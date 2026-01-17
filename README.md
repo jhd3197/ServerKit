@@ -24,12 +24,6 @@ ServerKit is a lightweight, modern server control panel for managing web applica
 
 ---
 
-## Screenshots
-
-*(Coming soon)*
-
----
-
 ## Tech Stack
 
 | Layer | Technology |
@@ -77,9 +71,16 @@ npm run dev
 
 ### Production Installation
 
+Install command:
+
 ```bash
-# One-liner installation (coming soon)
-curl -sSL https://get.serverkit.io | bash
+curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
+```
+
+Update command:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
 ```
 
 ---

@@ -1160,6 +1160,210 @@ class ApiService {
             body: { app_path: appPath, repo_url: repoUrl, branch }
         });
     }
+
+    // ========================================
+    // File Manager endpoints
+    // ========================================
+    async browseFiles(path = '/home', showHidden = false) {
+        const params = new URLSearchParams({ path, show_hidden: showHidden });
+        return this.request(`/files/browse?${params}`);
+    }
+
+    async getFileInfo(path) {
+        return this.request(`/files/info?path=${encodeURIComponent(path)}`);
+    }
+
+    async readFile(path) {
+        return this.request(`/files/read?path=${encodeURIComponent(path)}`);
+    }
+
+    async writeFile(path, content, createBackup = true) {
+        return this.request('/files/write', {
+            method: 'POST',
+            body: { path, content, create_backup: createBackup }
+        });
+    }
+
+    async createFile(path, content = '') {
+        return this.request('/files/create', {
+            method: 'POST',
+            body: { path, content }
+        });
+    }
+
+    async createDirectory(path) {
+        return this.request('/files/mkdir', {
+            method: 'POST',
+            body: { path }
+        });
+    }
+
+    async deleteFile(path) {
+        return this.request(`/files/delete?path=${encodeURIComponent(path)}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async renameFile(path, newName) {
+        return this.request('/files/rename', {
+            method: 'POST',
+            body: { path, new_name: newName }
+        });
+    }
+
+    async copyFile(src, dest) {
+        return this.request('/files/copy', {
+            method: 'POST',
+            body: { src, dest }
+        });
+    }
+
+    async moveFile(src, dest) {
+        return this.request('/files/move', {
+            method: 'POST',
+            body: { src, dest }
+        });
+    }
+
+    async changeFilePermissions(path, mode) {
+        return this.request('/files/chmod', {
+            method: 'POST',
+            body: { path, mode }
+        });
+    }
+
+    async searchFiles(directory, pattern, maxResults = 100) {
+        const params = new URLSearchParams({ directory, pattern, max_results: maxResults });
+        return this.request(`/files/search?${params}`);
+    }
+
+    async getDiskUsage(path = '/') {
+        return this.request(`/files/disk-usage?path=${encodeURIComponent(path)}`);
+    }
+
+    async downloadFile(path) {
+        const token = this.getToken();
+        const url = `${this.baseUrl}/files/download?path=${encodeURIComponent(path)}`;
+        window.open(`${url}&token=${token}`, '_blank');
+    }
+
+    async uploadFile(destination, file, onProgress = null) {
+        const token = this.getToken();
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('destination', destination);
+
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `${this.baseUrl}/files/upload`);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+            if (onProgress) {
+                xhr.upload.onprogress = (e) => {
+                    if (e.lengthComputable) {
+                        onProgress((e.loaded / e.total) * 100);
+                    }
+                };
+            }
+
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    resolve(JSON.parse(xhr.responseText));
+                } else {
+                    reject(new Error(JSON.parse(xhr.responseText).error || 'Upload failed'));
+                }
+            };
+
+            xhr.onerror = () => reject(new Error('Upload failed'));
+            xhr.send(formData);
+        });
+    }
+
+    // ========================================
+    // FTP Server endpoints
+    // ========================================
+    async getFTPStatus() {
+        return this.request('/ftp/status');
+    }
+
+    async controlFTPService(action, service = null) {
+        return this.request(`/ftp/service/${action}`, {
+            method: 'POST',
+            body: service ? { service } : {}
+        });
+    }
+
+    async getFTPConfig(service = null) {
+        const params = service ? `?service=${service}` : '';
+        return this.request(`/ftp/config${params}`);
+    }
+
+    async updateFTPConfig(config, service = null) {
+        return this.request('/ftp/config', {
+            method: 'POST',
+            body: { config, service }
+        });
+    }
+
+    async getFTPUsers() {
+        return this.request('/ftp/users');
+    }
+
+    async createFTPUser(username, password = null, homeDir = null) {
+        return this.request('/ftp/users', {
+            method: 'POST',
+            body: { username, password, home_dir: homeDir }
+        });
+    }
+
+    async deleteFTPUser(username, deleteHome = false) {
+        const params = deleteHome ? '?delete_home=true' : '';
+        return this.request(`/ftp/users/${username}${params}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async changeFTPPassword(username, password = null) {
+        return this.request(`/ftp/users/${username}/password`, {
+            method: 'POST',
+            body: password ? { password } : {}
+        });
+    }
+
+    async toggleFTPUser(username, enabled) {
+        return this.request(`/ftp/users/${username}/toggle`, {
+            method: 'POST',
+            body: { enabled }
+        });
+    }
+
+    async getFTPConnections() {
+        return this.request('/ftp/connections');
+    }
+
+    async disconnectFTPSession(pid) {
+        return this.request(`/ftp/connections/${pid}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async getFTPLogs(lines = 100) {
+        return this.request(`/ftp/logs?lines=${lines}`);
+    }
+
+    async installFTPServer(service = 'vsftpd') {
+        return this.request('/ftp/install', {
+            method: 'POST',
+            body: { service }
+        });
+    }
+
+    async testFTPConnection(host = 'localhost', port = 21, username = null, password = null) {
+        return this.request('/ftp/test', {
+            method: 'POST',
+            body: { host, port, username, password }
+        });
+    }
 }
 
 export const api = new ApiService();

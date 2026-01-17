@@ -91,6 +91,14 @@ def create_app(config_name=None):
     from app.api.deploy import deploy_bp
     app.register_blueprint(deploy_bp, url_prefix='/api/v1/deploy')
 
+    # Register blueprints - File Manager
+    from app.api.files import files_bp
+    app.register_blueprint(files_bp, url_prefix='/api/v1/files')
+
+    # Register blueprints - FTP Server
+    from app.api.ftp import ftp_bp
+    app.register_blueprint(ftp_bp, url_prefix='/api/v1/ftp')
+
     # Create database tables
     with app.app_context():
         db.create_all()
