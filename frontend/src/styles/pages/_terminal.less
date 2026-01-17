@@ -5,7 +5,7 @@
         .tab {
             display: flex;
             align-items: center;
-            gap: @spacing-sm;
+            gap: @space-2;
 
             svg {
                 stroke: currentColor;
@@ -28,7 +28,7 @@
 .logs-layout {
     display: grid;
     grid-template-columns: 300px 1fr;
-    gap: @spacing-lg;
+    gap: @space-6;
     height: 100%;
 
     @media (max-width: @breakpoint-lg) {
@@ -49,11 +49,11 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: @spacing-md;
+        padding: @space-4;
         border-bottom: 1px solid var(--border-color);
 
         h3 {
-            font-size: @font-sm;
+            font-size: @font-size-sm;
             font-weight: 600;
             margin: 0;
         }
@@ -63,21 +63,21 @@
 .log-files-list {
     flex: 1;
     overflow-y: auto;
-    padding: @spacing-sm;
+    padding: @space-2;
 
     .empty-hint {
-        padding: @spacing-lg;
+        padding: @space-6;
         text-align: center;
         color: var(--text-tertiary);
-        font-size: @font-sm;
+        font-size: @font-size-sm;
     }
 }
 
 .log-file-item {
     display: flex;
     align-items: center;
-    gap: @spacing-sm;
-    padding: @spacing-sm @spacing-md;
+    gap: @space-2;
+    padding: @space-2 @space-4;
     border-radius: @radius-md;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -126,7 +126,7 @@
         }
 
         &.nginx {
-            color: @primary;
+            color: @accent-primary;
         }
 
         &.database {
@@ -143,7 +143,7 @@
     }
 
     .log-file-name {
-        font-size: @font-sm;
+        font-size: @font-size-sm;
         font-weight: 500;
         white-space: nowrap;
         overflow: hidden;
@@ -151,7 +151,7 @@
     }
 
     .log-file-path {
-        font-size: @font-xs;
+        font-size: @font-size-xs;
         color: var(--text-tertiary);
         white-space: nowrap;
         overflow: hidden;
@@ -159,7 +159,7 @@
     }
 
     .log-file-size {
-        font-size: @font-xs;
+        font-size: @font-size-xs;
         color: var(--text-tertiary);
         flex-shrink: 0;
     }
@@ -178,8 +178,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: @spacing-md;
-    padding: @spacing-sm @spacing-md;
+    gap: @space-4;
+    padding: @space-2 @space-4;
     border-bottom: 1px solid var(--border-color);
     flex-wrap: wrap;
 
@@ -187,15 +187,15 @@
     .toolbar-right {
         display: flex;
         align-items: center;
-        gap: @spacing-sm;
+        gap: @space-2;
     }
 }
 
 .search-input {
     display: flex;
     align-items: center;
-    gap: @spacing-sm;
-    padding: @spacing-xs @spacing-sm;
+    gap: @space-2;
+    padding: @space-1 @space-2;
     background: var(--bg-tertiary);
     border: 1px solid var(--border-color);
     border-radius: @radius-md;
@@ -211,7 +211,7 @@
         border: none;
         background: none;
         padding: 0;
-        font-size: @font-sm;
+        font-size: @font-size-sm;
         width: 180px;
 
         &:focus {
@@ -221,20 +221,20 @@
 }
 
 .lines-select {
-    padding: @spacing-xs @spacing-sm;
+    padding: @space-1 @space-2;
     border: 1px solid var(--border-color);
     border-radius: @radius-sm;
     background: var(--bg-tertiary);
     color: var(--text-primary);
-    font-size: @font-sm;
+    font-size: @font-size-sm;
 }
 
 .auto-refresh-toggle {
     display: flex;
     align-items: center;
-    gap: @spacing-xs;
+    gap: @space-1;
     cursor: pointer;
-    font-size: @font-sm;
+    font-size: @font-size-sm;
     color: var(--text-secondary);
 
     input {
@@ -245,7 +245,7 @@
 .log-content {
     flex: 1;
     overflow: auto;
-    padding: @spacing-md;
+    padding: @space-4;
     background: #1a1a2e;
 
     pre {
@@ -270,12 +270,12 @@
             stroke: currentColor;
             fill: none;
             stroke-width: 1.5;
-            margin-bottom: @spacing-md;
+            margin-bottom: @space-4;
             opacity: 0.5;
         }
 
         p {
-            font-size: @font-sm;
+            font-size: @font-size-sm;
         }
     }
 }
@@ -287,7 +287,7 @@
 .journal-container {
     display: flex;
     flex-direction: column;
-    gap: @spacing-lg;
+    gap: @space-6;
     height: calc(100vh - 280px);
     min-height: 500px;
 }
@@ -295,27 +295,27 @@
 .journal-controls {
     display: flex;
     align-items: flex-end;
-    gap: @spacing-lg;
+    gap: @space-6;
     flex-wrap: wrap;
 
     .control-group {
         display: flex;
         flex-direction: column;
-        gap: @spacing-xs;
+        gap: @space-1;
 
         label {
-            font-size: @font-xs;
+            font-size: @font-size-xs;
             font-weight: 500;
             color: var(--text-secondary);
         }
 
         input,
         select {
-            padding: @spacing-xs @spacing-sm;
+            padding: @space-1 @space-2;
             border: 1px solid var(--border-color);
             border-radius: @radius-sm;
             background: var(--bg-secondary);
-            font-size: @font-sm;
+            font-size: @font-size-sm;
         }
 
         input {
@@ -327,21 +327,21 @@
 .input-with-suggestions {
     display: flex;
     flex-direction: column;
-    gap: @spacing-sm;
+    gap: @space-2;
 }
 
 .quick-units {
     display: flex;
     flex-wrap: wrap;
-    gap: @spacing-xs;
+    gap: @space-1;
 }
 
 .unit-chip {
-    padding: 2px @spacing-sm;
+    padding: 2px @space-2;
     border: 1px solid var(--border-color);
     border-radius: @radius-full;
     background: var(--bg-secondary);
-    font-size: @font-xs;
+    font-size: @font-size-xs;
     cursor: pointer;
     transition: all 0.15s ease;
 
@@ -362,7 +362,7 @@
     background: #1a1a2e;
     border-radius: @radius-lg;
     overflow: auto;
-    padding: @spacing-md;
+    padding: @space-4;
 
     pre {
         margin: 0;
@@ -382,29 +382,29 @@
 .processes-container {
     display: flex;
     flex-direction: column;
-    gap: @spacing-lg;
+    gap: @space-6;
 }
 
 .processes-toolbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: @spacing-md;
+    gap: @space-4;
     flex-wrap: wrap;
 
     .toolbar-left,
     .toolbar-right {
         display: flex;
         align-items: center;
-        gap: @spacing-sm;
+        gap: @space-2;
     }
 
     select {
-        padding: @spacing-xs @spacing-sm;
+        padding: @space-1 @space-2;
         border: 1px solid var(--border-color);
         border-radius: @radius-sm;
         background: var(--bg-secondary);
-        font-size: @font-sm;
+        font-size: @font-size-sm;
     }
 }
 
@@ -441,7 +441,7 @@
 
     .mono {
         font-family: 'JetBrains Mono', monospace;
-        font-size: @font-xs;
+        font-size: @font-size-xs;
     }
 
     .process-name {
@@ -465,7 +465,7 @@
             opacity: 0.3;
 
             &.cpu {
-                background: @primary;
+                background: @accent-primary;
             }
 
             &.memory {
@@ -475,14 +475,14 @@
 
         span {
             position: relative;
-            font-size: @font-xs;
+            font-size: @font-size-xs;
             font-family: monospace;
         }
     }
 
     .action-buttons {
         display: flex;
-        gap: @spacing-xs;
+        gap: @space-1;
     }
 }
 
@@ -507,38 +507,38 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: @spacing-md;
+        padding: @space-4;
         border-bottom: 1px solid var(--border-color);
 
         h3 {
-            font-size: @font-md;
+            font-size: @font-size-md;
             font-weight: 600;
             margin: 0;
         }
     }
 
     .panel-body {
-        padding: @spacing-md;
+        padding: @space-4;
     }
 
     .details-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: @spacing-md;
+        gap: @space-4;
     }
 
     .detail-item {
         display: flex;
         flex-direction: column;
-        gap: @spacing-xs;
+        gap: @space-1;
 
         .detail-label {
-            font-size: @font-xs;
+            font-size: @font-size-xs;
             color: var(--text-tertiary);
         }
 
         .detail-value {
-            font-size: @font-sm;
+            font-size: @font-size-sm;
             font-weight: 500;
 
             &.mono {
@@ -548,24 +548,24 @@
     }
 
     .command-line {
-        margin-top: @spacing-md;
-        padding-top: @spacing-md;
+        margin-top: @space-4;
+        padding-top: @space-4;
         border-top: 1px solid var(--border-color);
 
         .detail-label {
             display: block;
-            font-size: @font-xs;
+            font-size: @font-size-xs;
             color: var(--text-tertiary);
-            margin-bottom: @spacing-xs;
+            margin-bottom: @space-1;
         }
 
         code {
             display: block;
-            padding: @spacing-sm;
+            padding: @space-2;
             background: var(--bg-tertiary);
             border-radius: @radius-sm;
             font-family: monospace;
-            font-size: @font-xs;
+            font-size: @font-size-xs;
             word-break: break-all;
         }
     }
@@ -578,13 +578,13 @@
 .services-container {
     display: flex;
     flex-direction: column;
-    gap: @spacing-lg;
+    gap: @space-6;
 }
 
 .services-toolbar {
     display: flex;
     align-items: center;
-    gap: @spacing-sm;
+    gap: @space-2;
 
     .btn svg {
         stroke: currentColor;
@@ -596,28 +596,28 @@
 .services-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: @spacing-md;
+    gap: @space-4;
 }
 
 .service-card {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: @radius-lg;
-    padding: @spacing-md;
+    padding: @space-4;
     display: flex;
     flex-direction: column;
-    gap: @spacing-sm;
+    gap: @space-2;
 
     .service-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: @spacing-md;
+        gap: @space-4;
 
         .service-info {
             display: flex;
             align-items: center;
-            gap: @spacing-sm;
+            gap: @space-2;
 
             .status-dot {
                 width: 8px;
@@ -643,7 +643,7 @@
             }
 
             h4 {
-                font-size: @font-sm;
+                font-size: @font-size-sm;
                 font-weight: 600;
                 margin: 0;
             }
@@ -651,15 +651,15 @@
     }
 
     .service-description {
-        font-size: @font-xs;
+        font-size: @font-size-xs;
         color: var(--text-secondary);
         margin: 0;
     }
 
     .service-meta {
         display: flex;
-        gap: @spacing-md;
-        font-size: @font-xs;
+        gap: @space-4;
+        font-size: @font-size-xs;
         color: var(--text-tertiary);
 
         .meta-label {
@@ -669,9 +669,9 @@
 
     .service-actions {
         display: flex;
-        gap: @spacing-xs;
-        margin-top: @spacing-sm;
-        padding-top: @spacing-sm;
+        gap: @space-1;
+        margin-top: @space-2;
+        padding-top: @space-2;
         border-top: 1px solid var(--border-color);
     }
 }
@@ -687,7 +687,7 @@
     overflow: auto;
     background: #1a1a2e;
     border-radius: @radius-md;
-    padding: @spacing-md;
+    padding: @space-4;
 
     pre {
         margin: 0;

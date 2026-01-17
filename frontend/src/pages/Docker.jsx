@@ -98,6 +98,7 @@ const ContainersTab = () => {
     const [showAll, setShowAll] = useState(true);
     const [showRunModal, setShowRunModal] = useState(false);
     const [selectedContainer, setSelectedContainer] = useState(null);
+    const [execContainer, setExecContainer] = useState(null);
 
     useEffect(() => {
         loadContainers();
@@ -205,6 +206,12 @@ const ContainersTab = () => {
                                         </button>
                                         <button
                                             className="btn btn-secondary btn-sm"
+                                            onClick={() => setExecContainer(container)}
+                                        >
+                                            Exec
+                                        </button>
+                                        <button
+                                            className="btn btn-secondary btn-sm"
                                             onClick={() => handleAction(container.id, 'restart')}
                                         >
                                             Restart
@@ -249,6 +256,13 @@ const ContainersTab = () => {
                 <ContainerLogsModal
                     container={selectedContainer}
                     onClose={() => setSelectedContainer(null)}
+                />
+            )}
+
+            {execContainer && (
+                <ContainerExecModal
+                    container={execContainer}
+                    onClose={() => setExecContainer(null)}
                 />
             )}
         </div>
@@ -411,6 +425,139 @@ const ContainerLogsModal = ({ container, onClose }) => {
                 </div>
                 <div className="modal-actions">
                     <button className="btn btn-secondary" onClick={loadLogs}>Refresh</button>
+                    <button className="btn btn-primary" onClick={onClose}>Close</button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const ContainerExecModal = ({ container, onClose }) => {
+    const [command, setCommand] = useState('');
+    const [output, setOutput] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [history, setHistory] = useState([]);
+    const [historyIndex, setHistoryIndex] = useState(-1);
+    const outputRef = React.useRef(null);
+    const inputRef = React.useRef(null);
+
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, []);
+
+    useEffect(() => {
+        if (outputRef.current) {
+            outputRef.current.scrollTop = outputRef.current.scrollHeight;
+        }
+    }, [output]);
+
+    async function executeCommand(e) {
+        e.preventDefault();
+        if (!command.trim() || loading) return;
+
+        const cmd = command.trim();
+        setOutput(prev => [...prev, { type: 'command', text: `$ ${cmd}` }]);
+        setHistory(prev => [cmd, ...prev.slice(0, 49)]);
+        setHistoryIndex(-1);
+        setCommand('');
+        setLoading(true);
+
+        try {
+            const result = await api.execContainer(container.id, cmd);
+            if (result.output) {
+                setOutput(prev => [...prev, { type: 'output', text: result.output }]);
+            }
+            if (result.error) {
+                setOutput(prev => [...prev, { type: 'error', text: result.error }]);
+            }
+            if (result.exit_code !== 0) {
+                setOutput(prev => [...prev, { type: 'info', text: `Exit code: ${result.exit_code}` }]);
+            }
+        } catch (err) {
+            setOutput(prev => [...prev, { type: 'error', text: err.message || 'Failed to execute command' }]);
+        } finally {
+            setLoading(false);
+            if (inputRef.current) {
+                inputRef.current.focus();
+            }
+        }
+    }
+
+    function handleKeyDown(e) {
+        if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (history.length > 0 && historyIndex < history.length - 1) {
+                const newIndex = historyIndex + 1;
+                setHistoryIndex(newIndex);
+                setCommand(history[newIndex]);
+            }
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (historyIndex > 0) {
+                const newIndex = historyIndex - 1;
+                setHistoryIndex(newIndex);
+                setCommand(history[newIndex]);
+            } else if (historyIndex === 0) {
+                setHistoryIndex(-1);
+                setCommand('');
+            }
+        }
+    }
+
+    function clearOutput() {
+        setOutput([]);
+    }
+
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal modal-lg" onClick={e => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h2>Exec: {container.name}</h2>
+                    <button className="modal-close" onClick={onClose}>&times;</button>
+                </div>
+                <div className="modal-body exec-modal-body">
+                    <div className="exec-output" ref={outputRef}>
+                        {output.length === 0 ? (
+                            <div className="exec-welcome">
+                                <p>Execute commands in container <code>{container.name}</code></p>
+                                <p className="text-muted">Type a command and press Enter</p>
+                            </div>
+                        ) : (
+                            output.map((line, idx) => (
+                                <div key={idx} className={`exec-line exec-${line.type}`}>
+                                    <pre>{line.text}</pre>
+                                </div>
+                            ))
+                        )}
+                        {loading && (
+                            <div className="exec-line exec-loading">
+                                <span className="spinner-inline"></span> Running...
+                            </div>
+                        )}
+                    </div>
+                    <form onSubmit={executeCommand} className="exec-input-form">
+                        <span className="exec-prompt">$</span>
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            value={command}
+                            onChange={(e) => setCommand(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            placeholder="Enter command..."
+                            className="exec-input"
+                            disabled={loading}
+                            autoComplete="off"
+                            spellCheck="false"
+                        />
+                        <button type="submit" className="btn btn-primary btn-sm" disabled={loading || !command.trim()}>
+                            Run
+                        </button>
+                    </form>
+                </div>
+                <div className="modal-actions">
+                    <button className="btn btn-secondary" onClick={clearOutput}>Clear</button>
                     <button className="btn btn-primary" onClick={onClose}>Close</button>
                 </div>
             </div>

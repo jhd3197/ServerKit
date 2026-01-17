@@ -1,6 +1,7 @@
 """File management service for browsing, editing, and managing files."""
 
 import os
+import sys
 import shutil
 import stat
 import mimetypes
@@ -8,9 +9,18 @@ import hashlib
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime
-import pwd
-import grp
 
+try:
+    import pwd
+except ImportError:
+    # Provide a Windows-compatible alternative here
+    pwd = None
+
+if sys.platform != "win32":
+    import grp
+else:
+    # Use Windows-specific logic or a placeholder
+    grp = None 
 
 class FileService:
     """Service for file system operations."""

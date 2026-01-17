@@ -3,8 +3,14 @@
 import os
 import subprocess
 import re
-import pwd
-import crypt
+try:
+    import pwd
+except ImportError:
+    # Provide a Windows-compatible alternative here
+    pwd = None
+#import crypt
+from passlib.hash import sha512_crypt # Or your preferred hash scheme
+import platform
 import secrets
 from typing import Dict, List, Optional
 from datetime import datetime

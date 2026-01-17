@@ -72,6 +72,19 @@ const Sidebar = () => {
                     </svg>
                     Docker
                 </NavLink>
+                <NavLink to="/php" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                    <svg viewBox="0 0 24 24">
+                        <ellipse cx="12" cy="12" rx="10" ry="6"/>
+                        <text x="12" y="15" textAnchor="middle" fontSize="8" fill="currentColor" stroke="none">php</text>
+                    </svg>
+                    PHP
+                </NavLink>
+                <NavLink to="/firewall" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Firewall
+                </NavLink>
             </nav>
 
             <div className="menu-label">Operations</div>

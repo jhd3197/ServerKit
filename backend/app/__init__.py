@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
@@ -13,6 +13,9 @@ jwt = JWTManager()
 limiter = Limiter(key_func=get_remote_address, default_limits=["100 per minute"])
 socketio = None
 
+# Path to frontend dist folder (relative to backend folder)
+FRONTEND_DIST = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'frontend', 'dist')
+
 
 def create_app(config_name=None):
     global socketio
@@ -20,14 +23,25 @@ def create_app(config_name=None):
     if config_name is None:
         config_name = os.environ.get('FLASK_ENV', 'development')
 
-    app = Flask(__name__)
+    # Configure Flask to serve static files from frontend dist
+    app = Flask(
+        __name__,
+        static_folder=FRONTEND_DIST,
+        static_url_path=''
+    )
     app.config.from_object(config[config_name])
 
     # Initialize extensions
     db.init_app(app)
     jwt.init_app(app)
     limiter.init_app(app)
-    CORS(app, origins=app.config['CORS_ORIGINS'], supports_credentials=True)
+    CORS(
+        app,
+        origins=app.config['CORS_ORIGINS'],
+        supports_credentials=True,
+        allow_headers=['Content-Type', 'Authorization', 'X-Requested-With'],
+        methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH']
+    )
 
     # Register security headers middleware
     from app.middleware.security import register_security_headers
@@ -99,9 +113,28 @@ def create_app(config_name=None):
     from app.api.ftp import ftp_bp
     app.register_blueprint(ftp_bp, url_prefix='/api/v1/ftp')
 
+    # Register blueprints - Firewall
+    from app.api.firewall import firewall_bp
+    app.register_blueprint(firewall_bp, url_prefix='/api/v1/firewall')
+
     # Create database tables
     with app.app_context():
         db.create_all()
+
+    # Serve frontend for root path
+    @app.route('/')
+    def serve_index():
+        return send_from_directory(app.static_folder, 'index.html')
+
+    # Catch-all route for SPA - must be after all other routes
+    @app.errorhandler(404)
+    def not_found(e):
+        # If it's an API request, return JSON 404
+        from flask import request
+        if request.path.startswith('/api/'):
+            return {'error': 'Not found'}, 404
+        # Otherwise serve the SPA index.html for client-side routing
+        return send_from_directory(app.static_folder, 'index.html')
 
     return app
 

@@ -97,9 +97,9 @@
         justify-content: space-between;
         gap: @space-4;
         padding: @space-4 @space-5;
-        background: @surface-secondary;
-        border: 1px solid @border-primary;
-        border-radius: @border-radius-lg;
+        background: @bg-card;
+        border: 1px solid @border-subtle;
+        border-radius: @radius-lg;
 
         @media (max-width: @breakpoint-md) {
             flex-direction: column;
@@ -124,7 +124,7 @@
         }
 
         .repo-url {
-            font-family: @font-family-mono;
+            font-family: @font-mono;
             font-size: @font-size-sm;
             color: @text-primary;
             word-break: break-all;
@@ -154,8 +154,8 @@
         gap: @space-3;
         margin-top: @space-3;
         padding: @space-3;
-        background: @surface-tertiary;
-        border-radius: @border-radius-md;
+        background: @bg-hover;
+        border-radius: @radius-md;
 
         code {
             flex: 1;
@@ -186,9 +186,9 @@
 
     .script-code {
         padding: @space-3;
-        background: @surface-tertiary;
-        border-radius: @border-radius-md;
-        font-family: @font-family-mono;
+        background: @bg-hover;
+        border-radius: @radius-md;
+        font-family: @font-mono;
         font-size: @font-size-xs;
         color: @text-secondary;
         overflow-x: auto;
@@ -202,7 +202,7 @@
         gap: @space-2;
         margin-top: @space-4;
         padding-top: @space-4;
-        border-top: 1px solid @border-primary;
+        border-top: 1px solid @border-subtle;
     }
 
     .checkbox-label {
@@ -231,7 +231,7 @@
     }
 
     textarea {
-        font-family: @font-family-mono;
+        font-family: @font-mono;
         font-size: @font-size-sm;
         resize: vertical;
         min-height: 80px;

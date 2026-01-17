@@ -1,4 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+// Use relative URL in production (served from Flask), absolute in development
+const API_BASE_URL = import.meta.env.VITE_API_URL ||
+    (import.meta.env.PROD ? '/api/v1' : 'http://localhost:5000/api/v1');
 
 class ApiService {
     constructor() {
@@ -1362,6 +1364,96 @@ class ApiService {
         return this.request('/ftp/test', {
             method: 'POST',
             body: { host, port, username, password }
+        });
+    }
+
+    // ========================================
+    // Firewall endpoints
+    // ========================================
+    async getFirewallStatus() {
+        return this.request('/firewall/status');
+    }
+
+    async enableFirewall(firewall = null) {
+        return this.request('/firewall/enable', {
+            method: 'POST',
+            body: firewall ? { firewall } : {}
+        });
+    }
+
+    async disableFirewall(firewall = null) {
+        return this.request('/firewall/disable', {
+            method: 'POST',
+            body: firewall ? { firewall } : {}
+        });
+    }
+
+    async getFirewallRules(firewall = null) {
+        const params = firewall ? `?firewall=${firewall}` : '';
+        return this.request(`/firewall/rules${params}`);
+    }
+
+    async addFirewallRule(ruleData) {
+        return this.request('/firewall/rules', {
+            method: 'POST',
+            body: ruleData
+        });
+    }
+
+    async removeFirewallRule(ruleData) {
+        return this.request('/firewall/rules', {
+            method: 'DELETE',
+            body: ruleData
+        });
+    }
+
+    async blockIP(ip, permanent = true) {
+        return this.request('/firewall/block-ip', {
+            method: 'POST',
+            body: { ip, permanent }
+        });
+    }
+
+    async unblockIP(ip, permanent = true) {
+        return this.request('/firewall/unblock-ip', {
+            method: 'POST',
+            body: { ip, permanent }
+        });
+    }
+
+    async getBlockedIPs() {
+        return this.request('/firewall/blocked-ips');
+    }
+
+    async allowPort(port, protocol = 'tcp', permanent = true) {
+        return this.request('/firewall/allow-port', {
+            method: 'POST',
+            body: { port, protocol, permanent }
+        });
+    }
+
+    async denyPort(port, protocol = 'tcp', permanent = true) {
+        return this.request('/firewall/deny-port', {
+            method: 'POST',
+            body: { port, protocol, permanent }
+        });
+    }
+
+    async getFirewallZones() {
+        return this.request('/firewall/zones');
+    }
+
+    async setDefaultZone(zone) {
+        return this.request('/firewall/zones/default', {
+            method: 'POST',
+            body: { zone }
+        });
+    }
+
+    async installFirewall(firewall = 'ufw') {
+        return this.request('/firewall/install', {
+            method: 'POST',
+            body: { firewall }
         });
     }
 }

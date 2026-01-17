@@ -37,3 +37,7 @@ Flask-Limiter==3.5.0
 
 # CLI
 click==8.1.7
+
+schedule
+passlib
+bcrypt

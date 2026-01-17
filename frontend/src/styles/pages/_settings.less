@@ -3,19 +3,19 @@
 // ============================================
 
 .settings-page {
-    padding: @spacing-lg;
+    padding: @space-6;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .settings-header {
-    margin-bottom: @spacing-xl;
+    margin-bottom: @space-8;
 
     h1 {
         font-size: 1.75rem;
         font-weight: 600;
         color: @text-primary;
-        margin: 0 0 @spacing-xs 0;
+        margin: 0 0 @space-1 0;
     }
 
     p {
@@ -26,7 +26,7 @@
 
 .settings-content {
     display: flex;
-    gap: @spacing-xl;
+    gap: @space-8;
 
     @media (max-width: 900px) {
         flex-direction: column;
@@ -47,7 +47,7 @@
         margin: 0;
         display: flex;
         flex-direction: column;
-        gap: @spacing-xs;
+        gap: @space-1;
 
         @media (max-width: 900px) {
             flex-direction: row;
@@ -59,8 +59,8 @@
         width: 100%;
         display: flex;
         align-items: center;
-        gap: @spacing-sm;
-        padding: @spacing-sm @spacing-md;
+        gap: @space-2;
+        padding: @space-2 @space-3;
         background: transparent;
         border: none;
         border-radius: @radius-md;
@@ -75,12 +75,12 @@
         }
 
         &:hover {
-            background: @bg-tertiary;
+            background: @bg-hover;
             color: @text-primary;
         }
 
         &.active {
-            background: @primary-color;
+            background: @accent-primary;
             color: white;
         }
 
@@ -100,11 +100,11 @@
 
 // Individual Settings Section
 .settings-section {
-    background: @bg-secondary;
-    border: 1px solid @border-color;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
     border-radius: @radius-lg;
-    padding: @spacing-lg;
-    margin-bottom: @spacing-lg;
+    padding: @space-6;
+    margin-bottom: @space-6;
 
     &:last-child {
         margin-bottom: 0;
@@ -114,14 +114,14 @@
 .section-header {
     display: flex;
     align-items: center;
-    gap: @spacing-sm;
-    margin-bottom: @spacing-lg;
-    padding-bottom: @spacing-md;
-    border-bottom: 1px solid @border-color;
+    gap: @space-2;
+    margin-bottom: @space-6;
+    padding-bottom: @space-4;
+    border-bottom: 1px solid @border-subtle;
 
     .section-icon {
         font-size: 1.25rem;
-        color: @primary-color;
+        color: @accent-primary;
     }
 
     h2 {
@@ -136,19 +136,19 @@
 .settings-form {
     display: flex;
     flex-direction: column;
-    gap: @spacing-lg;
+    gap: @space-6;
 }
 
 .form-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: @spacing-md;
+    gap: @space-4;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: @spacing-xs;
+    gap: @space-1;
 
     label {
         font-size: 0.85rem;
@@ -157,9 +157,9 @@
     }
 
     input, select {
-        padding: @spacing-sm @spacing-md;
-        background: @bg-tertiary;
-        border: 1px solid @border-color;
+        padding: @space-2 @space-3;
+        background: @bg-hover;
+        border: 1px solid @border-subtle;
         border-radius: @radius-md;
         color: @text-primary;
         font-size: 0.9rem;
@@ -167,7 +167,7 @@
 
         &:focus {
             outline: none;
-            border-color: @primary-color;
+            border-color: @accent-primary;
         }
 
         &:disabled {
@@ -178,16 +178,16 @@
 
     .input-hint {
         font-size: 0.8rem;
-        color: @text-muted;
+        color: @text-tertiary;
     }
 }
 
 .form-actions {
     display: flex;
-    gap: @spacing-sm;
-    margin-top: @spacing-md;
-    padding-top: @spacing-md;
-    border-top: 1px solid @border-color;
+    gap: @space-2;
+    margin-top: @space-4;
+    padding-top: @space-4;
+    border-top: 1px solid @border-subtle;
 
     &.no-border {
         border-top: none;
@@ -200,52 +200,52 @@
     .password-fields {
         display: flex;
         flex-direction: column;
-        gap: @spacing-md;
+        gap: @space-4;
     }
 
     .password-requirements {
         font-size: 0.8rem;
-        color: @text-muted;
-        margin-top: @spacing-xs;
+        color: @text-tertiary;
+        margin-top: @space-1;
     }
 }
 
 // Theme Options
 .theme-options {
     display: flex;
-    gap: @spacing-md;
+    gap: @space-4;
     flex-wrap: wrap;
 }
 
 .theme-option {
     flex: 1;
     min-width: 150px;
-    padding: @spacing-md;
-    background: @bg-tertiary;
-    border: 2px solid @border-color;
+    padding: @space-4;
+    background: @bg-hover;
+    border: 2px solid @border-subtle;
     border-radius: @radius-md;
     cursor: pointer;
     transition: all 0.2s ease;
     text-align: center;
 
     &:hover {
-        border-color: @primary-color;
+        border-color: @accent-primary;
     }
 
     &.active {
-        border-color: @primary-color;
-        background: fade(@primary-color, 10%);
+        border-color: @accent-primary;
+        background: fade(@accent-primary, 10%);
     }
 
     .theme-icon {
         font-size: 2rem;
-        margin-bottom: @spacing-sm;
+        margin-bottom: @space-2;
     }
 
     .theme-name {
         font-weight: 500;
         color: @text-primary;
-        margin-bottom: @spacing-xs;
+        margin-bottom: @space-1;
     }
 
     .theme-desc {
@@ -258,15 +258,15 @@
 .notification-settings {
     display: flex;
     flex-direction: column;
-    gap: @spacing-md;
+    gap: @space-4;
 }
 
 .notification-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: @spacing-md;
-    background: @bg-tertiary;
+    padding: @space-4;
+    background: @bg-hover;
     border-radius: @radius-md;
 
     .notification-info {
@@ -275,7 +275,7 @@
         .notification-label {
             font-weight: 500;
             color: @text-primary;
-            margin-bottom: @spacing-xs;
+            margin-bottom: @space-1;
         }
 
         .notification-desc {
@@ -297,7 +297,7 @@
         height: 0;
 
         &:checked + .toggle-slider {
-            background: @primary-color;
+            background: @accent-primary;
 
             &::before {
                 transform: translateX(22px);
@@ -305,7 +305,7 @@
         }
 
         &:focus + .toggle-slider {
-            box-shadow: 0 0 0 2px fade(@primary-color, 30%);
+            box-shadow: 0 0 0 2px fade(@accent-primary, 30%);
         }
     }
 
@@ -316,7 +316,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: @border-color;
+        background: @border-subtle;
         border-radius: 26px;
         transition: all 0.3s ease;
 
@@ -338,25 +338,25 @@
 .system-info-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: @spacing-md;
+    gap: @space-4;
 }
 
 .info-card {
-    padding: @spacing-md;
-    background: @bg-tertiary;
+    padding: @space-4;
+    background: @bg-hover;
     border-radius: @radius-md;
     text-align: center;
 
     .info-icon {
         font-size: 1.5rem;
-        color: @primary-color;
-        margin-bottom: @spacing-sm;
+        color: @accent-primary;
+        margin-bottom: @space-2;
     }
 
     .info-label {
         font-size: 0.8rem;
         color: @text-secondary;
-        margin-bottom: @spacing-xs;
+        margin-bottom: @space-1;
     }
 
     .info-value {
@@ -366,24 +366,24 @@
     }
 
     .info-bar {
-        margin-top: @spacing-sm;
+        margin-top: @space-2;
         height: 6px;
-        background: @border-color;
+        background: @border-subtle;
         border-radius: 3px;
         overflow: hidden;
 
         .info-bar-fill {
             height: 100%;
-            background: @primary-color;
+            background: @accent-primary;
             border-radius: 3px;
             transition: width 0.3s ease;
 
             &.warning {
-                background: @warning-color;
+                background: @warning;
             }
 
             &.danger {
-                background: @danger-color;
+                background: @danger;
             }
         }
     }
@@ -394,15 +394,15 @@
     .app-info {
         display: flex;
         align-items: center;
-        gap: @spacing-lg;
-        margin-bottom: @spacing-lg;
-        padding-bottom: @spacing-lg;
-        border-bottom: 1px solid @border-color;
+        gap: @space-6;
+        margin-bottom: @space-6;
+        padding-bottom: @space-6;
+        border-bottom: 1px solid @border-subtle;
 
         .app-logo {
             width: 64px;
             height: 64px;
-            background: @gradient-primary;
+            background: linear-gradient(135deg, @accent-primary 0%, @accent-hover 100%);
             border-radius: @radius-lg;
             display: flex;
             align-items: center;
@@ -415,7 +415,7 @@
                 font-size: 1.25rem;
                 font-weight: 600;
                 color: @text-primary;
-                margin-bottom: @spacing-xs;
+                margin-bottom: @space-1;
             }
 
             .app-version {
@@ -428,40 +428,40 @@
     .features-list {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: @spacing-sm;
-        margin-bottom: @spacing-lg;
+        gap: @space-2;
+        margin-bottom: @space-6;
 
         .feature-item {
             display: flex;
             align-items: center;
-            gap: @spacing-sm;
-            padding: @spacing-sm;
+            gap: @space-2;
+            padding: @space-2;
             color: @text-secondary;
 
             .feature-check {
-                color: @success-color;
+                color: @success;
             }
         }
     }
 
     .about-links {
         display: flex;
-        gap: @spacing-md;
+        gap: @space-4;
         flex-wrap: wrap;
 
         a {
             display: flex;
             align-items: center;
-            gap: @spacing-xs;
-            padding: @spacing-sm @spacing-md;
-            background: @bg-tertiary;
+            gap: @space-1;
+            padding: @space-2 @space-3;
+            background: @bg-hover;
             border-radius: @radius-md;
             color: @text-secondary;
             text-decoration: none;
             transition: all 0.2s ease;
 
             &:hover {
-                background: @primary-color;
+                background: @accent-primary;
                 color: white;
             }
         }
@@ -470,23 +470,23 @@
 
 // Success/Error Messages
 .settings-message {
-    padding: @spacing-sm @spacing-md;
+    padding: @space-2 @space-3;
     border-radius: @radius-md;
-    margin-bottom: @spacing-md;
+    margin-bottom: @space-4;
     display: flex;
     align-items: center;
-    gap: @spacing-sm;
+    gap: @space-2;
 
     &.success {
-        background: fade(@success-color, 15%);
-        color: @success-color;
-        border: 1px solid fade(@success-color, 30%);
+        background: fade(@success, 15%);
+        color: @success;
+        border: 1px solid fade(@success, 30%);
     }
 
     &.error {
-        background: fade(@danger-color, 15%);
-        color: @danger-color;
-        border: 1px solid fade(@danger-color, 30%);
+        background: fade(@danger, 15%);
+        color: @danger;
+        border: 1px solid fade(@danger, 30%);
     }
 }
 
@@ -496,17 +496,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: @spacing-xxl;
+    padding: @space-16;
     color: @text-secondary;
 
     .spinner {
         width: 40px;
         height: 40px;
-        border: 3px solid @border-color;
-        border-top-color: @primary-color;
+        border: 3px solid @border-subtle;
+        border-top-color: @accent-primary;
         border-radius: 50%;
         animation: spin 1s linear infinite;
-        margin-bottom: @spacing-md;
+        margin-bottom: @space-4;
     }
 }
 

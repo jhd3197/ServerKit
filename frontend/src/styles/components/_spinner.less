@@ -86,18 +86,23 @@
         transform: translate(-50%, -50%);
 
         .spinner-ring {
-            border-color: fade(currentColor, 30%);
-            border-top-color: currentColor;
+            border-color: @border-subtle;
+            border-top-color: @text-primary;
         }
     }
 
     &.btn-primary .spinner .spinner-ring {
-        border-color: fade(#fff, 30%);
+        border-color: rgba(255, 255, 255, 0.3);
         border-top-color: #fff;
     }
 
     &.btn-secondary .spinner .spinner-ring {
         border-color: fade(@text-primary, 30%);
         border-top-color: @text-primary;
+    }
+
+    &.btn-danger .spinner .spinner-ring {
+        border-color: rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
     }
 }

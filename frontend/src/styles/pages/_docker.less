@@ -72,3 +72,122 @@
     gap: @space-2;
     flex-shrink: 0;
 }
+
+// Container Exec Modal
+.exec-modal-body {
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+}
+
+.exec-output {
+    flex: 1;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    padding: @space-4;
+    overflow-y: auto;
+    font-family: @font-mono;
+    font-size: @font-size-sm;
+    margin-bottom: @space-3;
+}
+
+.exec-welcome {
+    color: @text-secondary;
+    text-align: center;
+    padding: @space-8 0;
+
+    p {
+        margin-bottom: @space-2;
+    }
+
+    code {
+        background: @bg-hover;
+        padding: @space-1 @space-2;
+        border-radius: @radius-sm;
+        color: @accent-primary;
+    }
+}
+
+.exec-line {
+    margin-bottom: @space-2;
+
+    pre {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+    &.exec-command {
+        color: @accent-primary;
+        font-weight: @font-weight-medium;
+    }
+
+    &.exec-output {
+        color: @text-primary;
+    }
+
+    &.exec-error {
+        color: @danger;
+    }
+
+    &.exec-info {
+        color: @text-tertiary;
+        font-size: @font-size-xs;
+    }
+
+    &.exec-loading {
+        color: @text-secondary;
+        display: flex;
+        align-items: center;
+        gap: @space-2;
+    }
+}
+
+.spinner-inline {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid @border-subtle;
+    border-top-color: @accent-primary;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.exec-input-form {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    padding: @space-2 @space-3;
+
+    &:focus-within {
+        border-color: @accent-primary;
+    }
+}
+
+.exec-prompt {
+    color: @accent-primary;
+    font-family: @font-mono;
+    font-weight: @font-weight-semibold;
+}
+
+.exec-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: @text-primary;
+    font-family: @font-mono;
+    font-size: @font-size-sm;
+    outline: none;
+
+    &::placeholder {
+        color: @text-tertiary;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+    }
+}

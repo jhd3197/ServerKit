@@ -22,7 +22,7 @@
 
         &.apps {
             background: rgba(59, 130, 246, 0.1);
-            color: @primary;
+            color: @accent-primary;
         }
 
         &.databases {
@@ -37,18 +37,18 @@
     }
 
     .filter-select {
-        padding: @spacing-xs @spacing-sm;
+        padding: @space-1 @space-2;
         border: 1px solid var(--border-color);
         border-radius: @radius-sm;
         background: var(--bg-secondary);
         color: var(--text-primary);
-        font-size: @font-sm;
+        font-size: @font-size-sm;
     }
 
     .backup-name {
         display: flex;
         align-items: center;
-        gap: @spacing-sm;
+        gap: @space-2;
 
         svg {
             stroke: currentColor;
@@ -58,7 +58,7 @@
         }
 
         .icon-app {
-            color: @primary;
+            color: @accent-primary;
         }
 
         .icon-db {
@@ -68,13 +68,13 @@
 
     .action-buttons {
         display: flex;
-        gap: @spacing-xs;
+        gap: @space-1;
     }
 
     .checkbox-label {
         display: flex;
         align-items: center;
-        gap: @spacing-sm;
+        gap: @space-2;
         cursor: pointer;
 
         input[type="checkbox"] {
@@ -84,7 +84,7 @@
         }
 
         span {
-            font-size: @font-sm;
+            font-size: @font-size-sm;
             color: var(--text-primary);
         }
     }
@@ -92,50 +92,50 @@
     .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: @spacing-md;
+        gap: @space-4;
     }
 
     .form-help {
         display: block;
-        margin-top: @spacing-xs;
-        font-size: @font-xs;
+        margin-top: @space-1;
+        font-size: @font-size-xs;
         color: var(--text-tertiary);
     }
 
     .restore-warning {
         text-align: center;
-        padding: @spacing-lg;
+        padding: @space-6;
         background: rgba(239, 68, 68, 0.1);
         border-radius: @radius-md;
-        margin-bottom: @spacing-lg;
+        margin-bottom: @space-6;
 
         svg {
             stroke: @danger;
             fill: none;
             stroke-width: 2;
-            margin-bottom: @spacing-sm;
+            margin-bottom: @space-2;
         }
 
         h3 {
             color: @danger;
-            margin-bottom: @spacing-sm;
+            margin-bottom: @space-2;
         }
 
         p {
             color: var(--text-secondary);
-            font-size: @font-sm;
+            font-size: @font-size-sm;
         }
     }
 
     .restore-details {
         background: var(--bg-secondary);
         border-radius: @radius-md;
-        padding: @spacing-md;
+        padding: @space-4;
 
         .detail-row {
             display: flex;
             justify-content: space-between;
-            padding: @spacing-xs 0;
+            padding: @space-1 0;
 
             &:not(:last-child) {
                 border-bottom: 1px solid var(--border-color);
@@ -144,12 +144,12 @@
 
         .detail-label {
             color: var(--text-tertiary);
-            font-size: @font-sm;
+            font-size: @font-size-sm;
         }
 
         .detail-value {
             font-weight: 500;
-            font-size: @font-sm;
+            font-size: @font-size-sm;
         }
     }
 }

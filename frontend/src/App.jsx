@@ -18,6 +18,8 @@ import Terminal from './pages/Terminal';
 import Settings from './pages/Settings';
 import FileManager from './pages/FileManager';
 import FTPServer from './pages/FTPServer';
+import PHP from './pages/PHP';
+import Firewall from './pages/Firewall';
 
 function PrivateRoute({ children }) {
     const { isAuthenticated, loading } = useAuth();
@@ -64,6 +66,8 @@ function AppRoutes() {
                 <Route path="databases" element={<Databases />} />
                 <Route path="ssl" element={<div className="page">SSL Certificates</div>} />
                 <Route path="docker" element={<Docker />} />
+                <Route path="php" element={<PHP />} />
+                <Route path="firewall" element={<Firewall />} />
                 <Route path="files" element={<FileManager />} />
                 <Route path="ftp" element={<FTPServer />} />
                 <Route path="monitoring" element={<Monitoring />} />

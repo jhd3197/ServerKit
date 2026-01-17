@@ -7,9 +7,6 @@ const DashboardLayout = () => {
         <div className="dashboard-layout">
             <Sidebar />
             <main className="main-content">
-                <div className="header">
-                    <h2>Dashboard</h2>
-                </div>
                 <Outlet />
             </main>
         </div>
