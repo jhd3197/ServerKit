@@ -28,19 +28,46 @@ const Docker = () => {
 
     if (!dockerStatus?.installed) {
         return (
-            <div>
-                <header className="top-bar">
-                    <div>
+            <div className="page docker-page">
+                <div className="page-header">
+                    <div className="page-header-content">
                         <h1>Docker</h1>
-                        <div className="subtitle">Container management</div>
+                        <p className="page-description">Container management</p>
                     </div>
-                </header>
-                <div className="empty-state">
-                    <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" fill="none" strokeWidth="1.5">
-                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                    </svg>
-                    <h3>Docker not available</h3>
-                    <p>{dockerStatus?.error || 'Docker is not installed or running on this server.'}</p>
+                </div>
+                <div className="docker-unavailable">
+                    <div className="docker-unavailable-icon">
+                        <svg viewBox="0 0 24 24" width="64" height="64" stroke="currentColor" fill="none" strokeWidth="1">
+                            <rect x="2" y="7" width="5" height="5" rx="1"/>
+                            <rect x="9" y="7" width="5" height="5" rx="1"/>
+                            <rect x="16" y="7" width="5" height="5" rx="1"/>
+                            <rect x="2" y="14" width="5" height="5" rx="1"/>
+                            <rect x="9" y="14" width="5" height="5" rx="1"/>
+                            <path d="M21 12c0 4-3 7-8 7s-8-3-8-7" strokeDasharray="2 2"/>
+                        </svg>
+                    </div>
+                    <h2>Docker Not Available</h2>
+                    <p className="docker-unavailable-message">
+                        Docker is not installed or not running on this system.
+                    </p>
+                    <div className="docker-unavailable-details">
+                        <code>{dockerStatus?.error || 'Unable to connect to Docker daemon'}</code>
+                    </div>
+                    <div className="docker-unavailable-help">
+                        <h4>To use Docker management:</h4>
+                        <ul>
+                            <li>Ensure Docker Desktop is installed and running</li>
+                            <li>On Linux, make sure the Docker daemon is started</li>
+                            <li>Verify the user has permissions to access Docker</li>
+                        </ul>
+                    </div>
+                    <button className="btn btn-primary" onClick={checkDockerStatus}>
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" strokeWidth="2">
+                            <path d="M23 4v6h-6M1 20v-6h6"/>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                        </svg>
+                        Retry Connection
+                    </button>
                 </div>
             </div>
         );

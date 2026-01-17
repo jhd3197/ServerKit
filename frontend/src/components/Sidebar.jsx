@@ -117,6 +117,13 @@ const Sidebar = () => {
                     </svg>
                     Backups
                 </NavLink>
+                <NavLink to="/cron" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Cron Jobs
+                </NavLink>
             </nav>
 
             <div className="menu-label">System</div>

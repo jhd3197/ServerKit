@@ -1456,6 +1456,43 @@ class ApiService {
             body: { firewall }
         });
     }
+
+    // ========================================
+    // Cron Job endpoints
+    // ========================================
+    async getCronStatus() {
+        return this.request('/cron/status');
+    }
+
+    async getCronJobs() {
+        return this.request('/cron/jobs');
+    }
+
+    async createCronJob(data) {
+        return this.request('/cron/jobs', {
+            method: 'POST',
+            body: data
+        });
+    }
+
+    async deleteCronJob(jobId) {
+        return this.request(`/cron/jobs/${jobId}`, { method: 'DELETE' });
+    }
+
+    async toggleCronJob(jobId, enabled) {
+        return this.request(`/cron/jobs/${jobId}/toggle`, {
+            method: 'POST',
+            body: { enabled }
+        });
+    }
+
+    async runCronJob(jobId) {
+        return this.request(`/cron/jobs/${jobId}/run`, { method: 'POST' });
+    }
+
+    async getCronPresets() {
+        return this.request('/cron/presets');
+    }
 }
 
 export const api = new ApiService();

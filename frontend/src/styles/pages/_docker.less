@@ -191,3 +191,126 @@
         opacity: 0.5;
     }
 }
+
+// Docker Unavailable State
+.docker-page {
+    .page-header {
+        margin-bottom: @space-6;
+
+        .page-header-content {
+            h1 {
+                font-size: @font-size-2xl;
+                font-weight: @font-weight-semibold;
+                margin: 0 0 @space-1 0;
+            }
+
+            .page-description {
+                color: @text-secondary;
+                margin: 0;
+            }
+        }
+    }
+}
+
+.docker-unavailable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: @space-12 @space-6;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-xl;
+    max-width: 600px;
+    margin: 0 auto;
+
+    .docker-unavailable-icon {
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: fade(@color-docker, 10%);
+        border-radius: @radius-xl;
+        margin-bottom: @space-6;
+
+        svg {
+            stroke: @color-docker;
+            opacity: 0.6;
+        }
+    }
+
+    h2 {
+        font-size: @font-size-xl;
+        font-weight: @font-weight-semibold;
+        margin: 0 0 @space-2 0;
+        color: @text-primary;
+    }
+
+    .docker-unavailable-message {
+        color: @text-secondary;
+        font-size: @font-size-base;
+        margin: 0 0 @space-4 0;
+    }
+
+    .docker-unavailable-details {
+        width: 100%;
+        margin-bottom: @space-6;
+
+        code {
+            display: block;
+            padding: @space-3 @space-4;
+            background: @bg-hover;
+            border: 1px solid @border-subtle;
+            border-radius: @radius-md;
+            font-family: @font-mono;
+            font-size: @font-size-xs;
+            color: @text-tertiary;
+            word-break: break-all;
+            text-align: left;
+        }
+    }
+
+    .docker-unavailable-help {
+        width: 100%;
+        padding: @space-5;
+        background: @bg-hover;
+        border-radius: @radius-lg;
+        text-align: left;
+        margin-bottom: @space-6;
+
+        h4 {
+            font-size: @font-size-sm;
+            font-weight: @font-weight-semibold;
+            margin: 0 0 @space-3 0;
+            color: @text-primary;
+        }
+
+        ul {
+            margin: 0;
+            padding-left: @space-5;
+
+            li {
+                font-size: @font-size-sm;
+                color: @text-secondary;
+                margin-bottom: @space-2;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: @space-2;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+}

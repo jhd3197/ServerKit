@@ -1,0 +1,181 @@
+// ============================================
+// CRON JOBS PAGE
+// ============================================
+
+.cron-page {
+    .page-header {
+        margin-bottom: @space-6;
+
+        .page-header-content {
+            h1 {
+                font-size: @font-size-2xl;
+                font-weight: @font-weight-semibold;
+                margin: 0 0 @space-1 0;
+            }
+
+            .page-description {
+                color: @text-secondary;
+                margin: 0;
+            }
+        }
+    }
+}
+
+// Stats icons
+.stat-icon {
+    &.cron {
+        background: fade(@accent-primary, 10%);
+        color: @accent-primary;
+    }
+
+    &.jobs {
+        background: fade(@color-docker, 10%);
+        color: @color-docker;
+    }
+
+    &.active {
+        background: fade(@success, 10%);
+        color: @success;
+    }
+
+    &.platform {
+        background: fade(@warning, 10%);
+        color: @warning;
+    }
+}
+
+.cron-list {
+    .flex-column-gap(@space-3);
+}
+
+.cron-item {
+    .list-item-base();
+    transition: opacity 0.2s ease;
+
+    &.disabled {
+        opacity: 0.6;
+
+        .cron-item-icon {
+            color: @text-tertiary;
+        }
+    }
+}
+
+.cron-item-info {
+    .flex-start();
+    gap: @space-4;
+    flex: 1;
+    min-width: 0;
+}
+
+.cron-item-icon {
+    .icon-box();
+    background: @bg-hover;
+    border-radius: @radius-lg;
+    color: @accent-primary;
+}
+
+.cron-item-details {
+    min-width: 0;
+    flex: 1;
+
+    h3 {
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+        margin-bottom: @space-1;
+        .truncate();
+    }
+}
+
+.cron-item-meta {
+    .flex-start();
+    gap: @space-3;
+    font-size: @font-size-sm;
+    color: @text-tertiary;
+    flex-wrap: wrap;
+    margin-bottom: @space-2;
+
+    .mono {
+        .mono-text();
+        background: @bg-hover;
+        padding: @space-1 - 2 @space-2 - 2;
+        border-radius: @radius-sm;
+    }
+
+    .description {
+        color: @text-secondary;
+    }
+}
+
+.cron-item-command {
+    code {
+        display: inline-block;
+        max-width: 100%;
+        font-family: @font-mono;
+        font-size: @font-size-xs;
+        color: @text-secondary;
+        background: @bg-hover;
+        padding: @space-1 @space-2;
+        border-radius: @radius-sm;
+        .truncate();
+    }
+}
+
+.cron-item-status {
+    flex-shrink: 0;
+    margin-right: @space-3;
+}
+
+.cron-item-actions {
+    display: flex;
+    gap: @space-2;
+    flex-shrink: 0;
+
+    .btn {
+        padding: @space-2;
+
+        svg {
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+    }
+
+    .btn-warning {
+        background: fade(@warning, 10%);
+        color: @warning;
+        border: 1px solid fade(@warning, 20%);
+
+        &:hover {
+            background: fade(@warning, 20%);
+        }
+    }
+
+    .btn-success {
+        background: fade(@success, 10%);
+        color: @success;
+        border: 1px solid fade(@success, 20%);
+
+        &:hover {
+            background: fade(@success, 20%);
+        }
+    }
+}
+
+// Spinner inline for running jobs
+.spinner-inline {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid @border-subtle;
+    border-top-color: @accent-primary;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
