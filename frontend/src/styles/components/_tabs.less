@@ -1,0 +1,44 @@
+// ============================================
+// TAB COMPONENTS
+// ============================================
+
+.tabs {
+    display: flex;
+    gap: @space-1;
+    border-bottom: 1px solid @border-subtle;
+    margin-bottom: @space-6;
+    overflow-x: auto;
+    .custom-scrollbar();
+
+    @media (max-width: @breakpoint-md) {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+.tab {
+    background: none;
+    border: none;
+    padding: @space-3 @space-5;
+    color: @text-secondary;
+    font-size: @font-size-base;
+    font-weight: @font-weight-medium;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    .transition();
+    white-space: nowrap;
+
+    &:hover {
+        color: @text-primary;
+    }
+
+    &.active {
+        color: @accent-primary;
+        border-bottom-color: @accent-primary;
+    }
+}
+
+.tab-content {
+    min-height: 400px;
+}

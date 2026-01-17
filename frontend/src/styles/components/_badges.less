@@ -1,0 +1,119 @@
+// ============================================
+// BADGE COMPONENTS
+// ============================================
+
+// Status badge
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: @space-2 - 2;
+    padding: @space-1 @space-2 + 2;
+    border-radius: @radius-full;
+    font-size: @font-size-xs + 1;
+    font-weight: @font-weight-semibold;
+    border: 1px solid transparent;
+}
+
+.status-dot {
+    .status-dot(currentColor);
+}
+
+// Status variants
+.status-active {
+    background: @success-bg;
+    color: @success;
+    border-color: @success-border;
+}
+
+.status-warning {
+    background: @warning-bg;
+    color: @warning;
+    border-color: @warning-border;
+}
+
+.status-stopped {
+    background: fade(@text-tertiary, 10%);
+    color: @text-tertiary;
+    border-color: fade(@text-tertiary, 20%);
+}
+
+.status-error {
+    background: @danger-bg;
+    color: @danger;
+    border-color: @danger-border;
+}
+
+// App type badge
+.app-type {
+    background: @bg-hover;
+    padding: @space-1 - 2 @space-2;
+    border-radius: @radius-sm;
+    font-weight: @font-weight-semibold;
+    font-size: @font-size-xs;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+// SSL badge
+.ssl-badge {
+    background: @success-bg;
+    color: @success;
+    padding: @space-1 - 2 @space-2;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-semibold;
+}
+
+// Active badge (for themes/plugins)
+.active-badge {
+    background: @success-bg;
+    color: @success;
+    padding: @space-1 @space-3;
+    border-radius: @radius-full;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-semibold;
+}
+
+// Database type badge
+.db-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+    background: @bg-hover;
+    padding: @space-1 - 2 @space-2;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+
+    &.mysql {
+        color: @color-mysql;
+    }
+
+    &.postgresql {
+        color: @color-postgresql;
+    }
+}
+
+// Privilege tag
+.privilege-tag {
+    background: @accent-glow;
+    color: @accent-primary;
+    padding: @space-1 - 2 @space-2;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+// Table name tag
+.table-tag {
+    background: @bg-hover;
+    border: 1px solid @border-subtle;
+    padding: @space-2 - 2 @space-3;
+    border-radius: @radius-md;
+    .mono-text();
+    color: @text-secondary;
+}

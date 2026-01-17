@@ -1,0 +1,58 @@
+// ============================================
+// LOGS & COMMAND OUTPUT COMPONENTS
+// ============================================
+
+// Log viewer
+.log-viewer {
+    .code-block();
+    max-height: 500px;
+    overflow-y: auto;
+    line-height: @line-height-normal;
+}
+
+// Log controls
+.log-controls {
+    .flex-start();
+    gap: @space-3;
+
+    select {
+        padding: @space-2 @space-3;
+        background: @bg-body;
+        border: 1px solid @border-subtle;
+        border-radius: @radius-md;
+        color: @text-primary;
+        font-size: @font-size-sm + 1;
+    }
+}
+
+// Command output
+.command-output {
+    background: @bg-body;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    padding: @space-4;
+    margin-top: @space-5;
+
+    pre {
+        .mono-text();
+        white-space: pre-wrap;
+        word-break: break-all;
+        color: @text-primary;
+    }
+
+    &.error {
+        border-color: @danger;
+    }
+
+    .stderr {
+        color: @danger;
+    }
+}
+
+// Quick commands
+.quick-commands {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-2;
+    margin-bottom: @space-5;
+}

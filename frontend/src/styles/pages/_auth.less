@@ -1,0 +1,54 @@
+// ============================================
+// AUTHENTICATION PAGES (Login, Register)
+// ============================================
+
+.auth-container {
+    min-height: 100vh;
+    .flex-center();
+    padding: @space-5;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-2xl;
+    padding: @space-10;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: @space-8;
+
+    .brand-logo {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto @space-4;
+    }
+
+    h1 {
+        font-size: @font-size-2xl;
+        font-weight: @font-weight-bold;
+        margin-bottom: @space-2;
+    }
+
+    p {
+        color: @text-secondary;
+    }
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: @space-6;
+    color: @text-secondary;
+
+    a {
+        color: @accent-primary;
+        font-weight: @font-weight-medium;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

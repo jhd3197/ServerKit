@@ -1,0 +1,128 @@
+// ============================================
+// FORM COMPONENTS
+// ============================================
+
+.form-group {
+    margin-bottom: @space-5;
+
+    label {
+        display: block;
+        font-size: @font-size-sm + 1;
+        font-weight: @font-weight-medium;
+        color: @text-secondary;
+        margin-bottom: @space-2;
+    }
+
+    input,
+    select,
+    textarea {
+        .input-base();
+    }
+
+    select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2371717a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right @space-4 center;
+        padding-right: @space-10;
+    }
+
+    textarea {
+        font-family: @font-mono;
+        resize: vertical;
+        min-height: 120px;
+    }
+}
+
+// Two column form row
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: @space-4;
+
+    @media (max-width: @breakpoint-md) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// Inline form (input + button)
+.install-form,
+.env-form,
+.command-input {
+    display: flex;
+    gap: @space-3;
+    margin-bottom: @space-6;
+
+    input {
+        flex: 1;
+        .input-base();
+    }
+}
+
+// Hint text
+.hint {
+    color: @text-tertiary;
+    font-size: @font-size-sm + 1;
+    margin-bottom: @space-4;
+}
+
+// Error message
+.error-message {
+    background: @danger-bg;
+    border: 1px solid @danger-border;
+    color: @danger;
+    padding: @space-3 @space-4;
+    border-radius: @radius-lg;
+    margin-bottom: @space-5;
+    font-size: @font-size-sm + 1;
+}
+
+.error-banner {
+    background: @danger-bg;
+    border: 1px solid @danger-border;
+    color: @danger;
+    padding: @space-3 @space-4;
+    border-radius: @radius-lg;
+    margin-bottom: @space-6;
+}
+
+// Filter toggle (checkbox)
+.filter-toggle {
+    .flex-start();
+    gap: @space-2;
+
+    label {
+        .flex-start();
+        gap: @space-2;
+        color: @text-secondary;
+        font-size: @font-size-sm + 1;
+        cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: @accent-primary;
+    }
+}
+
+// Code editor textarea
+.code-editor {
+    width: 100%;
+    min-height: 400px;
+    padding: @space-4;
+    background: @bg-body;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    color: @text-primary;
+    font-family: @font-mono;
+    font-size: @font-size-sm + 1;
+    line-height: @line-height-relaxed;
+    resize: vertical;
+    .transition(border-color);
+
+    &:focus {
+        border-color: @accent-primary;
+    }
+}

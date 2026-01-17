@@ -1,0 +1,101 @@
+// ============================================
+// SIDEBAR LAYOUT
+// ============================================
+
+.sidebar {
+    width: @sidebar-width;
+    background-color: @bg-sidebar;
+    border-right: 1px solid @border-subtle;
+    .flex-column();
+    position: fixed;
+    height: 100vh;
+    z-index: @z-fixed;
+
+    @media (max-width: @breakpoint-md) {
+        display: none;
+    }
+}
+
+// Brand/Logo
+.brand {
+    padding: @space-6 @space-8;
+    font-size: @font-size-md;
+    font-weight: @font-weight-bold;
+    letter-spacing: -0.5px;
+    color: @text-primary;
+    .flex-start();
+    gap: @space-3;
+    border-bottom: 1px solid @border-subtle;
+}
+
+.brand-logo {
+    .icon-box(32px);
+    background: linear-gradient(135deg, @accent-primary, lighten(@accent-primary, 15%));
+    border-radius: @radius-lg;
+    color: white;
+}
+
+// Menu labels
+.menu-label {
+    padding: @space-6 @space-8 @space-2;
+    font-size: @font-size-xs + 1;
+    font-weight: @font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: @text-tertiary;
+}
+
+// Navigation
+.nav {
+    .flex-column();
+    padding: 0 @space-4;
+    gap: @space-1;
+}
+
+.nav-item {
+    .flex-start();
+    gap: @space-3;
+    padding: @space-2 + 2 @space-4;
+    color: @text-secondary;
+    text-decoration: none;
+    border-radius: @radius-md;
+    .transition();
+    font-weight: @font-weight-medium;
+
+    &:hover {
+        background-color: @bg-hover;
+        color: @text-primary;
+    }
+
+    &.active {
+        background-color: @accent-glow;
+        color: @accent-primary;
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        fill: none;
+    }
+}
+
+// User profile at bottom
+.user-profile {
+    margin-top: auto;
+    padding: @space-5;
+    border-top: 1px solid @border-subtle;
+    .flex-start();
+    gap: @space-3;
+}
+
+.avatar {
+    .icon-box(36px);
+    background-color: @bg-hover;
+    border-radius: @radius-full;
+    color: @text-secondary;
+    font-weight: @font-weight-semibold;
+}

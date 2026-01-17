@@ -1,0 +1,163 @@
+// ============================================
+// CARD COMPONENTS
+// ============================================
+
+.card {
+    .card-base();
+    padding: @space-6;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+.card-header {
+    .flex-between();
+    margin-bottom: @space-5;
+}
+
+.card h3 {
+    font-size: @font-size-md;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+    margin-bottom: @space-1;
+}
+
+.card-link {
+    color: @text-secondary;
+    text-decoration: none;
+    font-size: @font-size-sm + 1;
+    .transition(color);
+
+    &:hover {
+        color: @accent-primary;
+    }
+}
+
+// Application/Service icon
+.app-icon {
+    .icon-box(48px);
+    border-radius: @radius-xl - 2;
+    font-size: @font-size-lg;
+    font-weight: @font-weight-bold;
+    color: white;
+}
+
+// Metrics row at bottom of cards
+.metric-row {
+    margin-top: @space-6;
+    padding-top: @space-5;
+    border-top: 1px solid @border-subtle;
+    .flex-between();
+    font-size: @font-size-sm;
+    color: @text-secondary;
+}
+
+.metric-item {
+    .flex-column();
+    gap: @space-1;
+}
+
+.metric-value {
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+    .mono-text();
+}
+
+// Stat cards (dashboard)
+.stat-card {
+    background: @bg-card;
+    padding: @space-5;
+    border-radius: @radius-xl;
+    border: 1px solid @border-subtle;
+    .flex-column();
+    gap: @space-2;
+}
+
+.stat-label {
+    font-size: @font-size-sm;
+    color: @text-tertiary;
+    text-transform: uppercase;
+    font-weight: @font-weight-semibold;
+}
+
+.stat-value {
+    font-size: @font-size-xl;
+    font-weight: @font-weight-bold;
+    color: @text-primary;
+}
+
+.stat-suffix {
+    font-size: @font-size-base;
+    color: @text-tertiary;
+    font-weight: @font-weight-normal;
+}
+
+// Progress bar
+.progress-bar {
+    height: 4px;
+    background: @bg-hover;
+    border-radius: @radius-sm - 2;
+    overflow: hidden;
+    margin-top: @space-1;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: @radius-sm - 2;
+    .transition(width);
+}
+
+// Empty state card
+.empty-state {
+    text-align: center;
+    padding: @space-16 @space-5;
+    background: @bg-card;
+    border-radius: @radius-xl;
+    border: 1px solid @border-subtle;
+
+    svg {
+        color: @text-tertiary;
+        margin-bottom: @space-4;
+    }
+
+    h3 {
+        font-size: @font-size-md;
+        font-weight: @font-weight-semibold;
+        margin-bottom: @space-2;
+    }
+
+    p {
+        color: @text-secondary;
+        margin-bottom: @space-6;
+    }
+}
+
+// Section header
+.section-header {
+    .flex-between();
+    margin-bottom: @space-5;
+
+    h3 {
+        font-size: @font-size-md;
+        font-weight: @font-weight-semibold;
+    }
+}
+
+// Danger zone card
+.danger-zone {
+    border-color: fade(@danger, 30%);
+    background: fade(@danger, 5%);
+
+    h4 {
+        color: @danger;
+        margin-bottom: @space-2;
+    }
+
+    p {
+        color: @text-secondary;
+        margin-bottom: @space-4;
+    }
+}

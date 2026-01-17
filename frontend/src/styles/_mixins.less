@@ -1,0 +1,214 @@
+// ============================================
+// SERVERKIT DESIGN SYSTEM - MIXINS
+// ============================================
+
+// --------------------------------------------
+// FLEXBOX
+// --------------------------------------------
+.flex-center() {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between() {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flex-start() {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.flex-column() {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-column-gap(@gap) {
+    display: flex;
+    flex-direction: column;
+    gap: @gap;
+}
+
+// --------------------------------------------
+// TRUNCATE
+// --------------------------------------------
+.truncate() {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+// --------------------------------------------
+// TRANSITIONS
+// --------------------------------------------
+.transition(@property: all) {
+    transition: @property @transition-base;
+}
+
+.transition-fast(@property: all) {
+    transition: @property @transition-fast;
+}
+
+// --------------------------------------------
+// CARDS & CONTAINERS
+// --------------------------------------------
+.card-base() {
+    background-color: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-xl;
+    .transition(border-color);
+
+    &:hover {
+        border-color: @border-active;
+    }
+}
+
+.card-interactive() {
+    .card-base();
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+// --------------------------------------------
+// INPUTS
+// --------------------------------------------
+.input-base() {
+    width: 100%;
+    padding: @space-3 @space-4;
+    background: @bg-body;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    color: @text-primary;
+    font-size: @font-size-base;
+    .transition(border-color);
+
+    &:focus {
+        border-color: @accent-primary;
+        outline: none;
+    }
+
+    &::placeholder {
+        color: @text-tertiary;
+    }
+}
+
+// --------------------------------------------
+// BUTTONS
+// --------------------------------------------
+.button-base() {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2 @space-5;
+    border-radius: @radius-lg;
+    border: 1px solid transparent;
+    font-size: @font-size-sm + 1;
+    font-weight: @font-weight-medium;
+    cursor: pointer;
+    .transition();
+    background: none;
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+// --------------------------------------------
+// ICON CONTAINERS
+// --------------------------------------------
+.icon-box(@size: 40px) {
+    width: @size;
+    height: @size;
+    border-radius: @radius-lg;
+    .flex-center();
+    flex-shrink: 0;
+}
+
+// --------------------------------------------
+// STATUS INDICATORS
+// --------------------------------------------
+.status-dot(@color) {
+    width: 6px;
+    height: 6px;
+    background: @color;
+    border-radius: @radius-full;
+}
+
+// --------------------------------------------
+// LIST ITEMS
+// --------------------------------------------
+.list-item-base() {
+    display: flex;
+    align-items: center;
+    gap: @space-5;
+    padding: @space-4 @space-5;
+    .card-base();
+}
+
+// --------------------------------------------
+// RESPONSIVE
+// --------------------------------------------
+.respond-to(@breakpoint, @rules) {
+    @media (max-width: @breakpoint) {
+        @rules();
+    }
+}
+
+// --------------------------------------------
+// SCROLLBAR
+// --------------------------------------------
+.custom-scrollbar() {
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: @bg-body;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: @border-active;
+        border-radius: @radius-sm;
+
+        &:hover {
+            background: @text-tertiary;
+        }
+    }
+}
+
+// --------------------------------------------
+// FOCUS RING
+// --------------------------------------------
+.focus-ring() {
+    &:focus-visible {
+        outline: 2px solid @accent-primary;
+        outline-offset: 2px;
+    }
+}
+
+// --------------------------------------------
+// CODE/MONO
+// --------------------------------------------
+.mono-text() {
+    font-family: @font-mono;
+    font-size: @font-size-sm;
+}
+
+.code-block() {
+    background: @bg-body;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    padding: @space-4;
+    .mono-text();
+    .custom-scrollbar();
+}

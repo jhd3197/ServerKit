@@ -1,0 +1,195 @@
+// ============================================
+// DASHBOARD PAGE
+// ============================================
+
+// Dashboard-specific stat cards
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: @space-6;
+    margin-bottom: @space-8;
+
+    @media (max-width: @breakpoint-xl) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: @breakpoint-sm) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// System metrics cards (enhanced)
+.system-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: @space-6;
+    margin-bottom: @space-8;
+}
+
+.metric-card {
+    .card-base();
+    padding: @space-5;
+
+    .metric-header {
+        .flex-between();
+        margin-bottom: @space-4;
+
+        h4 {
+            font-size: @font-size-sm;
+            color: @text-tertiary;
+            text-transform: uppercase;
+            font-weight: @font-weight-semibold;
+        }
+
+        .metric-icon {
+            color: @text-tertiary;
+        }
+    }
+
+    .metric-main {
+        .flex-start();
+        gap: @space-3;
+        margin-bottom: @space-3;
+
+        .metric-value {
+            font-size: @font-size-2xl + 4;
+            font-weight: @font-weight-bold;
+            color: @text-primary;
+            line-height: 1;
+        }
+
+        .metric-unit {
+            font-size: @font-size-base;
+            color: @text-tertiary;
+            align-self: flex-end;
+            margin-bottom: @space-1;
+        }
+    }
+
+    .metric-sub {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+    }
+}
+
+// Quick actions grid
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: @space-4;
+    margin-bottom: @space-8;
+}
+
+.quick-action-card {
+    .card-interactive();
+    padding: @space-5;
+    text-align: center;
+
+    .action-icon {
+        .icon-box(48px);
+        background: @accent-glow;
+        color: @accent-primary;
+        margin: 0 auto @space-4;
+        border-radius: @radius-xl;
+    }
+
+    h4 {
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        margin-bottom: @space-1;
+    }
+
+    p {
+        font-size: @font-size-sm;
+        color: @text-tertiary;
+    }
+}
+
+// Recent activity
+.activity-list {
+    .flex-column-gap(@space-3);
+}
+
+.activity-item {
+    .flex-start();
+    gap: @space-4;
+    padding: @space-3 0;
+    border-bottom: 1px solid @border-subtle;
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.activity-icon {
+    .icon-box(36px);
+    background: @bg-hover;
+    border-radius: @radius-lg;
+    color: @text-secondary;
+    flex-shrink: 0;
+
+    &.success {
+        background: @success-bg;
+        color: @success;
+    }
+
+    &.warning {
+        background: @warning-bg;
+        color: @warning;
+    }
+
+    &.error {
+        background: @danger-bg;
+        color: @danger;
+    }
+}
+
+.activity-content {
+    flex: 1;
+    min-width: 0;
+
+    p {
+        font-size: @font-size-sm + 1;
+        color: @text-primary;
+        margin-bottom: @space-1;
+    }
+
+    span {
+        font-size: @font-size-sm;
+        color: @text-tertiary;
+    }
+}
+
+// Server uptime display
+.uptime-display {
+    .flex-start();
+    gap: @space-6;
+    padding: @space-5;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-xl;
+    margin-bottom: @space-6;
+}
+
+.uptime-item {
+    text-align: center;
+
+    .uptime-value {
+        font-size: @font-size-2xl;
+        font-weight: @font-weight-bold;
+        color: @text-primary;
+    }
+
+    .uptime-label {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+}
+
+.uptime-separator {
+    color: @text-tertiary;
+    font-size: @font-size-2xl;
+    font-weight: @font-weight-bold;
+}

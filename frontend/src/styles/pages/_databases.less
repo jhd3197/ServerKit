@@ -1,0 +1,146 @@
+// ============================================
+// DATABASES PAGE
+// ============================================
+
+// Status section
+.db-status {
+    display: flex;
+    gap: @space-6;
+    margin-bottom: @space-6;
+
+    @media (max-width: @breakpoint-md) {
+        flex-direction: column;
+    }
+}
+
+.db-status-item {
+    .flex-start();
+    gap: @space-3;
+    padding: @space-4 @space-6;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-xl;
+    flex: 1;
+}
+
+.status-icon {
+    .icon-box(48px);
+    border-radius: @radius-xl - 2;
+    font-size: @font-size-xl;
+    font-weight: @font-weight-bold;
+
+    &.mysql {
+        background: linear-gradient(135deg, @color-mysql-secondary, @color-mysql);
+        color: white;
+    }
+
+    &.postgresql {
+        background: linear-gradient(135deg, @color-postgresql, @color-postgresql-secondary);
+        color: white;
+    }
+}
+
+.status-info {
+    h3 {
+        font-size: @font-size-md;
+        font-weight: @font-weight-semibold;
+        margin-bottom: @space-1;
+    }
+
+    span {
+        font-size: @font-size-sm + 1;
+        color: @text-secondary;
+
+        &.running {
+            color: @success;
+        }
+
+        &.stopped {
+            color: @danger;
+        }
+    }
+}
+
+// Database list
+.db-list {
+    .flex-column-gap(@space-3);
+}
+
+.db-item {
+    .list-item-base();
+}
+
+.db-item-info {
+    .flex-start();
+    gap: @space-4;
+    flex: 1;
+    min-width: 0;
+}
+
+.db-item-icon {
+    .icon-box();
+    background: @bg-hover;
+    border-radius: @radius-lg;
+
+    &.mysql {
+        color: @color-mysql;
+    }
+
+    &.postgresql {
+        color: @color-postgresql;
+    }
+
+    &.user {
+        color: @accent-primary;
+    }
+}
+
+.db-item-details {
+    min-width: 0;
+
+    h3 {
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+        margin-bottom: @space-1;
+        .truncate();
+    }
+}
+
+.db-item-meta {
+    .flex-start();
+    gap: @space-3;
+    font-size: @font-size-sm;
+    color: @text-tertiary;
+    flex-wrap: wrap;
+
+    .mono {
+        .mono-text();
+        background: @bg-hover;
+        padding: @space-1 - 2 @space-2 - 2;
+        border-radius: @radius-sm;
+    }
+
+    .host {
+        color: @text-secondary;
+    }
+}
+
+.db-item-actions {
+    display: flex;
+    gap: @space-2;
+    flex-shrink: 0;
+}
+
+// Users section
+.users-header {
+    .flex-between();
+    margin: @space-8 0 @space-4;
+    padding-top: @space-6;
+    border-top: 1px solid @border-subtle;
+
+    h3 {
+        font-size: @font-size-md;
+        font-weight: @font-weight-semibold;
+    }
+}

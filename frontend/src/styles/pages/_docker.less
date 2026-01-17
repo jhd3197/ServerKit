@@ -1,0 +1,74 @@
+// ============================================
+// DOCKER PAGE
+// ============================================
+
+.docker-list {
+    .flex-column-gap(@space-3);
+}
+
+.docker-item {
+    .list-item-base();
+}
+
+.docker-item-info {
+    .flex-start();
+    gap: @space-4;
+    flex: 1;
+    min-width: 0;
+}
+
+.docker-item-icon {
+    .icon-box();
+    background: @bg-hover;
+    border-radius: @radius-lg;
+    color: @color-docker;
+
+    &.image-icon {
+        color: #a78bfa; // Purple for images
+    }
+
+    &.network-icon {
+        color: #34d399; // Green for networks
+    }
+
+    &.volume-icon {
+        color: #fbbf24; // Yellow for volumes
+    }
+}
+
+.docker-item-details {
+    min-width: 0;
+
+    h3 {
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+        margin-bottom: @space-1;
+        .truncate();
+    }
+}
+
+.docker-item-meta {
+    .flex-start();
+    gap: @space-3;
+    font-size: @font-size-sm;
+    color: @text-tertiary;
+    flex-wrap: wrap;
+
+    .mono {
+        .mono-text();
+        background: @bg-hover;
+        padding: @space-1 - 2 @space-2 - 2;
+        border-radius: @radius-sm;
+    }
+}
+
+.docker-item-status {
+    flex-shrink: 0;
+}
+
+.docker-item-actions {
+    display: flex;
+    gap: @space-2;
+    flex-shrink: 0;
+}

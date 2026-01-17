@@ -1,0 +1,37 @@
+// ============================================
+// GRID LAYOUTS
+// ============================================
+
+// Stats strip (4-column grid)
+.stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: @space-6;
+    margin-bottom: @space-8;
+
+    @media (max-width: @breakpoint-xl) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: @breakpoint-sm) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// Dashboard grid (auto-fit cards)
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: @space-6;
+}
+
+// Overview grid (2-column)
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: @space-6;
+
+    @media (max-width: @breakpoint-md) {
+        grid-template-columns: 1fr;
+    }
+}

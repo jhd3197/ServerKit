@@ -1,0 +1,99 @@
+// ============================================
+// BUTTON COMPONENTS
+// ============================================
+
+.btn {
+    .button-base();
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+// Primary button (accent color)
+.btn-primary {
+    background-color: @accent-primary;
+    color: white;
+    box-shadow: @shadow-accent;
+
+    &:hover:not(:disabled) {
+        background-color: @accent-hover;
+    }
+}
+
+// Secondary button (outlined)
+.btn-secondary {
+    background-color: transparent;
+    border-color: @border-active;
+    color: @text-primary;
+
+    &:hover:not(:disabled) {
+        background-color: @bg-hover;
+    }
+}
+
+// Danger button
+.btn-danger {
+    background: @danger;
+    color: white;
+
+    &:hover:not(:disabled) {
+        background: @danger-hover;
+    }
+}
+
+// Ghost button (no border)
+.btn-ghost {
+    background: transparent;
+    color: @text-secondary;
+
+    &:hover:not(:disabled) {
+        background-color: @bg-hover;
+        color: @text-primary;
+    }
+}
+
+// Size variants
+.btn-sm {
+    padding: @space-1 @space-2;
+    font-size: @font-size-xs + 1;
+}
+
+.btn-lg {
+    padding: @space-3 @space-6;
+    font-size: @font-size-base;
+}
+
+// Full width
+.btn-full {
+    width: 100%;
+    justify-content: center;
+}
+
+// Icon only button
+.btn-icon {
+    padding: @space-2;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+// Expand/collapse button
+.btn-expand {
+    background: none;
+    border: none;
+    color: @text-tertiary;
+    cursor: pointer;
+    padding: @space-1 @space-2;
+    font-size: @font-size-sm;
+    .flex-start();
+    gap: @space-1;
+    .transition(color);
+
+    &:hover {
+        color: @text-primary;
+    }
+}

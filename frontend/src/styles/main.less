@@ -1,0 +1,48 @@
+// ============================================
+// SERVERKIT - MAIN STYLESHEET
+// ============================================
+// This file imports all LESS partials in the correct order.
+// Import this file in your main React entry point.
+// ============================================
+
+// --------------------------------------------
+// 1. DESIGN TOKENS
+// --------------------------------------------
+@import '_variables';
+@import '_mixins';
+
+// --------------------------------------------
+// 2. BASE STYLES
+// --------------------------------------------
+@import 'base/_reset';
+@import 'base/_typography';
+
+// --------------------------------------------
+// 3. LAYOUT
+// --------------------------------------------
+@import 'layout/_sidebar';
+@import 'layout/_main-content';
+@import 'layout/_grid';
+
+// --------------------------------------------
+// 4. COMPONENTS
+// --------------------------------------------
+@import 'components/_buttons';
+@import 'components/_cards';
+@import 'components/_modals';
+@import 'components/_forms';
+@import 'components/_badges';
+@import 'components/_tabs';
+@import 'components/_lists';
+@import 'components/_services';
+@import 'components/_logs';
+@import 'components/_credentials';
+
+// --------------------------------------------
+// 5. PAGE-SPECIFIC STYLES
+// --------------------------------------------
+@import 'pages/_auth';
+@import 'pages/_dashboard';
+@import 'pages/_applications';
+@import 'pages/_docker';
+@import 'pages/_databases';

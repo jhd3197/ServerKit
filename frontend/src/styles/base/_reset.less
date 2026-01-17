@@ -1,0 +1,68 @@
+// ============================================
+// RESET & BASE STYLES
+// ============================================
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background-color: @bg-body;
+    color: @text-primary;
+    font-family: @font-main;
+    font-size: @font-size-base;
+    line-height: @line-height-normal;
+    min-height: 100vh;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+// Selection
+::selection {
+    background: @accent-primary;
+    color: white;
+}
+
+// Scrollbar (global)
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: @bg-body;
+}
+
+::-webkit-scrollbar-thumb {
+    background: @border-active;
+    border-radius: @radius-sm;
+
+    &:hover {
+        background: @text-tertiary;
+    }
+}

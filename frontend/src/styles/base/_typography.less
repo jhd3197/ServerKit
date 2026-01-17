@@ -1,0 +1,55 @@
+// ============================================
+// TYPOGRAPHY STYLES
+// ============================================
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+    font-weight: @font-weight-semibold;
+    line-height: @line-height-tight;
+    letter-spacing: -0.5px;
+}
+
+h1 { font-size: @font-size-2xl; }
+h2 { font-size: @font-size-lg; }
+h3 { font-size: @font-size-md; }
+h4 { font-size: @font-size-base; }
+
+// Text utilities
+.text-primary { color: @text-primary; }
+.text-secondary { color: @text-secondary; }
+.text-tertiary { color: @text-tertiary; }
+.text-success { color: @success; }
+.text-warning { color: @warning; }
+.text-danger { color: @danger; }
+.text-accent { color: @accent-primary; }
+
+// Weight utilities
+.font-normal { font-weight: @font-weight-normal; }
+.font-medium { font-weight: @font-weight-medium; }
+.font-semibold { font-weight: @font-weight-semibold; }
+.font-bold { font-weight: @font-weight-bold; }
+
+// Mono text
+.mono {
+    font-family: @font-mono;
+    font-size: @font-size-sm;
+}
+
+// Truncate
+.truncate {
+    .truncate();
+}
+
+// Subtitle (used in page headers)
+.subtitle {
+    color: @text-tertiary;
+    margin-top: @space-1;
+    font-size: @font-size-base;
+}
+
+// Section titles
+.section-title {
+    font-size: @font-size-lg;
+    margin-bottom: @space-5;
+    font-weight: @font-weight-semibold;
+}

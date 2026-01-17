@@ -1,0 +1,77 @@
+// ============================================
+// APPLICATIONS PAGES
+// ============================================
+
+// Applications list
+.apps-list {
+    .flex-column-gap(@space-3);
+}
+
+.app-row {
+    .list-item-base();
+}
+
+.app-info {
+    .flex-start();
+    gap: @space-4;
+    flex: 1;
+    min-width: 0;
+}
+
+.app-details {
+    min-width: 0;
+
+    h3 {
+        font-size: @font-size-base + 1;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+        margin-bottom: @space-1;
+        .truncate();
+    }
+}
+
+.app-meta {
+    .flex-start();
+    gap: @space-3;
+    font-size: @font-size-sm;
+    color: @text-tertiary;
+
+    a {
+        color: @text-secondary;
+        .transition(color);
+
+        &:hover {
+            color: @accent-primary;
+        }
+    }
+}
+
+.app-status {
+    flex-shrink: 0;
+}
+
+.app-actions {
+    display: flex;
+    gap: @space-2;
+    flex-shrink: 0;
+}
+
+// Application Detail Page
+.app-header-info {
+    .flex-start();
+    gap: @space-5;
+
+    @media (max-width: @breakpoint-md) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.app-header-title {
+    .flex-start();
+    gap: @space-4;
+
+    h1 {
+        font-size: @font-size-2xl;
+    }
+}

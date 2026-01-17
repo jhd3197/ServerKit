@@ -1,0 +1,65 @@
+// ============================================
+// SERVICES STATUS COMPONENTS
+// ============================================
+
+.services-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-3;
+    margin-bottom: @space-6;
+}
+
+.service-item {
+    .flex-start();
+    gap: @space-2;
+    padding: @space-2 @space-4;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    font-size: @font-size-sm + 1;
+}
+
+.service-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: @radius-full;
+
+    &.running {
+        background: @success;
+        box-shadow: 0 0 8px @success;
+    }
+
+    &.stopped {
+        background: @text-tertiary;
+    }
+}
+
+.service-name {
+    font-weight: @font-weight-medium;
+    color: @text-primary;
+}
+
+.service-status {
+    color: @text-tertiary;
+    font-size: @font-size-sm;
+}
+
+// Live indicator (pulsing dot)
+.live-indicator {
+    color: @success;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        .status-dot(@success);
+        margin-right: @space-1;
+        animation: pulse 2s infinite;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}

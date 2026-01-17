@@ -1,0 +1,56 @@
+// ============================================
+// MAIN CONTENT LAYOUT
+// ============================================
+
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content {
+    margin-left: @sidebar-width;
+    flex: 1;
+    padding: @space-10;
+    overflow-y: auto;
+
+    @media (max-width: @breakpoint-md) {
+        margin-left: 0;
+        padding: @space-5;
+    }
+}
+
+// Top bar (page header)
+.top-bar {
+    .flex-between();
+    margin-bottom: @space-10;
+
+    h1 {
+        font-size: @font-size-2xl;
+        font-weight: @font-weight-semibold;
+        letter-spacing: -0.5px;
+    }
+
+    @media (max-width: @breakpoint-md) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: @space-4;
+    }
+}
+
+.top-bar-actions {
+    display: flex;
+    gap: @space-3;
+}
+
+// Page placeholder
+.page {
+    font-size: @font-size-2xl;
+    color: @text-secondary;
+}
+
+// Loading state
+.loading {
+    .flex-center();
+    min-height: 100vh;
+    color: @text-secondary;
+}
