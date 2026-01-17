@@ -66,27 +66,103 @@
     .mono-text();
 }
 
+// Stats grid layout
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: @space-4;
+    margin-bottom: @space-6;
+
+    @media (max-width: @breakpoint-xl) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: @breakpoint-sm) {
+        grid-template-columns: 1fr;
+    }
+}
+
 // Stat cards (dashboard)
 .stat-card {
     background: @bg-card;
     padding: @space-5;
     border-radius: @radius-xl;
     border: 1px solid @border-subtle;
-    .flex-column();
-    gap: @space-2;
+    display: flex;
+    align-items: center;
+    gap: @space-4;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: @radius-lg;
+    flex-shrink: 0;
+
+    svg {
+        width: 24px;
+        height: 24px;
+        stroke: currentColor;
+        stroke-width: 2;
+        fill: none;
+    }
+
+    // Default colors
+    background: fade(@accent-primary, 10%);
+    color: @accent-primary;
+
+    &.backups {
+        background: fade(@accent-primary, 10%);
+        color: @accent-primary;
+    }
+
+    &.apps {
+        background: fade(@success, 10%);
+        color: @success;
+    }
+
+    &.databases {
+        background: fade(@color-postgresql, 10%);
+        color: @color-postgresql;
+    }
+
+    &.size {
+        background: fade(@warning, 10%);
+        color: @warning;
+    }
+
+    &.alerts {
+        background: fade(@danger, 10%);
+        color: @danger;
+    }
+
+    &.schedules {
+        background: fade(@color-docker, 10%);
+        color: @color-docker;
+    }
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: @space-1;
+    min-width: 0;
 }
 
 .stat-label {
     font-size: @font-size-sm;
     color: @text-tertiary;
-    text-transform: uppercase;
-    font-weight: @font-weight-semibold;
+    font-weight: @font-weight-medium;
 }
 
 .stat-value {
     font-size: @font-size-xl;
     font-weight: @font-weight-bold;
     color: @text-primary;
+    line-height: 1.2;
 }
 
 .stat-suffix {

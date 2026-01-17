@@ -1,4 +1,6 @@
-// Monitoring Page Styles
+// ============================================
+// MONITORING PAGE
+// ============================================
 
 .monitoring-page {
     .monitoring-overview {
@@ -10,7 +12,7 @@
     .threshold-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: @space-6;
+        gap: @space-4;
     }
 
     .threshold-item {
@@ -18,19 +20,19 @@
         justify-content: space-between;
         align-items: center;
         padding: @space-4;
-        background: var(--bg-secondary);
+        background: @bg-hover;
         border-radius: @radius-md;
     }
 
     .threshold-label {
-        color: var(--text-secondary);
+        color: @text-secondary;
         font-size: @font-size-sm;
     }
 
     .threshold-value {
         font-size: @font-size-lg;
-        font-weight: 600;
-        color: var(--primary);
+        font-weight: @font-weight-semibold;
+        color: @accent-primary;
     }
 
     .threshold-form-grid {
@@ -49,8 +51,8 @@
         display: flex;
         align-items: center;
         gap: @space-4;
-        padding: @space-2 @space-4;
-        background: var(--bg-secondary);
+        padding: @space-3 @space-4;
+        background: @bg-hover;
         border-radius: @radius-md;
 
         .badge {
@@ -60,46 +62,35 @@
         .alert-message {
             flex: 1;
             font-size: @font-size-sm;
+            color: @text-primary;
         }
 
         .alert-time {
-            color: var(--text-tertiary);
+            color: @text-tertiary;
             font-size: @font-size-xs;
             white-space: nowrap;
         }
     }
 
+    // Stat icon variants for monitoring
     .stat-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: @radius-lg;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 2;
-        }
-
         &.status {
-            background: rgba(34, 197, 94, 0.1);
+            background: fade(@success, 10%);
             color: @success;
         }
 
         &.alerts {
-            background: rgba(239, 68, 68, 0.1);
+            background: fade(@danger, 10%);
             color: @danger;
         }
 
         &.interval {
-            background: rgba(59, 130, 246, 0.1);
+            background: fade(@accent-primary, 10%);
             color: @accent-primary;
         }
 
         &.notifications {
-            background: rgba(168, 85, 247, 0.1);
+            background: fade(#a855f7, 10%);
             color: #a855f7;
         }
     }
@@ -109,7 +100,7 @@
     }
 
     .text-muted {
-        color: var(--text-tertiary);
+        color: @text-tertiary;
     }
 
     .input-group {
@@ -139,7 +130,7 @@
 
         span {
             font-size: @font-size-sm;
-            color: var(--text-primary);
+            color: @text-primary;
         }
     }
 
@@ -147,6 +138,6 @@
         display: block;
         margin-top: @space-1;
         font-size: @font-size-xs;
-        color: var(--text-tertiary);
+        color: @text-tertiary;
     }
 }

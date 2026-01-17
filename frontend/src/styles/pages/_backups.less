@@ -1,48 +1,43 @@
-// Backups Page Styles
+// ============================================
+// BACKUPS PAGE
+// ============================================
 
 .backups-page {
+    // Stat icon variants for backups
     .stat-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: @radius-lg;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 2;
-        }
-
         &.backups {
-            background: rgba(34, 197, 94, 0.1);
+            background: fade(@success, 10%);
             color: @success;
         }
 
         &.apps {
-            background: rgba(59, 130, 246, 0.1);
+            background: fade(@accent-primary, 10%);
             color: @accent-primary;
         }
 
         &.databases {
-            background: rgba(168, 85, 247, 0.1);
+            background: fade(#a855f7, 10%);
             color: #a855f7;
         }
 
         &.size {
-            background: rgba(249, 115, 22, 0.1);
+            background: fade(@warning, 10%);
             color: @warning;
         }
     }
 
     .filter-select {
-        padding: @space-1 @space-2;
-        border: 1px solid var(--border-color);
-        border-radius: @radius-sm;
-        background: var(--bg-secondary);
-        color: var(--text-primary);
+        padding: @space-2 @space-3;
+        border: 1px solid @border-subtle;
+        border-radius: @radius-md;
+        background: @bg-hover;
+        color: @text-primary;
         font-size: @font-size-sm;
+
+        &:focus {
+            outline: none;
+            border-color: @accent-primary;
+        }
     }
 
     .backup-name {
@@ -85,7 +80,7 @@
 
         span {
             font-size: @font-size-sm;
-            color: var(--text-primary);
+            color: @text-primary;
         }
     }
 
@@ -99,13 +94,13 @@
         display: block;
         margin-top: @space-1;
         font-size: @font-size-xs;
-        color: var(--text-tertiary);
+        color: @text-tertiary;
     }
 
     .restore-warning {
         text-align: center;
         padding: @space-6;
-        background: rgba(239, 68, 68, 0.1);
+        background: @danger-bg;
         border-radius: @radius-md;
         margin-bottom: @space-6;
 
@@ -122,34 +117,35 @@
         }
 
         p {
-            color: var(--text-secondary);
+            color: @text-secondary;
             font-size: @font-size-sm;
         }
     }
 
     .restore-details {
-        background: var(--bg-secondary);
+        background: @bg-hover;
         border-radius: @radius-md;
         padding: @space-4;
 
         .detail-row {
             display: flex;
             justify-content: space-between;
-            padding: @space-1 0;
+            padding: @space-2 0;
 
             &:not(:last-child) {
-                border-bottom: 1px solid var(--border-color);
+                border-bottom: 1px solid @border-subtle;
             }
         }
 
         .detail-label {
-            color: var(--text-tertiary);
+            color: @text-tertiary;
             font-size: @font-size-sm;
         }
 
         .detail-value {
-            font-weight: 500;
+            font-weight: @font-weight-medium;
             font-size: @font-size-sm;
+            color: @text-primary;
         }
     }
 }
