@@ -121,6 +121,10 @@ def create_app(config_name=None):
     from app.api.cron import cron_bp
     app.register_blueprint(cron_bp, url_prefix='/api/v1/cron')
 
+    # Register blueprints - Uptime Tracking
+    from app.api.uptime import uptime_bp
+    app.register_blueprint(uptime_bp, url_prefix='/api/v1/uptime')
+
     # Create database tables
     with app.app_context():
         db.create_all()

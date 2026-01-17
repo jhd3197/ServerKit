@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Cpu, MemoryStick, HardDrive, Clock, Server,
-    Plus, FileText, RefreshCw, Activity, Layers,
-    Database, Globe, Container, Code, CheckCircle,
-    AlertCircle, XCircle, ArrowRight
+    Cpu, MemoryStick, HardDrive, Server,
+    Plus, RefreshCw, Activity, Layers,
+    Database, Globe, Container, Code,
+    ArrowRight
 } from 'lucide-react';
 import api from '../services/api';
 import { useMetrics } from '../hooks/useMetrics';
+import UptimeGraph from '../components/UptimeGraph';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -70,22 +71,6 @@ const Dashboard = () => {
         return colors[type] || '#6366f1';
     }
 
-    function parseUptime(uptimeStr) {
-        if (!uptimeStr) return { days: 0, hours: 0, minutes: 0 };
-
-        const match = uptimeStr.match(/(\d+)d\s*(\d+)h\s*(\d+)m|(\d+)h\s*(\d+)m|(\d+)m/);
-        if (!match) return { days: 0, hours: 0, minutes: 0 };
-
-        if (match[1]) {
-            return { days: parseInt(match[1]), hours: parseInt(match[2]), minutes: parseInt(match[3]) };
-        } else if (match[4]) {
-            return { days: 0, hours: parseInt(match[4]), minutes: parseInt(match[5]) };
-        } else {
-            return { days: 0, hours: 0, minutes: parseInt(match[6]) };
-        }
-    }
-
-    const uptime = parseUptime(metrics?.system?.uptime_human);
     const runningApps = apps.filter(a => a.status === 'running').length;
     const runningServices = services.filter(s => s.status === 'running').length;
 
@@ -115,41 +100,8 @@ const Dashboard = () => {
                 </div>
             </header>
 
-            {/* Uptime Display */}
-            {metrics?.system && (
-                <div className="uptime-display">
-                    <Server size={24} style={{ color: 'var(--success)' }} />
-                    <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: '13px', color: 'var(--text-tertiary)', marginBottom: '4px' }}>
-                            Server Uptime
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                            <div className="uptime-item">
-                                <span className="uptime-value">{uptime.days}</span>
-                                <span className="uptime-label">Days</span>
-                            </div>
-                            <span className="uptime-separator">:</span>
-                            <div className="uptime-item">
-                                <span className="uptime-value">{String(uptime.hours).padStart(2, '0')}</span>
-                                <span className="uptime-label">Hours</span>
-                            </div>
-                            <span className="uptime-separator">:</span>
-                            <div className="uptime-item">
-                                <span className="uptime-value">{String(uptime.minutes).padStart(2, '0')}</span>
-                                <span className="uptime-label">Minutes</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
-                            {metrics.system?.hostname}
-                        </div>
-                        <div style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>
-                            {metrics.system?.platform}
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Uptime Graph */}
+            <UptimeGraph />
 
             {/* System Metrics */}
             {metrics && (

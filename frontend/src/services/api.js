@@ -1493,6 +1493,37 @@ class ApiService {
     async getCronPresets() {
         return this.request('/cron/presets');
     }
+
+    // ========================================
+    // Uptime Tracking endpoints
+    // ========================================
+    async getCurrentUptime() {
+        return this.request('/uptime/current');
+    }
+
+    async getUptimeStats() {
+        return this.request('/uptime/stats');
+    }
+
+    async getUptimeGraph(period = '24h') {
+        return this.request(`/uptime/graph?period=${period}`);
+    }
+
+    async getUptimeHistory(hours = 24) {
+        return this.request(`/uptime/history?hours=${hours}`);
+    }
+
+    async startUptimeTracking() {
+        return this.request('/uptime/tracking/start', { method: 'POST' });
+    }
+
+    async stopUptimeTracking() {
+        return this.request('/uptime/tracking/stop', { method: 'POST' });
+    }
+
+    async getUptimeTrackingStatus() {
+        return this.request('/uptime/tracking/status');
+    }
 }
 
 export const api = new ApiService();

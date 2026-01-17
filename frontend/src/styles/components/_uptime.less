@@ -1,0 +1,445 @@
+// ============================================
+// UPTIME GRAPH COMPONENT
+// ============================================
+
+.uptime-card {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-xl;
+    padding: @space-6;
+
+    &.loading,
+    &.error {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: @space-3;
+        min-height: 200px;
+        color: @text-tertiary;
+    }
+
+    &.error {
+        color: @danger;
+    }
+}
+
+.uptime-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: @space-6;
+}
+
+.uptime-title {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+
+    .uptime-icon {
+        color: @success;
+    }
+
+    h3 {
+        font-size: @font-size-lg;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+        margin: 0 0 @space-1 0;
+    }
+}
+
+.uptime-status {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-2;
+    font-size: @font-size-sm;
+    color: @text-secondary;
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: @text-tertiary;
+    }
+
+    &.online {
+        color: @success;
+
+        .status-dot {
+            background: @success;
+            box-shadow: 0 0 8px @success;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+    }
+
+    &.degraded {
+        color: @warning;
+
+        .status-dot {
+            background: @warning;
+        }
+    }
+
+    &.offline {
+        color: @danger;
+
+        .status-dot {
+            background: @danger;
+        }
+    }
+}
+
+@keyframes pulse-dot {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.2);
+    }
+}
+
+.uptime-percentage {
+    text-align: right;
+
+    .percentage-value {
+        display: block;
+        font-size: @font-size-2xl;
+        font-weight: @font-weight-bold;
+        font-family: @font-mono;
+        color: @text-primary;
+
+        &.excellent {
+            color: @success;
+        }
+
+        &.good {
+            color: @success;
+        }
+
+        &.fair {
+            color: @warning;
+        }
+
+        &.poor {
+            color: @danger;
+        }
+    }
+
+    .percentage-label {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+}
+
+// Uptime Counter
+.uptime-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-2;
+    padding: @space-5;
+    background: linear-gradient(135deg, fade(@accent-primary, 5%), fade(@success, 5%));
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    margin-bottom: @space-6;
+}
+
+.uptime-counter-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+
+    .counter-value {
+        font-size: 32px;
+        font-weight: @font-weight-bold;
+        font-family: @font-mono;
+        color: @text-primary;
+        line-height: 1;
+    }
+
+    .counter-label {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: @space-1;
+    }
+}
+
+.counter-separator {
+    font-size: 32px;
+    font-weight: @font-weight-bold;
+    font-family: @font-mono;
+    color: @text-tertiary;
+    margin: 0 @space-1;
+    margin-bottom: @space-4;
+}
+
+// Graph Section
+.uptime-graph-section {
+    margin-bottom: @space-5;
+}
+
+.uptime-graph-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: @space-3;
+
+    .graph-title {
+        font-size: @font-size-sm;
+        font-weight: @font-weight-medium;
+        color: @text-secondary;
+    }
+}
+
+.period-selector {
+    display: flex;
+    gap: @space-1;
+    background: @bg-hover;
+    padding: @space-1;
+    border-radius: @radius-md;
+}
+
+.period-btn {
+    padding: @space-1 @space-3;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+    color: @text-tertiary;
+    background: transparent;
+    border: none;
+    border-radius: @radius-sm;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        color: @text-primary;
+    }
+
+    &.active {
+        background: @accent-primary;
+        color: white;
+    }
+}
+
+.uptime-graph {
+    display: flex;
+    gap: 2px;
+    height: 32px;
+    background: @bg-hover;
+    border-radius: @radius-md;
+    overflow: hidden;
+    padding: 4px;
+}
+
+.graph-bar {
+    flex: 1;
+    border-radius: 2px;
+    transition: transform @transition-fast, opacity @transition-fast;
+    cursor: pointer;
+    min-width: 4px;
+
+    &:hover {
+        transform: scaleY(1.1);
+        opacity: 0.8;
+    }
+
+    &.up {
+        background: @success;
+    }
+
+    &.degraded {
+        background: @warning;
+    }
+
+    &.down {
+        background: @danger;
+    }
+
+    &.no_data,
+    &.no-data {
+        background: @border-subtle;
+    }
+}
+
+.uptime-graph-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: @space-2;
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+}
+
+// Legend
+.uptime-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-5;
+    padding: @space-3 0;
+    border-top: 1px solid @border-subtle;
+    border-bottom: 1px solid @border-subtle;
+    margin-bottom: @space-5;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    font-size: @font-size-xs;
+    color: @text-secondary;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+
+    &.up {
+        background: @success;
+    }
+
+    &.degraded {
+        background: @warning;
+    }
+
+    &.down {
+        background: @danger;
+    }
+
+    &.no-data {
+        background: @border-subtle;
+    }
+}
+
+// Stats Grid
+.uptime-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: @space-3;
+}
+
+.uptime-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: @space-3;
+    background: @bg-hover;
+    border-radius: @radius-md;
+
+    .stat-period {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        text-transform: uppercase;
+        margin-bottom: @space-1;
+    }
+
+    .stat-value {
+        font-size: @font-size-md;
+        font-weight: @font-weight-bold;
+        font-family: @font-mono;
+        color: @text-primary;
+
+        &.excellent,
+        &.good {
+            color: @success;
+        }
+
+        &.fair {
+            color: @warning;
+        }
+
+        &.poor {
+            color: @danger;
+        }
+    }
+}
+
+// Compact Version
+.uptime-compact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @space-4 @space-5;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+}
+
+.uptime-compact-status {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+
+    .uptime-compact-label {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+    }
+
+    .uptime-compact-percent {
+        font-size: @font-size-base;
+        font-weight: @font-weight-bold;
+        font-family: @font-mono;
+        padding: @space-1 @space-2;
+        border-radius: @radius-sm;
+        background: @success-bg;
+        color: @success;
+
+        &.fair {
+            background: @warning-bg;
+            color: @warning;
+        }
+
+        &.poor {
+            background: @danger-bg;
+            color: @danger;
+        }
+    }
+}
+
+.uptime-compact-time {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    font-family: @font-mono;
+
+    .value {
+        font-size: @font-size-lg;
+        font-weight: @font-weight-bold;
+        color: @text-primary;
+    }
+
+    .unit {
+        font-size: @font-size-sm;
+        color: @text-tertiary;
+        margin-right: @space-1;
+    }
+}
+
+// Responsive
+@media (max-width: @breakpoint-md) {
+    .uptime-counter-item {
+        min-width: 50px;
+
+        .counter-value {
+            font-size: 24px;
+        }
+    }
+
+    .counter-separator {
+        font-size: 24px;
+    }
+
+    .uptime-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .uptime-legend {
+        flex-wrap: wrap;
+        gap: @space-3;
+    }
+}
