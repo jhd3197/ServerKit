@@ -97,3 +97,17 @@
         color: @text-primary;
     }
 }
+
+// Loading state (see _spinner.less for spinner-specific styles)
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    color: transparent !important;
+
+    .spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

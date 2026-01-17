@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { useToast } from '../contexts/ToastContext';
 
 const Docker = () => {
     const [activeTab, setActiveTab] = useState('containers');
@@ -418,6 +419,7 @@ const ContainerLogsModal = ({ container, onClose }) => {
 };
 
 const ImagesTab = () => {
+    const toast = useToast();
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showPullModal, setShowPullModal] = useState(false);
@@ -443,10 +445,11 @@ const ImagesTab = () => {
 
         try {
             await api.removeImage(imageId, true);
+            toast.success('Image removed successfully');
             loadImages();
         } catch (err) {
             console.error('Failed to remove image:', err);
-            alert('Failed to remove image. It may be in use by a container.');
+            toast.error('Failed to remove image. It may be in use by a container.');
         }
     }
 
@@ -581,6 +584,7 @@ const PullImageModal = ({ onClose, onPulled }) => {
 };
 
 const NetworksTab = () => {
+    const toast = useToast();
     const [networks, setNetworks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -606,10 +610,11 @@ const NetworksTab = () => {
 
         try {
             await api.removeNetwork(networkId);
+            toast.success('Network removed successfully');
             loadNetworks();
         } catch (err) {
             console.error('Failed to remove network:', err);
-            alert('Failed to remove network. It may be in use.');
+            toast.error('Failed to remove network. It may be in use.');
         }
     }
 
@@ -740,6 +745,7 @@ const CreateNetworkModal = ({ onClose, onCreated }) => {
 };
 
 const VolumesTab = () => {
+    const toast = useToast();
     const [volumes, setVolumes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -765,10 +771,11 @@ const VolumesTab = () => {
 
         try {
             await api.removeVolume(volumeName, true);
+            toast.success('Volume removed successfully');
             loadVolumes();
         } catch (err) {
             console.error('Failed to remove volume:', err);
-            alert('Failed to remove volume. It may be in use.');
+            toast.error('Failed to remove volume. It may be in use.');
         }
     }
 

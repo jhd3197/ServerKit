@@ -1,0 +1,23 @@
+[Unit]
+Description=ServerKit Web Server Management Dashboard
+Documentation=https://github.com/yourusername/serverkit
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/serverkit
+ExecStart=/usr/bin/docker compose -f docker-compose.prod.yml up -d
+ExecStop=/usr/bin/docker compose -f docker-compose.prod.yml down
+ExecReload=/usr/bin/docker compose -f docker-compose.prod.yml restart
+TimeoutStartSec=300
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/opt/serverkit
+
+[Install]
+WantedBy=multi-user.target

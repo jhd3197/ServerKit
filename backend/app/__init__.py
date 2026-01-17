@@ -3,11 +3,14 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 from config import config
 
 db = SQLAlchemy()
 jwt = JWTManager()
+limiter = Limiter(key_func=get_remote_address, default_limits=["100 per minute"])
 socketio = None
 
 
@@ -23,7 +26,12 @@ def create_app(config_name=None):
     # Initialize extensions
     db.init_app(app)
     jwt.init_app(app)
+    limiter.init_app(app)
     CORS(app, origins=app.config['CORS_ORIGINS'], supports_credentials=True)
+
+    # Register security headers middleware
+    from app.middleware.security import register_security_headers
+    register_security_headers(app)
 
     # Initialize SocketIO
     from app.sockets import init_socketio
@@ -70,6 +78,18 @@ def create_app(config_name=None):
     # Register blueprints - Databases
     from app.api.databases import databases_bp
     app.register_blueprint(databases_bp, url_prefix='/api/v1/databases')
+
+    # Register blueprints - Monitoring & Alerts
+    from app.api.monitoring import monitoring_bp
+    app.register_blueprint(monitoring_bp, url_prefix='/api/v1/monitoring')
+
+    # Register blueprints - Backups
+    from app.api.backups import backups_bp
+    app.register_blueprint(backups_bp, url_prefix='/api/v1/backups')
+
+    # Register blueprints - Git Deployment
+    from app.api.deploy import deploy_bp
+    app.register_blueprint(deploy_bp, url_prefix='/api/v1/deploy')
 
     # Create database tables
     with app.app_context():

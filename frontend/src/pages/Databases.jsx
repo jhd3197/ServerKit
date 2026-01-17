@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
+import { useToast } from '../contexts/ToastContext';
 
 const Databases = () => {
     const [activeTab, setActiveTab] = useState('mysql');
@@ -84,6 +85,7 @@ const Databases = () => {
 };
 
 const MySQLTab = ({ status }) => {
+    const toast = useToast();
     const [databases, setDatabases] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -121,10 +123,11 @@ const MySQLTab = ({ status }) => {
 
         try {
             await api.dropMySQLDatabase(name);
+            toast.success(`Database "${name}" dropped successfully`);
             loadData();
         } catch (err) {
             console.error('Failed to drop database:', err);
-            alert('Failed to drop database');
+            toast.error('Failed to drop database');
         }
     }
 
@@ -132,11 +135,11 @@ const MySQLTab = ({ status }) => {
         try {
             const result = await api.backupMySQLDatabase(name);
             if (result.success) {
-                alert(`Backup created: ${result.backup_path}`);
+                toast.success(`Backup created: ${result.backup_path}`);
             }
         } catch (err) {
             console.error('Failed to backup database:', err);
-            alert('Failed to create backup');
+            toast.error('Failed to create backup');
         }
     }
 
@@ -145,10 +148,11 @@ const MySQLTab = ({ status }) => {
 
         try {
             await api.dropMySQLUser(username, host);
+            toast.success(`User "${username}" dropped successfully`);
             loadData();
         } catch (err) {
             console.error('Failed to drop user:', err);
-            alert('Failed to drop user');
+            toast.error('Failed to drop user');
         }
     }
 
@@ -308,6 +312,7 @@ const MySQLTab = ({ status }) => {
 };
 
 const PostgreSQLTab = ({ status }) => {
+    const toast = useToast();
     const [databases, setDatabases] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -345,10 +350,11 @@ const PostgreSQLTab = ({ status }) => {
 
         try {
             await api.dropPostgreSQLDatabase(name);
+            toast.success(`Database "${name}" dropped successfully`);
             loadData();
         } catch (err) {
             console.error('Failed to drop database:', err);
-            alert('Failed to drop database');
+            toast.error('Failed to drop database');
         }
     }
 
@@ -356,11 +362,11 @@ const PostgreSQLTab = ({ status }) => {
         try {
             const result = await api.backupPostgreSQLDatabase(name);
             if (result.success) {
-                alert(`Backup created: ${result.backup_path}`);
+                toast.success(`Backup created: ${result.backup_path}`);
             }
         } catch (err) {
             console.error('Failed to backup database:', err);
-            alert('Failed to create backup');
+            toast.error('Failed to create backup');
         }
     }
 
@@ -369,10 +375,11 @@ const PostgreSQLTab = ({ status }) => {
 
         try {
             await api.dropPostgreSQLUser(username);
+            toast.success(`User "${username}" dropped successfully`);
             loadData();
         } catch (err) {
             console.error('Failed to drop user:', err);
-            alert('Failed to drop user');
+            toast.error('Failed to drop user');
         }
     }
 

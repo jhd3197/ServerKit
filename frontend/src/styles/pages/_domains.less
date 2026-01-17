@@ -1,0 +1,228 @@
+// ============================================
+// DOMAINS & SSL PAGE
+// ============================================
+
+// SSL Status Bar
+.ssl-status-bar {
+    display: flex;
+    gap: @space-6;
+    margin-bottom: @space-8;
+
+    @media (max-width: @breakpoint-md) {
+        flex-direction: column;
+    }
+}
+
+.ssl-status-item {
+    .flex-start();
+    gap: @space-4;
+    padding: @space-5;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-xl;
+    flex: 1;
+}
+
+.ssl-status-icon {
+    .icon-box(48px);
+    border-radius: @radius-xl - 2;
+
+    &.active {
+        background: @success-bg;
+        color: @success;
+    }
+
+    &.inactive {
+        background: @danger-bg;
+        color: @danger;
+    }
+}
+
+.ssl-status-info {
+    h4 {
+        font-size: @font-size-md;
+        font-weight: @font-weight-semibold;
+        margin-bottom: @space-1;
+    }
+
+    span {
+        font-size: @font-size-sm + 1;
+        color: @text-secondary;
+    }
+}
+
+// Domain List
+.domain-list {
+    .flex-column-gap(@space-3);
+}
+
+.domain-item {
+    .list-item-base();
+}
+
+.domain-item-info {
+    .flex-start();
+    gap: @space-4;
+    flex: 1;
+    min-width: 0;
+}
+
+.domain-item-icon {
+    .icon-box();
+    background: @bg-hover;
+    border-radius: @radius-lg;
+    color: @text-secondary;
+
+    &.ssl {
+        background: @success-bg;
+        color: @success;
+    }
+}
+
+.domain-item-details {
+    min-width: 0;
+
+    h3 {
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+        margin-bottom: @space-1;
+        .flex-start();
+        gap: @space-2;
+    }
+}
+
+.primary-badge {
+    background: @accent-glow;
+    color: @accent-primary;
+    padding: @space-1 - 2 @space-2;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-semibold;
+    text-transform: uppercase;
+}
+
+.domain-item-meta {
+    .flex-start();
+    gap: @space-4;
+    font-size: @font-size-sm;
+    color: @text-tertiary;
+
+    span {
+        .flex-start();
+        gap: @space-1;
+    }
+}
+
+.app-link {
+    color: @text-secondary;
+}
+
+.ssl-badge {
+    color: @success;
+}
+
+.domain-item-actions {
+    display: flex;
+    gap: @space-2;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+// Certificate List
+.cert-list {
+    .flex-column-gap(@space-3);
+}
+
+.cert-item {
+    .list-item-base();
+}
+
+.cert-item-info {
+    .flex-start();
+    gap: @space-4;
+    flex: 1;
+    min-width: 0;
+}
+
+.cert-item-icon {
+    .icon-box();
+    background: @success-bg;
+    border-radius: @radius-lg;
+    color: @success;
+}
+
+.cert-item-details {
+    min-width: 0;
+
+    h3 {
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+        margin-bottom: @space-1;
+    }
+}
+
+.cert-item-meta {
+    .flex-start();
+    gap: @space-4;
+    font-size: @font-size-sm;
+    color: @text-tertiary;
+
+    span {
+        .flex-start();
+        gap: @space-1;
+
+        &.valid {
+            color: @success;
+        }
+
+        &.expiring {
+            color: @warning;
+        }
+    }
+}
+
+.cert-status {
+    flex-shrink: 0;
+}
+
+// SSL Info Box (in modal)
+.ssl-info-box {
+    .flex-start();
+    gap: @space-4;
+    padding: @space-5;
+    background: @success-bg;
+    border: 1px solid @success-border;
+    border-radius: @radius-lg;
+    margin-bottom: @space-5;
+    color: @success;
+
+    h4 {
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        margin-bottom: @space-1;
+    }
+
+    p {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+
+        strong {
+            color: @text-primary;
+        }
+    }
+}
+
+// Checkbox label
+.checkbox-label {
+    .flex-start();
+    gap: @space-2;
+    cursor: pointer;
+
+    input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: @accent-primary;
+    }
+}

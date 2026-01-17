@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ToastProvider } from './contexts/ToastContext';
+import { ToastContainer } from './components/Toast';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
@@ -9,6 +11,11 @@ import Applications from './pages/Applications';
 import ApplicationDetail from './pages/ApplicationDetail';
 import Docker from './pages/Docker';
 import Databases from './pages/Databases';
+import Domains from './pages/Domains';
+import Monitoring from './pages/Monitoring';
+import Backups from './pages/Backups';
+import Terminal from './pages/Terminal';
+import Settings from './pages/Settings';
 
 function PrivateRoute({ children }) {
     const { isAuthenticated, loading } = useAuth();
@@ -51,12 +58,14 @@ function AppRoutes() {
                 <Route index element={<Dashboard />} />
                 <Route path="apps" element={<Applications />} />
                 <Route path="apps/:id" element={<ApplicationDetail />} />
-                <Route path="domains" element={<div className="page">Domains & Sites</div>} />
+                <Route path="domains" element={<Domains />} />
                 <Route path="databases" element={<Databases />} />
                 <Route path="ssl" element={<div className="page">SSL Certificates</div>} />
                 <Route path="docker" element={<Docker />} />
-                <Route path="terminal" element={<div className="page">Terminal / Logs</div>} />
-                <Route path="settings" element={<div className="page">Settings</div>} />
+                <Route path="monitoring" element={<Monitoring />} />
+                <Route path="backups" element={<Backups />} />
+                <Route path="terminal" element={<Terminal />} />
+                <Route path="settings" element={<Settings />} />
             </Route>
         </Routes>
     );
@@ -66,7 +75,10 @@ function App() {
     return (
         <Router>
             <AuthProvider>
-                <AppRoutes />
+                <ToastProvider>
+                    <AppRoutes />
+                    <ToastContainer />
+                </ToastProvider>
             </AuthProvider>
         </Router>
     );

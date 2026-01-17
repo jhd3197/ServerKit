@@ -35,8 +35,12 @@ def get_status():
 @databases_bp.route('/mysql', methods=['GET'])
 @jwt_required()
 def list_mysql_databases():
-    """List MySQL databases."""
-    root_password = request.args.get('root_password')
+    """List MySQL databases.
+
+    For security, root_password should be passed via X-DB-Password header, not query params.
+    """
+    # Read root_password from header for security (not exposed in URL/logs)
+    root_password = request.headers.get('X-DB-Password')
     databases = DatabaseService.mysql_list_databases(root_password)
     return jsonify({'databases': databases}), 200
 
@@ -94,8 +98,11 @@ def drop_mysql_database(name):
 @databases_bp.route('/mysql/<name>/tables', methods=['GET'])
 @jwt_required()
 def get_mysql_tables(name):
-    """Get tables in a MySQL database."""
-    root_password = request.args.get('root_password')
+    """Get tables in a MySQL database.
+
+    For security, root_password should be passed via X-DB-Password header.
+    """
+    root_password = request.headers.get('X-DB-Password')
     tables = DatabaseService.mysql_get_tables(name, root_password)
     return jsonify({'tables': tables}), 200
 
@@ -133,8 +140,11 @@ def restore_mysql_database(name):
 @databases_bp.route('/mysql/users', methods=['GET'])
 @jwt_required()
 def list_mysql_users():
-    """List MySQL users."""
-    root_password = request.args.get('root_password')
+    """List MySQL users.
+
+    For security, root_password should be passed via X-DB-Password header.
+    """
+    root_password = request.headers.get('X-DB-Password')
     users = DatabaseService.mysql_list_users(root_password)
     return jsonify({'users': users}), 200
 
@@ -188,9 +198,12 @@ def drop_mysql_user(username):
 @databases_bp.route('/mysql/users/<username>/privileges', methods=['GET'])
 @jwt_required()
 def get_mysql_user_privileges(username):
-    """Get privileges for a MySQL user."""
+    """Get privileges for a MySQL user.
+
+    For security, root_password should be passed via X-DB-Password header.
+    """
     host = request.args.get('host', 'localhost')
-    root_password = request.args.get('root_password')
+    root_password = request.headers.get('X-DB-Password')
     privileges = DatabaseService.mysql_get_user_privileges(username, host, root_password)
     return jsonify({'privileges': privileges}), 200
 

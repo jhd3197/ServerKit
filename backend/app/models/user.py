@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 
@@ -15,8 +15,40 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    # Account lockout fields
+    failed_login_count = db.Column(db.Integer, default=0)
+    locked_until = db.Column(db.DateTime, nullable=True)
+
     # Relationships
     applications = db.relationship('Application', backref='owner', lazy='dynamic')
+
+    # Lockout durations (progressive: 5 min, 15 min, 1 hour)
+    LOCKOUT_DURATIONS = [5, 15, 60]
+    MAX_FAILED_ATTEMPTS = 5
+
+    @property
+    def is_locked(self):
+        """Check if account is currently locked."""
+        if self.locked_until is None:
+            return False
+        return datetime.utcnow() < self.locked_until
+
+    def record_failed_login(self):
+        """Record a failed login attempt and lock account if threshold reached."""
+        self.failed_login_count += 1
+        if self.failed_login_count >= self.MAX_FAILED_ATTEMPTS:
+            # Calculate lockout duration based on how many times they've been locked
+            lockout_index = min(
+                (self.failed_login_count - self.MAX_FAILED_ATTEMPTS) // self.MAX_FAILED_ATTEMPTS,
+                len(self.LOCKOUT_DURATIONS) - 1
+            )
+            lockout_minutes = self.LOCKOUT_DURATIONS[lockout_index]
+            self.locked_until = datetime.utcnow() + timedelta(minutes=lockout_minutes)
+
+    def reset_failed_login(self):
+        """Reset failed login count after successful login."""
+        self.failed_login_count = 0
+        self.locked_until = None
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

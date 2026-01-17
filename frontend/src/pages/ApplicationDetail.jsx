@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
+import { useToast } from '../contexts/ToastContext';
 
 const ApplicationDetail = () => {
     const { id } = useParams();
@@ -184,6 +185,12 @@ const ApplicationDetail = () => {
                     </>
                 )}
                 <button
+                    className={`tab ${activeTab === 'deploy' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('deploy')}
+                >
+                    Deploy
+                </button>
+                <button
                     className={`tab ${activeTab === 'logs' ? 'active' : ''}`}
                     onClick={() => setActiveTab('logs')}
                 >
@@ -206,6 +213,7 @@ const ApplicationDetail = () => {
                 {activeTab === 'plugins' && isWordPressApp && <PluginsTab appId={app.id} />}
                 {activeTab === 'themes' && isWordPressApp && <ThemesTab appId={app.id} />}
                 {activeTab === 'backups' && isWordPressApp && <BackupsTab appId={app.id} />}
+                {activeTab === 'deploy' && <DeployTab appId={app.id} appPath={app.path} />}
                 {activeTab === 'logs' && <LogsTab app={app} />}
                 {activeTab === 'settings' && <SettingsTab app={app} onUpdate={loadApp} />}
             </div>
@@ -319,6 +327,7 @@ const OverviewTab = ({ app }) => {
 };
 
 const PackagesTab = ({ appId }) => {
+    const toast = useToast();
     const [packages, setPackages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [installing, setInstalling] = useState(false);
@@ -358,8 +367,9 @@ const PackagesTab = ({ appId }) => {
     async function handleFreeze() {
         try {
             await api.freezePythonRequirements(appId);
-            alert('requirements.txt updated');
+            toast.success('requirements.txt updated');
         } catch (err) {
+            toast.error('Failed to freeze requirements');
             console.error('Failed to freeze requirements:', err);
         }
     }
@@ -491,6 +501,7 @@ const EnvironmentTab = ({ appId }) => {
 };
 
 const GunicornTab = ({ appId }) => {
+    const toast = useToast();
     const [config, setConfig] = useState('');
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -514,8 +525,9 @@ const GunicornTab = ({ appId }) => {
         setSaving(true);
         try {
             await api.updateGunicornConfig(appId, config);
-            alert('Configuration saved. Restart the app to apply changes.');
+            toast.success('Configuration saved. Restart the app to apply changes.');
         } catch (err) {
+            toast.error('Failed to save configuration');
             console.error('Failed to save config:', err);
         } finally {
             setSaving(false);
@@ -763,6 +775,7 @@ const ThemesTab = ({ appId }) => {
 };
 
 const BackupsTab = ({ appId }) => {
+    const toast = useToast();
     const [backups, setBackups] = useState([]);
     const [loading, setLoading] = useState(true);
     const [creating, setCreating] = useState(false);
@@ -799,8 +812,9 @@ const BackupsTab = ({ appId }) => {
 
         try {
             await api.restoreWordPressBackup(appId, backupName);
-            alert('Backup restored successfully');
+            toast.success('Backup restored successfully');
         } catch (err) {
+            toast.error('Failed to restore backup');
             console.error('Failed to restore backup:', err);
         }
     }
@@ -918,6 +932,446 @@ const SettingsTab = ({ app, onUpdate }) => {
                     {deleting ? 'Deleting...' : 'Delete Application'}
                 </button>
             </div>
+        </div>
+    );
+};
+
+const DeployTab = ({ appId, appPath }) => {
+    const toast = useToast();
+    const [config, setConfig] = useState(null);
+    const [gitStatus, setGitStatus] = useState(null);
+    const [history, setHistory] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [deploying, setDeploying] = useState(false);
+    const [showConfigModal, setShowConfigModal] = useState(false);
+    const [error, setError] = useState(null);
+
+    // Config form state
+    const [configForm, setConfigForm] = useState({
+        repoUrl: '',
+        branch: 'main',
+        autoDeploy: true,
+        preDeployScript: '',
+        postDeployScript: ''
+    });
+
+    useEffect(() => {
+        loadData();
+    }, [appId]);
+
+    async function loadData() {
+        try {
+            setLoading(true);
+            const [configRes, historyRes] = await Promise.all([
+                api.getDeployConfig(appId),
+                api.getDeploymentHistory(appId, 20)
+            ]);
+
+            if (configRes.configured) {
+                setConfig(configRes.config);
+                setConfigForm({
+                    repoUrl: configRes.config.repo_url || '',
+                    branch: configRes.config.branch || 'main',
+                    autoDeploy: configRes.config.auto_deploy !== false,
+                    preDeployScript: configRes.config.pre_deploy_script || '',
+                    postDeployScript: configRes.config.post_deploy_script || ''
+                });
+                // Load git status if configured
+                try {
+                    const statusRes = await api.getGitStatus(appId);
+                    setGitStatus(statusRes);
+                } catch (e) {
+                    // Git status may fail if not a git repo yet
+                }
+            } else {
+                setConfig(null);
+            }
+
+            setHistory(historyRes.deployments || []);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function handleConfigureDeployment(e) {
+        e.preventDefault();
+        try {
+            await api.configureDeployment(
+                appId,
+                configForm.repoUrl,
+                configForm.branch,
+                configForm.autoDeploy,
+                configForm.preDeployScript || null,
+                configForm.postDeployScript || null
+            );
+            setShowConfigModal(false);
+            loadData();
+        } catch (err) {
+            setError(err.message);
+        }
+    }
+
+    async function handleRemoveDeployment() {
+        if (!confirm('Remove deployment configuration? This will not delete the repository files.')) return;
+        try {
+            await api.removeDeployment(appId);
+            setConfig(null);
+            setGitStatus(null);
+            loadData();
+        } catch (err) {
+            setError(err.message);
+        }
+    }
+
+    async function handleDeploy(force = false) {
+        setDeploying(true);
+        setError(null);
+        try {
+            const result = await api.triggerDeploy(appId, force);
+            if (result.success) {
+                toast.success('Deployment completed successfully!');
+            } else {
+                setError(result.error || 'Deployment failed');
+            }
+            loadData();
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setDeploying(false);
+        }
+    }
+
+    async function handlePull() {
+        setDeploying(true);
+        setError(null);
+        try {
+            const result = await api.pullChanges(appId);
+            if (result.success) {
+                toast.success('Changes pulled successfully!');
+            } else {
+                setError(result.error || 'Pull failed');
+            }
+            loadData();
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setDeploying(false);
+        }
+    }
+
+    function formatTimestamp(timestamp) {
+        return new Date(timestamp).toLocaleString();
+    }
+
+    function getStatusBadgeClass(status) {
+        switch (status) {
+            case 'success': return 'badge-success';
+            case 'failed': return 'badge-danger';
+            case 'in_progress': return 'badge-warning';
+            default: return 'badge-secondary';
+        }
+    }
+
+    if (loading) {
+        return <div className="loading">Loading deployment configuration...</div>;
+    }
+
+    return (
+        <div className="deploy-tab">
+            {error && (
+                <div className="alert alert-danger">
+                    {error}
+                    <button onClick={() => setError(null)} className="alert-close">&times;</button>
+                </div>
+            )}
+
+            {!config ? (
+                <div className="deploy-setup">
+                    <div className="empty-state">
+                        <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" fill="none" strokeWidth="2">
+                            <circle cx="12" cy="12" r="4"/>
+                            <line x1="1.05" y1="12" x2="7" y2="12"/>
+                            <line x1="17.01" y1="12" x2="22.96" y2="12"/>
+                        </svg>
+                        <h3>Git Deployment Not Configured</h3>
+                        <p>Connect a Git repository to enable automatic deployments via webhooks or manual triggers.</p>
+                        <button className="btn btn-primary" onClick={() => setShowConfigModal(true)}>
+                            Configure Deployment
+                        </button>
+                    </div>
+                </div>
+            ) : (
+                <>
+                    <div className="deploy-header">
+                        <div className="deploy-status-card">
+                            <div className="deploy-repo-info">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" strokeWidth="2">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                                </svg>
+                                <div>
+                                    <span className="repo-url">{config.repo_url}</span>
+                                    <span className="repo-branch">Branch: {config.branch}</span>
+                                </div>
+                            </div>
+                            <div className="deploy-actions">
+                                <button
+                                    className="btn btn-secondary btn-sm"
+                                    onClick={handlePull}
+                                    disabled={deploying}
+                                >
+                                    Pull Only
+                                </button>
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={() => handleDeploy(false)}
+                                    disabled={deploying}
+                                >
+                                    {deploying ? 'Deploying...' : 'Deploy Now'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="deploy-grid">
+                        <div className="card">
+                            <h3>Configuration</h3>
+                            <div className="info-list">
+                                <div className="info-item">
+                                    <span className="info-label">Repository</span>
+                                    <span className="info-value mono">{config.repo_url}</span>
+                                </div>
+                                <div className="info-item">
+                                    <span className="info-label">Branch</span>
+                                    <span className="info-value">{config.branch}</span>
+                                </div>
+                                <div className="info-item">
+                                    <span className="info-label">Auto Deploy</span>
+                                    <span className="info-value">{config.auto_deploy ? 'Enabled' : 'Disabled'}</span>
+                                </div>
+                                <div className="info-item">
+                                    <span className="info-label">Deploy Count</span>
+                                    <span className="info-value">{config.deploy_count || 0}</span>
+                                </div>
+                                {config.last_deploy && (
+                                    <div className="info-item">
+                                        <span className="info-label">Last Deploy</span>
+                                        <span className="info-value">{formatTimestamp(config.last_deploy)}</span>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="card-actions">
+                                <button className="btn btn-secondary btn-sm" onClick={() => setShowConfigModal(true)}>
+                                    Edit Configuration
+                                </button>
+                                <button className="btn btn-danger btn-sm" onClick={handleRemoveDeployment}>
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+
+                        {gitStatus && !gitStatus.error && (
+                            <div className="card">
+                                <h3>Git Status</h3>
+                                <div className="info-list">
+                                    <div className="info-item">
+                                        <span className="info-label">Current Branch</span>
+                                        <span className="info-value">{gitStatus.branch}</span>
+                                    </div>
+                                    {gitStatus.commit && (
+                                        <>
+                                            <div className="info-item">
+                                                <span className="info-label">Commit</span>
+                                                <span className="info-value mono">{gitStatus.commit.short_hash}</span>
+                                            </div>
+                                            <div className="info-item">
+                                                <span className="info-label">Message</span>
+                                                <span className="info-value">{gitStatus.commit.message}</span>
+                                            </div>
+                                            <div className="info-item">
+                                                <span className="info-label">Author</span>
+                                                <span className="info-value">{gitStatus.commit.author}</span>
+                                            </div>
+                                        </>
+                                    )}
+                                    <div className="info-item">
+                                        <span className="info-label">Uncommitted Changes</span>
+                                        <span className="info-value">
+                                            {gitStatus.has_uncommitted ? `${gitStatus.changes} file(s)` : 'None'}
+                                        </span>
+                                    </div>
+                                    {(gitStatus.ahead > 0 || gitStatus.behind > 0) && (
+                                        <div className="info-item">
+                                            <span className="info-label">Remote Status</span>
+                                            <span className="info-value">
+                                                {gitStatus.ahead > 0 && `${gitStatus.ahead} ahead`}
+                                                {gitStatus.ahead > 0 && gitStatus.behind > 0 && ', '}
+                                                {gitStatus.behind > 0 && `${gitStatus.behind} behind`}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="card">
+                            <h3>Webhook</h3>
+                            <p className="hint">Use this URL in your Git provider to trigger automatic deployments on push.</p>
+                            <div className="webhook-url">
+                                <code>{window.location.origin}/api/v1/deploy/webhook/{appId}/{config.webhook_token}</code>
+                                <button
+                                    className="btn btn-secondary btn-sm"
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(
+                                            `${window.location.origin}/api/v1/deploy/webhook/${appId}/${config.webhook_token}`
+                                        );
+                                        toast.success('Webhook URL copied to clipboard');
+                                    }}
+                                >
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {(config.pre_deploy_script || config.post_deploy_script) && (
+                        <div className="card">
+                            <h3>Deploy Scripts</h3>
+                            <div className="scripts-grid">
+                                {config.pre_deploy_script && (
+                                    <div className="script-section">
+                                        <h4>Pre-Deploy Script</h4>
+                                        <pre className="script-code">{config.pre_deploy_script}</pre>
+                                    </div>
+                                )}
+                                {config.post_deploy_script && (
+                                    <div className="script-section">
+                                        <h4>Post-Deploy Script</h4>
+                                        <pre className="script-code">{config.post_deploy_script}</pre>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="card">
+                        <h3>Deployment History</h3>
+                        {history.length === 0 ? (
+                            <p className="hint">No deployments yet.</p>
+                        ) : (
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Started</th>
+                                        <th>Completed</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {history.map((deploy, index) => (
+                                        <tr key={index}>
+                                            <td>
+                                                <span className={`badge ${getStatusBadgeClass(deploy.status)}`}>
+                                                    {deploy.status}
+                                                </span>
+                                            </td>
+                                            <td>{formatTimestamp(deploy.started_at)}</td>
+                                            <td>{deploy.completed_at ? formatTimestamp(deploy.completed_at) : '-'}</td>
+                                            <td>
+                                                {deploy.error && <span className="text-danger">{deploy.error}</span>}
+                                                {deploy.steps && (
+                                                    <span className="text-muted">
+                                                        {deploy.steps.length} step(s)
+                                                    </span>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
+                    </div>
+                </>
+            )}
+
+            {/* Configure Deployment Modal */}
+            {showConfigModal && (
+                <div className="modal-overlay" onClick={() => setShowConfigModal(false)}>
+                    <div className="modal" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>{config ? 'Edit Deployment' : 'Configure Deployment'}</h2>
+                            <button className="modal-close" onClick={() => setShowConfigModal(false)}>&times;</button>
+                        </div>
+                        <form onSubmit={handleConfigureDeployment}>
+                            <div className="modal-body">
+                                <div className="form-group">
+                                    <label>Repository URL *</label>
+                                    <input
+                                        type="url"
+                                        value={configForm.repoUrl}
+                                        onChange={(e) => setConfigForm({...configForm, repoUrl: e.target.value})}
+                                        placeholder="https://github.com/user/repo.git"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Branch</label>
+                                    <input
+                                        type="text"
+                                        value={configForm.branch}
+                                        onChange={(e) => setConfigForm({...configForm, branch: e.target.value})}
+                                        placeholder="main"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="checkbox-label">
+                                        <input
+                                            type="checkbox"
+                                            checked={configForm.autoDeploy}
+                                            onChange={(e) => setConfigForm({...configForm, autoDeploy: e.target.checked})}
+                                        />
+                                        <span>Enable Auto Deploy on Webhook</span>
+                                    </label>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Pre-Deploy Script (optional)</label>
+                                    <textarea
+                                        value={configForm.preDeployScript}
+                                        onChange={(e) => setConfigForm({...configForm, preDeployScript: e.target.value})}
+                                        placeholder="npm install&#10;npm run build"
+                                        rows={3}
+                                    />
+                                    <span className="form-help">Commands to run before pulling changes</span>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Post-Deploy Script (optional)</label>
+                                    <textarea
+                                        value={configForm.postDeployScript}
+                                        onChange={(e) => setConfigForm({...configForm, postDeployScript: e.target.value})}
+                                        placeholder="npm install&#10;npm run build&#10;systemctl restart myapp"
+                                        rows={3}
+                                    />
+                                    <span className="form-help">Commands to run after pulling changes</span>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowConfigModal(false)}>
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn btn-primary">
+                                    {config ? 'Update Configuration' : 'Configure Deployment'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

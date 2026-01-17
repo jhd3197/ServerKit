@@ -1,0 +1,111 @@
+// ============================================
+// TOAST NOTIFICATION STYLES
+// ============================================
+
+.toast-container {
+    position: fixed;
+    top: @space-4;
+    right: @space-4;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: @space-2;
+    max-width: 400px;
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: flex-start;
+    gap: @space-3;
+    padding: @space-3 @space-4;
+    border-radius: @radius-md;
+    background: @bg-secondary;
+    border: 1px solid @border-default;
+    box-shadow: @shadow-lg;
+    pointer-events: auto;
+    animation: toast-slide-in 0.3s ease-out;
+
+    &-icon {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    &-message {
+        flex: 1;
+        font-size: @font-size-sm;
+        line-height: 1.4;
+        color: @text-primary;
+    }
+
+    &-dismiss {
+        flex-shrink: 0;
+        background: none;
+        border: none;
+        padding: @space-1;
+        cursor: pointer;
+        color: @text-tertiary;
+        border-radius: @radius-sm;
+        .transition(all);
+
+        &:hover {
+            color: @text-primary;
+            background: @bg-hover;
+        }
+    }
+
+    // Variants
+    &-success {
+        border-color: fade(@success, 30%);
+        background: fade(@success, 10%);
+
+        .toast-icon {
+            color: @success;
+        }
+    }
+
+    &-error {
+        border-color: fade(@danger, 30%);
+        background: fade(@danger, 10%);
+
+        .toast-icon {
+            color: @danger;
+        }
+    }
+
+    &-warning {
+        border-color: fade(@warning, 30%);
+        background: fade(@warning, 10%);
+
+        .toast-icon {
+            color: @warning;
+        }
+    }
+
+    &-info {
+        border-color: fade(@accent-primary, 30%);
+        background: fade(@accent-primary, 10%);
+
+        .toast-icon {
+            color: @accent-primary;
+        }
+    }
+}
+
+@keyframes toast-slide-in {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

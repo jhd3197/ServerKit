@@ -21,6 +21,29 @@ class LogService:
         'auth': '/var/log/auth.log',
     }
 
+    # Allowed directories for log file access (path traversal protection)
+    ALLOWED_LOG_DIRECTORIES = [
+        '/var/log',
+        '/home',
+        '/opt',
+    ]
+
+    @classmethod
+    def is_path_allowed(cls, filepath: str) -> bool:
+        """Check if the filepath is within allowed directories."""
+        try:
+            # Resolve the absolute path to prevent traversal attacks
+            real_path = os.path.realpath(filepath)
+
+            # Check if the path starts with any allowed directory
+            for allowed_dir in cls.ALLOWED_LOG_DIRECTORIES:
+                if real_path.startswith(allowed_dir):
+                    return True
+
+            return False
+        except (ValueError, OSError):
+            return False
+
     @classmethod
     def get_log_files(cls) -> List[Dict]:
         """Get list of available log files."""
@@ -47,6 +70,9 @@ class LogService:
     @classmethod
     def read_log(cls, filepath: str, lines: int = 100, from_end: bool = True) -> Dict:
         """Read lines from a log file."""
+        if not cls.is_path_allowed(filepath):
+            return {'success': False, 'error': 'Access denied: path not in allowed directories'}
+
         if not os.path.exists(filepath):
             return {'success': False, 'error': 'Log file not found'}
 
@@ -85,6 +111,9 @@ class LogService:
     @classmethod
     def search_log(cls, filepath: str, pattern: str, lines: int = 100) -> Dict:
         """Search log file for pattern."""
+        if not cls.is_path_allowed(filepath):
+            return {'success': False, 'error': 'Access denied: path not in allowed directories'}
+
         if not os.path.exists(filepath):
             return {'success': False, 'error': 'Log file not found'}
 
@@ -155,6 +184,9 @@ class LogService:
     @classmethod
     def clear_log(cls, filepath: str) -> Dict:
         """Clear/truncate a log file."""
+        if not cls.is_path_allowed(filepath):
+            return {'success': False, 'error': 'Access denied: path not in allowed directories'}
+
         if not os.path.exists(filepath):
             return {'success': False, 'error': 'Log file not found'}
 
@@ -194,6 +226,10 @@ class LogService:
     @classmethod
     def tail_log(cls, filepath: str, callback, stop_event: threading.Event = None):
         """Stream log file in real-time (for WebSocket use)."""
+        if not cls.is_path_allowed(filepath):
+            callback({'error': 'Access denied: path not in allowed directories'})
+            return
+
         if not os.path.exists(filepath):
             callback({'error': 'Log file not found'})
             return

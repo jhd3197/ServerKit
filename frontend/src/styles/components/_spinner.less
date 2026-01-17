@@ -1,0 +1,103 @@
+// ============================================
+// SPINNER STYLES
+// ============================================
+
+.spinner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &-sm {
+        width: 16px;
+        height: 16px;
+
+        .spinner-ring {
+            width: 16px;
+            height: 16px;
+            border-width: 2px;
+        }
+    }
+
+    &-md {
+        width: 24px;
+        height: 24px;
+
+        .spinner-ring {
+            width: 24px;
+            height: 24px;
+            border-width: 3px;
+        }
+    }
+
+    &-lg {
+        width: 40px;
+        height: 40px;
+
+        .spinner-ring {
+            width: 40px;
+            height: 40px;
+            border-width: 4px;
+        }
+    }
+}
+
+.spinner-ring {
+    border-radius: 50%;
+    border-style: solid;
+    border-color: fade(@accent-primary, 30%);
+    border-top-color: @accent-primary;
+    animation: spinner-rotate 0.8s linear infinite;
+}
+
+@keyframes spinner-rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// Loading state component
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: @space-3;
+    padding: @space-8;
+    color: @text-secondary;
+
+    span {
+        font-size: @font-size-sm;
+    }
+}
+
+// Button loading state
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    color: transparent !important;
+
+    .spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        .spinner-ring {
+            border-color: fade(currentColor, 30%);
+            border-top-color: currentColor;
+        }
+    }
+
+    &.btn-primary .spinner .spinner-ring {
+        border-color: fade(#fff, 30%);
+        border-top-color: #fff;
+    }
+
+    &.btn-secondary .spinner .spinner-ring {
+        border-color: fade(@text-primary, 30%);
+        border-top-color: @text-primary;
+    }
+}

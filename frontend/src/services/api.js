@@ -117,6 +117,13 @@ class ApiService {
         return this.request('/auth/me');
     }
 
+    async updateCurrentUser(data) {
+        return this.request('/auth/me', {
+            method: 'PUT',
+            body: data
+        });
+    }
+
     // Apps endpoints
     async getApps() {
         return this.request('/apps');
@@ -187,8 +194,31 @@ class ApiService {
         });
     }
 
-    async enableSsl(domainId) {
-        return this.request(`/domains/${domainId}/ssl/enable`, { method: 'POST' });
+    async enableSsl(domainId, email) {
+        return this.request(`/domains/${domainId}/ssl/enable`, {
+            method: 'POST',
+            body: { email }
+        });
+    }
+
+    async disableSsl(domainId) {
+        return this.request(`/domains/${domainId}/ssl/disable`, { method: 'POST' });
+    }
+
+    async renewDomainSsl(domainId) {
+        return this.request(`/domains/${domainId}/ssl/renew`, { method: 'POST' });
+    }
+
+    async verifyDomain(domainId) {
+        return this.request(`/domains/${domainId}/verify`);
+    }
+
+    async getDomainsNginxSites() {
+        return this.request('/domains/nginx/sites');
+    }
+
+    async getDomainsSslStatus() {
+        return this.request('/domains/ssl/status');
     }
 
     // System endpoints
@@ -926,6 +956,209 @@ class ApiService {
 
     async generateDatabasePassword(length = 16) {
         return this.request(`/databases/generate-password?length=${length}`);
+    }
+
+    // ========================================
+    // Monitoring & Alerts endpoints
+    // ========================================
+    async getMonitoringStatus() {
+        return this.request('/monitoring/status');
+    }
+
+    async getMonitoringMetrics() {
+        return this.request('/monitoring/metrics');
+    }
+
+    async checkAlerts() {
+        return this.request('/monitoring/alerts/check');
+    }
+
+    async getAlertHistory(limit = 100) {
+        return this.request(`/monitoring/alerts/history?limit=${limit}`);
+    }
+
+    async getMonitoringConfig() {
+        return this.request('/monitoring/config');
+    }
+
+    async updateMonitoringConfig(config) {
+        return this.request('/monitoring/config', {
+            method: 'PUT',
+            body: config
+        });
+    }
+
+    async getMonitoringThresholds() {
+        return this.request('/monitoring/thresholds');
+    }
+
+    async updateMonitoringThresholds(thresholds) {
+        return this.request('/monitoring/thresholds', {
+            method: 'PUT',
+            body: thresholds
+        });
+    }
+
+    async startMonitoring() {
+        return this.request('/monitoring/start', { method: 'POST' });
+    }
+
+    async stopMonitoring() {
+        return this.request('/monitoring/stop', { method: 'POST' });
+    }
+
+    async testEmailAlert(email) {
+        return this.request('/monitoring/test/email', {
+            method: 'POST',
+            body: { email }
+        });
+    }
+
+    async testWebhookAlert(webhookUrl) {
+        return this.request('/monitoring/test/webhook', {
+            method: 'POST',
+            body: { webhook_url: webhookUrl }
+        });
+    }
+
+    // ========================================
+    // Backup System endpoints
+    // ========================================
+    async getBackups(type = null) {
+        const params = type ? `?type=${type}` : '';
+        return this.request(`/backups${params}`);
+    }
+
+    async getBackupStats() {
+        return this.request('/backups/stats');
+    }
+
+    async getBackupConfig() {
+        return this.request('/backups/config');
+    }
+
+    async updateBackupConfig(config) {
+        return this.request('/backups/config', {
+            method: 'PUT',
+            body: config
+        });
+    }
+
+    async backupApplication(applicationId, includeDb = false, dbConfig = null) {
+        return this.request('/backups/application', {
+            method: 'POST',
+            body: {
+                application_id: applicationId,
+                include_db: includeDb,
+                db_config: dbConfig
+            }
+        });
+    }
+
+    async backupDatabase(dbType, dbName, user = null, password = null, host = 'localhost') {
+        return this.request('/backups/database', {
+            method: 'POST',
+            body: { db_type: dbType, db_name: dbName, user, password, host }
+        });
+    }
+
+    async restoreApplication(backupPath, restorePath = null) {
+        return this.request('/backups/restore/application', {
+            method: 'POST',
+            body: { backup_path: backupPath, restore_path: restorePath }
+        });
+    }
+
+    async restoreDatabase(backupPath, dbType, dbName, user = null, password = null, host = 'localhost') {
+        return this.request('/backups/restore/database', {
+            method: 'POST',
+            body: { backup_path: backupPath, db_type: dbType, db_name: dbName, user, password, host }
+        });
+    }
+
+    async deleteBackup(backupPath) {
+        return this.request(`/backups/${encodeURIComponent(backupPath)}`, { method: 'DELETE' });
+    }
+
+    async cleanupBackups(retentionDays = null) {
+        return this.request('/backups/cleanup', {
+            method: 'POST',
+            body: retentionDays ? { retention_days: retentionDays } : {}
+        });
+    }
+
+    async getBackupSchedules() {
+        return this.request('/backups/schedules');
+    }
+
+    async addBackupSchedule(name, backupType, target, scheduleTime, days = null) {
+        return this.request('/backups/schedules', {
+            method: 'POST',
+            body: { name, backup_type: backupType, target, schedule_time: scheduleTime, days }
+        });
+    }
+
+    async removeBackupSchedule(scheduleId) {
+        return this.request(`/backups/schedules/${scheduleId}`, { method: 'DELETE' });
+    }
+
+    // ========================================
+    // Git Deployment endpoints
+    // ========================================
+    async getDeployConfig(appId) {
+        return this.request(`/deploy/apps/${appId}/config`);
+    }
+
+    async configureDeployment(appId, repoUrl, branch = 'main', autoDeploy = true, preDeployScript = null, postDeployScript = null) {
+        return this.request(`/deploy/apps/${appId}/config`, {
+            method: 'POST',
+            body: {
+                repo_url: repoUrl,
+                branch,
+                auto_deploy: autoDeploy,
+                pre_deploy_script: preDeployScript,
+                post_deploy_script: postDeployScript
+            }
+        });
+    }
+
+    async removeDeployment(appId) {
+        return this.request(`/deploy/apps/${appId}/config`, { method: 'DELETE' });
+    }
+
+    async triggerDeploy(appId, force = false) {
+        return this.request(`/deploy/apps/${appId}/deploy`, {
+            method: 'POST',
+            body: { force }
+        });
+    }
+
+    async pullChanges(appId, branch = null) {
+        return this.request(`/deploy/apps/${appId}/pull`, {
+            method: 'POST',
+            body: branch ? { branch } : {}
+        });
+    }
+
+    async getGitStatus(appId) {
+        return this.request(`/deploy/apps/${appId}/git-status`);
+    }
+
+    async getCommitInfo(appId) {
+        return this.request(`/deploy/apps/${appId}/commit`);
+    }
+
+    async getDeploymentHistory(appId = null, limit = 50) {
+        const params = new URLSearchParams({ limit });
+        if (appId) params.append('app_id', appId);
+        return this.request(`/deploy/history?${params}`);
+    }
+
+    async cloneRepository(appPath, repoUrl, branch = 'main') {
+        return this.request('/deploy/clone', {
+            method: 'POST',
+            body: { app_path: appPath, repo_url: repoUrl, branch }
+        });
     }
 }
 

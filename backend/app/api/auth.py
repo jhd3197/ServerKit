@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import (
     create_access_token,
@@ -6,13 +7,14 @@ from flask_jwt_extended import (
     get_jwt_identity,
     get_jwt
 )
-from app import db
+from app import db, limiter
 from app.models import User
 
 auth_bp = Blueprint('auth', __name__)
 
 
 @auth_bp.route('/register', methods=['POST'])
+@limiter.limit("3 per minute")
 def register():
     data = request.get_json()
 
@@ -60,6 +62,7 @@ def register():
 
 
 @auth_bp.route('/login', methods=['POST'])
+@limiter.limit("5 per minute")
 def login():
     data = request.get_json()
 
@@ -74,11 +77,26 @@ def login():
 
     user = User.query.filter_by(email=email).first()
 
+    # Check if account is locked
+    if user and user.is_locked:
+        remaining = int((user.locked_until - datetime.utcnow()).total_seconds() / 60)
+        return jsonify({
+            'error': f'Account is locked. Try again in {remaining} minute(s).'
+        }), 429
+
     if not user or not user.check_password(password):
+        # Record failed login attempt
+        if user:
+            user.record_failed_login()
+            db.session.commit()
         return jsonify({'error': 'Invalid email or password'}), 401
 
     if not user.is_active:
         return jsonify({'error': 'Account is deactivated'}), 403
+
+    # Reset failed login count on successful login
+    user.reset_failed_login()
+    db.session.commit()
 
     access_token = create_access_token(identity=user.id)
     refresh_token = create_refresh_token(identity=user.id)

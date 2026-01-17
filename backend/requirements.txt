@@ -31,3 +31,6 @@ python-dotenv==1.0.0
 
 # YAML parsing (for Docker Compose)
 PyYAML==6.0.1
+
+# Rate limiting
+Flask-Limiter==3.5.0

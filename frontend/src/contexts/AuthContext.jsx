@@ -42,12 +42,26 @@ export function AuthProvider({ children }) {
         setUser(null);
     }
 
+    async function updateUser(data) {
+        const response = await api.updateCurrentUser(data);
+        setUser(response.user);
+        return response;
+    }
+
+    async function refreshUser() {
+        const data = await api.getCurrentUser();
+        setUser(data.user);
+        return data.user;
+    }
+
     const value = {
         user,
         loading,
         login,
         register,
         logout,
+        updateUser,
+        refreshUser,
         isAuthenticated: !!user,
         isAdmin: user?.role === 'admin',
     };
