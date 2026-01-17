@@ -59,7 +59,7 @@ ServerKit is a lightweight, modern server control panel for managing web applica
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ServerKit.git
+git clone https://github.com/jhd3197/ServerKit.git
 cd ServerKit
 
 # Backend setup

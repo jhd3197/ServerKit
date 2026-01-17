@@ -34,3 +34,6 @@ PyYAML==6.0.1
 
 # Rate limiting
 Flask-Limiter==3.5.0
+
+# CLI
+click==8.1.7

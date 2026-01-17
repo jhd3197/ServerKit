@@ -1,73 +1,169 @@
 # ServerKit Deployment Guide
 
-This guide covers deploying ServerKit in production using Docker.
+Complete guide for deploying ServerKit on Ubuntu servers.
+
+## Quick Install (Ubuntu)
+
+```bash
+# One-line install
+curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
+
+# Or clone and install manually
+git clone https://github.com/jhd3197/serverkit.git
+cd serverkit
+chmod +x serverkit
+./serverkit install
+```
 
 ## Prerequisites
 
+- Ubuntu 20.04+ (or Debian 11+)
 - Docker 20.10+ and Docker Compose 2.0+
-- A server with at least 1GB RAM
-- A domain name (for SSL/HTTPS)
-- SSL certificate (Let's Encrypt recommended)
+- At least 1GB RAM
+- Domain name (for SSL/HTTPS)
 
-## Quick Start (Development)
+## CLI Commands
+
+ServerKit includes a management CLI for common administrative tasks.
+
+### Service Management
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/serverkit.git
-cd serverkit
+# Start/Stop/Restart
+serverkit start
+serverkit stop
+serverkit restart
 
-# Start with Docker Compose
-docker compose up -d
+# View status
+serverkit status
 
-# Access at http://localhost
+# View logs
+serverkit logs              # All services
+serverkit logs backend      # Backend only
+serverkit logs frontend     # Frontend only
+
+# Update to latest version
+serverkit update
+
+# Uninstall
+serverkit uninstall
 ```
 
-## Production Deployment
-
-### 1. Generate Secure Keys
+### User Management
 
 ```bash
-# Generate SECRET_KEY
-python -c "import secrets; print(secrets.token_hex(32))"
+# Create admin user
+serverkit create-admin
+# Prompts for: email, username, password
 
-# Generate JWT_SECRET_KEY
-python -c "import secrets; print(secrets.token_hex(32))"
+# Reset a user's password
+serverkit reset-password
+# Prompts for: email, new password
+
+# Unlock a locked account (after failed login attempts)
+serverkit unlock-user
+# Prompts for: email
+
+# List all users
+serverkit list-users
+
+# Promote user to admin
+serverkit make-admin
+# Prompts for: email
+
+# Deactivate/Activate user
+serverkit deactivate-user
+serverkit activate-user
 ```
 
-### 2. Create Environment File
-
-Create `.env` in the project root:
+### Database Management
 
 ```bash
-# Required - generate unique keys!
-SECRET_KEY=your-generated-secret-key
-JWT_SECRET_KEY=your-generated-jwt-secret-key
+# Initialize database
+serverkit init-db
 
-# Database (SQLite by default, or use PostgreSQL)
+# Backup database
+serverkit backup-db
+# Creates: backup/serverkit-YYYYMMDD-HHMMSS.db
+
+# Restore from backup
+serverkit restore-db backup/serverkit-20240115-120000.db
+```
+
+### Utility Commands
+
+```bash
+# Generate secure keys for .env
+serverkit generate-keys
+
+# Edit configuration
+serverkit config
+
+# Open shell in backend container
+serverkit shell
+
+# Show help
+serverkit help
+```
+
+## Manual Installation
+
+### 1. Install Docker
+
+```bash
+# Install Docker
+curl -fsSL https://get.docker.com | sh
+
+# Add user to docker group
+sudo usermod -aG docker $USER
+
+# Log out and back in, then verify
+docker --version
+```
+
+### 2. Clone Repository
+
+```bash
+git clone https://github.com/jhd3197/serverkit.git /opt/serverkit
+cd /opt/serverkit
+```
+
+### 3. Configure Environment
+
+```bash
+# Generate secure keys
+serverkit generate-keys
+
+# Create .env file
+cat > .env << 'EOF'
+SECRET_KEY=<paste-generated-key>
+JWT_SECRET_KEY=<paste-generated-key>
 DATABASE_URL=sqlite:///serverkit.db
-# DATABASE_URL=postgresql://user:pass@host:5432/serverkit
-
-# CORS origins (your domain)
 CORS_ORIGINS=https://yourdomain.com
+PORT=80
+SSL_PORT=443
+FLASK_ENV=production
+EOF
 ```
 
-### 3. SSL Certificate Setup
+### 4. SSL Certificate Setup
 
-#### Using Let's Encrypt (Recommended)
+#### Option A: Let's Encrypt (Recommended)
 
 ```bash
-# Create directories
-mkdir -p nginx/ssl
+# Install certbot
+sudo apt install certbot
 
-# Install certbot and get certificate
+# Get certificate (stop any service on port 80 first)
 sudo certbot certonly --standalone -d yourdomain.com
 
 # Copy certificates
 sudo cp /etc/letsencrypt/live/yourdomain.com/fullchain.pem nginx/ssl/
 sudo cp /etc/letsencrypt/live/yourdomain.com/privkey.pem nginx/ssl/
+sudo chown -R $USER:$USER nginx/ssl/
 ```
 
-#### Using Self-Signed (Testing Only)
+#### Option B: Self-Signed (Development Only)
 
 ```bash
 mkdir -p nginx/ssl
@@ -77,36 +173,32 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -subj "/CN=localhost"
 ```
 
-### 4. Deploy
+### 5. Build and Start
 
 ```bash
-# Build and start production containers
-docker compose -f docker-compose.prod.yml up -d --build
+# Build containers
+docker compose build
 
-# Check status
-docker compose -f docker-compose.prod.yml ps
+# Start services
+docker compose up -d
 
-# View logs
-docker compose -f docker-compose.prod.yml logs -f
+# Verify
+serverkit status
 ```
 
-### 5. Initial Setup
-
-1. Navigate to `https://yourdomain.com`
-2. Register the first admin user
-3. Configure server monitoring settings
-
-## Systemd Service (Optional)
-
-Install as a system service for automatic startup:
+### 6. Create Admin User
 
 ```bash
-# Copy the service file
-sudo cp deploy/serverkit.service /etc/systemd/system/
+serverkit create-admin
+```
 
-# Copy project to /opt
-sudo mkdir -p /opt/serverkit
-sudo cp -r . /opt/serverkit/
+## Systemd Service
+
+Run ServerKit as a system service:
+
+```bash
+# Copy service file
+sudo cp deploy/serverkit.service /etc/systemd/system/
 
 # Enable and start
 sudo systemctl daemon-reload
@@ -117,55 +209,56 @@ sudo systemctl start serverkit
 sudo systemctl status serverkit
 ```
 
-## Maintenance
+## Configuration Reference
 
-### Updating
+### Environment Variables
 
-```bash
-cd /opt/serverkit
-git pull
-docker compose -f docker-compose.prod.yml up -d --build
-```
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `SECRET_KEY` | Flask secret key | Required |
+| `JWT_SECRET_KEY` | JWT signing key | Required |
+| `DATABASE_URL` | Database connection string | `sqlite:///serverkit.db` |
+| `CORS_ORIGINS` | Allowed CORS origins | `http://localhost` |
+| `PORT` | HTTP port | `80` |
+| `SSL_PORT` | HTTPS port | `443` |
+| `FLASK_ENV` | Environment mode | `production` |
 
-### Backup Database
+### Docker Volumes
 
-```bash
-# SQLite
-docker compose -f docker-compose.prod.yml exec backend \
-  cp /app/instance/serverkit.db /app/instance/serverkit.db.backup
+| Volume | Purpose |
+|--------|---------|
+| `serverkit-data` | Database and application data |
+| `nginx/ssl` | SSL certificates |
 
-# Copy to host
-docker cp serverkit-backend:/app/instance/serverkit.db.backup ./backup/
-```
+## Common Tasks
 
-### View Logs
-
-```bash
-# All services
-docker compose -f docker-compose.prod.yml logs -f
-
-# Specific service
-docker compose -f docker-compose.prod.yml logs -f backend
-docker compose -f docker-compose.prod.yml logs -f nginx
-```
-
-### Restart Services
+### Auto-renew SSL Certificate
 
 ```bash
-docker compose -f docker-compose.prod.yml restart
-# or
-sudo systemctl restart serverkit
+# Add to crontab
+sudo crontab -e
+
+# Add this line (renews at 2:30 AM daily)
+30 2 * * * certbot renew --quiet && cp /etc/letsencrypt/live/yourdomain.com/*.pem /opt/serverkit/nginx/ssl/ && docker compose -f /opt/serverkit/docker-compose.yml restart frontend
 ```
 
-## Security Checklist
+### Change Domain
 
-- [ ] Generated unique SECRET_KEY and JWT_SECRET_KEY
-- [ ] SSL/TLS certificate configured
-- [ ] Firewall configured (ports 80, 443 only)
-- [ ] Regular backups configured
-- [ ] Monitoring/alerting set up
-- [ ] Rate limiting verified working
-- [ ] Security headers present (check with browser dev tools)
+1. Update `.env` file: `CORS_ORIGINS=https://newdomain.com`
+2. Get new SSL certificate
+3. Restart: `serverkit restart`
+
+### Scale for Production
+
+For high-traffic deployments, consider:
+
+```bash
+# Use PostgreSQL instead of SQLite
+DATABASE_URL=postgresql://user:pass@localhost:5432/serverkit
+
+# Add Redis for session storage
+# Edit docker-compose.yml to add redis service
+```
 
 ## Troubleshooting
 
@@ -173,61 +266,68 @@ sudo systemctl restart serverkit
 
 ```bash
 # Check logs
-docker compose -f docker-compose.prod.yml logs backend
+serverkit logs backend
 
-# Check if port is in use
-sudo lsof -i :5000
+# Rebuild
+docker compose build --no-cache
+docker compose up -d
+```
+
+### Permission denied errors
+
+```bash
+# Fix Docker socket permissions
+sudo chmod 666 /var/run/docker.sock
+
+# Or add user to docker group
+sudo usermod -aG docker $USER
+# Then log out and back in
+```
+
+### Port already in use
+
+```bash
+# Find what's using port 80
 sudo lsof -i :80
+
+# Stop the service or change PORT in .env
 ```
 
-### 502 Bad Gateway
-
-Usually means the backend isn't running:
+### Reset everything
 
 ```bash
-docker compose -f docker-compose.prod.yml ps
-docker compose -f docker-compose.prod.yml restart backend
+# Stop and remove all containers and volumes
+serverkit stop
+docker compose down -v
+
+# Rebuild from scratch
+docker compose build --no-cache
+serverkit start
+serverkit init-db
+serverkit create-admin
 ```
 
-### WebSocket connection failed
-
-Ensure nginx is properly proxying WebSocket connections. Check the `/socket.io` location block in nginx.conf.
-
-### SSL Certificate Issues
+### Locked out / Forgot password
 
 ```bash
-# Test certificate
-openssl s_client -connect yourdomain.com:443 -servername yourdomain.com
+# Reset password via CLI
+serverkit reset-password
+# Enter email and new password
 
-# Check certificate expiry
-openssl x509 -in nginx/ssl/fullchain.pem -noout -dates
+# Or unlock account if locked
+serverkit unlock-user
 ```
 
-## Architecture
+## Security Checklist
 
-```
-                    ┌─────────────┐
-                    │   Client    │
-                    └──────┬──────┘
-                           │
-                    ┌──────▼──────┐
-                    │    Nginx    │
-                    │  (SSL/TLS)  │
-                    └──────┬──────┘
-                           │
-           ┌───────────────┼───────────────┐
-           │               │               │
-    ┌──────▼──────┐ ┌──────▼──────┐ ┌──────▼──────┐
-    │  Frontend   │ │   Backend   │ │  Socket.IO  │
-    │   (React)   │ │   (Flask)   │ │ (WebSocket) │
-    └─────────────┘ └──────┬──────┘ └─────────────┘
-                           │
-                    ┌──────▼──────┐
-                    │   SQLite/   │
-                    │  PostgreSQL │
-                    └─────────────┘
-```
+- [ ] Generated unique SECRET_KEY and JWT_SECRET_KEY
+- [ ] Using HTTPS with valid SSL certificate
+- [ ] Firewall configured (allow only ports 80, 443, 22)
+- [ ] Regular backups configured
+- [ ] Admin password is strong
+- [ ] Updated to latest version
 
 ## Support
 
-For issues and questions, please open an issue on GitHub.
+- GitHub Issues: https://github.com/jhd3197/serverkit/issues
+- Documentation: https://github.com/jhd3197/serverkit/wiki

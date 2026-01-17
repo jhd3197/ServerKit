@@ -1,6 +1,6 @@
 [Unit]
 Description=ServerKit Web Server Management Dashboard
-Documentation=https://github.com/yourusername/serverkit
+Documentation=https://github.com/jhd3197/serverkit
 After=network.target docker.service
 Requires=docker.service
 

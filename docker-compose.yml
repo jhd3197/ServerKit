@@ -1,4 +1,5 @@
-# Docker Compose - Development Configuration
+# ServerKit Docker Compose
+# Usage: docker compose up -d
 version: '3.8'
 
 services:
@@ -8,19 +9,26 @@ services:
       dockerfile: Dockerfile
     container_name: serverkit-backend
     environment:
-      - FLASK_ENV=development
-      - DATABASE_URL=sqlite:///serverkit.db
-      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}
-      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-jwt-secret-key-change-in-production}
-      - CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+      - FLASK_ENV=${FLASK_ENV:-production}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///serverkit.db}
+      - SECRET_KEY=${SECRET_KEY:?SECRET_KEY is required}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:?JWT_SECRET_KEY is required}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost}
     volumes:
-      - ./backend:/app
-      - backend-data:/app/instance
-    ports:
-      - "5000:5000"
+      - serverkit-data:/app/instance
+      - /var/log:/var/log:ro
+      - /home:/home:ro
+      - /opt:/opt:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - serverkit-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/v1/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   frontend:
     build:
@@ -28,16 +36,26 @@ services:
       dockerfile: Dockerfile
     container_name: serverkit-frontend
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     ports:
-      - "80:80"
+      - "${PORT:-80}:80"
+      - "${SSL_PORT:-443}:443"
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl:ro
     networks:
       - serverkit-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 networks:
   serverkit-network:
     driver: bridge
 
 volumes:
-  backend-data:
+  serverkit-data:
+    name: serverkit-data
