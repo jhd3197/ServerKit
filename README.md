@@ -85,6 +85,13 @@ curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh |
 
 ---
 
+## Screenshots
+![Screenshot_17-1-2026_13453_localhost](https://github.com/user-attachments/assets/6407ecf0-7a1a-4c4b-b7e3-8af6619da2f9)
+<img width="1703" height="887" alt="image" src="https://github.com/user-attachments/assets/73807009-9538-48e9-bbdf-152aed57bdd8" />
+
+
+---
+
 ## Project Structure
 
 ```
