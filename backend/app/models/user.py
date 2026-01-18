@@ -7,14 +7,22 @@ import json
 class User(db.Model):
     __tablename__ = 'users'
 
+    # Role constants
+    ROLE_ADMIN = 'admin'
+    ROLE_DEVELOPER = 'developer'
+    ROLE_VIEWER = 'viewer'
+    VALID_ROLES = [ROLE_ADMIN, ROLE_DEVELOPER, ROLE_VIEWER]
+
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     username = db.Column(db.String(80), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(256), nullable=False)
-    role = db.Column(db.String(20), default='user')  # 'admin' or 'user'
+    role = db.Column(db.String(20), default='developer')  # 'admin', 'developer', 'viewer'
     is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    last_login_at = db.Column(db.DateTime, nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
     # Account lockout fields
     failed_login_count = db.Column(db.Integer, default=0)
@@ -63,6 +71,25 @@ class User(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    @property
+    def is_admin(self):
+        """Check if user has admin role."""
+        return self.role == self.ROLE_ADMIN
+
+    @property
+    def is_developer(self):
+        """Check if user has developer role or higher."""
+        return self.role in [self.ROLE_ADMIN, self.ROLE_DEVELOPER]
+
+    @property
+    def is_viewer(self):
+        """Check if user has viewer role or higher (all roles)."""
+        return self.role in self.VALID_ROLES
+
+    def has_role(self, *roles):
+        """Check if user has any of the specified roles."""
+        return self.role in roles
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -72,7 +99,9 @@ class User(db.Model):
             'is_active': self.is_active,
             'totp_enabled': self.totp_enabled,
             'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
+            'updated_at': self.updated_at.isoformat(),
+            'last_login_at': self.last_login_at.isoformat() if self.last_login_at else None,
+            'created_by': self.created_by
         }
 
     def get_backup_codes(self):

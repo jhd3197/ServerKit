@@ -149,9 +149,18 @@ def create_app(config_name=None):
     from app.api.two_factor import two_factor_bp
     app.register_blueprint(two_factor_bp, url_prefix='/api/v1/auth/2fa')
 
+    # Register blueprints - Admin (User Management, Settings, Audit Logs)
+    from app.api.admin import admin_bp
+    app.register_blueprint(admin_bp, url_prefix='/api/v1/admin')
+
     # Create database tables
     with app.app_context():
         db.create_all()
+
+        # Initialize default settings and migrate legacy roles
+        from app.services.settings_service import SettingsService
+        SettingsService.initialize_defaults()
+        SettingsService.migrate_legacy_roles()
 
     # Serve frontend for root path
     @app.route('/')

@@ -6,10 +6,37 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [setupStatus, setSetupStatus] = useState({
+        needsSetup: false,
+        registrationEnabled: false,
+        checked: false
+    });
 
     useEffect(() => {
-        checkAuth();
+        checkSetupStatus();
     }, []);
+
+    async function checkSetupStatus() {
+        try {
+            const status = await api.getSetupStatus();
+            setSetupStatus({
+                needsSetup: status.needs_setup,
+                registrationEnabled: status.registration_enabled,
+                checked: true
+            });
+
+            // If setup is complete, check authentication
+            if (!status.needs_setup) {
+                await checkAuth();
+            } else {
+                setLoading(false);
+            }
+        } catch (error) {
+            console.error('Setup status check failed:', error);
+            // Fallback to checking auth directly
+            await checkAuth();
+        }
+    }
 
     async function checkAuth() {
         const token = localStorage.getItem('access_token');
@@ -23,6 +50,19 @@ export function AuthProvider({ children }) {
             }
         }
         setLoading(false);
+    }
+
+    async function refreshSetupStatus() {
+        try {
+            const status = await api.getSetupStatus();
+            setSetupStatus({
+                needsSetup: status.needs_setup,
+                registrationEnabled: status.registration_enabled,
+                checked: true
+            });
+        } catch (error) {
+            console.error('Failed to refresh setup status:', error);
+        }
     }
 
     async function login(email, password) {
@@ -62,8 +102,14 @@ export function AuthProvider({ children }) {
         logout,
         updateUser,
         refreshUser,
+        refreshSetupStatus,
         isAuthenticated: !!user,
         isAdmin: user?.role === 'admin',
+        isDeveloper: user?.role === 'admin' || user?.role === 'developer',
+        isViewer: !!user?.role,
+        setupStatus,
+        needsSetup: setupStatus.needsSetup,
+        registrationEnabled: setupStatus.registrationEnabled,
     };
 
     return (

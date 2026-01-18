@@ -7,6 +7,7 @@ import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Setup from './pages/Setup';
 import Applications from './pages/Applications';
 import ApplicationDetail from './pages/ApplicationDetail';
 import Docker from './pages/Docker';
@@ -25,38 +26,72 @@ import Security from './pages/Security';
 import Templates from './pages/Templates';
 
 function PrivateRoute({ children }) {
-    const { isAuthenticated, loading } = useAuth();
+    const { isAuthenticated, loading, needsSetup } = useAuth();
 
     if (loading) {
         return <div className="loading">Loading...</div>;
+    }
+
+    // If setup is needed, redirect to setup
+    if (needsSetup) {
+        return <Navigate to="/setup" />;
     }
 
     return isAuthenticated ? children : <Navigate to="/login" />;
 }
 
 function PublicRoute({ children }) {
-    const { isAuthenticated, loading } = useAuth();
+    const { isAuthenticated, loading, needsSetup } = useAuth();
 
     if (loading) {
         return <div className="loading">Loading...</div>;
     }
 
+    // If setup is needed, redirect to setup
+    if (needsSetup) {
+        return <Navigate to="/setup" />;
+    }
+
     return isAuthenticated ? <Navigate to="/" /> : children;
 }
 
+function SetupRoute({ children }) {
+    const { loading, needsSetup, isAuthenticated } = useAuth();
+
+    if (loading) {
+        return <div className="loading">Loading...</div>;
+    }
+
+    // If setup is not needed, redirect appropriately
+    if (!needsSetup) {
+        return isAuthenticated ? <Navigate to="/" /> : <Navigate to="/login" />;
+    }
+
+    return children;
+}
+
 function AppRoutes() {
+    const { registrationEnabled } = useAuth();
+
     return (
         <Routes>
+            <Route path="/setup" element={
+                <SetupRoute>
+                    <Setup />
+                </SetupRoute>
+            } />
             <Route path="/login" element={
                 <PublicRoute>
                     <Login />
                 </PublicRoute>
             } />
-            <Route path="/register" element={
-                <PublicRoute>
-                    <Register />
-                </PublicRoute>
-            } />
+            {registrationEnabled && (
+                <Route path="/register" element={
+                    <PublicRoute>
+                        <Register />
+                    </PublicRoute>
+                } />
+            )}
             <Route path="/" element={
                 <PrivateRoute>
                     <DashboardLayout />

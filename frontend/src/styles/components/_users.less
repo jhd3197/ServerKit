@@ -1,0 +1,486 @@
+// ============================================
+// USER MANAGEMENT STYLES
+// ============================================
+
+// --------------------------------------------
+// Setup Page
+// --------------------------------------------
+.setup-card {
+    max-width: 480px;
+}
+
+.setup-info {
+    display: flex;
+    gap: @space-4;
+    padding: @space-4;
+    background: fade(@accent-primary, 10%);
+    border-radius: @radius-md;
+    margin-bottom: @space-6;
+
+    .setup-info-icon {
+        flex-shrink: 0;
+        color: @accent-primary;
+    }
+
+    p {
+        margin: 0;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        line-height: 1.5;
+    }
+}
+
+.setup-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-2;
+    margin-top: @space-6;
+    padding-top: @space-6;
+    border-top: 1px solid @border-default;
+    color: @text-tertiary;
+    font-size: @font-size-sm;
+
+    svg {
+        color: @success;
+    }
+}
+
+// --------------------------------------------
+// Users Tab
+// --------------------------------------------
+.users-tab {
+    .tab-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: @space-6;
+
+        .tab-header-content {
+            h3 {
+                margin: 0 0 @space-1 0;
+                font-size: @font-size-lg;
+                font-weight: 600;
+            }
+
+            p {
+                margin: 0;
+                color: @text-secondary;
+                font-size: @font-size-sm;
+            }
+        }
+    }
+}
+
+.users-table-container {
+    overflow-x: auto;
+    border: 1px solid @border-default;
+    border-radius: @radius-md;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+        padding: @space-4;
+        text-align: left;
+        border-bottom: 1px solid @border-default;
+    }
+
+    th {
+        background: @bg-hover;
+        font-weight: 500;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background: @bg-card;
+    }
+
+    tr.inactive {
+        opacity: 0.6;
+
+        td {
+            background: fade(@warning, 5%);
+        }
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: @space-4;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: @accent-primary;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: @font-size-md;
+        flex-shrink: 0;
+    }
+
+    .user-details {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        .username {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: @space-2;
+        }
+
+        .email {
+            font-size: @font-size-sm;
+            color: @text-secondary;
+        }
+    }
+
+    .you-badge {
+        font-size: @font-size-xs;
+        padding: 2px 6px;
+        background: @accent-primary;
+        color: #fff;
+        border-radius: @radius-sm;
+        font-weight: 500;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: @radius-full;
+        font-size: @font-size-xs;
+        font-weight: 500;
+
+        &.active {
+            background: fade(@success, 15%);
+            color: @success;
+        }
+
+        &.inactive {
+            background: fade(@warning, 15%);
+            color: @warning;
+        }
+    }
+
+    .date-cell {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        white-space: nowrap;
+    }
+
+    .actions-cell {
+        display: flex;
+        gap: @space-1;
+    }
+}
+
+// --------------------------------------------
+// User Modal Styles
+// --------------------------------------------
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: @space-4;
+
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    cursor: pointer;
+
+    input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+
+    .checkbox-text {
+        font-weight: 400;
+    }
+}
+
+.form-help {
+    display: block;
+    margin-top: @space-1;
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+}
+
+.role-descriptions {
+    margin-top: @space-6;
+    padding: @space-4;
+    background: @bg-hover;
+    border-radius: @radius-md;
+
+    h4 {
+        margin: 0 0 @space-4 0;
+        font-size: @font-size-sm;
+        font-weight: 600;
+        color: @text-secondary;
+    }
+
+    .role-item {
+        display: flex;
+        gap: @space-2;
+        padding: @space-2 0;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid @border-default;
+        }
+
+        .role-name {
+            font-weight: 500;
+            min-width: 80px;
+            font-size: @font-size-sm;
+        }
+
+        .role-desc {
+            font-size: @font-size-sm;
+            color: @text-secondary;
+        }
+    }
+}
+
+// --------------------------------------------
+// Audit Log Tab
+// --------------------------------------------
+.audit-log-tab {
+    .tab-header {
+        margin-bottom: @space-6;
+
+        h3 {
+            margin: 0 0 @space-1 0;
+            font-size: @font-size-lg;
+            font-weight: 600;
+        }
+
+        p {
+            margin: 0;
+            color: @text-secondary;
+            font-size: @font-size-sm;
+        }
+    }
+}
+
+.filters-bar {
+    display: flex;
+    gap: @space-4;
+    align-items: flex-end;
+    margin-bottom: @space-6;
+    padding: @space-4;
+    background: @bg-hover;
+    border-radius: @radius-md;
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: @space-1;
+
+        label {
+            font-size: @font-size-sm;
+            font-weight: 500;
+            color: @text-secondary;
+        }
+
+        select {
+            min-width: 180px;
+        }
+    }
+}
+
+.audit-log-list {
+    display: flex;
+    flex-direction: column;
+    gap: @space-2;
+}
+
+.log-entry {
+    display: flex;
+    gap: @space-4;
+    padding: @space-4;
+    background: @bg-card;
+    border-radius: @radius-md;
+    border-left: 3px solid transparent;
+
+    &.action-success {
+        border-left-color: @success;
+    }
+
+    &.action-warning {
+        border-left-color: @warning;
+    }
+
+    &.action-danger {
+        border-left-color: @danger;
+    }
+
+    &.action-info {
+        border-left-color: @accent-primary;
+    }
+
+    .log-icon {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: @bg-hover;
+        border-radius: @radius-sm;
+        color: @text-secondary;
+    }
+
+    .log-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .log-header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: @space-2;
+        align-items: center;
+        margin-bottom: @space-1;
+
+        .log-action {
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .log-user {
+            color: @text-secondary;
+            font-size: @font-size-sm;
+        }
+
+        .log-target {
+            color: @text-tertiary;
+            font-size: @font-size-sm;
+        }
+    }
+
+    .log-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: @space-2;
+        margin-bottom: @space-2;
+
+        .detail-item {
+            display: inline-flex;
+            gap: @space-1;
+            padding: 2px @space-2;
+            background: @bg-hover;
+            border-radius: @radius-sm;
+            font-size: @font-size-xs;
+
+            .detail-key {
+                color: @text-tertiary;
+            }
+
+            .detail-value {
+                color: @text-secondary;
+                max-width: 200px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+    }
+
+    .log-meta {
+        display: flex;
+        gap: @space-4;
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+
+        .log-ip {
+            font-family: @font-mono;
+        }
+    }
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-4;
+    margin-top: @space-6;
+    padding-top: @space-6;
+    border-top: 1px solid @border-default;
+
+    .pagination-info {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+    }
+}
+
+// --------------------------------------------
+// Settings Nav Divider
+// --------------------------------------------
+.settings-nav-divider {
+    padding: @space-2 @space-4;
+    margin-top: @space-4;
+    font-size: @font-size-xs;
+    font-weight: 600;
+    color: @text-tertiary;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+// --------------------------------------------
+// Loading & Empty States
+// --------------------------------------------
+.loading-state,
+.empty-state {
+    padding: @space-10;
+    text-align: center;
+    color: @text-secondary;
+}
+
+// --------------------------------------------
+// Button Variants
+// --------------------------------------------
+.btn.text-warning {
+    color: @warning;
+
+    &:hover {
+        background: fade(@warning, 10%);
+    }
+}
+
+.btn.text-success {
+    color: @success;
+
+    &:hover {
+        background: fade(@success, 10%);
+    }
+}
+
+.btn.text-danger {
+    color: @danger;
+
+    &:hover {
+        background: fade(@danger, 10%);
+    }
+}

@@ -8,9 +8,23 @@ from flask_jwt_extended import (
     get_jwt
 )
 from app import db, limiter
-from app.models import User
+from app.models import User, AuditLog
+from app.services.settings_service import SettingsService
+from app.services.audit_service import AuditService
 
 auth_bp = Blueprint('auth', __name__)
+
+
+@auth_bp.route('/setup-status', methods=['GET'])
+def get_setup_status():
+    """Check if initial setup is needed and if registration is enabled."""
+    needs_setup = SettingsService.needs_setup()
+    registration_enabled = SettingsService.is_registration_enabled()
+
+    return jsonify({
+        'needs_setup': needs_setup,
+        'registration_enabled': registration_enabled
+    }), 200
 
 
 @auth_bp.route('/register', methods=['POST'])
@@ -20,6 +34,11 @@ def register():
 
     if not data:
         return jsonify({'error': 'No data provided'}), 400
+
+    # Check if registration is allowed
+    is_first_user = User.query.count() == 0
+    if not is_first_user and not SettingsService.is_registration_enabled():
+        return jsonify({'error': 'Registration is disabled'}), 403
 
     email = data.get('email')
     username = data.get('username')
@@ -37,17 +56,27 @@ def register():
     if len(password) < 8:
         return jsonify({'error': 'Password must be at least 8 characters'}), 400
 
-    # First user becomes admin
-    is_first_user = User.query.count() == 0
-
     user = User(
         email=email,
         username=username,
-        role='admin' if is_first_user else 'user'
+        role=User.ROLE_ADMIN if is_first_user else User.ROLE_DEVELOPER
     )
     user.set_password(password)
 
     db.session.add(user)
+    db.session.commit()
+
+    # Mark setup as complete if this is the first user
+    if is_first_user:
+        SettingsService.complete_setup(user_id=user.id)
+
+    # Log the user creation
+    AuditService.log_user_action(
+        action=AuditLog.ACTION_USER_CREATE,
+        user_id=user.id,
+        target_user_id=user.id,
+        details={'username': username, 'role': user.role, 'self_registration': True}
+    )
     db.session.commit()
 
     access_token = create_access_token(identity=user.id)
@@ -57,7 +86,8 @@ def register():
         'message': 'User registered successfully',
         'user': user.to_dict(),
         'access_token': access_token,
-        'refresh_token': refresh_token
+        'refresh_token': refresh_token,
+        'is_first_user': is_first_user
     }), 201
 
 
@@ -88,10 +118,13 @@ def login():
         # Record failed login attempt
         if user:
             user.record_failed_login()
+            AuditService.log_login(user.id, success=False, details={'reason': 'invalid_password'})
             db.session.commit()
         return jsonify({'error': 'Invalid email or password'}), 401
 
     if not user.is_active:
+        AuditService.log_login(user.id, success=False, details={'reason': 'account_deactivated'})
+        db.session.commit()
         return jsonify({'error': 'Account is deactivated'}), 403
 
     # Check if 2FA is enabled
@@ -112,6 +145,11 @@ def login():
 
     # No 2FA - proceed with normal login
     user.reset_failed_login()
+    user.last_login_at = datetime.utcnow()
+    db.session.commit()
+
+    # Log successful login
+    AuditService.log_login(user.id, success=True)
     db.session.commit()
 
     access_token = create_access_token(identity=user.id)

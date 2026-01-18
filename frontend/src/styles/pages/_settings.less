@@ -37,12 +37,29 @@
     gap: @space-1;
     position: sticky;
     top: @space-6;
-    height: fit-content;
+    max-height: calc(100vh - @space-12);
+    overflow-y: auto;
+
+    // Custom scrollbar for nav
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: @border-active;
+        border-radius: @radius-full;
+    }
 
     @media (max-width: @breakpoint-lg) {
         flex-direction: row;
         flex-wrap: wrap;
         position: static;
+        max-height: none;
+        overflow-y: visible;
         background: @bg-card;
         padding: @space-2;
         border-radius: @radius-lg;

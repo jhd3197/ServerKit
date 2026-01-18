@@ -93,6 +93,10 @@ class ApiService {
     }
 
     // Auth endpoints
+    async getSetupStatus() {
+        return this.request('/auth/setup-status');
+    }
+
     async login(email, password) {
         const data = await this.request('/auth/login', {
             method: 'POST',
@@ -124,6 +128,84 @@ class ApiService {
             method: 'PUT',
             body: data
         });
+    }
+
+    // ========================================
+    // Admin - User Management endpoints
+    // ========================================
+    async getUsers() {
+        return this.request('/admin/users');
+    }
+
+    async getUser(userId) {
+        return this.request(`/admin/users/${userId}`);
+    }
+
+    async createUser(userData) {
+        return this.request('/admin/users', {
+            method: 'POST',
+            body: userData
+        });
+    }
+
+    async updateUser(userId, userData) {
+        return this.request(`/admin/users/${userId}`, {
+            method: 'PUT',
+            body: userData
+        });
+    }
+
+    async deleteUser(userId) {
+        return this.request(`/admin/users/${userId}`, {
+            method: 'DELETE'
+        });
+    }
+
+    // ========================================
+    // Admin - Audit Log endpoints
+    // ========================================
+    async getAuditLogs(params = {}) {
+        const searchParams = new URLSearchParams();
+        if (params.page) searchParams.append('page', params.page);
+        if (params.per_page) searchParams.append('per_page', params.per_page);
+        if (params.action) searchParams.append('action', params.action);
+        if (params.user_id) searchParams.append('user_id', params.user_id);
+        if (params.target_type) searchParams.append('target_type', params.target_type);
+        const query = searchParams.toString();
+        return this.request(`/admin/audit-logs${query ? '?' + query : ''}`);
+    }
+
+    async getAuditLogActions() {
+        return this.request('/admin/audit-logs/actions');
+    }
+
+    // ========================================
+    // Admin - System Settings endpoints
+    // ========================================
+    async getSystemSettings() {
+        return this.request('/admin/settings');
+    }
+
+    async updateSystemSettings(settings) {
+        return this.request('/admin/settings', {
+            method: 'PUT',
+            body: settings
+        });
+    }
+
+    async getSystemSetting(key) {
+        return this.request(`/admin/settings/${key}`);
+    }
+
+    async updateSystemSetting(key, value) {
+        return this.request(`/admin/settings/${key}`, {
+            method: 'PUT',
+            body: { value }
+        });
+    }
+
+    async getAdminStats() {
+        return this.request('/admin/stats');
     }
 
     // Apps endpoints

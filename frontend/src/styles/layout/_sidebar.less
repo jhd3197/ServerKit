@@ -26,6 +26,7 @@
     .flex-start();
     gap: @space-3;
     border-bottom: 1px solid @border-subtle;
+    flex-shrink: 0;
 }
 
 .brand-logo {
@@ -33,6 +34,31 @@
     background: linear-gradient(135deg, @accent-primary, lighten(@accent-primary, 15%));
     border-radius: @radius-lg;
     color: white;
+}
+
+// Scrollable nav container
+.sidebar-nav-container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: @border-active;
+        border-radius: @radius-full;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: @text-tertiary;
+    }
 }
 
 // Menu labels
@@ -85,7 +111,7 @@
 
 // User profile at bottom
 .user-profile {
-    margin-top: auto;
+    flex-shrink: 0;
     padding: @space-5;
     border-top: 1px solid @border-subtle;
     .flex-start();
