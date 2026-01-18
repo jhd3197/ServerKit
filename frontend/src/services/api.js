@@ -1524,6 +1524,67 @@ class ApiService {
     async getUptimeTrackingStatus() {
         return this.request('/uptime/tracking/status');
     }
+
+    // ========================================
+    // Environment Variables endpoints
+    // ========================================
+    async getEnvVars(appId, maskSecrets = false) {
+        const params = maskSecrets ? '?mask=true' : '';
+        return this.request(`/apps/${appId}/env${params}`);
+    }
+
+    async getEnvVar(appId, key) {
+        return this.request(`/apps/${appId}/env/${encodeURIComponent(key)}`);
+    }
+
+    async createEnvVar(appId, key, value, isSecret = false, description = null) {
+        return this.request(`/apps/${appId}/env`, {
+            method: 'POST',
+            body: { key, value, is_secret: isSecret, description }
+        });
+    }
+
+    async updateEnvVar(appId, key, data) {
+        return this.request(`/apps/${appId}/env/${encodeURIComponent(key)}`, {
+            method: 'PUT',
+            body: data
+        });
+    }
+
+    async deleteEnvVar(appId, key) {
+        return this.request(`/apps/${appId}/env/${encodeURIComponent(key)}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async bulkSetEnvVars(appId, envVars) {
+        return this.request(`/apps/${appId}/env/bulk`, {
+            method: 'POST',
+            body: { env_vars: envVars }
+        });
+    }
+
+    async importEnvFile(appId, content, overwrite = true) {
+        return this.request(`/apps/${appId}/env/import`, {
+            method: 'POST',
+            body: { content, overwrite }
+        });
+    }
+
+    async exportEnvFile(appId, includeSecrets = true) {
+        const params = includeSecrets ? '' : '?include_secrets=false';
+        return this.request(`/apps/${appId}/env/export${params}`);
+    }
+
+    async getEnvVarHistory(appId, limit = 50) {
+        return this.request(`/apps/${appId}/env/history?limit=${limit}`);
+    }
+
+    async clearEnvVars(appId) {
+        return this.request(`/apps/${appId}/env/clear`, {
+            method: 'DELETE'
+        });
+    }
 }
 
 export const api = new ApiService();

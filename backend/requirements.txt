@@ -41,3 +41,6 @@ click==8.1.7
 schedule
 passlib
 bcrypt
+
+# Encryption for env vars
+cryptography==42.0.0

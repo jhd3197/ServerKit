@@ -125,6 +125,10 @@ def create_app(config_name=None):
     from app.api.uptime import uptime_bp
     app.register_blueprint(uptime_bp, url_prefix='/api/v1/uptime')
 
+    # Register blueprints - Environment Variables
+    from app.api.env_vars import env_vars_bp
+    app.register_blueprint(env_vars_bp, url_prefix='/api/v1/apps')
+
     # Create database tables
     with app.app_context():
         db.create_all()

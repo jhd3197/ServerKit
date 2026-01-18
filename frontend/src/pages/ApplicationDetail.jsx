@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useToast } from '../contexts/ToastContext';
+import EnvironmentVariables from '../components/EnvironmentVariables';
 
 const ApplicationDetail = () => {
     const { id } = useParams();
@@ -134,6 +135,12 @@ const ApplicationDetail = () => {
                 >
                     Overview
                 </button>
+                <button
+                    className={`tab ${activeTab === 'environment' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('environment')}
+                >
+                    Environment
+                </button>
                 {isPythonApp && (
                     <>
                         <button
@@ -141,12 +148,6 @@ const ApplicationDetail = () => {
                             onClick={() => setActiveTab('packages')}
                         >
                             Packages
-                        </button>
-                        <button
-                            className={`tab ${activeTab === 'environment' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('environment')}
-                        >
-                            Environment
                         </button>
                         <button
                             className={`tab ${activeTab === 'gunicorn' ? 'active' : ''}`}
@@ -206,8 +207,8 @@ const ApplicationDetail = () => {
 
             <div className="tab-content">
                 {activeTab === 'overview' && <OverviewTab app={app} />}
+                {activeTab === 'environment' && <EnvironmentVariables appId={app.id} />}
                 {activeTab === 'packages' && isPythonApp && <PackagesTab appId={app.id} />}
-                {activeTab === 'environment' && isPythonApp && <EnvironmentTab appId={app.id} />}
                 {activeTab === 'gunicorn' && isPythonApp && <GunicornTab appId={app.id} />}
                 {activeTab === 'commands' && isPythonApp && <CommandsTab appId={app.id} appType={app.app_type} />}
                 {activeTab === 'plugins' && isWordPressApp && <PluginsTab appId={app.id} />}

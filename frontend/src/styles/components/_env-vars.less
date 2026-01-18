@@ -1,0 +1,271 @@
+// ============================================
+// ENVIRONMENT VARIABLES COMPONENT
+// ============================================
+
+.env-vars-container {
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: @spacing-md;
+
+        h3 {
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: @spacing-sm;
+        }
+    }
+
+    .hint {
+        color: @text-tertiary;
+        font-size: @font-size-sm;
+        margin-bottom: @spacing-lg;
+    }
+}
+
+// Add new variable form
+.env-add-form {
+    background: @surface-secondary;
+    border: 1px solid @border-color;
+    border-radius: @radius-md;
+    padding: @spacing-md;
+    margin-bottom: @spacing-lg;
+
+    .env-form-row {
+        display: flex;
+        gap: @spacing-sm;
+        margin-bottom: @spacing-sm;
+    }
+
+    .env-key-input {
+        width: 200px;
+        flex-shrink: 0;
+        font-family: @font-mono;
+        text-transform: uppercase;
+    }
+
+    .env-value-input {
+        flex: 1;
+    }
+
+    .env-secret-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: @surface-tertiary;
+        border: 1px solid @border-color;
+        border-radius: @radius-sm;
+        cursor: pointer;
+        color: @text-tertiary;
+        transition: all 0.2s;
+
+        input {
+            display: none;
+        }
+
+        &:hover {
+            border-color: @primary;
+            color: @primary;
+        }
+
+        &:has(input:checked) {
+            background: fade(@primary, 20%);
+            border-color: @primary;
+            color: @primary;
+        }
+    }
+
+    .env-description-input {
+        width: 100%;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+    }
+}
+
+// Filter
+.env-filter {
+    position: relative;
+    margin-bottom: @spacing-md;
+
+    input {
+        width: 100%;
+        padding-right: 36px;
+    }
+
+    .filter-clear {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: @text-tertiary;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 4px 8px;
+
+        &:hover {
+            color: @text-primary;
+        }
+    }
+}
+
+// Variables list
+.env-list {
+    display: flex;
+    flex-direction: column;
+    gap: @spacing-sm;
+}
+
+.env-item {
+    background: @surface-secondary;
+    border: 1px solid @border-color;
+    border-radius: @radius-md;
+    padding: @spacing-md;
+    transition: border-color 0.2s;
+
+    &:hover {
+        border-color: @border-light;
+    }
+
+    &.is-secret {
+        border-left: 3px solid @warning;
+    }
+
+    .env-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: @spacing-xs;
+    }
+
+    .env-key {
+        font-family: @font-mono;
+        font-weight: 600;
+        color: @text-primary;
+        display: flex;
+        align-items: center;
+        gap: @spacing-xs;
+
+        .secret-badge {
+            color: @warning;
+        }
+    }
+
+    .env-item-actions {
+        display: flex;
+        gap: @spacing-xs;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    &:hover .env-item-actions {
+        opacity: 1;
+    }
+
+    .env-value {
+        font-family: @font-mono;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        word-break: break-all;
+        padding: @spacing-xs 0;
+    }
+
+    .env-description {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        margin-top: @spacing-xs;
+        font-style: italic;
+    }
+
+    .env-edit-row {
+        display: flex;
+        gap: @spacing-sm;
+        margin-top: @spacing-sm;
+
+        input {
+            flex: 1;
+            font-family: @font-mono;
+        }
+    }
+}
+
+.btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    border-radius: @radius-sm;
+    color: @text-tertiary;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+        background: @surface-tertiary;
+        color: @text-primary;
+    }
+
+    &.btn-danger:hover {
+        background: fade(@danger, 20%);
+        color: @danger;
+    }
+}
+
+// Empty state
+.env-empty {
+    text-align: center;
+    padding: @spacing-xl;
+    color: @text-tertiary;
+    background: @surface-secondary;
+    border: 1px dashed @border-color;
+    border-radius: @radius-md;
+}
+
+// Footer
+.env-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: @spacing-lg;
+    padding-top: @spacing-md;
+    border-top: 1px solid @border-color;
+
+    .env-count {
+        color: @text-tertiary;
+        font-size: @font-size-sm;
+    }
+}
+
+// Import modal specific
+.import-file-upload {
+    margin-bottom: @spacing-md;
+}
+
+.import-textarea {
+    width: 100%;
+    font-family: @font-mono;
+    font-size: @font-size-sm;
+    background: @surface-primary;
+    border: 1px solid @border-color;
+    border-radius: @radius-sm;
+    padding: @spacing-md;
+    resize: vertical;
+    min-height: 200px;
+
+    &::placeholder {
+        color: @text-tertiary;
+    }
+}
+
+// Modal large variant
+.modal-lg {
+    max-width: 700px;
+}
