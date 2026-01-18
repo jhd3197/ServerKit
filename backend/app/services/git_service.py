@@ -304,8 +304,12 @@ class GitService:
 
     @classmethod
     def verify_webhook(cls, app_id: int, token: str,
-                      signature: str = None, payload: bytes = None) -> bool:
-        """Verify webhook authenticity."""
+                      signature: str = None, payload: bytes = None,
+                      provider: str = 'github') -> bool:
+        """Verify webhook authenticity.
+
+        Supports GitHub, GitLab, and Bitbucket signature verification.
+        """
         app_config = cls.get_app_config(app_id)
         if not app_config:
             return False
@@ -314,14 +318,98 @@ class GitService:
         if token != app_config.get('webhook_token'):
             return False
 
-        # If signature provided (GitHub style), verify it
+        # If signature provided, verify based on provider
         if signature and payload:
             config = cls.get_config()
             secret = config.get('webhook_secret', '').encode()
-            expected = 'sha256=' + hmac.new(secret, payload, hashlib.sha256).hexdigest()
-            return hmac.compare_digest(signature, expected)
+
+            if provider == 'github':
+                # GitHub: X-Hub-Signature-256 header with sha256=<hex>
+                expected = 'sha256=' + hmac.new(secret, payload, hashlib.sha256).hexdigest()
+                return hmac.compare_digest(signature, expected)
+
+            elif provider == 'gitlab':
+                # GitLab: X-Gitlab-Token header contains the secret directly
+                return hmac.compare_digest(signature, config.get('webhook_secret', ''))
+
+            elif provider == 'bitbucket':
+                # Bitbucket: X-Hub-Signature header with sha256=<hex> (similar to GitHub)
+                expected = 'sha256=' + hmac.new(secret, payload, hashlib.sha256).hexdigest()
+                return hmac.compare_digest(signature, expected)
 
         return True
+
+    @classmethod
+    def get_remote_branches(cls, app_path: str) -> Dict:
+        """Get list of remote branches for a repository."""
+        if not os.path.exists(os.path.join(app_path, '.git')):
+            return {'success': False, 'error': 'Not a Git repository'}
+
+        try:
+            # Fetch latest from remote
+            fetch_cmd = ['git', '-C', app_path, 'fetch', '--all', '--prune']
+            subprocess.run(fetch_cmd, capture_output=True, text=True, timeout=60)
+
+            # Get remote branches
+            cmd = ['git', '-C', app_path, 'branch', '-r', '--format=%(refname:short)']
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+
+            if result.returncode != 0:
+                return {'success': False, 'error': result.stderr}
+
+            branches = []
+            for line in result.stdout.strip().split('\n'):
+                branch = line.strip()
+                if branch and not branch.endswith('/HEAD'):
+                    # Remove origin/ prefix
+                    if branch.startswith('origin/'):
+                        branch = branch[7:]
+                    branches.append(branch)
+
+            # Get current branch
+            cmd = ['git', '-C', app_path, 'rev-parse', '--abbrev-ref', 'HEAD']
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            current_branch = result.stdout.strip() if result.returncode == 0 else None
+
+            return {
+                'success': True,
+                'branches': sorted(set(branches)),
+                'current_branch': current_branch
+            }
+
+        except subprocess.TimeoutExpired:
+            return {'success': False, 'error': 'Operation timed out'}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def get_remote_branches_from_url(cls, repo_url: str) -> Dict:
+        """Get list of branches from a remote repository URL without cloning."""
+        try:
+            cmd = ['git', 'ls-remote', '--heads', repo_url]
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+
+            if result.returncode != 0:
+                return {'success': False, 'error': result.stderr or 'Failed to fetch branches'}
+
+            branches = []
+            for line in result.stdout.strip().split('\n'):
+                if line:
+                    # Format: <hash>\trefs/heads/<branch>
+                    parts = line.split('\t')
+                    if len(parts) == 2 and parts[1].startswith('refs/heads/'):
+                        branch = parts[1].replace('refs/heads/', '')
+                        branches.append(branch)
+
+            return {
+                'success': True,
+                'branches': sorted(branches)
+            }
+
+        except subprocess.TimeoutExpired:
+            return {'success': False, 'error': 'Operation timed out'}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
 
     @classmethod
     def handle_webhook(cls, app_id: int, payload: Dict) -> Dict:
@@ -427,3 +515,62 @@ class GitService:
 
         except Exception as e:
             return {'error': str(e)}
+
+    WEBHOOK_LOG = '/var/log/serverkit/webhooks.log'
+
+    @classmethod
+    def log_webhook(cls, app_id: int, provider: str, headers: List, payload: bytes) -> None:
+        """Log incoming webhook for debugging."""
+        try:
+            log_dir = os.path.dirname(cls.WEBHOOK_LOG)
+            os.makedirs(log_dir, exist_ok=True)
+
+            # Sanitize headers (remove sensitive tokens)
+            safe_headers = {}
+            for key, value in headers:
+                if 'token' in key.lower() or 'signature' in key.lower() or 'secret' in key.lower():
+                    safe_headers[key] = value[:10] + '...' if len(value) > 10 else '***'
+                else:
+                    safe_headers[key] = value
+
+            log_entry = {
+                'timestamp': datetime.now().isoformat(),
+                'app_id': app_id,
+                'provider': provider,
+                'headers': safe_headers,
+                'payload_size': len(payload),
+                'payload_preview': payload[:500].decode('utf-8', errors='replace') if payload else None
+            }
+
+            with open(cls.WEBHOOK_LOG, 'a') as f:
+                f.write(json.dumps(log_entry) + '\n')
+
+        except Exception:
+            pass
+
+    @classmethod
+    def get_webhook_logs(cls, app_id: int = None, limit: int = 50) -> List[Dict]:
+        """Get webhook logs for debugging."""
+        logs = []
+
+        if not os.path.exists(cls.WEBHOOK_LOG):
+            return logs
+
+        try:
+            with open(cls.WEBHOOK_LOG, 'r') as f:
+                lines = f.readlines()
+
+            for line in reversed(lines[-limit * 2:]):
+                try:
+                    entry = json.loads(line.strip())
+                    if app_id is None or entry.get('app_id') == app_id:
+                        logs.append(entry)
+                        if len(logs) >= limit:
+                            break
+                except json.JSONDecodeError:
+                    pass
+
+        except Exception:
+            pass
+
+        return logs

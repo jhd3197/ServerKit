@@ -1,0 +1,262 @@
+// ============================================
+// DEPLOY TAB STYLES
+// ============================================
+
+// Deploy Tab Container
+.deploy-tab {
+    display: flex;
+    flex-direction: column;
+    gap: @space-6;
+}
+
+// Deploy Setup Empty State
+.deploy-setup {
+    .empty-state {
+        text-align: center;
+        padding: @space-12 @space-8;
+        background: @bg-card;
+        border: 1px dashed @border-subtle;
+        border-radius: @radius-lg;
+
+        svg {
+            color: @text-tertiary;
+            margin-bottom: @space-4;
+        }
+
+        h3 {
+            margin-bottom: @space-2;
+        }
+
+        p {
+            color: @text-secondary;
+            margin-bottom: @space-6;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
+
+// Deploy Header
+.deploy-header {
+    margin-bottom: @space-4;
+}
+
+.deploy-status-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: @space-4 @space-6;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+}
+
+.deploy-repo-info {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+
+    svg {
+        color: @text-secondary;
+    }
+
+    .repo-url {
+        display: block;
+        font-weight: @font-weight-medium;
+        color: @text-primary;
+    }
+
+    .repo-branch {
+        display: block;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+    }
+}
+
+.deploy-actions {
+    display: flex;
+    gap: @space-3;
+}
+
+// Deploy Grid
+.deploy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: @space-6;
+}
+
+// Webhook URL
+.webhook-url {
+    display: flex;
+    gap: @space-2;
+    align-items: center;
+    margin-top: @space-3;
+    padding: @space-3;
+    background: @bg-hover;
+    border-radius: @radius-md;
+    overflow: hidden;
+
+    code {
+        flex: 1;
+        font-family: @font-mono;
+        font-size: @font-size-sm;
+        color: @text-primary;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.webhook-logs-toggle {
+    margin-top: @space-4;
+}
+
+// Webhook Logs
+.webhook-logs {
+    margin-top: @space-4;
+    padding-top: @space-4;
+    border-top: 1px solid @border-subtle;
+}
+
+.webhook-logs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: @space-3;
+
+    h4 {
+        margin: 0;
+        font-size: @font-size-sm;
+        font-weight: @font-weight-semibold;
+        color: @text-secondary;
+    }
+}
+
+.webhook-logs-list {
+    display: flex;
+    flex-direction: column;
+    gap: @space-3;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.webhook-log-item {
+    padding: @space-3;
+    background: @bg-hover;
+    border-radius: @radius-md;
+    border: 1px solid @border-subtle;
+}
+
+.webhook-log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: @space-2;
+}
+
+.provider-badge {
+    display: inline-block;
+    padding: @space-1 @space-2;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+    border-radius: @radius-sm;
+    text-transform: capitalize;
+
+    &.github {
+        background: fade(#333, 15%);
+        color: #333;
+    }
+
+    &.gitlab {
+        background: fade(#fc6d26, 15%);
+        color: #fc6d26;
+    }
+
+    &.bitbucket {
+        background: fade(#0052cc, 15%);
+        color: #0052cc;
+    }
+}
+
+.webhook-log-time {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+}
+
+.webhook-log-details {
+    margin-bottom: @space-2;
+}
+
+.webhook-log-size {
+    font-size: @font-size-sm;
+    color: @text-secondary;
+}
+
+.webhook-log-preview {
+    margin: 0;
+    padding: @space-2;
+    background: @bg-body;
+    border-radius: @radius-sm;
+    font-family: @font-mono;
+    font-size: @font-size-xs;
+    color: @text-secondary;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+// Input with action button
+.input-with-action {
+    display: flex;
+    gap: @space-2;
+
+    input {
+        flex: 1;
+    }
+
+    .btn {
+        flex-shrink: 0;
+    }
+}
+
+// Scripts Grid
+.scripts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: @space-4;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.script-section {
+    h4 {
+        margin: 0 0 @space-2 0;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+    }
+}
+
+.script-code {
+    margin: 0;
+    padding: @space-3;
+    background: @bg-hover;
+    border-radius: @radius-md;
+    font-family: @font-mono;
+    font-size: @font-size-sm;
+    color: @text-primary;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+// Card Actions
+.card-actions {
+    display: flex;
+    gap: @space-2;
+    margin-top: @space-4;
+    padding-top: @space-4;
+    border-top: 1px solid @border-subtle;
+}

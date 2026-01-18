@@ -1205,6 +1205,23 @@ class ApiService {
         });
     }
 
+    async getAppBranches(appId) {
+        return this.request(`/deploy/apps/${appId}/branches`);
+    }
+
+    async getBranchesFromUrl(repoUrl) {
+        return this.request('/deploy/branches', {
+            method: 'POST',
+            body: { repo_url: repoUrl }
+        });
+    }
+
+    async getWebhookLogs(appId = null, limit = 50) {
+        const params = new URLSearchParams({ limit });
+        if (appId) params.append('app_id', appId);
+        return this.request(`/deploy/webhook-logs?${params}`);
+    }
+
     // ========================================
     // File Manager endpoints
     // ========================================

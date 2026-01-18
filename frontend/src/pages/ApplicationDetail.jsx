@@ -942,9 +942,13 @@ const DeployTab = ({ appId, appPath }) => {
     const [config, setConfig] = useState(null);
     const [gitStatus, setGitStatus] = useState(null);
     const [history, setHistory] = useState([]);
+    const [webhookLogs, setWebhookLogs] = useState([]);
+    const [branches, setBranches] = useState([]);
     const [loading, setLoading] = useState(true);
     const [deploying, setDeploying] = useState(false);
     const [showConfigModal, setShowConfigModal] = useState(false);
+    const [showWebhookLogs, setShowWebhookLogs] = useState(false);
+    const [loadingBranches, setLoadingBranches] = useState(false);
     const [error, setError] = useState(null);
 
     // Config form state
@@ -993,6 +997,44 @@ const DeployTab = ({ appId, appPath }) => {
             setError(err.message);
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function loadBranchesFromUrl(repoUrl) {
+        if (!repoUrl) return;
+        setLoadingBranches(true);
+        try {
+            const result = await api.getBranchesFromUrl(repoUrl);
+            if (result.success) {
+                setBranches(result.branches || []);
+            }
+        } catch (err) {
+            console.error('Failed to load branches:', err);
+        } finally {
+            setLoadingBranches(false);
+        }
+    }
+
+    async function loadBranchesFromApp() {
+        setLoadingBranches(true);
+        try {
+            const result = await api.getAppBranches(appId);
+            if (result.success) {
+                setBranches(result.branches || []);
+            }
+        } catch (err) {
+            console.error('Failed to load branches:', err);
+        } finally {
+            setLoadingBranches(false);
+        }
+    }
+
+    async function loadWebhookLogs() {
+        try {
+            const result = await api.getWebhookLogs(appId, 20);
+            setWebhookLogs(result.logs || []);
+        } catch (err) {
+            console.error('Failed to load webhook logs:', err);
         }
     }
 
@@ -1233,6 +1275,56 @@ const DeployTab = ({ appId, appPath }) => {
                                     Copy
                                 </button>
                             </div>
+                            <div className="webhook-logs-toggle">
+                                <button
+                                    className="btn btn-secondary btn-sm"
+                                    onClick={() => {
+                                        setShowWebhookLogs(!showWebhookLogs);
+                                        if (!showWebhookLogs) loadWebhookLogs();
+                                    }}
+                                >
+                                    {showWebhookLogs ? 'Hide Webhook Logs' : 'Show Webhook Logs'}
+                                </button>
+                            </div>
+                            {showWebhookLogs && (
+                                <div className="webhook-logs">
+                                    <div className="webhook-logs-header">
+                                        <h4>Recent Webhook Requests</h4>
+                                        <button className="btn btn-secondary btn-sm" onClick={loadWebhookLogs}>
+                                            Refresh
+                                        </button>
+                                    </div>
+                                    {webhookLogs.length === 0 ? (
+                                        <p className="hint">No webhook requests received yet.</p>
+                                    ) : (
+                                        <div className="webhook-logs-list">
+                                            {webhookLogs.map((log, index) => (
+                                                <div key={index} className="webhook-log-item">
+                                                    <div className="webhook-log-header">
+                                                        <span className={`provider-badge ${log.provider}`}>
+                                                            {log.provider}
+                                                        </span>
+                                                        <span className="webhook-log-time">
+                                                            {new Date(log.timestamp).toLocaleString()}
+                                                        </span>
+                                                    </div>
+                                                    <div className="webhook-log-details">
+                                                        <span className="webhook-log-size">
+                                                            Payload: {log.payload_size} bytes
+                                                        </span>
+                                                    </div>
+                                                    {log.payload_preview && (
+                                                        <pre className="webhook-log-preview">
+                                                            {log.payload_preview.substring(0, 200)}
+                                                            {log.payload_preview.length > 200 && '...'}
+                                                        </pre>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -1309,23 +1401,49 @@ const DeployTab = ({ appId, appPath }) => {
                             <div className="modal-body">
                                 <div className="form-group">
                                     <label>Repository URL *</label>
-                                    <input
-                                        type="url"
-                                        value={configForm.repoUrl}
-                                        onChange={(e) => setConfigForm({...configForm, repoUrl: e.target.value})}
-                                        placeholder="https://github.com/user/repo.git"
-                                        required
-                                    />
+                                    <div className="input-with-action">
+                                        <input
+                                            type="url"
+                                            value={configForm.repoUrl}
+                                            onChange={(e) => setConfigForm({...configForm, repoUrl: e.target.value})}
+                                            placeholder="https://github.com/user/repo.git"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary btn-sm"
+                                            onClick={() => loadBranchesFromUrl(configForm.repoUrl)}
+                                            disabled={!configForm.repoUrl || loadingBranches}
+                                        >
+                                            {loadingBranches ? 'Loading...' : 'Fetch Branches'}
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className="form-group">
                                     <label>Branch</label>
-                                    <input
-                                        type="text"
-                                        value={configForm.branch}
-                                        onChange={(e) => setConfigForm({...configForm, branch: e.target.value})}
-                                        placeholder="main"
-                                    />
+                                    {branches.length > 0 ? (
+                                        <select
+                                            value={configForm.branch}
+                                            onChange={(e) => setConfigForm({...configForm, branch: e.target.value})}
+                                        >
+                                            {branches.map(branch => (
+                                                <option key={branch} value={branch}>{branch}</option>
+                                            ))}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            value={configForm.branch}
+                                            onChange={(e) => setConfigForm({...configForm, branch: e.target.value})}
+                                            placeholder="main"
+                                        />
+                                    )}
+                                    <span className="form-help">
+                                        {branches.length > 0
+                                            ? `${branches.length} branches available`
+                                            : 'Click "Fetch Branches" to load available branches'}
+                                    </span>
                                 </div>
 
                                 <div className="form-group">

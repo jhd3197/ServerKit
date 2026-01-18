@@ -195,15 +195,75 @@ def clone_repository():
     return jsonify(result), 201 if result['success'] else 400
 
 
+@deploy_bp.route('/apps/<int:app_id>/branches', methods=['GET'])
+@jwt_required()
+def get_branches(app_id):
+    """Get list of remote branches for an app's repository."""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    app = Application.query.get(app_id)
+
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if user.role != 'admin' and app.user_id != current_user_id:
+        return jsonify({'error': 'Access denied'}), 403
+
+    result = GitService.get_remote_branches(app.path)
+    return jsonify(result), 200 if result.get('success') else 400
+
+
+@deploy_bp.route('/branches', methods=['POST'])
+@jwt_required()
+def get_branches_from_url():
+    """Get list of branches from a repository URL (before cloning)."""
+    data = request.get_json()
+    if not data or 'repo_url' not in data:
+        return jsonify({'error': 'repo_url is required'}), 400
+
+    result = GitService.get_remote_branches_from_url(data['repo_url'])
+    return jsonify(result), 200 if result.get('success') else 400
+
+
+@deploy_bp.route('/webhook-logs', methods=['GET'])
+@jwt_required()
+def get_webhook_logs():
+    """Get webhook logs for debugging."""
+    app_id = request.args.get('app_id', type=int)
+    limit = request.args.get('limit', 50, type=int)
+
+    logs = GitService.get_webhook_logs(app_id, limit)
+    return jsonify({'logs': logs}), 200
+
+
 # Webhook endpoint (no auth required)
 @deploy_bp.route('/webhook/<int:app_id>/<token>', methods=['POST'])
 def webhook(app_id, token):
     """Handle incoming webhook from Git provider."""
-    # Get signature if provided (GitHub style)
-    signature = request.headers.get('X-Hub-Signature-256')
+    # Detect provider based on headers
+    provider = 'github'  # default
+    signature = None
+
+    if request.headers.get('X-Gitlab-Token'):
+        provider = 'gitlab'
+        signature = request.headers.get('X-Gitlab-Token')
+    elif request.headers.get('X-Hub-Signature-256'):
+        # Could be GitHub or Bitbucket
+        if request.headers.get('X-Bitbucket-Type'):
+            provider = 'bitbucket'
+        else:
+            provider = 'github'
+        signature = request.headers.get('X-Hub-Signature-256')
+    elif request.headers.get('X-Hub-Signature'):
+        # Bitbucket uses X-Hub-Signature
+        provider = 'bitbucket'
+        signature = request.headers.get('X-Hub-Signature')
+
+    # Log webhook for debugging
+    GitService.log_webhook(app_id, provider, request.headers.to_wsgi_list(), request.data)
 
     # Verify webhook
-    if not GitService.verify_webhook(app_id, token, signature, request.data):
+    if not GitService.verify_webhook(app_id, token, signature, request.data, provider):
         return jsonify({'error': 'Invalid webhook'}), 403
 
     # Parse payload
