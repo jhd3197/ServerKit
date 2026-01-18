@@ -782,22 +782,35 @@ const AppearanceSettings = () => {
 };
 
 const NotificationSettings = () => {
-    const { isAdmin } = useAuth();
+    const { isAdmin, user } = useAuth();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [testing, setTesting] = useState(null);
     const [message, setMessage] = useState(null);
+    const [activeSection, setActiveSection] = useState('personal');
     const [config, setConfig] = useState({
         discord: { enabled: false, webhook_url: '', username: 'ServerKit', avatar_url: '', notify_on: ['critical', 'warning'] },
         slack: { enabled: false, webhook_url: '', channel: '', username: 'ServerKit', icon_emoji: ':robot_face:', notify_on: ['critical', 'warning'] },
         telegram: { enabled: false, bot_token: '', chat_id: '', notify_on: ['critical', 'warning'] },
+        email: { enabled: false, smtp_host: '', smtp_port: 587, smtp_user: '', smtp_password: '', smtp_tls: true, from_email: '', from_name: 'ServerKit', to_emails: [], notify_on: ['critical', 'warning'] },
         generic_webhook: { enabled: false, url: '', headers: {}, notify_on: ['critical', 'warning'] }
     });
     const [expandedChannel, setExpandedChannel] = useState(null);
+    const [userPrefs, setUserPrefs] = useState({
+        enabled: true,
+        channels: ['email'],
+        severities: ['critical', 'warning'],
+        email: '',
+        discord_webhook: '',
+        telegram_chat_id: '',
+        categories: { system: true, security: true, backups: true, apps: true },
+        quiet_hours: { enabled: false, start: '22:00', end: '08:00' }
+    });
 
     const severityOptions = ['critical', 'warning', 'info', 'success'];
 
     useEffect(() => {
+        loadUserPrefs();
         if (isAdmin) loadConfig();
     }, [isAdmin]);
 
@@ -808,12 +821,50 @@ const NotificationSettings = () => {
                 discord: { ...prev.discord, ...data.discord },
                 slack: { ...prev.slack, ...data.slack },
                 telegram: { ...prev.telegram, ...data.telegram },
+                email: { ...prev.email, ...data.email },
                 generic_webhook: { ...prev.generic_webhook, ...data.generic_webhook }
             }));
         } catch (err) {
             console.error('Failed to load notification config:', err);
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function loadUserPrefs() {
+        try {
+            const data = await api.getUserNotificationPreferences();
+            setUserPrefs(prev => ({ ...prev, ...data }));
+        } catch (err) {
+            console.error('Failed to load user notification preferences:', err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function handleSaveUserPrefs() {
+        setSaving(true);
+        setMessage(null);
+        try {
+            await api.updateUserNotificationPreferences(userPrefs);
+            setMessage({ type: 'success', text: 'Your notification preferences have been saved' });
+        } catch (err) {
+            setMessage({ type: 'error', text: err.message });
+        } finally {
+            setSaving(false);
+        }
+    }
+
+    async function handleTestUserNotification() {
+        setTesting('user');
+        setMessage(null);
+        try {
+            const result = await api.testUserNotification();
+            setMessage({ type: result.success ? 'success' : 'error', text: result.success ? 'Test notification sent!' : (result.error || 'Test failed') });
+        } catch (err) {
+            setMessage({ type: 'error', text: err.message });
+        } finally {
+            setTesting(null);
         }
     }
 
@@ -858,21 +909,210 @@ const NotificationSettings = () => {
         updateChannelConfig(channel, 'notify_on', updated);
     }
 
-    if (!isAdmin) {
-        return (
-            <div className="settings-section">
-                <div className="section-header">
-                    <h2>Notification Settings</h2>
-                    <p>Configure notification webhooks for alerts</p>
-                </div>
-                <div className="alert alert-warning">Admin access required to configure notifications.</div>
-            </div>
-        );
-    }
-
     if (loading) {
         return <div className="loading">Loading notification settings...</div>;
     }
+
+    const userPrefsUI = (
+        <div className="user-notification-prefs">
+            <div className="settings-card">
+                <div className="form-group">
+                    <label className="toggle-switch-label">
+                        <span>Enable notifications for my account</span>
+                        <label className="toggle-switch">
+                            <input
+                                type="checkbox"
+                                checked={userPrefs.enabled}
+                                onChange={(e) => setUserPrefs({...userPrefs, enabled: e.target.checked})}
+                            />
+                            <span className="toggle-slider"></span>
+                        </label>
+                    </label>
+                </div>
+            </div>
+
+            <div className="settings-card">
+                <h3>Notification Channels</h3>
+                <p>Choose how you want to receive notifications</p>
+                <div className="channel-toggles">
+                    {['email', 'discord', 'slack', 'telegram'].map(ch => (
+                        <label key={ch} className="channel-toggle">
+                            <input
+                                type="checkbox"
+                                checked={userPrefs.channels?.includes(ch)}
+                                onChange={(e) => {
+                                    const channels = e.target.checked
+                                        ? [...(userPrefs.channels || []), ch]
+                                        : (userPrefs.channels || []).filter(c => c !== ch);
+                                    setUserPrefs({...userPrefs, channels});
+                                }}
+                            />
+                            <span>{ch.charAt(0).toUpperCase() + ch.slice(1)}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
+
+            {userPrefs.channels?.includes('email') && (
+                <div className="settings-card">
+                    <h3>Email Settings</h3>
+                    <div className="form-group">
+                        <label>Notification Email (optional)</label>
+                        <input
+                            type="email"
+                            value={userPrefs.email || ''}
+                            onChange={(e) => setUserPrefs({...userPrefs, email: e.target.value})}
+                            placeholder={user?.email || 'Uses your account email'}
+                        />
+                        <span className="form-help">Leave empty to use your account email</span>
+                    </div>
+                </div>
+            )}
+
+            {userPrefs.channels?.includes('discord') && (
+                <div className="settings-card">
+                    <h3>Personal Discord Webhook</h3>
+                    <div className="form-group">
+                        <label>Webhook URL</label>
+                        <input
+                            type="text"
+                            value={userPrefs.discord_webhook || ''}
+                            onChange={(e) => setUserPrefs({...userPrefs, discord_webhook: e.target.value})}
+                            placeholder="https://discord.com/api/webhooks/..."
+                        />
+                        <span className="form-help">Create a webhook in your personal server or DM channel</span>
+                    </div>
+                </div>
+            )}
+
+            {userPrefs.channels?.includes('telegram') && (
+                <div className="settings-card">
+                    <h3>Personal Telegram</h3>
+                    <div className="form-group">
+                        <label>Your Chat ID</label>
+                        <input
+                            type="text"
+                            value={userPrefs.telegram_chat_id || ''}
+                            onChange={(e) => setUserPrefs({...userPrefs, telegram_chat_id: e.target.value})}
+                            placeholder="Your personal chat ID"
+                        />
+                        <span className="form-help">Use @userinfobot to get your personal chat ID</span>
+                    </div>
+                </div>
+            )}
+
+            <div className="settings-card">
+                <h3>Severity Levels</h3>
+                <p>Which alert types do you want to receive?</p>
+                <div className="severity-toggles">
+                    {severityOptions.map(severity => (
+                        <label key={severity} className={`severity-toggle ${severity}`}>
+                            <input
+                                type="checkbox"
+                                checked={userPrefs.severities?.includes(severity)}
+                                onChange={(e) => {
+                                    const severities = e.target.checked
+                                        ? [...(userPrefs.severities || []), severity]
+                                        : (userPrefs.severities || []).filter(s => s !== severity);
+                                    setUserPrefs({...userPrefs, severities});
+                                }}
+                            />
+                            <span>{severity.charAt(0).toUpperCase() + severity.slice(1)}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
+
+            <div className="settings-card">
+                <h3>Notification Categories</h3>
+                <p>What types of events should trigger notifications?</p>
+                <div className="category-toggles">
+                    {Object.entries({
+                        system: 'System Alerts (CPU, Memory, Disk)',
+                        security: 'Security Events',
+                        backups: 'Backup Status',
+                        apps: 'Application Events'
+                    }).map(([key, label]) => (
+                        <label key={key} className="category-toggle">
+                            <input
+                                type="checkbox"
+                                checked={userPrefs.categories?.[key] !== false}
+                                onChange={(e) => setUserPrefs({
+                                    ...userPrefs,
+                                    categories: { ...userPrefs.categories, [key]: e.target.checked }
+                                })}
+                            />
+                            <span>{label}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
+
+            <div className="settings-card">
+                <h3>Quiet Hours</h3>
+                <p>Pause non-critical notifications during these hours</p>
+                <div className="form-group">
+                    <label className="toggle-switch-label">
+                        <span>Enable quiet hours</span>
+                        <label className="toggle-switch">
+                            <input
+                                type="checkbox"
+                                checked={userPrefs.quiet_hours?.enabled}
+                                onChange={(e) => setUserPrefs({
+                                    ...userPrefs,
+                                    quiet_hours: { ...userPrefs.quiet_hours, enabled: e.target.checked }
+                                })}
+                            />
+                            <span className="toggle-slider"></span>
+                        </label>
+                    </label>
+                </div>
+                {userPrefs.quiet_hours?.enabled && (
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label>Start Time</label>
+                            <input
+                                type="time"
+                                value={userPrefs.quiet_hours?.start || '22:00'}
+                                onChange={(e) => setUserPrefs({
+                                    ...userPrefs,
+                                    quiet_hours: { ...userPrefs.quiet_hours, start: e.target.value }
+                                })}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>End Time</label>
+                            <input
+                                type="time"
+                                value={userPrefs.quiet_hours?.end || '08:00'}
+                                onChange={(e) => setUserPrefs({
+                                    ...userPrefs,
+                                    quiet_hours: { ...userPrefs.quiet_hours, end: e.target.value }
+                                })}
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <div className="form-actions">
+                <button
+                    className="btn btn-secondary"
+                    onClick={handleTestUserNotification}
+                    disabled={testing === 'user' || !userPrefs.enabled}
+                >
+                    {testing === 'user' ? 'Sending...' : 'Send Test Notification'}
+                </button>
+                <button
+                    className="btn btn-primary"
+                    onClick={handleSaveUserPrefs}
+                    disabled={saving}
+                >
+                    {saving ? 'Saving...' : 'Save Preferences'}
+                </button>
+            </div>
+        </div>
+    );
 
     const channels = [
         { id: 'discord', name: 'Discord', icon: (
@@ -890,6 +1130,12 @@ const NotificationSettings = () => {
                 <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
             </svg>
         ), description: 'Send notifications to Telegram chats via bot API' },
+        { id: 'email', name: 'Email', icon: (
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" strokeWidth="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+            </svg>
+        ), description: 'Send email notifications with HTML templates via SMTP' },
         { id: 'generic_webhook', name: 'Generic Webhook', icon: (
             <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" strokeWidth="2">
                 <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
@@ -901,8 +1147,8 @@ const NotificationSettings = () => {
     return (
         <div className="settings-section">
             <div className="section-header">
-                <h2>Notification Webhooks</h2>
-                <p>Configure notification channels for server alerts</p>
+                <h2>Notification Settings</h2>
+                <p>Configure how you receive alerts and notifications</p>
             </div>
 
             {message && (
@@ -911,6 +1157,34 @@ const NotificationSettings = () => {
                 </div>
             )}
 
+            <div className="notification-tabs">
+                <button
+                    className={`notification-tab ${activeSection === 'personal' ? 'active' : ''}`}
+                    onClick={() => setActiveSection('personal')}
+                >
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    My Preferences
+                </button>
+                {isAdmin && (
+                    <button
+                        className={`notification-tab ${activeSection === 'admin' ? 'active' : ''}`}
+                        onClick={() => setActiveSection('admin')}
+                    >
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                        System Webhooks
+                    </button>
+                )}
+            </div>
+
+            {activeSection === 'personal' && userPrefsUI}
+
+            {activeSection === 'admin' && isAdmin && (
             <div className="notification-channels">
                 {channels.map(channel => (
                     <div key={channel.id} className={`notification-channel-card ${config[channel.id]?.enabled ? 'enabled' : ''}`}>
@@ -1049,6 +1323,93 @@ const NotificationSettings = () => {
                                     </>
                                 )}
 
+                                {channel.id === 'email' && (
+                                    <>
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label>SMTP Host</label>
+                                                <input
+                                                    type="text"
+                                                    value={config.email.smtp_host || ''}
+                                                    onChange={(e) => updateChannelConfig('email', 'smtp_host', e.target.value)}
+                                                    placeholder="smtp.example.com"
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>SMTP Port</label>
+                                                <input
+                                                    type="number"
+                                                    value={config.email.smtp_port || 587}
+                                                    onChange={(e) => updateChannelConfig('email', 'smtp_port', parseInt(e.target.value))}
+                                                    placeholder="587"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label>SMTP Username</label>
+                                                <input
+                                                    type="text"
+                                                    value={config.email.smtp_user || ''}
+                                                    onChange={(e) => updateChannelConfig('email', 'smtp_user', e.target.value)}
+                                                    placeholder="user@example.com"
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>SMTP Password</label>
+                                                <input
+                                                    type="password"
+                                                    value={config.email.smtp_password || ''}
+                                                    onChange={(e) => updateChannelConfig('email', 'smtp_password', e.target.value)}
+                                                    placeholder="••••••••"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label>From Email</label>
+                                                <input
+                                                    type="email"
+                                                    value={config.email.from_email || ''}
+                                                    onChange={(e) => updateChannelConfig('email', 'from_email', e.target.value)}
+                                                    placeholder="alerts@example.com"
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>From Name</label>
+                                                <input
+                                                    type="text"
+                                                    value={config.email.from_name || 'ServerKit'}
+                                                    onChange={(e) => updateChannelConfig('email', 'from_name', e.target.value)}
+                                                    placeholder="ServerKit"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Recipient Emails (comma-separated)</label>
+                                            <input
+                                                type="text"
+                                                value={(config.email.to_emails || []).join(', ')}
+                                                onChange={(e) => updateChannelConfig('email', 'to_emails', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
+                                                placeholder="admin@example.com, team@example.com"
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="toggle-switch-label">
+                                                <span>Use TLS</span>
+                                                <label className="toggle-switch">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={config.email.smtp_tls !== false}
+                                                        onChange={(e) => updateChannelConfig('email', 'smtp_tls', e.target.checked)}
+                                                    />
+                                                    <span className="toggle-slider"></span>
+                                                </label>
+                                            </label>
+                                        </div>
+                                    </>
+                                )}
+
                                 {channel.id === 'generic_webhook' && (
                                     <div className="form-group">
                                         <label>Webhook URL</label>
@@ -1099,6 +1460,7 @@ const NotificationSettings = () => {
                     </div>
                 ))}
             </div>
+            )}
         </div>
     );
 };

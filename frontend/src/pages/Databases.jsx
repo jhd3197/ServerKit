@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import { useToast } from '../contexts/ToastContext';
+import QueryRunner from '../components/QueryRunner';
 
 const Databases = () => {
     const [activeTab, setActiveTab] = useState('mysql');
@@ -73,12 +74,19 @@ const Databases = () => {
                 >
                     Backups
                 </button>
+                <button
+                    className={`tab ${activeTab === 'sqlite' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('sqlite')}
+                >
+                    SQLite
+                </button>
             </div>
 
             <div className="tab-content">
                 {activeTab === 'mysql' && <MySQLTab status={status?.mysql} />}
                 {activeTab === 'postgresql' && <PostgreSQLTab status={status?.postgresql} />}
                 {activeTab === 'backups' && <BackupsTab />}
+                {activeTab === 'sqlite' && <SQLiteTab />}
             </div>
         </div>
     );
@@ -93,6 +101,7 @@ const MySQLTab = ({ status }) => {
     const [showCreateDbModal, setShowCreateDbModal] = useState(false);
     const [showCreateUserModal, setShowCreateUserModal] = useState(false);
     const [selectedDb, setSelectedDb] = useState(null);
+    const [queryDb, setQueryDb] = useState(null);
 
     useEffect(() => {
         if (status?.running) {
@@ -225,6 +234,12 @@ const MySQLTab = ({ status }) => {
                                 </div>
                                 <div className="db-item-actions">
                                     <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() => setQueryDb(db)}
+                                    >
+                                        Query
+                                    </button>
+                                    <button
                                         className="btn btn-secondary btn-sm"
                                         onClick={() => setSelectedDb(db)}
                                     >
@@ -307,6 +322,14 @@ const MySQLTab = ({ status }) => {
                     onClose={() => setSelectedDb(null)}
                 />
             )}
+
+            {queryDb && (
+                <QueryRunner
+                    database={queryDb}
+                    dbType="mysql"
+                    onClose={() => setQueryDb(null)}
+                />
+            )}
         </div>
     );
 };
@@ -320,6 +343,7 @@ const PostgreSQLTab = ({ status }) => {
     const [showCreateDbModal, setShowCreateDbModal] = useState(false);
     const [showCreateUserModal, setShowCreateUserModal] = useState(false);
     const [selectedDb, setSelectedDb] = useState(null);
+    const [queryDb, setQueryDb] = useState(null);
 
     useEffect(() => {
         if (status?.running) {
@@ -452,6 +476,12 @@ const PostgreSQLTab = ({ status }) => {
                                 </div>
                                 <div className="db-item-actions">
                                     <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() => setQueryDb(db)}
+                                    >
+                                        Query
+                                    </button>
+                                    <button
                                         className="btn btn-secondary btn-sm"
                                         onClick={() => setSelectedDb(db)}
                                     >
@@ -532,6 +562,14 @@ const PostgreSQLTab = ({ status }) => {
                     database={selectedDb}
                     dbType="postgresql"
                     onClose={() => setSelectedDb(null)}
+                />
+            )}
+
+            {queryDb && (
+                <QueryRunner
+                    database={queryDb}
+                    dbType="postgresql"
+                    onClose={() => setQueryDb(null)}
                 />
             )}
         </div>
@@ -1224,6 +1262,155 @@ const TablesModal = ({ database, dbType, onClose }) => {
             } else {
                 data = await api.getPostgreSQLTables(database.name);
             }
+            setTables(data.tables || []);
+        } catch (err) {
+            console.error('Failed to load tables:', err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal" onClick={e => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h2>Tables in {database.name}</h2>
+                    <button className="modal-close" onClick={onClose}>&times;</button>
+                </div>
+                <div className="modal-body">
+                    {loading ? (
+                        <div className="loading">Loading tables...</div>
+                    ) : tables.length === 0 ? (
+                        <p className="hint">No tables in this database.</p>
+                    ) : (
+                        <div className="tables-list">
+                            {tables.map(table => (
+                                <div key={table.name} className="table-item">
+                                    <span className="table-name">{table.name}</span>
+                                    <span className="table-rows">{table.rows.toLocaleString()} rows</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+                <div className="modal-actions">
+                    <button className="btn btn-primary" onClick={onClose}>Close</button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const SQLiteTab = () => {
+    const [databases, setDatabases] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [queryDb, setQueryDb] = useState(null);
+    const [selectedDb, setSelectedDb] = useState(null);
+
+    useEffect(() => {
+        loadDatabases();
+    }, []);
+
+    async function loadDatabases() {
+        setLoading(true);
+        try {
+            const data = await api.getSQLiteDatabases();
+            setDatabases(data.databases || []);
+        } catch (err) {
+            console.error('Failed to load SQLite databases:', err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    if (loading) {
+        return <div className="loading">Scanning for SQLite databases...</div>;
+    }
+
+    return (
+        <div>
+            <div className="section-header">
+                <div className="hint">
+                    Showing .db, .sqlite, and .sqlite3 files found in /var/www, /home, and /opt
+                </div>
+                <button className="btn btn-secondary" onClick={loadDatabases}>
+                    Refresh
+                </button>
+            </div>
+
+            {databases.length === 0 ? (
+                <div className="empty-state">
+                    <h3>No SQLite databases found</h3>
+                    <p>No .db, .sqlite, or .sqlite3 files were found in the scanned directories.</p>
+                </div>
+            ) : (
+                <div className="db-list">
+                    {databases.map(db => (
+                        <div key={db.path} className="db-item">
+                            <div className="db-item-info">
+                                <div className="db-item-icon sqlite">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" strokeWidth="2">
+                                        <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                                        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                                    </svg>
+                                </div>
+                                <div className="db-item-details">
+                                    <h3>{db.name}</h3>
+                                    <div className="db-item-meta">
+                                        <span className="mono">{db.path}</span>
+                                        <span>{formatBytes(db.size)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="db-item-actions">
+                                <button
+                                    className="btn btn-primary btn-sm"
+                                    onClick={() => setQueryDb(db)}
+                                >
+                                    Query
+                                </button>
+                                <button
+                                    className="btn btn-secondary btn-sm"
+                                    onClick={() => setSelectedDb(db)}
+                                >
+                                    Tables
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {selectedDb && (
+                <SQLiteTablesModal
+                    database={selectedDb}
+                    onClose={() => setSelectedDb(null)}
+                />
+            )}
+
+            {queryDb && (
+                <QueryRunner
+                    database={queryDb}
+                    dbType="sqlite"
+                    onClose={() => setQueryDb(null)}
+                />
+            )}
+        </div>
+    );
+};
+
+const SQLiteTablesModal = ({ database, onClose }) => {
+    const [tables, setTables] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        loadTables();
+    }, [database]);
+
+    async function loadTables() {
+        try {
+            const data = await api.getSQLiteTables(database.path);
             setTables(data.tables || []);
         } catch (err) {
             console.error('Failed to load tables:', err);

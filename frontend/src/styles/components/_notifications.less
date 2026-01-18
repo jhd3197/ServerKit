@@ -2,6 +2,100 @@
 // NOTIFICATION SETTINGS STYLES
 // ============================================
 
+// Notification Tabs
+.notification-tabs {
+    display: flex;
+    gap: @space-2;
+    margin-bottom: @space-6;
+    padding-bottom: @space-4;
+    border-bottom: 1px solid @border-subtle;
+}
+
+.notification-tab {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-3 @space-4;
+    background: transparent;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    color: @text-secondary;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    svg {
+        stroke-width: 2;
+    }
+
+    &:hover {
+        background: @bg-hover;
+        border-color: @border-default;
+        color: @text-primary;
+    }
+
+    &.active {
+        background: @accent-glow;
+        border-color: @accent-primary;
+        color: @accent-primary;
+
+        svg {
+            stroke: @accent-primary;
+        }
+    }
+}
+
+// User Notification Preferences
+.user-notification-prefs {
+    display: flex;
+    flex-direction: column;
+    gap: @space-4;
+}
+
+.channel-toggles,
+.category-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-3;
+}
+
+.channel-toggle,
+.category-toggle {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2 @space-3;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    input[type="checkbox"] {
+        accent-color: @accent-primary;
+    }
+
+    span {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+    }
+
+    &:hover {
+        background: @bg-hover;
+        border-color: @border-default;
+    }
+
+    &:has(input:checked) {
+        background: @accent-glow;
+        border-color: fade(@accent-primary, 40%);
+
+        span {
+            color: @text-primary;
+        }
+    }
+}
+
 .notification-channels {
     display: flex;
     flex-direction: column;

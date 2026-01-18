@@ -6,12 +6,15 @@ Handles sending notifications to various channels:
 - Slack webhooks
 - Telegram bots
 - Generic webhooks
-- Email (via existing SMTP config)
+- Email (with HTML templates)
 """
 
 import os
 import json
 import requests
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from typing import Dict, List, Optional
 from pathlib import Path
@@ -62,6 +65,18 @@ class NotificationService:
                 'enabled': False,
                 'bot_token': '',
                 'chat_id': '',
+                'notify_on': ['critical', 'warning']
+            },
+            'email': {
+                'enabled': False,
+                'smtp_host': '',
+                'smtp_port': 587,
+                'smtp_user': '',
+                'smtp_password': '',
+                'smtp_tls': True,
+                'from_email': '',
+                'from_name': 'ServerKit',
+                'to_emails': [],
                 'notify_on': ['critical', 'warning']
             },
             'generic_webhook': {
@@ -377,6 +392,201 @@ class NotificationService:
             return {'success': False, 'error': str(e)}
 
     # ==========================================
+    # EMAIL
+    # ==========================================
+    @classmethod
+    def _get_email_template(cls, alerts: List[Dict]) -> str:
+        """Generate HTML email template for alerts."""
+        hostname = cls.get_hostname()
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        # Color mapping for severity
+        severity_styles = {
+            'critical': {'bg': '#fef2f2', 'border': '#ef4444', 'text': '#dc2626'},
+            'warning': {'bg': '#fffbeb', 'border': '#f59e0b', 'text': '#d97706'},
+            'info': {'bg': '#eff6ff', 'border': '#3b82f6', 'text': '#2563eb'},
+            'success': {'bg': '#f0fdf4', 'border': '#22c55e', 'text': '#16a34a'},
+            'test': {'bg': '#f9fafb', 'border': '#6b7280', 'text': '#4b5563'}
+        }
+
+        alerts_html = ""
+        for alert in alerts:
+            severity = alert.get('severity', 'info')
+            style = severity_styles.get(severity, severity_styles['info'])
+
+            alert_html = f"""
+            <div style="margin-bottom: 16px; padding: 16px; background-color: {style['bg']};
+                        border-left: 4px solid {style['border']}; border-radius: 4px;">
+                <div style="color: {style['text']}; font-weight: 600; font-size: 14px;
+                            text-transform: uppercase; margin-bottom: 8px;">
+                    {severity}: {alert.get('type', 'Alert').upper()}
+                </div>
+                <div style="color: #374151; font-size: 14px;">
+                    {alert.get('message', 'No message')}
+                </div>
+            """
+
+            if 'value' in alert or 'threshold' in alert:
+                alert_html += '<div style="margin-top: 12px; font-size: 13px; color: #6b7280;">'
+                if 'value' in alert:
+                    alert_html += f'<span style="margin-right: 16px;">Current: <strong>{alert["value"]}</strong></span>'
+                if 'threshold' in alert:
+                    alert_html += f'<span>Threshold: <strong>{alert["threshold"]}</strong></span>'
+                alert_html += '</div>'
+
+            alert_html += '</div>'
+            alerts_html += alert_html
+
+        template = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                     line-height: 1.6; color: #374151; max-width: 600px; margin: 0 auto; padding: 20px;">
+
+            <!-- Header -->
+            <div style="text-align: center; padding: 24px 0; border-bottom: 1px solid #e5e7eb;">
+                <h1 style="margin: 0; color: #111827; font-size: 24px;">
+                    ServerKit Alert
+                </h1>
+                <p style="margin: 8px 0 0 0; color: #6b7280; font-size: 14px;">
+                    {len(alerts)} alert(s) triggered on {hostname}
+                </p>
+            </div>
+
+            <!-- Alerts -->
+            <div style="padding: 24px 0;">
+                {alerts_html}
+            </div>
+
+            <!-- Footer -->
+            <div style="text-align: center; padding: 24px 0; border-top: 1px solid #e5e7eb;
+                        font-size: 12px; color: #9ca3af;">
+                <p style="margin: 0;">
+                    Sent by ServerKit at {timestamp}
+                </p>
+                <p style="margin: 8px 0 0 0;">
+                    <a href="#" style="color: #6366f1; text-decoration: none;">Manage notification settings</a>
+                </p>
+            </div>
+        </body>
+        </html>
+        """
+        return template
+
+    @classmethod
+    def _get_plain_text_template(cls, alerts: List[Dict]) -> str:
+        """Generate plain text email for alerts."""
+        hostname = cls.get_hostname()
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        lines = [
+            "ServerKit Alert",
+            "=" * 40,
+            f"{len(alerts)} alert(s) triggered on {hostname}",
+            ""
+        ]
+
+        for alert in alerts:
+            severity = alert.get('severity', 'info').upper()
+            alert_type = alert.get('type', 'Alert').upper()
+            lines.append(f"[{severity}] {alert_type}")
+            lines.append(alert.get('message', 'No message'))
+            if 'value' in alert:
+                lines.append(f"  Current: {alert['value']}")
+            if 'threshold' in alert:
+                lines.append(f"  Threshold: {alert['threshold']}")
+            lines.append("")
+
+        lines.append("-" * 40)
+        lines.append(f"Sent by ServerKit at {timestamp}")
+
+        return "\n".join(lines)
+
+    @classmethod
+    def send_email(cls, alerts: List[Dict], config: Dict = None) -> Dict:
+        """
+        Send notification via email with HTML template.
+
+        Args:
+            alerts: List of alert dictionaries
+            config: Email configuration (optional, uses saved config if not provided)
+
+        Returns:
+            dict with success status and message
+        """
+        if config is None:
+            config = cls.get_config().get('email', {})
+
+        if not config.get('enabled'):
+            return {'success': False, 'error': 'Email notifications not enabled'}
+
+        if not config.get('smtp_host') or not config.get('from_email') or not config.get('to_emails'):
+            return {'success': False, 'error': 'Email not configured (missing SMTP host, from email, or recipients)'}
+
+        # Filter alerts by severity
+        notify_on = config.get('notify_on', ['critical', 'warning'])
+        alerts = [a for a in alerts if a.get('severity', 'info') in notify_on]
+
+        if not alerts:
+            return {'success': True, 'message': 'No alerts to send'}
+
+        try:
+            # Determine subject based on severity
+            severities = [a.get('severity', 'info') for a in alerts]
+            if 'critical' in severities:
+                priority = 'CRITICAL'
+            elif 'warning' in severities:
+                priority = 'WARNING'
+            else:
+                priority = 'INFO'
+
+            subject = f"[{priority}] ServerKit: {len(alerts)} alert(s) on {cls.get_hostname()}"
+
+            # Create message
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = subject
+            msg['From'] = f"{config.get('from_name', 'ServerKit')} <{config['from_email']}>"
+            msg['To'] = ', '.join(config['to_emails'])
+
+            # Add plain text and HTML versions
+            plain_text = cls._get_plain_text_template(alerts)
+            html_content = cls._get_email_template(alerts)
+
+            msg.attach(MIMEText(plain_text, 'plain'))
+            msg.attach(MIMEText(html_content, 'html'))
+
+            # Send email
+            smtp_port = config.get('smtp_port', 587)
+            use_tls = config.get('smtp_tls', True)
+
+            if use_tls:
+                server = smtplib.SMTP(config['smtp_host'], smtp_port)
+                server.starttls()
+            else:
+                server = smtplib.SMTP_SSL(config['smtp_host'], smtp_port)
+
+            if config.get('smtp_user') and config.get('smtp_password'):
+                server.login(config['smtp_user'], config['smtp_password'])
+
+            server.send_message(msg)
+            server.quit()
+
+            return {'success': True, 'message': 'Email notification sent'}
+
+        except smtplib.SMTPAuthenticationError:
+            return {'success': False, 'error': 'SMTP authentication failed'}
+        except smtplib.SMTPConnectError:
+            return {'success': False, 'error': 'Failed to connect to SMTP server'}
+        except smtplib.SMTPException as e:
+            return {'success': False, 'error': f'SMTP error: {str(e)}'}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    # ==========================================
     # GENERIC WEBHOOK
     # ==========================================
     @classmethod
@@ -454,6 +664,9 @@ class NotificationService:
         if config.get('telegram', {}).get('enabled'):
             results['telegram'] = cls.send_telegram(alerts, config['telegram'])
 
+        if config.get('email', {}).get('enabled'):
+            results['email'] = cls.send_email(alerts, config['email'])
+
         if config.get('generic_webhook', {}).get('enabled'):
             results['generic_webhook'] = cls.send_generic_webhook(alerts, config['generic_webhook'])
 
@@ -488,6 +701,9 @@ class NotificationService:
         elif channel == 'telegram':
             test_config = {**config.get('telegram', {}), 'notify_on': ['test']}
             return cls.send_telegram(test_alerts, test_config)
+        elif channel == 'email':
+            test_config = {**config.get('email', {}), 'notify_on': ['test']}
+            return cls.send_email(test_alerts, test_config)
         elif channel == 'generic_webhook':
             test_config = {**config.get('generic_webhook', {}), 'notify_on': ['test']}
             return cls.send_generic_webhook(test_alerts, test_config)
@@ -517,6 +733,15 @@ class NotificationService:
                 'enabled': config.get('telegram', {}).get('enabled', False),
                 'configured': bool(config.get('telegram', {}).get('bot_token') and config.get('telegram', {}).get('chat_id')),
                 'notify_on': config.get('telegram', {}).get('notify_on', [])
+            },
+            'email': {
+                'enabled': config.get('email', {}).get('enabled', False),
+                'configured': bool(
+                    config.get('email', {}).get('smtp_host') and
+                    config.get('email', {}).get('from_email') and
+                    config.get('email', {}).get('to_emails')
+                ),
+                'notify_on': config.get('email', {}).get('notify_on', [])
             },
             'generic_webhook': {
                 'enabled': config.get('generic_webhook', {}).get('enabled', False),

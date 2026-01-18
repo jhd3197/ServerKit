@@ -960,6 +960,48 @@ class ApiService {
         return this.request(`/databases/generate-password?length=${length}`);
     }
 
+    // Query Execution
+    async executeMySQLQuery(database, query, readonly = true) {
+        return this.request(`/databases/mysql/${database}/query`, {
+            method: 'POST',
+            body: { query, readonly }
+        });
+    }
+
+    async executePostgreSQLQuery(database, query, readonly = true) {
+        return this.request(`/databases/postgresql/${database}/query`, {
+            method: 'POST',
+            body: { query, readonly }
+        });
+    }
+
+    async executeSQLiteQuery(path, query, readonly = true) {
+        return this.request('/databases/sqlite/query', {
+            method: 'POST',
+            body: { path, query, readonly }
+        });
+    }
+
+    async getMySQLTableStructure(database, table) {
+        return this.request(`/databases/mysql/${database}/tables/${table}/structure`);
+    }
+
+    async getPostgreSQLTableStructure(database, table) {
+        return this.request(`/databases/postgresql/${database}/tables/${table}/structure`);
+    }
+
+    async getSQLiteTableStructure(path, table) {
+        return this.request(`/databases/sqlite/tables/${table}/structure?path=${encodeURIComponent(path)}`);
+    }
+
+    async getSQLiteDatabases() {
+        return this.request('/databases/sqlite');
+    }
+
+    async getSQLiteTables(path) {
+        return this.request(`/databases/sqlite/tables?path=${encodeURIComponent(path)}`);
+    }
+
     // ========================================
     // Monitoring & Alerts endpoints
     // ========================================
@@ -1651,6 +1693,24 @@ class ApiService {
 
     async testAllNotifications() {
         return this.request('/notifications/test', {
+            method: 'POST'
+        });
+    }
+
+    // User notification preferences
+    async getUserNotificationPreferences() {
+        return this.request('/notifications/preferences');
+    }
+
+    async updateUserNotificationPreferences(preferences) {
+        return this.request('/notifications/preferences', {
+            method: 'PUT',
+            body: preferences
+        });
+    }
+
+    async testUserNotification() {
+        return this.request('/notifications/preferences/test', {
             method: 'POST'
         });
     }

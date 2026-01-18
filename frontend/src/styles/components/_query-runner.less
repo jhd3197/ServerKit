@@ -1,0 +1,483 @@
+// ============================================
+// QUERY RUNNER COMPONENT STYLES
+// ============================================
+
+// Overlay - full screen modal
+.query-runner-overlay {
+    &.modal-overlay {
+        padding: 0;
+        background: rgba(0, 0, 0, 0.8);
+    }
+}
+
+// Main modal container
+.query-runner-modal {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: @bg-body;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+// Header
+.query-runner-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: @space-3 @space-4;
+    background: @bg-sidebar;
+    border-bottom: 1px solid @border-subtle;
+    flex-shrink: 0;
+}
+
+.query-runner-title {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    font-size: @font-size-md;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+
+    svg {
+        color: @accent-primary;
+    }
+
+    .db-type-badge {
+        font-size: @font-size-xs;
+        padding: @space-1 @space-2;
+        border-radius: @radius-sm;
+        font-weight: @font-weight-medium;
+
+        &.mysql {
+            background: fade(@color-mysql, 15%);
+            color: @color-mysql;
+        }
+
+        &.postgresql {
+            background: fade(@color-postgresql, 15%);
+            color: @color-postgresql-secondary;
+        }
+
+        &.sqlite {
+            background: fade(@accent-primary, 15%);
+            color: @accent-primary;
+        }
+    }
+}
+
+.query-runner-actions {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+
+    .readonly-toggle {
+        display: flex;
+        align-items: center;
+        gap: @space-2;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        cursor: pointer;
+
+        input[type="checkbox"] {
+            accent-color: @warning;
+        }
+    }
+
+    .modal-close {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        color: @text-secondary;
+        font-size: 24px;
+        cursor: pointer;
+        border-radius: @radius-md;
+        transition: all @transition-fast;
+
+        &:hover {
+            background: @bg-hover;
+            color: @text-primary;
+        }
+    }
+}
+
+// Body layout
+.query-runner-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+// Sidebar
+.query-runner-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: @bg-sidebar;
+    border-right: 1px solid @border-subtle;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sidebar-section {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    &:first-child {
+        flex: 1;
+        min-height: 150px;
+    }
+
+    &:last-child {
+        border-top: 1px solid @border-subtle;
+        max-height: 40%;
+    }
+
+    h4 {
+        padding: @space-3 @space-4;
+        margin: 0;
+        font-size: @font-size-sm;
+        font-weight: @font-weight-semibold;
+        color: @text-secondary;
+        background: @bg-card;
+        border-bottom: 1px solid @border-subtle;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+
+        .btn-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            color: @text-secondary;
+            cursor: pointer;
+            border-radius: @radius-sm;
+            transition: all @transition-fast;
+
+            &:hover {
+                background: @bg-hover;
+                color: @accent-primary;
+            }
+        }
+    }
+}
+
+.tables-list,
+.columns-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: @space-2;
+}
+
+.table-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @space-2 @space-3;
+    border-radius: @radius-md;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        background: @bg-hover;
+    }
+
+    &.selected {
+        background: @accent-glow;
+        border: 1px solid fade(@accent-primary, 30%);
+    }
+
+    .table-name {
+        font-size: @font-size-sm;
+        color: @text-primary;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .table-rows {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        flex-shrink: 0;
+        margin-left: @space-2;
+    }
+}
+
+.column-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @space-1 @space-3;
+    border-radius: @radius-sm;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        background: @bg-hover;
+    }
+
+    .column-name {
+        font-size: @font-size-sm;
+        font-family: @font-mono;
+        color: @text-primary;
+    }
+
+    .column-type {
+        font-size: @font-size-xs;
+        font-family: @font-mono;
+        color: @text-tertiary;
+    }
+}
+
+// Main query area
+.query-runner-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: @bg-body;
+}
+
+// Query editor
+.query-editor {
+    flex-shrink: 0;
+    padding: @space-4;
+    border-bottom: 1px solid @border-subtle;
+
+    textarea {
+        width: 100%;
+        height: 150px;
+        padding: @space-3;
+        font-family: @font-mono;
+        font-size: @font-size-sm;
+        line-height: @line-height-relaxed;
+        background: @bg-card;
+        border: 1px solid @border-subtle;
+        border-radius: @radius-md;
+        color: @text-primary;
+        resize: vertical;
+        transition: border-color @transition-fast;
+
+        &:focus {
+            outline: none;
+            border-color: @accent-primary;
+            box-shadow: 0 0 0 3px @accent-glow;
+        }
+
+        &::placeholder {
+            color: @text-tertiary;
+        }
+    }
+}
+
+.query-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: @space-3;
+}
+
+.query-hints {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+
+    .hint {
+        display: flex;
+        align-items: center;
+        gap: @space-1;
+        font-size: @font-size-sm;
+        color: @text-tertiary;
+
+        svg {
+            color: @warning;
+        }
+    }
+}
+
+// Error display
+.query-error {
+    display: flex;
+    align-items: flex-start;
+    gap: @space-2;
+    padding: @space-3 @space-4;
+    background: @danger-bg;
+    border-bottom: 1px solid @danger-border;
+    color: @danger;
+    font-size: @font-size-sm;
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+}
+
+// Results area
+.query-results {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: @space-2 @space-4;
+    background: @bg-card;
+    border-bottom: 1px solid @border-subtle;
+    flex-shrink: 0;
+
+    .results-info {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+    }
+}
+
+// Results table
+.results-table-container {
+    flex: 1;
+    overflow: auto;
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: @font-size-sm;
+
+    th, td {
+        padding: @space-2 @space-3;
+        text-align: left;
+        border-bottom: 1px solid @border-subtle;
+        white-space: nowrap;
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    th {
+        position: sticky;
+        top: 0;
+        background: @bg-card;
+        font-weight: @font-weight-medium;
+        color: @text-secondary;
+        cursor: pointer;
+        user-select: none;
+        transition: background @transition-fast;
+
+        &:hover {
+            background: @bg-hover;
+        }
+
+        &.sorted-asc,
+        &.sorted-desc {
+            color: @accent-primary;
+        }
+
+        .sort-indicator {
+            font-size: @font-size-xs;
+            margin-left: @space-1;
+        }
+    }
+
+    td {
+        font-family: @font-mono;
+        color: @text-primary;
+
+        &.null-value {
+            color: @text-tertiary;
+            font-style: italic;
+        }
+    }
+
+    tbody tr {
+        &:hover {
+            background: fade(@bg-hover, 50%);
+        }
+    }
+}
+
+// History panel
+.query-history-panel {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 400px;
+    max-height: calc(100% - 80px);
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    box-shadow: @shadow-lg;
+    display: flex;
+    flex-direction: column;
+    z-index: @z-modal;
+    margin: @space-4;
+    overflow: hidden;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: @space-3 @space-4;
+    border-bottom: 1px solid @border-subtle;
+
+    h4 {
+        margin: 0;
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+    }
+}
+
+.history-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: @space-2;
+}
+
+.history-item {
+    padding: @space-3;
+    border-radius: @radius-md;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        background: @bg-hover;
+    }
+
+    code {
+        display: block;
+        font-family: @font-mono;
+        font-size: @font-size-sm;
+        color: @text-primary;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: @space-1;
+    }
+
+    .history-time {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+    }
+}
+
+// SQLite icon color
+.db-item-icon.sqlite {
+    color: @accent-primary;
+}

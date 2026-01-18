@@ -429,6 +429,183 @@ def delete_backup(filename):
     return jsonify(result), 200 if result['success'] else 400
 
 
+# ==================== QUERY EXECUTION ====================
+
+@databases_bp.route('/mysql/<name>/query', methods=['POST'])
+@jwt_required()
+def execute_mysql_query(name):
+    """Execute a query on a MySQL database.
+
+    Request body:
+        query: SQL query to execute
+        readonly: If true, only allow SELECT/SHOW/DESCRIBE/EXPLAIN (default: true)
+
+    Security: Readonly mode is enforced by default. Admin role required to disable.
+    """
+    data = request.get_json()
+
+    if not data or 'query' not in data:
+        return jsonify({'error': 'query is required'}), 400
+
+    query = data['query']
+    readonly = data.get('readonly', True)
+    root_password = request.headers.get('X-DB-Password')
+
+    # Only admins can disable readonly mode
+    if not readonly:
+        current_user_id = get_jwt_identity()
+        from app.models import User
+        user = User.query.get(current_user_id)
+        if not user or user.role != 'admin':
+            return jsonify({'error': 'Admin access required to execute write queries'}), 403
+
+    result = DatabaseService.mysql_execute_query(
+        database=name,
+        query=query,
+        readonly=readonly,
+        root_password=root_password,
+        timeout=30,
+        max_rows=1000
+    )
+
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@databases_bp.route('/postgresql/<name>/query', methods=['POST'])
+@jwt_required()
+def execute_pg_query(name):
+    """Execute a query on a PostgreSQL database.
+
+    Request body:
+        query: SQL query to execute
+        readonly: If true, only allow SELECT/SHOW/DESCRIBE/EXPLAIN (default: true)
+
+    Security: Readonly mode is enforced by default. Admin role required to disable.
+    """
+    data = request.get_json()
+
+    if not data or 'query' not in data:
+        return jsonify({'error': 'query is required'}), 400
+
+    query = data['query']
+    readonly = data.get('readonly', True)
+
+    # Only admins can disable readonly mode
+    if not readonly:
+        current_user_id = get_jwt_identity()
+        from app.models import User
+        user = User.query.get(current_user_id)
+        if not user or user.role != 'admin':
+            return jsonify({'error': 'Admin access required to execute write queries'}), 403
+
+    result = DatabaseService.pg_execute_query(
+        database=name,
+        query=query,
+        readonly=readonly,
+        timeout=30,
+        max_rows=1000
+    )
+
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@databases_bp.route('/sqlite/query', methods=['POST'])
+@jwt_required()
+def execute_sqlite_query():
+    """Execute a query on a SQLite database file.
+
+    Request body:
+        path: Path to the SQLite database file
+        query: SQL query to execute
+        readonly: If true, only allow SELECT queries (default: true)
+
+    Security: Readonly mode is enforced by default. Admin role required to disable.
+    """
+    data = request.get_json()
+
+    if not data or 'path' not in data or 'query' not in data:
+        return jsonify({'error': 'path and query are required'}), 400
+
+    db_path = data['path']
+    query = data['query']
+    readonly = data.get('readonly', True)
+
+    # Only admins can disable readonly mode
+    if not readonly:
+        current_user_id = get_jwt_identity()
+        from app.models import User
+        user = User.query.get(current_user_id)
+        if not user or user.role != 'admin':
+            return jsonify({'error': 'Admin access required to execute write queries'}), 403
+
+    result = DatabaseService.sqlite_execute_query(
+        db_path=db_path,
+        query=query,
+        readonly=readonly,
+        timeout=30,
+        max_rows=1000
+    )
+
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@databases_bp.route('/mysql/<name>/tables/<table>/structure', methods=['GET'])
+@jwt_required()
+def get_mysql_table_structure(name, table):
+    """Get the structure/schema of a MySQL table."""
+    root_password = request.headers.get('X-DB-Password')
+    result = DatabaseService.mysql_get_table_structure(name, table, root_password)
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@databases_bp.route('/postgresql/<name>/tables/<table>/structure', methods=['GET'])
+@jwt_required()
+def get_pg_table_structure(name, table):
+    """Get the structure/schema of a PostgreSQL table."""
+    result = DatabaseService.pg_get_table_structure(name, table)
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@databases_bp.route('/sqlite/tables/<table>/structure', methods=['GET'])
+@jwt_required()
+def get_sqlite_table_structure(table):
+    """Get the structure/schema of a SQLite table.
+
+    Query params:
+        path: Path to the SQLite database file
+    """
+    db_path = request.args.get('path')
+    if not db_path:
+        return jsonify({'error': 'path query parameter is required'}), 400
+
+    result = DatabaseService.sqlite_get_table_structure(db_path, table)
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@databases_bp.route('/sqlite', methods=['GET'])
+@jwt_required()
+def list_sqlite_databases():
+    """List SQLite database files found in common locations."""
+    databases = DatabaseService.sqlite_list_databases()
+    return jsonify({'databases': databases}), 200
+
+
+@databases_bp.route('/sqlite/tables', methods=['GET'])
+@jwt_required()
+def get_sqlite_tables():
+    """Get tables in a SQLite database.
+
+    Query params:
+        path: Path to the SQLite database file
+    """
+    db_path = request.args.get('path')
+    if not db_path:
+        return jsonify({'error': 'path query parameter is required'}), 400
+
+    tables = DatabaseService.sqlite_get_tables(db_path)
+    return jsonify({'tables': tables}), 200
+
+
 # ==================== UTILITY ====================
 
 @databases_bp.route('/generate-password', methods=['GET'])

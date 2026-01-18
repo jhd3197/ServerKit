@@ -509,6 +509,429 @@ class DatabaseService:
                 })
         return tables
 
+    # ==================== QUERY EXECUTION ====================
+
+    # Allowed readonly commands for security
+    READONLY_COMMANDS = {'SELECT', 'SHOW', 'DESCRIBE', 'DESC', 'EXPLAIN'}
+
+    @staticmethod
+    def _is_readonly_query(query):
+        """Check if a query is readonly (SELECT, SHOW, DESCRIBE, EXPLAIN)."""
+        # Remove leading whitespace and get first word
+        normalized = query.strip().upper()
+        first_word = normalized.split()[0] if normalized.split() else ''
+        return first_word in DatabaseService.READONLY_COMMANDS
+
+    @staticmethod
+    def mysql_execute_query(database, query, readonly=True, root_password=None, timeout=30, max_rows=1000):
+        """Execute a MySQL query and return structured results.
+
+        Args:
+            database: Database name to query
+            query: SQL query to execute
+            readonly: If True, only allow SELECT/SHOW/DESCRIBE/EXPLAIN
+            root_password: MySQL root password
+            timeout: Query timeout in seconds
+            max_rows: Maximum rows to return
+
+        Returns:
+            dict with columns, rows, row_count, and execution info
+        """
+        import json
+        import time
+
+        # Security check for readonly mode
+        if readonly and not DatabaseService._is_readonly_query(query):
+            return {
+                'success': False,
+                'error': 'Only SELECT, SHOW, DESCRIBE, and EXPLAIN queries are allowed in readonly mode'
+            }
+
+        try:
+            start_time = time.time()
+
+            # Build mysql command with JSON output format
+            cmd = ['mysql', '-u', 'root']
+            if root_password:
+                cmd.extend([f'-p{root_password}'])
+            cmd.extend([
+                '-D', database,
+                '-e', query,
+                '--batch',  # Tab-separated output
+                '-N' if query.strip().upper().startswith(('SHOW', 'DESCRIBE', 'DESC')) else ''
+            ])
+            # Remove empty strings from cmd
+            cmd = [c for c in cmd if c]
+
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=timeout
+            )
+
+            execution_time = time.time() - start_time
+
+            if result.returncode != 0:
+                return {
+                    'success': False,
+                    'error': result.stderr.strip() if result.stderr else 'Query execution failed'
+                }
+
+            # Parse the output
+            lines = result.stdout.strip().split('\n') if result.stdout.strip() else []
+
+            if not lines:
+                return {
+                    'success': True,
+                    'columns': [],
+                    'rows': [],
+                    'row_count': 0,
+                    'execution_time': execution_time,
+                    'truncated': False
+                }
+
+            # First line is headers (unless -N was used)
+            if query.strip().upper().startswith(('SHOW', 'DESCRIBE', 'DESC')):
+                # For SHOW/DESCRIBE, we need to add generic column names
+                columns = [f'Column_{i}' for i in range(len(lines[0].split('\t')))] if lines else []
+                data_lines = lines
+            else:
+                columns = lines[0].split('\t') if lines else []
+                data_lines = lines[1:]
+
+            # Parse rows
+            rows = []
+            for i, line in enumerate(data_lines):
+                if i >= max_rows:
+                    break
+                values = line.split('\t')
+                # Convert NULL strings to None
+                values = [None if v == 'NULL' else v for v in values]
+                rows.append(values)
+
+            return {
+                'success': True,
+                'columns': columns,
+                'rows': rows,
+                'row_count': len(rows),
+                'total_rows': len(data_lines),
+                'execution_time': round(execution_time, 4),
+                'truncated': len(data_lines) > max_rows
+            }
+
+        except subprocess.TimeoutExpired:
+            return {
+                'success': False,
+                'error': f'Query timed out after {timeout} seconds'
+            }
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @staticmethod
+    def pg_execute_query(database, query, readonly=True, timeout=30, max_rows=1000):
+        """Execute a PostgreSQL query and return structured results.
+
+        Args:
+            database: Database name to query
+            query: SQL query to execute
+            readonly: If True, only allow SELECT/SHOW/DESCRIBE/EXPLAIN
+            timeout: Query timeout in seconds
+            max_rows: Maximum rows to return
+
+        Returns:
+            dict with columns, rows, row_count, and execution info
+        """
+        import time
+
+        # Security check for readonly mode
+        if readonly and not DatabaseService._is_readonly_query(query):
+            return {
+                'success': False,
+                'error': 'Only SELECT, SHOW, DESCRIBE, and EXPLAIN queries are allowed in readonly mode'
+            }
+
+        try:
+            start_time = time.time()
+
+            # For PostgreSQL, we use psql with specific formatting
+            # -F sets field separator, -A for unaligned output
+            cmd = [
+                'sudo', '-u', 'postgres', 'psql',
+                '-d', database,
+                '-c', query,
+                '-F', '\t',  # Tab separator
+                '-A',  # Unaligned output
+                '--pset', 'footer=off'  # No row count footer
+            ]
+
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=timeout
+            )
+
+            execution_time = time.time() - start_time
+
+            if result.returncode != 0:
+                error_msg = result.stderr.strip() if result.stderr else 'Query execution failed'
+                return {
+                    'success': False,
+                    'error': error_msg
+                }
+
+            # Parse the output
+            lines = result.stdout.strip().split('\n') if result.stdout.strip() else []
+
+            if not lines:
+                return {
+                    'success': True,
+                    'columns': [],
+                    'rows': [],
+                    'row_count': 0,
+                    'execution_time': execution_time,
+                    'truncated': False
+                }
+
+            # First line is headers
+            columns = lines[0].split('\t') if lines else []
+            data_lines = lines[1:] if len(lines) > 1 else []
+
+            # Parse rows
+            rows = []
+            for i, line in enumerate(data_lines):
+                if i >= max_rows:
+                    break
+                if line.strip():  # Skip empty lines
+                    values = line.split('\t')
+                    # Convert empty strings and special values
+                    values = [None if v == '' else v for v in values]
+                    rows.append(values)
+
+            return {
+                'success': True,
+                'columns': columns,
+                'rows': rows,
+                'row_count': len(rows),
+                'total_rows': len(data_lines),
+                'execution_time': round(execution_time, 4),
+                'truncated': len(data_lines) > max_rows
+            }
+
+        except subprocess.TimeoutExpired:
+            return {
+                'success': False,
+                'error': f'Query timed out after {timeout} seconds'
+            }
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @staticmethod
+    def sqlite_execute_query(db_path, query, readonly=True, timeout=30, max_rows=1000):
+        """Execute a SQLite query and return structured results.
+
+        Args:
+            db_path: Path to SQLite database file
+            query: SQL query to execute
+            readonly: If True, only allow SELECT/SHOW/DESCRIBE/EXPLAIN
+            timeout: Query timeout in seconds
+            max_rows: Maximum rows to return
+
+        Returns:
+            dict with columns, rows, row_count, and execution info
+        """
+        import sqlite3
+        import time
+
+        # Security check for readonly mode
+        if readonly and not DatabaseService._is_readonly_query(query):
+            return {
+                'success': False,
+                'error': 'Only SELECT queries are allowed in readonly mode'
+            }
+
+        # Validate path exists
+        if not os.path.exists(db_path):
+            return {'success': False, 'error': f'Database file not found: {db_path}'}
+
+        try:
+            start_time = time.time()
+
+            # Open in readonly mode if readonly is True
+            uri = f'file:{db_path}?mode=ro' if readonly else db_path
+            conn = sqlite3.connect(uri, uri=readonly, timeout=timeout)
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+
+            cursor.execute(query)
+
+            # Get column names
+            columns = [description[0] for description in cursor.description] if cursor.description else []
+
+            # Fetch rows with limit
+            rows = []
+            total_fetched = 0
+            for row in cursor:
+                total_fetched += 1
+                if len(rows) < max_rows:
+                    rows.append(list(row))
+
+            execution_time = time.time() - start_time
+            conn.close()
+
+            return {
+                'success': True,
+                'columns': columns,
+                'rows': rows,
+                'row_count': len(rows),
+                'total_rows': total_fetched,
+                'execution_time': round(execution_time, 4),
+                'truncated': total_fetched > max_rows
+            }
+
+        except sqlite3.OperationalError as e:
+            return {'success': False, 'error': str(e)}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @staticmethod
+    def mysql_get_table_structure(database, table, root_password=None):
+        """Get the structure/schema of a MySQL table."""
+        query = f"DESCRIBE `{table}`;"
+        result = DatabaseService.mysql_execute(query, database=database, root_password=root_password)
+
+        if not result['success']:
+            return result
+
+        columns = []
+        for line in result['output'].strip().split('\n')[1:]:
+            parts = line.split('\t')
+            if len(parts) >= 6:
+                columns.append({
+                    'name': parts[0],
+                    'type': parts[1],
+                    'nullable': parts[2] == 'YES',
+                    'key': parts[3],
+                    'default': parts[4] if parts[4] != 'NULL' else None,
+                    'extra': parts[5]
+                })
+
+        return {'success': True, 'columns': columns, 'table': table}
+
+    @staticmethod
+    def pg_get_table_structure(database, table):
+        """Get the structure/schema of a PostgreSQL table."""
+        query = f"""
+            SELECT column_name, data_type, is_nullable, column_default
+            FROM information_schema.columns
+            WHERE table_name = '{table}' AND table_schema = 'public'
+            ORDER BY ordinal_position;
+        """
+        result = DatabaseService.pg_execute(query, database=database)
+
+        if not result['success']:
+            return result
+
+        columns = []
+        for line in result['output'].strip().split('\n'):
+            parts = line.split('|')
+            if len(parts) >= 4:
+                columns.append({
+                    'name': parts[0].strip(),
+                    'type': parts[1].strip(),
+                    'nullable': parts[2].strip() == 'YES',
+                    'default': parts[3].strip() if parts[3].strip() else None
+                })
+
+        return {'success': True, 'columns': columns, 'table': table}
+
+    @staticmethod
+    def sqlite_get_table_structure(db_path, table):
+        """Get the structure/schema of a SQLite table."""
+        import sqlite3
+
+        if not os.path.exists(db_path):
+            return {'success': False, 'error': f'Database file not found: {db_path}'}
+
+        try:
+            conn = sqlite3.connect(f'file:{db_path}?mode=ro', uri=True)
+            cursor = conn.cursor()
+            cursor.execute(f"PRAGMA table_info(`{table}`);")
+            rows = cursor.fetchall()
+            conn.close()
+
+            columns = []
+            for row in rows:
+                columns.append({
+                    'name': row[1],
+                    'type': row[2],
+                    'nullable': row[3] == 0,
+                    'default': row[4],
+                    'primary_key': row[5] == 1
+                })
+
+            return {'success': True, 'columns': columns, 'table': table}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @staticmethod
+    def sqlite_list_databases(search_paths=None):
+        """Find SQLite database files in common locations."""
+        if search_paths is None:
+            search_paths = ['/var/www', '/home', '/opt']
+
+        databases = []
+        for base_path in search_paths:
+            if not os.path.exists(base_path):
+                continue
+            try:
+                for root, dirs, files in os.walk(base_path):
+                    # Skip hidden directories and common non-app directories
+                    dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['node_modules', 'vendor', '__pycache__']]
+
+                    for file in files:
+                        if file.endswith(('.db', '.sqlite', '.sqlite3')):
+                            filepath = os.path.join(root, file)
+                            try:
+                                size = os.path.getsize(filepath)
+                                databases.append({
+                                    'name': file,
+                                    'path': filepath,
+                                    'size': size,
+                                    'type': 'sqlite'
+                                })
+                            except OSError:
+                                continue
+            except PermissionError:
+                continue
+
+        return databases
+
+    @staticmethod
+    def sqlite_get_tables(db_path):
+        """Get tables in a SQLite database."""
+        import sqlite3
+
+        if not os.path.exists(db_path):
+            return []
+
+        try:
+            conn = sqlite3.connect(f'file:{db_path}?mode=ro', uri=True)
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';")
+            tables = []
+            for row in cursor.fetchall():
+                table_name = row[0]
+                # Get row count
+                cursor.execute(f"SELECT COUNT(*) FROM `{table_name}`;")
+                count = cursor.fetchone()[0]
+                tables.append({'name': table_name, 'rows': count})
+            conn.close()
+            return tables
+        except Exception:
+            return []
+
     # ==================== UTILITY ====================
 
     @staticmethod
