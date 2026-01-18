@@ -48,3 +48,6 @@ cryptography==42.0.0
 # Two-Factor Authentication
 pyotp==2.9.0
 qrcode[pil]==7.4.2
+
+# HTTP Requests (for webhooks & notifications)
+requests==2.31.0

@@ -97,6 +97,10 @@ def create_app(config_name=None):
     from app.api.monitoring import monitoring_bp
     app.register_blueprint(monitoring_bp, url_prefix='/api/v1/monitoring')
 
+    # Register blueprints - Notifications
+    from app.api.notifications import notifications_bp
+    app.register_blueprint(notifications_bp, url_prefix='/api/v1/notifications')
+
     # Register blueprints - Backups
     from app.api.backups import backups_bp
     app.register_blueprint(backups_bp, url_prefix='/api/v1/backups')

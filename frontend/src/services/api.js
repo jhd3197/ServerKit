@@ -1624,6 +1624,36 @@ class ApiService {
             body: { temp_token: tempToken, code }
         });
     }
+
+    // ========================================
+    // Notification Webhooks endpoints
+    // ========================================
+    async getNotificationsStatus() {
+        return this.request('/notifications/status');
+    }
+
+    async getNotificationsConfig() {
+        return this.request('/notifications/config');
+    }
+
+    async updateNotificationChannel(channel, settings) {
+        return this.request(`/notifications/config/${channel}`, {
+            method: 'PUT',
+            body: settings
+        });
+    }
+
+    async testNotificationChannel(channel) {
+        return this.request(`/notifications/test/${channel}`, {
+            method: 'POST'
+        });
+    }
+
+    async testAllNotifications() {
+        return this.request('/notifications/test', {
+            method: 'POST'
+        });
+    }
 }
 
 export const api = new ApiService();

@@ -10,6 +10,8 @@ from pathlib import Path
 import threading
 import time
 
+from .notification_service import NotificationService
+
 
 class MonitoringService:
     """Service for system monitoring and alerts."""
@@ -266,12 +268,16 @@ class MonitoringService:
         # Log alerts
         cls.log_alert(alerts_to_send)
 
-        # Send notifications
+        # Send email notifications
         if config.get('email', {}).get('enabled'):
             cls.send_email_alert(alerts_to_send)
 
+        # Send legacy webhook (for backwards compatibility)
         if config.get('webhook', {}).get('enabled'):
             cls.send_webhook_alert(alerts_to_send)
+
+        # Send to all configured notification channels (Discord, Slack, Telegram, etc.)
+        NotificationService.send_all(alerts_to_send)
 
     @classmethod
     def log_alert(cls, alerts: List[Dict]) -> None:
@@ -374,6 +380,7 @@ class MonitoringService:
         config = cls.get_config()
         metrics = cls.get_current_metrics()
         alerts = cls.check_thresholds()
+        notification_status = NotificationService.get_status()
 
         return {
             'enabled': config.get('enabled', False),
@@ -381,6 +388,7 @@ class MonitoringService:
             'check_interval': config.get('check_interval', 60),
             'email_enabled': config.get('email', {}).get('enabled', False),
             'webhook_enabled': config.get('webhook', {}).get('enabled', False),
+            'notifications': notification_status,
             'current_metrics': metrics,
             'active_alerts': alerts
         }
