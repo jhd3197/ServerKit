@@ -3,6 +3,7 @@ from flask_jwt_extended import decode_token
 from flask import request
 import threading
 import time
+import queue
 
 from app.services.system_service import SystemService
 from app.services.log_service import LogService, LogStreamer
@@ -14,6 +15,10 @@ log_streamer = LogStreamer()
 metric_subscribers = set()
 metric_thread = None
 metric_stop_event = threading.Event()
+
+# Store active build subscriptions
+build_subscribers = {}  # sid -> app_id
+build_log_queues = {}  # app_id -> queue
 
 
 def init_socketio(app):
@@ -151,3 +156,71 @@ def handle_leave_room(data):
     if room:
         leave_room(room)
         emit('left', {'room': room})
+
+
+# ==================== BUILD LOG STREAMING ====================
+
+@socketio.on('subscribe_build')
+def handle_subscribe_build(data):
+    """Subscribe to build log streaming for an app."""
+    sid = request.sid
+    app_id = data.get('app_id')
+
+    if not app_id:
+        emit('error', {'message': 'app_id required'})
+        return
+
+    # Store subscription
+    build_subscribers[sid] = app_id
+
+    # Join a room for this app's builds
+    join_room(f'build_{app_id}')
+
+    emit('subscribed', {'channel': 'build', 'app_id': app_id})
+
+
+@socketio.on('unsubscribe_build')
+def handle_unsubscribe_build():
+    """Unsubscribe from build log streaming."""
+    sid = request.sid
+
+    if sid in build_subscribers:
+        app_id = build_subscribers[sid]
+        leave_room(f'build_{app_id}')
+        del build_subscribers[sid]
+
+    emit('unsubscribed', {'channel': 'build'})
+
+
+def emit_build_log(app_id: int, message: str, level: str = 'info'):
+    """Emit a build log message to all subscribers.
+
+    This function is called from the build service to stream logs.
+    """
+    socketio.emit('build_log', {
+        'app_id': app_id,
+        'message': message,
+        'level': level,
+        'timestamp': time.time()
+    }, room=f'build_{app_id}')
+
+
+def emit_build_status(app_id: int, status: str, details: dict = None):
+    """Emit a build status update to all subscribers."""
+    socketio.emit('build_status', {
+        'app_id': app_id,
+        'status': status,
+        'details': details or {},
+        'timestamp': time.time()
+    }, room=f'build_{app_id}')
+
+
+def create_build_log_callback(app_id: int):
+    """Create a log callback function for the build service.
+
+    Returns a function that can be passed to BuildService.build()
+    to stream logs in real-time via WebSocket.
+    """
+    def log_callback(message: str):
+        emit_build_log(app_id, message)
+    return log_callback

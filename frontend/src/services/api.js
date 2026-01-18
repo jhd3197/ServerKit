@@ -1223,6 +1223,81 @@ class ApiService {
     }
 
     // ========================================
+    // Build & Deployment endpoints
+    // ========================================
+    async getBuildConfig(appId) {
+        return this.request(`/builds/apps/${appId}/build-config`);
+    }
+
+    async configureBuild(appId, config) {
+        return this.request(`/builds/apps/${appId}/build-config`, {
+            method: 'POST',
+            body: config
+        });
+    }
+
+    async removeBuildConfig(appId) {
+        return this.request(`/builds/apps/${appId}/build-config`, { method: 'DELETE' });
+    }
+
+    async detectBuildMethod(appId) {
+        return this.request(`/builds/apps/${appId}/detect`);
+    }
+
+    async getNixpacksPlan(appId) {
+        return this.request(`/builds/apps/${appId}/nixpacks-plan`);
+    }
+
+    async triggerBuild(appId, noCache = false) {
+        return this.request(`/builds/apps/${appId}/build`, {
+            method: 'POST',
+            body: { no_cache: noCache }
+        });
+    }
+
+    async getBuildLogs(appId, limit = 20) {
+        return this.request(`/builds/apps/${appId}/build-logs?limit=${limit}`);
+    }
+
+    async getBuildLogDetail(appId, timestamp) {
+        return this.request(`/builds/apps/${appId}/build-logs/${timestamp}`);
+    }
+
+    async clearBuildCache(appId) {
+        return this.request(`/builds/apps/${appId}/clear-cache`, { method: 'POST' });
+    }
+
+    async deployApp(appId, options = {}) {
+        return this.request(`/builds/apps/${appId}/deploy`, {
+            method: 'POST',
+            body: options
+        });
+    }
+
+    async getDeployments(appId, limit = 20, offset = 0) {
+        return this.request(`/builds/apps/${appId}/deployments?limit=${limit}&offset=${offset}`);
+    }
+
+    async getDeploymentDetail(deploymentId, includeLogs = false) {
+        return this.request(`/builds/deployments/${deploymentId}?include_logs=${includeLogs}`);
+    }
+
+    async getDeploymentDiff(deploymentId) {
+        return this.request(`/builds/deployments/${deploymentId}/diff`);
+    }
+
+    async rollback(appId, targetVersion = null) {
+        return this.request(`/builds/apps/${appId}/rollback`, {
+            method: 'POST',
+            body: targetVersion ? { version: targetVersion } : {}
+        });
+    }
+
+    async getCurrentDeployment(appId) {
+        return this.request(`/builds/apps/${appId}/current-deployment`);
+    }
+
+    // ========================================
     // File Manager endpoints
     // ========================================
     async browseFiles(path = '/home', showHidden = false) {

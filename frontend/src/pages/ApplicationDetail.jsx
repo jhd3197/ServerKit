@@ -186,6 +186,12 @@ const ApplicationDetail = () => {
                     </>
                 )}
                 <button
+                    className={`tab ${activeTab === 'build' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('build')}
+                >
+                    Build
+                </button>
+                <button
                     className={`tab ${activeTab === 'deploy' ? 'active' : ''}`}
                     onClick={() => setActiveTab('deploy')}
                 >
@@ -214,6 +220,7 @@ const ApplicationDetail = () => {
                 {activeTab === 'plugins' && isWordPressApp && <PluginsTab appId={app.id} />}
                 {activeTab === 'themes' && isWordPressApp && <ThemesTab appId={app.id} />}
                 {activeTab === 'backups' && isWordPressApp && <BackupsTab appId={app.id} />}
+                {activeTab === 'build' && <BuildTab appId={app.id} appPath={app.path} />}
                 {activeTab === 'deploy' && <DeployTab appId={app.id} appPath={app.path} />}
                 {activeTab === 'logs' && <LogsTab app={app} />}
                 {activeTab === 'settings' && <SettingsTab app={app} onUpdate={loadApp} />}
@@ -854,6 +861,543 @@ const BackupsTab = ({ appId }) => {
                             </button>
                         </div>
                     ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+const BuildTab = ({ appId, appPath }) => {
+    const toast = useToast();
+    const [buildConfig, setBuildConfig] = useState(null);
+    const [detection, setDetection] = useState(null);
+    const [deployments, setDeployments] = useState([]);
+    const [currentDeployment, setCurrentDeployment] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [building, setBuilding] = useState(false);
+    const [deploying, setDeploying] = useState(false);
+    const [showConfigModal, setShowConfigModal] = useState(false);
+    const [showLogsModal, setShowLogsModal] = useState(false);
+    const [selectedLog, setSelectedLog] = useState(null);
+    const [buildLogs, setBuildLogs] = useState([]);
+    const [error, setError] = useState(null);
+
+    // Config form state
+    const [configForm, setConfigForm] = useState({
+        buildMethod: 'auto',
+        dockerfilePath: 'Dockerfile',
+        customBuildCmd: '',
+        customStartCmd: '',
+        cacheEnabled: true,
+        timeout: 600,
+        keepDeployments: 5
+    });
+
+    useEffect(() => {
+        loadData();
+    }, [appId]);
+
+    async function loadData() {
+        try {
+            setLoading(true);
+            const [configRes, detectRes, deploymentsRes] = await Promise.all([
+                api.getBuildConfig(appId),
+                api.detectBuildMethod(appId),
+                api.getDeployments(appId, 10)
+            ]);
+
+            setDetection(detectRes);
+
+            if (configRes.configured) {
+                setBuildConfig(configRes.config);
+                setConfigForm({
+                    buildMethod: configRes.config.build_method || 'auto',
+                    dockerfilePath: configRes.config.dockerfile_path || 'Dockerfile',
+                    customBuildCmd: configRes.config.custom_build_cmd || '',
+                    customStartCmd: configRes.config.custom_start_cmd || '',
+                    cacheEnabled: configRes.config.cache_enabled !== false,
+                    timeout: configRes.config.timeout || 600,
+                    keepDeployments: configRes.config.keep_deployments || 5
+                });
+            }
+
+            setDeployments(deploymentsRes.deployments || []);
+            setCurrentDeployment(deploymentsRes.current);
+
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function handleConfigureBuild(e) {
+        e.preventDefault();
+        try {
+            await api.configureBuild(appId, {
+                build_method: configForm.buildMethod,
+                dockerfile_path: configForm.dockerfilePath,
+                custom_build_cmd: configForm.customBuildCmd || null,
+                custom_start_cmd: configForm.customStartCmd || null,
+                cache_enabled: configForm.cacheEnabled,
+                timeout: configForm.timeout,
+                keep_deployments: configForm.keepDeployments
+            });
+            setShowConfigModal(false);
+            toast.success('Build configuration saved');
+            loadData();
+        } catch (err) {
+            setError(err.message);
+        }
+    }
+
+    async function handleBuild(noCache = false) {
+        setBuilding(true);
+        setError(null);
+        try {
+            const result = await api.triggerBuild(appId, noCache);
+            if (result.success) {
+                toast.success('Build completed successfully');
+            } else {
+                setError(result.error || 'Build failed');
+            }
+            loadData();
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setBuilding(false);
+        }
+    }
+
+    async function handleDeploy(noCache = false) {
+        setDeploying(true);
+        setError(null);
+        try {
+            const result = await api.deployApp(appId, { no_cache: noCache });
+            if (result.success) {
+                toast.success(`Deployment v${result.deployment.version} successful!`);
+            } else {
+                setError(result.error || 'Deployment failed');
+            }
+            loadData();
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setDeploying(false);
+        }
+    }
+
+    async function handleRollback(version = null) {
+        if (!confirm(version
+            ? `Rollback to version ${version}? This will replace the current deployment.`
+            : 'Rollback to previous deployment?'
+        )) return;
+
+        setDeploying(true);
+        setError(null);
+        try {
+            const result = await api.rollback(appId, version);
+            if (result.success) {
+                toast.success('Rollback successful');
+            } else {
+                setError(result.error || 'Rollback failed');
+            }
+            loadData();
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setDeploying(false);
+        }
+    }
+
+    async function loadBuildLogs() {
+        try {
+            const result = await api.getBuildLogs(appId);
+            setBuildLogs(result.logs || []);
+        } catch (err) {
+            console.error('Failed to load build logs:', err);
+        }
+    }
+
+    async function viewBuildLog(timestamp) {
+        try {
+            const log = await api.getBuildLogDetail(appId, timestamp);
+            setSelectedLog(log);
+            setShowLogsModal(true);
+        } catch (err) {
+            toast.error('Failed to load build log');
+        }
+    }
+
+    function getStatusBadgeClass(status) {
+        switch (status) {
+            case 'live': return 'badge-success';
+            case 'building':
+            case 'deploying':
+            case 'pending': return 'badge-warning';
+            case 'failed': return 'badge-danger';
+            case 'rolled_back': return 'badge-secondary';
+            default: return 'badge-default';
+        }
+    }
+
+    function formatDuration(seconds) {
+        if (!seconds) return '-';
+        if (seconds < 60) return `${Math.round(seconds)}s`;
+        return `${Math.floor(seconds / 60)}m ${Math.round(seconds % 60)}s`;
+    }
+
+    if (loading) {
+        return <div className="loading">Loading build configuration...</div>;
+    }
+
+    return (
+        <div className="build-tab">
+            {error && (
+                <div className="alert alert-danger">
+                    {error}
+                    <button onClick={() => setError(null)} className="alert-close">&times;</button>
+                </div>
+            )}
+
+            {/* Detection Results */}
+            {detection && (
+                <div className="card">
+                    <h3>Auto-Detection Results</h3>
+                    <div className="detection-results">
+                        <div className="detection-item">
+                            <span className="detection-label">Language</span>
+                            <span className="detection-value">{detection.language || 'Unknown'}</span>
+                        </div>
+                        <div className="detection-item">
+                            <span className="detection-label">Framework</span>
+                            <span className="detection-value">{detection.framework || 'Unknown'}</span>
+                        </div>
+                        <div className="detection-item">
+                            <span className="detection-label">Recommended</span>
+                            <span className="detection-value">{detection.build_method}</span>
+                        </div>
+                        <div className="detection-item">
+                            <span className="detection-label">Dockerfile</span>
+                            <span className={`detection-value ${detection.has_dockerfile ? 'text-success' : ''}`}>
+                                {detection.has_dockerfile ? 'Found' : 'Not found'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Build Configuration */}
+            <div className="card">
+                <div className="section-header">
+                    <h3>Build Configuration</h3>
+                    <button className="btn btn-secondary btn-sm" onClick={() => setShowConfigModal(true)}>
+                        {buildConfig ? 'Edit' : 'Configure'}
+                    </button>
+                </div>
+
+                {buildConfig ? (
+                    <div className="info-list">
+                        <div className="info-item">
+                            <span className="info-label">Build Method</span>
+                            <span className="info-value">{buildConfig.build_method}</span>
+                        </div>
+                        {buildConfig.dockerfile_path && buildConfig.build_method === 'dockerfile' && (
+                            <div className="info-item">
+                                <span className="info-label">Dockerfile</span>
+                                <span className="info-value mono">{buildConfig.dockerfile_path}</span>
+                            </div>
+                        )}
+                        <div className="info-item">
+                            <span className="info-label">Cache</span>
+                            <span className="info-value">{buildConfig.cache_enabled ? 'Enabled' : 'Disabled'}</span>
+                        </div>
+                        <div className="info-item">
+                            <span className="info-label">Timeout</span>
+                            <span className="info-value">{buildConfig.timeout}s</span>
+                        </div>
+                        <div className="info-item">
+                            <span className="info-label">Build Count</span>
+                            <span className="info-value">{buildConfig.build_count || 0}</span>
+                        </div>
+                    </div>
+                ) : (
+                    <p className="hint">No build configuration. Click Configure to set up builds.</p>
+                )}
+
+                {buildConfig && (
+                    <div className="build-actions">
+                        <button
+                            className="btn btn-secondary"
+                            onClick={() => handleBuild(false)}
+                            disabled={building || deploying}
+                        >
+                            {building ? 'Building...' : 'Build Only'}
+                        </button>
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => handleDeploy(false)}
+                            disabled={building || deploying}
+                        >
+                            {deploying ? 'Deploying...' : 'Build & Deploy'}
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            {/* Current Deployment */}
+            {currentDeployment && (
+                <div className="card current-deployment">
+                    <h3>Current Deployment</h3>
+                    <div className="deployment-current-info">
+                        <div className="deployment-version">
+                            <span className="version-number">v{currentDeployment.version}</span>
+                            <span className={`badge ${getStatusBadgeClass(currentDeployment.status)}`}>
+                                {currentDeployment.status}
+                            </span>
+                        </div>
+                        {currentDeployment.commit_hash && (
+                            <div className="deployment-commit">
+                                <span className="commit-hash mono">{currentDeployment.commit_hash.substring(0, 8)}</span>
+                                {currentDeployment.commit_message && (
+                                    <span className="commit-message">{currentDeployment.commit_message}</span>
+                                )}
+                            </div>
+                        )}
+                        <div className="deployment-meta">
+                            <span>Deployed {new Date(currentDeployment.deploy_completed_at).toLocaleString()}</span>
+                            {currentDeployment.duration && (
+                                <span>Duration: {formatDuration(currentDeployment.duration)}</span>
+                            )}
+                        </div>
+                    </div>
+                    <div className="deployment-actions">
+                        <button
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => handleRollback()}
+                            disabled={deploying || deployments.length < 2}
+                        >
+                            Rollback to Previous
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Deployment History */}
+            <div className="card">
+                <div className="section-header">
+                    <h3>Deployment History</h3>
+                    <button className="btn btn-secondary btn-sm" onClick={loadData}>
+                        Refresh
+                    </button>
+                </div>
+
+                {deployments.length === 0 ? (
+                    <p className="hint">No deployments yet.</p>
+                ) : (
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Version</th>
+                                <th>Status</th>
+                                <th>Commit</th>
+                                <th>Deployed</th>
+                                <th>Duration</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {deployments.map(deployment => (
+                                <tr key={deployment.id}>
+                                    <td>
+                                        <span className="version-tag">{deployment.version_tag || `v${deployment.version}`}</span>
+                                    </td>
+                                    <td>
+                                        <span className={`badge ${getStatusBadgeClass(deployment.status)}`}>
+                                            {deployment.status}
+                                        </span>
+                                    </td>
+                                    <td className="mono">
+                                        {deployment.commit_hash ? deployment.commit_hash.substring(0, 8) : '-'}
+                                    </td>
+                                    <td>
+                                        {deployment.deploy_completed_at
+                                            ? new Date(deployment.deploy_completed_at).toLocaleString()
+                                            : '-'}
+                                    </td>
+                                    <td>{formatDuration(deployment.duration)}</td>
+                                    <td>
+                                        {deployment.status !== 'live' && deployment.image_tag && (
+                                            <button
+                                                className="btn btn-secondary btn-xs"
+                                                onClick={() => handleRollback(deployment.version)}
+                                                disabled={deploying}
+                                            >
+                                                Rollback
+                                            </button>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
+            </div>
+
+            {/* Build Logs */}
+            <div className="card">
+                <div className="section-header">
+                    <h3>Build Logs</h3>
+                    <button className="btn btn-secondary btn-sm" onClick={loadBuildLogs}>
+                        Load Logs
+                    </button>
+                </div>
+
+                {buildLogs.length === 0 ? (
+                    <p className="hint">Click "Load Logs" to view build history.</p>
+                ) : (
+                    <div className="build-logs-list">
+                        {buildLogs.map((log, index) => (
+                            <div key={index} className="build-log-item" onClick={() => viewBuildLog(log.started_at)}>
+                                <span className={`badge ${getStatusBadgeClass(log.status)}`}>{log.status}</span>
+                                <span className="build-log-method">{log.build_method}</span>
+                                <span className="build-log-time">{new Date(log.started_at).toLocaleString()}</span>
+                                <span className="build-log-lines">{log.log_count} lines</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* Configure Build Modal */}
+            {showConfigModal && (
+                <div className="modal-overlay" onClick={() => setShowConfigModal(false)}>
+                    <div className="modal" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>Configure Build</h2>
+                            <button className="modal-close" onClick={() => setShowConfigModal(false)}>&times;</button>
+                        </div>
+                        <form onSubmit={handleConfigureBuild}>
+                            <div className="modal-body">
+                                <div className="form-group">
+                                    <label>Build Method</label>
+                                    <select
+                                        value={configForm.buildMethod}
+                                        onChange={(e) => setConfigForm({...configForm, buildMethod: e.target.value})}
+                                    >
+                                        <option value="auto">Auto-detect</option>
+                                        <option value="dockerfile">Dockerfile</option>
+                                        <option value="nixpacks">Nixpacks</option>
+                                        <option value="custom">Custom Command</option>
+                                    </select>
+                                </div>
+
+                                {configForm.buildMethod === 'dockerfile' && (
+                                    <div className="form-group">
+                                        <label>Dockerfile Path</label>
+                                        <input
+                                            type="text"
+                                            value={configForm.dockerfilePath}
+                                            onChange={(e) => setConfigForm({...configForm, dockerfilePath: e.target.value})}
+                                            placeholder="Dockerfile"
+                                        />
+                                    </div>
+                                )}
+
+                                {(configForm.buildMethod === 'custom' || configForm.buildMethod === 'nixpacks') && (
+                                    <>
+                                        <div className="form-group">
+                                            <label>Custom Build Command</label>
+                                            <textarea
+                                                value={configForm.customBuildCmd}
+                                                onChange={(e) => setConfigForm({...configForm, customBuildCmd: e.target.value})}
+                                                placeholder="npm install && npm run build"
+                                                rows={2}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Custom Start Command</label>
+                                            <textarea
+                                                value={configForm.customStartCmd}
+                                                onChange={(e) => setConfigForm({...configForm, customStartCmd: e.target.value})}
+                                                placeholder="npm start"
+                                                rows={2}
+                                            />
+                                        </div>
+                                    </>
+                                )}
+
+                                <div className="form-group">
+                                    <label className="checkbox-label">
+                                        <input
+                                            type="checkbox"
+                                            checked={configForm.cacheEnabled}
+                                            onChange={(e) => setConfigForm({...configForm, cacheEnabled: e.target.checked})}
+                                        />
+                                        <span>Enable Build Cache</span>
+                                    </label>
+                                </div>
+
+                                <div className="form-row">
+                                    <div className="form-group">
+                                        <label>Timeout (seconds)</label>
+                                        <input
+                                            type="number"
+                                            value={configForm.timeout}
+                                            onChange={(e) => setConfigForm({...configForm, timeout: parseInt(e.target.value)})}
+                                            min={60}
+                                            max={3600}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Keep Deployments</label>
+                                        <input
+                                            type="number"
+                                            value={configForm.keepDeployments}
+                                            onChange={(e) => setConfigForm({...configForm, keepDeployments: parseInt(e.target.value)})}
+                                            min={1}
+                                            max={50}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowConfigModal(false)}>
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn btn-primary">
+                                    Save Configuration
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Build Log Detail Modal */}
+            {showLogsModal && selectedLog && (
+                <div className="modal-overlay" onClick={() => setShowLogsModal(false)}>
+                    <div className="modal modal-lg" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>Build Log - {selectedLog.build_method}</h2>
+                            <button className="modal-close" onClick={() => setShowLogsModal(false)}>&times;</button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="build-log-meta">
+                                <span className={`badge ${getStatusBadgeClass(selectedLog.status)}`}>{selectedLog.status}</span>
+                                <span>Started: {new Date(selectedLog.started_at).toLocaleString()}</span>
+                                {selectedLog.completed_at && (
+                                    <span>Completed: {new Date(selectedLog.completed_at).toLocaleString()}</span>
+                                )}
+                            </div>
+                            {selectedLog.error && (
+                                <div className="alert alert-danger">{selectedLog.error}</div>
+                            )}
+                            <pre className="build-log-output">
+                                {(selectedLog.logs || []).join('\n')}
+                            </pre>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
