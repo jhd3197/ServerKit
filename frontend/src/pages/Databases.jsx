@@ -57,14 +57,12 @@ const Databases = () => {
                 <button
                     className={`tab ${activeTab === 'mysql' ? 'active' : ''}`}
                     onClick={() => setActiveTab('mysql')}
-                    disabled={!status?.mysql?.installed}
                 >
                     MySQL / MariaDB
                 </button>
                 <button
                     className={`tab ${activeTab === 'postgresql' ? 'active' : ''}`}
                     onClick={() => setActiveTab('postgresql')}
-                    disabled={!status?.postgresql?.installed}
                 >
                     PostgreSQL
                 </button>
@@ -163,6 +161,15 @@ const MySQLTab = ({ status }) => {
             console.error('Failed to drop user:', err);
             toast.error('Failed to drop user');
         }
+    }
+
+    if (!status?.installed) {
+        return (
+            <div className="empty-state">
+                <h3>MySQL is not installed</h3>
+                <p>Install MySQL or MariaDB on your server to manage databases.</p>
+            </div>
+        );
     }
 
     if (!status?.running) {
@@ -405,6 +412,15 @@ const PostgreSQLTab = ({ status }) => {
             console.error('Failed to drop user:', err);
             toast.error('Failed to drop user');
         }
+    }
+
+    if (!status?.installed) {
+        return (
+            <div className="empty-state">
+                <h3>PostgreSQL is not installed</h3>
+                <p>Install PostgreSQL on your server to manage databases.</p>
+            </div>
+        );
     }
 
     if (!status?.running) {
