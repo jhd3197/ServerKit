@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
-import { useToast } from '../components/Toast';
+import { useToast } from '../contexts/ToastContext';
 
 const Templates = () => {
     const navigate = useNavigate();

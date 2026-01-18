@@ -69,7 +69,7 @@ def configure_build(app_id):
 
     result = BuildService.configure_build(
         app_id=app_id,
-        app_path=app.root_path or app.path,
+        app_path=app.root_path,
         build_method=data.get('build_method', 'auto'),
         dockerfile_path=data.get('dockerfile_path'),
         custom_build_cmd=data.get('custom_build_cmd'),
@@ -113,7 +113,7 @@ def detect_build_method(app_id):
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
-    detection = BuildService.detect_build_method(app.root_path or app.path)
+    detection = BuildService.detect_build_method(app.root_path)
     return jsonify(detection), 200
 
 
@@ -131,7 +131,7 @@ def get_nixpacks_plan(app_id):
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
-    result = BuildService.get_nixpacks_plan(app.root_path or app.path)
+    result = BuildService.get_nixpacks_plan(app.root_path)
     return jsonify(result), 200 if result.get('success') else 400
 
 

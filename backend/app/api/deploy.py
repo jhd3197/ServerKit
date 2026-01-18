@@ -62,7 +62,7 @@ def configure_deployment(app_id):
 
     result = GitService.configure_deployment(
         app_id=app_id,
-        app_path=app.path,
+        app_path=app.root_path,
         repo_url=data['repo_url'],
         branch=data.get('branch', 'main'),
         auto_deploy=data.get('auto_deploy', True),
@@ -117,7 +117,7 @@ def pull_changes(app_id):
         return jsonify({'error': 'Access denied'}), 403
 
     data = request.get_json() or {}
-    result = GitService.pull_changes(app.path, data.get('branch'))
+    result = GitService.pull_changes(app.root_path, data.get('branch'))
 
     return jsonify(result), 200 if result['success'] else 400
 
@@ -136,7 +136,7 @@ def get_git_status(app_id):
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
-    status = GitService.get_git_status(app.path)
+    status = GitService.get_git_status(app.root_path)
     return jsonify(status), 200
 
 
@@ -154,7 +154,7 @@ def get_commit_info(app_id):
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
-    commit_info = GitService.get_commit_info(app.path)
+    commit_info = GitService.get_commit_info(app.root_path)
     if commit_info:
         return jsonify({'commit': commit_info}), 200
     return jsonify({'error': 'Not a Git repository'}), 404
@@ -209,7 +209,7 @@ def get_branches(app_id):
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
-    result = GitService.get_remote_branches(app.path)
+    result = GitService.get_remote_branches(app.root_path)
     return jsonify(result), 200 if result.get('success') else 400
 
 

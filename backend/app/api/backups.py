@@ -81,7 +81,7 @@ def backup_application():
 
     result = BackupService.backup_application(
         app_name=app.name,
-        app_path=app.path,
+        app_path=app.root_path,
         include_db=data.get('include_db', False),
         db_config=data.get('db_config')
     )

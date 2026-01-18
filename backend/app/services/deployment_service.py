@@ -52,7 +52,7 @@ class DeploymentService:
         if build_config:
             build_method = build_config.get('build_method', 'auto')
             if build_method == 'auto':
-                detection = BuildService.detect_build_method(app.root_path or app.path)
+                detection = BuildService.detect_build_method(app.root_path)
                 build_method = detection.get('build_method')
 
         # Create deployment record
@@ -287,7 +287,7 @@ class DeploymentService:
                 log_callback("Pulling latest changes...")
 
             pull_result = GitService.pull_changes(
-                app.root_path or app.path,
+                app.root_path,
                 deploy_config.get('branch')
             )
 
@@ -301,7 +301,7 @@ class DeploymentService:
 
                 script_result = GitService._run_script(
                     deploy_config['post_deploy_script'],
-                    app.root_path or app.path
+                    app.root_path
                 )
 
                 if not script_result.get('success'):
@@ -434,7 +434,7 @@ class DeploymentService:
         if not target.commit_hash:
             return {'success': False, 'error': 'No commit hash to rollback to'}
 
-        app_path = app.root_path or app.path
+        app_path = app.root_path
 
         try:
             if log_callback:
@@ -483,7 +483,7 @@ class DeploymentService:
                 return
 
             app = Application.query.get(deployment.app_id)
-            app_path = app.root_path or app.path
+            app_path = app.root_path
 
             # Get git diff
             result = subprocess.run(

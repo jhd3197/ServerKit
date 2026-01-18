@@ -54,28 +54,29 @@ class Deployment(db.Model):
     error_message = db.Column(db.Text, nullable=True)
 
     # Metadata (JSON for flexibility)
-    metadata = db.Column(db.Text, default='{}')
+    # Note: 'metadata' is reserved by SQLAlchemy, so we use 'extra_data'
+    extra_data = db.Column(db.Text, default='{}')
 
     # Relationships
-    app = db.relationship('Application', backref=db.backref('deployments', lazy='dynamic', order_by='Deployment.version.desc()'))
-    deployer = db.relationship('User', backref='deployments')
+    app = db.relationship('Application', backref=db.backref('deployments', lazy='dynamic'))
+    deployer = db.relationship('User', backref=db.backref('user_deployments', lazy='dynamic'))
 
     def get_metadata(self):
         """Get metadata as dict."""
         try:
-            return json.loads(self.metadata) if self.metadata else {}
+            return json.loads(self.extra_data) if self.extra_data else {}
         except (json.JSONDecodeError, TypeError):
             return {}
 
     def set_metadata(self, data):
         """Set metadata from dict."""
-        self.metadata = json.dumps(data)
+        self.extra_data = json.dumps(data)
 
     def update_metadata(self, key, value):
         """Update a single metadata field."""
         meta = self.get_metadata()
         meta[key] = value
-        self.metadata = json.dumps(meta)
+        self.extra_data = json.dumps(meta)
 
     @property
     def duration(self):
