@@ -1,0 +1,410 @@
+// ============================================
+// SECURITY PAGE STYLES
+// ============================================
+
+.security-page {
+    .tabs-nav {
+        display: flex;
+        gap: @spacing-xs;
+        margin-bottom: @spacing-lg;
+        border-bottom: 1px solid @border-color;
+        padding-bottom: @spacing-sm;
+        overflow-x: auto;
+
+        .tab-btn {
+            padding: @spacing-sm @spacing-md;
+            border: none;
+            background: none;
+            color: @text-secondary;
+            cursor: pointer;
+            border-radius: @radius-md;
+            white-space: nowrap;
+            transition: all 0.2s;
+
+            &:hover {
+                background: @surface-tertiary;
+                color: @text-primary;
+            }
+
+            &.active {
+                background: @primary;
+                color: white;
+            }
+        }
+    }
+}
+
+// Overview Tab
+.security-overview {
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: @spacing-md;
+        margin-bottom: @spacing-lg;
+    }
+
+    .stat-card {
+        display: flex;
+        align-items: center;
+        gap: @spacing-md;
+        padding: @spacing-lg;
+        background: @surface-secondary;
+        border-radius: @radius-lg;
+        border: 1px solid @border-color;
+
+        &.success {
+            border-color: fade(@success, 30%);
+            .stat-icon { color: @success; background: fade(@success, 15%); }
+        }
+
+        &.warning {
+            border-color: fade(@warning, 30%);
+            .stat-icon { color: @warning; background: fade(@warning, 15%); }
+        }
+
+        &.danger {
+            border-color: fade(@danger, 30%);
+            .stat-icon { color: @danger; background: fade(@danger, 15%); }
+        }
+
+        &.info {
+            border-color: fade(@info, 30%);
+            .stat-icon { color: @info; background: fade(@info, 15%); }
+        }
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: @surface-tertiary;
+        border-radius: @radius-md;
+        flex-shrink: 0;
+    }
+
+    .stat-content {
+        display: flex;
+        flex-direction: column;
+
+        .stat-value {
+            font-size: @font-size-xl;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            color: @text-secondary;
+            font-size: @font-size-sm;
+        }
+    }
+
+    .security-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: @spacing-md;
+    }
+}
+
+// Scanner Tab
+.scanner-tab {
+    .scan-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: @spacing-lg;
+        align-items: start;
+    }
+
+    .scan-preset {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: @spacing-sm;
+        text-align: center;
+
+        .btn-lg {
+            display: flex;
+            align-items: center;
+            gap: @spacing-sm;
+            padding: @spacing-md @spacing-xl;
+            font-size: @font-size-md;
+
+            svg {
+                flex-shrink: 0;
+            }
+        }
+
+        .scan-desc {
+            color: @text-secondary;
+            font-size: @font-size-sm;
+        }
+    }
+
+    .scan-custom {
+        label {
+            display: block;
+            margin-bottom: @spacing-sm;
+            font-weight: 500;
+        }
+
+        .input-group {
+            display: flex;
+            gap: @spacing-sm;
+
+            input {
+                flex: 1;
+            }
+        }
+    }
+
+    .scan-progress {
+        margin-top: @spacing-lg;
+        border-color: @info;
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: @spacing-md;
+
+            .spinner {
+                width: 32px;
+                height: 32px;
+            }
+
+            p {
+                margin: 0;
+
+                &:not(:last-child) {
+                    margin-bottom: @spacing-xs;
+                }
+            }
+        }
+    }
+
+    .path-cell {
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: @font-mono;
+        font-size: @font-size-sm;
+    }
+}
+
+// Quarantine Tab
+.quarantine-tab {
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: @spacing-xl;
+        text-align: center;
+
+        svg {
+            color: @success;
+            margin-bottom: @spacing-md;
+        }
+
+        p {
+            font-size: @font-size-lg;
+            margin-bottom: @spacing-xs;
+        }
+    }
+}
+
+// Integrity Tab
+.integrity-tab {
+    .description {
+        color: @text-secondary;
+        margin-bottom: @spacing-lg;
+    }
+
+    .integrity-actions {
+        display: flex;
+        gap: @spacing-md;
+    }
+
+    .change-section {
+        margin-bottom: @spacing-lg;
+
+        h4 {
+            margin-bottom: @spacing-sm;
+            color: @warning;
+        }
+    }
+
+    .file-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        background: @surface-tertiary;
+        border-radius: @radius-md;
+        max-height: 300px;
+        overflow-y: auto;
+
+        li {
+            padding: @spacing-sm @spacing-md;
+            font-family: @font-mono;
+            font-size: @font-size-sm;
+            border-bottom: 1px solid @border-color;
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+}
+
+// Events Tab
+.events-tab {
+    .card-warning {
+        border-color: @warning;
+    }
+
+    .failed-login-summary {
+        display: flex;
+        align-items: baseline;
+        gap: @spacing-sm;
+
+        .count {
+            font-size: @font-size-xxl;
+            font-weight: 700;
+
+            &.danger {
+                color: @danger;
+            }
+        }
+
+        .label {
+            color: @text-secondary;
+        }
+    }
+
+    .recent-failures {
+        margin-top: @spacing-md;
+
+        summary {
+            cursor: pointer;
+            color: @primary;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        pre {
+            margin-top: @spacing-sm;
+            padding: @spacing-md;
+            background: @surface-tertiary;
+            border-radius: @radius-md;
+            font-size: @font-size-xs;
+            max-height: 200px;
+            overflow: auto;
+        }
+    }
+
+    .events-list {
+        display: flex;
+        flex-direction: column;
+        gap: @spacing-sm;
+    }
+
+    .event-item {
+        display: flex;
+        align-items: flex-start;
+        gap: @spacing-md;
+        padding: @spacing-md;
+        background: @surface-tertiary;
+        border-radius: @radius-md;
+        border-left: 3px solid @border-color;
+
+        &.malware {
+            border-left-color: @danger;
+            .event-icon { color: @danger; }
+        }
+
+        &.integrity {
+            border-left-color: @warning;
+            .event-icon { color: @warning; }
+        }
+    }
+
+    .event-icon {
+        flex-shrink: 0;
+        color: @text-secondary;
+    }
+
+    .event-content {
+        flex: 1;
+        min-width: 0;
+
+        .event-message {
+            display: block;
+            margin-bottom: @spacing-xs;
+        }
+
+        .event-time {
+            font-size: @font-size-sm;
+            color: @text-tertiary;
+        }
+    }
+}
+
+// Settings Tab
+.settings-tab {
+    .card {
+        margin-bottom: @spacing-lg;
+    }
+
+    .form-actions {
+        margin-top: @spacing-lg;
+    }
+}
+
+// Shared Components
+.not-installed {
+    text-align: center;
+    padding: @spacing-lg;
+
+    p {
+        margin-bottom: @spacing-md;
+        color: @text-secondary;
+    }
+}
+
+.info-list {
+    display: flex;
+    flex-direction: column;
+    gap: @spacing-sm;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: @spacing-sm 0;
+    border-bottom: 1px solid @border-color;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        color: @text-secondary;
+    }
+
+    .info-value {
+        font-weight: 500;
+    }
+}
+
+.help-text {
+    color: @text-secondary;
+    font-size: @font-size-sm;
+}
+
+.loading-sm {
+    color: @text-tertiary;
+    font-size: @font-size-sm;
+    padding: @spacing-md;
+}

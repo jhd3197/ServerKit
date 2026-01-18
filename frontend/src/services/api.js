@@ -1654,6 +1654,106 @@ class ApiService {
             method: 'POST'
         });
     }
+
+    // ========================================
+    // Security (ClamAV, File Integrity) endpoints
+    // ========================================
+    async getSecurityStatus() {
+        return this.request('/security/status');
+    }
+
+    async getSecurityConfig() {
+        return this.request('/security/config');
+    }
+
+    async updateSecurityConfig(config) {
+        return this.request('/security/config', {
+            method: 'PUT',
+            body: config
+        });
+    }
+
+    async getClamAVStatus() {
+        return this.request('/security/clamav/status');
+    }
+
+    async installClamAV() {
+        return this.request('/security/clamav/install', { method: 'POST' });
+    }
+
+    async updateVirusDefinitions() {
+        return this.request('/security/clamav/update', { method: 'POST' });
+    }
+
+    async scanFile(path) {
+        return this.request('/security/scan/file', {
+            method: 'POST',
+            body: { path }
+        });
+    }
+
+    async scanDirectory(path, recursive = true) {
+        return this.request('/security/scan/directory', {
+            method: 'POST',
+            body: { path, recursive }
+        });
+    }
+
+    async getScanStatus() {
+        return this.request('/security/scan/status');
+    }
+
+    async cancelScan() {
+        return this.request('/security/scan/cancel', { method: 'POST' });
+    }
+
+    async getScanHistory(limit = 50) {
+        return this.request(`/security/scan/history?limit=${limit}`);
+    }
+
+    async runQuickScan() {
+        return this.request('/security/scan/quick', { method: 'POST' });
+    }
+
+    async runFullScan() {
+        return this.request('/security/scan/full', { method: 'POST' });
+    }
+
+    async getQuarantinedFiles() {
+        return this.request('/security/quarantine');
+    }
+
+    async quarantineFile(path) {
+        return this.request('/security/quarantine', {
+            method: 'POST',
+            body: { path }
+        });
+    }
+
+    async deleteQuarantinedFile(filename) {
+        return this.request(`/security/quarantine/${encodeURIComponent(filename)}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async initializeIntegrityDatabase(paths = null) {
+        return this.request('/security/integrity/initialize', {
+            method: 'POST',
+            body: paths ? { paths } : {}
+        });
+    }
+
+    async checkFileIntegrity() {
+        return this.request('/security/integrity/check');
+    }
+
+    async getFailedLogins(hours = 24) {
+        return this.request(`/security/failed-logins?hours=${hours}`);
+    }
+
+    async getSecurityEvents(limit = 100) {
+        return this.request(`/security/events?limit=${limit}`);
+    }
 }
 
 export const api = new ApiService();

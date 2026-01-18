@@ -21,6 +21,7 @@ import FTPServer from './pages/FTPServer';
 import PHP from './pages/PHP';
 import Firewall from './pages/Firewall';
 import CronJobs from './pages/CronJobs';
+import Security from './pages/Security';
 
 function PrivateRoute({ children }) {
     const { isAuthenticated, loading } = useAuth();
@@ -74,6 +75,7 @@ function AppRoutes() {
                 <Route path="monitoring" element={<Monitoring />} />
                 <Route path="backups" element={<Backups />} />
                 <Route path="cron" element={<CronJobs />} />
+                <Route path="security" element={<Security />} />
                 <Route path="terminal" element={<Terminal />} />
                 <Route path="settings" element={<Settings />} />
             </Route>

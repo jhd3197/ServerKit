@@ -121,6 +121,10 @@ def create_app(config_name=None):
     from app.api.firewall import firewall_bp
     app.register_blueprint(firewall_bp, url_prefix='/api/v1/firewall')
 
+    # Register blueprints - Security (ClamAV, File Integrity, etc.)
+    from app.api.security import security_bp
+    app.register_blueprint(security_bp, url_prefix='/api/v1/security')
+
     # Register blueprints - Cron Jobs
     from app.api.cron import cron_bp
     app.register_blueprint(cron_bp, url_prefix='/api/v1/cron')
