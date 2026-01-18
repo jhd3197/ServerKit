@@ -1,0 +1,88 @@
+id: authelia
+name: Authelia
+version: "4.37"
+description: Authentication and authorization server providing 2FA and SSO
+icon: https://www.authelia.com/images/branding/logo-cropped.png
+website: https://www.authelia.com
+documentation: https://www.authelia.com/docs/
+categories:
+  - security
+  - authentication
+  - sso
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "9091"
+  - name: JWT_SECRET
+    description: JWT secret
+    type: password
+    generate: password
+  - name: SESSION_SECRET
+    description: Session secret
+    type: password
+    generate: password
+  - name: STORAGE_ENCRYPTION_KEY
+    description: Storage encryption key
+    type: password
+    generate: password
+  - name: DOMAIN
+    description: Domain name (e.g., example.com)
+    required: true
+
+ports:
+  - port: 9091
+    protocol: tcp
+    description: Authentication portal
+
+volumes:
+  - name: config
+    path: /config
+    description: Authelia configuration
+
+compose:
+  services:
+    authelia:
+      image: authelia/authelia:${VERSION:-4.37}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - AUTHELIA_JWT_SECRET=${JWT_SECRET}
+        - AUTHELIA_SESSION_SECRET=${SESSION_SECRET}
+        - AUTHELIA_STORAGE_ENCRYPTION_KEY=${STORAGE_ENCRYPTION_KEY}
+      volumes:
+        - authelia_config:/config
+      ports:
+        - "${HTTP_PORT}:9091"
+
+  volumes:
+    authelia_config:
+
+post_install: |
+  # Create basic configuration
+  cat > /var/serverkit/apps/${APP_NAME}/config/configuration.yml << 'EOF'
+  theme: dark
+  default_redirection_url: https://${DOMAIN}
+  server:
+    host: 0.0.0.0
+    port: 9091
+  log:
+    level: info
+  authentication_backend:
+    file:
+      path: /config/users_database.yml
+  access_control:
+    default_policy: deny
+  session:
+    name: authelia_session
+    domain: ${DOMAIN}
+    expiration: 1h
+    inactivity: 5m
+  storage:
+    local:
+      path: /config/db.sqlite3
+  notifier:
+    filesystem:
+      filename: /config/notification.txt
+  EOF

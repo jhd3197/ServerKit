@@ -1,0 +1,117 @@
+id: jitsi
+name: Jitsi Meet
+version: "9111"
+description: Secure, fully featured, and completely free video conferencing
+icon: https://jitsi.org/wp-content/uploads/2020/04/oie_ij7MkXQDMfUP.png
+website: https://jitsi.org
+documentation: https://jitsi.github.io/handbook/
+categories:
+  - collaboration
+  - video
+  - conferencing
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8000"
+  - name: HTTPS_PORT
+    description: HTTPS port
+    type: port
+    default: "8443"
+  - name: PUBLIC_URL
+    description: Public URL (e.g., https://meet.example.com)
+    required: true
+  - name: JICOFO_AUTH_PASSWORD
+    description: Jicofo auth password
+    type: password
+    generate: password
+  - name: JVB_AUTH_PASSWORD
+    description: JVB auth password
+    type: password
+    generate: password
+  - name: JIGASI_XMPP_PASSWORD
+    description: Jigasi XMPP password
+    type: password
+    generate: password
+
+ports:
+  - port: 8000
+    protocol: tcp
+    description: HTTP
+  - port: 8443
+    protocol: tcp
+    description: HTTPS
+  - port: 10000
+    protocol: udp
+    description: Video bridge
+
+volumes:
+  - name: config
+    path: /config
+    description: Jitsi config
+  - name: transcripts
+    path: /usr/share/jitsi-meet/transcripts
+    description: Transcripts
+
+compose:
+  services:
+    web:
+      image: jitsi/web:stable-${VERSION:-9111}
+      container_name: ${APP_NAME}-web
+      restart: unless-stopped
+      environment:
+        - PUBLIC_URL=${PUBLIC_URL}
+        - TZ=UTC
+      volumes:
+        - jitsi_config:/config:Z
+        - jitsi_transcripts:/usr/share/jitsi-meet/transcripts:Z
+      ports:
+        - "${HTTP_PORT}:80"
+        - "${HTTPS_PORT}:443"
+
+    prosody:
+      image: jitsi/prosody:stable-${VERSION:-9111}
+      container_name: ${APP_NAME}-prosody
+      restart: unless-stopped
+      environment:
+        - PUBLIC_URL=${PUBLIC_URL}
+        - JICOFO_AUTH_PASSWORD=${JICOFO_AUTH_PASSWORD}
+        - JVB_AUTH_PASSWORD=${JVB_AUTH_PASSWORD}
+        - JIGASI_XMPP_PASSWORD=${JIGASI_XMPP_PASSWORD}
+      volumes:
+        - jitsi_prosody:/config:Z
+        - jitsi_prosody_plugins:/prosody-plugins-custom:Z
+
+    jicofo:
+      image: jitsi/jicofo:stable-${VERSION:-9111}
+      container_name: ${APP_NAME}-jicofo
+      restart: unless-stopped
+      environment:
+        - JICOFO_AUTH_PASSWORD=${JICOFO_AUTH_PASSWORD}
+      volumes:
+        - jitsi_jicofo:/config:Z
+      depends_on:
+        - prosody
+
+    jvb:
+      image: jitsi/jvb:stable-${VERSION:-9111}
+      container_name: ${APP_NAME}-jvb
+      restart: unless-stopped
+      environment:
+        - JVB_AUTH_PASSWORD=${JVB_AUTH_PASSWORD}
+        - PUBLIC_URL=${PUBLIC_URL}
+      volumes:
+        - jitsi_jvb:/config:Z
+      ports:
+        - "10000:10000/udp"
+      depends_on:
+        - prosody
+
+  volumes:
+    jitsi_config:
+    jitsi_transcripts:
+    jitsi_prosody:
+    jitsi_prosody_plugins:
+    jitsi_jicofo:
+    jitsi_jvb:

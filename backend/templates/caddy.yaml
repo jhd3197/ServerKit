@@ -1,0 +1,67 @@
+id: caddy
+name: Caddy
+version: "2.7"
+description: Fast, multi-platform web server with automatic HTTPS
+icon: https://caddyserver.com/resources/images/caddy-circle-lock.svg
+website: https://caddyserver.com
+documentation: https://caddyserver.com/docs/
+categories:
+  - networking
+  - proxy
+  - ssl
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "80"
+  - name: HTTPS_PORT
+    description: HTTPS port
+    type: port
+    default: "443"
+
+ports:
+  - port: 80
+    protocol: tcp
+    description: HTTP
+  - port: 443
+    protocol: tcp
+    description: HTTPS
+
+volumes:
+  - name: data
+    path: /data
+    description: Caddy data
+  - name: config
+    path: /config
+    description: Caddy configuration
+  - name: site
+    path: /srv
+    description: Website files
+
+compose:
+  services:
+    caddy:
+      image: caddy:${VERSION:-2.7-alpine}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      volumes:
+        - caddy_data:/data
+        - caddy_config:/config
+        - caddy_site:/srv
+      ports:
+        - "${HTTP_PORT}:80"
+        - "${HTTPS_PORT}:443"
+
+  volumes:
+    caddy_data:
+    caddy_config:
+    caddy_site:
+
+post_install: |
+  # Create default Caddyfile
+  cat > /var/serverkit/apps/${APP_NAME}/config/Caddyfile << 'EOF'
+  :80 {
+      respond "Hello from Caddy!"
+  }
+  EOF

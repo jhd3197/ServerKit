@@ -1,0 +1,45 @@
+id: grav
+name: Grav CMS
+version: "1.7"
+description: Modern flat-file CMS that is fast, simple, and flexible
+icon: https://getgrav.org/user/themes/flavor-flavor/images/favicon.png
+website: https://getgrav.org
+documentation: https://learn.getgrav.org
+categories:
+  - cms
+  - flat-file
+  - blog
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8080"
+
+ports:
+  - port: 8080
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: user
+    path: /var/www/html/user
+    description: Grav user content
+
+compose:
+  services:
+    grav:
+      image: linuxserver/grav:${VERSION:-latest}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=UTC
+      volumes:
+        - grav_data:/var/www/html
+      ports:
+        - "${HTTP_PORT}:80"
+
+  volumes:
+    grav_data:

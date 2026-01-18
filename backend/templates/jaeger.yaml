@@ -1,0 +1,58 @@
+id: jaeger
+name: Jaeger
+version: "1.52"
+description: Open-source distributed tracing system for monitoring and troubleshooting microservices
+icon: https://www.jaegertracing.io/img/jaeger-icon-color.png
+website: https://www.jaegertracing.io
+documentation: https://www.jaegertracing.io/docs/
+categories:
+  - monitoring
+  - tracing
+  - observability
+
+variables:
+  - name: UI_PORT
+    description: Web UI port
+    type: port
+    default: "16686"
+  - name: COLLECTOR_PORT
+    description: Collector port for spans
+    type: port
+    default: "14268"
+
+ports:
+  - port: 16686
+    protocol: tcp
+    description: Web UI
+  - port: 14268
+    protocol: tcp
+    description: HTTP collector
+  - port: 6831
+    protocol: udp
+    description: Thrift compact protocol
+
+volumes:
+  - name: data
+    path: /badger
+    description: Badger storage for traces
+
+compose:
+  services:
+    jaeger:
+      image: jaegertracing/all-in-one:${VERSION:-1.52}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - SPAN_STORAGE_TYPE=badger
+        - BADGER_EPHEMERAL=false
+        - BADGER_DIRECTORY_VALUE=/badger/data
+        - BADGER_DIRECTORY_KEY=/badger/key
+      volumes:
+        - jaeger_data:/badger
+      ports:
+        - "${UI_PORT}:16686"
+        - "${COLLECTOR_PORT}:14268"
+        - "6831:6831/udp"
+
+  volumes:
+    jaeger_data:

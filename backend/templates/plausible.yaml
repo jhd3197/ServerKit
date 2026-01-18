@@ -1,0 +1,82 @@
+id: plausible
+name: Plausible Analytics
+version: "2.0"
+description: Privacy-friendly, lightweight alternative to Google Analytics
+icon: https://plausible.io/images/icon/plausible_favicon.png
+website: https://plausible.io
+documentation: https://plausible.io/docs
+categories:
+  - analytics
+  - privacy
+  - monitoring
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8000"
+  - name: BASE_URL
+    description: Base URL (e.g., https://analytics.example.com)
+    required: true
+  - name: SECRET_KEY_BASE
+    description: Secret key for encryption
+    type: password
+    generate: password
+  - name: DB_PASSWORD
+    description: PostgreSQL password
+    type: password
+    generate: password
+
+ports:
+  - port: 8000
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /var/lib/plausible
+    description: Plausible data
+
+compose:
+  services:
+    plausible:
+      image: plausible/analytics:v${VERSION:-2.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
+      environment:
+        - BASE_URL=${BASE_URL}
+        - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+        - DATABASE_URL=postgres://plausible:${DB_PASSWORD}@plausible_db:5432/plausible_db
+        - CLICKHOUSE_DATABASE_URL=http://plausible_events_db:8123/plausible_events_db
+      ports:
+        - "${HTTP_PORT}:8000"
+      depends_on:
+        - plausible_db
+        - plausible_events_db
+
+    plausible_db:
+      image: postgres:14-alpine
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      environment:
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_USER=plausible
+        - POSTGRES_DB=plausible_db
+      volumes:
+        - plausible_db:/var/lib/postgresql/data
+
+    plausible_events_db:
+      image: clickhouse/clickhouse-server:23.3-alpine
+      container_name: ${APP_NAME}-events
+      restart: unless-stopped
+      volumes:
+        - plausible_events:/var/lib/clickhouse
+      ulimits:
+        nofile:
+          soft: 262144
+          hard: 262144
+
+  volumes:
+    plausible_db:
+    plausible_events:

@@ -1,0 +1,88 @@
+id: directus
+name: Directus
+version: "10.8"
+description: Open-source data platform with instant REST and GraphQL API for any SQL database
+icon: https://directus.io/favicon.ico
+website: https://directus.io
+documentation: https://docs.directus.io
+categories:
+  - cms
+  - headless
+  - api
+  - database
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8055"
+  - name: ADMIN_EMAIL
+    description: Admin email
+    default: admin@example.com
+    required: true
+  - name: ADMIN_PASSWORD
+    description: Admin password
+    type: password
+    generate: password
+  - name: SECRET
+    description: Application secret key
+    type: password
+    generate: password
+  - name: DB_PASSWORD
+    description: PostgreSQL password
+    type: password
+    generate: password
+
+ports:
+  - port: 8055
+    protocol: tcp
+    description: Web interface and API
+
+volumes:
+  - name: uploads
+    path: /directus/uploads
+    description: Uploaded files
+  - name: extensions
+    path: /directus/extensions
+    description: Directus extensions
+
+compose:
+  services:
+    directus:
+      image: directus/directus:${VERSION:-10.8}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - KEY=${SECRET}
+        - SECRET=${SECRET}
+        - DB_CLIENT=pg
+        - DB_HOST=db
+        - DB_PORT=5432
+        - DB_DATABASE=directus
+        - DB_USER=directus
+        - DB_PASSWORD=${DB_PASSWORD}
+        - ADMIN_EMAIL=${ADMIN_EMAIL}
+        - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      volumes:
+        - directus_uploads:/directus/uploads
+        - directus_extensions:/directus/extensions
+      ports:
+        - "${HTTP_PORT}:8055"
+      depends_on:
+        - db
+
+    db:
+      image: postgres:15-alpine
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      environment:
+        - POSTGRES_USER=directus
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=directus
+      volumes:
+        - directus_db:/var/lib/postgresql/data
+
+  volumes:
+    directus_uploads:
+    directus_extensions:
+    directus_db:

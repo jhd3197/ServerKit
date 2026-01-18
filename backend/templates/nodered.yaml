@@ -1,0 +1,46 @@
+id: nodered
+name: Node-RED
+version: "3.1"
+description: Flow-based programming tool for wiring together hardware devices and APIs
+icon: https://nodered.org/about/resources/media/node-red-icon.svg
+website: https://nodered.org
+documentation: https://nodered.org/docs/
+categories:
+  - home-automation
+  - automation
+  - iot
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "1880"
+  - name: TZ
+    description: Timezone
+    default: UTC
+
+ports:
+  - port: 1880
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /data
+    description: Node-RED data
+
+compose:
+  services:
+    nodered:
+      image: nodered/node-red:${VERSION:-3.1}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - TZ=${TZ}
+      volumes:
+        - nodered_data:/data
+      ports:
+        - "${HTTP_PORT}:1880"
+
+  volumes:
+    nodered_data:

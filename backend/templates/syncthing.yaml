@@ -1,0 +1,63 @@
+id: syncthing
+name: Syncthing
+version: "1.27"
+description: Continuous file synchronization for decentralized, peer-to-peer sync
+icon: https://syncthing.net/img/logo-horizontal.svg
+website: https://syncthing.net
+documentation: https://docs.syncthing.net
+categories:
+  - storage
+  - sync
+  - backup
+
+variables:
+  - name: HTTP_PORT
+    description: Web UI port
+    type: port
+    default: "8384"
+  - name: SYNC_PORT
+    description: Sync protocol port
+    type: port
+    default: "22000"
+  - name: DATA_PATH
+    description: Path to sync folder on host
+    default: /data
+    required: true
+
+ports:
+  - port: 8384
+    protocol: tcp
+    description: Web interface
+  - port: 22000
+    protocol: tcp
+    description: Sync protocol
+  - port: 21027
+    protocol: udp
+    description: Discovery
+
+volumes:
+  - name: config
+    path: /config
+    description: Syncthing configuration
+
+compose:
+  services:
+    syncthing:
+      image: syncthing/syncthing:${VERSION:-1.27}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      hostname: ${APP_NAME}
+      environment:
+        - PUID=1000
+        - PGID=1000
+      volumes:
+        - syncthing_config:/config
+        - ${DATA_PATH}:/data
+      ports:
+        - "${HTTP_PORT}:8384"
+        - "${SYNC_PORT}:22000/tcp"
+        - "${SYNC_PORT}:22000/udp"
+        - "21027:21027/udp"
+
+  volumes:
+    syncthing_config:

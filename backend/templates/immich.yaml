@@ -1,0 +1,100 @@
+id: immich
+name: Immich
+version: "1.91"
+description: High-performance self-hosted photo and video backup solution with mobile apps
+icon: https://immich.app/img/immich-logo.svg
+website: https://immich.app
+documentation: https://immich.app/docs/overview/introduction
+categories:
+  - media
+  - photos
+  - backup
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "2283"
+  - name: UPLOAD_LOCATION
+    description: Path for uploaded photos on host
+    default: /photos
+    required: true
+  - name: DB_PASSWORD
+    description: PostgreSQL password
+    type: password
+    generate: password
+
+ports:
+  - port: 2283
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: upload
+    path: /usr/src/app/upload
+    description: Photo uploads
+
+compose:
+  services:
+    immich-server:
+      image: ghcr.io/immich-app/immich-server:v${VERSION:-1.91.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      command: ["start.sh", "immich"]
+      environment:
+        - DB_HOSTNAME=database
+        - DB_USERNAME=postgres
+        - DB_PASSWORD=${DB_PASSWORD}
+        - DB_DATABASE_NAME=immich
+        - REDIS_HOSTNAME=redis
+      volumes:
+        - ${UPLOAD_LOCATION}:/usr/src/app/upload
+      ports:
+        - "${HTTP_PORT}:3001"
+      depends_on:
+        - redis
+        - database
+
+    immich-microservices:
+      image: ghcr.io/immich-app/immich-server:v${VERSION:-1.91.0}
+      container_name: ${APP_NAME}-microservices
+      restart: unless-stopped
+      command: ["start.sh", "microservices"]
+      environment:
+        - DB_HOSTNAME=database
+        - DB_USERNAME=postgres
+        - DB_PASSWORD=${DB_PASSWORD}
+        - DB_DATABASE_NAME=immich
+        - REDIS_HOSTNAME=redis
+      volumes:
+        - ${UPLOAD_LOCATION}:/usr/src/app/upload
+      depends_on:
+        - redis
+        - database
+
+    immich-machine-learning:
+      image: ghcr.io/immich-app/immich-machine-learning:v${VERSION:-1.91.0}
+      container_name: ${APP_NAME}-ml
+      restart: unless-stopped
+      volumes:
+        - immich_ml_cache:/cache
+
+    redis:
+      image: redis:7-alpine
+      container_name: ${APP_NAME}-redis
+      restart: unless-stopped
+
+    database:
+      image: tensorchord/pgvecto-rs:pg14-v0.1.11
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      environment:
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_USER=postgres
+        - POSTGRES_DB=immich
+      volumes:
+        - immich_db:/var/lib/postgresql/data
+
+  volumes:
+    immich_ml_cache:
+    immich_db:

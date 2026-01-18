@@ -1,0 +1,66 @@
+id: wikijs
+name: Wiki.js
+version: "2.5"
+description: Modern and powerful wiki app built on Node.js
+icon: https://js.wiki/img/logo.svg
+website: https://js.wiki
+documentation: https://docs.requarks.io
+categories:
+  - productivity
+  - wiki
+  - documentation
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "3000"
+  - name: DB_PASSWORD
+    description: PostgreSQL password
+    type: password
+    generate: password
+
+ports:
+  - port: 3000
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /wiki/data
+    description: Wiki.js data
+
+compose:
+  services:
+    wikijs:
+      image: ghcr.io/requarks/wiki:${VERSION:-2.5}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - DB_TYPE=postgres
+        - DB_HOST=db
+        - DB_PORT=5432
+        - DB_USER=wikijs
+        - DB_PASS=${DB_PASSWORD}
+        - DB_NAME=wikijs
+      volumes:
+        - wikijs_data:/wiki/data
+      ports:
+        - "${HTTP_PORT}:3000"
+      depends_on:
+        - db
+
+    db:
+      image: postgres:15-alpine
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      environment:
+        - POSTGRES_USER=wikijs
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=wikijs
+      volumes:
+        - wikijs_db:/var/lib/postgresql/data
+
+  volumes:
+    wikijs_data:
+    wikijs_db:

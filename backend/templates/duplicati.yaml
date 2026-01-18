@@ -1,0 +1,55 @@
+id: duplicati
+name: Duplicati
+version: "2.0"
+description: Free backup software to store encrypted backups online
+icon: https://www.duplicati.com/images/duplicati-logo.svg
+website: https://www.duplicati.com
+documentation: https://duplicati.readthedocs.io
+categories:
+  - storage
+  - backup
+  - encryption
+
+variables:
+  - name: HTTP_PORT
+    description: Web UI port
+    type: port
+    default: "8200"
+  - name: BACKUP_SOURCE
+    description: Path to backup source on host
+    default: /source
+    required: true
+
+ports:
+  - port: 8200
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: config
+    path: /config
+    description: Duplicati configuration
+  - name: backups
+    path: /backups
+    description: Local backup destination
+
+compose:
+  services:
+    duplicati:
+      image: linuxserver/duplicati:${VERSION:-latest}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=UTC
+      volumes:
+        - duplicati_config:/config
+        - duplicati_backups:/backups
+        - ${BACKUP_SOURCE}:/source:ro
+      ports:
+        - "${HTTP_PORT}:8200"
+
+  volumes:
+    duplicati_config:
+    duplicati_backups:

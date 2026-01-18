@@ -1,0 +1,68 @@
+id: zigbee2mqtt
+name: Zigbee2MQTT
+version: "1.35"
+description: Bridge Zigbee devices to MQTT without proprietary bridges or gateways
+icon: https://www.zigbee2mqtt.io/logo.png
+website: https://www.zigbee2mqtt.io
+documentation: https://www.zigbee2mqtt.io/guide/getting-started/
+categories:
+  - home-automation
+  - iot
+  - zigbee
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port for web UI
+    type: port
+    default: "8080"
+  - name: MQTT_SERVER
+    description: MQTT server URL
+    default: mqtt://mosquitto
+    required: true
+  - name: SERIAL_PORT
+    description: Zigbee adapter serial port
+    default: /dev/ttyUSB0
+    required: true
+
+ports:
+  - port: 8080
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /app/data
+    description: Zigbee2MQTT data
+
+compose:
+  services:
+    zigbee2mqtt:
+      image: koenkk/zigbee2mqtt:${VERSION:-1.35.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - TZ=UTC
+      volumes:
+        - zigbee2mqtt_data:/app/data
+        - /run/udev:/run/udev:ro
+      devices:
+        - ${SERIAL_PORT}:/dev/ttyUSB0
+      ports:
+        - "${HTTP_PORT}:8080"
+
+  volumes:
+    zigbee2mqtt_data:
+
+post_install: |
+  # Create configuration
+  cat > /var/serverkit/apps/${APP_NAME}/data/configuration.yaml << 'EOF'
+  homeassistant: true
+  permit_join: false
+  mqtt:
+    base_topic: zigbee2mqtt
+    server: ${MQTT_SERVER}
+  serial:
+    port: /dev/ttyUSB0
+  frontend:
+    port: 8080
+  EOF

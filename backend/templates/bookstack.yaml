@@ -1,0 +1,78 @@
+id: bookstack
+name: BookStack
+version: "23.12"
+description: Simple, self-hosted platform for organizing and storing information
+icon: https://www.bookstackapp.com/images/bookstack-logo.svg
+website: https://www.bookstackapp.com
+documentation: https://www.bookstackapp.com/docs/
+categories:
+  - productivity
+  - wiki
+  - documentation
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8080"
+  - name: APP_URL
+    description: Application URL
+    default: http://localhost:8080
+    required: true
+  - name: DB_PASSWORD
+    description: MySQL password
+    type: password
+    generate: password
+
+ports:
+  - port: 8080
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: config
+    path: /config
+    description: BookStack configuration
+
+compose:
+  services:
+    bookstack:
+      image: linuxserver/bookstack:${VERSION:-23.12.3}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=UTC
+        - APP_URL=${APP_URL}
+        - DB_HOST=db
+        - DB_PORT=3306
+        - DB_USER=bookstack
+        - DB_PASS=${DB_PASSWORD}
+        - DB_DATABASE=bookstackapp
+      volumes:
+        - bookstack_config:/config
+      ports:
+        - "${HTTP_PORT}:80"
+      depends_on:
+        - db
+
+    db:
+      image: mariadb:10.11
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      environment:
+        - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+        - MYSQL_DATABASE=bookstackapp
+        - MYSQL_USER=bookstack
+        - MYSQL_PASSWORD=${DB_PASSWORD}
+      volumes:
+        - bookstack_db:/var/lib/mysql
+
+  volumes:
+    bookstack_config:
+    bookstack_db:
+
+post_install: |
+  echo "Default credentials: admin@admin.com / password"
+  echo "Please change the password after first login!"

@@ -1,0 +1,71 @@
+id: traefik
+name: Traefik
+version: "3.0"
+description: Modern HTTP reverse proxy and load balancer with automatic HTTPS
+icon: https://traefik.io/static/traefik-logo.svg
+website: https://traefik.io
+documentation: https://doc.traefik.io/traefik/
+categories:
+  - networking
+  - proxy
+  - ssl
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "80"
+  - name: HTTPS_PORT
+    description: HTTPS port
+    type: port
+    default: "443"
+  - name: DASHBOARD_PORT
+    description: Dashboard port
+    type: port
+    default: "8080"
+  - name: ACME_EMAIL
+    description: Email for Let's Encrypt certificates
+    required: true
+
+ports:
+  - port: 80
+    protocol: tcp
+    description: HTTP
+  - port: 443
+    protocol: tcp
+    description: HTTPS
+  - port: 8080
+    protocol: tcp
+    description: Dashboard
+
+volumes:
+  - name: certs
+    path: /letsencrypt
+    description: Let's Encrypt certificates
+
+compose:
+  services:
+    traefik:
+      image: traefik:v${VERSION:-3.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      command:
+        - "--api.dashboard=true"
+        - "--api.insecure=true"
+        - "--providers.docker=true"
+        - "--providers.docker.exposedbydefault=false"
+        - "--entrypoints.web.address=:80"
+        - "--entrypoints.websecure.address=:443"
+        - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}"
+        - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+        - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      volumes:
+        - traefik_certs:/letsencrypt
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+      ports:
+        - "${HTTP_PORT}:80"
+        - "${HTTPS_PORT}:443"
+        - "${DASHBOARD_PORT}:8080"
+
+  volumes:
+    traefik_certs:

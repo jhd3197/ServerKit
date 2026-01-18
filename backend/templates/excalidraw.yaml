@@ -1,0 +1,31 @@
+id: excalidraw
+name: Excalidraw
+version: "0.17"
+description: Virtual whiteboard for sketching hand-drawn like diagrams
+icon: https://excalidraw.com/apple-touch-icon.png
+website: https://excalidraw.com
+documentation: https://github.com/excalidraw/excalidraw
+categories:
+  - productivity
+  - diagrams
+  - whiteboard
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "3000"
+
+ports:
+  - port: 3000
+    protocol: tcp
+    description: Web interface
+
+compose:
+  services:
+    excalidraw:
+      image: excalidraw/excalidraw:latest
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      ports:
+        - "${HTTP_PORT}:80"

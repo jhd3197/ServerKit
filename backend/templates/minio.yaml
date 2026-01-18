@@ -1,0 +1,61 @@
+id: minio
+name: MinIO
+version: "2024-01"
+description: High-performance, S3-compatible object storage for cloud-native applications
+icon: https://min.io/resources/img/logo/MINIO_wordmark.png
+website: https://min.io
+documentation: https://min.io/docs/minio/linux/index.html
+categories:
+  - storage
+  - s3
+  - cloud
+
+variables:
+  - name: API_PORT
+    description: API port
+    type: port
+    default: "9000"
+  - name: CONSOLE_PORT
+    description: Console port
+    type: port
+    default: "9001"
+  - name: ROOT_USER
+    description: Root username
+    default: admin
+    required: true
+  - name: ROOT_PASSWORD
+    description: Root password (min 8 chars)
+    type: password
+    generate: password
+
+ports:
+  - port: 9000
+    protocol: tcp
+    description: S3 API
+  - port: 9001
+    protocol: tcp
+    description: Web console
+
+volumes:
+  - name: data
+    path: /data
+    description: Object storage data
+
+compose:
+  services:
+    minio:
+      image: minio/minio:RELEASE.${VERSION:-2024-01-16T16-07-38Z}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      command: server /data --console-address ":9001"
+      environment:
+        - MINIO_ROOT_USER=${ROOT_USER}
+        - MINIO_ROOT_PASSWORD=${ROOT_PASSWORD}
+      volumes:
+        - minio_data:/data
+      ports:
+        - "${API_PORT}:9000"
+        - "${CONSOLE_PORT}:9001"
+
+  volumes:
+    minio_data:

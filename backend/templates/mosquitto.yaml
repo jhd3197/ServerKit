@@ -1,0 +1,68 @@
+id: mosquitto
+name: Eclipse Mosquitto
+version: "2.0"
+description: Lightweight MQTT message broker for IoT and home automation
+icon: https://mosquitto.org/images/mosquitto-logo-only.svg
+website: https://mosquitto.org
+documentation: https://mosquitto.org/documentation/
+categories:
+  - home-automation
+  - iot
+  - messaging
+
+variables:
+  - name: MQTT_PORT
+    description: MQTT port
+    type: port
+    default: "1883"
+  - name: WEBSOCKET_PORT
+    description: WebSocket port
+    type: port
+    default: "9001"
+
+ports:
+  - port: 1883
+    protocol: tcp
+    description: MQTT
+  - port: 9001
+    protocol: tcp
+    description: WebSocket
+
+volumes:
+  - name: config
+    path: /mosquitto/config
+    description: Mosquitto configuration
+  - name: data
+    path: /mosquitto/data
+    description: Mosquitto data
+  - name: log
+    path: /mosquitto/log
+    description: Mosquitto logs
+
+compose:
+  services:
+    mosquitto:
+      image: eclipse-mosquitto:${VERSION:-2.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      volumes:
+        - mosquitto_config:/mosquitto/config
+        - mosquitto_data:/mosquitto/data
+        - mosquitto_log:/mosquitto/log
+      ports:
+        - "${MQTT_PORT}:1883"
+        - "${WEBSOCKET_PORT}:9001"
+
+  volumes:
+    mosquitto_config:
+    mosquitto_data:
+    mosquitto_log:
+
+post_install: |
+  # Create default config
+  cat > /var/serverkit/apps/${APP_NAME}/config/mosquitto.conf << 'EOF'
+  listener 1883
+  listener 9001
+  protocol websockets
+  allow_anonymous true
+  EOF

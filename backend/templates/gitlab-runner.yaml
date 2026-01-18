@@ -1,0 +1,54 @@
+id: gitlab-runner
+name: GitLab Runner
+version: "16.6"
+description: Application that works with GitLab CI/CD to run jobs in a pipeline
+icon: https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png
+website: https://docs.gitlab.com/runner/
+documentation: https://docs.gitlab.com/runner/
+categories:
+  - devops
+  - ci-cd
+  - gitlab
+
+variables:
+  - name: GITLAB_URL
+    description: GitLab instance URL
+    default: https://gitlab.com
+    required: true
+  - name: REGISTRATION_TOKEN
+    description: Runner registration token
+    type: password
+    required: true
+  - name: RUNNER_NAME
+    description: Runner name/description
+    default: docker-runner
+
+volumes:
+  - name: config
+    path: /etc/gitlab-runner
+    description: Runner configuration
+  - name: docker
+    path: /var/run/docker.sock
+    description: Docker socket
+
+compose:
+  services:
+    gitlab-runner:
+      image: gitlab/gitlab-runner:v${VERSION:-16.6.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      volumes:
+        - runner_config:/etc/gitlab-runner
+        - /var/run/docker.sock:/var/run/docker.sock
+
+  volumes:
+    runner_config:
+
+post_install: |
+  docker exec ${APP_NAME} gitlab-runner register \
+    --non-interactive \
+    --url "${GITLAB_URL}" \
+    --registration-token "${REGISTRATION_TOKEN}" \
+    --executor "docker" \
+    --docker-image alpine:latest \
+    --description "${RUNNER_NAME}"

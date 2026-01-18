@@ -1,0 +1,51 @@
+id: mongo-express
+name: Mongo Express
+version: "1.0"
+description: Web-based MongoDB admin interface for managing databases and collections
+icon: https://www.mongodb.com/assets/images/global/favicon.ico
+website: https://github.com/mongo-express/mongo-express
+documentation: https://github.com/mongo-express/mongo-express#readme
+categories:
+  - database
+  - mongodb
+  - management
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8081"
+  - name: MONGO_HOST
+    description: MongoDB server host
+    default: mongo
+    required: true
+  - name: MONGO_PORT
+    description: MongoDB server port
+    type: port
+    default: "27017"
+  - name: ADMIN_USERNAME
+    description: Basic auth username
+    default: admin
+  - name: ADMIN_PASSWORD
+    description: Basic auth password
+    type: password
+    generate: password
+
+ports:
+  - port: 8081
+    protocol: tcp
+    description: Web interface
+
+compose:
+  services:
+    mongo-express:
+      image: mongo-express:${VERSION:-1.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - ME_CONFIG_MONGODB_SERVER=${MONGO_HOST}
+        - ME_CONFIG_MONGODB_PORT=${MONGO_PORT}
+        - ME_CONFIG_BASICAUTH_USERNAME=${ADMIN_USERNAME}
+        - ME_CONFIG_BASICAUTH_PASSWORD=${ADMIN_PASSWORD}
+      ports:
+        - "${HTTP_PORT}:8081"

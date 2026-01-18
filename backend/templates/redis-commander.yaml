@@ -1,0 +1,45 @@
+id: redis-commander
+name: Redis Commander
+version: "0.8"
+description: Web-based Redis management tool for viewing and editing data
+icon: https://redis.io/images/redis-white.png
+website: https://github.com/joeferner/redis-commander
+documentation: https://github.com/joeferner/redis-commander#readme
+categories:
+  - database
+  - redis
+  - management
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8081"
+  - name: REDIS_HOST
+    description: Redis server host
+    default: redis
+    required: true
+  - name: REDIS_PORT
+    description: Redis server port
+    type: port
+    default: "6379"
+  - name: REDIS_PASSWORD
+    description: Redis password (if any)
+    type: password
+
+ports:
+  - port: 8081
+    protocol: tcp
+    description: Web interface
+
+compose:
+  services:
+    redis-commander:
+      image: rediscommander/redis-commander:${VERSION:-latest}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - REDIS_HOSTS=local:${REDIS_HOST}:${REDIS_PORT}
+        - REDIS_PASSWORD=${REDIS_PASSWORD}
+      ports:
+        - "${HTTP_PORT}:8081"

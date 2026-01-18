@@ -1,0 +1,68 @@
+id: rocketchat
+name: Rocket.Chat
+version: "6.5"
+description: Open-source team communication platform with chat, video, and file sharing
+icon: https://rocket.chat/images/default/favicon.svg
+website: https://rocket.chat
+documentation: https://docs.rocket.chat
+categories:
+  - collaboration
+  - chat
+  - communication
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "3000"
+  - name: ROOT_URL
+    description: Root URL (e.g., https://chat.example.com)
+    default: http://localhost:3000
+    required: true
+
+ports:
+  - port: 3000
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: uploads
+    path: /app/uploads
+    description: Uploaded files
+
+compose:
+  services:
+    rocketchat:
+      image: rocket.chat:${VERSION:-6.5}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - ROOT_URL=${ROOT_URL}
+        - MONGO_URL=mongodb://mongo:27017/rocketchat?replicaSet=rs0
+        - MONGO_OPLOG_URL=mongodb://mongo:27017/local?replicaSet=rs0
+      volumes:
+        - rocketchat_uploads:/app/uploads
+      ports:
+        - "${HTTP_PORT}:3000"
+      depends_on:
+        - mongo
+
+    mongo:
+      image: mongo:6.0
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      command: mongod --oplogSize 128 --replSet rs0
+      volumes:
+        - rocketchat_db:/data/db
+
+    mongo-init-replica:
+      image: mongo:6.0
+      container_name: ${APP_NAME}-mongo-init
+      command: >
+        bash -c "sleep 10 && mongosh mongo/rocketchat --eval \"rs.initiate({ _id: 'rs0', members: [ { _id: 0, host: 'mongo:27017' } ]})\""
+      depends_on:
+        - mongo
+
+  volumes:
+    rocketchat_uploads:
+    rocketchat_db:

@@ -1,0 +1,52 @@
+id: pgadmin
+name: pgAdmin 4
+version: "8.2"
+description: Web-based PostgreSQL administration and development platform
+icon: https://www.pgadmin.org/static/COMPILED/assets/img/favicon.ico
+website: https://www.pgadmin.org
+documentation: https://www.pgadmin.org/docs/
+categories:
+  - database
+  - postgresql
+  - management
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "5050"
+  - name: ADMIN_EMAIL
+    description: Admin email for login
+    default: admin@example.com
+    required: true
+  - name: ADMIN_PASSWORD
+    description: Admin password
+    type: password
+    generate: password
+
+ports:
+  - port: 5050
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /var/lib/pgadmin
+    description: pgAdmin data
+
+compose:
+  services:
+    pgadmin:
+      image: dpage/pgadmin4:${VERSION:-8.2}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - PGADMIN_DEFAULT_EMAIL=${ADMIN_EMAIL}
+        - PGADMIN_DEFAULT_PASSWORD=${ADMIN_PASSWORD}
+      volumes:
+        - pgadmin_data:/var/lib/pgadmin
+      ports:
+        - "${HTTP_PORT}:80"
+
+  volumes:
+    pgadmin_data:

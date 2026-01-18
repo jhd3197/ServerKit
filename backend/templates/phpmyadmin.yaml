@@ -1,0 +1,43 @@
+id: phpmyadmin
+name: phpMyAdmin
+version: "5.2"
+description: Web-based MySQL and MariaDB administration tool
+icon: https://www.phpmyadmin.net/static/images/logo.png
+website: https://www.phpmyadmin.net
+documentation: https://docs.phpmyadmin.net
+categories:
+  - database
+  - mysql
+  - management
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8080"
+  - name: MYSQL_HOST
+    description: MySQL server host
+    default: mysql
+    required: true
+  - name: MYSQL_PORT
+    description: MySQL server port
+    type: port
+    default: "3306"
+
+ports:
+  - port: 8080
+    protocol: tcp
+    description: Web interface
+
+compose:
+  services:
+    phpmyadmin:
+      image: phpmyadmin:${VERSION:-5.2}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - PMA_HOST=${MYSQL_HOST}
+        - PMA_PORT=${MYSQL_PORT}
+        - UPLOAD_LIMIT=100M
+      ports:
+        - "${HTTP_PORT}:80"

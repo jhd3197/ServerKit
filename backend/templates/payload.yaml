@@ -1,0 +1,64 @@
+id: payload
+name: Payload CMS
+version: "2.5"
+description: Modern TypeScript headless CMS with powerful admin panel and customization
+icon: https://payloadcms.com/images/favicon.svg
+website: https://payloadcms.com
+documentation: https://payloadcms.com/docs
+categories:
+  - cms
+  - headless
+  - typescript
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "3000"
+  - name: PAYLOAD_SECRET
+    description: Payload secret key
+    type: password
+    generate: password
+  - name: MONGODB_URI
+    description: MongoDB connection URI
+    default: mongodb://mongo:27017/payload
+
+ports:
+  - port: 3000
+    protocol: tcp
+    description: Web interface and API
+
+volumes:
+  - name: media
+    path: /app/media
+    description: Uploaded media files
+
+compose:
+  services:
+    payload:
+      image: node:20-alpine
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      working_dir: /app
+      command: sh -c "npm install && npm run serve"
+      environment:
+        - PAYLOAD_SECRET=${PAYLOAD_SECRET}
+        - MONGODB_URI=${MONGODB_URI}
+        - PAYLOAD_PUBLIC_SERVER_URL=http://localhost:${HTTP_PORT}
+      volumes:
+        - payload_media:/app/media
+      ports:
+        - "${HTTP_PORT}:3000"
+      depends_on:
+        - mongo
+
+    mongo:
+      image: mongo:7
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      volumes:
+        - payload_db:/data/db
+
+  volumes:
+    payload_media:
+    payload_db:

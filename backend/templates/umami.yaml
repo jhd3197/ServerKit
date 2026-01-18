@@ -1,0 +1,63 @@
+id: umami
+name: Umami
+version: "2.9"
+description: Simple, fast, privacy-focused alternative to Google Analytics
+icon: https://umami.is/images/umami-logo.svg
+website: https://umami.is
+documentation: https://umami.is/docs
+categories:
+  - analytics
+  - privacy
+  - monitoring
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "3000"
+  - name: APP_SECRET
+    description: Application secret
+    type: password
+    generate: password
+  - name: DB_PASSWORD
+    description: PostgreSQL password
+    type: password
+    generate: password
+
+ports:
+  - port: 3000
+    protocol: tcp
+    description: Web interface
+
+compose:
+  services:
+    umami:
+      image: ghcr.io/umami-software/umami:postgresql-v${VERSION:-2.9.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - DATABASE_URL=postgresql://umami:${DB_PASSWORD}@db:5432/umami
+        - DATABASE_TYPE=postgresql
+        - APP_SECRET=${APP_SECRET}
+      ports:
+        - "${HTTP_PORT}:3000"
+      depends_on:
+        - db
+
+    db:
+      image: postgres:15-alpine
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      environment:
+        - POSTGRES_USER=umami
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=umami
+      volumes:
+        - umami_db:/var/lib/postgresql/data
+
+  volumes:
+    umami_db:
+
+post_install: |
+  echo "Default login: admin / umami"
+  echo "Please change the password after first login!"

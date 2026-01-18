@@ -1,0 +1,85 @@
+id: outline
+name: Outline
+version: "0.74"
+description: Beautiful, real-time collaborative team wiki and knowledge base
+icon: https://www.getoutline.com/images/logo.svg
+website: https://www.getoutline.com
+documentation: https://www.getoutline.com/developers
+categories:
+  - productivity
+  - wiki
+  - collaboration
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "3000"
+  - name: SECRET_KEY
+    description: Secret key
+    type: password
+    generate: password
+  - name: UTILS_SECRET
+    description: Utils secret
+    type: password
+    generate: password
+  - name: DB_PASSWORD
+    description: PostgreSQL password
+    type: password
+    generate: password
+  - name: URL
+    description: Public URL (e.g., https://wiki.example.com)
+    required: true
+
+ports:
+  - port: 3000
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /var/lib/outline/data
+    description: Outline data
+
+compose:
+  services:
+    outline:
+      image: outlinewiki/outline:${VERSION:-0.74.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - SECRET_KEY=${SECRET_KEY}
+        - UTILS_SECRET=${UTILS_SECRET}
+        - DATABASE_URL=postgres://outline:${DB_PASSWORD}@postgres:5432/outline
+        - REDIS_URL=redis://redis:6379
+        - URL=${URL}
+        - PORT=3000
+        - FILE_STORAGE=local
+        - FILE_STORAGE_LOCAL_ROOT_DIR=/var/lib/outline/data
+      volumes:
+        - outline_data:/var/lib/outline/data
+      ports:
+        - "${HTTP_PORT}:3000"
+      depends_on:
+        - postgres
+        - redis
+
+    postgres:
+      image: postgres:15-alpine
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      environment:
+        - POSTGRES_USER=outline
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=outline
+      volumes:
+        - outline_db:/var/lib/postgresql/data
+
+    redis:
+      image: redis:7-alpine
+      container_name: ${APP_NAME}-redis
+      restart: unless-stopped
+
+  volumes:
+    outline_data:
+    outline_db:

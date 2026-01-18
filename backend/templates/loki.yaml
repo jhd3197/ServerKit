@@ -1,0 +1,42 @@
+id: loki
+name: Grafana Loki
+version: "2.9"
+description: Horizontally scalable, highly available log aggregation system inspired by Prometheus
+icon: https://grafana.com/static/img/logos/logo-loki.svg
+website: https://grafana.com/oss/loki/
+documentation: https://grafana.com/docs/loki/latest/
+categories:
+  - monitoring
+  - logging
+  - observability
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "3100"
+
+ports:
+  - port: 3100
+    protocol: tcp
+    description: HTTP API
+
+volumes:
+  - name: data
+    path: /loki
+    description: Loki data storage
+
+compose:
+  services:
+    loki:
+      image: grafana/loki:${VERSION:-2.9.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      command: -config.file=/etc/loki/local-config.yaml
+      volumes:
+        - loki_data:/loki
+      ports:
+        - "${HTTP_PORT}:3100"
+
+  volumes:
+    loki_data:

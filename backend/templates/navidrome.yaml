@@ -1,0 +1,52 @@
+id: navidrome
+name: Navidrome
+version: "0.50"
+description: Modern music server and streamer compatible with Subsonic/Airsonic
+icon: https://www.navidrome.org/logo.png
+website: https://www.navidrome.org
+documentation: https://www.navidrome.org/docs/
+categories:
+  - media
+  - music
+  - streaming
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "4533"
+  - name: MUSIC_PATH
+    description: Path to music files on host
+    default: /music
+    required: true
+
+ports:
+  - port: 4533
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /data
+    description: Navidrome data
+
+compose:
+  services:
+    navidrome:
+      image: deluan/navidrome:${VERSION:-0.50.2}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      user: "1000:1000"
+      environment:
+        - ND_SCANSCHEDULE=1h
+        - ND_LOGLEVEL=info
+        - ND_SESSIONTIMEOUT=24h
+        - ND_BASEURL=
+      volumes:
+        - navidrome_data:/data
+        - ${MUSIC_PATH}:/music:ro
+      ports:
+        - "${HTTP_PORT}:4533"
+
+  volumes:
+    navidrome_data:

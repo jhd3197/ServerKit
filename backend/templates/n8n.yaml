@@ -1,0 +1,78 @@
+id: n8n
+name: n8n
+version: "1.22"
+description: Extendable workflow automation tool for connecting apps and services
+icon: https://n8n.io/favicon.ico
+website: https://n8n.io
+documentation: https://docs.n8n.io
+categories:
+  - productivity
+  - automation
+  - integration
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "5678"
+  - name: WEBHOOK_URL
+    description: Webhook URL (e.g., https://n8n.example.com)
+    required: true
+  - name: ENCRYPTION_KEY
+    description: Encryption key for credentials
+    type: password
+    generate: password
+  - name: DB_PASSWORD
+    description: PostgreSQL password
+    type: password
+    generate: password
+
+ports:
+  - port: 5678
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /home/node/.n8n
+    description: n8n data
+
+compose:
+  services:
+    n8n:
+      image: n8nio/n8n:${VERSION:-1.22.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - N8N_HOST=0.0.0.0
+        - N8N_PORT=5678
+        - N8N_PROTOCOL=https
+        - WEBHOOK_URL=${WEBHOOK_URL}
+        - N8N_ENCRYPTION_KEY=${ENCRYPTION_KEY}
+        - DB_TYPE=postgresdb
+        - DB_POSTGRESDB_HOST=postgres
+        - DB_POSTGRESDB_PORT=5432
+        - DB_POSTGRESDB_DATABASE=n8n
+        - DB_POSTGRESDB_USER=n8n
+        - DB_POSTGRESDB_PASSWORD=${DB_PASSWORD}
+      volumes:
+        - n8n_data:/home/node/.n8n
+      ports:
+        - "${HTTP_PORT}:5678"
+      depends_on:
+        - postgres
+
+    postgres:
+      image: postgres:15-alpine
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      environment:
+        - POSTGRES_USER=n8n
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=n8n
+      volumes:
+        - n8n_db:/var/lib/postgresql/data
+
+  volumes:
+    n8n_data:
+    n8n_db:

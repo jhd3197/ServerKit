@@ -1,0 +1,61 @@
+id: netdata
+name: Netdata
+version: "1.44"
+description: Real-time performance and health monitoring for systems and applications
+icon: https://raw.githubusercontent.com/netdata/netdata/master/web/gui/static/img/netdata-logomark.svg
+website: https://netdata.cloud
+documentation: https://learn.netdata.cloud/docs/
+categories:
+  - monitoring
+  - metrics
+  - realtime
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port for web interface
+    type: port
+    default: "19999"
+
+ports:
+  - port: 19999
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: config
+    path: /etc/netdata
+    description: Netdata configuration
+  - name: lib
+    path: /var/lib/netdata
+    description: Netdata data
+  - name: cache
+    path: /var/cache/netdata
+    description: Netdata cache
+
+compose:
+  services:
+    netdata:
+      image: netdata/netdata:v${VERSION:-1.44.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      hostname: ${APP_NAME}
+      cap_add:
+        - SYS_PTRACE
+      security_opt:
+        - apparmor:unconfined
+      volumes:
+        - netdata_config:/etc/netdata
+        - netdata_lib:/var/lib/netdata
+        - netdata_cache:/var/cache/netdata
+        - /etc/passwd:/host/etc/passwd:ro
+        - /etc/group:/host/etc/group:ro
+        - /proc:/host/proc:ro
+        - /sys:/host/sys:ro
+        - /etc/os-release:/host/etc/os-release:ro
+      ports:
+        - "${HTTP_PORT}:19999"
+
+  volumes:
+    netdata_config:
+    netdata_lib:
+    netdata_cache:

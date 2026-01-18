@@ -1,0 +1,51 @@
+id: filebrowser
+name: File Browser
+version: "2.27"
+description: Web-based file manager with upload, download, and file sharing features
+icon: https://raw.githubusercontent.com/filebrowser/logo/master/icon.svg
+website: https://filebrowser.org
+documentation: https://filebrowser.org/
+categories:
+  - storage
+  - files
+  - management
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8080"
+  - name: ROOT_PATH
+    description: Root path to browse on host
+    default: /srv
+    required: true
+
+ports:
+  - port: 8080
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: database
+    path: /database
+    description: File Browser database
+
+compose:
+  services:
+    filebrowser:
+      image: filebrowser/filebrowser:v${VERSION:-2.27.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      user: "1000:1000"
+      volumes:
+        - ${ROOT_PATH}:/srv
+        - filebrowser_db:/database
+      ports:
+        - "${HTTP_PORT}:80"
+
+  volumes:
+    filebrowser_db:
+
+post_install: |
+  echo "Default credentials: admin / admin"
+  echo "Please change the password after first login!"

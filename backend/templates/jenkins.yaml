@@ -1,0 +1,60 @@
+id: jenkins
+name: Jenkins
+version: "2.426"
+description: Leading open-source automation server for building, deploying, and automating projects
+icon: https://www.jenkins.io/images/logos/jenkins/jenkins.svg
+website: https://www.jenkins.io
+documentation: https://www.jenkins.io/doc/
+categories:
+  - devops
+  - ci-cd
+  - automation
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8080"
+  - name: AGENT_PORT
+    description: Agent connection port
+    type: port
+    default: "50000"
+  - name: JAVA_OPTS
+    description: Java options
+    default: "-Xmx2048m"
+
+ports:
+  - port: 8080
+    protocol: tcp
+    description: Web interface
+  - port: 50000
+    protocol: tcp
+    description: Agent connections
+
+volumes:
+  - name: home
+    path: /var/jenkins_home
+    description: Jenkins home directory
+
+compose:
+  services:
+    jenkins:
+      image: jenkins/jenkins:${VERSION:-2.426-lts}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      user: root
+      environment:
+        - JAVA_OPTS=${JAVA_OPTS}
+      volumes:
+        - jenkins_home:/var/jenkins_home
+        - /var/run/docker.sock:/var/run/docker.sock
+      ports:
+        - "${HTTP_PORT}:8080"
+        - "${AGENT_PORT}:50000"
+
+  volumes:
+    jenkins_home:
+
+post_install: |
+  echo "Initial admin password can be found in container logs or at:"
+  echo "/var/jenkins_home/secrets/initialAdminPassword"

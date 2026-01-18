@@ -1,0 +1,80 @@
+id: drone
+name: Drone CI
+version: "2.22"
+description: Container-native continuous integration platform with simple pipeline configuration
+icon: https://raw.githubusercontent.com/drone/brand/master/logos/vector/drone-logo-vector-dark.svg
+website: https://www.drone.io
+documentation: https://docs.drone.io
+categories:
+  - devops
+  - ci-cd
+  - docker
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8080"
+  - name: GITEA_SERVER
+    description: Gitea server URL (e.g., https://gitea.example.com)
+    required: true
+  - name: GITEA_CLIENT_ID
+    description: Gitea OAuth client ID
+    required: true
+  - name: GITEA_CLIENT_SECRET
+    description: Gitea OAuth client secret
+    type: password
+    required: true
+  - name: RPC_SECRET
+    description: RPC secret for runner communication
+    type: password
+    generate: password
+  - name: SERVER_HOST
+    description: Drone server host (e.g., drone.example.com)
+    required: true
+
+ports:
+  - port: 8080
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /data
+    description: Drone data
+
+compose:
+  services:
+    drone:
+      image: drone/drone:${VERSION:-2.22}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - DRONE_GITEA_SERVER=${GITEA_SERVER}
+        - DRONE_GITEA_CLIENT_ID=${GITEA_CLIENT_ID}
+        - DRONE_GITEA_CLIENT_SECRET=${GITEA_CLIENT_SECRET}
+        - DRONE_RPC_SECRET=${RPC_SECRET}
+        - DRONE_SERVER_HOST=${SERVER_HOST}
+        - DRONE_SERVER_PROTO=https
+      volumes:
+        - drone_data:/data
+      ports:
+        - "${HTTP_PORT}:80"
+
+    drone-runner:
+      image: drone/drone-runner-docker:1
+      container_name: ${APP_NAME}-runner
+      restart: unless-stopped
+      environment:
+        - DRONE_RPC_PROTO=http
+        - DRONE_RPC_HOST=drone
+        - DRONE_RPC_SECRET=${RPC_SECRET}
+        - DRONE_RUNNER_CAPACITY=2
+        - DRONE_RUNNER_NAME=${APP_NAME}-runner
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      depends_on:
+        - drone
+
+  volumes:
+    drone_data:

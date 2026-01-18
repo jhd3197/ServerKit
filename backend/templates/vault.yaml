@@ -1,0 +1,61 @@
+id: vault
+name: HashiCorp Vault
+version: "1.15"
+description: Secrets management and data protection platform for securing sensitive data
+icon: https://www.vaultproject.io/img/logo-hashicorp.svg
+website: https://www.vaultproject.io
+documentation: https://developer.hashicorp.com/vault/docs
+categories:
+  - devops
+  - security
+  - secrets
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8200"
+  - name: DEV_MODE
+    description: Run in development mode (not for production)
+    options:
+      - "true"
+      - "false"
+    default: "true"
+  - name: DEV_ROOT_TOKEN
+    description: Development root token
+    type: password
+    generate: password
+
+ports:
+  - port: 8200
+    protocol: tcp
+    description: HTTP API and UI
+
+volumes:
+  - name: data
+    path: /vault/data
+    description: Vault data
+  - name: logs
+    path: /vault/logs
+    description: Vault logs
+
+compose:
+  services:
+    vault:
+      image: hashicorp/vault:${VERSION:-1.15}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      cap_add:
+        - IPC_LOCK
+      environment:
+        - VAULT_DEV_ROOT_TOKEN_ID=${DEV_ROOT_TOKEN}
+        - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+      volumes:
+        - vault_data:/vault/data
+        - vault_logs:/vault/logs
+      ports:
+        - "${HTTP_PORT}:8200"
+
+  volumes:
+    vault_data:
+    vault_logs:

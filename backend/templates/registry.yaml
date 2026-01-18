@@ -1,0 +1,59 @@
+id: registry
+name: Docker Registry
+version: "2.8"
+description: Private Docker container image registry for storing and distributing container images
+icon: https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png
+website: https://docs.docker.com/registry/
+documentation: https://docs.docker.com/registry/
+categories:
+  - devops
+  - docker
+  - registry
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "5000"
+  - name: REGISTRY_AUTH
+    description: Enable basic authentication
+    options:
+      - "true"
+      - "false"
+    default: "false"
+  - name: REGISTRY_USER
+    description: Registry username (if auth enabled)
+    default: admin
+  - name: REGISTRY_PASSWORD
+    description: Registry password (if auth enabled)
+    type: password
+    generate: password
+
+ports:
+  - port: 5000
+    protocol: tcp
+    description: Registry API
+
+volumes:
+  - name: data
+    path: /var/lib/registry
+    description: Registry storage
+  - name: auth
+    path: /auth
+    description: Authentication files
+
+compose:
+  services:
+    registry:
+      image: registry:${VERSION:-2.8}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - REGISTRY_STORAGE_DELETE_ENABLED=true
+      volumes:
+        - registry_data:/var/lib/registry
+      ports:
+        - "${HTTP_PORT}:5000"
+
+  volumes:
+    registry_data:

@@ -1,54 +1,435 @@
 {
-  "version": "1.0",
-  "updated_at": "2024-01-18",
+  "version": "1.0.0",
+  "updated_at": "2025-01-18",
   "templates": [
     {
       "id": "uptime-kuma",
       "name": "Uptime Kuma",
       "version": "1.23",
-      "description": "A fancy self-hosted monitoring tool for websites and services",
-      "icon": "/icons/uptime-kuma.png",
+      "description": "Self-hosted monitoring tool for tracking uptime of websites and services",
       "categories": ["monitoring", "devops"]
     },
     {
       "id": "portainer",
       "name": "Portainer",
       "version": "2.19",
-      "description": "Lightweight Docker management UI",
-      "icon": "/icons/portainer.png",
-      "categories": ["devops", "docker", "management"]
+      "description": "Container management platform for Docker, Swarm, and Kubernetes",
+      "categories": ["docker", "management", "devops"]
     },
     {
       "id": "ghost",
       "name": "Ghost",
       "version": "5.75",
       "description": "Professional publishing platform for blogs and newsletters",
-      "icon": "/icons/ghost.png",
-      "categories": ["cms", "blog", "publishing"]
+      "categories": ["blog", "cms", "publishing"]
     },
     {
       "id": "nextcloud",
       "name": "Nextcloud",
       "version": "28.0",
-      "description": "Self-hosted productivity platform with file sync and collaboration",
-      "icon": "/icons/nextcloud.png",
+      "description": "Self-hosted productivity platform with file sync, collaboration, and office suite",
       "categories": ["storage", "collaboration", "productivity"]
     },
     {
       "id": "gitea",
       "name": "Gitea",
       "version": "1.21",
-      "description": "Lightweight self-hosted Git service",
-      "icon": "/icons/gitea.png",
-      "categories": ["devops", "git", "development"]
+      "description": "Lightweight self-hosted Git service with issue tracking and CI/CD",
+      "categories": ["git", "development", "devops"]
     },
     {
       "id": "nginx-proxy-manager",
       "name": "Nginx Proxy Manager",
       "version": "2.10",
-      "description": "Easy-to-use reverse proxy with SSL management",
-      "icon": "/icons/nginx-proxy-manager.png",
+      "description": "Easy-to-use reverse proxy with SSL certificate management",
+      "categories": ["proxy", "ssl", "networking"]
+    },
+    {
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "10.2",
+      "description": "Open-source analytics and interactive visualization platform",
+      "categories": ["monitoring", "analytics", "visualization"]
+    },
+    {
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "2.48",
+      "description": "Open-source monitoring and alerting toolkit for reliability",
+      "categories": ["monitoring", "metrics", "alerting"]
+    },
+    {
+      "id": "netdata",
+      "name": "Netdata",
+      "version": "1.44",
+      "description": "Real-time performance and health monitoring for systems",
+      "categories": ["monitoring", "metrics", "realtime"]
+    },
+    {
+      "id": "loki",
+      "name": "Grafana Loki",
+      "version": "2.9",
+      "description": "Horizontally scalable log aggregation system",
+      "categories": ["monitoring", "logging", "observability"]
+    },
+    {
+      "id": "jaeger",
+      "name": "Jaeger",
+      "version": "1.52",
+      "description": "Open-source distributed tracing system for microservices",
+      "categories": ["monitoring", "tracing", "observability"]
+    },
+    {
+      "id": "jenkins",
+      "name": "Jenkins",
+      "version": "2.426",
+      "description": "Leading open-source automation server for CI/CD",
+      "categories": ["devops", "ci-cd", "automation"]
+    },
+    {
+      "id": "drone",
+      "name": "Drone CI",
+      "version": "2.22",
+      "description": "Container-native continuous integration platform",
+      "categories": ["devops", "ci-cd", "docker"]
+    },
+    {
+      "id": "gitlab-runner",
+      "name": "GitLab Runner",
+      "version": "16.6",
+      "description": "Application that works with GitLab CI/CD to run jobs",
+      "categories": ["devops", "ci-cd", "gitlab"]
+    },
+    {
+      "id": "sonarqube",
+      "name": "SonarQube",
+      "version": "10.3",
+      "description": "Continuous inspection of code quality and security",
+      "categories": ["devops", "code-quality", "security"]
+    },
+    {
+      "id": "registry",
+      "name": "Docker Registry",
+      "version": "2.8",
+      "description": "Private Docker container image registry",
+      "categories": ["devops", "docker", "registry"]
+    },
+    {
+      "id": "vault",
+      "name": "HashiCorp Vault",
+      "version": "1.15",
+      "description": "Secrets management and data protection platform",
+      "categories": ["devops", "security", "secrets"]
+    },
+    {
+      "id": "wordpress",
+      "name": "WordPress",
+      "version": "6.4",
+      "description": "World's most popular content management system",
+      "categories": ["cms", "blog", "website"]
+    },
+    {
+      "id": "strapi",
+      "name": "Strapi",
+      "version": "4.15",
+      "description": "Open-source headless CMS with customizable API",
+      "categories": ["cms", "headless", "api"]
+    },
+    {
+      "id": "directus",
+      "name": "Directus",
+      "version": "10.8",
+      "description": "Open-source data platform with instant REST and GraphQL API",
+      "categories": ["cms", "headless", "api", "database"]
+    },
+    {
+      "id": "payload",
+      "name": "Payload CMS",
+      "version": "2.5",
+      "description": "Modern TypeScript headless CMS with powerful admin panel",
+      "categories": ["cms", "headless", "typescript"]
+    },
+    {
+      "id": "grav",
+      "name": "Grav CMS",
+      "version": "1.7",
+      "description": "Modern flat-file CMS that is fast, simple, and flexible",
+      "categories": ["cms", "flat-file", "blog"]
+    },
+    {
+      "id": "jellyfin",
+      "name": "Jellyfin",
+      "version": "10.8",
+      "description": "Free and open-source media server for streaming",
+      "categories": ["media", "streaming", "entertainment"]
+    },
+    {
+      "id": "plex",
+      "name": "Plex Media Server",
+      "version": "1.32",
+      "description": "Organize and stream your personal media collection",
+      "categories": ["media", "streaming", "entertainment"]
+    },
+    {
+      "id": "photoprism",
+      "name": "PhotoPrism",
+      "version": "231128",
+      "description": "AI-powered photo management with face recognition",
+      "categories": ["media", "photos", "ai"]
+    },
+    {
+      "id": "immich",
+      "name": "Immich",
+      "version": "1.91",
+      "description": "High-performance self-hosted photo and video backup",
+      "categories": ["media", "photos", "backup"]
+    },
+    {
+      "id": "navidrome",
+      "name": "Navidrome",
+      "version": "0.50",
+      "description": "Modern music server and streamer compatible with Subsonic",
+      "categories": ["media", "music", "streaming"]
+    },
+    {
+      "id": "rocketchat",
+      "name": "Rocket.Chat",
+      "version": "6.5",
+      "description": "Open-source team communication platform",
+      "categories": ["collaboration", "chat", "communication"]
+    },
+    {
+      "id": "mattermost",
+      "name": "Mattermost",
+      "version": "9.2",
+      "description": "Open-source Slack alternative for secure team collaboration",
+      "categories": ["collaboration", "chat", "communication"]
+    },
+    {
+      "id": "matrix-synapse",
+      "name": "Matrix Synapse",
+      "version": "1.98",
+      "description": "Decentralized communication server for federated messaging",
+      "categories": ["collaboration", "chat", "federation"]
+    },
+    {
+      "id": "jitsi",
+      "name": "Jitsi Meet",
+      "version": "9111",
+      "description": "Secure, fully featured video conferencing",
+      "categories": ["collaboration", "video", "conferencing"]
+    },
+    {
+      "id": "minio",
+      "name": "MinIO",
+      "version": "2024-01",
+      "description": "High-performance, S3-compatible object storage",
+      "categories": ["storage", "s3", "cloud"]
+    },
+    {
+      "id": "seafile",
+      "name": "Seafile",
+      "version": "11.0",
+      "description": "Open-source file sync and share platform",
+      "categories": ["storage", "sync", "collaboration"]
+    },
+    {
+      "id": "filebrowser",
+      "name": "File Browser",
+      "version": "2.27",
+      "description": "Web-based file manager with upload and sharing",
+      "categories": ["storage", "files", "management"]
+    },
+    {
+      "id": "syncthing",
+      "name": "Syncthing",
+      "version": "1.27",
+      "description": "Continuous file synchronization for peer-to-peer sync",
+      "categories": ["storage", "sync", "backup"]
+    },
+    {
+      "id": "duplicati",
+      "name": "Duplicati",
+      "version": "2.0",
+      "description": "Free backup software to store encrypted backups online",
+      "categories": ["storage", "backup", "encryption"]
+    },
+    {
+      "id": "bookstack",
+      "name": "BookStack",
+      "version": "23.12",
+      "description": "Simple, self-hosted platform for organizing information",
+      "categories": ["productivity", "wiki", "documentation"]
+    },
+    {
+      "id": "wikijs",
+      "name": "Wiki.js",
+      "version": "2.5",
+      "description": "Modern and powerful wiki app built on Node.js",
+      "categories": ["productivity", "wiki", "documentation"]
+    },
+    {
+      "id": "outline",
+      "name": "Outline",
+      "version": "0.74",
+      "description": "Beautiful, real-time collaborative team wiki",
+      "categories": ["productivity", "wiki", "collaboration"]
+    },
+    {
+      "id": "excalidraw",
+      "name": "Excalidraw",
+      "version": "0.17",
+      "description": "Virtual whiteboard for sketching hand-drawn diagrams",
+      "categories": ["productivity", "diagrams", "whiteboard"]
+    },
+    {
+      "id": "n8n",
+      "name": "n8n",
+      "version": "1.22",
+      "description": "Extendable workflow automation tool",
+      "categories": ["productivity", "automation", "integration"]
+    },
+    {
+      "id": "vaultwarden",
+      "name": "Vaultwarden",
+      "version": "1.30",
+      "description": "Lightweight Bitwarden-compatible password manager server",
+      "categories": ["security", "passwords", "privacy"]
+    },
+    {
+      "id": "authelia",
+      "name": "Authelia",
+      "version": "4.37",
+      "description": "Authentication and authorization server providing 2FA and SSO",
+      "categories": ["security", "authentication", "sso"]
+    },
+    {
+      "id": "keycloak",
+      "name": "Keycloak",
+      "version": "23.0",
+      "description": "Open-source identity and access management",
+      "categories": ["security", "authentication", "sso"]
+    },
+    {
+      "id": "crowdsec",
+      "name": "CrowdSec",
+      "version": "1.6",
+      "description": "Collaborative security engine for detecting threats",
+      "categories": ["security", "firewall", "threat-detection"]
+    },
+    {
+      "id": "phpmyadmin",
+      "name": "phpMyAdmin",
+      "version": "5.2",
+      "description": "Web-based MySQL and MariaDB administration tool",
+      "categories": ["database", "mysql", "management"]
+    },
+    {
+      "id": "pgadmin",
+      "name": "pgAdmin 4",
+      "version": "8.2",
+      "description": "Web-based PostgreSQL administration platform",
+      "categories": ["database", "postgresql", "management"]
+    },
+    {
+      "id": "redis-commander",
+      "name": "Redis Commander",
+      "version": "0.8",
+      "description": "Web-based Redis management tool",
+      "categories": ["database", "redis", "management"]
+    },
+    {
+      "id": "mongo-express",
+      "name": "Mongo Express",
+      "version": "1.0",
+      "description": "Web-based MongoDB admin interface",
+      "categories": ["database", "mongodb", "management"]
+    },
+    {
+      "id": "homeassistant",
+      "name": "Home Assistant",
+      "version": "2024.1",
+      "description": "Open-source home automation platform",
+      "categories": ["home-automation", "iot", "smart-home"]
+    },
+    {
+      "id": "nodered",
+      "name": "Node-RED",
+      "version": "3.1",
+      "description": "Flow-based programming tool for IoT",
+      "categories": ["home-automation", "automation", "iot"]
+    },
+    {
+      "id": "mosquitto",
+      "name": "Eclipse Mosquitto",
+      "version": "2.0",
+      "description": "Lightweight MQTT message broker",
+      "categories": ["home-automation", "iot", "messaging"]
+    },
+    {
+      "id": "zigbee2mqtt",
+      "name": "Zigbee2MQTT",
+      "version": "1.35",
+      "description": "Bridge Zigbee devices to MQTT",
+      "categories": ["home-automation", "iot", "zigbee"]
+    },
+    {
+      "id": "code-server",
+      "name": "Code Server",
+      "version": "4.20",
+      "description": "VS Code in the browser with full IDE features",
+      "categories": ["development", "ide", "productivity"]
+    },
+    {
+      "id": "traefik",
+      "name": "Traefik",
+      "version": "3.0",
+      "description": "Modern HTTP reverse proxy with automatic HTTPS",
       "categories": ["networking", "proxy", "ssl"]
+    },
+    {
+      "id": "caddy",
+      "name": "Caddy",
+      "version": "2.7",
+      "description": "Fast, multi-platform web server with automatic HTTPS",
+      "categories": ["networking", "proxy", "ssl"]
+    },
+    {
+      "id": "plausible",
+      "name": "Plausible Analytics",
+      "version": "2.0",
+      "description": "Privacy-friendly alternative to Google Analytics",
+      "categories": ["analytics", "privacy", "monitoring"]
+    },
+    {
+      "id": "umami",
+      "name": "Umami",
+      "version": "2.9",
+      "description": "Simple, fast, privacy-focused analytics",
+      "categories": ["analytics", "privacy", "monitoring"]
     }
+  ],
+  "categories": [
+    "monitoring",
+    "devops",
+    "cms",
+    "blog",
+    "media",
+    "collaboration",
+    "storage",
+    "productivity",
+    "security",
+    "database",
+    "home-automation",
+    "development",
+    "networking",
+    "analytics",
+    "docker",
+    "git",
+    "proxy",
+    "ssl",
+    "iot",
+    "ci-cd",
+    "automation"
   ]
 }

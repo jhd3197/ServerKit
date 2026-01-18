@@ -1,0 +1,68 @@
+id: plex
+name: Plex Media Server
+version: "1.32"
+description: Organize and stream your personal media collection to any device
+icon: https://www.plex.tv/wp-content/uploads/2018/01/pmp-icon-1.png
+website: https://www.plex.tv
+documentation: https://support.plex.tv
+categories:
+  - media
+  - streaming
+  - entertainment
+
+variables:
+  - name: PLEX_CLAIM
+    description: Plex claim token (get from plex.tv/claim)
+    required: false
+  - name: MEDIA_PATH
+    description: Path to media files on host
+    default: /media
+    required: true
+  - name: HTTP_PORT
+    description: Web interface port
+    type: port
+    default: "32400"
+
+ports:
+  - port: 32400
+    protocol: tcp
+    description: Web interface
+  - port: 3005
+    protocol: tcp
+    description: Plex Companion
+  - port: 8324
+    protocol: tcp
+    description: Roku control
+  - port: 32469
+    protocol: tcp
+    description: Plex DLNA
+
+volumes:
+  - name: config
+    path: /config
+    description: Plex configuration
+  - name: transcode
+    path: /transcode
+    description: Transcode directory
+
+compose:
+  services:
+    plex:
+      image: linuxserver/plex:${VERSION:-latest}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      network_mode: host
+      environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=UTC
+        - VERSION=docker
+        - PLEX_CLAIM=${PLEX_CLAIM}
+      volumes:
+        - plex_config:/config
+        - plex_transcode:/transcode
+        - ${MEDIA_PATH}:/media:ro
+
+  volumes:
+    plex_config:
+    plex_transcode:

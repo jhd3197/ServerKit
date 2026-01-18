@@ -1,0 +1,89 @@
+id: strapi
+name: Strapi
+version: "4.15"
+description: Open-source headless CMS with customizable API and admin panel
+icon: https://strapi.io/assets/strapi-logo-dark.svg
+website: https://strapi.io
+documentation: https://docs.strapi.io
+categories:
+  - cms
+  - headless
+  - api
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "1337"
+  - name: APP_KEYS
+    description: Application keys
+    type: password
+    generate: password
+  - name: API_TOKEN_SALT
+    description: API token salt
+    type: password
+    generate: password
+  - name: ADMIN_JWT_SECRET
+    description: Admin JWT secret
+    type: password
+    generate: password
+  - name: JWT_SECRET
+    description: JWT secret
+    type: password
+    generate: password
+  - name: DB_PASSWORD
+    description: PostgreSQL password
+    type: password
+    generate: password
+
+ports:
+  - port: 1337
+    protocol: tcp
+    description: API and admin panel
+
+volumes:
+  - name: app
+    path: /opt/app
+    description: Strapi application
+  - name: db
+    path: /var/lib/postgresql/data
+    description: PostgreSQL data
+
+compose:
+  services:
+    strapi:
+      image: strapi/strapi:${VERSION:-4.15}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - DATABASE_CLIENT=postgres
+        - DATABASE_HOST=db
+        - DATABASE_PORT=5432
+        - DATABASE_NAME=strapi
+        - DATABASE_USERNAME=strapi
+        - DATABASE_PASSWORD=${DB_PASSWORD}
+        - APP_KEYS=${APP_KEYS}
+        - API_TOKEN_SALT=${API_TOKEN_SALT}
+        - ADMIN_JWT_SECRET=${ADMIN_JWT_SECRET}
+        - JWT_SECRET=${JWT_SECRET}
+      volumes:
+        - strapi_app:/opt/app
+      ports:
+        - "${HTTP_PORT}:1337"
+      depends_on:
+        - db
+
+    db:
+      image: postgres:15-alpine
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      environment:
+        - POSTGRES_USER=strapi
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=strapi
+      volumes:
+        - strapi_db:/var/lib/postgresql/data
+
+  volumes:
+    strapi_app:
+    strapi_db:

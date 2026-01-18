@@ -1,0 +1,54 @@
+id: grafana
+name: Grafana
+version: "10.2"
+description: Open-source analytics and interactive visualization platform for metrics, logs, and traces
+icon: https://raw.githubusercontent.com/grafana/grafana/main/public/img/grafana_icon.svg
+website: https://grafana.com
+documentation: https://grafana.com/docs/grafana/latest/
+categories:
+  - monitoring
+  - analytics
+  - visualization
+
+variables:
+  - name: ADMIN_USER
+    description: Admin username
+    default: admin
+    required: true
+  - name: ADMIN_PASSWORD
+    description: Admin password
+    type: password
+    generate: password
+    required: true
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "3000"
+
+ports:
+  - port: 3000
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /var/lib/grafana
+    description: Grafana data and dashboards
+
+compose:
+  services:
+    grafana:
+      image: grafana/grafana:${VERSION:-10.2.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - GF_SECURITY_ADMIN_USER=${ADMIN_USER}
+        - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+        - GF_SERVER_HTTP_PORT=${HTTP_PORT}
+      volumes:
+        - grafana_data:/var/lib/grafana
+      ports:
+        - "${HTTP_PORT}:${HTTP_PORT}"
+
+  volumes:
+    grafana_data:

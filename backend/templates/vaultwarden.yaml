@@ -1,0 +1,55 @@
+id: vaultwarden
+name: Vaultwarden
+version: "1.30"
+description: Lightweight Bitwarden-compatible password manager server
+icon: https://raw.githubusercontent.com/dani-garcia/vaultwarden/main/resources/vaultwarden-icon.svg
+website: https://github.com/dani-garcia/vaultwarden
+documentation: https://github.com/dani-garcia/vaultwarden/wiki
+categories:
+  - security
+  - passwords
+  - privacy
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8080"
+  - name: ADMIN_TOKEN
+    description: Admin panel token
+    type: password
+    generate: password
+  - name: SIGNUPS_ALLOWED
+    description: Allow new user signups
+    options:
+      - "true"
+      - "false"
+    default: "true"
+
+ports:
+  - port: 8080
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /data
+    description: Vaultwarden data
+
+compose:
+  services:
+    vaultwarden:
+      image: vaultwarden/server:${VERSION:-1.30.1}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - ADMIN_TOKEN=${ADMIN_TOKEN}
+        - SIGNUPS_ALLOWED=${SIGNUPS_ALLOWED}
+        - WEBSOCKET_ENABLED=true
+      volumes:
+        - vaultwarden_data:/data
+      ports:
+        - "${HTTP_PORT}:80"
+
+  volumes:
+    vaultwarden_data:

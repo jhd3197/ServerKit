@@ -1,0 +1,53 @@
+id: crowdsec
+name: CrowdSec
+version: "1.6"
+description: Collaborative security engine for detecting and blocking threats
+icon: https://www.crowdsec.net/wp-content/uploads/2022/01/logo-crowdsec.svg
+website: https://www.crowdsec.net
+documentation: https://docs.crowdsec.net
+categories:
+  - security
+  - firewall
+  - threat-detection
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port for API
+    type: port
+    default: "8080"
+  - name: COLLECTIONS
+    description: Collections to install (comma-separated)
+    default: crowdsecurity/linux,crowdsecurity/sshd
+
+ports:
+  - port: 8080
+    protocol: tcp
+    description: API
+
+volumes:
+  - name: config
+    path: /etc/crowdsec
+    description: CrowdSec configuration
+  - name: data
+    path: /var/lib/crowdsec/data
+    description: CrowdSec data
+
+compose:
+  services:
+    crowdsec:
+      image: crowdsecurity/crowdsec:v${VERSION:-1.6.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - COLLECTIONS=${COLLECTIONS}
+        - GID=1000
+      volumes:
+        - crowdsec_config:/etc/crowdsec
+        - crowdsec_data:/var/lib/crowdsec/data
+        - /var/log:/var/log:ro
+      ports:
+        - "${HTTP_PORT}:8080"
+
+  volumes:
+    crowdsec_config:
+    crowdsec_data:

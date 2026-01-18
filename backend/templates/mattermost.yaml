@@ -1,0 +1,94 @@
+id: mattermost
+name: Mattermost
+version: "9.2"
+description: Open-source Slack alternative for secure team collaboration and messaging
+icon: https://mattermost.com/wp-content/uploads/2022/02/icon.svg
+website: https://mattermost.com
+documentation: https://docs.mattermost.com
+categories:
+  - collaboration
+  - chat
+  - communication
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8065"
+  - name: SITE_URL
+    description: Site URL (e.g., https://mattermost.example.com)
+    default: http://localhost:8065
+    required: true
+  - name: DB_PASSWORD
+    description: PostgreSQL password
+    type: password
+    generate: password
+
+ports:
+  - port: 8065
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /mattermost/data
+    description: Mattermost data
+  - name: logs
+    path: /mattermost/logs
+    description: Mattermost logs
+  - name: config
+    path: /mattermost/config
+    description: Mattermost config
+  - name: plugins
+    path: /mattermost/plugins
+    description: Mattermost plugins
+
+compose:
+  services:
+    mattermost:
+      image: mattermost/mattermost-team-edition:${VERSION:-9.2}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      security_opt:
+        - no-new-privileges:true
+      pids_limit: 200
+      tmpfs:
+        - /tmp
+      environment:
+        - TZ=UTC
+        - MM_SQLSETTINGS_DRIVERNAME=postgres
+        - MM_SQLSETTINGS_DATASOURCE=postgres://mmuser:${DB_PASSWORD}@postgres:5432/mattermost?sslmode=disable&connect_timeout=10
+        - MM_SERVICESETTINGS_SITEURL=${SITE_URL}
+      volumes:
+        - mattermost_data:/mattermost/data
+        - mattermost_logs:/mattermost/logs
+        - mattermost_config:/mattermost/config
+        - mattermost_plugins:/mattermost/plugins
+      ports:
+        - "${HTTP_PORT}:8065"
+      depends_on:
+        - postgres
+
+    postgres:
+      image: postgres:15-alpine
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      security_opt:
+        - no-new-privileges:true
+      pids_limit: 100
+      tmpfs:
+        - /tmp
+        - /var/run/postgresql
+      environment:
+        - POSTGRES_USER=mmuser
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=mattermost
+      volumes:
+        - mattermost_db:/var/lib/postgresql/data
+
+  volumes:
+    mattermost_data:
+    mattermost_logs:
+    mattermost_config:
+    mattermost_plugins:
+    mattermost_db:

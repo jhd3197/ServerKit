@@ -1,0 +1,78 @@
+id: sonarqube
+name: SonarQube
+version: "10.3"
+description: Continuous inspection of code quality and security vulnerabilities
+icon: https://www.sonarqube.org/logos/index/sonarqube-logo.svg
+website: https://www.sonarqube.org
+documentation: https://docs.sonarqube.org/latest/
+categories:
+  - devops
+  - code-quality
+  - security
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "9000"
+  - name: DB_PASSWORD
+    description: PostgreSQL password
+    type: password
+    generate: password
+
+ports:
+  - port: 9000
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /opt/sonarqube/data
+    description: SonarQube data
+  - name: extensions
+    path: /opt/sonarqube/extensions
+    description: SonarQube extensions
+  - name: logs
+    path: /opt/sonarqube/logs
+    description: SonarQube logs
+
+compose:
+  services:
+    sonarqube:
+      image: sonarqube:${VERSION:-10.3-community}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - SONAR_JDBC_URL=jdbc:postgresql://db:5432/sonarqube
+        - SONAR_JDBC_USERNAME=sonarqube
+        - SONAR_JDBC_PASSWORD=${DB_PASSWORD}
+      volumes:
+        - sonarqube_data:/opt/sonarqube/data
+        - sonarqube_extensions:/opt/sonarqube/extensions
+        - sonarqube_logs:/opt/sonarqube/logs
+      ports:
+        - "${HTTP_PORT}:9000"
+      depends_on:
+        - db
+
+    db:
+      image: postgres:15-alpine
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      environment:
+        - POSTGRES_USER=sonarqube
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=sonarqube
+      volumes:
+        - sonarqube_db:/var/lib/postgresql/data
+
+  volumes:
+    sonarqube_data:
+    sonarqube_extensions:
+    sonarqube_logs:
+    sonarqube_db:
+
+pre_install: |
+  # SonarQube requires increased vm.max_map_count
+  sysctl -w vm.max_map_count=524288
+  echo "vm.max_map_count=524288" >> /etc/sysctl.conf

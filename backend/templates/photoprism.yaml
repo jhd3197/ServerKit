@@ -1,0 +1,88 @@
+id: photoprism
+name: PhotoPrism
+version: "231128"
+description: AI-powered photo management application with face recognition and auto-tagging
+icon: https://photoprism.app/static/icons/logo.svg
+website: https://photoprism.app
+documentation: https://docs.photoprism.app
+categories:
+  - media
+  - photos
+  - ai
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "2342"
+  - name: ADMIN_PASSWORD
+    description: Admin password
+    type: password
+    generate: password
+  - name: PHOTOS_PATH
+    description: Path to photos on host
+    default: /photos
+    required: true
+  - name: DB_PASSWORD
+    description: MariaDB password
+    type: password
+    generate: password
+
+ports:
+  - port: 2342
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: storage
+    path: /photoprism/storage
+    description: PhotoPrism storage
+
+compose:
+  services:
+    photoprism:
+      image: photoprism/photoprism:${VERSION:-231128}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      security_opt:
+        - seccomp:unconfined
+        - apparmor:unconfined
+      environment:
+        - PHOTOPRISM_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+        - PHOTOPRISM_SITE_URL=http://localhost:${HTTP_PORT}/
+        - PHOTOPRISM_ORIGINALS_LIMIT=5000
+        - PHOTOPRISM_HTTP_COMPRESSION=gzip
+        - PHOTOPRISM_DATABASE_DRIVER=mysql
+        - PHOTOPRISM_DATABASE_SERVER=mariadb:3306
+        - PHOTOPRISM_DATABASE_NAME=photoprism
+        - PHOTOPRISM_DATABASE_USER=photoprism
+        - PHOTOPRISM_DATABASE_PASSWORD=${DB_PASSWORD}
+      volumes:
+        - ${PHOTOS_PATH}:/photoprism/originals
+        - photoprism_storage:/photoprism/storage
+      ports:
+        - "${HTTP_PORT}:2342"
+      depends_on:
+        - mariadb
+
+    mariadb:
+      image: mariadb:11
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      security_opt:
+        - seccomp:unconfined
+        - apparmor:unconfined
+      command: --innodb-buffer-pool-size=512M --transaction-isolation=READ-COMMITTED --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-connections=512 --innodb-rollback-on-timeout=OFF --innodb-lock-wait-timeout=120
+      environment:
+        - MARIADB_AUTO_UPGRADE=1
+        - MARIADB_INITDB_SKIP_TZINFO=1
+        - MARIADB_ROOT_PASSWORD=${DB_PASSWORD}
+        - MARIADB_DATABASE=photoprism
+        - MARIADB_USER=photoprism
+        - MARIADB_PASSWORD=${DB_PASSWORD}
+      volumes:
+        - photoprism_db:/var/lib/mysql
+
+  volumes:
+    photoprism_storage:
+    photoprism_db:

@@ -1,0 +1,73 @@
+id: keycloak
+name: Keycloak
+version: "23.0"
+description: Open-source identity and access management for modern applications
+icon: https://www.keycloak.org/resources/images/logo.svg
+website: https://www.keycloak.org
+documentation: https://www.keycloak.org/documentation
+categories:
+  - security
+  - authentication
+  - sso
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8080"
+  - name: ADMIN_USER
+    description: Admin username
+    default: admin
+    required: true
+  - name: ADMIN_PASSWORD
+    description: Admin password
+    type: password
+    generate: password
+  - name: DB_PASSWORD
+    description: PostgreSQL password
+    type: password
+    generate: password
+
+ports:
+  - port: 8080
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: data
+    path: /opt/keycloak/data
+    description: Keycloak data
+
+compose:
+  services:
+    keycloak:
+      image: quay.io/keycloak/keycloak:${VERSION:-23.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      command: start-dev
+      environment:
+        - KC_DB=postgres
+        - KC_DB_URL_HOST=postgres
+        - KC_DB_URL_DATABASE=keycloak
+        - KC_DB_USERNAME=keycloak
+        - KC_DB_PASSWORD=${DB_PASSWORD}
+        - KEYCLOAK_ADMIN=${ADMIN_USER}
+        - KEYCLOAK_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      ports:
+        - "${HTTP_PORT}:8080"
+      depends_on:
+        - postgres
+
+    postgres:
+      image: postgres:15-alpine
+      container_name: ${APP_NAME}-db
+      restart: unless-stopped
+      environment:
+        - POSTGRES_USER=keycloak
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=keycloak
+      volumes:
+        - keycloak_db:/var/lib/postgresql/data
+
+  volumes:
+    keycloak_db:

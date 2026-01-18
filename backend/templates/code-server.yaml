@@ -1,0 +1,55 @@
+id: code-server
+name: Code Server
+version: "4.20"
+description: VS Code in the browser with full IDE features and extensions support
+icon: https://code.visualstudio.com/favicon.ico
+website: https://coder.com/code-server
+documentation: https://coder.com/docs/code-server/latest
+categories:
+  - development
+  - ide
+  - productivity
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port
+    type: port
+    default: "8080"
+  - name: PASSWORD
+    description: Access password
+    type: password
+    generate: password
+  - name: SUDO_PASSWORD
+    description: Sudo password
+    type: password
+    generate: password
+
+ports:
+  - port: 8080
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: config
+    path: /config
+    description: Code Server configuration
+
+compose:
+  services:
+    code-server:
+      image: linuxserver/code-server:${VERSION:-4.20.0}
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=UTC
+        - PASSWORD=${PASSWORD}
+        - SUDO_PASSWORD=${SUDO_PASSWORD}
+      volumes:
+        - code_server_config:/config
+      ports:
+        - "${HTTP_PORT}:8443"
+
+  volumes:
+    code_server_config:
