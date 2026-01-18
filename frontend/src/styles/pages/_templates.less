@@ -1,0 +1,317 @@
+// ============================================
+// TEMPLATES PAGE STYLES
+// ============================================
+
+.templates-page {
+    .page-description {
+        color: @text-secondary;
+        margin-top: @space-2;
+    }
+}
+
+// Filters
+.templates-filters {
+    display: flex;
+    flex-direction: column;
+    gap: @space-4;
+    margin-bottom: @space-6;
+}
+
+.search-box {
+    input {
+        width: 100%;
+        max-width: 400px;
+        padding: @space-3 @space-4;
+        background: @bg-card;
+        border: 1px solid @border-subtle;
+        border-radius: @radius-md;
+        color: @text-primary;
+        font-size: @font-size-base;
+
+        &:focus {
+            outline: none;
+            border-color: @accent-primary;
+            box-shadow: 0 0 0 3px @accent-glow;
+        }
+
+        &::placeholder {
+            color: @text-tertiary;
+        }
+    }
+}
+
+.category-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-2;
+}
+
+.category-btn {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2 @space-3;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    color: @text-secondary;
+    font-size: @font-size-sm;
+    cursor: pointer;
+    transition: all @transition-fast;
+    text-transform: capitalize;
+
+    &:hover {
+        background: @bg-hover;
+        border-color: @border-default;
+        color: @text-primary;
+    }
+
+    &.active {
+        background: @accent-glow;
+        border-color: @accent-primary;
+        color: @accent-primary;
+    }
+}
+
+// Templates Grid
+.templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: @space-6;
+}
+
+.template-card {
+    display: flex;
+    gap: @space-4;
+    padding: @space-5;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        border-color: @accent-primary;
+        box-shadow: @shadow-md;
+        transform: translateY(-2px);
+    }
+}
+
+.template-icon {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: @bg-hover;
+    border-radius: @radius-md;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+
+.template-icon-placeholder {
+    font-size: @font-size-2xl;
+    font-weight: @font-weight-bold;
+    color: @accent-primary;
+}
+
+.template-icon-large {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: @bg-hover;
+    border-radius: @radius-lg;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .template-icon-placeholder {
+        font-size: @font-size-3xl;
+    }
+}
+
+.template-info {
+    flex: 1;
+    min-width: 0;
+
+    h3 {
+        margin: 0 0 @space-2 0;
+        font-size: @font-size-lg;
+        font-weight: @font-weight-semibold;
+    }
+}
+
+.template-description {
+    margin: 0 0 @space-3 0;
+    color: @text-secondary;
+    font-size: @font-size-sm;
+    line-height: @line-height-relaxed;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.template-full-description {
+    margin-bottom: @space-4;
+    color: @text-secondary;
+    line-height: @line-height-relaxed;
+}
+
+.template-meta {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    flex-wrap: wrap;
+}
+
+.template-version {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+    padding: @space-1 @space-2;
+    background: @bg-hover;
+    border-radius: @radius-sm;
+}
+
+.template-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-2;
+}
+
+.category-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+    padding: @space-1 @space-2;
+    font-size: @font-size-xs;
+    color: @text-secondary;
+    background: @bg-hover;
+    border-radius: @radius-sm;
+    text-transform: capitalize;
+}
+
+// Template Detail Modal
+.template-detail-header {
+    display: flex;
+    align-items: center;
+    gap: @space-4;
+
+    h2 {
+        margin: 0;
+    }
+}
+
+.template-links {
+    display: flex;
+    gap: @space-2;
+    margin-bottom: @space-6;
+}
+
+.template-details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: @space-6;
+}
+
+.detail-section {
+    h4 {
+        margin: 0 0 @space-3 0;
+        font-size: @font-size-sm;
+        font-weight: @font-weight-semibold;
+        color: @text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+}
+
+.variables-list {
+    display: flex;
+    flex-direction: column;
+    gap: @space-3;
+}
+
+.variable-item {
+    display: flex;
+    flex-direction: column;
+    gap: @space-1;
+    padding: @space-3;
+    background: @bg-hover;
+    border-radius: @radius-md;
+}
+
+.variable-name {
+    font-family: @font-mono;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    color: @accent-primary;
+}
+
+.variable-description {
+    font-size: @font-size-sm;
+    color: @text-secondary;
+}
+
+.variable-default {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+}
+
+.ports-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-2;
+}
+
+.port-item {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2 @space-3;
+    background: @bg-hover;
+    border-radius: @radius-md;
+}
+
+.port-number {
+    font-family: @font-mono;
+    font-weight: @font-weight-medium;
+    color: @text-primary;
+}
+
+.port-protocol {
+    font-size: @font-size-xs;
+    padding: @space-1;
+    background: @bg-card;
+    border-radius: @radius-sm;
+    color: @text-secondary;
+    text-transform: uppercase;
+}
+
+.port-description {
+    font-size: @font-size-sm;
+    color: @text-secondary;
+}
+
+// Install Modal
+.install-modal {
+    h4 {
+        margin: @space-4 0 @space-3 0;
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        padding-top: @space-4;
+        border-top: 1px solid @border-subtle;
+    }
+}

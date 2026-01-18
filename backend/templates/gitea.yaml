@@ -1,0 +1,80 @@
+name: gitea
+version: "1.21"
+description: Lightweight self-hosted Git service
+icon: /icons/gitea.png
+categories:
+  - devops
+  - git
+  - development
+website: https://gitea.io
+documentation: https://docs.gitea.io
+
+variables:
+  HTTP_PORT:
+    type: port
+    default: 3000
+    description: Port for web interface
+  SSH_PORT:
+    type: port
+    default: 2222
+    description: Port for SSH access
+  DB_PASSWORD:
+    type: password
+    length: 24
+    description: Database password
+  SECRET_KEY:
+    type: random
+    length: 32
+    description: Internal secret key
+
+compose:
+  services:
+    gitea:
+      image: gitea/gitea:1.21
+      container_name: gitea
+      restart: unless-stopped
+      ports:
+        - "${HTTP_PORT}:3000"
+        - "${SSH_PORT}:22"
+      environment:
+        USER_UID: 1000
+        USER_GID: 1000
+        GITEA__database__DB_TYPE: postgres
+        GITEA__database__HOST: gitea-db:5432
+        GITEA__database__NAME: gitea
+        GITEA__database__USER: gitea
+        GITEA__database__PASSWD: "${DB_PASSWORD}"
+        GITEA__security__SECRET_KEY: "${SECRET_KEY}"
+      volumes:
+        - gitea-data:/data
+        - /etc/timezone:/etc/timezone:ro
+        - /etc/localtime:/etc/localtime:ro
+      depends_on:
+        - gitea-db
+
+    gitea-db:
+      image: postgres:15-alpine
+      container_name: gitea-db
+      restart: unless-stopped
+      environment:
+        POSTGRES_USER: gitea
+        POSTGRES_PASSWORD: "${DB_PASSWORD}"
+        POSTGRES_DB: gitea
+      volumes:
+        - gitea-db-data:/var/lib/postgresql/data
+
+  volumes:
+    gitea-data:
+    gitea-db-data:
+
+ports:
+  - port: "${HTTP_PORT}"
+    protocol: http
+    description: Web Interface
+  - port: "${SSH_PORT}"
+    protocol: ssh
+    description: Git SSH
+
+requirements:
+  memory: 512MB
+  storage: 5GB

@@ -1,0 +1,94 @@
+name: nextcloud
+version: "28.0"
+description: Self-hosted productivity platform with file sync and collaboration
+icon: /icons/nextcloud.png
+categories:
+  - storage
+  - collaboration
+  - productivity
+website: https://nextcloud.com
+documentation: https://docs.nextcloud.com
+
+variables:
+  PORT:
+    type: port
+    default: 8080
+    description: Port to expose Nextcloud
+  ADMIN_USER:
+    type: string
+    default: admin
+    description: Admin username
+  ADMIN_PASSWORD:
+    type: password
+    length: 16
+    description: Admin password
+    required: true
+  DB_PASSWORD:
+    type: password
+    length: 24
+    description: Database password
+  REDIS_PASSWORD:
+    type: password
+    length: 16
+    description: Redis password
+
+compose:
+  services:
+    nextcloud:
+      image: nextcloud:28-apache
+      container_name: nextcloud
+      restart: unless-stopped
+      ports:
+        - "${PORT}:80"
+      environment:
+        POSTGRES_HOST: nextcloud-db
+        POSTGRES_DB: nextcloud
+        POSTGRES_USER: nextcloud
+        POSTGRES_PASSWORD: "${DB_PASSWORD}"
+        NEXTCLOUD_ADMIN_USER: "${ADMIN_USER}"
+        NEXTCLOUD_ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
+        REDIS_HOST: nextcloud-redis
+        REDIS_HOST_PASSWORD: "${REDIS_PASSWORD}"
+      volumes:
+        - nextcloud-data:/var/www/html
+      depends_on:
+        - nextcloud-db
+        - nextcloud-redis
+
+    nextcloud-db:
+      image: postgres:15-alpine
+      container_name: nextcloud-db
+      restart: unless-stopped
+      environment:
+        POSTGRES_USER: nextcloud
+        POSTGRES_PASSWORD: "${DB_PASSWORD}"
+        POSTGRES_DB: nextcloud
+      volumes:
+        - nextcloud-db-data:/var/lib/postgresql/data
+
+    nextcloud-redis:
+      image: redis:alpine
+      container_name: nextcloud-redis
+      restart: unless-stopped
+      command: redis-server --requirepass "${REDIS_PASSWORD}"
+      volumes:
+        - nextcloud-redis-data:/data
+
+  volumes:
+    nextcloud-data:
+    nextcloud-db-data:
+    nextcloud-redis-data:
+
+ports:
+  - port: "${PORT}"
+    protocol: http
+    description: Web Interface
+
+requirements:
+  memory: 1GB
+  storage: 10GB
+
+scripts:
+  post_install: |
+    echo "Nextcloud installed! Access it at http://localhost:${PORT}"
+    echo "Default admin: ${ADMIN_USER}"

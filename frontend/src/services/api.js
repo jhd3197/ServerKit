@@ -1298,6 +1298,73 @@ class ApiService {
     }
 
     // ========================================
+    // Template endpoints
+    // ========================================
+    async listTemplates(category = null, search = null) {
+        const params = new URLSearchParams();
+        if (category) params.append('category', category);
+        if (search) params.append('search', search);
+        const query = params.toString();
+        return this.request(`/templates/${query ? '?' + query : ''}`);
+    }
+
+    async getTemplateCategories() {
+        return this.request('/templates/categories');
+    }
+
+    async getTemplate(templateId) {
+        return this.request(`/templates/${templateId}`);
+    }
+
+    async installTemplate(templateId, appName, variables = {}) {
+        return this.request(`/templates/${templateId}/install`, {
+            method: 'POST',
+            body: { app_name: appName, variables }
+        });
+    }
+
+    async validateTemplateInstall(templateId, appName, variables = {}) {
+        return this.request('/templates/validate-install', {
+            method: 'POST',
+            body: { template_id: templateId, app_name: appName, variables }
+        });
+    }
+
+    async checkAppUpdate(appId) {
+        return this.request(`/templates/apps/${appId}/check-update`);
+    }
+
+    async updateAppFromTemplate(appId) {
+        return this.request(`/templates/apps/${appId}/update`, { method: 'POST' });
+    }
+
+    async getAppTemplateInfo(appId) {
+        return this.request(`/templates/apps/${appId}/template-info`);
+    }
+
+    async listTemplateRepos() {
+        return this.request('/templates/repos');
+    }
+
+    async addTemplateRepo(name, url) {
+        return this.request('/templates/repos', {
+            method: 'POST',
+            body: { name, url }
+        });
+    }
+
+    async removeTemplateRepo(url) {
+        return this.request('/templates/repos', {
+            method: 'DELETE',
+            body: { url }
+        });
+    }
+
+    async syncTemplates() {
+        return this.request('/templates/sync', { method: 'POST' });
+    }
+
+    // ========================================
     // File Manager endpoints
     // ========================================
     async browseFiles(path = '/home', showHidden = false) {

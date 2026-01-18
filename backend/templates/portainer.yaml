@@ -1,0 +1,50 @@
+name: portainer
+version: "2.19"
+description: Lightweight Docker management UI
+icon: /icons/portainer.png
+categories:
+  - devops
+  - docker
+  - management
+website: https://www.portainer.io
+documentation: https://docs.portainer.io
+
+variables:
+  PORT:
+    type: port
+    default: 9000
+    description: Port for web interface
+  HTTPS_PORT:
+    type: port
+    default: 9443
+    description: Port for HTTPS access
+
+compose:
+  services:
+    portainer:
+      image: portainer/portainer-ce:latest
+      container_name: portainer
+      restart: unless-stopped
+      ports:
+        - "${PORT}:9000"
+        - "${HTTPS_PORT}:9443"
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - portainer-data:/data
+      security_opt:
+        - no-new-privileges:true
+
+  volumes:
+    portainer-data:
+
+ports:
+  - port: "${PORT}"
+    protocol: http
+    description: Web Interface
+  - port: "${HTTPS_PORT}"
+    protocol: https
+    description: HTTPS Interface
+
+requirements:
+  memory: 128MB
+  storage: 500MB

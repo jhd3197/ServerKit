@@ -1,0 +1,70 @@
+name: ghost
+version: "5.75"
+description: Professional publishing platform for blogs and newsletters
+icon: /icons/ghost.png
+categories:
+  - cms
+  - blog
+  - publishing
+website: https://ghost.org
+documentation: https://ghost.org/docs
+
+variables:
+  PORT:
+    type: port
+    default: 2368
+    description: Port to expose Ghost
+  SITE_URL:
+    type: string
+    default: http://localhost:2368
+    description: Full URL where Ghost will be accessible
+    required: true
+  DB_PASSWORD:
+    type: password
+    length: 24
+    description: MySQL database password
+
+compose:
+  services:
+    ghost:
+      image: ghost:5-alpine
+      container_name: ghost
+      restart: unless-stopped
+      ports:
+        - "${PORT}:2368"
+      environment:
+        url: "${SITE_URL}"
+        database__client: mysql
+        database__connection__host: ghost-db
+        database__connection__user: ghost
+        database__connection__password: "${DB_PASSWORD}"
+        database__connection__database: ghost
+      volumes:
+        - ghost-content:/var/lib/ghost/content
+      depends_on:
+        - ghost-db
+
+    ghost-db:
+      image: mysql:8.0
+      container_name: ghost-db
+      restart: unless-stopped
+      environment:
+        MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+        MYSQL_USER: ghost
+        MYSQL_PASSWORD: "${DB_PASSWORD}"
+        MYSQL_DATABASE: ghost
+      volumes:
+        - ghost-db-data:/var/lib/mysql
+
+  volumes:
+    ghost-content:
+    ghost-db-data:
+
+ports:
+  - port: "${PORT}"
+    protocol: http
+    description: Ghost Blog
+
+requirements:
+  memory: 512MB
+  storage: 2GB

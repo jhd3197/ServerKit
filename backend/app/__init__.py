@@ -113,6 +113,10 @@ def create_app(config_name=None):
     from app.api.builds import builds_bp
     app.register_blueprint(builds_bp, url_prefix='/api/v1/builds')
 
+    # Register blueprints - Templates
+    from app.api.templates import templates_bp
+    app.register_blueprint(templates_bp, url_prefix='/api/v1/templates')
+
     # Register blueprints - File Manager
     from app.api.files import files_bp
     app.register_blueprint(files_bp, url_prefix='/api/v1/files')

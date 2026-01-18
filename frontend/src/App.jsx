@@ -22,6 +22,7 @@ import PHP from './pages/PHP';
 import Firewall from './pages/Firewall';
 import CronJobs from './pages/CronJobs';
 import Security from './pages/Security';
+import Templates from './pages/Templates';
 
 function PrivateRoute({ children }) {
     const { isAuthenticated, loading } = useAuth();
@@ -64,6 +65,7 @@ function AppRoutes() {
                 <Route index element={<Dashboard />} />
                 <Route path="apps" element={<Applications />} />
                 <Route path="apps/:id" element={<ApplicationDetail />} />
+                <Route path="templates" element={<Templates />} />
                 <Route path="domains" element={<Domains />} />
                 <Route path="databases" element={<Databases />} />
                 <Route path="ssl" element={<div className="page">SSL Certificates</div>} />

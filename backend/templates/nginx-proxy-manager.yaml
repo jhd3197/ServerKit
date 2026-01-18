@@ -1,0 +1,88 @@
+name: nginx-proxy-manager
+version: "2.10"
+description: Easy-to-use reverse proxy with SSL management
+icon: /icons/nginx-proxy-manager.png
+categories:
+  - networking
+  - proxy
+  - ssl
+website: https://nginxproxymanager.com
+documentation: https://nginxproxymanager.com/guide
+
+variables:
+  HTTP_PORT:
+    type: port
+    default: 80
+    description: HTTP port for proxied sites
+  HTTPS_PORT:
+    type: port
+    default: 443
+    description: HTTPS port for proxied sites
+  ADMIN_PORT:
+    type: port
+    default: 81
+    description: Admin panel port
+  DB_PASSWORD:
+    type: password
+    length: 24
+    description: MySQL database password
+
+compose:
+  services:
+    npm:
+      image: jc21/nginx-proxy-manager:latest
+      container_name: nginx-proxy-manager
+      restart: unless-stopped
+      ports:
+        - "${HTTP_PORT}:80"
+        - "${HTTPS_PORT}:443"
+        - "${ADMIN_PORT}:81"
+      environment:
+        DB_MYSQL_HOST: npm-db
+        DB_MYSQL_PORT: 3306
+        DB_MYSQL_USER: npm
+        DB_MYSQL_PASSWORD: "${DB_PASSWORD}"
+        DB_MYSQL_NAME: npm
+      volumes:
+        - npm-data:/data
+        - npm-letsencrypt:/etc/letsencrypt
+      depends_on:
+        - npm-db
+
+    npm-db:
+      image: jc21/mariadb-aria:latest
+      container_name: npm-db
+      restart: unless-stopped
+      environment:
+        MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+        MYSQL_DATABASE: npm
+        MYSQL_USER: npm
+        MYSQL_PASSWORD: "${DB_PASSWORD}"
+      volumes:
+        - npm-db-data:/var/lib/mysql
+
+  volumes:
+    npm-data:
+    npm-letsencrypt:
+    npm-db-data:
+
+ports:
+  - port: "${ADMIN_PORT}"
+    protocol: http
+    description: Admin Panel
+  - port: "${HTTP_PORT}"
+    protocol: http
+    description: HTTP Proxy
+  - port: "${HTTPS_PORT}"
+    protocol: https
+    description: HTTPS Proxy
+
+requirements:
+  memory: 256MB
+  storage: 1GB
+
+scripts:
+  post_install: |
+    echo "Nginx Proxy Manager installed!"
+    echo "Access admin panel at http://localhost:${ADMIN_PORT}"
+    echo "Default credentials: admin@example.com / changeme"

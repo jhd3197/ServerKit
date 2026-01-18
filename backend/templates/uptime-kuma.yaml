@@ -1,0 +1,45 @@
+name: uptime-kuma
+version: "1.23"
+description: A fancy self-hosted monitoring tool for websites and services
+icon: /icons/uptime-kuma.png
+categories:
+  - monitoring
+  - devops
+website: https://uptime.kuma.pet
+documentation: https://github.com/louislam/uptime-kuma/wiki
+
+variables:
+  PORT:
+    type: port
+    default: 3001
+    description: Port to expose the web interface
+  DATA_PATH:
+    type: string
+    default: ./data
+    description: Path to store data
+
+compose:
+  services:
+    uptime-kuma:
+      image: louislam/uptime-kuma:1
+      container_name: uptime-kuma
+      restart: unless-stopped
+      ports:
+        - "${PORT}:3001"
+      volumes:
+        - uptime-kuma-data:/app/data
+      dns:
+        - 1.1.1.1
+        - 8.8.8.8
+
+  volumes:
+    uptime-kuma-data:
+
+ports:
+  - port: "${PORT}"
+    protocol: http
+    description: Web Interface
+
+requirements:
+  memory: 256MB
+  storage: 1GB
