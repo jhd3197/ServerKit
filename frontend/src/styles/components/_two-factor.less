@@ -6,8 +6,8 @@
 .totp-inputs {
     display: flex;
     justify-content: center;
-    gap: @spacing-sm;
-    margin: @spacing-lg 0;
+    gap: @space-2;
+    margin: @space-6 0;
 }
 
 .totp-input {
@@ -16,16 +16,16 @@
     font-size: 24px;
     font-weight: 600;
     text-align: center;
-    border: 2px solid @border-color;
+    border: 2px solid @border-subtle;
     border-radius: @radius-md;
-    background: @surface-secondary;
+    background: @bg-card;
     color: @text-primary;
     transition: all 0.2s;
 
     &:focus {
-        border-color: @primary;
+        border-color: @accent-primary;
         outline: none;
-        box-shadow: 0 0 0 3px fade(@primary, 20%);
+        box-shadow: 0 0 0 3px fade(@accent-primary, 20%);
     }
 
     &::placeholder {
@@ -38,14 +38,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: @spacing-sm;
-    margin-top: @spacing-lg;
+    gap: @space-2;
+    margin-top: @space-6;
 }
 
 .link-button {
     background: none;
     border: none;
-    color: @primary;
+    color: @accent-primary;
     cursor: pointer;
     font-size: @font-size-sm;
     padding: 0;
@@ -57,16 +57,16 @@
 
 // 2FA Card in Settings
 .two-fa-card {
-    border: 1px solid @border-color;
+    border: 1px solid @border-subtle;
     border-radius: @radius-lg;
-    padding: @spacing-lg;
-    margin-bottom: @spacing-lg;
+    padding: @space-6;
+    margin-bottom: @space-6;
 }
 
 .two-fa-header {
     display: flex;
-    gap: @spacing-md;
-    margin-bottom: @spacing-lg;
+    gap: @space-4;
+    margin-bottom: @space-6;
 
     .two-fa-icon {
         width: 48px;
@@ -74,14 +74,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: fade(@primary, 15%);
+        background: fade(@accent-primary, 15%);
         border-radius: @radius-md;
-        color: @primary;
+        color: @accent-primary;
         flex-shrink: 0;
     }
 
     h3 {
-        margin: 0 0 @spacing-xs 0;
+        margin: 0 0 @space-1 0;
     }
 
     p {
@@ -94,7 +94,7 @@
 .two-fa-disabled {
     .two-fa-description {
         color: @text-secondary;
-        margin-bottom: @spacing-md;
+        margin-bottom: @space-4;
     }
 }
 
@@ -102,8 +102,8 @@
     .two-fa-status {
         display: flex;
         align-items: center;
-        gap: @spacing-sm;
-        margin-bottom: @spacing-md;
+        gap: @space-2;
+        margin-bottom: @space-4;
     }
 
     .two-fa-info {
@@ -112,13 +112,13 @@
     }
 
     .two-fa-backup-info {
-        background: @surface-tertiary;
-        padding: @spacing-sm @spacing-md;
+        background: @bg-hover;
+        padding: @space-2 @space-4;
         border-radius: @radius-sm;
-        margin-bottom: @spacing-md;
+        margin-bottom: @space-4;
         display: flex;
         flex-direction: column;
-        gap: @spacing-xs;
+        gap: @space-1;
 
         .warning-text {
             color: @warning;
@@ -128,7 +128,7 @@
 
     .two-fa-actions {
         display: flex;
-        gap: @spacing-sm;
+        gap: @space-2;
     }
 }
 
@@ -136,12 +136,12 @@
 .setup-steps {
     display: flex;
     flex-direction: column;
-    gap: @spacing-lg;
+    gap: @space-6;
 }
 
 .setup-step {
     display: flex;
-    gap: @spacing-md;
+    gap: @space-4;
 
     .step-number {
         width: 28px;
@@ -149,7 +149,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: @primary;
+        background: @accent-primary;
         color: white;
         border-radius: 50%;
         font-weight: 600;
@@ -161,12 +161,12 @@
         flex: 1;
 
         h4 {
-            margin: 0 0 @spacing-xs 0;
+            margin: 0 0 @space-1 0;
         }
 
         p {
             color: @text-secondary;
-            margin: 0 0 @spacing-md 0;
+            margin: 0 0 @space-4 0;
             font-size: @font-size-sm;
         }
     }
@@ -175,10 +175,10 @@
 .qr-code-container {
     display: flex;
     justify-content: center;
-    padding: @spacing-md;
+    padding: @space-4;
     background: white;
     border-radius: @radius-md;
-    margin-bottom: @spacing-md;
+    margin-bottom: @space-4;
 }
 
 .qr-code {
@@ -187,30 +187,30 @@
 }
 
 .qr-fallback {
-    background: @surface-tertiary;
-    padding: @spacing-md;
+    background: @bg-hover;
+    padding: @space-4;
     border-radius: @radius-md;
     text-align: center;
 
     .secret-key {
         display: block;
         font-size: @font-size-lg;
-        padding: @spacing-sm;
-        margin-top: @spacing-sm;
-        background: @surface-primary;
+        padding: @space-2;
+        margin-top: @space-2;
+        background: @bg-body;
         border-radius: @radius-sm;
         word-break: break-all;
     }
 }
 
 .manual-entry {
-    margin-top: @spacing-md;
+    margin-top: @space-4;
     font-size: @font-size-sm;
     color: @text-secondary;
 
     summary {
         cursor: pointer;
-        color: @primary;
+        color: @accent-primary;
 
         &:hover {
             text-decoration: underline;
@@ -218,11 +218,11 @@
     }
 
     p {
-        margin: @spacing-xs 0;
+        margin: @space-1 0;
     }
 
     code {
-        background: @surface-tertiary;
+        background: @bg-hover;
         padding: 2px 6px;
         border-radius: @radius-sm;
     }
@@ -233,7 +233,7 @@
     font-weight: 600;
     text-align: center;
     letter-spacing: 0.5em;
-    padding: @spacing-md;
+    padding: @space-4;
     width: 100%;
     max-width: 200px;
 }
@@ -241,12 +241,12 @@
 // Warning Box
 .warning-box {
     display: flex;
-    gap: @spacing-md;
-    padding: @spacing-md;
+    gap: @space-4;
+    padding: @space-4;
     background: fade(@warning, 10%);
     border: 1px solid fade(@warning, 30%);
     border-radius: @radius-md;
-    margin-bottom: @spacing-lg;
+    margin-bottom: @space-6;
 
     svg {
         flex-shrink: 0;
@@ -263,21 +263,21 @@
 .error-text {
     color: @danger;
     font-size: @font-size-sm;
-    margin-top: @spacing-xs;
+    margin-top: @space-1;
 }
 
 // Backup Codes Grid
 .backup-codes-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: @spacing-sm;
-    margin-bottom: @spacing-lg;
+    gap: @space-2;
+    margin-bottom: @space-6;
 }
 
 .backup-code {
     display: block;
-    padding: @spacing-sm @spacing-md;
-    background: @surface-tertiary;
+    padding: @space-2 @space-4;
+    background: @bg-hover;
     border-radius: @radius-sm;
     text-align: center;
     font-size: @font-size-md;
@@ -287,10 +287,10 @@
 .backup-codes-actions {
     display: flex;
     justify-content: center;
-    gap: @spacing-sm;
+    gap: @space-2;
 
     .btn svg {
-        margin-right: @spacing-xs;
+        margin-right: @space-1;
     }
 }
 

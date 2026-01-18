@@ -1,26 +1,121 @@
 # ServerKit
 
-**Modern, self-hosted server management panel** - An open-source alternative to ServerPilot and CyberPanel.
+<p align="center">
+  <strong>Modern, self-hosted server management panel</strong><br>
+  An open-source alternative to ServerPilot, RunCloud, and Coolify
+</p>
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
-![React](https://img.shields.io/badge/react-18-blue.svg)
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
+  <img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python">
+  <img src="https://img.shields.io/badge/react-18-blue.svg" alt="React">
+  <img src="https://img.shields.io/badge/docker-ready-blue.svg" alt="Docker">
+</p>
 
 ---
 
-## Overview
+## What is ServerKit?
 
-ServerKit is a lightweight, modern server control panel for managing web applications, databases, and services on your VPS or dedicated server. Built with Python/Flask backend and React frontend.
+ServerKit is a lightweight, modern server control panel for managing web applications, databases, Docker containers, and security on your VPS or dedicated server. Built with Python/Flask backend and React frontend.
 
-### Key Features
+**Perfect for:** Developers, freelancers, and small teams who want full control over their infrastructure without the complexity of Kubernetes or the cost of managed platforms.
 
-- **PHP / WordPress** - PHP-FPM 8.2 with one-click WordPress installation
-- **Python Apps** - Deploy Flask and Django applications with Gunicorn
-- **Docker Support** - Manage containers directly from the dashboard
+---
+
+## Features
+
+### Application Management
+- **PHP / WordPress** - PHP-FPM 8.x with one-click WordPress installation
+- **Python Apps** - Deploy Flask and Django with Gunicorn
+- **Node.js** - PM2-managed Node applications
+- **Docker** - Full container and Docker Compose management
+- **Environment Variables** - Secure, encrypted variable management per app
+
+### Infrastructure
+- **Domain Management** - Nginx virtual hosts with easy configuration
 - **SSL Certificates** - Automatic Let's Encrypt with auto-renewal
 - **Database Management** - MySQL/MariaDB and PostgreSQL support
-- **Real-time Monitoring** - CPU, RAM, disk, and network metrics
-- **Modern UI** - Dark-themed dashboard built with React
+- **Firewall (UFW)** - Visual firewall rule management
+- **Cron Jobs** - Schedule tasks with a visual editor
+- **File Manager** - Browse and edit files via web interface
+- **FTP Server** - Manage vsftpd users and access
+
+### Security
+- **Two-Factor Authentication (2FA)** - TOTP-based with backup codes
+- **ClamAV Integration** - Malware scanning with quarantine
+- **File Integrity Monitoring** - Detect unauthorized file changes
+- **Failed Login Detection** - Monitor suspicious login attempts
+- **Security Alerts** - Real-time notifications for threats
+
+### Monitoring & Alerts
+- **Real-time Metrics** - CPU, RAM, disk, network monitoring
+- **Server Uptime Tracking** - Historical uptime data
+- **Alert Thresholds** - Customizable warning/critical levels
+- **Notification Webhooks:**
+  - Discord
+  - Slack
+  - Telegram
+  - Generic webhooks
+
+### Modern UI
+- Dark-themed responsive dashboard
+- Real-time WebSocket updates
+- Mobile-friendly interface
+
+---
+
+## Screenshots
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/6407ecf0-7a1a-4c4b-b7e3-8af6619da2f9" alt="Dashboard" width="100%">
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/73807009-9538-48e9-bbdf-152aed57bdd8" alt="Applications" width="100%">
+</p>
+
+---
+
+## Quick Start
+
+### Option 1: Docker (Recommended)
+
+```bash
+# Clone the repository
+git clone https://github.com/jhd3197/ServerKit.git
+cd ServerKit
+
+# Configure environment
+cp .env.example .env
+nano .env  # Set SECRET_KEY and JWT_SECRET_KEY
+
+# Start ServerKit
+docker compose up -d
+
+# Access at http://localhost
+```
+
+### Option 2: One-Line Install (Ubuntu)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
+```
+
+### Option 3: Manual Installation
+
+See [Installation Guide](docs/INSTALLATION.md) for detailed instructions.
+
+---
+
+## Requirements
+
+| Requirement | Minimum | Recommended |
+|-------------|---------|-------------|
+| OS | Ubuntu 22.04 LTS | Ubuntu 24.04 LTS |
+| CPU | 1 vCPU | 2+ vCPU |
+| RAM | 1 GB | 2+ GB |
+| Disk | 10 GB | 20+ GB |
+| Docker | 24.0+ | Latest |
 
 ---
 
@@ -28,67 +123,24 @@ ServerKit is a lightweight, modern server control panel for managing web applica
 
 | Layer | Technology |
 |-------|------------|
-| Backend | Python 3.11+, Flask, SQLAlchemy |
-| Frontend | React 18, Vite, TailwindCSS |
-| Database | PostgreSQL / SQLite |
-| Web Server | Nginx |
-| Containers | Docker |
-| Real-time | WebSocket (Flask-SocketIO) |
+| Backend | Python 3.11, Flask, SQLAlchemy, Flask-SocketIO |
+| Frontend | React 18, Vite, LESS |
+| Database | SQLite / PostgreSQL |
+| Web Server | Nginx, Gunicorn |
+| Containers | Docker, Docker Compose |
+| Security | ClamAV, TOTP (pyotp), Cryptography |
 
 ---
 
-## Requirements
+## Documentation
 
-- Ubuntu 22.04+ / Debian 12+ (recommended)
-- Python 3.11+
-- Node.js 18+
-- Docker (optional, for container management)
-- Root or sudo access
-
----
-
-## Quick Start
-
-### Development Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/jhd3197/ServerKit.git
-cd ServerKit
-
-# Backend setup
-cd backend
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-flask run
-
-# Frontend setup (new terminal)
-cd frontend
-npm install
-npm run dev
-```
-
-### Production Installation
-
-Install command:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
-```
-
-Update command:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
-```
-
----
-
-## Screenshots
-![Screenshot_17-1-2026_13453_localhost](https://github.com/user-attachments/assets/6407ecf0-7a1a-4c4b-b7e3-8af6619da2f9)
-<img width="1703" height="887" alt="image" src="https://github.com/user-attachments/assets/73807009-9538-48e9-bbdf-152aed57bdd8" />
-
+| Document | Description |
+|----------|-------------|
+| [Installation Guide](docs/INSTALLATION.md) | Complete setup instructions |
+| [Deployment Guide](docs/DEPLOYMENT.md) | CLI commands and production deployment |
+| [API Reference](docs/API.md) | REST API documentation |
+| [Roadmap](ROADMAP.md) | Development roadmap and planned features |
+| [Contributing](CONTRIBUTING.md) | How to contribute |
 
 ---
 
@@ -98,135 +150,153 @@ curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh |
 ServerKit/
 ├── backend/                 # Flask API
 │   ├── app/
-│   │   ├── api/            # API routes
+│   │   ├── api/            # API endpoints
 │   │   ├── models/         # Database models
-│   │   ├── services/       # Business logic
-│   │   └── utils/          # Helpers
+│   │   └── services/       # Business logic
 │   ├── config.py
 │   └── requirements.txt
 │
 ├── frontend/               # React application
 │   ├── src/
 │   │   ├── components/    # Reusable components
-│   │   ├── layouts/       # Layout components
 │   │   ├── pages/         # Page components
-│   │   └── services/      # API clients
+│   │   ├── services/      # API client
+│   │   └── styles/        # LESS stylesheets
 │   └── package.json
 │
-├── agent/                  # Server monitoring agent
-│   └── serverkit-agent.py
-│
-├── docker/                 # Docker configurations
-│   ├── Dockerfile
-│   └── docker-compose.yml
-│
 ├── docs/                   # Documentation
-├── ROADMAP.md             # Development roadmap
+├── docker-compose.yml      # Docker configuration
 └── README.md
 ```
 
 ---
 
-## Supported Applications
+## CLI Commands
 
-### PHP / WordPress
-- PHP-FPM 8.0, 8.1, 8.2, 8.3
-- One-click WordPress installation
-- WP-CLI integration
-- Automatic updates and backups
+ServerKit includes a management CLI:
 
-### Python
-- Flask applications with Gunicorn
-- Django applications with static file handling
-- Virtual environment management
-- Multiple Python versions
+```bash
+# Service Management
+serverkit start|stop|restart|status
 
-### Docker
-- Container management
-- Docker Compose support
-- Image management
-- Log streaming
+# User Management
+serverkit create-admin
+serverkit reset-password
 
-### Databases
-- MySQL / MariaDB
-- PostgreSQL
-- Redis (optional)
+# Database
+serverkit backup-db
+serverkit restore-db <backup-file>
 
----
-
-## API Documentation
-
-API runs on port `5000` by default.
-
-```
-Base URL: http://localhost:5000/api/v1
-
-Authentication:
-  POST   /auth/login          # Get JWT token
-  POST   /auth/register       # Register new user
-  POST   /auth/refresh        # Refresh token
-
-Applications:
-  GET    /apps                # List all apps
-  POST   /apps                # Create new app
-  GET    /apps/:id            # Get app details
-  PUT    /apps/:id            # Update app
-  DELETE /apps/:id            # Delete app
-
-Domains:
-  GET    /domains             # List domains
-  POST   /domains             # Add domain
-  DELETE /domains/:id         # Remove domain
-
-System:
-  GET    /system/metrics      # Server metrics
-  GET    /system/logs         # System logs
-  POST   /system/services     # Control services
+# Utilities
+serverkit generate-keys
+serverkit logs [service]
+serverkit update
 ```
 
 ---
 
 ## Configuration
 
-Create a `.env` file in the backend directory:
+Create a `.env` file from the example:
+
+```bash
+cp .env.example .env
+```
+
+Key configuration options:
 
 ```env
-# Flask
-FLASK_ENV=development
+# Required - Generate unique values!
 SECRET_KEY=your-secret-key
-
-# Database
-DATABASE_URL=sqlite:///serverkit.db
-
-# JWT
 JWT_SECRET_KEY=your-jwt-secret
 
-# Server Agent
-AGENT_TOKEN=your-agent-token
+# Database (SQLite default, PostgreSQL for production)
+DATABASE_URL=sqlite:///serverkit.db
+
+# Your domain
+CORS_ORIGINS=https://panel.yourdomain.com
+```
+
+Generate secure keys:
+```bash
+python -c "import secrets; print(secrets.token_hex(32))"
 ```
 
 ---
 
-## Roadmap
+## Notification Setup
 
-See [ROADMAP.md](ROADMAP.md) for the detailed development plan.
+ServerKit can send alerts to multiple channels:
 
-**Current Status: Phase 1 - Foundation**
+### Discord
+1. Create webhook: Server Settings → Integrations → Webhooks
+2. Copy URL to Settings → Notifications → Discord
 
-| Phase | Description | Status |
-|-------|-------------|--------|
-| 1 | Foundation & Core | In Progress |
-| 2 | Server Agent | Planned |
-| 3 | PHP & WordPress | Planned |
-| 4 | Python Apps | Planned |
-| 5 | Docker Support | Planned |
-| 6 | Database Management | Planned |
+### Slack
+1. Create app: api.slack.com → Incoming Webhooks
+2. Copy URL to Settings → Notifications → Slack
+
+### Telegram
+1. Create bot via @BotFather
+2. Get chat ID from @userinfobot
+3. Configure in Settings → Notifications → Telegram
+
+---
+
+## Security Features
+
+### Two-Factor Authentication
+- TOTP-based (Google Authenticator, Authy, etc.)
+- Backup codes for recovery
+- Enable in Settings → Security
+
+### Malware Scanning
+- ClamAV integration
+- Quick scan / Full scan options
+- Automatic quarantine
+- Configure in Security → Settings
+
+### File Integrity Monitoring
+- Baseline creation
+- Change detection
+- Alert on modifications
+
+---
+
+## API Overview
+
+Base URL: `http://localhost:5000/api/v1`
+
+```
+Authentication:
+  POST   /auth/login           # Login
+  POST   /auth/register        # Register
+  POST   /auth/2fa/verify      # 2FA verification
+
+Applications:
+  GET    /apps                 # List apps
+  POST   /apps                 # Create app
+  GET    /apps/:id             # Get app
+  DELETE /apps/:id             # Delete app
+
+Security:
+  GET    /security/status      # Security summary
+  POST   /security/scan/quick  # Quick malware scan
+  GET    /security/events      # Security events
+
+Notifications:
+  GET    /notifications/config  # Get config
+  PUT    /notifications/config/:channel  # Update channel
+  POST   /notifications/test/:channel    # Test channel
+```
+
+Full API documentation: [docs/API.md](docs/API.md)
 
 ---
 
 ## Contributing
 
-Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) before submitting a PR.
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -236,17 +306,42 @@ Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md)
 
 ---
 
+## Roadmap
+
+See [ROADMAP.md](ROADMAP.md) for the full development plan.
+
+**Recent additions:**
+- Two-Factor Authentication (2FA)
+- Discord/Slack/Telegram notifications
+- ClamAV malware scanning
+- File integrity monitoring
+- Environment variable management
+- Cron job management
+
+**Coming soon:**
+- Multi-server management
+- Git deployment with webhooks
+- Let's Encrypt wildcard SSL
+- Email server management
+- Backup to S3/B2
+
+---
+
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
 ## Acknowledgments
 
-- Inspired by [ServerPilot](https://serverpilot.io) and [CyberPanel](https://cyberpanel.net)
-- UI design inspired by modern admin dashboards
+- Inspired by [Coolify](https://coolify.io), [ServerPilot](https://serverpilot.io), and [RunCloud](https://runcloud.io)
+- UI inspired by modern admin dashboards
 
 ---
 
-**ServerKit** - Simple. Modern. Self-hosted.
+<p align="center">
+  <strong>ServerKit</strong> - Simple. Modern. Self-hosted.<br>
+  <a href="https://github.com/jhd3197/ServerKit/issues">Report Bug</a> ·
+  <a href="https://github.com/jhd3197/ServerKit/issues">Request Feature</a>
+</p>

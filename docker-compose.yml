@@ -1,6 +1,13 @@
+# ============================================
 # ServerKit Docker Compose
-# Usage: docker compose up -d
-version: '3.8'
+# ============================================
+# Usage:
+#   1. Copy .env.example to .env and configure
+#   2. Run: docker compose up -d
+#
+# For production with SSL:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# ============================================
 
 services:
   backend:
@@ -9,26 +16,48 @@ services:
       dockerfile: Dockerfile
     container_name: serverkit-backend
     environment:
+      # Flask Configuration
       - FLASK_ENV=${FLASK_ENV:-production}
-      - DATABASE_URL=${DATABASE_URL:-sqlite:///serverkit.db}
+      - PORT=5000
+
+      # Security Keys (REQUIRED - generate with: python -c "import secrets; print(secrets.token_hex(32))")
       - SECRET_KEY=${SECRET_KEY:?SECRET_KEY is required}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:?JWT_SECRET_KEY is required}
-      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost}
+
+      # Database
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///serverkit.db}
+
+      # CORS Origins (comma-separated list)
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost,http://localhost:80}
     volumes:
+      # Application data (database)
       - serverkit-data:/app/instance
-      - /var/log:/var/log:ro
-      - /home:/home:ro
-      - /opt:/opt:ro
+
+      # ServerKit configuration (notifications, security settings, etc.)
+      - serverkit-config:/etc/serverkit
+
+      # ServerKit logs (using /app/logs to avoid conflict with host /var/log mount)
+      - serverkit-logs:/app/logs
+
+      # Quarantine directory for malware
+      - serverkit-quarantine:/var/quarantine
+
+      # Docker socket (for container management)
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - serverkit-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/v1/health')"]
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/v1/system/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 10s
+      start_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   frontend:
     build:
@@ -51,11 +80,23 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 networks:
   serverkit-network:
     driver: bridge
+    name: serverkit-network
 
 volumes:
   serverkit-data:
     name: serverkit-data
+  serverkit-config:
+    name: serverkit-config
+  serverkit-logs:
+    name: serverkit-logs
+  serverkit-quarantine:
+    name: serverkit-quarantine

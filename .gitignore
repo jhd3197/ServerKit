@@ -2,3 +2,5 @@
 nul
 /.claude
 /.claude_
+.env
+/frontend/dist

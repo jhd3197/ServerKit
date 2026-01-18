@@ -7,7 +7,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: @spacing-md;
+        margin-bottom: @space-4;
 
         h3 {
             margin: 0;
@@ -15,29 +15,29 @@
 
         .header-actions {
             display: flex;
-            gap: @spacing-sm;
+            gap: @space-2;
         }
     }
 
     .hint {
         color: @text-tertiary;
         font-size: @font-size-sm;
-        margin-bottom: @spacing-lg;
+        margin-bottom: @space-6;
     }
 }
 
 // Add new variable form
 .env-add-form {
-    background: @surface-secondary;
-    border: 1px solid @border-color;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
     border-radius: @radius-md;
-    padding: @spacing-md;
-    margin-bottom: @spacing-lg;
+    padding: @space-4;
+    margin-bottom: @space-6;
 
     .env-form-row {
         display: flex;
-        gap: @spacing-sm;
-        margin-bottom: @spacing-sm;
+        gap: @space-2;
+        margin-bottom: @space-2;
     }
 
     .env-key-input {
@@ -57,8 +57,8 @@
         justify-content: center;
         width: 40px;
         height: 40px;
-        background: @surface-tertiary;
-        border: 1px solid @border-color;
+        background: @bg-hover;
+        border: 1px solid @border-subtle;
         border-radius: @radius-sm;
         cursor: pointer;
         color: @text-tertiary;
@@ -69,14 +69,14 @@
         }
 
         &:hover {
-            border-color: @primary;
-            color: @primary;
+            border-color: @accent-primary;
+            color: @accent-primary;
         }
 
         &:has(input:checked) {
-            background: fade(@primary, 20%);
-            border-color: @primary;
-            color: @primary;
+            background: fade(@accent-primary, 20%);
+            border-color: @accent-primary;
+            color: @accent-primary;
         }
     }
 
@@ -90,7 +90,7 @@
 // Filter
 .env-filter {
     position: relative;
-    margin-bottom: @spacing-md;
+    margin-bottom: @space-4;
 
     input {
         width: 100%;
@@ -119,18 +119,18 @@
 .env-list {
     display: flex;
     flex-direction: column;
-    gap: @spacing-sm;
+    gap: @space-2;
 }
 
 .env-item {
-    background: @surface-secondary;
-    border: 1px solid @border-color;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
     border-radius: @radius-md;
-    padding: @spacing-md;
+    padding: @space-4;
     transition: border-color 0.2s;
 
     &:hover {
-        border-color: @border-light;
+        border-color: @border-active;
     }
 
     &.is-secret {
@@ -141,7 +141,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: @spacing-xs;
+        margin-bottom: @space-1;
     }
 
     .env-key {
@@ -150,7 +150,7 @@
         color: @text-primary;
         display: flex;
         align-items: center;
-        gap: @spacing-xs;
+        gap: @space-1;
 
         .secret-badge {
             color: @warning;
@@ -159,7 +159,7 @@
 
     .env-item-actions {
         display: flex;
-        gap: @spacing-xs;
+        gap: @space-1;
         opacity: 0;
         transition: opacity 0.2s;
     }
@@ -173,20 +173,20 @@
         font-size: @font-size-sm;
         color: @text-secondary;
         word-break: break-all;
-        padding: @spacing-xs 0;
+        padding: @space-1 0;
     }
 
     .env-description {
         font-size: @font-size-xs;
         color: @text-tertiary;
-        margin-top: @spacing-xs;
+        margin-top: @space-1;
         font-style: italic;
     }
 
     .env-edit-row {
         display: flex;
-        gap: @spacing-sm;
-        margin-top: @spacing-sm;
+        gap: @space-2;
+        margin-top: @space-2;
 
         input {
             flex: 1;
@@ -209,7 +209,7 @@
     transition: all 0.2s;
 
     &:hover {
-        background: @surface-tertiary;
+        background: @bg-hover;
         color: @text-primary;
     }
 
@@ -222,10 +222,10 @@
 // Empty state
 .env-empty {
     text-align: center;
-    padding: @spacing-xl;
+    padding: @space-8;
     color: @text-tertiary;
-    background: @surface-secondary;
-    border: 1px dashed @border-color;
+    background: @bg-card;
+    border: 1px dashed @border-subtle;
     border-radius: @radius-md;
 }
 
@@ -234,9 +234,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: @spacing-lg;
-    padding-top: @spacing-md;
-    border-top: 1px solid @border-color;
+    margin-top: @space-6;
+    padding-top: @space-4;
+    border-top: 1px solid @border-subtle;
 
     .env-count {
         color: @text-tertiary;
@@ -246,17 +246,17 @@
 
 // Import modal specific
 .import-file-upload {
-    margin-bottom: @spacing-md;
+    margin-bottom: @space-4;
 }
 
 .import-textarea {
     width: 100%;
     font-family: @font-mono;
     font-size: @font-size-sm;
-    background: @surface-primary;
-    border: 1px solid @border-color;
+    background: @bg-body;
+    border: 1px solid @border-subtle;
     border-radius: @radius-sm;
-    padding: @spacing-md;
+    padding: @space-4;
     resize: vertical;
     min-height: 200px;
 

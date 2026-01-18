@@ -5,14 +5,14 @@
 .security-page {
     .tabs-nav {
         display: flex;
-        gap: @spacing-xs;
-        margin-bottom: @spacing-lg;
-        border-bottom: 1px solid @border-color;
-        padding-bottom: @spacing-sm;
+        gap: @space-1;
+        margin-bottom: @space-6;
+        border-bottom: 1px solid @border-subtle;
+        padding-bottom: @space-2;
         overflow-x: auto;
 
         .tab-btn {
-            padding: @spacing-sm @spacing-md;
+            padding: @space-2 @space-4;
             border: none;
             background: none;
             color: @text-secondary;
@@ -22,12 +22,12 @@
             transition: all 0.2s;
 
             &:hover {
-                background: @surface-tertiary;
+                background: @bg-hover;
                 color: @text-primary;
             }
 
             &.active {
-                background: @primary;
+                background: @accent-primary;
                 color: white;
             }
         }
@@ -39,18 +39,18 @@
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: @spacing-md;
-        margin-bottom: @spacing-lg;
+        gap: @space-4;
+        margin-bottom: @space-6;
     }
 
     .stat-card {
         display: flex;
         align-items: center;
-        gap: @spacing-md;
-        padding: @spacing-lg;
-        background: @surface-secondary;
+        gap: @space-4;
+        padding: @space-6;
+        background: @bg-card;
         border-radius: @radius-lg;
-        border: 1px solid @border-color;
+        border: 1px solid @border-subtle;
 
         &.success {
             border-color: fade(@success, 30%);
@@ -68,8 +68,8 @@
         }
 
         &.info {
-            border-color: fade(@info, 30%);
-            .stat-icon { color: @info; background: fade(@info, 15%); }
+            border-color: fade(@accent-primary, 30%);
+            .stat-icon { color: @accent-primary; background: fade(@accent-primary, 15%); }
         }
     }
 
@@ -79,7 +79,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: @surface-tertiary;
+        background: @bg-hover;
         border-radius: @radius-md;
         flex-shrink: 0;
     }
@@ -102,7 +102,7 @@
     .security-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: @spacing-md;
+        gap: @space-4;
     }
 }
 
@@ -111,7 +111,7 @@
     .scan-options {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: @spacing-lg;
+        gap: @space-6;
         align-items: start;
     }
 
@@ -119,14 +119,14 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: @spacing-sm;
+        gap: @space-2;
         text-align: center;
 
         .btn-lg {
             display: flex;
             align-items: center;
-            gap: @spacing-sm;
-            padding: @spacing-md @spacing-xl;
+            gap: @space-2;
+            padding: @space-4 @space-8;
             font-size: @font-size-md;
 
             svg {
@@ -143,13 +143,13 @@
     .scan-custom {
         label {
             display: block;
-            margin-bottom: @spacing-sm;
+            margin-bottom: @space-2;
             font-weight: 500;
         }
 
         .input-group {
             display: flex;
-            gap: @spacing-sm;
+            gap: @space-2;
 
             input {
                 flex: 1;
@@ -158,13 +158,13 @@
     }
 
     .scan-progress {
-        margin-top: @spacing-lg;
-        border-color: @info;
+        margin-top: @space-6;
+        border-color: @accent-primary;
 
         .progress-info {
             display: flex;
             align-items: center;
-            gap: @spacing-md;
+            gap: @space-4;
 
             .spinner {
                 width: 32px;
@@ -175,7 +175,7 @@
                 margin: 0;
 
                 &:not(:last-child) {
-                    margin-bottom: @spacing-xs;
+                    margin-bottom: @space-1;
                 }
             }
         }
@@ -197,17 +197,17 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: @spacing-xl;
+        padding: @space-8;
         text-align: center;
 
         svg {
             color: @success;
-            margin-bottom: @spacing-md;
+            margin-bottom: @space-4;
         }
 
         p {
             font-size: @font-size-lg;
-            margin-bottom: @spacing-xs;
+            margin-bottom: @space-1;
         }
     }
 }
@@ -216,19 +216,19 @@
 .integrity-tab {
     .description {
         color: @text-secondary;
-        margin-bottom: @spacing-lg;
+        margin-bottom: @space-6;
     }
 
     .integrity-actions {
         display: flex;
-        gap: @spacing-md;
+        gap: @space-4;
     }
 
     .change-section {
-        margin-bottom: @spacing-lg;
+        margin-bottom: @space-6;
 
         h4 {
-            margin-bottom: @spacing-sm;
+            margin-bottom: @space-2;
             color: @warning;
         }
     }
@@ -237,16 +237,16 @@
         list-style: none;
         padding: 0;
         margin: 0;
-        background: @surface-tertiary;
+        background: @bg-hover;
         border-radius: @radius-md;
         max-height: 300px;
         overflow-y: auto;
 
         li {
-            padding: @spacing-sm @spacing-md;
+            padding: @space-2 @space-4;
             font-family: @font-mono;
             font-size: @font-size-sm;
-            border-bottom: 1px solid @border-color;
+            border-bottom: 1px solid @border-subtle;
 
             &:last-child {
                 border-bottom: none;
@@ -264,10 +264,10 @@
     .failed-login-summary {
         display: flex;
         align-items: baseline;
-        gap: @spacing-sm;
+        gap: @space-2;
 
         .count {
-            font-size: @font-size-xxl;
+            font-size: @font-size-2xl;
             font-weight: 700;
 
             &.danger {
@@ -281,11 +281,11 @@
     }
 
     .recent-failures {
-        margin-top: @spacing-md;
+        margin-top: @space-4;
 
         summary {
             cursor: pointer;
-            color: @primary;
+            color: @accent-primary;
 
             &:hover {
                 text-decoration: underline;
@@ -293,9 +293,9 @@
         }
 
         pre {
-            margin-top: @spacing-sm;
-            padding: @spacing-md;
-            background: @surface-tertiary;
+            margin-top: @space-2;
+            padding: @space-4;
+            background: @bg-hover;
             border-radius: @radius-md;
             font-size: @font-size-xs;
             max-height: 200px;
@@ -306,17 +306,17 @@
     .events-list {
         display: flex;
         flex-direction: column;
-        gap: @spacing-sm;
+        gap: @space-2;
     }
 
     .event-item {
         display: flex;
         align-items: flex-start;
-        gap: @spacing-md;
-        padding: @spacing-md;
-        background: @surface-tertiary;
+        gap: @space-4;
+        padding: @space-4;
+        background: @bg-hover;
         border-radius: @radius-md;
-        border-left: 3px solid @border-color;
+        border-left: 3px solid @border-subtle;
 
         &.malware {
             border-left-color: @danger;
@@ -340,7 +340,7 @@
 
         .event-message {
             display: block;
-            margin-bottom: @spacing-xs;
+            margin-bottom: @space-1;
         }
 
         .event-time {
@@ -353,21 +353,21 @@
 // Settings Tab
 .settings-tab {
     .card {
-        margin-bottom: @spacing-lg;
+        margin-bottom: @space-6;
     }
 
     .form-actions {
-        margin-top: @spacing-lg;
+        margin-top: @space-6;
     }
 }
 
 // Shared Components
 .not-installed {
     text-align: center;
-    padding: @spacing-lg;
+    padding: @space-6;
 
     p {
-        margin-bottom: @spacing-md;
+        margin-bottom: @space-4;
         color: @text-secondary;
     }
 }
@@ -375,15 +375,15 @@
 .info-list {
     display: flex;
     flex-direction: column;
-    gap: @spacing-sm;
+    gap: @space-2;
 }
 
 .info-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: @spacing-sm 0;
-    border-bottom: 1px solid @border-color;
+    padding: @space-2 0;
+    border-bottom: 1px solid @border-subtle;
 
     &:last-child {
         border-bottom: none;
@@ -406,5 +406,5 @@
 .loading-sm {
     color: @text-tertiary;
     font-size: @font-size-sm;
-    padding: @spacing-md;
+    padding: @space-4;
 }

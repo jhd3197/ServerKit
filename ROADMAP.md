@@ -1,293 +1,298 @@
 # ServerKit Roadmap
 
-A modern, self-hosted server management panel - alternative to ServerPilot/CyberPanel.
+This document outlines the development roadmap for ServerKit. Features are organized by phases and priority.
 
 ---
 
-## Phase 1: Foundation & Core Infrastructure
+## Current Version: v0.9.0
 
-### 1.1 Project Setup
-- [x] Initialize React frontend with Vite
-- [x] Create admin dashboard mockup/design system
-- [ ] Set up Flask backend structure
-- [ ] Configure SQLAlchemy with SQLite/PostgreSQL
-- [ ] Set up Docker development environment
-- [ ] Configure CORS and API routing
-- [ ] Implement JWT authentication system
+### Recently Completed
 
-### 1.2 User Management
-- [ ] User registration and login
-- [ ] Role-based access control (Admin, User)
-- [ ] Session management
-- [ ] Password reset functionality
-- [ ] API token generation for CLI access
-
-### 1.3 Core API Structure
-```
-/api/v1/
-├── auth/          # Authentication endpoints
-├── servers/       # Server management
-├── apps/          # Application management
-├── domains/       # Domain configuration
-├── databases/     # Database management
-├── ssl/           # SSL certificate management
-└── system/        # System metrics and logs
-```
+- **Two-Factor Authentication (2FA)** - TOTP-based with backup codes
+- **Notification Webhooks** - Discord, Slack, Telegram, generic webhooks
+- **ClamAV Integration** - Malware scanning with quarantine
+- **File Integrity Monitoring** - Baseline creation and change detection
+- **Environment Variable Management** - Secure, encrypted per-app variables
+- **Cron Job Management** - Visual cron editor
+- **Server Uptime Tracking** - Historical uptime data and visualization
 
 ---
 
-## Phase 2: Server Agent & System Integration
+## Phase 1: Core Infrastructure (Completed)
 
-### 2.1 Server Agent (Python)
-- [ ] System metrics collection (CPU, RAM, Disk, Load)
-- [ ] Process monitoring and management
-- [ ] Service control (start, stop, restart)
-- [ ] Log aggregation and streaming
-- [ ] WebSocket connection for real-time updates
-
-### 2.2 Nginx Management
-- [ ] Nginx configuration generator
-- [ ] Virtual host management
-- [ ] Reverse proxy configuration
-- [ ] Load balancing setup
-- [ ] Configuration validation and reload
-
-### 2.3 SSL/TLS Management
-- [ ] Let's Encrypt integration (Certbot)
-- [ ] Auto-renewal setup
-- [ ] Custom certificate upload
-- [ ] SSL status monitoring
-- [ ] Force HTTPS redirects
+- [x] Flask backend with SQLAlchemy ORM
+- [x] React frontend with Vite
+- [x] JWT-based authentication
+- [x] Real-time WebSocket updates
+- [x] System metrics (CPU, RAM, disk, network)
+- [x] Docker and Docker Compose support
+- [x] SQLite/PostgreSQL database support
 
 ---
 
-## Phase 3: PHP & WordPress Support
+## Phase 2: Application Management (Completed)
 
-### 3.1 PHP-FPM Management
-- [ ] PHP 8.2 FPM pool configuration
-- [ ] Multiple PHP version support (8.0, 8.1, 8.2, 8.3)
-- [ ] Per-site PHP configuration
-- [ ] PHP extensions management
-- [ ] OPcache configuration
-
-### 3.2 WordPress Toolkit
-- [ ] One-click WordPress installation
-- [ ] WP-CLI integration
-- [ ] Automatic updates management
-- [ ] Backup and restore
-- [ ] Staging environment creation
-- [ ] Database optimization tools
-
-### 3.3 WordPress-Specific Features
-- [ ] Plugin/theme management
-- [ ] wp-config.php editor
-- [ ] Security hardening
-- [ ] Performance optimization
-- [ ] Search & replace tool
+- [x] PHP/WordPress application deployment
+- [x] Python (Flask/Django) application support
+- [x] Node.js application management with PM2
+- [x] Docker container management
+- [x] Environment variable management
+- [x] Application start/stop/restart controls
+- [x] Log viewing per application
 
 ---
 
-## Phase 4: Python Application Support
+## Phase 3: Domain & SSL Management (Completed)
 
-### 4.1 Python Runtime Management
-- [ ] Multiple Python version support (3.9, 3.10, 3.11, 3.12)
-- [ ] Virtual environment management
-- [ ] pip package management
-- [ ] Requirements.txt handling
-
-### 4.2 Flask Application Deployment
-- [ ] Gunicorn/uWSGI configuration
-- [ ] Environment variables management
-- [ ] Application process management
-- [ ] Log routing and monitoring
-- [ ] Static file serving
-
-### 4.3 Django Application Deployment
-- [ ] Django-specific configuration
-- [ ] Static/media file handling
-- [ ] Database migrations support
-- [ ] Celery worker management
-- [ ] Django admin access
+- [x] Nginx virtual host management
+- [x] Domain configuration interface
+- [x] Let's Encrypt SSL integration
+- [x] SSL certificate auto-renewal
+- [x] Redirect management (HTTP → HTTPS)
 
 ---
 
-## Phase 5: Docker Container Management
+## Phase 4: Database Management (Completed)
 
-### 5.1 Docker Integration
-- [ ] Docker daemon connection
-- [ ] Container listing and management
-- [ ] Image management (pull, remove)
-- [ ] Container logs streaming
-- [ ] Resource usage monitoring
-
-### 5.2 Docker Compose Support
-- [ ] Compose file editor
-- [ ] Stack deployment
-- [ ] Service scaling
-- [ ] Network management
-- [ ] Volume management
-
-### 5.3 Container Features
-- [ ] Container shell access (WebSocket terminal)
-- [ ] Environment variable management
-- [ ] Port mapping configuration
-- [ ] Container health checks
-- [ ] Auto-restart policies
+- [x] MySQL/MariaDB database support
+- [x] PostgreSQL database support
+- [x] Database creation/deletion
+- [x] User management per database
+- [x] Basic query interface
 
 ---
 
-## Phase 6: Database Management
+## Phase 5: File & FTP Management (Completed)
 
-### 6.1 MySQL/MariaDB
-- [ ] Database creation and management
-- [ ] User and privilege management
-- [ ] phpMyAdmin integration
-- [ ] Backup and restore
-- [ ] Query execution interface
-
-### 6.2 PostgreSQL
-- [ ] Database creation and management
-- [ ] User and privilege management
-- [ ] pgAdmin integration (optional)
-- [ ] Backup and restore
-
-### 6.3 Redis (Optional)
-- [ ] Redis server management
-- [ ] Key browser
-- [ ] Memory usage monitoring
+- [x] Web-based file manager
+- [x] File upload/download
+- [x] File editing with syntax highlighting
+- [x] vsftpd FTP server integration
+- [x] FTP user management
 
 ---
 
-## Phase 7: Frontend Dashboard (React)
+## Phase 6: Monitoring & Alerts (Completed)
 
-### 7.1 Dashboard Components
-- [ ] Server overview with real-time metrics
-- [ ] Application cards with status indicators
-- [ ] Quick actions panel
-- [ ] Activity feed
-- [ ] Resource usage charts (Recharts)
-
-### 7.2 Application Management UI
-- [ ] Application list view
-- [ ] Application detail page
-- [ ] Deployment wizard
-- [ ] Configuration editor
-- [ ] Log viewer
-
-### 7.3 Domain Management UI
-- [ ] Domain list and management
-- [ ] DNS records editor (if applicable)
-- [ ] SSL certificate status
-- [ ] Domain routing configuration
-
-### 7.4 System Pages
-- [ ] Web-based terminal (xterm.js)
-- [ ] File manager
-- [ ] Cron job manager
-- [ ] Firewall configuration
-- [ ] Settings and preferences
+- [x] Real-time system metrics
+- [x] Server uptime tracking
+- [x] Customizable alert thresholds
+- [x] Discord webhook notifications
+- [x] Slack webhook notifications
+- [x] Telegram bot notifications
+- [x] Generic webhook support
+- [x] Alert history and logging
 
 ---
 
-## Phase 8: Advanced Features
+## Phase 7: Security Features (Completed)
 
-### 8.1 Monitoring & Alerts
-- [ ] Uptime monitoring
-- [ ] Resource threshold alerts
-- [ ] Email/webhook notifications
-- [ ] Custom alert rules
-- [ ] Incident history
+- [x] Two-factor authentication (TOTP)
+- [x] Backup codes for 2FA recovery
+- [x] ClamAV malware scanning
+- [x] Quick scan / Full scan options
+- [x] File quarantine management
+- [x] File integrity monitoring
+- [x] Failed login detection
+- [x] Security event logging
 
-### 8.2 Backup System
-- [ ] Scheduled backups
-- [ ] Multiple backup destinations (local, S3, etc.)
-- [ ] One-click restore
-- [ ] Backup encryption
-- [ ] Retention policies
+---
 
-### 8.3 Git Deployment
+## Phase 8: Scheduled Tasks (Completed)
+
+- [x] Cron job management
+- [x] Visual cron expression builder
+- [x] Job execution history
+- [x] Enable/disable jobs
+
+---
+
+## Phase 9: Firewall Management (Completed)
+
+- [x] UFW firewall integration
+- [x] Visual rule management
+- [x] Common port presets
+- [x] Rule enable/disable
+
+---
+
+## Phase 10: Multi-Server Management (Planned)
+
+**Priority: High** | **Target: v1.1.0**
+
+- [ ] Agent-based remote server monitoring
+- [ ] Centralized dashboard for multiple servers
+- [ ] Server grouping and tagging
+- [ ] Cross-server metrics comparison
+- [ ] Remote command execution
+- [ ] Server health overview
+
+---
+
+## Phase 11: Git Deployment (Planned)
+
+**Priority: High** | **Target: v1.1.0**
+
 - [ ] GitHub/GitLab webhook integration
-- [ ] Auto-deploy on push
-- [ ] Deploy hooks (pre/post)
-- [ ] Rollback functionality
-- [ ] Deployment history
+- [ ] Automatic deployment on push
+- [ ] Branch selection for deployment
+- [ ] Rollback to previous deployments
+- [ ] Deployment history and logs
+- [ ] Pre/post deployment scripts
+- [ ] Zero-downtime deployments
 
 ---
 
-## Phase 9: Security & Hardening
+## Phase 12: Backup & Restore (Planned)
 
-### 9.1 Security Features
+**Priority: High** | **Target: v1.2.0**
+
+- [ ] Automated database backups
+- [ ] File/directory backups
+- [ ] S3-compatible storage support
+- [ ] Backblaze B2 integration
+- [ ] Backup scheduling
+- [ ] One-click restore
+- [ ] Backup retention policies
+- [ ] Offsite backup verification
+
+---
+
+## Phase 13: Email Server Management (Planned)
+
+**Priority: Medium** | **Target: v1.3.0**
+
+- [ ] Postfix mail server setup
+- [ ] Dovecot IMAP/POP3 configuration
+- [ ] Email account management
+- [ ] Spam filtering (SpamAssassin)
+- [ ] DKIM/SPF/DMARC configuration
+- [ ] Webmail interface integration
+- [ ] Email forwarding rules
+
+---
+
+## Phase 14: Advanced SSL Features (Planned)
+
+**Priority: Medium** | **Target: v1.2.0**
+
+- [ ] Wildcard SSL certificates
+- [ ] Multi-domain certificates (SAN)
+- [ ] Custom certificate upload
+- [ ] Certificate expiry monitoring
+- [ ] Automatic renewal notifications
+
+---
+
+## Phase 15: Team & Permissions (Planned)
+
+**Priority: Medium** | **Target: v1.4.0**
+
+- [ ] Multi-user support
+- [ ] Role-based access control (RBAC)
+- [ ] Custom permission sets
+- [ ] Audit logging per user
+- [ ] Team invitations
+- [ ] Activity dashboard
+
+---
+
+## Phase 16: API Enhancements (Planned)
+
+**Priority: Medium** | **Target: v1.3.0**
+
+- [ ] API key management
+- [ ] Rate limiting
+- [ ] Webhook event subscriptions
+- [ ] OpenAPI/Swagger documentation
+- [ ] API usage analytics
+
+---
+
+## Phase 17: Advanced Security (Planned)
+
+**Priority: High** | **Target: v1.2.0**
+
 - [ ] Fail2ban integration
-- [ ] UFW firewall management
 - [ ] SSH key management
-- [ ] Two-factor authentication
-- [ ] Audit logging
-
-### 9.2 Malware Protection
-- [ ] File integrity monitoring
-- [ ] Malware scanning (ClamAV)
-- [ ] Suspicious activity detection
+- [ ] IP allowlist/blocklist
+- [ ] Brute force protection
+- [ ] Security audit reports
+- [ ] Vulnerability scanning
+- [ ] Automatic security updates
 
 ---
 
-## Phase 10: Polish & Production
+## Phase 18: Performance Optimization (Planned)
 
-### 10.1 Documentation
-- [ ] User documentation
-- [ ] API documentation
-- [ ] Installation guide
-- [ ] Troubleshooting guide
+**Priority: Low** | **Target: v1.5.0**
 
-### 10.2 Testing
-- [ ] Unit tests (pytest)
-- [ ] Integration tests
-- [ ] E2E tests (Playwright/Cypress)
-- [ ] Load testing
-
-### 10.3 Production Readiness
-- [ ] Production Docker image
-- [ ] One-liner installation script
-- [ ] Update mechanism
-- [ ] Migration tools
-- [ ] CLI tool for management
+- [ ] Redis caching integration
+- [ ] Database query optimization
+- [ ] Static asset CDN support
+- [ ] Lazy loading for large datasets
+- [ ] Background job queue (Celery)
 
 ---
 
-## Tech Stack Summary
+## Phase 19: Mobile App (Planned)
 
-| Component | Technology |
-|-----------|------------|
-| **Backend** | Python 3.11+, Flask, SQLAlchemy |
-| **Frontend** | React 18, Vite, TailwindCSS |
-| **Database** | SQLite (dev), PostgreSQL (prod) |
-| **Web Server** | Nginx |
-| **Process Manager** | Supervisor/systemd |
-| **Container Runtime** | Docker |
-| **Task Queue** | Celery + Redis (optional) |
-| **Real-time** | WebSocket (Flask-SocketIO) |
+**Priority: Low** | **Target: v2.0.0**
+
+- [ ] React Native mobile application
+- [ ] Push notifications
+- [ ] Quick actions (restart, view stats)
+- [ ] Biometric authentication
 
 ---
 
-## Milestones
+## Phase 20: Marketplace & Extensions (Planned)
 
-| Milestone | Target | Status |
-|-----------|--------|--------|
-| **v0.1 - Alpha** | Core API + Auth + Basic Dashboard | Not Started |
-| **v0.2 - PHP Support** | PHP-FPM + WordPress | Not Started |
-| **v0.3 - Python Apps** | Flask/Django deployment | Not Started |
-| **v0.4 - Docker** | Container management | Not Started |
-| **v0.5 - Databases** | MySQL/PostgreSQL management | Not Started |
-| **v1.0 - Stable** | Production ready | Not Started |
+**Priority: Low** | **Target: v2.0.0**
+
+- [ ] Plugin/extension system
+- [ ] Community marketplace
+- [ ] Custom dashboard widgets
+- [ ] Theme customization
+
+---
+
+## Version Milestones
+
+| Version | Target Features | Status |
+|---------|-----------------|--------|
+| v0.9.0 | Core features, 2FA, Notifications, Security | Current |
+| v1.0.0 | Production-ready stable release | Planned |
+| v1.1.0 | Multi-server, Git deployment | Planned |
+| v1.2.0 | Backups, Advanced SSL, Advanced Security | Planned |
+| v1.3.0 | Email server, API enhancements | Planned |
+| v1.4.0 | Team & permissions | Planned |
+| v1.5.0 | Performance optimizations | Planned |
+| v2.0.0 | Mobile app, Marketplace | Future |
 
 ---
 
 ## Contributing
 
-1. Pick an unchecked item from the roadmap
-2. Create a feature branch
-3. Implement with tests
-4. Submit a PR
+Want to help? See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+**Priority areas for contributions:**
+- Multi-server agent development
+- Git webhook integration
+- S3/B2 backup implementations
+- Additional notification channels
+- UI/UX improvements
+- Documentation
 
 ---
 
-*Last updated: January 2026*
+## Feature Requests
+
+Have a feature idea? Open an issue on GitHub with the `enhancement` label.
+
+---
+
+<p align="center">
+  <strong>ServerKit Roadmap</strong><br>
+  Last updated: January 2026
+</p>
