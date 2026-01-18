@@ -194,7 +194,7 @@ const ProfileSettings = () => {
 };
 
 const SecuritySettings = () => {
-    const { updateUser } = useAuth();
+    const { updateUser, user } = useAuth();
     const [formData, setFormData] = useState({
         currentPassword: '',
         newPassword: '',
@@ -202,6 +202,32 @@ const SecuritySettings = () => {
     });
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState(null);
+
+    // 2FA state
+    const [twoFAStatus, setTwoFAStatus] = useState(null);
+    const [twoFALoading, setTwoFALoading] = useState(true);
+    const [showSetupModal, setShowSetupModal] = useState(false);
+    const [showDisableModal, setShowDisableModal] = useState(false);
+    const [showBackupCodesModal, setShowBackupCodesModal] = useState(false);
+    const [setupData, setSetupData] = useState(null);
+    const [verificationCode, setVerificationCode] = useState('');
+    const [backupCodes, setBackupCodes] = useState([]);
+    const [twoFAError, setTwoFAError] = useState('');
+
+    useEffect(() => {
+        load2FAStatus();
+    }, []);
+
+    async function load2FAStatus() {
+        try {
+            const status = await api.get2FAStatus();
+            setTwoFAStatus(status);
+        } catch (err) {
+            console.error('Failed to load 2FA status:', err);
+        } finally {
+            setTwoFALoading(false);
+        }
+    }
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -230,6 +256,109 @@ const SecuritySettings = () => {
         }
     }
 
+    async function handleInitiate2FA() {
+        setTwoFAError('');
+        setTwoFALoading(true);
+        try {
+            const data = await api.initiate2FASetup();
+            setSetupData(data);
+            setShowSetupModal(true);
+        } catch (err) {
+            setTwoFAError(err.message);
+        } finally {
+            setTwoFALoading(false);
+        }
+    }
+
+    async function handleConfirm2FA() {
+        if (!verificationCode || verificationCode.length !== 6) {
+            setTwoFAError('Please enter a 6-digit code');
+            return;
+        }
+
+        setTwoFALoading(true);
+        setTwoFAError('');
+        try {
+            const result = await api.confirm2FASetup(verificationCode);
+            setBackupCodes(result.backup_codes);
+            setShowSetupModal(false);
+            setShowBackupCodesModal(true);
+            setVerificationCode('');
+            load2FAStatus();
+        } catch (err) {
+            setTwoFAError(err.message || 'Invalid verification code');
+        } finally {
+            setTwoFALoading(false);
+        }
+    }
+
+    async function handleDisable2FA() {
+        if (!verificationCode) {
+            setTwoFAError('Please enter a verification code');
+            return;
+        }
+
+        setTwoFALoading(true);
+        setTwoFAError('');
+        try {
+            await api.disable2FA(verificationCode);
+            setShowDisableModal(false);
+            setVerificationCode('');
+            load2FAStatus();
+        } catch (err) {
+            setTwoFAError(err.message || 'Invalid verification code');
+        } finally {
+            setTwoFALoading(false);
+        }
+    }
+
+    async function handleRegenerateBackupCodes() {
+        if (!verificationCode || verificationCode.length !== 6) {
+            setTwoFAError('Please enter a 6-digit code');
+            return;
+        }
+
+        setTwoFALoading(true);
+        setTwoFAError('');
+        try {
+            const result = await api.regenerateBackupCodes(verificationCode);
+            setBackupCodes(result.backup_codes);
+            setShowBackupCodesModal(true);
+            setVerificationCode('');
+            load2FAStatus();
+        } catch (err) {
+            setTwoFAError(err.message || 'Invalid verification code');
+        } finally {
+            setTwoFALoading(false);
+        }
+    }
+
+    function downloadBackupCodes() {
+        const content = `ServerKit Backup Codes
+Generated: ${new Date().toLocaleString()}
+
+These codes can be used to access your account if you lose your authenticator device.
+Each code can only be used once.
+
+${backupCodes.join('\n')}
+
+Keep these codes in a safe place.`;
+
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'serverkit-backup-codes.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    function copyBackupCodes() {
+        navigator.clipboard.writeText(backupCodes.join('\n'));
+    }
+
     return (
         <div className="settings-section">
             <div className="section-header">
@@ -242,6 +371,77 @@ const SecuritySettings = () => {
                     {message.text}
                 </div>
             )}
+
+            {/* Two-Factor Authentication Section */}
+            <div className="settings-card two-fa-card">
+                <div className="two-fa-header">
+                    <div className="two-fa-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" strokeWidth="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3>Two-Factor Authentication (2FA)</h3>
+                        <p>Add an extra layer of security to your account</p>
+                    </div>
+                </div>
+
+                {twoFALoading && !twoFAStatus ? (
+                    <div className="loading-sm">Loading...</div>
+                ) : twoFAStatus?.enabled ? (
+                    <div className="two-fa-enabled">
+                        <div className="two-fa-status">
+                            <span className="badge badge-success">Enabled</span>
+                            <span className="two-fa-info">
+                                Enabled on {new Date(twoFAStatus.confirmed_at).toLocaleDateString()}
+                            </span>
+                        </div>
+                        <div className="two-fa-backup-info">
+                            <span>Backup codes remaining: <strong>{twoFAStatus.backup_codes_remaining}</strong></span>
+                            {twoFAStatus.backup_codes_remaining <= 3 && (
+                                <span className="warning-text">Consider regenerating your backup codes</span>
+                            )}
+                        </div>
+                        <div className="two-fa-actions">
+                            <button
+                                className="btn btn-secondary"
+                                onClick={() => {
+                                    setVerificationCode('');
+                                    setTwoFAError('');
+                                    setShowBackupCodesModal(true);
+                                }}
+                            >
+                                Regenerate Backup Codes
+                            </button>
+                            <button
+                                className="btn btn-danger"
+                                onClick={() => {
+                                    setVerificationCode('');
+                                    setTwoFAError('');
+                                    setShowDisableModal(true);
+                                }}
+                            >
+                                Disable 2FA
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="two-fa-disabled">
+                        <p className="two-fa-description">
+                            Two-factor authentication adds an additional layer of security to your account
+                            by requiring a code from your authenticator app in addition to your password.
+                        </p>
+                        <button
+                            className="btn btn-primary"
+                            onClick={handleInitiate2FA}
+                            disabled={twoFALoading}
+                        >
+                            Enable Two-Factor Authentication
+                        </button>
+                    </div>
+                )}
+            </div>
 
             <form onSubmit={handleSubmit} className="settings-form">
                 <h3>Change Password</h3>
@@ -304,6 +504,197 @@ const SecuritySettings = () => {
                     <span className="badge badge-success">Current</span>
                 </div>
             </div>
+
+            {/* 2FA Setup Modal */}
+            {showSetupModal && setupData && (
+                <div className="modal-overlay" onClick={() => setShowSetupModal(false)}>
+                    <div className="modal modal-md" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>Set Up Two-Factor Authentication</h2>
+                            <button className="modal-close" onClick={() => setShowSetupModal(false)}>&times;</button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="setup-steps">
+                                <div className="setup-step">
+                                    <span className="step-number">1</span>
+                                    <div className="step-content">
+                                        <h4>Scan the QR Code</h4>
+                                        <p>Use your authenticator app (Google Authenticator, Authy, 1Password, etc.) to scan this QR code.</p>
+                                        {setupData.qr_code ? (
+                                            <div className="qr-code-container">
+                                                <img src={setupData.qr_code} alt="2FA QR Code" className="qr-code" />
+                                            </div>
+                                        ) : (
+                                            <div className="qr-fallback">
+                                                <p>QR code unavailable. Enter this secret manually:</p>
+                                                <code className="secret-key">{setupData.secret}</code>
+                                            </div>
+                                        )}
+                                        <details className="manual-entry">
+                                            <summary>Can't scan? Enter manually</summary>
+                                            <p>Account: {user?.email}</p>
+                                            <p>Secret: <code>{setupData.secret}</code></p>
+                                        </details>
+                                    </div>
+                                </div>
+
+                                <div className="setup-step">
+                                    <span className="step-number">2</span>
+                                    <div className="step-content">
+                                        <h4>Enter Verification Code</h4>
+                                        <p>Enter the 6-digit code from your authenticator app to verify setup.</p>
+                                        <input
+                                            type="text"
+                                            value={verificationCode}
+                                            onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                            placeholder="000000"
+                                            className="verification-input"
+                                            autoFocus
+                                        />
+                                        {twoFAError && <p className="error-text">{twoFAError}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={() => setShowSetupModal(false)}>
+                                Cancel
+                            </button>
+                            <button
+                                className="btn btn-primary"
+                                onClick={handleConfirm2FA}
+                                disabled={twoFALoading || verificationCode.length !== 6}
+                            >
+                                {twoFALoading ? 'Verifying...' : 'Enable 2FA'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Disable 2FA Modal */}
+            {showDisableModal && (
+                <div className="modal-overlay" onClick={() => setShowDisableModal(false)}>
+                    <div className="modal" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>Disable Two-Factor Authentication</h2>
+                            <button className="modal-close" onClick={() => setShowDisableModal(false)}>&times;</button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="warning-box">
+                                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" strokeWidth="2">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                    <line x1="12" y1="9" x2="12" y2="13"/>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                </svg>
+                                <p>Disabling 2FA will make your account less secure. You will only need your password to log in.</p>
+                            </div>
+                            <div className="form-group">
+                                <label>Enter a verification code or backup code to disable 2FA:</label>
+                                <input
+                                    type="text"
+                                    value={verificationCode}
+                                    onChange={(e) => setVerificationCode(e.target.value)}
+                                    placeholder="Code from authenticator or backup code"
+                                    autoFocus
+                                />
+                                {twoFAError && <p className="error-text">{twoFAError}</p>}
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={() => setShowDisableModal(false)}>
+                                Cancel
+                            </button>
+                            <button
+                                className="btn btn-danger"
+                                onClick={handleDisable2FA}
+                                disabled={twoFALoading || !verificationCode}
+                            >
+                                {twoFALoading ? 'Disabling...' : 'Disable 2FA'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Backup Codes Modal */}
+            {showBackupCodesModal && (
+                <div className="modal-overlay" onClick={() => setShowBackupCodesModal(false)}>
+                    <div className="modal modal-md" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>{backupCodes.length > 0 ? 'Your Backup Codes' : 'Regenerate Backup Codes'}</h2>
+                            <button className="modal-close" onClick={() => setShowBackupCodesModal(false)}>&times;</button>
+                        </div>
+                        <div className="modal-body">
+                            {backupCodes.length > 0 ? (
+                                <>
+                                    <div className="warning-box">
+                                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" strokeWidth="2">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <line x1="12" y1="8" x2="12" y2="12"/>
+                                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                        </svg>
+                                        <p>Save these backup codes in a secure location. They will not be shown again. Each code can only be used once.</p>
+                                    </div>
+                                    <div className="backup-codes-grid">
+                                        {backupCodes.map((code, index) => (
+                                            <code key={index} className="backup-code">{code}</code>
+                                        ))}
+                                    </div>
+                                    <div className="backup-codes-actions">
+                                        <button className="btn btn-secondary" onClick={downloadBackupCodes}>
+                                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" strokeWidth="2">
+                                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                                            </svg>
+                                            Download
+                                        </button>
+                                        <button className="btn btn-secondary" onClick={copyBackupCodes}>
+                                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" strokeWidth="2">
+                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                            </svg>
+                                            Copy
+                                        </button>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <p>Enter a code from your authenticator app to generate new backup codes. This will invalidate all existing backup codes.</p>
+                                    <div className="form-group">
+                                        <label>Verification Code</label>
+                                        <input
+                                            type="text"
+                                            value={verificationCode}
+                                            onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                            placeholder="000000"
+                                            autoFocus
+                                        />
+                                        {twoFAError && <p className="error-text">{twoFAError}</p>}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary" onClick={() => {
+                                setShowBackupCodesModal(false);
+                                setBackupCodes([]);
+                                setVerificationCode('');
+                            }}>
+                                {backupCodes.length > 0 ? 'Done' : 'Cancel'}
+                            </button>
+                            {backupCodes.length === 0 && (
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={handleRegenerateBackupCodes}
+                                    disabled={twoFALoading || verificationCode.length !== 6}
+                                >
+                                    {twoFALoading ? 'Generating...' : 'Generate New Codes'}
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -1585,6 +1585,45 @@ class ApiService {
             method: 'DELETE'
         });
     }
+
+    // ========================================
+    // Two-Factor Authentication endpoints
+    // ========================================
+    async get2FAStatus() {
+        return this.request('/auth/2fa/status');
+    }
+
+    async initiate2FASetup() {
+        return this.request('/auth/2fa/setup', { method: 'POST' });
+    }
+
+    async confirm2FASetup(code) {
+        return this.request('/auth/2fa/setup/confirm', {
+            method: 'POST',
+            body: { code }
+        });
+    }
+
+    async disable2FA(code) {
+        return this.request('/auth/2fa/disable', {
+            method: 'POST',
+            body: { code }
+        });
+    }
+
+    async regenerateBackupCodes(code) {
+        return this.request('/auth/2fa/backup-codes/regenerate', {
+            method: 'POST',
+            body: { code }
+        });
+    }
+
+    async verify2FA(tempToken, code) {
+        return this.request('/auth/2fa/verify', {
+            method: 'POST',
+            body: { temp_token: tempToken, code }
+        });
+    }
 }
 
 export const api = new ApiService();

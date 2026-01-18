@@ -129,6 +129,10 @@ def create_app(config_name=None):
     from app.api.env_vars import env_vars_bp
     app.register_blueprint(env_vars_bp, url_prefix='/api/v1/apps')
 
+    # Register blueprints - Two-Factor Authentication
+    from app.api.two_factor import two_factor_bp
+    app.register_blueprint(two_factor_bp, url_prefix='/api/v1/auth/2fa')
+
     # Create database tables
     with app.app_context():
         db.create_all()

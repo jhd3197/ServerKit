@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
+import json
 
 
 class User(db.Model):
@@ -18,6 +19,12 @@ class User(db.Model):
     # Account lockout fields
     failed_login_count = db.Column(db.Integer, default=0)
     locked_until = db.Column(db.DateTime, nullable=True)
+
+    # Two-Factor Authentication fields
+    totp_secret = db.Column(db.String(32), nullable=True)  # Base32 encoded secret
+    totp_enabled = db.Column(db.Boolean, default=False)
+    backup_codes = db.Column(db.Text, nullable=True)  # JSON array of hashed backup codes
+    totp_confirmed_at = db.Column(db.DateTime, nullable=True)  # When 2FA was enabled
 
     # Relationships
     applications = db.relationship('Application', backref='owner', lazy='dynamic')
@@ -63,9 +70,32 @@ class User(db.Model):
             'username': self.username,
             'role': self.role,
             'is_active': self.is_active,
+            'totp_enabled': self.totp_enabled,
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
         }
+
+    def get_backup_codes(self):
+        """Get the list of backup code hashes."""
+        if not self.backup_codes:
+            return []
+        try:
+            return json.loads(self.backup_codes)
+        except (json.JSONDecodeError, TypeError):
+            return []
+
+    def set_backup_codes(self, codes_hashes):
+        """Store backup code hashes."""
+        self.backup_codes = json.dumps(codes_hashes)
+
+    def use_backup_code(self, code_hash):
+        """Remove a used backup code."""
+        codes = self.get_backup_codes()
+        if code_hash in codes:
+            codes.remove(code_hash)
+            self.set_backup_codes(codes)
+            return True
+        return False
 
     def __repr__(self):
         return f'<User {self.username}>'

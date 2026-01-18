@@ -1,0 +1,306 @@
+// ============================================
+// TWO-FACTOR AUTHENTICATION STYLES
+// ============================================
+
+// TOTP Code Input (Login page)
+.totp-inputs {
+    display: flex;
+    justify-content: center;
+    gap: @spacing-sm;
+    margin: @spacing-lg 0;
+}
+
+.totp-input {
+    width: 48px;
+    height: 56px;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    border: 2px solid @border-color;
+    border-radius: @radius-md;
+    background: @surface-secondary;
+    color: @text-primary;
+    transition: all 0.2s;
+
+    &:focus {
+        border-color: @primary;
+        outline: none;
+        box-shadow: 0 0 0 3px fade(@primary, 20%);
+    }
+
+    &::placeholder {
+        color: @text-tertiary;
+    }
+}
+
+// Auth footer links
+.auth-footer-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: @spacing-sm;
+    margin-top: @spacing-lg;
+}
+
+.link-button {
+    background: none;
+    border: none;
+    color: @primary;
+    cursor: pointer;
+    font-size: @font-size-sm;
+    padding: 0;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// 2FA Card in Settings
+.two-fa-card {
+    border: 1px solid @border-color;
+    border-radius: @radius-lg;
+    padding: @spacing-lg;
+    margin-bottom: @spacing-lg;
+}
+
+.two-fa-header {
+    display: flex;
+    gap: @spacing-md;
+    margin-bottom: @spacing-lg;
+
+    .two-fa-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: fade(@primary, 15%);
+        border-radius: @radius-md;
+        color: @primary;
+        flex-shrink: 0;
+    }
+
+    h3 {
+        margin: 0 0 @spacing-xs 0;
+    }
+
+    p {
+        margin: 0;
+        color: @text-secondary;
+        font-size: @font-size-sm;
+    }
+}
+
+.two-fa-disabled {
+    .two-fa-description {
+        color: @text-secondary;
+        margin-bottom: @spacing-md;
+    }
+}
+
+.two-fa-enabled {
+    .two-fa-status {
+        display: flex;
+        align-items: center;
+        gap: @spacing-sm;
+        margin-bottom: @spacing-md;
+    }
+
+    .two-fa-info {
+        color: @text-secondary;
+        font-size: @font-size-sm;
+    }
+
+    .two-fa-backup-info {
+        background: @surface-tertiary;
+        padding: @spacing-sm @spacing-md;
+        border-radius: @radius-sm;
+        margin-bottom: @spacing-md;
+        display: flex;
+        flex-direction: column;
+        gap: @spacing-xs;
+
+        .warning-text {
+            color: @warning;
+            font-size: @font-size-sm;
+        }
+    }
+
+    .two-fa-actions {
+        display: flex;
+        gap: @spacing-sm;
+    }
+}
+
+// Setup Modal
+.setup-steps {
+    display: flex;
+    flex-direction: column;
+    gap: @spacing-lg;
+}
+
+.setup-step {
+    display: flex;
+    gap: @spacing-md;
+
+    .step-number {
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: @primary;
+        color: white;
+        border-radius: 50%;
+        font-weight: 600;
+        font-size: @font-size-sm;
+        flex-shrink: 0;
+    }
+
+    .step-content {
+        flex: 1;
+
+        h4 {
+            margin: 0 0 @spacing-xs 0;
+        }
+
+        p {
+            color: @text-secondary;
+            margin: 0 0 @spacing-md 0;
+            font-size: @font-size-sm;
+        }
+    }
+}
+
+.qr-code-container {
+    display: flex;
+    justify-content: center;
+    padding: @spacing-md;
+    background: white;
+    border-radius: @radius-md;
+    margin-bottom: @spacing-md;
+}
+
+.qr-code {
+    width: 200px;
+    height: 200px;
+}
+
+.qr-fallback {
+    background: @surface-tertiary;
+    padding: @spacing-md;
+    border-radius: @radius-md;
+    text-align: center;
+
+    .secret-key {
+        display: block;
+        font-size: @font-size-lg;
+        padding: @spacing-sm;
+        margin-top: @spacing-sm;
+        background: @surface-primary;
+        border-radius: @radius-sm;
+        word-break: break-all;
+    }
+}
+
+.manual-entry {
+    margin-top: @spacing-md;
+    font-size: @font-size-sm;
+    color: @text-secondary;
+
+    summary {
+        cursor: pointer;
+        color: @primary;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    p {
+        margin: @spacing-xs 0;
+    }
+
+    code {
+        background: @surface-tertiary;
+        padding: 2px 6px;
+        border-radius: @radius-sm;
+    }
+}
+
+.verification-input {
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.5em;
+    padding: @spacing-md;
+    width: 100%;
+    max-width: 200px;
+}
+
+// Warning Box
+.warning-box {
+    display: flex;
+    gap: @spacing-md;
+    padding: @spacing-md;
+    background: fade(@warning, 10%);
+    border: 1px solid fade(@warning, 30%);
+    border-radius: @radius-md;
+    margin-bottom: @spacing-lg;
+
+    svg {
+        flex-shrink: 0;
+        color: @warning;
+    }
+
+    p {
+        margin: 0;
+        color: @text-primary;
+        font-size: @font-size-sm;
+    }
+}
+
+.error-text {
+    color: @danger;
+    font-size: @font-size-sm;
+    margin-top: @spacing-xs;
+}
+
+// Backup Codes Grid
+.backup-codes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: @spacing-sm;
+    margin-bottom: @spacing-lg;
+}
+
+.backup-code {
+    display: block;
+    padding: @spacing-sm @spacing-md;
+    background: @surface-tertiary;
+    border-radius: @radius-sm;
+    text-align: center;
+    font-size: @font-size-md;
+    font-family: @font-mono;
+}
+
+.backup-codes-actions {
+    display: flex;
+    justify-content: center;
+    gap: @spacing-sm;
+
+    .btn svg {
+        margin-right: @spacing-xs;
+    }
+}
+
+// Modal medium size
+.modal-md {
+    max-width: 500px;
+}
+
+// Loading small
+.loading-sm {
+    color: @text-tertiary;
+    font-size: @font-size-sm;
+}

@@ -94,7 +94,23 @@ def login():
     if not user.is_active:
         return jsonify({'error': 'Account is deactivated'}), 403
 
-    # Reset failed login count on successful login
+    # Check if 2FA is enabled
+    if user.totp_enabled:
+        # Create a short-lived temporary token for 2FA verification
+        # This token can only be used to complete 2FA, not to access resources
+        temp_token = create_access_token(
+            identity=user.id,
+            additional_claims={'2fa_pending': True},
+            expires_delta=False  # Use default (short) expiry
+        )
+
+        return jsonify({
+            'requires_2fa': True,
+            'temp_token': temp_token,
+            'message': 'Two-factor authentication required'
+        }), 200
+
+    # No 2FA - proceed with normal login
     user.reset_failed_login()
     db.session.commit()
 

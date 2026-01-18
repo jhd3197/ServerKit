@@ -44,3 +44,7 @@ bcrypt
 
 # Encryption for env vars
 cryptography==42.0.0
+
+# Two-Factor Authentication
+pyotp==2.9.0
+qrcode[pil]==7.4.2
