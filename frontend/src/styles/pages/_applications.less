@@ -2,13 +2,313 @@
 // APPLICATIONS PAGES
 // ============================================
 
-// Applications list
+// Applications page wrapper
+.applications-page {
+    display: flex;
+    flex-direction: column;
+    gap: @space-4;
+}
+
+// ============================================
+// TOOLBAR
+// ============================================
+
+.apps-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: @space-4;
+    flex-wrap: wrap;
+}
+
+.apps-toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: @space-4;
+    flex: 1;
+    min-width: 0;
+}
+
+.apps-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+}
+
+// Search wrapper
+.apps-search-wrapper {
+    position: relative;
+    max-width: 300px;
+    flex: 1;
+}
+
+.apps-search-icon {
+    position: absolute;
+    left: @space-3;
+    top: 50%;
+    transform: translateY(-50%);
+    color: @text-tertiary;
+    pointer-events: none;
+}
+
+.apps-search-input {
+    width: 100%;
+    padding: @space-2 @space-3;
+    padding-left: @space-8 + 4;
+    padding-right: @space-8;
+    background: @bg-card;
+    border: 1px solid @border-default;
+    border-radius: @radius-md;
+    color: @text-primary;
+    font-size: @font-size-sm;
+    .transition(border-color);
+
+    &::placeholder {
+        color: @text-tertiary;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: @accent-primary;
+    }
+}
+
+.apps-search-clear {
+    position: absolute;
+    right: @space-2;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: @space-1;
+    cursor: pointer;
+    color: @text-tertiary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: @radius-sm;
+    .transition(color);
+
+    &:hover {
+        color: @text-primary;
+    }
+}
+
+// Results count
+.apps-count {
+    font-size: @font-size-sm;
+    color: @text-tertiary;
+    white-space: nowrap;
+}
+
+// Sort dropdown
+.apps-sort-wrapper {
+    position: relative;
+}
+
+.apps-sort-select {
+    appearance: none;
+    padding: @space-2 @space-8 @space-2 @space-3;
+    background: @bg-card;
+    border: 1px solid @border-default;
+    border-radius: @radius-md;
+    color: @text-primary;
+    font-size: @font-size-sm;
+    cursor: pointer;
+    .transition(border-color);
+
+    &:focus {
+        outline: none;
+        border-color: @accent-primary;
+    }
+}
+
+.apps-sort-icon {
+    position: absolute;
+    right: @space-2;
+    top: 50%;
+    transform: translateY(-50%);
+    color: @text-tertiary;
+    pointer-events: none;
+}
+
+// View toggle
+.apps-view-toggle {
+    display: flex;
+    background: @bg-card;
+    border: 1px solid @border-default;
+    border-radius: @radius-md;
+    overflow: hidden;
+}
+
+.apps-view-btn {
+    padding: @space-2;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: @text-tertiary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .transition(all);
+
+    &:hover {
+        color: @text-primary;
+        background: @bg-hover;
+    }
+
+    &.active {
+        color: @accent-primary;
+        background: @accent-glow;
+    }
+
+    &:first-child {
+        border-right: 1px solid @border-default;
+    }
+}
+
+// ============================================
+// BULK ACTION BAR
+// ============================================
+
+.apps-bulk-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: @space-3 @space-4;
+    background: @accent-glow;
+    border: 1px solid fade(@accent-primary, 30%);
+    border-radius: @radius-lg;
+    gap: @space-4;
+    flex-wrap: wrap;
+}
+
+.apps-bulk-info {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    color: @accent-primary;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+}
+
+.apps-bulk-clear {
+    background: none;
+    border: none;
+    color: @text-secondary;
+    font-size: @font-size-sm;
+    cursor: pointer;
+    padding: @space-1 @space-2;
+    margin-left: @space-2;
+    border-radius: @radius-sm;
+    .transition(color);
+
+    &:hover {
+        color: @text-primary;
+    }
+}
+
+.apps-bulk-actions {
+    display: flex;
+    gap: @space-2;
+}
+
+// ============================================
+// CHECKBOX STYLES
+// ============================================
+
+.apps-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+
+    input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+
+        &:checked + .apps-checkbox-custom {
+            background: @accent-primary;
+            border-color: @accent-primary;
+
+            &::after {
+                opacity: 1;
+            }
+        }
+
+        &:focus + .apps-checkbox-custom {
+            box-shadow: 0 0 0 2px @accent-glow;
+        }
+    }
+}
+
+.apps-checkbox-custom {
+    width: 18px;
+    height: 18px;
+    background: @bg-card;
+    border: 1px solid @border-default;
+    border-radius: @radius-sm;
+    position: relative;
+    .transition(all);
+
+    &::after {
+        content: '';
+        position: absolute;
+        left: 5px;
+        top: 2px;
+        width: 5px;
+        height: 9px;
+        border: solid @text-primary;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        opacity: 0;
+        .transition(opacity);
+    }
+
+    &:hover {
+        border-color: @accent-primary;
+    }
+}
+
+// ============================================
+// APPLICATIONS LIST VIEW
+// ============================================
+
 .apps-list {
-    .flex-column-gap(@space-3);
+    .flex-column-gap(@space-2);
+}
+
+.apps-list-header {
+    display: flex;
+    align-items: center;
+    gap: @space-4;
+    padding: @space-2 @space-4;
+    color: @text-tertiary;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+}
+
+.apps-list-header-text {
+    margin-left: @space-1;
 }
 
 .app-row {
     .list-item-base();
+    display: flex;
+    align-items: center;
+    gap: @space-4;
+    .transition(all);
+
+    &.selected {
+        background: @accent-glow;
+        border-color: fade(@accent-primary, 30%);
+    }
+
+    &:hover {
+        border-color: @border-active;
+    }
 }
 
 .app-info {
@@ -18,8 +318,26 @@
     min-width: 0;
 }
 
+.app-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: @radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: @font-weight-bold;
+    font-size: @font-size-md;
+    flex-shrink: 0;
+
+    svg {
+        color: white;
+    }
+}
+
 .app-details {
     min-width: 0;
+    flex: 1;
 
     h3 {
         font-size: @font-size-base + 1;
@@ -35,6 +353,7 @@
     gap: @space-3;
     font-size: @font-size-sm;
     color: @text-tertiary;
+    flex-wrap: wrap;
 
     a {
         color: @text-secondary;
@@ -46,17 +365,287 @@
     }
 }
 
+.app-type-badge {
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+    color: @accent-primary;
+    background: @accent-glow;
+    padding: 2px @space-2;
+    border-radius: @radius-sm;
+}
+
+.app-port {
+    font-family: @font-mono;
+    font-size: @font-size-xs;
+    color: @text-secondary;
+}
+
+.app-domains-info {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+    color: @text-secondary;
+
+    a {
+        color: @text-secondary;
+
+        &:hover {
+            color: @accent-primary;
+        }
+    }
+}
+
+.private-url-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+    color: @success;
+    font-size: @font-size-xs;
+}
+
 .app-status {
     flex-shrink: 0;
+}
+
+// Enhanced status badge with animation
+.status-badge-enhanced {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-1 + 2 @space-3;
+    border-radius: @radius-full;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    text-transform: capitalize;
+
+    &.status-active {
+        background: @success-bg;
+        color: @success;
+
+        .status-dot-animated {
+            background: @success;
+            animation: pulse-green 2s ease-in-out infinite;
+        }
+    }
+
+    &.status-stopped {
+        background: @bg-tertiary;
+        color: @text-secondary;
+
+        .status-dot-animated {
+            background: @text-tertiary;
+        }
+    }
+
+    &.status-error {
+        background: @danger-bg;
+        color: @danger;
+
+        .status-dot-animated {
+            background: @danger;
+        }
+    }
+
+    &.status-warning {
+        background: @warning-bg;
+        color: @warning;
+
+        .status-dot-animated {
+            background: @warning;
+            animation: pulse-yellow 2s ease-in-out infinite;
+        }
+    }
+
+    &.transitioning {
+        .status-dot-animated {
+            animation: pulse-fast 0.5s ease-in-out infinite;
+        }
+    }
+}
+
+.status-dot-animated {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+@keyframes pulse-green {
+    0%, 100% {
+        box-shadow: 0 0 0 0 fade(@success, 40%);
+    }
+    50% {
+        box-shadow: 0 0 0 4px fade(@success, 0%);
+    }
+}
+
+@keyframes pulse-yellow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 fade(@warning, 40%);
+    }
+    50% {
+        box-shadow: 0 0 0 4px fade(@warning, 0%);
+    }
+}
+
+@keyframes pulse-fast {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
 }
 
 .app-actions {
     display: flex;
     gap: @space-2;
     flex-shrink: 0;
+
+    .btn-text {
+        @media (max-width: @breakpoint-md) {
+            display: none;
+        }
+    }
 }
 
-// Application Detail Page
+// ============================================
+// APPLICATIONS GRID VIEW
+// ============================================
+
+.apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: @space-4;
+}
+
+.app-card {
+    background: @bg-card;
+    border: 1px solid @border-default;
+    border-radius: @radius-lg;
+    padding: @space-4;
+    cursor: pointer;
+    position: relative;
+    .transition(all);
+
+    &:hover {
+        border-color: @border-active;
+        transform: translateY(-2px);
+        box-shadow: @shadow-md;
+    }
+
+    &.selected {
+        background: @accent-glow;
+        border-color: fade(@accent-primary, 30%);
+    }
+}
+
+.app-card-checkbox {
+    position: absolute;
+    top: @space-3;
+    left: @space-3;
+    z-index: 1;
+}
+
+.app-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: @space-3;
+    padding-left: @space-6 + @space-2;
+}
+
+.app-card-body {
+    h3 {
+        font-size: @font-size-md;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+        margin-bottom: @space-2;
+        .truncate();
+    }
+}
+
+.app-card-meta {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    margin-bottom: @space-3;
+}
+
+.app-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: @space-1;
+    min-height: 48px;
+}
+
+.app-card-info-row {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    font-size: @font-size-sm;
+    color: @text-secondary;
+
+    svg {
+        color: @text-tertiary;
+        flex-shrink: 0;
+    }
+}
+
+.app-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: @space-2;
+    margin-top: @space-3;
+    padding-top: @space-3;
+    border-top: 1px solid @border-subtle;
+}
+
+// Icon-only button
+.btn-icon {
+    padding: @space-2 !important;
+
+    svg {
+        margin: 0 !important;
+    }
+}
+
+// ============================================
+// CONFIRMATION MODAL
+// ============================================
+
+.confirm-modal {
+    max-width: 420px;
+}
+
+.confirm-modal-header {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    margin-bottom: @space-3;
+
+    h2 {
+        margin: 0;
+        font-size: @font-size-lg;
+    }
+}
+
+.confirm-icon-danger {
+    color: @danger;
+    flex-shrink: 0;
+}
+
+.confirm-modal-message {
+    color: @text-secondary;
+    font-size: @font-size-base;
+    line-height: @line-height-relaxed;
+    margin-bottom: @space-5;
+}
+
+// ============================================
+// APPLICATION DETAIL PAGE
+// ============================================
+
 .app-header-info {
     .flex-start();
     gap: @space-5;
@@ -391,5 +980,50 @@
 
     &.not-accessible {
         color: @danger;
+    }
+}
+
+// ============================================
+// RESPONSIVE ADJUSTMENTS
+// ============================================
+
+@media (max-width: @breakpoint-md) {
+    .apps-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .apps-toolbar-left {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .apps-search-wrapper {
+        max-width: none;
+    }
+
+    .apps-toolbar-right {
+        justify-content: space-between;
+    }
+
+    .apps-bulk-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .apps-bulk-actions {
+        justify-content: flex-end;
+    }
+
+    .app-row {
+        flex-wrap: wrap;
+    }
+
+    .app-actions {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: @space-2;
+        padding-top: @space-2;
+        border-top: 1px solid @border-subtle;
     }
 }
