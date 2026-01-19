@@ -110,10 +110,27 @@ const Templates = () => {
     const selectedCategory = searchParams.get('category') || null;
     const searchQuery = searchParams.get('search') || '';
     const sortBy = searchParams.get('sort') || 'name-asc';
+    const installTemplateId = searchParams.get('install');
 
     useEffect(() => {
         loadData();
     }, []);
+
+    // Auto-open install modal if template ID is in URL
+    useEffect(() => {
+        if (installTemplateId && templates.length > 0 && !loading) {
+            const template = templates.find(t => t.id === installTemplateId);
+            if (template) {
+                handleViewTemplate(template).then(() => {
+                    setShowInstallModal(true);
+                });
+                // Clear the install param from URL
+                const newParams = new URLSearchParams(searchParams);
+                newParams.delete('install');
+                setSearchParams(newParams, { replace: true });
+            }
+        }
+    }, [installTemplateId, templates, loading]);
 
     useEffect(() => {
         loadTemplates();
