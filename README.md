@@ -1,20 +1,30 @@
+<div align="center">
+
 # ServerKit
 
-<p align="center">
-  <img width="700" alt="server-kit" src="https://github.com/user-attachments/assets/bfc59e75-8f90-4674-a222-e18213b628b7" />
-</p>
+<img width="700" alt="server-kit" src="https://github.com/user-attachments/assets/bfc59e75-8f90-4674-a222-e18213b628b7" />
 
-<p align="center">
-  <strong>Modern, self-hosted server management panel</strong><br>
-  An open-source alternative to ServerPilot, RunCloud, and Coolify
-</p>
+**Self-hosted infrastructure, made simple**
 
-<p align="center">
-  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
-  <img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python">
-  <img src="https://img.shields.io/badge/react-18-blue.svg" alt="React">
-  <img src="https://img.shields.io/badge/docker-ready-blue.svg" alt="Docker">
-</p>
+<br>
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11+-3776AB.svg?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![React](https://img.shields.io/badge/react-18-61DAFB.svg?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org)
+[![Docker](https://img.shields.io/badge/docker-ready-2496ED.svg?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
+
+[![Flask](https://img.shields.io/badge/flask-3.0-000000.svg?style=flat-square&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
+[![Nginx](https://img.shields.io/badge/nginx-reverse_proxy-009639.svg?style=flat-square&logo=nginx&logoColor=white)](https://nginx.org)
+[![Let's Encrypt](https://img.shields.io/badge/SSL-Let's_Encrypt-003A70.svg?style=flat-square&logo=letsencrypt&logoColor=white)](https://letsencrypt.org)
+[![MySQL](https://img.shields.io/badge/mysql-8.0-4479A1.svg?style=flat-square&logo=mysql&logoColor=white)](https://mysql.com)
+[![PostgreSQL](https://img.shields.io/badge/postgresql-15-4169E1.svg?style=flat-square&logo=postgresql&logoColor=white)](https://postgresql.org)
+[![Ubuntu](https://img.shields.io/badge/ubuntu-22.04+-E95420.svg?style=flat-square&logo=ubuntu&logoColor=white)](https://ubuntu.com)
+
+<br>
+
+[Features](#features) · [Quick Start](#quick-start) · [Documentation](#documentation) · [Architecture](docs/ARCHITECTURE.md) · [Contributing](#contributing)
+
+</div>
 
 ---
 
@@ -23,6 +33,55 @@
 ServerKit is a lightweight, modern server control panel for managing web applications, databases, Docker containers, and security on your VPS or dedicated server. Built with Python/Flask backend and React frontend.
 
 **Perfect for:** Developers, freelancers, and small teams who want full control over their infrastructure without the complexity of Kubernetes or the cost of managed platforms.
+
+---
+
+## Architecture
+
+<details>
+<summary><strong>View How It Works</strong></summary>
+
+<br>
+
+```
+                          ┌──────────────────┐
+                          │     INTERNET     │
+                          └────────┬─────────┘
+                                   │
+                                   ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                            YOUR SERVER                                    │
+│                                                                           │
+│  ┌─────────────────────────────────────────────────────────────────────┐ │
+│  │                      NGINX (Reverse Proxy)                          │ │
+│  │                         :80 / :443                                  │ │
+│  │                                                                     │ │
+│  │    app1.com ──┐      app2.com ──┐      api.app3.com ──┐            │ │
+│  └───────────────┼─────────────────┼─────────────────────┼─────────────┘ │
+│                  │ proxy_pass      │ proxy_pass          │ proxy_pass    │
+│                  ▼                 ▼                     ▼               │
+│  ┌─────────────────────────────────────────────────────────────────────┐ │
+│  │                      DOCKER CONTAINERS                              │ │
+│  │                                                                     │ │
+│  │    ┌───────────┐    ┌───────────┐    ┌───────────┐                 │ │
+│  │    │ WordPress │    │   Flask   │    │  Node.js  │    ...          │ │
+│  │    │   :8001   │    │   :8002   │    │   :8003   │                 │ │
+│  │    └─────┬─────┘    └───────────┘    └───────────┘                 │ │
+│  └──────────┼──────────────────────────────────────────────────────────┘ │
+│             │                                                            │
+│             ▼                                                            │
+│  ┌─────────────────────────────────────────────────────────────────────┐ │
+│  │                        DATABASES                                    │ │
+│  │    MySQL :3306    PostgreSQL :5432    Redis :6379                  │ │
+│  └─────────────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+</details>
+
+**[View Full Architecture Documentation →](docs/ARCHITECTURE.md)**
+
+> Includes: Request flow diagrams, template system, port allocation, database linking, and troubleshooting guides.
 
 ---
 
@@ -82,7 +141,15 @@ ServerKit is a lightweight, modern server control panel for managing web applica
 
 ## Quick Start
 
-### Option 1: Docker (Recommended)
+### Option 1: One-Line Install (Recommended)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
+```
+
+> Works on Ubuntu 22.04+ and Debian 12+. Sets up everything automatically.
+
+### Option 2: Docker
 
 ```bash
 # Clone the repository
@@ -97,12 +164,6 @@ nano .env  # Set SECRET_KEY and JWT_SECRET_KEY
 docker compose up -d
 
 # Access at http://localhost
-```
-
-### Option 2: One-Line Install (Ubuntu)
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
 ```
 
 ### Option 3: Manual Installation
@@ -140,6 +201,7 @@ See [Installation Guide](docs/INSTALLATION.md) for detailed instructions.
 
 | Document | Description |
 |----------|-------------|
+| [Architecture](docs/ARCHITECTURE.md) | System design, request flow, and diagrams |
 | [Installation Guide](docs/INSTALLATION.md) | Complete setup instructions |
 | [Deployment Guide](docs/DEPLOYMENT.md) | CLI commands and production deployment |
 | [API Reference](docs/API.md) | REST API documentation |
@@ -308,44 +370,15 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
----
-
-## Roadmap
-
-See [ROADMAP.md](ROADMAP.md) for the full development plan.
-
-**Recent additions:**
-- Two-Factor Authentication (2FA)
-- Discord/Slack/Telegram notifications
-- ClamAV malware scanning
-- File integrity monitoring
-- Environment variable management
-- Cron job management
-
-**Coming soon:**
-- Multi-server management
-- Git deployment with webhooks
-- Let's Encrypt wildcard SSL
-- Email server management
-- Backup to S3/B2
-
----
-
-## License
-
-This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
-
----
-
-## Acknowledgments
-
-- Inspired by [Coolify](https://coolify.io), [ServerPilot](https://serverpilot.io), and [RunCloud](https://runcloud.io)
-- UI inspired by modern admin dashboards
 
 ---
 
 <p align="center">
-  <strong>ServerKit</strong> - Simple. Modern. Self-hosted.<br>
+  <strong>ServerKit</strong> — Simple. Modern. Self-hosted.<br>
   <a href="https://github.com/jhd3197/ServerKit/issues">Report Bug</a> ·
   <a href="https://github.com/jhd3197/ServerKit/issues">Request Feature</a>
+</p>
+
+<p align="center">
+  Made with ❤️ by <a href="https://juandenis.com">Juan Denis</a>
 </p>
