@@ -2,7 +2,7 @@
 
 ## Current Status
 - **Milestone**: 3 - Visual Workflow Builder
-- **Current Phase**: 16 - Workflow Canvas Foundation
+- **Current Phase**: 17 - Resource Node Types
 - **Phase Status**: Pending
 - **Last Updated**: 2026-01-19
 
@@ -10,12 +10,21 @@
 
 | Phase | Status | Started | Completed |
 |-------|--------|---------|-----------|
-| 16 | pending | - | - |
+| 16 | completed | 2026-01-19 | 2026-01-19 |
 | 17 | pending | - | - |
 | 18 | pending | - | - |
 | 19 | pending | - | - |
 | 20 | pending | - | - |
 | 21 | pending | - | - |
+
+## Phase 16 Summary
+Workflow Canvas Foundation completed:
+- Installed @xyflow/react (React Flow) library
+- Created WorkflowBuilder page with canvas, controls, minimap
+- Added /workflow route and sidebar navigation
+- Created BaseNode component with handles and styling
+- Added node toolbar for adding Docker/Database/Domain nodes
+- Comprehensive LESS styles for workflow UI
 
 ## Milestone 3 Overview
 Visual Workflow Builder (v1.2)

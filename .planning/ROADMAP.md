@@ -27,7 +27,7 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 
 | Phase | Name | Status | Goal |
 |-------|------|--------|------|
-| 16 | Workflow Canvas Foundation | pending | React Flow canvas with pan/zoom, node rendering, connection system |
+| 16 | Workflow Canvas Foundation | **completed** | React Flow canvas with pan/zoom, node rendering, connection system |
 | 17 | Resource Node Types | pending | Create node types for Docker apps, databases, domains |
 | 18 | Node Configuration Panels | pending | Side panels for configuring each node type |
 | 19 | Connection Logic | pending | Define and validate connections between nodes |
@@ -36,24 +36,26 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 
 ---
 
-## Phase 16: Workflow Canvas Foundation
+## Phase 16: Workflow Canvas Foundation ✓
 **Goal**: Set up React Flow canvas with pan/zoom, basic node rendering, and connection system
 
-**Research**: Yes - evaluate React Flow library, understand canvas patterns
+**Status**: Completed 2026-01-19
 
-### Tasks
-1. Install and configure React Flow library
-2. Create WorkflowBuilder page with canvas
-3. Implement pan/zoom controls
-4. Add basic node rendering system
-5. Implement edge/connection drawing
-6. Add minimap and controls overlay
+### What Was Built
+- Installed @xyflow/react (React Flow) library
+- Created WorkflowBuilder page with canvas at /workflow
+- Added Background, Controls, and MiniMap components
+- Created BaseNode component with connection handles
+- Added node toolbar for adding Docker/Database/Domain nodes
+- Comprehensive LESS styles for workflow UI
 
 ### Success Criteria
-- [ ] Canvas renders with pan/zoom
-- [ ] Can add placeholder nodes
-- [ ] Can draw connections between nodes
-- [ ] Minimap shows overview
+- [x] Canvas renders with pan/zoom
+- [x] Can add placeholder nodes
+- [x] Can draw connections between nodes
+- [x] Minimap shows overview
+
+[Full Summary](./phases/16-workflow-canvas-foundation/SUMMARY.md)
 
 ---
 
