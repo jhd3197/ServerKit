@@ -58,6 +58,86 @@ run_cli() {
     python cli.py "$@"
 }
 
+# Version management
+VERSION_FILE="$INSTALL_DIR/VERSION"
+REMOTE_VERSION_URL="https://raw.githubusercontent.com/jhd3197/serverkit/main/VERSION"
+
+get_local_version() {
+    if [ -f "$VERSION_FILE" ]; then
+        cat "$VERSION_FILE" | tr -d '\n\r '
+    else
+        echo "unknown"
+    fi
+}
+
+get_remote_version() {
+    curl -sf "$REMOTE_VERSION_URL" 2>/dev/null | tr -d '\n\r ' || echo "unknown"
+}
+
+compare_versions() {
+    # Returns: 0 if equal, 1 if v1 > v2, 2 if v1 < v2
+    local v1="$1"
+    local v2="$2"
+
+    if [ "$v1" = "$v2" ]; then
+        return 0
+    fi
+
+    # Compare version components
+    local v1_major=$(echo "$v1" | cut -d. -f1)
+    local v1_minor=$(echo "$v1" | cut -d. -f2)
+    local v1_patch=$(echo "$v1" | cut -d. -f3)
+
+    local v2_major=$(echo "$v2" | cut -d. -f1)
+    local v2_minor=$(echo "$v2" | cut -d. -f2)
+    local v2_patch=$(echo "$v2" | cut -d. -f3)
+
+    if [ "$v1_major" -gt "$v2_major" ] 2>/dev/null; then return 1; fi
+    if [ "$v1_major" -lt "$v2_major" ] 2>/dev/null; then return 2; fi
+    if [ "$v1_minor" -gt "$v2_minor" ] 2>/dev/null; then return 1; fi
+    if [ "$v1_minor" -lt "$v2_minor" ] 2>/dev/null; then return 2; fi
+    if [ "$v1_patch" -gt "$v2_patch" ] 2>/dev/null; then return 1; fi
+    if [ "$v1_patch" -lt "$v2_patch" ] 2>/dev/null; then return 2; fi
+
+    return 0
+}
+
+cmd_version() {
+    local version=$(get_local_version)
+    echo "ServerKit version $version"
+}
+
+cmd_check_update() {
+    print_info "Checking for updates..."
+
+    local local_version=$(get_local_version)
+    local remote_version=$(get_remote_version)
+
+    echo ""
+    echo "  Installed version: $local_version"
+    echo "  Latest version:    $remote_version"
+    echo ""
+
+    if [ "$remote_version" = "unknown" ]; then
+        print_warning "Could not check remote version (network error?)"
+        return 1
+    fi
+
+    compare_versions "$local_version" "$remote_version"
+    local result=$?
+
+    if [ $result -eq 2 ]; then
+        print_success "Update available! Run 'sudo serverkit update' to upgrade."
+        return 0
+    elif [ $result -eq 0 ]; then
+        print_success "You are running the latest version."
+        return 0
+    else
+        print_info "You are running a newer version than released."
+        return 0
+    fi
+}
+
 # Commands
 cmd_help() {
     print_header
@@ -99,6 +179,10 @@ cmd_help() {
     echo "  add-site          Add a new site/domain"
     echo "  list-sites        List all configured sites"
     echo "  remove-site       Remove a site"
+    echo ""
+    echo "Version Commands:"
+    echo "  version           Show current version"
+    echo "  check-update      Check if updates are available"
     echo ""
     echo "Utility Commands:"
     echo "  generate-keys     Generate secure keys for .env"
@@ -239,12 +323,33 @@ cmd_update() {
     check_installed
     print_header
     echo ""
-    print_info "Updating ServerKit..."
 
     cd "$INSTALL_DIR"
 
-    # Store current version
-    CURRENT_VERSION=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+    # Get versions
+    CURRENT_VERSION=$(get_local_version)
+    REMOTE_VERSION=$(get_remote_version)
+
+    echo "  Installed version: $CURRENT_VERSION"
+    echo "  Latest version:    $REMOTE_VERSION"
+    echo ""
+
+    # Check if update is needed
+    if [ "$REMOTE_VERSION" != "unknown" ]; then
+        compare_versions "$CURRENT_VERSION" "$REMOTE_VERSION"
+        local result=$?
+        if [ $result -eq 0 ]; then
+            print_success "Already running the latest version."
+            echo ""
+            read -p "Force update anyway? [y/N] " -n 1 -r
+            echo ""
+            if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+                exit 0
+            fi
+        fi
+    fi
+
+    print_info "Updating ServerKit..."
 
     # Stop services
     print_info "Stopping services..."
@@ -260,7 +365,8 @@ cmd_update() {
     chmod +x "$INSTALL_DIR/serverkit"
     chmod +x "$INSTALL_DIR/scripts/"*.sh 2>/dev/null || true
 
-    NEW_VERSION=$(git rev-parse --short HEAD)
+    # Get new version from VERSION file
+    NEW_VERSION=$(get_local_version)
 
     # Update Python dependencies
     print_info "Updating Python dependencies..."
@@ -721,6 +827,12 @@ case "${1:-help}" in
         ;;
     update)
         cmd_update
+        ;;
+    version|--version|-v)
+        cmd_version
+        ;;
+    check-update)
+        cmd_check_update
         ;;
     uninstall)
         cmd_uninstall
