@@ -221,6 +221,55 @@ def validate_installation():
     return jsonify({'valid': True}), 200
 
 
+@templates_bp.route('/test-db-connection', methods=['POST'])
+@jwt_required()
+def test_db_connection():
+    """Test database connection before template installation.
+
+    Used to validate external database connections for templates
+    like wordpress-external-db before attempting installation.
+
+    Request body:
+        host: Database host (required)
+        port: Database port (default: 3306)
+        user: Database username (required)
+        password: Database password (required)
+        database: Database name (required)
+
+    Returns:
+        200: Connection successful
+        400: Connection failed or missing parameters
+    """
+    data = request.get_json()
+
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    required = ['host', 'user', 'password', 'database']
+    for field in required:
+        if field not in data:
+            return jsonify({'error': f'Missing required field: {field}'}), 400
+
+    result = TemplateService.validate_mysql_connection(
+        host=data.get('host'),
+        port=data.get('port', 3306),
+        user=data.get('user'),
+        password=data.get('password'),
+        database=data.get('database')
+    )
+
+    if result.get('success'):
+        response = {'success': True, 'message': 'Connection successful'}
+        if result.get('warning'):
+            response['warning'] = result.get('warning')
+        return jsonify(response), 200
+    else:
+        return jsonify({
+            'success': False,
+            'error': result.get('error')
+        }), 400
+
+
 # ==================== APP UPDATES ====================
 
 @templates_bp.route('/apps/<int:app_id>/check-update', methods=['GET'])
