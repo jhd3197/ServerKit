@@ -1,0 +1,301 @@
+// ============================================
+// WORKFLOW BUILDER PAGE STYLES
+// ============================================
+
+.workflow-page {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - @space-6);
+    padding: @space-4;
+
+    .page-header {
+        flex-shrink: 0;
+        margin-bottom: @space-4;
+
+        h1 {
+            margin: 0 0 @space-1;
+            font-size: @font-size-xl;
+            font-weight: @font-weight-semibold;
+        }
+
+        .page-subtitle {
+            margin: 0;
+            color: @text-secondary;
+            font-size: @font-size-sm;
+        }
+    }
+}
+
+// ============================================
+// CANVAS CONTAINER
+// ============================================
+
+.workflow-canvas {
+    flex: 1;
+    background: @bg-body;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    overflow: hidden;
+    position: relative;
+
+    .react-flow {
+        background: @bg-body;
+    }
+
+    // React Flow Controls
+    .react-flow__controls {
+        background: @bg-card;
+        border: 1px solid @border-subtle;
+        border-radius: @radius-md;
+        box-shadow: @shadow-lg;
+
+        button {
+            background: @bg-card;
+            border: none;
+            border-bottom: 1px solid @border-subtle;
+            color: @text-secondary;
+            width: 28px;
+            height: 28px;
+
+            &:hover {
+                background: @bg-hover;
+                color: @text-primary;
+            }
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            svg {
+                fill: currentColor;
+            }
+        }
+    }
+
+    // React Flow MiniMap
+    .react-flow__minimap {
+        background: @bg-card;
+        border: 1px solid @border-subtle;
+        border-radius: @radius-md;
+        box-shadow: @shadow-lg;
+    }
+
+    // React Flow Background
+    .react-flow__background {
+        background: @bg-body;
+    }
+}
+
+// ============================================
+// NODE STYLES
+// ============================================
+
+.workflow-node {
+    min-width: 180px;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    box-shadow: @shadow-md;
+    transition: all @transition-fast;
+
+    &:hover {
+        border-color: @border-active;
+        box-shadow: @shadow-lg;
+    }
+
+    &.selected {
+        border-color: @accent-primary;
+        box-shadow: 0 0 0 2px @accent-glow;
+    }
+}
+
+.workflow-node-header {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2 @space-3;
+    border-bottom: 2px solid @accent-primary;
+    border-top-left-radius: @radius-lg;
+    border-top-right-radius: @radius-lg;
+}
+
+.workflow-node-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: @accent-primary;
+    border-radius: @radius-md;
+    color: white;
+}
+
+.workflow-node-type {
+    font-size: @font-size-xs;
+    font-weight: @font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: @text-tertiary;
+}
+
+.workflow-node-body {
+    padding: @space-3;
+}
+
+.workflow-node-label {
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    color: @text-primary;
+    margin-bottom: @space-1;
+}
+
+.workflow-node-status {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+    padding: @space-1 @space-2;
+    border-radius: @radius-full;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+
+    &.status-running {
+        background: @success-bg;
+        color: @success;
+    }
+
+    &.status-stopped {
+        background: fade(@text-tertiary, 10%);
+        color: @text-tertiary;
+    }
+
+    &.status-error {
+        background: @danger-bg;
+        color: @danger;
+    }
+}
+
+// ============================================
+// HANDLE STYLES
+// ============================================
+
+.workflow-handle {
+    width: 12px !important;
+    height: 12px !important;
+    background: @bg-card !important;
+    border: 2px solid @border-active !important;
+    transition: all @transition-fast;
+
+    &:hover {
+        background: @accent-primary !important;
+        border-color: @accent-primary !important;
+        transform: scale(1.2);
+    }
+}
+
+.workflow-handle-target {
+    left: -6px !important;
+}
+
+.workflow-handle-source {
+    right: -6px !important;
+}
+
+// ============================================
+// TOOLBAR STYLES
+// ============================================
+
+.workflow-toolbar {
+    position: absolute;
+    top: @space-4;
+    left: @space-4;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: @space-2;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    padding: @space-2;
+    box-shadow: @shadow-lg;
+}
+
+.workflow-toolbar-btn {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2 @space-3;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: @radius-md;
+    color: @text-secondary;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    cursor: pointer;
+    transition: all @transition-fast;
+    white-space: nowrap;
+
+    svg {
+        flex-shrink: 0;
+    }
+
+    &:hover {
+        background: @bg-hover;
+        color: @text-primary;
+    }
+
+    &.toolbar-btn-docker:hover {
+        background: fade(#2496ed, 15%);
+        color: #2496ed;
+        border-color: fade(#2496ed, 30%);
+    }
+
+    &.toolbar-btn-database:hover {
+        background: fade(@warning, 15%);
+        color: @warning;
+        border-color: fade(@warning, 30%);
+    }
+
+    &.toolbar-btn-domain:hover {
+        background: fade(@success, 15%);
+        color: @success;
+        border-color: fade(@success, 30%);
+    }
+}
+
+.workflow-toolbar-divider {
+    height: 1px;
+    background: @border-subtle;
+    margin: @space-1 0;
+}
+
+// ============================================
+// EDGE STYLES
+// ============================================
+
+.react-flow__edge-path {
+    stroke: @border-active;
+    stroke-width: 2;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+    stroke: @accent-primary;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+    stroke: @accent-primary;
+}
+
+// Animated edges
+.react-flow__edge.animated path {
+    stroke-dasharray: 5;
+    animation: flowAnimation 0.5s linear infinite;
+}
+
+@keyframes flowAnimation {
+    from {
+        stroke-dashoffset: 10;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
