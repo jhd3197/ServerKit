@@ -11,7 +11,7 @@
 | Phase | Status | Started | Completed |
 |-------|--------|---------|-----------|
 | 1 | completed | 2026-01-19 | 2026-01-19 |
-| 2 | pending | - | - |
+| 2 | planned | 2026-01-19 | - |
 | 3 | pending | - | - |
 | 4 | pending | - | - |
 | 5 | pending | - | - |
