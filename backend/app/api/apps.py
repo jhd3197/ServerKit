@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
@@ -7,6 +8,201 @@ from app.services.docker_service import DockerService
 from app.services.log_service import LogService
 
 apps_bp = Blueprint('apps', __name__)
+
+
+# ==================== ENVIRONMENT LINKING ====================
+
+@apps_bp.route('/<int:app_id>/link', methods=['POST'])
+@jwt_required()
+def link_apps(app_id):
+    """Link two apps as prod/dev pair sharing database resources."""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    app = Application.query.get(app_id)
+
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if user.role != 'admin' and app.user_id != current_user_id:
+        return jsonify({'error': 'Access denied'}), 403
+
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    target_app_id = data.get('target_app_id')
+    as_environment = data.get('as_environment', 'development')
+
+    if not target_app_id:
+        return jsonify({'error': 'target_app_id is required'}), 400
+
+    valid_environments = ['production', 'development', 'staging']
+    if as_environment not in valid_environments:
+        return jsonify({'error': f'Invalid environment. Must be one of: {", ".join(valid_environments)}'}), 400
+
+    target_app = Application.query.get(target_app_id)
+    if not target_app:
+        return jsonify({'error': 'Target application not found'}), 404
+
+    if user.role != 'admin' and target_app.user_id != current_user_id:
+        return jsonify({'error': 'Access denied to target application'}), 403
+
+    if app.app_type != target_app.app_type:
+        return jsonify({'error': 'Apps must be of the same type to link'}), 400
+
+    if app_id == target_app_id:
+        return jsonify({'error': 'Cannot link an app to itself'}), 400
+
+    # Set environment types based on as_environment
+    if as_environment == 'development':
+        app.environment_type = 'development'
+        target_app.environment_type = 'production'
+    elif as_environment == 'production':
+        app.environment_type = 'production'
+        target_app.environment_type = 'development'
+    else:  # staging
+        app.environment_type = 'staging'
+        target_app.environment_type = 'production'
+
+    # Link bidirectionally
+    app.linked_app_id = target_app_id
+    target_app.linked_app_id = app_id
+
+    # Store shared config
+    shared_config = {
+        'linked_at': db.func.now().compile().string if hasattr(db.func.now().compile(), 'string') else 'now',
+        'link_type': 'environment_pair'
+    }
+    app.shared_config = json.dumps(shared_config)
+    target_app.shared_config = json.dumps(shared_config)
+
+    db.session.commit()
+
+    return jsonify({
+        'message': 'Apps linked successfully',
+        'app': app.to_dict(include_linked=True),
+        'target_app': target_app.to_dict(include_linked=True)
+    }), 200
+
+
+@apps_bp.route('/<int:app_id>/linked', methods=['GET'])
+@jwt_required()
+def get_linked_apps(app_id):
+    """Get apps linked to this app."""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    app = Application.query.get(app_id)
+
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if user.role != 'admin' and app.user_id != current_user_id:
+        return jsonify({'error': 'Access denied'}), 403
+
+    linked_apps = []
+
+    # Get directly linked app
+    if app.linked_app:
+        linked_apps.append({
+            'id': app.linked_app.id,
+            'name': app.linked_app.name,
+            'app_type': app.linked_app.app_type,
+            'environment_type': app.linked_app.environment_type,
+            'status': app.linked_app.status,
+            'port': app.linked_app.port
+        })
+
+    # Get apps that link to this one
+    for linked_from in app.linked_from:
+        if linked_from.id != app.linked_app_id:  # Avoid duplicates
+            linked_apps.append({
+                'id': linked_from.id,
+                'name': linked_from.name,
+                'app_type': linked_from.app_type,
+                'environment_type': linked_from.environment_type,
+                'status': linked_from.status,
+                'port': linked_from.port
+            })
+
+    return jsonify({
+        'app_id': app_id,
+        'environment_type': app.environment_type,
+        'linked_apps': linked_apps,
+        'shared_config': json.loads(app.shared_config) if app.shared_config else None
+    }), 200
+
+
+@apps_bp.route('/<int:app_id>/link', methods=['DELETE'])
+@jwt_required()
+def unlink_apps(app_id):
+    """Unlink apps and reset environment types."""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    app = Application.query.get(app_id)
+
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if user.role != 'admin' and app.user_id != current_user_id:
+        return jsonify({'error': 'Access denied'}), 403
+
+    if not app.linked_app_id:
+        return jsonify({'error': 'App is not linked to any other app'}), 400
+
+    target_app = Application.query.get(app.linked_app_id)
+
+    # Reset both apps
+    app.linked_app_id = None
+    app.environment_type = 'standalone'
+    app.shared_config = None
+
+    if target_app:
+        target_app.linked_app_id = None
+        target_app.environment_type = 'standalone'
+        target_app.shared_config = None
+
+    db.session.commit()
+
+    return jsonify({
+        'message': 'Apps unlinked successfully',
+        'app': app.to_dict()
+    }), 200
+
+
+@apps_bp.route('/<int:app_id>/environment', methods=['PUT'])
+@jwt_required()
+def update_environment(app_id):
+    """Update environment type for an app."""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    app = Application.query.get(app_id)
+
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if user.role != 'admin' and app.user_id != current_user_id:
+        return jsonify({'error': 'Access denied'}), 403
+
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    environment_type = data.get('environment_type')
+    valid_types = ['production', 'development', 'staging', 'standalone']
+
+    if environment_type not in valid_types:
+        return jsonify({'error': f'Invalid environment_type. Must be one of: {", ".join(valid_types)}'}), 400
+
+    app.environment_type = environment_type
+    db.session.commit()
+
+    return jsonify({
+        'message': 'Environment type updated',
+        'app': app.to_dict()
+    }), 200
+
+
+# ==================== APP CRUD ====================
 
 
 @apps_bp.route('', methods=['GET'])
