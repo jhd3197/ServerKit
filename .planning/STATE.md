@@ -1,164 +1,88 @@
 # ServerKit Enhancement - State
 
 ## Current Status
-- **Milestone**: 3 - Visual Workflow Builder (COMPLETED)
-- **Current Phase**: 21 - Workflow Deployment (Final)
-- **Phase Status**: Completed
+- **Milestone**: 4 - Container Logs & Monitoring
+- **Current Phase**: 22 - Container Logs API
+- **Phase Status**: Not Started
 - **Last Updated**: 2026-01-19
 
 ## Phase Progress
 
 | Phase | Status | Started | Completed |
 |-------|--------|---------|-----------|
-| 16 | completed | 2026-01-19 | 2026-01-19 |
-| 17 | completed | 2026-01-19 | 2026-01-19 |
-| 18 | completed | 2026-01-19 | 2026-01-19 |
-| 19 | completed | 2026-01-19 | 2026-01-19 |
-| 20 | completed | 2026-01-19 | 2026-01-19 |
-| 21 | completed | 2026-01-19 | 2026-01-19 |
+| 22 | pending | - | - |
+| 23 | pending | - | - |
+| 24 | pending | - | - |
+| 25 | pending | - | - |
+| 26 | pending | - | - |
+| 27 | pending | - | - |
+| 28 | pending | - | - |
 
-## Phase 21 Summary
-Workflow Deployment completed:
-- Created WorkflowService with deploy_workflow(), get_deployment_order()
-- Deployment order: databases → apps → domains
-- deploy_database() creates MySQL/PostgreSQL with users
-- deploy_docker_app() creates Application + docker-compose files
-- deploy_domain() creates Domain linked to app with nginx config
-- Added POST /workflows/{id}/deploy API endpoint
-- Added deployWorkflow() frontend API method
-- Added Deploy button to toolbar (green, requires saved workflow)
-- Created DeploymentProgressModal with per-node status
-- Updates nodes with created resource IDs after deployment
+## Milestone 4 Overview
+Container Logs & Monitoring (v1.3)
 
-## Phase 20 Summary
-Workflow Save/Load completed:
-- Created Workflow SQLAlchemy model with nodes/edges/viewport as JSON
-- Created CRUD API endpoints (GET/POST/PUT/DELETE /workflows)
-- Registered workflows blueprint at /api/v1/workflows
-- Added frontend API methods (getWorkflows, createWorkflow, updateWorkflow, deleteWorkflow)
-- Added workflow toolbar with name input, New/Load/Import/Save buttons
-- Created WorkflowListModal for loading saved workflows with delete capability
-- Added import existing infrastructure feature (apps + domains as nodes)
-
-## Phase 19 Summary
-Connection Logic completed:
-- Created connection validation utility with rules matrix
-- Wired isValidConnection callback preventing invalid connections
-- Added error toast for invalid connection attempts
-- Created custom ConnectionEdge with labels and delete button
-- Added edge selection and deletion (Delete/Backspace keys)
-- Comprehensive connection styles
-
-## Phase 18 Summary
-Node Configuration Panels completed:
-- Created ConfigPanel base component with slide animation
-- Created DockerAppConfigPanel with ports list
-- Created DatabaseConfigPanel with type-aware defaults
-- Created DomainConfigPanel with SSL/DNS fields
-- Created ServiceConfigPanel with service type selector
-- Wired panels to node selection in WorkflowBuilder
-- Added comprehensive panel styles
-
-## Phase 17 Summary
-Resource Node Types completed:
-- Created DockerAppNode with status, ports, memory display
-- Created DatabaseNode with type badges (MySQL, PostgreSQL, MongoDB, Redis)
-- Created DomainNode with SSL/DNS status badges
-- Created ServiceNode for future extensibility
-- Enhanced palette with Compute/Storage/Network categories
-- Added comprehensive node-specific styles with animations
-
-## Phase 16 Summary
-Workflow Canvas Foundation completed:
-- Installed @xyflow/react (React Flow) library
-- Created WorkflowBuilder page with canvas, controls, minimap
-- Added /workflow route and sidebar navigation
-- Created BaseNode component with handles and styling
-- Added node toolbar for adding Docker/Database/Domain nodes
-- Comprehensive LESS styles for workflow UI
-
-## Milestone 3 Overview
-Visual Workflow Builder (v1.2)
-
-**Goal**: Create a visual, flow-based interface for orchestrating Docker apps, databases, and domain connections using a node-based editor (similar to n8n, Node-RED).
+**Goal**: Add comprehensive container logging and monitoring capabilities - real-time log streaming, search/filtering, per-app resource graphs, and configurable alert rules with notifications.
 
 **Key Features**:
-- Canvas with pan/zoom for visual orchestration
-- Node types for Docker apps, databases, domains
-- Connection system showing relationships
-- Save/load workflows
-- Deploy infrastructure from visual workflow
+- Real-time container log streaming via WebSocket
+- Log search with filtering by level, time, regex
+- Per-app CPU/memory/network metrics collection
+- Resource usage graphs in application detail
+- Configurable alert rules with thresholds
+- Multi-channel notifications (email, Discord, Telegram)
+
+## Phase Descriptions
+
+### Phase 22: Container Logs API
+Backend API to fetch and stream Docker container logs
+
+### Phase 23: Log Viewer UI
+Real-time log display with auto-scroll, ANSI color support
+
+### Phase 24: Log Search & Filtering
+Search within logs, filter by level/time, export
+
+### Phase 25: Per-App Resource Collection
+Collect per-container CPU/memory/network stats via Docker API
+
+### Phase 26: App Resource Graphs
+Per-app resource usage charts in application detail view
+
+### Phase 27: Alert Rules Engine
+Define thresholds, evaluate metrics, trigger alerts
+
+### Phase 28: Alert Notifications
+Send alerts via email, Discord, Telegram webhooks
 
 ## Previous Milestone Summary
 
-### Milestone 2 (v1.1) - Completed
-- Phase 11: WordPress External DB template
-- Phase 12: Multi-environment app linking API
-- Phase 13: Environment switching UI
-- Phase 14: GitHub & community links
-- Phase 15: Documentation & testing
+### Milestone 3 (v1.2) - Completed 2026-01-19
+Visual Workflow Builder:
+- Phase 16: Workflow Canvas Foundation
+- Phase 17: Resource Node Types
+- Phase 18: Node Configuration Panels
+- Phase 19: Connection Logic
+- Phase 20: Workflow Save/Load
+- Phase 21: Deploy from Workflow
 
-## Phase 15 Summary
-WordPress Dev Workflow Testing (documentation phase):
-- Created TEST-PLAN.md with 8-step workflow validation procedure
-- Created docs/MULTI_ENVIRONMENT.md user guide for the feature
-- Updated docs/README.md with multi-environment section
-- All documentation and testing artifacts in place
+### Milestone 2 (v1.1) - Completed 2026-01-19
+Multi-Environment WordPress & Community Features:
+- Phase 11-15: WordPress external DB, app linking, environment UI, GitHub links
 
-## Phase 13 Summary
-Environment Switching UI implemented:
-- Added environment badges (PROD/DEV/STAGING) to app list with color coding
-- Added environment filter dropdown to apps toolbar with URL param persistence
-- Created LinkedAppsSection component showing linked apps with navigation/unlink
-- Created LinkAppModal for linking apps with environment selection and DB credential options
-- Integrated linked apps into ApplicationDetail Overview tab
-- Added environment settings to Settings tab with change/unlink functionality
-
-## Phase 12 Summary
-Multi-Environment App Linking implemented:
-- Added `environment_type`, `linked_app_id`, `shared_config` fields to Application model
-- Added app linking API endpoints (POST/GET/DELETE `/apps/{id}/link`, PUT `/apps/{id}/environment`)
-- Added `propagate_db_credentials()` for sharing DB credentials with different table prefixes
-- Added frontend API methods (`linkApp`, `getLinkedApps`, `unlinkApp`, `updateAppEnvironment`)
-- Updated GET /apps with environment filtering and include_linked option
-
-## Phase 11 Summary
-Shared Database WordPress Template implemented:
-- Created `wordpress-external-db.yaml` template for external MySQL connections
-- Added `validate_mysql_connection()` with socket and pymysql validation
-- Added `/templates/test-db-connection` API endpoint
-- Added `testDatabaseConnection()` frontend API method
-- Enables dev/prod WordPress instances sharing same database with different table prefixes
-
-## Phase 14 Summary
-GitHub & Community Links fully implemented:
-- Updated About section with correct GitHub repository links
-- Added version update check via GitHub releases API (1-hour cache)
-- Added GitHub link to sidebar
-- Added dismissible "Star on GitHub" prompt for new users
-- All icons now use Lucide React components
-
-## Milestone 2 Overview
-Multi-Environment WordPress & Community Features (v1.1)
-
-**Goals:**
-- Create WordPress template with external database support
-- Enable prod/dev environment linking with shared database
-- Add environment switching UI with theme sync
-- Add GitHub and community resource links
+### Milestone 1 (v1.0) - Completed 2026-01-19
+Infrastructure Fixes, Private URLs & UI Polish:
+- Phases 1-10: Docker/domain debugging, templates, UI polish
 
 ## Blockers
 None currently identified.
 
 ## Notes
-- Milestone 1 (v1.0) completed 2026-01-19
-- Milestone 2 (v1.1) completed 2026-01-19
-- Milestone 3 (v1.2) started 2026-01-19
-- React Flow recommended for canvas implementation
-- This milestone is UI-focused - reuses existing backend APIs
+- Docker SDK for Python will be used for container logs/stats
+- Existing WebSocket infrastructure (Flask-SocketIO) will be extended
+- Recharts already installed for graphs
+- Existing NotificationService will be extended for alerts
 
 ## Quick Links
 - [ROADMAP.md](./ROADMAP.md)
 - [PROJECT.md](./PROJECT.md)
-- [Milestone 1 Archive](./milestones/v1.0-ROADMAP.md)
-- [Milestone 2 Phases](./phases/) (11-15)
+- [Milestone 3 Archive](./milestones/v1.2-ROADMAP.md)
