@@ -1,0 +1,69 @@
+# ==============================================
+# ServerKit Development Docker Compose
+# ==============================================
+# FOR LOCAL TESTING ONLY - System management features
+# (PHP install, firewall, etc.) won't work in Docker.
+#
+# Usage:
+#   docker compose -f docker-compose.dev.yml up --build
+#
+# Access:
+#   Frontend: http://localhost:3000
+#   Backend:  http://localhost:5000
+# ==============================================
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: serverkit-backend-dev
+    environment:
+      - FLASK_ENV=development
+      - SECRET_KEY=dev-secret-key-not-for-production
+      - JWT_SECRET_KEY=dev-jwt-key-not-for-production
+      - DATABASE_URL=sqlite:////app/instance/serverkit.db
+      - CORS_ORIGINS=http://localhost,http://localhost:3000,http://localhost:5173
+    ports:
+      - "5000:5000"
+    volumes:
+      - dev-data:/app/instance
+      - dev-config:/etc/serverkit
+    networks:
+      - serverkit-dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/v1/system/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  frontend-dev:
+    image: node:20-alpine
+    container_name: serverkit-frontend-dev
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 3000"
+    environment:
+      - VITE_API_URL=http://localhost:5000
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - frontend-modules:/app/node_modules
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - serverkit-dev
+
+networks:
+  serverkit-dev:
+    driver: bridge
+    name: serverkit-dev
+
+volumes:
+  dev-data:
+    name: serverkit-dev-data
+  dev-config:
+    name: serverkit-dev-config
+  frontend-modules:
+    name: serverkit-frontend-modules
