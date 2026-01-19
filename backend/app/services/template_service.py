@@ -92,11 +92,21 @@ class TemplateService:
             if 'services' not in compose:
                 errors.append("Compose section must have 'services'")
 
-        # Validate variables
+        # Validate variables (support both list and dict formats)
         if 'variables' in template:
-            for var_name, var_config in template['variables'].items():
-                if not isinstance(var_config, dict):
-                    errors.append(f"Variable {var_name} must be a dictionary")
+            variables = template['variables']
+            if isinstance(variables, list):
+                # List format: [{name: 'PORT', type: 'port', ...}, ...]
+                for var in variables:
+                    if not isinstance(var, dict):
+                        errors.append("Each variable in list must be a dictionary")
+                    elif 'name' not in var:
+                        errors.append("Each variable must have a 'name' field")
+            elif isinstance(variables, dict):
+                # Dict format: {PORT: {type: 'port', ...}, ...}
+                for var_name, var_config in variables.items():
+                    if not isinstance(var_config, dict):
+                        errors.append(f"Variable {var_name} must be a dictionary")
 
         if errors:
             return {'valid': False, 'errors': errors}
