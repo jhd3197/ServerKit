@@ -102,9 +102,31 @@ def create_domain():
     db.session.add(domain)
     db.session.commit()
 
+    # Auto-create nginx config for Docker apps
+    nginx_result = None
+    if app.app_type == 'docker' and app.port:
+        # Get all domains for this app to include in nginx config
+        all_domains = [d.name for d in Domain.query.filter_by(application_id=application_id).all()]
+
+        # Create nginx site config
+        nginx_result = NginxService.create_site(
+            name=app.name,
+            app_type='docker',
+            domains=all_domains,
+            root_path=app.root_path or '',
+            port=app.port
+        )
+
+        # Enable the site if creation was successful
+        if nginx_result.get('success'):
+            enable_result = NginxService.enable_site(app.name)
+            if not enable_result.get('success'):
+                nginx_result['warning'] = f"Site created but not enabled: {enable_result.get('error')}"
+
     return jsonify({
         'message': 'Domain created successfully',
-        'domain': domain.to_dict()
+        'domain': domain.to_dict(),
+        'nginx': nginx_result
     }), 201
 
 
@@ -156,10 +178,35 @@ def delete_domain(domain_id):
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
+    application_id = domain.application_id
     db.session.delete(domain)
     db.session.commit()
 
-    return jsonify({'message': 'Domain deleted successfully'}), 200
+    # Update nginx config for Docker apps
+    nginx_result = None
+    if app.app_type == 'docker' and app.port:
+        remaining_domains = [d.name for d in Domain.query.filter_by(application_id=application_id).all()]
+
+        if remaining_domains:
+            # Update nginx config with remaining domains
+            nginx_result = NginxService.create_site(
+                name=app.name,
+                app_type='docker',
+                domains=remaining_domains,
+                root_path=app.root_path or '',
+                port=app.port
+            )
+            if nginx_result.get('success'):
+                NginxService.reload()
+        else:
+            # No domains left, disable and delete the site
+            NginxService.disable_site(app.name)
+            nginx_result = NginxService.delete_site(app.name)
+
+    return jsonify({
+        'message': 'Domain deleted successfully',
+        'nginx': nginx_result
+    }), 200
 
 
 @domains_bp.route('/<int:domain_id>/ssl/enable', methods=['POST'])
@@ -312,4 +359,55 @@ def get_ssl_status():
         'certbot_installed': is_installed,
         'total_certificates': len(certificates),
         'certificates': certificates
+    }), 200
+
+
+@domains_bp.route('/nginx/regenerate/<int:app_id>', methods=['POST'])
+@jwt_required()
+@admin_required
+def regenerate_nginx_config(app_id):
+    """Regenerate nginx config for a Docker app."""
+    app = Application.query.get(app_id)
+
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if app.app_type != 'docker':
+        return jsonify({'error': 'This endpoint is only for Docker apps'}), 400
+
+    if not app.port:
+        return jsonify({'error': 'Application does not have a port configured'}), 400
+
+    # Get all domains for this app
+    domains = [d.name for d in Domain.query.filter_by(application_id=app_id).all()]
+
+    if not domains:
+        return jsonify({'error': 'No domains configured for this application'}), 400
+
+    # Create nginx site config
+    result = NginxService.create_site(
+        name=app.name,
+        app_type='docker',
+        domains=domains,
+        root_path=app.root_path or '',
+        port=app.port
+    )
+
+    if not result.get('success'):
+        return jsonify({'error': result.get('error', 'Failed to create nginx config')}), 400
+
+    # Enable the site
+    enable_result = NginxService.enable_site(app.name)
+    if not enable_result.get('success'):
+        return jsonify({
+            'warning': 'Config created but not enabled',
+            'error': enable_result.get('error'),
+            'config': result
+        }), 200
+
+    return jsonify({
+        'message': f'Nginx config regenerated for {app.name}',
+        'domains': domains,
+        'port': app.port,
+        'config': result
     }), 200

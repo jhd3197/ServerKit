@@ -409,6 +409,16 @@ class TemplateService:
                 )
 
             # Create application record
+            # Look for port in variables - templates may use PORT or HTTP_PORT
+            app_port = None
+            for port_var in ['PORT', 'HTTP_PORT', 'WEB_PORT']:
+                if port_var in variables:
+                    try:
+                        app_port = int(variables[port_var])
+                        break
+                    except (ValueError, TypeError):
+                        pass
+
             app = Application(
                 name=app_name,
                 app_type='docker',
@@ -416,7 +426,7 @@ class TemplateService:
                 root_path=app_path,
                 docker_image=template.get('name'),
                 user_id=user_id or 1,
-                port=int(variables.get('PORT', 0)) if 'PORT' in variables else None
+                port=app_port
             )
             db.session.add(app)
             db.session.commit()
