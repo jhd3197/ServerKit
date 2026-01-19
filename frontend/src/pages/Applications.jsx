@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
     Plus, Package, Grid, List, Play, Square, RotateCcw, Settings,
     Search, X, ChevronDown, Check, Trash2, AlertTriangle, Link2,
-    Globe, Container, Clock
+    Globe, Container, Clock, GitBranch
 } from 'lucide-react';
 import api from '../services/api';
 
@@ -435,6 +435,26 @@ const Applications = () => {
     );
 };
 
+// Environment badge helper
+const EnvironmentBadge = ({ app }) => {
+    if (!app.environment_type || app.environment_type === 'standalone') {
+        return null;
+    }
+
+    const envLabels = {
+        production: 'PROD',
+        development: 'DEV',
+        staging: 'STAGING'
+    };
+
+    return (
+        <span className={`env-badge env-${app.environment_type}`} title={app.has_linked_app ? 'Linked to another app' : ''}>
+            {envLabels[app.environment_type] || app.environment_type.toUpperCase()}
+            {app.has_linked_app && <GitBranch size={10} className="env-linked-icon" />}
+        </span>
+    );
+};
+
 // App Row component for list view
 const AppRow = ({ app, selected, onSelect, onAction, onManage, actionInProgress, getStackColor, getStatusClass }) => {
     const isTransitioning = !!actionInProgress;
@@ -462,6 +482,7 @@ const AppRow = ({ app, selected, onSelect, onAction, onManage, actionInProgress,
                     <h3>{app.name}</h3>
                     <div className="app-meta">
                         <span className="app-type-badge">{app.app_type.toUpperCase()}</span>
+                        <EnvironmentBadge app={app} />
                         {app.php_version && <span>PHP {app.php_version}</span>}
                         {app.python_version && <span>Python {app.python_version}</span>}
                         {app.port && (
@@ -579,6 +600,7 @@ const AppCard = ({ app, selected, onSelect, onAction, onManage, actionInProgress
                 <h3>{app.name}</h3>
                 <div className="app-card-meta">
                     <span className="app-type-badge">{app.app_type.toUpperCase()}</span>
+                    <EnvironmentBadge app={app} />
                     {app.port && <span className="app-port">:{app.port}</span>}
                 </div>
 
@@ -593,6 +615,12 @@ const AppCard = ({ app, selected, onSelect, onAction, onManage, actionInProgress
                         <div className="app-card-info-row">
                             <Link2 size={12} />
                             <span>Private URL</span>
+                        </div>
+                    )}
+                    {app.has_linked_app && (
+                        <div className="app-card-info-row">
+                            <GitBranch size={12} />
+                            <span>Linked</span>
                         </div>
                     )}
                     {app.container_count && (

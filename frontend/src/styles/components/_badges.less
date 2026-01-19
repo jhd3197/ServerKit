@@ -117,3 +117,39 @@
     .mono-text();
     color: @text-secondary;
 }
+
+// Environment badge
+.env-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+    padding: @space-1 - 2 @space-2;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border: 1px solid transparent;
+
+    &.env-production {
+        background: fade(@success, 15%);
+        color: @success;
+        border-color: fade(@success, 30%);
+    }
+
+    &.env-development {
+        background: fade(@accent-primary, 15%);
+        color: @accent-primary;
+        border-color: fade(@accent-primary, 30%);
+    }
+
+    &.env-staging {
+        background: fade(@warning, 15%);
+        color: @warning;
+        border-color: fade(@warning, 30%);
+    }
+
+    .env-linked-icon {
+        opacity: 0.7;
+    }
+}
