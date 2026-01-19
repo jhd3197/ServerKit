@@ -2,8 +2,8 @@
 
 ## Current Status
 - **Milestone**: 1 - Infrastructure Fixes, Private URLs & UI Polish
-- **Current Phase**: 3 - PHP App Template Testing
-- **Phase Status**: Not Started
+- **Current Phase**: 5 - Private URL System
+- **Phase Status**: Completed
 - **Last Updated**: 2026-01-19
 
 ## Phase Progress
@@ -12,14 +12,23 @@
 |-------|--------|---------|-----------|
 | 1 | completed | 2026-01-19 | 2026-01-19 |
 | 2 | completed | 2026-01-19 | 2026-01-19 |
-| 3 | planned | 2026-01-19 | - |
-| 4 | pending | - | - |
-| 5 | pending | - | - |
+| 3 | completed | 2026-01-19 | 2026-01-19 |
+| 4 | skipped | - | - |
+| 5 | completed | 2026-01-19 | 2026-01-19 |
 | 6 | pending | - | - |
 | 7 | pending | - | - |
 | 8 | pending | - | - |
 | 9 | pending | - | - |
 | 10 | pending | - | - |
+
+## Phase 5 Summary
+Private URL system fully implemented:
+- Database schema with private_slug and private_url_enabled fields
+- PrivateURLService for secure slug generation and validation
+- API endpoints for enable/disable/update/regenerate
+- Nginx integration for /p/{slug} routing
+- Frontend component with copy, regenerate, custom slug support
+- Visual indicator in applications list
 
 ## Phase 2 Summary
 WordPress deployment tested successfully. Found and fixed 2 critical bugs:
@@ -42,11 +51,12 @@ Completed all 8 tasks:
 None currently identified.
 
 ## Notes
-- Phase 1 complete - diagnostic tools now available for debugging routing issues
-- Ready to test templates with the new diagnostic capabilities
-- User can now run diagnostics from the Application Detail page
+- Phase 5 complete - private URL feature ready for testing
+- Database migration required on deploy (new fields in Application model)
+- Nginx config auto-generates when private URLs enabled
 
 ## Quick Links
 - [ROADMAP.md](./ROADMAP.md)
 - [PROJECT.md](./PROJECT.md)
 - [Phase 1 Summary](./phases/01-docker-domain-debugging/SUMMARY.md)
+- [Phase 5 Summary](./phases/05-private-urls/SUMMARY.md)

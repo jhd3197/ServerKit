@@ -12,9 +12,9 @@
 |-------|------|--------|------|
 | 1 | Docker & Domain Debugging | **completed** | Fix port mapping and domain routing for Docker apps |
 | 2 | WordPress Template Testing | **completed** | Deploy and verify WordPress works end-to-end |
-| 3 | PHP App Template Testing | pending | Deploy and verify PHP/Laravel apps work correctly |
-| 4 | Flask/Python Template Testing | pending | Deploy and verify Python apps route correctly |
-| 5 | Private URL System | pending | Add private URL generation and custom slugs |
+| 3 | PHP App Template Testing | **completed** | Deploy and verify PHP/Laravel apps work correctly |
+| 4 | Flask/Python Template Testing | skipped | Deploy and verify Python apps route correctly |
+| 5 | Private URL System | **completed** | Add private URL generation and custom slugs |
 | 6 | Dashboard Historical Metrics | pending | Add CPU/Memory/Disk graphs over time |
 | 7 | Templates Page Polish | pending | Fix icons, update URLs, improve filtering |
 | 8 | Applications UI Polish | pending | Improve app list and management pages |
@@ -209,10 +209,13 @@ See `.planning/phases/02-wordpress-testing/SUMMARY.md` for details.
    - Quick copy action for private URL
 
 ### Success Criteria
-- [ ] Private URLs can be generated for any app
-- [ ] Custom slugs work with validation
-- [ ] Private URL routes to correct container
-- [ ] UI allows easy management and copying
+- [x] Private URLs can be generated for any app
+- [x] Custom slugs work with validation
+- [x] Private URL routes to correct container
+- [x] UI allows easy management and copying
+
+### Completed
+Phase 5 implemented the complete private URL system. See `.planning/phases/05-private-urls/SUMMARY.md` for details.
 
 ---
 
