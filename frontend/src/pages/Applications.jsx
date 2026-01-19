@@ -35,6 +35,7 @@ const Applications = () => {
     // Get filter values from URL params
     const searchQuery = searchParams.get('search') || '';
     const sortBy = searchParams.get('sort') || 'name-asc';
+    const envFilter = searchParams.get('environment') || '';
 
     useEffect(() => {
         loadApps();
@@ -81,6 +82,11 @@ const Applications = () => {
             );
         }
 
+        // Filter by environment
+        if (envFilter) {
+            result = result.filter(app => app.environment_type === envFilter);
+        }
+
         // Sort
         result.sort((a, b) => {
             switch (sortBy) {
@@ -96,13 +102,17 @@ const Applications = () => {
                     return a.app_type.localeCompare(b.app_type);
                 case 'created':
                     return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+                case 'environment':
+                    // Group by environment type
+                    const envOrder = { production: 0, development: 1, staging: 2, standalone: 3 };
+                    return (envOrder[a.environment_type] ?? 4) - (envOrder[b.environment_type] ?? 4);
                 default:
                     return 0;
             }
         });
 
         return result;
-    }, [apps, searchQuery, sortBy]);
+    }, [apps, searchQuery, sortBy, envFilter]);
 
     function getStackColor(type) {
         const colors = {
@@ -272,6 +282,23 @@ const Applications = () => {
 
                 <div className="apps-toolbar-right">
                     {/* Sort dropdown */}
+                    {/* Environment filter */}
+                    <div className="apps-sort-wrapper">
+                        <select
+                            className="apps-sort-select"
+                            value={envFilter}
+                            onChange={(e) => updateFilters({ environment: e.target.value })}
+                        >
+                            <option value="">All Environments</option>
+                            <option value="production">Production</option>
+                            <option value="development">Development</option>
+                            <option value="staging">Staging</option>
+                            <option value="standalone">Standalone</option>
+                        </select>
+                        <ChevronDown size={14} className="apps-sort-icon" />
+                    </div>
+
+                    {/* Sort dropdown */}
                     <div className="apps-sort-wrapper">
                         <select
                             className="apps-sort-select"
@@ -282,6 +309,7 @@ const Applications = () => {
                             <option value="name-desc">Name (Z-A)</option>
                             <option value="status">Status</option>
                             <option value="type">Type</option>
+                            <option value="environment">Environment</option>
                             <option value="created">Newest First</option>
                         </select>
                         <ChevronDown size={14} className="apps-sort-icon" />
