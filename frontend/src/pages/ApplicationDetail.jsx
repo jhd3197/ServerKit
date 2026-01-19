@@ -1431,14 +1431,22 @@ const LogsTab = ({ app }) => {
                 // Docker apps - use Docker compose logs
                 const data = await api.getDockerAppLogs(app.id, 200);
                 if (data.success) {
-                    setLogs(data.logs || 'No logs available');
+                    // Backend returns 'lines' as array, join them
+                    const logContent = Array.isArray(data.lines)
+                        ? data.lines.join('\n')
+                        : (data.logs || 'No logs available');
+                    setLogs(logContent || 'No logs available');
                 } else {
                     setLogs(data.error || 'Failed to load logs');
                 }
             } else {
                 // Regular apps - use nginx logs
                 const data = await api.getAppLogs(app.name, logType, 200);
-                setLogs(data.content || 'No logs available');
+                // Handle both array and string formats
+                const logContent = Array.isArray(data.lines)
+                    ? data.lines.join('\n')
+                    : (data.content || 'No logs available');
+                setLogs(logContent);
             }
         } catch (err) {
             setLogs('Failed to load logs: ' + (err.message || 'Unknown error'));

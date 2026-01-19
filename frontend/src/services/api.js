@@ -909,6 +909,19 @@ class ApiService {
         });
     }
 
+    async dockerCleanup(includeVolumes = false) {
+        return this.request('/docker/cleanup', {
+            method: 'POST',
+            body: { volumes: includeVolumes }
+        });
+    }
+
+    async cleanupAllApps() {
+        return this.request('/docker/cleanup/apps', {
+            method: 'POST'
+        });
+    }
+
     // Database endpoints
     async getDatabaseStatus() {
         return this.request('/databases/status');

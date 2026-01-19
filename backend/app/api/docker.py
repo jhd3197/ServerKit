@@ -149,11 +149,23 @@ def restart_container(container_id):
     return jsonify(result), 200 if result['success'] else 400
 
 
+PROTECTED_CONTAINERS = ['serverkit-frontend', 'serverkit_frontend', 'serverkit']
+
 @docker_bp.route('/containers/<container_id>', methods=['DELETE'])
 @jwt_required()
 @admin_required
 def remove_container(container_id):
     """Remove a container."""
+    # Protect ServerKit containers from deletion
+    container = DockerService.get_container(container_id)
+    if container:
+        container_name = container.get('name', '').lower().replace('/', '')
+        if any(protected in container_name for protected in PROTECTED_CONTAINERS):
+            return jsonify({
+                'success': False,
+                'error': 'Cannot delete ServerKit system container. This container is required for the panel to function.'
+            }), 403
+
     data = request.get_json() or {}
     force = data.get('force', False)
     volumes = data.get('volumes', False)
@@ -420,6 +432,196 @@ def compose_restart():
 
     result = DockerService.compose_restart(data['path'], data.get('service'))
     return jsonify(result), 200 if result['success'] else 400
+
+
+# ==================== CLEANUP ====================
+
+@docker_bp.route('/cleanup', methods=['POST'])
+@jwt_required()
+@admin_required
+def docker_cleanup():
+    """Clean up unused Docker resources.
+
+    Removes:
+    - Stopped containers (except ServerKit)
+    - Unused images
+    - Unused networks
+    - Unused volumes (optional)
+
+    Does NOT remove:
+    - Running containers
+    - ServerKit containers
+    - Images in use
+    """
+    import subprocess
+
+    data = request.get_json() or {}
+    include_volumes = data.get('volumes', False)
+
+    results = {
+        'containers': None,
+        'images': None,
+        'networks': None,
+        'volumes': None
+    }
+
+    # Get list of protected container IDs (ServerKit)
+    protected_ids = set()
+    try:
+        list_result = subprocess.run(
+            ['docker', 'ps', '-a', '--format', '{{.ID}} {{.Names}}'],
+            capture_output=True, text=True
+        )
+        for line in list_result.stdout.strip().split('\n'):
+            if line:
+                parts = line.split(' ', 1)
+                if len(parts) == 2:
+                    container_id, name = parts
+                    if any(p in name.lower() for p in PROTECTED_CONTAINERS):
+                        protected_ids.add(container_id)
+    except Exception:
+        pass
+
+    # Remove stopped containers (except protected ones)
+    try:
+        # Get stopped containers
+        result = subprocess.run(
+            ['docker', 'ps', '-a', '-q', '-f', 'status=exited'],
+            capture_output=True, text=True
+        )
+        stopped_ids = [id for id in result.stdout.strip().split('\n') if id and id not in protected_ids]
+
+        if stopped_ids:
+            remove_result = subprocess.run(
+                ['docker', 'rm'] + stopped_ids,
+                capture_output=True, text=True
+            )
+            results['containers'] = {
+                'removed': len(stopped_ids),
+                'success': remove_result.returncode == 0
+            }
+        else:
+            results['containers'] = {'removed': 0, 'success': True}
+    except Exception as e:
+        results['containers'] = {'error': str(e)}
+
+    # Remove dangling images
+    try:
+        result = subprocess.run(
+            ['docker', 'image', 'prune', '-f'],
+            capture_output=True, text=True
+        )
+        results['images'] = {
+            'success': result.returncode == 0,
+            'output': result.stdout.strip()
+        }
+    except Exception as e:
+        results['images'] = {'error': str(e)}
+
+    # Remove unused networks
+    try:
+        result = subprocess.run(
+            ['docker', 'network', 'prune', '-f'],
+            capture_output=True, text=True
+        )
+        results['networks'] = {
+            'success': result.returncode == 0,
+            'output': result.stdout.strip()
+        }
+    except Exception as e:
+        results['networks'] = {'error': str(e)}
+
+    # Remove unused volumes (optional)
+    if include_volumes:
+        try:
+            result = subprocess.run(
+                ['docker', 'volume', 'prune', '-f'],
+                capture_output=True, text=True
+            )
+            results['volumes'] = {
+                'success': result.returncode == 0,
+                'output': result.stdout.strip()
+            }
+        except Exception as e:
+            results['volumes'] = {'error': str(e)}
+    else:
+        results['volumes'] = {'skipped': True, 'message': 'Volume cleanup not requested'}
+
+    return jsonify({
+        'success': True,
+        'message': 'Docker cleanup completed',
+        'results': results
+    }), 200
+
+
+@docker_bp.route('/cleanup/apps', methods=['POST'])
+@jwt_required()
+@admin_required
+def cleanup_all_apps():
+    """Remove all user-deployed Docker apps.
+
+    This will:
+    - Stop and remove all containers in /var/serverkit/apps/
+    - Delete app folders
+    - Remove apps from database
+
+    Does NOT affect ServerKit itself.
+    """
+    import shutil
+    import os
+
+    apps_dir = '/var/serverkit/apps'
+    results = []
+
+    # Get all apps from database
+    docker_apps = Application.query.filter_by(app_type='docker').all()
+
+    for app in docker_apps:
+        app_result = {'name': app.name, 'success': True, 'steps': []}
+
+        # Stop and remove containers
+        if app.root_path and os.path.exists(app.root_path):
+            try:
+                compose_result = DockerService.compose_down(app.root_path, volumes=True, remove_orphans=True)
+                app_result['steps'].append({'action': 'docker_down', 'success': compose_result.get('success', False)})
+            except Exception as e:
+                app_result['steps'].append({'action': 'docker_down', 'error': str(e)})
+                app_result['success'] = False
+
+            # Delete folder
+            try:
+                shutil.rmtree(app.root_path)
+                app_result['steps'].append({'action': 'delete_folder', 'success': True})
+            except Exception as e:
+                app_result['steps'].append({'action': 'delete_folder', 'error': str(e)})
+                app_result['success'] = False
+
+        # Remove from database
+        try:
+            db.session.delete(app)
+            app_result['steps'].append({'action': 'delete_db', 'success': True})
+        except Exception as e:
+            app_result['steps'].append({'action': 'delete_db', 'error': str(e)})
+            app_result['success'] = False
+
+        results.append(app_result)
+
+    # Commit database changes
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'success': False,
+            'error': f'Database commit failed: {str(e)}',
+            'results': results
+        }), 500
+
+    return jsonify({
+        'success': True,
+        'message': f'Removed {len(results)} apps',
+        'results': results
+    }), 200
 
 
 @docker_bp.route('/compose/pull', methods=['POST'])
