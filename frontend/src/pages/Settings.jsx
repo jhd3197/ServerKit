@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import UsersTab from '../components/settings/UsersTab';
 import AuditLogTab from '../components/settings/AuditLogTab';
-import { Github, FileText, HelpCircle, MessageSquare, Bug, Check, Layers, Download, CheckCircle, RefreshCw, ExternalLink } from 'lucide-react';
+import { Github, FileText, HelpCircle, MessageSquare, Bug, Check, Layers, Download, CheckCircle, RefreshCw, ExternalLink, Star, X } from 'lucide-react';
 
 const Settings = () => {
     const [activeTab, setActiveTab] = useState('profile');
@@ -1647,10 +1647,15 @@ const SystemInfo = () => {
     );
 };
 
+const STAR_PROMPT_KEY = 'serverkit-star-prompt-dismissed';
+
 const AboutSection = () => {
     const [version, setVersion] = useState('...');
     const [updateInfo, setUpdateInfo] = useState(null);
     const [checkingUpdate, setCheckingUpdate] = useState(false);
+    const [showStarPrompt, setShowStarPrompt] = useState(() => {
+        return localStorage.getItem(STAR_PROMPT_KEY) !== 'true';
+    });
 
     useEffect(() => {
         const fetchVersion = async () => {
@@ -1663,6 +1668,11 @@ const AboutSection = () => {
         };
         fetchVersion();
     }, []);
+
+    const dismissStarPrompt = () => {
+        setShowStarPrompt(false);
+        localStorage.setItem(STAR_PROMPT_KEY, 'true');
+    };
 
     const checkForUpdate = async () => {
         setCheckingUpdate(true);
@@ -1732,6 +1742,30 @@ const AboutSection = () => {
                     )}
                 </div>
             </div>
+
+            {showStarPrompt && (
+                <div className="star-prompt-card">
+                    <button className="dismiss-btn" onClick={dismissStarPrompt} title="Dismiss">
+                        <X size={16} />
+                    </button>
+                    <div className="star-icon">
+                        <Star size={24} />
+                    </div>
+                    <div className="star-content">
+                        <h4>Enjoying ServerKit?</h4>
+                        <p>If you find ServerKit useful, consider starring the repository on GitHub. It helps others discover the project!</p>
+                        <a
+                            href="https://github.com/jhd3197/ServerKit"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-accent"
+                        >
+                            <Star size={16} />
+                            Star on GitHub
+                        </a>
+                    </div>
+                </div>
+            )}
 
             <div className="settings-card">
                 <h3>Features</h3>
