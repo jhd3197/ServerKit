@@ -2,7 +2,7 @@
 
 ## Current Status
 - **Milestone**: 1 - Infrastructure Fixes, Private URLs & UI Polish
-- **Current Phase**: 8 - Applications UI Polish
+- **Current Phase**: 9 - FileManager Disk Usage UI
 - **Phase Status**: Pending
 - **Last Updated**: 2026-01-19
 
@@ -17,9 +17,21 @@
 | 5 | completed | 2026-01-19 | 2026-01-19 |
 | 6 | completed | 2026-01-19 | 2026-01-19 |
 | 7 | completed | 2026-01-19 | 2026-01-19 |
-| 8 | planned | 2026-01-19 | - |
+| 8 | completed | 2026-01-19 | 2026-01-19 |
 | 9 | pending | - | - |
 | 10 | pending | - | - |
+
+## Phase 8 Summary
+Applications UI polish fully implemented:
+- Lucide icons replacing all inline SVGs
+- Sorting options (name A-Z/Z-A, status, type, created)
+- Grid/list view toggle with localStorage persistence
+- Bulk selection with checkboxes and action bar
+- ConfirmModal component for destructive actions
+- Enhanced status badges with animated pulse for running apps
+- Search filter with URL param persistence
+- Improved app cards with port, domain count, container info
+- Mobile responsive design
 
 ## Phase 7 Summary
 Templates page polish fully implemented:
@@ -73,9 +85,9 @@ Completed all 8 tasks:
 None currently identified.
 
 ## Notes
-- Phase 7 complete - templates page polished with icons and filters
-- URL params allow sharing filtered template views
-- Featured templates list can be made dynamic later
+- Phase 8 complete - applications page polished with full feature set
+- Both Templates and Applications pages now have consistent UX
+- Ready for Phase 9 (FileManager Disk Usage UI) or Phase 10 (Integration Testing)
 
 ## Quick Links
 - [ROADMAP.md](./ROADMAP.md)
@@ -84,3 +96,4 @@ None currently identified.
 - [Phase 5 Summary](./phases/05-private-urls/SUMMARY.md)
 - [Phase 6 Summary](./phases/06-dashboard-historical-metrics/SUMMARY.md)
 - [Phase 7 Summary](./phases/07-templates-page-polish/SUMMARY.md)
+- [Phase 8 Summary](./phases/08-applications-ui-polish/SUMMARY.md)
