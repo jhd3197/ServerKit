@@ -539,8 +539,12 @@ class DockerService:
     def compose_ps(project_path):
         """List Docker Compose services.
 
-        Note: docker compose ps --format json outputs NDJSON (one JSON object per line),
-        not a JSON array. We parse each line separately.
+        Handles multiple output formats from docker compose ps --format json:
+        - NDJSON: One JSON object per line (common in newer versions)
+        - JSON Array: Single line with array of objects
+        - Mixed: Warning messages (time=...) mixed with JSON
+
+        Returns a list of container dictionaries.
         """
         try:
             result = subprocess.run(
@@ -549,14 +553,24 @@ class DockerService:
                 capture_output=True, text=True
             )
             if result.returncode == 0 and result.stdout.strip():
-                # Parse NDJSON - one JSON object per line
                 containers = []
                 for line in result.stdout.strip().split('\n'):
-                    if line.strip():
-                        try:
-                            containers.append(json.loads(line))
-                        except json.JSONDecodeError:
-                            continue
+                    line = line.strip()
+                    # Skip empty lines and warning messages (e.g., "time=..." from docker)
+                    if not line or line.startswith('time=') or line.startswith('WARN'):
+                        continue
+                    try:
+                        parsed = json.loads(line)
+                        # Handle both single object and array cases
+                        if isinstance(parsed, list):
+                            # JSON array on single line
+                            containers.extend(parsed)
+                        elif isinstance(parsed, dict):
+                            # Single JSON object (NDJSON format)
+                            containers.append(parsed)
+                        # Skip if neither dict nor list (shouldn't happen)
+                    except json.JSONDecodeError:
+                        continue
                 return containers
             return []
         except Exception:
