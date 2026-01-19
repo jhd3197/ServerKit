@@ -128,3 +128,42 @@ def delete_workflow(workflow_id):
     db.session.commit()
 
     return jsonify({'message': 'Workflow deleted successfully'})
+
+
+@workflows_bp.route('/<int:workflow_id>/deploy', methods=['POST'])
+@jwt_required()
+def deploy_workflow(workflow_id):
+    """
+    Deploy all resources from a workflow.
+
+    This endpoint converts workflow nodes (Docker apps, databases, domains)
+    into actual infrastructure by calling the appropriate backend services.
+
+    Returns:
+        {
+            "success": boolean,
+            "message": string,
+            "results": [
+                {"nodeId": "node_1", "type": "dockerApp", "success": true, "resourceId": 5},
+                {"nodeId": "node_2", "type": "domain", "success": true, "resourceId": 12},
+                ...
+            ],
+            "errors": [],
+            "workflow": {...updated workflow with resource IDs...}
+        }
+    """
+    from app.services.workflow_service import WorkflowService
+
+    current_user_id = get_jwt_identity()
+
+    result = WorkflowService.deploy_workflow(workflow_id, current_user_id)
+
+    if result.get('success'):
+        return jsonify(result), 200
+    elif result.get('error') == 'Workflow not found':
+        return jsonify(result), 404
+    elif result.get('error') == 'Access denied':
+        return jsonify(result), 403
+    else:
+        # Partial success or errors - return 200 with error details
+        return jsonify(result), 200
