@@ -176,7 +176,7 @@ cmd_help() {
     echo ""
     echo "App Management:"
     echo "  create-app        Show how to create apps (via web UI)"
-    echo "  list-apps         List all deployed apps"
+    echo "  list-apps [--all] List deployed apps (--all shows Docker containers)"
     echo "  start-app         Start an app"
     echo "  stop-app          Stop an app"
     echo "  app-logs          View app logs"
@@ -644,7 +644,12 @@ cmd_create_app() {
 
 cmd_list_apps() {
     check_installed
-    run_cli list-apps
+    # Pass --all flag if provided
+    if [ "$1" = "--all" ] || [ "$1" = "-a" ]; then
+        run_cli list-apps --all
+    else
+        run_cli list-apps
+    fi
 }
 
 cmd_start_app() {
@@ -916,7 +921,7 @@ case "${1:-help}" in
         cmd_create_app "$2" "$3" "$4"
         ;;
     list-apps)
-        cmd_list_apps
+        cmd_list_apps "$2"
         ;;
     start-app)
         cmd_start_app "$2"

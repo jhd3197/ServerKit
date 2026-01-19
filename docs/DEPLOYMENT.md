@@ -96,10 +96,13 @@ serverkit restore-db backup/serverkit-20240115-120000.db
 ### App & Cleanup Commands
 
 ```bash
-# List all installed applications
+# List all installed applications (from database)
 serverkit list-apps
 
-# Delete all apps, containers, and folders
+# Also show all Docker containers (including infrastructure)
+serverkit list-apps --all
+
+# Delete all apps, containers, folders, and orphaned Docker resources
 serverkit cleanup-apps
 
 # Also delete Docker volumes
@@ -109,8 +112,16 @@ serverkit cleanup-apps --delete-volumes
 serverkit cleanup-apps --keep-db
 
 # Complete factory reset (delete everything and start fresh)
+# Preserves only serverkit-frontend infrastructure
 serverkit factory-reset
 ```
+
+**Note:** Cleanup commands will:
+- Stop and remove all app containers
+- Remove orphaned Docker containers (not tracked in database)
+- Prune unused Docker networks
+- Delete all folders in `/var/serverkit/apps/`
+- Never touch ServerKit infrastructure (serverkit-frontend, serverkit-network)
 
 ### Utility Commands
 

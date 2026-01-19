@@ -277,6 +277,7 @@ def cleanup_apps(delete_volumes, keep_db):
     This removes:
     - All Docker containers and networks for apps
     - All app folders in /var/serverkit/apps/
+    - Orphaned Docker containers (excludes serverkit-* infrastructure)
     - Optionally Docker volumes (--delete-volumes)
     - Database records (unless --keep-db)
     """
@@ -284,16 +285,16 @@ def cleanup_apps(delete_volumes, keep_db):
     import subprocess
     from app.models import Application
 
+    # Infrastructure containers to never touch
+    PROTECTED_CONTAINERS = ['serverkit-frontend', 'serverkit-backend', 'serverkit']
+
     app = create_app()
     with app.app_context():
         apps = Application.query.all()
 
-        if not apps:
-            click.echo('No applications found.')
-            return
+        click.echo(f'Found {len(apps)} application(s) in database...\n')
 
-        click.echo(f'Found {len(apps)} application(s) to clean up...\n')
-
+        # 1. Clean up tracked applications
         for application in apps:
             click.echo(f'Cleaning up: {application.name}')
 
@@ -333,6 +334,82 @@ def cleanup_apps(delete_volumes, keep_db):
         if not keep_db:
             db.session.commit()
 
+        # 2. Clean up orphaned containers (not in database, not infrastructure)
+        click.echo('\nCleaning up orphaned Docker containers...')
+        try:
+            result = subprocess.run(
+                ['docker', 'ps', '-a', '--format', '{{.Names}}'],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            if result.returncode == 0:
+                containers = result.stdout.strip().split('\n')
+                orphaned = 0
+                for container in containers:
+                    if not container:
+                        continue
+                    # Skip protected infrastructure containers
+                    if any(container.startswith(p) for p in PROTECTED_CONTAINERS):
+                        continue
+                    # Skip if it's a serverkit network container
+                    if container == 'serverkit-frontend' or container == 'serverkit-backend':
+                        continue
+
+                    # Stop and remove orphaned container
+                    try:
+                        subprocess.run(['docker', 'stop', container], capture_output=True, timeout=30)
+                        subprocess.run(['docker', 'rm', container], capture_output=True, timeout=30)
+                        click.echo(click.style(f'  ✓ Removed orphaned container: {container}', fg='yellow'))
+                        orphaned += 1
+                    except Exception:
+                        pass
+
+                if orphaned == 0:
+                    click.echo('  No orphaned containers found.')
+                else:
+                    click.echo(f'  Removed {orphaned} orphaned container(s).')
+        except Exception as e:
+            click.echo(click.style(f'  ✗ Failed to clean orphaned containers: {e}', fg='red'))
+
+        # 3. Clean up orphaned Docker networks (except serverkit-network)
+        click.echo('\nCleaning up orphaned Docker networks...')
+        try:
+            subprocess.run(
+                ['docker', 'network', 'prune', '-f'],
+                capture_output=True,
+                timeout=30
+            )
+            click.echo(click.style('  ✓ Pruned unused networks', fg='green'))
+        except Exception as e:
+            click.echo(click.style(f'  ✗ Failed to prune networks: {e}', fg='red'))
+
+        # 4. Optionally clean up volumes
+        if delete_volumes:
+            click.echo('\nCleaning up orphaned Docker volumes...')
+            try:
+                subprocess.run(
+                    ['docker', 'volume', 'prune', '-f'],
+                    capture_output=True,
+                    timeout=30
+                )
+                click.echo(click.style('  ✓ Pruned unused volumes', fg='green'))
+            except Exception as e:
+                click.echo(click.style(f'  ✗ Failed to prune volumes: {e}', fg='red'))
+
+        # 5. Clean up any remaining folders in /var/serverkit/apps/
+        apps_dir = '/var/serverkit/apps'
+        if os.path.exists(apps_dir):
+            click.echo(f'\nCleaning up app folders in {apps_dir}...')
+            for folder in os.listdir(apps_dir):
+                folder_path = os.path.join(apps_dir, folder)
+                if os.path.isdir(folder_path):
+                    try:
+                        shutil.rmtree(folder_path)
+                        click.echo(click.style(f'  ✓ Deleted: {folder}', fg='yellow'))
+                    except Exception as e:
+                        click.echo(click.style(f'  ✗ Failed to delete {folder}: {e}', fg='red'))
+
         click.echo(click.style('\nCleanup completed!', fg='green'))
 
 
@@ -344,7 +421,8 @@ def factory_reset():
     This removes:
     - All applications and Docker containers
     - All app folders
-    - All Docker volumes
+    - All orphaned Docker containers (preserves serverkit infrastructure)
+    - All Docker volumes and networks (except serverkit-network)
     - All database tables
     - Template installation cache
     """
@@ -352,12 +430,17 @@ def factory_reset():
     import subprocess
     from app.models import Application
 
+    # Infrastructure to never touch
+    PROTECTED_CONTAINERS = ['serverkit-frontend', 'serverkit-backend', 'serverkit']
+    PROTECTED_NETWORKS = ['serverkit-network', 'serverkit_default']
+
     app = create_app()
     with app.app_context():
         click.echo('Starting factory reset...\n')
 
-        # 1. Clean up all applications
+        # 1. Clean up all applications from database
         apps = Application.query.all()
+        click.echo(f'Stopping {len(apps)} tracked application(s)...')
         for application in apps:
             if application.root_path and os.path.exists(application.root_path):
                 try:
@@ -370,7 +453,31 @@ def factory_reset():
                 except Exception:
                     pass
 
-        # 2. Delete entire apps directory
+        # 2. Stop and remove ALL non-infrastructure containers
+        click.echo('Removing all app containers...')
+        try:
+            result = subprocess.run(
+                ['docker', 'ps', '-a', '--format', '{{.Names}}'],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            if result.returncode == 0:
+                containers = [c for c in result.stdout.strip().split('\n') if c]
+                for container in containers:
+                    # Skip protected infrastructure
+                    if any(container.startswith(p) for p in PROTECTED_CONTAINERS):
+                        continue
+                    try:
+                        subprocess.run(['docker', 'stop', container], capture_output=True, timeout=30)
+                        subprocess.run(['docker', 'rm', '-f', container], capture_output=True, timeout=30)
+                    except Exception:
+                        pass
+            click.echo(click.style('✓ Removed all app containers', fg='green'))
+        except Exception as e:
+            click.echo(click.style(f'✗ Failed to remove containers: {e}', fg='red'))
+
+        # 3. Delete entire apps directory
         apps_dir = '/var/serverkit/apps'
         if os.path.exists(apps_dir):
             try:
@@ -380,7 +487,23 @@ def factory_reset():
             except Exception as e:
                 click.echo(click.style(f'✗ Failed to delete apps folder: {e}', fg='red'))
 
-        # 3. Clear template installation cache
+        # 4. Prune Docker volumes (except protected)
+        click.echo('Pruning Docker volumes...')
+        try:
+            subprocess.run(['docker', 'volume', 'prune', '-f'], capture_output=True, timeout=60)
+            click.echo(click.style('✓ Pruned unused volumes', fg='green'))
+        except Exception as e:
+            click.echo(click.style(f'✗ Failed to prune volumes: {e}', fg='red'))
+
+        # 5. Prune Docker networks (except protected)
+        click.echo('Pruning Docker networks...')
+        try:
+            subprocess.run(['docker', 'network', 'prune', '-f'], capture_output=True, timeout=30)
+            click.echo(click.style('✓ Pruned unused networks', fg='green'))
+        except Exception as e:
+            click.echo(click.style(f'✗ Failed to prune networks: {e}', fg='red'))
+
+        # 6. Clear template installation cache
         template_config = '/etc/serverkit/templates.json'
         if os.path.exists(template_config):
             try:
@@ -394,7 +517,7 @@ def factory_reset():
             except Exception as e:
                 click.echo(click.style(f'✗ Failed to clear template cache: {e}', fg='red'))
 
-        # 4. Drop and recreate database
+        # 7. Drop and recreate database
         try:
             db.drop_all()
             db.create_all()
@@ -407,32 +530,66 @@ def factory_reset():
 
 
 @cli.command()
-def list_apps():
-    """List all applications."""
+@click.option('--all', 'show_all', is_flag=True, help='Also show Docker container status')
+def list_apps(show_all):
+    """List all user applications (excludes ServerKit infrastructure)."""
+    import subprocess
     from app.models import Application
 
     app = create_app()
     with app.app_context():
         apps = Application.query.all()
 
+        click.echo('\n' + '=' * 90)
+        click.echo('  USER APPLICATIONS')
+        click.echo('=' * 90)
+
         if not apps:
-            click.echo('No applications found.')
-            return
+            click.echo('\n  No applications found in database.')
+            click.echo('  Install apps from the Templates page in the web UI.\n')
+        else:
+            click.echo(f"\n{'ID':<5} {'Name':<25} {'Type':<10} {'Status':<10} {'Port':<8} {'Path'}")
+            click.echo('-' * 90)
 
-        click.echo(f"\n{'ID':<5} {'Name':<25} {'Type':<12} {'Status':<10} {'Port':<8} {'Path'}")
-        click.echo('-' * 100)
+            for application in apps:
+                click.echo(
+                    f"{application.id:<5} "
+                    f"{application.name:<25} "
+                    f"{application.app_type:<10} "
+                    f"{application.status:<10} "
+                    f"{str(application.port or '-'):<8} "
+                    f"{application.root_path or '-'}"
+                )
 
-        for application in apps:
-            click.echo(
-                f"{application.id:<5} "
-                f"{application.name:<25} "
-                f"{application.app_type:<12} "
-                f"{application.status:<10} "
-                f"{str(application.port or '-'):<8} "
-                f"{application.root_path or '-'}"
-            )
+            click.echo(f"\nTotal: {len(apps)} application(s)")
 
-        click.echo(f"\nTotal: {len(apps)} application(s)")
+        if show_all:
+            click.echo('\n' + '=' * 90)
+            click.echo('  DOCKER CONTAINERS')
+            click.echo('=' * 90 + '\n')
+
+            try:
+                result = subprocess.run(
+                    ['docker', 'ps', '-a', '--format', 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'],
+                    capture_output=True,
+                    text=True,
+                    timeout=30
+                )
+                if result.returncode == 0:
+                    # Filter out header and show
+                    lines = result.stdout.strip().split('\n')
+                    for line in lines:
+                        # Mark serverkit infrastructure
+                        if 'serverkit-frontend' in line or 'serverkit-backend' in line:
+                            click.echo(click.style(f'{line}  [INFRASTRUCTURE]', fg='blue'))
+                        else:
+                            click.echo(line)
+                else:
+                    click.echo('  Failed to list Docker containers')
+            except Exception as e:
+                click.echo(f'  Error: {e}')
+
+        click.echo('')
 
 
 if __name__ == '__main__':
