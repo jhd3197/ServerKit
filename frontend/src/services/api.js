@@ -1863,6 +1863,29 @@ class ApiService {
     }
 
     // ========================================
+    // Metrics History endpoints
+    // ========================================
+    async getMetricsHistory(period = '1h') {
+        return this.request(`/metrics/history?period=${period}`);
+    }
+
+    async getMetricsStats() {
+        return this.request('/metrics/stats');
+    }
+
+    async startMetricsCollection() {
+        return this.request('/metrics/collection/start', { method: 'POST' });
+    }
+
+    async stopMetricsCollection() {
+        return this.request('/metrics/collection/stop', { method: 'POST' });
+    }
+
+    async triggerMetricsAggregation() {
+        return this.request('/metrics/aggregate', { method: 'POST' });
+    }
+
+    // ========================================
     // Private URL endpoints
     // ========================================
     async enablePrivateUrl(appId, slug = null) {
