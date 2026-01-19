@@ -87,10 +87,9 @@ const Dashboard = () => {
                 <div className="server-identity">
                     <h1>
                         <span className="status-dot-live"></span>
-                        ServerKit
+                        {hostname}
                     </h1>
                     <div className="server-details">
-                        <span>HOST: {hostname}</span>
                         <span>IP: {ipAddress}</span>
                         <span>KERNEL: {kernelVersion}</span>
                         <span>UPTIME: {uptimeFormatted.days}d {String(uptimeFormatted.hours).padStart(2, '0')}h {String(uptimeFormatted.minutes).padStart(2, '0')}m</span>

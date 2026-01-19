@@ -233,14 +233,6 @@ const MetricsGraph = ({ compact = false }) => {
                                 <stop offset="5%" stopColor={CHART_COLORS.network} stopOpacity={0.5} />
                                 <stop offset="95%" stopColor={CHART_COLORS.network} stopOpacity={0} />
                             </linearGradient>
-                            {/* Glow filters for lines */}
-                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                                <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                                <feMerge>
-                                    <feMergeNode in="coloredBlur" />
-                                    <feMergeNode in="SourceGraphic" />
-                                </feMerge>
-                            </filter>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#27272a" opacity={0.5} />
                         <XAxis
@@ -265,9 +257,7 @@ const MetricsGraph = ({ compact = false }) => {
                                 stroke={CHART_COLORS.cpu}
                                 fill="url(#cpuGradient)"
                                 strokeWidth={2}
-                                tension={0.4}
                                 dot={false}
-                                activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.cpu, fill: '#18181b' }}
                                 name="CPU"
                             />
                         )}
@@ -278,9 +268,7 @@ const MetricsGraph = ({ compact = false }) => {
                                 stroke={CHART_COLORS.memory}
                                 fill="url(#memoryGradient)"
                                 strokeWidth={2}
-                                tension={0.4}
                                 dot={false}
-                                activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.memory, fill: '#18181b' }}
                                 name="Memory"
                             />
                         )}
@@ -291,9 +279,7 @@ const MetricsGraph = ({ compact = false }) => {
                                 stroke={CHART_COLORS.network}
                                 fill="url(#networkGradient)"
                                 strokeWidth={2}
-                                tension={0.1}
                                 dot={false}
-                                activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.network, fill: '#18181b' }}
                                 name="Network"
                             />
                         )}
