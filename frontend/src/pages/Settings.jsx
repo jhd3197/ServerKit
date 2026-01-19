@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import UsersTab from '../components/settings/UsersTab';
 import AuditLogTab from '../components/settings/AuditLogTab';
+import { Github, FileText, HelpCircle, MessageSquare, Bug, Check, Layers } from 'lucide-react';
 
 const Settings = () => {
     const [activeTab, setActiveTab] = useState('profile');
@@ -1670,9 +1671,7 @@ const AboutSection = () => {
 
             <div className="about-card">
                 <div className="about-logo">
-                    <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" fill="none" strokeWidth="1.5">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    </svg>
+                    <Layers size={48} strokeWidth={1.5} />
                 </div>
                 <h3>ServerKit</h3>
                 <p className="version">Version {version}</p>
@@ -1686,31 +1685,31 @@ const AboutSection = () => {
                 <h3>Features</h3>
                 <ul className="feature-list">
                     <li>
-                        <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+                        <Check size={16} />
                         Application Management (PHP, Python, Node.js, Docker)
                     </li>
                     <li>
-                        <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+                        <Check size={16} />
                         Domain & SSL Certificate Management
                     </li>
                     <li>
-                        <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+                        <Check size={16} />
                         Database Management (MySQL, PostgreSQL)
                     </li>
                     <li>
-                        <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+                        <Check size={16} />
                         Docker Container Management
                     </li>
                     <li>
-                        <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+                        <Check size={16} />
                         System Monitoring & Alerts
                     </li>
                     <li>
-                        <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+                        <Check size={16} />
                         Automated Backups
                     </li>
                     <li>
-                        <svg viewBox="0 0 24 24" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+                        <Check size={16} />
                         Git Deployment with Webhooks
                     </li>
                 </ul>
@@ -1719,26 +1718,25 @@ const AboutSection = () => {
             <div className="settings-card">
                 <h3>Links</h3>
                 <div className="link-list">
-                    <a href="https://github.com/serverkit" target="_blank" rel="noopener noreferrer" className="link-item">
-                        <svg viewBox="0 0 24 24" width="18" height="18">
-                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                        </svg>
+                    <a href="https://github.com/jhd3197/ServerKit" target="_blank" rel="noopener noreferrer" className="link-item">
+                        <Github size={18} />
                         GitHub Repository
                     </a>
-                    <a href="#" className="link-item">
-                        <svg viewBox="0 0 24 24" width="18" height="18">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                        </svg>
+                    <a href="https://github.com/jhd3197/ServerKit#readme" target="_blank" rel="noopener noreferrer" className="link-item">
+                        <FileText size={18} />
                         Documentation
                     </a>
-                    <a href="#" className="link-item">
-                        <svg viewBox="0 0 24 24" width="18" height="18">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                            <line x1="12" y1="17" x2="12.01" y2="17"/>
-                        </svg>
-                        Support
+                    <a href="https://github.com/jhd3197/ServerKit/issues" target="_blank" rel="noopener noreferrer" className="link-item">
+                        <HelpCircle size={18} />
+                        Support & Issues
+                    </a>
+                    <a href="https://github.com/jhd3197/ServerKit/discussions" target="_blank" rel="noopener noreferrer" className="link-item">
+                        <MessageSquare size={18} />
+                        Discussions
+                    </a>
+                    <a href="https://github.com/jhd3197/ServerKit/issues/new" target="_blank" rel="noopener noreferrer" className="link-item">
+                        <Bug size={18} />
+                        Report a Bug
                     </a>
                 </div>
             </div>
