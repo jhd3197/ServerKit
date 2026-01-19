@@ -85,6 +85,21 @@ def create_domain():
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
+    # For Docker apps, validate port configuration
+    port_warning = None
+    if app.app_type == 'docker':
+        if not app.port:
+            return jsonify({
+                'error': 'Docker app must have a port configured before adding domains',
+                'hint': 'Update the application with a valid port number first'
+            }), 400
+
+        # Check if port is accessible (warning only, don't block)
+        from app.services.docker_service import DockerService
+        port_check = DockerService.check_port_accessible(app.port)
+        if not port_check.get('accessible'):
+            port_warning = f"Warning: Port {app.port} is not currently accessible. Make sure the container is running and the port is exposed."
+
     # Check if this should be the primary domain
     is_primary = data.get('is_primary', False)
     if is_primary:
@@ -123,11 +138,16 @@ def create_domain():
             if not enable_result.get('success'):
                 nginx_result['warning'] = f"Site created but not enabled: {enable_result.get('error')}"
 
-    return jsonify({
+    response = {
         'message': 'Domain created successfully',
         'domain': domain.to_dict(),
         'nginx': nginx_result
-    }), 201
+    }
+
+    if port_warning:
+        response['warning'] = port_warning
+
+    return jsonify(response), 201
 
 
 @domains_bp.route('/<int:domain_id>', methods=['PUT'])
