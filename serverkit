@@ -123,8 +123,10 @@ cmd_check_update() {
         return 1
     fi
 
+    set +e  # Temporarily disable exit on error
     compare_versions "$local_version" "$remote_version"
     local result=$?
+    set -e  # Re-enable exit on error
 
     if [ $result -eq 2 ]; then
         print_success "Update available! Run 'sudo serverkit update' to upgrade."
@@ -336,8 +338,10 @@ cmd_update() {
 
     # Check if update is needed
     if [ "$REMOTE_VERSION" != "unknown" ]; then
+        set +e  # Temporarily disable exit on error
         compare_versions "$CURRENT_VERSION" "$REMOTE_VERSION"
         local result=$?
+        set -e  # Re-enable exit on error
         if [ $result -eq 0 ]; then
             print_success "Already running the latest version."
             echo ""
