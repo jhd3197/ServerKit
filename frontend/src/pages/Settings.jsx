@@ -1647,6 +1647,20 @@ const SystemInfo = () => {
 };
 
 const AboutSection = () => {
+    const [version, setVersion] = useState('...');
+
+    useEffect(() => {
+        const fetchVersion = async () => {
+            try {
+                const response = await api.get('/system/version');
+                setVersion(response.data.version);
+            } catch (error) {
+                setVersion('1.0.0');
+            }
+        };
+        fetchVersion();
+    }, []);
+
     return (
         <div className="settings-section">
             <div className="section-header">
@@ -1661,7 +1675,7 @@ const AboutSection = () => {
                     </svg>
                 </div>
                 <h3>ServerKit</h3>
-                <p className="version">Version 1.0.0</p>
+                <p className="version">Version {version}</p>
                 <p className="description">
                     A modern, lightweight server management panel for managing web applications,
                     databases, domains, and more. Built with Flask and React.

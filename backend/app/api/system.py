@@ -1,9 +1,37 @@
-from flask import Blueprint, jsonify
+import os
+from flask import Blueprint, jsonify, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import User
 from app.services.system_service import SystemService
 
 system_bp = Blueprint('system', __name__)
+
+
+@system_bp.route('/version', methods=['GET'])
+def get_version():
+    """Get ServerKit version - no auth required."""
+    version = '1.0.0'  # Default version
+
+    # Try to read from VERSION file
+    version_paths = [
+        '/opt/serverkit/VERSION',
+        os.path.join(current_app.root_path, '..', 'VERSION'),
+        os.path.join(current_app.root_path, '..', '..', 'VERSION'),
+    ]
+
+    for path in version_paths:
+        try:
+            if os.path.exists(path):
+                with open(path, 'r') as f:
+                    version = f.read().strip()
+                break
+        except Exception:
+            pass
+
+    return jsonify({
+        'version': version,
+        'name': 'ServerKit'
+    }), 200
 
 
 @system_bp.route('/metrics', methods=['GET'])
