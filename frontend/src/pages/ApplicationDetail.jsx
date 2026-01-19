@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useToast } from '../contexts/ToastContext';
 import EnvironmentVariables from '../components/EnvironmentVariables';
+import PrivateURLSection from '../components/PrivateURLSection';
 
 const ApplicationDetail = () => {
     const { id } = useParams();
@@ -212,7 +213,7 @@ const ApplicationDetail = () => {
             </div>
 
             <div className="tab-content">
-                {activeTab === 'overview' && <OverviewTab app={app} />}
+                {activeTab === 'overview' && <OverviewTab app={app} onUpdate={loadApp} />}
                 {activeTab === 'environment' && <EnvironmentVariables appId={app.id} />}
                 {activeTab === 'packages' && isPythonApp && <PackagesTab appId={app.id} />}
                 {activeTab === 'gunicorn' && isPythonApp && <GunicornTab appId={app.id} />}
@@ -229,7 +230,7 @@ const ApplicationDetail = () => {
     );
 };
 
-const OverviewTab = ({ app }) => {
+const OverviewTab = ({ app, onUpdate }) => {
     const [status, setStatus] = useState(null);
     const [appStatus, setAppStatus] = useState(null);
 
@@ -351,6 +352,10 @@ const OverviewTab = ({ app }) => {
 
             {app.app_type === 'docker' && (
                 <RoutingDiagnosticsCard appId={app.id} />
+            )}
+
+            {app.app_type === 'docker' && app.port && (
+                <PrivateURLSection app={app} onUpdate={onUpdate} />
             )}
         </div>
     );
