@@ -1,0 +1,220 @@
+// ============================================
+// LINKED APPS SECTION
+// ============================================
+
+.linked-apps-section {
+    margin-top: @space-4;
+}
+
+.linked-apps-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: @space-4;
+
+    h3 {
+        display: flex;
+        align-items: center;
+        gap: @space-2;
+        margin: 0;
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+    }
+}
+
+.linked-apps-content {
+    display: flex;
+    flex-direction: column;
+    gap: @space-4;
+}
+
+.current-environment {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    padding: @space-3;
+    background: @bg-hover;
+    border-radius: @radius-md;
+
+    .env-label {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+    }
+}
+
+.linked-apps-divider {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    color: @text-tertiary;
+    font-size: @font-size-sm;
+
+    &::before,
+    &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: @border-subtle;
+    }
+}
+
+.linked-apps-list {
+    display: flex;
+    flex-direction: column;
+    gap: @space-3;
+}
+
+.linked-app-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @space-3;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    transition: border-color @transition-fast;
+
+    &:hover {
+        border-color: @border-default;
+    }
+}
+
+.linked-app-info {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+}
+
+.linked-app-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: @accent-glow;
+    color: @accent-primary;
+    border-radius: @radius-md;
+}
+
+.linked-app-details {
+    display: flex;
+    flex-direction: column;
+    gap: @space-1;
+}
+
+.linked-app-name {
+    font-weight: @font-weight-medium;
+    color: @text-primary;
+}
+
+.linked-app-meta {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    font-size: @font-size-sm;
+}
+
+.linked-app-port {
+    color: @text-tertiary;
+    font-family: @font-family-mono;
+    font-size: @font-size-xs;
+}
+
+.linked-app-actions {
+    display: flex;
+    gap: @space-2;
+}
+
+.linked-apps-empty,
+.linked-apps-info {
+    padding: @space-4;
+    text-align: center;
+    background: @bg-hover;
+    border-radius: @radius-md;
+
+    p {
+        margin: 0 0 @space-3;
+        color: @text-secondary;
+        font-size: @font-size-sm;
+    }
+
+    .btn {
+        margin-top: @space-2;
+    }
+}
+
+.linked-apps-info p {
+    margin: 0;
+}
+
+// Shared config info
+.shared-config-info {
+    padding: @space-3;
+    background: fade(@accent-primary, 10%);
+    border: 1px solid fade(@accent-primary, 20%);
+    border-radius: @radius-md;
+}
+
+.shared-config-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    color: @accent-primary;
+    margin-bottom: @space-2;
+}
+
+.shared-config-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-3;
+    font-size: @font-size-xs;
+    color: @text-secondary;
+    font-family: @font-family-mono;
+
+    span {
+        background: @bg-card;
+        padding: @space-1 @space-2;
+        border-radius: @radius-sm;
+    }
+}
+
+// Small status badge variant
+.status-badge-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: @radius-full;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    &.status-active {
+        background: @success-bg;
+        color: @success;
+    }
+
+    &.status-stopped {
+        background: fade(@text-tertiary, 10%);
+        color: @text-tertiary;
+    }
+
+    &.status-error {
+        background: @danger-bg;
+        color: @danger;
+    }
+
+    &.status-warning {
+        background: @warning-bg;
+        color: @warning;
+    }
+}
