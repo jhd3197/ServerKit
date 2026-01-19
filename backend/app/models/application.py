@@ -24,6 +24,11 @@ class Application(db.Model):
     private_slug = db.Column(db.String(50), unique=True, nullable=True, index=True)
     private_url_enabled = db.Column(db.Boolean, default=False)
 
+    # Environment linking
+    environment_type = db.Column(db.String(20), default='standalone')  # 'production', 'development', 'staging', 'standalone'
+    linked_app_id = db.Column(db.Integer, db.ForeignKey('applications.id'), nullable=True)
+    shared_config = db.Column(db.Text, nullable=True)  # JSON string for shared resources
+
     # Metadata
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -34,9 +39,11 @@ class Application(db.Model):
 
     # Relationships
     domains = db.relationship('Domain', backref='application', lazy='dynamic', cascade='all, delete-orphan')
+    linked_app = db.relationship('Application', remote_side=[id], backref='linked_from', foreign_keys=[linked_app_id])
 
-    def to_dict(self):
-        return {
+    def to_dict(self, include_linked=False):
+        import json
+        result = {
             'id': self.id,
             'name': self.name,
             'app_type': self.app_type,
@@ -49,12 +56,24 @@ class Application(db.Model):
             'container_id': self.container_id,
             'private_slug': self.private_slug,
             'private_url_enabled': self.private_url_enabled,
+            'environment_type': self.environment_type,
+            'linked_app_id': self.linked_app_id,
+            'shared_config': json.loads(self.shared_config) if self.shared_config else None,
+            'has_linked_app': self.linked_app_id is not None,
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat(),
             'last_deployed_at': self.last_deployed_at.isoformat() if self.last_deployed_at else None,
             'user_id': self.user_id,
             'domains': [d.to_dict() for d in self.domains]
         }
+        if include_linked and self.linked_app:
+            result['linked_app'] = {
+                'id': self.linked_app.id,
+                'name': self.linked_app.name,
+                'environment_type': self.linked_app.environment_type,
+                'status': self.linked_app.status
+            }
+        return result
 
     def __repr__(self):
         return f'<Application {self.name}>'
