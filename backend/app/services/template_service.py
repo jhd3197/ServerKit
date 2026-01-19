@@ -320,7 +320,8 @@ class TemplateService:
     def install_template(cls, template_id: str, app_name: str,
                         user_variables: Dict = None, user_id: int = None) -> Dict:
         """Install a template as a new application."""
-        from app.models import Application, db
+        from app import db
+        from app.models import Application
         from app.services.docker_service import DockerService
 
         # Get template
@@ -509,7 +510,8 @@ class TemplateService:
     @classmethod
     def update_app(cls, app_id: int, user_id: int = None) -> Dict:
         """Update an installed app to the latest template version."""
-        from app.models import Application, db
+        from app import db
+        from app.models import Application
         from app.services.docker_service import DockerService
 
         config = cls.get_config()
