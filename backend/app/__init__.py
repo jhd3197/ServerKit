@@ -155,6 +155,10 @@ def create_app(config_name=None):
     from app.api.admin import admin_bp
     app.register_blueprint(admin_bp, url_prefix='/api/v1/admin')
 
+    # Register blueprints - Historical Metrics
+    from app.api.metrics import metrics_bp
+    app.register_blueprint(metrics_bp, url_prefix='/api/v1/metrics')
+
     # Create database tables
     with app.app_context():
         db.create_all()
@@ -163,6 +167,11 @@ def create_app(config_name=None):
         from app.services.settings_service import SettingsService
         SettingsService.initialize_defaults()
         SettingsService.migrate_legacy_roles()
+
+        # Start metrics history collection in background
+        from app.services.metrics_history_service import MetricsHistoryService
+        if not MetricsHistoryService.is_running():
+            MetricsHistoryService.start_collection(app)
 
     # Serve frontend for root path
     @app.route('/')
