@@ -229,10 +229,15 @@ cp "$INSTALL_DIR/nginx/sites-available/example.conf.template" /etc/nginx/sites-a
 
 print_success "Nginx proxy configured"
 
+# Clean up Docker networks to prevent issues
+print_info "Cleaning up Docker..."
+docker network prune -f 2>/dev/null || true
+docker system prune -f 2>/dev/null || true
+
 # Build and start frontend container
 print_info "Building frontend container..."
 cd "$INSTALL_DIR"
-docker compose build
+docker compose build --no-cache
 
 print_info "Starting services..."
 

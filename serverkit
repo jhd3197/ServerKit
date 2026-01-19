@@ -152,7 +152,7 @@ cmd_help() {
     echo "  restart           Restart all services"
     echo "  status            Show service status"
     echo "  logs [service]    View logs (backend, frontend, or all)"
-    echo "  update            Update to latest version"
+    echo "  update [--force]  Update to latest version (--force skips version check)"
     echo "  uninstall         Uninstall ServerKit"
     echo ""
     echo "User Management:"
@@ -321,6 +321,11 @@ cmd_logs() {
 }
 
 cmd_update() {
+    local force_update=false
+    if [ "$1" = "--force" ] || [ "$1" = "-f" ]; then
+        force_update=true
+    fi
+
     check_root
     check_installed
     print_header
@@ -336,8 +341,8 @@ cmd_update() {
     echo "  Latest version:    $REMOTE_VERSION"
     echo ""
 
-    # Check if update is needed
-    if [ "$REMOTE_VERSION" != "unknown" ]; then
+    # Check if update is needed (skip if --force)
+    if [ "$force_update" = false ] && [ "$REMOTE_VERSION" != "unknown" ]; then
         set +e  # Temporarily disable exit on error
         compare_versions "$CURRENT_VERSION" "$REMOTE_VERSION"
         local result=$?
@@ -383,9 +388,14 @@ cmd_update() {
     cp -r "$INSTALL_DIR/backend/templates/"*.yaml /etc/serverkit/templates/ 2>/dev/null || true
     cp -r "$INSTALL_DIR/backend/templates/"*.yml /etc/serverkit/templates/ 2>/dev/null || true
 
-    # Rebuild frontend
+    # Clean up Docker to prevent networking issues
+    print_info "Cleaning up Docker..."
+    docker network prune -f 2>/dev/null || true
+    docker system prune -f 2>/dev/null || true
+
+    # Rebuild frontend (no cache to ensure fresh build)
     print_info "Rebuilding frontend..."
-    docker compose build
+    docker compose build --no-cache
 
     # Reload systemd in case service file changed
     systemctl daemon-reload
@@ -830,7 +840,7 @@ case "${1:-help}" in
         cmd_logs "$2"
         ;;
     update)
-        cmd_update
+        cmd_update "$2"
         ;;
     version|--version|-v)
         cmd_version
