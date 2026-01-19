@@ -2220,6 +2220,37 @@ class ApiService {
     async getSecurityEvents(limit = 100) {
         return this.request(`/security/events?limit=${limit}`);
     }
+
+    // ========================================
+    // Workflow endpoints
+    // ========================================
+    async getWorkflows() {
+        return this.request('/workflows');
+    }
+
+    async getWorkflow(id) {
+        return this.request(`/workflows/${id}`);
+    }
+
+    async createWorkflow(data) {
+        return this.request('/workflows', {
+            method: 'POST',
+            body: data
+        });
+    }
+
+    async updateWorkflow(id, data) {
+        return this.request(`/workflows/${id}`, {
+            method: 'PUT',
+            body: data
+        });
+    }
+
+    async deleteWorkflow(id) {
+        return this.request(`/workflows/${id}`, {
+            method: 'DELETE'
+        });
+    }
 }
 
 export const api = new ApiService();
