@@ -537,7 +537,11 @@ class DockerService:
 
     @staticmethod
     def compose_ps(project_path):
-        """List Docker Compose services."""
+        """List Docker Compose services.
+
+        Note: docker compose ps --format json outputs NDJSON (one JSON object per line),
+        not a JSON array. We parse each line separately.
+        """
         try:
             result = subprocess.run(
                 ['docker', 'compose', 'ps', '--format', 'json'],
@@ -545,7 +549,15 @@ class DockerService:
                 capture_output=True, text=True
             )
             if result.returncode == 0 and result.stdout.strip():
-                return json.loads(result.stdout)
+                # Parse NDJSON - one JSON object per line
+                containers = []
+                for line in result.stdout.strip().split('\n'):
+                    if line.strip():
+                        try:
+                            containers.append(json.loads(line))
+                        except json.JSONDecodeError:
+                            continue
+                return containers
             return []
         except Exception:
             return []
