@@ -440,9 +440,12 @@ class TemplateService:
             }
 
         except Exception as e:
+            import traceback
+            error_trace = traceback.format_exc()
+            print(f"Template install service error: {error_trace}")
             if os.path.exists(app_path):
                 shutil.rmtree(app_path)
-            return {'success': False, 'error': str(e)}
+            return {'success': False, 'error': str(e), 'trace': error_trace}
 
     @classmethod
     def _run_script(cls, script: str, cwd: str, variables: Dict) -> Dict:

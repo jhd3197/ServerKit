@@ -123,33 +123,40 @@ def get_template(template_id):
 @admin_required
 def install_template(template_id):
     """Install a template as a new application."""
-    current_user_id = get_jwt_identity()
-    data = request.get_json()
+    try:
+        current_user_id = get_jwt_identity()
+        data = request.get_json()
 
-    if not data:
-        return jsonify({'error': 'No data provided'}), 400
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
 
-    app_name = data.get('app_name')
-    if not app_name:
-        return jsonify({'error': 'app_name is required'}), 400
+        app_name = data.get('app_name')
+        if not app_name:
+            return jsonify({'error': 'app_name is required'}), 400
 
-    # Validate app name
-    import re
-    if not re.match(r'^[a-z0-9][a-z0-9-]*[a-z0-9]$', app_name) or len(app_name) < 3:
-        return jsonify({
-            'error': 'App name must be lowercase alphanumeric with hyphens, at least 3 characters'
-        }), 400
+        # Validate app name
+        import re
+        if not re.match(r'^[a-z0-9][a-z0-9-]*[a-z0-9]$', app_name) or len(app_name) < 3:
+            return jsonify({
+                'error': 'App name must be lowercase alphanumeric with hyphens, at least 3 characters'
+            }), 400
 
-    user_variables = data.get('variables', {})
+        user_variables = data.get('variables', {})
 
-    result = TemplateService.install_template(
-        template_id=template_id,
-        app_name=app_name,
-        user_variables=user_variables,
-        user_id=current_user_id
-    )
+        result = TemplateService.install_template(
+            template_id=template_id,
+            app_name=app_name,
+            user_variables=user_variables,
+            user_id=current_user_id
+        )
 
-    return jsonify(result), 201 if result.get('success') else 400
+        return jsonify(result), 201 if result.get('success') else 400
+
+    except Exception as e:
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"Template install error: {error_trace}")
+        return jsonify({'error': str(e), 'trace': error_trace}), 500
 
 
 @templates_bp.route('/validate-install', methods=['POST'])
