@@ -1,0 +1,237 @@
+id: flask-hello-world
+name: Flask - Hello World
+version: "1.0"
+description: Simple Flask app for testing and debugging. Shows server info, port, and connection status. No database needed.
+icon: https://flask.palletsprojects.com/en/2.3.x/_images/flask-logo.png
+website: https://flask.palletsprojects.com
+documentation: https://flask.palletsprojects.com/en/2.3.x/quickstart/
+categories:
+  - development
+  - api
+  - testing
+
+variables:
+  - name: HTTP_PORT
+    description: Port for the Flask application (auto-assigned)
+    type: port
+    default: "5000"
+    hidden: true
+
+ports:
+  - port: "${HTTP_PORT}"
+    protocol: http
+    description: Flask Web Server
+
+requirements:
+  memory: 128MB
+  storage: 100MB
+
+compose:
+  services:
+    app:
+      image: python:3.12-slim
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      working_dir: /app
+      command: >
+        sh -c "pip install --no-cache-dir flask && python app.py"
+      ports:
+        - "${HTTP_PORT}:5000"
+      environment:
+        - FLASK_ENV=production
+        - PYTHONUNBUFFERED=1
+        - APP_NAME=${APP_NAME}
+        - EXTERNAL_PORT=${HTTP_PORT}
+      volumes:
+        - app_code:/app
+
+  volumes:
+    app_code:
+
+files:
+  - path: /app/app.py
+    content: |
+      """
+      Flask Hello World - Debug Template
+
+      This app shows useful debugging information to help diagnose
+      connectivity issues between domains, nginx, and containers.
+      """
+      import os
+      import socket
+      import datetime
+      import sys
+      from flask import Flask, request, jsonify
+
+      app = Flask(__name__)
+
+      # Log all requests
+      @app.before_request
+      def log_request():
+          print(f"[{datetime.datetime.now().isoformat()}] {request.method} {request.path} from {request.remote_addr}", flush=True)
+
+      @app.route('/')
+      def hello():
+          return f'''<!DOCTYPE html>
+      <html>
+      <head>
+          <title>Flask Hello World - Debug Info</title>
+          <style>
+              body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background: #f5f5f5; }}
+              .container {{ background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }}
+              h1 {{ color: #2ecc71; margin-bottom: 10px; }}
+              .subtitle {{ color: #666; margin-bottom: 30px; }}
+              .info-card {{ background: #f8f9fa; border-radius: 8px; padding: 15px; margin: 10px 0; border-left: 4px solid #3498db; }}
+              .info-card.success {{ border-left-color: #2ecc71; }}
+              .info-card.warning {{ border-left-color: #f39c12; }}
+              .label {{ font-weight: 600; color: #333; }}
+              .value {{ color: #666; font-family: monospace; }}
+              .endpoints {{ margin-top: 30px; }}
+              .endpoint {{ background: #e8f4f8; padding: 10px 15px; margin: 5px 0; border-radius: 6px; font-family: monospace; }}
+              .status-ok {{ color: #2ecc71; font-weight: bold; }}
+          </style>
+      </head>
+      <body>
+          <div class="container">
+              <h1>Hello World from Flask!</h1>
+              <p class="subtitle">Debug Template - Connection Test Successful</p>
+
+              <div class="info-card success">
+                  <span class="label">Status:</span>
+                  <span class="status-ok">RUNNING</span>
+              </div>
+
+              <div class="info-card">
+                  <span class="label">Container Name:</span>
+                  <span class="value">{os.environ.get('APP_NAME', 'unknown')}</span>
+              </div>
+
+              <div class="info-card">
+                  <span class="label">Container Hostname:</span>
+                  <span class="value">{socket.gethostname()}</span>
+              </div>
+
+              <div class="info-card">
+                  <span class="label">Internal Port (Container):</span>
+                  <span class="value">5000</span>
+              </div>
+
+              <div class="info-card">
+                  <span class="label">External Port (Host):</span>
+                  <span class="value">{os.environ.get('EXTERNAL_PORT', 'unknown')}</span>
+              </div>
+
+              <div class="info-card">
+                  <span class="label">Your IP (Request):</span>
+                  <span class="value">{request.remote_addr}</span>
+              </div>
+
+              <div class="info-card">
+                  <span class="label">Host Header:</span>
+                  <span class="value">{request.host}</span>
+              </div>
+
+              <div class="info-card">
+                  <span class="label">X-Forwarded-For:</span>
+                  <span class="value">{request.headers.get('X-Forwarded-For', 'Not set (direct connection)')}</span>
+              </div>
+
+              <div class="info-card">
+                  <span class="label">X-Forwarded-Proto:</span>
+                  <span class="value">{request.headers.get('X-Forwarded-Proto', 'Not set')}</span>
+              </div>
+
+              <div class="info-card">
+                  <span class="label">Server Time:</span>
+                  <span class="value">{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}</span>
+              </div>
+
+              <div class="endpoints">
+                  <h3>Debug Endpoints</h3>
+                  <div class="endpoint">GET /health - Health check (JSON)</div>
+                  <div class="endpoint">GET /debug - Full debug info (JSON)</div>
+                  <div class="endpoint">GET /headers - Request headers (JSON)</div>
+              </div>
+          </div>
+      </body>
+      </html>'''
+
+      @app.route('/health')
+      def health():
+          """Health check endpoint - useful for monitoring"""
+          print(f"[{datetime.datetime.now().isoformat()}] Health check requested", flush=True)
+          return jsonify({
+              'status': 'healthy',
+              'app': os.environ.get('APP_NAME', 'flask-hello-world'),
+              'timestamp': datetime.datetime.now().isoformat()
+          })
+
+      @app.route('/debug')
+      def debug():
+          """Full debug information - shows all connection details"""
+          print(f"[{datetime.datetime.now().isoformat()}] Debug info requested", flush=True)
+          return jsonify({
+              'status': 'ok',
+              'container': {
+                  'name': os.environ.get('APP_NAME', 'unknown'),
+                  'hostname': socket.gethostname(),
+                  'internal_port': 5000,
+                  'external_port': os.environ.get('EXTERNAL_PORT', 'unknown'),
+              },
+              'request': {
+                  'remote_addr': request.remote_addr,
+                  'host': request.host,
+                  'url': request.url,
+                  'method': request.method,
+                  'scheme': request.scheme,
+              },
+              'proxy_headers': {
+                  'x_forwarded_for': request.headers.get('X-Forwarded-For'),
+                  'x_forwarded_proto': request.headers.get('X-Forwarded-Proto'),
+                  'x_real_ip': request.headers.get('X-Real-IP'),
+                  'host': request.headers.get('Host'),
+              },
+              'environment': {
+                  'FLASK_ENV': os.environ.get('FLASK_ENV'),
+                  'APP_NAME': os.environ.get('APP_NAME'),
+                  'EXTERNAL_PORT': os.environ.get('EXTERNAL_PORT'),
+              },
+              'timestamp': datetime.datetime.now().isoformat()
+          })
+
+      @app.route('/headers')
+      def headers():
+          """Show all request headers - useful for debugging nginx proxy"""
+          print(f"[{datetime.datetime.now().isoformat()}] Headers requested", flush=True)
+          return jsonify({
+              'headers': dict(request.headers),
+              'timestamp': datetime.datetime.now().isoformat()
+          })
+
+      if __name__ == '__main__':
+          print(f"=" * 60, flush=True)
+          print(f"Flask Hello World - Debug Template", flush=True)
+          print(f"=" * 60, flush=True)
+          print(f"Container: {os.environ.get('APP_NAME', 'unknown')}", flush=True)
+          print(f"Internal Port: 5000", flush=True)
+          print(f"External Port: {os.environ.get('EXTERNAL_PORT', 'unknown')}", flush=True)
+          print(f"Starting Flask server...", flush=True)
+          print(f"=" * 60, flush=True)
+          sys.stdout.flush()
+          app.run(host='0.0.0.0', port=5000, debug=False)
+
+post_install: |
+  Flask Hello World is now running!
+
+  This is a debug template to help you test connectivity.
+
+  Test your app:
+    - Private URL: http://your-server:${HTTP_PORT}
+    - Health Check: http://your-server:${HTTP_PORT}/health
+    - Debug Info: http://your-server:${HTTP_PORT}/debug
+
+  If you see the Hello World page, your port mapping is working correctly!
+  If you still get 502 errors when connecting a domain:
+    1. Check that nginx can reach port ${HTTP_PORT}
+    2. Verify the domain DNS points to your server
+    3. Check nginx error logs: /var/log/nginx/<app-name>.error.log

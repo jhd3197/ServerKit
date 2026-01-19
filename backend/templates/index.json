@@ -423,6 +423,13 @@
       "categories": ["development", "web", "custom"]
     },
     {
+      "id": "flask-hello-world",
+      "name": "Flask - Hello World",
+      "version": "1.0",
+      "description": "Simple Flask debug app. Shows server info, port, and connection status. No database needed.",
+      "categories": ["development", "api", "testing"]
+    },
+    {
       "id": "python-app",
       "name": "Python Application",
       "version": "3.12",
@@ -461,6 +468,7 @@
     "automation",
     "custom",
     "web",
-    "api"
+    "api",
+    "testing"
   ]
 }
