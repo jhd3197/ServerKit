@@ -20,7 +20,8 @@ import DockerAppConfigPanel from '../components/workflow/panels/DockerAppConfigP
 import DatabaseConfigPanel from '../components/workflow/panels/DatabaseConfigPanel';
 import DomainConfigPanel from '../components/workflow/panels/DomainConfigPanel';
 import ServiceConfigPanel from '../components/workflow/panels/ServiceConfigPanel';
-import { isValidConnection as checkValidConnection, getConnectionError } from '../utils/connectionRules';
+import { isValidConnection as checkValidConnection, getConnectionError, getConnectionType } from '../utils/connectionRules';
+import ConnectionEdge from '../components/workflow/ConnectionEdge';
 
 const initialNodes = [];
 const initialEdges = [];
@@ -37,6 +38,10 @@ const nodeColorMap = {
     database: '#f59e0b',
     domain: '#10b981',
     service: '#6366f1'
+};
+
+const edgeTypes = {
+    connection: ConnectionEdge
 };
 
 let nodeId = 0;
@@ -114,25 +119,50 @@ const WorkflowCanvas = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [selectedNode, setSelectedNode] = useState(null);
+    const [selectedEdge, setSelectedEdge] = useState(null);
     const [connectionError, setConnectionError] = useState(null);
     const { screenToFlowPosition } = useReactFlow();
 
     const memoizedNodeTypes = useMemo(() => nodeTypes, []);
+    const memoizedEdgeTypes = useMemo(() => edgeTypes, []);
 
     // Validate connections before allowing them
     const isValidConnection = useCallback((connection) => {
         return checkValidConnection(connection, nodes);
     }, [nodes]);
 
+    // Delete edge by ID
+    const deleteEdge = useCallback((edgeId) => {
+        setEdges((eds) => eds.filter((e) => e.id !== edgeId));
+        setSelectedEdge(null);
+    }, [setEdges]);
+
     const onConnect = useCallback(
         (params) => {
             // Double-check validation on connect
             if (checkValidConnection(params, nodes)) {
-                setEdges((eds) => addEdge(params, eds));
+                // Find source and target node types
+                const sourceNode = nodes.find(n => n.id === params.source);
+                const targetNode = nodes.find(n => n.id === params.target);
+                const connectionType = getConnectionType(sourceNode?.type, targetNode?.type);
+
+                // Create edge with metadata
+                const newEdge = {
+                    ...params,
+                    type: 'connection',
+                    animated: true,
+                    data: {
+                        sourceType: sourceNode?.type,
+                        targetType: targetNode?.type,
+                        connectionType,
+                        onDelete: deleteEdge
+                    }
+                };
+                setEdges((eds) => addEdge(newEdge, eds));
                 setConnectionError(null);
             }
         },
-        [setEdges, nodes]
+        [setEdges, nodes, deleteEdge]
     );
 
     const onConnectStart = useCallback(() => {
@@ -175,11 +205,31 @@ const WorkflowCanvas = () => {
 
     const handleNodeClick = useCallback((event, node) => {
         setSelectedNode(node);
+        setSelectedEdge(null);
+    }, []);
+
+    const handleEdgeClick = useCallback((event, edge) => {
+        setSelectedEdge(edge);
+        setSelectedNode(null);
     }, []);
 
     const handlePaneClick = useCallback(() => {
         setSelectedNode(null);
+        setSelectedEdge(null);
     }, []);
+
+    // Handle Delete key press for selected edge
+    const handleKeyDown = useCallback((event) => {
+        if ((event.key === 'Delete' || event.key === 'Backspace') && selectedEdge) {
+            deleteEdge(selectedEdge.id);
+        }
+    }, [selectedEdge, deleteEdge]);
+
+    // Attach keydown listener
+    React.useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [handleKeyDown]);
 
     const handlePanelClose = useCallback(() => {
         setSelectedNode(null);
@@ -235,6 +285,7 @@ const WorkflowCanvas = () => {
                 nodes={nodes}
                 edges={edges}
                 nodeTypes={memoizedNodeTypes}
+                edgeTypes={memoizedEdgeTypes}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
@@ -242,6 +293,7 @@ const WorkflowCanvas = () => {
                 onConnectEnd={onConnectEnd}
                 isValidConnection={isValidConnection}
                 onNodeClick={handleNodeClick}
+                onEdgeClick={handleEdgeClick}
                 onPaneClick={handlePaneClick}
                 fitView
                 panOnScroll
@@ -249,7 +301,7 @@ const WorkflowCanvas = () => {
                 panOnDrag={[1, 2]}
                 selectNodesOnDrag={false}
                 defaultEdgeOptions={{
-                    type: 'smoothstep',
+                    type: 'connection',
                     animated: true
                 }}
             >
