@@ -1863,6 +1863,39 @@ class ApiService {
     }
 
     // ========================================
+    // Private URL endpoints
+    // ========================================
+    async enablePrivateUrl(appId, slug = null) {
+        return this.request(`/apps/${appId}/private-url`, {
+            method: 'POST',
+            body: slug ? { slug } : {}
+        });
+    }
+
+    async getPrivateUrl(appId) {
+        return this.request(`/apps/${appId}/private-url`);
+    }
+
+    async updatePrivateUrl(appId, slug) {
+        return this.request(`/apps/${appId}/private-url`, {
+            method: 'PUT',
+            body: { slug }
+        });
+    }
+
+    async disablePrivateUrl(appId) {
+        return this.request(`/apps/${appId}/private-url`, {
+            method: 'DELETE'
+        });
+    }
+
+    async regeneratePrivateUrl(appId) {
+        return this.request(`/apps/${appId}/private-url/regenerate`, {
+            method: 'POST'
+        });
+    }
+
+    // ========================================
     // Environment Variables endpoints
     // ========================================
     async getEnvVars(appId, maskSecrets = false) {

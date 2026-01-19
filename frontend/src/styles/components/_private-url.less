@@ -1,0 +1,158 @@
+// ============================================
+// PRIVATE URL COMPONENT
+// ============================================
+
+.private-url-section {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    padding: @space-5;
+    margin-bottom: @space-5;
+
+    .section-header {
+        margin-bottom: @space-4;
+
+        h3 {
+            display: flex;
+            align-items: center;
+            gap: @space-2;
+            margin: 0;
+            font-size: @font-size-lg;
+            font-weight: 500;
+            color: @text-primary;
+
+            svg {
+                color: @accent-primary;
+            }
+        }
+    }
+}
+
+.private-url-disabled {
+    .hint {
+        color: @text-secondary;
+        font-size: @font-size-sm;
+        margin-bottom: @space-4;
+        line-height: 1.5;
+    }
+
+    .slug-hint {
+        color: @text-tertiary;
+        font-size: @font-size-xs;
+        margin-top: @space-2;
+    }
+}
+
+.private-url-form,
+.slug-edit-form {
+    display: flex;
+    gap: @space-3;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .input-group {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .input-prefix {
+        background: @bg-tertiary;
+        border: 1px solid @border-subtle;
+        border-right: none;
+        border-radius: @radius-sm 0 0 @radius-sm;
+        padding: @space-2 @space-3;
+        color: @text-tertiary;
+        font-family: @font-mono;
+        font-size: @font-size-sm;
+        height: 40px;
+        display: flex;
+        align-items: center;
+    }
+
+    .slug-input {
+        flex: 1;
+        border-radius: 0 @radius-sm @radius-sm 0;
+        font-family: @font-mono;
+        min-width: 150px;
+    }
+}
+
+.private-url-enabled {
+    .private-url-display {
+        background: fade(@success, 10%);
+        border: 1px solid fade(@success, 30%);
+        border-radius: @radius-md;
+        padding: @space-4;
+        margin-bottom: @space-4;
+    }
+
+    .url-box {
+        display: flex;
+        flex-direction: column;
+        gap: @space-2;
+        margin-bottom: @space-3;
+    }
+
+    .url-label {
+        color: @text-secondary;
+        font-size: @font-size-sm;
+    }
+
+    .url-value {
+        background: @bg-secondary;
+        padding: @space-2 @space-3;
+        border-radius: @radius-sm;
+        font-family: @font-mono;
+        font-size: @font-size-sm;
+        color: @text-primary;
+        word-break: break-all;
+        user-select: all;
+    }
+
+    .url-actions {
+        display: flex;
+        gap: @space-2;
+        flex-wrap: wrap;
+    }
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: @accent-primary;
+    cursor: pointer;
+    padding: 0;
+    font-size: @font-size-sm;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.slug-edit-form {
+    margin-top: @space-4;
+    padding-top: @space-4;
+    border-top: 1px solid @border-subtle;
+}
+
+.private-url-footer {
+    margin-top: @space-4;
+    padding-top: @space-4;
+    border-top: 1px solid @border-subtle;
+}
+
+// Private URL indicator in app list
+.private-url-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+    color: @success;
+    font-size: @font-size-sm;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+}
