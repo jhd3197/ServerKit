@@ -237,13 +237,22 @@ def get_apps():
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
 
+    # Optional filter by environment type
+    environment_filter = request.args.get('environment')
+    include_linked = request.args.get('include_linked', 'false').lower() == 'true'
+
     if user.role == 'admin':
-        apps = Application.query.all()
+        query = Application.query
     else:
-        apps = Application.query.filter_by(user_id=current_user_id).all()
+        query = Application.query.filter_by(user_id=current_user_id)
+
+    if environment_filter:
+        query = query.filter_by(environment_type=environment_filter)
+
+    apps = query.all()
 
     return jsonify({
-        'apps': [app.to_dict() for app in apps]
+        'apps': [app.to_dict(include_linked=include_linked) for app in apps]
     }), 200
 
 
@@ -260,7 +269,8 @@ def get_app(app_id):
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
-    return jsonify({'app': app.to_dict()}), 200
+    # Single app requests include linked app info by default
+    return jsonify({'app': app.to_dict(include_linked=True)}), 200
 
 
 @apps_bp.route('', methods=['POST'])
