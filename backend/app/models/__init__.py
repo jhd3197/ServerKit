@@ -6,8 +6,10 @@ from app.models.notification_preferences import NotificationPreferences
 from app.models.deployment import Deployment, DeploymentDiff
 from app.models.system_settings import SystemSettings
 from app.models.audit_log import AuditLog
+from app.models.metrics_history import MetricsHistory
 
 __all__ = [
     'User', 'Application', 'Domain', 'EnvironmentVariable', 'EnvironmentVariableHistory',
-    'NotificationPreferences', 'Deployment', 'DeploymentDiff', 'SystemSettings', 'AuditLog'
+    'NotificationPreferences', 'Deployment', 'DeploymentDiff', 'SystemSettings', 'AuditLog',
+    'MetricsHistory'
 ]
