@@ -1491,11 +1491,11 @@ const DockerDatabasesTab = () => {
         try {
             const [containerData, appsData] = await Promise.all([
                 api.getDockerDatabases(),
-                api.get('/apps')
+                api.getApps()
             ]);
             setContainers(containerData.containers || []);
             // Filter to only Docker apps
-            const dockerApps = (appsData.data?.apps || []).filter(app => app.app_type === 'docker');
+            const dockerApps = (appsData.apps || []).filter(app => app.app_type === 'docker');
             setApps(dockerApps);
         } catch (err) {
             console.error('Failed to load Docker databases:', err);
