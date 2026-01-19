@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { GitBranch } from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/ToastContext';
 import EnvironmentVariables from '../components/EnvironmentVariables';
 import PrivateURLSection from '../components/PrivateURLSection';
+import LinkedAppsSection from '../components/LinkedAppsSection';
+import LinkAppModal from '../components/LinkAppModal';
 
 const ApplicationDetail = () => {
     const { id } = useParams();
@@ -108,6 +111,13 @@ const ApplicationDetail = () => {
                     </div>
                 </div>
                 <div className="top-bar-actions">
+                    {app.environment_type && app.environment_type !== 'standalone' && (
+                        <span className={`env-badge env-${app.environment_type}`}>
+                            {app.environment_type === 'production' ? 'PROD' :
+                             app.environment_type === 'development' ? 'DEV' : 'STAGING'}
+                            {app.has_linked_app && <GitBranch size={10} />}
+                        </span>
+                    )}
                     <span className={`status-badge ${getStatusClass(app.status)}`}>
                         <span className="status-dot"/>
                         {app.status}
@@ -231,14 +241,19 @@ const ApplicationDetail = () => {
 };
 
 const OverviewTab = ({ app, onUpdate }) => {
+    const navigate = useNavigate();
     const [status, setStatus] = useState(null);
     const [appStatus, setAppStatus] = useState(null);
+    const [linkedApps, setLinkedApps] = useState([]);
+    const [showLinkModal, setShowLinkModal] = useState(false);
+    const [linkLoading, setLinkLoading] = useState(false);
 
     useEffect(() => {
         if (['flask', 'django'].includes(app.app_type)) {
             loadStatus();
         }
         loadAppStatus();
+        loadLinkedApps();
     }, [app]);
 
     async function loadStatus() {
@@ -257,6 +272,36 @@ const OverviewTab = ({ app, onUpdate }) => {
         } catch (err) {
             console.error('Failed to load app status:', err);
         }
+    }
+
+    async function loadLinkedApps() {
+        try {
+            const data = await api.getLinkedApps(app.id);
+            setLinkedApps(data.linked_apps || []);
+        } catch (err) {
+            console.error('Failed to load linked apps:', err);
+        }
+    }
+
+    async function handleUnlink() {
+        if (!window.confirm('Are you sure you want to unlink these apps? Database credentials will remain unchanged.')) {
+            return;
+        }
+        setLinkLoading(true);
+        try {
+            await api.unlinkApp(app.id);
+            onUpdate();
+            loadLinkedApps();
+        } catch (err) {
+            console.error('Failed to unlink apps:', err);
+        } finally {
+            setLinkLoading(false);
+        }
+    }
+
+    function handleLinked() {
+        onUpdate();
+        loadLinkedApps();
     }
 
     return (
@@ -356,6 +401,24 @@ const OverviewTab = ({ app, onUpdate }) => {
 
             {app.app_type === 'docker' && app.port && (
                 <PrivateURLSection app={app} onUpdate={onUpdate} />
+            )}
+
+            {/* Environment Linking Section */}
+            <LinkedAppsSection
+                app={app}
+                linkedApps={linkedApps}
+                onLink={() => setShowLinkModal(true)}
+                onUnlink={handleUnlink}
+                onNavigate={(appId) => navigate(`/apps/${appId}`)}
+                loading={linkLoading}
+            />
+
+            {showLinkModal && (
+                <LinkAppModal
+                    app={app}
+                    onClose={() => setShowLinkModal(false)}
+                    onLinked={handleLinked}
+                />
             )}
         </div>
     );
