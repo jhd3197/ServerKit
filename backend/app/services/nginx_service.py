@@ -162,6 +162,58 @@ class NginxService:
 }}
 '''
 
+    # Private URL routing templates
+    PRIVATE_URL_CONFIG_NAME = 'serverkit-private-urls'
+
+    PRIVATE_URL_LOCATION_TEMPLATE = '''    # Private URL: /p/{slug}
+    location /p/{slug}/ {{
+        proxy_pass http://127.0.0.1:{port}/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Private-URL {slug};
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 86400;
+    }}
+
+    # Also handle without trailing slash
+    location = /p/{slug} {{
+        return 301 /p/{slug}/;
+    }}
+'''
+
+    PRIVATE_URL_MAIN_CONFIG = '''# ServerKit Private URL Routes
+# This file is auto-generated. Do not edit manually.
+# Generated at: {timestamp}
+
+server {{
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    # Match all requests to this server for private URLs
+    server_name _;
+
+    access_log /var/log/nginx/private-urls.access.log;
+    error_log /var/log/nginx/private-urls.error.log;
+
+{locations}
+
+    # Fallback for unknown slugs under /p/
+    location /p/ {{
+        return 404;
+    }}
+
+    # Root location - return 404 for unmatched requests
+    location / {{
+        return 404;
+    }}
+}}
+'''
+
     @classmethod
     def test_config(cls) -> Dict:
         """Test Nginx configuration syntax."""
@@ -615,3 +667,139 @@ class NginxService:
         }
 
         return results
+
+    # ==================== PRIVATE URL MANAGEMENT ====================
+
+    @classmethod
+    def update_private_url_config(cls, app, old_slug: str = None) -> Dict:
+        """Update Nginx config for a private URL.
+
+        This regenerates the entire private URLs config file since changes
+        are infrequent and full regeneration is simpler.
+
+        Args:
+            app: The Application object with private_slug and port
+            old_slug: Optional old slug being replaced (unused, kept for API compatibility)
+
+        Returns:
+            Dict with success status and message
+        """
+        return cls.regenerate_all_private_urls()
+
+    @classmethod
+    def remove_private_url_config(cls, slug: str) -> Dict:
+        """Remove a private URL from Nginx config.
+
+        This regenerates the entire private URLs config file.
+
+        Args:
+            slug: The slug being removed (unused, full regeneration happens)
+
+        Returns:
+            Dict with success status and message
+        """
+        return cls.regenerate_all_private_urls()
+
+    @classmethod
+    def regenerate_all_private_urls(cls) -> Dict:
+        """Regenerate the entire private URLs config from database.
+
+        Queries all applications with private URLs enabled and regenerates
+        the Nginx configuration file with all location blocks.
+
+        Returns:
+            Dict with success status, message, and count of URLs configured
+        """
+        from datetime import datetime
+        from app.models import Application
+
+        try:
+            # Query all apps with private URLs enabled
+            apps = Application.query.filter(
+                Application.private_url_enabled == True,
+                Application.private_slug.isnot(None),
+                Application.port.isnot(None)
+            ).all()
+
+            # Generate location blocks
+            locations = []
+            for app in apps:
+                location = cls.PRIVATE_URL_LOCATION_TEMPLATE.format(
+                    slug=app.private_slug,
+                    port=app.port
+                )
+                locations.append(location)
+
+            # Generate full config
+            if locations:
+                config = cls.PRIVATE_URL_MAIN_CONFIG.format(
+                    timestamp=datetime.utcnow().isoformat(),
+                    locations='\n'.join(locations)
+                )
+            else:
+                # No private URLs - create minimal config
+                config = f'''# ServerKit Private URL Routes
+# This file is auto-generated. Do not edit manually.
+# Generated at: {datetime.utcnow().isoformat()}
+# No private URLs configured
+
+server {{
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+
+    location /p/ {{
+        return 404;
+    }}
+
+    location / {{
+        return 404;
+    }}
+}}
+'''
+
+            # Write config file
+            config_path = os.path.join(cls.SITES_AVAILABLE, cls.PRIVATE_URL_CONFIG_NAME)
+            process = subprocess.run(
+                ['sudo', 'tee', config_path],
+                input=config,
+                capture_output=True,
+                text=True
+            )
+            if process.returncode != 0:
+                return {'success': False, 'error': f'Failed to write config: {process.stderr}'}
+
+            # Enable the site if not already enabled
+            enabled_path = os.path.join(cls.SITES_ENABLED, cls.PRIVATE_URL_CONFIG_NAME)
+            if not os.path.exists(enabled_path):
+                result = subprocess.run(
+                    ['sudo', 'ln', '-sf', config_path, enabled_path],
+                    capture_output=True,
+                    text=True
+                )
+                if result.returncode != 0:
+                    return {'success': False, 'error': f'Failed to enable config: {result.stderr}'}
+
+            # Reload Nginx
+            reload_result = cls.reload()
+            if not reload_result['success']:
+                return reload_result
+
+            return {
+                'success': True,
+                'message': f'Private URL config regenerated with {len(apps)} URLs',
+                'url_count': len(apps),
+                'config_path': config_path
+            }
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def get_private_url_config(cls) -> Dict:
+        """Get the current private URL configuration.
+
+        Returns:
+            Dict with exists, enabled, content, and URL count
+        """
+        return cls.get_site_config(cls.PRIVATE_URL_CONFIG_NAME)
