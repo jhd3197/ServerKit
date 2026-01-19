@@ -1,6 +1,10 @@
 # ServerKit
 
 <p align="center">
+  <img width="700" alt="server-kit" src="https://github.com/user-attachments/assets/bfc59e75-8f90-4674-a222-e18213b628b7" />
+</p>
+
+<p align="center">
   <strong>Modern, self-hosted server management panel</strong><br>
   An open-source alternative to ServerPilot, RunCloud, and Coolify
 </p>
