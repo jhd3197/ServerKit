@@ -10,7 +10,7 @@
 
 | Phase | Name | Status | Goal |
 |-------|------|--------|------|
-| 1 | Docker & Domain Debugging | pending | Fix port mapping and domain routing for Docker apps |
+| 1 | Docker & Domain Debugging | **completed** | Fix port mapping and domain routing for Docker apps |
 | 2 | WordPress Template Testing | pending | Deploy and verify WordPress works end-to-end |
 | 3 | PHP App Template Testing | pending | Deploy and verify PHP/Laravel apps work correctly |
 | 4 | Flask/Python Template Testing | pending | Deploy and verify Python apps route correctly |
@@ -59,14 +59,13 @@
    - Add "Test Connection" button for domains
 
 ### Success Criteria
-- [ ] Docker containers expose ports to localhost correctly
-- [ ] Nginx configs are created and enabled automatically
-- [ ] Domains route traffic to Docker containers
-- [ ] Diagnostic info visible in UI
+- [x] Docker containers expose ports to localhost correctly
+- [x] Nginx configs are created and enabled automatically
+- [x] Domains route traffic to Docker containers
+- [x] Diagnostic info visible in UI
 
-### Research Needed
-- [ ] How Docker Compose port mapping differs from `docker run -p`
-- [ ] Windows Docker Desktop network mode behavior
+### Completed
+Phase 1 added diagnostic tools to identify and debug routing issues. See `.planning/phases/01-docker-domain-debugging/SUMMARY.md` for details.
 
 ---
 
