@@ -2,6 +2,20 @@
 
 This guide explains how to run ServerKit locally on Windows for development and testing.
 
+## Production Server Specs (Reference)
+
+ServerKit is tested on Digital Ocean with these specs:
+
+| Spec | Value |
+|------|-------|
+| **OS** | Ubuntu 24.04.3 LTS |
+| **CPU** | 2 cores (AMD) |
+| **RAM** | 4 GB |
+| **Disk** | 25 GB |
+| **Plan** | Basic Droplet (~$12/mo) |
+
+For local development, similar or lower specs work fine.
+
 ## Prerequisites
 
 - **Windows 10/11** with WSL2 enabled
