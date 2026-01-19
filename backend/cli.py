@@ -1,19 +1,58 @@
 #!/usr/bin/env python3
 """ServerKit CLI - Administrative commands for ServerKit."""
 
+import os
 import click
 import secrets
 import sys
-from werkzeug.security import generate_password_hash
+from pathlib import Path
 
+# Load .env file before importing app
+# Check multiple locations for the .env file
+def load_env():
+    """Load environment variables from .env file."""
+    try:
+        from dotenv import load_dotenv
+
+        # Try multiple locations
+        env_locations = [
+            Path(__file__).parent / '.env',                    # Same directory as cli.py
+            Path(__file__).parent.parent / '.env',             # Parent directory
+            Path('/opt/serverkit/.env'),                       # Production location
+            Path('/opt/serverkit/backend/.env'),               # Alternative production
+        ]
+
+        for env_path in env_locations:
+            if env_path.exists():
+                load_dotenv(env_path)
+                return str(env_path)
+
+        # Also check if DATABASE_URL is already set
+        if os.environ.get('DATABASE_URL'):
+            return 'environment'
+
+        return None
+    except ImportError:
+        # python-dotenv not installed
+        return None
+
+# Load env before any other imports that might use config
+_env_loaded = load_env()
+
+from werkzeug.security import generate_password_hash
 from app import create_app, db
 from app.models import User
 
 
 @click.group()
-def cli():
+@click.option('--debug', is_flag=True, help='Show debug information')
+@click.pass_context
+def cli(ctx, debug):
     """ServerKit administrative CLI."""
-    pass
+    ctx.ensure_object(dict)
+    ctx.obj['debug'] = debug
+    if debug and _env_loaded:
+        click.echo(f"Loaded environment from: {_env_loaded}")
 
 
 @cli.command()
