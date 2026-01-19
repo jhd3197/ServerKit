@@ -623,3 +623,207 @@
     left: 50% !important;
     transform: translateX(-50%);
 }
+
+// ============================================
+// CONFIGURATION PANEL
+// ============================================
+
+.config-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height: 100%;
+    background: @bg-card;
+    border-left: 1px solid @border-subtle;
+    box-shadow: @shadow-lg;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.25s ease-out, opacity 0.2s ease-out;
+    pointer-events: none;
+
+    &.open {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+}
+
+.config-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @space-4;
+    border-bottom: 2px solid @accent-primary;
+    flex-shrink: 0;
+}
+
+.config-panel-title {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+
+    h3 {
+        margin: 0;
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+    }
+}
+
+.config-panel-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: @radius-md;
+    color: white;
+}
+
+.config-panel-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    border-radius: @radius-sm;
+    color: @text-tertiary;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        background: @bg-hover;
+        color: @text-primary;
+    }
+}
+
+.config-panel-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: @space-4;
+    .custom-scrollbar();
+
+    .form-group {
+        margin-bottom: @space-4;
+
+        label {
+            display: block;
+            font-size: @font-size-sm;
+            font-weight: @font-weight-medium;
+            color: @text-secondary;
+            margin-bottom: @space-2;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: @space-2 @space-3;
+            background: @bg-body;
+            border: 1px solid @border-subtle;
+            border-radius: @radius-md;
+            color: @text-primary;
+            font-size: @font-size-sm;
+            transition: border-color @transition-fast;
+
+            &:focus {
+                outline: none;
+                border-color: @accent-primary;
+            }
+
+            &::placeholder {
+                color: @text-tertiary;
+            }
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2371717a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right @space-3 center;
+            padding-right: @space-8;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .input-readonly {
+            background: @bg-hover;
+            cursor: not-allowed;
+            color: @text-tertiary;
+        }
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: @space-3;
+    }
+
+    .form-hint {
+        display: block;
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        margin-top: @space-1;
+    }
+}
+
+.config-panel-footer {
+    padding: @space-4;
+    border-top: 1px solid @border-subtle;
+    flex-shrink: 0;
+}
+
+// ============================================
+// PORT LIST (Docker Config Panel)
+// ============================================
+
+.port-list {
+    display: flex;
+    flex-direction: column;
+    gap: @space-2;
+}
+
+.port-item {
+    display: flex;
+    gap: @space-2;
+
+    input {
+        flex: 1;
+    }
+}
+
+.btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-radius: @radius-md;
+    flex-shrink: 0;
+}
+
+.btn-danger-ghost {
+    background: transparent;
+    border: 1px solid transparent;
+    color: @text-tertiary;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        background: @danger-bg;
+        border-color: @danger-border;
+        color: @danger;
+    }
+}
