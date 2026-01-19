@@ -130,6 +130,7 @@ const WorkflowCanvas = () => {
     const [workflowName, setWorkflowName] = useState('Untitled Workflow');
     const [isSaving, setIsSaving] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isImporting, setIsImporting] = useState(false);
     const [showLoadModal, setShowLoadModal] = useState(false);
     const [saveMessage, setSaveMessage] = useState(null);
 
@@ -252,6 +253,89 @@ const WorkflowCanvas = () => {
         setWorkflowName('Untitled Workflow');
         nodeId = 0;
     }, [setNodes, setEdges]);
+
+    // Import existing infrastructure as nodes
+    const importInfrastructure = useCallback(async () => {
+        setIsImporting(true);
+        setSaveMessage(null);
+
+        try {
+            // Fetch apps, domains in parallel
+            const [appsResponse, domainsResponse] = await Promise.all([
+                api.getApps().catch(() => ({ apps: [] })),
+                api.getDomains().catch(() => ({ domains: [] }))
+            ]);
+
+            const apps = appsResponse.apps || [];
+            const domains = domainsResponse.domains || [];
+
+            if (apps.length === 0 && domains.length === 0) {
+                setSaveMessage('No infrastructure found');
+                setTimeout(() => setSaveMessage(null), 3000);
+                return;
+            }
+
+            const importedNodes = [];
+            const GRID_SPACING_X = 280;
+            const GRID_SPACING_Y = 200;
+            const COLS = 3;
+
+            // Import Docker apps
+            apps.forEach((app, index) => {
+                const col = index % COLS;
+                const row = Math.floor(index / COLS);
+                importedNodes.push({
+                    id: `node_${nodeId++}`,
+                    type: 'dockerApp',
+                    position: {
+                        x: 100 + col * GRID_SPACING_X,
+                        y: 100 + row * GRID_SPACING_Y
+                    },
+                    data: {
+                        name: app.name,
+                        image: app.docker_image || 'custom',
+                        status: app.status === 'running' ? 'running' : 'stopped',
+                        ports: app.ports || [],
+                        memory: app.memory_limit || null,
+                        appId: app.id
+                    }
+                });
+            });
+
+            // Import Domains (offset below apps)
+            const appsRows = Math.ceil(apps.length / COLS);
+            domains.forEach((domain, index) => {
+                const col = index % COLS;
+                const row = appsRows + Math.floor(index / COLS);
+                importedNodes.push({
+                    id: `node_${nodeId++}`,
+                    type: 'domain',
+                    position: {
+                        x: 100 + col * GRID_SPACING_X,
+                        y: 100 + row * GRID_SPACING_Y
+                    },
+                    data: {
+                        name: domain.domain,
+                        ssl: domain.ssl_enabled ? 'active' : 'none',
+                        dnsStatus: domain.dns_verified ? 'propagated' : 'pending',
+                        domainId: domain.id
+                    }
+                });
+            });
+
+            // Add imported nodes to existing nodes
+            setNodes((nds) => [...nds, ...importedNodes]);
+
+            setSaveMessage(`Imported ${apps.length} apps, ${domains.length} domains`);
+            setTimeout(() => setSaveMessage(null), 4000);
+        } catch (error) {
+            console.error('Failed to import infrastructure:', error);
+            setSaveMessage('Failed to import');
+            setTimeout(() => setSaveMessage(null), 3000);
+        } finally {
+            setIsImporting(false);
+        }
+    }, [setNodes]);
 
     const onConnect = useCallback(
         (params) => {
@@ -420,6 +504,15 @@ const WorkflowCanvas = () => {
                     >
                         <FolderOpen size={16} />
                         <span>Load</span>
+                    </button>
+                    <button
+                        className="toolbar-btn"
+                        onClick={importInfrastructure}
+                        disabled={isImporting}
+                        title="Import existing apps and domains as nodes"
+                    >
+                        <Download size={16} />
+                        <span>{isImporting ? 'Importing...' : 'Import'}</span>
                     </button>
                     <button
                         className="toolbar-btn toolbar-btn-primary"
