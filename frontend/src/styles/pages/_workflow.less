@@ -948,3 +948,387 @@
         stroke-width: 2 !important;
     }
 }
+
+// ============================================
+// WORKFLOW TOOLBAR (SAVE/LOAD)
+// ============================================
+
+.workflow-toolbar {
+    position: absolute;
+    top: @space-4;
+    right: @space-4;
+    z-index: 15;
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    padding: @space-2 @space-3;
+    box-shadow: @shadow-lg;
+}
+
+.toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+}
+
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+}
+
+.workflow-name-input {
+    width: 180px;
+    padding: @space-2 @space-3;
+    background: @bg-body;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    color: @text-primary;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    transition: border-color @transition-fast;
+
+    &:focus {
+        outline: none;
+        border-color: @accent-primary;
+    }
+
+    &::placeholder {
+        color: @text-tertiary;
+    }
+}
+
+.workflow-id-badge {
+    padding: @space-1 @space-2;
+    background: @bg-hover;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    font-family: @font-mono;
+    color: @text-tertiary;
+}
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2 @space-3;
+    background: transparent;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    color: @text-secondary;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    cursor: pointer;
+    transition: all @transition-fast;
+    white-space: nowrap;
+
+    svg {
+        flex-shrink: 0;
+    }
+
+    &:hover {
+        background: @bg-hover;
+        border-color: @border-active;
+        color: @text-primary;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.toolbar-btn-primary {
+    background: @accent-primary;
+    border-color: @accent-primary;
+    color: white;
+
+    &:hover {
+        background: darken(@accent-primary, 5%);
+        border-color: darken(@accent-primary, 5%);
+        color: white;
+    }
+}
+
+.toolbar-message {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: @space-2;
+    padding: @space-2 @space-3;
+    background: @success-bg;
+    border: 1px solid @success-border;
+    border-radius: @radius-md;
+    color: @success;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+    white-space: nowrap;
+    animation: slideDown 0.2s ease-out;
+}
+
+// ============================================
+// WORKFLOW LIST MODAL
+// ============================================
+
+.workflow-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: fade(@bg-body, 80%);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: fadeIn 0.15s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.workflow-modal {
+    width: 500px;
+    max-width: 90vw;
+    max-height: 80vh;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-xl;
+    box-shadow: @shadow-xl;
+    display: flex;
+    flex-direction: column;
+    animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.workflow-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @space-4 @space-5;
+    border-bottom: 1px solid @border-subtle;
+
+    h2 {
+        margin: 0;
+        font-size: @font-size-lg;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+    }
+}
+
+.modal-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: @radius-md;
+    color: @text-tertiary;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        background: @bg-hover;
+        color: @text-primary;
+    }
+}
+
+.workflow-modal-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: @space-4;
+    .custom-scrollbar();
+}
+
+.workflow-list-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: @space-3;
+    padding: @space-8;
+    color: @text-tertiary;
+
+    .spin {
+        animation: spin 1s linear infinite;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.workflow-list-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: @space-3;
+    padding: @space-8;
+    color: @danger;
+
+    button {
+        padding: @space-2 @space-4;
+        background: @danger;
+        border: none;
+        border-radius: @radius-md;
+        color: white;
+        font-size: @font-size-sm;
+        font-weight: @font-weight-medium;
+        cursor: pointer;
+        transition: background @transition-fast;
+
+        &:hover {
+            background: darken(@danger, 10%);
+        }
+    }
+}
+
+.workflow-list-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-8;
+    color: @text-tertiary;
+
+    p {
+        margin: 0;
+        font-size: @font-size-base;
+        font-weight: @font-weight-medium;
+        color: @text-secondary;
+    }
+
+    span {
+        font-size: @font-size-sm;
+    }
+}
+
+.workflow-list {
+    display: flex;
+    flex-direction: column;
+    gap: @space-2;
+}
+
+.workflow-list-item {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    padding: @space-3 @space-4;
+    background: @bg-body;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        border-color: @accent-primary;
+        background: fade(@accent-primary, 5%);
+    }
+}
+
+.workflow-item-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.workflow-item-name {
+    font-size: @font-size-sm;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.workflow-item-desc {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 2px;
+}
+
+.workflow-item-meta {
+    display: flex;
+    flex-direction: column;
+    gap: @space-1;
+    flex-shrink: 0;
+}
+
+.workflow-item-stats {
+    display: flex;
+    gap: @space-3;
+
+    .stat {
+        display: flex;
+        align-items: center;
+        gap: @space-1;
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+    }
+}
+
+.workflow-item-date {
+    display: flex;
+    align-items: center;
+    gap: @space-1;
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+}
+
+.workflow-item-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: @radius-md;
+    color: @text-tertiary;
+    cursor: pointer;
+    transition: all @transition-fast;
+    flex-shrink: 0;
+
+    &:hover {
+        background: @danger-bg;
+        border-color: @danger-border;
+        color: @danger;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .spin {
+        animation: spin 1s linear infinite;
+    }
+}
