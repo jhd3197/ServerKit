@@ -29,7 +29,7 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 |-------|------|--------|------|
 | 16 | Workflow Canvas Foundation | **completed** | React Flow canvas with pan/zoom, node rendering, connection system |
 | 17 | Resource Node Types | **completed** | Create node types for Docker apps, databases, domains |
-| 18 | Node Configuration Panels | pending | Side panels for configuring each node type |
+| 18 | Node Configuration Panels | **completed** | Side panels for configuring each node type |
 | 19 | Connection Logic | pending | Define and validate connections between nodes |
 | 20 | Workflow Save/Load | pending | Save workflows to backend, load existing infrastructure |
 | 21 | Deploy from Workflow | pending | Execute workflow to create/update actual resources |
@@ -82,22 +82,26 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 
 ---
 
-## Phase 18: Node Configuration Panels
+## Phase 18: Node Configuration Panels ✓
 **Goal**: Create side panels for configuring each node type
 
-### Tasks
-1. Create sliding panel component
-2. Adapt existing Docker app form to panel
-3. Adapt existing database form to panel
-4. Adapt existing domain form to panel
-5. Wire panel open/close to node selection
-6. Handle form validation in panels
+**Status**: Completed 2026-01-19
+
+### What Was Built
+- ConfigPanel base component with slide animation
+- DockerAppConfigPanel with ports list and memory input
+- DatabaseConfigPanel with type-aware default ports
+- DomainConfigPanel with SSL/DNS status fields
+- ServiceConfigPanel with service type selector
+- Panel wiring in WorkflowBuilder with real-time updates
 
 ### Success Criteria
-- [ ] Clicking node opens config panel
-- [ ] Panel contains appropriate form for node type
-- [ ] Form changes reflect in node display
-- [ ] Panel can be closed/dismissed
+- [x] Clicking node opens config panel
+- [x] Panel contains appropriate form for node type
+- [x] Form changes reflect in node display
+- [x] Panel can be closed/dismissed
+
+[Full Summary](./phases/18-node-configuration-panels/SUMMARY.md)
 
 ---
 
