@@ -7,6 +7,26 @@
         color: @text-secondary;
         margin-top: @space-2;
     }
+
+    .empty-state {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: @space-4;
+        padding: @space-12;
+        color: @text-tertiary;
+
+        svg {
+            opacity: 0.5;
+        }
+
+        p {
+            margin: 0;
+            font-size: @font-size-lg;
+        }
+    }
 }
 
 // Filters
@@ -14,14 +34,27 @@
     display: flex;
     flex-direction: column;
     gap: @space-4;
-    margin-bottom: @space-6;
+    margin-bottom: @space-4;
 }
 
 .search-box {
+    position: relative;
+    max-width: 400px;
+
+    .search-icon {
+        position: absolute;
+        left: @space-3;
+        top: 50%;
+        transform: translateY(-50%);
+        color: @text-tertiary;
+        pointer-events: none;
+    }
+
     input {
         width: 100%;
-        max-width: 400px;
         padding: @space-3 @space-4;
+        padding-left: @space-10;
+        padding-right: @space-10;
         background: @bg-card;
         border: 1px solid @border-subtle;
         border-radius: @radius-md;
@@ -36,6 +69,27 @@
 
         &::placeholder {
             color: @text-tertiary;
+        }
+    }
+
+    .search-clear {
+        position: absolute;
+        right: @space-2;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: @space-1;
+        background: transparent;
+        border: none;
+        color: @text-tertiary;
+        cursor: pointer;
+        border-radius: @radius-sm;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            color: @text-primary;
+            background: @bg-hover;
         }
     }
 }
@@ -73,14 +127,127 @@
     }
 }
 
+// Active Filters
+.active-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: @space-2;
+    margin-bottom: @space-4;
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-1 @space-2;
+    padding-right: @space-1;
+    background: @accent-glow;
+    border: 1px solid @accent-primary;
+    border-radius: @radius-full;
+    font-size: @font-size-sm;
+    color: @accent-primary;
+
+    svg:first-child {
+        flex-shrink: 0;
+    }
+
+    button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: @space-1;
+        margin-left: @space-1;
+        background: transparent;
+        border: none;
+        border-radius: @radius-full;
+        color: @accent-primary;
+        cursor: pointer;
+        transition: all @transition-fast;
+
+        &:hover {
+            background: @accent-primary;
+            color: white;
+        }
+    }
+}
+
+.clear-all-btn {
+    padding: @space-1 @space-3;
+    background: transparent;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-full;
+    font-size: @font-size-sm;
+    color: @text-secondary;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        background: @bg-hover;
+        border-color: @border-default;
+        color: @text-primary;
+    }
+}
+
+// Results Header
+.templates-results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: @space-4;
+    padding-bottom: @space-3;
+    border-bottom: 1px solid @border-subtle;
+}
+
+.results-count {
+    font-size: @font-size-sm;
+    color: @text-secondary;
+}
+
+.sort-dropdown {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    position: relative;
+
+    label {
+        font-size: @font-size-sm;
+        color: @text-tertiary;
+    }
+
+    select {
+        appearance: none;
+        padding: @space-2 @space-8 @space-2 @space-3;
+        background: @bg-card;
+        border: 1px solid @border-subtle;
+        border-radius: @radius-md;
+        font-size: @font-size-sm;
+        color: @text-primary;
+        cursor: pointer;
+
+        &:focus {
+            outline: none;
+            border-color: @accent-primary;
+        }
+    }
+
+    .dropdown-icon {
+        position: absolute;
+        right: @space-2;
+        pointer-events: none;
+        color: @text-tertiary;
+    }
+}
+
 // Templates Grid
 .templates-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: @space-6;
+    gap: @space-5;
 }
 
 .template-card {
+    position: relative;
     display: flex;
     gap: @space-4;
     padding: @space-5;
@@ -97,6 +264,25 @@
     }
 }
 
+.featured-badge {
+    position: absolute;
+    top: @space-3;
+    right: @space-3;
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+    padding: @space-1 @space-2;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+    color: white;
+
+    svg {
+        fill: currentColor;
+    }
+}
+
 .template-icon {
     width: 64px;
     height: 64px;
@@ -107,11 +293,17 @@
     background: @bg-hover;
     border-radius: @radius-md;
     overflow: hidden;
+    color: @accent-primary;
 
     img {
         width: 100%;
         height: 100%;
         object-fit: contain;
+        padding: @space-2;
+    }
+
+    svg {
+        flex-shrink: 0;
     }
 }
 
@@ -131,11 +323,13 @@
     background: @bg-hover;
     border-radius: @radius-lg;
     overflow: hidden;
+    color: @accent-primary;
 
     img {
         width: 100%;
         height: 100%;
         object-fit: contain;
+        padding: @space-2;
     }
 
     .template-icon-placeholder {
@@ -174,22 +368,38 @@
 .template-meta {
     display: flex;
     align-items: center;
-    gap: @space-3;
+    gap: @space-2;
     flex-wrap: wrap;
 }
 
 .template-version {
     font-size: @font-size-xs;
-    color: @text-tertiary;
+    font-weight: @font-weight-medium;
+    color: @accent-primary;
     padding: @space-1 @space-2;
+    background: @accent-glow;
+    border-radius: @radius-sm;
+}
+
+.template-link-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
     background: @bg-hover;
     border-radius: @radius-sm;
+    color: @text-tertiary;
+
+    &:hover {
+        color: @accent-primary;
+    }
 }
 
 .template-categories {
     display: flex;
     flex-wrap: wrap;
-    gap: @space-2;
+    gap: @space-1;
 }
 
 .category-badge {
@@ -219,6 +429,12 @@
     display: flex;
     gap: @space-2;
     margin-bottom: @space-6;
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: @space-2;
+    }
 }
 
 .template-details-grid {
@@ -229,15 +445,69 @@
 
 .detail-section {
     h4 {
+        display: flex;
+        align-items: center;
+        gap: @space-2;
         margin: 0 0 @space-3 0;
         font-size: @font-size-sm;
         font-weight: @font-weight-semibold;
         color: @text-secondary;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+
+        svg {
+            flex-shrink: 0;
+        }
+
+        .copy-btn {
+            margin-left: auto;
+            padding: @space-1;
+            background: transparent;
+            border: none;
+            color: @text-tertiary;
+            cursor: pointer;
+            border-radius: @radius-sm;
+            display: flex;
+            align-items: center;
+            transition: all @transition-fast;
+
+            &:hover {
+                color: @accent-primary;
+                background: @bg-hover;
+            }
+        }
     }
 }
 
+// Requirements
+.requirements-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-3;
+}
+
+.requirement-item {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2 @space-3;
+    background: @bg-hover;
+    border-radius: @radius-md;
+
+    .requirement-label {
+        font-size: @font-size-sm;
+        color: @text-tertiary;
+    }
+
+    .requirement-value {
+        font-size: @font-size-sm;
+        font-weight: @font-weight-medium;
+        color: @text-primary;
+        font-family: @font-mono;
+    }
+}
+
+// Variables
 .variables-list {
     display: flex;
     flex-direction: column;
@@ -251,6 +521,17 @@
     padding: @space-3;
     background: @bg-hover;
     border-radius: @radius-md;
+    border-left: 3px solid transparent;
+
+    &.required {
+        border-left-color: @accent-primary;
+    }
+
+    .variable-header {
+        display: flex;
+        align-items: center;
+        gap: @space-2;
+    }
 }
 
 .variable-name {
@@ -258,6 +539,24 @@
     font-size: @font-size-sm;
     font-weight: @font-weight-medium;
     color: @accent-primary;
+}
+
+.required-badge {
+    font-size: @font-size-xs;
+    padding: 2px @space-2;
+    background: @accent-primary;
+    color: white;
+    border-radius: @radius-sm;
+    font-weight: @font-weight-medium;
+}
+
+.auto-badge {
+    font-size: @font-size-xs;
+    padding: 2px @space-2;
+    background: @success-bg;
+    color: @success;
+    border-radius: @radius-sm;
+    font-weight: @font-weight-medium;
 }
 
 .variable-description {
@@ -268,8 +567,10 @@
 .variable-default {
     font-size: @font-size-xs;
     color: @text-tertiary;
+    font-family: @font-mono;
 }
 
+// Ports
 .ports-list {
     display: flex;
     flex-wrap: wrap;
@@ -305,6 +606,20 @@
     color: @text-secondary;
 }
 
+// Compose Preview
+.compose-preview {
+    padding: @space-4;
+    background: @bg-elevated;
+    border-radius: @radius-md;
+    border: 1px solid @border-subtle;
+
+    code {
+        font-family: @font-mono;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+    }
+}
+
 // Install Modal
 .install-modal {
     h4 {
@@ -313,5 +628,40 @@
         font-weight: @font-weight-semibold;
         padding-top: @space-4;
         border-top: 1px solid @border-subtle;
+    }
+}
+
+// Responsive
+@media (max-width: @breakpoint-md) {
+    .templates-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .templates-results-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: @space-3;
+    }
+
+    .sort-dropdown {
+        width: 100%;
+
+        select {
+            flex: 1;
+        }
+    }
+
+    .template-card {
+        flex-direction: column;
+    }
+
+    .template-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .featured-badge {
+        top: @space-2;
+        right: @space-2;
     }
 }

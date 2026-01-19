@@ -1,18 +1,115 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import {
+    Search, X, Star, ExternalLink, BookOpen, Container, Globe, BarChart3,
+    Database, Shield, Cloud, MessageSquare, Video, Music, Image, Home,
+    Code, Server, GitBranch, Workflow, HardDrive, Lock, Users, FileText,
+    Settings, Layers, ChevronDown, Copy, Check, Tag, Cpu, HardDriveIcon
+} from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/ToastContext';
+
+// Featured templates (curated list)
+const FEATURED_TEMPLATES = [
+    'wordpress', 'nextcloud', 'grafana', 'portainer', 'uptime-kuma',
+    'gitea', 'vaultwarden', 'jellyfin', 'ghost', 'n8n'
+];
+
+// Icon mapping for templates
+const TEMPLATE_ICONS = {
+    // Monitoring
+    'uptime-kuma': BarChart3,
+    'grafana': BarChart3,
+    'prometheus': BarChart3,
+    'netdata': BarChart3,
+    'loki': BarChart3,
+    'jaeger': BarChart3,
+    'plausible': BarChart3,
+    'umami': BarChart3,
+    // CMS / Blog
+    'wordpress': Globe,
+    'ghost': FileText,
+    'strapi': Layers,
+    'directus': Database,
+    'payload': Layers,
+    'grav': FileText,
+    // DevOps
+    'portainer': Container,
+    'jenkins': Workflow,
+    'drone': Workflow,
+    'gitlab-runner': GitBranch,
+    'sonarqube': Code,
+    'registry': Container,
+    'vault': Lock,
+    // Storage
+    'nextcloud': Cloud,
+    'minio': Cloud,
+    'seafile': Cloud,
+    'filebrowser': HardDrive,
+    'syncthing': Cloud,
+    'duplicati': HardDrive,
+    // Collaboration
+    'rocketchat': MessageSquare,
+    'mattermost': MessageSquare,
+    'matrix-synapse': MessageSquare,
+    'jitsi': Video,
+    // Media
+    'jellyfin': Video,
+    'plex': Video,
+    'photoprism': Image,
+    'immich': Image,
+    'navidrome': Music,
+    // Productivity
+    'bookstack': BookOpen,
+    'wikijs': BookOpen,
+    'outline': FileText,
+    'excalidraw': FileText,
+    'n8n': Workflow,
+    // Security
+    'vaultwarden': Lock,
+    'authelia': Shield,
+    'keycloak': Shield,
+    'crowdsec': Shield,
+    // Database tools
+    'phpmyadmin': Database,
+    'pgadmin': Database,
+    'redis-commander': Database,
+    'mongo-express': Database,
+    // Home Automation
+    'homeassistant': Home,
+    'nodered': Workflow,
+    'mosquitto': Home,
+    'zigbee2mqtt': Home,
+    // Development
+    'code-server': Code,
+    'gitea': GitBranch,
+    // Networking
+    'traefik': Server,
+    'caddy': Server,
+    'nginx-proxy-manager': Server,
+    // Custom apps
+    'php-app': Code,
+    'python-app': Code,
+    'node-app': Code
+};
 
 const Templates = () => {
     const navigate = useNavigate();
     const toast = useToast();
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [templates, setTemplates] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [failedIcons, setFailedIcons] = useState(new Set());
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [showInstallModal, setShowInstallModal] = useState(false);
+    const [copiedCompose, setCopiedCompose] = useState(false);
+
+    // Initialize from URL params
+    const selectedCategory = searchParams.get('category') || null;
+    const searchQuery = searchParams.get('search') || '';
+    const sortBy = searchParams.get('sort') || 'name-asc';
 
     useEffect(() => {
         loadData();
@@ -21,6 +118,34 @@ const Templates = () => {
     useEffect(() => {
         loadTemplates();
     }, [selectedCategory, searchQuery]);
+
+    function updateFilters(updates) {
+        const newParams = new URLSearchParams(searchParams);
+        Object.entries(updates).forEach(([key, value]) => {
+            if (value) {
+                newParams.set(key, value);
+            } else {
+                newParams.delete(key);
+            }
+        });
+        setSearchParams(newParams);
+    }
+
+    function setSelectedCategoryFilter(category) {
+        updateFilters({ category });
+    }
+
+    function setSearchQueryFilter(search) {
+        updateFilters({ search: search || null });
+    }
+
+    function setSortByFilter(sort) {
+        updateFilters({ sort });
+    }
+
+    function clearAllFilters() {
+        setSearchParams(new URLSearchParams());
+    }
 
     async function loadData() {
         try {
@@ -46,6 +171,30 @@ const Templates = () => {
         }
     }
 
+    function handleIconError(templateId) {
+        setFailedIcons(prev => new Set(prev).add(templateId));
+    }
+
+    function getTemplateIcon(templateId) {
+        return TEMPLATE_ICONS[templateId] || Layers;
+    }
+
+    function renderIcon(template, size = 32) {
+        const IconComponent = getTemplateIcon(template.id);
+        const hasIcon = template.icon && !failedIcons.has(template.id);
+
+        if (hasIcon) {
+            return (
+                <img
+                    src={template.icon}
+                    alt={template.name}
+                    onError={() => handleIconError(template.id)}
+                />
+            );
+        }
+        return <IconComponent size={size} />;
+    }
+
     function getCategoryIcon(category) {
         const icons = {
             monitoring: '📊',
@@ -62,7 +211,13 @@ const Templates = () => {
             ssl: '🔒',
             productivity: '📋',
             management: '📁',
-            publishing: '📰'
+            publishing: '📰',
+            media: '🎬',
+            security: '🛡️',
+            database: '🗄️',
+            'home-automation': '🏠',
+            analytics: '📈',
+            iot: '📡'
         };
         return icons[category] || '📦';
     }
@@ -77,6 +232,34 @@ const Templates = () => {
             toast.error('Failed to load template details');
         }
     }
+
+    function isFeatured(templateId) {
+        return FEATURED_TEMPLATES.includes(templateId);
+    }
+
+    // Sort templates
+    function sortTemplates(templates) {
+        const sorted = [...templates];
+        switch (sortBy) {
+            case 'name-asc':
+                return sorted.sort((a, b) => a.name.localeCompare(b.name));
+            case 'name-desc':
+                return sorted.sort((a, b) => b.name.localeCompare(a.name));
+            case 'featured':
+                return sorted.sort((a, b) => {
+                    const aFeatured = isFeatured(a.id);
+                    const bFeatured = isFeatured(b.id);
+                    if (aFeatured && !bFeatured) return -1;
+                    if (!aFeatured && bFeatured) return 1;
+                    return a.name.localeCompare(b.name);
+                });
+            default:
+                return sorted;
+        }
+    }
+
+    const sortedTemplates = sortTemplates(templates);
+    const hasActiveFilters = selectedCategory || searchQuery;
 
     if (loading) {
         return (
@@ -96,25 +279,31 @@ const Templates = () => {
             {/* Search and Filters */}
             <div className="templates-filters">
                 <div className="search-box">
+                    <Search size={18} className="search-icon" />
                     <input
                         type="text"
                         placeholder="Search templates..."
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => setSearchQueryFilter(e.target.value)}
                     />
+                    {searchQuery && (
+                        <button className="search-clear" onClick={() => setSearchQueryFilter('')}>
+                            <X size={16} />
+                        </button>
+                    )}
                 </div>
                 <div className="category-filters">
                     <button
                         className={`category-btn ${!selectedCategory ? 'active' : ''}`}
-                        onClick={() => setSelectedCategory(null)}
+                        onClick={() => setSelectedCategoryFilter(null)}
                     >
                         All
                     </button>
-                    {categories.map(category => (
+                    {categories.slice(0, 12).map(category => (
                         <button
                             key={category}
                             className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
-                            onClick={() => setSelectedCategory(category)}
+                            onClick={() => setSelectedCategoryFilter(category)}
                         >
                             {getCategoryIcon(category)} {category}
                         </button>
@@ -122,33 +311,91 @@ const Templates = () => {
                 </div>
             </div>
 
+            {/* Active Filters */}
+            {hasActiveFilters && (
+                <div className="active-filters">
+                    {selectedCategory && (
+                        <span className="filter-chip">
+                            <Tag size={14} />
+                            {selectedCategory}
+                            <button onClick={() => setSelectedCategoryFilter(null)}>
+                                <X size={14} />
+                            </button>
+                        </span>
+                    )}
+                    {searchQuery && (
+                        <span className="filter-chip">
+                            <Search size={14} />
+                            "{searchQuery}"
+                            <button onClick={() => setSearchQueryFilter('')}>
+                                <X size={14} />
+                            </button>
+                        </span>
+                    )}
+                    <button className="clear-all-btn" onClick={clearAllFilters}>
+                        Clear All
+                    </button>
+                </div>
+            )}
+
+            {/* Results Header */}
+            <div className="templates-results-header">
+                <span className="results-count">
+                    {sortedTemplates.length} template{sortedTemplates.length !== 1 ? 's' : ''}
+                </span>
+                <div className="sort-dropdown">
+                    <label>Sort by:</label>
+                    <select value={sortBy} onChange={(e) => setSortByFilter(e.target.value)}>
+                        <option value="name-asc">Name (A-Z)</option>
+                        <option value="name-desc">Name (Z-A)</option>
+                        <option value="featured">Featured First</option>
+                    </select>
+                    <ChevronDown size={16} className="dropdown-icon" />
+                </div>
+            </div>
+
             {/* Templates Grid */}
             <div className="templates-grid">
-                {templates.length === 0 ? (
+                {sortedTemplates.length === 0 ? (
                     <div className="empty-state">
+                        <Layers size={48} />
                         <p>No templates found</p>
+                        {hasActiveFilters && (
+                            <button className="btn btn-secondary btn-sm" onClick={clearAllFilters}>
+                                Clear Filters
+                            </button>
+                        )}
                     </div>
                 ) : (
-                    templates.map(template => (
+                    sortedTemplates.map(template => (
                         <div key={template.id} className="template-card" onClick={() => handleViewTemplate(template)}>
+                            {isFeatured(template.id) && (
+                                <span className="featured-badge">
+                                    <Star size={12} /> Featured
+                                </span>
+                            )}
                             <div className="template-icon">
-                                {template.icon ? (
-                                    <img src={template.icon} alt={template.name} />
-                                ) : (
-                                    <span className="template-icon-placeholder">
-                                        {template.name?.charAt(0).toUpperCase()}
-                                    </span>
-                                )}
+                                {renderIcon(template, 32)}
                             </div>
                             <div className="template-info">
                                 <h3>{template.name}</h3>
                                 <p className="template-description">{template.description}</p>
                                 <div className="template-meta">
                                     <span className="template-version">v{template.version}</span>
+                                    {template.website && (
+                                        <span className="template-link-indicator" title="Has website">
+                                            <ExternalLink size={12} />
+                                        </span>
+                                    )}
+                                    {template.documentation && (
+                                        <span className="template-link-indicator" title="Has documentation">
+                                            <BookOpen size={12} />
+                                        </span>
+                                    )}
                                     <div className="template-categories">
                                         {(template.categories || []).slice(0, 2).map(cat => (
                                             <span key={cat} className="category-badge">
-                                                {getCategoryIcon(cat)} {cat}
+                                                {cat}
                                             </span>
                                         ))}
                                     </div>
@@ -166,13 +413,7 @@ const Templates = () => {
                         <div className="modal-header">
                             <div className="template-detail-header">
                                 <div className="template-icon-large">
-                                    {selectedTemplate.icon ? (
-                                        <img src={selectedTemplate.icon} alt={selectedTemplate.name} />
-                                    ) : (
-                                        <span className="template-icon-placeholder">
-                                            {selectedTemplate.name?.charAt(0).toUpperCase()}
-                                        </span>
-                                    )}
+                                    {renderIcon(selectedTemplate, 40)}
                                 </div>
                                 <div>
                                     <h2>{selectedTemplate.name}</h2>
@@ -187,19 +428,19 @@ const Templates = () => {
                             <div className="template-links">
                                 {selectedTemplate.website && (
                                     <a href={selectedTemplate.website} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                                        Website
+                                        <ExternalLink size={14} /> Website
                                     </a>
                                 )}
                                 {selectedTemplate.documentation && (
                                     <a href={selectedTemplate.documentation} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm">
-                                        Documentation
+                                        <BookOpen size={14} /> Documentation
                                     </a>
                                 )}
                             </div>
 
                             <div className="template-details-grid">
                                 <div className="detail-section">
-                                    <h4>Categories</h4>
+                                    <h4><Tag size={16} /> Categories</h4>
                                     <div className="template-categories">
                                         {(selectedTemplate.categories || []).map(cat => (
                                             <span key={cat} className="category-badge">
@@ -209,15 +450,44 @@ const Templates = () => {
                                     </div>
                                 </div>
 
+                                {selectedTemplate.requirements && (
+                                    <div className="detail-section">
+                                        <h4><Cpu size={16} /> Requirements</h4>
+                                        <div className="requirements-list">
+                                            {selectedTemplate.requirements.memory && (
+                                                <div className="requirement-item">
+                                                    <span className="requirement-label">Memory:</span>
+                                                    <span className="requirement-value">{selectedTemplate.requirements.memory}</span>
+                                                </div>
+                                            )}
+                                            {selectedTemplate.requirements.storage && (
+                                                <div className="requirement-item">
+                                                    <span className="requirement-label">Storage:</span>
+                                                    <span className="requirement-value">{selectedTemplate.requirements.storage}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
                                 {selectedTemplate.variables && selectedTemplate.variables.length > 0 && (
                                     <div className="detail-section">
-                                        <h4>Configuration Variables</h4>
+                                        <h4><Settings size={16} /> Configuration Variables</h4>
                                         <div className="variables-list">
-                                            {selectedTemplate.variables.map(variable => (
-                                                <div key={variable.name} className="variable-item">
-                                                    <span className="variable-name">{variable.name}</span>
-                                                    <span className="variable-description">{variable.description}</span>
-                                                    {variable.default && (
+                                            {selectedTemplate.variables
+                                                .filter(v => !v.hidden)
+                                                .sort((a, b) => (b.required ? 1 : 0) - (a.required ? 1 : 0))
+                                                .map(variable => (
+                                                <div key={variable.name} className={`variable-item ${variable.required ? 'required' : ''}`}>
+                                                    <div className="variable-header">
+                                                        <span className="variable-name">{variable.name}</span>
+                                                        {variable.required && <span className="required-badge">Required</span>}
+                                                        {variable.auto_generated && <span className="auto-badge">Auto</span>}
+                                                    </div>
+                                                    {variable.description && (
+                                                        <span className="variable-description">{variable.description}</span>
+                                                    )}
+                                                    {variable.default && !variable.auto_generated && (
                                                         <span className="variable-default">Default: {variable.default}</span>
                                                     )}
                                                 </div>
@@ -228,15 +498,38 @@ const Templates = () => {
 
                                 {selectedTemplate.ports && selectedTemplate.ports.length > 0 && (
                                     <div className="detail-section">
-                                        <h4>Exposed Ports</h4>
+                                        <h4><Server size={16} /> Exposed Ports</h4>
                                         <div className="ports-list">
                                             {selectedTemplate.ports.map((port, index) => (
                                                 <div key={index} className="port-item">
                                                     <span className="port-number">{port.port}</span>
                                                     <span className="port-protocol">{port.protocol}</span>
-                                                    <span className="port-description">{port.description}</span>
+                                                    {port.description && (
+                                                        <span className="port-description">{port.description}</span>
+                                                    )}
                                                 </div>
                                             ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {selectedTemplate.has_compose && (
+                                    <div className="detail-section">
+                                        <h4>
+                                            <Container size={16} /> Docker Compose
+                                            <button
+                                                className="copy-btn"
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText('docker-compose.yml available after install');
+                                                    setCopiedCompose(true);
+                                                    setTimeout(() => setCopiedCompose(false), 2000);
+                                                }}
+                                            >
+                                                {copiedCompose ? <Check size={14} /> : <Copy size={14} />}
+                                            </button>
+                                        </h4>
+                                        <div className="compose-preview">
+                                            <code>Docker Compose configuration will be generated during installation</code>
                                         </div>
                                     </div>
                                 )}
@@ -356,10 +649,10 @@ const InstallModal = ({ template, onClose, onSuccess }) => {
                             <span className="form-help">Lowercase letters, numbers, and hyphens only</span>
                         </div>
 
-                        {(template.variables || []).length > 0 && (
+                        {(template.variables || []).filter(v => !v.hidden).length > 0 && (
                             <>
                                 <h4>Configuration</h4>
-                                {template.variables.map(variable => (
+                                {template.variables.filter(v => !v.hidden).map(variable => (
                                     <div key={variable.name} className="form-group">
                                         <label>
                                             {variable.name}
