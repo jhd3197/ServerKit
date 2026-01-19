@@ -16,7 +16,7 @@
 | 4 | skipped | - | - |
 | 5 | completed | 2026-01-19 | 2026-01-19 |
 | 6 | completed | 2026-01-19 | 2026-01-19 |
-| 7 | pending | - | - |
+| 7 | planned | 2026-01-19 | - |
 | 8 | pending | - | - |
 | 9 | pending | - | - |
 | 10 | pending | - | - |
