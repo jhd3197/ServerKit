@@ -156,6 +156,67 @@ class TemplateService:
         return str(default)
 
     @classmethod
+    def validate_mysql_connection(cls, host: str, port: int, user: str,
+                                   password: str, database: str) -> Dict:
+        """Validate MySQL database connection.
+
+        Args:
+            host: Database host
+            port: Database port
+            user: Database username
+            password: Database password
+            database: Database name
+
+        Returns:
+            Dict with 'success' and optional 'error' or 'warning' message
+        """
+        import socket
+
+        try:
+            # First check if host:port is reachable
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(5)
+            result = sock.connect_ex((host, int(port)))
+            sock.close()
+
+            if result != 0:
+                return {
+                    'success': False,
+                    'error': f'Cannot connect to {host}:{port} - host unreachable'
+                }
+
+            # Try MySQL connection if pymysql available
+            try:
+                import pymysql
+                conn = pymysql.connect(
+                    host=host,
+                    port=int(port),
+                    user=user,
+                    password=password,
+                    database=database,
+                    connect_timeout=5
+                )
+                conn.close()
+                return {'success': True}
+            except ImportError:
+                # pymysql not available, just check port was reachable
+                return {
+                    'success': True,
+                    'warning': 'MySQL library not available, only port check performed'
+                }
+            except Exception as e:
+                return {
+                    'success': False,
+                    'error': f'Database connection failed: {str(e)}'
+                }
+
+        except Exception as e:
+            return {
+                'success': False,
+                'error': f'Connection check failed: {str(e)}'
+            }
+
+    @classmethod
     def _find_available_port(cls, start_port: int = 8000, max_attempts: int = 100) -> int:
         """Find an available port that's not in use by the system or Docker.
 
@@ -406,6 +467,21 @@ class TemplateService:
                 return {'success': False, 'error': f"Required variable not provided: {var_name}"}
             else:
                 variables[var_name] = cls.generate_value(var_config)
+
+        # Validate external database connection for external-db templates
+        if template_id == 'wordpress-external-db':
+            db_check = cls.validate_mysql_connection(
+                host=variables.get('DB_HOST'),
+                port=variables.get('DB_PORT', '3306'),
+                user=variables.get('DB_USER'),
+                password=variables.get('DB_PASSWORD'),
+                database=variables.get('DB_NAME')
+            )
+            if not db_check.get('success'):
+                return {
+                    'success': False,
+                    'error': f"Database connection failed: {db_check.get('error')}"
+                }
 
         # Create app directory
         app_path = os.path.join(cls.INSTALLED_DIR, app_name)
