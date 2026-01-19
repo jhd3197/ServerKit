@@ -167,19 +167,31 @@ ServerKit includes a management CLI:
 ```bash
 # Service Management
 serverkit start|stop|restart|status
+serverkit logs [backend|frontend]
+serverkit update
 
 # User Management
 serverkit create-admin
 serverkit reset-password
+serverkit list-users
 
 # Database
+serverkit init-db
+serverkit migrate-db          # Apply schema updates
 serverkit backup-db
-serverkit restore-db <backup-file>
+serverkit restore-db <file>
+
+# App Management
+serverkit list-apps           # List all installed apps
+
+# Cleanup Commands
+serverkit cleanup-apps        # Delete all apps and containers
+serverkit cleanup-apps --delete-volumes   # Also delete Docker volumes
+serverkit factory-reset       # Complete reset (delete everything)
 
 # Utilities
 serverkit generate-keys
-serverkit logs [service]
-serverkit update
+serverkit config
 ```
 
 See [Deployment Guide](DEPLOYMENT.md) for complete CLI documentation.
