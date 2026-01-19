@@ -788,6 +788,143 @@ class TemplateService:
         return config.get('installed', {}).get(str(app_id))
 
     @classmethod
+    def propagate_db_credentials(cls, source_app_id: int, target_app_id: int,
+                                  target_prefix: str = None) -> Dict:
+        """Propagate database credentials from source app to target app.
+
+        Reads source app's .env file for DB credentials, updates target app's
+        .env with same credentials but different table prefix.
+
+        Args:
+            source_app_id: ID of the app with existing DB credentials
+            target_app_id: ID of the app to receive credentials
+            target_prefix: Table prefix for target app (default: wp_dev_)
+
+        Returns:
+            Dict with success status and propagated config
+        """
+        from app.models import Application
+
+        source_app = Application.query.get(source_app_id)
+        target_app = Application.query.get(target_app_id)
+
+        if not source_app or not target_app:
+            return {'success': False, 'error': 'App not found'}
+
+        if not source_app.root_path or not target_app.root_path:
+            return {'success': False, 'error': 'Apps must have root_path set'}
+
+        # Read source app's .env file
+        source_env_path = os.path.join(source_app.root_path, '.env')
+        if not os.path.exists(source_env_path):
+            return {'success': False, 'error': 'Source app .env file not found'}
+
+        try:
+            env_vars = {}
+            with open(source_env_path, 'r') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#') and '=' in line:
+                        key, value = line.split('=', 1)
+                        env_vars[key.strip()] = value.strip()
+
+            # Extract DB credentials
+            db_config = {}
+            db_keys = ['DB_HOST', 'DB_PORT', 'DB_NAME', 'DB_USER', 'DB_PASSWORD',
+                       'WORDPRESS_DB_HOST', 'WORDPRESS_DB_NAME', 'WORDPRESS_DB_USER',
+                       'WORDPRESS_DB_PASSWORD', 'MYSQL_HOST', 'MYSQL_DATABASE',
+                       'MYSQL_USER', 'MYSQL_PASSWORD']
+
+            for key in db_keys:
+                if key in env_vars:
+                    db_config[key] = env_vars[key]
+
+            if not db_config:
+                return {'success': False, 'error': 'No database credentials found in source app'}
+
+            # Set target table prefix (default different from source)
+            source_prefix = env_vars.get('TABLE_PREFIX', env_vars.get('WORDPRESS_TABLE_PREFIX', 'wp_'))
+            if target_prefix is None:
+                if source_prefix == 'wp_':
+                    target_prefix = 'wp_dev_'
+                else:
+                    target_prefix = 'wp_'
+
+            # Update target app's .env file
+            target_env_path = os.path.join(target_app.root_path, '.env')
+
+            # Read existing target .env or create new
+            target_env = {}
+            if os.path.exists(target_env_path):
+                with open(target_env_path, 'r') as f:
+                    for line in f:
+                        line = line.strip()
+                        if line and not line.startswith('#') and '=' in line:
+                            key, value = line.split('=', 1)
+                            target_env[key.strip()] = value.strip()
+
+            # Update with source DB credentials
+            for key, value in db_config.items():
+                target_env[key] = value
+
+            # Set different table prefix
+            target_env['TABLE_PREFIX'] = target_prefix
+            target_env['WORDPRESS_TABLE_PREFIX'] = target_prefix
+
+            # Write updated .env
+            with open(target_env_path, 'w') as f:
+                for key, value in target_env.items():
+                    f.write(f"{key}={value}\n")
+
+            # Also update docker-compose.yml if it exists
+            compose_path = os.path.join(target_app.root_path, 'docker-compose.yml')
+            if os.path.exists(compose_path):
+                try:
+                    with open(compose_path, 'r') as f:
+                        compose = yaml.safe_load(f)
+
+                    # Update environment variables in services
+                    for service_name, service in compose.get('services', {}).items():
+                        env_list = service.get('environment', [])
+                        if isinstance(env_list, list):
+                            new_env = []
+                            for env_item in env_list:
+                                if isinstance(env_item, str) and '=' in env_item:
+                                    key = env_item.split('=')[0]
+                                    if key in target_env:
+                                        new_env.append(f"{key}={target_env[key]}")
+                                    else:
+                                        new_env.append(env_item)
+                                else:
+                                    new_env.append(env_item)
+                            service['environment'] = new_env
+
+                    with open(compose_path, 'w') as f:
+                        yaml.dump(compose, f, default_flow_style=False)
+                except Exception as e:
+                    # Non-fatal, continue
+                    pass
+
+            # Store shared config in both apps
+            shared_config = {
+                'db_host': db_config.get('DB_HOST', db_config.get('WORDPRESS_DB_HOST', '')),
+                'db_name': db_config.get('DB_NAME', db_config.get('WORDPRESS_DB_NAME', '')),
+                'source_prefix': source_prefix,
+                'target_prefix': target_prefix,
+                'propagated_at': datetime.now().isoformat()
+            }
+
+            return {
+                'success': True,
+                'shared_config': shared_config,
+                'source_prefix': source_prefix,
+                'target_prefix': target_prefix
+            }
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
     def add_repository(cls, name: str, url: str) -> Dict:
         """Add a template repository."""
         config = cls.get_config()

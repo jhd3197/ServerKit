@@ -69,20 +69,46 @@ def link_apps(app_id):
     target_app.linked_app_id = app_id
 
     # Store shared config
+    from datetime import datetime
     shared_config = {
-        'linked_at': db.func.now().compile().string if hasattr(db.func.now().compile(), 'string') else 'now',
+        'linked_at': datetime.now().isoformat(),
         'link_type': 'environment_pair'
     }
+
+    # Propagate DB credentials for Docker/WordPress apps
+    propagation_result = None
+    if app.app_type == 'docker' and data.get('propagate_credentials', True):
+        from app.services.template_service import TemplateService
+        # Determine which app is the source (prod) and which is target (dev)
+        if as_environment == 'development':
+            # Current app is dev, target is prod - propagate from target to current
+            propagation_result = TemplateService.propagate_db_credentials(
+                target_app_id, app_id, data.get('table_prefix')
+            )
+        else:
+            # Current app is prod, target is dev - propagate from current to target
+            propagation_result = TemplateService.propagate_db_credentials(
+                app_id, target_app_id, data.get('table_prefix')
+            )
+
+        if propagation_result and propagation_result.get('success'):
+            shared_config['db_credentials_propagated'] = True
+            shared_config['shared_db'] = propagation_result.get('shared_config', {})
+
     app.shared_config = json.dumps(shared_config)
     target_app.shared_config = json.dumps(shared_config)
 
     db.session.commit()
 
-    return jsonify({
+    response = {
         'message': 'Apps linked successfully',
         'app': app.to_dict(include_linked=True),
         'target_app': target_app.to_dict(include_linked=True)
-    }), 200
+    }
+    if propagation_result:
+        response['credential_propagation'] = propagation_result
+
+    return jsonify(response), 200
 
 
 @apps_bp.route('/<int:app_id>/linked', methods=['GET'])
