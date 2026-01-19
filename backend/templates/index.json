@@ -129,6 +129,13 @@
       "categories": ["cms", "blog", "website"]
     },
     {
+      "id": "wordpress-external-db",
+      "name": "WordPress (External Database)",
+      "version": "6.4",
+      "description": "WordPress CMS with external MySQL database support for dev/prod environments",
+      "categories": ["cms", "blog", "website", "development"]
+    },
+    {
       "id": "strapi",
       "name": "Strapi",
       "version": "4.15",
