@@ -15,10 +15,12 @@ variables:
     description: API port
     type: port
     default: "9000"
+    hidden: true
   - name: CONSOLE_PORT
     description: Console port
     type: port
     default: "9001"
+    hidden: true
   - name: ROOT_USER
     description: Root username
     default: admin

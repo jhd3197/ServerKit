@@ -15,6 +15,7 @@ variables:
     description: HTTP port for web interface
     type: port
     default: "19999"
+    hidden: true
 
 ports:
   - port: 19999

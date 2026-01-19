@@ -15,6 +15,7 @@ variables:
     description: HTTP port
     type: port
     default: "4533"
+    hidden: true
   - name: MUSIC_PATH
     description: Path to music files on host
     default: /music

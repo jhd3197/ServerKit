@@ -14,10 +14,12 @@ variables:
   - name: HTTP_PORT
     type: port
     default: "9000"
+    hidden: true
     description: Port for web interface (auto-assigned)
   - name: HTTPS_PORT
     type: port
     default: "9443"
+    hidden: true
     description: Port for HTTPS access (auto-assigned)
 
 compose:

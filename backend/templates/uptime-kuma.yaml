@@ -13,6 +13,7 @@ variables:
   - name: HTTP_PORT
     type: port
     default: "3001"
+    hidden: true
     description: Port for web interface (auto-assigned if not specified)
 
 compose:

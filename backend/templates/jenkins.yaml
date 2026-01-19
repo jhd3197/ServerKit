@@ -15,10 +15,12 @@ variables:
     description: HTTP port
     type: port
     default: "8080"
+    hidden: true
   - name: AGENT_PORT
     description: Agent connection port
     type: port
     default: "50000"
+    hidden: true
   - name: JAVA_OPTS
     description: Java options
     default: "-Xmx2048m"

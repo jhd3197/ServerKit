@@ -15,10 +15,12 @@ variables:
     description: Web UI port
     type: port
     default: "8384"
+    hidden: true
   - name: SYNC_PORT
     description: Sync protocol port
     type: port
     default: "22000"
+    hidden: true
   - name: DATA_PATH
     description: Path to sync folder on host
     default: /data

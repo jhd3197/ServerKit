@@ -15,10 +15,12 @@ variables:
     description: HTTP port
     type: port
     default: "80"
+    hidden: true
   - name: HTTPS_PORT
     description: HTTPS port
     type: port
     default: "443"
+    hidden: true
 
 ports:
   - port: 80

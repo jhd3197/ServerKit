@@ -15,10 +15,12 @@ variables:
     description: MQTT port
     type: port
     default: "1883"
+    hidden: true
   - name: WEBSOCKET_PORT
     description: WebSocket port
     type: port
     default: "9001"
+    hidden: true
 
 ports:
   - port: 1883

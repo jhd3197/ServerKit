@@ -15,14 +15,17 @@ variables:
     description: HTTP port
     type: port
     default: "80"
+    hidden: true
   - name: HTTPS_PORT
     description: HTTPS port
     type: port
     default: "443"
+    hidden: true
   - name: DASHBOARD_PORT
     description: Dashboard port
     type: port
     default: "8080"
+    hidden: true
   - name: ACME_EMAIL
     description: Email for Let's Encrypt certificates
     required: true

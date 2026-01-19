@@ -130,8 +130,13 @@ class TemplateService:
             return {'success': False, 'error': str(e)}
 
     @classmethod
-    def generate_value(cls, var_config: Dict) -> str:
-        """Generate a value for a variable based on its configuration."""
+    def generate_value(cls, var_config: Dict, force_generate: bool = False) -> str:
+        """Generate a value for a variable based on its configuration.
+
+        Args:
+            var_config: Variable configuration dict
+            force_generate: If True, always generate new value even for ports
+        """
         var_type = var_config.get('type', 'string')
         default = var_config.get('default', '')
 
@@ -143,7 +148,9 @@ class TemplateService:
             return ''.join(secrets.choice(chars) for _ in range(length))
 
         elif var_type == 'port':
-            return str(cls._find_available_port(int(default) if default else 8000))
+            # ALWAYS find an available port - never trust defaults
+            start_port = int(default) if default else 8000
+            return str(cls._find_available_port(start_port))
 
         elif var_type == 'uuid':
             import uuid
@@ -217,45 +224,64 @@ class TemplateService:
             }
 
     @classmethod
-    def _find_available_port(cls, start_port: int = 8000, max_attempts: int = 100) -> int:
-        """Find an available port that's not in use by the system or Docker.
+    def _find_available_port(cls, start_port: int = 8000, max_attempts: int = 1000) -> int:
+        """Find an available port that's not in use by the system, Docker, or database.
 
-        Checks both socket binding and Docker container port mappings.
+        Checks:
+        1. Ports assigned to existing applications in the database
+        2. Docker container port mappings
+        3. Socket binding test
         """
         import socket
+
+        # Get ports from database (assigned to apps)
+        db_ports = cls._get_database_used_ports()
 
         # Get ports currently used by Docker containers
         docker_ports = cls._get_docker_used_ports()
 
+        # Combine all used ports
+        used_ports = db_ports | docker_ports
+
         for port in range(start_port, start_port + max_attempts):
-            # Skip if Docker is using this port
-            if port in docker_ports:
+            # Skip reserved/common ports
+            if port < 1024:
+                continue
+
+            # Skip if already assigned in DB or Docker
+            if port in used_ports:
                 continue
 
             # Check if port is available on localhost (where Docker binds)
             try:
-                # Check 127.0.0.1 specifically since Docker binds there
-                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                sock.settimeout(1)
-                result = sock.connect_ex(('127.0.0.1', port))
-                sock.close()
-
-                # If connection failed, port is available
-                if result != 0:
-                    # Double-check by trying to bind
-                    try:
-                        test_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                        test_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-                        test_sock.bind(('127.0.0.1', port))
-                        test_sock.close()
-                        return port
-                    except OSError:
-                        continue
+                # Try to bind - most reliable check
+                test_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                test_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                test_sock.bind(('127.0.0.1', port))
+                test_sock.close()
+                return port
+            except OSError:
+                continue
             except Exception:
                 continue
 
-        # Fallback: return a high port number
-        return start_port + max_attempts
+        # Fallback: return a random high port
+        import random
+        return random.randint(10000, 60000)
+
+    @classmethod
+    def _get_database_used_ports(cls) -> set:
+        """Get all ports assigned to applications in the database."""
+        used_ports = set()
+        try:
+            from app.models import Application
+            apps = Application.query.filter(Application.port.isnot(None)).all()
+            for app in apps:
+                if app.port:
+                    used_ports.add(app.port)
+        except Exception:
+            pass
+        return used_ports
 
     @classmethod
     def _get_docker_used_ports(cls) -> set:
@@ -314,9 +340,9 @@ class TemplateService:
         # Substitute variables
         compose = cls.substitute_in_dict(compose, variables)
 
-        # Add version if not present
-        if 'version' not in compose:
-            compose = {'version': '3.8', **compose}
+        # Remove obsolete version field (not needed in modern Docker Compose)
+        if 'version' in compose:
+            del compose['version']
 
         return yaml.dump(compose, default_flow_style=False, sort_keys=False)
 
@@ -461,7 +487,12 @@ class TemplateService:
             template_vars = {v['name']: v for v in template_vars if 'name' in v}
 
         for var_name, var_config in template_vars.items():
-            if user_variables and var_name in user_variables:
+            var_type = var_config.get('type', 'string')
+
+            # ALWAYS auto-generate ports - never use user values for ports
+            if var_type == 'port':
+                variables[var_name] = cls.generate_value(var_config)
+            elif user_variables and var_name in user_variables and user_variables[var_name]:
                 variables[var_name] = user_variables[var_name]
             elif var_config.get('required', False) and var_name not in (user_variables or {}):
                 return {'success': False, 'error': f"Required variable not provided: {var_name}"}

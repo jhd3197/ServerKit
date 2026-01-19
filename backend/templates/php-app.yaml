@@ -15,6 +15,7 @@ variables:
     description: HTTP port for the application
     type: port
     default: "8100"
+    hidden: true
   - name: PHP_VERSION
     description: PHP version (8.0, 8.1, 8.2, 8.3)
     type: string

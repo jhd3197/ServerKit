@@ -24,6 +24,7 @@ variables:
     description: HTTP port
     type: port
     default: "3000"
+    hidden: true
 
 ports:
   - port: 3000

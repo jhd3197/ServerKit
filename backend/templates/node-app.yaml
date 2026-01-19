@@ -15,6 +15,7 @@ variables:
     description: HTTP port for the application (auto-assigned if not specified)
     type: port
     default: "8300"
+    hidden: true
   - name: NODE_VERSION
     description: Node.js version (18, 20, 21)
     type: string

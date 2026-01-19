@@ -15,6 +15,7 @@ variables:
     description: HTTP port
     type: port
     default: "2342"
+    hidden: true
   - name: ADMIN_PASSWORD
     description: Admin password
     type: password

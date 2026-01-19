@@ -14,14 +14,17 @@ variables:
   - name: HTTP_PORT
     type: port
     default: "80"
+    hidden: true
     description: HTTP port for proxied sites
   - name: HTTPS_PORT
     type: port
     default: "443"
+    hidden: true
     description: HTTPS port for proxied sites
   - name: ADMIN_PORT
     type: port
     default: "81"
+    hidden: true
     description: Admin panel port
   - name: DB_PASSWORD
     type: password

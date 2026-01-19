@@ -15,6 +15,7 @@ variables:
     description: Web UI port
     type: port
     default: "8200"
+    hidden: true
   - name: BACKUP_SOURCE
     description: Path to backup source on host
     default: /source

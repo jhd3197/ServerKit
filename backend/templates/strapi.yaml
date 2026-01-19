@@ -15,6 +15,7 @@ variables:
     description: HTTP port
     type: port
     default: "1337"
+    hidden: true
   - name: APP_KEYS
     description: Application keys
     type: password

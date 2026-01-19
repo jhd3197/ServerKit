@@ -14,7 +14,9 @@ variables:
   - name: HTTP_PORT
     type: port
     default: "8080"
+    hidden: true
     description: Port to expose Nextcloud
+    hidden: true
   - name: ADMIN_USER
     type: string
     default: admin
@@ -22,16 +24,17 @@ variables:
   - name: ADMIN_PASSWORD
     type: password
     length: 16
-    description: Admin password
-    required: true
+    description: Admin password (auto-generated if empty)
   - name: DB_PASSWORD
     type: password
     length: 24
     description: Database password
+    hidden: true
   - name: REDIS_PASSWORD
     type: password
     length: 16
     description: Redis password
+    hidden: true
 
 compose:
   services:

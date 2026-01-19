@@ -15,14 +15,17 @@ variables:
     description: HTTP port
     type: port
     default: "8080"
+    hidden: true
   - name: DB_PASSWORD
     description: MySQL root password
     type: password
     generate: password
+    hidden: true
   - name: WP_DB_PASSWORD
     description: WordPress database password
     type: password
     generate: password
+    hidden: true
 
 ports:
   - port: 8080

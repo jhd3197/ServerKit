@@ -15,10 +15,12 @@ variables:
     description: Web UI port
     type: port
     default: "16686"
+    hidden: true
   - name: COLLECTOR_PORT
     description: Collector port for spans
     type: port
     default: "14268"
+    hidden: true
 
 ports:
   - port: 16686

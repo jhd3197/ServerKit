@@ -15,6 +15,7 @@ variables:
     description: HTTP port for the application
     type: port
     default: "8200"
+    hidden: true
   - name: PYTHON_VERSION
     description: Python version (3.9, 3.10, 3.11, 3.12)
     type: string

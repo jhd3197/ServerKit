@@ -15,6 +15,7 @@ variables:
     description: HTTP port for API
     type: port
     default: "8080"
+    hidden: true
   - name: COLLECTIONS
     description: Collections to install (comma-separated)
     default: crowdsecurity/linux,crowdsecurity/sshd

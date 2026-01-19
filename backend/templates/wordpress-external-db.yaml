@@ -16,6 +16,7 @@ variables:
     description: HTTP port for WordPress
     type: port
     default: "8080"
+    hidden: true
   - name: DB_HOST
     description: External database host (e.g., 192.168.1.100 or db.example.com)
     type: string

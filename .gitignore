@@ -4,3 +4,4 @@ nul
 /.claude_
 .env
 /frontend/dist
+*.tmp

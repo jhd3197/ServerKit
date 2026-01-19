@@ -15,6 +15,7 @@ variables:
     description: HTTP port
     type: port
     default: "5678"
+    hidden: true
   - name: WEBHOOK_URL
     description: Webhook URL (e.g., https://n8n.example.com)
     required: true

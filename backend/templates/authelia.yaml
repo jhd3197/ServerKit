@@ -15,6 +15,7 @@ variables:
     description: HTTP port
     type: port
     default: "9091"
+    hidden: true
   - name: JWT_SECRET
     description: JWT secret
     type: password

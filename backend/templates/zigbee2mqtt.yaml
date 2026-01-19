@@ -15,6 +15,7 @@ variables:
     description: HTTP port for web UI
     type: port
     default: "8080"
+    hidden: true
   - name: MQTT_SERVER
     description: MQTT server URL
     default: mqtt://mosquitto

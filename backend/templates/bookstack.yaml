@@ -15,6 +15,7 @@ variables:
     description: HTTP port
     type: port
     default: "8080"
+    hidden: true
   - name: APP_URL
     description: Application URL
     default: http://localhost:8080

@@ -15,6 +15,7 @@ variables:
     description: HTTP port
     type: port
     default: "8080"
+    hidden: true
   - name: PASSWORD
     description: Access password
     type: password

@@ -15,10 +15,12 @@ variables:
     description: HTTP port
     type: port
     default: "8096"
+    hidden: true
   - name: HTTPS_PORT
     description: HTTPS port
     type: port
     default: "8920"
+    hidden: true
   - name: MEDIA_PATH
     description: Path to media files on host
     default: /media

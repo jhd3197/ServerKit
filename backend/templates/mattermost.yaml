@@ -15,6 +15,7 @@ variables:
     description: HTTP port
     type: port
     default: "8065"
+    hidden: true
   - name: SITE_URL
     description: Site URL (e.g., https://mattermost.example.com)
     default: http://localhost:8065

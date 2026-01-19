@@ -74,6 +74,12 @@ export function AuthProvider({ children }) {
     async function register(email, username, password) {
         const data = await api.register(email, username, password);
         setUser(data.user);
+        // After first registration, setup is complete - update status
+        setSetupStatus({
+            needsSetup: false,
+            registrationEnabled: false,
+            checked: true
+        });
         return data;
     }
 

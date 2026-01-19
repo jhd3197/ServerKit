@@ -16,6 +16,7 @@ variables:
     description: HTTP port
     type: port
     default: "8055"
+    hidden: true
   - name: ADMIN_EMAIL
     description: Admin email
     default: admin@example.com

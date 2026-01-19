@@ -14,16 +14,19 @@ variables:
   - name: HTTP_PORT
     type: port
     default: "2368"
+    hidden: true
     description: Port to expose Ghost
+    hidden: true
   - name: SITE_URL
     type: string
     default: http://localhost:2368
-    description: Full URL where Ghost will be accessible
+    description: Full URL where Ghost will be accessible (e.g., https://blog.example.com)
     required: true
   - name: DB_PASSWORD
     type: password
     length: 24
     description: MySQL database password
+    hidden: true
 
 compose:
   services:

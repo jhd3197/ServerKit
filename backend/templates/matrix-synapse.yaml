@@ -15,6 +15,7 @@ variables:
     description: HTTP port
     type: port
     default: "8008"
+    hidden: true
   - name: SERVER_NAME
     description: Server name (your domain, e.g., matrix.example.com)
     required: true

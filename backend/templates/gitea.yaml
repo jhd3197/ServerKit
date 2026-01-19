@@ -14,10 +14,12 @@ variables:
   - name: HTTP_PORT
     type: port
     default: "3000"
+    hidden: true
     description: Port for web interface
   - name: SSH_PORT
     type: port
     default: "2222"
+    hidden: true
     description: Port for SSH access
   - name: DB_PASSWORD
     type: password
