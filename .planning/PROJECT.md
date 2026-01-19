@@ -2,19 +2,23 @@
 
 ## Current State
 
-**Version**: v1.0 (Milestone 1 Complete)
+**Version**: v1.1 (Milestone 2 Complete)
+**Active**: Milestone 3 - Visual Workflow Builder (v1.2)
 **Last Updated**: 2026-01-19
 
-ServerKit is a modern, self-hosted server management panel (Flask backend + React frontend) now at production-ready v1.0 after completing the first enhancement milestone.
+ServerKit is a modern, self-hosted server management panel (Flask backend + React frontend) with multi-environment WordPress support and community features.
 
 ### What's Shipped
 
-- **Docker/Domain Infrastructure** - Port accessibility checks, Nginx diagnostics, routing debug tools
-- **Private URL System** - Secure shareable URLs with custom slugs for any Docker app
-- **Dashboard Historical Metrics** - Time-series graphs for CPU, Memory, Disk with configurable periods
-- **Templates Page Polish** - 60+ icon fallbacks, URL filter persistence, featured badges
-- **Applications UI Polish** - Grid/list views, bulk actions, sorting, enhanced status indicators
-- **FileManager Disk Usage** - Multi-mount widget, directory analysis, file type breakdown charts
+**v1.1 (Milestone 2)**:
+- **Multi-Environment App Linking** - Link prod/dev WordPress instances with shared databases
+- **WordPress External DB Template** - Connect WordPress to external MySQL with custom table prefixes
+- **Environment Switching UI** - Badges, filters, linked apps navigation
+- **GitHub Integration** - Repository links, version update checks, star prompt
+
+**v1.0 (Milestone 1)**:
+- Docker/Domain Infrastructure, Private URLs, Historical Metrics
+- Templates & Applications UI polish, FileManager disk usage
 
 ### Tech Stack
 - **Backend**: Python 3.11+, Flask 3.0, SQLAlchemy, Flask-SocketIO, psutil
@@ -23,12 +27,15 @@ ServerKit is a modern, self-hosted server management panel (Flask backend + Reac
 
 ## Next Milestone Goals
 
-*No active milestone. Potential areas for v1.1:*
-- Performance optimizations
-- Additional template integrations
-- User management enhancements
-- API documentation
-- Mobile-responsive improvements
+**Milestone 3: Visual Workflow Builder (v1.2)**
+
+Create a visual, flow-based interface for orchestrating infrastructure:
+- **Canvas Foundation** - React Flow with pan/zoom, node rendering
+- **Resource Nodes** - Visual blocks for Docker apps, databases, domains
+- **Configuration Panels** - Side panels adapting existing forms
+- **Connection Logic** - Validate and visualize relationships
+- **Save/Load** - Persist workflows, import existing infrastructure
+- **Deploy** - Execute workflows to create/update resources
 
 ---
 

@@ -14,8 +14,12 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 
 ## Current Milestone
 
-> **No active milestone**
-> Ready for next milestone planning
+> **Milestone 3**: Visual Workflow Builder
+> **Version**: v1.2
+> **Started**: 2026-01-19
+> **Status**: In Progress
+
+**Goal**: Create a visual, flow-based interface for orchestrating Docker apps, databases, and domain connections - an alternative "v2" way to manage infrastructure visually using a node-based editor.
 
 ---
 
@@ -23,152 +27,158 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 
 | Phase | Name | Status | Goal |
 |-------|------|--------|------|
-| 11 | Shared Database WordPress Template | **completed** | Create WordPress template with external DB support |
-| 12 | Multi-Environment App Linking | **completed** | Link prod/dev apps to share database |
-| 13 | Environment Switching UI | **completed** | UI to manage prod/dev environments |
-| 14 | GitHub & Community Links | **completed** | Add GitHub link, community resources to app |
-| 15 | WordPress Dev Workflow Testing | **completed** | End-to-end testing and documentation |
+| 16 | Workflow Canvas Foundation | pending | React Flow canvas with pan/zoom, node rendering, connection system |
+| 17 | Resource Node Types | pending | Create node types for Docker apps, databases, domains |
+| 18 | Node Configuration Panels | pending | Side panels for configuring each node type |
+| 19 | Connection Logic | pending | Define and validate connections between nodes |
+| 20 | Workflow Save/Load | pending | Save workflows to backend, load existing infrastructure |
+| 21 | Deploy from Workflow | pending | Execute workflow to create/update actual resources |
 
 ---
 
-## Phase 11: Shared Database WordPress Template ✓
-**Goal**: Create a WordPress template variant that connects to an external database instead of its own
+## Phase 16: Workflow Canvas Foundation
+**Goal**: Set up React Flow canvas with pan/zoom, basic node rendering, and connection system
 
-**Status**: Completed 2026-01-19
-
-### What Was Built
-- `wordpress-external-db.yaml` template with DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD, TABLE_PREFIX variables
-- `validate_mysql_connection()` in template_service.py with socket + pymysql validation
-- `POST /templates/test-db-connection` API endpoint
-- `testDatabaseConnection()` frontend API method
-
-### Success Criteria
-- [x] WordPress template can connect to external MySQL
-- [x] Connection errors shown clearly during install
-- [x] Table prefix configurable
-
-[Full Summary](./phases/11-shared-database-wordpress-template/SUMMARY.md)
-
----
-
-## Phase 12: Multi-Environment App Linking ✓
-**Goal**: Allow apps to be linked as prod/dev pairs sharing a database
-
-**Status**: Completed 2026-01-19
-
-### What Was Built
-- Application model with `environment_type`, `linked_app_id`, `shared_config` fields
-- App linking API: POST/GET/DELETE `/apps/{id}/link`, PUT `/apps/{id}/environment`
-- `propagate_db_credentials()` for sharing DB credentials with different table prefixes
-- Frontend API methods: `linkApp`, `getLinkedApps`, `unlinkApp`, `updateAppEnvironment`
-- GET /apps with environment filtering and include_linked option
-
-### Success Criteria
-- [x] Apps can be linked as prod/dev pairs
-- [x] Linked apps share database credentials automatically
-- [x] Table prefixes prevent collision
-
-[Full Summary](./phases/12-multi-environment-app-linking/SUMMARY.md)
-
----
-
-## Phase 13: Environment Switching UI ✓
-**Goal**: UI to manage and switch between prod/dev environments
-
-**Status**: Completed 2026-01-19
-
-### What Was Built
-- Environment badges (PROD/DEV/STAGING) in app list with color coding
-- Environment filter dropdown in apps toolbar with URL param persistence
-- LinkedAppsSection component showing linked apps with navigation/unlink buttons
-- LinkAppModal for linking apps with environment selection and DB credential options
-- Environment settings in Settings tab with change/unlink functionality
-- Comprehensive LESS styles for all new components
-
-### Success Criteria
-- [x] Environment type visible in UI
-- [x] Easy navigation between linked apps
-- [ ] Theme sync works for WordPress apps (deferred to Phase 15)
-
-[Full Summary](./phases/13-environment-switching-ui/SUMMARY.md)
-
----
-
-## Phase 14: GitHub & Community Links
-**Goal**: Add GitHub repository link and community resources to the application
+**Research**: Yes - evaluate React Flow library, understand canvas patterns
 
 ### Tasks
-1. **Add GitHub link to UI**
-   - GitHub icon in header/footer
-   - Link to repository (github.com/jhd3197/ServerKit)
-   - "Star on GitHub" prompt for new users
-
-2. **Add documentation links**
-   - Link to README/Wiki
-   - Quick start guide link
-   - API documentation link (if available)
-
-3. **Add community section to Settings page**
-   - GitHub Issues link for bug reports
-   - Discussions link for questions
-   - Contributing guidelines link
-
-4. **Add version info with update check**
-   - Show current version in Settings
-   - Check for new releases via GitHub API
-   - "Update available" notification
+1. Install and configure React Flow library
+2. Create WorkflowBuilder page with canvas
+3. Implement pan/zoom controls
+4. Add basic node rendering system
+5. Implement edge/connection drawing
+6. Add minimap and controls overlay
 
 ### Success Criteria
-- [ ] GitHub link visible in main UI
-- [ ] Documentation accessible from Settings
-- [ ] Version check shows update availability
+- [ ] Canvas renders with pan/zoom
+- [ ] Can add placeholder nodes
+- [ ] Can draw connections between nodes
+- [ ] Minimap shows overview
 
 ---
 
-## Phase 15: WordPress Dev Workflow Testing ✓
-**Goal**: End-to-end testing of the complete dev workflow
+## Phase 17: Resource Node Types
+**Goal**: Create visual node types for Docker apps, databases, and domains
 
-**Status**: Completed 2026-01-19
-
-### What Was Built
-- TEST-PLAN.md with 8-step validation workflow
-- docs/MULTI_ENVIRONMENT.md user guide
-- Updated docs/README.md with multi-environment section
-- Comprehensive documentation for the feature
+### Tasks
+1. Design node visual styles (icons, colors, shapes)
+2. Create DockerAppNode component
+3. Create DatabaseNode component
+4. Create DomainNode component
+5. Create ServiceNode component (for future expandability)
+6. Add node palette/toolbar for adding nodes
 
 ### Success Criteria
-- [x] Test plan documents complete workflow
-- [x] User guide is clear and actionable
-- [x] Documentation is discoverable from main README
-- [ ] Theme sync works as expected (deferred to future release)
+- [ ] Each resource type has distinct visual node
+- [ ] Nodes display key info (name, status, type)
+- [ ] Node palette allows adding new nodes
+- [ ] Nodes are draggable on canvas
 
-[Full Summary](./phases/15-wordpress-dev-workflow-testing/SUMMARY.md)
+---
+
+## Phase 18: Node Configuration Panels
+**Goal**: Create side panels for configuring each node type
+
+### Tasks
+1. Create sliding panel component
+2. Adapt existing Docker app form to panel
+3. Adapt existing database form to panel
+4. Adapt existing domain form to panel
+5. Wire panel open/close to node selection
+6. Handle form validation in panels
+
+### Success Criteria
+- [ ] Clicking node opens config panel
+- [ ] Panel contains appropriate form for node type
+- [ ] Form changes reflect in node display
+- [ ] Panel can be closed/dismissed
+
+---
+
+## Phase 19: Connection Logic
+**Goal**: Define and validate connections between nodes
+
+### Tasks
+1. Define valid connection types (app→db, domain→app, etc.)
+2. Implement connection validation rules
+3. Add visual feedback for valid/invalid connections
+4. Show connection metadata (port, protocol)
+5. Allow connection deletion
+6. Implement connection click to edit
+
+### Success Criteria
+- [ ] Can only create valid connections
+- [ ] Invalid connections show error feedback
+- [ ] Connections display relevant metadata
+- [ ] Can edit and delete connections
+
+---
+
+## Phase 20: Workflow Save/Load
+**Goal**: Persist workflows and load existing infrastructure as workflows
+
+### Tasks
+1. Define workflow JSON schema
+2. Create backend API for workflow CRUD
+3. Save workflow state to backend
+4. Load workflow from backend
+5. Import existing infrastructure as workflow
+6. Add workflow list/manager
+
+### Success Criteria
+- [ ] Workflows save to database
+- [ ] Workflows load correctly
+- [ ] Existing apps/DBs appear as nodes
+- [ ] Can manage multiple workflows
+
+---
+
+## Phase 21: Deploy from Workflow
+**Goal**: Execute workflow to create/update actual resources
+
+### Tasks
+1. Implement workflow execution engine
+2. Create resources from nodes (calls existing APIs)
+3. Establish connections (configure relationships)
+4. Show deployment progress/status
+5. Handle deployment errors gracefully
+6. Add rollback capability for failed deploys
+
+### Success Criteria
+- [ ] Can deploy new infrastructure from workflow
+- [ ] Existing resources update correctly
+- [ ] Progress visible during deployment
+- [ ] Errors handled with clear feedback
 
 ---
 
 ## Dependencies
 
 ```
-Phase 11 (Shared DB Template) ──► Phase 12 (App Linking)
-                                        │
-                                        ▼
-Phase 12 ────────────────────► Phase 13 (Environment UI)
-                                        │
-                                        ▼
-Phase 13 ────────────────────► Phase 15 (Testing)
-
-Phase 14 (GitHub Links) ─────► Phase 15 (Testing)
+Phase 16 (Canvas) ────────────► Phase 17 (Nodes)
+                                      │
+                                      ▼
+Phase 17 ─────────────────────► Phase 18 (Panels)
+                                      │
+                                      ▼
+Phase 18 ─────────────────────► Phase 19 (Connections)
+                                      │
+                                      ▼
+Phase 19 ─────────────────────► Phase 20 (Save/Load)
+                                      │
+                                      ▼
+Phase 20 ─────────────────────► Phase 21 (Deploy)
 ```
 
 ---
 
 ## Notes
 
-- Phases 11-13 are the core multi-environment feature
-- Phase 14 (GitHub links) can be done independently
-- Phase 15 should run last after all features implemented
-- Table prefix approach avoids complexity of separate databases
-- Consider backup strategy before theme sync operations
+- This is a UI-layer feature - reuses all existing backend APIs
+- React Flow is the recommended library for node-based editors
+- Consider localStorage for autosave during development
+- Start simple - MVP is canvas + nodes + basic connections
+- Full deployment can be phased (start with import existing)
 
 ---
 
@@ -176,8 +186,9 @@ Phase 14 (GitHub Links) ─────► Phase 15 (Testing)
 
 | Phase | Complexity | Files Changed |
 |-------|------------|---------------|
-| 11 | Medium | 3-5 (template + validation) |
-| 12 | High | 6-8 (model, API, service) |
-| 13 | High | 5-7 (UI components) |
-| 14 | Low | 2-4 (UI only) |
-| 15 | Low | 0 (testing + docs) |
+| 16 | Medium | 4-6 (new page, canvas setup) |
+| 17 | Medium | 5-8 (node components) |
+| 18 | Medium | 4-6 (panel components) |
+| 19 | Medium | 3-5 (validation logic) |
+| 20 | High | 6-8 (backend + frontend) |
+| 21 | High | 5-7 (execution engine) |

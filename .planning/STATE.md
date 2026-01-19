@@ -1,20 +1,42 @@
 # ServerKit Enhancement - State
 
 ## Current Status
-- **Milestone**: 2 - Multi-Environment WordPress & Community Features (COMPLETED)
-- **Current Phase**: None - Milestone complete
-- **Phase Status**: Complete
+- **Milestone**: 3 - Visual Workflow Builder
+- **Current Phase**: 16 - Workflow Canvas Foundation
+- **Phase Status**: Pending
 - **Last Updated**: 2026-01-19
 
 ## Phase Progress
 
 | Phase | Status | Started | Completed |
 |-------|--------|---------|-----------|
-| 11 | completed | 2026-01-19 | 2026-01-19 |
-| 12 | completed | 2026-01-19 | 2026-01-19 |
-| 13 | completed | 2026-01-19 | 2026-01-19 |
-| 14 | completed | 2026-01-19 | 2026-01-19 |
-| 15 | completed | 2026-01-19 | 2026-01-19 |
+| 16 | pending | - | - |
+| 17 | pending | - | - |
+| 18 | pending | - | - |
+| 19 | pending | - | - |
+| 20 | pending | - | - |
+| 21 | pending | - | - |
+
+## Milestone 3 Overview
+Visual Workflow Builder (v1.2)
+
+**Goal**: Create a visual, flow-based interface for orchestrating Docker apps, databases, and domain connections using a node-based editor (similar to n8n, Node-RED).
+
+**Key Features**:
+- Canvas with pan/zoom for visual orchestration
+- Node types for Docker apps, databases, domains
+- Connection system showing relationships
+- Save/load workflows
+- Deploy infrastructure from visual workflow
+
+## Previous Milestone Summary
+
+### Milestone 2 (v1.1) - Completed
+- Phase 11: WordPress External DB template
+- Phase 12: Multi-environment app linking API
+- Phase 13: Environment switching UI
+- Phase 14: GitHub & community links
+- Phase 15: Documentation & testing
 
 ## Phase 15 Summary
 WordPress Dev Workflow Testing (documentation phase):
@@ -71,15 +93,12 @@ None currently identified.
 ## Notes
 - Milestone 1 (v1.0) completed 2026-01-19
 - Milestone 2 (v1.1) completed 2026-01-19
-- All 5 phases (11-15) successfully completed
-- Theme sync feature noted as future enhancement (not implemented)
+- Milestone 3 (v1.2) started 2026-01-19
+- React Flow recommended for canvas implementation
+- This milestone is UI-focused - reuses existing backend APIs
 
 ## Quick Links
 - [ROADMAP.md](./ROADMAP.md)
 - [PROJECT.md](./PROJECT.md)
 - [Milestone 1 Archive](./milestones/v1.0-ROADMAP.md)
-- [Phase 11 Summary](./phases/11-shared-database-wordpress-template/SUMMARY.md)
-- [Phase 12 Summary](./phases/12-multi-environment-app-linking/SUMMARY.md)
-- [Phase 13 Summary](./phases/13-environment-switching-ui/SUMMARY.md)
-- [Phase 14 Summary](./phases/14-github-community-links/SUMMARY.md)
-- [Phase 15 Summary](./phases/15-wordpress-dev-workflow-testing/SUMMARY.md)
+- [Milestone 2 Phases](./phases/) (11-15)
