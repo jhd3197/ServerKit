@@ -11,43 +11,95 @@ import {
     MiniMap
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { Server, Database, Globe } from 'lucide-react';
-import BaseNode from '../components/workflow/BaseNode';
+import { Server, Database, Globe, Box } from 'lucide-react';
+import DockerAppNode from '../components/workflow/nodes/DockerAppNode';
+import DatabaseNode from '../components/workflow/nodes/DatabaseNode';
+import DomainNode from '../components/workflow/nodes/DomainNode';
+import ServiceNode from '../components/workflow/nodes/ServiceNode';
 
 const initialNodes = [];
 const initialEdges = [];
 
 const nodeTypes = {
-    base: BaseNode
+    dockerApp: DockerAppNode,
+    database: DatabaseNode,
+    domain: DomainNode,
+    service: ServiceNode
+};
+
+const nodeColorMap = {
+    dockerApp: '#2496ed',
+    database: '#f59e0b',
+    domain: '#10b981',
+    service: '#6366f1'
 };
 
 let nodeId = 0;
 const getId = () => `node_${nodeId++}`;
 
-const NodeToolbar = ({ onAddNode }) => {
+const NodePalette = ({ onAddNode }) => {
     return (
-        <div className="workflow-toolbar">
-            <button
-                className="workflow-toolbar-btn toolbar-btn-docker"
-                onClick={() => onAddNode('docker')}
-            >
-                <Server size={16} />
-                Docker App
-            </button>
-            <button
-                className="workflow-toolbar-btn toolbar-btn-database"
-                onClick={() => onAddNode('database')}
-            >
-                <Database size={16} />
-                Database
-            </button>
-            <button
-                className="workflow-toolbar-btn toolbar-btn-domain"
-                onClick={() => onAddNode('domain')}
-            >
-                <Globe size={16} />
-                Domain
-            </button>
+        <div className="workflow-palette">
+            <div className="palette-section">
+                <div className="palette-header">Compute</div>
+                <button
+                    className="palette-item palette-item-docker"
+                    onClick={() => onAddNode('dockerApp', { name: 'New App', status: 'stopped' })}
+                >
+                    <Server size={16} />
+                    <span>Docker App</span>
+                </button>
+                <button
+                    className="palette-item palette-item-service"
+                    onClick={() => onAddNode('service', { name: 'New Service', status: 'stopped' })}
+                >
+                    <Box size={16} />
+                    <span>Service</span>
+                </button>
+            </div>
+
+            <div className="palette-section">
+                <div className="palette-header">Storage</div>
+                <button
+                    className="palette-item palette-item-database"
+                    onClick={() => onAddNode('database', { name: 'New Database', type: 'mysql', status: 'stopped' })}
+                >
+                    <Database size={16} />
+                    <span>MySQL</span>
+                </button>
+                <button
+                    className="palette-item palette-item-database"
+                    onClick={() => onAddNode('database', { name: 'New Database', type: 'postgresql', status: 'stopped' })}
+                >
+                    <Database size={16} />
+                    <span>PostgreSQL</span>
+                </button>
+                <button
+                    className="palette-item palette-item-database"
+                    onClick={() => onAddNode('database', { name: 'New Database', type: 'mongodb', status: 'stopped' })}
+                >
+                    <Database size={16} />
+                    <span>MongoDB</span>
+                </button>
+                <button
+                    className="palette-item palette-item-database"
+                    onClick={() => onAddNode('database', { name: 'Cache', type: 'redis', status: 'stopped' })}
+                >
+                    <Database size={16} />
+                    <span>Redis</span>
+                </button>
+            </div>
+
+            <div className="palette-section">
+                <div className="palette-header">Network</div>
+                <button
+                    className="palette-item palette-item-domain"
+                    onClick={() => onAddNode('domain', { name: 'example.com', ssl: 'none', dnsStatus: 'pending' })}
+                >
+                    <Globe size={16} />
+                    <span>Domain</span>
+                </button>
+            </div>
         </div>
     );
 };
@@ -65,25 +117,26 @@ const WorkflowCanvas = () => {
         [setEdges]
     );
 
-    const addNode = useCallback((nodeType) => {
+    const addNode = useCallback((nodeType, defaultData = {}) => {
         const newNode = {
             id: getId(),
-            type: 'base',
+            type: nodeType,
             position: screenToFlowPosition({
                 x: window.innerWidth / 2 - 90,
                 y: window.innerHeight / 2 - 50
             }),
-            data: {
-                label: `New ${nodeType.charAt(0).toUpperCase() + nodeType.slice(1)}`,
-                nodeType: nodeType
-            }
+            data: defaultData
         };
         setNodes((nds) => [...nds, newNode]);
     }, [screenToFlowPosition, setNodes]);
 
+    const getNodeColor = useCallback((node) => {
+        return nodeColorMap[node.type] || '#6366f1';
+    }, []);
+
     return (
         <div className="workflow-canvas" ref={reactFlowWrapper}>
-            <NodeToolbar onAddNode={addNode} />
+            <NodePalette onAddNode={addNode} />
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
@@ -113,7 +166,7 @@ const WorkflowCanvas = () => {
                     showInteractive={false}
                 />
                 <MiniMap
-                    nodeColor="#6366f1"
+                    nodeColor={getNodeColor}
                     maskColor="rgba(0, 0, 0, 0.8)"
                     style={{
                         backgroundColor: '#1a1a1e'
