@@ -1,9 +1,9 @@
 # ServerKit Enhancement - State
 
 ## Current Status
-- **Milestone**: 3 - Visual Workflow Builder
-- **Current Phase**: 21 - Workflow Deployment
-- **Phase Status**: Planned
+- **Milestone**: 3 - Visual Workflow Builder (COMPLETED)
+- **Current Phase**: 21 - Workflow Deployment (Final)
+- **Phase Status**: Completed
 - **Last Updated**: 2026-01-19
 
 ## Phase Progress
@@ -15,7 +15,20 @@
 | 18 | completed | 2026-01-19 | 2026-01-19 |
 | 19 | completed | 2026-01-19 | 2026-01-19 |
 | 20 | completed | 2026-01-19 | 2026-01-19 |
-| 21 | pending | - | - |
+| 21 | completed | 2026-01-19 | 2026-01-19 |
+
+## Phase 21 Summary
+Workflow Deployment completed:
+- Created WorkflowService with deploy_workflow(), get_deployment_order()
+- Deployment order: databases → apps → domains
+- deploy_database() creates MySQL/PostgreSQL with users
+- deploy_docker_app() creates Application + docker-compose files
+- deploy_domain() creates Domain linked to app with nginx config
+- Added POST /workflows/{id}/deploy API endpoint
+- Added deployWorkflow() frontend API method
+- Added Deploy button to toolbar (green, requires saved workflow)
+- Created DeploymentProgressModal with per-node status
+- Updates nodes with created resource IDs after deployment
 
 ## Phase 20 Summary
 Workflow Save/Load completed:

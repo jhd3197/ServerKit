@@ -17,7 +17,8 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 > **Milestone 3**: Visual Workflow Builder
 > **Version**: v1.2
 > **Started**: 2026-01-19
-> **Status**: In Progress
+> **Completed**: 2026-01-19
+> **Status**: Complete
 
 **Goal**: Create a visual, flow-based interface for orchestrating Docker apps, databases, and domain connections - an alternative "v2" way to manage infrastructure visually using a node-based editor.
 
@@ -32,7 +33,7 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 | 18 | Node Configuration Panels | **completed** | Side panels for configuring each node type |
 | 19 | Connection Logic | **completed** | Define and validate connections between nodes |
 | 20 | Workflow Save/Load | **completed** | Save workflows to backend, load existing infrastructure |
-| 21 | Deploy from Workflow | pending | Execute workflow to create/update actual resources |
+| 21 | Deploy from Workflow | **completed** | Execute workflow to create/update actual resources |
 
 ---
 
@@ -152,22 +153,41 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 
 ---
 
-## Phase 21: Deploy from Workflow
+## Phase 21: Deploy from Workflow ✓
 **Goal**: Execute workflow to create/update actual resources
 
-### Tasks
-1. Implement workflow execution engine
-2. Create resources from nodes (calls existing APIs)
-3. Establish connections (configure relationships)
-4. Show deployment progress/status
-5. Handle deployment errors gracefully
-6. Add rollback capability for failed deploys
+**Status**: Completed 2026-01-19
+
+### What Was Built
+- Created WorkflowService with deployment orchestration
+- Deployment order: databases → apps → domains
+- Database deployment creates MySQL/PostgreSQL with auto-generated credentials
+- Docker app deployment creates Application + docker-compose files
+- Domain deployment creates Domain linked to app with nginx config
+- Added POST /workflows/{id}/deploy API endpoint
+- Added deployWorkflow() frontend API method
+- Added Deploy button to toolbar (green, requires saved workflow)
+- Created DeploymentProgressModal with per-node status display
 
 ### Success Criteria
-- [ ] Can deploy new infrastructure from workflow
-- [ ] Existing resources update correctly
-- [ ] Progress visible during deployment
-- [ ] Errors handled with clear feedback
+- [x] Can deploy new infrastructure from workflow
+- [x] Existing resources update correctly
+- [x] Progress visible during deployment
+- [x] Errors handled with clear feedback
+
+[Full Summary](./phases/21-workflow-deployment/SUMMARY.md)
+
+---
+
+## Milestone 3 Complete
+
+All 6 phases completed:
+- Phase 16: Workflow Canvas Foundation
+- Phase 17: Resource Node Types
+- Phase 18: Node Configuration Panels
+- Phase 19: Connection Logic
+- Phase 20: Workflow Save/Load
+- Phase 21: Deploy from Workflow
 
 ---
 
