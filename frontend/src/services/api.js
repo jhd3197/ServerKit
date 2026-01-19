@@ -340,6 +340,21 @@ class ApiService {
         return this.request('/system/metrics');
     }
 
+    async getServerTime() {
+        return this.request('/system/time');
+    }
+
+    async getTimezones() {
+        return this.request('/system/timezones');
+    }
+
+    async setTimezone(timezone) {
+        return this.request('/system/timezone', {
+            method: 'PUT',
+            body: { timezone }
+        });
+    }
+
     async getVersion() {
         return this.request('/system/version');
     }

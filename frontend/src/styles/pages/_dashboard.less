@@ -54,6 +54,43 @@
     }
 }
 
+.status-bar-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.server-time-display {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    color: @text-secondary;
+    font-size: @font-size-sm;
+
+    svg {
+        color: @text-tertiary;
+    }
+
+    .time-value {
+        font-family: @font-mono;
+        font-weight: @font-weight-medium;
+        color: @text-primary;
+    }
+
+    .timezone-badge {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: @font-size-xs;
+        color: @accent-primary;
+        background: @accent-glow;
+        padding: 2px 8px;
+        border-radius: @radius-full;
+        margin-left: @space-2;
+    }
+}
+
 .status-bar-right {
     display: flex;
     align-items: center;

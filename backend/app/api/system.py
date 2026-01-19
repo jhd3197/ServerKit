@@ -187,6 +187,49 @@ def health_check():
     }), 200
 
 
+@system_bp.route('/time', methods=['GET'])
+@jwt_required()
+def get_server_time():
+    """Get current server time and timezone."""
+    return jsonify(SystemService.get_server_time()), 200
+
+
+@system_bp.route('/timezones', methods=['GET'])
+@jwt_required()
+def get_timezones():
+    """Get list of available timezones."""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+
+    if user.role != 'admin':
+        return jsonify({'error': 'Admin access required'}), 403
+
+    timezones = SystemService.get_available_timezones()
+    return jsonify({'timezones': timezones}), 200
+
+
+@system_bp.route('/timezone', methods=['PUT'])
+@jwt_required()
+def set_timezone():
+    """Set server timezone (admin only)."""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+
+    if user.role != 'admin':
+        return jsonify({'error': 'Admin access required'}), 403
+
+    data = request.get_json()
+    if not data or 'timezone' not in data:
+        return jsonify({'error': 'Timezone is required'}), 400
+
+    result = SystemService.set_timezone(data['timezone'])
+
+    if result['success']:
+        return jsonify(result), 200
+    else:
+        return jsonify(result), 400
+
+
 @system_bp.route('/processes', methods=['GET'])
 @jwt_required()
 def get_processes():

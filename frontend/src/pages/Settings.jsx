@@ -1505,10 +1505,15 @@ const SystemInfo = () => {
     const { isAdmin } = useAuth();
     const [metrics, setMetrics] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [timezones, setTimezones] = useState([]);
+    const [selectedTimezone, setSelectedTimezone] = useState('');
+    const [savingTimezone, setSavingTimezone] = useState(false);
+    const [timezoneMessage, setTimezoneMessage] = useState(null);
 
     useEffect(() => {
         if (isAdmin) {
             loadMetrics();
+            loadTimezones();
         }
     }, [isAdmin]);
 
@@ -1516,10 +1521,41 @@ const SystemInfo = () => {
         try {
             const data = await api.getSystemMetrics();
             setMetrics(data);
+            if (data?.time?.timezone_id) {
+                setSelectedTimezone(data.time.timezone_id);
+            }
         } catch (err) {
             console.error('Failed to load metrics:', err);
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function loadTimezones() {
+        try {
+            const data = await api.getTimezones();
+            setTimezones(data.timezones || []);
+        } catch (err) {
+            console.error('Failed to load timezones:', err);
+        }
+    }
+
+    async function handleTimezoneChange() {
+        if (!selectedTimezone) return;
+
+        setSavingTimezone(true);
+        setTimezoneMessage(null);
+
+        try {
+            const result = await api.setTimezone(selectedTimezone);
+            setTimezoneMessage({ type: 'success', text: result.message || 'Timezone updated' });
+            // Refresh metrics to show new time
+            loadMetrics();
+        } catch (err) {
+            setTimezoneMessage({ type: 'error', text: err.message || 'Failed to set timezone' });
+        } finally {
+            setSavingTimezone(false);
+            setTimeout(() => setTimezoneMessage(null), 5000);
         }
     }
 
@@ -1643,6 +1679,57 @@ const SystemInfo = () => {
                     </div>
                 </div>
             )}
+
+            {/* Server Time & Timezone */}
+            <div className="settings-card">
+                <h3>Server Time & Timezone</h3>
+                {metrics?.time && (
+                    <div className="info-list" style={{ marginBottom: '1rem' }}>
+                        <div className="info-item">
+                            <span className="info-label">Current Time</span>
+                            <span className="info-value">{metrics.time.current_time_formatted}</span>
+                        </div>
+                        <div className="info-item">
+                            <span className="info-label">UTC Offset</span>
+                            <span className="info-value">{metrics.time.utc_offset}</span>
+                        </div>
+                        <div className="info-item">
+                            <span className="info-label">Current Timezone</span>
+                            <span className="info-value">{metrics.time.timezone_id || metrics.time.timezone_name}</span>
+                        </div>
+                    </div>
+                )}
+                <div className="form-group">
+                    <label>Change Timezone</label>
+                    <div className="timezone-selector">
+                        <select
+                            value={selectedTimezone}
+                            onChange={(e) => setSelectedTimezone(e.target.value)}
+                            className="form-control"
+                        >
+                            <option value="">Select timezone...</option>
+                            {timezones.map((tz) => (
+                                <option key={tz} value={tz}>{tz}</option>
+                            ))}
+                        </select>
+                        <button
+                            className="btn btn-primary"
+                            onClick={handleTimezoneChange}
+                            disabled={savingTimezone || !selectedTimezone || selectedTimezone === metrics?.time?.timezone_id}
+                        >
+                            {savingTimezone ? 'Saving...' : 'Apply'}
+                        </button>
+                    </div>
+                    {timezoneMessage && (
+                        <div className={`timezone-message ${timezoneMessage.type}`}>
+                            {timezoneMessage.text}
+                        </div>
+                    )}
+                    <span className="form-help">
+                        Changing timezone requires server restart to take full effect
+                    </span>
+                </div>
+            </div>
         </div>
     );
 };

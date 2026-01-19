@@ -551,6 +551,39 @@
     }
 }
 
+// Timezone Selector
+.timezone-selector {
+    display: flex;
+    gap: @space-3;
+    align-items: center;
+
+    select {
+        flex: 1;
+        max-width: 300px;
+    }
+
+    .btn {
+        flex-shrink: 0;
+    }
+}
+
+.timezone-message {
+    margin-top: @space-2;
+    padding: @space-2 @space-3;
+    border-radius: @radius-md;
+    font-size: @font-size-sm;
+
+    &.success {
+        background: fade(@success, 15%);
+        color: @success;
+    }
+
+    &.error {
+        background: fade(@danger, 15%);
+        color: @danger;
+    }
+}
+
 // About Section
 .about-card {
     background: @bg-card;

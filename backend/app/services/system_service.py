@@ -192,6 +192,134 @@ class SystemService:
         return ' '.join(parts) if parts else '0m'
 
     @classmethod
+    def get_server_time(cls):
+        """Get current server time and timezone info."""
+        import time as time_module
+
+        now = datetime.now()
+        utc_now = datetime.utcnow()
+
+        # Get timezone name
+        tz_name = time_module.tzname[time_module.daylight] if time_module.daylight else time_module.tzname[0]
+
+        # Try to get more detailed timezone info on Linux
+        timezone_file = '/etc/timezone'
+        timezone_id = None
+        if os.path.exists(timezone_file):
+            try:
+                with open(timezone_file, 'r') as f:
+                    timezone_id = f.read().strip()
+            except Exception:
+                pass
+
+        # Fallback: try timedatectl on systemd systems
+        if not timezone_id:
+            try:
+                result = subprocess.run(
+                    ['timedatectl', 'show', '--property=Timezone', '--value'],
+                    capture_output=True, text=True, timeout=5
+                )
+                if result.returncode == 0:
+                    timezone_id = result.stdout.strip()
+            except Exception:
+                pass
+
+        # Calculate UTC offset
+        utc_offset_seconds = (now - utc_now).total_seconds()
+        utc_offset_hours = int(utc_offset_seconds // 3600)
+        utc_offset_minutes = int((abs(utc_offset_seconds) % 3600) // 60)
+        utc_offset_str = f"UTC{'+' if utc_offset_hours >= 0 else ''}{utc_offset_hours:+d}:{utc_offset_minutes:02d}"
+
+        return {
+            'current_time': now.isoformat(),
+            'current_time_formatted': now.strftime('%Y-%m-%d %H:%M:%S'),
+            'utc_time': utc_now.isoformat(),
+            'timezone_name': tz_name,
+            'timezone_id': timezone_id or tz_name,
+            'utc_offset': utc_offset_str,
+            'utc_offset_seconds': int(utc_offset_seconds)
+        }
+
+    @classmethod
+    def get_available_timezones(cls):
+        """Get list of available timezones."""
+        try:
+            # Use timedatectl to list timezones on systemd systems
+            result = subprocess.run(
+                ['timedatectl', 'list-timezones'],
+                capture_output=True, text=True, timeout=10
+            )
+            if result.returncode == 0:
+                return result.stdout.strip().split('\n')
+        except Exception:
+            pass
+
+        # Fallback: return common timezones
+        return [
+            'UTC',
+            'America/New_York',
+            'America/Chicago',
+            'America/Denver',
+            'America/Los_Angeles',
+            'America/Toronto',
+            'America/Vancouver',
+            'America/Mexico_City',
+            'America/Sao_Paulo',
+            'Europe/London',
+            'Europe/Paris',
+            'Europe/Berlin',
+            'Europe/Madrid',
+            'Europe/Rome',
+            'Europe/Amsterdam',
+            'Europe/Moscow',
+            'Asia/Tokyo',
+            'Asia/Shanghai',
+            'Asia/Hong_Kong',
+            'Asia/Singapore',
+            'Asia/Dubai',
+            'Asia/Kolkata',
+            'Australia/Sydney',
+            'Australia/Melbourne',
+            'Pacific/Auckland',
+        ]
+
+    @classmethod
+    def set_timezone(cls, timezone_id):
+        """Set server timezone (requires root/sudo)."""
+        # Validate timezone exists
+        available = cls.get_available_timezones()
+        if timezone_id not in available:
+            return {'success': False, 'error': f'Invalid timezone: {timezone_id}'}
+
+        try:
+            # Try timedatectl first (systemd)
+            result = subprocess.run(
+                ['sudo', 'timedatectl', 'set-timezone', timezone_id],
+                capture_output=True, text=True, timeout=10
+            )
+            if result.returncode == 0:
+                return {'success': True, 'message': f'Timezone set to {timezone_id}'}
+
+            # Fallback: symlink method
+            result = subprocess.run(
+                ['sudo', 'ln', '-sf', f'/usr/share/zoneinfo/{timezone_id}', '/etc/localtime'],
+                capture_output=True, text=True, timeout=10
+            )
+            if result.returncode == 0:
+                # Also update /etc/timezone
+                subprocess.run(
+                    ['sudo', 'bash', '-c', f'echo "{timezone_id}" > /etc/timezone'],
+                    capture_output=True, text=True, timeout=10
+                )
+                return {'success': True, 'message': f'Timezone set to {timezone_id}'}
+
+            return {'success': False, 'error': result.stderr or 'Failed to set timezone'}
+        except subprocess.TimeoutExpired:
+            return {'success': False, 'error': 'Timeout while setting timezone'}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
     def get_all_metrics(cls):
         """Get all system metrics at once."""
         return {
@@ -201,5 +329,6 @@ class SystemService:
             'network': cls.get_network_metrics(),
             'load_average': cls.get_load_average(),
             'system': cls.get_system_info(),
+            'time': cls.get_server_time(),
             'timestamp': datetime.utcnow().isoformat()
         }

@@ -4,7 +4,7 @@ import {
     Cpu, MemoryStick, HardDrive, Server,
     Plus, RefreshCw, Activity, Layers,
     Database, Globe, Container, Code,
-    ArrowRight, Clock, CheckCircle
+    ArrowRight, Clock, CheckCircle, MapPin
 } from 'lucide-react';
 import api from '../services/api';
 import { useMetrics } from '../hooks/useMetrics';
@@ -17,11 +17,19 @@ const Dashboard = () => {
     const [services, setServices] = useState([]);
     const [dbStatus, setDbStatus] = useState(null);
     const [uptime, setUptime] = useState(null);
+    const [serverTime, setServerTime] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         loadData();
     }, []);
+
+    // Update server time display every second using metrics.time
+    useEffect(() => {
+        if (metrics?.time) {
+            setServerTime(metrics.time);
+        }
+    }, [metrics]);
 
     async function loadData() {
         try {
@@ -117,6 +125,18 @@ const Dashboard = () => {
                             <Clock size={14} />
                             <span>
                                 {uptimeFormatted.days}d {String(uptimeFormatted.hours).padStart(2, '0')}h {String(uptimeFormatted.minutes).padStart(2, '0')}m
+                            </span>
+                        </div>
+                    )}
+                </div>
+                <div className="status-bar-center">
+                    {serverTime && (
+                        <div className="server-time-display">
+                            <Clock size={14} />
+                            <span className="time-value">{serverTime.current_time_formatted}</span>
+                            <span className="timezone-badge">
+                                <MapPin size={10} />
+                                {serverTime.timezone_id || serverTime.timezone_name}
                             </span>
                         </div>
                     )}
