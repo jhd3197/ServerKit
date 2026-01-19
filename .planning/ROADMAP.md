@@ -11,7 +11,7 @@
 | Phase | Name | Status | Goal |
 |-------|------|--------|------|
 | 1 | Docker & Domain Debugging | **completed** | Fix port mapping and domain routing for Docker apps |
-| 2 | WordPress Template Testing | pending | Deploy and verify WordPress works end-to-end |
+| 2 | WordPress Template Testing | **completed** | Deploy and verify WordPress works end-to-end |
 | 3 | PHP App Template Testing | pending | Deploy and verify PHP/Laravel apps work correctly |
 | 4 | Flask/Python Template Testing | pending | Deploy and verify Python apps route correctly |
 | 5 | Private URL System | pending | Add private URL generation and custom slugs |
@@ -94,10 +94,17 @@ Phase 1 added diagnostic tools to identify and debug routing issues. See `.plann
    - Update template if issues are template-specific
 
 ### Success Criteria
-- [ ] WordPress container starts successfully
-- [ ] Database connection works
-- [ ] Domain routes to WordPress
-- [ ] Installation wizard accessible
+- [x] WordPress container starts successfully
+- [x] Database connection works
+- [x] Domain routes to WordPress
+- [x] Installation wizard accessible
+
+### Completed
+Phase 2 testing passed. Found and fixed 2 bugs:
+- NDJSON parsing in compose_ps (critical)
+- CLI .env loading
+
+See `.planning/phases/02-wordpress-testing/SUMMARY.md` for details.
 
 ---
 
