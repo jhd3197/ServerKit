@@ -11,9 +11,10 @@ import {
     MiniMap
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { Server, Database, Globe, Box, Save, FolderOpen, Plus, Download } from 'lucide-react';
+import { Server, Database, Globe, Box, Save, FolderOpen, Plus, Download, Play } from 'lucide-react';
 import api from '../services/api';
 import WorkflowListModal from '../components/workflow/WorkflowListModal';
+import DeploymentProgressModal from '../components/workflow/DeploymentProgressModal';
 import DockerAppNode from '../components/workflow/nodes/DockerAppNode';
 import DatabaseNode from '../components/workflow/nodes/DatabaseNode';
 import DomainNode from '../components/workflow/nodes/DomainNode';
@@ -133,6 +134,11 @@ const WorkflowCanvas = () => {
     const [isImporting, setIsImporting] = useState(false);
     const [showLoadModal, setShowLoadModal] = useState(false);
     const [saveMessage, setSaveMessage] = useState(null);
+
+    // Deployment state
+    const [isDeploying, setIsDeploying] = useState(false);
+    const [showDeployModal, setShowDeployModal] = useState(false);
+    const [deploymentResults, setDeploymentResults] = useState(null);
 
     const memoizedNodeTypes = useMemo(() => nodeTypes, []);
     const memoizedEdgeTypes = useMemo(() => edgeTypes, []);
@@ -337,6 +343,78 @@ const WorkflowCanvas = () => {
         }
     }, [setNodes]);
 
+    // Deploy workflow
+    const deployWorkflow = useCallback(async () => {
+        if (!currentWorkflow) {
+            setSaveMessage('Save workflow first');
+            setTimeout(() => setSaveMessage(null), 3000);
+            return;
+        }
+
+        if (nodes.length === 0) {
+            setSaveMessage('No nodes to deploy');
+            setTimeout(() => setSaveMessage(null), 3000);
+            return;
+        }
+
+        setIsDeploying(true);
+        setShowDeployModal(true);
+        setDeploymentResults(null);
+
+        try {
+            // First save the workflow to ensure it's up to date
+            const viewport = getViewport();
+            const serializableNodes = nodes.map(({ id, type, position, data }) => ({
+                id, type, position,
+                data: { ...data }
+            }));
+            const serializableEdges = edges.map(({ id, source, target, sourceHandle, targetHandle, type, animated, data }) => ({
+                id, source, target, sourceHandle, targetHandle, type, animated,
+                data: data ? { sourceType: data.sourceType, targetType: data.targetType, connectionType: data.connectionType } : undefined
+            }));
+
+            await api.updateWorkflow(currentWorkflow.id, {
+                name: workflowName,
+                nodes: serializableNodes,
+                edges: serializableEdges,
+                viewport
+            });
+
+            // Now deploy
+            const result = await api.deployWorkflow(currentWorkflow.id);
+            setDeploymentResults(result);
+
+            // Update nodes with deployed resource IDs
+            if (result.workflow && result.workflow.nodes) {
+                const updatedNodes = result.workflow.nodes.map((node) => ({
+                    ...node,
+                    data: { ...node.data }
+                }));
+
+                // Update node ID counter
+                const maxNodeId = updatedNodes.reduce((max, node) => {
+                    const numId = parseInt(node.id.replace('node_', ''), 10);
+                    return isNaN(numId) ? max : Math.max(max, numId);
+                }, 0);
+                nodeId = maxNodeId + 1;
+
+                setNodes(updatedNodes);
+                setCurrentWorkflow(result.workflow);
+            }
+
+        } catch (error) {
+            console.error('Failed to deploy workflow:', error);
+            setDeploymentResults({
+                success: false,
+                error: error.message || 'Deployment failed',
+                results: [],
+                errors: [{ error: error.message || 'Deployment failed' }]
+            });
+        } finally {
+            setIsDeploying(false);
+        }
+    }, [currentWorkflow, nodes, edges, workflowName, getViewport, setNodes]);
+
     const onConnect = useCallback(
         (params) => {
             // Double-check validation on connect
@@ -523,6 +601,15 @@ const WorkflowCanvas = () => {
                         <Save size={16} />
                         <span>{isSaving ? 'Saving...' : 'Save'}</span>
                     </button>
+                    <button
+                        className="toolbar-btn toolbar-btn-deploy"
+                        onClick={deployWorkflow}
+                        disabled={isDeploying || !currentWorkflow || nodes.length === 0}
+                        title={!currentWorkflow ? 'Save workflow first' : 'Deploy infrastructure'}
+                    >
+                        <Play size={16} />
+                        <span>{isDeploying ? 'Deploying...' : 'Deploy'}</span>
+                    </button>
                 </div>
                 {saveMessage && (
                     <div className="toolbar-message">{saveMessage}</div>
@@ -582,6 +669,14 @@ const WorkflowCanvas = () => {
                 <WorkflowListModal
                     onLoad={loadWorkflow}
                     onClose={() => setShowLoadModal(false)}
+                />
+            )}
+            {showDeployModal && (
+                <DeploymentProgressModal
+                    isDeploying={isDeploying}
+                    results={deploymentResults}
+                    nodes={nodes}
+                    onClose={() => setShowDeployModal(false)}
                 />
             )}
         </div>
