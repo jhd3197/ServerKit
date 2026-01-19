@@ -2,7 +2,7 @@
 
 ## Current Status
 - **Milestone**: 4 - Container Logs & Monitoring
-- **Current Phase**: 22 - Container Logs API
+- **Current Phase**: 23 - Log Viewer UI
 - **Phase Status**: Not Started
 - **Last Updated**: 2026-01-19
 
@@ -10,7 +10,7 @@
 
 | Phase | Status | Started | Completed |
 |-------|--------|---------|-----------|
-| 22 | pending | - | - |
+| 22 | completed | 2026-01-19 | 2026-01-19 |
 | 23 | pending | - | - |
 | 24 | pending | - | - |
 | 25 | pending | - | - |
@@ -77,10 +77,13 @@ Infrastructure Fixes, Private URLs & UI Polish:
 None currently identified.
 
 ## Notes
-- Docker SDK for Python will be used for container logs/stats
-- Existing WebSocket infrastructure (Flask-SocketIO) will be extended
+- Using subprocess for Docker CLI commands (not Docker SDK)
+- WebSocket infrastructure extended with container log streaming
 - Recharts already installed for graphs
 - Existing NotificationService will be extended for alerts
+
+## Session Log
+- 2026-01-19: Phase 22 completed - Container Logs API (3 commits)
 
 ## Quick Links
 - [ROADMAP.md](./ROADMAP.md)

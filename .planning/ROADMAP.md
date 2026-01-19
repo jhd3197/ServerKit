@@ -30,7 +30,7 @@ Completed 2026-01-19 | 6 phases | React Flow canvas, node types, deploy from wor
 
 | Phase | Name | Status | Goal |
 |-------|------|--------|------|
-| 22 | Container Logs API | pending | Backend API to fetch/stream Docker container logs |
+| 22 | Container Logs API | **completed** | Backend API to fetch/stream Docker container logs |
 | 23 | Log Viewer UI | pending | Real-time log display with auto-scroll, ANSI color support |
 | 24 | Log Search & Filtering | pending | Search within logs, filter by level/time, export |
 | 25 | Per-App Resource Collection | pending | Collect per-container CPU/memory/network stats via Docker API |
@@ -40,7 +40,7 @@ Completed 2026-01-19 | 6 phases | React Flow canvas, node types, deploy from wor
 
 ---
 
-## Phase 22: Container Logs API
+## Phase 22: Container Logs API (Completed)
 **Goal**: Create backend API to fetch and stream Docker container logs
 
 **Key Tasks**:
@@ -51,10 +51,10 @@ Completed 2026-01-19 | 6 phases | React Flow canvas, node types, deploy from wor
 - Support multiple output formats (raw, JSON)
 
 **Success Criteria**:
-- [ ] Can fetch last N lines of container logs
-- [ ] Can stream logs in real-time via WebSocket
-- [ ] Logs include timestamps
-- [ ] Handles containers that aren't running
+- [x] Can fetch last N lines of container logs
+- [x] Can stream logs in real-time via WebSocket
+- [x] Logs include timestamps
+- [x] Handles containers that aren't running
 
 ---
 
