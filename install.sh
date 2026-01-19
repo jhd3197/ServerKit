@@ -120,6 +120,16 @@ mkdir -p "$LOG_DIR"
 mkdir -p "$DATA_DIR"
 mkdir -p "$INSTALL_DIR/backend/instance"
 mkdir -p "$INSTALL_DIR/nginx/ssl"
+mkdir -p /etc/serverkit/templates
+mkdir -p /var/serverkit/apps
+
+# Copy bundled templates to system directory
+print_info "Installing app templates..."
+if [ -d "$INSTALL_DIR/backend/templates" ]; then
+    cp -r "$INSTALL_DIR/backend/templates/"*.yaml /etc/serverkit/templates/ 2>/dev/null || true
+    cp -r "$INSTALL_DIR/backend/templates/"*.yml /etc/serverkit/templates/ 2>/dev/null || true
+    print_success "Installed $(ls /etc/serverkit/templates/*.yaml 2>/dev/null | wc -l) app templates"
+fi
 
 # Set up Python virtual environment
 print_info "Setting up Python virtual environment..."

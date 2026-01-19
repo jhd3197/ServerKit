@@ -267,6 +267,12 @@ cmd_update() {
     source "$VENV_DIR/bin/activate"
     pip install -r "$INSTALL_DIR/backend/requirements.txt" --quiet
 
+    # Sync app templates
+    print_info "Syncing app templates..."
+    mkdir -p /etc/serverkit/templates
+    cp -r "$INSTALL_DIR/backend/templates/"*.yaml /etc/serverkit/templates/ 2>/dev/null || true
+    cp -r "$INSTALL_DIR/backend/templates/"*.yml /etc/serverkit/templates/ 2>/dev/null || true
+
     # Rebuild frontend
     print_info "Rebuilding frontend..."
     docker compose build
