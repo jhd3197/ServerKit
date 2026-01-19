@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import {
     ReactFlow,
     ReactFlowProvider,
@@ -16,6 +16,10 @@ import DockerAppNode from '../components/workflow/nodes/DockerAppNode';
 import DatabaseNode from '../components/workflow/nodes/DatabaseNode';
 import DomainNode from '../components/workflow/nodes/DomainNode';
 import ServiceNode from '../components/workflow/nodes/ServiceNode';
+import DockerAppConfigPanel from '../components/workflow/panels/DockerAppConfigPanel';
+import DatabaseConfigPanel from '../components/workflow/panels/DatabaseConfigPanel';
+import DomainConfigPanel from '../components/workflow/panels/DomainConfigPanel';
+import ServiceConfigPanel from '../components/workflow/panels/ServiceConfigPanel';
 
 const initialNodes = [];
 const initialEdges = [];
@@ -108,6 +112,7 @@ const WorkflowCanvas = () => {
     const reactFlowWrapper = useRef(null);
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [selectedNode, setSelectedNode] = useState(null);
     const { screenToFlowPosition } = useReactFlow();
 
     const memoizedNodeTypes = useMemo(() => nodeTypes, []);
@@ -134,6 +139,56 @@ const WorkflowCanvas = () => {
         return nodeColorMap[node.type] || '#6366f1';
     }, []);
 
+    const handleNodeClick = useCallback((event, node) => {
+        setSelectedNode(node);
+    }, []);
+
+    const handlePaneClick = useCallback(() => {
+        setSelectedNode(null);
+    }, []);
+
+    const handlePanelClose = useCallback(() => {
+        setSelectedNode(null);
+    }, []);
+
+    const handleNodeDataChange = useCallback((newData) => {
+        if (!selectedNode) return;
+
+        setNodes((nds) =>
+            nds.map((node) =>
+                node.id === selectedNode.id
+                    ? { ...node, data: newData }
+                    : node
+            )
+        );
+
+        // Update selectedNode reference to reflect changes
+        setSelectedNode((prev) => prev ? { ...prev, data: newData } : null);
+    }, [selectedNode, setNodes]);
+
+    const renderConfigPanel = () => {
+        if (!selectedNode) return null;
+
+        const panelProps = {
+            node: selectedNode,
+            onChange: handleNodeDataChange,
+            onClose: handlePanelClose
+        };
+
+        switch (selectedNode.type) {
+            case 'dockerApp':
+                return <DockerAppConfigPanel {...panelProps} />;
+            case 'database':
+                return <DatabaseConfigPanel {...panelProps} />;
+            case 'domain':
+                return <DomainConfigPanel {...panelProps} />;
+            case 'service':
+                return <ServiceConfigPanel {...panelProps} />;
+            default:
+                return null;
+        }
+    };
+
     return (
         <div className="workflow-canvas" ref={reactFlowWrapper}>
             <NodePalette onAddNode={addNode} />
@@ -144,6 +199,8 @@ const WorkflowCanvas = () => {
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
+                onNodeClick={handleNodeClick}
+                onPaneClick={handlePaneClick}
                 fitView
                 panOnScroll
                 selectionOnDrag
@@ -173,6 +230,7 @@ const WorkflowCanvas = () => {
                     }}
                 />
             </ReactFlow>
+            {renderConfigPanel()}
         </div>
     );
 };
