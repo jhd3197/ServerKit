@@ -185,9 +185,19 @@ def validate_installation():
         errors.append('Template not found')
     else:
         template = result['template']
-        for var_name, var_config in template.get('variables', {}).items():
-            if var_config.get('required', False) and var_name not in user_variables:
-                errors.append(f'Required variable "{var_name}" is not provided')
+        raw_vars = template.get('variables', [])
+
+        # Handle both list and dict formats
+        if isinstance(raw_vars, list):
+            for var in raw_vars:
+                if isinstance(var, dict) and var.get('required', False):
+                    var_name = var.get('name', '')
+                    if var_name and var_name not in user_variables:
+                        errors.append(f'Required variable "{var_name}" is not provided')
+        elif isinstance(raw_vars, dict):
+            for var_name, var_config in raw_vars.items():
+                if var_config.get('required', False) and var_name not in user_variables:
+                    errors.append(f'Required variable "{var_name}" is not provided')
 
     if errors:
         return jsonify({'valid': False, 'errors': errors}), 400
