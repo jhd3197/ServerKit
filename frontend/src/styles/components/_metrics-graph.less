@@ -1,0 +1,229 @@
+// ============================================
+// METRICS GRAPH COMPONENT
+// ============================================
+
+.metrics-graph-card {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-xl;
+    padding: @space-6;
+    margin-bottom: @space-6;
+
+    &.loading,
+    &.error,
+    &.empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: @space-3;
+        min-height: 200px;
+        color: @text-tertiary;
+
+        .muted {
+            font-size: @font-size-sm;
+        }
+    }
+
+    &.error {
+        color: @danger;
+    }
+}
+
+.metrics-graph-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: @space-5;
+}
+
+.graph-title {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    font-size: @font-size-base;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+}
+
+// Summary Row
+.metrics-summary-row {
+    display: flex;
+    gap: @space-6;
+    padding: @space-4;
+    background: @bg-hover;
+    border-radius: @radius-lg;
+    margin-bottom: @space-5;
+}
+
+.summary-stat {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+
+    svg {
+        color: @text-tertiary;
+    }
+
+    .stat-label {
+        display: block;
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+        display: block;
+        font-size: @font-size-lg;
+        font-weight: @font-weight-bold;
+        font-family: @font-mono;
+        color: @text-primary;
+    }
+}
+
+// Chart Container
+.metrics-chart-container {
+    margin-bottom: @space-4;
+
+    &.compact {
+        margin-bottom: @space-3;
+    }
+}
+
+// Tooltip
+.metrics-tooltip {
+    background: @bg-elevated;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    padding: @space-3;
+    box-shadow: @shadow-lg;
+
+    .tooltip-time {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        margin-bottom: @space-2;
+        padding-bottom: @space-2;
+        border-bottom: 1px solid @border-subtle;
+    }
+
+    .tooltip-row {
+        display: flex;
+        justify-content: space-between;
+        gap: @space-4;
+        font-size: @font-size-sm;
+        padding: @space-1 0;
+
+        span:last-child {
+            font-family: @font-mono;
+            font-weight: @font-weight-semibold;
+        }
+    }
+}
+
+// Legend
+.metrics-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-6;
+    padding-top: @space-4;
+    border-top: 1px solid @border-subtle;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    font-size: @font-size-sm;
+    color: @text-secondary;
+}
+
+.legend-line {
+    width: 20px;
+    height: 3px;
+    border-radius: 2px;
+}
+
+// Compact Version
+.metrics-graph-compact {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-xl;
+    padding: @space-4;
+    margin-bottom: @space-6;
+
+    .metrics-graph-header {
+        margin-bottom: @space-3;
+
+        .graph-title {
+            font-size: @font-size-sm;
+        }
+    }
+}
+
+.metrics-summary-compact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-5;
+    padding-top: @space-3;
+    border-top: 1px solid @border-subtle;
+
+    .summary-item {
+        display: flex;
+        align-items: center;
+        gap: @space-2;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+
+        svg {
+            color: @text-tertiary;
+        }
+
+        span {
+            font-family: @font-mono;
+            font-weight: @font-weight-medium;
+        }
+    }
+}
+
+// Recharts Overrides
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+    stroke: @border-subtle;
+}
+
+.recharts-text {
+    fill: @text-secondary;
+}
+
+// Responsive
+@media (max-width: @breakpoint-md) {
+    .metrics-summary-row {
+        flex-wrap: wrap;
+        gap: @space-4;
+    }
+
+    .summary-stat {
+        flex: 1 1 calc(50% - @space-2);
+        min-width: 140px;
+    }
+
+    .metrics-legend {
+        flex-wrap: wrap;
+        gap: @space-3;
+    }
+}
+
+@media (max-width: @breakpoint-sm) {
+    .metrics-graph-header {
+        flex-direction: column;
+        gap: @space-3;
+        align-items: flex-start;
+    }
+
+    .summary-stat {
+        flex: 1 1 100%;
+    }
+}
