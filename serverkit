@@ -88,7 +88,7 @@ cmd_help() {
     echo "  restore-db        Restore database from backup"
     echo ""
     echo "App Management:"
-    echo "  create-app        Create a new app (php, python, node)"
+    echo "  create-app        Show how to create apps (via web UI)"
     echo "  list-apps         List all deployed apps"
     echo "  start-app         Start an app"
     echo "  stop-app          Stop an app"
@@ -442,80 +442,24 @@ cmd_setup_proxy() {
 }
 
 cmd_create_app() {
-    check_root
-
-    TYPE="$1"
-    NAME="$2"
-    PORT="$3"
-
-    if [ -z "$TYPE" ] || [ -z "$NAME" ]; then
-        echo "Usage: serverkit create-app <type> <name> [port]"
-        echo ""
-        echo "Types:"
-        echo "  php      PHP 8.x application (nginx + php-fpm)"
-        echo "  python   Python application (Flask/FastAPI/Django)"
-        echo "  node     Node.js application (Express/Next.js)"
-        echo ""
-        echo "Examples:"
-        echo "  serverkit create-app php myblog"
-        echo "  serverkit create-app python myapi 8200"
-        echo "  serverkit create-app node myapp 8300"
-        exit 1
-    fi
-
-    TEMPLATE_DIR="$INSTALL_DIR/templates/$TYPE"
-    APP_DIR="/var/www/$NAME"
-
-    if [ ! -d "$TEMPLATE_DIR" ]; then
-        print_error "Unknown app type: $TYPE"
-        echo "Available: php, python, node"
-        exit 1
-    fi
-
-    if [ -d "$APP_DIR" ]; then
-        print_warning "Directory already exists: $APP_DIR"
-        read -p "Overwrite? (y/N) " -n 1 -r
-        echo
-        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            exit 0
-        fi
-        rm -rf "$APP_DIR"
-    fi
-
-    # Determine default port based on type
-    if [ -z "$PORT" ]; then
-        case "$TYPE" in
-            php) PORT=8100 ;;
-            python) PORT=8200 ;;
-            node) PORT=8300 ;;
-        esac
-        # Find next available port
-        while ss -tlnp | grep -q ":$PORT "; do
-            PORT=$((PORT + 1))
-        done
-    fi
-
-    print_info "Creating $TYPE app: $NAME on port $PORT..."
-
-    # Copy template
-    mkdir -p /var/www
-    cp -r "$TEMPLATE_DIR" "$APP_DIR"
-
-    # Create .env from example
-    if [ -f "$APP_DIR/.env.example" ]; then
-        cp "$APP_DIR/.env.example" "$APP_DIR/.env"
-        sed -i "s/APP_NAME=.*/APP_NAME=$NAME/g" "$APP_DIR/.env"
-        sed -i "s/PORT=.*/PORT=$PORT/g" "$APP_DIR/.env"
-    fi
-
-    print_success "App created at $APP_DIR"
+    print_header
     echo ""
-    echo "Next steps:"
-    echo "  1. cd $APP_DIR"
-    echo "  2. Edit .env and customize settings"
-    echo "  3. Put your code in src/"
-    echo "  4. docker compose up -d"
-    echo "  5. sudo serverkit add-site your-domain.com $PORT"
+    echo "To create a new app, use the ServerKit web interface:"
+    echo ""
+    echo "  1. Open ServerKit in your browser"
+    echo "  2. Go to Templates in the sidebar"
+    echo "  3. Choose from 60+ available templates:"
+    echo "     - PHP Application (custom PHP projects)"
+    echo "     - Python Application (Flask, FastAPI, Django)"
+    echo "     - Node.js Application (Express, Next.js)"
+    echo "     - WordPress, Ghost, Nextcloud, and many more"
+    echo "  4. Click Install and configure your app"
+    echo ""
+    echo "The web interface provides:"
+    echo "  ✓ One-click installation"
+    echo "  ✓ Automatic port assignment"
+    echo "  ✓ Configuration UI"
+    echo "  ✓ Update management"
     echo ""
 }
 
@@ -551,7 +495,7 @@ cmd_list_apps() {
         echo "  No apps found in /var/www/"
     fi
     echo ""
-    echo "Create new app:  sudo serverkit create-app <type> <name>"
+    echo "Install new apps via the Templates page in the ServerKit web interface."
     echo ""
 }
 

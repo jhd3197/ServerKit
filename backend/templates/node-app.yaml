@@ -1,0 +1,83 @@
+id: node-app
+name: Node.js Application
+version: "20"
+description: Custom Node.js application. Supports Node 18-21. Perfect for Express, Next.js, or any Node.js project.
+icon: https://nodejs.org/static/logos/nodejsLight.svg
+website: https://nodejs.org
+documentation: https://nodejs.org/docs/
+categories:
+  - development
+  - api
+  - custom
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port for the application
+    type: port
+    default: "8300"
+  - name: NODE_VERSION
+    description: Node.js version (18, 20, 21)
+    type: string
+    default: "20"
+  - name: APP_PORT
+    description: Internal app port
+    type: string
+    default: "3000"
+
+ports:
+  - port: 8300
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: app
+    path: /app
+    description: Application files (put your Node.js code here)
+
+requirements:
+  memory: 256MB
+  storage: 1GB
+
+compose:
+  services:
+    app:
+      image: node:${NODE_VERSION:-20}-alpine
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      working_dir: /app
+      command: sh -c "npm install 2>/dev/null || true && npm start"
+      ports:
+        - "${HTTP_PORT}:${APP_PORT:-3000}"
+      volumes:
+        - app_data:/app
+      environment:
+        - NODE_ENV=production
+        - PORT=${APP_PORT:-3000}
+
+  volumes:
+    app_data:
+
+post_install: |
+  Your Node.js application is ready!
+
+  To add your code:
+    docker cp ./your-files/. ${APP_NAME}:/app/
+
+  To access shell:
+    docker exec -it ${APP_NAME} sh
+
+  To install packages:
+    docker exec -it ${APP_NAME} npm install express
+
+  Example package.json:
+    {
+      "name": "my-app",
+      "scripts": { "start": "node index.js" },
+      "dependencies": { "express": "^4.18.0" }
+    }
+
+  Example index.js:
+    const express = require('express');
+    const app = express();
+    app.get('/', (req, res) => res.send('Hello World!'));
+    app.listen(3000);

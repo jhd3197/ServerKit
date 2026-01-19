@@ -407,6 +407,27 @@
       "version": "2.9",
       "description": "Simple, fast, privacy-focused analytics",
       "categories": ["analytics", "privacy", "monitoring"]
+    },
+    {
+      "id": "php-app",
+      "name": "PHP Application",
+      "version": "8.3",
+      "description": "Custom PHP application with Apache. Supports PHP 8.0-8.3.",
+      "categories": ["development", "web", "custom"]
+    },
+    {
+      "id": "python-app",
+      "name": "Python Application",
+      "version": "3.12",
+      "description": "Custom Python application. Supports Flask, FastAPI, Django.",
+      "categories": ["development", "api", "custom"]
+    },
+    {
+      "id": "node-app",
+      "name": "Node.js Application",
+      "version": "20",
+      "description": "Custom Node.js application. Supports Express, Next.js.",
+      "categories": ["development", "api", "custom"]
     }
   ],
   "categories": [
@@ -430,6 +451,9 @@
     "ssl",
     "iot",
     "ci-cd",
-    "automation"
+    "automation",
+    "custom",
+    "web",
+    "api"
   ]
 }

@@ -1,0 +1,63 @@
+id: php-app
+name: PHP Application
+version: "8.3"
+description: Custom PHP application with Apache. Supports PHP 8.0-8.3. Perfect for Laravel, WordPress themes, or any PHP project.
+icon: https://www.php.net/images/logos/new-php-logo.svg
+website: https://www.php.net
+documentation: https://www.php.net/docs.php
+categories:
+  - development
+  - web
+  - custom
+
+variables:
+  - name: HTTP_PORT
+    description: HTTP port for the application
+    type: port
+    default: "8100"
+  - name: PHP_VERSION
+    description: PHP version (8.0, 8.1, 8.2, 8.3)
+    type: string
+    default: "8.3"
+
+ports:
+  - port: 8100
+    protocol: tcp
+    description: Web interface
+
+volumes:
+  - name: html
+    path: /var/www/html
+    description: Application files (put your PHP code here)
+
+requirements:
+  memory: 256MB
+  storage: 1GB
+
+compose:
+  services:
+    app:
+      image: php:${PHP_VERSION:-8.3}-apache
+      container_name: ${APP_NAME}
+      restart: unless-stopped
+      ports:
+        - "${HTTP_PORT}:80"
+      volumes:
+        - html:/var/www/html
+      environment:
+        - APACHE_DOCUMENT_ROOT=/var/www/html
+
+  volumes:
+    html:
+
+post_install: |
+  Your PHP application is ready!
+
+  To add your code:
+    docker cp ./your-files/. ${APP_NAME}:/var/www/html/
+
+  To access shell:
+    docker exec -it ${APP_NAME} bash
+
+  To install extensions:
+    docker exec -it ${APP_NAME} docker-php-ext-install mysqli pdo pdo_mysql
