@@ -247,3 +247,149 @@
         font-size: @font-size-sm;
     }
 }
+
+// ============================================
+// ROUTING DIAGNOSTICS
+// ============================================
+
+.diagnostics-card {
+    .card-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: @space-4;
+
+        h3 {
+            margin: 0;
+        }
+    }
+
+    .diagnostics-hint {
+        color: @text-tertiary;
+        font-size: @font-size-sm;
+        margin: 0;
+    }
+
+    .diagnostics-results {
+        .flex-column-gap(@space-4);
+    }
+
+    .health-summary {
+        padding: @space-3 @space-4;
+        border-radius: @radius-md;
+        font-weight: @font-weight-medium;
+
+        &.healthy {
+            background: rgba(34, 197, 94, 0.1);
+            color: @success;
+        }
+
+        &.unhealthy {
+            background: rgba(239, 68, 68, 0.1);
+            color: @danger;
+        }
+    }
+
+    .diagnostics-section {
+        h4 {
+            font-size: @font-size-sm;
+            font-weight: @font-weight-semibold;
+            color: @text-secondary;
+            margin-bottom: @space-2;
+            display: flex;
+            align-items: center;
+            gap: @space-2;
+        }
+
+        &.issues, &.recommendations {
+            padding: @space-3;
+            border-radius: @radius-md;
+        }
+
+        &.issues {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        &.recommendations {
+            background: rgba(234, 179, 8, 0.05);
+            border: 1px solid rgba(234, 179, 8, 0.2);
+        }
+    }
+
+    .check-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: @space-2 @space-4;
+    }
+
+    .check-item {
+        display: flex;
+        align-items: center;
+        gap: @space-2;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+    }
+
+    .health-icon {
+        font-weight: bold;
+        font-size: @font-size-base;
+
+        &.healthy {
+            color: @success;
+        }
+
+        &.unhealthy {
+            color: @danger;
+        }
+    }
+
+    .issues-list, .recommendations-list {
+        margin: 0;
+        padding-left: @space-5;
+        font-size: @font-size-sm;
+
+        li {
+            margin-bottom: @space-1;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .issues-list {
+        color: @danger;
+    }
+
+    .recommendations-list {
+        color: @warning;
+    }
+
+    .config-preview {
+        margin: @space-2 0 0;
+        padding: @space-3;
+        background: @bg-hover;
+        border-radius: @radius-md;
+        font-family: @font-mono;
+        font-size: @font-size-xs;
+        color: @text-secondary;
+        overflow-x: auto;
+        white-space: pre;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+}
+
+.port-status {
+    font-size: @font-size-xs;
+    margin-left: @space-2;
+
+    &.accessible {
+        color: @success;
+    }
+
+    &.not-accessible {
+        color: @danger;
+    }
+}

@@ -231,11 +231,13 @@ const ApplicationDetail = () => {
 
 const OverviewTab = ({ app }) => {
     const [status, setStatus] = useState(null);
+    const [appStatus, setAppStatus] = useState(null);
 
     useEffect(() => {
         if (['flask', 'django'].includes(app.app_type)) {
             loadStatus();
         }
+        loadAppStatus();
     }, [app]);
 
     async function loadStatus() {
@@ -244,6 +246,15 @@ const OverviewTab = ({ app }) => {
             setStatus(data);
         } catch (err) {
             console.error('Failed to load status:', err);
+        }
+    }
+
+    async function loadAppStatus() {
+        try {
+            const data = await api.getAppStatus(app.id);
+            setAppStatus(data);
+        } catch (err) {
+            console.error('Failed to load app status:', err);
         }
     }
 
@@ -275,7 +286,14 @@ const OverviewTab = ({ app }) => {
                     {app.port && (
                         <div className="info-item">
                             <span className="info-label">Port</span>
-                            <span className="info-value">{app.port}</span>
+                            <span className="info-value">
+                                {app.port}
+                                {appStatus && (
+                                    <span className={`port-status ${appStatus.port_accessible ? 'accessible' : 'not-accessible'}`}>
+                                        {appStatus.port_accessible ? ' (accessible)' : ' (not accessible)'}
+                                    </span>
+                                )}
+                            </span>
                         </div>
                     )}
                     <div className="info-item">
@@ -329,6 +347,152 @@ const OverviewTab = ({ app }) => {
                         ))}
                     </div>
                 </div>
+            )}
+
+            {app.app_type === 'docker' && (
+                <RoutingDiagnosticsCard appId={app.id} />
+            )}
+        </div>
+    );
+};
+
+const RoutingDiagnosticsCard = ({ appId }) => {
+    const [diagnostics, setDiagnostics] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [expanded, setExpanded] = useState(false);
+
+    async function runDiagnostics() {
+        setLoading(true);
+        try {
+            const response = await fetch(`/api/v1/domains/debug/diagnose/${appId}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                }
+            });
+            const data = await response.json();
+            setDiagnostics(data);
+            setExpanded(true);
+        } catch (err) {
+            console.error('Failed to run diagnostics:', err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    function getHealthIcon(healthy) {
+        return healthy ? (
+            <span className="health-icon healthy">&#10003;</span>
+        ) : (
+            <span className="health-icon unhealthy">&#10007;</span>
+        );
+    }
+
+    return (
+        <div className="card diagnostics-card">
+            <div className="card-header-row">
+                <h3>Routing Diagnostics</h3>
+                <button
+                    className="btn btn-sm btn-secondary"
+                    onClick={runDiagnostics}
+                    disabled={loading}
+                >
+                    {loading ? 'Checking...' : 'Run Diagnostics'}
+                </button>
+            </div>
+
+            {diagnostics && (
+                <div className="diagnostics-results">
+                    <div className={`health-summary ${diagnostics.health?.overall ? 'healthy' : 'unhealthy'}`}>
+                        <span className="health-status">
+                            {diagnostics.health?.overall ? 'All checks passed' : 'Issues detected'}
+                        </span>
+                    </div>
+
+                    {diagnostics.nginx?.health && (
+                        <div className="diagnostics-section">
+                            <h4>Nginx Configuration</h4>
+                            <div className="check-list">
+                                <div className="check-item">
+                                    {getHealthIcon(diagnostics.nginx.health.config_exists)}
+                                    <span>Config exists</span>
+                                </div>
+                                <div className="check-item">
+                                    {getHealthIcon(diagnostics.nginx.health.config_enabled)}
+                                    <span>Config enabled</span>
+                                </div>
+                                <div className="check-item">
+                                    {getHealthIcon(diagnostics.nginx.health.nginx_running)}
+                                    <span>Nginx running</span>
+                                </div>
+                                <div className="check-item">
+                                    {getHealthIcon(diagnostics.nginx.health.syntax_valid)}
+                                    <span>Syntax valid</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {diagnostics.docker && (
+                        <div className="diagnostics-section">
+                            <h4>Docker Status</h4>
+                            <div className="check-list">
+                                <div className="check-item">
+                                    {getHealthIcon(diagnostics.docker.port_check?.accessible)}
+                                    <span>Port {diagnostics.app?.port} accessible</span>
+                                </div>
+                                <div className="check-item">
+                                    {getHealthIcon(diagnostics.docker.containers?.length > 0)}
+                                    <span>{diagnostics.docker.containers?.length || 0} container(s) found</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {diagnostics.health?.issues?.length > 0 && (
+                        <div className="diagnostics-section issues">
+                            <h4>Issues</h4>
+                            <ul className="issues-list">
+                                {diagnostics.health.issues.map((issue, idx) => (
+                                    <li key={idx}>{issue}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {diagnostics.health?.recommendations?.length > 0 && (
+                        <div className="diagnostics-section recommendations">
+                            <h4>Recommendations</h4>
+                            <ul className="recommendations-list">
+                                {diagnostics.health.recommendations.map((rec, idx) => (
+                                    <li key={idx}>{rec}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {expanded && diagnostics.nginx?.config?.content && (
+                        <div className="diagnostics-section">
+                            <h4>
+                                Nginx Config
+                                <button
+                                    className="btn btn-xs btn-ghost"
+                                    onClick={() => setExpanded(!expanded)}
+                                >
+                                    {expanded ? 'Hide' : 'Show'}
+                                </button>
+                            </h4>
+                            <pre className="config-preview">
+                                {diagnostics.nginx.config.content}
+                            </pre>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {!diagnostics && !loading && (
+                <p className="diagnostics-hint">
+                    Click "Run Diagnostics" to check routing configuration and identify issues.
+                </p>
             )}
         </div>
     );
