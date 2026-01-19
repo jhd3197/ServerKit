@@ -1,15 +1,17 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import {
     ReactFlow,
     ReactFlowProvider,
     useNodesState,
     useEdgesState,
+    useReactFlow,
     addEdge,
     Background,
     Controls,
     MiniMap
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { Server, Database, Globe } from 'lucide-react';
 import BaseNode from '../components/workflow/BaseNode';
 
 const initialNodes = [];
@@ -19,9 +21,42 @@ const nodeTypes = {
     base: BaseNode
 };
 
+let nodeId = 0;
+const getId = () => `node_${nodeId++}`;
+
+const NodeToolbar = ({ onAddNode }) => {
+    return (
+        <div className="workflow-toolbar">
+            <button
+                className="workflow-toolbar-btn toolbar-btn-docker"
+                onClick={() => onAddNode('docker')}
+            >
+                <Server size={16} />
+                Docker App
+            </button>
+            <button
+                className="workflow-toolbar-btn toolbar-btn-database"
+                onClick={() => onAddNode('database')}
+            >
+                <Database size={16} />
+                Database
+            </button>
+            <button
+                className="workflow-toolbar-btn toolbar-btn-domain"
+                onClick={() => onAddNode('domain')}
+            >
+                <Globe size={16} />
+                Domain
+            </button>
+        </div>
+    );
+};
+
 const WorkflowCanvas = () => {
+    const reactFlowWrapper = useRef(null);
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const { screenToFlowPosition } = useReactFlow();
 
     const memoizedNodeTypes = useMemo(() => nodeTypes, []);
 
@@ -30,8 +65,25 @@ const WorkflowCanvas = () => {
         [setEdges]
     );
 
+    const addNode = useCallback((nodeType) => {
+        const newNode = {
+            id: getId(),
+            type: 'base',
+            position: screenToFlowPosition({
+                x: window.innerWidth / 2 - 90,
+                y: window.innerHeight / 2 - 50
+            }),
+            data: {
+                label: `New ${nodeType.charAt(0).toUpperCase() + nodeType.slice(1)}`,
+                nodeType: nodeType
+            }
+        };
+        setNodes((nds) => [...nds, newNode]);
+    }, [screenToFlowPosition, setNodes]);
+
     return (
-        <div className="workflow-canvas">
+        <div className="workflow-canvas" ref={reactFlowWrapper}>
+            <NodeToolbar onAddNode={addNode} />
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
