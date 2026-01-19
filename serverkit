@@ -166,8 +166,13 @@ cmd_help() {
     echo ""
     echo "Database Commands:"
     echo "  init-db           Initialize the database"
+    echo "  migrate-db        Apply database migrations"
     echo "  backup-db         Backup the database"
     echo "  restore-db        Restore database from backup"
+    echo ""
+    echo "Cleanup Commands:"
+    echo "  cleanup-apps      Delete all apps and containers"
+    echo "  factory-reset     Complete reset (delete everything)"
     echo ""
     echo "App Management:"
     echo "  create-app        Show how to create apps (via web UI)"
@@ -491,6 +496,44 @@ cmd_init_db() {
     run_cli init-db
 }
 
+cmd_migrate_db() {
+    check_installed
+    run_cli migrate-db
+}
+
+cmd_cleanup_apps() {
+    check_root
+    check_installed
+
+    DELETE_VOLUMES=""
+    KEEP_DB=""
+
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --delete-volumes|-v)
+                DELETE_VOLUMES="--delete-volumes"
+                shift
+                ;;
+            --keep-db|-k)
+                KEEP_DB="--keep-db"
+                shift
+                ;;
+            *)
+                shift
+                ;;
+        esac
+    done
+
+    run_cli cleanup-apps $DELETE_VOLUMES $KEEP_DB
+}
+
+cmd_factory_reset() {
+    check_root
+    check_installed
+    run_cli factory-reset
+}
+
 cmd_backup_db() {
     check_installed
     BACKUP_DIR="$INSTALL_DIR/backups"
@@ -600,39 +643,8 @@ cmd_create_app() {
 }
 
 cmd_list_apps() {
-    print_header
-    echo ""
-    echo "Deployed Applications:"
-    echo "─────────────────────────────────────────"
-
-    if [ -d /var/www ]; then
-        for app_dir in /var/www/*/; do
-            if [ -f "$app_dir/docker-compose.yml" ]; then
-                APP_NAME=$(basename "$app_dir")
-
-                # Get port from .env
-                if [ -f "$app_dir/.env" ]; then
-                    PORT=$(grep "^PORT=" "$app_dir/.env" | cut -d= -f2)
-                else
-                    PORT="?"
-                fi
-
-                # Check if running
-                if docker compose -f "$app_dir/docker-compose.yml" ps 2>/dev/null | grep -q "running"; then
-                    STATUS="${GREEN}●${NC} running"
-                else
-                    STATUS="${RED}○${NC} stopped"
-                fi
-
-                printf "  %b  %-20s  port %-6s  %s\n" "$STATUS" "$APP_NAME" "$PORT" "$app_dir"
-            fi
-        done
-    else
-        echo "  No apps found in /var/www/"
-    fi
-    echo ""
-    echo "Install new apps via the Templates page in the ServerKit web interface."
-    echo ""
+    check_installed
+    run_cli list-apps
 }
 
 cmd_start_app() {
@@ -874,6 +886,16 @@ case "${1:-help}" in
         ;;
     init-db)
         cmd_init_db
+        ;;
+    migrate-db)
+        cmd_migrate_db
+        ;;
+    cleanup-apps)
+        shift
+        cmd_cleanup_apps "$@"
+        ;;
+    factory-reset)
+        cmd_factory_reset
         ;;
     backup-db)
         cmd_backup_db

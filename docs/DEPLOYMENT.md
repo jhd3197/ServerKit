@@ -82,12 +82,34 @@ serverkit activate-user
 # Initialize database
 serverkit init-db
 
+# Apply database migrations (after updates)
+serverkit migrate-db
+
 # Backup database
 serverkit backup-db
 # Creates: backup/serverkit-YYYYMMDD-HHMMSS.db
 
 # Restore from backup
 serverkit restore-db backup/serverkit-20240115-120000.db
+```
+
+### App & Cleanup Commands
+
+```bash
+# List all installed applications
+serverkit list-apps
+
+# Delete all apps, containers, and folders
+serverkit cleanup-apps
+
+# Also delete Docker volumes
+serverkit cleanup-apps --delete-volumes
+
+# Keep database records (only delete containers/folders)
+serverkit cleanup-apps --keep-db
+
+# Complete factory reset (delete everything and start fresh)
+serverkit factory-reset
 ```
 
 ### Utility Commands
