@@ -254,6 +254,191 @@ class DockerService:
             return {'success': False, 'error': str(e)}
 
     @staticmethod
+    def stream_container_logs(container_id, tail=100, since=None, timestamps=True):
+        """Start streaming container logs in real-time.
+
+        Args:
+            container_id: Docker container ID or name
+            tail: Number of existing lines to fetch first (default: 100)
+            since: Only logs since this timestamp or duration (e.g., '10m', '1h')
+            timestamps: Include timestamps in output (default: True)
+
+        Returns:
+            subprocess.Popen object for the streaming process, or None on error
+        """
+        try:
+            cmd = ['docker', 'logs', '--follow']
+            if tail:
+                cmd.extend(['--tail', str(tail)])
+            if since:
+                cmd.extend(['--since', since])
+            if timestamps:
+                cmd.append('-t')
+            cmd.append(container_id)
+
+            process = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1
+            )
+            return process
+        except Exception:
+            return None
+
+    @staticmethod
+    def get_app_container_id(app):
+        """Get the main container ID for an application.
+
+        For apps with container_id set, use that directly.
+        For compose apps, query docker compose ps to find container.
+
+        Args:
+            app: Application model instance (or dict with container_id and root_path)
+
+        Returns:
+            str: Container ID or name, or None if not found
+        """
+        # Handle both model instances and dicts
+        container_id = getattr(app, 'container_id', None) or (app.get('container_id') if isinstance(app, dict) else None)
+        root_path = getattr(app, 'root_path', None) or (app.get('root_path') if isinstance(app, dict) else None)
+
+        if container_id:
+            return container_id
+
+        if root_path:
+            # Get containers from docker compose
+            containers = DockerService.compose_ps(root_path)
+            if containers:
+                # Return first container (main service)
+                # Docker compose ps returns 'ID' or 'Name' depending on version
+                return containers[0].get('ID') or containers[0].get('Name') or containers[0].get('id')
+
+        return None
+
+    @staticmethod
+    def get_all_app_containers(app):
+        """Get all container IDs for a compose application.
+
+        Args:
+            app: Application model instance (or dict with root_path)
+
+        Returns:
+            list: List of container info dicts with 'id', 'name', 'service', 'state'
+        """
+        root_path = getattr(app, 'root_path', None) or (app.get('root_path') if isinstance(app, dict) else None)
+
+        if not root_path:
+            container_id = getattr(app, 'container_id', None) or (app.get('container_id') if isinstance(app, dict) else None)
+            if container_id:
+                return [{'id': container_id, 'name': container_id, 'service': 'main', 'state': 'unknown'}]
+            return []
+
+        containers = DockerService.compose_ps(root_path)
+        result = []
+        for c in containers:
+            result.append({
+                'id': c.get('ID') or c.get('id'),
+                'name': c.get('Name') or c.get('name') or c.get('Names'),
+                'service': c.get('Service') or c.get('service'),
+                'state': c.get('State') or c.get('state') or c.get('Status', '').split()[0].lower()
+            })
+        return result
+
+    @staticmethod
+    def parse_log_line(line):
+        """Parse a Docker log line into structured format.
+
+        Docker logs with timestamps look like:
+        2024-01-15T10:30:45.123456789Z Log message here
+
+        Args:
+            line: Raw log line string
+
+        Returns:
+            dict: {
+                'timestamp': '2024-01-15T10:30:45.123456789Z' or None,
+                'message': 'Log message here',
+                'level': 'info' | 'warn' | 'error' | 'debug'
+            }
+        """
+        import re
+
+        if not line:
+            return {'timestamp': None, 'message': '', 'level': 'info'}
+
+        # Docker timestamp pattern: 2024-01-15T10:30:45.123456789Z
+        timestamp_pattern = r'^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z)\s+'
+        match = re.match(timestamp_pattern, line)
+
+        timestamp = None
+        message = line
+
+        if match:
+            timestamp = match.group(1)
+            message = line[match.end():]
+
+        # Detect log level from message content
+        message_lower = message.lower()
+        level = 'info'
+
+        if any(x in message_lower for x in ['error', 'err:', 'fatal', 'exception', 'traceback']):
+            level = 'error'
+        elif any(x in message_lower for x in ['warn', 'warning']):
+            level = 'warn'
+        elif any(x in message_lower for x in ['debug', 'dbg:']):
+            level = 'debug'
+
+        return {
+            'timestamp': timestamp,
+            'message': message,
+            'level': level
+        }
+
+    @staticmethod
+    def parse_logs_to_lines(logs_text):
+        """Parse raw logs text into structured lines.
+
+        Args:
+            logs_text: Raw logs string with newlines
+
+        Returns:
+            list: List of parsed log line dicts
+        """
+        if not logs_text:
+            return []
+
+        lines = []
+        for line in logs_text.split('\n'):
+            if line.strip():
+                lines.append(DockerService.parse_log_line(line))
+        return lines
+
+    @staticmethod
+    def get_container_state(container_id):
+        """Get the current state of a container.
+
+        Args:
+            container_id: Docker container ID or name
+
+        Returns:
+            dict: {'running': bool, 'state': str, 'status': str} or None if not found
+        """
+        info = DockerService.get_container(container_id)
+        if not info:
+            return None
+
+        state = info.get('State', {})
+        return {
+            'running': state.get('Running', False),
+            'state': state.get('Status', 'unknown'),
+            'status': state.get('Status', 'unknown'),
+            'started_at': state.get('StartedAt'),
+            'finished_at': state.get('FinishedAt')
+        }
+
+    @staticmethod
     def get_container_stats(container_id):
         """Get container resource usage stats."""
         try:
