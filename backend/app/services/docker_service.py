@@ -715,3 +715,80 @@ class DockerService:
             }
         except Exception as e:
             return {'success': False, 'error': str(e)}
+
+    # ==================== DIAGNOSTICS ====================
+
+    @staticmethod
+    def check_port_accessible(port: int, host: str = '127.0.0.1') -> dict:
+        """Check if a port is accessible (something is listening).
+
+        Args:
+            port: The port number to check
+            host: The host address to check (default: 127.0.0.1)
+
+        Returns:
+            Dict with 'accessible' boolean and additional info
+        """
+        import socket
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(2)
+            result = sock.connect_ex((host, port))
+            sock.close()
+            return {
+                'accessible': result == 0,
+                'port': port,
+                'host': host
+            }
+        except Exception as e:
+            return {'accessible': False, 'port': port, 'host': host, 'error': str(e)}
+
+    @staticmethod
+    def get_container_port_bindings(container_name: str) -> dict:
+        """Get port bindings for a container.
+
+        Args:
+            container_name: Name or ID of the container
+
+        Returns:
+            Dict with 'success' boolean and 'ports' mapping
+        """
+        try:
+            result = subprocess.run(
+                ['docker', 'inspect', '--format', '{{json .NetworkSettings.Ports}}', container_name],
+                capture_output=True, text=True
+            )
+            if result.returncode == 0:
+                ports = json.loads(result.stdout.strip())
+                return {'success': True, 'ports': ports}
+            return {'success': False, 'error': result.stderr}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @staticmethod
+    def get_container_network_info(container_name: str) -> dict:
+        """Get network information for a container.
+
+        Args:
+            container_name: Name or ID of the container
+
+        Returns:
+            Dict with network settings including IP addresses and ports
+        """
+        try:
+            result = subprocess.run(
+                ['docker', 'inspect', '--format', '{{json .NetworkSettings}}', container_name],
+                capture_output=True, text=True
+            )
+            if result.returncode == 0:
+                network_settings = json.loads(result.stdout.strip())
+                return {
+                    'success': True,
+                    'ip_address': network_settings.get('IPAddress'),
+                    'ports': network_settings.get('Ports'),
+                    'networks': network_settings.get('Networks'),
+                    'gateway': network_settings.get('Gateway')
+                }
+            return {'success': False, 'error': result.stderr}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
