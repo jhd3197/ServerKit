@@ -58,8 +58,10 @@ def create_app(config_name=None):
     # Register blueprints - Core
     from app.api.apps import apps_bp
     from app.api.domains import domains_bp
+    from app.api.private_urls import private_urls_bp
     app.register_blueprint(apps_bp, url_prefix='/api/v1/apps')
     app.register_blueprint(domains_bp, url_prefix='/api/v1/domains')
+    app.register_blueprint(private_urls_bp, url_prefix='/api/v1/apps')
 
     # Register blueprints - System
     from app.api.system import system_bp
