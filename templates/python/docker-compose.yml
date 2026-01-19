@@ -1,0 +1,57 @@
+# Python Application Template
+# Copy this folder to /var/www/your-app-name and customize
+#
+# Usage:
+#   1. Copy: sudo serverkit create-app python myapp
+#   2. Put your Python files in ./src/
+#   3. Start: docker compose up -d
+#   4. Add site: sudo serverkit add-site myapp.domain.com <PORT>
+
+services:
+  app:
+    image: python:${PYTHON_VERSION:-3.12}-slim
+    container_name: ${APP_NAME:-python-app}
+    restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "pip install --no-cache-dir -r requirements.txt 2>/dev/null || true &&
+             python ${ENTRYPOINT:-app.py}"
+    ports:
+      - "${PORT:-8200}:${APP_PORT:-8000}"
+    volumes:
+      - ./src:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - PORT=${APP_PORT:-8000}
+    networks:
+      - app-network
+
+  # Optional: Database (uncomment if needed)
+  # db:
+  #   image: postgres:15
+  #   container_name: ${APP_NAME:-python-app}-db
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_DB: ${DB_NAME:-app}
+  #     POSTGRES_USER: ${DB_USER:-app}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+  #   volumes:
+  #     - db-data:/var/lib/postgresql/data
+  #   networks:
+  #     - app-network
+
+  # Optional: Redis (uncomment if needed)
+  # redis:
+  #   image: redis:alpine
+  #   container_name: ${APP_NAME:-python-app}-redis
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+# volumes:
+#   db-data:

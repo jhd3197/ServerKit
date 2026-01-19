@@ -1,0 +1,49 @@
+# Node.js Application Template
+# Copy this folder to /var/www/your-app-name and customize
+#
+# Usage:
+#   1. Copy: sudo serverkit create-app node myapp
+#   2. Put your Node.js files in ./src/
+#   3. Start: docker compose up -d
+#   4. Add site: sudo serverkit add-site myapp.domain.com <PORT>
+
+services:
+  app:
+    image: node:${NODE_VERSION:-20}-alpine
+    container_name: ${APP_NAME:-node-app}
+    restart: unless-stopped
+    working_dir: /app
+    command: sh -c "npm install && npm start"
+    ports:
+      - "${PORT:-8300}:${APP_PORT:-3000}"
+    volumes:
+      - ./src:/app
+      - node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${APP_PORT:-3000}
+    networks:
+      - app-network
+
+  # Optional: MongoDB (uncomment if needed)
+  # db:
+  #   image: mongo:7
+  #   container_name: ${APP_NAME:-node-app}-db
+  #   restart: unless-stopped
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: ${DB_USER:-root}
+  #     MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
+  #   volumes:
+  #     - db-data:/data/db
+  #   networks:
+  #     - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  node_modules:
+
+# volumes:
+#   db-data:

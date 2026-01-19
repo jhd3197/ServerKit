@@ -87,6 +87,13 @@ cmd_help() {
     echo "  backup-db         Backup the database"
     echo "  restore-db        Restore database from backup"
     echo ""
+    echo "App Management:"
+    echo "  create-app        Create a new app (php, python, node)"
+    echo "  list-apps         List all deployed apps"
+    echo "  start-app         Start an app"
+    echo "  stop-app          Stop an app"
+    echo "  app-logs          View app logs"
+    echo ""
     echo "Site Management:"
     echo "  setup-proxy       Setup host nginx as reverse proxy (run once)"
     echo "  add-site          Add a new site/domain"
@@ -434,6 +441,183 @@ cmd_setup_proxy() {
     fi
 }
 
+cmd_create_app() {
+    check_root
+
+    TYPE="$1"
+    NAME="$2"
+    PORT="$3"
+
+    if [ -z "$TYPE" ] || [ -z "$NAME" ]; then
+        echo "Usage: serverkit create-app <type> <name> [port]"
+        echo ""
+        echo "Types:"
+        echo "  php      PHP 8.x application (nginx + php-fpm)"
+        echo "  python   Python application (Flask/FastAPI/Django)"
+        echo "  node     Node.js application (Express/Next.js)"
+        echo ""
+        echo "Examples:"
+        echo "  serverkit create-app php myblog"
+        echo "  serverkit create-app python myapi 8200"
+        echo "  serverkit create-app node myapp 8300"
+        exit 1
+    fi
+
+    TEMPLATE_DIR="$INSTALL_DIR/templates/$TYPE"
+    APP_DIR="/var/www/$NAME"
+
+    if [ ! -d "$TEMPLATE_DIR" ]; then
+        print_error "Unknown app type: $TYPE"
+        echo "Available: php, python, node"
+        exit 1
+    fi
+
+    if [ -d "$APP_DIR" ]; then
+        print_warning "Directory already exists: $APP_DIR"
+        read -p "Overwrite? (y/N) " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            exit 0
+        fi
+        rm -rf "$APP_DIR"
+    fi
+
+    # Determine default port based on type
+    if [ -z "$PORT" ]; then
+        case "$TYPE" in
+            php) PORT=8100 ;;
+            python) PORT=8200 ;;
+            node) PORT=8300 ;;
+        esac
+        # Find next available port
+        while ss -tlnp | grep -q ":$PORT "; do
+            PORT=$((PORT + 1))
+        done
+    fi
+
+    print_info "Creating $TYPE app: $NAME on port $PORT..."
+
+    # Copy template
+    mkdir -p /var/www
+    cp -r "$TEMPLATE_DIR" "$APP_DIR"
+
+    # Create .env from example
+    if [ -f "$APP_DIR/.env.example" ]; then
+        cp "$APP_DIR/.env.example" "$APP_DIR/.env"
+        sed -i "s/APP_NAME=.*/APP_NAME=$NAME/g" "$APP_DIR/.env"
+        sed -i "s/PORT=.*/PORT=$PORT/g" "$APP_DIR/.env"
+    fi
+
+    print_success "App created at $APP_DIR"
+    echo ""
+    echo "Next steps:"
+    echo "  1. cd $APP_DIR"
+    echo "  2. Edit .env and customize settings"
+    echo "  3. Put your code in src/"
+    echo "  4. docker compose up -d"
+    echo "  5. sudo serverkit add-site your-domain.com $PORT"
+    echo ""
+}
+
+cmd_list_apps() {
+    print_header
+    echo ""
+    echo "Deployed Applications:"
+    echo "─────────────────────────────────────────"
+
+    if [ -d /var/www ]; then
+        for app_dir in /var/www/*/; do
+            if [ -f "$app_dir/docker-compose.yml" ]; then
+                APP_NAME=$(basename "$app_dir")
+
+                # Get port from .env
+                if [ -f "$app_dir/.env" ]; then
+                    PORT=$(grep "^PORT=" "$app_dir/.env" | cut -d= -f2)
+                else
+                    PORT="?"
+                fi
+
+                # Check if running
+                if docker compose -f "$app_dir/docker-compose.yml" ps 2>/dev/null | grep -q "running"; then
+                    STATUS="${GREEN}●${NC} running"
+                else
+                    STATUS="${RED}○${NC} stopped"
+                fi
+
+                printf "  %b  %-20s  port %-6s  %s\n" "$STATUS" "$APP_NAME" "$PORT" "$app_dir"
+            fi
+        done
+    else
+        echo "  No apps found in /var/www/"
+    fi
+    echo ""
+    echo "Create new app:  sudo serverkit create-app <type> <name>"
+    echo ""
+}
+
+cmd_start_app() {
+    check_root
+    NAME="$1"
+
+    if [ -z "$NAME" ]; then
+        echo "Usage: serverkit start-app <name>"
+        cmd_list_apps
+        exit 1
+    fi
+
+    APP_DIR="/var/www/$NAME"
+    if [ ! -d "$APP_DIR" ]; then
+        print_error "App not found: $NAME"
+        exit 1
+    fi
+
+    print_info "Starting $NAME..."
+    cd "$APP_DIR"
+    docker compose up -d
+    print_success "$NAME started"
+}
+
+cmd_stop_app() {
+    check_root
+    NAME="$1"
+
+    if [ -z "$NAME" ]; then
+        echo "Usage: serverkit stop-app <name>"
+        cmd_list_apps
+        exit 1
+    fi
+
+    APP_DIR="/var/www/$NAME"
+    if [ ! -d "$APP_DIR" ]; then
+        print_error "App not found: $NAME"
+        exit 1
+    fi
+
+    print_info "Stopping $NAME..."
+    cd "$APP_DIR"
+    docker compose down
+    print_success "$NAME stopped"
+}
+
+cmd_app_logs() {
+    NAME="$1"
+
+    if [ -z "$NAME" ]; then
+        echo "Usage: serverkit app-logs <name>"
+        cmd_list_apps
+        exit 1
+    fi
+
+    APP_DIR="/var/www/$NAME"
+    if [ ! -d "$APP_DIR" ]; then
+        print_error "App not found: $NAME"
+        exit 1
+    fi
+
+    cd "$APP_DIR"
+    docker compose logs -f
+}
+
 cmd_add_site() {
     check_root
 
@@ -619,6 +803,21 @@ case "${1:-help}" in
         ;;
     setup-proxy)
         cmd_setup_proxy
+        ;;
+    create-app)
+        cmd_create_app "$2" "$3" "$4"
+        ;;
+    list-apps)
+        cmd_list_apps
+        ;;
+    start-app)
+        cmd_start_app "$2"
+        ;;
+    stop-app)
+        cmd_stop_app "$2"
+        ;;
+    app-logs)
+        cmd_app_logs "$2"
         ;;
     add-site)
         cmd_add_site "$2" "$3"
