@@ -1652,8 +1652,8 @@ const AboutSection = () => {
     useEffect(() => {
         const fetchVersion = async () => {
             try {
-                const response = await api.get('/system/version');
-                setVersion(response.data.version);
+                const data = await api.getVersion();
+                setVersion(data.version || '1.0.0');
             } catch (error) {
                 setVersion('1.0.0');
             }

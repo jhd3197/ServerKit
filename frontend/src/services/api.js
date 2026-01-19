@@ -310,6 +310,10 @@ class ApiService {
         return this.request('/system/metrics');
     }
 
+    async getVersion() {
+        return this.request('/system/version');
+    }
+
     async getProcesses() {
         return this.request('/system/processes');
     }
