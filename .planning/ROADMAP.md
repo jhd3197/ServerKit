@@ -31,7 +31,7 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 | 17 | Resource Node Types | **completed** | Create node types for Docker apps, databases, domains |
 | 18 | Node Configuration Panels | **completed** | Side panels for configuring each node type |
 | 19 | Connection Logic | **completed** | Define and validate connections between nodes |
-| 20 | Workflow Save/Load | pending | Save workflows to backend, load existing infrastructure |
+| 20 | Workflow Save/Load | **completed** | Save workflows to backend, load existing infrastructure |
 | 21 | Deploy from Workflow | pending | Execute workflow to create/update actual resources |
 
 ---
@@ -128,22 +128,27 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 
 ---
 
-## Phase 20: Workflow Save/Load
+## Phase 20: Workflow Save/Load ✓
 **Goal**: Persist workflows and load existing infrastructure as workflows
 
-### Tasks
-1. Define workflow JSON schema
-2. Create backend API for workflow CRUD
-3. Save workflow state to backend
-4. Load workflow from backend
-5. Import existing infrastructure as workflow
-6. Add workflow list/manager
+**Status**: Completed 2026-01-19
+
+### What Was Built
+- Created Workflow SQLAlchemy model with nodes/edges/viewport as JSON
+- Created CRUD API endpoints (GET/POST/PUT/DELETE /workflows)
+- Registered workflows blueprint at /api/v1/workflows
+- Added frontend API methods
+- Added workflow toolbar with name input, New/Load/Import/Save buttons
+- Created WorkflowListModal for loading saved workflows
+- Added import existing infrastructure feature
 
 ### Success Criteria
-- [ ] Workflows save to database
-- [ ] Workflows load correctly
-- [ ] Existing apps/DBs appear as nodes
-- [ ] Can manage multiple workflows
+- [x] Workflows save to database
+- [x] Workflows load correctly
+- [x] Existing apps/DBs appear as nodes
+- [x] Can manage multiple workflows
+
+[Full Summary](./phases/20-workflow-save-load/SUMMARY.md)
 
 ---
 
