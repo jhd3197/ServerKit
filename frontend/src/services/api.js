@@ -1580,6 +1580,20 @@ class ApiService {
         return this.request(`/files/disk-usage?path=${encodeURIComponent(path)}`);
     }
 
+    async getAllDiskMounts() {
+        return this.request('/files/disk-mounts');
+    }
+
+    async analyzeDirectory(path = '/home', depth = 2, limit = 20) {
+        const params = new URLSearchParams({ path, depth, limit });
+        return this.request(`/files/analyze?${params}`);
+    }
+
+    async getFileTypeBreakdown(path = '/home', maxDepth = 3) {
+        const params = new URLSearchParams({ path, max_depth: maxDepth });
+        return this.request(`/files/type-breakdown?${params}`);
+    }
+
     async downloadFile(path) {
         const token = this.getToken();
         const url = `${this.baseUrl}/files/download?path=${encodeURIComponent(path)}`;
