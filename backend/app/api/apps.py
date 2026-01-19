@@ -307,7 +307,7 @@ def get_app_status(app_id):
         containers = DockerService.compose_ps(app.root_path)
 
         # Determine overall status
-        running_count = sum(1 for c in containers if c.get('status', '').startswith('Up'))
+        running_count = sum(1 for c in containers if c.get('Status', c.get('status', '')).startswith('Up'))
         total_count = len(containers)
 
         if total_count == 0:
@@ -324,16 +324,30 @@ def get_app_status(app_id):
             app.status = actual_status
             db.session.commit()
 
+        # Check port accessibility
+        port_status = None
+        if app.port:
+            port_status = DockerService.check_port_accessible(app.port)
+
         return jsonify({
             'status': actual_status,
             'containers': containers,
             'running': running_count,
-            'total': total_count
+            'total': total_count,
+            'port': app.port,
+            'port_accessible': port_status.get('accessible') if port_status else None
         }), 200
+
+    # Non-Docker apps
+    port_status = None
+    if app.port:
+        port_status = DockerService.check_port_accessible(app.port)
 
     return jsonify({
         'status': app.status,
         'containers': [],
         'running': 1 if app.status == 'running' else 0,
-        'total': 1
+        'total': 1,
+        'port': app.port,
+        'port_accessible': port_status.get('accessible') if port_status else None
     }), 200
