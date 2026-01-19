@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
 from app.models import Application, User
+from app.services.docker_service import DockerService
+from app.services.log_service import LogService
 
 apps_bp = Blueprint('apps', __name__)
 
@@ -148,7 +150,12 @@ def start_app(app_id):
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
-    # TODO: Actually start the application service
+    # Handle Docker apps
+    if app.app_type == 'docker' and app.root_path:
+        result = DockerService.compose_up(app.root_path, detach=True)
+        if not result.get('success'):
+            return jsonify({'error': result.get('error', 'Failed to start containers')}), 400
+
     app.status = 'running'
     db.session.commit()
 
@@ -171,7 +178,12 @@ def stop_app(app_id):
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
-    # TODO: Actually stop the application service
+    # Handle Docker apps
+    if app.app_type == 'docker' and app.root_path:
+        result = DockerService.compose_down(app.root_path)
+        if not result.get('success'):
+            return jsonify({'error': result.get('error', 'Failed to stop containers')}), 400
+
     app.status = 'stopped'
     db.session.commit()
 
@@ -194,11 +206,94 @@ def restart_app(app_id):
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
-    # TODO: Actually restart the application service
+    # Handle Docker apps
+    if app.app_type == 'docker' and app.root_path:
+        result = DockerService.compose_restart(app.root_path)
+        if not result.get('success'):
+            return jsonify({'error': result.get('error', 'Failed to restart containers')}), 400
+
     app.status = 'running'
     db.session.commit()
 
     return jsonify({
         'message': 'Application restarted',
         'app': app.to_dict()
+    }), 200
+
+
+@apps_bp.route('/<int:app_id>/logs', methods=['GET'])
+@jwt_required()
+def get_app_logs(app_id):
+    """Get logs for a specific application."""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    app = Application.query.get(app_id)
+
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if user.role != 'admin' and app.user_id != current_user_id:
+        return jsonify({'error': 'Access denied'}), 403
+
+    lines = request.args.get('lines', 100, type=int)
+    log_type = request.args.get('type', 'all')
+
+    # For Docker apps, get docker compose logs
+    if app.app_type == 'docker' and app.root_path:
+        result = LogService.get_docker_app_logs(app.name, app.root_path, lines)
+        return jsonify(result), 200 if result.get('success') else 400
+
+    # For other apps, get nginx logs
+    result = LogService.get_app_logs(app.name, log_type, lines)
+    return jsonify(result), 200 if result.get('success') else 400
+
+
+@apps_bp.route('/<int:app_id>/status', methods=['GET'])
+@jwt_required()
+def get_app_status(app_id):
+    """Get real-time status for a Docker application."""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    app = Application.query.get(app_id)
+
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if user.role != 'admin' and app.user_id != current_user_id:
+        return jsonify({'error': 'Access denied'}), 403
+
+    if app.app_type == 'docker' and app.root_path:
+        # Get container status from Docker
+        containers = DockerService.compose_ps(app.root_path)
+
+        # Determine overall status
+        running_count = sum(1 for c in containers if c.get('status', '').startswith('Up'))
+        total_count = len(containers)
+
+        if total_count == 0:
+            actual_status = 'stopped'
+        elif running_count == total_count:
+            actual_status = 'running'
+        elif running_count > 0:
+            actual_status = 'partial'
+        else:
+            actual_status = 'stopped'
+
+        # Update DB if status changed
+        if app.status != actual_status and actual_status in ['running', 'stopped']:
+            app.status = actual_status
+            db.session.commit()
+
+        return jsonify({
+            'status': actual_status,
+            'containers': containers,
+            'running': running_count,
+            'total': total_count
+        }), 200
+
+    return jsonify({
+        'status': app.status,
+        'containers': [],
+        'running': 1 if app.status == 'running' else 0,
+        'total': 1
     }), 200

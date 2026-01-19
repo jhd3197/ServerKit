@@ -67,6 +67,9 @@ def get_template(template_id):
     template = result['template']
 
     # Add processed variable info - handle both list and dict formats
+    # Auto-generated types that users don't need to fill in
+    auto_generated_types = ['port', 'password', 'random', 'uuid']
+
     variables = []
     raw_vars = template.get('variables', [])
 
@@ -74,25 +77,31 @@ def get_template(template_id):
         # New list format: [{name: 'PORT', type: 'port', ...}, ...]
         for var in raw_vars:
             if isinstance(var, dict):
+                var_type = var.get('type', 'string')
                 variables.append({
                     'name': var.get('name', ''),
                     'description': var.get('description', ''),
-                    'type': var.get('type', 'string'),
+                    'type': var_type,
                     'default': var.get('default', ''),
                     'required': var.get('required', False),
-                    'options': var.get('options', None)
+                    'options': var.get('options', None),
+                    'auto_generated': var_type in auto_generated_types,
+                    'hidden': var_type == 'port'  # Ports are hidden from users
                 })
     elif isinstance(raw_vars, dict):
         # Old dict format: {PORT: {type: 'port', ...}, ...}
         for var_name, var_config in raw_vars.items():
             if isinstance(var_config, dict):
+                var_type = var_config.get('type', 'string')
                 variables.append({
                     'name': var_name,
                     'description': var_config.get('description', ''),
-                    'type': var_config.get('type', 'string'),
+                    'type': var_type,
                     'default': var_config.get('default', ''),
                     'required': var_config.get('required', False),
-                    'options': var_config.get('options', None)
+                    'options': var_config.get('options', None),
+                    'auto_generated': var_type in auto_generated_types,
+                    'hidden': var_type == 'port'
                 })
 
     return jsonify({

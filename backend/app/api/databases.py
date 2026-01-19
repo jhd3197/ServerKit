@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models import User
+from app.models import User, Application
 from app.services.database_service import DatabaseService
 
 databases_bp = Blueprint('databases', __name__)
@@ -604,6 +604,112 @@ def get_sqlite_tables():
 
     tables = DatabaseService.sqlite_get_tables(db_path)
     return jsonify({'tables': tables}), 200
+
+
+# ==================== DOCKER CONTAINER DATABASES ====================
+
+@databases_bp.route('/docker', methods=['GET'])
+@jwt_required()
+def list_docker_databases():
+    """List all databases running in Docker containers.
+
+    This includes MySQL/MariaDB containers from template-deployed apps.
+    """
+    containers = DatabaseService.list_docker_mysql_containers()
+    return jsonify({'containers': containers}), 200
+
+
+@databases_bp.route('/docker/app/<int:app_id>', methods=['GET'])
+@jwt_required()
+def get_app_databases(app_id):
+    """Get database info for a Docker application.
+
+    This reads the docker-compose.yml and .env files to find database
+    containers and their credentials.
+    """
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    app = Application.query.get(app_id)
+
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if user.role != 'admin' and app.user_id != current_user_id:
+        return jsonify({'error': 'Access denied'}), 403
+
+    if app.app_type != 'docker' or not app.root_path:
+        return jsonify({'error': 'Application is not a Docker app'}), 400
+
+    db_info = DatabaseService.get_app_database_info(app.name, app.root_path)
+
+    if not db_info:
+        return jsonify({'databases': [], 'message': 'No database containers found'}), 200
+
+    return jsonify({'databases': db_info}), 200
+
+
+@databases_bp.route('/docker/<container>/databases', methods=['GET'])
+@jwt_required()
+def list_docker_container_databases(container):
+    """List databases in a Docker MySQL container."""
+    user = request.args.get('user', 'root')
+    password = request.headers.get('X-DB-Password')
+
+    databases = DatabaseService.docker_mysql_list_databases(container, user, password)
+    return jsonify({'databases': databases}), 200
+
+
+@databases_bp.route('/docker/<container>/<database>/tables', methods=['GET'])
+@jwt_required()
+def get_docker_database_tables(container, database):
+    """Get tables in a Docker MySQL database."""
+    user = request.args.get('user', 'root')
+    password = request.headers.get('X-DB-Password')
+
+    tables = DatabaseService.docker_mysql_get_tables(container, database, user, password)
+    return jsonify({'tables': tables}), 200
+
+
+@databases_bp.route('/docker/<container>/<database>/query', methods=['POST'])
+@jwt_required()
+def execute_docker_query(container, database):
+    """Execute a query on a Docker MySQL database.
+
+    Request body:
+        query: SQL query to execute
+        readonly: If true, only allow SELECT/SHOW/DESCRIBE/EXPLAIN (default: true)
+
+    Security: Readonly mode is enforced by default. Admin role required to disable.
+    """
+    data = request.get_json()
+
+    if not data or 'query' not in data:
+        return jsonify({'error': 'query is required'}), 400
+
+    query = data['query']
+    readonly = data.get('readonly', True)
+    user = data.get('user', 'root')
+    password = request.headers.get('X-DB-Password') or data.get('password')
+
+    # Only admins can disable readonly mode
+    if not readonly:
+        current_user_id = get_jwt_identity()
+        user_obj = User.query.get(current_user_id)
+        if not user_obj or user_obj.role != 'admin':
+            return jsonify({'error': 'Admin access required to execute write queries'}), 403
+
+    result = DatabaseService.docker_mysql_execute_query(
+        container_name=container,
+        database=database,
+        query=query,
+        user=user,
+        password=password,
+        readonly=readonly,
+        timeout=30,
+        max_rows=1000
+    )
+
+    return jsonify(result), 200 if result['success'] else 400
 
 
 # ==================== UTILITY ====================

@@ -2,6 +2,7 @@ import subprocess
 import os
 import secrets
 import string
+import json
 from datetime import datetime
 
 
@@ -992,3 +993,335 @@ class DatabaseService:
         """Generate a secure random password."""
         alphabet = string.ascii_letters + string.digits + '!@#$%^&*'
         return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+    # ==================== DOCKER CONTAINER DATABASES ====================
+
+    @staticmethod
+    def list_docker_mysql_containers():
+        """Find all Docker containers running MySQL/MariaDB."""
+        try:
+            # Get all running containers
+            result = subprocess.run(
+                ['docker', 'ps', '--format', '{{json .}}'],
+                capture_output=True, text=True
+            )
+            if result.returncode != 0:
+                return []
+
+            containers = []
+            mysql_images = ['mysql', 'mariadb', 'percona']
+
+            for line in result.stdout.strip().split('\n'):
+                if not line:
+                    continue
+                container = json.loads(line)
+                image = container.get('Image', '').lower()
+
+                # Check if it's a MySQL-like container
+                if any(img in image for img in mysql_images):
+                    containers.append({
+                        'id': container.get('ID'),
+                        'name': container.get('Names'),
+                        'image': container.get('Image'),
+                        'status': container.get('Status'),
+                        'ports': container.get('Ports'),
+                        'type': 'mysql'
+                    })
+
+            return containers
+        except Exception:
+            return []
+
+    @staticmethod
+    def docker_mysql_execute(container_name, query, database=None, user='root', password=None):
+        """Execute a MySQL query inside a Docker container."""
+        try:
+            cmd = ['docker', 'exec', container_name, 'mysql', '-u', user]
+
+            if password:
+                cmd.append(f'-p{password}')
+
+            if database:
+                cmd.extend(['-D', database])
+
+            cmd.extend(['-e', query])
+
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            return {
+                'success': result.returncode == 0,
+                'output': result.stdout,
+                'error': result.stderr if result.returncode != 0 else None
+            }
+        except subprocess.TimeoutExpired:
+            return {'success': False, 'error': 'Query timed out'}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @staticmethod
+    def docker_mysql_list_databases(container_name, user='root', password=None):
+        """List databases in a Docker MySQL container."""
+        result = DatabaseService.docker_mysql_execute(
+            container_name,
+            "SHOW DATABASES;",
+            user=user,
+            password=password
+        )
+        if not result['success']:
+            return []
+
+        databases = []
+        system_dbs = ['information_schema', 'mysql', 'performance_schema', 'sys']
+        for line in result['output'].strip().split('\n')[1:]:
+            db_name = line.strip()
+            if db_name and db_name not in system_dbs:
+                databases.append({
+                    'name': db_name,
+                    'type': 'docker_mysql',
+                    'container': container_name
+                })
+        return databases
+
+    @staticmethod
+    def docker_mysql_get_tables(container_name, database, user='root', password=None):
+        """Get tables in a Docker MySQL database."""
+        result = DatabaseService.docker_mysql_execute(
+            container_name,
+            "SHOW TABLES;",
+            database=database,
+            user=user,
+            password=password
+        )
+        if not result['success']:
+            return []
+
+        tables = []
+        for line in result['output'].strip().split('\n')[1:]:
+            table_name = line.strip()
+            if table_name:
+                # Get row count
+                count_result = DatabaseService.docker_mysql_execute(
+                    container_name,
+                    f"SELECT COUNT(*) FROM `{table_name}`;",
+                    database=database,
+                    user=user,
+                    password=password
+                )
+                rows = 0
+                if count_result['success']:
+                    try:
+                        rows = int(count_result['output'].strip().split('\n')[1])
+                    except (IndexError, ValueError):
+                        pass
+
+                tables.append({
+                    'name': table_name,
+                    'rows': rows
+                })
+        return tables
+
+    @staticmethod
+    def docker_mysql_execute_query(container_name, database, query, user='root', password=None,
+                                   readonly=True, timeout=30, max_rows=1000):
+        """Execute a query against a Docker MySQL container and return structured results."""
+        import time
+
+        # Security check for readonly mode
+        if readonly and not DatabaseService._is_readonly_query(query):
+            return {
+                'success': False,
+                'error': 'Only SELECT, SHOW, DESCRIBE, and EXPLAIN queries are allowed in readonly mode'
+            }
+
+        try:
+            start_time = time.time()
+
+            cmd = ['docker', 'exec', container_name, 'mysql', '-u', user]
+            if password:
+                cmd.append(f'-p{password}')
+            cmd.extend([
+                '-D', database,
+                '-e', query,
+                '--batch'
+            ])
+
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+            execution_time = time.time() - start_time
+
+            if result.returncode != 0:
+                return {
+                    'success': False,
+                    'error': result.stderr.strip() if result.stderr else 'Query execution failed'
+                }
+
+            # Parse the output
+            lines = result.stdout.strip().split('\n') if result.stdout.strip() else []
+
+            if not lines:
+                return {
+                    'success': True,
+                    'columns': [],
+                    'rows': [],
+                    'row_count': 0,
+                    'execution_time': execution_time,
+                    'truncated': False
+                }
+
+            # First line is headers
+            columns = lines[0].split('\t') if lines else []
+            data_lines = lines[1:] if len(lines) > 1 else []
+
+            # Parse rows
+            rows = []
+            for i, line in enumerate(data_lines):
+                if i >= max_rows:
+                    break
+                values = line.split('\t')
+                values = [None if v == 'NULL' else v for v in values]
+                rows.append(values)
+
+            return {
+                'success': True,
+                'columns': columns,
+                'rows': rows,
+                'row_count': len(rows),
+                'total_rows': len(data_lines),
+                'execution_time': round(execution_time, 4),
+                'truncated': len(data_lines) > max_rows
+            }
+
+        except subprocess.TimeoutExpired:
+            return {
+                'success': False,
+                'error': f'Query timed out after {timeout} seconds'
+            }
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @staticmethod
+    def get_app_database_info(app_name, app_path):
+        """Get database info for a Docker app by reading its compose file."""
+        compose_path = os.path.join(app_path, 'docker-compose.yml') if app_path else None
+        env_path = os.path.join(app_path, '.env') if app_path else None
+
+        if not compose_path or not os.path.exists(compose_path):
+            return None
+
+        try:
+            import yaml
+
+            with open(compose_path, 'r') as f:
+                compose = yaml.safe_load(f)
+
+            # Read .env file for passwords
+            env_vars = {}
+            if env_path and os.path.exists(env_path):
+                with open(env_path, 'r') as f:
+                    for line in f:
+                        if '=' in line and not line.strip().startswith('#'):
+                            key, value = line.strip().split('=', 1)
+                            env_vars[key] = value
+
+            db_info = []
+            services = compose.get('services', {})
+
+            for service_name, service_config in services.items():
+                image = service_config.get('image', '').lower()
+
+                # Check for MySQL containers
+                if any(db in image for db in ['mysql', 'mariadb', 'percona']):
+                    container_name = service_config.get('container_name', f'{app_name}_{service_name}')
+                    environment = service_config.get('environment', [])
+
+                    # Extract credentials from environment
+                    root_password = None
+                    db_user = None
+                    db_password = None
+                    db_name = None
+
+                    if isinstance(environment, list):
+                        for env in environment:
+                            if isinstance(env, str) and '=' in env:
+                                key, value = env.split('=', 1)
+                            elif isinstance(env, str):
+                                key = env
+                                value = env_vars.get(env.replace('${', '').replace('}', ''), '')
+                            else:
+                                continue
+
+                            # Resolve ${VAR} syntax
+                            if value.startswith('${') and value.endswith('}'):
+                                var_name = value[2:-1]
+                                value = env_vars.get(var_name, value)
+
+                            if 'ROOT_PASSWORD' in key:
+                                root_password = value
+                            elif 'MYSQL_PASSWORD' in key and 'ROOT' not in key:
+                                db_password = value
+                            elif 'MYSQL_USER' in key:
+                                db_user = value
+                            elif 'MYSQL_DATABASE' in key:
+                                db_name = value
+                    elif isinstance(environment, dict):
+                        for key, value in environment.items():
+                            if isinstance(value, str) and value.startswith('${') and value.endswith('}'):
+                                var_name = value[2:-1]
+                                value = env_vars.get(var_name, value)
+
+                            if 'ROOT_PASSWORD' in key:
+                                root_password = value
+                            elif 'MYSQL_PASSWORD' in key and 'ROOT' not in key:
+                                db_password = value
+                            elif 'MYSQL_USER' in key:
+                                db_user = value
+                            elif 'MYSQL_DATABASE' in key:
+                                db_name = value
+
+                    db_info.append({
+                        'type': 'mysql',
+                        'container': container_name,
+                        'service': service_name,
+                        'image': image,
+                        'database': db_name,
+                        'user': db_user or 'root',
+                        'password': db_password or root_password,
+                        'root_password': root_password
+                    })
+
+                # Check for PostgreSQL containers
+                elif 'postgres' in image:
+                    container_name = service_config.get('container_name', f'{app_name}_{service_name}')
+                    environment = service_config.get('environment', [])
+
+                    pg_user = 'postgres'
+                    pg_password = None
+                    pg_db = None
+
+                    if isinstance(environment, list):
+                        for env in environment:
+                            if isinstance(env, str) and '=' in env:
+                                key, value = env.split('=', 1)
+                                if value.startswith('${') and value.endswith('}'):
+                                    var_name = value[2:-1]
+                                    value = env_vars.get(var_name, value)
+
+                                if 'POSTGRES_PASSWORD' in key:
+                                    pg_password = value
+                                elif 'POSTGRES_USER' in key:
+                                    pg_user = value
+                                elif 'POSTGRES_DB' in key:
+                                    pg_db = value
+
+                    db_info.append({
+                        'type': 'postgresql',
+                        'container': container_name,
+                        'service': service_name,
+                        'image': image,
+                        'database': pg_db,
+                        'user': pg_user,
+                        'password': pg_password
+                    })
+
+            return db_info if db_info else None
+
+        except Exception as e:
+            return None
