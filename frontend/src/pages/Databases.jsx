@@ -67,6 +67,12 @@ const Databases = () => {
                     PostgreSQL
                 </button>
                 <button
+                    className={`tab ${activeTab === 'docker' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('docker')}
+                >
+                    Docker Apps
+                </button>
+                <button
                     className={`tab ${activeTab === 'backups' ? 'active' : ''}`}
                     onClick={() => setActiveTab('backups')}
                 >
@@ -83,6 +89,7 @@ const Databases = () => {
             <div className="tab-content">
                 {activeTab === 'mysql' && <MySQLTab status={status?.mysql} />}
                 {activeTab === 'postgresql' && <PostgreSQLTab status={status?.postgresql} />}
+                {activeTab === 'docker' && <DockerDatabasesTab />}
                 {activeTab === 'backups' && <BackupsTab />}
                 {activeTab === 'sqlite' && <SQLiteTab />}
             </div>
@@ -1457,6 +1464,249 @@ const SQLiteTablesModal = ({ database, onClose }) => {
                             ))}
                         </div>
                     )}
+                </div>
+                <div className="modal-actions">
+                    <button className="btn btn-primary" onClick={onClose}>Close</button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const DockerDatabasesTab = () => {
+    const toast = useToast();
+    const [containers, setContainers] = useState([]);
+    const [apps, setApps] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedApp, setSelectedApp] = useState(null);
+    const [appDbInfo, setAppDbInfo] = useState(null);
+    const [queryDb, setQueryDb] = useState(null);
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    async function loadData() {
+        setLoading(true);
+        try {
+            const [containerData, appsData] = await Promise.all([
+                api.getDockerDatabases(),
+                api.get('/apps')
+            ]);
+            setContainers(containerData.containers || []);
+            // Filter to only Docker apps
+            const dockerApps = (appsData.data?.apps || []).filter(app => app.app_type === 'docker');
+            setApps(dockerApps);
+        } catch (err) {
+            console.error('Failed to load Docker databases:', err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function loadAppDbInfo(app) {
+        try {
+            const data = await api.getAppDatabases(app.id);
+            setAppDbInfo(data.databases || []);
+            setSelectedApp(app);
+        } catch (err) {
+            console.error('Failed to load app database info:', err);
+            toast.error('Failed to load database info');
+        }
+    }
+
+    if (loading) {
+        return <div className="loading">Loading Docker databases...</div>;
+    }
+
+    return (
+        <div>
+            <div className="section-header">
+                <div className="hint">
+                    Databases running inside Docker containers from your deployed apps
+                </div>
+                <button className="btn btn-secondary" onClick={loadData}>
+                    Refresh
+                </button>
+            </div>
+
+            {apps.length === 0 ? (
+                <div className="empty-state">
+                    <h3>No Docker apps</h3>
+                    <p>Deploy an app from a template to see its databases here.</p>
+                </div>
+            ) : (
+                <div className="db-list">
+                    {apps.map(app => (
+                        <div key={app.id} className="db-item">
+                            <div className="db-item-info">
+                                <div className="db-item-icon docker">
+                                    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" strokeWidth="2">
+                                        <path d="M21 10c0-3-2-6-7-6s-7 3-7 6"/>
+                                        <rect x="3" y="10" width="18" height="10" rx="2"/>
+                                        <circle cx="8" cy="15" r="1"/>
+                                        <circle cx="12" cy="15" r="1"/>
+                                        <circle cx="16" cy="15" r="1"/>
+                                    </svg>
+                                </div>
+                                <div className="db-item-details">
+                                    <h3>{app.name}</h3>
+                                    <div className="db-item-meta">
+                                        <span className={`status-badge ${app.status}`}>{app.status}</span>
+                                        <span>Port {app.port}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="db-item-actions">
+                                <button
+                                    className="btn btn-primary btn-sm"
+                                    onClick={() => loadAppDbInfo(app)}
+                                >
+                                    View Databases
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {selectedApp && appDbInfo && (
+                <DockerAppDbModal
+                    app={selectedApp}
+                    databases={appDbInfo}
+                    onClose={() => { setSelectedApp(null); setAppDbInfo(null); }}
+                    onQuery={(db) => setQueryDb(db)}
+                />
+            )}
+
+            {queryDb && (
+                <QueryRunner
+                    database={queryDb}
+                    dbType="docker"
+                    onClose={() => setQueryDb(null)}
+                />
+            )}
+        </div>
+    );
+};
+
+const DockerAppDbModal = ({ app, databases, onClose, onQuery }) => {
+    const [tables, setTables] = useState({});
+    const [loadingTables, setLoadingTables] = useState({});
+
+    async function loadTables(db) {
+        if (tables[db.container + db.database]) return;
+
+        setLoadingTables(prev => ({ ...prev, [db.container + db.database]: true }));
+        try {
+            const data = await api.getDockerDatabaseTables(db.container, db.database, db.password);
+            setTables(prev => ({ ...prev, [db.container + db.database]: data.tables || [] }));
+        } catch (err) {
+            console.error('Failed to load tables:', err);
+        } finally {
+            setLoadingTables(prev => ({ ...prev, [db.container + db.database]: false }));
+        }
+    }
+
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal modal-lg" onClick={e => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h2>Databases in {app.name}</h2>
+                    <button className="modal-close" onClick={onClose}>&times;</button>
+                </div>
+                <div className="modal-body">
+                    {databases.length === 0 ? (
+                        <p className="hint">No databases found in this app's containers.</p>
+                    ) : (
+                        <div className="db-list">
+                            {databases.map((db, idx) => (
+                                <div key={idx} className="db-item">
+                                    <div className="db-item-info">
+                                        <div className={`db-item-icon ${db.type}`}>
+                                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" strokeWidth="2">
+                                                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                                                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                                                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                                            </svg>
+                                        </div>
+                                        <div className="db-item-details">
+                                            <h3>{db.database || 'Default'}</h3>
+                                            <div className="db-item-meta">
+                                                <span>Container: {db.container}</span>
+                                                <span>{db.type === 'mysql' ? 'MySQL' : 'PostgreSQL'}</span>
+                                                {db.user && <span>User: {db.user}</span>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="db-item-actions">
+                                        <button
+                                            className="btn btn-primary btn-sm"
+                                            onClick={() => onQuery({
+                                                name: db.database,
+                                                container: db.container,
+                                                password: db.password || db.root_password,
+                                                user: db.user
+                                            })}
+                                        >
+                                            Query
+                                        </button>
+                                        <button
+                                            className="btn btn-secondary btn-sm"
+                                            onClick={() => loadTables(db)}
+                                        >
+                                            Tables
+                                        </button>
+                                    </div>
+                                    {tables[db.container + db.database] && (
+                                        <div className="tables-inline">
+                                            {tables[db.container + db.database].length === 0 ? (
+                                                <p className="hint">No tables</p>
+                                            ) : (
+                                                <div className="tables-list compact">
+                                                    {tables[db.container + db.database].map(table => (
+                                                        <div key={table.name} className="table-item">
+                                                            <span className="table-name">{table.name}</span>
+                                                            <span className="table-rows">{table.rows} rows</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    <div className="credentials-info">
+                        <h4>Connection Info</h4>
+                        <p className="hint">These databases run inside Docker containers. Use these credentials to connect:</p>
+                        {databases.map((db, idx) => (
+                            <div key={idx} className="credentials-box">
+                                <div className="credential-item">
+                                    <label>Container:</label>
+                                    <code>{db.container}</code>
+                                </div>
+                                {db.database && (
+                                    <div className="credential-item">
+                                        <label>Database:</label>
+                                        <code>{db.database}</code>
+                                    </div>
+                                )}
+                                <div className="credential-item">
+                                    <label>User:</label>
+                                    <code>{db.user || 'root'}</code>
+                                </div>
+                                {db.password && (
+                                    <div className="credential-item">
+                                        <label>Password:</label>
+                                        <code>{db.password}</code>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <div className="modal-actions">
                     <button className="btn btn-primary" onClick={onClose}>Close</button>

@@ -51,8 +51,10 @@ const QueryRunner = ({ database, dbType, onClose }) => {
                 data = await api.getPostgreSQLTables(database.name);
             } else if (dbType === 'sqlite') {
                 data = await api.getSQLiteTables(database.path);
+            } else if (dbType === 'docker') {
+                data = await api.getDockerDatabaseTables(database.container, database.name, database.password);
             }
-            setTables(data.tables || []);
+            setTables(data?.tables || []);
         } catch (err) {
             console.error('Failed to load tables:', err);
         }
@@ -113,6 +115,8 @@ const QueryRunner = ({ database, dbType, onClose }) => {
                 result = await api.executePostgreSQLQuery(database.name, query, readonly);
             } else if (dbType === 'sqlite') {
                 result = await api.executeSQLiteQuery(database.path, query, readonly);
+            } else if (dbType === 'docker') {
+                result = await api.executeDockerQuery(database.container, database.name, query, database.password, readonly);
             }
 
             if (result.success) {
@@ -253,7 +257,7 @@ const QueryRunner = ({ database, dbType, onClose }) => {
                         </svg>
                         <span>Query Runner - {dbName}</span>
                         <span className={`db-type-badge ${dbType}`}>
-                            {dbType === 'mysql' ? 'MySQL' : dbType === 'postgresql' ? 'PostgreSQL' : 'SQLite'}
+                            {dbType === 'mysql' ? 'MySQL' : dbType === 'postgresql' ? 'PostgreSQL' : dbType === 'docker' ? 'Docker MySQL' : 'SQLite'}
                         </span>
                     </div>
                     <div className="query-runner-actions">

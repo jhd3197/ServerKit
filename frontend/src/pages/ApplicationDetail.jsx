@@ -1407,19 +1407,41 @@ const BuildTab = ({ appId, appPath }) => {
 const LogsTab = ({ app }) => {
     const [logs, setLogs] = useState('');
     const [loading, setLoading] = useState(true);
-    const [logType, setLogType] = useState('access');
+    const [logType, setLogType] = useState('all');
+    const [autoRefresh, setAutoRefresh] = useState(false);
+
+    const isDockerApp = app.app_type === 'docker';
 
     useEffect(() => {
         loadLogs();
     }, [app, logType]);
 
+    useEffect(() => {
+        let interval;
+        if (autoRefresh) {
+            interval = setInterval(loadLogs, 5000);
+        }
+        return () => clearInterval(interval);
+    }, [autoRefresh]);
+
     async function loadLogs() {
         setLoading(true);
         try {
-            const data = await api.getAppLogs(app.name, logType, 200);
-            setLogs(data.content || 'No logs available');
+            if (isDockerApp) {
+                // Docker apps - use Docker compose logs
+                const data = await api.getDockerAppLogs(app.id, 200);
+                if (data.success) {
+                    setLogs(data.logs || 'No logs available');
+                } else {
+                    setLogs(data.error || 'Failed to load logs');
+                }
+            } else {
+                // Regular apps - use nginx logs
+                const data = await api.getAppLogs(app.name, logType, 200);
+                setLogs(data.content || 'No logs available');
+            }
         } catch (err) {
-            setLogs('Failed to load logs');
+            setLogs('Failed to load logs: ' + (err.message || 'Unknown error'));
         } finally {
             setLoading(false);
         }
@@ -1430,10 +1452,23 @@ const LogsTab = ({ app }) => {
             <div className="section-header">
                 <h3>Application Logs</h3>
                 <div className="log-controls">
-                    <select value={logType} onChange={(e) => setLogType(e.target.value)}>
-                        <option value="access">Access Log</option>
-                        <option value="error">Error Log</option>
-                    </select>
+                    {!isDockerApp && (
+                        <select value={logType} onChange={(e) => setLogType(e.target.value)}>
+                            <option value="access">Access Log</option>
+                            <option value="error">Error Log</option>
+                        </select>
+                    )}
+                    {isDockerApp && (
+                        <span className="hint">Docker Compose Logs</span>
+                    )}
+                    <label className="checkbox-inline">
+                        <input
+                            type="checkbox"
+                            checked={autoRefresh}
+                            onChange={(e) => setAutoRefresh(e.target.checked)}
+                        />
+                        Auto-refresh
+                    </label>
                     <button className="btn btn-secondary btn-sm" onClick={loadLogs}>
                         Refresh
                     </button>

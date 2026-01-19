@@ -1084,6 +1084,43 @@ class ApiService {
         return this.request(`/databases/sqlite/tables?path=${encodeURIComponent(path)}`);
     }
 
+    // Docker Container Databases
+    async getDockerDatabases() {
+        return this.request('/databases/docker');
+    }
+
+    async getAppDatabases(appId) {
+        return this.request(`/databases/docker/app/${appId}`);
+    }
+
+    async getDockerContainerDatabases(container, password = null) {
+        const headers = password ? { 'X-DB-Password': password } : {};
+        return this.request(`/databases/docker/${container}/databases`, { headers });
+    }
+
+    async getDockerDatabaseTables(container, database, password = null) {
+        const headers = password ? { 'X-DB-Password': password } : {};
+        return this.request(`/databases/docker/${container}/${database}/tables`, { headers });
+    }
+
+    async executeDockerQuery(container, database, query, password = null, readonly = true) {
+        const headers = password ? { 'X-DB-Password': password } : {};
+        return this.request(`/databases/docker/${container}/${database}/query`, {
+            method: 'POST',
+            body: { query, readonly, password },
+            headers
+        });
+    }
+
+    // Docker App Logs and Status
+    async getDockerAppLogs(appId, lines = 100) {
+        return this.request(`/apps/${appId}/logs?lines=${lines}`);
+    }
+
+    async getDockerAppStatus(appId) {
+        return this.request(`/apps/${appId}/status`);
+    }
+
     // ========================================
     // Monitoring & Alerts endpoints
     // ========================================
