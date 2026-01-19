@@ -2251,6 +2251,12 @@ class ApiService {
             method: 'DELETE'
         });
     }
+
+    async deployWorkflow(id) {
+        return this.request(`/workflows/${id}/deploy`, {
+            method: 'POST'
+        });
+    }
 }
 
 export const api = new ApiService();
