@@ -1470,6 +1470,13 @@ class ApiService {
         });
     }
 
+    async testDatabaseConnection(config) {
+        return this.request('/templates/test-db-connection', {
+            method: 'POST',
+            body: config
+        });
+    }
+
     async checkAppUpdate(appId) {
         return this.request(`/templates/apps/${appId}/check-update`);
     }
