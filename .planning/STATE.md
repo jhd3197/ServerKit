@@ -2,8 +2,8 @@
 
 ## Current Status
 - **Milestone**: 1 - Infrastructure Fixes, Private URLs & UI Polish
-- **Current Phase**: 6 - Dashboard Historical Metrics
-- **Phase Status**: Planned
+- **Current Phase**: 7 - App Detail Page Redesign
+- **Phase Status**: Pending
 - **Last Updated**: 2026-01-19
 
 ## Phase Progress
@@ -15,11 +15,21 @@
 | 3 | completed | 2026-01-19 | 2026-01-19 |
 | 4 | skipped | - | - |
 | 5 | completed | 2026-01-19 | 2026-01-19 |
-| 6 | planned | 2026-01-19 | - |
+| 6 | completed | 2026-01-19 | 2026-01-19 |
 | 7 | pending | - | - |
 | 8 | pending | - | - |
 | 9 | pending | - | - |
 | 10 | pending | - | - |
+
+## Phase 6 Summary
+Dashboard historical metrics fully implemented:
+- MetricsHistory model with minute/hour/day aggregation levels
+- MetricsHistoryService with background collection every 60 seconds
+- Auto-aggregation (minute→hour→day) and cleanup per retention policy
+- REST API endpoints for history, stats, and collection control
+- MetricsGraph component with Recharts LineChart
+- Period selector (1h, 6h, 24h, 7d, 30d)
+- Integrated into Dashboard below real-time metrics
 
 ## Phase 5 Summary
 Private URL system fully implemented:
@@ -51,12 +61,13 @@ Completed all 8 tasks:
 None currently identified.
 
 ## Notes
-- Phase 5 complete - private URL feature ready for testing
-- Database migration required on deploy (new fields in Application model)
-- Nginx config auto-generates when private URLs enabled
+- Phase 6 complete - historical metrics with graphs ready
+- Metrics collection starts automatically on app startup
+- Database migration runs automatically via SQLAlchemy
 
 ## Quick Links
 - [ROADMAP.md](./ROADMAP.md)
 - [PROJECT.md](./PROJECT.md)
 - [Phase 1 Summary](./phases/01-docker-domain-debugging/SUMMARY.md)
 - [Phase 5 Summary](./phases/05-private-urls/SUMMARY.md)
+- [Phase 6 Summary](./phases/06-dashboard-historical-metrics/SUMMARY.md)
