@@ -69,7 +69,9 @@ class WorkflowService:
                 created_resources[node['id']] = {
                     'type': node['type'],
                     'resourceId': result.get('resourceId'),
-                    'resourceName': result.get('resourceName')
+                    'resourceName': result.get('resourceName'),
+                    'credentials': result.get('credentials'),  # Store DB credentials for apps
+                    'rootPath': result.get('rootPath')
                 }
             else:
                 errors.append({
@@ -360,14 +362,24 @@ class WorkflowService:
 
                 if target_resource and target_resource['type'] == 'database':
                     # Get database credentials from the deployment result
-                    # We need to look at the results array - for now use naming convention
-                    db_name = target_resource.get('resourceName', '')
-                    env_vars.update({
-                        'DB_HOST': 'localhost',
-                        'DB_NAME': db_name,
-                        'DB_USER': db_name,
-                        'DB_PORT': '3306'
-                    })
+                    credentials = target_resource.get('credentials', {})
+                    if credentials:
+                        env_vars.update({
+                            'DB_HOST': credentials.get('host', 'localhost'),
+                            'DB_NAME': credentials.get('database', ''),
+                            'DB_USER': credentials.get('username', ''),
+                            'DB_PASSWORD': credentials.get('password', ''),
+                            'DB_PORT': str(credentials.get('port', 3306))
+                        })
+                    else:
+                        # Fallback to naming convention
+                        db_name = target_resource.get('resourceName', '')
+                        env_vars.update({
+                            'DB_HOST': 'localhost',
+                            'DB_NAME': db_name,
+                            'DB_USER': db_name,
+                            'DB_PORT': '3306'
+                        })
 
         # Create the application record
         app = Application(
@@ -412,6 +424,25 @@ class WorkflowService:
                 'error': docker_result.get('error', 'Failed to create Docker app')
             }
 
+        # Start the containers
+        start_result = DockerService.compose_up(app.root_path, detach=True)
+        if start_result.get('success'):
+            app.status = 'running'
+            db.session.commit()
+        else:
+            # App created but containers didn't start - still return success
+            # but include warning
+            return {
+                'nodeId': node['id'],
+                'type': 'dockerApp',
+                'success': True,
+                'resourceId': app.id,
+                'resourceName': app.name,
+                'port': app.port,
+                'rootPath': app.root_path,
+                'warning': f'App created but containers failed to start: {start_result.get("error", "Unknown error")}'
+            }
+
         return {
             'nodeId': node['id'],
             'type': 'dockerApp',
@@ -419,7 +450,8 @@ class WorkflowService:
             'resourceId': app.id,
             'resourceName': app.name,
             'port': app.port,
-            'rootPath': app.root_path
+            'rootPath': app.root_path,
+            'status': 'running'
         }
 
     @staticmethod
