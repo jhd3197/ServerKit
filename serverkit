@@ -256,6 +256,10 @@ cmd_update() {
     git fetch origin
     git reset --hard origin/main
 
+    # Restore executable permissions
+    chmod +x "$INSTALL_DIR/serverkit"
+    chmod +x "$INSTALL_DIR/scripts/"*.sh 2>/dev/null || true
+
     NEW_VERSION=$(git rev-parse --short HEAD)
 
     # Update Python dependencies
