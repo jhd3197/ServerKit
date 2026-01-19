@@ -1722,6 +1722,16 @@ const LogsTab = ({ app }) => {
 const SettingsTab = ({ app, onUpdate }) => {
     const navigate = useNavigate();
     const [deleting, setDeleting] = useState(false);
+    const [environmentType, setEnvironmentType] = useState(app.environment_type || 'standalone');
+    const [savingEnvironment, setSavingEnvironment] = useState(false);
+    const [unlinking, setUnlinking] = useState(false);
+
+    const envLabels = {
+        standalone: 'Standalone',
+        production: 'Production',
+        development: 'Development',
+        staging: 'Staging'
+    };
 
     async function handleDelete() {
         if (!confirm(`Delete ${app.name}? This action cannot be undone.`)) return;
@@ -1737,9 +1747,94 @@ const SettingsTab = ({ app, onUpdate }) => {
         }
     }
 
+    async function handleEnvironmentChange(newType) {
+        if (newType === app.environment_type) return;
+
+        setSavingEnvironment(true);
+        try {
+            await api.updateAppEnvironment(app.id, newType);
+            setEnvironmentType(newType);
+            onUpdate();
+        } catch (err) {
+            console.error('Failed to update environment:', err);
+            setEnvironmentType(app.environment_type || 'standalone');
+        } finally {
+            setSavingEnvironment(false);
+        }
+    }
+
+    async function handleUnlink() {
+        if (!confirm(`Unlink ${app.name} from its linked application? Both apps will become standalone.`)) return;
+
+        setUnlinking(true);
+        try {
+            await api.unlinkApp(app.id);
+            onUpdate();
+        } catch (err) {
+            console.error('Failed to unlink app:', err);
+        } finally {
+            setUnlinking(false);
+        }
+    }
+
     return (
         <div>
             <h3>Application Settings</h3>
+
+            {/* Environment Configuration */}
+            <div className="card settings-section">
+                <h4>Environment Configuration</h4>
+                <div className="settings-row">
+                    <div className="settings-label">
+                        <span>Environment Type</span>
+                        <span className="settings-hint">
+                            {app.has_linked_app
+                                ? 'This app is linked. Unlink to change environment type.'
+                                : 'Set how this application is used in your workflow.'}
+                        </span>
+                    </div>
+                    <div className="settings-control">
+                        {app.has_linked_app ? (
+                            <span className={`env-badge env-${app.environment_type}`}>
+                                {envLabels[app.environment_type] || app.environment_type}
+                            </span>
+                        ) : (
+                            <select
+                                value={environmentType}
+                                onChange={(e) => handleEnvironmentChange(e.target.value)}
+                                disabled={savingEnvironment}
+                                className="settings-select"
+                            >
+                                <option value="standalone">Standalone</option>
+                                <option value="development">Development</option>
+                                <option value="staging">Staging</option>
+                                <option value="production">Production</option>
+                            </select>
+                        )}
+                        {savingEnvironment && <span className="settings-saving">Saving...</span>}
+                    </div>
+                </div>
+
+                {app.has_linked_app && (
+                    <div className="settings-row settings-linked-warning">
+                        <div className="settings-label">
+                            <span>Linked Application</span>
+                            <span className="settings-hint">
+                                This app is linked to another application. Unlinking will reset both apps to standalone mode.
+                            </span>
+                        </div>
+                        <div className="settings-control">
+                            <button
+                                className="btn btn-secondary"
+                                onClick={handleUnlink}
+                                disabled={unlinking}
+                            >
+                                {unlinking ? 'Unlinking...' : 'Unlink Application'}
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
 
             <div className="card danger-zone">
                 <h4>Danger Zone</h4>

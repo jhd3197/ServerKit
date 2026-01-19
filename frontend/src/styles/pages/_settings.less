@@ -813,3 +813,79 @@
     color: @text-secondary;
     font-size: @font-size-sm;
 }
+
+// Settings Row (for app settings tab)
+.settings-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: @space-4;
+    background: @bg-hover;
+    border-radius: @radius-md;
+    gap: @space-4;
+
+    &:not(:last-child) {
+        margin-bottom: @space-3;
+    }
+
+    &.settings-linked-warning {
+        background: fade(@warning, 10%);
+        border: 1px solid fade(@warning, 20%);
+    }
+}
+
+.settings-label {
+    flex: 1;
+
+    > span:first-child {
+        display: block;
+        font-weight: @font-weight-medium;
+        color: @text-primary;
+        margin-bottom: @space-1;
+    }
+
+    .settings-hint {
+        display: block;
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+    }
+}
+
+.settings-control {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    flex-shrink: 0;
+}
+
+.settings-select {
+    min-width: 160px;
+    padding: @space-2 @space-3;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    color: @text-primary;
+    font-size: @font-size-sm;
+    cursor: pointer;
+    transition: border-color @transition-fast;
+
+    &:hover {
+        border-color: @border-default;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: @accent-primary;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+.settings-saving {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+    font-style: italic;
+}
