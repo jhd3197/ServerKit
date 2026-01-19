@@ -2,8 +2,8 @@
 
 ## Current Status
 - **Milestone**: 3 - Visual Workflow Builder
-- **Current Phase**: 20 - Workflow Save/Load
-- **Phase Status**: Planned
+- **Current Phase**: 21 - Workflow Deployment
+- **Phase Status**: Pending
 - **Last Updated**: 2026-01-19
 
 ## Phase Progress
@@ -14,8 +14,18 @@
 | 17 | completed | 2026-01-19 | 2026-01-19 |
 | 18 | completed | 2026-01-19 | 2026-01-19 |
 | 19 | completed | 2026-01-19 | 2026-01-19 |
-| 20 | pending | - | - |
+| 20 | completed | 2026-01-19 | 2026-01-19 |
 | 21 | pending | - | - |
+
+## Phase 20 Summary
+Workflow Save/Load completed:
+- Created Workflow SQLAlchemy model with nodes/edges/viewport as JSON
+- Created CRUD API endpoints (GET/POST/PUT/DELETE /workflows)
+- Registered workflows blueprint at /api/v1/workflows
+- Added frontend API methods (getWorkflows, createWorkflow, updateWorkflow, deleteWorkflow)
+- Added workflow toolbar with name input, New/Load/Import/Save buttons
+- Created WorkflowListModal for loading saved workflows with delete capability
+- Added import existing infrastructure feature (apps + domains as nodes)
 
 ## Phase 19 Summary
 Connection Logic completed:
