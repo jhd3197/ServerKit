@@ -181,6 +181,155 @@
     }
 }
 
+// ============================================
+// LINK APP MODAL
+// ============================================
+
+.link-app-modal {
+    max-width: 500px;
+
+    .modal-header h2 {
+        display: flex;
+        align-items: center;
+        gap: @space-2;
+    }
+}
+
+.link-app-current {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-3;
+    background: @bg-hover;
+    border-radius: @radius-md;
+    margin-bottom: @space-4;
+
+    .link-app-label {
+        color: @text-tertiary;
+        font-size: @font-size-sm;
+    }
+
+    .link-app-name {
+        font-weight: @font-weight-medium;
+        color: @text-primary;
+    }
+}
+
+.link-app-empty {
+    text-align: center;
+    padding: @space-6;
+
+    svg {
+        color: @text-tertiary;
+        margin-bottom: @space-3;
+    }
+
+    h3 {
+        margin: 0 0 @space-2;
+        font-size: @font-size-lg;
+    }
+
+    p {
+        color: @text-secondary;
+        font-size: @font-size-sm;
+        margin-bottom: @space-4;
+    }
+}
+
+.env-radio-group {
+    display: flex;
+    gap: @space-2;
+}
+
+.env-radio-option {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-3;
+    background: @bg-card;
+    border: 2px solid @border-subtle;
+    border-radius: @radius-md;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    input {
+        display: none;
+    }
+
+    &:hover {
+        border-color: @border-default;
+    }
+
+    &.selected {
+        border-color: @accent-primary;
+        background: @accent-glow;
+    }
+
+    .env-radio-label {
+        font-size: @font-size-xs;
+        color: @text-secondary;
+    }
+}
+
+.link-preview {
+    margin: @space-4 0;
+    padding: @space-4;
+    background: @bg-hover;
+    border-radius: @radius-md;
+}
+
+.link-preview-title {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: @space-3;
+}
+
+.link-preview-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-4;
+}
+
+.link-preview-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-3;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    min-width: 120px;
+}
+
+.link-preview-name {
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    color: @text-primary;
+}
+
+.link-preview-connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: @accent-glow;
+    color: @accent-primary;
+    border-radius: 50%;
+}
+
+.modal-loading {
+    padding: @space-6;
+    text-align: center;
+    color: @text-secondary;
+}
+
 // Small status badge variant
 .status-badge-sm {
     display: inline-flex;
