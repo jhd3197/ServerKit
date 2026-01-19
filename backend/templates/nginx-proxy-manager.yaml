@@ -1,4 +1,5 @@
-name: nginx-proxy-manager
+id: nginx-proxy-manager
+name: Nginx Proxy Manager
 version: "2.10"
 description: Easy-to-use reverse proxy with SSL management
 icon: /icons/nginx-proxy-manager.png
@@ -10,28 +11,28 @@ website: https://nginxproxymanager.com
 documentation: https://nginxproxymanager.com/guide
 
 variables:
-  HTTP_PORT:
+  - name: HTTP_PORT
     type: port
-    default: 80
+    default: "80"
     description: HTTP port for proxied sites
-  HTTPS_PORT:
+  - name: HTTPS_PORT
     type: port
-    default: 443
+    default: "443"
     description: HTTPS port for proxied sites
-  ADMIN_PORT:
+  - name: ADMIN_PORT
     type: port
-    default: 81
+    default: "81"
     description: Admin panel port
-  DB_PASSWORD:
+  - name: DB_PASSWORD
     type: password
     length: 24
     description: MySQL database password
 
 compose:
   services:
-    npm:
+    app:
       image: jc21/nginx-proxy-manager:latest
-      container_name: nginx-proxy-manager
+      container_name: ${APP_NAME}
       restart: unless-stopped
       ports:
         - "${HTTP_PORT}:80"
@@ -51,7 +52,7 @@ compose:
 
     npm-db:
       image: jc21/mariadb-aria:latest
-      container_name: npm-db
+      container_name: ${APP_NAME}-db
       restart: unless-stopped
       environment:
         MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
@@ -80,9 +81,3 @@ ports:
 requirements:
   memory: 256MB
   storage: 1GB
-
-scripts:
-  post_install: |
-    echo "Nginx Proxy Manager installed!"
-    echo "Access admin panel at http://localhost:${ADMIN_PORT}"
-    echo "Default credentials: admin@example.com / changeme"
