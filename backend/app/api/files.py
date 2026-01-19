@@ -284,6 +284,50 @@ def get_disk_usage():
     return jsonify(result), 400
 
 
+@files_bp.route('/disk-mounts', methods=['GET'])
+@jwt_required()
+def get_disk_mounts():
+    """Get disk usage for all mount points."""
+    result = FileService.get_all_disk_mounts()
+
+    if result.get('success'):
+        return jsonify(result), 200
+    return jsonify(result), 400
+
+
+@files_bp.route('/analyze', methods=['GET'])
+@jwt_required()
+def analyze_directory():
+    """Analyze directory sizes."""
+    path = request.args.get('path', '/home')
+    depth = request.args.get('depth', 2, type=int)
+    limit = request.args.get('limit', 20, type=int)
+
+    result = FileService.analyze_directory_sizes(path, depth=depth, limit=limit)
+
+    if result.get('success'):
+        return jsonify(result), 200
+
+    status = 403 if 'denied' in result.get('error', '').lower() else 400
+    return jsonify(result), status
+
+
+@files_bp.route('/type-breakdown', methods=['GET'])
+@jwt_required()
+def get_type_breakdown():
+    """Get file type breakdown for a directory."""
+    path = request.args.get('path', '/home')
+    max_depth = request.args.get('max_depth', 3, type=int)
+
+    result = FileService.get_file_type_breakdown(path, max_depth=max_depth)
+
+    if result.get('success'):
+        return jsonify(result), 200
+
+    status = 403 if 'denied' in result.get('error', '').lower() else 400
+    return jsonify(result), status
+
+
 @files_bp.route('/download', methods=['GET'])
 @jwt_required()
 def download_file():

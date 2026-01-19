@@ -6,6 +6,7 @@ import shutil
 import stat
 import mimetypes
 import hashlib
+import psutil
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime
@@ -478,3 +479,257 @@ class FileService:
                 return f"{size:.1f} {unit}"
             size /= 1024
         return f"{size:.1f} PB"
+
+    @classmethod
+    def get_all_disk_mounts(cls) -> Dict:
+        """Get disk usage for all mount points."""
+        try:
+            partitions = psutil.disk_partitions(all=False)
+            mounts = []
+
+            for partition in partitions:
+                try:
+                    usage = psutil.disk_usage(partition.mountpoint)
+                    mounts.append({
+                        'device': partition.device,
+                        'mountpoint': partition.mountpoint,
+                        'fstype': partition.fstype,
+                        'total': usage.total,
+                        'used': usage.used,
+                        'free': usage.free,
+                        'percent': usage.percent,
+                        'total_human': cls._format_size(usage.total),
+                        'used_human': cls._format_size(usage.used),
+                        'free_human': cls._format_size(usage.free)
+                    })
+                except (PermissionError, OSError):
+                    # Skip mounts we can't access
+                    continue
+
+            return {'success': True, 'mounts': mounts}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def analyze_directory_sizes(cls, path: str, depth: int = 1, limit: int = 20) -> Dict:
+        """Analyze directory to get sizes of subdirectories and large files."""
+        if not cls.is_path_allowed(path):
+            return {'success': False, 'error': 'Access denied: path not in allowed directories'}
+
+        if not os.path.exists(path):
+            return {'success': False, 'error': 'Path not found'}
+
+        if not os.path.isdir(path):
+            return {'success': False, 'error': 'Path is not a directory'}
+
+        try:
+            entries = []
+            total_size = 0
+
+            # Scan directory entries
+            with os.scandir(path) as scanner:
+                for entry in scanner:
+                    try:
+                        if entry.is_dir(follow_symlinks=False):
+                            # Calculate directory size recursively (with limit)
+                            size = cls._get_dir_size_recursive(entry.path, max_depth=depth)
+                            entries.append({
+                                'name': entry.name,
+                                'path': entry.path,
+                                'size': size,
+                                'size_human': cls._format_size(size),
+                                'is_dir': True
+                            })
+                        else:
+                            size = entry.stat().st_size
+                            entries.append({
+                                'name': entry.name,
+                                'path': entry.path,
+                                'size': size,
+                                'size_human': cls._format_size(size),
+                                'is_dir': False
+                            })
+                        total_size += size
+                    except (PermissionError, OSError):
+                        continue
+
+            # Sort by size descending
+            entries.sort(key=lambda x: x['size'], reverse=True)
+
+            # Calculate percentages
+            for entry in entries:
+                entry['percent'] = round((entry['size'] / total_size * 100), 1) if total_size > 0 else 0
+
+            # Separate directories and files
+            directories = [e for e in entries if e['is_dir']][:limit]
+            files = [e for e in entries if not e['is_dir']][:limit]
+
+            return {
+                'success': True,
+                'path': path,
+                'total_size': total_size,
+                'total_size_human': cls._format_size(total_size),
+                'directories': directories,
+                'largest_files': files
+            }
+        except PermissionError:
+            return {'success': False, 'error': 'Permission denied'}
+        except OSError as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def _get_dir_size_recursive(cls, path: str, max_depth: int = 2, current_depth: int = 0) -> int:
+        """Get total size of directory recursively with depth limit."""
+        if current_depth > max_depth:
+            return 0
+
+        total = 0
+        try:
+            with os.scandir(path) as scanner:
+                for entry in scanner:
+                    try:
+                        if entry.is_file(follow_symlinks=False):
+                            total += entry.stat().st_size
+                        elif entry.is_dir(follow_symlinks=False):
+                            total += cls._get_dir_size_recursive(
+                                entry.path, max_depth, current_depth + 1
+                            )
+                    except (PermissionError, OSError):
+                        continue
+        except (PermissionError, OSError):
+            pass
+        return total
+
+    @classmethod
+    def get_file_type_breakdown(cls, path: str, max_depth: int = 3) -> Dict:
+        """Get breakdown of file sizes by type category."""
+        if not cls.is_path_allowed(path):
+            return {'success': False, 'error': 'Access denied: path not in allowed directories'}
+
+        if not os.path.exists(path):
+            return {'success': False, 'error': 'Path not found'}
+
+        if not os.path.isdir(path):
+            return {'success': False, 'error': 'Path is not a directory'}
+
+        # File type categories with extensions
+        categories = {
+            'images': {
+                'extensions': {'.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp', '.ico', '.tiff'},
+                'color': '#10b981',  # green
+                'size': 0,
+                'count': 0
+            },
+            'videos': {
+                'extensions': {'.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm', '.m4v'},
+                'color': '#8b5cf6',  # purple
+                'size': 0,
+                'count': 0
+            },
+            'audio': {
+                'extensions': {'.mp3', '.wav', '.flac', '.aac', '.ogg', '.wma', '.m4a'},
+                'color': '#f59e0b',  # amber
+                'size': 0,
+                'count': 0
+            },
+            'documents': {
+                'extensions': {'.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.txt', '.rtf', '.odt'},
+                'color': '#3b82f6',  # blue
+                'size': 0,
+                'count': 0
+            },
+            'code': {
+                'extensions': {'.py', '.js', '.jsx', '.ts', '.tsx', '.html', '.css', '.less', '.scss',
+                              '.php', '.rb', '.go', '.rs', '.java', '.c', '.cpp', '.h', '.sh', '.sql'},
+                'color': '#6366f1',  # indigo
+                'size': 0,
+                'count': 0
+            },
+            'archives': {
+                'extensions': {'.zip', '.tar', '.gz', '.rar', '.7z', '.bz2', '.xz', '.tgz'},
+                'color': '#ef4444',  # red
+                'size': 0,
+                'count': 0
+            },
+            'data': {
+                'extensions': {'.json', '.xml', '.yaml', '.yml', '.csv', '.db', '.sqlite', '.sql'},
+                'color': '#14b8a6',  # teal
+                'size': 0,
+                'count': 0
+            },
+            'other': {
+                'extensions': set(),
+                'color': '#71717a',  # gray
+                'size': 0,
+                'count': 0
+            }
+        }
+
+        try:
+            cls._categorize_files_recursive(path, categories, max_depth, 0)
+
+            # Build result array
+            breakdown = []
+            total_size = sum(cat['size'] for cat in categories.values())
+
+            for name, cat in categories.items():
+                if cat['size'] > 0:
+                    breakdown.append({
+                        'name': name.capitalize(),
+                        'size': cat['size'],
+                        'size_human': cls._format_size(cat['size']),
+                        'count': cat['count'],
+                        'color': cat['color'],
+                        'percent': round((cat['size'] / total_size * 100), 1) if total_size > 0 else 0
+                    })
+
+            # Sort by size descending
+            breakdown.sort(key=lambda x: x['size'], reverse=True)
+
+            return {
+                'success': True,
+                'path': path,
+                'total_size': total_size,
+                'total_size_human': cls._format_size(total_size),
+                'breakdown': breakdown
+            }
+        except PermissionError:
+            return {'success': False, 'error': 'Permission denied'}
+        except OSError as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def _categorize_files_recursive(cls, path: str, categories: Dict, max_depth: int, current_depth: int) -> None:
+        """Recursively categorize files by type."""
+        if current_depth > max_depth:
+            return
+
+        try:
+            with os.scandir(path) as scanner:
+                for entry in scanner:
+                    try:
+                        if entry.is_file(follow_symlinks=False):
+                            ext = os.path.splitext(entry.name)[1].lower()
+                            size = entry.stat().st_size
+
+                            # Find matching category
+                            categorized = False
+                            for cat_name, cat in categories.items():
+                                if cat_name != 'other' and ext in cat['extensions']:
+                                    cat['size'] += size
+                                    cat['count'] += 1
+                                    categorized = True
+                                    break
+
+                            if not categorized:
+                                categories['other']['size'] += size
+                                categories['other']['count'] += 1
+
+                        elif entry.is_dir(follow_symlinks=False):
+                            cls._categorize_files_recursive(
+                                entry.path, categories, max_depth, current_depth + 1
+                            )
+                    except (PermissionError, OSError):
+                        continue
+        except (PermissionError, OSError):
+            pass
