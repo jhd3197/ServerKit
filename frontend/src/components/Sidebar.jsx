@@ -58,6 +58,16 @@ const Sidebar = () => {
                         </svg>
                         Templates
                     </NavLink>
+                    <NavLink to="/workflow" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="18" cy="5" r="3"/>
+                            <circle cx="6" cy="12" r="3"/>
+                            <circle cx="18" cy="19" r="3"/>
+                            <path d="M8.59 13.51l6.83 3.98"/>
+                            <path d="M15.41 6.51l-6.82 3.98"/>
+                        </svg>
+                        Workflow Builder
+                    </NavLink>
                     <NavLink to="/databases" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                         <svg viewBox="0 0 24 24">
                             <ellipse cx="12" cy="5" rx="9" ry="3"/>
