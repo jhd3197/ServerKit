@@ -249,6 +249,36 @@ class ApiService {
         return this.request(`/apps/${id}/restart`, { method: 'POST' });
     }
 
+    // App linking endpoints
+    async linkApp(appId, targetAppId, asEnvironment, options = {}) {
+        return this.request(`/apps/${appId}/link`, {
+            method: 'POST',
+            body: {
+                target_app_id: targetAppId,
+                as_environment: asEnvironment,
+                propagate_credentials: options.propagateCredentials !== false,
+                table_prefix: options.tablePrefix
+            }
+        });
+    }
+
+    async getLinkedApps(appId) {
+        return this.request(`/apps/${appId}/linked`);
+    }
+
+    async unlinkApp(appId) {
+        return this.request(`/apps/${appId}/link`, {
+            method: 'DELETE'
+        });
+    }
+
+    async updateAppEnvironment(appId, environmentType) {
+        return this.request(`/apps/${appId}/environment`, {
+            method: 'PUT',
+            body: { environment_type: environmentType }
+        });
+    }
+
     // Domains endpoints
     async getDomains() {
         return this.request('/domains');
