@@ -24,8 +24,8 @@ services:
       - SECRET_KEY=${SECRET_KEY:?SECRET_KEY is required}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:?JWT_SECRET_KEY is required}
 
-      # Database
-      - DATABASE_URL=${DATABASE_URL:-sqlite:///serverkit.db}
+      # Database (4 slashes = absolute path for SQLite)
+      - DATABASE_URL=${DATABASE_URL:-sqlite:////app/instance/serverkit.db}
 
       # CORS Origins (comma-separated list)
       - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost,http://localhost:80}

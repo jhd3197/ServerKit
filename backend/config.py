@@ -14,8 +14,8 @@ INSECURE_SECRET_KEYS = [
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 
-    # Database
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///serverkit.db')
+    # Database - use instance folder for Flask convention
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:////app/instance/serverkit.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # JWT

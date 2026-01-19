@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean
 
 # Create directories for ServerKit
-RUN mkdir -p /etc/serverkit /app/logs /var/quarantine
+RUN mkdir -p /etc/serverkit /app/logs /var/quarantine /app/instance
 
 # Copy requirements first for caching
 COPY requirements.txt .
@@ -45,6 +45,7 @@ COPY . .
 # Create non-root user and set permissions
 RUN useradd --create-home appuser \
     && chown -R appuser:appuser /app \
+    && chown -R appuser:appuser /app/instance \
     && chown -R appuser:appuser /etc/serverkit \
     && chown -R appuser:appuser /var/quarantine
 
