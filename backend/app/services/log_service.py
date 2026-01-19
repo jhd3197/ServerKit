@@ -24,6 +24,8 @@ class LogService:
     # Allowed directories for log file access (path traversal protection)
     ALLOWED_LOG_DIRECTORIES = [
         '/var/log',
+        '/var/serverkit',
+        '/var/www',
         '/home',
         '/opt',
     ]
@@ -142,7 +144,21 @@ class LogService:
 
     @classmethod
     def get_app_logs(cls, app_name: str, log_type: str = 'access', lines: int = 100) -> Dict:
-        """Get logs for a specific application."""
+        """Get logs for a specific application.
+
+        Checks for Docker-based apps first, then falls back to nginx logs.
+        """
+        # Check if this is a Docker-based app
+        docker_compose_paths = [
+            f'/var/serverkit/apps/{app_name}/docker-compose.yml',
+            f'/var/www/{app_name}/docker-compose.yml',
+        ]
+
+        for compose_path in docker_compose_paths:
+            if os.path.exists(compose_path):
+                return cls.get_docker_app_logs(app_name, os.path.dirname(compose_path), lines)
+
+        # Fall back to nginx logs for host-based apps
         if log_type == 'access':
             filepath = f'/var/log/nginx/{app_name}.access.log'
         elif log_type == 'error':
@@ -151,6 +167,54 @@ class LogService:
             return {'success': False, 'error': 'Invalid log type. Use "access" or "error"'}
 
         return cls.read_log(filepath, lines)
+
+    @classmethod
+    def get_docker_app_logs(cls, app_name: str, app_dir: str, lines: int = 100) -> Dict:
+        """Get logs for a Docker Compose application."""
+        try:
+            result = subprocess.run(
+                ['docker', 'compose', 'logs', '--tail', str(lines), '--no-color'],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                cwd=app_dir
+            )
+
+            if result.returncode == 0:
+                log_lines = result.stdout.split('\n') if result.stdout else []
+                return {
+                    'success': True,
+                    'lines': log_lines,
+                    'count': len(log_lines),
+                    'source': 'docker',
+                    'app_dir': app_dir
+                }
+            else:
+                # Try with docker-compose (older syntax) as fallback
+                result = subprocess.run(
+                    ['docker-compose', 'logs', '--tail', str(lines), '--no-color'],
+                    capture_output=True,
+                    text=True,
+                    timeout=30,
+                    cwd=app_dir
+                )
+                if result.returncode == 0:
+                    log_lines = result.stdout.split('\n') if result.stdout else []
+                    return {
+                        'success': True,
+                        'lines': log_lines,
+                        'count': len(log_lines),
+                        'source': 'docker',
+                        'app_dir': app_dir
+                    }
+                return {'success': False, 'error': result.stderr or 'Failed to get Docker logs'}
+
+        except FileNotFoundError:
+            return {'success': False, 'error': 'Docker not found'}
+        except subprocess.TimeoutExpired:
+            return {'success': False, 'error': 'Timeout getting logs'}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
 
     @classmethod
     def get_journalctl_logs(cls, unit: str = None, lines: int = 100,
