@@ -299,3 +299,327 @@
         stroke-dashoffset: 0;
     }
 }
+
+// ============================================
+// NODE PALETTE STYLES
+// ============================================
+
+.workflow-palette {
+    position: absolute;
+    top: @space-4;
+    left: @space-4;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: @space-1;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    padding: @space-2;
+    box-shadow: @shadow-lg;
+    max-height: calc(100% - @space-8);
+    overflow-y: auto;
+}
+
+.palette-section {
+    display: flex;
+    flex-direction: column;
+    gap: @space-1;
+
+    &:not(:last-child) {
+        padding-bottom: @space-2;
+        border-bottom: 1px solid @border-subtle;
+        margin-bottom: @space-1;
+    }
+}
+
+.palette-header {
+    font-size: @font-size-xs;
+    font-weight: @font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: @text-tertiary;
+    padding: @space-1 @space-2;
+}
+
+.palette-item {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2 @space-3;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: @radius-md;
+    color: @text-secondary;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    cursor: pointer;
+    transition: all @transition-fast;
+    white-space: nowrap;
+    text-align: left;
+
+    svg {
+        flex-shrink: 0;
+    }
+
+    &:hover {
+        background: @bg-hover;
+        color: @text-primary;
+    }
+
+    &.palette-item-docker:hover {
+        background: fade(#2496ed, 15%);
+        color: #2496ed;
+        border-color: fade(#2496ed, 30%);
+    }
+
+    &.palette-item-database:hover {
+        background: fade(@warning, 15%);
+        color: @warning;
+        border-color: fade(@warning, 30%);
+    }
+
+    &.palette-item-domain:hover {
+        background: fade(@success, 15%);
+        color: @success;
+        border-color: fade(@success, 30%);
+    }
+
+    &.palette-item-service:hover {
+        background: fade(@accent-primary, 15%);
+        color: @accent-primary;
+        border-color: fade(@accent-primary, 30%);
+    }
+}
+
+// ============================================
+// NODE TYPE-SPECIFIC STYLES
+// ============================================
+
+// Docker App Node
+.workflow-node-docker {
+    .node-header-docker {
+        border-color: #2496ed;
+    }
+
+    .node-icon-docker {
+        background: #2496ed;
+    }
+}
+
+// Database Node
+.workflow-node-database {
+    .node-header-database {
+        border-color: @warning;
+    }
+
+    .node-icon-database {
+        background: @warning;
+    }
+}
+
+// Domain Node
+.workflow-node-domain {
+    .node-header-domain {
+        border-color: @success;
+    }
+
+    .node-icon-domain {
+        background: @success;
+    }
+
+    .node-label-domain {
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        font-family: @font-mono;
+    }
+}
+
+// Service Node
+.workflow-node-service {
+    .node-header-service {
+        border-color: @accent-primary;
+    }
+
+    .node-icon-service {
+        background: @accent-primary;
+    }
+}
+
+// ============================================
+// NODE DETAIL STYLES
+// ============================================
+
+.node-detail {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    margin-top: @space-2;
+    font-size: @font-size-xs;
+
+    .node-detail-label {
+        color: @text-tertiary;
+    }
+
+    .node-detail-value {
+        color: @text-secondary;
+        font-family: @font-mono;
+    }
+}
+
+.node-detail-image .node-detail-value {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.node-detail-memory,
+.node-detail-size {
+    color: @text-tertiary;
+
+    svg {
+        opacity: 0.7;
+    }
+}
+
+.node-description {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+    margin-top: @space-1;
+}
+
+// ============================================
+// PORT PILLS
+// ============================================
+
+.node-ports {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-1;
+    margin-top: @space-2;
+}
+
+.node-port-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px @space-2;
+    background: fade(@accent-primary, 15%);
+    border: 1px solid fade(@accent-primary, 30%);
+    border-radius: @radius-full;
+    font-size: @font-size-xs;
+    font-family: @font-mono;
+    color: @accent-primary;
+}
+
+// ============================================
+// TYPE BADGES
+// ============================================
+
+.node-type-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px @space-2;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-semibold;
+    color: white;
+    margin-top: @space-1;
+}
+
+// ============================================
+// SSL & DNS BADGES
+// ============================================
+
+.node-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-2;
+    margin-top: @space-2;
+}
+
+.node-ssl-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+    padding: 2px @space-2;
+    border: 1px solid;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+}
+
+.node-dns-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-1;
+    padding: 2px @space-2;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+
+    &.dns-propagated {
+        background: @success-bg;
+        color: @success;
+    }
+
+    &.dns-pending {
+        background: fade(@warning, 15%);
+        color: @warning;
+    }
+}
+
+// ============================================
+// STATUS DOT (ANIMATED)
+// ============================================
+
+.node-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: auto;
+
+    &.status-running {
+        background: @success;
+        box-shadow: 0 0 0 2px fade(@success, 30%);
+        animation: pulseRunning 2s ease-in-out infinite;
+    }
+
+    &.status-stopped {
+        background: @text-tertiary;
+    }
+
+    &.status-error {
+        background: @danger;
+        box-shadow: 0 0 0 2px fade(@danger, 30%);
+        animation: pulseError 1s ease-in-out infinite;
+    }
+}
+
+@keyframes pulseRunning {
+    0%, 100% {
+        box-shadow: 0 0 0 2px fade(@success, 30%);
+    }
+    50% {
+        box-shadow: 0 0 0 4px fade(@success, 15%);
+    }
+}
+
+@keyframes pulseError {
+    0%, 100% {
+        box-shadow: 0 0 0 2px fade(@danger, 30%);
+    }
+    50% {
+        box-shadow: 0 0 0 4px fade(@danger, 15%);
+    }
+}
+
+// ============================================
+// DATABASE HANDLE (BOTTOM)
+// ============================================
+
+.workflow-handle-database {
+    bottom: -6px !important;
+    left: 50% !important;
+    transform: translateX(-50%);
+}
