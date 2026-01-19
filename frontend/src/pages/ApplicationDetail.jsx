@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { GitBranch } from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/ToastContext';
@@ -57,12 +57,23 @@ const ApplicationDetail = () => {
         return colors[type] || '#a1a1aa';
     }
 
-    function getStatusClass(status) {
-        switch (status) {
-            case 'running': return 'status-active';
-            case 'stopped': return 'status-stopped';
-            case 'error': return 'status-error';
-            default: return 'status-warning';
+    function getAppIcon(type) {
+        switch (type) {
+            case 'wordpress':
+                return (
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 19.542c-5.261 0-9.542-4.281-9.542-9.542S6.739 2.458 12 2.458 21.542 6.739 21.542 12 17.261 21.542 12 21.542z"/>
+                        <path d="M3.019 12c0 3.403 1.977 6.347 4.844 7.746l-4.1-11.237C3.284 9.593 3.019 10.764 3.019 12zm15.109-.274c0-1.063-.382-1.799-.709-2.372-.436-.709-.845-1.309-.845-2.018 0-.791.6-1.527 1.446-1.527.038 0 .074.005.111.007A8.954 8.954 0 0012 3.019c-3.218 0-6.049 1.65-7.699 4.149.216.007.42.011.594.011.964 0 2.458-.117 2.458-.117.497-.029.555.701.059.76 0 0-.499.059-1.055.088l3.356 9.979 2.017-6.042-1.436-3.937c-.497-.029-.968-.088-.968-.088-.497-.029-.439-.789.058-.76 0 0 1.523.117 2.429.117.964 0 2.458-.117 2.458-.117.497-.029.556.701.059.76 0 0-.5.059-1.055.088l3.331 9.905.92-3.072c.398-1.275.702-2.19.702-2.978z"/>
+                    </svg>
+                );
+            case 'docker':
+                return (
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.186m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288z"/>
+                    </svg>
+                );
+            default:
+                return <span style={{ fontSize: '20px', fontWeight: 'bold' }}>{type.charAt(0).toUpperCase()}</span>;
         }
     }
 
@@ -83,146 +94,178 @@ const ApplicationDetail = () => {
 
     const isPythonApp = ['flask', 'django'].includes(app.app_type);
     const isWordPressApp = app.app_type === 'wordpress';
-    const isPHPApp = app.app_type === 'php';
+    const isDockerApp = app.app_type === 'docker';
+    const isRunning = app.status === 'running';
 
     return (
-        <div>
-            <header className="top-bar">
-                <div className="app-header-info">
-                    <button className="btn btn-secondary btn-sm" onClick={() => navigate('/apps')}>
-                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" strokeWidth="2">
-                            <path d="M19 12H5M12 19l-7-7 7-7"/>
-                        </svg>
-                        Back
-                    </button>
-                    <div className="app-header-title">
-                        <div className="app-icon" style={{ background: getStackColor(app.app_type) }}>
-                            {app.app_type.charAt(0).toUpperCase()}
-                        </div>
-                        <div>
-                            <h1>{app.name}</h1>
-                            <div className="subtitle">
-                                {app.app_type.toUpperCase()}
-                                {app.python_version && ` • Python ${app.python_version}`}
-                                {app.php_version && ` • PHP ${app.php_version}`}
-                                {app.port && ` • Port ${app.port}`}
-                            </div>
-                        </div>
-                    </div>
+        <div className="app-detail-page">
+            {/* Top Bar with Breadcrumbs and Actions */}
+            <div className="app-detail-topbar">
+                <div className="app-detail-breadcrumbs">
+                    <Link to="/apps">Applications</Link>
+                    <span>/</span>
+                    <span className="current">{app.name}</span>
                 </div>
-                <div className="top-bar-actions">
-                    {app.environment_type && app.environment_type !== 'standalone' && (
-                        <span className={`env-badge env-${app.environment_type}`}>
-                            {app.environment_type === 'production' ? 'PROD' :
-                             app.environment_type === 'development' ? 'DEV' : 'STAGING'}
-                            {app.has_linked_app && <GitBranch size={10} />}
-                        </span>
+                <div className="app-detail-actions">
+                    {app.port && (
+                        <a
+                            href={`http://localhost:${app.port}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-ghost"
+                        >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                <polyline points="15 3 21 3 21 9"/>
+                                <line x1="10" y1="14" x2="21" y2="3"/>
+                            </svg>
+                            Open App
+                        </a>
                     )}
-                    <span className={`status-badge ${getStatusClass(app.status)}`}>
-                        <span className="status-dot"/>
-                        {app.status}
-                    </span>
-                    {app.status === 'running' ? (
+                    {isRunning && (
                         <>
-                            <button className="btn btn-secondary" onClick={() => handleAction('restart')}>
+                            <button className="btn btn-ghost" onClick={() => handleAction('restart')}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <polyline points="23 4 23 10 17 10"/>
+                                    <polyline points="1 20 1 14 7 14"/>
+                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                                </svg>
                                 Restart
                             </button>
-                            <button className="btn btn-secondary" onClick={() => handleAction('stop')}>
+                            <button className="btn btn-danger-outline" onClick={() => handleAction('stop')}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <rect x="6" y="6" width="12" height="12"/>
+                                </svg>
                                 Stop
                             </button>
                         </>
-                    ) : (
+                    )}
+                    {!isRunning && (
                         <button className="btn btn-primary" onClick={() => handleAction('start')}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"/>
+                            </svg>
                             Start
                         </button>
                     )}
                 </div>
-            </header>
+            </div>
 
-            <div className="tabs">
-                <button
-                    className={`tab ${activeTab === 'overview' ? 'active' : ''}`}
+            {/* App Header */}
+            <div className="app-detail-header">
+                <div className="app-detail-icon" style={{ background: getStackColor(app.app_type) }}>
+                    {getAppIcon(app.app_type)}
+                </div>
+                <div className="app-detail-title-block">
+                    <h1>
+                        {app.name}
+                        <span className={`app-status-badge ${isRunning ? 'running' : 'stopped'}`}>
+                            <span className="pulse-dot" />
+                            {isRunning ? 'Running' : 'Stopped'}
+                        </span>
+                        {app.environment_type && app.environment_type !== 'standalone' && (
+                            <span className={`env-badge env-${app.environment_type}`}>
+                                {app.environment_type === 'production' ? 'PROD' :
+                                 app.environment_type === 'development' ? 'DEV' : 'STAGING'}
+                                {app.has_linked_app && <GitBranch size={10} />}
+                            </span>
+                        )}
+                    </h1>
+                    <div className="app-detail-subtitle">
+                        <span>{app.app_type.toUpperCase()}</span>
+                        <span className="separator">•</span>
+                        {app.port && <><span className="mono">Port {app.port}</span><span className="separator">•</span></>}
+                        <span>Created {new Date(app.created_at).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Tabs */}
+            <div className="app-detail-tabs">
+                <div
+                    className={`app-detail-tab ${activeTab === 'overview' ? 'active' : ''}`}
                     onClick={() => setActiveTab('overview')}
                 >
                     Overview
-                </button>
-                <button
-                    className={`tab ${activeTab === 'environment' ? 'active' : ''}`}
+                </div>
+                <div
+                    className={`app-detail-tab ${activeTab === 'environment' ? 'active' : ''}`}
                     onClick={() => setActiveTab('environment')}
                 >
                     Environment
-                </button>
+                </div>
                 {isPythonApp && (
                     <>
-                        <button
-                            className={`tab ${activeTab === 'packages' ? 'active' : ''}`}
+                        <div
+                            className={`app-detail-tab ${activeTab === 'packages' ? 'active' : ''}`}
                             onClick={() => setActiveTab('packages')}
                         >
                             Packages
-                        </button>
-                        <button
-                            className={`tab ${activeTab === 'gunicorn' ? 'active' : ''}`}
+                        </div>
+                        <div
+                            className={`app-detail-tab ${activeTab === 'gunicorn' ? 'active' : ''}`}
                             onClick={() => setActiveTab('gunicorn')}
                         >
                             Gunicorn
-                        </button>
-                        <button
-                            className={`tab ${activeTab === 'commands' ? 'active' : ''}`}
+                        </div>
+                        <div
+                            className={`app-detail-tab ${activeTab === 'commands' ? 'active' : ''}`}
                             onClick={() => setActiveTab('commands')}
                         >
                             Commands
-                        </button>
+                        </div>
                     </>
                 )}
                 {isWordPressApp && (
                     <>
-                        <button
-                            className={`tab ${activeTab === 'plugins' ? 'active' : ''}`}
+                        <div
+                            className={`app-detail-tab ${activeTab === 'plugins' ? 'active' : ''}`}
                             onClick={() => setActiveTab('plugins')}
                         >
                             Plugins
-                        </button>
-                        <button
-                            className={`tab ${activeTab === 'themes' ? 'active' : ''}`}
+                        </div>
+                        <div
+                            className={`app-detail-tab ${activeTab === 'themes' ? 'active' : ''}`}
                             onClick={() => setActiveTab('themes')}
                         >
                             Themes
-                        </button>
-                        <button
-                            className={`tab ${activeTab === 'backups' ? 'active' : ''}`}
+                        </div>
+                        <div
+                            className={`app-detail-tab ${activeTab === 'backups' ? 'active' : ''}`}
                             onClick={() => setActiveTab('backups')}
                         >
                             Backups
-                        </button>
+                        </div>
                     </>
                 )}
-                <button
-                    className={`tab ${activeTab === 'build' ? 'active' : ''}`}
+                <div
+                    className={`app-detail-tab ${activeTab === 'build' ? 'active' : ''}`}
                     onClick={() => setActiveTab('build')}
                 >
                     Build
-                </button>
-                <button
-                    className={`tab ${activeTab === 'deploy' ? 'active' : ''}`}
+                </div>
+                <div
+                    className={`app-detail-tab ${activeTab === 'deploy' ? 'active' : ''}`}
                     onClick={() => setActiveTab('deploy')}
                 >
                     Deploy
-                </button>
-                <button
-                    className={`tab ${activeTab === 'logs' ? 'active' : ''}`}
+                </div>
+                <div
+                    className={`app-detail-tab ${activeTab === 'logs' ? 'active' : ''}`}
                     onClick={() => setActiveTab('logs')}
                 >
                     Logs
-                </button>
-                <button
-                    className={`tab ${activeTab === 'settings' ? 'active' : ''}`}
+                </div>
+                <div
+                    className={`app-detail-tab ${activeTab === 'settings' ? 'active' : ''}`}
                     onClick={() => setActiveTab('settings')}
                 >
                     Settings
-                </button>
+                </div>
             </div>
 
-            <div className="tab-content">
+            {/* Tab Content */}
+            <div className="app-detail-content">
                 {activeTab === 'overview' && <OverviewTab app={app} onUpdate={loadApp} />}
                 {activeTab === 'environment' && <EnvironmentVariables appId={app.id} />}
                 {activeTab === 'packages' && isPythonApp && <PackagesTab appId={app.id} />}
@@ -240,6 +283,7 @@ const ApplicationDetail = () => {
     );
 };
 
+// Overview Tab with new grid layout
 const OverviewTab = ({ app, onUpdate }) => {
     const navigate = useNavigate();
     const [status, setStatus] = useState(null);
@@ -247,6 +291,7 @@ const OverviewTab = ({ app, onUpdate }) => {
     const [linkedApps, setLinkedApps] = useState([]);
     const [showLinkModal, setShowLinkModal] = useState(false);
     const [linkLoading, setLinkLoading] = useState(false);
+    const [containerStats, setContainerStats] = useState(null);
 
     useEffect(() => {
         if (['flask', 'django'].includes(app.app_type)) {
@@ -254,6 +299,9 @@ const OverviewTab = ({ app, onUpdate }) => {
         }
         loadAppStatus();
         loadLinkedApps();
+        if (app.app_type === 'docker') {
+            loadContainerStats();
+        }
     }, [app]);
 
     async function loadStatus() {
@@ -283,6 +331,22 @@ const OverviewTab = ({ app, onUpdate }) => {
         }
     }
 
+    async function loadContainerStats() {
+        try {
+            // Try to get container stats for docker apps
+            const containers = await api.getContainers(true);
+            const appContainer = containers.containers?.find(c =>
+                c.name?.includes(app.name) || c.name?.includes(app.slug)
+            );
+            if (appContainer && appContainer.state === 'running') {
+                const stats = await api.getContainerStats(appContainer.id);
+                setContainerStats(stats.stats);
+            }
+        } catch (err) {
+            console.error('Failed to load container stats:', err);
+        }
+    }
+
     async function handleUnlink() {
         if (!window.confirm('Are you sure you want to unlink these apps? Database credentials will remain unchanged.')) {
             return;
@@ -304,114 +368,179 @@ const OverviewTab = ({ app, onUpdate }) => {
         loadLinkedApps();
     }
 
+    function parseResourceValue(value) {
+        if (!value) return 0;
+        return parseFloat(value.replace('%', '')) || 0;
+    }
+
     return (
-        <div className="overview-grid">
-            <div className="card">
-                <h3>Application Info</h3>
-                <div className="info-list">
-                    <div className="info-item">
-                        <span className="info-label">Type</span>
-                        <span className="info-value">{app.app_type.toUpperCase()}</span>
-                    </div>
-                    <div className="info-item">
-                        <span className="info-label">Root Path</span>
-                        <span className="info-value mono">{app.root_path}</span>
-                    </div>
-                    {app.python_version && (
-                        <div className="info-item">
-                            <span className="info-label">Python Version</span>
-                            <span className="info-value">{app.python_version}</span>
+        <div className="app-overview-grid">
+            {/* Left Column */}
+            <div className="app-overview-left">
+                {/* Application Info Panel */}
+                <div className="app-panel">
+                    <div className="app-panel-header">Application Info</div>
+                    <div className="app-panel-body">
+                        <div className="app-info-grid">
+                            <div className="app-info-item">
+                                <span className="app-info-label">Type</span>
+                                <span className="app-info-value">{app.app_type === 'docker' ? 'Docker Container' : app.app_type.toUpperCase()}</span>
+                            </div>
+                            <div className="app-info-item">
+                                <span className="app-info-label">Port</span>
+                                <span className="app-info-value">
+                                    {app.port || '-'}
+                                    {appStatus && app.port && (
+                                        <span className={`port-indicator ${appStatus.port_accessible ? 'accessible' : ''}`}>
+                                            {appStatus.port_accessible ? ' (accessible)' : ' (not accessible)'}
+                                        </span>
+                                    )}
+                                </span>
+                            </div>
+                            {app.python_version && (
+                                <div className="app-info-item">
+                                    <span className="app-info-label">Python Version</span>
+                                    <span className="app-info-value">{app.python_version}</span>
+                                </div>
+                            )}
+                            {app.php_version && (
+                                <div className="app-info-item">
+                                    <span className="app-info-label">PHP Version</span>
+                                    <span className="app-info-value">{app.php_version}</span>
+                                </div>
+                            )}
+                            <div className="app-info-item full-width">
+                                <span className="app-info-label">Root Path</span>
+                                <div><span className="app-path-value">{app.root_path || `/var/serverkit/apps/${app.name}`}</span></div>
+                            </div>
                         </div>
-                    )}
-                    {app.php_version && (
-                        <div className="info-item">
-                            <span className="info-label">PHP Version</span>
-                            <span className="info-value">{app.php_version}</span>
-                        </div>
-                    )}
-                    {app.port && (
-                        <div className="info-item">
-                            <span className="info-label">Port</span>
-                            <span className="info-value">
-                                {app.port}
-                                {appStatus && (
-                                    <span className={`port-status ${appStatus.port_accessible ? 'accessible' : 'not-accessible'}`}>
-                                        {appStatus.port_accessible ? ' (accessible)' : ' (not accessible)'}
-                                    </span>
-                                )}
-                            </span>
-                        </div>
-                    )}
-                    <div className="info-item">
-                        <span className="info-label">Created</span>
-                        <span className="info-value">{new Date(app.created_at).toLocaleDateString()}</span>
                     </div>
                 </div>
+
+                {/* Routing Diagnostics Panel (Docker apps only) */}
+                {app.app_type === 'docker' && (
+                    <RoutingDiagnosticsPanel appId={app.id} />
+                )}
+
+                {/* Environment Linking Panel */}
+                <div className="app-panel">
+                    <div className="app-panel-header">Environment Linking</div>
+                    <div className="app-panel-body">
+                        <p className="app-panel-hint">
+                            Link this app to another to create a production/development pair. Linked apps can share database credentials.
+                        </p>
+                        <LinkedAppsSection
+                            app={app}
+                            linkedApps={linkedApps}
+                            onLink={() => setShowLinkModal(true)}
+                            onUnlink={handleUnlink}
+                            onNavigate={(appId) => navigate(`/apps/${appId}`)}
+                            loading={linkLoading}
+                            compact
+                        />
+                    </div>
+                </div>
+
+                {/* Process Status (Python apps) */}
+                {status && (
+                    <div className="app-panel">
+                        <div className="app-panel-header">Process Status</div>
+                        <div className="app-panel-body">
+                            <div className="app-info-grid">
+                                <div className="app-info-item">
+                                    <span className="app-info-label">Service</span>
+                                    <span className="app-info-value mono">{status.service_name}</span>
+                                </div>
+                                <div className="app-info-item">
+                                    <span className="app-info-label">State</span>
+                                    <span className="app-info-value">{status.active_state} ({status.sub_state})</span>
+                                </div>
+                                {status.main_pid !== '0' && (
+                                    <div className="app-info-item">
+                                        <span className="app-info-label">PID</span>
+                                        <span className="app-info-value mono">{status.main_pid}</span>
+                                    </div>
+                                )}
+                                {status.memory && status.memory !== '0' && (
+                                    <div className="app-info-item">
+                                        <span className="app-info-label">Memory</span>
+                                        <span className="app-info-value">{formatBytes(parseInt(status.memory))}</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Domains Panel */}
+                {app.domains && app.domains.length > 0 && (
+                    <div className="app-panel">
+                        <div className="app-panel-header">Domains</div>
+                        <div className="app-panel-body">
+                            <div className="domains-list">
+                                {app.domains.map(domain => (
+                                    <div key={domain.id} className="domain-item">
+                                        <a href={`https://${domain.name}`} target="_blank" rel="noopener noreferrer">
+                                            {domain.name}
+                                        </a>
+                                        {domain.ssl_enabled && (
+                                            <span className="ssl-badge">SSL</span>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
-            {status && (
-                <div className="card">
-                    <h3>Process Status</h3>
-                    <div className="info-list">
-                        <div className="info-item">
-                            <span className="info-label">Service</span>
-                            <span className="info-value mono">{status.service_name}</span>
+            {/* Right Column */}
+            <div className="app-overview-right">
+                {/* Private URL Panel (Docker apps with port) */}
+                {app.app_type === 'docker' && app.port && (
+                    <PrivateURLSection app={app} onUpdate={onUpdate} />
+                )}
+
+                {/* Live Resources Panel */}
+                {app.app_type === 'docker' && (
+                    <div className="app-panel">
+                        <div className="app-panel-header">Live Resources</div>
+                        <div className="app-panel-body">
+                            <div className="resource-bar-container">
+                                <div className="resource-bar-header">
+                                    <span className="resource-bar-label">CPU Load</span>
+                                    <span className="resource-bar-value">
+                                        {containerStats ? `${parseResourceValue(containerStats.CPUPerc).toFixed(0)}%` : '-'}
+                                    </span>
+                                </div>
+                                <div className="resource-bar-track">
+                                    <div
+                                        className="resource-bar-fill cpu"
+                                        style={{ width: `${containerStats ? parseResourceValue(containerStats.CPUPerc) : 0}%` }}
+                                    />
+                                </div>
+                            </div>
+                            <div className="resource-bar-container">
+                                <div className="resource-bar-header">
+                                    <span className="resource-bar-label">RAM Usage</span>
+                                    <span className="resource-bar-value">
+                                        {containerStats?.MemUsage || '-'}
+                                    </span>
+                                </div>
+                                <div className="resource-bar-track">
+                                    <div
+                                        className="resource-bar-fill ram"
+                                        style={{ width: `${containerStats ? parseResourceValue(containerStats.MemPerc) : 0}%` }}
+                                    />
+                                </div>
+                            </div>
+                            {!containerStats && app.status !== 'running' && (
+                                <p className="resource-hint">Start the container to see live resources.</p>
+                            )}
                         </div>
-                        <div className="info-item">
-                            <span className="info-label">State</span>
-                            <span className="info-value">{status.active_state} ({status.sub_state})</span>
-                        </div>
-                        {status.main_pid !== '0' && (
-                            <div className="info-item">
-                                <span className="info-label">PID</span>
-                                <span className="info-value mono">{status.main_pid}</span>
-                            </div>
-                        )}
-                        {status.memory && status.memory !== '0' && (
-                            <div className="info-item">
-                                <span className="info-label">Memory</span>
-                                <span className="info-value">{formatBytes(parseInt(status.memory))}</span>
-                            </div>
-                        )}
                     </div>
-                </div>
-            )}
-
-            {app.domains && app.domains.length > 0 && (
-                <div className="card">
-                    <h3>Domains</h3>
-                    <div className="domains-list">
-                        {app.domains.map(domain => (
-                            <div key={domain.id} className="domain-item">
-                                <a href={`https://${domain.name}`} target="_blank" rel="noopener noreferrer">
-                                    {domain.name}
-                                </a>
-                                {domain.ssl_enabled && (
-                                    <span className="ssl-badge">SSL</span>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {app.app_type === 'docker' && (
-                <RoutingDiagnosticsCard appId={app.id} />
-            )}
-
-            {app.app_type === 'docker' && app.port && (
-                <PrivateURLSection app={app} onUpdate={onUpdate} />
-            )}
-
-            {/* Environment Linking Section */}
-            <LinkedAppsSection
-                app={app}
-                linkedApps={linkedApps}
-                onLink={() => setShowLinkModal(true)}
-                onUnlink={handleUnlink}
-                onNavigate={(appId) => navigate(`/apps/${appId}`)}
-                loading={linkLoading}
-            />
+                )}
+            </div>
 
             {showLinkModal && (
                 <LinkAppModal
@@ -424,10 +553,11 @@ const OverviewTab = ({ app, onUpdate }) => {
     );
 };
 
-const RoutingDiagnosticsCard = ({ appId }) => {
+// Routing Diagnostics Panel
+const RoutingDiagnosticsPanel = ({ appId }) => {
     const [diagnostics, setDiagnostics] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [expanded, setExpanded] = useState(false);
+    const [lastChecked, setLastChecked] = useState(null);
 
     async function runDiagnostics() {
         setLoading(true);
@@ -439,7 +569,7 @@ const RoutingDiagnosticsCard = ({ appId }) => {
             });
             const data = await response.json();
             setDiagnostics(data);
-            setExpanded(true);
+            setLastChecked(new Date());
         } catch (err) {
             console.error('Failed to run diagnostics:', err);
         } finally {
@@ -447,124 +577,65 @@ const RoutingDiagnosticsCard = ({ appId }) => {
         }
     }
 
-    function getHealthIcon(healthy) {
-        return healthy ? (
-            <span className="health-icon healthy">&#10003;</span>
-        ) : (
-            <span className="health-icon unhealthy">&#10007;</span>
-        );
-    }
+    const isHealthy = diagnostics?.health?.overall;
 
     return (
-        <div className="card diagnostics-card">
-            <div className="card-header-row">
-                <h3>Routing Diagnostics</h3>
+        <div className="app-panel">
+            <div className="app-panel-header">
+                <span>Routing Diagnostics</span>
                 <button
-                    className="btn btn-sm btn-secondary"
+                    className="btn btn-ghost btn-sm"
                     onClick={runDiagnostics}
                     disabled={loading}
                 >
                     {loading ? 'Checking...' : 'Run Diagnostics'}
                 </button>
             </div>
-
-            {diagnostics && (
-                <div className="diagnostics-results">
-                    <div className={`health-summary ${diagnostics.health?.overall ? 'healthy' : 'unhealthy'}`}>
-                        <span className="health-status">
-                            {diagnostics.health?.overall ? 'All checks passed' : 'Issues detected'}
-                        </span>
-                    </div>
-
-                    {diagnostics.nginx?.health && (
-                        <div className="diagnostics-section">
-                            <h4>Nginx Configuration</h4>
-                            <div className="check-list">
-                                <div className="check-item">
-                                    {getHealthIcon(diagnostics.nginx.health.config_exists)}
-                                    <span>Config exists</span>
-                                </div>
-                                <div className="check-item">
-                                    {getHealthIcon(diagnostics.nginx.health.config_enabled)}
-                                    <span>Config enabled</span>
-                                </div>
-                                <div className="check-item">
-                                    {getHealthIcon(diagnostics.nginx.health.nginx_running)}
-                                    <span>Nginx running</span>
-                                </div>
-                                <div className="check-item">
-                                    {getHealthIcon(diagnostics.nginx.health.syntax_valid)}
-                                    <span>Syntax valid</span>
-                                </div>
+            <div className="app-panel-body">
+                {diagnostics ? (
+                    <>
+                        <div className={`diag-status ${isHealthy ? 'healthy' : 'unhealthy'}`}>
+                            <div className={`diag-icon ${isHealthy ? 'healthy' : 'unhealthy'}`}>
+                                {isHealthy ? '✓' : '✗'}
+                            </div>
+                            <div className="diag-text">
+                                <h4>{isHealthy ? 'Configuration Healthy' : 'Issues Detected'}</h4>
+                                <p>
+                                    {lastChecked && `Last checked: ${Math.round((Date.now() - lastChecked) / 60000)} minutes ago. `}
+                                    {isHealthy ? 'No routing issues detected.' : 'Some checks failed.'}
+                                </p>
                             </div>
                         </div>
-                    )}
-
-                    {diagnostics.docker && (
-                        <div className="diagnostics-section">
-                            <h4>Docker Status</h4>
-                            <div className="check-list">
-                                <div className="check-item">
-                                    {getHealthIcon(diagnostics.docker.port_check?.accessible)}
-                                    <span>Port {diagnostics.app?.port} accessible</span>
-                                </div>
-                                <div className="check-item">
-                                    {getHealthIcon(diagnostics.docker.containers?.length > 0)}
-                                    <span>{diagnostics.docker.containers?.length || 0} container(s) found</span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {diagnostics.health?.issues?.length > 0 && (
-                        <div className="diagnostics-section issues">
-                            <h4>Issues</h4>
-                            <ul className="issues-list">
-                                {diagnostics.health.issues.map((issue, idx) => (
-                                    <li key={idx}>{issue}</li>
+                        {diagnostics.health?.issues?.length > 0 && (
+                            <ul className="diag-issues">
+                                {diagnostics.health.issues.map((issue, i) => (
+                                    <li key={i}>{issue}</li>
                                 ))}
                             </ul>
-                        </div>
-                    )}
-
-                    {diagnostics.health?.recommendations?.length > 0 && (
-                        <div className="diagnostics-section recommendations">
-                            <h4>Recommendations</h4>
-                            <ul className="recommendations-list">
-                                {diagnostics.health.recommendations.map((rec, idx) => (
-                                    <li key={idx}>{rec}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-
-                    {expanded && diagnostics.nginx?.config?.content && (
-                        <div className="diagnostics-section">
-                            <h4>
-                                Nginx Config
-                                <button
-                                    className="btn btn-xs btn-ghost"
-                                    onClick={() => setExpanded(!expanded)}
-                                >
-                                    {expanded ? 'Hide' : 'Show'}
-                                </button>
-                            </h4>
-                            <pre className="config-preview">
-                                {diagnostics.nginx.config.content}
-                            </pre>
-                        </div>
-                    )}
-                </div>
-            )}
-
-            {!diagnostics && !loading && (
-                <p className="diagnostics-hint">
-                    Click "Run Diagnostics" to check routing configuration and identify issues.
-                </p>
-            )}
+                        )}
+                    </>
+                ) : (
+                    <p className="app-panel-hint">
+                        Click "Run Diagnostics" to check routing configuration and identify issues.
+                    </p>
+                )}
+            </div>
         </div>
     );
 };
+
+// Helper function
+function formatBytes(bytes) {
+    if (!bytes || bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+// ============================================
+// EXISTING TAB COMPONENTS (preserved)
+// ============================================
 
 const PackagesTab = ({ appId }) => {
     const toast = useToast();
@@ -644,95 +715,6 @@ const PackagesTab = ({ appId }) => {
                     <div key={pkg.name} className="package-item">
                         <span className="package-name">{pkg.name}</span>
                         <span className="package-version">{pkg.version}</span>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
-
-const EnvironmentTab = ({ appId }) => {
-    const [envVars, setEnvVars] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [newKey, setNewKey] = useState('');
-    const [newValue, setNewValue] = useState('');
-
-    useEffect(() => {
-        loadEnvVars();
-    }, [appId]);
-
-    async function loadEnvVars() {
-        try {
-            const data = await api.getPythonEnvVars(appId);
-            setEnvVars(data.env_vars || {});
-        } catch (err) {
-            console.error('Failed to load env vars:', err);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    async function handleAdd(e) {
-        e.preventDefault();
-        if (!newKey.trim()) return;
-
-        try {
-            await api.setPythonEnvVars(appId, { [newKey]: newValue });
-            setNewKey('');
-            setNewValue('');
-            loadEnvVars();
-        } catch (err) {
-            console.error('Failed to add env var:', err);
-        }
-    }
-
-    async function handleDelete(key) {
-        if (!confirm(`Delete ${key}?`)) return;
-
-        try {
-            await api.deletePythonEnvVar(appId, key);
-            loadEnvVars();
-        } catch (err) {
-            console.error('Failed to delete env var:', err);
-        }
-    }
-
-    if (loading) {
-        return <div className="loading">Loading environment variables...</div>;
-    }
-
-    return (
-        <div>
-            <h3>Environment Variables</h3>
-            <p className="hint">Changes require app restart to take effect.</p>
-
-            <form className="env-form" onSubmit={handleAdd}>
-                <input
-                    type="text"
-                    value={newKey}
-                    onChange={(e) => setNewKey(e.target.value)}
-                    placeholder="KEY"
-                />
-                <input
-                    type="text"
-                    value={newValue}
-                    onChange={(e) => setNewValue(e.target.value)}
-                    placeholder="value"
-                />
-                <button type="submit" className="btn btn-primary">Add</button>
-            </form>
-
-            <div className="env-list">
-                {Object.entries(envVars).map(([key, value]) => (
-                    <div key={key} className="env-item">
-                        <span className="env-key">{key}</span>
-                        <span className="env-value">{value}</span>
-                        <button
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => handleDelete(key)}
-                        >
-                            Delete
-                        </button>
                     </div>
                 ))}
             </div>
@@ -1114,7 +1096,6 @@ const BuildTab = ({ appId, appPath }) => {
     const [buildLogs, setBuildLogs] = useState([]);
     const [error, setError] = useState(null);
 
-    // Config form state
     const [configForm, setConfigForm] = useState({
         buildMethod: 'auto',
         dockerfilePath: 'Dockerfile',
@@ -1242,25 +1223,6 @@ const BuildTab = ({ appId, appPath }) => {
         }
     }
 
-    async function loadBuildLogs() {
-        try {
-            const result = await api.getBuildLogs(appId);
-            setBuildLogs(result.logs || []);
-        } catch (err) {
-            console.error('Failed to load build logs:', err);
-        }
-    }
-
-    async function viewBuildLog(timestamp) {
-        try {
-            const log = await api.getBuildLogDetail(appId, timestamp);
-            setSelectedLog(log);
-            setShowLogsModal(true);
-        } catch (err) {
-            toast.error('Failed to load build log');
-        }
-    }
-
     function getStatusBadgeClass(status) {
         switch (status) {
             case 'live': return 'badge-success';
@@ -1292,308 +1254,159 @@ const BuildTab = ({ appId, appPath }) => {
                 </div>
             )}
 
-            {/* Detection Results */}
             {detection && (
                 <div className="card">
                     <h3>Auto-Detection Results</h3>
                     <div className="detection-results">
                         <div className="detection-item">
-                            <span className="detection-label">Language</span>
-                            <span className="detection-value">{detection.language || 'Unknown'}</span>
+                            <span className="detection-label">Detected Method:</span>
+                            <span className="detection-value">{detection.detected_method || 'None'}</span>
                         </div>
-                        <div className="detection-item">
-                            <span className="detection-label">Framework</span>
-                            <span className="detection-value">{detection.framework || 'Unknown'}</span>
-                        </div>
-                        <div className="detection-item">
-                            <span className="detection-label">Recommended</span>
-                            <span className="detection-value">{detection.build_method}</span>
-                        </div>
-                        <div className="detection-item">
-                            <span className="detection-label">Dockerfile</span>
-                            <span className={`detection-value ${detection.has_dockerfile ? 'text-success' : ''}`}>
-                                {detection.has_dockerfile ? 'Found' : 'Not found'}
-                            </span>
-                        </div>
+                        {detection.dockerfile_exists && (
+                            <div className="detection-item">
+                                <span className="detection-label">Dockerfile:</span>
+                                <span className="detection-value">Found</span>
+                            </div>
+                        )}
+                        {detection.docker_compose_exists && (
+                            <div className="detection-item">
+                                <span className="detection-label">Docker Compose:</span>
+                                <span className="detection-value">Found</span>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
 
-            {/* Build Configuration */}
             <div className="card">
-                <div className="section-header">
+                <div className="card-header-row">
                     <h3>Build Configuration</h3>
                     <button className="btn btn-secondary btn-sm" onClick={() => setShowConfigModal(true)}>
-                        {buildConfig ? 'Edit' : 'Configure'}
+                        Configure
                     </button>
                 </div>
-
                 {buildConfig ? (
                     <div className="info-list">
                         <div className="info-item">
-                            <span className="info-label">Build Method</span>
+                            <span className="info-label">Method</span>
                             <span className="info-value">{buildConfig.build_method}</span>
-                        </div>
-                        {buildConfig.dockerfile_path && buildConfig.build_method === 'dockerfile' && (
-                            <div className="info-item">
-                                <span className="info-label">Dockerfile</span>
-                                <span className="info-value mono">{buildConfig.dockerfile_path}</span>
-                            </div>
-                        )}
-                        <div className="info-item">
-                            <span className="info-label">Cache</span>
-                            <span className="info-value">{buildConfig.cache_enabled ? 'Enabled' : 'Disabled'}</span>
                         </div>
                         <div className="info-item">
                             <span className="info-label">Timeout</span>
                             <span className="info-value">{buildConfig.timeout}s</span>
                         </div>
-                        <div className="info-item">
-                            <span className="info-label">Build Count</span>
-                            <span className="info-value">{buildConfig.build_count || 0}</span>
-                        </div>
                     </div>
                 ) : (
-                    <p className="hint">No build configuration. Click Configure to set up builds.</p>
+                    <p className="hint">No build configuration. Click Configure to set up.</p>
                 )}
-
-                {buildConfig && (
-                    <div className="build-actions">
-                        <button
-                            className="btn btn-secondary"
-                            onClick={() => handleBuild(false)}
-                            disabled={building || deploying}
-                        >
-                            {building ? 'Building...' : 'Build Only'}
-                        </button>
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => handleDeploy(false)}
-                            disabled={building || deploying}
-                        >
-                            {deploying ? 'Deploying...' : 'Build & Deploy'}
-                        </button>
-                    </div>
-                )}
+                <div className="card-actions">
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => handleDeploy(false)}
+                        disabled={deploying || building}
+                    >
+                        {deploying ? 'Deploying...' : 'Build & Deploy'}
+                    </button>
+                    <button
+                        className="btn btn-secondary"
+                        onClick={() => handleBuild(false)}
+                        disabled={building || deploying}
+                    >
+                        {building ? 'Building...' : 'Build Only'}
+                    </button>
+                </div>
             </div>
 
-            {/* Current Deployment */}
-            {currentDeployment && (
-                <div className="card current-deployment">
-                    <h3>Current Deployment</h3>
-                    <div className="deployment-current-info">
-                        <div className="deployment-version">
-                            <span className="version-number">v{currentDeployment.version}</span>
-                            <span className={`badge ${getStatusBadgeClass(currentDeployment.status)}`}>
-                                {currentDeployment.status}
-                            </span>
-                        </div>
-                        {currentDeployment.commit_hash && (
-                            <div className="deployment-commit">
-                                <span className="commit-hash mono">{currentDeployment.commit_hash.substring(0, 8)}</span>
-                                {currentDeployment.commit_message && (
-                                    <span className="commit-message">{currentDeployment.commit_message}</span>
+            {deployments.length > 0 && (
+                <div className="card">
+                    <h3>Deployment History</h3>
+                    <div className="deployments-list">
+                        {deployments.map(dep => (
+                            <div key={dep.version} className={`deployment-item ${dep.status === 'live' ? 'current' : ''}`}>
+                                <div className="deployment-info">
+                                    <span className="deployment-version">v{dep.version}</span>
+                                    <span className={`badge ${getStatusBadgeClass(dep.status)}`}>{dep.status}</span>
+                                </div>
+                                <div className="deployment-meta">
+                                    <span>{new Date(dep.created_at).toLocaleString()}</span>
+                                    <span>{formatDuration(dep.build_duration)}</span>
+                                </div>
+                                {dep.status !== 'live' && (
+                                    <button
+                                        className="btn btn-secondary btn-sm"
+                                        onClick={() => handleRollback(dep.version)}
+                                        disabled={deploying}
+                                    >
+                                        Rollback
+                                    </button>
                                 )}
                             </div>
-                        )}
-                        <div className="deployment-meta">
-                            <span>Deployed {new Date(currentDeployment.deploy_completed_at).toLocaleString()}</span>
-                            {currentDeployment.duration && (
-                                <span>Duration: {formatDuration(currentDeployment.duration)}</span>
-                            )}
-                        </div>
-                    </div>
-                    <div className="deployment-actions">
-                        <button
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => handleRollback()}
-                            disabled={deploying || deployments.length < 2}
-                        >
-                            Rollback to Previous
-                        </button>
+                        ))}
                     </div>
                 </div>
             )}
 
-            {/* Deployment History */}
-            <div className="card">
-                <div className="section-header">
-                    <h3>Deployment History</h3>
-                    <button className="btn btn-secondary btn-sm" onClick={loadData}>
-                        Refresh
-                    </button>
-                </div>
-
-                {deployments.length === 0 ? (
-                    <p className="hint">No deployments yet.</p>
-                ) : (
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th>Version</th>
-                                <th>Status</th>
-                                <th>Commit</th>
-                                <th>Deployed</th>
-                                <th>Duration</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {deployments.map(deployment => (
-                                <tr key={deployment.id}>
-                                    <td>
-                                        <span className="version-tag">{deployment.version_tag || `v${deployment.version}`}</span>
-                                    </td>
-                                    <td>
-                                        <span className={`badge ${getStatusBadgeClass(deployment.status)}`}>
-                                            {deployment.status}
-                                        </span>
-                                    </td>
-                                    <td className="mono">
-                                        {deployment.commit_hash ? deployment.commit_hash.substring(0, 8) : '-'}
-                                    </td>
-                                    <td>
-                                        {deployment.deploy_completed_at
-                                            ? new Date(deployment.deploy_completed_at).toLocaleString()
-                                            : '-'}
-                                    </td>
-                                    <td>{formatDuration(deployment.duration)}</td>
-                                    <td>
-                                        {deployment.status !== 'live' && deployment.image_tag && (
-                                            <button
-                                                className="btn btn-secondary btn-xs"
-                                                onClick={() => handleRollback(deployment.version)}
-                                                disabled={deploying}
-                                            >
-                                                Rollback
-                                            </button>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
-            </div>
-
-            {/* Build Logs */}
-            <div className="card">
-                <div className="section-header">
-                    <h3>Build Logs</h3>
-                    <button className="btn btn-secondary btn-sm" onClick={loadBuildLogs}>
-                        Load Logs
-                    </button>
-                </div>
-
-                {buildLogs.length === 0 ? (
-                    <p className="hint">Click "Load Logs" to view build history.</p>
-                ) : (
-                    <div className="build-logs-list">
-                        {buildLogs.map((log, index) => (
-                            <div key={index} className="build-log-item" onClick={() => viewBuildLog(log.started_at)}>
-                                <span className={`badge ${getStatusBadgeClass(log.status)}`}>{log.status}</span>
-                                <span className="build-log-method">{log.build_method}</span>
-                                <span className="build-log-time">{new Date(log.started_at).toLocaleString()}</span>
-                                <span className="build-log-lines">{log.log_count} lines</span>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-
-            {/* Configure Build Modal */}
             {showConfigModal && (
                 <div className="modal-overlay" onClick={() => setShowConfigModal(false)}>
                     <div className="modal" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
-                            <h2>Configure Build</h2>
+                            <h2>Build Configuration</h2>
                             <button className="modal-close" onClick={() => setShowConfigModal(false)}>&times;</button>
                         </div>
                         <form onSubmit={handleConfigureBuild}>
-                            <div className="modal-body">
+                            <div className="form-group">
+                                <label>Build Method</label>
+                                <select
+                                    value={configForm.buildMethod}
+                                    onChange={e => setConfigForm({...configForm, buildMethod: e.target.value})}
+                                >
+                                    <option value="auto">Auto-detect</option>
+                                    <option value="dockerfile">Dockerfile</option>
+                                    <option value="docker-compose">Docker Compose</option>
+                                    <option value="custom">Custom</option>
+                                </select>
+                            </div>
+                            {configForm.buildMethod === 'dockerfile' && (
                                 <div className="form-group">
-                                    <label>Build Method</label>
-                                    <select
-                                        value={configForm.buildMethod}
-                                        onChange={(e) => setConfigForm({...configForm, buildMethod: e.target.value})}
-                                    >
-                                        <option value="auto">Auto-detect</option>
-                                        <option value="dockerfile">Dockerfile</option>
-                                        <option value="nixpacks">Nixpacks</option>
-                                        <option value="custom">Custom Command</option>
-                                    </select>
+                                    <label>Dockerfile Path</label>
+                                    <input
+                                        type="text"
+                                        value={configForm.dockerfilePath}
+                                        onChange={e => setConfigForm({...configForm, dockerfilePath: e.target.value})}
+                                    />
                                 </div>
-
-                                {configForm.buildMethod === 'dockerfile' && (
+                            )}
+                            {configForm.buildMethod === 'custom' && (
+                                <>
                                     <div className="form-group">
-                                        <label>Dockerfile Path</label>
+                                        <label>Build Command</label>
                                         <input
                                             type="text"
-                                            value={configForm.dockerfilePath}
-                                            onChange={(e) => setConfigForm({...configForm, dockerfilePath: e.target.value})}
-                                            placeholder="Dockerfile"
-                                        />
-                                    </div>
-                                )}
-
-                                {(configForm.buildMethod === 'custom' || configForm.buildMethod === 'nixpacks') && (
-                                    <>
-                                        <div className="form-group">
-                                            <label>Custom Build Command</label>
-                                            <textarea
-                                                value={configForm.customBuildCmd}
-                                                onChange={(e) => setConfigForm({...configForm, customBuildCmd: e.target.value})}
-                                                placeholder="npm install && npm run build"
-                                                rows={2}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Custom Start Command</label>
-                                            <textarea
-                                                value={configForm.customStartCmd}
-                                                onChange={(e) => setConfigForm({...configForm, customStartCmd: e.target.value})}
-                                                placeholder="npm start"
-                                                rows={2}
-                                            />
-                                        </div>
-                                    </>
-                                )}
-
-                                <div className="form-group">
-                                    <label className="checkbox-label">
-                                        <input
-                                            type="checkbox"
-                                            checked={configForm.cacheEnabled}
-                                            onChange={(e) => setConfigForm({...configForm, cacheEnabled: e.target.checked})}
-                                        />
-                                        <span>Enable Build Cache</span>
-                                    </label>
-                                </div>
-
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label>Timeout (seconds)</label>
-                                        <input
-                                            type="number"
-                                            value={configForm.timeout}
-                                            onChange={(e) => setConfigForm({...configForm, timeout: parseInt(e.target.value)})}
-                                            min={60}
-                                            max={3600}
+                                            value={configForm.customBuildCmd}
+                                            onChange={e => setConfigForm({...configForm, customBuildCmd: e.target.value})}
+                                            placeholder="npm run build"
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <label>Keep Deployments</label>
+                                        <label>Start Command</label>
                                         <input
-                                            type="number"
-                                            value={configForm.keepDeployments}
-                                            onChange={(e) => setConfigForm({...configForm, keepDeployments: parseInt(e.target.value)})}
-                                            min={1}
-                                            max={50}
+                                            type="text"
+                                            value={configForm.customStartCmd}
+                                            onChange={e => setConfigForm({...configForm, customStartCmd: e.target.value})}
+                                            placeholder="npm start"
                                         />
                                     </div>
-                                </div>
+                                </>
+                            )}
+                            <div className="form-group">
+                                <label>Timeout (seconds)</label>
+                                <input
+                                    type="number"
+                                    value={configForm.timeout}
+                                    onChange={e => setConfigForm({...configForm, timeout: parseInt(e.target.value)})}
+                                />
                             </div>
-                            <div className="modal-footer">
+                            <div className="modal-actions">
                                 <button type="button" className="btn btn-secondary" onClick={() => setShowConfigModal(false)}>
                                     Cancel
                                 </button>
@@ -1605,33 +1418,6 @@ const BuildTab = ({ appId, appPath }) => {
                     </div>
                 </div>
             )}
-
-            {/* Build Log Detail Modal */}
-            {showLogsModal && selectedLog && (
-                <div className="modal-overlay" onClick={() => setShowLogsModal(false)}>
-                    <div className="modal modal-lg" onClick={e => e.stopPropagation()}>
-                        <div className="modal-header">
-                            <h2>Build Log - {selectedLog.build_method}</h2>
-                            <button className="modal-close" onClick={() => setShowLogsModal(false)}>&times;</button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="build-log-meta">
-                                <span className={`badge ${getStatusBadgeClass(selectedLog.status)}`}>{selectedLog.status}</span>
-                                <span>Started: {new Date(selectedLog.started_at).toLocaleString()}</span>
-                                {selectedLog.completed_at && (
-                                    <span>Completed: {new Date(selectedLog.completed_at).toLocaleString()}</span>
-                                )}
-                            </div>
-                            {selectedLog.error && (
-                                <div className="alert alert-danger">{selectedLog.error}</div>
-                            )}
-                            <pre className="build-log-output">
-                                {(selectedLog.logs || []).join('\n')}
-                            </pre>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
@@ -1639,64 +1425,47 @@ const BuildTab = ({ appId, appPath }) => {
 const LogsTab = ({ app }) => {
     const [logs, setLogs] = useState('');
     const [loading, setLoading] = useState(true);
-    const [logType, setLogType] = useState('all');
     const [autoRefresh, setAutoRefresh] = useState(false);
 
     const isDockerApp = app.app_type === 'docker';
+    const isPythonApp = ['flask', 'django'].includes(app.app_type);
 
     useEffect(() => {
         loadLogs();
-    }, [app, logType]);
+    }, [app.id]);
 
     useEffect(() => {
-        let interval;
-        if (autoRefresh) {
-            interval = setInterval(loadLogs, 5000);
-        }
+        if (!autoRefresh) return;
+        const interval = setInterval(loadLogs, 5000);
         return () => clearInterval(interval);
-    }, [autoRefresh]);
+    }, [autoRefresh, app.id]);
 
     async function loadLogs() {
-        setLoading(true);
         try {
+            let data;
             if (isDockerApp) {
-                // Docker apps - use Docker compose logs
-                const data = await api.getDockerAppLogs(app.id, 200);
-                if (data.success) {
-                    // Backend returns 'lines' as array, join them
-                    const logContent = Array.isArray(data.lines)
-                        ? data.lines.join('\n')
-                        : (data.logs || 'No logs available');
-                    setLogs(logContent || 'No logs available');
-                } else {
-                    setLogs(data.error || 'Failed to load logs');
-                }
+                data = await api.getDockerAppLogs(app.id, 200);
+            } else if (isPythonApp) {
+                data = await api.getPythonAppLogs(app.id, 200);
             } else {
-                // Regular apps - use nginx logs
-                const data = await api.getAppLogs(app.name, logType, 200);
-                // Handle both array and string formats
-                const logContent = Array.isArray(data.lines)
-                    ? data.lines.join('\n')
-                    : (data.content || 'No logs available');
-                setLogs(logContent);
+                data = { logs: 'Logs not available for this app type.' };
             }
+            setLogs(data.logs || 'No logs available');
         } catch (err) {
-            setLogs('Failed to load logs: ' + (err.message || 'Unknown error'));
+            console.error('Failed to load logs:', err);
+            setLogs('Failed to load logs');
         } finally {
             setLoading(false);
         }
     }
 
     return (
-        <div>
-            <div className="section-header">
+        <div className="logs-tab">
+            <div className="logs-header">
                 <h3>Application Logs</h3>
-                <div className="log-controls">
-                    {!isDockerApp && (
-                        <select value={logType} onChange={(e) => setLogType(e.target.value)}>
-                            <option value="access">Access Log</option>
-                            <option value="error">Error Log</option>
-                        </select>
+                <div className="logs-controls">
+                    {isPythonApp && (
+                        <span className="hint">Gunicorn/systemd Logs</span>
                     )}
                     {isDockerApp && (
                         <span className="hint">Docker Compose Logs</span>
@@ -1781,7 +1550,6 @@ const SettingsTab = ({ app, onUpdate }) => {
         <div>
             <h3>Application Settings</h3>
 
-            {/* Environment Configuration */}
             <div className="card settings-section">
                 <h4>Environment Configuration</h4>
                 <div className="settings-row">
@@ -1856,16 +1624,13 @@ const DeployTab = ({ appId, appPath }) => {
     const [config, setConfig] = useState(null);
     const [gitStatus, setGitStatus] = useState(null);
     const [history, setHistory] = useState([]);
-    const [webhookLogs, setWebhookLogs] = useState([]);
-    const [branches, setBranches] = useState([]);
     const [loading, setLoading] = useState(true);
     const [deploying, setDeploying] = useState(false);
     const [showConfigModal, setShowConfigModal] = useState(false);
-    const [showWebhookLogs, setShowWebhookLogs] = useState(false);
     const [loadingBranches, setLoadingBranches] = useState(false);
+    const [branches, setBranches] = useState([]);
     const [error, setError] = useState(null);
 
-    // Config form state
     const [configForm, setConfigForm] = useState({
         repoUrl: '',
         branch: 'main',
@@ -1895,13 +1660,10 @@ const DeployTab = ({ appId, appPath }) => {
                     preDeployScript: configRes.config.pre_deploy_script || '',
                     postDeployScript: configRes.config.post_deploy_script || ''
                 });
-                // Load git status if configured
                 try {
                     const statusRes = await api.getGitStatus(appId);
                     setGitStatus(statusRes);
-                } catch (e) {
-                    // Git status may fail if not a git repo yet
-                }
+                } catch (e) {}
             } else {
                 setConfig(null);
             }
@@ -1911,44 +1673,6 @@ const DeployTab = ({ appId, appPath }) => {
             setError(err.message);
         } finally {
             setLoading(false);
-        }
-    }
-
-    async function loadBranchesFromUrl(repoUrl) {
-        if (!repoUrl) return;
-        setLoadingBranches(true);
-        try {
-            const result = await api.getBranchesFromUrl(repoUrl);
-            if (result.success) {
-                setBranches(result.branches || []);
-            }
-        } catch (err) {
-            console.error('Failed to load branches:', err);
-        } finally {
-            setLoadingBranches(false);
-        }
-    }
-
-    async function loadBranchesFromApp() {
-        setLoadingBranches(true);
-        try {
-            const result = await api.getAppBranches(appId);
-            if (result.success) {
-                setBranches(result.branches || []);
-            }
-        } catch (err) {
-            console.error('Failed to load branches:', err);
-        } finally {
-            setLoadingBranches(false);
-        }
-    }
-
-    async function loadWebhookLogs() {
-        try {
-            const result = await api.getWebhookLogs(appId, 20);
-            setWebhookLogs(result.logs || []);
-        } catch (err) {
-            console.error('Failed to load webhook logs:', err);
         }
     }
 
@@ -2016,10 +1740,6 @@ const DeployTab = ({ appId, appPath }) => {
         } finally {
             setDeploying(false);
         }
-    }
-
-    function formatTimestamp(timestamp) {
-        return new Date(timestamp).toLocaleString();
     }
 
     function getStatusBadgeClass(status) {
@@ -2107,20 +1827,10 @@ const DeployTab = ({ appId, appPath }) => {
                                     <span className="info-label">Auto Deploy</span>
                                     <span className="info-value">{config.auto_deploy ? 'Enabled' : 'Disabled'}</span>
                                 </div>
-                                <div className="info-item">
-                                    <span className="info-label">Deploy Count</span>
-                                    <span className="info-value">{config.deploy_count || 0}</span>
-                                </div>
-                                {config.last_deploy && (
-                                    <div className="info-item">
-                                        <span className="info-label">Last Deploy</span>
-                                        <span className="info-value">{formatTimestamp(config.last_deploy)}</span>
-                                    </div>
-                                )}
                             </div>
                             <div className="card-actions">
                                 <button className="btn btn-secondary btn-sm" onClick={() => setShowConfigModal(true)}>
-                                    Edit Configuration
+                                    Edit
                                 </button>
                                 <button className="btn btn-danger btn-sm" onClick={handleRemoveDeployment}>
                                     Remove
@@ -2128,277 +1838,84 @@ const DeployTab = ({ appId, appPath }) => {
                             </div>
                         </div>
 
-                        {gitStatus && !gitStatus.error && (
+                        {history.length > 0 && (
                             <div className="card">
-                                <h3>Git Status</h3>
-                                <div className="info-list">
-                                    <div className="info-item">
-                                        <span className="info-label">Current Branch</span>
-                                        <span className="info-value">{gitStatus.branch}</span>
-                                    </div>
-                                    {gitStatus.commit && (
-                                        <>
-                                            <div className="info-item">
-                                                <span className="info-label">Commit</span>
-                                                <span className="info-value mono">{gitStatus.commit.short_hash}</span>
-                                            </div>
-                                            <div className="info-item">
-                                                <span className="info-label">Message</span>
-                                                <span className="info-value">{gitStatus.commit.message}</span>
-                                            </div>
-                                            <div className="info-item">
-                                                <span className="info-label">Author</span>
-                                                <span className="info-value">{gitStatus.commit.author}</span>
-                                            </div>
-                                        </>
-                                    )}
-                                    <div className="info-item">
-                                        <span className="info-label">Uncommitted Changes</span>
-                                        <span className="info-value">
-                                            {gitStatus.has_uncommitted ? `${gitStatus.changes} file(s)` : 'None'}
-                                        </span>
-                                    </div>
-                                    {(gitStatus.ahead > 0 || gitStatus.behind > 0) && (
-                                        <div className="info-item">
-                                            <span className="info-label">Remote Status</span>
-                                            <span className="info-value">
-                                                {gitStatus.ahead > 0 && `${gitStatus.ahead} ahead`}
-                                                {gitStatus.ahead > 0 && gitStatus.behind > 0 && ', '}
-                                                {gitStatus.behind > 0 && `${gitStatus.behind} behind`}
-                                            </span>
+                                <h3>Deployment History</h3>
+                                <div className="deployments-list">
+                                    {history.slice(0, 5).map((dep, idx) => (
+                                        <div key={idx} className="deployment-item">
+                                            <span className={`badge ${getStatusBadgeClass(dep.status)}`}>{dep.status}</span>
+                                            <span className="deployment-date">{new Date(dep.timestamp).toLocaleString()}</span>
                                         </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="card">
-                            <h3>Webhook</h3>
-                            <p className="hint">Use this URL in your Git provider to trigger automatic deployments on push.</p>
-                            <div className="webhook-url">
-                                <code>{window.location.origin}/api/v1/deploy/webhook/{appId}/{config.webhook_token}</code>
-                                <button
-                                    className="btn btn-secondary btn-sm"
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(
-                                            `${window.location.origin}/api/v1/deploy/webhook/${appId}/${config.webhook_token}`
-                                        );
-                                        toast.success('Webhook URL copied to clipboard');
-                                    }}
-                                >
-                                    Copy
-                                </button>
-                            </div>
-                            <div className="webhook-logs-toggle">
-                                <button
-                                    className="btn btn-secondary btn-sm"
-                                    onClick={() => {
-                                        setShowWebhookLogs(!showWebhookLogs);
-                                        if (!showWebhookLogs) loadWebhookLogs();
-                                    }}
-                                >
-                                    {showWebhookLogs ? 'Hide Webhook Logs' : 'Show Webhook Logs'}
-                                </button>
-                            </div>
-                            {showWebhookLogs && (
-                                <div className="webhook-logs">
-                                    <div className="webhook-logs-header">
-                                        <h4>Recent Webhook Requests</h4>
-                                        <button className="btn btn-secondary btn-sm" onClick={loadWebhookLogs}>
-                                            Refresh
-                                        </button>
-                                    </div>
-                                    {webhookLogs.length === 0 ? (
-                                        <p className="hint">No webhook requests received yet.</p>
-                                    ) : (
-                                        <div className="webhook-logs-list">
-                                            {webhookLogs.map((log, index) => (
-                                                <div key={index} className="webhook-log-item">
-                                                    <div className="webhook-log-header">
-                                                        <span className={`provider-badge ${log.provider}`}>
-                                                            {log.provider}
-                                                        </span>
-                                                        <span className="webhook-log-time">
-                                                            {new Date(log.timestamp).toLocaleString()}
-                                                        </span>
-                                                    </div>
-                                                    <div className="webhook-log-details">
-                                                        <span className="webhook-log-size">
-                                                            Payload: {log.payload_size} bytes
-                                                        </span>
-                                                    </div>
-                                                    {log.payload_preview && (
-                                                        <pre className="webhook-log-preview">
-                                                            {log.payload_preview.substring(0, 200)}
-                                                            {log.payload_preview.length > 200 && '...'}
-                                                        </pre>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    {(config.pre_deploy_script || config.post_deploy_script) && (
-                        <div className="card">
-                            <h3>Deploy Scripts</h3>
-                            <div className="scripts-grid">
-                                {config.pre_deploy_script && (
-                                    <div className="script-section">
-                                        <h4>Pre-Deploy Script</h4>
-                                        <pre className="script-code">{config.pre_deploy_script}</pre>
-                                    </div>
-                                )}
-                                {config.post_deploy_script && (
-                                    <div className="script-section">
-                                        <h4>Post-Deploy Script</h4>
-                                        <pre className="script-code">{config.post_deploy_script}</pre>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="card">
-                        <h3>Deployment History</h3>
-                        {history.length === 0 ? (
-                            <p className="hint">No deployments yet.</p>
-                        ) : (
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>Status</th>
-                                        <th>Started</th>
-                                        <th>Completed</th>
-                                        <th>Details</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {history.map((deploy, index) => (
-                                        <tr key={index}>
-                                            <td>
-                                                <span className={`badge ${getStatusBadgeClass(deploy.status)}`}>
-                                                    {deploy.status}
-                                                </span>
-                                            </td>
-                                            <td>{formatTimestamp(deploy.started_at)}</td>
-                                            <td>{deploy.completed_at ? formatTimestamp(deploy.completed_at) : '-'}</td>
-                                            <td>
-                                                {deploy.error && <span className="text-danger">{deploy.error}</span>}
-                                                {deploy.steps && (
-                                                    <span className="text-muted">
-                                                        {deploy.steps.length} step(s)
-                                                    </span>
-                                                )}
-                                            </td>
-                                        </tr>
                                     ))}
-                                </tbody>
-                            </table>
+                                </div>
+                            </div>
                         )}
                     </div>
                 </>
             )}
 
-            {/* Configure Deployment Modal */}
             {showConfigModal && (
                 <div className="modal-overlay" onClick={() => setShowConfigModal(false)}>
                     <div className="modal" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
-                            <h2>{config ? 'Edit Deployment' : 'Configure Deployment'}</h2>
+                            <h2>Configure Deployment</h2>
                             <button className="modal-close" onClick={() => setShowConfigModal(false)}>&times;</button>
                         </div>
                         <form onSubmit={handleConfigureDeployment}>
-                            <div className="modal-body">
-                                <div className="form-group">
-                                    <label>Repository URL *</label>
-                                    <div className="input-with-action">
-                                        <input
-                                            type="url"
-                                            value={configForm.repoUrl}
-                                            onChange={(e) => setConfigForm({...configForm, repoUrl: e.target.value})}
-                                            placeholder="https://github.com/user/repo.git"
-                                            required
-                                        />
-                                        <button
-                                            type="button"
-                                            className="btn btn-secondary btn-sm"
-                                            onClick={() => loadBranchesFromUrl(configForm.repoUrl)}
-                                            disabled={!configForm.repoUrl || loadingBranches}
-                                        >
-                                            {loadingBranches ? 'Loading...' : 'Fetch Branches'}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="form-group">
-                                    <label>Branch</label>
-                                    {branches.length > 0 ? (
-                                        <select
-                                            value={configForm.branch}
-                                            onChange={(e) => setConfigForm({...configForm, branch: e.target.value})}
-                                        >
-                                            {branches.map(branch => (
-                                                <option key={branch} value={branch}>{branch}</option>
-                                            ))}
-                                        </select>
-                                    ) : (
-                                        <input
-                                            type="text"
-                                            value={configForm.branch}
-                                            onChange={(e) => setConfigForm({...configForm, branch: e.target.value})}
-                                            placeholder="main"
-                                        />
-                                    )}
-                                    <span className="form-help">
-                                        {branches.length > 0
-                                            ? `${branches.length} branches available`
-                                            : 'Click "Fetch Branches" to load available branches'}
-                                    </span>
-                                </div>
-
-                                <div className="form-group">
-                                    <label className="checkbox-label">
-                                        <input
-                                            type="checkbox"
-                                            checked={configForm.autoDeploy}
-                                            onChange={(e) => setConfigForm({...configForm, autoDeploy: e.target.checked})}
-                                        />
-                                        <span>Enable Auto Deploy on Webhook</span>
-                                    </label>
-                                </div>
-
-                                <div className="form-group">
-                                    <label>Pre-Deploy Script (optional)</label>
-                                    <textarea
-                                        value={configForm.preDeployScript}
-                                        onChange={(e) => setConfigForm({...configForm, preDeployScript: e.target.value})}
-                                        placeholder="npm install&#10;npm run build"
-                                        rows={3}
-                                    />
-                                    <span className="form-help">Commands to run before pulling changes</span>
-                                </div>
-
-                                <div className="form-group">
-                                    <label>Post-Deploy Script (optional)</label>
-                                    <textarea
-                                        value={configForm.postDeployScript}
-                                        onChange={(e) => setConfigForm({...configForm, postDeployScript: e.target.value})}
-                                        placeholder="npm install&#10;npm run build&#10;systemctl restart myapp"
-                                        rows={3}
-                                    />
-                                    <span className="form-help">Commands to run after pulling changes</span>
-                                </div>
+                            <div className="form-group">
+                                <label>Repository URL</label>
+                                <input
+                                    type="text"
+                                    value={configForm.repoUrl}
+                                    onChange={e => setConfigForm({...configForm, repoUrl: e.target.value})}
+                                    placeholder="https://github.com/user/repo.git"
+                                    required
+                                />
                             </div>
-                            <div className="modal-footer">
+                            <div className="form-group">
+                                <label>Branch</label>
+                                <input
+                                    type="text"
+                                    value={configForm.branch}
+                                    onChange={e => setConfigForm({...configForm, branch: e.target.value})}
+                                    placeholder="main"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label className="checkbox-label">
+                                    <input
+                                        type="checkbox"
+                                        checked={configForm.autoDeploy}
+                                        onChange={e => setConfigForm({...configForm, autoDeploy: e.target.checked})}
+                                    />
+                                    <span>Enable auto-deploy on push</span>
+                                </label>
+                            </div>
+                            <div className="form-group">
+                                <label>Pre-deploy Script</label>
+                                <textarea
+                                    value={configForm.preDeployScript}
+                                    onChange={e => setConfigForm({...configForm, preDeployScript: e.target.value})}
+                                    placeholder="npm install"
+                                    rows={3}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Post-deploy Script</label>
+                                <textarea
+                                    value={configForm.postDeployScript}
+                                    onChange={e => setConfigForm({...configForm, postDeployScript: e.target.value})}
+                                    placeholder="npm run build"
+                                    rows={3}
+                                />
+                            </div>
+                            <div className="modal-actions">
                                 <button type="button" className="btn btn-secondary" onClick={() => setShowConfigModal(false)}>
                                     Cancel
                                 </button>
                                 <button type="submit" className="btn btn-primary">
-                                    {config ? 'Update Configuration' : 'Configure Deployment'}
+                                    Save Configuration
                                 </button>
                             </div>
                         </form>
@@ -2408,13 +1925,5 @@ const DeployTab = ({ appId, appPath }) => {
         </div>
     );
 };
-
-function formatBytes(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
 
 export default ApplicationDetail;
