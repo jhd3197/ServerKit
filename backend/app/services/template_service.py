@@ -143,18 +143,7 @@ class TemplateService:
             return ''.join(secrets.choice(chars) for _ in range(length))
 
         elif var_type == 'port':
-            # Find available port starting from default
-            import socket
-            start_port = int(default) if default else 8000
-            for port in range(start_port, start_port + 100):
-                try:
-                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    sock.bind(('', port))
-                    sock.close()
-                    return str(port)
-                except OSError:
-                    continue
-            return str(start_port)
+            return str(cls._find_available_port(int(default) if default else 8000))
 
         elif var_type == 'uuid':
             import uuid
@@ -165,6 +154,74 @@ class TemplateService:
             return secrets.token_hex(length // 2)
 
         return str(default)
+
+    @classmethod
+    def _find_available_port(cls, start_port: int = 8000, max_attempts: int = 100) -> int:
+        """Find an available port that's not in use by the system or Docker.
+
+        Checks both socket binding and Docker container port mappings.
+        """
+        import socket
+
+        # Get ports currently used by Docker containers
+        docker_ports = cls._get_docker_used_ports()
+
+        for port in range(start_port, start_port + max_attempts):
+            # Skip if Docker is using this port
+            if port in docker_ports:
+                continue
+
+            # Check if port is available on localhost (where Docker binds)
+            try:
+                # Check 127.0.0.1 specifically since Docker binds there
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.settimeout(1)
+                result = sock.connect_ex(('127.0.0.1', port))
+                sock.close()
+
+                # If connection failed, port is available
+                if result != 0:
+                    # Double-check by trying to bind
+                    try:
+                        test_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        test_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                        test_sock.bind(('127.0.0.1', port))
+                        test_sock.close()
+                        return port
+                    except OSError:
+                        continue
+            except Exception:
+                continue
+
+        # Fallback: return a high port number
+        return start_port + max_attempts
+
+    @classmethod
+    def _get_docker_used_ports(cls) -> set:
+        """Get all ports currently mapped by Docker containers."""
+        used_ports = set()
+        try:
+            result = subprocess.run(
+                ['docker', 'ps', '--format', '{{.Ports}}'],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            if result.returncode == 0:
+                # Parse port mappings like "0.0.0.0:8080->80/tcp, 127.0.0.1:3306->3306/tcp"
+                import re
+                for line in result.stdout.strip().split('\n'):
+                    if line:
+                        # Find all host ports in the format "host:port->container"
+                        matches = re.findall(r'(?:[\d.]+:)?(\d+)->', line)
+                        for port_str in matches:
+                            try:
+                                used_ports.add(int(port_str))
+                            except ValueError:
+                                pass
+        except Exception:
+            pass
+        return used_ports
 
     @classmethod
     def substitute_variables(cls, content: str, variables: Dict) -> str:

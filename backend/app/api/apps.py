@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
@@ -121,6 +122,9 @@ def update_app(app_id):
 @apps_bp.route('/<int:app_id>', methods=['DELETE'])
 @jwt_required()
 def delete_app(app_id):
+    import shutil
+    from app.services.nginx_service import NginxService
+
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
     app = Application.query.get(app_id)
@@ -131,10 +135,46 @@ def delete_app(app_id):
     if user.role != 'admin' and app.user_id != current_user_id:
         return jsonify({'error': 'Access denied'}), 403
 
+    cleanup_results = {
+        'docker': None,
+        'folder': None,
+        'nginx': None
+    }
+
+    # For Docker apps, stop and remove containers/volumes
+    if app.app_type == 'docker' and app.root_path:
+        try:
+            # Stop and remove containers, networks, and volumes
+            result = DockerService.compose_down(app.root_path, volumes=True, remove_orphans=True)
+            cleanup_results['docker'] = result
+        except Exception as e:
+            cleanup_results['docker'] = {'error': str(e)}
+
+        # Delete the app folder
+        try:
+            if app.root_path and app.root_path.startswith('/var/serverkit/apps/'):
+                if os.path.exists(app.root_path):
+                    shutil.rmtree(app.root_path)
+                    cleanup_results['folder'] = {'success': True}
+        except Exception as e:
+            cleanup_results['folder'] = {'error': str(e)}
+
+    # Remove nginx site config
+    try:
+        NginxService.disable_site(app.name)
+        NginxService.delete_site(app.name)
+        cleanup_results['nginx'] = {'success': True}
+    except Exception as e:
+        cleanup_results['nginx'] = {'error': str(e)}
+
+    # Delete from database
     db.session.delete(app)
     db.session.commit()
 
-    return jsonify({'message': 'Application deleted successfully'}), 200
+    return jsonify({
+        'message': 'Application deleted successfully',
+        'cleanup': cleanup_results
+    }), 200
 
 
 @apps_bp.route('/<int:app_id>/start', methods=['POST'])
