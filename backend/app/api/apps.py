@@ -520,6 +520,157 @@ def get_app_logs(app_id):
     return jsonify(result), 200 if result.get('success') else 400
 
 
+@apps_bp.route('/<int:app_id>/container-logs', methods=['GET'])
+@jwt_required()
+def get_container_logs(app_id):
+    """Get container logs for a Docker application.
+
+    Query params:
+        - tail: Number of lines from end (default: 100, max: 10000)
+        - since: ISO timestamp or duration (e.g., '10m', '1h', '2024-01-01T00:00:00Z')
+        - timestamps: Include timestamps (default: true)
+        - format: Output format - 'raw' or 'json' (default: 'raw')
+        - service: Specific service/container name for compose apps (optional)
+
+    Returns:
+        {
+            "success": true,
+            "logs": "...",  // Raw format
+            "lines": [...]  // JSON format with parsed lines
+            "container_id": "...",
+            "container_name": "...",
+            "app_id": 1,
+            "containers": [...] // Available containers for compose apps
+        }
+    """
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    app = Application.query.get(app_id)
+
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if user.role != 'admin' and app.user_id != current_user_id:
+        return jsonify({'error': 'Access denied'}), 403
+
+    # Parse query parameters
+    tail = request.args.get('tail', 100, type=int)
+    tail = min(tail, 10000)  # Cap at 10000 lines
+    since = request.args.get('since')
+    timestamps = request.args.get('timestamps', 'true').lower() == 'true'
+    output_format = request.args.get('format', 'raw')
+    service = request.args.get('service')
+
+    # Get all available containers for this app
+    all_containers = DockerService.get_all_app_containers(app)
+
+    # Determine which container to get logs from
+    container_id = None
+    container_name = None
+
+    if service:
+        # Find specific service container
+        for c in all_containers:
+            if c.get('service') == service or c.get('name') == service:
+                container_id = c.get('id') or c.get('name')
+                container_name = c.get('name')
+                break
+        if not container_id:
+            return jsonify({
+                'success': False,
+                'error': f'Service "{service}" not found',
+                'available_services': [c.get('service') or c.get('name') for c in all_containers]
+            }), 404
+    else:
+        # Get main container
+        container_id = DockerService.get_app_container_id(app)
+        if all_containers:
+            container_name = all_containers[0].get('name')
+
+    if not container_id:
+        return jsonify({
+            'success': False,
+            'error': 'No container found for this application',
+            'hint': 'The application may not have been started yet'
+        }), 404
+
+    # Check container state
+    container_state = DockerService.get_container_state(container_id)
+    if not container_state:
+        return jsonify({
+            'success': False,
+            'error': 'Container not found or no longer exists'
+        }), 404
+
+    # Get logs
+    result = DockerService.get_container_logs(
+        container_id,
+        tail=tail,
+        since=since,
+        timestamps=timestamps
+    )
+
+    if not result.get('success'):
+        return jsonify({
+            'success': False,
+            'error': result.get('error', 'Failed to fetch logs')
+        }), 400
+
+    logs = result.get('logs', '')
+
+    response = {
+        'success': True,
+        'app_id': app_id,
+        'container_id': container_id,
+        'container_name': container_name,
+        'container_state': container_state,
+        'containers': all_containers
+    }
+
+    if output_format == 'json':
+        response['lines'] = DockerService.parse_logs_to_lines(logs)
+    else:
+        response['logs'] = logs
+
+    return jsonify(response), 200
+
+
+@apps_bp.route('/<int:app_id>/containers', methods=['GET'])
+@jwt_required()
+def get_app_containers(app_id):
+    """Get list of containers for a Docker application.
+
+    Useful for compose apps with multiple services.
+
+    Returns:
+        {
+            "success": true,
+            "app_id": 1,
+            "containers": [
+                {"id": "abc123", "name": "app-web", "service": "web", "state": "running"},
+                {"id": "def456", "name": "app-db", "service": "db", "state": "running"}
+            ]
+        }
+    """
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    app = Application.query.get(app_id)
+
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if user.role != 'admin' and app.user_id != current_user_id:
+        return jsonify({'error': 'Access denied'}), 403
+
+    containers = DockerService.get_all_app_containers(app)
+
+    return jsonify({
+        'success': True,
+        'app_id': app_id,
+        'containers': containers
+    }), 200
+
+
 @apps_bp.route('/<int:app_id>/status', methods=['GET'])
 @jwt_required()
 def get_app_status(app_id):
