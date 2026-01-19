@@ -2,7 +2,7 @@
 
 ## Current Status
 - **Milestone**: 2 - Multi-Environment WordPress & Community Features
-- **Current Phase**: 13 - Environment Switching UI
+- **Current Phase**: 15 - WordPress Dev Workflow Testing
 - **Phase Status**: Pending
 - **Last Updated**: 2026-01-19
 
@@ -12,9 +12,18 @@
 |-------|--------|---------|-----------|
 | 11 | completed | 2026-01-19 | 2026-01-19 |
 | 12 | completed | 2026-01-19 | 2026-01-19 |
-| 13 | pending | - | - |
+| 13 | completed | 2026-01-19 | 2026-01-19 |
 | 14 | completed | 2026-01-19 | 2026-01-19 |
 | 15 | pending | - | - |
+
+## Phase 13 Summary
+Environment Switching UI implemented:
+- Added environment badges (PROD/DEV/STAGING) to app list with color coding
+- Added environment filter dropdown to apps toolbar with URL param persistence
+- Created LinkedAppsSection component showing linked apps with navigation/unlink
+- Created LinkAppModal for linking apps with environment selection and DB credential options
+- Integrated linked apps into ApplicationDetail Overview tab
+- Added environment settings to Settings tab with change/unlink functionality
 
 ## Phase 12 Summary
 Multi-Environment App Linking implemented:
@@ -55,8 +64,8 @@ None currently identified.
 ## Notes
 - Milestone 1 (v1.0) completed 2026-01-19
 - Phase numbering continues from Milestone 1 (11-15)
-- Phases 11, 12, and 14 completed - template, linking API, and community features done
-- Next: Phase 13 (Environment Switching UI) to add UI for managing linked apps
+- Phases 11, 12, 13, and 14 completed - all core features done
+- Next: Phase 15 (WordPress Dev Workflow Testing) for end-to-end validation
 
 ## Quick Links
 - [ROADMAP.md](./ROADMAP.md)
@@ -64,4 +73,5 @@ None currently identified.
 - [Milestone 1 Archive](./milestones/v1.0-ROADMAP.md)
 - [Phase 11 Summary](./phases/11-shared-database-wordpress-template/SUMMARY.md)
 - [Phase 12 Summary](./phases/12-multi-environment-app-linking/SUMMARY.md)
+- [Phase 13 Summary](./phases/13-environment-switching-ui/SUMMARY.md)
 - [Phase 14 Summary](./phases/14-github-community-links/SUMMARY.md)

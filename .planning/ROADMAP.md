@@ -24,7 +24,7 @@ Completed 2026-01-19 | 9 phases | 109 commits | +14,667/-2,836 lines
 |-------|------|--------|------|
 | 11 | Shared Database WordPress Template | **completed** | Create WordPress template with external DB support |
 | 12 | Multi-Environment App Linking | **completed** | Link prod/dev apps to share database |
-| 13 | Environment Switching UI | pending | UI to manage prod/dev environments |
+| 13 | Environment Switching UI | **completed** | UI to manage prod/dev environments |
 | 14 | GitHub & Community Links | **completed** | Add GitHub link, community resources to app |
 | 15 | WordPress Dev Workflow Testing | pending | End-to-end testing of the dev workflow |
 
@@ -71,34 +71,25 @@ Completed 2026-01-19 | 9 phases | 109 commits | +14,667/-2,836 lines
 
 ---
 
-## Phase 13: Environment Switching UI
+## Phase 13: Environment Switching UI ✓
 **Goal**: UI to manage and switch between prod/dev environments
 
-### Tasks
-1. **Environment badge in app list**
-   - Show "PROD" / "DEV" / "STAGING" badge
-   - Color coding (green=prod, blue=dev, yellow=staging)
-   - Filter apps by environment type
+**Status**: Completed 2026-01-19
 
-2. **Linked apps section in app detail**
-   - Show linked apps with quick navigation
-   - Environment comparison (running status, version, etc.)
-   - Quick action: "Copy theme from dev to prod"
-
-3. **Environment configuration panel**
-   - Set environment type for existing apps
-   - Link/unlink apps UI
-   - Shared resource visualization
-
-4. **Theme sync feature (WordPress-specific)**
-   - Copy theme files from dev to prod
-   - Preview changes before sync
-   - Rollback capability
+### What Was Built
+- Environment badges (PROD/DEV/STAGING) in app list with color coding
+- Environment filter dropdown in apps toolbar with URL param persistence
+- LinkedAppsSection component showing linked apps with navigation/unlink buttons
+- LinkAppModal for linking apps with environment selection and DB credential options
+- Environment settings in Settings tab with change/unlink functionality
+- Comprehensive LESS styles for all new components
 
 ### Success Criteria
-- [ ] Environment type visible in UI
-- [ ] Easy navigation between linked apps
-- [ ] Theme sync works for WordPress apps
+- [x] Environment type visible in UI
+- [x] Easy navigation between linked apps
+- [ ] Theme sync works for WordPress apps (deferred to Phase 15)
+
+[Full Summary](./phases/13-environment-switching-ui/SUMMARY.md)
 
 ---
 
