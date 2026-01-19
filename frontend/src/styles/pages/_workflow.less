@@ -1332,3 +1332,306 @@
         animation: spin 1s linear infinite;
     }
 }
+
+// ============================================
+// DEPLOY BUTTON
+// ============================================
+
+.toolbar-btn-deploy {
+    background: @success;
+    border-color: @success;
+    color: white;
+
+    &:hover:not(:disabled) {
+        background: darken(@success, 5%);
+        border-color: darken(@success, 5%);
+        color: white;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+// ============================================
+// DEPLOYMENT PROGRESS MODAL
+// ============================================
+
+.deployment-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: fade(@bg-body, 80%);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: fadeIn 0.15s ease-out;
+}
+
+.deployment-modal {
+    width: 520px;
+    max-width: 90vw;
+    max-height: 80vh;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-xl;
+    box-shadow: @shadow-xl;
+    display: flex;
+    flex-direction: column;
+    animation: scaleIn 0.2s ease-out;
+}
+
+.deployment-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @space-4 @space-5;
+    border-bottom: 1px solid @border-subtle;
+
+    h2 {
+        margin: 0;
+        font-size: @font-size-lg;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+    }
+}
+
+.deployment-modal-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: @space-4;
+    .custom-scrollbar();
+}
+
+.deployment-modal-footer {
+    padding: @space-4;
+    border-top: 1px solid @border-subtle;
+    display: flex;
+    justify-content: flex-end;
+
+    .btn-primary {
+        padding: @space-2 @space-5;
+        background: @accent-primary;
+        border: none;
+        border-radius: @radius-md;
+        color: white;
+        font-size: @font-size-sm;
+        font-weight: @font-weight-medium;
+        cursor: pointer;
+        transition: background @transition-fast;
+
+        &:hover {
+            background: darken(@accent-primary, 5%);
+        }
+    }
+}
+
+.deployment-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: @space-3;
+    padding: @space-8;
+    color: @text-tertiary;
+
+    .spin {
+        animation: spin 1s linear infinite;
+    }
+
+    p {
+        margin: 0;
+        font-size: @font-size-base;
+        font-weight: @font-weight-medium;
+        color: @text-secondary;
+    }
+
+    span {
+        font-size: @font-size-sm;
+    }
+}
+
+.deployment-summary {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    padding: @space-3 @space-4;
+    border-radius: @radius-md;
+    margin-bottom: @space-4;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+
+    &.success {
+        background: @success-bg;
+        border: 1px solid @success-border;
+        color: @success;
+    }
+
+    &.has-errors {
+        background: @danger-bg;
+        border: 1px solid @danger-border;
+        color: @danger;
+    }
+}
+
+.deployment-results {
+    display: flex;
+    flex-direction: column;
+    gap: @space-2;
+}
+
+.deployment-result-item {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    padding: @space-3 @space-4;
+    background: @bg-body;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    transition: all @transition-fast;
+
+    &.success {
+        border-color: fade(@success, 30%);
+    }
+
+    &.error {
+        border-color: fade(@danger, 30%);
+        background: fade(@danger, 5%);
+    }
+
+    &.pending {
+        opacity: 0.6;
+    }
+}
+
+.result-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: @radius-md;
+    color: white;
+    flex-shrink: 0;
+}
+
+.result-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.result-name {
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    color: @text-primary;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.result-type {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+}
+
+.result-status {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    .spin {
+        animation: spin 1s linear infinite;
+        color: @text-tertiary;
+    }
+
+    .status-success {
+        color: @success;
+    }
+
+    .status-error {
+        color: @danger;
+    }
+
+    .status-pending {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+    }
+}
+
+.result-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-sm;
+    color: @text-tertiary;
+    text-decoration: none;
+    transition: all @transition-fast;
+    flex-shrink: 0;
+
+    &:hover {
+        background: @bg-hover;
+        border-color: @accent-primary;
+        color: @accent-primary;
+    }
+}
+
+.deployment-errors {
+    margin-top: @space-4;
+    padding: @space-3;
+    background: @danger-bg;
+    border: 1px solid @danger-border;
+    border-radius: @radius-md;
+
+    h4 {
+        margin: 0 0 @space-2;
+        font-size: @font-size-sm;
+        font-weight: @font-weight-semibold;
+        color: @danger;
+    }
+}
+
+.error-item {
+    display: flex;
+    align-items: flex-start;
+    gap: @space-2;
+    padding: @space-2 0;
+    font-size: @font-size-xs;
+    color: @danger;
+
+    svg {
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    &:not(:last-child) {
+        border-bottom: 1px solid fade(@danger, 20%);
+    }
+}
+
+// ============================================
+// DEPLOYED NODE INDICATOR
+// ============================================
+
+.workflow-node.deployed {
+    border-color: @success;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 12px;
+        height: 12px;
+        background: @success;
+        border: 2px solid @bg-card;
+        border-radius: 50%;
+    }
+}
