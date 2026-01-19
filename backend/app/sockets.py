@@ -1,12 +1,13 @@
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask_jwt_extended import decode_token
-from flask import request
+from flask import request, current_app
 import threading
 import time
 import queue
 
 from app.services.system_service import SystemService
 from app.services.log_service import LogService, LogStreamer
+from app.services.docker_service import DockerService
 
 socketio = SocketIO()
 log_streamer = LogStreamer()
@@ -19,6 +20,9 @@ metric_stop_event = threading.Event()
 # Store active build subscriptions
 build_subscribers = {}  # sid -> app_id
 build_log_queues = {}  # app_id -> queue
+
+# Store active container log streams
+container_log_streams = {}  # sid -> {'process': Popen, 'app_id': int, 'thread': Thread, 'stop_event': Event}
 
 
 def init_socketio(app):
@@ -59,6 +63,9 @@ def handle_disconnect():
 
     # Stop any log streams for this client
     log_streamer.stop_stream(sid)
+
+    # Stop any container log streams for this client
+    stop_container_log_stream(sid)
 
 
 @socketio.on('subscribe_metrics')
@@ -224,3 +231,222 @@ def create_build_log_callback(app_id: int):
     def log_callback(message: str):
         emit_build_log(app_id, message)
     return log_callback
+
+
+# ==================== CONTAINER LOG STREAMING ====================
+
+@socketio.on('subscribe_container_logs')
+def handle_subscribe_container_logs(data):
+    """Subscribe to real-time container log streaming.
+
+    data: {
+        'app_id': int,
+        'tail': int (optional, default 100),
+        'since': str (optional),
+        'service': str (optional, for compose apps)
+    }
+
+    Emits:
+        - 'subscribed': Confirmation with app_id and container info
+        - 'container_log': Log lines as they arrive
+        - 'container_log_error': If streaming fails
+        - 'container_log_ended': When stream ends (container stopped)
+    """
+    from app.models import Application, User
+    from app import db
+
+    sid = request.sid
+    app_id = data.get('app_id')
+    tail = data.get('tail', 100)
+    since = data.get('since')
+    service = data.get('service')
+
+    if not app_id:
+        emit('error', {'message': 'app_id required'})
+        return
+
+    # Stop any existing stream for this client
+    stop_container_log_stream(sid)
+
+    # Get app and verify access
+    try:
+        app = Application.query.get(app_id)
+        if not app:
+            emit('container_log_error', {'message': 'Application not found', 'app_id': app_id})
+            return
+    except Exception as e:
+        emit('container_log_error', {'message': f'Database error: {str(e)}', 'app_id': app_id})
+        return
+
+    # Get container ID
+    all_containers = DockerService.get_all_app_containers(app)
+
+    container_id = None
+    container_name = None
+
+    if service:
+        for c in all_containers:
+            if c.get('service') == service or c.get('name') == service:
+                container_id = c.get('id') or c.get('name')
+                container_name = c.get('name')
+                break
+    else:
+        container_id = DockerService.get_app_container_id(app)
+        if all_containers:
+            container_name = all_containers[0].get('name')
+
+    if not container_id:
+        emit('container_log_error', {
+            'message': 'No container found for this application',
+            'app_id': app_id,
+            'hint': 'The application may not have been started yet'
+        })
+        return
+
+    # Check container state
+    container_state = DockerService.get_container_state(container_id)
+    if not container_state:
+        emit('container_log_error', {
+            'message': 'Container not found or no longer exists',
+            'app_id': app_id
+        })
+        return
+
+    # Join room for this app's logs
+    join_room(f'logs_{app_id}')
+
+    # Start streaming process
+    process = DockerService.stream_container_logs(
+        container_id,
+        tail=tail,
+        since=since,
+        timestamps=True
+    )
+
+    if not process:
+        emit('container_log_error', {
+            'message': 'Failed to start log stream',
+            'app_id': app_id
+        })
+        return
+
+    # Create stop event for this stream
+    stop_event = threading.Event()
+
+    # Create thread to read and emit logs
+    def stream_logs():
+        try:
+            while not stop_event.is_set():
+                line = process.stdout.readline()
+                if not line:
+                    # Process ended (container stopped or exited)
+                    if not stop_event.is_set():
+                        socketio.emit('container_log_ended', {
+                            'app_id': app_id,
+                            'message': 'Container log stream ended'
+                        }, room=f'logs_{app_id}')
+                    break
+
+                # Parse the log line
+                parsed = DockerService.parse_log_line(line.rstrip('\n'))
+
+                socketio.emit('container_log', {
+                    'app_id': app_id,
+                    'line': line.rstrip('\n'),
+                    'parsed': parsed,
+                    'timestamp': time.time()
+                }, room=f'logs_{app_id}')
+        except Exception as e:
+            if not stop_event.is_set():
+                socketio.emit('container_log_error', {
+                    'app_id': app_id,
+                    'message': f'Stream error: {str(e)}'
+                }, room=f'logs_{app_id}')
+        finally:
+            # Clean up
+            try:
+                process.terminate()
+                process.wait(timeout=2)
+            except:
+                try:
+                    process.kill()
+                except:
+                    pass
+
+    thread = threading.Thread(target=stream_logs, daemon=True)
+    thread.start()
+
+    # Store stream info for cleanup
+    container_log_streams[sid] = {
+        'process': process,
+        'app_id': app_id,
+        'thread': thread,
+        'stop_event': stop_event,
+        'container_id': container_id
+    }
+
+    emit('subscribed', {
+        'channel': 'container_logs',
+        'app_id': app_id,
+        'container_id': container_id,
+        'container_name': container_name,
+        'container_state': container_state,
+        'containers': all_containers
+    })
+
+
+@socketio.on('unsubscribe_container_logs')
+def handle_unsubscribe_container_logs():
+    """Unsubscribe from container log streaming."""
+    sid = request.sid
+    stream_info = container_log_streams.get(sid)
+
+    if stream_info:
+        app_id = stream_info.get('app_id')
+        leave_room(f'logs_{app_id}')
+        stop_container_log_stream(sid)
+
+    emit('unsubscribed', {'channel': 'container_logs'})
+
+
+def stop_container_log_stream(sid: str):
+    """Stop a container log stream for a specific session.
+
+    Args:
+        sid: Socket session ID
+    """
+    stream_info = container_log_streams.pop(sid, None)
+    if stream_info:
+        # Signal thread to stop
+        stop_event = stream_info.get('stop_event')
+        if stop_event:
+            stop_event.set()
+
+        # Terminate the process
+        process = stream_info.get('process')
+        if process:
+            try:
+                process.terminate()
+                process.wait(timeout=2)
+            except:
+                try:
+                    process.kill()
+                except:
+                    pass
+
+
+def emit_container_log(app_id: int, line: str, level: str = 'info'):
+    """Emit a container log line to all subscribers.
+
+    This function can be called externally to inject log messages.
+    """
+    socketio.emit('container_log', {
+        'app_id': app_id,
+        'line': line,
+        'parsed': {
+            'timestamp': None,
+            'message': line,
+            'level': level
+        },
+        'timestamp': time.time()
+    }, room=f'logs_{app_id}')
