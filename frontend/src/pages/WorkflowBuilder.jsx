@@ -201,7 +201,14 @@ const WorkflowCanvas = () => {
     }, [nodes, edges, workflowName, currentWorkflow, getViewport]);
 
     // Load workflow
-    const loadWorkflow = useCallback(async (workflow) => {
+    const loadWorkflow = useCallback((workflow) => {
+        if (!workflow) {
+            console.error('No workflow provided to load');
+            setSaveMessage('No workflow data');
+            setTimeout(() => setSaveMessage(null), 3000);
+            return;
+        }
+
         setIsLoading(true);
         setShowLoadModal(false);
 
@@ -216,7 +223,7 @@ const WorkflowCanvas = () => {
             const loadedEdges = (workflow.edges || []).map((edge) => ({
                 ...edge,
                 data: {
-                    ...edge.data,
+                    ...(edge.data || {}),
                     onDelete: deleteEdge
                 }
             }));
@@ -230,7 +237,7 @@ const WorkflowCanvas = () => {
 
             setNodes(loadedNodes);
             setEdges(loadedEdges);
-            setWorkflowName(workflow.name);
+            setWorkflowName(workflow.name || 'Untitled Workflow');
             setCurrentWorkflow(workflow);
 
             // Restore viewport
@@ -240,7 +247,7 @@ const WorkflowCanvas = () => {
                 }, 50);
             }
 
-            setSaveMessage('Workflow loaded');
+            setSaveMessage(`Loaded: ${workflow.name}`);
             setTimeout(() => setSaveMessage(null), 3000);
         } catch (error) {
             console.error('Failed to load workflow:', error);
@@ -685,13 +692,7 @@ const WorkflowCanvas = () => {
 
 const WorkflowBuilder = () => {
     return (
-        <div className="workflow-page">
-            <div className="page-header">
-                <h1>Workflow Builder</h1>
-                <p className="page-subtitle">
-                    Visual orchestration for your infrastructure
-                </p>
-            </div>
+        <div className="workflow-page fullscreen">
             <ReactFlowProvider>
                 <WorkflowCanvas />
             </ReactFlowProvider>

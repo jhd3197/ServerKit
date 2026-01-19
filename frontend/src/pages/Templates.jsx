@@ -640,13 +640,12 @@ const InstallModal = ({ template, onClose, onSuccess }) => {
                             <input
                                 type="text"
                                 value={appName}
-                                onChange={(e) => setAppName(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'))}
+                                onChange={(e) => setAppName(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
                                 placeholder="my-app"
-                                pattern="[a-z0-9][a-z0-9-]*[a-z0-9]"
-                                minLength={3}
+                                minLength={2}
                                 required
                             />
-                            <span className="form-help">Lowercase letters, numbers, and hyphens only</span>
+                            <span className="form-help">Lowercase letters, numbers, and hyphens only (min 2 chars)</span>
                         </div>
 
                         {(template.variables || []).filter(v => !v.hidden).length > 0 && (

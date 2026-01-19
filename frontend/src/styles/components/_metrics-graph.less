@@ -168,7 +168,80 @@
     }
 }
 
-// Legend
+// Filter Legend (clickable)
+.metrics-filter-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-3;
+    margin-bottom: @space-4;
+}
+
+.filter-btn {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2 @space-4;
+    border-radius: @radius-full;
+    border: 1px solid @border-subtle;
+    background: transparent;
+    color: @text-tertiary;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    cursor: pointer;
+    transition: all @transition-fast;
+    opacity: 0.5;
+
+    svg {
+        opacity: 0.7;
+    }
+
+    &:hover {
+        background: @bg-hover;
+        border-color: @border-active;
+    }
+
+    &.active {
+        opacity: 1;
+        color: @text-primary;
+
+        svg {
+            opacity: 1;
+        }
+    }
+
+    &.cpu.active {
+        background: rgba(16, 185, 129, 0.15);
+        border-color: rgba(16, 185, 129, 0.4);
+        color: #10b981;
+
+        &:hover {
+            background: rgba(16, 185, 129, 0.25);
+        }
+    }
+
+    &.memory.active {
+        background: rgba(99, 102, 241, 0.15);
+        border-color: rgba(99, 102, 241, 0.4);
+        color: #6366f1;
+
+        &:hover {
+            background: rgba(99, 102, 241, 0.25);
+        }
+    }
+
+    &.disk.active {
+        background: rgba(245, 158, 11, 0.15);
+        border-color: rgba(245, 158, 11, 0.4);
+        color: #f59e0b;
+
+        &:hover {
+            background: rgba(245, 158, 11, 0.25);
+        }
+    }
+}
+
+// Legacy Legend (static, kept for compact view)
 .metrics-legend {
     display: flex;
     align-items: center;

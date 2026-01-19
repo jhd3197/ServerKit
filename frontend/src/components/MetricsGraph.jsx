@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid,
-    Tooltip, ResponsiveContainer, Area, AreaChart, Legend
+    XAxis, YAxis, CartesianGrid,
+    Tooltip, ResponsiveContainer, Area, AreaChart
 } from 'recharts';
-import { Cpu, MemoryStick, HardDrive, Clock, TrendingUp } from 'lucide-react';
+import { Cpu, MemoryStick, HardDrive, TrendingUp } from 'lucide-react';
 import api from '../services/api';
 
 // Chart colors - using actual hex values for SVG compatibility
@@ -18,8 +18,20 @@ const MetricsGraph = ({ compact = false }) => {
     const [period, setPeriod] = useState('1h');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [visibleMetrics, setVisibleMetrics] = useState({
+        cpu: true,
+        memory: true,
+        disk: true
+    });
 
     const periods = ['1h', '6h', '24h', '7d', '30d'];
+
+    const toggleMetric = (metric) => {
+        setVisibleMetrics(prev => ({
+            ...prev,
+            [metric]: !prev[metric]
+        }));
+    };
 
     useEffect(() => {
         loadHistory();
@@ -49,17 +61,6 @@ const MetricsGraph = ({ compact = false }) => {
         } else {
             return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
         }
-    }
-
-    function getColor(value, type) {
-        if (type === 'cpu') {
-            if (value > 80) return '#ef4444';  // danger
-            if (value > 60) return '#f59e0b';  // warning
-            return '#10b981';  // success
-        }
-        if (value > 90) return '#ef4444';  // danger
-        if (value > 80) return '#f59e0b';  // warning
-        return '#6366f1';  // accent
     }
 
     if (loading && !data) {
@@ -194,41 +195,29 @@ const MetricsGraph = ({ compact = false }) => {
                 </div>
             </div>
 
-            <div className="metrics-summary-row">
-                <div className="summary-stat">
-                    <Cpu size={16} />
-                    <div>
-                        <span className="stat-label">CPU Avg</span>
-                        <span className="stat-value" style={{ color: getColor(data.summary.cpu_avg, 'cpu') }}>
-                            {data.summary.cpu_avg}%
-                        </span>
-                    </div>
-                </div>
-                <div className="summary-stat">
-                    <MemoryStick size={16} />
-                    <div>
-                        <span className="stat-label">Memory Avg</span>
-                        <span className="stat-value" style={{ color: getColor(data.summary.memory_avg, 'memory') }}>
-                            {data.summary.memory_avg}%
-                        </span>
-                    </div>
-                </div>
-                <div className="summary-stat">
-                    <HardDrive size={16} />
-                    <div>
-                        <span className="stat-label">Disk Avg</span>
-                        <span className="stat-value" style={{ color: getColor(data.summary.disk_avg, 'disk') }}>
-                            {data.summary.disk_avg}%
-                        </span>
-                    </div>
-                </div>
-                <div className="summary-stat">
-                    <Clock size={16} />
-                    <div>
-                        <span className="stat-label">Data Points</span>
-                        <span className="stat-value">{data.points}</span>
-                    </div>
-                </div>
+            {/* Clickable filter legend */}
+            <div className="metrics-filter-legend">
+                <button
+                    className={`filter-btn cpu ${visibleMetrics.cpu ? 'active' : ''}`}
+                    onClick={() => toggleMetric('cpu')}
+                >
+                    <Cpu size={14} />
+                    <span>CPU</span>
+                </button>
+                <button
+                    className={`filter-btn memory ${visibleMetrics.memory ? 'active' : ''}`}
+                    onClick={() => toggleMetric('memory')}
+                >
+                    <MemoryStick size={14} />
+                    <span>Memory</span>
+                </button>
+                <button
+                    className={`filter-btn disk ${visibleMetrics.disk ? 'active' : ''}`}
+                    onClick={() => toggleMetric('disk')}
+                >
+                    <HardDrive size={14} />
+                    <span>Disk</span>
+                </button>
             </div>
 
             <div className="metrics-chart-container">
@@ -275,56 +264,47 @@ const MetricsGraph = ({ compact = false }) => {
                             tickFormatter={(value) => `${value}%`}
                         />
                         <Tooltip content={<CustomTooltip />} />
-                        <Area
-                            type="monotone"
-                            dataKey="cpu"
-                            stroke={CHART_COLORS.cpu}
-                            fill="url(#cpuGradient)"
-                            strokeWidth={2.5}
-                            dot={false}
-                            activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.cpu, fill: '#18181b' }}
-                            name="CPU"
-                            filter="url(#glow)"
-                        />
-                        <Area
-                            type="monotone"
-                            dataKey="memory"
-                            stroke={CHART_COLORS.memory}
-                            fill="url(#memoryGradient)"
-                            strokeWidth={2.5}
-                            dot={false}
-                            activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.memory, fill: '#18181b' }}
-                            name="Memory"
-                            filter="url(#glow)"
-                        />
-                        <Area
-                            type="monotone"
-                            dataKey="disk"
-                            stroke={CHART_COLORS.disk}
-                            fill="url(#diskGradient)"
-                            strokeWidth={2.5}
-                            dot={false}
-                            activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.disk, fill: '#18181b' }}
-                            name="Disk"
-                            filter="url(#glow)"
-                        />
+                        {visibleMetrics.cpu && (
+                            <Area
+                                type="monotone"
+                                dataKey="cpu"
+                                stroke={CHART_COLORS.cpu}
+                                fill="url(#cpuGradient)"
+                                strokeWidth={2.5}
+                                dot={false}
+                                activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.cpu, fill: '#18181b' }}
+                                name="CPU"
+                                filter="url(#glow)"
+                            />
+                        )}
+                        {visibleMetrics.memory && (
+                            <Area
+                                type="monotone"
+                                dataKey="memory"
+                                stroke={CHART_COLORS.memory}
+                                fill="url(#memoryGradient)"
+                                strokeWidth={2.5}
+                                dot={false}
+                                activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.memory, fill: '#18181b' }}
+                                name="Memory"
+                                filter="url(#glow)"
+                            />
+                        )}
+                        {visibleMetrics.disk && (
+                            <Area
+                                type="monotone"
+                                dataKey="disk"
+                                stroke={CHART_COLORS.disk}
+                                fill="url(#diskGradient)"
+                                strokeWidth={2.5}
+                                dot={false}
+                                activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.disk, fill: '#18181b' }}
+                                name="Disk"
+                                filter="url(#glow)"
+                            />
+                        )}
                     </AreaChart>
                 </ResponsiveContainer>
-            </div>
-
-            <div className="metrics-legend">
-                <div className="legend-item">
-                    <span className="legend-line cpu" />
-                    <span>CPU</span>
-                </div>
-                <div className="legend-item">
-                    <span className="legend-line memory" />
-                    <span>Memory</span>
-                </div>
-                <div className="legend-item">
-                    <span className="legend-line disk" />
-                    <span>Disk</span>
-                </div>
             </div>
         </div>
     );

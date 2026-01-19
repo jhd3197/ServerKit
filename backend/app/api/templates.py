@@ -172,53 +172,66 @@ def install_template(template_id):
 @jwt_required()
 def validate_installation():
     """Validate template installation parameters before installing."""
-    data = request.get_json()
+    try:
+        data = request.get_json()
 
-    if not data:
-        return jsonify({'error': 'No data provided'}), 400
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
 
-    template_id = data.get('template_id')
-    app_name = data.get('app_name')
-    user_variables = data.get('variables', {})
+        template_id = data.get('template_id')
+        app_name = data.get('app_name')
+        user_variables = data.get('variables', {})
 
-    errors = []
+        errors = []
 
-    # Validate app name
-    import re
-    if not app_name:
-        errors.append('App name is required')
-    elif not re.match(r'^[a-z0-9][a-z0-9-]*[a-z0-9]$', app_name) or len(app_name) < 3:
-        errors.append('App name must be lowercase alphanumeric with hyphens, at least 3 characters')
+        # Validate app name
+        import re
+        if not app_name:
+            errors.append('App name is required')
+        elif len(app_name) < 2:
+            errors.append('App name must be at least 2 characters')
+        elif not re.match(r'^[a-z0-9]([a-z0-9-]*[a-z0-9])?$', app_name):
+            errors.append('App name must be lowercase alphanumeric with optional hyphens (not at start/end)')
 
-    # Check if app name is taken
-    existing = Application.query.filter_by(name=app_name).first()
-    if existing:
-        errors.append(f'An application named "{app_name}" already exists')
+        # Check if app name is taken
+        if app_name:
+            existing = Application.query.filter_by(name=app_name).first()
+            if existing:
+                errors.append(f'An application named "{app_name}" already exists')
 
-    # Validate template exists and check required variables
-    result = TemplateService.get_template(template_id)
-    if not result.get('success'):
-        errors.append('Template not found')
-    else:
-        template = result['template']
-        raw_vars = template.get('variables', [])
+        # Validate template exists and check required variables
+        if template_id:
+            result = TemplateService.get_template(template_id)
+            if not result.get('success'):
+                errors.append('Template not found')
+            else:
+                template = result['template']
+                raw_vars = template.get('variables', [])
 
-        # Handle both list and dict formats
-        if isinstance(raw_vars, list):
-            for var in raw_vars:
-                if isinstance(var, dict) and var.get('required', False):
-                    var_name = var.get('name', '')
-                    if var_name and var_name not in user_variables:
-                        errors.append(f'Required variable "{var_name}" is not provided')
-        elif isinstance(raw_vars, dict):
-            for var_name, var_config in raw_vars.items():
-                if var_config.get('required', False) and var_name not in user_variables:
-                    errors.append(f'Required variable "{var_name}" is not provided')
+                # Handle both list and dict formats
+                if isinstance(raw_vars, list):
+                    for var in raw_vars:
+                        if isinstance(var, dict) and var.get('required', False):
+                            var_name = var.get('name', '')
+                            if var_name and var_name not in user_variables:
+                                errors.append(f'Required variable "{var_name}" is not provided')
+                elif isinstance(raw_vars, dict):
+                    for var_name, var_config in raw_vars.items():
+                        if var_config.get('required', False) and var_name not in user_variables:
+                            errors.append(f'Required variable "{var_name}" is not provided')
+        else:
+            errors.append('Template ID is required')
 
-    if errors:
-        return jsonify({'valid': False, 'errors': errors}), 400
+        if errors:
+            return jsonify({'valid': False, 'errors': errors}), 400
 
-    return jsonify({'valid': True}), 200
+        return jsonify({'valid': True}), 200
+
+    except Exception as e:
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"Validate install error: {error_trace}")
+        return jsonify({'error': str(e), 'trace': error_trace}), 500
 
 
 @templates_bp.route('/test-db-connection', methods=['POST'])

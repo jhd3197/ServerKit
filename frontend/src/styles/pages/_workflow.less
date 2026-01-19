@@ -8,6 +8,16 @@
     height: calc(100vh - @space-6);
     padding: @space-4;
 
+    &.fullscreen {
+        height: 100vh;
+        padding: 0;
+
+        .workflow-canvas {
+            border-radius: 0;
+            border: none;
+        }
+    }
+
     .page-header {
         flex-shrink: 0;
         margin-bottom: @space-4;
@@ -200,73 +210,6 @@
     right: -6px !important;
 }
 
-// ============================================
-// TOOLBAR STYLES
-// ============================================
-
-.workflow-toolbar {
-    position: absolute;
-    top: @space-4;
-    left: @space-4;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    gap: @space-2;
-    background: @bg-card;
-    border: 1px solid @border-subtle;
-    border-radius: @radius-lg;
-    padding: @space-2;
-    box-shadow: @shadow-lg;
-}
-
-.workflow-toolbar-btn {
-    display: flex;
-    align-items: center;
-    gap: @space-2;
-    padding: @space-2 @space-3;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: @radius-md;
-    color: @text-secondary;
-    font-size: @font-size-sm;
-    font-weight: @font-weight-medium;
-    cursor: pointer;
-    transition: all @transition-fast;
-    white-space: nowrap;
-
-    svg {
-        flex-shrink: 0;
-    }
-
-    &:hover {
-        background: @bg-hover;
-        color: @text-primary;
-    }
-
-    &.toolbar-btn-docker:hover {
-        background: fade(#2496ed, 15%);
-        color: #2496ed;
-        border-color: fade(#2496ed, 30%);
-    }
-
-    &.toolbar-btn-database:hover {
-        background: fade(@warning, 15%);
-        color: @warning;
-        border-color: fade(@warning, 30%);
-    }
-
-    &.toolbar-btn-domain:hover {
-        background: fade(@success, 15%);
-        color: @success;
-        border-color: fade(@success, 30%);
-    }
-}
-
-.workflow-toolbar-divider {
-    height: 1px;
-    background: @border-subtle;
-    margin: @space-1 0;
-}
 
 // ============================================
 // EDGE STYLES
@@ -317,7 +260,7 @@
     border-radius: @radius-lg;
     padding: @space-2;
     box-shadow: @shadow-lg;
-    max-height: calc(100% - @space-8);
+    max-height: calc(100% - 120px);
     overflow-y: auto;
 }
 

@@ -43,12 +43,18 @@ const WorkflowListModal = ({ onLoad, onClose }) => {
     };
 
     const handleLoad = async (workflow) => {
+        setError(null);
         try {
             const response = await api.getWorkflow(workflow.id);
-            onLoad(response);
+            if (response && response.nodes !== undefined) {
+                onLoad(response);
+            } else {
+                console.error('Invalid workflow response:', response);
+                setError('Invalid workflow data received');
+            }
         } catch (err) {
             console.error('Failed to load workflow:', err);
-            setError('Failed to load workflow');
+            setError(err.message || 'Failed to load workflow');
         }
     };
 
