@@ -20,6 +20,7 @@ import DockerAppConfigPanel from '../components/workflow/panels/DockerAppConfigP
 import DatabaseConfigPanel from '../components/workflow/panels/DatabaseConfigPanel';
 import DomainConfigPanel from '../components/workflow/panels/DomainConfigPanel';
 import ServiceConfigPanel from '../components/workflow/panels/ServiceConfigPanel';
+import { isValidConnection as checkValidConnection, getConnectionError } from '../utils/connectionRules';
 
 const initialNodes = [];
 const initialEdges = [];
@@ -113,14 +114,47 @@ const WorkflowCanvas = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [selectedNode, setSelectedNode] = useState(null);
+    const [connectionError, setConnectionError] = useState(null);
     const { screenToFlowPosition } = useReactFlow();
 
     const memoizedNodeTypes = useMemo(() => nodeTypes, []);
 
+    // Validate connections before allowing them
+    const isValidConnection = useCallback((connection) => {
+        return checkValidConnection(connection, nodes);
+    }, [nodes]);
+
     const onConnect = useCallback(
-        (params) => setEdges((eds) => addEdge(params, eds)),
-        [setEdges]
+        (params) => {
+            // Double-check validation on connect
+            if (checkValidConnection(params, nodes)) {
+                setEdges((eds) => addEdge(params, eds));
+                setConnectionError(null);
+            }
+        },
+        [setEdges, nodes]
     );
+
+    const onConnectStart = useCallback(() => {
+        setConnectionError(null);
+    }, []);
+
+    const onConnectEnd = useCallback((event, connectionState) => {
+        // Show error if connection was attempted but failed validation
+        if (connectionState.isValid === false && connectionState.toNode) {
+            const error = getConnectionError({
+                source: connectionState.fromNode?.id,
+                target: connectionState.toNode?.id,
+                sourceHandle: connectionState.fromHandle?.id,
+                targetHandle: connectionState.toHandle?.id
+            }, nodes);
+            if (error) {
+                setConnectionError(error);
+                // Clear error after 3 seconds
+                setTimeout(() => setConnectionError(null), 3000);
+            }
+        }
+    }, [nodes]);
 
     const addNode = useCallback((nodeType, defaultData = {}) => {
         const newNode = {
@@ -192,6 +226,11 @@ const WorkflowCanvas = () => {
     return (
         <div className="workflow-canvas" ref={reactFlowWrapper}>
             <NodePalette onAddNode={addNode} />
+            {connectionError && (
+                <div className="connection-error-toast">
+                    {connectionError}
+                </div>
+            )}
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
@@ -199,6 +238,9 @@ const WorkflowCanvas = () => {
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
+                onConnectStart={onConnectStart}
+                onConnectEnd={onConnectEnd}
+                isValidConnection={isValidConnection}
                 onNodeClick={handleNodeClick}
                 onPaneClick={handlePaneClick}
                 fitView
