@@ -16,7 +16,7 @@
 | 4 | Flask/Python Template Testing | skipped | Deploy and verify Python apps route correctly |
 | 5 | Private URL System | **completed** | Add private URL generation and custom slugs |
 | 6 | Dashboard Historical Metrics | **completed** | Add CPU/Memory/Disk graphs over time |
-| 7 | Templates Page Polish | pending | Fix icons, update URLs, improve filtering |
+| 7 | Templates Page Polish | **completed** | Fix icons, update URLs, improve filtering |
 | 8 | Applications UI Polish | pending | Improve app list and management pages |
 | 9 | FileManager Disk Usage UI | pending | Better visualization for disk usage |
 | 10 | Integration Testing | pending | End-to-end testing of all features |
