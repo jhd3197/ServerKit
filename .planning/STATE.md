@@ -2,8 +2,8 @@
 
 ## Current Status
 - **Milestone**: 1 - Infrastructure Fixes, Private URLs & UI Polish
-- **Current Phase**: 5 - Private URL System
-- **Phase Status**: Completed
+- **Current Phase**: 6 - Dashboard Historical Metrics
+- **Phase Status**: Planned
 - **Last Updated**: 2026-01-19
 
 ## Phase Progress
@@ -15,7 +15,7 @@
 | 3 | completed | 2026-01-19 | 2026-01-19 |
 | 4 | skipped | - | - |
 | 5 | completed | 2026-01-19 | 2026-01-19 |
-| 6 | pending | - | - |
+| 6 | planned | 2026-01-19 | - |
 | 7 | pending | - | - |
 | 8 | pending | - | - |
 | 9 | pending | - | - |
