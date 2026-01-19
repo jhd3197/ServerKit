@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
 import UsersTab from '../components/settings/UsersTab';
 import AuditLogTab from '../components/settings/AuditLogTab';
-import { Github, FileText, HelpCircle, MessageSquare, Bug, Check, Layers } from 'lucide-react';
+import { Github, FileText, HelpCircle, MessageSquare, Bug, Check, Layers, Download, CheckCircle, RefreshCw, ExternalLink } from 'lucide-react';
 
 const Settings = () => {
     const [activeTab, setActiveTab] = useState('profile');
@@ -1649,6 +1649,8 @@ const SystemInfo = () => {
 
 const AboutSection = () => {
     const [version, setVersion] = useState('...');
+    const [updateInfo, setUpdateInfo] = useState(null);
+    const [checkingUpdate, setCheckingUpdate] = useState(false);
 
     useEffect(() => {
         const fetchVersion = async () => {
@@ -1661,6 +1663,17 @@ const AboutSection = () => {
         };
         fetchVersion();
     }, []);
+
+    const checkForUpdate = async () => {
+        setCheckingUpdate(true);
+        try {
+            const data = await api.checkUpdate();
+            setUpdateInfo(data);
+        } catch (error) {
+            setUpdateInfo({ error: 'Failed to check for updates' });
+        }
+        setCheckingUpdate(false);
+    };
 
     return (
         <div className="settings-section">
@@ -1679,6 +1692,45 @@ const AboutSection = () => {
                     A modern, lightweight server management panel for managing web applications,
                     databases, domains, and more. Built with Flask and React.
                 </p>
+
+                <div className="update-check">
+                    {!updateInfo ? (
+                        <button
+                            className="btn btn-secondary btn-sm"
+                            onClick={checkForUpdate}
+                            disabled={checkingUpdate}
+                        >
+                            {checkingUpdate ? (
+                                <><RefreshCw size={14} className="spinning" /> Checking...</>
+                            ) : (
+                                <><Download size={14} /> Check for Updates</>
+                            )}
+                        </button>
+                    ) : updateInfo.error ? (
+                        <div className="update-status error">
+                            <span>{updateInfo.error}</span>
+                            <button className="btn-link" onClick={checkForUpdate}>Retry</button>
+                        </div>
+                    ) : updateInfo.update_available ? (
+                        <div className="update-status available">
+                            <Download size={16} />
+                            <span>Update available: <strong>v{updateInfo.latest_version}</strong></span>
+                            <a
+                                href={updateInfo.release_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-accent btn-sm"
+                            >
+                                View Release <ExternalLink size={12} />
+                            </a>
+                        </div>
+                    ) : (
+                        <div className="update-status current">
+                            <CheckCircle size={16} />
+                            <span>You're up to date!</span>
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="settings-card">

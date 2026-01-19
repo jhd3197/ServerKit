@@ -314,6 +314,10 @@ class ApiService {
         return this.request('/system/version');
     }
 
+    async checkUpdate() {
+        return this.request('/system/check-update');
+    }
+
     async getProcesses() {
         return this.request('/system/processes');
     }
