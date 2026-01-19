@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Cpu, MemoryStick, HardDrive, Server,
-    Plus, RefreshCw, Activity, Layers,
-    Database, Globe, Container, Code,
-    ArrowRight, Clock, CheckCircle, MapPin
+    Cpu, MemoryStick, HardDrive, Activity,
+    Plus, RefreshCw, Server, Zap,
+    RotateCcw, Database, Layers, Container, Globe, Code
 } from 'lucide-react';
 import api from '../services/api';
 import { useMetrics } from '../hooks/useMetrics';
@@ -18,13 +17,13 @@ const Dashboard = () => {
     const [dbStatus, setDbStatus] = useState(null);
     const [uptime, setUptime] = useState(null);
     const [serverTime, setServerTime] = useState(null);
+    const [systemInfo, setSystemInfo] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         loadData();
     }, []);
 
-    // Update server time display every second using metrics.time
     useEffect(() => {
         if (metrics?.time) {
             setServerTime(metrics.time);
@@ -33,16 +32,18 @@ const Dashboard = () => {
 
     async function loadData() {
         try {
-            const [appsData, servicesData, dbData, uptimeData] = await Promise.all([
+            const [appsData, servicesData, dbData, uptimeData, sysInfoData] = await Promise.all([
                 api.getApps(),
                 api.getServicesStatus().catch(() => ({ services: [] })),
                 api.getDatabasesStatus().catch(() => null),
-                api.getCurrentUptime().catch(() => null)
+                api.getCurrentUptime().catch(() => null),
+                api.getSystemInfo().catch(() => null)
             ]);
             setApps(appsData.apps || []);
             setServices(servicesData.services || []);
             setDbStatus(dbData);
             setUptime(uptimeData);
+            setSystemInfo(sysInfoData);
         } catch (err) {
             console.error('Failed to load data:', err);
         } finally {
@@ -61,31 +62,19 @@ const Dashboard = () => {
 
     function getStackIcon(type) {
         switch (type) {
-            case 'docker': return <Container size={20} />;
+            case 'docker': return <Container size={16} />;
             case 'wordpress':
-            case 'php': return <Code size={20} />;
+            case 'php': return <Code size={16} />;
             case 'flask':
-            case 'django': return <Layers size={20} />;
-            default: return <Globe size={20} />;
+            case 'django': return <Layers size={16} />;
+            default: return <Globe size={16} />;
         }
     }
 
-    function getStackColor(type) {
-        const colors = {
-            'php': '#777bb4',
-            'wordpress': '#21759b',
-            'flask': '#000000',
-            'django': '#092e20',
-            'docker': '#2496ed',
-            'static': '#60a5fa',
-        };
-        return colors[type] || '#6366f1';
-    }
-
-    const runningApps = apps.filter(a => a.status === 'running').length;
-    const runningServices = services.filter(s => s.status === 'running').length;
-
     const uptimeFormatted = uptime?.uptime_formatted || { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    const hostname = systemInfo?.hostname || 'server';
+    const kernelVersion = systemInfo?.kernel || '-';
+    const ipAddress = systemInfo?.ip_address || '-';
 
     if (loading && metricsLoading) {
         return <div className="loading">Loading dashboard...</div>;
@@ -93,281 +82,172 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard-page">
-            <header className="top-bar">
-                <div>
-                    <h1>Dashboard</h1>
-                    <div className="subtitle">
-                        Server overview
-                        {connected && <span className="live-indicator"> Live</span>}
+            {/* Top Bar */}
+            <div className="top-bar">
+                <div className="server-identity">
+                    <h1>
+                        <span className="status-dot-live"></span>
+                        ServerKit
+                    </h1>
+                    <div className="server-details">
+                        <span>HOST: {hostname}</span>
+                        <span>IP: {ipAddress}</span>
+                        <span>KERNEL: {kernelVersion}</span>
+                        <span>UPTIME: {uptimeFormatted.days}d {String(uptimeFormatted.hours).padStart(2, '0')}h {String(uptimeFormatted.minutes).padStart(2, '0')}m</span>
                     </div>
                 </div>
-                <div className="top-bar-actions">
-                    <button className="btn btn-secondary" onClick={loadData}>
-                        <RefreshCw size={16} />
-                        Refresh
-                    </button>
-                    <button className="btn btn-primary" onClick={() => navigate('/apps')}>
-                        <Plus size={16} />
-                        New App
-                    </button>
-                </div>
-            </header>
-
-            {/* Server Status Bar */}
-            <div className="server-status-bar">
-                <div className="status-bar-left">
-                    <div className="server-status-indicator">
-                        <CheckCircle size={18} className="status-icon-ok" />
-                        <span className="status-text">Operational</span>
+                <div className="clock-widget">
+                    <div className="clock-time">
+                        {serverTime?.current_time_formatted?.split(' ')[1] || '--:--:--'}
                     </div>
-                    {uptime && (
-                        <div className="uptime-inline">
-                            <Clock size={14} />
-                            <span>
-                                {uptimeFormatted.days}d {String(uptimeFormatted.hours).padStart(2, '0')}h {String(uptimeFormatted.minutes).padStart(2, '0')}m
-                            </span>
-                        </div>
-                    )}
-                </div>
-                <div className="status-bar-center">
-                    {serverTime && (
-                        <div className="server-time-display">
-                            <Clock size={14} />
-                            <span className="time-value">{serverTime.current_time_formatted}</span>
-                            <span className="timezone-badge">
-                                <MapPin size={10} />
-                                {serverTime.timezone_id || serverTime.timezone_name}
-                            </span>
-                        </div>
-                    )}
-                </div>
-                <div className="status-bar-right">
-                    <div className="status-bar-stat">
-                        <span className="stat-label">Apps</span>
-                        <span className="stat-value">{runningApps}/{apps.length}</span>
-                    </div>
-                    <div className="status-bar-stat">
-                        <span className="stat-label">Services</span>
-                        <span className="stat-value">{runningServices}/{services.length}</span>
+                    <div className="clock-zone">
+                        ZONE: {serverTime?.timezone_id || 'UTC'}
                     </div>
                 </div>
             </div>
 
-            {/* System Metrics - Live */}
-            {metrics && (
-                <div className="metrics-grid">
-                    <div className="metric-card">
-                        <div className="metric-header">
-                            <Cpu size={16} className="metric-icon" />
-                            <span>CPU</span>
-                            <span className="metric-live-badge">Live</span>
-                        </div>
-                        <div className="metric-value-row">
-                            <span className="metric-value">{(metrics.cpu?.percent || 0).toFixed(1)}%</span>
-                            <span className="metric-detail">{metrics.cpu?.count_logical || 0} cores</span>
-                        </div>
-                        <div className="metric-bar">
-                            <div
-                                className="metric-bar-fill"
-                                style={{
-                                    width: `${metrics.cpu?.percent || 0}%`,
-                                    background: (metrics.cpu?.percent || 0) > 80 ? 'var(--danger)' :
-                                               (metrics.cpu?.percent || 0) > 60 ? 'var(--warning)' : 'var(--success)'
-                                }}
-                            />
-                        </div>
+            {/* Grid Container */}
+            <div className="grid-container">
+                {/* Metric Tiles */}
+                <div className="metric-tile">
+                    <div className="tile-head">
+                        <span className="tile-title">Processor Load</span>
+                        <Zap size={16} className="tile-icon cpu" />
                     </div>
-
-                    <div className="metric-card">
-                        <div className="metric-header">
-                            <MemoryStick size={16} className="metric-icon" />
-                            <span>Memory</span>
-                            <span className="metric-live-badge">Live</span>
-                        </div>
-                        <div className="metric-value-row">
-                            <span className="metric-value">{(metrics.memory?.ram?.percent || 0).toFixed(1)}%</span>
-                            <span className="metric-detail">{metrics.memory?.ram?.used_human} / {metrics.memory?.ram?.total_human}</span>
-                        </div>
-                        <div className="metric-bar">
-                            <div
-                                className="metric-bar-fill"
-                                style={{
-                                    width: `${metrics.memory?.ram?.percent || 0}%`,
-                                    background: (metrics.memory?.ram?.percent || 0) > 90 ? 'var(--danger)' : 'var(--accent-primary)'
-                                }}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="metric-card">
-                        <div className="metric-header">
-                            <HardDrive size={16} className="metric-icon" />
-                            <span>Disk</span>
-                            <span className="metric-live-badge">Live</span>
-                        </div>
-                        <div className="metric-value-row">
-                            <span className="metric-value">{(metrics.disk?.partitions?.[0]?.percent || 0).toFixed(1)}%</span>
-                            <span className="metric-detail">{metrics.disk?.partitions?.[0]?.used_human} / {metrics.disk?.partitions?.[0]?.total_human}</span>
-                        </div>
-                        <div className="metric-bar">
-                            <div
-                                className="metric-bar-fill"
-                                style={{
-                                    width: `${metrics.disk?.partitions?.[0]?.percent || 0}%`,
-                                    background: (metrics.disk?.partitions?.[0]?.percent || 0) > 90 ? 'var(--danger)' : 'var(--accent-primary)'
-                                }}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="metric-card">
-                        <div className="metric-header">
-                            <Activity size={16} className="metric-icon" />
-                            <span>Network</span>
-                            <span className="metric-live-badge">Live</span>
-                        </div>
-                        <div className="metric-value-row">
-                            <span className="metric-value">{metrics.network?.io?.bytes_sent_human || '0B'}</span>
-                            <span className="metric-detail">sent</span>
-                        </div>
-                        <div className="metric-sub-value">
-                            Recv: {metrics.network?.io?.bytes_recv_human || '0B'}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Historical Metrics Graph */}
-            <MetricsGraph />
-
-            {/* Two Column Layout */}
-            <div className="dashboard-columns">
-                {/* Left Column - Services & Databases */}
-                <div className="dashboard-column">
-                    {/* Services */}
-                    {services.length > 0 && (
-                        <div className="dashboard-card">
-                            <div className="card-title">
-                                <Server size={16} />
-                                Services
-                            </div>
-                            <div className="services-list">
-                                {services.map(service => (
-                                    <div key={service.name} className="service-row">
-                                        <span className={`status-dot ${service.status === 'running' ? 'running' : 'stopped'}`} />
-                                        <span className="service-name">{service.name}</span>
-                                        <span className={`service-status ${service.status}`}>{service.status}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Database Status */}
-                    {dbStatus && (
-                        <div className="dashboard-card">
-                            <div className="card-title">
-                                <Database size={16} />
-                                Databases
-                            </div>
-                            <div className="db-list">
-                                <div className="db-row">
-                                    <div className="db-icon mysql">M</div>
-                                    <span className="db-name">MySQL</span>
-                                    <span className={`db-status ${dbStatus.mysql?.running ? 'running' : 'stopped'}`}>
-                                        {dbStatus.mysql?.running ? 'Running' : 'Stopped'}
-                                    </span>
-                                </div>
-                                <div className="db-row">
-                                    <div className="db-icon postgres">P</div>
-                                    <span className="db-name">PostgreSQL</span>
-                                    <span className={`db-status ${dbStatus.postgresql?.running ? 'running' : 'stopped'}`}>
-                                        {dbStatus.postgresql?.running ? 'Running' : 'Stopped'}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Quick Actions */}
-                    <div className="dashboard-card">
-                        <div className="card-title">Quick Actions</div>
-                        <div className="quick-links">
-                            <button className="quick-link" onClick={() => navigate('/apps')}>
-                                <Layers size={16} />
-                                Applications
-                            </button>
-                            <button className="quick-link" onClick={() => navigate('/docker')}>
-                                <Container size={16} />
-                                Docker
-                            </button>
-                            <button className="quick-link" onClick={() => navigate('/databases')}>
-                                <Database size={16} />
-                                Databases
-                            </button>
-                            <button className="quick-link" onClick={() => navigate('/domains')}>
-                                <Globe size={16} />
-                                Domains
-                            </button>
-                        </div>
+                    <div className="tile-val">{(metrics?.cpu?.percent || 0).toFixed(1)}%</div>
+                    <div className="tile-sub">
+                        <span>Cores: {metrics?.cpu?.count_logical || 0}</span>
+                        <span className={metrics?.cpu?.percent > 50 ? 'trend-up' : 'trend-down'}>
+                            {metrics?.cpu?.percent > 50 ? '▲' : '▼'} {Math.abs(metrics?.cpu?.percent - 50).toFixed(0)}%
+                        </span>
                     </div>
                 </div>
 
-                {/* Right Column - Applications */}
-                <div className="dashboard-column dashboard-column-wide">
-                    <div className="dashboard-card">
-                        <div className="card-title-row">
-                            <div className="card-title">
-                                <Layers size={16} />
-                                Applications
-                            </div>
-                            <button className="btn btn-sm btn-link" onClick={() => navigate('/apps')}>
-                                View All <ArrowRight size={14} />
-                            </button>
-                        </div>
+                <div className="metric-tile">
+                    <div className="tile-head">
+                        <span className="tile-title">Memory Allocation</span>
+                        <Database size={16} className="tile-icon memory" />
+                    </div>
+                    <div className="tile-val">{metrics?.memory?.ram?.used_human || '0 GB'}</div>
+                    <div className="tile-sub">
+                        <span>Total: {metrics?.memory?.ram?.total_human || '0 GB'}</span>
+                        <span>Cached: {metrics?.memory?.ram?.cached_human || '0 GB'}</span>
+                    </div>
+                </div>
 
-                        {apps.length === 0 ? (
-                            <div className="empty-apps">
-                                <Layers size={32} className="empty-icon" />
-                                <p>No applications yet</p>
-                                <button className="btn btn-primary btn-sm" onClick={() => navigate('/apps')}>
-                                    <Plus size={14} />
-                                    Create App
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="apps-table">
-                                <div className="apps-table-header">
-                                    <span>Name</span>
-                                    <span>Type</span>
-                                    <span>Status</span>
-                                    <span>Domain</span>
-                                </div>
-                                {apps.slice(0, 8).map(app => (
-                                    <div
-                                        key={app.id}
-                                        className="apps-table-row"
-                                        onClick={() => navigate(`/apps/${app.id}`)}
-                                    >
-                                        <span className="app-name">
-                                            <div className="app-icon-small" style={{ background: getStackColor(app.app_type) }}>
-                                                {getStackIcon(app.app_type)}
+                <div className="metric-tile">
+                    <div className="tile-head">
+                        <span className="tile-title">Network I/O</span>
+                        <Activity size={16} className="tile-icon network" />
+                    </div>
+                    <div className="tile-val">
+                        {metrics?.network?.io?.bytes_sent_human || '0 B'}
+                        <span className="tile-val-unit">sent</span>
+                    </div>
+                    <div className="tile-sub">
+                        <span>In: {metrics?.network?.io?.bytes_recv_human || '0 B'}</span>
+                        <span>Out: {metrics?.network?.io?.bytes_sent_human || '0 B'}</span>
+                    </div>
+                </div>
+
+                <div className="metric-tile">
+                    <div className="tile-head">
+                        <span className="tile-title">Disk Operations</span>
+                        <HardDrive size={16} className="tile-icon disk" />
+                    </div>
+                    <div className="tile-val">
+                        {(metrics?.disk?.partitions?.[0]?.percent || 0).toFixed(1)}%
+                        <span className="tile-val-unit">used</span>
+                    </div>
+                    <div className="tile-sub">
+                        <span>Used: {metrics?.disk?.partitions?.[0]?.used_human || '0 GB'}</span>
+                        <span>Free: {metrics?.disk?.partitions?.[0]?.free_human || '0 GB'}</span>
+                    </div>
+                </div>
+
+                {/* Chart Panel */}
+                <div className="chart-panel">
+                    <MetricsGraph />
+                </div>
+
+                {/* Spec Panel */}
+                <div className="spec-panel">
+                    <h3 className="spec-panel-title">Quick Actions</h3>
+                    <button className="btn-action" onClick={() => navigate('/docker')}>
+                        <span>Restart Services</span>
+                        <span>►</span>
+                    </button>
+                    <button className="btn-action" onClick={() => navigate('/databases')}>
+                        <span>Clear Cache</span>
+                        <span><Zap size={14} /></span>
+                    </button>
+                    <button className="btn-action" onClick={() => navigate('/ssl')}>
+                        <span>Rotate SSL Certs</span>
+                        <span><RotateCcw size={14} /></span>
+                    </button>
+
+                    <h3 className="spec-panel-title" style={{ marginTop: '1.5rem' }}>Hardware Specs</h3>
+                    <div className="spec-row">
+                        <span className="spec-label">Processor</span>
+                        <span className="spec-data">{systemInfo?.cpu?.model || 'N/A'}</span>
+                    </div>
+                    <div className="spec-row">
+                        <span className="spec-label">Architecture</span>
+                        <span className="spec-data">{systemInfo?.cpu?.architecture || 'N/A'}</span>
+                    </div>
+                    <div className="spec-row">
+                        <span className="spec-label">Swap Memory</span>
+                        <span className="spec-data">{metrics?.memory?.swap?.total_human || 'N/A'}</span>
+                    </div>
+                </div>
+
+                {/* Process Table */}
+                <div className="table-panel">
+                    <div className="table-header">
+                        <span>Active Processes / Containers</span>
+                        <button className="btn btn-sm btn-secondary" onClick={loadData}>
+                            <RefreshCw size={14} />
+                        </button>
+                    </div>
+                    <table className="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Domain</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {apps.length === 0 ? (
+                                <tr>
+                                    <td colSpan="5" style={{ textAlign: 'center', color: 'var(--text-tertiary)' }}>
+                                        No applications found
+                                    </td>
+                                </tr>
+                            ) : (
+                                apps.slice(0, 6).map(app => (
+                                    <tr key={app.id} onClick={() => navigate(`/apps/${app.id}`)} style={{ cursor: 'pointer' }}>
+                                        <td>{app.id}</td>
+                                        <td>
+                                            <div className="app-name-cell">
+                                                <span className="app-icon-mini">{getStackIcon(app.app_type)}</span>
+                                                {app.name}
                                             </div>
-                                            {app.name}
-                                        </span>
-                                        <span className="app-type">{app.app_type}</span>
-                                        <span className={`app-status ${getStatusClass(app.status)}`}>
-                                            <span className="status-dot" />
-                                            {app.status}
-                                        </span>
-                                        <span className="app-domain">
-                                            {app.domains?.[0]?.name || '-'}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
+                                        </td>
+                                        <td>{app.app_type}</td>
+                                        <td>
+                                            <span className={`badge badge-${app.status === 'running' ? 'running' : 'warning'}`}>
+                                                {app.status?.toUpperCase()}
+                                            </span>
+                                        </td>
+                                        <td>{app.domains?.[0]?.name || '-'}</td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

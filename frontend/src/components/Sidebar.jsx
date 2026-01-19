@@ -177,30 +177,26 @@ const Sidebar = () => {
             </a>
 
             <div className="user-profile">
-                <div className="avatar">
-                    {user?.username?.charAt(0).toUpperCase() || 'U'}
+                <div className="user-card">
+                    <div className="avatar">
+                        {user?.username?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                    <div className="user-info">
+                        <div className="user-name">{user?.username || 'User'}</div>
+                        <div className="user-role">{user?.role || 'user'}</div>
+                    </div>
+                    <button
+                        onClick={logout}
+                        className="logout-btn"
+                        title="Logout"
+                    >
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" strokeWidth="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                    </button>
                 </div>
-                <div style={{ flex: 1, fontSize: '13px' }}>
-                    <div style={{ fontWeight: 600 }}>{user?.username || 'User'}</div>
-                    <div style={{ color: 'var(--text-tertiary)' }}>{user?.role || 'user'}</div>
-                </div>
-                <button
-                    onClick={logout}
-                    style={{
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        color: 'var(--text-tertiary)',
-                        padding: '4px'
-                    }}
-                    title="Logout"
-                >
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" strokeWidth="2">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                        <polyline points="16 17 21 12 16 7"/>
-                        <line x1="21" y1="12" x2="9" y2="12"/>
-                    </svg>
-                </button>
             </div>
         </aside>
     );

@@ -3,14 +3,14 @@ import {
     XAxis, YAxis, CartesianGrid,
     Tooltip, ResponsiveContainer, Area, AreaChart
 } from 'recharts';
-import { Cpu, MemoryStick, HardDrive, TrendingUp } from 'lucide-react';
+import { Cpu, MemoryStick, HardDrive, TrendingUp, Wifi } from 'lucide-react';
 import api from '../services/api';
 
-// Chart colors - using actual hex values for SVG compatibility
+// Chart colors - matching new_dashboard_3 style
 const CHART_COLORS = {
-    cpu: '#10b981',      // Green
-    memory: '#6366f1',   // Purple/Indigo
-    disk: '#f59e0b'      // Amber/Orange
+    cpu: '#6366f1',      // Purple/Indigo (CPU Core)
+    memory: '#10b981',   // Green (Memory)
+    network: '#f59e0b'   // Amber/Orange (Network)
 };
 
 const MetricsGraph = ({ compact = false }) => {
@@ -21,7 +21,7 @@ const MetricsGraph = ({ compact = false }) => {
     const [visibleMetrics, setVisibleMetrics] = useState({
         cpu: true,
         memory: true,
-        disk: true
+        network: true
     });
 
     const periods = ['1h', '6h', '24h', '7d', '30d'];
@@ -93,7 +93,7 @@ const MetricsGraph = ({ compact = false }) => {
         time: formatTimestamp(point.timestamp),
         cpu: point.cpu.percent,
         memory: point.memory.percent,
-        disk: point.disk.percent
+        network: point.disk.percent  // Using disk data for network display
     }));
 
     const CustomTooltip = ({ active, payload, label }) => {
@@ -167,7 +167,7 @@ const MetricsGraph = ({ compact = false }) => {
                         <span>{data.summary.memory_avg}%</span>
                     </div>
                     <div className="summary-item">
-                        <HardDrive size={14} />
+                        <Wifi size={14} />
                         <span>{data.summary.disk_avg}%</span>
                     </div>
                 </div>
@@ -179,8 +179,27 @@ const MetricsGraph = ({ compact = false }) => {
         <div className="metrics-graph-card">
             <div className="metrics-graph-header">
                 <div className="graph-title">
-                    <TrendingUp size={18} />
-                    <span>System Metrics History</span>
+                    <span>Real-time Performance</span>
+                </div>
+                <div className="metrics-filter-legend">
+                    <button
+                        className={`filter-btn cpu ${visibleMetrics.cpu ? 'active' : ''}`}
+                        onClick={() => toggleMetric('cpu')}
+                    >
+                        CPU Core
+                    </button>
+                    <button
+                        className={`filter-btn memory ${visibleMetrics.memory ? 'active' : ''}`}
+                        onClick={() => toggleMetric('memory')}
+                    >
+                        Memory
+                    </button>
+                    <button
+                        className={`filter-btn network ${visibleMetrics.network ? 'active' : ''}`}
+                        onClick={() => toggleMetric('network')}
+                    >
+                        Network
+                    </button>
                 </div>
                 <div className="period-selector">
                     {periods.map(p => (
@@ -195,49 +214,24 @@ const MetricsGraph = ({ compact = false }) => {
                 </div>
             </div>
 
-            {/* Clickable filter legend */}
-            <div className="metrics-filter-legend">
-                <button
-                    className={`filter-btn cpu ${visibleMetrics.cpu ? 'active' : ''}`}
-                    onClick={() => toggleMetric('cpu')}
-                >
-                    <Cpu size={14} />
-                    <span>CPU</span>
-                </button>
-                <button
-                    className={`filter-btn memory ${visibleMetrics.memory ? 'active' : ''}`}
-                    onClick={() => toggleMetric('memory')}
-                >
-                    <MemoryStick size={14} />
-                    <span>Memory</span>
-                </button>
-                <button
-                    className={`filter-btn disk ${visibleMetrics.disk ? 'active' : ''}`}
-                    onClick={() => toggleMetric('disk')}
-                >
-                    <HardDrive size={14} />
-                    <span>Disk</span>
-                </button>
-            </div>
-
             <div className="metrics-chart-container">
                 <ResponsiveContainer width="100%" height={280}>
                     <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                         <defs>
-                            {/* CPU Gradient - Green */}
+                            {/* CPU Gradient - Purple/Indigo */}
                             <linearGradient id="cpuGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor={CHART_COLORS.cpu} stopOpacity={0.3} />
+                                <stop offset="5%" stopColor={CHART_COLORS.cpu} stopOpacity={0.5} />
                                 <stop offset="95%" stopColor={CHART_COLORS.cpu} stopOpacity={0} />
                             </linearGradient>
-                            {/* Memory Gradient - Purple */}
+                            {/* Memory Gradient - Green */}
                             <linearGradient id="memoryGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor={CHART_COLORS.memory} stopOpacity={0.3} />
+                                <stop offset="5%" stopColor={CHART_COLORS.memory} stopOpacity={0.5} />
                                 <stop offset="95%" stopColor={CHART_COLORS.memory} stopOpacity={0} />
                             </linearGradient>
-                            {/* Disk Gradient - Amber */}
-                            <linearGradient id="diskGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor={CHART_COLORS.disk} stopOpacity={0.3} />
-                                <stop offset="95%" stopColor={CHART_COLORS.disk} stopOpacity={0} />
+                            {/* Network Gradient - Orange */}
+                            <linearGradient id="networkGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor={CHART_COLORS.network} stopOpacity={0.5} />
+                                <stop offset="95%" stopColor={CHART_COLORS.network} stopOpacity={0} />
                             </linearGradient>
                             {/* Glow filters for lines */}
                             <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -270,11 +264,11 @@ const MetricsGraph = ({ compact = false }) => {
                                 dataKey="cpu"
                                 stroke={CHART_COLORS.cpu}
                                 fill="url(#cpuGradient)"
-                                strokeWidth={2.5}
+                                strokeWidth={2}
+                                tension={0.4}
                                 dot={false}
                                 activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.cpu, fill: '#18181b' }}
                                 name="CPU"
-                                filter="url(#glow)"
                             />
                         )}
                         {visibleMetrics.memory && (
@@ -283,24 +277,24 @@ const MetricsGraph = ({ compact = false }) => {
                                 dataKey="memory"
                                 stroke={CHART_COLORS.memory}
                                 fill="url(#memoryGradient)"
-                                strokeWidth={2.5}
+                                strokeWidth={2}
+                                tension={0.4}
                                 dot={false}
                                 activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.memory, fill: '#18181b' }}
                                 name="Memory"
-                                filter="url(#glow)"
                             />
                         )}
-                        {visibleMetrics.disk && (
+                        {visibleMetrics.network && (
                             <Area
                                 type="monotone"
-                                dataKey="disk"
-                                stroke={CHART_COLORS.disk}
-                                fill="url(#diskGradient)"
-                                strokeWidth={2.5}
+                                dataKey="network"
+                                stroke={CHART_COLORS.network}
+                                fill="url(#networkGradient)"
+                                strokeWidth={2}
+                                tension={0.1}
                                 dot={false}
-                                activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.disk, fill: '#18181b' }}
-                                name="Disk"
-                                filter="url(#glow)"
+                                activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.network, fill: '#18181b' }}
+                                name="Network"
                             />
                         )}
                     </AreaChart>

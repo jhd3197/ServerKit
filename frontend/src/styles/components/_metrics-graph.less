@@ -168,76 +168,63 @@
     }
 }
 
-// Filter Legend (clickable)
+// Filter Legend (clickable) - new_dashboard_3 style
 .metrics-filter-legend {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: @space-3;
-    margin-bottom: @space-4;
+    gap: @space-2;
+    background: @bg-hover;
+    padding: 4px;
+    border-radius: @radius-md;
+    border: 1px solid @border-subtle;
 }
 
 .filter-btn {
-    display: flex;
-    align-items: center;
-    gap: @space-2;
-    padding: @space-2 @space-4;
-    border-radius: @radius-full;
-    border: 1px solid @border-subtle;
     background: transparent;
+    border: 1px solid transparent;
     color: @text-tertiary;
-    font-size: @font-size-sm;
-    font-weight: @font-weight-medium;
+    padding: 6px 12px;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-semibold;
+    border-radius: @radius-sm;
     cursor: pointer;
     transition: all @transition-fast;
-    opacity: 0.5;
-
-    svg {
-        opacity: 0.7;
-    }
+    text-transform: uppercase;
 
     &:hover {
-        background: @bg-hover;
-        border-color: @border-active;
+        color: @text-primary;
     }
 
     &.active {
         opacity: 1;
-        color: @text-primary;
-
-        svg {
-            opacity: 1;
-        }
     }
 
+    // CPU - Purple/Indigo
     &.cpu.active {
-        background: rgba(16, 185, 129, 0.15);
-        border-color: rgba(16, 185, 129, 0.4);
-        color: #10b981;
-
-        &:hover {
-            background: rgba(16, 185, 129, 0.25);
-        }
-    }
-
-    &.memory.active {
-        background: rgba(99, 102, 241, 0.15);
-        border-color: rgba(99, 102, 241, 0.4);
+        background: rgba(99, 102, 241, 0.1);
         color: #6366f1;
-
-        &:hover {
-            background: rgba(99, 102, 241, 0.25);
-        }
+        border-color: rgba(99, 102, 241, 0.3);
     }
 
-    &.disk.active {
-        background: rgba(245, 158, 11, 0.15);
-        border-color: rgba(245, 158, 11, 0.4);
-        color: #f59e0b;
+    // Memory - Green
+    &.memory.active {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+        border-color: rgba(16, 185, 129, 0.3);
+    }
 
-        &:hover {
-            background: rgba(245, 158, 11, 0.25);
-        }
+    // Network - Orange
+    &.network.active {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+        border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    // Legacy disk class for backwards compatibility
+    &.disk.active {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+        border-color: rgba(245, 158, 11, 0.3);
     }
 }
 
@@ -287,16 +274,17 @@
     }
 
     &.cpu {
-        background: #10b981;
-        box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
-    }
-
-    &.memory {
         background: #6366f1;
         box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
     }
 
-    &.disk {
+    &.memory {
+        background: #10b981;
+        box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    }
+
+    &.disk,
+    &.network {
         background: #f59e0b;
         box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
     }

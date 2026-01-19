@@ -87,20 +87,23 @@
     border-radius: @radius-md;
     .transition();
     font-weight: @font-weight-medium;
+    margin-bottom: 2px;
 
     &:hover {
-        background-color: @bg-hover;
+        background-color: rgba(255, 255, 255, 0.03);
         color: @text-primary;
     }
 
     &.active {
         background-color: @accent-glow;
         color: @accent-primary;
+        border-left: 3px solid @accent-primary;
+        border-radius: @radius-sm;
     }
 
     svg {
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
         stroke: currentColor;
         stroke-width: 2;
         stroke-linecap: round;
@@ -136,16 +139,58 @@
 // User profile at bottom
 .user-profile {
     flex-shrink: 0;
-    padding: @space-5;
+    padding: @space-4;
     border-top: 1px solid @border-subtle;
-    .flex-start();
+}
+
+.user-card {
+    display: flex;
+    align-items: center;
     gap: @space-3;
+    padding: @space-3;
+    border-radius: @radius-lg;
+    background: @bg-hover;
+    border: 1px solid @border-subtle;
 }
 
 .avatar {
-    .icon-box(36px);
-    background-color: @bg-hover;
+    .icon-box(32px);
+    background-color: @accent-primary;
     border-radius: @radius-full;
-    color: @text-secondary;
+    color: white;
     font-weight: @font-weight-semibold;
+    font-size: @font-size-sm;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.user-name {
+    font-size: @font-size-sm;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+}
+
+.user-role {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+    font-family: @font-mono;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: @text-tertiary;
+    padding: @space-1;
+    border-radius: @radius-sm;
+    .transition();
+
+    &:hover {
+        color: @text-primary;
+        background: rgba(255, 255, 255, 0.05);
+    }
 }

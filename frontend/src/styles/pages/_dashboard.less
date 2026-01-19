@@ -1,601 +1,429 @@
 // ============================================
-// DASHBOARD PAGE - Clean Layout
+// DASHBOARD PAGE - Pro Layout (new_dashboard_3 style)
 // ============================================
 
 .dashboard-page {
     display: flex;
     flex-direction: column;
-    gap: @space-5;
+    gap: @space-6;
+    min-height: 100%;
 }
 
-// Server Status Bar
-.server-status-bar {
+// --- Top Bar: Pro Layout ---
+.top-bar {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: @space-3 @space-5;
-    background: @bg-card;
-    border: 1px solid @border-subtle;
-    border-radius: @radius-lg;
-}
-
-.status-bar-left {
-    display: flex;
-    align-items: center;
-    gap: @space-6;
-}
-
-.server-status-indicator {
-    display: flex;
-    align-items: center;
-    gap: @space-2;
-
-    .status-icon-ok {
-        color: @success;
-    }
-
-    .status-text {
-        font-weight: @font-weight-semibold;
-        color: @text-primary;
-    }
-}
-
-.uptime-inline {
-    display: flex;
-    align-items: center;
-    gap: @space-2;
-    color: @text-secondary;
-    font-size: @font-size-sm;
-    padding-left: @space-6;
-    border-left: 1px solid @border-subtle;
-
-    svg {
-        color: @text-tertiary;
-    }
-}
-
-.status-bar-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-}
-
-.server-time-display {
-    display: flex;
-    align-items: center;
-    gap: @space-2;
-    color: @text-secondary;
-    font-size: @font-size-sm;
-
-    svg {
-        color: @text-tertiary;
-    }
-
-    .time-value {
-        font-family: @font-mono;
-        font-weight: @font-weight-medium;
-        color: @text-primary;
-    }
-
-    .timezone-badge {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        font-size: @font-size-xs;
-        color: @accent-primary;
-        background: @accent-glow;
-        padding: 2px 8px;
-        border-radius: @radius-full;
-        margin-left: @space-2;
-    }
-}
-
-.status-bar-right {
-    display: flex;
-    align-items: center;
-    gap: @space-6;
-}
-
-.status-bar-stat {
-    display: flex;
-    align-items: center;
-    gap: @space-2;
-
-    .stat-label {
-        font-size: @font-size-sm;
-        color: @text-tertiary;
-    }
-
-    .stat-value {
-        font-size: @font-size-sm;
-        font-weight: @font-weight-semibold;
-        color: @text-primary;
-    }
-}
-
-// Metrics Grid - Compact
-.metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: @space-4;
-
-    @media (max-width: @breakpoint-xl) {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media (max-width: @breakpoint-sm) {
-        grid-template-columns: 1fr;
-    }
-}
-
-.metric-card {
-    background: @bg-card;
-    border: 1px solid @border-subtle;
-    border-radius: @radius-lg;
-    padding: @space-4;
-
-    .metric-header {
-        display: flex;
-        align-items: center;
-        gap: @space-2;
-        margin-bottom: @space-3;
-
-        .metric-icon {
-            color: @text-tertiary;
-        }
-
-        span {
-            font-size: @font-size-sm;
-            color: @text-tertiary;
-            font-weight: @font-weight-medium;
-        }
-
-        .metric-live-badge {
-            margin-left: auto;
-            font-size: 9px;
-            color: @success;
-            background: fade(@success, 15%);
-            padding: 2px 6px;
-            border-radius: @radius-full;
-            font-weight: @font-weight-bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            animation: pulse-live 2s ease-in-out infinite;
-        }
-    }
-
-    .metric-value-row {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        margin-bottom: @space-2;
-
-        .metric-value {
-            font-size: @font-size-xl;
-            font-weight: @font-weight-bold;
-            color: @text-primary;
-        }
-
-        .metric-detail {
-            font-size: @font-size-xs;
-            color: @text-tertiary;
-        }
-    }
-
-    .metric-bar {
-        height: 4px;
-        background: @bg-hover;
-        border-radius: @radius-full;
-        overflow: hidden;
-
-        .metric-bar-fill {
-            height: 100%;
-            border-radius: @radius-full;
-            transition: width 0.3s ease;
-        }
-    }
-
-    .metric-sub-value {
-        font-size: @font-size-xs;
-        color: @text-tertiary;
-        margin-top: @space-2;
-    }
-}
-
-// Two Column Layout
-.dashboard-columns {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: @space-5;
-
-    @media (max-width: @breakpoint-lg) {
-        grid-template-columns: 1fr;
-    }
-}
-
-.dashboard-column {
-    display: flex;
-    flex-direction: column;
-    gap: @space-4;
-}
-
-.dashboard-column-wide {
-    min-width: 0;
-}
-
-// Dashboard Cards
-.dashboard-card {
-    background: @bg-card;
-    border: 1px solid @border-subtle;
-    border-radius: @radius-lg;
-    padding: @space-4;
-
-    .card-title {
-        display: flex;
-        align-items: center;
-        gap: @space-2;
-        font-size: @font-size-sm;
-        font-weight: @font-weight-semibold;
-        color: @text-primary;
-        margin-bottom: @space-3;
-
-        svg {
-            color: @text-tertiary;
-        }
-    }
-
-    .card-title-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: @space-3;
-
-        .card-title {
-            margin-bottom: 0;
-        }
-    }
-}
-
-// Services List
-.services-list {
-    display: flex;
-    flex-direction: column;
-    gap: @space-2;
-}
-
-.service-row {
-    display: flex;
-    align-items: center;
-    gap: @space-3;
-    padding: @space-2 0;
-
-    &:not(:last-child) {
-        border-bottom: 1px solid @border-subtle;
-    }
-
-    .status-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: @text-tertiary;
-        flex-shrink: 0;
-
-        &.running {
-            background: @success;
-        }
-
-        &.stopped {
-            background: @danger;
-        }
-    }
-
-    .service-name {
-        flex: 1;
-        font-size: @font-size-sm;
-        color: @text-primary;
-    }
-
-    .service-status {
-        font-size: @font-size-xs;
-        color: @text-tertiary;
-        text-transform: capitalize;
-
-        &.running {
-            color: @success;
-        }
-
-        &.stopped {
-            color: @danger;
-        }
-    }
-}
-
-// Database List
-.db-list {
-    display: flex;
-    flex-direction: column;
-    gap: @space-2;
-}
-
-.db-row {
-    display: flex;
-    align-items: center;
-    gap: @space-3;
-    padding: @space-2 0;
-
-    &:not(:last-child) {
-        border-bottom: 1px solid @border-subtle;
-    }
-
-    .db-icon {
-        width: 24px;
-        height: 24px;
-        border-radius: @radius-sm;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: @font-size-xs;
-        font-weight: @font-weight-bold;
-        color: white;
-        flex-shrink: 0;
-
-        &.mysql {
-            background: #00758f;
-        }
-
-        &.postgres {
-            background: #336791;
-        }
-    }
-
-    .db-name {
-        flex: 1;
-        font-size: @font-size-sm;
-        color: @text-primary;
-    }
-
-    .db-status {
-        font-size: @font-size-xs;
-        color: @text-tertiary;
-
-        &.running {
-            color: @success;
-        }
-
-        &.stopped {
-            color: @danger;
-        }
-    }
-}
-
-// Quick Links
-.quick-links {
-    display: flex;
-    flex-direction: column;
-    gap: @space-2;
-}
-
-.quick-link {
-    display: flex;
-    align-items: center;
-    gap: @space-3;
-    padding: @space-2 @space-3;
-    background: transparent;
-    border: none;
-    border-radius: @radius-md;
-    color: @text-secondary;
-    font-size: @font-size-sm;
-    cursor: pointer;
-    transition: all @transition-fast;
-    text-align: left;
-
-    svg {
-        color: @text-tertiary;
-        flex-shrink: 0;
-    }
-
-    &:hover {
-        background: @bg-hover;
-        color: @text-primary;
-
-        svg {
-            color: @accent-primary;
-        }
-    }
-}
-
-// Applications Table
-.apps-table {
-    display: flex;
-    flex-direction: column;
-}
-
-.apps-table-header {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1.5fr;
-    gap: @space-4;
-    padding: @space-2 @space-3;
-    font-size: @font-size-xs;
-    color: @text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    align-items: flex-end;
+    padding-bottom: @space-4;
     border-bottom: 1px solid @border-subtle;
 }
 
-.apps-table-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1.5fr;
-    gap: @space-4;
-    padding: @space-3;
-    align-items: center;
-    cursor: pointer;
-    border-radius: @radius-md;
-    transition: background @transition-fast;
-
-    &:hover {
-        background: @bg-hover;
-    }
-
-    .app-name {
+.server-identity {
+    h1 {
+        font-size: 1.5rem;
+        font-weight: @font-weight-bold;
+        letter-spacing: -0.02em;
         display: flex;
         align-items: center;
-        gap: @space-3;
-        font-size: @font-size-sm;
-        font-weight: @font-weight-medium;
+        gap: 10px;
         color: @text-primary;
     }
 
-    .app-icon-small {
-        width: 28px;
-        height: 28px;
-        border-radius: @radius-md;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-
-        svg {
-            width: 14px;
-            height: 14px;
-            color: white;
-        }
-    }
-
-    .app-type {
-        font-size: @font-size-sm;
-        color: @text-secondary;
-        text-transform: capitalize;
-    }
-
-    .app-status {
-        display: flex;
-        align-items: center;
-        gap: @space-2;
-        font-size: @font-size-sm;
-        text-transform: capitalize;
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: @text-tertiary;
-        }
-
-        &.status-active {
-            color: @success;
-
-            .status-dot {
-                background: @success;
-            }
-        }
-
-        &.status-stopped {
-            color: @danger;
-
-            .status-dot {
-                background: @danger;
-            }
-        }
-
-        &.status-error {
-            color: @danger;
-
-            .status-dot {
-                background: @danger;
-            }
-        }
-
-        &.status-warning {
-            color: @warning;
-
-            .status-dot {
-                background: @warning;
-            }
-        }
-    }
-
-    .app-domain {
-        font-size: @font-size-sm;
+    .pro-badge {
+        font-weight: @font-weight-normal;
         color: @text-tertiary;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        margin-left: 10px;
+        font-size: 1rem;
     }
 }
 
-// Empty Apps State
-.empty-apps {
+.status-dot-live {
+    width: 10px;
+    height: 10px;
+    background: @success;
+    border-radius: 50%;
+    box-shadow: 0 0 10px @success;
+    display: inline-block;
+}
+
+.server-details {
+    display: flex;
+    gap: @space-6;
+    margin-top: @space-2;
+    font-size: @font-size-sm;
+    color: @text-tertiary;
+    font-family: @font-mono;
+}
+
+.clock-widget {
+    text-align: right;
+}
+
+.clock-time {
+    font-family: @font-mono;
+    font-size: 1.5rem;
+    font-weight: @font-weight-bold;
+    color: @text-primary;
+}
+
+.clock-zone {
+    color: @accent-primary;
+    font-weight: @font-weight-semibold;
+    font-size: @font-size-xs;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+// --- Grid System ---
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: @space-5;
+    max-width: 1800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+// --- Metric Tiles ---
+.metric-tile {
+    grid-column: span 3;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-sm;
+    padding: @space-5;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, @accent-primary, transparent);
+        opacity: 0.5;
+    }
+
+    @media (max-width: @breakpoint-xl) {
+        grid-column: span 6;
+    }
+
+    @media (max-width: @breakpoint-md) {
+        grid-column: span 12;
+    }
+}
+
+.tile-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: @space-3;
+}
+
+.tile-title {
+    font-size: @font-size-xs;
+    font-weight: @font-weight-semibold;
+    text-transform: uppercase;
+    color: @text-tertiary;
+    letter-spacing: 0.05em;
+}
+
+.tile-icon {
+    &.cpu { color: @accent-primary; }
+    &.memory { color: @success; }
+    &.network { color: @warning; }
+    &.disk { color: @danger; }
+}
+
+.tile-val {
+    font-family: @font-mono;
+    font-size: 1.75rem;
+    font-weight: @font-weight-bold;
+    color: @text-primary;
+}
+
+.tile-val-unit {
+    font-size: @font-size-base;
+    font-weight: @font-weight-normal;
+    color: @text-tertiary;
+    margin-left: @space-1;
+}
+
+.tile-sub {
+    font-size: @font-size-sm;
+    color: @text-tertiary;
+    margin-top: @space-2;
+    display: flex;
+    justify-content: space-between;
+}
+
+.trend-up { color: @warning; }
+.trend-down { color: @success; }
+
+// --- Chart Panel ---
+.chart-panel {
+    grid-column: span 8;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-sm;
+    padding: @space-5;
+    min-height: 450px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: @space-8;
-    text-align: center;
 
-    .empty-icon {
-        color: @text-tertiary;
-        margin-bottom: @space-3;
+    // Override MetricsGraph card styling when inside chart-panel
+    .metrics-graph-card {
+        background: transparent;
+        border: none;
+        padding: 0;
+        margin-bottom: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
-    p {
-        color: @text-secondary;
-        font-size: @font-size-sm;
-        margin-bottom: @space-4;
+    // Toolbar styling matching new_dashboard_3
+    .metrics-graph-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: @space-5;
+        gap: @space-4;
+    }
+
+    .graph-title {
+        font-weight: @font-weight-semibold;
+        font-size: @font-size-base;
+        color: @text-primary;
+    }
+
+    .metrics-chart-container {
+        flex-grow: 1;
+        margin-bottom: 0;
+    }
+
+    @media (max-width: @breakpoint-lg) {
+        grid-column: span 12;
+        min-height: 400px;
+    }
+
+    @media (max-width: @breakpoint-md) {
+        .metrics-graph-header {
+            flex-wrap: wrap;
+            gap: @space-3;
+        }
     }
 }
 
-// Button link variant
-.btn-link {
-    background: transparent;
-    border: none;
-    color: @text-secondary;
-    font-size: @font-size-sm;
-    display: flex;
-    align-items: center;
-    gap: @space-1;
-    cursor: pointer;
-    padding: @space-1 @space-2;
+// --- Spec Panel ---
+.spec-panel {
+    grid-column: span 4;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
     border-radius: @radius-sm;
+    padding: @space-5;
+    display: flex;
+    flex-direction: column;
+    gap: @space-4;
+
+    @media (max-width: @breakpoint-lg) {
+        grid-column: span 12;
+    }
+}
+
+.spec-panel-title {
+    font-size: @font-size-sm;
+    text-transform: uppercase;
+    color: @text-tertiary;
+    font-weight: @font-weight-semibold;
+    letter-spacing: 0.05em;
+}
+
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid @border-subtle;
+    padding-bottom: @space-3;
+    font-size: @font-size-sm;
+
+    &:last-child {
+        border: none;
+        padding-bottom: 0;
+    }
+}
+
+.spec-label {
+    color: @text-tertiary;
+}
+
+.spec-data {
+    font-family: @font-mono;
+    color: @text-primary;
+    text-align: right;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.btn-action {
+    width: 100%;
+    padding: @space-3;
+    background: @bg-hover;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    color: @text-primary;
+    font-weight: @font-weight-semibold;
+    font-size: @font-size-sm;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all @transition-fast;
 
     &:hover {
-        color: @accent-primary;
+        border-color: @accent-primary;
         background: @accent-glow;
     }
+
+    svg {
+        color: @text-tertiary;
+    }
 }
 
-// Live badge animation
-@keyframes pulse-live {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+// --- Process Table ---
+.table-panel {
+    grid-column: span 12;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-sm;
+    overflow: hidden;
 }
 
-// Responsive adjustments
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: @space-4 @space-5;
+    border-bottom: 1px solid @border-subtle;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: @font-size-sm;
+
+    th {
+        text-align: left;
+        padding: @space-4 @space-5;
+        background: @bg-hover;
+        color: @text-tertiary;
+        font-weight: @font-weight-semibold;
+        text-transform: uppercase;
+        font-size: @font-size-xs;
+        letter-spacing: 0.05em;
+    }
+
+    td {
+        padding: @space-4 @space-5;
+        border-bottom: 1px solid @border-subtle;
+        font-family: @font-mono;
+        color: @text-secondary;
+    }
+
+    tr:hover {
+        background: @bg-hover;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+}
+
+.app-name-cell {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    color: @text-primary;
+}
+
+.app-icon-mini {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: @text-tertiary;
+}
+
+// Status Badges
+.badge {
+    padding: 2px 8px;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    text-transform: uppercase;
+    font-weight: @font-weight-semibold;
+    letter-spacing: 0.5px;
+}
+
+.badge-running {
+    color: @success;
+    background: @success-bg;
+    border: 1px solid @success-border;
+}
+
+.badge-warning {
+    color: @warning;
+    background: @warning-bg;
+    border: 1px solid @warning-border;
+}
+
+.badge-stopped {
+    color: @danger;
+    background: @danger-bg;
+    border: 1px solid @danger-border;
+}
+
+// Responsive
 @media (max-width: @breakpoint-md) {
-    .server-status-bar {
+    .top-bar {
         flex-direction: column;
+        align-items: flex-start;
+        gap: @space-4;
+    }
+
+    .server-details {
+        flex-wrap: wrap;
         gap: @space-3;
-        align-items: flex-start;
     }
 
-    .status-bar-left {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: @space-2;
+    .clock-widget {
+        text-align: left;
     }
 
-    .uptime-inline {
-        padding-left: 0;
-        border-left: none;
-    }
-
-    .apps-table-header,
-    .apps-table-row {
-        grid-template-columns: 1fr 1fr;
-
-        span:nth-child(3),
-        span:nth-child(4) {
+    .data-table {
+        th:nth-child(3),
+        th:nth-child(5),
+        td:nth-child(3),
+        td:nth-child(5) {
             display: none;
         }
+    }
+}
+
+@media (max-width: @breakpoint-sm) {
+    .server-details {
+        flex-direction: column;
+        gap: @space-1;
+    }
+
+    .metric-tile {
+        padding: @space-4;
+    }
+
+    .tile-val {
+        font-size: 1.5rem;
     }
 }
