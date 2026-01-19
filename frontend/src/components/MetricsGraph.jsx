@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid,
-    Tooltip, ResponsiveContainer, Area, AreaChart
+    Tooltip, ResponsiveContainer, Area, AreaChart, Legend
 } from 'recharts';
 import { Cpu, MemoryStick, HardDrive, Clock, TrendingUp } from 'lucide-react';
 import api from '../services/api';
+
+// Chart colors - using actual hex values for SVG compatibility
+const CHART_COLORS = {
+    cpu: '#10b981',      // Green
+    memory: '#6366f1',   // Purple/Indigo
+    disk: '#f59e0b'      // Amber/Orange
+};
 
 const MetricsGraph = ({ compact = false }) => {
     const [data, setData] = useState(null);
@@ -46,13 +53,13 @@ const MetricsGraph = ({ compact = false }) => {
 
     function getColor(value, type) {
         if (type === 'cpu') {
-            if (value > 80) return 'var(--danger)';
-            if (value > 60) return 'var(--warning)';
-            return 'var(--success)';
+            if (value > 80) return '#ef4444';  // danger
+            if (value > 60) return '#f59e0b';  // warning
+            return '#10b981';  // success
         }
-        if (value > 90) return 'var(--danger)';
-        if (value > 80) return 'var(--warning)';
-        return 'var(--accent-primary)';
+        if (value > 90) return '#ef4444';  // danger
+        if (value > 80) return '#f59e0b';  // warning
+        return '#6366f1';  // accent
     }
 
     if (loading && !data) {
@@ -94,9 +101,10 @@ const MetricsGraph = ({ compact = false }) => {
                 <div className="metrics-tooltip">
                     <div className="tooltip-time">{label}</div>
                     {payload.map((entry, index) => (
-                        <div key={index} className="tooltip-row" style={{ color: entry.color }}>
-                            <span>{entry.name}:</span>
-                            <span>{entry.value}%</span>
+                        <div key={index} className="tooltip-row">
+                            <span className="tooltip-dot" style={{ backgroundColor: entry.stroke || entry.color }} />
+                            <span className="tooltip-label">{entry.name}:</span>
+                            <span className="tooltip-value" style={{ color: entry.stroke || entry.color }}>{entry.value?.toFixed(1)}%</span>
                         </div>
                     ))}
                 </div>
@@ -129,9 +137,9 @@ const MetricsGraph = ({ compact = false }) => {
                     <ResponsiveContainer width="100%" height={120}>
                         <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
                             <defs>
-                                <linearGradient id="cpuGradient" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="var(--success)" stopOpacity={0.3} />
-                                    <stop offset="95%" stopColor="var(--success)" stopOpacity={0} />
+                                <linearGradient id="cpuGradientCompact" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor={CHART_COLORS.cpu} stopOpacity={0.4} />
+                                    <stop offset="95%" stopColor={CHART_COLORS.cpu} stopOpacity={0} />
                                 </linearGradient>
                             </defs>
                             <XAxis dataKey="time" tick={false} axisLine={false} />
@@ -140,8 +148,8 @@ const MetricsGraph = ({ compact = false }) => {
                             <Area
                                 type="monotone"
                                 dataKey="cpu"
-                                stroke="var(--success)"
-                                fill="url(#cpuGradient)"
+                                stroke={CHART_COLORS.cpu}
+                                fill="url(#cpuGradientCompact)"
                                 strokeWidth={2}
                                 name="CPU"
                             />
@@ -224,63 +232,97 @@ const MetricsGraph = ({ compact = false }) => {
             </div>
 
             <div className="metrics-chart-container">
-                <ResponsiveContainer width="100%" height={250}>
-                    <LineChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
+                <ResponsiveContainer width="100%" height={280}>
+                    <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+                        <defs>
+                            {/* CPU Gradient - Green */}
+                            <linearGradient id="cpuGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor={CHART_COLORS.cpu} stopOpacity={0.3} />
+                                <stop offset="95%" stopColor={CHART_COLORS.cpu} stopOpacity={0} />
+                            </linearGradient>
+                            {/* Memory Gradient - Purple */}
+                            <linearGradient id="memoryGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor={CHART_COLORS.memory} stopOpacity={0.3} />
+                                <stop offset="95%" stopColor={CHART_COLORS.memory} stopOpacity={0} />
+                            </linearGradient>
+                            {/* Disk Gradient - Amber */}
+                            <linearGradient id="diskGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor={CHART_COLORS.disk} stopOpacity={0.3} />
+                                <stop offset="95%" stopColor={CHART_COLORS.disk} stopOpacity={0} />
+                            </linearGradient>
+                            {/* Glow filters for lines */}
+                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#27272a" opacity={0.5} />
                         <XAxis
                             dataKey="time"
-                            tick={{ fontSize: 11, fill: 'var(--text-secondary)' }}
-                            axisLine={{ stroke: 'var(--border-subtle)' }}
+                            tick={{ fontSize: 11, fill: '#a1a1aa' }}
+                            axisLine={{ stroke: '#27272a' }}
                             tickLine={false}
                             interval="preserveStartEnd"
                         />
                         <YAxis
                             domain={[0, 100]}
-                            tick={{ fontSize: 11, fill: 'var(--text-secondary)' }}
-                            axisLine={{ stroke: 'var(--border-subtle)' }}
+                            tick={{ fontSize: 11, fill: '#a1a1aa' }}
+                            axisLine={{ stroke: '#27272a' }}
                             tickLine={false}
                             tickFormatter={(value) => `${value}%`}
                         />
                         <Tooltip content={<CustomTooltip />} />
-                        <Line
+                        <Area
                             type="monotone"
                             dataKey="cpu"
-                            stroke="var(--success)"
-                            strokeWidth={2}
+                            stroke={CHART_COLORS.cpu}
+                            fill="url(#cpuGradient)"
+                            strokeWidth={2.5}
                             dot={false}
+                            activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.cpu, fill: '#18181b' }}
                             name="CPU"
+                            filter="url(#glow)"
                         />
-                        <Line
+                        <Area
                             type="monotone"
                             dataKey="memory"
-                            stroke="var(--accent-primary)"
-                            strokeWidth={2}
+                            stroke={CHART_COLORS.memory}
+                            fill="url(#memoryGradient)"
+                            strokeWidth={2.5}
                             dot={false}
+                            activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.memory, fill: '#18181b' }}
                             name="Memory"
+                            filter="url(#glow)"
                         />
-                        <Line
+                        <Area
                             type="monotone"
                             dataKey="disk"
-                            stroke="var(--warning)"
-                            strokeWidth={2}
+                            stroke={CHART_COLORS.disk}
+                            fill="url(#diskGradient)"
+                            strokeWidth={2.5}
                             dot={false}
+                            activeDot={{ r: 6, strokeWidth: 2, stroke: CHART_COLORS.disk, fill: '#18181b' }}
                             name="Disk"
+                            filter="url(#glow)"
                         />
-                    </LineChart>
+                    </AreaChart>
                 </ResponsiveContainer>
             </div>
 
             <div className="metrics-legend">
                 <div className="legend-item">
-                    <span className="legend-line" style={{ background: 'var(--success)' }} />
+                    <span className="legend-line cpu" />
                     <span>CPU</span>
                 </div>
                 <div className="legend-item">
-                    <span className="legend-line" style={{ background: 'var(--accent-primary)' }} />
+                    <span className="legend-line memory" />
                     <span>Memory</span>
                 </div>
                 <div className="legend-item">
-                    <span className="legend-line" style={{ background: 'var(--warning)' }} />
+                    <span className="legend-line disk" />
                     <span>Disk</span>
                 </div>
             </div>

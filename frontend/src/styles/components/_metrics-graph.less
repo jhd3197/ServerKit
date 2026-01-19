@@ -85,19 +85,51 @@
 // Chart Container
 .metrics-chart-container {
     margin-bottom: @space-4;
+    background: linear-gradient(180deg, rgba(39, 39, 42, 0.3) 0%, transparent 100%);
+    border-radius: @radius-lg;
+    padding: @space-2 0;
 
     &.compact {
         margin-bottom: @space-3;
+        background: transparent;
+        padding: 0;
+    }
+
+    // Recharts path animation
+    .recharts-area-area {
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .recharts-area-curve {
+        animation: drawLine 1s ease-out;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes drawLine {
+    from {
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+    }
+    to {
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 0;
     }
 }
 
 // Tooltip
 .metrics-tooltip {
-    background: @bg-elevated;
+    background: rgba(24, 24, 27, 0.95);
+    backdrop-filter: blur(8px);
     border: 1px solid @border-subtle;
-    border-radius: @radius-md;
-    padding: @space-3;
-    box-shadow: @shadow-lg;
+    border-radius: @radius-lg;
+    padding: @space-3 @space-4;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    min-width: 140px;
 
     .tooltip-time {
         font-size: @font-size-xs;
@@ -105,19 +137,34 @@
         margin-bottom: @space-2;
         padding-bottom: @space-2;
         border-bottom: 1px solid @border-subtle;
+        text-align: center;
     }
 
     .tooltip-row {
         display: flex;
-        justify-content: space-between;
-        gap: @space-4;
+        align-items: center;
+        gap: @space-2;
         font-size: @font-size-sm;
         padding: @space-1 0;
+    }
 
-        span:last-child {
-            font-family: @font-mono;
-            font-weight: @font-weight-semibold;
-        }
+    .tooltip-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .tooltip-label {
+        color: @text-secondary;
+        flex: 1;
+    }
+
+    .tooltip-value {
+        font-family: @font-mono;
+        font-weight: @font-weight-bold;
+        min-width: 48px;
+        text-align: right;
     }
 }
 
@@ -126,23 +173,60 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: @space-6;
+    gap: @space-8;
     padding-top: @space-4;
+    margin-top: @space-2;
     border-top: 1px solid @border-subtle;
 }
 
 .legend-item {
     display: flex;
     align-items: center;
-    gap: @space-2;
+    gap: @space-3;
     font-size: @font-size-sm;
     color: @text-secondary;
+    padding: @space-1 @space-3;
+    border-radius: @radius-full;
+    transition: @transition-fast;
+
+    &:hover {
+        background: @bg-hover;
+        color: @text-primary;
+    }
 }
 
 .legend-line {
-    width: 20px;
+    width: 24px;
     height: 3px;
     border-radius: 2px;
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: inherit;
+    }
+
+    &.cpu {
+        background: #10b981;
+        box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    }
+
+    &.memory {
+        background: #6366f1;
+        box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+    }
+
+    &.disk {
+        background: #f59e0b;
+        box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+    }
 }
 
 // Compact Version
@@ -192,10 +276,24 @@
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line {
     stroke: @border-subtle;
+    opacity: 0.5;
 }
 
 .recharts-text {
     fill: @text-secondary;
+}
+
+.recharts-area-curve {
+    filter: drop-shadow(0 0 4px currentColor);
+}
+
+.recharts-active-dot {
+    filter: drop-shadow(0 0 6px currentColor);
+}
+
+.recharts-tooltip-cursor {
+    stroke: @text-tertiary;
+    stroke-dasharray: 4 4;
 }
 
 // Responsive
