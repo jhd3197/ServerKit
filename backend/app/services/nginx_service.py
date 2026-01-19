@@ -466,3 +466,152 @@ class NginxService:
 
         except Exception as e:
             return {'success': False, 'error': str(e)}
+
+    # ==================== DIAGNOSTICS ====================
+
+    @classmethod
+    def get_site_config(cls, name: str) -> Dict:
+        """Get the content of a site configuration file.
+
+        Args:
+            name: The site name (config filename)
+
+        Returns:
+            Dict with exists, enabled, content, and path
+        """
+        config_path = os.path.join(cls.SITES_AVAILABLE, name)
+        if not os.path.exists(config_path):
+            return {'exists': False, 'error': 'Config file not found', 'path': config_path}
+
+        try:
+            with open(config_path, 'r') as f:
+                content = f.read()
+
+            enabled_path = os.path.join(cls.SITES_ENABLED, name)
+            is_enabled = os.path.exists(enabled_path) or os.path.islink(enabled_path)
+
+            # Parse some basic info from the config
+            parsed = cls._parse_site_config(config_path)
+
+            return {
+                'exists': True,
+                'enabled': is_enabled,
+                'content': content,
+                'path': config_path,
+                'enabled_path': enabled_path,
+                'domains': parsed.get('domains', []),
+                'ssl': parsed.get('ssl', False)
+            }
+        except Exception as e:
+            return {'exists': True, 'error': str(e), 'path': config_path}
+
+    @classmethod
+    def diagnose_site(cls, name: str, port: int = None) -> Dict:
+        """Full diagnostic for a site configuration.
+
+        Args:
+            name: The site name
+            port: Optional port to check accessibility
+
+        Returns:
+            Dict with comprehensive diagnostic information
+        """
+        diagnosis = {
+            'site_name': name,
+            'config': cls.get_site_config(name),
+            'nginx_status': cls.get_status(),
+            'config_test': cls.test_config()
+        }
+
+        # Check port accessibility if provided
+        if port:
+            from app.services.docker_service import DockerService
+            diagnosis['port_check'] = DockerService.check_port_accessible(port)
+
+        # Determine overall health
+        config_ok = diagnosis['config'].get('exists', False)
+        enabled_ok = diagnosis['config'].get('enabled', False)
+        nginx_ok = diagnosis['nginx_status'].get('running', False)
+        syntax_ok = diagnosis['config_test'].get('success', False)
+        port_ok = diagnosis.get('port_check', {}).get('accessible', True)  # True if no port to check
+
+        diagnosis['health'] = {
+            'config_exists': config_ok,
+            'config_enabled': enabled_ok,
+            'nginx_running': nginx_ok,
+            'syntax_valid': syntax_ok,
+            'port_accessible': port_ok,
+            'overall': all([config_ok, enabled_ok, nginx_ok, syntax_ok, port_ok])
+        }
+
+        # Generate recommendations
+        recommendations = []
+        if not config_ok:
+            recommendations.append('Create Nginx site configuration')
+        if config_ok and not enabled_ok:
+            recommendations.append('Enable the site with NginxService.enable_site()')
+        if not nginx_ok:
+            recommendations.append('Start Nginx service')
+        if not syntax_ok:
+            recommendations.append(f"Fix Nginx config syntax: {diagnosis['config_test'].get('message', '')}")
+        if port and not port_ok:
+            recommendations.append(f'Ensure container is running and exposing port {port}')
+
+        diagnosis['recommendations'] = recommendations
+
+        return diagnosis
+
+    @classmethod
+    def check_site_routing(cls, name: str, domain: str, port: int) -> Dict:
+        """Test the full routing chain for a site.
+
+        Args:
+            name: The site name
+            domain: The domain to test
+            port: The backend port
+
+        Returns:
+            Dict with routing test results
+        """
+        import urllib.request
+        import urllib.error
+
+        results = {
+            'site_name': name,
+            'domain': domain,
+            'port': port,
+            'tests': {}
+        }
+
+        # Test 1: Port accessibility
+        from app.services.docker_service import DockerService
+        results['tests']['port_accessible'] = DockerService.check_port_accessible(port)
+
+        # Test 2: Direct backend request
+        try:
+            req = urllib.request.Request(f'http://127.0.0.1:{port}/', method='HEAD')
+            req.add_header('User-Agent', 'ServerKit-Diagnostic/1.0')
+            with urllib.request.urlopen(req, timeout=5) as response:
+                results['tests']['backend_responds'] = {
+                    'success': True,
+                    'status_code': response.status
+                }
+        except urllib.error.HTTPError as e:
+            results['tests']['backend_responds'] = {
+                'success': True,  # HTTP error still means backend responded
+                'status_code': e.code
+            }
+        except Exception as e:
+            results['tests']['backend_responds'] = {
+                'success': False,
+                'error': str(e)
+            }
+
+        # Test 3: Config exists and enabled
+        config = cls.get_site_config(name)
+        results['tests']['config_status'] = {
+            'exists': config.get('exists', False),
+            'enabled': config.get('enabled', False)
+        }
+
+        return results
