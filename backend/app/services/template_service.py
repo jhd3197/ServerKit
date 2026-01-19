@@ -457,6 +457,10 @@ class TemplateService:
                 shutil.rmtree(app_path)
                 return compose_result
 
+            # Verify container started and port is accessible
+            import time
+            time.sleep(3)  # Give containers time to fully start
+
             # Run post-install script if exists
             if 'scripts' in template and 'post_install' in template['scripts']:
                 cls._run_script(
@@ -475,6 +479,16 @@ class TemplateService:
                         break
                     except (ValueError, TypeError):
                         pass
+
+            # Verify port is accessible after startup
+            port_accessible = False
+            port_warning = None
+            if app_port:
+                port_check = DockerService.check_port_accessible(app_port)
+                port_accessible = port_check.get('accessible', False)
+                if not port_accessible:
+                    port_warning = f"Port {app_port} is not accessible after container start. Container may still be initializing or port mapping may be incorrect."
+                    print(f"Warning: {port_warning}")
 
             app = Application(
                 name=app_name,
@@ -499,13 +513,20 @@ class TemplateService:
             }
             cls.save_config(config)
 
-            return {
+            result = {
                 'success': True,
                 'app_id': app.id,
                 'app_name': app_name,
                 'app_path': app_path,
-                'variables': variables
+                'variables': variables,
+                'port': app_port,
+                'port_accessible': port_accessible
             }
+
+            if port_warning:
+                result['port_warning'] = port_warning
+
+            return result
 
         except Exception as e:
             import traceback
