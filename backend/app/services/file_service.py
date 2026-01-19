@@ -26,7 +26,7 @@ class FileService:
     """Service for file system operations."""
 
     # Allowed root directories for browsing (security)
-    ALLOWED_ROOTS = ['/home', '/var/www', '/opt', '/srv', '/var/log']
+    ALLOWED_ROOTS = ['/home', '/var/www', '/opt', '/srv', '/var/log', '/var/serverkit']
 
     # File extensions that can be edited in browser
     EDITABLE_EXTENSIONS = {
@@ -63,13 +63,19 @@ class FileService:
 
             # Get owner and group names
             try:
-                owner = pwd.getpwuid(stat_info.st_uid).pw_name
-            except (KeyError, AttributeError):
+                if pwd:
+                    owner = pwd.getpwuid(stat_info.st_uid).pw_name
+                else:
+                    owner = str(stat_info.st_uid)
+            except (KeyError, AttributeError, TypeError):
                 owner = str(stat_info.st_uid)
 
             try:
-                group = grp.getgrgid(stat_info.st_gid).gr_name
-            except (KeyError, AttributeError):
+                if grp:
+                    group = grp.getgrgid(stat_info.st_gid).gr_name
+                else:
+                    group = str(stat_info.st_gid)
+            except (KeyError, AttributeError, TypeError):
                 group = str(stat_info.st_gid)
 
             # Get permissions string
@@ -410,18 +416,25 @@ class FileService:
     def get_disk_usage(cls, path: str) -> Dict:
         """Get disk usage for a path."""
         try:
+            # Validate path exists
+            if not os.path.exists(path):
+                return {'success': False, 'error': 'Path not found'}
+
             usage = shutil.disk_usage(path)
             return {
                 'success': True,
+                'path': path,
                 'total': usage.total,
                 'used': usage.used,
                 'free': usage.free,
-                'percent': round((usage.used / usage.total) * 100, 1),
+                'percent': round((usage.used / usage.total) * 100, 1) if usage.total > 0 else 0,
                 'total_human': cls._format_size(usage.total),
                 'used_human': cls._format_size(usage.used),
                 'free_human': cls._format_size(usage.free)
             }
-        except OSError as e:
+        except PermissionError:
+            return {'success': False, 'error': 'Permission denied'}
+        except (OSError, Exception) as e:
             return {'success': False, 'error': str(e)}
 
     @classmethod
