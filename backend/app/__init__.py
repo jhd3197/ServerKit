@@ -159,6 +159,10 @@ def create_app(config_name=None):
     from app.api.metrics import metrics_bp
     app.register_blueprint(metrics_bp, url_prefix='/api/v1/metrics')
 
+    # Register blueprints - Workflows
+    from app.api.workflows import workflows_bp
+    app.register_blueprint(workflows_bp, url_prefix='/api/v1/workflows')
+
     # Create database tables
     with app.app_context():
         db.create_all()
