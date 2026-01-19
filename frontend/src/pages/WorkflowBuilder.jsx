@@ -4,7 +4,10 @@ import {
     ReactFlowProvider,
     useNodesState,
     useEdgesState,
-    addEdge
+    addEdge,
+    Background,
+    Controls,
+    MiniMap
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -29,7 +32,30 @@ const WorkflowCanvas = () => {
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 fitView
-            />
+                panOnScroll
+                selectionOnDrag
+                panOnDrag={[1, 2]}
+                selectNodesOnDrag={false}
+            >
+                <Background
+                    variant="dots"
+                    gap={20}
+                    size={1}
+                    color="#333"
+                />
+                <Controls
+                    showZoom={true}
+                    showFitView={true}
+                    showInteractive={false}
+                />
+                <MiniMap
+                    nodeColor="#6366f1"
+                    maskColor="rgba(0, 0, 0, 0.8)"
+                    style={{
+                        backgroundColor: '#1a1a1e'
+                    }}
+                />
+            </ReactFlow>
         </div>
     );
 };
