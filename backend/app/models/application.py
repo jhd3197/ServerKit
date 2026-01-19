@@ -20,6 +20,10 @@ class Application(db.Model):
     docker_image = db.Column(db.String(200), nullable=True)
     container_id = db.Column(db.String(100), nullable=True)
 
+    # Private URL feature
+    private_slug = db.Column(db.String(50), unique=True, nullable=True, index=True)
+    private_url_enabled = db.Column(db.Boolean, default=False)
+
     # Metadata
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -43,6 +47,8 @@ class Application(db.Model):
             'root_path': self.root_path,
             'docker_image': self.docker_image,
             'container_id': self.container_id,
+            'private_slug': self.private_slug,
+            'private_url_enabled': self.private_url_enabled,
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat(),
             'last_deployed_at': self.last_deployed_at.isoformat() if self.last_deployed_at else None,
