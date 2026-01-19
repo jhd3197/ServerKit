@@ -1,6 +1,11 @@
 #!/bin/bash
 #
-# ServerKit Quick Install Script for Ubuntu
+# ServerKit Quick Install Script for Ubuntu/Debian
+#
+# Architecture:
+#   - Backend: Runs directly on host (for full system access)
+#   - Frontend: Runs in Docker (nginx serving static files)
+#
 # Usage: curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
 #
 
@@ -13,117 +18,214 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-echo -e "${BLUE}"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  ServerKit Installer"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo -e "${NC}"
+INSTALL_DIR="/opt/serverkit"
+VENV_DIR="$INSTALL_DIR/venv"
+LOG_DIR="/var/log/serverkit"
+DATA_DIR="/var/lib/serverkit"
+
+print_header() {
+    echo -e "${BLUE}"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "  ServerKit Installer"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo -e "${NC}"
+}
+
+print_success() { echo -e "${GREEN}✓ $1${NC}"; }
+print_error() { echo -e "${RED}✗ $1${NC}"; }
+print_warning() { echo -e "${YELLOW}! $1${NC}"; }
+print_info() { echo -e "${BLUE}→ $1${NC}"; }
+
+print_header
 
 # Check if running as root
-if [ "$EUID" -eq 0 ]; then
-    echo -e "${YELLOW}Warning: Running as root is not recommended${NC}"
+if [ "$EUID" -ne 0 ]; then
+    print_error "Please run as root (sudo)"
+    exit 1
 fi
 
-# Check Ubuntu
+# Check Ubuntu/Debian
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     if [ "$ID" != "ubuntu" ] && [ "$ID" != "debian" ]; then
-        echo -e "${YELLOW}Warning: This script is designed for Ubuntu/Debian${NC}"
+        print_warning "This script is designed for Ubuntu/Debian. Proceed with caution."
     fi
 fi
 
-echo -e "${BLUE}→ Checking prerequisites...${NC}"
+echo ""
+print_info "Installing system dependencies..."
+
+# Update package list
+apt-get update
+
+# Install Python and required packages
+apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-dev \
+    git \
+    curl \
+    build-essential \
+    libffi-dev \
+    libssl-dev \
+    iproute2 \
+    procps
+
+print_success "System dependencies installed"
 
 # Install Docker if not present
 if ! command -v docker &> /dev/null; then
-    echo -e "${BLUE}→ Installing Docker...${NC}"
+    print_info "Installing Docker..."
     curl -fsSL https://get.docker.com | sh
-    sudo usermod -aG docker $USER
-    echo -e "${GREEN}✓ Docker installed${NC}"
-    echo -e "${YELLOW}! You may need to log out and back in for Docker permissions${NC}"
+    systemctl enable docker
+    systemctl start docker
+    print_success "Docker installed"
+else
+    print_success "Docker already installed"
 fi
 
 # Install Docker Compose plugin if not present
 if ! docker compose version &> /dev/null; then
-    echo -e "${BLUE}→ Installing Docker Compose...${NC}"
-    sudo apt-get update
-    sudo apt-get install -y docker-compose-plugin
-    echo -e "${GREEN}✓ Docker Compose installed${NC}"
+    print_info "Installing Docker Compose..."
+    apt-get install -y docker-compose-plugin
+    print_success "Docker Compose installed"
+else
+    print_success "Docker Compose already installed"
 fi
 
-# Install git if not present
-if ! command -v git &> /dev/null; then
-    echo -e "${BLUE}→ Installing git...${NC}"
-    sudo apt-get update
-    sudo apt-get install -y git
-fi
-
-# Clone repository
-INSTALL_DIR="/opt/serverkit"
-echo -e "${BLUE}→ Installing ServerKit to $INSTALL_DIR...${NC}"
+# Clone or update repository
+print_info "Installing ServerKit to $INSTALL_DIR..."
 
 if [ -d "$INSTALL_DIR" ]; then
-    echo -e "${YELLOW}! Directory exists, updating...${NC}"
+    print_warning "Directory exists, updating..."
     cd "$INSTALL_DIR"
-    sudo git pull
+    git fetch origin
+    git reset --hard origin/main
 else
-    sudo git clone https://github.com/jhd3197/serverkit.git "$INSTALL_DIR"
+    git clone https://github.com/jhd3197/serverkit.git "$INSTALL_DIR"
     cd "$INSTALL_DIR"
 fi
 
-# Set permissions
-sudo chown -R $USER:$USER "$INSTALL_DIR"
+print_success "Repository cloned"
 
-# Make CLI executable
-chmod +x serverkit
+# Create directories
+print_info "Creating directories..."
+mkdir -p "$LOG_DIR"
+mkdir -p "$DATA_DIR"
+mkdir -p "$INSTALL_DIR/backend/instance"
+mkdir -p "$INSTALL_DIR/nginx/ssl"
 
-# Create symlink for global access
-sudo ln -sf "$INSTALL_DIR/serverkit" /usr/local/bin/serverkit
+# Set up Python virtual environment
+print_info "Setting up Python virtual environment..."
+python3 -m venv "$VENV_DIR"
+source "$VENV_DIR/bin/activate"
 
-# Generate configuration
-if [ ! -f ".env" ]; then
-    echo -e "${BLUE}→ Generating configuration...${NC}"
+# Install Python dependencies
+print_info "Installing Python dependencies..."
+pip install --upgrade pip
+pip install -r "$INSTALL_DIR/backend/requirements.txt"
+pip install gunicorn gevent gevent-websocket
+
+print_success "Python dependencies installed"
+
+# Generate .env if not exists
+if [ ! -f "$INSTALL_DIR/.env" ]; then
+    print_info "Generating configuration..."
     SECRET_KEY=$(openssl rand -hex 32)
     JWT_SECRET_KEY=$(openssl rand -hex 32)
 
-    cat > .env << EOF
+    cat > "$INSTALL_DIR/.env" << EOF
 # ServerKit Configuration
+# Generated on $(date)
+
+# Security Keys (auto-generated, keep secret!)
 SECRET_KEY=$SECRET_KEY
 JWT_SECRET_KEY=$JWT_SECRET_KEY
-DATABASE_URL=sqlite:///serverkit.db
-CORS_ORIGINS=http://localhost
+
+# Database (SQLite by default)
+DATABASE_URL=sqlite:///$INSTALL_DIR/backend/instance/serverkit.db
+
+# CORS Origins (comma-separated, add your domain)
+CORS_ORIGINS=http://localhost,https://localhost
+
+# Ports
 PORT=80
 SSL_PORT=443
+
+# Environment
 FLASK_ENV=production
 EOF
+
+    print_success "Configuration generated"
+else
+    print_warning ".env already exists, keeping existing configuration"
 fi
 
-# Create SSL directory
-mkdir -p nginx/ssl
-
-# Generate self-signed certificate
-if [ ! -f "nginx/ssl/fullchain.pem" ]; then
-    echo -e "${BLUE}→ Generating SSL certificate...${NC}"
+# Generate self-signed SSL certificate if not exists
+if [ ! -f "$INSTALL_DIR/nginx/ssl/fullchain.pem" ]; then
+    print_info "Generating self-signed SSL certificate..."
     openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-        -keyout nginx/ssl/privkey.pem \
-        -out nginx/ssl/fullchain.pem \
+        -keyout "$INSTALL_DIR/nginx/ssl/privkey.pem" \
+        -out "$INSTALL_DIR/nginx/ssl/fullchain.pem" \
         -subj "/CN=localhost" 2>/dev/null
+    print_warning "Self-signed certificate created. Replace with real cert for production."
 fi
 
-# Build and start
-echo -e "${BLUE}→ Building containers (this may take a few minutes)...${NC}"
+# Install systemd service for backend
+print_info "Installing systemd service..."
+cp "$INSTALL_DIR/serverkit-backend.service" /etc/systemd/system/serverkit.service
+
+# Reload systemd and enable service
+systemctl daemon-reload
+systemctl enable serverkit
+
+print_success "Systemd service installed"
+
+# Make CLI executable and create symlink
+chmod +x "$INSTALL_DIR/serverkit"
+ln -sf "$INSTALL_DIR/serverkit" /usr/local/bin/serverkit
+
+print_success "CLI installed"
+
+# Build and start frontend container
+print_info "Building frontend container..."
+cd "$INSTALL_DIR"
 docker compose build
 
-echo -e "${BLUE}→ Starting services...${NC}"
+print_info "Starting services..."
+
+# Start backend (systemd)
+systemctl start serverkit
+
+# Start frontend (Docker)
 docker compose up -d
 
-# Wait for services
-echo -e "${BLUE}→ Waiting for services...${NC}"
-sleep 15
+# Wait for services to start
+print_info "Waiting for services to start..."
+sleep 10
 
-# Final check
+# Health check
 echo ""
+BACKEND_OK=false
+FRONTEND_OK=false
+
+if curl -s http://127.0.0.1:5000/api/v1/system/health > /dev/null 2>&1; then
+    BACKEND_OK=true
+    print_success "Backend is running"
+else
+    print_error "Backend health check failed"
+fi
+
 if curl -s http://localhost > /dev/null 2>&1; then
+    FRONTEND_OK=true
+    print_success "Frontend is running"
+else
+    print_error "Frontend health check failed"
+fi
+
+echo ""
+if [ "$BACKEND_OK" = true ] && [ "$FRONTEND_OK" = true ]; then
     echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${GREEN}  Installation Complete!${NC}"
     echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -135,6 +237,10 @@ if curl -s http://localhost > /dev/null 2>&1; then
     echo "  2. View status:        serverkit status"
     echo "  3. View logs:          serverkit logs"
     echo ""
+    echo "Service Management:"
+    echo "  Backend (systemd):     systemctl [start|stop|restart] serverkit"
+    echo "  Frontend (Docker):     docker compose -C $INSTALL_DIR [up|down]"
+    echo ""
     echo "For all commands:        serverkit help"
     echo ""
 else
@@ -142,6 +248,8 @@ else
     echo -e "${RED}  Installation may have issues${NC}"
     echo -e "${RED}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo ""
-    echo "Check logs with: serverkit logs"
+    echo "Troubleshooting:"
+    echo "  Backend logs:   journalctl -u serverkit -f"
+    echo "  Frontend logs:  docker compose -C $INSTALL_DIR logs -f"
     echo ""
 fi

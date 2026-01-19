@@ -1,75 +1,27 @@
 # ============================================
 # ServerKit Docker Compose
 # ============================================
+# The backend runs directly on the host (not in Docker)
+# for full system access. Only the frontend runs in Docker.
+#
 # Usage:
 #   1. Copy .env.example to .env and configure
-#   2. Run: docker compose up -d
-#
-# For production with SSL:
-#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#   2. Start backend: sudo systemctl start serverkit
+#   3. Start frontend: docker compose up -d
 # ============================================
 
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: serverkit-backend
-    environment:
-      # Flask Configuration
-      - FLASK_ENV=${FLASK_ENV:-production}
-      - PORT=5000
-
-      # Security Keys (REQUIRED - generate with: python -c "import secrets; print(secrets.token_hex(32))")
-      - SECRET_KEY=${SECRET_KEY:?SECRET_KEY is required}
-      - JWT_SECRET_KEY=${JWT_SECRET_KEY:?JWT_SECRET_KEY is required}
-
-      # Database (4 slashes = absolute path for SQLite)
-      - DATABASE_URL=${DATABASE_URL:-sqlite:////app/instance/serverkit.db}
-
-      # CORS Origins (comma-separated list)
-      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost,http://localhost:80}
-    volumes:
-      # Application data (database)
-      - serverkit-data:/app/instance
-
-      # ServerKit configuration (notifications, security settings, etc.)
-      - serverkit-config:/etc/serverkit
-
-      # ServerKit logs (using /app/logs to avoid conflict with host /var/log mount)
-      - serverkit-logs:/app/logs
-
-      # Quarantine directory for malware
-      - serverkit-quarantine:/var/quarantine
-
-      # Docker socket (for container management)
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    networks:
-      - serverkit-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/api/v1/system/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 15s
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: serverkit-frontend
-    depends_on:
-      backend:
-        condition: service_healthy
     ports:
       - "${PORT:-80}:80"
       - "${SSL_PORT:-443}:443"
+    extra_hosts:
+      # Allows container to reach the host machine where backend runs
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./nginx/ssl:/etc/nginx/ssl:ro
     networks:
@@ -90,13 +42,3 @@ networks:
   serverkit-network:
     driver: bridge
     name: serverkit-network
-
-volumes:
-  serverkit-data:
-    name: serverkit-data
-  serverkit-config:
-    name: serverkit-config
-  serverkit-logs:
-    name: serverkit-logs
-  serverkit-quarantine:
-    name: serverkit-quarantine

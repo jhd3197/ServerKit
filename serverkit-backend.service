@@ -1,0 +1,30 @@
+[Unit]
+Description=ServerKit Backend API
+After=network.target docker.service
+Wants=docker.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/opt/serverkit/backend
+Environment="PATH=/opt/serverkit/venv/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="FLASK_ENV=production"
+EnvironmentFile=/opt/serverkit/.env
+ExecStart=/opt/serverkit/venv/bin/gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 -b 127.0.0.1:5000 --timeout 120 --access-logfile /var/log/serverkit/access.log --error-logfile /var/log/serverkit/error.log run:app
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=5
+
+# Security settings (while still allowing system management)
+NoNewPrivileges=no
+ProtectSystem=no
+ProtectHome=no
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=serverkit
+
+[Install]
+WantedBy=multi-user.target
