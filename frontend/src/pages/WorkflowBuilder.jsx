@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import {
     ReactFlow,
     ReactFlowProvider,
@@ -11,7 +11,9 @@ import {
     MiniMap
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { Server, Database, Globe, Box } from 'lucide-react';
+import { Server, Database, Globe, Box, Save, FolderOpen, Plus, Download } from 'lucide-react';
+import api from '../services/api';
+import WorkflowListModal from '../components/workflow/WorkflowListModal';
 import DockerAppNode from '../components/workflow/nodes/DockerAppNode';
 import DatabaseNode from '../components/workflow/nodes/DatabaseNode';
 import DomainNode from '../components/workflow/nodes/DomainNode';
@@ -121,7 +123,15 @@ const WorkflowCanvas = () => {
     const [selectedNode, setSelectedNode] = useState(null);
     const [selectedEdge, setSelectedEdge] = useState(null);
     const [connectionError, setConnectionError] = useState(null);
-    const { screenToFlowPosition } = useReactFlow();
+    const { screenToFlowPosition, getViewport, setViewport } = useReactFlow();
+
+    // Workflow state
+    const [currentWorkflow, setCurrentWorkflow] = useState(null);
+    const [workflowName, setWorkflowName] = useState('Untitled Workflow');
+    const [isSaving, setIsSaving] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [showLoadModal, setShowLoadModal] = useState(false);
+    const [saveMessage, setSaveMessage] = useState(null);
 
     const memoizedNodeTypes = useMemo(() => nodeTypes, []);
     const memoizedEdgeTypes = useMemo(() => edgeTypes, []);
@@ -136,6 +146,112 @@ const WorkflowCanvas = () => {
         setEdges((eds) => eds.filter((e) => e.id !== edgeId));
         setSelectedEdge(null);
     }, [setEdges]);
+
+    // Save workflow
+    const saveWorkflow = useCallback(async () => {
+        setIsSaving(true);
+        setSaveMessage(null);
+
+        try {
+            const viewport = getViewport();
+            // Serialize nodes without onDelete callback
+            const serializableNodes = nodes.map(({ id, type, position, data }) => ({
+                id, type, position,
+                data: { ...data }
+            }));
+            // Serialize edges without onDelete callback
+            const serializableEdges = edges.map(({ id, source, target, sourceHandle, targetHandle, type, animated, data }) => ({
+                id, source, target, sourceHandle, targetHandle, type, animated,
+                data: data ? { sourceType: data.sourceType, targetType: data.targetType, connectionType: data.connectionType } : undefined
+            }));
+
+            const workflowData = {
+                name: workflowName,
+                nodes: serializableNodes,
+                edges: serializableEdges,
+                viewport
+            };
+
+            if (currentWorkflow) {
+                // Update existing workflow
+                await api.updateWorkflow(currentWorkflow.id, workflowData);
+                setSaveMessage('Workflow saved');
+            } else {
+                // Create new workflow
+                const response = await api.createWorkflow(workflowData);
+                setCurrentWorkflow(response.workflow);
+                setSaveMessage('Workflow created');
+            }
+
+            setTimeout(() => setSaveMessage(null), 3000);
+        } catch (error) {
+            console.error('Failed to save workflow:', error);
+            setSaveMessage('Failed to save');
+            setTimeout(() => setSaveMessage(null), 3000);
+        } finally {
+            setIsSaving(false);
+        }
+    }, [nodes, edges, workflowName, currentWorkflow, getViewport]);
+
+    // Load workflow
+    const loadWorkflow = useCallback(async (workflow) => {
+        setIsLoading(true);
+        setShowLoadModal(false);
+
+        try {
+            // Restore nodes with recreated data
+            const loadedNodes = (workflow.nodes || []).map((node) => ({
+                ...node,
+                data: { ...node.data }
+            }));
+
+            // Restore edges with onDelete callback
+            const loadedEdges = (workflow.edges || []).map((edge) => ({
+                ...edge,
+                data: {
+                    ...edge.data,
+                    onDelete: deleteEdge
+                }
+            }));
+
+            // Update node ID counter to prevent collisions
+            const maxNodeId = loadedNodes.reduce((max, node) => {
+                const numId = parseInt(node.id.replace('node_', ''), 10);
+                return isNaN(numId) ? max : Math.max(max, numId);
+            }, 0);
+            nodeId = maxNodeId + 1;
+
+            setNodes(loadedNodes);
+            setEdges(loadedEdges);
+            setWorkflowName(workflow.name);
+            setCurrentWorkflow(workflow);
+
+            // Restore viewport
+            if (workflow.viewport) {
+                setTimeout(() => {
+                    setViewport(workflow.viewport);
+                }, 50);
+            }
+
+            setSaveMessage('Workflow loaded');
+            setTimeout(() => setSaveMessage(null), 3000);
+        } catch (error) {
+            console.error('Failed to load workflow:', error);
+            setSaveMessage('Failed to load');
+            setTimeout(() => setSaveMessage(null), 3000);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [setNodes, setEdges, setViewport, deleteEdge]);
+
+    // Create new workflow
+    const newWorkflow = useCallback(() => {
+        setNodes([]);
+        setEdges([]);
+        setCurrentWorkflow(null);
+        setWorkflowName('Untitled Workflow');
+        nodeId = 0;
+    }, [setNodes, setEdges]);
 
     const onConnect = useCallback(
         (params) => {
@@ -275,6 +391,50 @@ const WorkflowCanvas = () => {
 
     return (
         <div className="workflow-canvas" ref={reactFlowWrapper}>
+            <div className="workflow-toolbar">
+                <div className="toolbar-left">
+                    <input
+                        type="text"
+                        className="workflow-name-input"
+                        value={workflowName}
+                        onChange={(e) => setWorkflowName(e.target.value)}
+                        placeholder="Workflow name..."
+                    />
+                    {currentWorkflow && (
+                        <span className="workflow-id-badge">ID: {currentWorkflow.id}</span>
+                    )}
+                </div>
+                <div className="toolbar-right">
+                    <button
+                        className="toolbar-btn"
+                        onClick={newWorkflow}
+                        title="New Workflow"
+                    >
+                        <Plus size={16} />
+                        <span>New</span>
+                    </button>
+                    <button
+                        className="toolbar-btn"
+                        onClick={() => setShowLoadModal(true)}
+                        title="Load Workflow"
+                    >
+                        <FolderOpen size={16} />
+                        <span>Load</span>
+                    </button>
+                    <button
+                        className="toolbar-btn toolbar-btn-primary"
+                        onClick={saveWorkflow}
+                        disabled={isSaving}
+                        title="Save Workflow"
+                    >
+                        <Save size={16} />
+                        <span>{isSaving ? 'Saving...' : 'Save'}</span>
+                    </button>
+                </div>
+                {saveMessage && (
+                    <div className="toolbar-message">{saveMessage}</div>
+                )}
+            </div>
             <NodePalette onAddNode={addNode} />
             {connectionError && (
                 <div className="connection-error-toast">
@@ -325,6 +485,12 @@ const WorkflowCanvas = () => {
                 />
             </ReactFlow>
             {renderConfigPanel()}
+            {showLoadModal && (
+                <WorkflowListModal
+                    onLoad={loadWorkflow}
+                    onClose={() => setShowLoadModal(false)}
+                />
+            )}
         </div>
     );
 };
