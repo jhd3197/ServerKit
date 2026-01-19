@@ -109,6 +109,30 @@
     }
 }
 
+// GitHub link
+.sidebar-github-link {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-3 @space-6;
+    margin: @space-2 @space-4;
+    color: @text-tertiary;
+    text-decoration: none;
+    font-size: @font-size-sm;
+    border-radius: @radius-md;
+    .transition();
+
+    svg {
+        flex-shrink: 0;
+    }
+
+    &:hover {
+        background-color: @bg-hover;
+        color: @text-primary;
+    }
+}
+
 // User profile at bottom
 .user-profile {
     flex-shrink: 0;

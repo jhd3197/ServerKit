@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { Github } from 'lucide-react';
 
 const Sidebar = () => {
     const { user, logout } = useAuth();
@@ -153,6 +154,17 @@ const Sidebar = () => {
                     </NavLink>
                 </nav>
             </div>
+
+            <a
+                href="https://github.com/jhd3197/ServerKit"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="sidebar-github-link"
+                title="View on GitHub"
+            >
+                <Github size={16} />
+                <span>GitHub</span>
+            </a>
 
             <div className="user-profile">
                 <div className="avatar">
