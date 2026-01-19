@@ -11,6 +11,11 @@
 
 set -e
 
+# Safety: Move to a valid directory first
+# Prevents "getcwd: cannot access parent directories" error
+# when running from a deleted directory (e.g., after uninstall)
+cd /tmp 2>/dev/null || cd / || true
+
 # Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'

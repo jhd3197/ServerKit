@@ -304,6 +304,9 @@ cmd_uninstall() {
 
         cd "$INSTALL_DIR" 2>/dev/null && docker compose down -v 2>/dev/null || true
 
+        # Move to safe directory before deleting install dir
+        cd /tmp 2>/dev/null || cd / || true
+
         print_info "Removing files..."
         rm -f /etc/systemd/system/serverkit.service
         rm -f /usr/local/bin/serverkit
@@ -314,6 +317,9 @@ cmd_uninstall() {
         systemctl daemon-reload
 
         print_success "ServerKit uninstalled"
+        echo ""
+        echo "To reinstall, run:"
+        echo "  cd ~ && curl -fsSL https://raw.githubusercontent.com/jhd3197/ServerKit/main/install.sh | sudo bash"
     fi
 }
 
