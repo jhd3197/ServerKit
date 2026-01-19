@@ -25,7 +25,7 @@ Completed 2026-01-19 | 9 phases | 109 commits | +14,667/-2,836 lines
 | 11 | Shared Database WordPress Template | pending | Create WordPress template with external DB support |
 | 12 | Multi-Environment App Linking | pending | Link prod/dev apps to share database |
 | 13 | Environment Switching UI | pending | UI to manage prod/dev environments |
-| 14 | GitHub & Community Links | pending | Add GitHub link, community resources to app |
+| 14 | GitHub & Community Links | **completed** | Add GitHub link, community resources to app |
 | 15 | WordPress Dev Workflow Testing | pending | End-to-end testing of the dev workflow |
 
 ---
