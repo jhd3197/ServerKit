@@ -23,7 +23,7 @@ Completed 2026-01-19 | 9 phases | 109 commits | +14,667/-2,836 lines
 | Phase | Name | Status | Goal |
 |-------|------|--------|------|
 | 11 | Shared Database WordPress Template | **completed** | Create WordPress template with external DB support |
-| 12 | Multi-Environment App Linking | pending | Link prod/dev apps to share database |
+| 12 | Multi-Environment App Linking | **completed** | Link prod/dev apps to share database |
 | 13 | Environment Switching UI | pending | UI to manage prod/dev environments |
 | 14 | GitHub & Community Links | **completed** | Add GitHub link, community resources to app |
 | 15 | WordPress Dev Workflow Testing | pending | End-to-end testing of the dev workflow |
@@ -50,30 +50,24 @@ Completed 2026-01-19 | 9 phases | 109 commits | +14,667/-2,836 lines
 
 ---
 
-## Phase 12: Multi-Environment App Linking
+## Phase 12: Multi-Environment App Linking ✓
 **Goal**: Allow apps to be linked as prod/dev pairs sharing a database
 
-### Tasks
-1. **Database schema updates**
-   - Add `linked_app_id` field to Application model
-   - Add `environment_type` field (prod/dev/staging)
-   - Add `shared_resource_config` JSON field for shared resources
+**Status**: Completed 2026-01-19
 
-2. **App linking API**
-   - `POST /api/v1/apps/{id}/link` - Link two apps
-   - `GET /api/v1/apps/{id}/linked` - Get linked apps
-   - `DELETE /api/v1/apps/{id}/link` - Unlink apps
-   - Validation: only same-type apps can link
-
-3. **Shared database configuration**
-   - When linking, propagate database credentials
-   - Auto-configure table prefixes to avoid collision
-   - Show shared resources in app detail
+### What Was Built
+- Application model with `environment_type`, `linked_app_id`, `shared_config` fields
+- App linking API: POST/GET/DELETE `/apps/{id}/link`, PUT `/apps/{id}/environment`
+- `propagate_db_credentials()` for sharing DB credentials with different table prefixes
+- Frontend API methods: `linkApp`, `getLinkedApps`, `unlinkApp`, `updateAppEnvironment`
+- GET /apps with environment filtering and include_linked option
 
 ### Success Criteria
-- [ ] Apps can be linked as prod/dev pairs
-- [ ] Linked apps share database credentials automatically
-- [ ] Table prefixes prevent collision
+- [x] Apps can be linked as prod/dev pairs
+- [x] Linked apps share database credentials automatically
+- [x] Table prefixes prevent collision
+
+[Full Summary](./phases/12-multi-environment-app-linking/SUMMARY.md)
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## Current Status
 - **Milestone**: 2 - Multi-Environment WordPress & Community Features
-- **Current Phase**: 12 - Multi-Environment App Linking
+- **Current Phase**: 13 - Environment Switching UI
 - **Phase Status**: Pending
 - **Last Updated**: 2026-01-19
 
@@ -11,10 +11,18 @@
 | Phase | Status | Started | Completed |
 |-------|--------|---------|-----------|
 | 11 | completed | 2026-01-19 | 2026-01-19 |
-| 12 | pending | - | - |
+| 12 | completed | 2026-01-19 | 2026-01-19 |
 | 13 | pending | - | - |
 | 14 | completed | 2026-01-19 | 2026-01-19 |
 | 15 | pending | - | - |
+
+## Phase 12 Summary
+Multi-Environment App Linking implemented:
+- Added `environment_type`, `linked_app_id`, `shared_config` fields to Application model
+- Added app linking API endpoints (POST/GET/DELETE `/apps/{id}/link`, PUT `/apps/{id}/environment`)
+- Added `propagate_db_credentials()` for sharing DB credentials with different table prefixes
+- Added frontend API methods (`linkApp`, `getLinkedApps`, `unlinkApp`, `updateAppEnvironment`)
+- Updated GET /apps with environment filtering and include_linked option
 
 ## Phase 11 Summary
 Shared Database WordPress Template implemented:
@@ -47,12 +55,13 @@ None currently identified.
 ## Notes
 - Milestone 1 (v1.0) completed 2026-01-19
 - Phase numbering continues from Milestone 1 (11-15)
-- Phases 11 and 14 completed - core template and community features done
-- Next: Phase 12 (Multi-Environment App Linking) to enable prod/dev linking
+- Phases 11, 12, and 14 completed - template, linking API, and community features done
+- Next: Phase 13 (Environment Switching UI) to add UI for managing linked apps
 
 ## Quick Links
 - [ROADMAP.md](./ROADMAP.md)
 - [PROJECT.md](./PROJECT.md)
 - [Milestone 1 Archive](./milestones/v1.0-ROADMAP.md)
 - [Phase 11 Summary](./phases/11-shared-database-wordpress-template/SUMMARY.md)
+- [Phase 12 Summary](./phases/12-multi-environment-app-linking/SUMMARY.md)
 - [Phase 14 Summary](./phases/14-github-community-links/SUMMARY.md)
