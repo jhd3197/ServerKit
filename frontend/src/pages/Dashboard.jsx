@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import api from '../services/api';
 import { useMetrics } from '../hooks/useMetrics';
+import MetricsGraph from '../components/MetricsGraph';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -211,6 +212,9 @@ const Dashboard = () => {
                     </div>
                 </div>
             )}
+
+            {/* Historical Metrics Graph */}
+            <MetricsGraph />
 
             {/* Two Column Layout */}
             <div className="dashboard-columns">
