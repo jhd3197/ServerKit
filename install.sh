@@ -188,6 +188,32 @@ ln -sf "$INSTALL_DIR/serverkit" /usr/local/bin/serverkit
 
 print_success "CLI installed"
 
+# Install and configure host nginx as reverse proxy
+print_info "Setting up nginx reverse proxy..."
+apt-get install -y nginx
+
+# Stop nginx and remove default site
+systemctl stop nginx 2>/dev/null || true
+rm -f /etc/nginx/sites-enabled/default
+
+# Ensure sites directories exist
+mkdir -p /etc/nginx/sites-available
+mkdir -p /etc/nginx/sites-enabled
+
+# Ensure nginx.conf includes sites-enabled
+if ! grep -q "sites-enabled" /etc/nginx/nginx.conf; then
+    sed -i '/http {/a \    include /etc/nginx/sites-enabled/*;' /etc/nginx/nginx.conf
+fi
+
+# Install ServerKit site config
+cp "$INSTALL_DIR/nginx/sites-available/serverkit.conf" /etc/nginx/sites-available/
+ln -sf /etc/nginx/sites-available/serverkit.conf /etc/nginx/sites-enabled/
+
+# Copy site template
+cp "$INSTALL_DIR/nginx/sites-available/example.conf.template" /etc/nginx/sites-available/
+
+print_success "Nginx proxy configured"
+
 # Build and start frontend container
 print_info "Building frontend container..."
 cd "$INSTALL_DIR"
@@ -200,6 +226,10 @@ systemctl start serverkit
 
 # Start frontend (Docker)
 docker compose up -d
+
+# Start nginx
+systemctl start nginx
+systemctl enable nginx
 
 # Wait for services to start
 print_info "Waiting for services to start..."

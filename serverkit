@@ -87,6 +87,12 @@ cmd_help() {
     echo "  backup-db         Backup the database"
     echo "  restore-db        Restore database from backup"
     echo ""
+    echo "Site Management:"
+    echo "  setup-proxy       Setup host nginx as reverse proxy (run once)"
+    echo "  add-site          Add a new site/domain"
+    echo "  list-sites        List all configured sites"
+    echo "  remove-site       Remove a site"
+    echo ""
     echo "Utility Commands:"
     echo "  generate-keys     Generate secure keys for .env"
     echo "  config            Edit configuration"
@@ -94,6 +100,7 @@ cmd_help() {
     echo "Examples:"
     echo "  sudo serverkit start"
     echo "  sudo serverkit create-admin"
+    echo "  sudo serverkit add-site test.mysite.com 3000"
     echo "  serverkit logs backend"
     echo ""
 }
@@ -413,6 +420,141 @@ cmd_config() {
     print_info "Restart ServerKit to apply changes: sudo serverkit restart"
 }
 
+cmd_setup_proxy() {
+    check_root
+    check_installed
+    print_info "Setting up host nginx as reverse proxy..."
+
+    if [ -f "$INSTALL_DIR/scripts/setup-nginx-proxy.sh" ]; then
+        chmod +x "$INSTALL_DIR/scripts/setup-nginx-proxy.sh"
+        "$INSTALL_DIR/scripts/setup-nginx-proxy.sh"
+    else
+        print_error "Setup script not found. Run 'serverkit update' first."
+        exit 1
+    fi
+}
+
+cmd_add_site() {
+    check_root
+
+    DOMAIN="$1"
+    PORT="${2:-3000}"
+
+    if [ -z "$DOMAIN" ]; then
+        echo "Usage: serverkit add-site <domain> [port]"
+        echo ""
+        echo "Examples:"
+        echo "  serverkit add-site test.builditdesign.com"
+        echo "  serverkit add-site myapp.builditdesign.com 3000"
+        exit 1
+    fi
+
+    SITE_FILE="/etc/nginx/sites-available/${DOMAIN}.conf"
+
+    if [ -f "$SITE_FILE" ]; then
+        print_warning "Site config already exists: $SITE_FILE"
+        read -p "Overwrite? (y/N) " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            exit 0
+        fi
+    fi
+
+    print_info "Creating site config for $DOMAIN..."
+
+    cat > "$SITE_FILE" << EOF
+# Site: $DOMAIN
+# Created: $(date)
+
+server {
+    listen 80;
+    server_name $DOMAIN;
+
+    location / {
+        proxy_pass http://127.0.0.1:$PORT;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+EOF
+
+    # Enable the site
+    ln -sf "$SITE_FILE" /etc/nginx/sites-enabled/
+
+    # Test and reload nginx
+    if nginx -t 2>/dev/null; then
+        systemctl reload nginx
+        print_success "Site added: $DOMAIN → localhost:$PORT"
+        echo ""
+        echo "Next steps:"
+        echo "  1. Add DNS record in Cloudflare:"
+        echo "     Type: A, Name: ${DOMAIN%%.*}, Content: $(curl -s ifconfig.me)"
+        echo "  2. Start your app on port $PORT"
+        echo ""
+    else
+        print_error "Nginx config error. Check: $SITE_FILE"
+        rm -f "/etc/nginx/sites-enabled/${DOMAIN}.conf"
+        exit 1
+    fi
+}
+
+cmd_list_sites() {
+    print_header
+    echo ""
+    echo "Configured Sites:"
+    echo "─────────────────────────────────────────"
+
+    if [ -d /etc/nginx/sites-enabled ]; then
+        for site in /etc/nginx/sites-enabled/*.conf; do
+            if [ -f "$site" ]; then
+                DOMAIN=$(grep -m1 "server_name" "$site" | awk '{print $2}' | tr -d ';')
+                PORT=$(grep -m1 "proxy_pass" "$site" | grep -oP ':\K[0-9]+' || echo "static")
+                ENABLED="✓"
+                printf "  %s %-35s → port %s\n" "$ENABLED" "$DOMAIN" "$PORT"
+            fi
+        done
+    else
+        echo "  No sites configured. Run 'serverkit setup-proxy' first."
+    fi
+    echo ""
+}
+
+cmd_remove_site() {
+    check_root
+
+    DOMAIN="$1"
+
+    if [ -z "$DOMAIN" ]; then
+        echo "Usage: serverkit remove-site <domain>"
+        cmd_list_sites
+        exit 1
+    fi
+
+    SITE_FILE="/etc/nginx/sites-available/${DOMAIN}.conf"
+    ENABLED_FILE="/etc/nginx/sites-enabled/${DOMAIN}.conf"
+
+    if [ ! -f "$SITE_FILE" ]; then
+        print_error "Site not found: $DOMAIN"
+        exit 1
+    fi
+
+    print_warning "This will remove the site config for $DOMAIN"
+    read -p "Continue? (y/N) " -n 1 -r
+    echo
+
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        rm -f "$ENABLED_FILE"
+        rm -f "$SITE_FILE"
+        systemctl reload nginx
+        print_success "Site removed: $DOMAIN"
+    fi
+}
+
 # Main
 case "${1:-help}" in
     help|--help|-h)
@@ -474,6 +616,18 @@ case "${1:-help}" in
         ;;
     config)
         cmd_config
+        ;;
+    setup-proxy)
+        cmd_setup_proxy
+        ;;
+    add-site)
+        cmd_add_site "$2" "$3"
+        ;;
+    list-sites)
+        cmd_list_sites
+        ;;
+    remove-site)
+        cmd_remove_site "$2"
         ;;
     *)
         print_error "Unknown command: $1"

@@ -1,0 +1,46 @@
+# Example Site Configuration Template
+# Copy this file and modify for each new domain/subdomain
+#
+# Usage:
+#   1. Copy: sudo cp example.conf.template /etc/nginx/sites-available/mysite.conf
+#   2. Edit: sudo nano /etc/nginx/sites-available/mysite.conf
+#   3. Enable: sudo ln -s /etc/nginx/sites-available/mysite.conf /etc/nginx/sites-enabled/
+#   4. Test: sudo nginx -t
+#   5. Reload: sudo systemctl reload nginx
+
+server {
+    listen 80;
+    server_name example.builditdesign.com;  # Change this to your domain
+
+    # Option 1: Proxy to a local app (Docker container, Node.js, etc.)
+    location / {
+        proxy_pass http://127.0.0.1:3000;  # Change port to your app's port
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+    # Option 2: Serve static files (uncomment and modify)
+    # root /var/www/example.builditdesign.com;
+    # index index.html index.htm;
+    # location / {
+    #     try_files $uri $uri/ =404;
+    # }
+
+    # Option 3: PHP site (uncomment and modify)
+    # root /var/www/example.builditdesign.com;
+    # index index.php index.html;
+    # location / {
+    #     try_files $uri $uri/ /index.php?$query_string;
+    # }
+    # location ~ \.php$ {
+    #     fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+    #     fastcgi_index index.php;
+    #     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    #     include fastcgi_params;
+    # }
+}
