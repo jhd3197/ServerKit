@@ -411,3 +411,137 @@ def regenerate_nginx_config(app_id):
         'port': app.port,
         'config': result
     }), 200
+
+
+@domains_bp.route('/debug/diagnose/<int:app_id>', methods=['GET'])
+@jwt_required()
+@admin_required
+def diagnose_app_routing(app_id):
+    """Diagnose routing issues for an application.
+
+    Returns comprehensive diagnostic information including:
+    - Application configuration
+    - Domain mappings
+    - Nginx configuration status
+    - Docker container status and port bindings
+    - Health assessment with recommendations
+    """
+    from app.services.docker_service import DockerService
+
+    app = Application.query.get(app_id)
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    diagnosis = {
+        'app': {
+            'id': app.id,
+            'name': app.name,
+            'type': app.app_type,
+            'port': app.port,
+            'root_path': app.root_path,
+            'status': app.status
+        },
+        'domains': [],
+        'nginx': None,
+        'docker': None,
+        'health': {
+            'overall': False,
+            'issues': []
+        }
+    }
+
+    # Get domains
+    domains = Domain.query.filter_by(application_id=app_id).all()
+    diagnosis['domains'] = [d.to_dict() for d in domains]
+
+    # Nginx diagnosis
+    diagnosis['nginx'] = NginxService.diagnose_site(app.name, app.port)
+
+    # Docker diagnosis (if docker app)
+    if app.app_type == 'docker':
+        diagnosis['docker'] = {
+            'port_check': None,
+            'containers': [],
+            'compose_status': None
+        }
+
+        # Check port accessibility
+        if app.port:
+            diagnosis['docker']['port_check'] = DockerService.check_port_accessible(app.port)
+        else:
+            diagnosis['health']['issues'].append('No port configured for Docker app')
+
+        # Get container info
+        if app.root_path:
+            containers = DockerService.compose_ps(app.root_path)
+            diagnosis['docker']['containers'] = containers
+
+            if not containers:
+                diagnosis['health']['issues'].append('No containers found - app may not be running')
+            else:
+                # Get port bindings for each container
+                for container in containers:
+                    container_name = container.get('Name') or container.get('name')
+                    if container_name:
+                        bindings = DockerService.get_container_port_bindings(container_name)
+                        container['port_bindings'] = bindings
+
+                        network_info = DockerService.get_container_network_info(container_name)
+                        container['network_info'] = network_info
+
+                # Check if any container is running
+                running = [c for c in containers if 'running' in str(c.get('State', '')).lower() or 'up' in str(c.get('Status', '')).lower()]
+                if not running:
+                    diagnosis['health']['issues'].append('No containers are currently running')
+        else:
+            diagnosis['health']['issues'].append('No root_path configured - cannot check Docker Compose')
+
+    # Assess overall health
+    nginx_health = diagnosis['nginx'].get('health', {})
+    if not nginx_health.get('config_exists'):
+        diagnosis['health']['issues'].append('Nginx config does not exist')
+    if not nginx_health.get('config_enabled'):
+        diagnosis['health']['issues'].append('Nginx config is not enabled')
+    if not nginx_health.get('nginx_running'):
+        diagnosis['health']['issues'].append('Nginx service is not running')
+    if not nginx_health.get('syntax_valid'):
+        diagnosis['health']['issues'].append('Nginx config has syntax errors')
+    if app.port and not nginx_health.get('port_accessible'):
+        diagnosis['health']['issues'].append(f'Port {app.port} is not accessible')
+
+    diagnosis['health']['overall'] = len(diagnosis['health']['issues']) == 0
+    diagnosis['health']['recommendations'] = diagnosis['nginx'].get('recommendations', [])
+
+    return jsonify(diagnosis), 200
+
+
+@domains_bp.route('/debug/test-routing/<int:app_id>', methods=['POST'])
+@jwt_required()
+@admin_required
+def test_app_routing(app_id):
+    """Test the routing chain for an application.
+
+    Performs active tests to verify traffic can flow from domain to container.
+    """
+    app = Application.query.get(app_id)
+    if not app:
+        return jsonify({'error': 'Application not found'}), 404
+
+    if not app.port:
+        return jsonify({'error': 'Application has no port configured'}), 400
+
+    # Get primary domain or first domain
+    domain = Domain.query.filter_by(application_id=app_id, is_primary=True).first()
+    if not domain:
+        domain = Domain.query.filter_by(application_id=app_id).first()
+
+    domain_name = domain.name if domain else None
+
+    # Run routing tests
+    results = NginxService.check_site_routing(
+        name=app.name,
+        domain=domain_name or 'localhost',
+        port=app.port
+    )
+
+    return jsonify(results), 200
