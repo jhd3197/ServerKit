@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
     ReactFlow,
     ReactFlowProvider,
@@ -10,13 +10,20 @@ import {
     MiniMap
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import BaseNode from '../components/workflow/BaseNode';
 
 const initialNodes = [];
 const initialEdges = [];
 
+const nodeTypes = {
+    base: BaseNode
+};
+
 const WorkflowCanvas = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+    const memoizedNodeTypes = useMemo(() => nodeTypes, []);
 
     const onConnect = useCallback(
         (params) => setEdges((eds) => addEdge(params, eds)),
@@ -28,6 +35,7 @@ const WorkflowCanvas = () => {
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
+                nodeTypes={memoizedNodeTypes}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
@@ -36,6 +44,10 @@ const WorkflowCanvas = () => {
                 selectionOnDrag
                 panOnDrag={[1, 2]}
                 selectNodesOnDrag={false}
+                defaultEdgeOptions={{
+                    type: 'smoothstep',
+                    animated: true
+                }}
             >
                 <Background
                     variant="dots"
