@@ -28,7 +28,7 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 | Phase | Name | Status | Goal |
 |-------|------|--------|------|
 | 16 | Workflow Canvas Foundation | **completed** | React Flow canvas with pan/zoom, node rendering, connection system |
-| 17 | Resource Node Types | pending | Create node types for Docker apps, databases, domains |
+| 17 | Resource Node Types | **completed** | Create node types for Docker apps, databases, domains |
 | 18 | Node Configuration Panels | pending | Side panels for configuring each node type |
 | 19 | Connection Logic | pending | Define and validate connections between nodes |
 | 20 | Workflow Save/Load | pending | Save workflows to backend, load existing infrastructure |
@@ -59,22 +59,26 @@ Completed 2026-01-19 | 5 phases | Multi-environment app linking, shared DB suppo
 
 ---
 
-## Phase 17: Resource Node Types
+## Phase 17: Resource Node Types ✓
 **Goal**: Create visual node types for Docker apps, databases, and domains
 
-### Tasks
-1. Design node visual styles (icons, colors, shapes)
-2. Create DockerAppNode component
-3. Create DatabaseNode component
-4. Create DomainNode component
-5. Create ServiceNode component (for future expandability)
-6. Add node palette/toolbar for adding nodes
+**Status**: Completed 2026-01-19
+
+### What Was Built
+- DockerAppNode with status, ports, memory display, multi-handles
+- DatabaseNode with type badges (MySQL, PostgreSQL, MongoDB, Redis)
+- DomainNode with SSL/DNS status badges
+- ServiceNode for future extensibility (Redis, Memcached, RabbitMQ)
+- Categorized palette (Compute, Storage, Network)
+- Node-specific styles with animated status indicators
 
 ### Success Criteria
-- [ ] Each resource type has distinct visual node
-- [ ] Nodes display key info (name, status, type)
-- [ ] Node palette allows adding new nodes
-- [ ] Nodes are draggable on canvas
+- [x] Each resource type has distinct visual node
+- [x] Nodes display key info (name, status, type)
+- [x] Node palette allows adding new nodes
+- [x] Nodes are draggable on canvas
+
+[Full Summary](./phases/17-resource-node-types/SUMMARY.md)
 
 ---
 
