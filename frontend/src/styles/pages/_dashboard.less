@@ -113,6 +113,19 @@
             color: @text-tertiary;
             font-weight: @font-weight-medium;
         }
+
+        .metric-live-badge {
+            margin-left: auto;
+            font-size: 9px;
+            color: @success;
+            background: fade(@success, 15%);
+            padding: 2px 6px;
+            border-radius: @radius-full;
+            font-weight: @font-weight-bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: pulse-live 2s ease-in-out infinite;
+        }
     }
 
     .metric-value-row {
@@ -512,6 +525,12 @@
         color: @accent-primary;
         background: @accent-glow;
     }
+}
+
+// Live badge animation
+@keyframes pulse-live {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }
 
 // Responsive adjustments

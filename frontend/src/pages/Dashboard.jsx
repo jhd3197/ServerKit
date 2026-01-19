@@ -133,17 +133,18 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* System Metrics */}
+            {/* System Metrics - Live */}
             {metrics && (
                 <div className="metrics-grid">
                     <div className="metric-card">
                         <div className="metric-header">
                             <Cpu size={16} className="metric-icon" />
                             <span>CPU</span>
+                            <span className="metric-live-badge">Live</span>
                         </div>
                         <div className="metric-value-row">
-                            <span className="metric-value">{metrics.cpu?.percent || 0}%</span>
-                            <span className="metric-detail">{metrics.cpu?.cores} cores</span>
+                            <span className="metric-value">{(metrics.cpu?.percent || 0).toFixed(1)}%</span>
+                            <span className="metric-detail">{metrics.cpu?.count_logical || 0} cores</span>
                         </div>
                         <div className="metric-bar">
                             <div
@@ -161,9 +162,10 @@ const Dashboard = () => {
                         <div className="metric-header">
                             <MemoryStick size={16} className="metric-icon" />
                             <span>Memory</span>
+                            <span className="metric-live-badge">Live</span>
                         </div>
                         <div className="metric-value-row">
-                            <span className="metric-value">{metrics.memory?.ram?.percent || 0}%</span>
+                            <span className="metric-value">{(metrics.memory?.ram?.percent || 0).toFixed(1)}%</span>
                             <span className="metric-detail">{metrics.memory?.ram?.used_human} / {metrics.memory?.ram?.total_human}</span>
                         </div>
                         <div className="metric-bar">
@@ -181,9 +183,10 @@ const Dashboard = () => {
                         <div className="metric-header">
                             <HardDrive size={16} className="metric-icon" />
                             <span>Disk</span>
+                            <span className="metric-live-badge">Live</span>
                         </div>
                         <div className="metric-value-row">
-                            <span className="metric-value">{metrics.disk?.partitions?.[0]?.percent || 0}%</span>
+                            <span className="metric-value">{(metrics.disk?.partitions?.[0]?.percent || 0).toFixed(1)}%</span>
                             <span className="metric-detail">{metrics.disk?.partitions?.[0]?.used_human} / {metrics.disk?.partitions?.[0]?.total_human}</span>
                         </div>
                         <div className="metric-bar">
@@ -201,6 +204,7 @@ const Dashboard = () => {
                         <div className="metric-header">
                             <Activity size={16} className="metric-icon" />
                             <span>Network</span>
+                            <span className="metric-live-badge">Live</span>
                         </div>
                         <div className="metric-value-row">
                             <span className="metric-value">{metrics.network?.io?.bytes_sent_human || '0B'}</span>
