@@ -11,6 +11,7 @@ Welcome to the ServerKit documentation. This guide will help you install, config
 | [Installation Guide](INSTALLATION.md) | Complete setup instructions for Docker and manual installation |
 | [Deployment Guide](DEPLOYMENT.md) | Production deployment, CLI commands, and configuration |
 | [API Reference](API.md) | REST API documentation with examples |
+| [Multi-Environment Guide](MULTI_ENVIRONMENT.md) | Set up prod/dev WordPress pairs with shared database |
 
 ---
 
@@ -60,6 +61,23 @@ Each application includes:
 - Log viewing and streaming
 - Start/stop/restart controls
 - Domain and SSL configuration
+
+### Multi-Environment Support
+
+ServerKit v1.1 introduces **multi-environment linking** for WordPress and other applications:
+
+- **Production/Development Pairs** - Link apps as prod/dev environments
+- **Shared Database** - Both environments can share the same MySQL database with different table prefixes
+- **Environment Badges** - Visual indicators (PROD/DEV/STAGING) in the UI
+- **Quick Navigation** - One-click switching between linked environments
+- **Credential Propagation** - Automatically share database credentials between linked apps
+
+**Common use case:** WordPress theme development
+1. Production WordPress serves live traffic
+2. Development WordPress shares the database (separate tables)
+3. Develop themes in dev without affecting production
+
+See the [Multi-Environment Setup Guide](MULTI_ENVIRONMENT.md) for detailed instructions.
 
 ### Domain & SSL
 
