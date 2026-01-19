@@ -827,3 +827,124 @@
         color: @danger;
     }
 }
+
+// ============================================
+// CONNECTION ERROR TOAST
+// ============================================
+
+.connection-error-toast {
+    position: absolute;
+    top: @space-4;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    padding: @space-2 @space-4;
+    background: @danger-bg;
+    border: 1px solid @danger-border;
+    border-radius: @radius-md;
+    color: @danger;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    box-shadow: @shadow-lg;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+// ============================================
+// EDGE LABEL STYLES
+// ============================================
+
+.edge-label {
+    display: flex;
+    align-items: center;
+    gap: @space-1;
+    padding: 2px @space-2;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+    color: white;
+    white-space: nowrap;
+    transition: all @transition-fast;
+    opacity: 0;
+
+    .react-flow__edge:hover &,
+    &.edge-label-selected {
+        opacity: 1;
+    }
+
+    &.edge-label-selected {
+        color: @bg-body;
+    }
+}
+
+.edge-label-text {
+    line-height: 1;
+}
+
+.edge-delete-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    margin-left: @space-1;
+    background: @danger;
+    border: none;
+    border-radius: @radius-sm;
+    color: white;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        background: darken(@danger, 10%);
+    }
+}
+
+// ============================================
+// HANDLE HOVER STATES
+// ============================================
+
+.workflow-handle {
+    transition: all @transition-fast;
+
+    &:hover {
+        transform: scale(1.3);
+    }
+}
+
+// Connecting state - show valid handles
+.react-flow__handle-connecting {
+    &.react-flow__handle-valid {
+        background: @success !important;
+        box-shadow: 0 0 6px fade(@success, 60%);
+    }
+
+    &:not(.react-flow__handle-valid) {
+        background: @danger !important;
+        box-shadow: 0 0 6px fade(@danger, 60%);
+    }
+}
+
+// ============================================
+// EDGE SELECTION STATES
+// ============================================
+
+.react-flow__edge {
+    cursor: pointer;
+
+    &.selected .react-flow__edge-path {
+        stroke: white !important;
+        stroke-width: 2 !important;
+    }
+}
