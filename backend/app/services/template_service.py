@@ -320,9 +320,16 @@ class TemplateService:
 
         template = result['template']
 
-        # Prepare variables
-        variables = {}
+        # Prepare variables - start with automatic variables
+        variables = {
+            'APP_NAME': app_name,
+        }
         template_vars = template.get('variables', {})
+
+        # Handle both dict format (new) and list format (old)
+        if isinstance(template_vars, list):
+            # Convert list format to dict
+            template_vars = {v['name']: v for v in template_vars if 'name' in v}
 
         for var_name, var_config in template_vars.items():
             if user_variables and var_name in user_variables:

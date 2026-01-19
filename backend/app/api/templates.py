@@ -66,17 +66,34 @@ def get_template(template_id):
 
     template = result['template']
 
-    # Add processed variable info
+    # Add processed variable info - handle both list and dict formats
     variables = []
-    for var_name, var_config in template.get('variables', {}).items():
-        variables.append({
-            'name': var_name,
-            'description': var_config.get('description', ''),
-            'type': var_config.get('type', 'string'),
-            'default': var_config.get('default', ''),
-            'required': var_config.get('required', False),
-            'options': var_config.get('options', None)
-        })
+    raw_vars = template.get('variables', [])
+
+    if isinstance(raw_vars, list):
+        # New list format: [{name: 'PORT', type: 'port', ...}, ...]
+        for var in raw_vars:
+            if isinstance(var, dict):
+                variables.append({
+                    'name': var.get('name', ''),
+                    'description': var.get('description', ''),
+                    'type': var.get('type', 'string'),
+                    'default': var.get('default', ''),
+                    'required': var.get('required', False),
+                    'options': var.get('options', None)
+                })
+    elif isinstance(raw_vars, dict):
+        # Old dict format: {PORT: {type: 'port', ...}, ...}
+        for var_name, var_config in raw_vars.items():
+            if isinstance(var_config, dict):
+                variables.append({
+                    'name': var_name,
+                    'description': var_config.get('description', ''),
+                    'type': var_config.get('type', 'string'),
+                    'default': var_config.get('default', ''),
+                    'required': var_config.get('required', False),
+                    'options': var_config.get('options', None)
+                })
 
     return jsonify({
         'template': {

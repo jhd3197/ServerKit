@@ -12,20 +12,16 @@ categories:
 
 variables:
   - name: HTTP_PORT
-    description: HTTP port for the application
+    description: HTTP port for the application (auto-assigned if not specified)
     type: port
     default: "8300"
   - name: NODE_VERSION
     description: Node.js version (18, 20, 21)
     type: string
     default: "20"
-  - name: APP_PORT
-    description: Internal app port
-    type: string
-    default: "3000"
 
 ports:
-  - port: 8300
+  - port: "${HTTP_PORT}"
     protocol: tcp
     description: Web interface
 
@@ -47,12 +43,12 @@ compose:
       working_dir: /app
       command: sh -c "npm install 2>/dev/null || true && npm start"
       ports:
-        - "${HTTP_PORT}:${APP_PORT:-3000}"
+        - "${HTTP_PORT}:3000"
       volumes:
         - app_data:/app
       environment:
         - NODE_ENV=production
-        - PORT=${APP_PORT:-3000}
+        - PORT=3000
 
   volumes:
     app_data:

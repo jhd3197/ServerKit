@@ -1,7 +1,8 @@
-name: portainer
+id: portainer
+name: Portainer
 version: "2.19"
-description: Lightweight Docker management UI
-icon: /icons/portainer.png
+description: Lightweight Docker management UI with container visualization
+icon: https://www.portainer.io/hubfs/portainer-logo-white.svg
 categories:
   - devops
   - docker
@@ -10,35 +11,35 @@ website: https://www.portainer.io
 documentation: https://docs.portainer.io
 
 variables:
-  PORT:
+  - name: HTTP_PORT
     type: port
-    default: 9000
-    description: Port for web interface
-  HTTPS_PORT:
+    default: "9000"
+    description: Port for web interface (auto-assigned)
+  - name: HTTPS_PORT
     type: port
-    default: 9443
-    description: Port for HTTPS access
+    default: "9443"
+    description: Port for HTTPS access (auto-assigned)
 
 compose:
   services:
-    portainer:
+    app:
       image: portainer/portainer-ce:latest
-      container_name: portainer
+      container_name: ${APP_NAME}
       restart: unless-stopped
       ports:
-        - "${PORT}:9000"
+        - "${HTTP_PORT}:9000"
         - "${HTTPS_PORT}:9443"
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-        - portainer-data:/data
+        - data:/data
       security_opt:
         - no-new-privileges:true
 
   volumes:
-    portainer-data:
+    data:
 
 ports:
-  - port: "${PORT}"
+  - port: "${HTTP_PORT}"
     protocol: http
     description: Web Interface
   - port: "${HTTPS_PORT}"
@@ -48,3 +49,10 @@ ports:
 requirements:
   memory: 128MB
   storage: 500MB
+
+post_install: |
+  Portainer is now running!
+
+  Access the web interface at: http://your-server:${HTTP_PORT}
+
+  First-time setup will ask you to create an admin account.
