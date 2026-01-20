@@ -547,6 +547,18 @@ class TemplateService:
                 for key, value in variables.items():
                     f.write(f"{key}={value}\n")
 
+            # Process template files section - create files and update compose for bind mounts
+            if 'files' in template:
+                files_result = cls._process_template_files(
+                    template['files'],
+                    app_path,
+                    compose_path,
+                    variables
+                )
+                if not files_result.get('success'):
+                    shutil.rmtree(app_path)
+                    return files_result
+
             # Run pre-install script if exists
             if 'scripts' in template and 'pre_install' in template['scripts']:
                 script_result = cls._run_script(
@@ -642,6 +654,139 @@ class TemplateService:
             if os.path.exists(app_path):
                 shutil.rmtree(app_path)
             return {'success': False, 'error': str(e), 'trace': error_trace}
+
+    @classmethod
+    def _process_template_files(cls, files: List[Dict], app_path: str,
+                                 compose_path: str, variables: Dict) -> Dict:
+        """Process template files section - create files and update compose for bind mounts.
+
+        This method:
+        1. Creates files defined in the template's 'files' section
+        2. Updates docker-compose.yml to bind mount these files into containers
+
+        Args:
+            files: List of file definitions from template (path, content)
+            app_path: Path to the app directory
+            compose_path: Path to the docker-compose.yml file
+            variables: Variables dict for substitution
+
+        Returns:
+            Dict with success status
+        """
+        try:
+            created_files = []
+            bind_mounts = []  # Track files that need to be bind mounted
+
+            for file_def in files:
+                container_path = file_def.get('path')
+                content = file_def.get('content', '')
+
+                if not container_path:
+                    continue
+
+                # Substitute variables in content
+                content = cls.substitute_variables(content, variables)
+
+                # Determine local filename (use basename of container path)
+                filename = os.path.basename(container_path)
+                local_path = os.path.join(app_path, filename)
+
+                # Write file locally
+                with open(local_path, 'w') as f:
+                    f.write(content)
+
+                created_files.append(filename)
+
+                # Track for bind mount: local file -> container path
+                # Get the container directory from the path
+                container_dir = os.path.dirname(container_path)
+                bind_mounts.append({
+                    'local': f'./{filename}',
+                    'container': container_path,
+                    'container_dir': container_dir
+                })
+
+            # Update docker-compose.yml to use bind mounts instead of named volumes
+            if bind_mounts:
+                cls._update_compose_with_bind_mounts(compose_path, bind_mounts)
+
+            return {
+                'success': True,
+                'files_created': created_files,
+                'bind_mounts': len(bind_mounts)
+            }
+
+        except Exception as e:
+            return {'success': False, 'error': f'Failed to process template files: {str(e)}'}
+
+    @classmethod
+    def _update_compose_with_bind_mounts(cls, compose_path: str, bind_mounts: List[Dict]) -> None:
+        """Update docker-compose.yml to use bind mounts for template files.
+
+        Replaces named volume mounts with bind mounts for specific container paths.
+
+        Args:
+            compose_path: Path to docker-compose.yml
+            bind_mounts: List of bind mount definitions
+        """
+        with open(compose_path, 'r') as f:
+            compose = yaml.safe_load(f)
+
+        # Group bind mounts by container directory
+        dir_to_files = {}
+        for mount in bind_mounts:
+            dir_to_files.setdefault(mount['container_dir'], []).append(mount)
+
+        # Process each service
+        for service_name, service in compose.get('services', {}).items():
+            volumes = service.get('volumes', [])
+            new_volumes = []
+            volumes_to_remove = set()
+
+            for vol in volumes:
+                if isinstance(vol, str):
+                    # Parse volume string: "name:/path" or "./local:/path"
+                    parts = vol.split(':')
+                    if len(parts) >= 2:
+                        mount_target = parts[1].rstrip('/')
+
+                        # Check if this volume's target directory matches any of our file paths
+                        should_replace = False
+                        for mount in bind_mounts:
+                            container_dir = mount['container_dir'].rstrip('/')
+                            if mount_target == container_dir:
+                                # This named volume covers a directory where we need to place files
+                                should_replace = True
+                                volumes_to_remove.add(parts[0])  # Track volume name to remove
+                                break
+
+                        if not should_replace:
+                            new_volumes.append(vol)
+                    else:
+                        new_volumes.append(vol)
+                else:
+                    new_volumes.append(vol)
+
+            # Add bind mounts for our files
+            for mount in bind_mounts:
+                bind_mount_str = f"{mount['local']}:{mount['container']}"
+                if bind_mount_str not in new_volumes:
+                    new_volumes.append(bind_mount_str)
+
+            service['volumes'] = new_volumes
+
+        # Remove unused named volumes from top-level volumes section
+        if 'volumes' in compose and volumes_to_remove:
+            for vol_name in volumes_to_remove:
+                if vol_name in compose['volumes']:
+                    del compose['volumes'][vol_name]
+            # Remove volumes section if empty
+            if not compose['volumes']:
+                del compose['volumes']
+
+        # Write updated compose file
+        with open(compose_path, 'w') as f:
+            yaml.dump(compose, f, default_flow_style=False, sort_keys=False)
 
     @classmethod
     def _run_script(cls, script: str, cwd: str, variables: Dict) -> Dict:

@@ -1,3 +1,4 @@
+import re
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
@@ -6,6 +7,65 @@ from app.services.nginx_service import NginxService
 from app.services.ssl_service import SSLService
 
 domains_bp = Blueprint('domains', __name__)
+
+
+def validate_and_sanitize_domain(domain_name: str) -> tuple:
+    """Validate and sanitize a domain name for nginx server_name.
+
+    Args:
+        domain_name: The domain name to validate
+
+    Returns:
+        Tuple of (sanitized_domain, error_message). error_message is None if valid.
+    """
+    if not domain_name:
+        return None, 'Domain name is required'
+
+    # Strip whitespace
+    domain = domain_name.strip()
+
+    # Remove protocol if present (common user mistake)
+    if domain.startswith('https://'):
+        domain = domain[8:]
+    if domain.startswith('http://'):
+        domain = domain[7:]
+
+    # Remove trailing slashes and paths
+    domain = domain.split('/')[0]
+
+    # Remove port if present
+    domain = domain.split(':')[0]
+
+    # Strip again after modifications
+    domain = domain.strip()
+
+    if not domain:
+        return None, 'Domain name is empty after sanitization'
+
+    # Validate domain format
+    # Allow: letters, numbers, hyphens, dots
+    # Must not start or end with hyphen or dot
+    # Must have at least one dot (for TLDs) unless it's localhost
+    domain_pattern = r'^(?!-)[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(?<!-)$'
+
+    if not re.match(domain_pattern, domain):
+        return None, f'Invalid domain format: {domain}. Domain must contain only letters, numbers, dots, and hyphens.'
+
+    # Check for consecutive dots
+    if '..' in domain:
+        return None, 'Domain cannot contain consecutive dots'
+
+    # Check length
+    if len(domain) > 253:
+        return None, 'Domain name is too long (max 253 characters)'
+
+    # Each label (part between dots) must be <= 63 chars
+    labels = domain.split('.')
+    for label in labels:
+        if len(label) > 63:
+            return None, f'Domain label "{label}" is too long (max 63 characters per label)'
+
+    return domain.lower(), None
 
 
 def admin_required(fn):
@@ -72,6 +132,14 @@ def create_domain():
 
     if not all([name, application_id]):
         return jsonify({'error': 'Missing required fields: name, application_id'}), 400
+
+    # Validate and sanitize domain name
+    sanitized_name, validation_error = validate_and_sanitize_domain(name)
+    if validation_error:
+        return jsonify({'error': validation_error}), 400
+
+    # Use sanitized name
+    name = sanitized_name
 
     # Check if domain already exists
     if Domain.query.filter_by(name=name).first():

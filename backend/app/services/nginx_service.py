@@ -191,10 +191,11 @@ class NginxService:
 # Generated at: {timestamp}
 
 server {{
-    listen 80 default_server;
-    listen [::]:80 default_server;
+    listen 80;
+    listen [::]:80;
 
-    # Match all requests to this server for private URLs
+    # Match requests to server IP for private URLs
+    # Note: Do NOT use default_server here - serverkit.conf handles that
     server_name _;
 
     access_log /var/log/nginx/private-urls.access.log;
@@ -738,14 +739,15 @@ server {{
                 )
             else:
                 # No private URLs - create minimal config
+                # Note: Do NOT use default_server here - serverkit.conf handles that
                 config = f'''# ServerKit Private URL Routes
 # This file is auto-generated. Do not edit manually.
 # Generated at: {datetime.utcnow().isoformat()}
 # No private URLs configured
 
 server {{
-    listen 80 default_server;
-    listen [::]:80 default_server;
+    listen 80;
+    listen [::]:80;
     server_name _;
 
     location /p/ {{

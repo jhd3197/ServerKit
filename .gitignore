@@ -5,3 +5,5 @@ nul
 .env
 /frontend/dist
 *.tmp
+.planning_old
+.mcp.json
