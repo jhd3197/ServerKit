@@ -21,6 +21,12 @@
         margin-left: 0;
         padding: @space-5;
     }
+
+    // Remove padding for fullscreen pages (workflow builder)
+    &:has(.workflow-page.fullscreen) {
+        padding: 0;
+        overflow: hidden;
+    }
 }
 
 // Top bar (page header)

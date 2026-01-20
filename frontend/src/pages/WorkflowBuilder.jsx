@@ -218,6 +218,18 @@ const WorkflowCanvas = () => {
             const apps = appsResponse.apps || [];
             const domains = domainsResponse.domains || [];
 
+            // Fetch databases for each Docker app in parallel
+            const appDatabasePromises = apps
+                .filter(app => app.app_type === 'docker')
+                .map(app => api.getAppDatabases(app.id).catch(() => ({ databases: [] })));
+            const appDatabaseResults = await Promise.all(appDatabasePromises);
+
+            // Create a map of app_id to databases
+            const appDatabasesMap = {};
+            apps.filter(app => app.app_type === 'docker').forEach((app, index) => {
+                appDatabasesMap[app.id] = appDatabaseResults[index]?.databases || [];
+            });
+
             if (apps.length === 0 && domains.length === 0) {
                 setSaveMessage('No infrastructure found - create an app first!');
                 setTimeout(() => setSaveMessage(null), 4000);
@@ -344,6 +356,59 @@ const WorkflowCanvas = () => {
                 });
             });
 
+            // Create database nodes below apps that have databases
+            const DATABASE_OFFSET_Y = 180;
+            let databaseCount = 0;
+            apps.forEach((app) => {
+                const databases = appDatabasesMap[app.id] || [];
+                if (databases.length > 0) {
+                    const appNodeId = appNodeIds[app.id];
+                    const appNode = importedNodes.find(n => n.id === appNodeId);
+
+                    databases.forEach((db, dbIdx) => {
+                        const dbNodeId = getId();
+                        databaseCount++;
+
+                        // Position database below its app
+                        importedNodes.push({
+                            id: dbNodeId,
+                            type: 'database',
+                            position: {
+                                x: appNode.position.x + (dbIdx * 200),
+                                y: appNode.position.y + DATABASE_OFFSET_Y
+                            },
+                            data: {
+                                name: db.database || db.name || 'Database',
+                                type: db.type || 'mysql',
+                                host: db.container || db.host || 'localhost',
+                                port: db.port || '3306',
+                                status: 'running',
+                                connectedAppId: app.id,
+                                containerName: db.container,
+                                isReal: true
+                            }
+                        });
+
+                        // Create edge from app's database handle to database node
+                        importedEdges.push({
+                            id: `edge_${appNodeId}_${dbNodeId}`,
+                            source: appNodeId,
+                            target: dbNodeId,
+                            sourceHandle: 'database',
+                            targetHandle: 'input',
+                            type: 'connection',
+                            animated: true,
+                            data: {
+                                sourceType: 'dockerApp',
+                                targetType: 'database',
+                                connectionType: 'uses',
+                                onDelete: deleteEdge
+                            }
+                        });
+                    });
+                }
+            });
+
             // Update state
             setNodes(importedNodes);
             setEdges(importedEdges);
@@ -354,7 +419,8 @@ const WorkflowCanvas = () => {
             // Fit view after a short delay
             setTimeout(() => fitView({ padding: 0.2 }), 100);
 
-            setSaveMessage(`Loaded ${apps.length} apps, ${domains.length} domains`);
+            const dbMessage = databaseCount > 0 ? `, ${databaseCount} databases` : '';
+            setSaveMessage(`Loaded ${apps.length} apps, ${domains.length} domains${dbMessage}`);
             setTimeout(() => setSaveMessage(null), 3000);
 
         } catch (error) {
