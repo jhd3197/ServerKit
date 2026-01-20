@@ -130,12 +130,42 @@ ServerKit is a lightweight, modern server control panel for managing web applica
 ## Screenshots
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/6407ecf0-7a1a-4c4b-b7e3-8af6619da2f9" alt="Dashboard" width="100%">
+  <img alt="Dashboard" width="100%" src="https://github.com/user-attachments/assets/e4382ba7-7b3f-4175-baaf-cc9c782de067" />
 </p>
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/73807009-9538-48e9-bbdf-152aed57bdd8" alt="Applications" width="100%">
+  
+![Workflow-Builder](https://github.com/user-attachments/assets/fc58beac-5e2c-487e-a37b-eaa6473eb325)
+  
 </p>
+
+<details>
+<summary><strong>View More Screenshots</strong></summary>
+
+<br>
+
+<p align="center">
+  <img alt="Docker" width="100%" src="https://github.com/user-attachments/assets/08fd47b9-778a-4170-8542-ed28579f8a12" />
+</p>
+
+<p align="center">
+  <img width="100%" alt="Workflow Builder" src="https://github.com/user-attachments/assets/1271f01d-f666-4609-8bc0-22a22c81eaf3" />
+</p>
+
+
+<p align="center">
+  <img width="100%" alt="Templates" src="https://github.com/user-attachments/assets/337bcf4a-d5aa-4496-b74a-b66e859304ad" />
+</p>
+
+<p align="center">
+  <img width="100%" alt="Applications" src="https://github.com/user-attachments/assets/b5bdf80c-4ce1-4de9-b8b9-ae069a17a2b3" />
+</p>
+
+<p align="center">
+  <img width="100%" alt="Applications Logs"  src="https://github.com/user-attachments/assets/3c397d1e-1452-4111-baae-452fb7bfbed7" />
+</p>
+
+</details>
 
 ---
 
