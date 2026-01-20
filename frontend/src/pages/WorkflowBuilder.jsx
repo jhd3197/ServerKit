@@ -11,7 +11,7 @@ import {
     MiniMap
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { Server, Database, Globe, Box, Save, FolderOpen, Plus, Download, Play } from 'lucide-react';
+import { Server, Database, Globe, Box, Save, FolderOpen, Plus, RefreshCw, Play, Layout, Eye } from 'lucide-react';
 import api from '../services/api';
 import WorkflowListModal from '../components/workflow/WorkflowListModal';
 import DeploymentProgressModal from '../components/workflow/DeploymentProgressModal';
@@ -50,57 +50,71 @@ const edgeTypes = {
 let nodeId = 0;
 const getId = () => `node_${nodeId++}`;
 
-const NodePalette = ({ onAddNode }) => {
+const NodePalette = ({ onAddNode, templates, onAddFromTemplate, existingApps, onAddExistingApp }) => {
+    const [showTemplates, setShowTemplates] = useState(false);
+    const [showExistingApps, setShowExistingApps] = useState(false);
+
     return (
         <div className="workflow-palette">
             <div className="palette-section">
-                <div className="palette-header">Compute</div>
+                <div className="palette-header">Add Application</div>
                 <button
                     className="palette-item palette-item-docker"
-                    onClick={() => onAddNode('dockerApp', { name: 'New App', status: 'stopped' })}
+                    onClick={() => setShowTemplates(!showTemplates)}
                 >
-                    <Server size={16} />
-                    <span>Docker App</span>
+                    <Plus size={16} />
+                    <span>From Template</span>
                 </button>
-                <button
-                    className="palette-item palette-item-service"
-                    onClick={() => onAddNode('service', { name: 'New Service', status: 'stopped' })}
-                >
-                    <Box size={16} />
-                    <span>Service</span>
-                </button>
-            </div>
+                {showTemplates && templates.length > 0 && (
+                    <div className="palette-submenu">
+                        {templates.map((template) => (
+                            <button
+                                key={template.id}
+                                className="palette-subitem"
+                                onClick={() => {
+                                    onAddFromTemplate(template);
+                                    setShowTemplates(false);
+                                }}
+                            >
+                                {template.name}
+                            </button>
+                        ))}
+                    </div>
+                )}
+                {showTemplates && templates.length === 0 && (
+                    <div className="palette-empty">No templates available</div>
+                )}
 
-            <div className="palette-section">
-                <div className="palette-header">Storage</div>
-                <button
-                    className="palette-item palette-item-database"
-                    onClick={() => onAddNode('database', { name: 'New Database', type: 'mysql', status: 'stopped' })}
-                >
-                    <Database size={16} />
-                    <span>MySQL</span>
-                </button>
-                <button
-                    className="palette-item palette-item-database"
-                    onClick={() => onAddNode('database', { name: 'New Database', type: 'postgresql', status: 'stopped' })}
-                >
-                    <Database size={16} />
-                    <span>PostgreSQL</span>
-                </button>
-                <button
-                    className="palette-item palette-item-database"
-                    onClick={() => onAddNode('database', { name: 'New Database', type: 'mongodb', status: 'stopped' })}
-                >
-                    <Database size={16} />
-                    <span>MongoDB</span>
-                </button>
-                <button
-                    className="palette-item palette-item-database"
-                    onClick={() => onAddNode('database', { name: 'Cache', type: 'redis', status: 'stopped' })}
-                >
-                    <Database size={16} />
-                    <span>Redis</span>
-                </button>
+                {existingApps.length > 0 && (
+                    <>
+                        <button
+                            className="palette-item palette-item-service"
+                            onClick={() => setShowExistingApps(!showExistingApps)}
+                        >
+                            <Server size={16} />
+                            <span>Existing App</span>
+                        </button>
+                        {showExistingApps && (
+                            <div className="palette-submenu">
+                                {existingApps.map((app) => (
+                                    <button
+                                        key={app.id}
+                                        className="palette-subitem"
+                                        onClick={() => {
+                                            onAddExistingApp(app);
+                                            setShowExistingApps(false);
+                                        }}
+                                    >
+                                        {app.name}
+                                        <span className={`status-badge status-${app.status}`}>
+                                            {app.status}
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
 
             <div className="palette-section">
@@ -113,6 +127,12 @@ const NodePalette = ({ onAddNode }) => {
                     <span>Domain</span>
                 </button>
             </div>
+
+            <div className="palette-section palette-section-info">
+                <div className="palette-hint">
+                    Tip: Click "Server Overview" to see all your infrastructure with connections
+                </div>
+            </div>
         </div>
     );
 };
@@ -124,16 +144,20 @@ const WorkflowCanvas = () => {
     const [selectedNode, setSelectedNode] = useState(null);
     const [selectedEdge, setSelectedEdge] = useState(null);
     const [connectionError, setConnectionError] = useState(null);
-    const { screenToFlowPosition, getViewport, setViewport } = useReactFlow();
+    const { screenToFlowPosition, getViewport, setViewport, fitView } = useReactFlow();
 
     // Workflow state
     const [currentWorkflow, setCurrentWorkflow] = useState(null);
     const [workflowName, setWorkflowName] = useState('Untitled Workflow');
     const [isSaving, setIsSaving] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [isImporting, setIsImporting] = useState(false);
     const [showLoadModal, setShowLoadModal] = useState(false);
     const [saveMessage, setSaveMessage] = useState(null);
+
+    // Server data state
+    const [templates, setTemplates] = useState([]);
+    const [allApps, setAllApps] = useState([]);
+    const [appsInView, setAppsInView] = useState(new Set());
 
     // Deployment state
     const [isDeploying, setIsDeploying] = useState(false);
@@ -143,16 +167,214 @@ const WorkflowCanvas = () => {
     const memoizedNodeTypes = useMemo(() => nodeTypes, []);
     const memoizedEdgeTypes = useMemo(() => edgeTypes, []);
 
-    // Validate connections before allowing them
-    const isValidConnection = useCallback((connection) => {
-        return checkValidConnection(connection, nodes);
-    }, [nodes]);
-
     // Delete edge by ID
     const deleteEdge = useCallback((edgeId) => {
         setEdges((eds) => eds.filter((e) => e.id !== edgeId));
         setSelectedEdge(null);
     }, [setEdges]);
+
+    // Fetch templates on mount
+    useEffect(() => {
+        const fetchTemplates = async () => {
+            try {
+                const response = await api.getTemplates();
+                setTemplates(response.templates || []);
+            } catch (error) {
+                console.error('Failed to fetch templates:', error);
+            }
+        };
+        fetchTemplates();
+    }, []);
+
+    // Fetch all apps for the existing apps list
+    useEffect(() => {
+        const fetchApps = async () => {
+            try {
+                const response = await api.getApps();
+                setAllApps(response.apps || []);
+            } catch (error) {
+                console.error('Failed to fetch apps:', error);
+            }
+        };
+        fetchApps();
+    }, []);
+
+    // Get apps not currently in the view
+    const existingAppsNotInView = useMemo(() => {
+        return allApps.filter(app => !appsInView.has(app.id));
+    }, [allApps, appsInView]);
+
+    // Load server overview - all infrastructure with connections
+    const loadServerOverview = useCallback(async () => {
+        setIsLoading(true);
+        setSaveMessage(null);
+
+        try {
+            const [appsResponse, domainsResponse] = await Promise.all([
+                api.getApps().catch(() => ({ apps: [] })),
+                api.getDomains().catch(() => ({ domains: [] }))
+            ]);
+
+            const apps = appsResponse.apps || [];
+            const domains = domainsResponse.domains || [];
+
+            if (apps.length === 0 && domains.length === 0) {
+                setSaveMessage('No infrastructure found - create an app first!');
+                setTimeout(() => setSaveMessage(null), 4000);
+                setIsLoading(false);
+                return;
+            }
+
+            const importedNodes = [];
+            const importedEdges = [];
+            const appNodeIds = {};
+            const domainNodeIds = {};
+
+            // Layout configuration
+            const GRID_SPACING_X = 320;
+            const GRID_SPACING_Y = 180;
+            const COLS = 3;
+            const DOMAIN_OFFSET_Y = 150;
+
+            // Reset node ID counter
+            nodeId = 0;
+
+            // Create app nodes
+            apps.forEach((app, index) => {
+                const col = index % COLS;
+                const row = Math.floor(index / COLS);
+                const nodeIdStr = getId();
+                appNodeIds[app.id] = nodeIdStr;
+
+                importedNodes.push({
+                    id: nodeIdStr,
+                    type: 'dockerApp',
+                    position: {
+                        x: 150 + col * GRID_SPACING_X,
+                        y: 200 + row * GRID_SPACING_Y
+                    },
+                    data: {
+                        name: app.name,
+                        appId: app.id,
+                        status: app.status || 'stopped',
+                        port: app.port,
+                        appType: app.app_type,
+                        template: app.docker_image || app.app_type,
+                        privateUrl: app.private_url_enabled ? `/p/${app.private_slug}` : null,
+                        domains: app.domains || [],
+                        isReal: true
+                    }
+                });
+            });
+
+            // Create domain nodes positioned above their connected apps
+            const processedDomains = new Set();
+            apps.forEach((app) => {
+                if (app.domains && app.domains.length > 0) {
+                    app.domains.forEach((domain, domIdx) => {
+                        if (processedDomains.has(domain.id)) return;
+                        processedDomains.add(domain.id);
+
+                        const appNodeId = appNodeIds[app.id];
+                        const appNode = importedNodes.find(n => n.id === appNodeId);
+                        const domainNodeId = getId();
+                        domainNodeIds[domain.id] = domainNodeId;
+
+                        // Position domain above its app
+                        importedNodes.push({
+                            id: domainNodeId,
+                            type: 'domain',
+                            position: {
+                                x: appNode.position.x + (domIdx * 80),
+                                y: appNode.position.y - DOMAIN_OFFSET_Y
+                            },
+                            data: {
+                                name: domain.name,
+                                domainId: domain.id,
+                                ssl: domain.ssl_enabled ? 'active' : 'none',
+                                dnsStatus: 'propagated',
+                                connectedAppId: app.id,
+                                isReal: true
+                            }
+                        });
+
+                        // Create edge from domain to app
+                        importedEdges.push({
+                            id: `edge_${domainNodeId}_${appNodeId}`,
+                            source: domainNodeId,
+                            target: appNodeId,
+                            sourceHandle: 'output',
+                            targetHandle: 'input',
+                            type: 'connection',
+                            animated: true,
+                            data: {
+                                sourceType: 'domain',
+                                targetType: 'dockerApp',
+                                connectionType: 'routes',
+                                onDelete: deleteEdge
+                            }
+                        });
+                    });
+                }
+            });
+
+            // Add orphan domains (not connected to any app)
+            const orphanDomains = domains.filter(d => !processedDomains.has(d.id));
+            const appsRows = Math.ceil(apps.length / COLS);
+            orphanDomains.forEach((domain, index) => {
+                const col = index % COLS;
+                const row = appsRows + 1 + Math.floor(index / COLS);
+                const domainNodeId = getId();
+
+                importedNodes.push({
+                    id: domainNodeId,
+                    type: 'domain',
+                    position: {
+                        x: 150 + col * GRID_SPACING_X,
+                        y: 200 + row * GRID_SPACING_Y
+                    },
+                    data: {
+                        name: domain.name,
+                        domainId: domain.id,
+                        ssl: domain.ssl_enabled ? 'active' : 'none',
+                        dnsStatus: 'pending',
+                        isOrphan: true,
+                        isReal: true
+                    }
+                });
+            });
+
+            // Update state
+            setNodes(importedNodes);
+            setEdges(importedEdges);
+            setAppsInView(new Set(apps.map(a => a.id)));
+            setCurrentWorkflow(null);
+            setWorkflowName('Server Overview');
+
+            // Fit view after a short delay
+            setTimeout(() => fitView({ padding: 0.2 }), 100);
+
+            setSaveMessage(`Loaded ${apps.length} apps, ${domains.length} domains`);
+            setTimeout(() => setSaveMessage(null), 3000);
+
+        } catch (error) {
+            console.error('Failed to load server overview:', error);
+            setSaveMessage('Failed to load infrastructure');
+            setTimeout(() => setSaveMessage(null), 3000);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [setNodes, setEdges, deleteEdge, fitView]);
+
+    // Auto-load server overview on mount
+    useEffect(() => {
+        loadServerOverview();
+    }, []);
+
+    // Validate connections before allowing them
+    const isValidConnection = useCallback((connection) => {
+        return checkValidConnection(connection, nodes);
+    }, [nodes]);
 
     // Save workflow
     const saveWorkflow = useCallback(async () => {
@@ -161,12 +383,10 @@ const WorkflowCanvas = () => {
 
         try {
             const viewport = getViewport();
-            // Serialize nodes without onDelete callback
             const serializableNodes = nodes.map(({ id, type, position, data }) => ({
                 id, type, position,
                 data: { ...data }
             }));
-            // Serialize edges without onDelete callback
             const serializableEdges = edges.map(({ id, source, target, sourceHandle, targetHandle, type, animated, data }) => ({
                 id, source, target, sourceHandle, targetHandle, type, animated,
                 data: data ? { sourceType: data.sourceType, targetType: data.targetType, connectionType: data.connectionType } : undefined
@@ -180,14 +400,12 @@ const WorkflowCanvas = () => {
             };
 
             if (currentWorkflow) {
-                // Update existing workflow
                 await api.updateWorkflow(currentWorkflow.id, workflowData);
-                setSaveMessage('Workflow saved');
+                setSaveMessage('View saved');
             } else {
-                // Create new workflow
                 const response = await api.createWorkflow(workflowData);
                 setCurrentWorkflow(response.workflow);
-                setSaveMessage('Workflow created');
+                setSaveMessage('View created');
             }
 
             setTimeout(() => setSaveMessage(null), 3000);
@@ -202,24 +420,17 @@ const WorkflowCanvas = () => {
 
     // Load workflow
     const loadWorkflow = useCallback((workflow) => {
-        if (!workflow) {
-            console.error('No workflow provided to load');
-            setSaveMessage('No workflow data');
-            setTimeout(() => setSaveMessage(null), 3000);
-            return;
-        }
+        if (!workflow) return;
 
         setIsLoading(true);
         setShowLoadModal(false);
 
         try {
-            // Restore nodes with recreated data
             const loadedNodes = (workflow.nodes || []).map((node) => ({
                 ...node,
                 data: { ...node.data }
             }));
 
-            // Restore edges with onDelete callback
             const loadedEdges = (workflow.edges || []).map((edge) => ({
                 ...edge,
                 data: {
@@ -228,23 +439,26 @@ const WorkflowCanvas = () => {
                 }
             }));
 
-            // Update node ID counter to prevent collisions
             const maxNodeId = loadedNodes.reduce((max, node) => {
                 const numId = parseInt(node.id.replace('node_', ''), 10);
                 return isNaN(numId) ? max : Math.max(max, numId);
             }, 0);
             nodeId = maxNodeId + 1;
 
+            // Track which apps are in view
+            const appIds = new Set();
+            loadedNodes.forEach(node => {
+                if (node.data?.appId) appIds.add(node.data.appId);
+            });
+            setAppsInView(appIds);
+
             setNodes(loadedNodes);
             setEdges(loadedEdges);
             setWorkflowName(workflow.name || 'Untitled Workflow');
             setCurrentWorkflow(workflow);
 
-            // Restore viewport
             if (workflow.viewport) {
-                setTimeout(() => {
-                    setViewport(workflow.viewport);
-                }, 50);
+                setTimeout(() => setViewport(workflow.viewport), 50);
             }
 
             setSaveMessage(`Loaded: ${workflow.name}`);
@@ -263,97 +477,73 @@ const WorkflowCanvas = () => {
         setNodes([]);
         setEdges([]);
         setCurrentWorkflow(null);
-        setWorkflowName('Untitled Workflow');
+        setWorkflowName('Custom View');
+        setAppsInView(new Set());
         nodeId = 0;
     }, [setNodes, setEdges]);
 
-    // Import existing infrastructure as nodes
-    const importInfrastructure = useCallback(async () => {
-        setIsImporting(true);
-        setSaveMessage(null);
+    // Add node from template (placeholder - would create app via API)
+    const addFromTemplate = useCallback((template) => {
+        setSaveMessage(`To create from "${template.name}", use the Applications page`);
+        setTimeout(() => setSaveMessage(null), 4000);
+    }, []);
 
-        try {
-            // Fetch apps, domains in parallel
-            const [appsResponse, domainsResponse] = await Promise.all([
-                api.getApps().catch(() => ({ apps: [] })),
-                api.getDomains().catch(() => ({ domains: [] }))
-            ]);
-
-            const apps = appsResponse.apps || [];
-            const domains = domainsResponse.domains || [];
-
-            if (apps.length === 0 && domains.length === 0) {
-                setSaveMessage('No infrastructure found');
-                setTimeout(() => setSaveMessage(null), 3000);
-                return;
+    // Add existing app to view
+    const addExistingApp = useCallback((app) => {
+        const newNode = {
+            id: getId(),
+            type: 'dockerApp',
+            position: screenToFlowPosition({
+                x: window.innerWidth / 2 - 90,
+                y: window.innerHeight / 2 - 50
+            }),
+            data: {
+                name: app.name,
+                appId: app.id,
+                status: app.status || 'stopped',
+                port: app.port,
+                appType: app.app_type,
+                template: app.docker_image || app.app_type,
+                privateUrl: app.private_url_enabled ? `/p/${app.private_slug}` : null,
+                domains: app.domains || [],
+                isReal: true
             }
+        };
 
-            const importedNodes = [];
-            const GRID_SPACING_X = 280;
-            const GRID_SPACING_Y = 200;
-            const COLS = 3;
+        setNodes((nds) => [...nds, newNode]);
+        setAppsInView((prev) => new Set([...prev, app.id]));
 
-            // Import Docker apps
-            apps.forEach((app, index) => {
-                const col = index % COLS;
-                const row = Math.floor(index / COLS);
-                importedNodes.push({
-                    id: `node_${nodeId++}`,
-                    type: 'dockerApp',
-                    position: {
-                        x: 100 + col * GRID_SPACING_X,
-                        y: 100 + row * GRID_SPACING_Y
-                    },
-                    data: {
-                        name: app.name,
-                        image: app.docker_image || 'custom',
-                        status: app.status === 'running' ? 'running' : 'stopped',
-                        ports: app.ports || [],
-                        memory: app.memory_limit || null,
-                        appId: app.id
-                    }
-                });
+        // Add edges for connected domains if they're in view
+        if (app.domains && app.domains.length > 0) {
+            app.domains.forEach(domain => {
+                // Find if domain node exists
+                const domainNode = nodes.find(n => n.data?.domainId === domain.id);
+                if (domainNode) {
+                    const newEdge = {
+                        id: `edge_${domainNode.id}_${newNode.id}`,
+                        source: domainNode.id,
+                        target: newNode.id,
+                        sourceHandle: 'output',
+                        targetHandle: 'input',
+                        type: 'connection',
+                        animated: true,
+                        data: {
+                            sourceType: 'domain',
+                            targetType: 'dockerApp',
+                            connectionType: 'routes',
+                            onDelete: deleteEdge
+                        }
+                    };
+                    setEdges((eds) => [...eds, newEdge]);
+                }
             });
-
-            // Import Domains (offset below apps)
-            const appsRows = Math.ceil(apps.length / COLS);
-            domains.forEach((domain, index) => {
-                const col = index % COLS;
-                const row = appsRows + Math.floor(index / COLS);
-                importedNodes.push({
-                    id: `node_${nodeId++}`,
-                    type: 'domain',
-                    position: {
-                        x: 100 + col * GRID_SPACING_X,
-                        y: 100 + row * GRID_SPACING_Y
-                    },
-                    data: {
-                        name: domain.domain,
-                        ssl: domain.ssl_enabled ? 'active' : 'none',
-                        dnsStatus: domain.dns_verified ? 'propagated' : 'pending',
-                        domainId: domain.id
-                    }
-                });
-            });
-
-            // Add imported nodes to existing nodes
-            setNodes((nds) => [...nds, ...importedNodes]);
-
-            setSaveMessage(`Imported ${apps.length} apps, ${domains.length} domains`);
-            setTimeout(() => setSaveMessage(null), 4000);
-        } catch (error) {
-            console.error('Failed to import infrastructure:', error);
-            setSaveMessage('Failed to import');
-            setTimeout(() => setSaveMessage(null), 3000);
-        } finally {
-            setIsImporting(false);
         }
-    }, [setNodes]);
+    }, [screenToFlowPosition, setNodes, setEdges, nodes, deleteEdge]);
 
     // Deploy workflow
     const deployWorkflow = useCallback(async () => {
         if (!currentWorkflow) {
-            setSaveMessage('Save workflow first');
+            setSaveMessage('Save as custom view first');
             setTimeout(() => setSaveMessage(null), 3000);
             return;
         }
@@ -369,7 +559,6 @@ const WorkflowCanvas = () => {
         setDeploymentResults(null);
 
         try {
-            // First save the workflow to ensure it's up to date
             const viewport = getViewport();
             const serializableNodes = nodes.map(({ id, type, position, data }) => ({
                 id, type, position,
@@ -387,18 +576,15 @@ const WorkflowCanvas = () => {
                 viewport
             });
 
-            // Now deploy
             const result = await api.deployWorkflow(currentWorkflow.id);
             setDeploymentResults(result);
 
-            // Update nodes with deployed resource IDs
             if (result.workflow && result.workflow.nodes) {
                 const updatedNodes = result.workflow.nodes.map((node) => ({
                     ...node,
                     data: { ...node.data }
                 }));
 
-                // Update node ID counter
                 const maxNodeId = updatedNodes.reduce((max, node) => {
                     const numId = parseInt(node.id.replace('node_', ''), 10);
                     return isNaN(numId) ? max : Math.max(max, numId);
@@ -424,14 +610,11 @@ const WorkflowCanvas = () => {
 
     const onConnect = useCallback(
         (params) => {
-            // Double-check validation on connect
             if (checkValidConnection(params, nodes)) {
-                // Find source and target node types
                 const sourceNode = nodes.find(n => n.id === params.source);
                 const targetNode = nodes.find(n => n.id === params.target);
                 const connectionType = getConnectionType(sourceNode?.type, targetNode?.type);
 
-                // Create edge with metadata
                 const newEdge = {
                     ...params,
                     type: 'connection',
@@ -455,7 +638,6 @@ const WorkflowCanvas = () => {
     }, []);
 
     const onConnectEnd = useCallback((event, connectionState) => {
-        // Show error if connection was attempted but failed validation
         if (connectionState.isValid === false && connectionState.toNode) {
             const error = getConnectionError({
                 source: connectionState.fromNode?.id,
@@ -465,7 +647,6 @@ const WorkflowCanvas = () => {
             }, nodes);
             if (error) {
                 setConnectionError(error);
-                // Clear error after 3 seconds
                 setTimeout(() => setConnectionError(null), 3000);
             }
         }
@@ -503,14 +684,12 @@ const WorkflowCanvas = () => {
         setSelectedEdge(null);
     }, []);
 
-    // Handle Delete key press for selected edge
     const handleKeyDown = useCallback((event) => {
         if ((event.key === 'Delete' || event.key === 'Backspace') && selectedEdge) {
             deleteEdge(selectedEdge.id);
         }
     }, [selectedEdge, deleteEdge]);
 
-    // Attach keydown listener
     React.useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
         return () => document.removeEventListener('keydown', handleKeyDown);
@@ -531,7 +710,6 @@ const WorkflowCanvas = () => {
             )
         );
 
-        // Update selectedNode reference to reflect changes
         setSelectedNode((prev) => prev ? { ...prev, data: newData } : null);
     }, [selectedNode, setNodes]);
 
@@ -567,62 +745,59 @@ const WorkflowCanvas = () => {
                         className="workflow-name-input"
                         value={workflowName}
                         onChange={(e) => setWorkflowName(e.target.value)}
-                        placeholder="Workflow name..."
+                        placeholder="View name..."
                     />
                     {currentWorkflow && (
-                        <span className="workflow-id-badge">ID: {currentWorkflow.id}</span>
+                        <span className="workflow-id-badge">Saved View</span>
                     )}
                 </div>
                 <div className="toolbar-right">
                     <button
+                        className="toolbar-btn toolbar-btn-overview"
+                        onClick={loadServerOverview}
+                        disabled={isLoading}
+                        title="Load full server infrastructure"
+                    >
+                        <Eye size={16} />
+                        <span>{isLoading ? 'Loading...' : 'Server Overview'}</span>
+                    </button>
+                    <button
                         className="toolbar-btn"
                         onClick={newWorkflow}
-                        title="New Workflow"
+                        title="New custom view"
                     >
                         <Plus size={16} />
-                        <span>New</span>
+                        <span>New View</span>
                     </button>
                     <button
                         className="toolbar-btn"
                         onClick={() => setShowLoadModal(true)}
-                        title="Load Workflow"
+                        title="Load saved view"
                     >
                         <FolderOpen size={16} />
                         <span>Load</span>
                     </button>
                     <button
-                        className="toolbar-btn"
-                        onClick={importInfrastructure}
-                        disabled={isImporting}
-                        title="Import existing apps and domains as nodes"
-                    >
-                        <Download size={16} />
-                        <span>{isImporting ? 'Importing...' : 'Import'}</span>
-                    </button>
-                    <button
                         className="toolbar-btn toolbar-btn-primary"
                         onClick={saveWorkflow}
                         disabled={isSaving}
-                        title="Save Workflow"
+                        title="Save current view"
                     >
                         <Save size={16} />
-                        <span>{isSaving ? 'Saving...' : 'Save'}</span>
-                    </button>
-                    <button
-                        className="toolbar-btn toolbar-btn-deploy"
-                        onClick={deployWorkflow}
-                        disabled={isDeploying || !currentWorkflow || nodes.length === 0}
-                        title={!currentWorkflow ? 'Save workflow first' : 'Deploy infrastructure'}
-                    >
-                        <Play size={16} />
-                        <span>{isDeploying ? 'Deploying...' : 'Deploy'}</span>
+                        <span>{isSaving ? 'Saving...' : 'Save View'}</span>
                     </button>
                 </div>
                 {saveMessage && (
                     <div className="toolbar-message">{saveMessage}</div>
                 )}
             </div>
-            <NodePalette onAddNode={addNode} />
+            <NodePalette
+                onAddNode={addNode}
+                templates={templates}
+                onAddFromTemplate={addFromTemplate}
+                existingApps={existingAppsNotInView}
+                onAddExistingApp={addExistingApp}
+            />
             {connectionError && (
                 <div className="connection-error-toast">
                     {connectionError}

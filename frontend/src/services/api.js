@@ -340,6 +340,10 @@ class ApiService {
         return this.request('/system/metrics');
     }
 
+    async getSystemInfo() {
+        return this.request('/system/info');
+    }
+
     async getServerTime() {
         return this.request('/system/time');
     }

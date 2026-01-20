@@ -46,15 +46,20 @@ class SystemService:
         memory = psutil.virtual_memory()
         swap = psutil.swap_memory()
 
+        # Get cached memory (available on Linux)
+        cached = getattr(memory, 'cached', 0)
+
         return {
             'ram': {
                 'total': memory.total,
                 'available': memory.available,
                 'used': memory.used,
+                'cached': cached,
                 'percent': memory.percent,
                 'total_human': cls.get_size(memory.total),
                 'available_human': cls.get_size(memory.available),
-                'used_human': cls.get_size(memory.used)
+                'used_human': cls.get_size(memory.used),
+                'cached_human': cls.get_size(cached)
             },
             'swap': {
                 'total': swap.total,
@@ -131,7 +136,19 @@ class SystemService:
                 })
             interfaces.append(interface)
 
+        # Wrap I/O stats in 'io' object for frontend compatibility
+        io_stats = {
+            'bytes_sent': net_io.bytes_sent,
+            'bytes_recv': net_io.bytes_recv,
+            'packets_sent': net_io.packets_sent,
+            'packets_recv': net_io.packets_recv,
+            'bytes_sent_human': cls.get_size(net_io.bytes_sent),
+            'bytes_recv_human': cls.get_size(net_io.bytes_recv),
+        }
+
         return {
+            'io': io_stats,
+            # Keep flat values for backwards compatibility
             'bytes_sent': net_io.bytes_sent,
             'bytes_recv': net_io.bytes_recv,
             'packets_sent': net_io.packets_sent,
@@ -161,6 +178,25 @@ class SystemService:
         boot_time = datetime.fromtimestamp(psutil.boot_time())
         uptime = datetime.now() - boot_time
 
+        # Get primary IP address
+        ip_address = cls._get_primary_ip()
+
+        # Get kernel version (on Linux, platform.release() gives kernel version)
+        kernel = platform.release()
+
+        # Get CPU model info
+        cpu_model = platform.processor() or 'Unknown'
+        # Try to get more detailed CPU info on Linux
+        if platform.system() == 'Linux':
+            try:
+                with open('/proc/cpuinfo', 'r') as f:
+                    for line in f:
+                        if line.startswith('model name'):
+                            cpu_model = line.split(':')[1].strip()
+                            break
+            except Exception:
+                pass
+
         return {
             'platform': platform.system(),
             'platform_release': platform.release(),
@@ -171,8 +207,54 @@ class SystemService:
             'python_version': platform.python_version(),
             'boot_time': boot_time.isoformat(),
             'uptime_seconds': int(uptime.total_seconds()),
-            'uptime_human': cls._format_uptime(uptime)
+            'uptime_human': cls._format_uptime(uptime),
+            # Additional fields for dashboard
+            'ip_address': ip_address,
+            'kernel': kernel,
+            'cpu': {
+                'model': cpu_model,
+                'architecture': platform.machine()
+            }
         }
+
+    @staticmethod
+    def _get_primary_ip():
+        """Get the primary IP address of the server."""
+        import socket
+        try:
+            # Create a socket to determine the primary IP
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.settimeout(0)
+            # Connect to a public address (doesn't actually send data)
+            s.connect(('8.8.8.8', 80))
+            ip = s.getsockname()[0]
+            s.close()
+            return ip
+        except Exception:
+            pass
+
+        # Fallback: try to get from network interfaces
+        try:
+            hostname = socket.gethostname()
+            ip = socket.gethostbyname(hostname)
+            if ip != '127.0.0.1':
+                return ip
+        except Exception:
+            pass
+
+        # Last resort: check network interfaces via psutil
+        try:
+            net_if = psutil.net_if_addrs()
+            for name, addrs in net_if.items():
+                if name == 'lo':
+                    continue
+                for addr in addrs:
+                    if addr.family == socket.AF_INET and not addr.address.startswith('127.'):
+                        return addr.address
+        except Exception:
+            pass
+
+        return 'Unknown'
 
     @staticmethod
     def _format_uptime(delta):

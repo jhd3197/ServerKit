@@ -1578,3 +1578,266 @@
         border-radius: 50%;
     }
 }
+
+// ============================================
+// REAL APP NODE INDICATOR
+// ============================================
+
+.workflow-node.is-real {
+    border-color: @accent-primary;
+
+    .workflow-node-header {
+        background: fade(@accent-primary, 15%);
+    }
+}
+
+// ============================================
+// PALETTE SUBMENU
+// ============================================
+
+.palette-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: @space-1;
+    margin-left: @space-3;
+    margin-bottom: @space-2;
+    padding-left: @space-2;
+    border-left: 2px solid @border-subtle;
+}
+
+.palette-subitem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: @space-2;
+    padding: @space-2;
+    background: @bg-body;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-sm;
+    color: @text-secondary;
+    font-size: @font-size-xs;
+    cursor: pointer;
+    transition: all @transition-fast;
+
+    &:hover {
+        background: @bg-hover;
+        border-color: @accent-primary;
+        color: @text-primary;
+    }
+
+    .status-badge {
+        font-size: 10px;
+        padding: 1px 6px;
+    }
+}
+
+.palette-empty {
+    padding: @space-2;
+    color: @text-tertiary;
+    font-size: @font-size-xs;
+    font-style: italic;
+}
+
+.palette-section-info {
+    margin-top: auto;
+    padding-top: @space-3;
+    border-top: 1px solid @border-subtle;
+}
+
+.palette-hint {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+    line-height: 1.4;
+}
+
+// ============================================
+// DOMAIN PILLS IN NODE
+// ============================================
+
+.node-domains {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-1;
+    margin-top: @space-2;
+}
+
+.node-domain-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px @space-2;
+    background: fade(@success, 15%);
+    border: 1px solid fade(@success, 30%);
+    border-radius: @radius-full;
+    font-size: 10px;
+    color: @success;
+
+    svg {
+        opacity: 0.7;
+    }
+}
+
+.node-domain-more {
+    font-size: 10px;
+    color: @text-tertiary;
+    padding: 2px @space-1;
+}
+
+// ============================================
+// PRIVATE URL IN NODE
+// ============================================
+
+@color-info: #22d3ee;
+
+.node-detail-private-url {
+    display: flex;
+    align-items: center;
+    gap: @space-1;
+    margin-top: @space-2;
+    padding: @space-1 @space-2;
+    background: fade(@color-info, 10%);
+    border-radius: @radius-sm;
+
+    svg {
+        color: @color-info;
+        flex-shrink: 0;
+    }
+
+    .node-detail-value {
+        font-size: 10px;
+        color: @color-info;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+// ============================================
+// SERVER OVERVIEW BUTTON
+// ============================================
+
+.toolbar-btn-overview {
+    background: fade(@color-info, 15%) !important;
+    border-color: fade(@color-info, 30%) !important;
+    color: @color-info !important;
+
+    &:hover:not(:disabled) {
+        background: fade(@color-info, 25%) !important;
+        border-color: @color-info !important;
+    }
+}
+
+// ============================================
+// CONFIG PANEL ENHANCEMENTS
+// ============================================
+
+.form-value {
+    padding: @space-2 @space-3;
+    background: @bg-body;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    font-size: @font-size-sm;
+    color: @text-primary;
+
+    &.status-badge {
+        display: inline-flex;
+        padding: @space-1 @space-2;
+        border-radius: @radius-sm;
+        font-size: @font-size-xs;
+        font-weight: @font-weight-medium;
+        text-transform: capitalize;
+    }
+
+    &.status-running {
+        background: @success-bg;
+        border-color: @success-border;
+        color: @success;
+    }
+
+    &.status-stopped {
+        background: @bg-body;
+        border-color: @border-subtle;
+        color: @text-tertiary;
+    }
+
+    &.status-error {
+        background: @danger-bg;
+        border-color: @danger-border;
+        color: @danger;
+    }
+}
+
+.form-value-link {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    cursor: pointer;
+    color: @accent-primary;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    svg:last-child {
+        opacity: 0.5;
+        margin-left: auto;
+    }
+}
+
+.form-domains {
+    display: flex;
+    flex-direction: column;
+    gap: @space-2;
+}
+
+.form-domain-item {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2;
+    background: @bg-body;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    font-size: @font-size-sm;
+
+    svg {
+        color: @success;
+    }
+
+    .ssl-badge {
+        margin-left: auto;
+        padding: 2px 6px;
+        background: @success-bg;
+        border-radius: @radius-sm;
+        font-size: 10px;
+        font-weight: @font-weight-medium;
+        color: @success;
+    }
+}
+
+.action-buttons {
+    display: flex;
+    gap: @space-2;
+    flex-wrap: wrap;
+
+    .btn {
+        flex: 1;
+        min-width: 70px;
+    }
+}
+
+.action-message {
+    margin-top: @space-2;
+    padding: @space-2;
+    background: @success-bg;
+    border: 1px solid @success-border;
+    border-radius: @radius-sm;
+    font-size: @font-size-xs;
+    color: @success;
+    text-align: center;
+}
+
+.btn-block {
+    width: 100%;
+    justify-content: center;
+}

@@ -1,15 +1,177 @@
 import React, { useState } from 'react';
-import { Server, Plus, Trash2 } from 'lucide-react';
+import { Server, Globe, Link, ExternalLink, Play, Square, RotateCw } from 'lucide-react';
 import ConfigPanel from '../ConfigPanel';
+import api from '../../../services/api';
 
 const DockerAppConfigPanel = ({ node, onChange, onClose }) => {
     const data = node?.data || {};
+    const isReal = data.isReal || data.appId;
 
-    const [ports, setPorts] = useState(data.ports || []);
+    const [isActioning, setIsActioning] = useState(false);
+    const [actionMessage, setActionMessage] = useState(null);
 
     const handleChange = (field, value) => {
         onChange({ ...data, [field]: value });
     };
+
+    // Actions for real apps
+    const handleAction = async (action) => {
+        if (!data.appId) return;
+
+        setIsActioning(true);
+        setActionMessage(null);
+
+        try {
+            let result;
+            switch (action) {
+                case 'start':
+                    result = await api.startApp(data.appId);
+                    handleChange('status', 'running');
+                    break;
+                case 'stop':
+                    result = await api.stopApp(data.appId);
+                    handleChange('status', 'stopped');
+                    break;
+                case 'restart':
+                    result = await api.restartApp(data.appId);
+                    handleChange('status', 'running');
+                    break;
+                default:
+                    return;
+            }
+            setActionMessage(`${action} successful`);
+        } catch (error) {
+            setActionMessage(`Failed to ${action}`);
+        } finally {
+            setIsActioning(false);
+            setTimeout(() => setActionMessage(null), 3000);
+        }
+    };
+
+    const openPrivateUrl = () => {
+        if (data.privateUrl) {
+            window.open(data.privateUrl, '_blank');
+        }
+    };
+
+    const openAppDetails = () => {
+        if (data.appId) {
+            window.location.href = `/applications/${data.appId}`;
+        }
+    };
+
+    // Real app panel - shows info and actions
+    if (isReal) {
+        return (
+            <ConfigPanel
+                isOpen={!!node}
+                title="Application"
+                icon={Server}
+                headerColor="#2496ed"
+                onClose={onClose}
+            >
+                <div className="form-group">
+                    <label>Name</label>
+                    <div className="form-value">{data.name || 'Unknown'}</div>
+                </div>
+
+                <div className="form-group">
+                    <label>Status</label>
+                    <div className={`form-value status-badge status-${data.status}`}>
+                        {data.status || 'unknown'}
+                    </div>
+                </div>
+
+                {data.template && (
+                    <div className="form-group">
+                        <label>Template</label>
+                        <div className="form-value">{data.template}</div>
+                    </div>
+                )}
+
+                {data.port && (
+                    <div className="form-group">
+                        <label>Port</label>
+                        <div className="form-value">{data.port}</div>
+                    </div>
+                )}
+
+                {data.privateUrl && (
+                    <div className="form-group">
+                        <label>Private URL</label>
+                        <div className="form-value form-value-link" onClick={openPrivateUrl}>
+                            <Link size={14} />
+                            {data.privateUrl}
+                            <ExternalLink size={12} />
+                        </div>
+                    </div>
+                )}
+
+                {data.domains && data.domains.length > 0 && (
+                    <div className="form-group">
+                        <label>Connected Domains</label>
+                        <div className="form-domains">
+                            {data.domains.map((domain, idx) => (
+                                <div key={idx} className="form-domain-item">
+                                    <Globe size={14} />
+                                    <span>{domain.name || domain}</span>
+                                    {domain.ssl_enabled && (
+                                        <span className="ssl-badge">SSL</span>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                <div className="form-group">
+                    <label>Actions</label>
+                    <div className="action-buttons">
+                        <button
+                            className="btn btn-sm btn-success"
+                            onClick={() => handleAction('start')}
+                            disabled={isActioning || data.status === 'running'}
+                        >
+                            <Play size={14} />
+                            Start
+                        </button>
+                        <button
+                            className="btn btn-sm btn-warning"
+                            onClick={() => handleAction('stop')}
+                            disabled={isActioning || data.status === 'stopped'}
+                        >
+                            <Square size={14} />
+                            Stop
+                        </button>
+                        <button
+                            className="btn btn-sm btn-secondary"
+                            onClick={() => handleAction('restart')}
+                            disabled={isActioning}
+                        >
+                            <RotateCw size={14} />
+                            Restart
+                        </button>
+                    </div>
+                    {actionMessage && (
+                        <div className="action-message">{actionMessage}</div>
+                    )}
+                </div>
+
+                <div className="form-group">
+                    <button
+                        className="btn btn-primary btn-block"
+                        onClick={openAppDetails}
+                    >
+                        <ExternalLink size={14} />
+                        Open App Details
+                    </button>
+                </div>
+            </ConfigPanel>
+        );
+    }
+
+    // Legacy panel for non-real apps (manual creation)
+    const [ports, setPorts] = useState(data.ports || []);
 
     const handleAddPort = () => {
         const newPorts = [...ports, ''];
@@ -87,7 +249,7 @@ const DockerAppConfigPanel = ({ node, onChange, onClose }) => {
                                 className="btn btn-icon btn-danger-ghost"
                                 onClick={() => handleRemovePort(index)}
                             >
-                                <Trash2 size={14} />
+                                ×
                             </button>
                         </div>
                     ))}
@@ -96,8 +258,7 @@ const DockerAppConfigPanel = ({ node, onChange, onClose }) => {
                         className="btn btn-secondary btn-sm"
                         onClick={handleAddPort}
                     >
-                        <Plus size={14} />
-                        Add Port
+                        + Add Port
                     </button>
                 </div>
                 <span className="form-hint">Format: host_port:container_port</span>

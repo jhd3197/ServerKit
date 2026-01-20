@@ -1,54 +1,92 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Cpu, MemoryStick, HardDrive, Activity,
     Plus, RefreshCw, Server, Zap,
-    RotateCcw, Database, Layers, Container, Globe, Code
+    RotateCcw, Database, Layers, Container, Globe, Code, Settings
 } from 'lucide-react';
 import api from '../services/api';
 import { useMetrics } from '../hooks/useMetrics';
 import MetricsGraph from '../components/MetricsGraph';
 
+// Refresh interval options in seconds
+const REFRESH_OPTIONS = [
+    { label: 'Off', value: 0 },
+    { label: '5s', value: 5 },
+    { label: '10s', value: 10 },
+    { label: '30s', value: 30 },
+    { label: '1m', value: 60 },
+];
+
 const Dashboard = () => {
     const navigate = useNavigate();
-    const { metrics, loading: metricsLoading, connected } = useMetrics(true);
+    const { metrics, loading: metricsLoading, connected, refresh: refreshMetrics } = useMetrics(true);
     const [apps, setApps] = useState([]);
     const [services, setServices] = useState([]);
     const [dbStatus, setDbStatus] = useState(null);
-    const [uptime, setUptime] = useState(null);
-    const [serverTime, setServerTime] = useState(null);
     const [systemInfo, setSystemInfo] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [refreshInterval, setRefreshInterval] = useState(() => {
+        const saved = localStorage.getItem('dashboard_refresh_interval');
+        return saved ? parseInt(saved, 10) : 10; // Default 10 seconds
+    });
+    const [lastUpdate, setLastUpdate] = useState(Date.now());
 
+    // Load initial data
     useEffect(() => {
         loadData();
     }, []);
 
+    // Polling fallback when WebSocket is not connected
     useEffect(() => {
-        if (metrics?.time) {
-            setServerTime(metrics.time);
+        if (refreshInterval > 0 && !connected) {
+            const interval = setInterval(() => {
+                refreshMetrics();
+                setLastUpdate(Date.now());
+            }, refreshInterval * 1000);
+            return () => clearInterval(interval);
+        }
+    }, [refreshInterval, connected, refreshMetrics]);
+
+    // Update lastUpdate when metrics change (from WebSocket)
+    useEffect(() => {
+        if (metrics) {
+            setLastUpdate(Date.now());
         }
     }, [metrics]);
 
+    // Save refresh interval preference
+    const handleRefreshIntervalChange = useCallback((value) => {
+        setRefreshInterval(value);
+        localStorage.setItem('dashboard_refresh_interval', value.toString());
+    }, []);
+
     async function loadData() {
         try {
-            const [appsData, servicesData, dbData, uptimeData, sysInfoData] = await Promise.all([
+            const [appsData, servicesData, dbData, sysInfoData] = await Promise.all([
                 api.getApps(),
                 api.getServicesStatus().catch(() => ({ services: [] })),
-                api.getDatabasesStatus().catch(() => null),
-                api.getCurrentUptime().catch(() => null),
+                api.getDatabaseStatus().catch(() => null),
                 api.getSystemInfo().catch(() => null)
             ]);
             setApps(appsData.apps || []);
             setServices(servicesData.services || []);
             setDbStatus(dbData);
-            setUptime(uptimeData);
             setSystemInfo(sysInfoData);
         } catch (err) {
             console.error('Failed to load data:', err);
         } finally {
             setLoading(false);
         }
+    }
+
+    // Helper to format uptime from seconds
+    function formatUptime(seconds) {
+        if (!seconds) return { days: 0, hours: 0, minutes: 0 };
+        const days = Math.floor(seconds / 86400);
+        const hours = Math.floor((seconds % 86400) / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        return { days, hours, minutes };
     }
 
     function getStatusClass(status) {
@@ -71,10 +109,13 @@ const Dashboard = () => {
         }
     }
 
-    const uptimeFormatted = uptime?.uptime_formatted || { days: 0, hours: 0, minutes: 0, seconds: 0 };
-    const hostname = systemInfo?.hostname || 'server';
-    const kernelVersion = systemInfo?.kernel || '-';
-    const ipAddress = systemInfo?.ip_address || '-';
+    // Get uptime from metrics.system (updated via WebSocket/polling)
+    const uptimeFormatted = formatUptime(metrics?.system?.uptime_seconds);
+    // Fallback to systemInfo for static data, prefer metrics.system for live data
+    const hostname = metrics?.system?.hostname || systemInfo?.hostname || 'server';
+    const kernelVersion = metrics?.system?.kernel || systemInfo?.kernel || '-';
+    const ipAddress = metrics?.system?.ip_address || systemInfo?.ip_address || '-';
+    const serverTime = metrics?.time;
 
     if (loading && metricsLoading) {
         return <div className="loading">Loading dashboard...</div>;
@@ -86,7 +127,7 @@ const Dashboard = () => {
             <div className="top-bar">
                 <div className="server-identity">
                     <h1>
-                        <span className="status-dot-live"></span>
+                        <span className={`status-dot-live ${connected ? '' : 'disconnected'}`}></span>
                         {hostname}
                     </h1>
                     <div className="server-details">
@@ -102,6 +143,28 @@ const Dashboard = () => {
                     <div className="clock-zone">
                         ZONE: {serverTime?.timezone_id || 'UTC'}
                     </div>
+                </div>
+                <div className="refresh-control">
+                    <span className={`connection-status ${connected ? 'live' : 'polling'}`}>
+                        {connected ? '● LIVE' : '○ POLL'}
+                    </span>
+                    <select
+                        value={refreshInterval}
+                        onChange={(e) => handleRefreshIntervalChange(parseInt(e.target.value, 10))}
+                        className="refresh-select"
+                        title="Auto-refresh interval"
+                    >
+                        {REFRESH_OPTIONS.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
+                    </select>
+                    <button
+                        className="btn-refresh"
+                        onClick={() => { refreshMetrics(); loadData(); }}
+                        title="Refresh now"
+                    >
+                        <RefreshCw size={14} />
+                    </button>
                 </div>
             </div>
 

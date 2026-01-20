@@ -130,6 +130,19 @@ def get_metrics():
     return jsonify(metrics), 200
 
 
+@system_bp.route('/info', methods=['GET'])
+@jwt_required()
+def get_system_info():
+    """Get system information (hostname, IP, kernel, CPU info)."""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+
+    if user.role != 'admin':
+        return jsonify({'error': 'Admin access required'}), 403
+
+    return jsonify(SystemService.get_system_info()), 200
+
+
 @system_bp.route('/cpu', methods=['GET'])
 @jwt_required()
 def get_cpu_metrics():
