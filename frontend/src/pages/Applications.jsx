@@ -1,118 +1,112 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import {
-    Plus, Package, Grid, List, Play, Square, RotateCcw, Settings,
-    Search, X, ChevronDown, Check, Trash2, AlertTriangle, Link2,
-    Globe, Container, Clock, GitBranch
-} from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Plus, X, Container, Globe, Package, FileText, RefreshCw, Square, Play, Settings, Trash2, AlertTriangle } from 'lucide-react';
 import api from '../services/api';
-
-// View mode persistence key
-const VIEW_MODE_KEY = 'serverkit-apps-view-mode';
+import { useToast } from '../contexts/ToastContext';
 
 const Applications = () => {
+    const navigate = useNavigate();
+    const toast = useToast();
     const [apps, setApps] = useState([]);
+    const [appStats, setAppStats] = useState({});
     const [loading, setLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
-    const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
-
-    // View mode from localStorage
-    const [viewMode, setViewMode] = useState(() => {
-        return localStorage.getItem(VIEW_MODE_KEY) || 'list';
+    const [searchTerm, setSearchTerm] = useState('');
+    const [showStopped, setShowStopped] = useState(true);
+    const [selectedApp, setSelectedApp] = useState(null);
+    const [stats, setStats] = useState({
+        total: 0,
+        running: 0,
+        stopped: 0,
+        docker: 0
     });
-
-    // Bulk selection state
-    const [selectedApps, setSelectedApps] = useState(new Set());
-    const [bulkLoading, setBulkLoading] = useState(false);
-
-    // Confirmation modal state
-    const [confirmModal, setConfirmModal] = useState(null);
-
-    // Action in progress tracking
-    const [actionInProgress, setActionInProgress] = useState({});
-
-    // Get filter values from URL params
-    const searchQuery = searchParams.get('search') || '';
-    const sortBy = searchParams.get('sort') || 'name-asc';
-    const envFilter = searchParams.get('environment') || '';
 
     useEffect(() => {
         loadApps();
     }, []);
 
-    // Persist view mode
-    useEffect(() => {
-        localStorage.setItem(VIEW_MODE_KEY, viewMode);
-    }, [viewMode]);
-
     async function loadApps() {
+        setLoading(true);
         try {
             const data = await api.getApps();
-            setApps(data.apps || []);
+            const appList = data.apps || [];
+            setApps(appList);
+
+            // Calculate stats
+            const running = appList.filter(a => a.status === 'running').length;
+            const docker = appList.filter(a => a.app_type === 'docker').length;
+            setStats({
+                total: appList.length,
+                running,
+                stopped: appList.length - running,
+                docker
+            });
+
+            // Load resource stats for running Docker apps (via container stats)
+            const runningDockerApps = appList.filter(a => a.status === 'running' && a.app_type === 'docker');
+            const statsPromises = runningDockerApps.map(async (app) => {
+                try {
+                    // Try to get container stats using app name as container reference
+                    const containersData = await api.getContainers(false).catch(() => ({ containers: [] }));
+                    const appContainer = containersData.containers?.find(c =>
+                        c.name?.includes(app.name) || c.name?.includes(app.id)
+                    );
+                    if (appContainer) {
+                        const statsData = await api.getContainerStats(appContainer.id).catch(() => null);
+                        if (statsData?.stats) {
+                            const cpuStr = statsData.stats.CPUPerc || '0%';
+                            const memStr = statsData.stats.MemPerc || '0%';
+                            return {
+                                id: app.id,
+                                stats: {
+                                    cpu_percent: parseFloat(cpuStr.replace('%', '')) || 0,
+                                    memory_percent: parseFloat(memStr.replace('%', '')) || 0
+                                }
+                            };
+                        }
+                    }
+                    return { id: app.id, stats: null };
+                } catch {
+                    return { id: app.id, stats: null };
+                }
+            });
+
+            const statsResults = await Promise.all(statsPromises);
+            const statsMap = {};
+            statsResults.forEach(({ id, stats }) => {
+                if (stats) statsMap[id] = stats;
+            });
+            setAppStats(statsMap);
         } catch (err) {
             console.error('Failed to load apps:', err);
+            toast.error('Failed to load applications');
         } finally {
             setLoading(false);
         }
     }
 
-    function updateFilters(updates) {
-        const newParams = new URLSearchParams(searchParams);
-        Object.entries(updates).forEach(([key, value]) => {
-            if (value) {
-                newParams.set(key, value);
-            } else {
-                newParams.delete(key);
+    async function handleAction(appId, action) {
+        try {
+            if (action === 'start') {
+                await api.startApp(appId);
+                toast.success('Application started');
+            } else if (action === 'stop') {
+                await api.stopApp(appId);
+                toast.success('Application stopped');
+            } else if (action === 'restart') {
+                await api.restartApp(appId);
+                toast.success('Application restarted');
+            } else if (action === 'delete') {
+                if (!confirm('Delete this application? This action cannot be undone.')) return;
+                await api.deleteApp(appId);
+                toast.success('Application deleted');
             }
-        });
-        setSearchParams(newParams, { replace: true });
+            loadApps();
+        } catch (err) {
+            console.error(`Failed to ${action} app:`, err);
+            toast.error(err.message || `Failed to ${action} application`);
+        }
     }
-
-    // Sort and filter apps
-    const filteredApps = useMemo(() => {
-        let result = [...apps];
-
-        // Filter by search
-        if (searchQuery) {
-            const query = searchQuery.toLowerCase();
-            result = result.filter(app =>
-                app.name.toLowerCase().includes(query) ||
-                app.app_type.toLowerCase().includes(query)
-            );
-        }
-
-        // Filter by environment
-        if (envFilter) {
-            result = result.filter(app => app.environment_type === envFilter);
-        }
-
-        // Sort
-        result.sort((a, b) => {
-            switch (sortBy) {
-                case 'name-asc':
-                    return a.name.localeCompare(b.name);
-                case 'name-desc':
-                    return b.name.localeCompare(a.name);
-                case 'status':
-                    // Running first, then stopped, then others
-                    const statusOrder = { running: 0, stopped: 1, error: 2 };
-                    return (statusOrder[a.status] ?? 3) - (statusOrder[b.status] ?? 3);
-                case 'type':
-                    return a.app_type.localeCompare(b.app_type);
-                case 'created':
-                    return new Date(b.created_at || 0) - new Date(a.created_at || 0);
-                case 'environment':
-                    // Group by environment type
-                    const envOrder = { production: 0, development: 1, staging: 2, standalone: 3 };
-                    return (envOrder[a.environment_type] ?? 4) - (envOrder[b.environment_type] ?? 4);
-                default:
-                    return 0;
-            }
-        });
-
-        return result;
-    }, [apps, searchQuery, sortBy, envFilter]);
 
     function getStackColor(type) {
         const colors = {
@@ -126,606 +120,358 @@ const Applications = () => {
         return colors[type] || '#a1a1aa';
     }
 
-    function getStatusClass(status) {
-        switch (status) {
-            case 'running': return 'status-active';
-            case 'stopped': return 'status-stopped';
-            case 'error': return 'status-error';
-            default: return 'status-warning';
-        }
-    }
-
-    async function handleAction(appId, action) {
-        setActionInProgress(prev => ({ ...prev, [appId]: action }));
-        try {
-            if (action === 'start') {
-                await api.startApp(appId);
-            } else if (action === 'stop') {
-                await api.stopApp(appId);
-            } else if (action === 'restart') {
-                await api.restartApp(appId);
-            }
-            await loadApps();
-        } catch (err) {
-            console.error(`Failed to ${action} app:`, err);
-        } finally {
-            setActionInProgress(prev => {
-                const copy = { ...prev };
-                delete copy[appId];
-                return copy;
-            });
-        }
-    }
-
-    // Bulk selection handlers
-    function toggleSelectApp(appId) {
-        setSelectedApps(prev => {
-            const next = new Set(prev);
-            if (next.has(appId)) {
-                next.delete(appId);
-            } else {
-                next.add(appId);
-            }
-            return next;
-        });
-    }
-
-    function toggleSelectAll() {
-        if (selectedApps.size === filteredApps.length) {
-            setSelectedApps(new Set());
-        } else {
-            setSelectedApps(new Set(filteredApps.map(app => app.id)));
-        }
-    }
-
-    async function handleBulkAction(action) {
-        if (selectedApps.size === 0) return;
-
-        if (action === 'delete') {
-            setConfirmModal({
-                title: 'Delete Applications',
-                message: `Are you sure you want to delete ${selectedApps.size} application(s)? This action cannot be undone.`,
-                confirmText: 'Delete',
-                danger: true,
-                onConfirm: async () => {
-                    setBulkLoading(true);
-                    try {
-                        for (const appId of selectedApps) {
-                            await api.deleteApp(appId);
-                        }
-                        setSelectedApps(new Set());
-                        await loadApps();
-                    } catch (err) {
-                        console.error('Bulk delete failed:', err);
-                    } finally {
-                        setBulkLoading(false);
-                        setConfirmModal(null);
-                    }
-                }
-            });
-            return;
-        }
-
-        setBulkLoading(true);
-        try {
-            for (const appId of selectedApps) {
-                if (action === 'start') {
-                    await api.startApp(appId);
-                } else if (action === 'stop') {
-                    await api.stopApp(appId);
-                } else if (action === 'restart') {
-                    await api.restartApp(appId);
-                }
-            }
-            await loadApps();
-        } catch (err) {
-            console.error(`Bulk ${action} failed:`, err);
-        } finally {
-            setBulkLoading(false);
-        }
-    }
-
-    function clearSelection() {
-        setSelectedApps(new Set());
-    }
+    const filteredApps = apps.filter(app => {
+        if (!showStopped && app.status !== 'running') return false;
+        if (!searchTerm) return true;
+        const search = searchTerm.toLowerCase();
+        return app.name?.toLowerCase().includes(search) ||
+               app.app_type?.toLowerCase().includes(search);
+    });
 
     if (loading) {
-        return <div className="loading">Loading applications...</div>;
+        return <div className="docker-loading">Loading applications...</div>;
     }
 
-    const isAllSelected = filteredApps.length > 0 && selectedApps.size === filteredApps.length;
-    const isSomeSelected = selectedApps.size > 0;
-
     return (
-        <div className="applications-page">
-            <header className="top-bar">
-                <div>
-                    <h1>Applications</h1>
-                    <div className="subtitle">Manage your web applications</div>
+        <div className="docker-page-new">
+            <div className="docker-page-header">
+                <div className="docker-page-title">
+                    <h2>Applications</h2>
+                    <div className="docker-page-subtitle">Manage your web applications and services</div>
                 </div>
-                <div className="top-bar-actions">
+                <div className="docker-page-actions">
                     <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
-                        <Plus size={16} />
-                        New Application
+                        <Plus size={16} /> New Application
                     </button>
-                </div>
-            </header>
-
-            {/* Toolbar with search, sort, and view toggle */}
-            <div className="apps-toolbar">
-                <div className="apps-toolbar-left">
-                    {/* Search */}
-                    <div className="apps-search-wrapper">
-                        <Search size={16} className="apps-search-icon" />
-                        <input
-                            type="text"
-                            className="apps-search-input"
-                            placeholder="Search applications..."
-                            value={searchQuery}
-                            onChange={(e) => updateFilters({ search: e.target.value })}
-                        />
-                        {searchQuery && (
-                            <button
-                                className="apps-search-clear"
-                                onClick={() => updateFilters({ search: '' })}
-                            >
-                                <X size={14} />
-                            </button>
-                        )}
-                    </div>
-
-                    {/* Results count */}
-                    <span className="apps-count">
-                        {filteredApps.length} {filteredApps.length === 1 ? 'app' : 'apps'}
-                    </span>
-                </div>
-
-                <div className="apps-toolbar-right">
-                    {/* Sort dropdown */}
-                    {/* Environment filter */}
-                    <div className="apps-sort-wrapper">
-                        <select
-                            className="apps-sort-select"
-                            value={envFilter}
-                            onChange={(e) => updateFilters({ environment: e.target.value })}
-                        >
-                            <option value="">All Environments</option>
-                            <option value="production">Production</option>
-                            <option value="development">Development</option>
-                            <option value="staging">Staging</option>
-                            <option value="standalone">Standalone</option>
-                        </select>
-                        <ChevronDown size={14} className="apps-sort-icon" />
-                    </div>
-
-                    {/* Sort dropdown */}
-                    <div className="apps-sort-wrapper">
-                        <select
-                            className="apps-sort-select"
-                            value={sortBy}
-                            onChange={(e) => updateFilters({ sort: e.target.value })}
-                        >
-                            <option value="name-asc">Name (A-Z)</option>
-                            <option value="name-desc">Name (Z-A)</option>
-                            <option value="status">Status</option>
-                            <option value="type">Type</option>
-                            <option value="environment">Environment</option>
-                            <option value="created">Newest First</option>
-                        </select>
-                        <ChevronDown size={14} className="apps-sort-icon" />
-                    </div>
-
-                    {/* View toggle */}
-                    <div className="apps-view-toggle">
-                        <button
-                            className={`apps-view-btn ${viewMode === 'list' ? 'active' : ''}`}
-                            onClick={() => setViewMode('list')}
-                            title="List view"
-                        >
-                            <List size={16} />
-                        </button>
-                        <button
-                            className={`apps-view-btn ${viewMode === 'grid' ? 'active' : ''}`}
-                            onClick={() => setViewMode('grid')}
-                            title="Grid view"
-                        >
-                            <Grid size={16} />
-                        </button>
-                    </div>
                 </div>
             </div>
 
-            {/* Bulk action bar */}
-            {isSomeSelected && (
-                <div className="apps-bulk-bar">
-                    <div className="apps-bulk-info">
-                        <Check size={16} />
-                        <span>{selectedApps.size} selected</span>
-                        <button className="apps-bulk-clear" onClick={clearSelection}>
-                            Clear
-                        </button>
-                    </div>
-                    <div className="apps-bulk-actions">
-                        <button
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => handleBulkAction('start')}
-                            disabled={bulkLoading}
-                        >
-                            <Play size={14} />
-                            Start
-                        </button>
-                        <button
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => handleBulkAction('stop')}
-                            disabled={bulkLoading}
-                        >
-                            <Square size={14} />
-                            Stop
-                        </button>
-                        <button
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => handleBulkAction('restart')}
-                            disabled={bulkLoading}
-                        >
-                            <RotateCcw size={14} />
-                            Restart
-                        </button>
-                        <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => handleBulkAction('delete')}
-                            disabled={bulkLoading}
-                        >
-                            <Trash2 size={14} />
-                            Delete
-                        </button>
+            <div className="docker-stats-row">
+                <div className="docker-stat-card">
+                    <div className="docker-stat-label">Applications</div>
+                    <div className="docker-stat-value">{stats.total}</div>
+                    <div className="docker-stat-meta">
+                        <span className="docker-stat-running">{stats.running} Running</span>
+                        <span className="docker-stat-stopped">{stats.stopped} Stopped</span>
                     </div>
                 </div>
-            )}
+                <div className="docker-stat-card">
+                    <div className="docker-stat-label">Docker Apps</div>
+                    <div className="docker-stat-value">{stats.docker}</div>
+                    <div className="docker-stat-meta">Container-based</div>
+                </div>
+                <div className="docker-stat-card">
+                    <div className="docker-stat-label">Running</div>
+                    <div className="docker-stat-value">{stats.running}</div>
+                    <div className="docker-stat-meta">Active services</div>
+                </div>
+                <div className="docker-stat-card">
+                    <div className="docker-stat-label">Stopped</div>
+                    <div className="docker-stat-value">{stats.stopped}</div>
+                    <div className="docker-stat-meta">Inactive</div>
+                </div>
+            </div>
 
-            {apps.length === 0 ? (
-                <div className="empty-state">
-                    <Package size={48} strokeWidth={1.5} />
-                    <h3>No applications yet</h3>
-                    <p>Create your first application to get started.</p>
-                    <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
-                        <Plus size={16} />
-                        Create Application
-                    </button>
+            <div className="docker-panel">
+                <div className="docker-panel-header">
+                    <div className="docker-panel-tabs">
+                        <div className="docker-panel-tab active">All Applications</div>
+                    </div>
+                    <div className="docker-panel-actions">
+                        <button className="btn btn-secondary btn-sm" onClick={loadApps}>
+                            <RefreshCw size={14} /> Refresh
+                        </button>
+                    </div>
                 </div>
-            ) : filteredApps.length === 0 ? (
-                <div className="empty-state">
-                    <Search size={48} strokeWidth={1.5} />
-                    <h3>No matching applications</h3>
-                    <p>Try adjusting your search query.</p>
-                    <button className="btn btn-secondary" onClick={() => updateFilters({ search: '' })}>
-                        Clear Search
-                    </button>
-                </div>
-            ) : viewMode === 'list' ? (
-                <div className="apps-list">
-                    {/* List header with select all */}
-                    <div className="apps-list-header">
-                        <label className="apps-checkbox-label">
+
+                <div className="docker-panel-content">
+                    <div className="docker-table-header">
+                        <label className="docker-filter-toggle">
                             <input
                                 type="checkbox"
-                                checked={isAllSelected}
-                                onChange={toggleSelectAll}
+                                checked={showStopped}
+                                onChange={(e) => setShowStopped(e.target.checked)}
                             />
-                            <span className="apps-checkbox-custom" />
+                            Show stopped
                         </label>
-                        <span className="apps-list-header-text">Application</span>
+                        <input
+                            type="text"
+                            className="docker-search"
+                            placeholder="Search apps..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                     </div>
 
-                    {filteredApps.map(app => (
-                        <AppRow
-                            key={app.id}
-                            app={app}
-                            selected={selectedApps.has(app.id)}
-                            onSelect={() => toggleSelectApp(app.id)}
-                            onAction={handleAction}
-                            onManage={() => navigate(`/apps/${app.id}`)}
-                            actionInProgress={actionInProgress[app.id]}
-                            getStackColor={getStackColor}
-                            getStatusClass={getStatusClass}
-                        />
-                    ))}
+                    {filteredApps.length === 0 ? (
+                        <div className="docker-empty">
+                            <h3>No applications</h3>
+                            <p>Create your first application to get started.</p>
+                        </div>
+                    ) : (
+                        <table className="docker-table">
+                            <thead>
+                                <tr>
+                                    <th>Application</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Domain</th>
+                                    <th>Resources</th>
+                                    <th style={{ textAlign: 'right' }}>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredApps.map(app => {
+                                    const stats = appStats[app.id];
+                                    const isRunning = app.status === 'running';
+                                    const cpuPercent = stats?.cpu_percent || 0;
+                                    const memPercent = stats?.memory_percent || 0;
+
+                                    return (
+                                        <tr key={app.id}>
+                                            <td>
+                                                <span className="docker-container-name">{app.name}</span>
+                                                <span className="docker-container-id">ID: {app.id}</span>
+                                            </td>
+                                            <td>
+                                                <span className="docker-image-tag" style={{ borderLeft: `3px solid ${getStackColor(app.app_type)}` }}>
+                                                    {app.app_type === 'docker' && <Container size={12} style={{ marginRight: 4 }} />}
+                                                    {app.app_type.toUpperCase()}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span className={`docker-status-pill ${isRunning ? 'running' : 'exited'}`}>
+                                                    <span className="docker-status-dot" />
+                                                    {isRunning ? 'Running' : 'Stopped'}
+                                                </span>
+                                                {app.port && (
+                                                    <div className="docker-status-detail">Port: {app.port}</div>
+                                                )}
+                                            </td>
+                                            <td>
+                                                <span className={`docker-ports ${!isRunning ? 'faded' : ''}`}>
+                                                    {app.domains && app.domains.length > 0 ? (
+                                                        app.domains.map((d, i) => (
+                                                            <span key={i}>
+                                                                <Globe size={12} style={{ marginRight: 4, verticalAlign: 'middle' }} />
+                                                                {d.name}
+                                                                {i < app.domains.length - 1 && <br />}
+                                                            </span>
+                                                        ))
+                                                    ) : (
+                                                        <span style={{ color: 'var(--text-tertiary)' }}>-</span>
+                                                    )}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div className={!isRunning ? 'faded' : ''}>
+                                                    <ResourceBar
+                                                        label="CPU"
+                                                        value={cpuPercent}
+                                                        color={cpuPercent > 50 ? '#F59E0B' : '#6366F1'}
+                                                    />
+                                                    <ResourceBar
+                                                        label="RAM"
+                                                        value={memPercent}
+                                                        color="#10B981"
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td className="docker-actions-cell">
+                                                <IconAction title="Logs" onClick={() => setSelectedApp(app)}>
+                                                    <LogsIcon />
+                                                </IconAction>
+                                                {isRunning ? (
+                                                    <>
+                                                        <IconAction title="Restart" onClick={() => handleAction(app.id, 'restart')}>
+                                                            <RestartIcon />
+                                                        </IconAction>
+                                                        <IconAction title="Stop" onClick={() => handleAction(app.id, 'stop')} color="#EF4444">
+                                                            <StopIcon />
+                                                        </IconAction>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <IconAction title="Start" onClick={() => handleAction(app.id, 'start')} color="#10B981">
+                                                            <PlayIcon />
+                                                        </IconAction>
+                                                        <IconAction title="Delete" onClick={() => handleAction(app.id, 'delete')} color="#EF4444">
+                                                            <TrashIcon />
+                                                        </IconAction>
+                                                    </>
+                                                )}
+                                                <IconAction title="Manage" onClick={() => navigate(`/apps/${app.id}`)}>
+                                                    <SettingsIcon />
+                                                </IconAction>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    )}
                 </div>
-            ) : (
-                <div className="apps-grid">
-                    {filteredApps.map(app => (
-                        <AppCard
-                            key={app.id}
-                            app={app}
-                            selected={selectedApps.has(app.id)}
-                            onSelect={() => toggleSelectApp(app.id)}
-                            onAction={handleAction}
-                            onManage={() => navigate(`/apps/${app.id}`)}
-                            actionInProgress={actionInProgress[app.id]}
-                            getStackColor={getStackColor}
-                            getStatusClass={getStatusClass}
-                        />
-                    ))}
-                </div>
-            )}
+            </div>
 
             {showCreateModal && (
                 <CreateAppModal onClose={() => setShowCreateModal(false)} />
             )}
 
-            {confirmModal && (
-                <ConfirmModal
-                    {...confirmModal}
-                    onCancel={() => setConfirmModal(null)}
-                    loading={bulkLoading}
+            {selectedApp && (
+                <AppLogsModal
+                    app={selectedApp}
+                    onClose={() => setSelectedApp(null)}
                 />
             )}
         </div>
     );
 };
 
-// Environment badge helper
-const EnvironmentBadge = ({ app }) => {
-    if (!app.environment_type || app.environment_type === 'standalone') {
-        return null;
+// Resource Bar Component
+const ResourceBar = ({ label, value, color }) => {
+    const numValue = parseFloat(value) || 0;
+    return (
+        <div className="docker-res-container">
+            <span className="docker-res-label">{label}</span>
+            <div className="docker-res-track">
+                <div
+                    className="docker-res-fill"
+                    style={{ width: `${Math.min(numValue, 100)}%`, backgroundColor: color }}
+                />
+            </div>
+            <span className="docker-res-value">{numValue.toFixed(0)}%</span>
+        </div>
+    );
+};
+
+// Icon Actions
+const IconAction = ({ title, onClick, color, children, disabled }) => (
+    <button
+        className="docker-icon-action"
+        title={title}
+        onClick={onClick}
+        disabled={disabled}
+        style={color ? { color } : {}}
+    >
+        {children}
+    </button>
+);
+
+// Icons
+const LogsIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+    </svg>
+);
+
+const RestartIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polyline points="23 4 23 10 17 10"/>
+        <polyline points="1 20 1 14 7 14"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+    </svg>
+);
+
+const StopIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <rect x="6" y="6" width="12" height="12"/>
+    </svg>
+);
+
+const PlayIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+    </svg>
+);
+
+const TrashIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+    </svg>
+);
+
+const SettingsIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+);
+
+// App Logs Modal
+const AppLogsModal = ({ app, onClose }) => {
+    const [logs, setLogs] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [logType, setLogType] = useState('access');
+
+    useEffect(() => {
+        loadLogs();
+    }, [app, logType]);
+
+    async function loadLogs() {
+        setLoading(true);
+        try {
+            // For Docker apps, try to get container logs
+            if (app.app_type === 'docker') {
+                const containersData = await api.getContainers(true).catch(() => ({ containers: [] }));
+                const appContainer = containersData.containers?.find(c =>
+                    c.name?.includes(app.name) || c.name?.includes(app.id)
+                );
+                if (appContainer) {
+                    const data = await api.getContainerLogs(appContainer.id, 200);
+                    setLogs(data.logs || 'No logs available');
+                    return;
+                }
+            }
+            // For other apps, use app logs endpoint
+            const data = await api.getAppLogs(app.name, logType, 200);
+            setLogs(data.logs || data.content || 'No logs available');
+        } catch (err) {
+            setLogs('Failed to load logs: ' + (err.message || 'Unknown error'));
+        } finally {
+            setLoading(false);
+        }
     }
 
-    const envLabels = {
-        production: 'PROD',
-        development: 'DEV',
-        staging: 'STAGING'
-    };
-
     return (
-        <span className={`env-badge env-${app.environment_type}`} title={app.has_linked_app ? 'Linked to another app' : ''}>
-            {envLabels[app.environment_type] || app.environment_type.toUpperCase()}
-            {app.has_linked_app && <GitBranch size={10} className="env-linked-icon" />}
-        </span>
-    );
-};
-
-// App Row component for list view
-const AppRow = ({ app, selected, onSelect, onAction, onManage, actionInProgress, getStackColor, getStatusClass }) => {
-    const isTransitioning = !!actionInProgress;
-
-    return (
-        <div className={`app-row ${selected ? 'selected' : ''}`}>
-            <label className="apps-checkbox-label" onClick={e => e.stopPropagation()}>
-                <input
-                    type="checkbox"
-                    checked={selected}
-                    onChange={onSelect}
-                />
-                <span className="apps-checkbox-custom" />
-            </label>
-
-            <div className="app-info">
-                <div className="app-icon" style={{ background: getStackColor(app.app_type) }}>
-                    {app.app_type === 'docker' ? (
-                        <Container size={16} />
-                    ) : (
-                        app.app_type === 'wordpress' ? 'W' : app.app_type.charAt(0).toUpperCase()
-                    )}
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal modal-lg" onClick={e => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h2>Logs: {app.name}</h2>
+                    <button className="modal-close" onClick={onClose}>&times;</button>
                 </div>
-                <div className="app-details">
-                    <h3>{app.name}</h3>
-                    <div className="app-meta">
-                        <span className="app-type-badge">{app.app_type.toUpperCase()}</span>
-                        <EnvironmentBadge app={app} />
-                        {app.php_version && <span>PHP {app.php_version}</span>}
-                        {app.python_version && <span>Python {app.python_version}</span>}
-                        {app.port && (
-                            <span className="app-port">:{app.port}</span>
-                        )}
-                        {app.domains && app.domains.length > 0 && (
-                            <span className="app-domains-info">
-                                <Globe size={12} />
-                                {app.domains.length === 1 ? (
-                                    <a href={`https://${app.domains[0].name}`} target="_blank" rel="noopener noreferrer">
-                                        {app.domains[0].name}
-                                    </a>
-                                ) : (
-                                    <span>{app.domains.length} domains</span>
-                                )}
-                            </span>
-                        )}
-                        {app.private_url_enabled && (
-                            <span className="private-url-indicator" title={`Private URL: /p/${app.private_slug}`}>
-                                <Link2 size={12} />
-                                Private
-                            </span>
-                        )}
-                    </div>
-                </div>
-            </div>
-
-            <div className="app-status">
-                <span className={`status-badge-enhanced ${getStatusClass(app.status)} ${isTransitioning ? 'transitioning' : ''}`}>
-                    <span className="status-dot-animated" />
-                    {isTransitioning ? (
-                        <span className="status-text">{actionInProgress}ing...</span>
-                    ) : (
-                        <span className="status-text">{app.status}</span>
-                    )}
-                </span>
-            </div>
-
-            <div className="app-actions">
-                {app.status === 'running' ? (
-                    <>
-                        <button
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => onAction(app.id, 'restart')}
-                            disabled={isTransitioning}
-                            title="Restart"
-                        >
-                            <RotateCcw size={14} />
-                            <span className="btn-text">Restart</span>
-                        </button>
-                        <button
-                            className="btn btn-secondary btn-sm"
-                            onClick={() => onAction(app.id, 'stop')}
-                            disabled={isTransitioning}
-                            title="Stop"
-                        >
-                            <Square size={14} />
-                            <span className="btn-text">Stop</span>
-                        </button>
-                    </>
-                ) : (
-                    <button
-                        className="btn btn-primary btn-sm"
-                        onClick={() => onAction(app.id, 'start')}
-                        disabled={isTransitioning}
-                        title="Start"
-                    >
-                        <Play size={14} />
-                        <span className="btn-text">Start</span>
-                    </button>
-                )}
-                <button
-                    className="btn btn-secondary btn-sm"
-                    onClick={onManage}
-                    title="Manage"
-                >
-                    <Settings size={14} />
-                    <span className="btn-text">Manage</span>
-                </button>
-            </div>
-        </div>
-    );
-};
-
-// App Card component for grid view
-const AppCard = ({ app, selected, onSelect, onAction, onManage, actionInProgress, getStackColor, getStatusClass }) => {
-    const isTransitioning = !!actionInProgress;
-
-    return (
-        <div className={`app-card ${selected ? 'selected' : ''}`} onClick={onManage}>
-            <label className="apps-checkbox-label app-card-checkbox" onClick={e => e.stopPropagation()}>
-                <input
-                    type="checkbox"
-                    checked={selected}
-                    onChange={onSelect}
-                />
-                <span className="apps-checkbox-custom" />
-            </label>
-
-            <div className="app-card-header">
-                <div className="app-icon" style={{ background: getStackColor(app.app_type) }}>
-                    {app.app_type === 'docker' ? (
-                        <Container size={18} />
-                    ) : (
-                        app.app_type === 'wordpress' ? 'W' : app.app_type.charAt(0).toUpperCase()
-                    )}
-                </div>
-                <span className={`status-badge-enhanced ${getStatusClass(app.status)} ${isTransitioning ? 'transitioning' : ''}`}>
-                    <span className="status-dot-animated" />
-                    {isTransitioning ? `${actionInProgress}ing...` : app.status}
-                </span>
-            </div>
-
-            <div className="app-card-body">
-                <h3>{app.name}</h3>
-                <div className="app-card-meta">
-                    <span className="app-type-badge">{app.app_type.toUpperCase()}</span>
-                    <EnvironmentBadge app={app} />
-                    {app.port && <span className="app-port">:{app.port}</span>}
-                </div>
-
-                <div className="app-card-info">
-                    {app.domains && app.domains.length > 0 && (
-                        <div className="app-card-info-row">
-                            <Globe size={12} />
-                            <span>{app.domains.length} domain{app.domains.length !== 1 ? 's' : ''}</span>
+                <div className="modal-body">
+                    {app.app_type !== 'docker' && (
+                        <div style={{ marginBottom: '1rem' }}>
+                            <select
+                                value={logType}
+                                onChange={(e) => setLogType(e.target.value)}
+                                className="docker-search"
+                                style={{ width: 'auto' }}
+                            >
+                                <option value="access">Access Logs</option>
+                                <option value="error">Error Logs</option>
+                            </select>
                         </div>
                     )}
-                    {app.private_url_enabled && (
-                        <div className="app-card-info-row">
-                            <Link2 size={12} />
-                            <span>Private URL</span>
-                        </div>
-                    )}
-                    {app.has_linked_app && (
-                        <div className="app-card-info-row">
-                            <GitBranch size={12} />
-                            <span>Linked</span>
-                        </div>
-                    )}
-                    {app.container_count && (
-                        <div className="app-card-info-row">
-                            <Container size={12} />
-                            <span>{app.container_count} container{app.container_count !== 1 ? 's' : ''}</span>
-                        </div>
-                    )}
+                    <pre className="log-viewer">{loading ? 'Loading...' : logs}</pre>
                 </div>
-            </div>
-
-            <div className="app-card-actions" onClick={e => e.stopPropagation()}>
-                {app.status === 'running' ? (
-                    <>
-                        <button
-                            className="btn btn-secondary btn-sm btn-icon"
-                            onClick={() => onAction(app.id, 'restart')}
-                            disabled={isTransitioning}
-                            title="Restart"
-                        >
-                            <RotateCcw size={14} />
-                        </button>
-                        <button
-                            className="btn btn-secondary btn-sm btn-icon"
-                            onClick={() => onAction(app.id, 'stop')}
-                            disabled={isTransitioning}
-                            title="Stop"
-                        >
-                            <Square size={14} />
-                        </button>
-                    </>
-                ) : (
-                    <button
-                        className="btn btn-primary btn-sm btn-icon"
-                        onClick={() => onAction(app.id, 'start')}
-                        disabled={isTransitioning}
-                        title="Start"
-                    >
-                        <Play size={14} />
-                    </button>
-                )}
-            </div>
-        </div>
-    );
-};
-
-// Confirmation Modal component
-const ConfirmModal = ({ title, message, confirmText, danger, onConfirm, onCancel, loading }) => {
-    return (
-        <div className="modal-overlay" onClick={onCancel}>
-            <div className="modal confirm-modal" onClick={e => e.stopPropagation()}>
-                <div className="confirm-modal-header">
-                    {danger && <AlertTriangle size={24} className="confirm-icon-danger" />}
-                    <h2>{title}</h2>
-                </div>
-                <p className="confirm-modal-message">{message}</p>
                 <div className="modal-actions">
-                    <button className="btn btn-secondary" onClick={onCancel} disabled={loading}>
-                        Cancel
-                    </button>
-                    <button
-                        className={`btn ${danger ? 'btn-danger' : 'btn-primary'}`}
-                        onClick={onConfirm}
-                        disabled={loading}
-                    >
-                        {loading ? 'Processing...' : confirmText}
-                    </button>
+                    <button className="btn btn-secondary" onClick={loadLogs}>Refresh</button>
+                    <button className="btn btn-primary" onClick={onClose}>Close</button>
                 </div>
             </div>
         </div>
     );
 };
 
+// Create App Modal
 const CreateAppModal = ({ onClose }) => {
     const navigate = useNavigate();
 
-    // Popular Docker templates to show
     const templates = [
         { id: 'wordpress', name: 'WordPress', icon: 'W', color: '#21759b', description: 'Full WordPress installation with database' },
         { id: 'nextcloud', name: 'Nextcloud', icon: 'N', color: '#0082c9', description: 'Self-hosted cloud storage platform' },
