@@ -60,6 +60,18 @@ fi
 echo ""
 print_info "Installing system dependencies..."
 
+# Configure needrestart for non-interactive mode (Ubuntu 22.04+)
+# This prevents the "Which services should be restarted?" dialog
+# and avoids dpkg lock issues during automated installs
+export NEEDRESTART_MODE=a
+export DEBIAN_FRONTEND=noninteractive
+
+# Also configure needrestart.conf if it exists for future apt operations
+if [ -f /etc/needrestart/needrestart.conf ]; then
+    # Set needrestart to auto-restart mode
+    sed -i "s/#\$nrconf{restart} = 'i';/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf 2>/dev/null || true
+fi
+
 # Update package list
 apt-get update
 
