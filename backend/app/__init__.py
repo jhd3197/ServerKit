@@ -131,6 +131,10 @@ def create_app(config_name=None):
     from app.api.firewall import firewall_bp
     app.register_blueprint(firewall_bp, url_prefix='/api/v1/firewall')
 
+    # Register blueprints - Git Server
+    from app.api.git import git_bp
+    app.register_blueprint(git_bp, url_prefix='/api/v1/git')
+
     # Register blueprints - Security (ClamAV, File Integrity, etc.)
     from app.api.security import security_bp
     app.register_blueprint(security_bp, url_prefix='/api/v1/security')

@@ -99,6 +99,14 @@ const Sidebar = () => {
                         </svg>
                         Firewall
                     </NavLink>
+                    <NavLink to="/git" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="18" cy="18" r="3"/>
+                            <circle cx="6" cy="6" r="3"/>
+                            <path d="M6 21V9a9 9 0 0 0 9 9"/>
+                        </svg>
+                        Git
+                    </NavLink>
                 </nav>
 
                 <div className="menu-label">Operations</div>

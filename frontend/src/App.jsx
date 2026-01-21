@@ -20,6 +20,7 @@ import Settings from './pages/Settings';
 import FileManager from './pages/FileManager';
 import FTPServer from './pages/FTPServer';
 import Firewall from './pages/Firewall';
+import Git from './pages/Git';
 import CronJobs from './pages/CronJobs';
 import Security from './pages/Security';
 import Templates from './pages/Templates';
@@ -107,6 +108,7 @@ function AppRoutes() {
                 <Route path="ssl" element={<div className="page">SSL Certificates</div>} />
                 <Route path="docker" element={<Docker />} />
                 <Route path="firewall" element={<Firewall />} />
+                <Route path="git" element={<Git />} />
                 <Route path="files" element={<FileManager />} />
                 <Route path="ftp" element={<FTPServer />} />
                 <Route path="monitoring" element={<Monitoring />} />

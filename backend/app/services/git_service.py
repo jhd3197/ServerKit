@@ -3,6 +3,7 @@ import subprocess
 import json
 import hmac
 import hashlib
+import secrets
 from datetime import datetime
 from typing import Dict, List, Optional
 from pathlib import Path
@@ -574,3 +575,251 @@ class GitService:
             pass
 
         return logs
+
+    # ========================================
+    # GITEA SERVER MANAGEMENT
+    # ========================================
+
+    GITEA_APP_NAME = 'serverkit-gitea'
+    GITEA_CONFIG_FILE = os.path.join(CONFIG_DIR, 'gitea.json')
+
+    @classmethod
+    def get_gitea_status(cls) -> Dict:
+        """Check if Gitea is installed and running."""
+        from app.models import Application
+
+        app = Application.query.filter_by(name=cls.GITEA_APP_NAME).first()
+
+        if not app:
+            return {
+                'installed': False,
+                'running': False,
+                'http_port': None,
+                'ssh_port': None,
+                'url': None
+            }
+
+        # Check container status
+        running = cls._is_gitea_running()
+
+        # Load config for ports
+        config = cls._load_gitea_config()
+
+        return {
+            'installed': True,
+            'running': running,
+            'http_port': app.port or config.get('http_port'),
+            'ssh_port': config.get('ssh_port'),
+            'url': f"http://localhost:{app.port}" if app.port else None,
+            'app_id': app.id,
+            'version': config.get('version', '1.21')
+        }
+
+    @classmethod
+    def _is_gitea_running(cls) -> bool:
+        """Check if Gitea container is running."""
+        try:
+            result = subprocess.run(
+                ['docker', 'ps', '--filter', f'name={cls.GITEA_APP_NAME}', '--format', '{{.Names}}'],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            return cls.GITEA_APP_NAME in result.stdout
+        except Exception:
+            return False
+
+    @classmethod
+    def _load_gitea_config(cls) -> Dict:
+        """Load Gitea configuration."""
+        if os.path.exists(cls.GITEA_CONFIG_FILE):
+            try:
+                with open(cls.GITEA_CONFIG_FILE, 'r') as f:
+                    return json.load(f)
+            except Exception:
+                pass
+        return {}
+
+    @classmethod
+    def _save_gitea_config(cls, config: Dict) -> bool:
+        """Save Gitea configuration."""
+        try:
+            os.makedirs(cls.CONFIG_DIR, exist_ok=True)
+            with open(cls.GITEA_CONFIG_FILE, 'w') as f:
+                json.dump(config, f, indent=2)
+            return True
+        except Exception:
+            return False
+
+    @classmethod
+    def get_gitea_resource_requirements(cls) -> Dict:
+        """Get resource requirements for Gitea installation."""
+        return {
+            'memory_min': '512MB',
+            'memory_recommended': '1GB',
+            'storage_min': '5GB',
+            'storage_recommended': '20GB',
+            'components': [
+                {'name': 'Gitea', 'memory': '~300MB', 'storage': '~100MB + repos'},
+                {'name': 'PostgreSQL', 'memory': '~200MB', 'storage': '~1GB'}
+            ],
+            'warning': 'Installation will spin up a PostgreSQL database container'
+        }
+
+    @classmethod
+    def install_gitea(cls, admin_user: str = 'admin',
+                      admin_email: str = None,
+                      admin_password: str = None) -> Dict:
+        """Install Gitea as integrated ServerKit service."""
+        from app.services.template_service import TemplateService
+
+        # Check if already installed
+        status = cls.get_gitea_status()
+        if status['installed']:
+            return {'success': False, 'error': 'Gitea is already installed'}
+
+        # Generate secure password if not provided
+        generated_password = False
+        if not admin_password:
+            admin_password = secrets.token_urlsafe(16)
+            generated_password = True
+
+        try:
+            # Install using template service
+            result = TemplateService.install_template(
+                template_id='gitea',
+                app_name=cls.GITEA_APP_NAME,
+                user_variables={},
+                user_id=1  # System user
+            )
+
+            if not result.get('success'):
+                return result
+
+            # Get the variables that were generated
+            variables = result.get('variables', {})
+            http_port = variables.get('HTTP_PORT')
+            ssh_port = variables.get('SSH_PORT')
+
+            # Save config with admin credentials and ports
+            config = {
+                'admin_user': admin_user,
+                'admin_email': admin_email,
+                'http_port': http_port,
+                'ssh_port': ssh_port,
+                'db_password': variables.get('DB_PASSWORD'),
+                'installed_at': datetime.now().isoformat(),
+                'version': '1.21'
+            }
+            cls._save_gitea_config(config)
+
+            response = {
+                'success': True,
+                'message': 'Gitea installed successfully',
+                'http_port': http_port,
+                'ssh_port': ssh_port,
+                'admin_user': admin_user
+            }
+
+            # Only include password in response if it was generated
+            if generated_password:
+                response['admin_password'] = admin_password
+                response['warning'] = 'Save these credentials - password shown only once!'
+
+            return response
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def uninstall_gitea(cls, remove_data: bool = False) -> Dict:
+        """Uninstall Gitea."""
+        from app import db
+        from app.models import Application
+        from app.services.docker_service import DockerService
+
+        app = Application.query.filter_by(name=cls.GITEA_APP_NAME).first()
+        if not app:
+            return {'success': False, 'error': 'Gitea is not installed'}
+
+        try:
+            # Stop and remove containers
+            if app.root_path and os.path.exists(app.root_path):
+                DockerService.compose_down(app.root_path, remove_volumes=remove_data)
+
+                if remove_data:
+                    import shutil
+                    shutil.rmtree(app.root_path, ignore_errors=True)
+
+            # Remove from database
+            db.session.delete(app)
+            db.session.commit()
+
+            # Remove config
+            if os.path.exists(cls.GITEA_CONFIG_FILE):
+                os.remove(cls.GITEA_CONFIG_FILE)
+
+            return {
+                'success': True,
+                'message': 'Gitea uninstalled successfully',
+                'data_removed': remove_data
+            }
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def start_gitea(cls) -> Dict:
+        """Start Gitea containers."""
+        from app import db
+        from app.models import Application
+        from app.services.docker_service import DockerService
+
+        app = Application.query.filter_by(name=cls.GITEA_APP_NAME).first()
+        if not app:
+            return {'success': False, 'error': 'Gitea is not installed'}
+
+        if not app.root_path or not os.path.exists(app.root_path):
+            return {'success': False, 'error': 'Gitea installation path not found'}
+
+        try:
+            result = DockerService.compose_up(app.root_path, detach=True)
+            if result.get('success'):
+                app.status = 'running'
+                db.session.commit()
+                return {'success': True, 'message': 'Gitea started'}
+            return result
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def stop_gitea(cls) -> Dict:
+        """Stop Gitea containers."""
+        from app import db
+        from app.models import Application
+        from app.services.docker_service import DockerService
+
+        app = Application.query.filter_by(name=cls.GITEA_APP_NAME).first()
+        if not app:
+            return {'success': False, 'error': 'Gitea is not installed'}
+
+        if not app.root_path or not os.path.exists(app.root_path):
+            return {'success': False, 'error': 'Gitea installation path not found'}
+
+        try:
+            result = DockerService.compose_stop(app.root_path)
+            if result.get('success'):
+                app.status = 'stopped'
+                db.session.commit()
+                return {'success': True, 'message': 'Gitea stopped'}
+            return result
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def restart_gitea(cls) -> Dict:
+        """Restart Gitea containers."""
+        stop_result = cls.stop_gitea()
+        if not stop_result.get('success'):
+            return stop_result
+        return cls.start_gitea()
