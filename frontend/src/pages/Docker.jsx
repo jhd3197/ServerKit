@@ -1139,19 +1139,28 @@ const RunContainerModal = ({ onClose, onCreated }) => {
 };
 
 const ContainerLogsModal = ({ container, onClose }) => {
+    const { serverId, isRemote } = useServer();
     const [logs, setLogs] = useState('');
     const [loading, setLoading] = useState(true);
+    const [tail, setTail] = useState(200);
 
     useEffect(() => {
         loadLogs();
-    }, [container]);
+    }, [container, tail]);
 
     async function loadLogs() {
+        setLoading(true);
         try {
-            const data = await api.getContainerLogs(container.id, 200);
+            let data;
+            if (isRemote) {
+                const result = await api.getRemoteContainerLogs(serverId, container.id, tail);
+                data = result.success ? { logs: result.data?.logs || '' } : { logs: '' };
+            } else {
+                data = await api.getContainerLogs(container.id, tail);
+            }
             setLogs(data.logs || 'No logs available');
         } catch (err) {
-            setLogs('Failed to load logs');
+            setLogs('Failed to load logs: ' + (err.message || 'Unknown error'));
         } finally {
             setLoading(false);
         }
@@ -1165,10 +1174,22 @@ const ContainerLogsModal = ({ container, onClose }) => {
                     <button className="modal-close" onClick={onClose}>&times;</button>
                 </div>
                 <div className="modal-body">
+                    <div className="logs-controls" style={{ marginBottom: '10px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <label>Lines:</label>
+                        <select value={tail} onChange={(e) => setTail(Number(e.target.value))} style={{ padding: '4px 8px' }}>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                            <option value={200}>200</option>
+                            <option value={500}>500</option>
+                            <option value={1000}>1000</option>
+                        </select>
+                    </div>
                     <pre className="log-viewer">{loading ? 'Loading...' : logs}</pre>
                 </div>
                 <div className="modal-actions">
-                    <button className="btn btn-secondary" onClick={loadLogs}>Refresh</button>
+                    <button className="btn btn-secondary" onClick={loadLogs} disabled={loading}>
+                        {loading ? 'Loading...' : 'Refresh'}
+                    </button>
                     <button className="btn btn-primary" onClick={onClose}>Close</button>
                 </div>
             </div>

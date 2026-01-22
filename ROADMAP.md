@@ -132,6 +132,8 @@ This document outlines the development roadmap for ServerKit. Features are organ
 - [x] GitHub Actions for agent releases (Linux/Windows)
 - [x] Installation scripts endpoint
 - [x] Agent auto-update mechanism
+- [x] Agent download page in UI
+- [x] Container logs streaming for remote servers
 
 ---
 

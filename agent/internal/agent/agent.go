@@ -92,6 +92,7 @@ func (a *Agent) registerHandlers() {
 		a.handlers[protocol.ActionDockerContainerRestart] = a.handleDockerContainerRestart
 		a.handlers[protocol.ActionDockerContainerRemove] = a.handleDockerContainerRemove
 		a.handlers[protocol.ActionDockerContainerStats] = a.handleDockerContainerStats
+		a.handlers[protocol.ActionDockerContainerLogs] = a.handleDockerContainerLogs
 
 		// Docker image commands
 		a.handlers[protocol.ActionDockerImageList] = a.handleDockerImageList
@@ -441,6 +442,38 @@ func (a *Agent) handleDockerContainerStats(ctx context.Context, params json.RawM
 		return nil, fmt.Errorf("invalid params: %w", err)
 	}
 	return a.docker.ContainerStats(ctx, p.ID)
+}
+
+func (a *Agent) handleDockerContainerLogs(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	var p struct {
+		ID         string `json:"id"`
+		Tail       string `json:"tail"`
+		Since      string `json:"since"`
+		Timestamps bool   `json:"timestamps"`
+	}
+	if err := json.Unmarshal(params, &p); err != nil {
+		return nil, fmt.Errorf("invalid params: %w", err)
+	}
+
+	// Set defaults
+	if p.Tail == "" {
+		p.Tail = "100"
+	}
+
+	reader, err := a.docker.ContainerLogs(ctx, p.ID, p.Tail, p.Since, false)
+	if err != nil {
+		return nil, err
+	}
+	defer reader.Close()
+
+	// Read logs into buffer
+	buf := make([]byte, 1024*1024) // 1MB max
+	n, _ := reader.Read(buf)
+	logs := string(buf[:n])
+
+	return map[string]interface{}{
+		"logs": logs,
+	}, nil
 }
 
 func (a *Agent) handleDockerImageList(ctx context.Context, params json.RawMessage) (interface{}, error) {

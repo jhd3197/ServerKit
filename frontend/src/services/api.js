@@ -2670,6 +2670,12 @@ class ApiService {
         return this.request(`/servers/${serverId}/docker/containers/${containerId}/stats`);
     }
 
+    async getRemoteContainerLogs(serverId, containerId, tail = 100, since = null) {
+        const params = new URLSearchParams({ tail });
+        if (since) params.append('since', since);
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}/logs?${params}`);
+    }
+
     async getRemoteImages(serverId) {
         return this.request(`/servers/${serverId}/docker/images`);
     }

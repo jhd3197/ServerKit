@@ -733,6 +733,34 @@ def get_remote_container_stats(server_id, container_id):
     return jsonify(result.get('data'))
 
 
+@servers_bp.route('/<server_id>/docker/containers/<container_id>/logs', methods=['GET'])
+@jwt_required()
+def get_remote_container_logs(server_id, container_id):
+    """
+    Get container logs from a remote server.
+
+    Query params:
+        tail: Number of lines (default 100, 'all' for all lines)
+        since: Show logs since timestamp
+        timestamps: Include timestamps (default true)
+    """
+    user_id = get_jwt_identity()
+    tail = request.args.get('tail', '100')
+    since = request.args.get('since')
+    timestamps = request.args.get('timestamps', 'true').lower() == 'true'
+
+    result = RemoteDockerService.get_container_logs(
+        server_id, container_id,
+        tail=tail, since=since, timestamps=timestamps,
+        user_id=user_id
+    )
+
+    if not result.get('success'):
+        return jsonify(result), 500
+
+    return jsonify(result.get('data'))
+
+
 @servers_bp.route('/<server_id>/docker/images', methods=['GET'])
 @jwt_required()
 def list_remote_images(server_id):

@@ -179,6 +179,50 @@ class RemoteDockerService:
             user_id=user_id
         )
 
+    @staticmethod
+    def get_container_logs(server_id: str, container_id: str, tail: str = '100',
+                           since: str = None, timestamps: bool = True,
+                           user_id: int = None) -> Dict[str, Any]:
+        """
+        Get container logs from a remote server.
+
+        Args:
+            server_id: Target server ID
+            container_id: Container ID or name
+            tail: Number of lines to show from end (default 100, 'all' for all)
+            since: Show logs since timestamp (e.g., '2021-01-01T00:00:00Z')
+            timestamps: Include timestamps in output
+            user_id: User ID for audit logging
+
+        Returns:
+            dict: {success, data: {logs: str}, error}
+        """
+        if not server_id or server_id == 'local':
+            from app.services.docker_service import DockerService
+            try:
+                logs = DockerService.get_container_logs(
+                    container_id,
+                    tail=tail,
+                    since=since,
+                    timestamps=timestamps
+                )
+                return {'success': True, 'data': {'logs': logs}}
+            except Exception as e:
+                return {'success': False, 'error': str(e)}
+
+        return agent_registry.send_command(
+            server_id=server_id,
+            action='docker:container:logs',
+            params={
+                'id': container_id,
+                'tail': tail,
+                'since': since or '',
+                'timestamps': timestamps
+            },
+            timeout=30.0,
+            user_id=user_id
+        )
+
     # ==================== Images ====================
 
     @staticmethod

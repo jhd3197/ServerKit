@@ -1350,10 +1350,12 @@ system:exec:  # Requires explicit permission
     [ ] Stack management
     [ ] Compose file editor
 
-[ ] Container logs streaming
-    [ ] Real-time log streaming
-    [ ] Log search/filter
-    [ ] Download logs
+[x] Container logs streaming
+    [x] Real-time log streaming via agent
+    [x] Backend endpoint for remote logs
+    [x] Frontend integration with server context
+    [ ] Log search/filter (future)
+    [ ] Download logs (future)
 
 [ ] Remote terminal (optional)
     [ ] PTY support in agent
@@ -1521,5 +1523,5 @@ logging:
 *This document is a living specification and will be updated as implementation progresses.*
 
 **Document Version**: 1.0.0
-**Last Updated**: 2025-01-21
+**Last Updated**: 2026-01-21
 **Author**: ServerKit Team
