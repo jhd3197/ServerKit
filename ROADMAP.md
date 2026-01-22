@@ -118,7 +118,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 10: Multi-Server Management (Planned)
 
-**Priority: High** | **Target: v1.1.0**
+**Priority: High**
 
 - [ ] Agent-based remote server monitoring
 - [ ] Centralized dashboard for multiple servers
@@ -131,7 +131,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 11: Git Deployment (Planned)
 
-**Priority: High** | **Target: v1.1.0**
+**Priority: High**
 
 - [ ] GitHub/GitLab webhook integration
 - [ ] Automatic deployment on push
@@ -145,7 +145,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 12: Backup & Restore (Planned)
 
-**Priority: High** | **Target: v1.2.0**
+**Priority: High**
 
 - [ ] Automated database backups
 - [ ] File/directory backups
@@ -160,7 +160,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 13: Email Server Management (Planned)
 
-**Priority: Medium** | **Target: v1.3.0**
+**Priority: Medium**
 
 - [ ] Postfix mail server setup
 - [ ] Dovecot IMAP/POP3 configuration
@@ -174,7 +174,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 14: Advanced SSL Features (Planned)
 
-**Priority: Medium** | **Target: v1.2.0**
+**Priority: Medium**
 
 - [ ] Wildcard SSL certificates
 - [ ] Multi-domain certificates (SAN)
@@ -186,7 +186,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 15: Team & Permissions (Planned)
 
-**Priority: Medium** | **Target: v1.4.0**
+**Priority: Medium**
 
 - [ ] Multi-user support
 - [ ] Role-based access control (RBAC)
@@ -199,7 +199,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 16: API Enhancements (Planned)
 
-**Priority: Medium** | **Target: v1.3.0**
+**Priority: Medium**
 
 - [ ] API key management
 - [ ] Rate limiting
@@ -211,7 +211,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 17: Advanced Security (Planned)
 
-**Priority: High** | **Target: v1.2.0**
+**Priority: High**
 
 - [ ] Fail2ban integration
 - [ ] SSH key management
@@ -225,7 +225,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 18: Performance Optimization (Planned)
 
-**Priority: Low** | **Target: v1.5.0**
+**Priority: Low**
 
 - [ ] Redis caching integration
 - [ ] Database query optimization
@@ -237,7 +237,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 19: Mobile App (Planned)
 
-**Priority: Low** | **Target: v2.0.0**
+**Priority: Low**
 
 - [ ] React Native mobile application
 - [ ] Push notifications
@@ -248,7 +248,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 20: Marketplace & Extensions (Planned)
 
-**Priority: Low** | **Target: v2.0.0**
+**Priority: Low**
 
 - [ ] Plugin/extension system
 - [ ] Community marketplace

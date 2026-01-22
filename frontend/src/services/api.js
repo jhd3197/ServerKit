@@ -1905,6 +1905,123 @@ class ApiService {
         return this.request('/git/restart', { method: 'POST' });
     }
 
+    // Git Webhooks
+    async getWebhooks() {
+        return this.request('/git/webhooks');
+    }
+
+    async getWebhook(webhookId) {
+        return this.request(`/git/webhooks/${webhookId}`);
+    }
+
+    async createWebhook(data) {
+        return this.request('/git/webhooks', {
+            method: 'POST',
+            body: data
+        });
+    }
+
+    async updateWebhook(webhookId, data) {
+        return this.request(`/git/webhooks/${webhookId}`, {
+            method: 'PUT',
+            body: data
+        });
+    }
+
+    async deleteWebhook(webhookId) {
+        return this.request(`/git/webhooks/${webhookId}`, { method: 'DELETE' });
+    }
+
+    async toggleWebhook(webhookId) {
+        return this.request(`/git/webhooks/${webhookId}/toggle`, { method: 'POST' });
+    }
+
+    async getWebhookLogs(webhookId, limit = 50) {
+        return this.request(`/git/webhooks/${webhookId}/logs?limit=${limit}`);
+    }
+
+    async testWebhook(webhookId) {
+        return this.request(`/git/webhooks/${webhookId}/test`, { method: 'POST' });
+    }
+
+    // Git Repositories
+    async getRepositories(limit = 50) {
+        return this.request(`/git/repos?limit=${limit}`);
+    }
+
+    async getRepository(owner, repo) {
+        return this.request(`/git/repos/${owner}/${repo}`);
+    }
+
+    async getRepoStats(owner, repo) {
+        return this.request(`/git/repos/${owner}/${repo}/stats`);
+    }
+
+    async getBranches(owner, repo) {
+        return this.request(`/git/repos/${owner}/${repo}/branches`);
+    }
+
+    async getBranch(owner, repo, branch) {
+        return this.request(`/git/repos/${owner}/${repo}/branches/${branch}`);
+    }
+
+    async getCommits(owner, repo, branch = null, page = 1, limit = 30) {
+        let url = `/git/repos/${owner}/${repo}/commits?page=${page}&limit=${limit}`;
+        if (branch) url += `&branch=${branch}`;
+        return this.request(url);
+    }
+
+    async getCommit(owner, repo, sha) {
+        return this.request(`/git/repos/${owner}/${repo}/commits/${sha}`);
+    }
+
+    async getRepoFiles(owner, repo, ref = 'main', path = '') {
+        let url = `/git/repos/${owner}/${repo}/contents?ref=${ref}`;
+        if (path) url += `&path=${path}`;
+        return this.request(url);
+    }
+
+    async getFileContent(owner, repo, filepath, ref = 'main') {
+        return this.request(`/git/repos/${owner}/${repo}/contents/${filepath}?ref=${ref}`);
+    }
+
+    async getRepoReadme(owner, repo, ref = null) {
+        let url = `/git/repos/${owner}/${repo}/readme`;
+        if (ref) url += `?ref=${ref}`;
+        return this.request(url);
+    }
+
+    async getGiteaVersion() {
+        return this.request('/git/version');
+    }
+
+    // Git Deployments
+    async getAppDeployments(appId, limit = 20) {
+        return this.request(`/git/deployments/app/${appId}?limit=${limit}`);
+    }
+
+    async getDeployment(deploymentId, includeLogs = false) {
+        return this.request(`/git/deployments/${deploymentId}?logs=${includeLogs}`);
+    }
+
+    async triggerDeploy(appId, branch = null) {
+        return this.request(`/git/deployments/app/${appId}/deploy`, {
+            method: 'POST',
+            body: branch ? { branch } : {}
+        });
+    }
+
+    async rollbackDeployment(appId, targetVersion = null) {
+        return this.request(`/git/deployments/app/${appId}/rollback`, {
+            method: 'POST',
+            body: targetVersion ? { targetVersion } : {}
+        });
+    }
+
+    async getWebhookDeployments(webhookId, limit = 20) {
+        return this.request(`/git/deployments/webhook/${webhookId}?limit=${limit}`);
+    }
+
     // ========================================
     // Cron Job endpoints
     // ========================================
