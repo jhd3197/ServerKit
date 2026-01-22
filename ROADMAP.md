@@ -210,19 +210,19 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ---
 
-## Phase 17: Advanced Security (In Progress)
+## Phase 17: Advanced Security (Completed)
 
 **Priority: High**
 
 - [x] Unified Security page with all security features
 - [x] Firewall tab with UFW/firewalld management
-- [ ] Fail2ban integration
-- [ ] SSH key management
-- [ ] IP allowlist/blocklist
-- [ ] Brute force protection
-- [ ] Security audit reports
-- [ ] Vulnerability scanning
-- [ ] Automatic security updates
+- [x] Fail2ban integration
+- [x] SSH key management
+- [x] IP allowlist/blocklist
+- [x] Brute force protection
+- [x] Security audit reports
+- [x] Vulnerability scanning (Lynis)
+- [x] Automatic security updates (unattended-upgrades/dnf-automatic)
 
 ---
 
