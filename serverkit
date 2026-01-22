@@ -152,7 +152,10 @@ cmd_help() {
     echo "  restart           Restart all services"
     echo "  status            Show service status"
     echo "  logs [service]    View logs (backend, frontend, or all)"
-    echo "  update [--force]  Update to latest version (--force skips version check)"
+    echo "  update [options]  Update ServerKit"
+    echo "                      --branch <name>  Switch to specific branch (e.g., dev)"
+    echo "                      --force          Skip version check"
+    echo "  branch            Show current branch"
     echo "  uninstall         Uninstall ServerKit"
     echo ""
     echo "User Management:"
@@ -325,11 +328,45 @@ cmd_logs() {
     esac
 }
 
+cmd_branch() {
+    check_installed
+    cd "$INSTALL_DIR"
+
+    local current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+    local current_commit=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+
+    echo ""
+    echo "  Current branch: $current_branch"
+    echo "  Current commit: $current_commit"
+    echo "  Version:        $(get_local_version)"
+    echo ""
+
+    # Show available remote branches
+    print_info "Available branches:"
+    git branch -r 2>/dev/null | grep -v HEAD | sed 's/origin\//    /' | head -10
+    echo ""
+}
+
 cmd_update() {
     local force_update=false
-    if [ "$1" = "--force" ] || [ "$1" = "-f" ]; then
-        force_update=true
-    fi
+    local target_branch=""
+
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --force|-f)
+                force_update=true
+                shift
+                ;;
+            --branch|-b)
+                target_branch="$2"
+                shift 2
+                ;;
+            *)
+                shift
+                ;;
+        esac
+    done
 
     check_root
     check_installed
@@ -338,15 +375,33 @@ cmd_update() {
 
     cd "$INSTALL_DIR"
 
+    # Get current branch
+    local current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+
+    # If no branch specified, use current branch (or main if detached)
+    if [ -z "$target_branch" ]; then
+        target_branch="$current_branch"
+        if [ "$target_branch" = "HEAD" ]; then
+            target_branch="main"
+        fi
+    fi
+
     # Get versions
     CURRENT_VERSION=$(get_local_version)
-    REMOTE_VERSION=$(get_remote_version)
 
-    echo "  Installed version: $CURRENT_VERSION"
-    echo "  Latest version:    $REMOTE_VERSION"
-    echo ""
+    # For non-main branches, skip version comparison
+    if [ "$target_branch" != "main" ]; then
+        force_update=true
+        print_warning "Updating to branch: $target_branch (dev mode)"
+        echo ""
+    else
+        REMOTE_VERSION=$(get_remote_version)
+        echo "  Installed version: $CURRENT_VERSION"
+        echo "  Latest version:    $REMOTE_VERSION"
+        echo ""
+    fi
 
-    # Check if update is needed (skip if --force)
+    # Check if update is needed (skip if --force or non-main branch)
     if [ "$force_update" = false ] && [ "$REMOTE_VERSION" != "unknown" ]; then
         set +e  # Temporarily disable exit on error
         compare_versions "$CURRENT_VERSION" "$REMOTE_VERSION"
@@ -363,17 +418,21 @@ cmd_update() {
         fi
     fi
 
-    print_info "Updating ServerKit..."
+    print_info "Updating ServerKit to branch: $target_branch..."
 
     # Stop services
     print_info "Stopping services..."
     systemctl stop $BACKEND_SERVICE || true
     docker compose down || true
 
-    # Pull latest changes
-    print_info "Pulling latest changes..."
-    git fetch origin
-    git reset --hard origin/main
+    # Fetch all branches and pull changes
+    print_info "Fetching latest changes..."
+    git fetch origin --prune
+
+    # Checkout target branch
+    print_info "Switching to branch: $target_branch..."
+    git checkout "$target_branch" 2>/dev/null || git checkout -b "$target_branch" "origin/$target_branch"
+    git reset --hard "origin/$target_branch"
 
     # Restore executable permissions
     chmod +x "$INSTALL_DIR/serverkit"
@@ -381,6 +440,7 @@ cmd_update() {
 
     # Get new version from VERSION file
     NEW_VERSION=$(get_local_version)
+    NEW_COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
 
     # Update Python dependencies
     print_info "Updating Python dependencies..."
@@ -414,9 +474,15 @@ cmd_update() {
 
     echo ""
     print_success "ServerKit updated!"
-    echo "  Previous version: $CURRENT_VERSION"
-    echo "  Current version:  $NEW_VERSION"
+    echo "  Branch:           $target_branch"
+    echo "  Commit:           $NEW_COMMIT"
+    echo "  Version:          $NEW_VERSION"
     echo ""
+
+    if [ "$target_branch" != "main" ]; then
+        print_warning "Running on '$target_branch' branch. Use 'serverkit update --branch main' to return to stable."
+    fi
+
     cmd_status_brief
 }
 
@@ -857,7 +923,11 @@ case "${1:-help}" in
         cmd_logs "$2"
         ;;
     update)
-        cmd_update "$2"
+        shift
+        cmd_update "$@"
+        ;;
+    branch)
+        cmd_branch
         ;;
     version|--version|-v)
         cmd_version
