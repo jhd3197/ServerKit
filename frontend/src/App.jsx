@@ -19,7 +19,7 @@ import Terminal from './pages/Terminal';
 import Settings from './pages/Settings';
 import FileManager from './pages/FileManager';
 import FTPServer from './pages/FTPServer';
-import Firewall from './pages/Firewall';
+// Firewall is now part of Security page
 import Git from './pages/Git';
 import CronJobs from './pages/CronJobs';
 import Security from './pages/Security';
@@ -107,7 +107,7 @@ function AppRoutes() {
                 <Route path="databases" element={<Databases />} />
                 <Route path="ssl" element={<div className="page">SSL Certificates</div>} />
                 <Route path="docker" element={<Docker />} />
-                <Route path="firewall" element={<Firewall />} />
+                <Route path="firewall" element={<Navigate to="/security" replace />} />
                 <Route path="git" element={<Git />} />
                 <Route path="files" element={<FileManager />} />
                 <Route path="ftp" element={<FTPServer />} />

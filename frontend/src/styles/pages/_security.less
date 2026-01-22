@@ -408,3 +408,169 @@
     font-size: @font-size-sm;
     padding: @space-4;
 }
+
+// Firewall Tab
+.firewall-tab {
+    .firewall-header {
+        margin-bottom: @space-6;
+    }
+
+    .firewall-status-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: @space-4;
+        background: @bg-card;
+        border-radius: @radius-lg;
+        border: 1px solid @border-subtle;
+    }
+
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: @space-2;
+        font-weight: 600;
+
+        &.active {
+            color: @success;
+        }
+
+        &.inactive {
+            color: @danger;
+        }
+
+        .firewall-type {
+            color: @text-tertiary;
+            font-weight: 400;
+        }
+    }
+
+    .firewall-actions {
+        display: flex;
+        gap: @space-2;
+    }
+
+    .firewall-stats {
+        display: flex;
+        gap: @space-4;
+        margin-bottom: @space-6;
+    }
+
+    .stat-mini {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: @space-4 @space-6;
+        background: @bg-card;
+        border-radius: @radius-md;
+        border: 1px solid @border-subtle;
+        min-width: 100px;
+
+        .stat-value {
+            font-size: @font-size-xl;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            color: @text-tertiary;
+            font-size: @font-size-sm;
+        }
+    }
+
+    .subtabs {
+        display: flex;
+        gap: @space-1;
+        margin-bottom: @space-4;
+        border-bottom: 1px solid @border-subtle;
+        padding-bottom: @space-2;
+
+        .subtab {
+            padding: @space-2 @space-3;
+            border: none;
+            background: none;
+            color: @text-secondary;
+            cursor: pointer;
+            border-radius: @radius-sm;
+            font-size: @font-size-sm;
+            transition: all 0.2s;
+
+            &:hover {
+                background: @bg-hover;
+                color: @text-primary;
+            }
+
+            &.active {
+                background: @bg-hover;
+                color: @accent-primary;
+            }
+        }
+    }
+
+    .quick-ports-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: @space-3;
+    }
+
+    .quick-port-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: @space-3 @space-4;
+        background: @bg-hover;
+        border-radius: @radius-md;
+
+        .port-info {
+            display: flex;
+            flex-direction: column;
+
+            .port-name {
+                font-weight: 500;
+            }
+
+            .port-number {
+                color: @text-tertiary;
+                font-size: @font-size-sm;
+                font-family: @font-mono;
+            }
+        }
+    }
+
+    .blocked-list {
+        display: flex;
+        flex-direction: column;
+        gap: @space-2;
+    }
+
+    .blocked-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: @space-3 @space-4;
+        background: @bg-hover;
+        border-radius: @radius-md;
+
+        .blocked-ip {
+            font-family: @font-mono;
+            font-weight: 500;
+        }
+    }
+
+    .empty-state-sm {
+        text-align: center;
+        padding: @space-6;
+        color: @text-secondary;
+    }
+
+    .install-info {
+        margin-top: @space-4;
+        padding: @space-4;
+        background: @bg-hover;
+        border-radius: @radius-md;
+
+        p {
+            margin: 0;
+            font-size: @font-size-sm;
+        }
+    }
+}

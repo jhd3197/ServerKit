@@ -107,12 +107,13 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ---
 
-## Phase 9: Firewall Management (Completed)
+## Phase 9: Firewall Management (Completed - Merged into Security)
 
 - [x] UFW firewall integration
 - [x] Visual rule management
 - [x] Common port presets
 - [x] Rule enable/disable
+- [x] Consolidated into Security page for unified security management
 
 ---
 
@@ -133,13 +134,13 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 **Priority: High**
 
-- [ ] GitHub/GitLab webhook integration
-- [ ] Automatic deployment on push
-- [ ] Branch selection for deployment
-- [ ] Rollback to previous deployments
-- [ ] Deployment history and logs
-- [ ] Pre/post deployment scripts
-- [ ] Zero-downtime deployments
+- [x] GitHub/GitLab webhook integration
+- [x] Automatic deployment on push
+- [x] Branch selection for deployment
+- [x] Rollback to previous deployments
+- [x] Deployment history and logs
+- [x] Pre/post deployment scripts
+- [x] Zero-downtime deployments
 
 ---
 
@@ -209,10 +210,12 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ---
 
-## Phase 17: Advanced Security (Planned)
+## Phase 17: Advanced Security (In Progress)
 
 **Priority: High**
 
+- [x] Unified Security page with all security features
+- [x] Firewall tab with UFW/firewalld management
 - [ ] Fail2ban integration
 - [ ] SSH key management
 - [ ] IP allowlist/blocklist
