@@ -610,6 +610,7 @@ def get_permission_profiles():
 # ==================== Remote Docker Operations ====================
 
 from app.services.remote_docker_service import RemoteDockerService
+from app.services.server_metrics_service import ServerMetricsService
 
 
 @servers_bp.route('/available', methods=['GET'])
@@ -1024,6 +1025,81 @@ def remote_compose_pull(server_id):
         return jsonify(result), 500
 
     return jsonify(result)
+
+
+# ==================== Historical Metrics ====================
+
+@servers_bp.route('/<server_id>/metrics/history', methods=['GET'])
+@jwt_required()
+def get_server_metrics_history(server_id):
+    """Get historical metrics for a server.
+
+    Query params:
+        period: '1h', '6h', '24h', '7d', '30d' (default: '24h')
+    """
+    period = request.args.get('period', '24h')
+
+    result = ServerMetricsService.get_server_history(server_id, period)
+    return jsonify(result)
+
+
+@servers_bp.route('/<server_id>/metrics/aggregated', methods=['GET'])
+@jwt_required()
+def get_server_metrics_aggregated(server_id):
+    """Get aggregated metrics for a server.
+
+    Query params:
+        period: '24h', '7d', '30d' (default: '24h')
+        aggregation: 'hourly', 'daily' (default: 'hourly')
+    """
+    period = request.args.get('period', '24h')
+    aggregation = request.args.get('aggregation', 'hourly')
+
+    result = ServerMetricsService.get_aggregated_metrics(server_id, period, aggregation)
+    return jsonify(result)
+
+
+@servers_bp.route('/metrics/compare', methods=['GET'])
+@jwt_required()
+def compare_server_metrics():
+    """Compare metrics across multiple servers.
+
+    Query params:
+        ids: Comma-separated server IDs
+        metric: 'cpu', 'memory', 'disk' (default: 'cpu')
+        period: '1h', '6h', '24h', '7d' (default: '24h')
+    """
+    ids_param = request.args.get('ids', '')
+    if not ids_param:
+        return jsonify({'error': 'ids parameter is required'}), 400
+
+    server_ids = [id.strip() for id in ids_param.split(',') if id.strip()]
+    metric = request.args.get('metric', 'cpu')
+    period = request.args.get('period', '24h')
+
+    result = ServerMetricsService.get_multi_server_comparison(server_ids, metric, period)
+    return jsonify(result)
+
+
+@servers_bp.route('/metrics/retention', methods=['GET'])
+@jwt_required()
+@developer_required
+def get_metrics_retention_stats():
+    """Get metrics retention statistics."""
+    result = ServerMetricsService.get_retention_stats()
+    return jsonify(result)
+
+
+@servers_bp.route('/metrics/cleanup', methods=['POST'])
+@jwt_required()
+@developer_required
+def trigger_metrics_cleanup():
+    """Trigger cleanup of old metrics data."""
+    result = ServerMetricsService.cleanup_old_metrics()
+    return jsonify({
+        'success': True,
+        'deleted': result
+    })
 
 
 # ==================== Installation Scripts ====================

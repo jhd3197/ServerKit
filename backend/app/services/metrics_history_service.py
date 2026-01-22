@@ -380,6 +380,14 @@ class MetricsHistoryService:
                         if (now - last_hour_check).total_seconds() >= 3600:
                             cls.aggregate_hourly()
                             cls.cleanup_old_data()
+
+                            # Also cleanup remote server metrics
+                            try:
+                                from app.services.server_metrics_service import ServerMetricsService
+                                ServerMetricsService.cleanup_old_metrics()
+                            except Exception as e:
+                                logger.error(f"Error cleaning up server metrics: {e}")
+
                             last_hour_check = now
 
                         # Check if we need to run daily aggregation

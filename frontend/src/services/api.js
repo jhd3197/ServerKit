@@ -2779,6 +2779,28 @@ class ApiService {
         });
     }
 
+    // Server Historical Metrics
+    async getServerMetricsHistory(serverId, period = '24h') {
+        return this.request(`/servers/${serverId}/metrics/history?period=${period}`);
+    }
+
+    async getServerMetricsAggregated(serverId, period = '24h', aggregation = 'hourly') {
+        return this.request(`/servers/${serverId}/metrics/aggregated?period=${period}&aggregation=${aggregation}`);
+    }
+
+    async compareServerMetrics(serverIds, metric = 'cpu', period = '24h') {
+        const ids = Array.isArray(serverIds) ? serverIds.join(',') : serverIds;
+        return this.request(`/servers/metrics/compare?ids=${ids}&metric=${metric}&period=${period}`);
+    }
+
+    async getMetricsRetentionStats() {
+        return this.request('/servers/metrics/retention');
+    }
+
+    async triggerMetricsCleanup() {
+        return this.request('/servers/metrics/cleanup', { method: 'POST' });
+    }
+
     // Agent Downloads
     async getAgentVersion() {
         return this.request('/servers/agent/version');

@@ -1290,7 +1290,7 @@ system:exec:  # Requires explicit permission
     [x] Volume/network listing
 ```
 
-### Phase 10.6: Monitoring & Metrics ✅ MOSTLY COMPLETE
+### Phase 10.6: Monitoring & Metrics ✅ COMPLETE
 **Duration: ~2 weeks**
 
 ```
@@ -1299,10 +1299,13 @@ system:exec:  # Requires explicit permission
     [x] WebSocket to frontend (SocketIO)
     [x] Live dashboard updates
 
-[x] Historical metrics (partial)
+[x] Historical metrics
     [x] Metrics storage (ServerMetrics model)
-    [ ] Retention policies (future)
-    [ ] Aggregation queries (future)
+    [x] Retention policies (7 days raw, configurable)
+    [x] Aggregation queries (hourly, daily)
+    [x] ServerMetricsService with cleanup
+    [x] API endpoints for history and aggregated data
+    [x] Multi-server comparison API
 
 [x] Cross-server dashboard
     [x] Overview page (Servers.jsx)
@@ -1341,7 +1344,7 @@ system:exec:  # Requires explicit permission
     [x] Download page in UI
 ```
 
-### Phase 10.8: Advanced Features 🔄 IN PROGRESS
+### Phase 10.8: Advanced Features ✅ MOSTLY COMPLETE
 **Duration: ~3-4 weeks**
 
 ```
@@ -1365,11 +1368,6 @@ system:exec:  # Requires explicit permission
     [ ] PTY support in agent
     [ ] Terminal UI component
     [ ] Session management
-
-[ ] Historical metrics
-    [ ] Retention policies
-    [ ] Aggregation queries
-    [ ] Metrics visualization improvements
 ```
 
 ---
@@ -1531,6 +1529,6 @@ logging:
 
 *This document is a living specification and will be updated as implementation progresses.*
 
-**Document Version**: 1.1.0
+**Document Version**: 1.2.0
 **Last Updated**: 2026-01-22
 **Author**: ServerKit Team
