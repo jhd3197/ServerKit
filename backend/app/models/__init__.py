@@ -9,9 +9,11 @@ from app.models.audit_log import AuditLog
 from app.models.metrics_history import MetricsHistory
 from app.models.workflow import Workflow
 from app.models.webhook import GitWebhook, WebhookLog, GitDeployment
+from app.models.server import Server, ServerGroup, ServerMetrics, ServerCommand, AgentSession
 
 __all__ = [
     'User', 'Application', 'Domain', 'EnvironmentVariable', 'EnvironmentVariableHistory',
     'NotificationPreferences', 'Deployment', 'DeploymentDiff', 'SystemSettings', 'AuditLog',
-    'MetricsHistory', 'Workflow', 'GitWebhook', 'WebhookLog', 'GitDeployment'
+    'MetricsHistory', 'Workflow', 'GitWebhook', 'WebhookLog', 'GitDeployment',
+    'Server', 'ServerGroup', 'ServerMetrics', 'ServerCommand', 'AgentSession'
 ]

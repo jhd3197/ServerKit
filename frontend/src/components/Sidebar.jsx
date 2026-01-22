@@ -33,6 +33,15 @@ const Sidebar = () => {
 
                 <div className="menu-label">Infrastructure</div>
                 <nav className="nav">
+                    <NavLink to="/servers" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                        <svg viewBox="0 0 24 24">
+                            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+                            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+                            <line x1="6" y1="6" x2="6.01" y2="6"/>
+                            <line x1="6" y1="18" x2="6.01" y2="18"/>
+                        </svg>
+                        Servers
+                    </NavLink>
                     <NavLink to="/domains" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                         <svg viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="10"/>

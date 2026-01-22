@@ -2548,6 +2548,165 @@ class ApiService {
             method: 'POST'
         });
     }
+
+    // ========================================
+    // Servers (Multi-Server Management) endpoints
+    // ========================================
+    async getServers() {
+        return this.request('/servers');
+    }
+
+    async getServer(id) {
+        return this.request(`/servers/${id}`);
+    }
+
+    async createServer(data) {
+        return this.request('/servers', {
+            method: 'POST',
+            body: data
+        });
+    }
+
+    async updateServer(id, data) {
+        return this.request(`/servers/${id}`, {
+            method: 'PUT',
+            body: data
+        });
+    }
+
+    async deleteServer(id) {
+        return this.request(`/servers/${id}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async getServerStatus(id) {
+        return this.request(`/servers/${id}/status`);
+    }
+
+    async getServerMetrics(id) {
+        return this.request(`/servers/${id}/metrics`);
+    }
+
+    async pingServer(id) {
+        return this.request(`/servers/${id}/ping`, {
+            method: 'POST'
+        });
+    }
+
+    // Server Registration
+    async generateRegistrationToken(serverId) {
+        return this.request(`/servers/${serverId}/registration-token`, {
+            method: 'POST'
+        });
+    }
+
+    async registerServer(registrationData) {
+        return this.request('/servers/register', {
+            method: 'POST',
+            body: registrationData
+        });
+    }
+
+    // Server Groups
+    async getServerGroups() {
+        return this.request('/servers/groups');
+    }
+
+    async createServerGroup(data) {
+        return this.request('/servers/groups', {
+            method: 'POST',
+            body: data
+        });
+    }
+
+    async updateServerGroup(id, data) {
+        return this.request(`/servers/groups/${id}`, {
+            method: 'PUT',
+            body: data
+        });
+    }
+
+    async deleteServerGroup(id) {
+        return this.request(`/servers/groups/${id}`, {
+            method: 'DELETE'
+        });
+    }
+
+    // Remote Docker Operations (via agent)
+    async getRemoteContainers(serverId, all = false) {
+        return this.request(`/servers/${serverId}/docker/containers?all=${all}`);
+    }
+
+    async getRemoteContainer(serverId, containerId) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}`);
+    }
+
+    async startRemoteContainer(serverId, containerId) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}/start`, {
+            method: 'POST'
+        });
+    }
+
+    async stopRemoteContainer(serverId, containerId) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}/stop`, {
+            method: 'POST'
+        });
+    }
+
+    async restartRemoteContainer(serverId, containerId) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}/restart`, {
+            method: 'POST'
+        });
+    }
+
+    async removeRemoteContainer(serverId, containerId, force = false) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}?force=${force}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async getRemoteContainerStats(serverId, containerId) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}/stats`);
+    }
+
+    async getRemoteImages(serverId) {
+        return this.request(`/servers/${serverId}/docker/images`);
+    }
+
+    async pullRemoteImage(serverId, image) {
+        return this.request(`/servers/${serverId}/docker/images/pull`, {
+            method: 'POST',
+            body: { image }
+        });
+    }
+
+    async removeRemoteImage(serverId, imageId, force = false) {
+        return this.request(`/servers/${serverId}/docker/images/${imageId}?force=${force}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async getRemoteVolumes(serverId) {
+        return this.request(`/servers/${serverId}/docker/volumes`);
+    }
+
+    async getRemoteNetworks(serverId) {
+        return this.request(`/servers/${serverId}/docker/networks`);
+    }
+
+    async getRemoteSystemMetrics(serverId) {
+        return this.request(`/servers/${serverId}/system/metrics`);
+    }
+
+    async getRemoteSystemInfo(serverId) {
+        return this.request(`/servers/${serverId}/system/info`);
+    }
+
+    // Get available servers for Docker operations
+    async getAvailableServers() {
+        return this.request('/servers/available');
+    }
 }
 
 export const api = new ApiService();
