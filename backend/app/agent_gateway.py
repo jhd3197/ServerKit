@@ -12,6 +12,8 @@ import time
 
 from app.services.agent_registry import agent_registry
 from app.models.server import Server
+from app.utils.ip_utils import is_ip_allowed
+from app.services.anomaly_detection_service import anomaly_detection_service
 
 
 class AgentNamespace(Namespace):
@@ -43,7 +45,8 @@ class AgentNamespace(Namespace):
             "agent_id": "uuid",
             "api_key_prefix": "sk_xxx",
             "signature": "hmac_signature",
-            "timestamp": unix_ms
+            "timestamp": unix_ms,
+            "nonce": "unique_nonce" (optional but recommended)
         }
         """
         sid = request.sid
@@ -51,8 +54,10 @@ class AgentNamespace(Namespace):
         api_key_prefix = data.get('api_key_prefix')
         signature = data.get('signature')
         timestamp = data.get('timestamp', 0)
+        nonce = data.get('nonce')  # Optional for backward compatibility
 
-        print(f"[AgentGateway] Auth attempt from agent {agent_id}")
+        ip_address = request.remote_addr
+        print(f"[AgentGateway] Auth attempt from agent {agent_id} at {ip_address}")
 
         if not all([agent_id, api_key_prefix, signature]):
             emit('auth_fail', {
@@ -62,9 +67,10 @@ class AgentNamespace(Namespace):
             disconnect()
             return
 
-        # Verify authentication
+        # Verify authentication (includes signature verification and replay protection)
         server = agent_registry.verify_agent_auth(
-            agent_id, api_key_prefix, signature, timestamp
+            agent_id, api_key_prefix, signature, timestamp,
+            nonce=nonce, ip_address=ip_address
         )
 
         if not server:
@@ -75,8 +81,25 @@ class AgentNamespace(Namespace):
             disconnect()
             return
 
+        # Check IP allowlist
+        if server.allowed_ips and len(server.allowed_ips) > 0:
+            if not is_ip_allowed(ip_address, server.allowed_ips):
+                # Log security event
+                anomaly_detection_service.track_ip_blocked(
+                    server.id, ip_address, server.allowed_ips
+                )
+                emit('auth_fail', {
+                    'type': 'auth_fail',
+                    'error': 'IP address not allowed'
+                })
+                print(f"[AgentGateway] IP {ip_address} blocked for server {server.id}")
+                disconnect()
+                return
+
+        # Check for new IP and create info alert
+        anomaly_detection_service.check_new_ip(server.id, ip_address)
+
         # Register agent
-        ip_address = request.remote_addr
         agent_version = request.headers.get('User-Agent', '').replace('ServerKit-Agent/', '')
 
         session_token = agent_registry.register_agent(
@@ -96,7 +119,7 @@ class AgentNamespace(Namespace):
             'server_id': server.id
         })
 
-        print(f"[AgentGateway] Agent {agent_id} authenticated successfully")
+        print(f"[AgentGateway] Agent {agent_id} authenticated successfully from {ip_address}")
 
     def on_heartbeat(self, data):
         """
@@ -237,6 +260,70 @@ class AgentNamespace(Namespace):
 
         if agent:
             print(f"[AgentGateway] Error from server {agent.server_id}: {data}")
+
+    def on_credential_update_ack(self, data):
+        """
+        Handle credential update acknowledgment from agent.
+
+        Expected data:
+        {
+            "type": "credential_update_ack",
+            "rotation_id": "uuid",
+            "success": bool,
+            "error": string (optional)
+        }
+        """
+        sid = request.sid
+        agent = agent_registry.get_agent_by_socket(sid)
+
+        if not agent:
+            emit('error', {
+                'type': 'error',
+                'code': 'NOT_AUTHENTICATED',
+                'message': 'Not authenticated'
+            })
+            return
+
+        rotation_id = data.get('rotation_id')
+        success = data.get('success', False)
+        error = data.get('error')
+
+        print(f"[AgentGateway] Credential update ack from {agent.server_id}: success={success}")
+
+        if not rotation_id:
+            emit('error', {
+                'type': 'error',
+                'code': 'MISSING_ROTATION_ID',
+                'message': 'Missing rotation_id'
+            })
+            return
+
+        try:
+            from app import db
+            server = Server.query.get(agent.server_id)
+
+            if not server:
+                return
+
+            if success:
+                # Complete the rotation
+                if server.complete_key_rotation(rotation_id):
+                    db.session.commit()
+                    print(f"[AgentGateway] Key rotation completed for server {server.id}")
+
+                    # Clear nonces for this server since we have new credentials
+                    from app.services.nonce_service import nonce_service
+                    nonce_service.clear_server_nonces(server.id)
+                else:
+                    print(f"[AgentGateway] Key rotation completion failed for server {server.id}")
+            else:
+                # Agent failed to update credentials, cancel rotation
+                server.cancel_key_rotation()
+                db.session.commit()
+                print(f"[AgentGateway] Key rotation cancelled for server {server.id}: {error}")
+
+        except Exception as e:
+            print(f"[AgentGateway] Error handling credential update ack: {e}")
 
 
 def init_agent_gateway(socketio):

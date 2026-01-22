@@ -2833,6 +2833,64 @@ class ApiService {
         return this.request('/servers/terminal/sessions');
     }
 
+    // Security Features
+    async getAllowedIPs(serverId) {
+        return this.request(`/servers/${serverId}/allowed-ips`);
+    }
+
+    async updateAllowedIPs(serverId, allowedIPs) {
+        return this.request(`/servers/${serverId}/allowed-ips`, {
+            method: 'PUT',
+            body: { allowed_ips: allowedIPs }
+        });
+    }
+
+    async getConnectionInfo(serverId) {
+        return this.request(`/servers/${serverId}/connection-info`);
+    }
+
+    async rotateAPIKey(serverId) {
+        return this.request(`/servers/${serverId}/rotate-api-key`, {
+            method: 'POST'
+        });
+    }
+
+    async getServerSecurityAlerts(serverId, options = {}) {
+        const params = new URLSearchParams();
+        if (options.status) params.append('status', options.status);
+        if (options.severity) params.append('severity', options.severity);
+        if (options.limit) params.append('limit', options.limit);
+        const query = params.toString() ? `?${params.toString()}` : '';
+        return this.request(`/servers/${serverId}/security/alerts${query}`);
+    }
+
+    async getAllSecurityAlerts(options = {}) {
+        const params = new URLSearchParams();
+        if (options.status) params.append('status', options.status);
+        if (options.severity) params.append('severity', options.severity);
+        if (options.type) params.append('type', options.type);
+        if (options.limit) params.append('limit', options.limit);
+        const query = params.toString() ? `?${params.toString()}` : '';
+        return this.request(`/servers/security/alerts${query}`);
+    }
+
+    async getSecurityAlertCounts(serverId = null) {
+        const query = serverId ? `?server_id=${serverId}` : '';
+        return this.request(`/servers/security/alerts/counts${query}`);
+    }
+
+    async acknowledgeAlert(alertId) {
+        return this.request(`/servers/security/alerts/${alertId}/acknowledge`, {
+            method: 'POST'
+        });
+    }
+
+    async resolveAlert(alertId) {
+        return this.request(`/servers/security/alerts/${alertId}/resolve`, {
+            method: 'POST'
+        });
+    }
+
     // Agent Downloads
     async getAgentVersion() {
         return this.request('/servers/agent/version');

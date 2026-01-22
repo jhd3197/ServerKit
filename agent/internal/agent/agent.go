@@ -2,7 +2,6 @@ package agent
 
 import (
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"sync"
@@ -237,6 +236,8 @@ func (a *Agent) handleMessage(msgType protocol.MessageType, data []byte) {
 		a.handleSubscribe(data)
 	case protocol.TypeUnsubscribe:
 		a.handleUnsubscribe(data)
+	case protocol.TypeCredentialUpdate:
+		a.handleCredentialUpdate(data)
 	default:
 		a.log.Warn("Unknown message type", "type", msgType)
 	}
@@ -376,6 +377,48 @@ func (a *Agent) streamMetrics(ctx context.Context, channel string) {
 }
 
 // cleanup performs cleanup on shutdown
+// handleCredentialUpdate handles credential rotation from server
+func (a *Agent) handleCredentialUpdate(data []byte) {
+	var msg protocol.CredentialUpdateMessage
+	if err := json.Unmarshal(data, &msg); err != nil {
+		a.log.Error("Failed to parse credential update", "error", err)
+		return
+	}
+
+	a.log.Info("Received credential update request", "rotation_id", msg.RotationID)
+
+	// Update authenticator with new credentials
+	a.auth.UpdateCredentials(msg.APIKey, msg.APISecret)
+
+	// Save new credentials to config file
+	err := a.saveCredentials(msg.APIKey, msg.APISecret)
+
+	// Send acknowledgment
+	ack := protocol.CredentialUpdateAck{
+		Message:    protocol.NewMessage(protocol.TypeCredentialUpdateAck, auth.GenerateNonce()),
+		RotationID: msg.RotationID,
+		Success:    err == nil,
+	}
+	if err != nil {
+		ack.Error = err.Error()
+		a.log.Error("Failed to save new credentials", "error", err)
+	} else {
+		a.log.Info("Credentials updated successfully", "rotation_id", msg.RotationID)
+	}
+
+	a.ws.Send(ack)
+}
+
+// saveCredentials saves new credentials to the key file
+func (a *Agent) saveCredentials(apiKey, apiSecret string) error {
+	// Update config with new credentials
+	a.cfg.Auth.APIKey = apiKey
+	a.cfg.Auth.APISecret = apiSecret
+
+	// Save using existing secure method
+	return a.cfg.SaveCredentials()
+}
+
 func (a *Agent) cleanup() {
 	a.log.Info("Cleaning up...")
 

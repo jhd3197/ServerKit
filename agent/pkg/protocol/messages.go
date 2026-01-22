@@ -32,6 +32,10 @@ const (
 
 	// System
 	TypeSystemInfo MessageType = "system_info"
+
+	// Credential Rotation
+	TypeCredentialUpdate    MessageType = "credential_update"
+	TypeCredentialUpdateAck MessageType = "credential_update_ack"
 )
 
 // Message is the base message structure
@@ -56,6 +60,7 @@ type AuthMessage struct {
 	Message
 	AgentID      string `json:"agent_id"`
 	APIKeyPrefix string `json:"api_key_prefix"`
+	Nonce        string `json:"nonce,omitempty"` // Unique nonce for replay protection
 }
 
 // AuthResponse is sent by server after authentication
@@ -213,3 +218,19 @@ const (
 	ChannelContainerStats = "container:%s:stats"
 	ChannelTerminal       = "terminal:%s"
 )
+
+// CredentialUpdateMessage is sent by server to rotate credentials
+type CredentialUpdateMessage struct {
+	Message
+	RotationID string `json:"rotation_id"`
+	APIKey     string `json:"api_key"`
+	APISecret  string `json:"api_secret"`
+}
+
+// CredentialUpdateAck is sent by agent after updating credentials
+type CredentialUpdateAck struct {
+	Message
+	RotationID string `json:"rotation_id"`
+	Success    bool   `json:"success"`
+	Error      string `json:"error,omitempty"`
+}

@@ -111,12 +111,15 @@ func (c *Client) Connect(ctx context.Context) error {
 // authenticate sends authentication message and waits for response
 func (c *Client) authenticate() error {
 	timestamp := time.Now().UnixMilli()
-	signature := c.auth.SignMessage(timestamp)
+	nonce := auth.GenerateNonce()
+	// Sign with nonce for replay protection
+	signature := c.auth.SignMessageWithNonce(timestamp, nonce)
 
 	authMsg := protocol.AuthMessage{
-		Message:      protocol.NewMessage(protocol.TypeAuth, auth.GenerateNonce()),
+		Message:      protocol.NewMessage(protocol.TypeAuth, nonce),
 		AgentID:      c.auth.AgentID(),
 		APIKeyPrefix: c.auth.GetAPIKeyPrefix(),
+		Nonce:        nonce,
 	}
 	authMsg.Timestamp = timestamp
 	authMsg.Signature = signature

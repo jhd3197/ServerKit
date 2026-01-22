@@ -2,6 +2,7 @@ package auth
 
 import (
 	"crypto/hmac"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
@@ -25,10 +26,33 @@ func New(agentID, apiKey, apiSecret string) *Authenticator {
 }
 
 // SignMessage creates an HMAC signature for authentication
-// The signature is computed as: HMAC-SHA256(agent_id + timestamp, api_secret)
+// The signature is computed as: HMAC-SHA256(agent_id:timestamp, api_secret)
 func (a *Authenticator) SignMessage(timestamp int64) string {
 	message := fmt.Sprintf("%s:%d", a.agentID, timestamp)
 	return a.computeHMAC(message)
+}
+
+// SignMessageWithNonce creates an HMAC signature including a nonce for replay protection
+// The signature is computed as: HMAC-SHA256(agent_id:timestamp:nonce, api_secret)
+func (a *Authenticator) SignMessageWithNonce(timestamp int64, nonce string) string {
+	message := fmt.Sprintf("%s:%d:%s", a.agentID, timestamp, nonce)
+	return a.computeHMAC(message)
+}
+
+// UpdateCredentials updates the API credentials
+func (a *Authenticator) UpdateCredentials(apiKey, apiSecret string) {
+	a.apiKey = apiKey
+	a.apiSecret = apiSecret
+}
+
+// GetAPIKey returns the full API key
+func (a *Authenticator) GetAPIKey() string {
+	return a.apiKey
+}
+
+// GetAPISecret returns the API secret
+func (a *Authenticator) GetAPISecret() string {
+	return a.apiSecret
 }
 
 // SignCommand creates an HMAC signature for a command
@@ -75,9 +99,14 @@ func (a *Authenticator) computeHMAC(message string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-// GenerateNonce generates a random nonce for request uniqueness
+// GenerateNonce generates a cryptographically random nonce for request uniqueness
 func GenerateNonce() string {
-	return fmt.Sprintf("%d-%d", time.Now().UnixNano(), time.Now().UnixMilli())
+	b := make([]byte, 16)
+	if _, err := rand.Read(b); err != nil {
+		// Fallback to time-based if random fails
+		return fmt.Sprintf("%d-%d", time.Now().UnixNano(), time.Now().UnixMilli())
+	}
+	return hex.EncodeToString(b)
 }
 
 // SessionToken represents an authenticated session

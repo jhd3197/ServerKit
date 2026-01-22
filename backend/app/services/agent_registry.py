@@ -466,35 +466,89 @@ class AgentRegistry:
 
     # ==================== Authentication ====================
 
-    def verify_agent_auth(self, agent_id: str, api_key_prefix: str, signature: str, timestamp: int) -> Optional[Server]:
+    def verify_agent_auth(
+        self,
+        agent_id: str,
+        api_key_prefix: str,
+        signature: str,
+        timestamp: int,
+        nonce: str = None,
+        ip_address: str = None
+    ) -> Optional[Server]:
         """
-        Verify agent authentication.
+        Verify agent authentication with full signature and replay protection.
 
         Args:
             agent_id: Agent's unique ID
             api_key_prefix: First 12 chars of API key
             signature: HMAC-SHA256 signature
             timestamp: Unix timestamp in milliseconds
+            nonce: Unique nonce for replay protection (optional but recommended)
+            ip_address: Source IP address for anomaly tracking
 
         Returns:
             Server if authenticated, None otherwise
         """
+        from app.services.nonce_service import nonce_service
+        from app.services.anomaly_detection_service import anomaly_detection_service
+
         # Check timestamp (allow 5 minute window)
         now = int(time.time() * 1000)
         if abs(now - timestamp) > 300000:  # 5 minutes
+            if ip_address:
+                anomaly_detection_service.track_auth_attempt(None, False, ip_address)
             return None
 
         # Find server by agent_id
         server = Server.query.filter_by(agent_id=agent_id).first()
         if not server:
+            if ip_address:
+                anomaly_detection_service.track_auth_attempt(None, False, ip_address)
             return None
 
-        # Verify API key prefix matches
-        if server.api_key_prefix != api_key_prefix:
+        # Verify API key prefix matches (support both active and pending during rotation)
+        prefix_matches = server.api_key_prefix == api_key_prefix
+        pending_prefix_matches = (
+            server.api_key_pending_prefix == api_key_prefix and
+            server.api_key_rotation_expires and
+            datetime.utcnow() <= server.api_key_rotation_expires
+        )
+
+        if not prefix_matches and not pending_prefix_matches:
+            anomaly_detection_service.track_auth_attempt(server.id, False, ip_address)
             return None
 
-        # Note: Full signature verification would require storing the secret
-        # For now, we verify the API key prefix matches
+        # Check nonce for replay protection (if nonce provided)
+        if nonce:
+            if not nonce_service.check_and_record(server.id, nonce):
+                # Replay attack detected!
+                anomaly_detection_service.track_replay_attack(server.id, ip_address, nonce)
+                return None
+
+        # Verify HMAC signature if we have the encrypted secret
+        api_secret = server.get_api_secret()
+        if api_secret:
+            # Construct the message that was signed
+            # Format: agent_id:timestamp:nonce (nonce is optional for backward compatibility)
+            if nonce:
+                message = f"{agent_id}:{timestamp}:{nonce}"
+            else:
+                message = f"{agent_id}:{timestamp}"
+
+            # Calculate expected signature
+            expected_signature = hmac.new(
+                api_secret.encode(),
+                message.encode(),
+                hashlib.sha256
+            ).hexdigest()
+
+            if not hmac.compare_digest(signature, expected_signature):
+                anomaly_detection_service.track_auth_attempt(server.id, False, ip_address)
+                return None
+
+        # Authentication successful
+        if ip_address:
+            anomaly_detection_service.track_auth_attempt(server.id, True, ip_address)
 
         return server
 

@@ -83,8 +83,17 @@ class Server(db.Model):
     # Security
     api_key_hash = db.Column(db.String(256))  # bcrypt hash
     api_key_prefix = db.Column(db.String(12))  # For identification: "sk_abc123"
+    api_secret_encrypted = db.Column(db.Text)  # Fernet-encrypted api_secret for signature verification
     permissions = db.Column(db.JSON, default=list)  # List of permission scopes
     allowed_ips = db.Column(db.JSON, default=list)  # IP whitelist (empty = all)
+
+    # API Key Rotation
+    api_key_pending_hash = db.Column(db.String(256))  # Hash of pending new API key
+    api_key_pending_prefix = db.Column(db.String(12))  # Prefix of pending new API key
+    api_secret_pending_encrypted = db.Column(db.Text)  # Encrypted pending new API secret
+    api_key_rotation_expires = db.Column(db.DateTime)  # When pending key rotation expires
+    api_key_rotation_id = db.Column(db.String(36))  # Unique ID for current rotation
+    api_key_last_rotated = db.Column(db.DateTime)  # Last successful rotation timestamp
 
     # Registration
     registration_token_hash = db.Column(db.String(256))
@@ -137,6 +146,96 @@ class Server(db.Model):
             return False
         return check_password_hash(self.api_key_hash, api_key)
 
+    def set_api_secret_encrypted(self, api_secret):
+        """Encrypt and store the API secret for signature verification"""
+        try:
+            from app.utils.crypto import encrypt_secret
+            self.api_secret_encrypted = encrypt_secret(api_secret)
+        except Exception as e:
+            print(f"Error encrypting API secret: {e}")
+            # Don't fail - system can work without signature verification
+
+    def get_api_secret(self):
+        """Decrypt and return the API secret"""
+        if not self.api_secret_encrypted:
+            return None
+        try:
+            from app.utils.crypto import decrypt_secret
+            return decrypt_secret(self.api_secret_encrypted)
+        except Exception as e:
+            print(f"Error decrypting API secret: {e}")
+            return None
+
+    def start_key_rotation(self):
+        """
+        Start API key rotation process.
+
+        Returns tuple: (new_api_key, new_api_secret, rotation_id)
+        """
+        from datetime import timedelta
+
+        new_api_key, new_api_secret = self.generate_api_credentials()
+        rotation_id = str(uuid.uuid4())
+
+        # Store pending credentials
+        self.api_key_pending_hash = generate_password_hash(new_api_key)
+        self.api_key_pending_prefix = new_api_key[:12] if len(new_api_key) >= 12 else new_api_key
+
+        try:
+            from app.utils.crypto import encrypt_secret
+            self.api_secret_pending_encrypted = encrypt_secret(new_api_secret)
+        except Exception as e:
+            print(f"Error encrypting pending API secret: {e}")
+
+        self.api_key_rotation_id = rotation_id
+        self.api_key_rotation_expires = datetime.utcnow() + timedelta(minutes=5)
+
+        return new_api_key, new_api_secret, rotation_id
+
+    def complete_key_rotation(self, rotation_id):
+        """
+        Complete API key rotation by activating pending credentials.
+
+        Returns: True if successful, False otherwise
+        """
+        if self.api_key_rotation_id != rotation_id:
+            return False
+
+        if self.api_key_rotation_expires and datetime.utcnow() > self.api_key_rotation_expires:
+            self.cancel_key_rotation()
+            return False
+
+        # Move pending to active
+        self.api_key_hash = self.api_key_pending_hash
+        self.api_key_prefix = self.api_key_pending_prefix
+        self.api_secret_encrypted = self.api_secret_pending_encrypted
+
+        # Clear pending and record rotation
+        self.api_key_pending_hash = None
+        self.api_key_pending_prefix = None
+        self.api_secret_pending_encrypted = None
+        self.api_key_rotation_id = None
+        self.api_key_rotation_expires = None
+        self.api_key_last_rotated = datetime.utcnow()
+
+        return True
+
+    def cancel_key_rotation(self):
+        """Cancel a pending key rotation"""
+        self.api_key_pending_hash = None
+        self.api_key_pending_prefix = None
+        self.api_secret_pending_encrypted = None
+        self.api_key_rotation_id = None
+        self.api_key_rotation_expires = None
+
+    def verify_pending_api_key(self, api_key):
+        """Verify against pending API key during rotation"""
+        if not self.api_key_pending_hash:
+            return False
+        if self.api_key_rotation_expires and datetime.utcnow() > self.api_key_rotation_expires:
+            return False
+        return check_password_hash(self.api_key_pending_hash, api_key)
+
     def has_permission(self, scope):
         """Check if server/agent has a specific permission scope"""
         if not self.permissions:
@@ -187,6 +286,8 @@ class Server(db.Model):
             'total_disk': self.total_disk,
             'docker_version': self.docker_version,
             'permissions': self.permissions or [],
+            'allowed_ips': self.allowed_ips or [],
+            'api_key_last_rotated': self.api_key_last_rotated.isoformat() if self.api_key_last_rotated else None,
             'registered_at': self.registered_at.isoformat() if self.registered_at else None,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,

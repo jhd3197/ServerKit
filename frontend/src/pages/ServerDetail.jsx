@@ -689,10 +689,16 @@ const SettingsTab = ({ server, onUpdate, onRegenerateToken }) => {
     });
     const [groups, setGroups] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [allowedIPs, setAllowedIPs] = useState([]);
+    const [newIP, setNewIP] = useState('');
+    const [connectionInfo, setConnectionInfo] = useState(null);
+    const [securityAlerts, setSecurityAlerts] = useState([]);
+    const [rotatingKey, setRotatingKey] = useState(false);
     const toast = useToast();
 
     useEffect(() => {
         loadGroups();
+        loadSecurityData();
     }, []);
 
     async function loadGroups() {
@@ -701,6 +707,82 @@ const SettingsTab = ({ server, onUpdate, onRegenerateToken }) => {
             setGroups(data.groups || []);
         } catch (err) {
             console.error('Failed to load groups:', err);
+        }
+    }
+
+    async function loadSecurityData() {
+        try {
+            const [ipsData, connData, alertsData] = await Promise.all([
+                api.getAllowedIPs(server.id),
+                api.getConnectionInfo(server.id),
+                api.getServerSecurityAlerts(server.id, { status: 'open', limit: 10 })
+            ]);
+            setAllowedIPs(ipsData.allowed_ips || []);
+            setConnectionInfo(connData);
+            setSecurityAlerts(alertsData || []);
+        } catch (err) {
+            console.error('Failed to load security data:', err);
+        }
+    }
+
+    async function handleAddIP() {
+        if (!newIP.trim()) return;
+        const updated = [...allowedIPs, newIP.trim()];
+        try {
+            await api.updateAllowedIPs(server.id, updated);
+            setAllowedIPs(updated);
+            setNewIP('');
+            toast.success('IP allowlist updated');
+        } catch (err) {
+            toast.error(err.details?.[0] || err.message || 'Invalid IP pattern');
+        }
+    }
+
+    async function handleRemoveIP(ip) {
+        const updated = allowedIPs.filter(i => i !== ip);
+        try {
+            await api.updateAllowedIPs(server.id, updated);
+            setAllowedIPs(updated);
+            toast.success('IP removed from allowlist');
+        } catch (err) {
+            toast.error(err.message || 'Failed to update allowlist');
+        }
+    }
+
+    async function handleRotateKey() {
+        if (!confirm('Rotate API credentials? The agent must be online to receive new credentials.')) return;
+        setRotatingKey(true);
+        try {
+            const result = await api.rotateAPIKey(server.id);
+            if (result.success) {
+                toast.success('Credential rotation initiated. Agent will update shortly.');
+            } else {
+                toast.error(result.error || 'Failed to rotate credentials');
+            }
+        } catch (err) {
+            toast.error(err.message || 'Failed to rotate credentials');
+        } finally {
+            setRotatingKey(false);
+        }
+    }
+
+    async function handleAcknowledgeAlert(alertId) {
+        try {
+            await api.acknowledgeAlert(alertId);
+            setSecurityAlerts(prev => prev.map(a =>
+                a.id === alertId ? { ...a, status: 'acknowledged' } : a
+            ));
+        } catch (err) {
+            toast.error('Failed to acknowledge alert');
+        }
+    }
+
+    async function handleResolveAlert(alertId) {
+        try {
+            await api.resolveAlert(alertId);
+            setSecurityAlerts(prev => prev.filter(a => a.id !== alertId));
+        } catch (err) {
+            toast.error('Failed to resolve alert');
         }
     }
 
@@ -799,6 +881,136 @@ const SettingsTab = ({ server, onUpdate, onRegenerateToken }) => {
                 </button>
             </div>
 
+            <div className="form-section">
+                <h3>Security</h3>
+
+                {/* Connection Info */}
+                {connectionInfo && (
+                    <div className="security-info">
+                        <div className="info-item">
+                            <span className="label">Current Connection IP:</span>
+                            <span className="value">{connectionInfo.ip_address || 'Not connected'}</span>
+                        </div>
+                        {connectionInfo.connected_since && (
+                            <div className="info-item">
+                                <span className="label">Connected Since:</span>
+                                <span className="value">{new Date(connectionInfo.connected_since).toLocaleString()}</span>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* IP Allowlist */}
+                <div className="subsection">
+                    <h4>IP Allowlist</h4>
+                    <p className="section-description">
+                        Restrict which IP addresses can connect to this server. Leave empty to allow all IPs.
+                        Supports single IPs, CIDR notation (192.168.1.0/24), and wildcards (192.168.1.*).
+                    </p>
+
+                    <div className="ip-list">
+                        {allowedIPs.length === 0 ? (
+                            <p className="empty-state">No IP restrictions (all IPs allowed)</p>
+                        ) : (
+                            allowedIPs.map((ip, idx) => (
+                                <div key={idx} className="ip-item">
+                                    <code>{ip}</code>
+                                    {connectionInfo?.ip_address === ip && (
+                                        <span className="badge badge-success">Current</span>
+                                    )}
+                                    <button
+                                        className="btn btn-icon btn-danger-subtle"
+                                        onClick={() => handleRemoveIP(ip)}
+                                        title="Remove"
+                                    >
+                                        <TrashIcon />
+                                    </button>
+                                </div>
+                            ))
+                        )}
+                    </div>
+
+                    <div className="ip-add-form">
+                        <input
+                            type="text"
+                            placeholder="Add IP address or CIDR (e.g., 192.168.1.0/24)"
+                            value={newIP}
+                            onChange={(e) => setNewIP(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddIP())}
+                        />
+                        <button className="btn btn-secondary" onClick={handleAddIP}>
+                            Add IP
+                        </button>
+                    </div>
+
+                    {connectionInfo?.ip_address && allowedIPs.length > 0 && !allowedIPs.some(ip => {
+                        // Simple check - full validation is server-side
+                        return ip === connectionInfo.ip_address || ip.includes('*') || ip.includes('/');
+                    }) && (
+                        <p className="warning">
+                            Warning: Current connection IP ({connectionInfo.ip_address}) may be blocked!
+                        </p>
+                    )}
+                </div>
+
+                {/* API Key Rotation */}
+                <div className="subsection">
+                    <h4>API Key Rotation</h4>
+                    <p className="section-description">
+                        Rotate the API credentials used by the agent. The agent must be online to receive new credentials.
+                    </p>
+                    <button
+                        className="btn btn-secondary"
+                        onClick={handleRotateKey}
+                        disabled={rotatingKey || server.status !== 'online'}
+                    >
+                        <KeyIcon /> {rotatingKey ? 'Rotating...' : 'Rotate API Key'}
+                    </button>
+                    {server.api_key_last_rotated && (
+                        <p className="hint">Last rotated: {new Date(server.api_key_last_rotated).toLocaleString()}</p>
+                    )}
+                </div>
+
+                {/* Security Alerts */}
+                {securityAlerts.length > 0 && (
+                    <div className="subsection">
+                        <h4>Security Alerts</h4>
+                        <div className="alerts-list">
+                            {securityAlerts.map(alert => (
+                                <div key={alert.id} className={`alert-item severity-${alert.severity}`}>
+                                    <div className="alert-header">
+                                        <span className={`severity-badge ${alert.severity}`}>{alert.severity}</span>
+                                        <span className="alert-type">{alert.alert_type.replace('_', ' ')}</span>
+                                        <span className="alert-time">{new Date(alert.created_at).toLocaleString()}</span>
+                                    </div>
+                                    <div className="alert-details">
+                                        {alert.source_ip && <span>IP: {alert.source_ip}</span>}
+                                        {alert.details?.message && <span>{alert.details.message}</span>}
+                                        {alert.details?.attempts && <span>Attempts: {alert.details.attempts}</span>}
+                                    </div>
+                                    <div className="alert-actions">
+                                        {alert.status === 'open' && (
+                                            <button
+                                                className="btn btn-sm btn-secondary"
+                                                onClick={() => handleAcknowledgeAlert(alert.id)}
+                                            >
+                                                Acknowledge
+                                            </button>
+                                        )}
+                                        <button
+                                            className="btn btn-sm btn-success"
+                                            onClick={() => handleResolveAlert(alert.id)}
+                                        >
+                                            Resolve
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+
             <div className="form-section danger-zone">
                 <h3>Danger Zone</h3>
                 <p className="section-description">
@@ -832,6 +1044,12 @@ const TrashIcon = () => (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <polyline points="3 6 5 6 21 6"/>
         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+    </svg>
+);
+
+const KeyIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
     </svg>
 );
 

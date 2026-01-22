@@ -354,6 +354,7 @@ def register_agent():
     # Update server with agent info
     server.agent_id = data.get('agent_id') or str(__import__('uuid').uuid4())
     server.set_api_key(api_key)
+    server.set_api_secret_encrypted(api_secret)  # Store encrypted secret for signature verification
     server.status = 'connecting'
     server.registered_at = datetime.utcnow()
 
@@ -605,6 +606,229 @@ def get_command_history(server_id):
 def get_permission_profiles():
     """Get available permission profiles"""
     return jsonify(PERMISSION_PROFILES)
+
+
+# ==================== Security Features ====================
+
+from app.utils.ip_utils import is_ip_allowed, validate_ip_pattern
+from app.models.security_alert import SecurityAlert
+from app.services.anomaly_detection_service import anomaly_detection_service
+
+
+@servers_bp.route('/<server_id>/allowed-ips', methods=['GET'])
+@jwt_required()
+def get_allowed_ips(server_id):
+    """Get allowed IPs for a server"""
+    server = Server.query.get(server_id)
+    if not server:
+        return jsonify({'error': 'Server not found'}), 404
+
+    return jsonify({
+        'allowed_ips': server.allowed_ips or [],
+        'is_enforced': bool(server.allowed_ips and len(server.allowed_ips) > 0)
+    })
+
+
+@servers_bp.route('/<server_id>/allowed-ips', methods=['PUT'])
+@jwt_required()
+@developer_required
+def update_allowed_ips(server_id):
+    """
+    Update allowed IPs for a server.
+
+    Body: { "allowed_ips": ["192.168.1.0/24", "10.0.0.5"] }
+
+    Supports:
+    - Single IP: "192.168.1.100"
+    - CIDR: "192.168.1.0/24"
+    - Wildcards: "192.168.1.*"
+    """
+    server = Server.query.get(server_id)
+    if not server:
+        return jsonify({'error': 'Server not found'}), 404
+
+    data = request.get_json()
+    allowed_ips = data.get('allowed_ips', [])
+
+    # Validate each IP pattern
+    errors = []
+    for ip_pattern in allowed_ips:
+        is_valid, error = validate_ip_pattern(ip_pattern)
+        if not is_valid:
+            errors.append(f"Invalid pattern '{ip_pattern}': {error}")
+
+    if errors:
+        return jsonify({'error': 'Invalid IP patterns', 'details': errors}), 400
+
+    server.allowed_ips = allowed_ips
+    db.session.commit()
+
+    return jsonify({
+        'allowed_ips': server.allowed_ips,
+        'is_enforced': bool(server.allowed_ips and len(server.allowed_ips) > 0)
+    })
+
+
+@servers_bp.route('/<server_id>/connection-info', methods=['GET'])
+@jwt_required()
+def get_connection_info(server_id):
+    """Get connection info for a server (current IP, connected status, etc.)"""
+    server = Server.query.get(server_id)
+    if not server:
+        return jsonify({'error': 'Server not found'}), 404
+
+    is_connected = agent_registry.is_agent_connected(server_id)
+    agent = agent_registry.get_agent(server_id) if is_connected else None
+
+    # Get active session from database
+    active_session = AgentSession.query.filter_by(
+        server_id=server_id,
+        is_active=True
+    ).first()
+
+    return jsonify({
+        'connected': is_connected,
+        'ip_address': agent.ip_address if agent else (active_session.ip_address if active_session else None),
+        'connected_since': active_session.connected_at.isoformat() if active_session else None,
+        'agent_version': agent.agent_version if agent else server.agent_version,
+        'last_heartbeat': agent.last_heartbeat.isoformat() if agent else None
+    })
+
+
+@servers_bp.route('/<server_id>/rotate-api-key', methods=['POST'])
+@jwt_required()
+@admin_required
+def rotate_api_key(server_id):
+    """
+    Initiate API key rotation for a server.
+
+    This generates new credentials and sends them to the connected agent.
+    The agent must acknowledge the update within 5 minutes.
+    """
+    server = Server.query.get(server_id)
+    if not server:
+        return jsonify({'error': 'Server not found'}), 404
+
+    if not agent_registry.is_agent_connected(server_id):
+        return jsonify({
+            'error': 'Agent must be connected to rotate API key',
+            'code': 'AGENT_OFFLINE'
+        }), 400
+
+    # Check if there's already a pending rotation
+    if server.api_key_rotation_id and server.api_key_rotation_expires:
+        if datetime.utcnow() < server.api_key_rotation_expires:
+            return jsonify({
+                'error': 'API key rotation already in progress',
+                'rotation_id': server.api_key_rotation_id,
+                'expires': server.api_key_rotation_expires.isoformat()
+            }), 409
+
+    # Start rotation
+    new_api_key, new_api_secret, rotation_id = server.start_key_rotation()
+    db.session.commit()
+
+    # Send credential update to agent
+    agent = agent_registry.get_agent(server_id)
+    if agent and agent_registry._socketio:
+        agent_registry._socketio.emit(
+            'credential_update',
+            {
+                'type': 'credential_update',
+                'rotation_id': rotation_id,
+                'api_key': new_api_key,
+                'api_secret': new_api_secret
+            },
+            room=agent.socket_id,
+            namespace='/agent'
+        )
+
+    return jsonify({
+        'success': True,
+        'rotation_id': rotation_id,
+        'message': 'Credential update sent to agent. Waiting for acknowledgment.',
+        'expires': server.api_key_rotation_expires.isoformat()
+    })
+
+
+@servers_bp.route('/<server_id>/security/alerts', methods=['GET'])
+@jwt_required()
+def get_server_security_alerts(server_id):
+    """Get security alerts for a specific server"""
+    server = Server.query.get(server_id)
+    if not server:
+        return jsonify({'error': 'Server not found'}), 404
+
+    status = request.args.get('status')
+    severity = request.args.get('severity')
+    limit = request.args.get('limit', 100, type=int)
+
+    alerts = anomaly_detection_service.get_alerts(
+        server_id=server_id,
+        status=status,
+        severity=severity,
+        limit=limit
+    )
+
+    return jsonify([a.to_dict() for a in alerts])
+
+
+@servers_bp.route('/security/alerts', methods=['GET'])
+@jwt_required()
+def get_all_security_alerts():
+    """Get security alerts for all servers"""
+    status = request.args.get('status')
+    severity = request.args.get('severity')
+    alert_type = request.args.get('type')
+    limit = request.args.get('limit', 100, type=int)
+
+    alerts = anomaly_detection_service.get_alerts(
+        status=status,
+        severity=severity,
+        alert_type=alert_type,
+        limit=limit
+    )
+
+    return jsonify([a.to_dict() for a in alerts])
+
+
+@servers_bp.route('/security/alerts/counts', methods=['GET'])
+@jwt_required()
+def get_security_alert_counts():
+    """Get counts of security alerts by status and severity"""
+    server_id = request.args.get('server_id')
+    counts = anomaly_detection_service.get_alert_counts(server_id=server_id)
+    return jsonify(counts)
+
+
+@servers_bp.route('/security/alerts/<alert_id>/acknowledge', methods=['POST'])
+@jwt_required()
+@developer_required
+def acknowledge_alert(alert_id):
+    """Acknowledge a security alert"""
+    alert = SecurityAlert.query.get(alert_id)
+    if not alert:
+        return jsonify({'error': 'Alert not found'}), 404
+
+    user_id = get_jwt_identity()
+    alert.acknowledge(user_id=user_id)
+
+    return jsonify(alert.to_dict())
+
+
+@servers_bp.route('/security/alerts/<alert_id>/resolve', methods=['POST'])
+@jwt_required()
+@developer_required
+def resolve_alert(alert_id):
+    """Resolve a security alert"""
+    alert = SecurityAlert.query.get(alert_id)
+    if not alert:
+        return jsonify({'error': 'Alert not found'}), 404
+
+    user_id = get_jwt_identity()
+    alert.resolve(user_id=user_id)
+
+    return jsonify(alert.to_dict())
 
 
 # ==================== Remote Docker Operations ====================
