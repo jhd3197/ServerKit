@@ -1869,6 +1869,43 @@ class ApiService {
     }
 
     // ========================================
+    // Git Server endpoints
+    // ========================================
+    async getGitStatus() {
+        return this.request('/git/status');
+    }
+
+    async getGitRequirements() {
+        return this.request('/git/requirements');
+    }
+
+    async installGit(data) {
+        return this.request('/git/install', {
+            method: 'POST',
+            body: data
+        });
+    }
+
+    async uninstallGit(removeData = false) {
+        return this.request('/git/uninstall', {
+            method: 'POST',
+            body: { removeData }
+        });
+    }
+
+    async startGit() {
+        return this.request('/git/start', { method: 'POST' });
+    }
+
+    async stopGit() {
+        return this.request('/git/stop', { method: 'POST' });
+    }
+
+    async restartGit() {
+        return this.request('/git/restart', { method: 'POST' });
+    }
+
+    // ========================================
     // Cron Job endpoints
     // ========================================
     async getCronStatus() {
