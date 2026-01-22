@@ -12,7 +12,7 @@ LDFLAGS := -s -w \
 BINARY_NAME := serverkit-agent
 DIST_DIR := dist
 
-.PHONY: all build clean test lint deps dev run
+.PHONY: all build clean test lint deps dev run docker-build docker-push docker-buildx
 
 all: build
 
@@ -92,6 +92,38 @@ install: build
 checksums:
 	@cd $(DIST_DIR) && sha256sum * > checksums.txt
 
+# Docker image name
+DOCKER_IMAGE := serverkit/agent
+DOCKER_TAG ?= latest
+
+# Build Docker image
+docker-build:
+	docker build \
+		--build-arg VERSION=$(VERSION) \
+		--build-arg BUILD_TIME=$(BUILD_TIME) \
+		--build-arg GIT_COMMIT=$(GIT_COMMIT) \
+		-t $(DOCKER_IMAGE):$(DOCKER_TAG) .
+
+# Build and tag Docker image with version
+docker-build-version: docker-build
+	docker tag $(DOCKER_IMAGE):$(DOCKER_TAG) $(DOCKER_IMAGE):$(VERSION)
+
+# Push Docker image
+docker-push:
+	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
+	docker push $(DOCKER_IMAGE):$(VERSION)
+
+# Build multi-arch Docker image
+docker-buildx:
+	docker buildx build \
+		--platform linux/amd64,linux/arm64 \
+		--build-arg VERSION=$(VERSION) \
+		--build-arg BUILD_TIME=$(BUILD_TIME) \
+		--build-arg GIT_COMMIT=$(GIT_COMMIT) \
+		-t $(DOCKER_IMAGE):$(DOCKER_TAG) \
+		-t $(DOCKER_IMAGE):$(VERSION) \
+		--push .
+
 # Help
 help:
 	@echo "ServerKit Agent Build System"
@@ -99,16 +131,22 @@ help:
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Targets:"
-	@echo "  build        Build for current platform"
-	@echo "  build-all    Build for all platforms"
-	@echo "  build-linux  Build for Linux only"
-	@echo "  build-windows Build for Windows only"
-	@echo "  dev          Build with debug symbols"
-	@echo "  run          Build and run the agent"
-	@echo "  test         Run tests"
-	@echo "  lint         Run linter"
-	@echo "  fmt          Format code"
-	@echo "  clean        Remove build artifacts"
-	@echo "  deps         Download dependencies"
-	@echo "  install      Install to /usr/local/bin"
-	@echo "  help         Show this help"
+	@echo "  build           Build for current platform"
+	@echo "  build-all       Build for all platforms"
+	@echo "  build-linux     Build for Linux only"
+	@echo "  build-windows   Build for Windows only"
+	@echo "  dev             Build with debug symbols"
+	@echo "  run             Build and run the agent"
+	@echo "  test            Run tests"
+	@echo "  lint            Run linter"
+	@echo "  fmt             Format code"
+	@echo "  clean           Remove build artifacts"
+	@echo "  deps            Download dependencies"
+	@echo "  install         Install to /usr/local/bin"
+	@echo ""
+	@echo "Docker:"
+	@echo "  docker-build    Build Docker image"
+	@echo "  docker-push     Push Docker image to registry"
+	@echo "  docker-buildx   Build multi-arch image (amd64, arm64)"
+	@echo ""
+	@echo "  help            Show this help"

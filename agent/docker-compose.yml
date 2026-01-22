@@ -1,0 +1,69 @@
+# ServerKit Agent - Docker Compose Configuration
+#
+# Usage:
+#   1. Register first (one-time setup):
+#      docker compose run --rm agent register -s https://your-serverkit.com -t YOUR_TOKEN
+#
+#   2. Start the agent:
+#      docker compose up -d
+#
+#   3. View logs:
+#      docker compose logs -f
+#
+#   4. Stop the agent:
+#      docker compose down
+
+services:
+  agent:
+    image: serverkit/agent:latest
+    container_name: serverkit-agent
+    restart: unless-stopped
+
+    # Run as root to access Docker socket
+    # The agent drops privileges internally where possible
+    user: root
+
+    volumes:
+      # Docker socket for container management
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      # Persist configuration between restarts
+      - serverkit-config:/etc/serverkit-agent
+
+      # Persist logs
+      - serverkit-logs:/var/log/serverkit-agent
+
+    environment:
+      # Optional: Set timezone
+      - TZ=UTC
+
+    # Optional: Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "serverkit-agent", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  serverkit-config:
+    name: serverkit-agent-config
+  serverkit-logs:
+    name: serverkit-agent-logs

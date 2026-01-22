@@ -1290,7 +1290,7 @@ system:exec:  # Requires explicit permission
     [x] Volume/network listing
 ```
 
-### Phase 10.6: Monitoring & Metrics 🔄 IN PROGRESS
+### Phase 10.6: Monitoring & Metrics ✅ MOSTLY COMPLETE
 **Duration: ~2 weeks**
 
 ```
@@ -1299,10 +1299,10 @@ system:exec:  # Requires explicit permission
     [x] WebSocket to frontend (SocketIO)
     [x] Live dashboard updates
 
-[ ] Historical metrics
+[x] Historical metrics (partial)
     [x] Metrics storage (ServerMetrics model)
-    [ ] Retention policies
-    [ ] Aggregation queries
+    [ ] Retention policies (future)
+    [ ] Aggregation queries (future)
 
 [x] Cross-server dashboard
     [x] Overview page (Servers.jsx)
@@ -1310,7 +1310,7 @@ system:exec:  # Requires explicit permission
     [x] Health grid view
 ```
 
-### Phase 10.7: Installation & Distribution ✅ MOSTLY COMPLETE
+### Phase 10.7: Installation & Distribution ✅ COMPLETE
 **Duration: ~1-2 weeks**
 
 ```
@@ -1324,13 +1324,13 @@ system:exec:  # Requires explicit permission
     [x] Linux install script (bash) - created
     [x] Windows install script (PowerShell) - created
     [x] Installation endpoint in backend
-    [ ] Docker image
+    [x] Docker image (Dockerfile + docker-compose.yml)
 
-[ ] Package building
-    [ ] .deb packages
-    [ ] .rpm packages
-    [ ] .msi installer
-    [ ] Homebrew formula
+[x] Package building
+    [x] .deb packages (packaging/deb/build.sh)
+    [x] .rpm packages (packaging/rpm/build.sh)
+    [x] .msi installer (packaging/msi/Product.wxs + build.ps1)
+    [ ] Homebrew formula (future)
 
 [x] Auto-update system
     [x] Version checking endpoint
@@ -1341,14 +1341,18 @@ system:exec:  # Requires explicit permission
     [x] Download page in UI
 ```
 
-### Phase 10.8: Advanced Features
+### Phase 10.8: Advanced Features 🔄 IN PROGRESS
 **Duration: ~3-4 weeks**
 
 ```
-[ ] Docker Compose on remote servers
-    [ ] Stack deployment
-    [ ] Stack management
-    [ ] Compose file editor
+[x] Docker Compose on remote servers
+    [x] Agent: Compose methods (list, ps, up, down, logs, restart, pull)
+    [x] Backend: RemoteDockerService compose methods
+    [x] Backend: API endpoints for compose operations
+    [x] Frontend: API methods for compose
+    [x] Frontend: ComposeTab in Docker page
+    [x] Frontend: ComposeLogsModal for viewing logs
+    [ ] Compose file editor (future)
 
 [x] Container logs streaming
     [x] Real-time log streaming via agent
@@ -1357,10 +1361,15 @@ system:exec:  # Requires explicit permission
     [ ] Log search/filter (future)
     [ ] Download logs (future)
 
-[ ] Remote terminal (optional)
+[ ] Remote terminal (optional - lower priority)
     [ ] PTY support in agent
     [ ] Terminal UI component
     [ ] Session management
+
+[ ] Historical metrics
+    [ ] Retention policies
+    [ ] Aggregation queries
+    [ ] Metrics visualization improvements
 ```
 
 ---
@@ -1522,6 +1531,6 @@ logging:
 
 *This document is a living specification and will be updated as implementation progresses.*
 
-**Document Version**: 1.0.0
-**Last Updated**: 2026-01-21
+**Document Version**: 1.1.0
+**Last Updated**: 2026-01-22
 **Author**: ServerKit Team

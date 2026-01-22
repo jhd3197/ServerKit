@@ -85,10 +85,212 @@ jobs:
           path: dist/serverkit-agent-${{ steps.version.outputs.version }}-*
           retention-days: 5
 
+  # Build .deb packages
+  build-deb:
+    name: Build DEB Package
+    runs-on: ubuntu-latest
+    needs: build
+
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/agent-v}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download binary
+        uses: actions/download-artifact@v4
+        with:
+          name: serverkit-agent-linux-${{ matrix.arch }}
+          path: dist/
+
+      - name: Extract binary
+        run: |
+          cd dist
+          tar -xzf serverkit-agent-${{ steps.version.outputs.version }}-linux-${{ matrix.arch }}.tar.gz
+
+      - name: Build DEB package
+        run: |
+          chmod +x agent/packaging/deb/build.sh
+          cd agent/packaging/deb
+          ./build.sh "${{ steps.version.outputs.version }}" "${{ matrix.arch }}" "../../../dist/serverkit-agent-linux-${{ matrix.arch }}" "../../../packages"
+
+      - name: Upload DEB package
+        uses: actions/upload-artifact@v4
+        with:
+          name: serverkit-agent-deb-${{ matrix.arch }}
+          path: packages/*.deb
+          retention-days: 5
+
+  # Build .rpm packages
+  build-rpm:
+    name: Build RPM Package
+    runs-on: ubuntu-latest
+    needs: build
+
+    strategy:
+      matrix:
+        include:
+          - goarch: amd64
+            rpmarch: x86_64
+          - goarch: arm64
+            rpmarch: aarch64
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/agent-v}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Install RPM build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm
+
+      - name: Download binary
+        uses: actions/download-artifact@v4
+        with:
+          name: serverkit-agent-linux-${{ matrix.goarch }}
+          path: dist/
+
+      - name: Extract binary
+        run: |
+          cd dist
+          tar -xzf serverkit-agent-${{ steps.version.outputs.version }}-linux-${{ matrix.goarch }}.tar.gz
+
+      - name: Build RPM package
+        run: |
+          chmod +x agent/packaging/rpm/build.sh
+          cd agent/packaging/rpm
+          ./build.sh "${{ steps.version.outputs.version }}" "${{ matrix.rpmarch }}" "../../../dist/serverkit-agent-linux-${{ matrix.goarch }}" "../../../packages"
+
+      - name: Upload RPM package
+        uses: actions/upload-artifact@v4
+        with:
+          name: serverkit-agent-rpm-${{ matrix.rpmarch }}
+          path: packages/*.rpm
+          retention-days: 5
+
+  # Build Windows MSI
+  build-msi:
+    name: Build MSI Installer
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/agent-v}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Install WiX Toolset
+        run: |
+          dotnet tool install --global wix
+
+      - name: Download binary
+        uses: actions/download-artifact@v4
+        with:
+          name: serverkit-agent-windows-amd64
+          path: dist/
+
+      - name: Extract binary
+        shell: bash
+        run: |
+          cd dist
+          unzip serverkit-agent-${{ steps.version.outputs.version }}-windows-amd64.zip
+
+      - name: Build MSI
+        shell: pwsh
+        run: |
+          cd agent/packaging/msi
+          .\build.ps1 -Version "${{ steps.version.outputs.version }}" -BinaryPath "..\..\..\dist\serverkit-agent-windows-amd64.exe" -OutputDir "..\..\..\packages"
+
+      - name: Upload MSI
+        uses: actions/upload-artifact@v4
+        with:
+          name: serverkit-agent-msi
+          path: packages/*.msi
+          retention-days: 5
+
+  # Build Docker image
+  build-docker:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/agent-v}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./agent
+          platforms: linux/amd64,linux/arm64
+          push: ${{ secrets.DOCKERHUB_USERNAME != '' }}
+          tags: |
+            serverkit/agent:latest
+            serverkit/agent:${{ steps.version.outputs.version }}
+          build-args: |
+            VERSION=${{ steps.version.outputs.version }}
+            BUILD_TIME=${{ github.event.repository.updated_at }}
+            GIT_COMMIT=${{ github.sha }}
+
   release:
     name: Create Release
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, build-deb, build-rpm, build-msi, build-docker]
     permissions:
       contents: write
 
@@ -114,7 +316,14 @@ jobs:
       - name: Prepare release files
         run: |
           mkdir -p release
+          # Binary archives
           find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" \) -exec mv {} release/ \;
+          # DEB packages
+          find artifacts -type f -name "*.deb" -exec mv {} release/ \;
+          # RPM packages
+          find artifacts -type f -name "*.rpm" -exec mv {} release/ \;
+          # MSI installers
+          find artifacts -type f -name "*.msi" -exec mv {} release/ \;
           ls -la release/
 
       - name: Generate checksums
@@ -137,22 +346,62 @@ jobs:
 
             ### Downloads
 
+            #### Binary Archives
             | Platform | Architecture | Download |
             |----------|--------------|----------|
             | Linux | x64 (amd64) | `serverkit-agent-${{ steps.version.outputs.version }}-linux-amd64.tar.gz` |
             | Linux | ARM64 | `serverkit-agent-${{ steps.version.outputs.version }}-linux-arm64.tar.gz` |
             | Windows | x64 (amd64) | `serverkit-agent-${{ steps.version.outputs.version }}-windows-amd64.zip` |
 
-            ### Quick Install
+            #### Linux Packages
+            | Format | Architecture | Download |
+            |--------|--------------|----------|
+            | DEB (Debian/Ubuntu) | amd64 | `serverkit-agent_${{ steps.version.outputs.version }}_amd64.deb` |
+            | DEB (Debian/Ubuntu) | arm64 | `serverkit-agent_${{ steps.version.outputs.version }}_arm64.deb` |
+            | RPM (RHEL/Fedora) | x86_64 | `serverkit-agent-${{ steps.version.outputs.version }}-1.x86_64.rpm` |
+            | RPM (RHEL/Fedora) | aarch64 | `serverkit-agent-${{ steps.version.outputs.version }}-1.aarch64.rpm` |
 
-            **Linux (one-liner):**
+            #### Windows Installer
+            | Format | Architecture | Download |
+            |--------|--------------|----------|
+            | MSI | x64 | `serverkit-agent-${{ steps.version.outputs.version }}-x64.msi` |
+
+            #### Docker
             ```bash
-            curl -fsSL https://your-serverkit.com/install.sh | sudo bash -s -- --token "YOUR_TOKEN"
+            docker pull serverkit/agent:${{ steps.version.outputs.version }}
+            docker pull serverkit/agent:latest
             ```
 
-            **Windows (PowerShell as Admin):**
+            ### Quick Install
+
+            **Debian/Ubuntu:**
+            ```bash
+            curl -LO https://github.com/${{ github.repository }}/releases/download/agent-v${{ steps.version.outputs.version }}/serverkit-agent_${{ steps.version.outputs.version }}_amd64.deb
+            sudo dpkg -i serverkit-agent_${{ steps.version.outputs.version }}_amd64.deb
+            sudo serverkit-agent register --token "YOUR_TOKEN" --server "https://your-serverkit.com"
+            sudo systemctl start serverkit-agent
+            ```
+
+            **RHEL/Fedora:**
+            ```bash
+            sudo rpm -i https://github.com/${{ github.repository }}/releases/download/agent-v${{ steps.version.outputs.version }}/serverkit-agent-${{ steps.version.outputs.version }}-1.x86_64.rpm
+            sudo serverkit-agent register --token "YOUR_TOKEN" --server "https://your-serverkit.com"
+            sudo systemctl start serverkit-agent
+            ```
+
+            **Windows (MSI):**
+            Download and run the MSI installer, then:
             ```powershell
-            irm https://your-serverkit.com/install.ps1 | iex; Install-ServerKitAgent -Token "YOUR_TOKEN"
+            serverkit-agent register --token "YOUR_TOKEN" --server "https://your-serverkit.com"
+            Start-Service ServerKitAgent
+            ```
+
+            **Docker:**
+            ```bash
+            docker run -d --name serverkit-agent \
+              -v /var/run/docker.sock:/var/run/docker.sock:ro \
+              -v serverkit-config:/etc/serverkit-agent \
+              serverkit/agent:${{ steps.version.outputs.version }}
             ```
 
             ### Verification
@@ -171,7 +420,7 @@ jobs:
   summary:
     name: Build Summary
     runs-on: ubuntu-latest
-    needs: [build, release]
+    needs: [build, build-deb, build-rpm, build-msi, build-docker, release]
 
     steps:
       - name: Get version
@@ -197,6 +446,17 @@ jobs:
           echo "| Linux | amd64 | ✅ Built |" >> $GITHUB_STEP_SUMMARY
           echo "| Linux | arm64 | ✅ Built |" >> $GITHUB_STEP_SUMMARY
           echo "| Windows | amd64 | ✅ Built |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Packages" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Format | Architecture | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|--------------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| DEB | amd64 | ✅ Built |" >> $GITHUB_STEP_SUMMARY
+          echo "| DEB | arm64 | ✅ Built |" >> $GITHUB_STEP_SUMMARY
+          echo "| RPM | x86_64 | ✅ Built |" >> $GITHUB_STEP_SUMMARY
+          echo "| RPM | aarch64 | ✅ Built |" >> $GITHUB_STEP_SUMMARY
+          echo "| MSI | x64 | ✅ Built |" >> $GITHUB_STEP_SUMMARY
+          echo "| Docker | multi-arch | ✅ Built |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Release" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

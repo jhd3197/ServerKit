@@ -29,6 +29,66 @@ irm https://your-serverkit.com/install.ps1 | iex
 Install-ServerKitAgent -Token "sk_reg_your_token" -Server "https://your-serverkit.com"
 ```
 
+### Docker (Recommended for containerized environments)
+
+```bash
+# Pull the image
+docker pull serverkit/agent:latest
+
+# Register the agent (one-time setup)
+docker run --rm -v serverkit-agent-config:/etc/serverkit-agent \
+  serverkit/agent:latest register \
+  --token "sk_reg_your_token" \
+  --server "https://your-serverkit.com"
+
+# Start the agent
+docker run -d --name serverkit-agent \
+  --restart unless-stopped \
+  -v /var/run/docker.sock:/var/run/docker.sock:ro \
+  -v serverkit-agent-config:/etc/serverkit-agent \
+  serverkit/agent:latest
+```
+
+Or use Docker Compose:
+
+```bash
+# Clone and navigate to agent directory
+cd agent
+
+# Register (one-time setup)
+docker compose run --rm agent register -s https://your-serverkit.com -t YOUR_TOKEN
+
+# Start the agent
+docker compose up -d
+
+# View logs
+docker compose logs -f
+```
+
+### Package Installation
+
+**Debian/Ubuntu (.deb):**
+```bash
+curl -LO https://github.com/serverkit/serverkit/releases/latest/download/serverkit-agent_VERSION_amd64.deb
+sudo dpkg -i serverkit-agent_VERSION_amd64.deb
+sudo serverkit-agent register --token "YOUR_TOKEN" --server "https://your-serverkit.com"
+sudo systemctl start serverkit-agent
+```
+
+**RHEL/CentOS/Fedora (.rpm):**
+```bash
+sudo rpm -i https://github.com/serverkit/serverkit/releases/latest/download/serverkit-agent-VERSION-1.x86_64.rpm
+sudo serverkit-agent register --token "YOUR_TOKEN" --server "https://your-serverkit.com"
+sudo systemctl start serverkit-agent
+```
+
+**Windows (.msi):**
+Download and run the MSI installer from the releases page, then:
+```powershell
+serverkit-agent register --token "YOUR_TOKEN" --server "https://your-serverkit.com"
+Start-Service ServerKitAgent
+```
+
 ### Manual Installation
 
 1. Download the appropriate binary for your platform from the releases page
@@ -209,6 +269,92 @@ Get-Content "C:\ProgramData\ServerKit\Agent\logs\agent.log" -Tail 50
 # Restart
 Restart-Service ServerKitAgent
 ```
+
+## Docker Deployment
+
+### Building the Image
+
+```bash
+cd agent
+
+# Build with version info
+docker build \
+  --build-arg VERSION=1.0.0 \
+  --build-arg BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
+  --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) \
+  -t serverkit/agent:latest .
+```
+
+### Running with Docker
+
+```bash
+# Register the agent first
+docker run --rm \
+  -v serverkit-agent-config:/etc/serverkit-agent \
+  serverkit/agent:latest register \
+  --token "sk_reg_xxx" \
+  --server "https://your-serverkit.com" \
+  --name "my-server"
+
+# Run the agent
+docker run -d \
+  --name serverkit-agent \
+  --restart unless-stopped \
+  -v /var/run/docker.sock:/var/run/docker.sock:ro \
+  -v serverkit-agent-config:/etc/serverkit-agent \
+  -v serverkit-agent-logs:/var/log/serverkit-agent \
+  serverkit/agent:latest
+```
+
+### Running with Docker Compose
+
+```yaml
+# docker-compose.yml
+services:
+  agent:
+    image: serverkit/agent:latest
+    container_name: serverkit-agent
+    restart: unless-stopped
+    user: root
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - serverkit-config:/etc/serverkit-agent
+      - serverkit-logs:/var/log/serverkit-agent
+    environment:
+      - TZ=UTC
+
+volumes:
+  serverkit-config:
+  serverkit-logs:
+```
+
+```bash
+# Register
+docker compose run --rm agent register -s https://your-serverkit.com -t YOUR_TOKEN
+
+# Start
+docker compose up -d
+
+# Logs
+docker compose logs -f
+
+# Stop
+docker compose down
+```
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `TZ` | Timezone | `UTC` |
+
+### Volumes
+
+| Path | Description |
+|------|-------------|
+| `/etc/serverkit-agent` | Configuration and credentials |
+| `/var/log/serverkit-agent` | Log files |
+| `/var/run/docker.sock` | Docker socket (mount read-only) |
 
 ## Development
 
