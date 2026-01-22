@@ -105,6 +105,15 @@ func (a *Agent) registerHandlers() {
 
 		// Docker network commands
 		a.handlers[protocol.ActionDockerNetworkList] = a.handleDockerNetworkList
+
+		// Docker compose commands
+		a.handlers[protocol.ActionDockerComposeList] = a.handleDockerComposeList
+		a.handlers[protocol.ActionDockerComposePs] = a.handleDockerComposePs
+		a.handlers[protocol.ActionDockerComposeUp] = a.handleDockerComposeUp
+		a.handlers[protocol.ActionDockerComposeDown] = a.handleDockerComposeDown
+		a.handlers[protocol.ActionDockerComposeLogs] = a.handleDockerComposeLogs
+		a.handlers[protocol.ActionDockerComposeRestart] = a.handleDockerComposeRestart
+		a.handlers[protocol.ActionDockerComposePull] = a.handleDockerComposePull
 	}
 
 	// System commands
@@ -553,4 +562,148 @@ func (a *Agent) handleSystemInfo(ctx context.Context, params json.RawMessage) (i
 
 func (a *Agent) handleSystemProcesses(ctx context.Context, params json.RawMessage) (interface{}, error) {
 	return a.metrics.ListProcesses(ctx)
+}
+
+// Docker Compose command handlers
+
+func (a *Agent) handleDockerComposeList(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	return a.docker.ComposeList(ctx)
+}
+
+func (a *Agent) handleDockerComposePs(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	var p struct {
+		ProjectPath string `json:"project_path"`
+	}
+	if err := json.Unmarshal(params, &p); err != nil {
+		return nil, fmt.Errorf("invalid params: %w", err)
+	}
+	return a.docker.ComposePsProject(ctx, p.ProjectPath)
+}
+
+func (a *Agent) handleDockerComposeUp(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	var p struct {
+		ProjectPath string `json:"project_path"`
+		Detach      bool   `json:"detach"`
+		Build       bool   `json:"build"`
+	}
+	if err := json.Unmarshal(params, &p); err != nil {
+		return nil, fmt.Errorf("invalid params: %w", err)
+	}
+
+	// Default to detached mode
+	if !p.Detach {
+		p.Detach = true
+	}
+
+	output, err := a.docker.ComposeUp(ctx, p.ProjectPath, p.Detach, p.Build)
+	if err != nil {
+		return map[string]interface{}{
+			"success": false,
+			"output":  output,
+			"error":   err.Error(),
+		}, nil
+	}
+
+	return map[string]interface{}{
+		"success": true,
+		"output":  output,
+	}, nil
+}
+
+func (a *Agent) handleDockerComposeDown(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	var p struct {
+		ProjectPath   string `json:"project_path"`
+		Volumes       bool   `json:"volumes"`
+		RemoveOrphans bool   `json:"remove_orphans"`
+	}
+	if err := json.Unmarshal(params, &p); err != nil {
+		return nil, fmt.Errorf("invalid params: %w", err)
+	}
+
+	output, err := a.docker.ComposeDown(ctx, p.ProjectPath, p.Volumes, p.RemoveOrphans)
+	if err != nil {
+		return map[string]interface{}{
+			"success": false,
+			"output":  output,
+			"error":   err.Error(),
+		}, nil
+	}
+
+	return map[string]interface{}{
+		"success": true,
+		"output":  output,
+	}, nil
+}
+
+func (a *Agent) handleDockerComposeLogs(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	var p struct {
+		ProjectPath string `json:"project_path"`
+		Service     string `json:"service"`
+		Tail        int    `json:"tail"`
+	}
+	if err := json.Unmarshal(params, &p); err != nil {
+		return nil, fmt.Errorf("invalid params: %w", err)
+	}
+
+	// Default tail to 100
+	if p.Tail == 0 {
+		p.Tail = 100
+	}
+
+	logs, err := a.docker.ComposeLogs(ctx, p.ProjectPath, p.Service, p.Tail)
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]interface{}{
+		"logs": logs,
+	}, nil
+}
+
+func (a *Agent) handleDockerComposeRestart(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	var p struct {
+		ProjectPath string `json:"project_path"`
+		Service     string `json:"service"`
+	}
+	if err := json.Unmarshal(params, &p); err != nil {
+		return nil, fmt.Errorf("invalid params: %w", err)
+	}
+
+	output, err := a.docker.ComposeRestart(ctx, p.ProjectPath, p.Service)
+	if err != nil {
+		return map[string]interface{}{
+			"success": false,
+			"output":  output,
+			"error":   err.Error(),
+		}, nil
+	}
+
+	return map[string]interface{}{
+		"success": true,
+		"output":  output,
+	}, nil
+}
+
+func (a *Agent) handleDockerComposePull(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	var p struct {
+		ProjectPath string `json:"project_path"`
+		Service     string `json:"service"`
+	}
+	if err := json.Unmarshal(params, &p); err != nil {
+		return nil, fmt.Errorf("invalid params: %w", err)
+	}
+
+	output, err := a.docker.ComposePull(ctx, p.ProjectPath, p.Service)
+	if err != nil {
+		return map[string]interface{}{
+			"success": false,
+			"output":  output,
+			"error":   err.Error(),
+		}, nil
+	}
+
+	return map[string]interface{}{
+		"success": true,
+		"output":  output,
+	}, nil
 }

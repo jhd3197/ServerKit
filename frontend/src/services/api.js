@@ -2714,6 +2714,71 @@ class ApiService {
         return this.request('/servers/available');
     }
 
+    // Remote Docker Compose Operations
+    async getRemoteComposeProjects(serverId) {
+        return this.request(`/servers/${serverId}/docker/compose/projects`);
+    }
+
+    async getRemoteComposePs(serverId, projectPath) {
+        return this.request(`/servers/${serverId}/docker/compose/ps`, {
+            method: 'POST',
+            body: { project_path: projectPath }
+        });
+    }
+
+    async remoteComposeUp(serverId, projectPath, options = {}) {
+        return this.request(`/servers/${serverId}/docker/compose/up`, {
+            method: 'POST',
+            body: {
+                project_path: projectPath,
+                detach: options.detach !== false,
+                build: options.build || false
+            }
+        });
+    }
+
+    async remoteComposeDown(serverId, projectPath, options = {}) {
+        return this.request(`/servers/${serverId}/docker/compose/down`, {
+            method: 'POST',
+            body: {
+                project_path: projectPath,
+                volumes: options.volumes || false,
+                remove_orphans: options.removeOrphans !== false
+            }
+        });
+    }
+
+    async remoteComposeLogs(serverId, projectPath, service = null, tail = 100) {
+        return this.request(`/servers/${serverId}/docker/compose/logs`, {
+            method: 'POST',
+            body: {
+                project_path: projectPath,
+                service: service,
+                tail: tail
+            }
+        });
+    }
+
+    async remoteComposeRestart(serverId, projectPath, service = null) {
+        return this.request(`/servers/${serverId}/docker/compose/restart`, {
+            method: 'POST',
+            body: {
+                project_path: projectPath,
+                service: service
+            }
+        });
+    }
+
+    async remoteComposePull(serverId, projectPath, service = null) {
+        return this.request(`/servers/${serverId}/docker/compose/pull`, {
+            method: 'POST',
+            body: {
+                project_path: projectPath,
+                service: service
+            }
+        });
+    }
+
     // Agent Downloads
     async getAgentVersion() {
         return this.request('/servers/agent/version');

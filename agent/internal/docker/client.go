@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"os/exec"
 	"strings"
 
 	"github.com/docker/docker/api/types"
@@ -445,5 +446,208 @@ func calculateCPUPercent(stats *types.StatsJSON) float64 {
 	}
 
 	return 0.0
+}
+
+// ==================== Docker Compose ====================
+
+// ComposeProject represents a Docker Compose project
+type ComposeProject struct {
+	Name        string   `json:"name"`
+	Status      string   `json:"status"`
+	ConfigFiles string   `json:"config_files"`
+}
+
+// ComposeContainer represents a container in a compose project
+type ComposeContainer struct {
+	ID      string `json:"id"`
+	Name    string `json:"name"`
+	Service string `json:"service"`
+	State   string `json:"state"`
+	Status  string `json:"status"`
+	Ports   string `json:"ports"`
+}
+
+// ComposeList lists all compose projects
+func (c *Client) ComposeList(ctx context.Context) ([]ComposeProject, error) {
+	cmd := exec.CommandContext(ctx, "docker", "compose", "ls", "--format", "json")
+	output, err := cmd.Output()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list compose projects: %w", err)
+	}
+
+	var projects []ComposeProject
+	if err := json.Unmarshal(output, &projects); err != nil {
+		return nil, fmt.Errorf("failed to parse compose projects: %w", err)
+	}
+
+	return projects, nil
+}
+
+// ComposePsProject lists containers for a specific compose project
+func (c *Client) ComposePsProject(ctx context.Context, projectPath string) ([]ComposeContainer, error) {
+	if err := validateProjectPath(projectPath); err != nil {
+		return nil, err
+	}
+
+	cmd := exec.CommandContext(ctx, "docker", "compose", "-f", projectPath, "ps", "--format", "json", "-a")
+	output, err := cmd.Output()
+	if err != nil {
+		return nil, fmt.Errorf("failed to list compose containers: %w", err)
+	}
+
+	// Handle empty output
+	if len(output) == 0 {
+		return []ComposeContainer{}, nil
+	}
+
+	// Docker compose ps can return either a JSON array or line-delimited JSON objects
+	var containers []ComposeContainer
+
+	// Try parsing as JSON array first
+	if err := json.Unmarshal(output, &containers); err != nil {
+		// Try line-by-line JSON parsing
+		lines := strings.Split(string(output), "\n")
+		for _, line := range lines {
+			line = strings.TrimSpace(line)
+			if line == "" {
+				continue
+			}
+			var container ComposeContainer
+			if err := json.Unmarshal([]byte(line), &container); err != nil {
+				continue
+			}
+			containers = append(containers, container)
+		}
+	}
+
+	return containers, nil
+}
+
+// ComposeUp starts a compose project
+func (c *Client) ComposeUp(ctx context.Context, projectPath string, detach, build bool) (string, error) {
+	if err := validateProjectPath(projectPath); err != nil {
+		return "", err
+	}
+
+	args := []string{"compose", "-f", projectPath, "up"}
+	if detach {
+		args = append(args, "-d")
+	}
+	if build {
+		args = append(args, "--build")
+	}
+
+	cmd := exec.CommandContext(ctx, "docker", args...)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return string(output), fmt.Errorf("compose up failed: %w: %s", err, output)
+	}
+
+	return string(output), nil
+}
+
+// ComposeDown stops a compose project
+func (c *Client) ComposeDown(ctx context.Context, projectPath string, volumes, removeOrphans bool) (string, error) {
+	if err := validateProjectPath(projectPath); err != nil {
+		return "", err
+	}
+
+	args := []string{"compose", "-f", projectPath, "down"}
+	if volumes {
+		args = append(args, "-v")
+	}
+	if removeOrphans {
+		args = append(args, "--remove-orphans")
+	}
+
+	cmd := exec.CommandContext(ctx, "docker", args...)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return string(output), fmt.Errorf("compose down failed: %w: %s", err, output)
+	}
+
+	return string(output), nil
+}
+
+// ComposeLogs gets logs from a compose project
+func (c *Client) ComposeLogs(ctx context.Context, projectPath, service string, tail int) (string, error) {
+	if err := validateProjectPath(projectPath); err != nil {
+		return "", err
+	}
+
+	args := []string{"compose", "-f", projectPath, "logs", "--no-color"}
+	if tail > 0 {
+		args = append(args, "--tail", fmt.Sprintf("%d", tail))
+	}
+	if service != "" {
+		args = append(args, service)
+	}
+
+	cmd := exec.CommandContext(ctx, "docker", args...)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return string(output), fmt.Errorf("compose logs failed: %w: %s", err, output)
+	}
+
+	return string(output), nil
+}
+
+// ComposeRestart restarts a compose project or specific service
+func (c *Client) ComposeRestart(ctx context.Context, projectPath, service string) (string, error) {
+	if err := validateProjectPath(projectPath); err != nil {
+		return "", err
+	}
+
+	args := []string{"compose", "-f", projectPath, "restart"}
+	if service != "" {
+		args = append(args, service)
+	}
+
+	cmd := exec.CommandContext(ctx, "docker", args...)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return string(output), fmt.Errorf("compose restart failed: %w: %s", err, output)
+	}
+
+	return string(output), nil
+}
+
+// ComposePull pulls images for a compose project
+func (c *Client) ComposePull(ctx context.Context, projectPath, service string) (string, error) {
+	if err := validateProjectPath(projectPath); err != nil {
+		return "", err
+	}
+
+	args := []string{"compose", "-f", projectPath, "pull"}
+	if service != "" {
+		args = append(args, service)
+	}
+
+	cmd := exec.CommandContext(ctx, "docker", args...)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return string(output), fmt.Errorf("compose pull failed: %w: %s", err, output)
+	}
+
+	return string(output), nil
+}
+
+// validateProjectPath validates the project path to prevent path traversal attacks
+func validateProjectPath(projectPath string) error {
+	if projectPath == "" {
+		return fmt.Errorf("project path is required")
+	}
+
+	// Check for path traversal attempts
+	if strings.Contains(projectPath, "..") {
+		return fmt.Errorf("invalid project path: path traversal not allowed")
+	}
+
+	// Check if path is absolute
+	if !strings.HasPrefix(projectPath, "/") {
+		return fmt.Errorf("invalid project path: must be absolute path")
+	}
+
+	return nil
 }
 

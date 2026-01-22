@@ -866,6 +866,166 @@ def get_remote_system_info(server_id):
     return jsonify(result.get('data'))
 
 
+# ==================== Remote Docker Compose Operations ====================
+
+@servers_bp.route('/<server_id>/docker/compose/projects', methods=['GET'])
+@jwt_required()
+def list_remote_compose_projects(server_id):
+    """List compose projects on a remote server"""
+    user_id = get_jwt_identity()
+
+    result = RemoteDockerService.compose_list(server_id, user_id=user_id)
+
+    if not result.get('success'):
+        return jsonify(result), 500 if result.get('code') != 'AGENT_OFFLINE' else 503
+
+    return jsonify(result.get('data', []))
+
+
+@servers_bp.route('/<server_id>/docker/compose/ps', methods=['POST'])
+@jwt_required()
+def remote_compose_ps(server_id):
+    """List containers for a compose project"""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data or not data.get('project_path'):
+        return jsonify({'error': 'project_path is required'}), 400
+
+    result = RemoteDockerService.compose_ps(
+        server_id,
+        data['project_path'],
+        user_id=user_id
+    )
+
+    if not result.get('success'):
+        return jsonify(result), 500
+
+    return jsonify(result.get('data', []))
+
+
+@servers_bp.route('/<server_id>/docker/compose/up', methods=['POST'])
+@jwt_required()
+@developer_required
+def remote_compose_up(server_id):
+    """Start a compose project"""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data or not data.get('project_path'):
+        return jsonify({'error': 'project_path is required'}), 400
+
+    result = RemoteDockerService.compose_up(
+        server_id,
+        data['project_path'],
+        detach=data.get('detach', True),
+        build=data.get('build', False),
+        user_id=user_id
+    )
+
+    if not result.get('success'):
+        return jsonify(result), 500
+
+    return jsonify(result)
+
+
+@servers_bp.route('/<server_id>/docker/compose/down', methods=['POST'])
+@jwt_required()
+@developer_required
+def remote_compose_down(server_id):
+    """Stop a compose project"""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data or not data.get('project_path'):
+        return jsonify({'error': 'project_path is required'}), 400
+
+    result = RemoteDockerService.compose_down(
+        server_id,
+        data['project_path'],
+        volumes=data.get('volumes', False),
+        remove_orphans=data.get('remove_orphans', True),
+        user_id=user_id
+    )
+
+    if not result.get('success'):
+        return jsonify(result), 500
+
+    return jsonify(result)
+
+
+@servers_bp.route('/<server_id>/docker/compose/logs', methods=['POST'])
+@jwt_required()
+def remote_compose_logs(server_id):
+    """Get logs from a compose project"""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data or not data.get('project_path'):
+        return jsonify({'error': 'project_path is required'}), 400
+
+    result = RemoteDockerService.compose_logs(
+        server_id,
+        data['project_path'],
+        service=data.get('service'),
+        tail=data.get('tail', 100),
+        user_id=user_id
+    )
+
+    if not result.get('success'):
+        return jsonify(result), 500
+
+    return jsonify(result.get('data'))
+
+
+@servers_bp.route('/<server_id>/docker/compose/restart', methods=['POST'])
+@jwt_required()
+@developer_required
+def remote_compose_restart(server_id):
+    """Restart a compose project or specific service"""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data or not data.get('project_path'):
+        return jsonify({'error': 'project_path is required'}), 400
+
+    result = RemoteDockerService.compose_restart(
+        server_id,
+        data['project_path'],
+        service=data.get('service'),
+        user_id=user_id
+    )
+
+    if not result.get('success'):
+        return jsonify(result), 500
+
+    return jsonify(result)
+
+
+@servers_bp.route('/<server_id>/docker/compose/pull', methods=['POST'])
+@jwt_required()
+@developer_required
+def remote_compose_pull(server_id):
+    """Pull images for a compose project"""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data or not data.get('project_path'):
+        return jsonify({'error': 'project_path is required'}), 400
+
+    result = RemoteDockerService.compose_pull(
+        server_id,
+        data['project_path'],
+        service=data.get('service'),
+        user_id=user_id
+    )
+
+    if not result.get('success'):
+        return jsonify(result), 500
+
+    return jsonify(result)
+
+
 # ==================== Installation Scripts ====================
 
 def _get_scripts_dir():

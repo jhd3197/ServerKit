@@ -412,3 +412,235 @@ class RemoteDockerService:
             })
 
         return servers
+
+    # ==================== Docker Compose ====================
+
+    @staticmethod
+    def compose_list(server_id: str, user_id: int = None) -> Dict[str, Any]:
+        """
+        List compose projects on a remote server.
+
+        Args:
+            server_id: Target server ID
+            user_id: User ID for audit logging
+
+        Returns:
+            dict: {success, data: [projects], error}
+        """
+        if not server_id or server_id == 'local':
+            from app.services.docker_service import DockerService
+            try:
+                projects = DockerService.compose_list()
+                return {'success': True, 'data': projects}
+            except Exception as e:
+                return {'success': False, 'error': str(e)}
+
+        return agent_registry.send_command(
+            server_id=server_id,
+            action='docker:compose:list',
+            params={},
+            user_id=user_id
+        )
+
+    @staticmethod
+    def compose_ps(server_id: str, project_path: str, user_id: int = None) -> Dict[str, Any]:
+        """
+        List containers for a compose project.
+
+        Args:
+            server_id: Target server ID
+            project_path: Path to docker-compose.yml
+            user_id: User ID for audit logging
+
+        Returns:
+            dict: {success, data: [containers], error}
+        """
+        if not server_id or server_id == 'local':
+            from app.services.docker_service import DockerService
+            try:
+                containers = DockerService.compose_ps(project_path)
+                return {'success': True, 'data': containers}
+            except Exception as e:
+                return {'success': False, 'error': str(e)}
+
+        return agent_registry.send_command(
+            server_id=server_id,
+            action='docker:compose:ps',
+            params={'project_path': project_path},
+            user_id=user_id
+        )
+
+    @staticmethod
+    def compose_up(server_id: str, project_path: str, detach: bool = True,
+                   build: bool = False, user_id: int = None) -> Dict[str, Any]:
+        """
+        Start a compose project.
+
+        Args:
+            server_id: Target server ID
+            project_path: Path to docker-compose.yml
+            detach: Run in detached mode
+            build: Build images before starting
+            user_id: User ID for audit logging
+
+        Returns:
+            dict: {success, output, error}
+        """
+        if not server_id or server_id == 'local':
+            from app.services.docker_service import DockerService
+            try:
+                result = DockerService.compose_up(project_path, detach=detach, build=build)
+                return {'success': True, 'data': result}
+            except Exception as e:
+                return {'success': False, 'error': str(e)}
+
+        return agent_registry.send_command(
+            server_id=server_id,
+            action='docker:compose:up',
+            params={
+                'project_path': project_path,
+                'detach': detach,
+                'build': build
+            },
+            timeout=300.0,  # 5 minutes for compose up
+            user_id=user_id
+        )
+
+    @staticmethod
+    def compose_down(server_id: str, project_path: str, volumes: bool = False,
+                     remove_orphans: bool = True, user_id: int = None) -> Dict[str, Any]:
+        """
+        Stop a compose project.
+
+        Args:
+            server_id: Target server ID
+            project_path: Path to docker-compose.yml
+            volumes: Remove volumes
+            remove_orphans: Remove orphan containers
+            user_id: User ID for audit logging
+
+        Returns:
+            dict: {success, output, error}
+        """
+        if not server_id or server_id == 'local':
+            from app.services.docker_service import DockerService
+            try:
+                result = DockerService.compose_down(project_path, volumes=volumes, remove_orphans=remove_orphans)
+                return {'success': True, 'data': result}
+            except Exception as e:
+                return {'success': False, 'error': str(e)}
+
+        return agent_registry.send_command(
+            server_id=server_id,
+            action='docker:compose:down',
+            params={
+                'project_path': project_path,
+                'volumes': volumes,
+                'remove_orphans': remove_orphans
+            },
+            timeout=120.0,  # 2 minutes for compose down
+            user_id=user_id
+        )
+
+    @staticmethod
+    def compose_logs(server_id: str, project_path: str, service: str = None,
+                     tail: int = 100, user_id: int = None) -> Dict[str, Any]:
+        """
+        Get logs from a compose project.
+
+        Args:
+            server_id: Target server ID
+            project_path: Path to docker-compose.yml
+            service: Specific service name (optional)
+            tail: Number of lines to retrieve
+            user_id: User ID for audit logging
+
+        Returns:
+            dict: {success, data: {logs: str}, error}
+        """
+        if not server_id or server_id == 'local':
+            from app.services.docker_service import DockerService
+            try:
+                logs = DockerService.compose_logs(project_path, service=service, tail=tail)
+                return {'success': True, 'data': {'logs': logs}}
+            except Exception as e:
+                return {'success': False, 'error': str(e)}
+
+        return agent_registry.send_command(
+            server_id=server_id,
+            action='docker:compose:logs',
+            params={
+                'project_path': project_path,
+                'service': service or '',
+                'tail': tail
+            },
+            timeout=30.0,
+            user_id=user_id
+        )
+
+    @staticmethod
+    def compose_restart(server_id: str, project_path: str, service: str = None,
+                        user_id: int = None) -> Dict[str, Any]:
+        """
+        Restart a compose project or specific service.
+
+        Args:
+            server_id: Target server ID
+            project_path: Path to docker-compose.yml
+            service: Specific service name (optional)
+            user_id: User ID for audit logging
+
+        Returns:
+            dict: {success, output, error}
+        """
+        if not server_id or server_id == 'local':
+            from app.services.docker_service import DockerService
+            try:
+                result = DockerService.compose_restart(project_path, service=service)
+                return {'success': True, 'data': result}
+            except Exception as e:
+                return {'success': False, 'error': str(e)}
+
+        return agent_registry.send_command(
+            server_id=server_id,
+            action='docker:compose:restart',
+            params={
+                'project_path': project_path,
+                'service': service or ''
+            },
+            user_id=user_id
+        )
+
+    @staticmethod
+    def compose_pull(server_id: str, project_path: str, service: str = None,
+                     user_id: int = None) -> Dict[str, Any]:
+        """
+        Pull images for a compose project.
+
+        Args:
+            server_id: Target server ID
+            project_path: Path to docker-compose.yml
+            service: Specific service name (optional)
+            user_id: User ID for audit logging
+
+        Returns:
+            dict: {success, output, error}
+        """
+        if not server_id or server_id == 'local':
+            from app.services.docker_service import DockerService
+            try:
+                result = DockerService.compose_pull(project_path, service=service)
+                return {'success': True, 'data': result}
+            except Exception as e:
+                return {'success': False, 'error': str(e)}
+
+        return agent_registry.send_command(
+            server_id=server_id,
+            action='docker:compose:pull',
+            params={
+                'project_path': project_path,
+                'service': service or ''
+            },
+            timeout=300.0,  # 5 minutes for pull
+            user_id=user_id
+        )

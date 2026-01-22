@@ -180,9 +180,13 @@ const (
 	ActionDockerNetworkRemove = "docker:network:remove"
 
 	// Docker compose actions
-	ActionDockerComposeList = "docker:compose:list"
-	ActionDockerComposeUp   = "docker:compose:up"
-	ActionDockerComposeDown = "docker:compose:down"
+	ActionDockerComposeList    = "docker:compose:list"
+	ActionDockerComposePs      = "docker:compose:ps"
+	ActionDockerComposeUp      = "docker:compose:up"
+	ActionDockerComposeDown    = "docker:compose:down"
+	ActionDockerComposeLogs    = "docker:compose:logs"
+	ActionDockerComposeRestart = "docker:compose:restart"
+	ActionDockerComposePull    = "docker:compose:pull"
 
 	// System actions
 	ActionSystemMetrics   = "system:metrics"
