@@ -1185,137 +1185,145 @@ system:exec:  # Requires explicit permission
 
 ## 11. Phase Implementation Plan
 
-### Phase 10.1: Foundation (Agent Core)
+### Phase 10.1: Foundation (Agent Core) ✅ COMPLETED
 **Duration: ~2-3 weeks**
 
 ```
-[ ] Design and implement Go agent binary
-    [ ] Project setup with Go modules
-    [ ] Configuration loading (YAML)
-    [ ] Logging system (structured logs)
-    [ ] WebSocket client with reconnection
-    [ ] HMAC authentication
-    [ ] Heartbeat mechanism
-    [ ] Graceful shutdown handling
+[x] Design and implement Go agent binary
+    [x] Project setup with Go modules
+    [x] Configuration loading (YAML)
+    [x] Logging system (structured logs)
+    [x] WebSocket client with reconnection
+    [x] HMAC authentication
+    [x] Heartbeat mechanism
+    [x] Graceful shutdown handling
 
-[ ] Docker integration in agent
-    [ ] Connect to Docker socket
-    [ ] Container list/inspect
-    [ ] Container start/stop/restart
-    [ ] Basic stats collection
+[x] Docker integration in agent
+    [x] Connect to Docker socket
+    [x] Container list/inspect
+    [x] Container start/stop/restart
+    [x] Basic stats collection
 
-[ ] Build pipeline
-    [ ] Cross-compilation for all platforms
-    [ ] Binary signing
-    [ ] Version embedding
+[x] Build pipeline
+    [x] Cross-compilation for all platforms (GitHub Actions)
+    [x] Version embedding
+    [ ] Binary signing (optional - future)
 ```
 
-### Phase 10.2: Backend Gateway
+### Phase 10.2: Backend Gateway ✅ COMPLETED
 **Duration: ~2 weeks**
 
 ```
-[ ] Database models
-    [ ] Server, ServerGroup models
-    [ ] ServerMetrics, ServerCommand models
-    [ ] AgentSession model
-    [ ] Migrations
+[x] Database models
+    [x] Server, ServerGroup models
+    [x] ServerMetrics, ServerCommand models
+    [x] AgentSession model
+    [x] Migrations (auto via SQLAlchemy)
 
-[ ] Agent Gateway (WebSocket server)
-    [ ] SocketIO namespace for agents
-    [ ] Authentication handler
-    [ ] Session management
-    [ ] Command routing
-    [ ] Connection tracking
+[x] Agent Gateway (WebSocket server)
+    [x] SocketIO namespace for agents (/agent)
+    [x] Authentication handler
+    [x] Session management
+    [x] Command routing
+    [x] Connection tracking
 
-[ ] API endpoints
-    [ ] Server CRUD
-    [ ] Registration token generation
-    [ ] Server status endpoint
+[x] API endpoints
+    [x] Server CRUD
+    [x] Registration token generation
+    [x] Server status endpoint
+    [x] Remote Docker endpoints (50+ routes)
 ```
 
-### Phase 10.3: Security Layer
+### Phase 10.3: Security Layer ✅ COMPLETED
 **Duration: ~1-2 weeks**
 
 ```
-[ ] Security implementation
-    [ ] API key generation and hashing
-    [ ] HMAC signature validation
-    [ ] Session token management
-    [ ] Permission checking middleware
-    [ ] Rate limiting per agent
-    [ ] Audit logging
+[x] Security implementation
+    [x] API key generation and hashing (bcrypt)
+    [x] HMAC-SHA256 signature validation
+    [x] Session token management
+    [x] Permission checking (scope-based)
+    [ ] Rate limiting per agent (future)
+    [x] Audit logging (ServerCommand model)
 
-[ ] Agent security
-    [ ] Encrypted key storage
-    [ ] Command validation
-    [ ] Permission enforcement
+[x] Agent security
+    [x] Encrypted key storage (AES-256-GCM)
+    [x] Command validation
+    [x] Permission enforcement
 ```
 
-### Phase 10.4: Frontend - Server Management
+### Phase 10.4: Frontend - Server Management ✅ COMPLETED
 **Duration: ~2 weeks**
 
 ```
-[ ] Servers page
-    [ ] Server list view
-    [ ] Server cards/grid view
-    [ ] Add server modal
-    [ ] Installation instructions
-    [ ] Server detail page
-    [ ] Server settings
+[x] Servers page
+    [x] Server list view (grid with cards)
+    [x] Server cards with live metrics
+    [x] Add server modal with permissions
+    [x] Installation instructions (Linux/Windows)
+    [x] Server detail page (tabbed interface)
+    [x] Server settings
 
-[ ] Server groups
-    [ ] Group CRUD UI
-    [ ] Drag-drop organization
-    [ ] Group filtering
+[x] Server groups
+    [x] Group CRUD UI (modal)
+    [x] Group filtering
+    [ ] Drag-drop organization (future)
 ```
 
-### Phase 10.5: Remote Docker Integration
+### Phase 10.5: Remote Docker Integration ✅ COMPLETED
 **Duration: ~2 weeks**
 
 ```
-[ ] Backend: Docker command routing
-    [ ] Route Docker commands to agents
-    [ ] Handle async responses
-    [ ] Error handling
+[x] Backend: Docker command routing
+    [x] Route Docker commands to agents (RemoteDockerService)
+    [x] Handle async responses (command results)
+    [x] Error handling
 
-[ ] Frontend: Docker page updates
-    [ ] Server selector dropdown
-    [ ] Context-aware Docker UI
-    [ ] Real-time container updates
+[x] Frontend: Docker page updates
+    [x] Server selector dropdown (top of page)
+    [x] Context-aware Docker UI (ServerContext)
+    [x] Real-time container updates
 
-[ ] Agent: Full Docker support
-    [ ] All container operations
-    [ ] Image operations
-    [ ] Volume/network listing
+[x] Agent: Full Docker support
+    [x] All container operations
+    [x] Image operations
+    [x] Volume/network listing
 ```
 
-### Phase 10.6: Monitoring & Metrics
+### Phase 10.6: Monitoring & Metrics 🔄 IN PROGRESS
 **Duration: ~2 weeks**
 
 ```
-[ ] Real-time metrics
-    [ ] Agent metrics streaming
-    [ ] WebSocket to frontend
-    [ ] Live dashboard updates
+[x] Real-time metrics
+    [x] Agent metrics streaming (heartbeat)
+    [x] WebSocket to frontend (SocketIO)
+    [x] Live dashboard updates
 
 [ ] Historical metrics
-    [ ] Metrics storage
+    [x] Metrics storage (ServerMetrics model)
     [ ] Retention policies
     [ ] Aggregation queries
 
-[ ] Cross-server dashboard
-    [ ] Overview page
-    [ ] Metric comparison charts
-    [ ] Health grid view
+[x] Cross-server dashboard
+    [x] Overview page (Servers.jsx)
+    [x] Metric comparison (server cards)
+    [x] Health grid view
 ```
 
-### Phase 10.7: Installation & Distribution
+### Phase 10.7: Installation & Distribution 🔄 IN PROGRESS
 **Duration: ~1-2 weeks**
 
 ```
-[ ] Installation scripts
-    [ ] Linux install script (bash)
-    [ ] Windows install script (PowerShell)
+[x] Build automation
+    [x] GitHub Actions workflow (agent-release.yml)
+    [x] Linux amd64/arm64 builds
+    [x] Windows amd64 builds
+    [x] Automatic releases on tag
+
+[x] Installation scripts
+    [x] Linux install script (bash) - created
+    [x] Windows install script (PowerShell) - created
+    [x] Installation endpoint in backend
     [ ] Docker image
 
 [ ] Package building
@@ -1325,7 +1333,7 @@ system:exec:  # Requires explicit permission
     [ ] Homebrew formula
 
 [ ] Distribution
-    [ ] Download page
+    [ ] Download page in UI
     [ ] Version checking
     [ ] Auto-update mechanism
 ```

@@ -4,8 +4,9 @@ Server Management API
 Endpoints for managing remote servers and their agents.
 """
 
+import os
 from datetime import datetime, timedelta
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app import db
@@ -833,3 +834,136 @@ def get_remote_system_info(server_id):
         return jsonify(result), 500
 
     return jsonify(result.get('data'))
+
+
+# ==================== Installation Scripts ====================
+
+def _get_scripts_dir():
+    """Get the scripts directory path"""
+    # Go up from backend/app/api to backend, then to scripts
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+    return os.path.join(base_dir, 'scripts')
+
+
+@servers_bp.route('/install.sh', methods=['GET'])
+def get_install_script_linux():
+    """
+    Get the Linux installation script.
+
+    This endpoint serves the bash installation script for installing
+    the ServerKit agent on Linux systems.
+
+    Usage:
+        curl -fsSL https://your-server/api/servers/install.sh | sudo bash -s -- \\
+            --token "YOUR_TOKEN" --server "https://your-server"
+    """
+    script_path = os.path.join(_get_scripts_dir(), 'install.sh')
+
+    if not os.path.exists(script_path):
+        return jsonify({'error': 'Installation script not found'}), 404
+
+    with open(script_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    # Replace placeholder URLs with actual server URL
+    server_url = request.url_root.rstrip('/')
+    content = content.replace('https://your-serverkit.com', server_url)
+
+    return Response(
+        content,
+        mimetype='text/x-shellscript',
+        headers={
+            'Content-Disposition': 'inline; filename="install.sh"',
+            'Cache-Control': 'no-cache'
+        }
+    )
+
+
+@servers_bp.route('/install.ps1', methods=['GET'])
+def get_install_script_windows():
+    """
+    Get the Windows installation script.
+
+    This endpoint serves the PowerShell installation script for installing
+    the ServerKit agent on Windows systems.
+
+    Usage:
+        irm https://your-server/api/servers/install.ps1 | iex; \\
+            Install-ServerKitAgent -Token "YOUR_TOKEN" -Server "https://your-server"
+    """
+    script_path = os.path.join(_get_scripts_dir(), 'install.ps1')
+
+    if not os.path.exists(script_path):
+        return jsonify({'error': 'Installation script not found'}), 404
+
+    with open(script_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    # Replace placeholder URLs with actual server URL
+    server_url = request.url_root.rstrip('/')
+    content = content.replace('https://your-serverkit.com', server_url)
+
+    return Response(
+        content,
+        mimetype='text/plain',
+        headers={
+            'Content-Disposition': 'inline; filename="install.ps1"',
+            'Cache-Control': 'no-cache'
+        }
+    )
+
+
+@servers_bp.route('/install-instructions/<server_id>', methods=['GET'])
+@jwt_required()
+def get_install_instructions(server_id):
+    """
+    Get installation instructions for a specific server.
+
+    Returns the installation commands with the server's registration token
+    already embedded.
+    """
+    server = Server.query.get(server_id)
+    if not server:
+        return jsonify({'error': 'Server not found'}), 404
+
+    # Check if server has a valid registration token
+    if not server.registration_token_hash:
+        return jsonify({
+            'error': 'No registration token available',
+            'message': 'Generate a new token using the regenerate-token endpoint'
+        }), 400
+
+    if server.registration_token_expires and server.registration_token_expires < datetime.utcnow():
+        return jsonify({
+            'error': 'Registration token expired',
+            'message': 'Generate a new token using the regenerate-token endpoint'
+        }), 400
+
+    # Get base URL
+    base_url = request.url_root.rstrip('/')
+    api_url = f"{base_url}/api/servers"
+
+    return jsonify({
+        'linux': {
+            'one_liner': f'curl -fsSL {api_url}/install.sh | sudo bash -s -- --token "YOUR_TOKEN" --server "{base_url}"',
+            'manual': [
+                f'# Download the script',
+                f'curl -fsSL {api_url}/install.sh -o install.sh',
+                f'chmod +x install.sh',
+                f'',
+                f'# Run installation',
+                f'sudo ./install.sh --token "YOUR_TOKEN" --server "{base_url}"'
+            ]
+        },
+        'windows': {
+            'one_liner': f'irm {api_url}/install.ps1 | iex; Install-ServerKitAgent -Token "YOUR_TOKEN" -Server "{base_url}"',
+            'manual': [
+                f'# Download the script (run in PowerShell as Administrator)',
+                f'Invoke-WebRequest -Uri "{api_url}/install.ps1" -OutFile install.ps1',
+                f'',
+                f'# Run installation',
+                f'.\\install.ps1 -Token "YOUR_TOKEN" -Server "{base_url}"'
+            ]
+        },
+        'note': 'Replace YOUR_TOKEN with the registration token shown in the UI'
+    })

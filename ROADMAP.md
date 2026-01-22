@@ -117,16 +117,21 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ---
 
-## Phase 10: Multi-Server Management (Planned)
+## Phase 10: Multi-Server Management (In Progress)
 
 **Priority: High**
 
-- [ ] Agent-based remote server monitoring
-- [ ] Centralized dashboard for multiple servers
-- [ ] Server grouping and tagging
-- [ ] Cross-server metrics comparison
-- [ ] Remote command execution
-- [ ] Server health overview
+- [x] Agent-based remote server monitoring (Go agent)
+- [x] Centralized dashboard for multiple servers
+- [x] Server grouping and tagging
+- [x] Cross-server metrics comparison
+- [x] Remote Docker management via agents
+- [x] Server health overview
+- [x] Agent WebSocket gateway
+- [x] HMAC-SHA256 authentication
+- [x] GitHub Actions for agent releases (Linux/Windows)
+- [x] Installation scripts endpoint
+- [ ] Agent auto-update mechanism
 
 ---
 

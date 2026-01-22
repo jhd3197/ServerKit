@@ -1,0 +1,203 @@
+name: Agent Release
+
+on:
+  push:
+    tags:
+      - 'agent-v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0)'
+        required: true
+        type: string
+
+env:
+  GO_VERSION: '1.21'
+
+jobs:
+  build:
+    name: Build Agent
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            suffix: ''
+          - goos: linux
+            goarch: arm64
+            suffix: ''
+          - goos: windows
+            goarch: amd64
+            suffix: '.exe'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: agent/go.sum
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/agent-v}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Building version: $VERSION"
+
+      - name: Build binary
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 0
+        run: |
+          cd agent
+          go build -ldflags="-s -w -X main.Version=${{ steps.version.outputs.version }}" \
+            -o ../dist/serverkit-agent-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.suffix }} \
+            ./cmd/agent
+
+      - name: Compress binary (Linux)
+        if: matrix.goos == 'linux'
+        run: |
+          cd dist
+          tar -czvf serverkit-agent-${{ steps.version.outputs.version }}-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz \
+            serverkit-agent-${{ matrix.goos }}-${{ matrix.goarch }}
+
+      - name: Compress binary (Windows)
+        if: matrix.goos == 'windows'
+        run: |
+          cd dist
+          zip serverkit-agent-${{ steps.version.outputs.version }}-${{ matrix.goos }}-${{ matrix.goarch }}.zip \
+            serverkit-agent-${{ matrix.goos }}-${{ matrix.goarch }}.exe
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: serverkit-agent-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist/serverkit-agent-${{ steps.version.outputs.version }}-*
+          retention-days: 5
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/agent-v}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Prepare release files
+        run: |
+          mkdir -p release
+          find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" \) -exec mv {} release/ \;
+          ls -la release/
+
+      - name: Generate checksums
+        run: |
+          cd release
+          sha256sum * > checksums.txt
+          cat checksums.txt
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: agent-v${{ steps.version.outputs.version }}
+          name: ServerKit Agent v${{ steps.version.outputs.version }}
+          draft: false
+          prerelease: false
+          files: |
+            release/*
+          body: |
+            ## ServerKit Agent v${{ steps.version.outputs.version }}
+
+            ### Downloads
+
+            | Platform | Architecture | Download |
+            |----------|--------------|----------|
+            | Linux | x64 (amd64) | `serverkit-agent-${{ steps.version.outputs.version }}-linux-amd64.tar.gz` |
+            | Linux | ARM64 | `serverkit-agent-${{ steps.version.outputs.version }}-linux-arm64.tar.gz` |
+            | Windows | x64 (amd64) | `serverkit-agent-${{ steps.version.outputs.version }}-windows-amd64.zip` |
+
+            ### Quick Install
+
+            **Linux (one-liner):**
+            ```bash
+            curl -fsSL https://your-serverkit.com/install.sh | sudo bash -s -- --token "YOUR_TOKEN"
+            ```
+
+            **Windows (PowerShell as Admin):**
+            ```powershell
+            irm https://your-serverkit.com/install.ps1 | iex; Install-ServerKitAgent -Token "YOUR_TOKEN"
+            ```
+
+            ### Verification
+
+            Verify downloads using the checksums in `checksums.txt`:
+            ```bash
+            sha256sum -c checksums.txt
+            ```
+
+            ### What's New
+
+            See [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/agent/CHANGELOG.md) for details.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  summary:
+    name: Build Summary
+    runs-on: ubuntu-latest
+    needs: [build, release]
+
+    steps:
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/agent-v}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create summary
+        run: |
+          echo "## Agent Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** v${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Built Binaries" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Platform | Architecture | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Linux | amd64 | ✅ Built |" >> $GITHUB_STEP_SUMMARY
+          echo "| Linux | arm64 | ✅ Built |" >> $GITHUB_STEP_SUMMARY
+          echo "| Windows | amd64 | ✅ Built |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Release" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Release created at: https://github.com/${{ github.repository }}/releases/tag/agent-v${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
