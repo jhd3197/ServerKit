@@ -3,6 +3,7 @@ module github.com/serverkit/agent
 go 1.21
 
 require (
+	github.com/creack/pty v1.1.21
 	github.com/docker/docker v24.0.7+incompatible
 	github.com/gorilla/websocket v1.5.1
 	github.com/shirou/gopsutil/v3 v3.24.1

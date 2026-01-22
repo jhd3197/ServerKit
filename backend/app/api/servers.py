@@ -611,6 +611,7 @@ def get_permission_profiles():
 
 from app.services.remote_docker_service import RemoteDockerService
 from app.services.server_metrics_service import ServerMetricsService
+from app.services.terminal_service import TerminalService
 
 
 @servers_bp.route('/available', methods=['GET'])
@@ -1099,6 +1100,124 @@ def trigger_metrics_cleanup():
     return jsonify({
         'success': True,
         'deleted': result
+    })
+
+
+# ==================== Remote Terminal ====================
+
+@servers_bp.route('/<server_id>/terminal', methods=['POST'])
+@jwt_required()
+@developer_required
+def create_terminal_session(server_id):
+    """Create a new terminal session on a remote server.
+
+    Body:
+        cols: Terminal width (default: 80)
+        rows: Terminal height (default: 24)
+    """
+    user_id = get_jwt_identity()
+    data = request.get_json() or {}
+
+    cols = data.get('cols', 80)
+    rows = data.get('rows', 24)
+
+    result = TerminalService.create_session(
+        server_id=server_id,
+        user_id=user_id,
+        cols=cols,
+        rows=rows
+    )
+
+    if not result.get('success'):
+        return jsonify(result), 500 if result.get('code') != 'AGENT_OFFLINE' else 503
+
+    return jsonify(result)
+
+
+@servers_bp.route('/terminal/<session_id>/input', methods=['POST'])
+@jwt_required()
+@developer_required
+def terminal_input(session_id):
+    """Send input to a terminal session.
+
+    Body:
+        data: Base64-encoded input data
+    """
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data or not data.get('data'):
+        return jsonify({'error': 'data is required'}), 400
+
+    result = TerminalService.send_input(
+        session_id=session_id,
+        data=data['data'],
+        user_id=user_id
+    )
+
+    if not result.get('success'):
+        return jsonify(result), 400
+
+    return jsonify(result)
+
+
+@servers_bp.route('/terminal/<session_id>/resize', methods=['POST'])
+@jwt_required()
+@developer_required
+def terminal_resize(session_id):
+    """Resize a terminal session.
+
+    Body:
+        cols: New terminal width
+        rows: New terminal height
+    """
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data or not data.get('cols') or not data.get('rows'):
+        return jsonify({'error': 'cols and rows are required'}), 400
+
+    result = TerminalService.resize_session(
+        session_id=session_id,
+        cols=data['cols'],
+        rows=data['rows'],
+        user_id=user_id
+    )
+
+    if not result.get('success'):
+        return jsonify(result), 400
+
+    return jsonify(result)
+
+
+@servers_bp.route('/terminal/<session_id>', methods=['DELETE'])
+@jwt_required()
+@developer_required
+def close_terminal_session(session_id):
+    """Close a terminal session."""
+    user_id = get_jwt_identity()
+
+    result = TerminalService.close_session(
+        session_id=session_id,
+        user_id=user_id
+    )
+
+    if not result.get('success'):
+        return jsonify(result), 400
+
+    return jsonify(result)
+
+
+@servers_bp.route('/terminal/sessions', methods=['GET'])
+@jwt_required()
+def list_terminal_sessions():
+    """List all terminal sessions for the current user."""
+    user_id = get_jwt_identity()
+
+    sessions = TerminalService.get_user_sessions(user_id)
+    return jsonify({
+        'sessions': sessions,
+        'count': len(sessions)
     })
 
 

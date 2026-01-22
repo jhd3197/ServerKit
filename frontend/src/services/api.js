@@ -2801,6 +2801,38 @@ class ApiService {
         return this.request('/servers/metrics/cleanup', { method: 'POST' });
     }
 
+    // Remote Terminal
+    async createTerminalSession(serverId, cols = 80, rows = 24) {
+        return this.request(`/servers/${serverId}/terminal`, {
+            method: 'POST',
+            body: { cols, rows }
+        });
+    }
+
+    async sendTerminalInput(sessionId, data) {
+        return this.request(`/servers/terminal/${sessionId}/input`, {
+            method: 'POST',
+            body: { data }
+        });
+    }
+
+    async resizeTerminal(sessionId, cols, rows) {
+        return this.request(`/servers/terminal/${sessionId}/resize`, {
+            method: 'POST',
+            body: { cols, rows }
+        });
+    }
+
+    async closeTerminalSession(sessionId) {
+        return this.request(`/servers/terminal/${sessionId}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async listTerminalSessions() {
+        return this.request('/servers/terminal/sessions');
+    }
+
     // Agent Downloads
     async getAgentVersion() {
         return this.request('/servers/agent/version');

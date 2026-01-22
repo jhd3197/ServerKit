@@ -2,6 +2,7 @@ package agent
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"sync"
@@ -12,18 +13,20 @@ import (
 	"github.com/serverkit/agent/internal/docker"
 	"github.com/serverkit/agent/internal/logger"
 	"github.com/serverkit/agent/internal/metrics"
+	"github.com/serverkit/agent/internal/terminal"
 	"github.com/serverkit/agent/internal/ws"
 	"github.com/serverkit/agent/pkg/protocol"
 )
 
 // Agent is the main agent that coordinates all components
 type Agent struct {
-	cfg     *config.Config
-	log     *logger.Logger
-	auth    *auth.Authenticator
-	ws      *ws.Client
-	docker  *docker.Client
-	metrics *metrics.Collector
+	cfg      *config.Config
+	log      *logger.Logger
+	auth     *auth.Authenticator
+	ws       *ws.Client
+	docker   *docker.Client
+	metrics  *metrics.Collector
+	terminal *terminal.Manager
 
 	// Active subscriptions
 	subscriptions map[string]context.CancelFunc
@@ -61,6 +64,13 @@ func New(cfg *config.Config, log *logger.Logger) (*Agent, error) {
 		metricsCollector = metrics.NewCollector(cfg.Metrics, log)
 	}
 
+	// Create terminal manager if exec is enabled
+	var termManager *terminal.Manager
+	if cfg.Features.Exec {
+		termManager = terminal.NewManager()
+		log.Info("Terminal/PTY support enabled")
+	}
+
 	agent := &Agent{
 		cfg:           cfg,
 		log:           log,
@@ -68,6 +78,7 @@ func New(cfg *config.Config, log *logger.Logger) (*Agent, error) {
 		ws:            wsClient,
 		docker:        dockerClient,
 		metrics:       metricsCollector,
+		terminal:      termManager,
 		subscriptions: make(map[string]context.CancelFunc),
 		handlers:      make(map[string]CommandHandler),
 	}
@@ -121,6 +132,14 @@ func (a *Agent) registerHandlers() {
 		a.handlers[protocol.ActionSystemMetrics] = a.handleSystemMetrics
 		a.handlers[protocol.ActionSystemInfo] = a.handleSystemInfo
 		a.handlers[protocol.ActionSystemProcesses] = a.handleSystemProcesses
+	}
+
+	// Terminal commands
+	if a.terminal != nil {
+		a.handlers[protocol.ActionTerminalCreate] = a.handleTerminalCreate
+		a.handlers[protocol.ActionTerminalInput] = a.handleTerminalInput
+		a.handlers[protocol.ActionTerminalResize] = a.handleTerminalResize
+		a.handlers[protocol.ActionTerminalClose] = a.handleTerminalClose
 	}
 }
 
@@ -367,6 +386,11 @@ func (a *Agent) cleanup() {
 	}
 	a.subscriptions = make(map[string]context.CancelFunc)
 	a.subMu.Unlock()
+
+	// Close all terminal sessions
+	if a.terminal != nil {
+		a.terminal.CloseAll()
+	}
 
 	// Close WebSocket
 	a.ws.Close()
@@ -705,5 +729,157 @@ func (a *Agent) handleDockerComposePull(ctx context.Context, params json.RawMess
 	return map[string]interface{}{
 		"success": true,
 		"output":  output,
+	}, nil
+}
+
+// Terminal command handlers
+
+func (a *Agent) handleTerminalCreate(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	var p struct {
+		SessionID string `json:"session_id"`
+		Cols      uint16 `json:"cols"`
+		Rows      uint16 `json:"rows"`
+	}
+	if err := json.Unmarshal(params, &p); err != nil {
+		return nil, fmt.Errorf("invalid params: %w", err)
+	}
+
+	if p.SessionID == "" {
+		return nil, fmt.Errorf("session_id is required")
+	}
+
+	// Default terminal size
+	if p.Cols == 0 {
+		p.Cols = 80
+	}
+	if p.Rows == 0 {
+		p.Rows = 24
+	}
+
+	// Create terminal session
+	session, err := a.terminal.CreateSession(p.SessionID, p.Cols, p.Rows)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create terminal session: %w", err)
+	}
+
+	// Set up output handler to stream data back
+	channel := fmt.Sprintf(protocol.ChannelTerminal, p.SessionID)
+	session.SetOutputHandler(func(data []byte) {
+		// Encode as base64 for safe transport
+		encoded := base64.StdEncoding.EncodeToString(data)
+		if err := a.ws.SendStream(channel, map[string]interface{}{
+			"type": "output",
+			"data": encoded,
+		}); err != nil {
+			a.log.Warn("Failed to send terminal output", "error", err)
+		}
+	})
+
+	// Set up close handler
+	session.SetCloseHandler(func() {
+		if err := a.ws.SendStream(channel, map[string]interface{}{
+			"type": "closed",
+		}); err != nil {
+			a.log.Warn("Failed to send terminal close event", "error", err)
+		}
+		// Clean up session
+		a.terminal.CloseSession(p.SessionID)
+	})
+
+	a.log.Info("Terminal session created",
+		"session_id", p.SessionID,
+		"cols", p.Cols,
+		"rows", p.Rows,
+		"shell", session.Shell,
+	)
+
+	return map[string]interface{}{
+		"success":    true,
+		"session_id": p.SessionID,
+		"shell":      session.Shell,
+		"cols":       session.Cols,
+		"rows":       session.Rows,
+	}, nil
+}
+
+func (a *Agent) handleTerminalInput(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	var p struct {
+		SessionID string `json:"session_id"`
+		Data      string `json:"data"` // base64 encoded
+	}
+	if err := json.Unmarshal(params, &p); err != nil {
+		return nil, fmt.Errorf("invalid params: %w", err)
+	}
+
+	session, ok := a.terminal.GetSession(p.SessionID)
+	if !ok {
+		return nil, fmt.Errorf("terminal session not found: %s", p.SessionID)
+	}
+
+	// Decode base64 data
+	data, err := base64.StdEncoding.DecodeString(p.Data)
+	if err != nil {
+		return nil, fmt.Errorf("invalid base64 data: %w", err)
+	}
+
+	// Write to terminal
+	_, err = session.Write(data)
+	if err != nil {
+		return nil, fmt.Errorf("failed to write to terminal: %w", err)
+	}
+
+	return map[string]interface{}{
+		"success": true,
+	}, nil
+}
+
+func (a *Agent) handleTerminalResize(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	var p struct {
+		SessionID string `json:"session_id"`
+		Cols      uint16 `json:"cols"`
+		Rows      uint16 `json:"rows"`
+	}
+	if err := json.Unmarshal(params, &p); err != nil {
+		return nil, fmt.Errorf("invalid params: %w", err)
+	}
+
+	session, ok := a.terminal.GetSession(p.SessionID)
+	if !ok {
+		return nil, fmt.Errorf("terminal session not found: %s", p.SessionID)
+	}
+
+	if err := session.Resize(p.Cols, p.Rows); err != nil {
+		return nil, fmt.Errorf("failed to resize terminal: %w", err)
+	}
+
+	a.log.Debug("Terminal resized",
+		"session_id", p.SessionID,
+		"cols", p.Cols,
+		"rows", p.Rows,
+	)
+
+	return map[string]interface{}{
+		"success": true,
+		"cols":    p.Cols,
+		"rows":    p.Rows,
+	}, nil
+}
+
+func (a *Agent) handleTerminalClose(ctx context.Context, params json.RawMessage) (interface{}, error) {
+	var p struct {
+		SessionID string `json:"session_id"`
+	}
+	if err := json.Unmarshal(params, &p); err != nil {
+		return nil, fmt.Errorf("invalid params: %w", err)
+	}
+
+	if err := a.terminal.CloseSession(p.SessionID); err != nil {
+		return nil, fmt.Errorf("failed to close terminal: %w", err)
+	}
+
+	a.log.Info("Terminal session closed", "session_id", p.SessionID)
+
+	return map[string]interface{}{
+		"success": true,
 	}, nil
 }

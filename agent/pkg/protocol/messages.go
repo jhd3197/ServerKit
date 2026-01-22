@@ -198,11 +198,18 @@ const (
 	ActionFileRead  = "file:read"
 	ActionFileWrite = "file:write"
 	ActionFileList  = "file:list"
+
+	// Terminal/PTY actions
+	ActionTerminalCreate = "terminal:create"
+	ActionTerminalInput  = "terminal:input"
+	ActionTerminalResize = "terminal:resize"
+	ActionTerminalClose  = "terminal:close"
 )
 
 // Stream channels
 const (
-	ChannelMetrics       = "metrics"
-	ChannelContainerLogs = "container:%s:logs"
+	ChannelMetrics        = "metrics"
+	ChannelContainerLogs  = "container:%s:logs"
 	ChannelContainerStats = "container:%s:stats"
+	ChannelTerminal       = "terminal:%s"
 )

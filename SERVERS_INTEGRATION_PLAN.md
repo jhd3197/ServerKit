@@ -1344,7 +1344,7 @@ system:exec:  # Requires explicit permission
     [x] Download page in UI
 ```
 
-### Phase 10.8: Advanced Features ✅ MOSTLY COMPLETE
+### Phase 10.8: Advanced Features ✅ COMPLETE
 **Duration: ~3-4 weeks**
 
 ```
@@ -1364,10 +1364,11 @@ system:exec:  # Requires explicit permission
     [ ] Log search/filter (future)
     [ ] Download logs (future)
 
-[ ] Remote terminal (optional - lower priority)
-    [ ] PTY support in agent
-    [ ] Terminal UI component
-    [ ] Session management
+[x] Remote terminal
+    [x] PTY support in agent (creack/pty library)
+    [x] Terminal manager for session management
+    [x] Backend terminal service and API endpoints
+    [x] Frontend xterm.js terminal component (RemoteTerminal.jsx)
 ```
 
 ---
