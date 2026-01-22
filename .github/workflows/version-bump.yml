@@ -3,7 +3,7 @@ name: Version Bump
 on:
   push:
     branches:
-      - main
+      - dev
     paths-ignore:
       - 'VERSION'
       - '.github/workflows/version-bump.yml'
