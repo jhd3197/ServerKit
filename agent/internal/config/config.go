@@ -26,6 +26,7 @@ type Config struct {
 	Docker   DockerConfig   `yaml:"docker"`
 	Security SecurityConfig `yaml:"security"`
 	Logging  LoggingConfig  `yaml:"logging"`
+	Update   UpdateConfig   `yaml:"update"`
 }
 
 // ServerConfig holds connection settings
@@ -90,6 +91,13 @@ type LoggingConfig struct {
 	Compress   bool   `yaml:"compress"`
 }
 
+// UpdateConfig holds auto-update settings
+type UpdateConfig struct {
+	Enabled       bool          `yaml:"enabled"`
+	CheckInterval time.Duration `yaml:"check_interval"`
+	AutoInstall   bool          `yaml:"auto_install"`
+}
+
 // Default returns default configuration
 func Default() *Config {
 	return &Config{
@@ -131,6 +139,11 @@ func Default() *Config {
 			MaxBackups: 5,
 			MaxAge:     30,
 			Compress:   true,
+		},
+		Update: UpdateConfig{
+			Enabled:       true,
+			CheckInterval: 1 * time.Hour,
+			AutoInstall:   false, // Require manual confirmation by default
 		},
 	}
 }

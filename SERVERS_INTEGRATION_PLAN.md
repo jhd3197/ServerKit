@@ -1310,7 +1310,7 @@ system:exec:  # Requires explicit permission
     [x] Health grid view
 ```
 
-### Phase 10.7: Installation & Distribution 🔄 IN PROGRESS
+### Phase 10.7: Installation & Distribution ✅ MOSTLY COMPLETE
 **Duration: ~1-2 weeks**
 
 ```
@@ -1332,10 +1332,13 @@ system:exec:  # Requires explicit permission
     [ ] .msi installer
     [ ] Homebrew formula
 
+[x] Auto-update system
+    [x] Version checking endpoint
+    [x] Auto-update mechanism in agent
+    [x] Manual update command (`serverkit-agent update`)
+
 [ ] Distribution
     [ ] Download page in UI
-    [ ] Version checking
-    [ ] Auto-update mechanism
 ```
 
 ### Phase 10.8: Advanced Features

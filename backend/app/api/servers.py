@@ -5,8 +5,10 @@ Endpoints for managing remote servers and their agents.
 """
 
 import os
+import hashlib
+import requests
 from datetime import datetime, timedelta
-from flask import Blueprint, request, jsonify, Response, current_app
+from flask import Blueprint, request, jsonify, Response, current_app, redirect
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app import db
@@ -967,3 +969,295 @@ def get_install_instructions(server_id):
         },
         'note': 'Replace YOUR_TOKEN with the registration token shown in the UI'
     })
+
+
+# ==================== Agent Updates ====================
+
+# Cache for GitHub releases to avoid rate limiting
+_releases_cache = {
+    'data': None,
+    'expires': None
+}
+
+GITHUB_REPO = os.environ.get('SERVERKIT_GITHUB_REPO', 'serverkit/serverkit')
+
+
+def _get_latest_agent_release():
+    """Fetch latest agent release from GitHub with caching"""
+    now = datetime.utcnow()
+
+    # Check cache
+    if _releases_cache['data'] and _releases_cache['expires'] and _releases_cache['expires'] > now:
+        return _releases_cache['data']
+
+    try:
+        # Fetch releases from GitHub
+        response = requests.get(
+            f'https://api.github.com/repos/{GITHUB_REPO}/releases',
+            headers={'Accept': 'application/vnd.github.v3+json'},
+            timeout=10
+        )
+        response.raise_for_status()
+        releases = response.json()
+
+        # Find latest agent release
+        for release in releases:
+            if release.get('tag_name', '').startswith('agent-v'):
+                version = release['tag_name'].replace('agent-v', '')
+
+                # Build assets map
+                assets = {}
+                for asset in release.get('assets', []):
+                    name = asset['name']
+                    if 'linux-amd64' in name:
+                        assets['linux-amd64'] = asset['browser_download_url']
+                    elif 'linux-arm64' in name:
+                        assets['linux-arm64'] = asset['browser_download_url']
+                    elif 'windows-amd64' in name:
+                        assets['windows-amd64'] = asset['browser_download_url']
+                    elif name == 'checksums.txt':
+                        assets['checksums'] = asset['browser_download_url']
+
+                result = {
+                    'version': version,
+                    'tag': release['tag_name'],
+                    'published_at': release['published_at'],
+                    'release_url': release['html_url'],
+                    'assets': assets,
+                    'body': release.get('body', '')
+                }
+
+                # Cache for 5 minutes
+                _releases_cache['data'] = result
+                _releases_cache['expires'] = now + timedelta(minutes=5)
+
+                return result
+
+        return None
+
+    except Exception as e:
+        current_app.logger.error(f"Failed to fetch GitHub releases: {e}")
+        # Return cached data if available, even if expired
+        if _releases_cache['data']:
+            return _releases_cache['data']
+        return None
+
+
+@servers_bp.route('/agent/version', methods=['GET'])
+def get_agent_version():
+    """
+    Get the latest agent version information.
+
+    This endpoint is called by agents to check for updates.
+    Returns version info and download URLs for all platforms.
+    """
+    release = _get_latest_agent_release()
+
+    if not release:
+        return jsonify({
+            'error': 'Unable to fetch version information',
+            'message': 'GitHub API may be unavailable'
+        }), 503
+
+    # Get base URL for local downloads (fallback)
+    base_url = request.url_root.rstrip('/')
+
+    return jsonify({
+        'version': release['version'],
+        'published_at': release['published_at'],
+        'release_notes_url': release['release_url'],
+        'downloads': {
+            'linux-amd64': release['assets'].get('linux-amd64'),
+            'linux-arm64': release['assets'].get('linux-arm64'),
+            'windows-amd64': release['assets'].get('windows-amd64'),
+        },
+        'checksums_url': release['assets'].get('checksums'),
+        'update_available_message': f"A new version of ServerKit Agent is available: v{release['version']}"
+    })
+
+
+@servers_bp.route('/agent/version/check', methods=['POST'])
+def check_agent_version():
+    """
+    Check if an agent needs to be updated.
+
+    Called by agents with their current version to check if an update is needed.
+
+    Request body:
+    {
+        "current_version": "1.0.0",
+        "os": "linux",
+        "arch": "amd64"
+    }
+    """
+    data = request.get_json() or {}
+    current_version = data.get('current_version', '0.0.0')
+    agent_os = data.get('os', 'linux')
+    agent_arch = data.get('arch', 'amd64')
+
+    release = _get_latest_agent_release()
+
+    if not release:
+        return jsonify({
+            'update_available': False,
+            'error': 'Unable to check for updates'
+        })
+
+    latest_version = release['version']
+
+    # Compare versions (simple string comparison works for semver)
+    update_available = _compare_versions(current_version, latest_version) < 0
+
+    platform_key = f"{agent_os}-{agent_arch}"
+    download_url = release['assets'].get(platform_key)
+
+    return jsonify({
+        'update_available': update_available,
+        'current_version': current_version,
+        'latest_version': latest_version,
+        'download_url': download_url,
+        'checksums_url': release['assets'].get('checksums'),
+        'release_notes_url': release['release_url'],
+        'published_at': release['published_at']
+    })
+
+
+def _compare_versions(v1, v2):
+    """
+    Compare two semantic versions.
+    Returns: -1 if v1 < v2, 0 if v1 == v2, 1 if v1 > v2
+    """
+    def parse_version(v):
+        # Remove leading 'v' if present
+        v = v.lstrip('v')
+        # Split by dots and convert to integers
+        parts = []
+        for part in v.split('.'):
+            # Handle pre-release versions like 1.0.0-beta.1
+            if '-' in part:
+                num, _ = part.split('-', 1)
+                parts.append(int(num) if num.isdigit() else 0)
+            else:
+                parts.append(int(part) if part.isdigit() else 0)
+        # Pad to at least 3 parts
+        while len(parts) < 3:
+            parts.append(0)
+        return parts
+
+    try:
+        p1 = parse_version(v1)
+        p2 = parse_version(v2)
+
+        for a, b in zip(p1, p2):
+            if a < b:
+                return -1
+            elif a > b:
+                return 1
+        return 0
+    except:
+        return 0
+
+
+@servers_bp.route('/agent/download/<os_name>/<arch>', methods=['GET'])
+def download_agent(os_name, arch):
+    """
+    Redirect to the appropriate agent download.
+
+    This endpoint redirects to the GitHub release asset for the
+    requested OS and architecture.
+    """
+    # Validate inputs
+    valid_os = ['linux', 'windows', 'darwin']
+    valid_arch = ['amd64', 'arm64']
+
+    if os_name not in valid_os:
+        return jsonify({'error': f'Invalid OS. Valid options: {valid_os}'}), 400
+
+    if arch not in valid_arch:
+        return jsonify({'error': f'Invalid architecture. Valid options: {valid_arch}'}), 400
+
+    release = _get_latest_agent_release()
+
+    if not release:
+        return jsonify({'error': 'Unable to fetch release information'}), 503
+
+    platform_key = f"{os_name}-{arch}"
+    download_url = release['assets'].get(platform_key)
+
+    if not download_url:
+        return jsonify({
+            'error': f'No release available for {os_name}-{arch}',
+            'available': list(release['assets'].keys())
+        }), 404
+
+    # Redirect to GitHub release
+    return redirect(download_url, code=302)
+
+
+@servers_bp.route('/agent/checksums', methods=['GET'])
+def get_agent_checksums():
+    """
+    Get SHA256 checksums for agent binaries.
+
+    Returns the checksums.txt content from the latest release.
+    """
+    release = _get_latest_agent_release()
+
+    if not release or not release['assets'].get('checksums'):
+        return jsonify({'error': 'Checksums not available'}), 404
+
+    try:
+        response = requests.get(release['assets']['checksums'], timeout=10)
+        response.raise_for_status()
+
+        return Response(
+            response.text,
+            mimetype='text/plain',
+            headers={
+                'Content-Disposition': 'inline; filename="checksums.txt"',
+                'X-Agent-Version': release['version']
+            }
+        )
+    except Exception as e:
+        current_app.logger.error(f"Failed to fetch checksums: {e}")
+        return jsonify({'error': 'Failed to fetch checksums'}), 503
+
+
+@servers_bp.route('/<server_id>/agent/update', methods=['POST'])
+@jwt_required()
+def trigger_agent_update(server_id):
+    """
+    Trigger an agent update on a specific server.
+
+    Sends a command to the agent to check for and install updates.
+    """
+    server = Server.query.get(server_id)
+    if not server:
+        return jsonify({'error': 'Server not found'}), 404
+
+    if not agent_registry.is_agent_connected(server_id):
+        return jsonify({
+            'success': False,
+            'error': 'Agent not connected'
+        }), 503
+
+    # Get latest version info
+    release = _get_latest_agent_release()
+    if not release:
+        return jsonify({
+            'success': False,
+            'error': 'Unable to fetch latest version'
+        }), 503
+
+    # Send update command to agent
+    result = agent_registry.send_command(
+        server_id=server_id,
+        action='agent:update',
+        params={
+            'version': release['version'],
+            'force': request.get_json().get('force', False) if request.get_json() else False
+        },
+        timeout=60.0  # Updates may take a while
+    )
+
+    return jsonify(result)

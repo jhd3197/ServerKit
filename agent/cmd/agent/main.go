@@ -10,6 +10,7 @@ import (
 	"github.com/serverkit/agent/internal/agent"
 	"github.com/serverkit/agent/internal/config"
 	"github.com/serverkit/agent/internal/logger"
+	"github.com/serverkit/agent/internal/updater"
 	"github.com/spf13/cobra"
 )
 
@@ -42,6 +43,7 @@ enabling remote Docker management, monitoring, and more.`,
 	rootCmd.AddCommand(statusCmd())
 	rootCmd.AddCommand(versionCmd())
 	rootCmd.AddCommand(configCmd())
+	rootCmd.AddCommand(updateCmd())
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -134,6 +136,93 @@ func configCmd() *cobra.Command {
 	return cmd
 }
 
+func updateCmd() *cobra.Command {
+	var forceUpdate bool
+	var checkOnly bool
+
+	cmd := &cobra.Command{
+		Use:   "update",
+		Short: "Check for and install updates",
+		Long: `Check for available updates and optionally install them.
+
+By default, this command checks for updates and prompts before installing.
+Use --force to install without prompting.
+Use --check to only check for updates without installing.`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runUpdate(forceUpdate, checkOnly)
+		},
+	}
+
+	cmd.Flags().BoolVarP(&forceUpdate, "force", "f", false, "install update without prompting")
+	cmd.Flags().BoolVarP(&checkOnly, "check", "c", false, "only check for updates, don't install")
+
+	return cmd
+}
+
+func runUpdate(force, checkOnly bool) error {
+	// Load configuration
+	cfg, err := config.Load(cfgFile)
+	if err != nil {
+		return fmt.Errorf("failed to load config: %w", err)
+	}
+
+	log := logger.New(config.LoggingConfig{Level: "info"})
+	u := updater.New(cfg, log, Version)
+
+	ctx := context.Background()
+
+	fmt.Printf("Current version: %s\n", Version)
+	fmt.Println("Checking for updates...")
+
+	info, err := u.CheckForUpdate(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to check for updates: %w", err)
+	}
+
+	if !info.UpdateAvailable {
+		fmt.Println("You are running the latest version.")
+		return nil
+	}
+
+	fmt.Printf("\nUpdate available: v%s -> v%s\n", info.CurrentVersion, info.LatestVersion)
+	fmt.Printf("Published: %s\n", info.PublishedAt)
+	if info.ReleaseNotesURL != "" {
+		fmt.Printf("Release notes: %s\n", info.ReleaseNotesURL)
+	}
+
+	if checkOnly {
+		return nil
+	}
+
+	// Prompt for confirmation unless forced
+	if !force {
+		fmt.Print("\nDo you want to install this update? [y/N]: ")
+		var response string
+		fmt.Scanln(&response)
+		if response != "y" && response != "Y" {
+			fmt.Println("Update cancelled.")
+			return nil
+		}
+	}
+
+	fmt.Println("\nDownloading update...")
+	binaryPath, err := u.DownloadUpdate(ctx, info)
+	if err != nil {
+		return fmt.Errorf("failed to download update: %w", err)
+	}
+
+	fmt.Println("Installing update...")
+	if err := u.InstallUpdate(binaryPath); err != nil {
+		u.Cleanup(binaryPath)
+		return fmt.Errorf("failed to install update: %w", err)
+	}
+
+	fmt.Println("\nUpdate installed successfully!")
+	fmt.Println("The agent will restart with the new version.")
+
+	return nil
+}
+
 func runAgent() error {
 	// Load configuration
 	cfg, err := config.Load(cfgFile)
@@ -166,6 +255,10 @@ func runAgent() error {
 	if err != nil {
 		return fmt.Errorf("failed to create agent: %w", err)
 	}
+
+	// Start update checker in background
+	updateChecker := updater.NewChecker(cfg, log, Version)
+	go updateChecker.Start(ctx)
 
 	// Handle graceful shutdown
 	sigCh := make(chan os.Signal, 1)

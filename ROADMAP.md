@@ -131,7 +131,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 - [x] HMAC-SHA256 authentication
 - [x] GitHub Actions for agent releases (Linux/Windows)
 - [x] Installation scripts endpoint
-- [ ] Agent auto-update mechanism
+- [x] Agent auto-update mechanism
 
 ---
 
