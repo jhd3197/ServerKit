@@ -808,3 +808,871 @@ class SecurityService:
                 config.get('notifications', {}).get('on_suspicious_activity', True)
             ])
         }
+
+    # ==========================================
+    # FAIL2BAN INTEGRATION
+    # ==========================================
+    @classmethod
+    def get_fail2ban_status(cls) -> Dict:
+        """Get Fail2ban installation and service status."""
+        result = {
+            'installed': False,
+            'service_running': False,
+            'version': None,
+            'jails': []
+        }
+
+        try:
+            version_output = subprocess.run(
+                ['fail2ban-client', '--version'],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            if version_output.returncode == 0:
+                result['installed'] = True
+                result['version'] = version_output.stdout.strip().split('\n')[0]
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            pass
+
+        if result['installed']:
+            try:
+                service_check = subprocess.run(
+                    ['systemctl', 'is-active', 'fail2ban'],
+                    capture_output=True,
+                    text=True,
+                    timeout=5
+                )
+                result['service_running'] = service_check.stdout.strip() == 'active'
+            except Exception:
+                pass
+
+            if result['service_running']:
+                try:
+                    jails_output = subprocess.run(
+                        ['fail2ban-client', 'status'],
+                        capture_output=True,
+                        text=True,
+                        timeout=10
+                    )
+                    if jails_output.returncode == 0:
+                        for line in jails_output.stdout.split('\n'):
+                            if 'Jail list:' in line:
+                                jails_str = line.split(':')[1].strip()
+                                if jails_str:
+                                    result['jails'] = [j.strip() for j in jails_str.split(',')]
+                except Exception:
+                    pass
+
+        return result
+
+    @classmethod
+    def install_fail2ban(cls) -> Dict:
+        """Install Fail2ban."""
+        try:
+            if os.path.exists('/usr/bin/apt'):
+                install_cmd = ['apt', 'install', '-y', 'fail2ban']
+            elif os.path.exists('/usr/bin/dnf'):
+                install_cmd = ['dnf', 'install', '-y', 'fail2ban']
+            elif os.path.exists('/usr/bin/yum'):
+                install_cmd = ['yum', 'install', '-y', 'fail2ban']
+            else:
+                return {'success': False, 'error': 'Unsupported package manager'}
+
+            result = subprocess.run(
+                install_cmd,
+                capture_output=True,
+                text=True,
+                timeout=300
+            )
+
+            if result.returncode != 0:
+                return {'success': False, 'error': result.stderr}
+
+            subprocess.run(['systemctl', 'enable', 'fail2ban'], capture_output=True, timeout=10)
+            subprocess.run(['systemctl', 'start', 'fail2ban'], capture_output=True, timeout=10)
+
+            return {'success': True, 'message': 'Fail2ban installed successfully'}
+
+        except subprocess.TimeoutExpired:
+            return {'success': False, 'error': 'Installation timed out'}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def get_fail2ban_jail_status(cls, jail: str) -> Dict:
+        """Get status of a specific Fail2ban jail."""
+        try:
+            result = subprocess.run(
+                ['fail2ban-client', 'status', jail],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+
+            if result.returncode != 0:
+                return {'success': False, 'error': f'Jail {jail} not found'}
+
+            status = {
+                'jail': jail,
+                'currently_banned': 0,
+                'total_banned': 0,
+                'banned_ips': [],
+                'currently_failed': 0,
+                'total_failed': 0
+            }
+
+            for line in result.stdout.split('\n'):
+                line = line.strip()
+                if 'Currently banned:' in line:
+                    status['currently_banned'] = int(line.split(':')[1].strip())
+                elif 'Total banned:' in line:
+                    status['total_banned'] = int(line.split(':')[1].strip())
+                elif 'Banned IP list:' in line:
+                    ips_str = line.split(':')[1].strip()
+                    if ips_str:
+                        status['banned_ips'] = ips_str.split()
+                elif 'Currently failed:' in line:
+                    status['currently_failed'] = int(line.split(':')[1].strip())
+                elif 'Total failed:' in line:
+                    status['total_failed'] = int(line.split(':')[1].strip())
+
+            return {'success': True, **status}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def get_all_fail2ban_bans(cls) -> Dict:
+        """Get all banned IPs across all jails."""
+        status = cls.get_fail2ban_status()
+        if not status['service_running']:
+            return {'success': False, 'error': 'Fail2ban is not running'}
+
+        all_bans = []
+        for jail in status['jails']:
+            jail_status = cls.get_fail2ban_jail_status(jail)
+            if jail_status.get('success'):
+                for ip in jail_status.get('banned_ips', []):
+                    all_bans.append({'ip': ip, 'jail': jail})
+
+        return {'success': True, 'banned_ips': all_bans, 'total': len(all_bans)}
+
+    @classmethod
+    def unban_ip(cls, ip: str, jail: str = None) -> Dict:
+        """Unban an IP from Fail2ban."""
+        try:
+            if jail:
+                result = subprocess.run(
+                    ['fail2ban-client', 'set', jail, 'unbanip', ip],
+                    capture_output=True,
+                    text=True,
+                    timeout=10
+                )
+            else:
+                result = subprocess.run(
+                    ['fail2ban-client', 'unban', ip],
+                    capture_output=True,
+                    text=True,
+                    timeout=10
+                )
+
+            if result.returncode == 0:
+                return {'success': True, 'message': f'IP {ip} unbanned'}
+            return {'success': False, 'error': result.stderr or 'Failed to unban IP'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def ban_ip(cls, ip: str, jail: str = 'sshd') -> Dict:
+        """Manually ban an IP in Fail2ban."""
+        try:
+            result = subprocess.run(
+                ['fail2ban-client', 'set', jail, 'banip', ip],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+
+            if result.returncode == 0:
+                return {'success': True, 'message': f'IP {ip} banned in {jail}'}
+            return {'success': False, 'error': result.stderr or 'Failed to ban IP'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    # ==========================================
+    # SSH KEY MANAGEMENT
+    # ==========================================
+    SSH_DIR = '/root/.ssh'
+    AUTHORIZED_KEYS = '/root/.ssh/authorized_keys'
+
+    @classmethod
+    def get_ssh_keys(cls, user: str = 'root') -> Dict:
+        """Get SSH authorized keys for a user."""
+        if user == 'root':
+            auth_keys_path = cls.AUTHORIZED_KEYS
+        else:
+            auth_keys_path = f'/home/{user}/.ssh/authorized_keys'
+
+        if not os.path.exists(auth_keys_path):
+            return {'success': True, 'keys': []}
+
+        try:
+            keys = []
+            with open(auth_keys_path, 'r') as f:
+                for idx, line in enumerate(f):
+                    line = line.strip()
+                    if not line or line.startswith('#'):
+                        continue
+
+                    parts = line.split()
+                    if len(parts) >= 2:
+                        key_type = parts[0]
+                        key_data = parts[1]
+                        comment = ' '.join(parts[2:]) if len(parts) > 2 else ''
+
+                        fingerprint = cls._get_key_fingerprint(line)
+
+                        keys.append({
+                            'id': idx,
+                            'type': key_type,
+                            'fingerprint': fingerprint,
+                            'comment': comment,
+                            'key': key_data[:20] + '...' + key_data[-20:] if len(key_data) > 50 else key_data
+                        })
+
+            return {'success': True, 'keys': keys, 'user': user}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def _get_key_fingerprint(cls, key_line: str) -> str:
+        """Get SSH key fingerprint."""
+        try:
+            result = subprocess.run(
+                ['ssh-keygen', '-lf', '-'],
+                input=key_line,
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            if result.returncode == 0:
+                parts = result.stdout.strip().split()
+                if len(parts) >= 2:
+                    return parts[1]
+        except Exception:
+            pass
+        return 'Unknown'
+
+    @classmethod
+    def add_ssh_key(cls, key: str, user: str = 'root') -> Dict:
+        """Add an SSH public key."""
+        key = key.strip()
+        if not key:
+            return {'success': False, 'error': 'Key cannot be empty'}
+
+        parts = key.split()
+        if len(parts) < 2 or parts[0] not in ['ssh-rsa', 'ssh-ed25519', 'ecdsa-sha2-nistp256', 'ecdsa-sha2-nistp384', 'ecdsa-sha2-nistp521']:
+            return {'success': False, 'error': 'Invalid SSH key format'}
+
+        if user == 'root':
+            ssh_dir = cls.SSH_DIR
+            auth_keys_path = cls.AUTHORIZED_KEYS
+        else:
+            ssh_dir = f'/home/{user}/.ssh'
+            auth_keys_path = f'{ssh_dir}/authorized_keys'
+
+        try:
+            os.makedirs(ssh_dir, mode=0o700, exist_ok=True)
+
+            if os.path.exists(auth_keys_path):
+                with open(auth_keys_path, 'r') as f:
+                    if key in f.read():
+                        return {'success': False, 'error': 'Key already exists'}
+
+            with open(auth_keys_path, 'a') as f:
+                f.write(key + '\n')
+
+            os.chmod(auth_keys_path, 0o600)
+
+            return {'success': True, 'message': 'SSH key added successfully'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def remove_ssh_key(cls, key_id: int, user: str = 'root') -> Dict:
+        """Remove an SSH key by index."""
+        if user == 'root':
+            auth_keys_path = cls.AUTHORIZED_KEYS
+        else:
+            auth_keys_path = f'/home/{user}/.ssh/authorized_keys'
+
+        if not os.path.exists(auth_keys_path):
+            return {'success': False, 'error': 'No authorized_keys file'}
+
+        try:
+            with open(auth_keys_path, 'r') as f:
+                lines = f.readlines()
+
+            key_lines = []
+            other_lines = []
+            for line in lines:
+                stripped = line.strip()
+                if stripped and not stripped.startswith('#'):
+                    key_lines.append(line)
+                else:
+                    other_lines.append(line)
+
+            if key_id < 0 or key_id >= len(key_lines):
+                return {'success': False, 'error': 'Invalid key ID'}
+
+            key_lines.pop(key_id)
+
+            with open(auth_keys_path, 'w') as f:
+                f.writelines(other_lines + key_lines)
+
+            return {'success': True, 'message': 'SSH key removed'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    # ==========================================
+    # IP ALLOWLIST/BLOCKLIST
+    # ==========================================
+    IP_LISTS_FILE = os.path.join(CONFIG_DIR, 'ip_lists.json')
+
+    @classmethod
+    def get_ip_lists(cls) -> Dict:
+        """Get IP allowlist and blocklist."""
+        if os.path.exists(cls.IP_LISTS_FILE):
+            try:
+                with open(cls.IP_LISTS_FILE, 'r') as f:
+                    return {'success': True, **json.load(f)}
+            except Exception:
+                pass
+
+        return {
+            'success': True,
+            'allowlist': [],
+            'blocklist': []
+        }
+
+    @classmethod
+    def add_to_ip_list(cls, ip: str, list_type: str, comment: str = '') -> Dict:
+        """Add IP to allowlist or blocklist."""
+        if list_type not in ['allowlist', 'blocklist']:
+            return {'success': False, 'error': 'Invalid list type'}
+
+        ip = ip.strip()
+        if not cls._validate_ip(ip):
+            return {'success': False, 'error': 'Invalid IP address format'}
+
+        try:
+            lists = cls.get_ip_lists()
+            current_list = lists.get(list_type, [])
+
+            if any(item['ip'] == ip for item in current_list):
+                return {'success': False, 'error': f'IP already in {list_type}'}
+
+            current_list.append({
+                'ip': ip,
+                'comment': comment,
+                'added_at': datetime.now().isoformat()
+            })
+
+            lists[list_type] = current_list
+            del lists['success']
+
+            os.makedirs(cls.CONFIG_DIR, exist_ok=True)
+            with open(cls.IP_LISTS_FILE, 'w') as f:
+                json.dump(lists, f, indent=2)
+
+            return {'success': True, 'message': f'IP added to {list_type}'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def remove_from_ip_list(cls, ip: str, list_type: str) -> Dict:
+        """Remove IP from allowlist or blocklist."""
+        if list_type not in ['allowlist', 'blocklist']:
+            return {'success': False, 'error': 'Invalid list type'}
+
+        try:
+            lists = cls.get_ip_lists()
+            current_list = lists.get(list_type, [])
+
+            new_list = [item for item in current_list if item['ip'] != ip]
+
+            if len(new_list) == len(current_list):
+                return {'success': False, 'error': 'IP not found in list'}
+
+            lists[list_type] = new_list
+            del lists['success']
+
+            with open(cls.IP_LISTS_FILE, 'w') as f:
+                json.dump(lists, f, indent=2)
+
+            return {'success': True, 'message': f'IP removed from {list_type}'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def _validate_ip(cls, ip: str) -> bool:
+        """Validate IP address or CIDR notation."""
+        import re
+        ipv4_pattern = r'^(\d{1,3}\.){3}\d{1,3}(\/\d{1,2})?$'
+        ipv6_pattern = r'^([0-9a-fA-F:]+)(\/\d{1,3})?$'
+
+        if re.match(ipv4_pattern, ip):
+            parts = ip.split('/')[0].split('.')
+            return all(0 <= int(p) <= 255 for p in parts)
+        elif re.match(ipv6_pattern, ip):
+            return True
+        return False
+
+    # ==========================================
+    # SECURITY AUDIT REPORTS
+    # ==========================================
+    @classmethod
+    def generate_security_audit(cls) -> Dict:
+        """Generate a comprehensive security audit report."""
+        audit = {
+            'generated_at': datetime.now().isoformat(),
+            'system': {},
+            'services': {},
+            'vulnerabilities': [],
+            'recommendations': [],
+            'score': 0
+        }
+
+        total_checks = 0
+        passed_checks = 0
+
+        try:
+            uname = subprocess.run(['uname', '-a'], capture_output=True, text=True, timeout=5)
+            audit['system']['kernel'] = uname.stdout.strip() if uname.returncode == 0 else 'Unknown'
+        except Exception:
+            audit['system']['kernel'] = 'Unknown'
+
+        ssh_config_checks = cls._audit_ssh_config()
+        audit['services']['ssh'] = ssh_config_checks
+        total_checks += ssh_config_checks['total_checks']
+        passed_checks += ssh_config_checks['passed_checks']
+
+        firewall_checks = cls._audit_firewall()
+        audit['services']['firewall'] = firewall_checks
+        total_checks += firewall_checks['total_checks']
+        passed_checks += firewall_checks['passed_checks']
+
+        fail2ban_checks = cls._audit_fail2ban()
+        audit['services']['fail2ban'] = fail2ban_checks
+        total_checks += fail2ban_checks['total_checks']
+        passed_checks += fail2ban_checks['passed_checks']
+
+        updates_check = cls._audit_updates()
+        audit['services']['updates'] = updates_check
+        total_checks += updates_check['total_checks']
+        passed_checks += updates_check['passed_checks']
+
+        if total_checks > 0:
+            audit['score'] = round((passed_checks / total_checks) * 100)
+
+        audit['recommendations'] = cls._generate_recommendations(audit)
+
+        return {'success': True, 'audit': audit}
+
+    @classmethod
+    def _audit_ssh_config(cls) -> Dict:
+        """Audit SSH configuration."""
+        checks = {
+            'total_checks': 0,
+            'passed_checks': 0,
+            'findings': []
+        }
+
+        ssh_config_path = '/etc/ssh/sshd_config'
+        if not os.path.exists(ssh_config_path):
+            checks['findings'].append({'severity': 'info', 'message': 'SSH config not found'})
+            return checks
+
+        try:
+            with open(ssh_config_path, 'r') as f:
+                config = f.read()
+
+            checks['total_checks'] += 1
+            if 'PermitRootLogin no' in config or 'PermitRootLogin prohibit-password' in config:
+                checks['passed_checks'] += 1
+                checks['findings'].append({'severity': 'pass', 'message': 'Root login is restricted'})
+            else:
+                checks['findings'].append({'severity': 'warning', 'message': 'Root login may be enabled'})
+
+            checks['total_checks'] += 1
+            if 'PasswordAuthentication no' in config:
+                checks['passed_checks'] += 1
+                checks['findings'].append({'severity': 'pass', 'message': 'Password authentication disabled'})
+            else:
+                checks['findings'].append({'severity': 'info', 'message': 'Password authentication is enabled'})
+
+            checks['total_checks'] += 1
+            if 'Port 22' in config or 'Port' not in config:
+                checks['findings'].append({'severity': 'info', 'message': 'SSH running on default port 22'})
+            else:
+                checks['passed_checks'] += 1
+                checks['findings'].append({'severity': 'pass', 'message': 'SSH running on non-default port'})
+
+        except Exception as e:
+            checks['findings'].append({'severity': 'error', 'message': f'Failed to read SSH config: {e}'})
+
+        return checks
+
+    @classmethod
+    def _audit_firewall(cls) -> Dict:
+        """Audit firewall status."""
+        checks = {
+            'total_checks': 0,
+            'passed_checks': 0,
+            'findings': []
+        }
+
+        checks['total_checks'] += 1
+        try:
+            ufw_result = subprocess.run(['ufw', 'status'], capture_output=True, text=True, timeout=5)
+            if ufw_result.returncode == 0 and 'active' in ufw_result.stdout.lower():
+                checks['passed_checks'] += 1
+                checks['findings'].append({'severity': 'pass', 'message': 'UFW firewall is active'})
+            else:
+                firewalld_result = subprocess.run(['firewall-cmd', '--state'], capture_output=True, text=True, timeout=5)
+                if firewalld_result.returncode == 0 and 'running' in firewalld_result.stdout.lower():
+                    checks['passed_checks'] += 1
+                    checks['findings'].append({'severity': 'pass', 'message': 'firewalld is active'})
+                else:
+                    checks['findings'].append({'severity': 'critical', 'message': 'No firewall is active'})
+        except Exception:
+            checks['findings'].append({'severity': 'warning', 'message': 'Could not determine firewall status'})
+
+        return checks
+
+    @classmethod
+    def _audit_fail2ban(cls) -> Dict:
+        """Audit Fail2ban status."""
+        checks = {
+            'total_checks': 0,
+            'passed_checks': 0,
+            'findings': []
+        }
+
+        checks['total_checks'] += 1
+        status = cls.get_fail2ban_status()
+        if status['service_running']:
+            checks['passed_checks'] += 1
+            checks['findings'].append({'severity': 'pass', 'message': f'Fail2ban is running with {len(status["jails"])} jails'})
+        elif status['installed']:
+            checks['findings'].append({'severity': 'warning', 'message': 'Fail2ban installed but not running'})
+        else:
+            checks['findings'].append({'severity': 'warning', 'message': 'Fail2ban is not installed'})
+
+        return checks
+
+    @classmethod
+    def _audit_updates(cls) -> Dict:
+        """Audit system updates."""
+        checks = {
+            'total_checks': 0,
+            'passed_checks': 0,
+            'findings': []
+        }
+
+        checks['total_checks'] += 1
+        try:
+            if os.path.exists('/usr/bin/apt'):
+                result = subprocess.run(['apt', 'list', '--upgradable'], capture_output=True, text=True, timeout=60)
+                if result.returncode == 0:
+                    lines = [l for l in result.stdout.split('\n') if '/' in l]
+                    if len(lines) == 0:
+                        checks['passed_checks'] += 1
+                        checks['findings'].append({'severity': 'pass', 'message': 'System is up to date'})
+                    else:
+                        checks['findings'].append({'severity': 'warning', 'message': f'{len(lines)} updates available'})
+            else:
+                checks['findings'].append({'severity': 'info', 'message': 'Update check not supported'})
+        except Exception:
+            checks['findings'].append({'severity': 'info', 'message': 'Could not check for updates'})
+
+        return checks
+
+    @classmethod
+    def _generate_recommendations(cls, audit: Dict) -> List[str]:
+        """Generate security recommendations based on audit findings."""
+        recommendations = []
+
+        ssh_findings = audit.get('services', {}).get('ssh', {}).get('findings', [])
+        for finding in ssh_findings:
+            if 'Root login may be enabled' in finding.get('message', ''):
+                recommendations.append('Disable root login in SSH configuration')
+            if 'Password authentication is enabled' in finding.get('message', ''):
+                recommendations.append('Consider disabling password authentication and using SSH keys')
+
+        firewall_findings = audit.get('services', {}).get('firewall', {}).get('findings', [])
+        for finding in firewall_findings:
+            if 'No firewall is active' in finding.get('message', ''):
+                recommendations.append('Enable a firewall (UFW or firewalld) immediately')
+
+        fail2ban_findings = audit.get('services', {}).get('fail2ban', {}).get('findings', [])
+        for finding in fail2ban_findings:
+            if 'not installed' in finding.get('message', '').lower():
+                recommendations.append('Install Fail2ban to protect against brute force attacks')
+            elif 'not running' in finding.get('message', '').lower():
+                recommendations.append('Start the Fail2ban service')
+
+        updates_findings = audit.get('services', {}).get('updates', {}).get('findings', [])
+        for finding in updates_findings:
+            if 'updates available' in finding.get('message', '').lower():
+                recommendations.append('Apply pending security updates')
+
+        return recommendations
+
+    # ==========================================
+    # VULNERABILITY SCANNING (Lynis)
+    # ==========================================
+    @classmethod
+    def get_lynis_status(cls) -> Dict:
+        """Check if Lynis is installed."""
+        try:
+            result = subprocess.run(['lynis', '--version'], capture_output=True, text=True, timeout=10)
+            if result.returncode == 0:
+                return {'installed': True, 'version': result.stdout.strip()}
+        except FileNotFoundError:
+            pass
+        except Exception:
+            pass
+        return {'installed': False, 'version': None}
+
+    @classmethod
+    def install_lynis(cls) -> Dict:
+        """Install Lynis security auditing tool."""
+        try:
+            if os.path.exists('/usr/bin/apt'):
+                install_cmd = ['apt', 'install', '-y', 'lynis']
+            elif os.path.exists('/usr/bin/dnf'):
+                install_cmd = ['dnf', 'install', '-y', 'lynis']
+            elif os.path.exists('/usr/bin/yum'):
+                install_cmd = ['yum', 'install', '-y', 'lynis']
+            else:
+                return {'success': False, 'error': 'Unsupported package manager'}
+
+            result = subprocess.run(install_cmd, capture_output=True, text=True, timeout=300)
+
+            if result.returncode != 0:
+                return {'success': False, 'error': result.stderr}
+
+            return {'success': True, 'message': 'Lynis installed successfully'}
+
+        except subprocess.TimeoutExpired:
+            return {'success': False, 'error': 'Installation timed out'}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    _lynis_scan = None
+    _lynis_thread = None
+
+    @classmethod
+    def run_lynis_scan(cls) -> Dict:
+        """Run a Lynis security audit scan."""
+        if cls._lynis_thread and cls._lynis_thread.is_alive():
+            return {'success': False, 'error': 'A scan is already in progress'}
+
+        status = cls.get_lynis_status()
+        if not status['installed']:
+            return {'success': False, 'error': 'Lynis is not installed'}
+
+        cls._lynis_scan = {
+            'status': 'running',
+            'started_at': datetime.now().isoformat(),
+            'output': '',
+            'warnings': [],
+            'suggestions': [],
+            'hardening_index': None
+        }
+
+        cls._lynis_thread = threading.Thread(target=cls._run_lynis_scan_thread, daemon=True)
+        cls._lynis_thread.start()
+
+        return {'success': True, 'message': 'Lynis scan started'}
+
+    @classmethod
+    def _run_lynis_scan_thread(cls) -> None:
+        """Execute Lynis scan in background thread."""
+        try:
+            result = subprocess.run(
+                ['lynis', 'audit', 'system', '--quick', '--no-colors'],
+                capture_output=True,
+                text=True,
+                timeout=1800
+            )
+
+            cls._lynis_scan['output'] = result.stdout
+            cls._lynis_scan['status'] = 'completed'
+            cls._lynis_scan['completed_at'] = datetime.now().isoformat()
+
+            for line in result.stdout.split('\n'):
+                if 'Warning:' in line:
+                    cls._lynis_scan['warnings'].append(line.strip())
+                elif 'Suggestion:' in line:
+                    cls._lynis_scan['suggestions'].append(line.strip())
+                elif 'Hardening index' in line:
+                    try:
+                        idx = line.split(':')[1].strip().split()[0]
+                        cls._lynis_scan['hardening_index'] = int(idx)
+                    except Exception:
+                        pass
+
+        except subprocess.TimeoutExpired:
+            cls._lynis_scan['status'] = 'timeout'
+            cls._lynis_scan['error'] = 'Scan timed out'
+        except Exception as e:
+            cls._lynis_scan['status'] = 'error'
+            cls._lynis_scan['error'] = str(e)
+
+    @classmethod
+    def get_lynis_scan_status(cls) -> Dict:
+        """Get current Lynis scan status."""
+        if cls._lynis_scan is None:
+            return {'status': 'idle', 'message': 'No scan in progress'}
+        return cls._lynis_scan.copy()
+
+    # ==========================================
+    # AUTOMATIC SECURITY UPDATES
+    # ==========================================
+    @classmethod
+    def get_auto_updates_status(cls) -> Dict:
+        """Get automatic security updates status."""
+        result = {
+            'supported': False,
+            'enabled': False,
+            'package': None,
+            'settings': {}
+        }
+
+        if os.path.exists('/usr/bin/apt'):
+            result['supported'] = True
+            result['package'] = 'unattended-upgrades'
+
+            try:
+                check = subprocess.run(
+                    ['dpkg', '-l', 'unattended-upgrades'],
+                    capture_output=True,
+                    text=True,
+                    timeout=10
+                )
+                result['installed'] = check.returncode == 0 and 'ii' in check.stdout
+            except Exception:
+                result['installed'] = False
+
+            config_path = '/etc/apt/apt.conf.d/20auto-upgrades'
+            if os.path.exists(config_path):
+                try:
+                    with open(config_path, 'r') as f:
+                        content = f.read()
+                        result['enabled'] = 'APT::Periodic::Unattended-Upgrade "1"' in content
+                        result['settings']['auto_update'] = 'APT::Periodic::Update-Package-Lists "1"' in content
+                except Exception:
+                    pass
+
+        elif os.path.exists('/usr/bin/dnf'):
+            result['supported'] = True
+            result['package'] = 'dnf-automatic'
+
+            try:
+                check = subprocess.run(['systemctl', 'is-enabled', 'dnf-automatic.timer'],
+                                       capture_output=True, text=True, timeout=10)
+                result['enabled'] = check.stdout.strip() == 'enabled'
+            except Exception:
+                pass
+
+        return result
+
+    @classmethod
+    def install_auto_updates(cls) -> Dict:
+        """Install automatic security updates package."""
+        try:
+            if os.path.exists('/usr/bin/apt'):
+                result = subprocess.run(
+                    ['apt', 'install', '-y', 'unattended-upgrades', 'apt-listchanges'],
+                    capture_output=True,
+                    text=True,
+                    timeout=300
+                )
+                if result.returncode != 0:
+                    return {'success': False, 'error': result.stderr}
+                return {'success': True, 'message': 'unattended-upgrades installed'}
+
+            elif os.path.exists('/usr/bin/dnf'):
+                result = subprocess.run(
+                    ['dnf', 'install', '-y', 'dnf-automatic'],
+                    capture_output=True,
+                    text=True,
+                    timeout=300
+                )
+                if result.returncode != 0:
+                    return {'success': False, 'error': result.stderr}
+                return {'success': True, 'message': 'dnf-automatic installed'}
+
+            return {'success': False, 'error': 'Unsupported package manager'}
+
+        except subprocess.TimeoutExpired:
+            return {'success': False, 'error': 'Installation timed out'}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def enable_auto_updates(cls) -> Dict:
+        """Enable automatic security updates."""
+        try:
+            if os.path.exists('/usr/bin/apt'):
+                config_content = '''APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+APT::Periodic::AutocleanInterval "7";
+'''
+                config_path = '/etc/apt/apt.conf.d/20auto-upgrades'
+                with open(config_path, 'w') as f:
+                    f.write(config_content)
+                return {'success': True, 'message': 'Automatic updates enabled'}
+
+            elif os.path.exists('/usr/bin/dnf'):
+                subprocess.run(['systemctl', 'enable', 'dnf-automatic.timer'], capture_output=True, timeout=10)
+                subprocess.run(['systemctl', 'start', 'dnf-automatic.timer'], capture_output=True, timeout=10)
+                return {'success': True, 'message': 'Automatic updates enabled'}
+
+            return {'success': False, 'error': 'Unsupported package manager'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def disable_auto_updates(cls) -> Dict:
+        """Disable automatic security updates."""
+        try:
+            if os.path.exists('/usr/bin/apt'):
+                config_content = '''APT::Periodic::Update-Package-Lists "0";
+APT::Periodic::Unattended-Upgrade "0";
+'''
+                config_path = '/etc/apt/apt.conf.d/20auto-upgrades'
+                with open(config_path, 'w') as f:
+                    f.write(config_content)
+                return {'success': True, 'message': 'Automatic updates disabled'}
+
+            elif os.path.exists('/usr/bin/dnf'):
+                subprocess.run(['systemctl', 'disable', 'dnf-automatic.timer'], capture_output=True, timeout=10)
+                subprocess.run(['systemctl', 'stop', 'dnf-automatic.timer'], capture_output=True, timeout=10)
+                return {'success': True, 'message': 'Automatic updates disabled'}
+
+            return {'success': False, 'error': 'Unsupported package manager'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}

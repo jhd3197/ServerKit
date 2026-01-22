@@ -2395,6 +2395,124 @@ class ApiService {
     }
 
     // ========================================
+    // Fail2ban endpoints
+    // ========================================
+    async getFail2banStatus() {
+        return this.request('/security/fail2ban/status');
+    }
+
+    async installFail2ban() {
+        return this.request('/security/fail2ban/install', { method: 'POST' });
+    }
+
+    async getFail2banJailStatus(jail) {
+        return this.request(`/security/fail2ban/jails/${jail}`);
+    }
+
+    async getAllFail2banBans() {
+        return this.request('/security/fail2ban/bans');
+    }
+
+    async fail2banUnban(ip, jail = null) {
+        return this.request('/security/fail2ban/unban', {
+            method: 'POST',
+            body: { ip, jail }
+        });
+    }
+
+    async fail2banBan(ip, jail = 'sshd') {
+        return this.request('/security/fail2ban/ban', {
+            method: 'POST',
+            body: { ip, jail }
+        });
+    }
+
+    // ========================================
+    // SSH Key endpoints
+    // ========================================
+    async getSSHKeys(user = 'root') {
+        return this.request(`/security/ssh-keys?user=${user}`);
+    }
+
+    async addSSHKey(key, user = 'root') {
+        return this.request('/security/ssh-keys', {
+            method: 'POST',
+            body: { key, user }
+        });
+    }
+
+    async removeSSHKey(keyId, user = 'root') {
+        return this.request(`/security/ssh-keys/${keyId}?user=${user}`, {
+            method: 'DELETE'
+        });
+    }
+
+    // ========================================
+    // IP Lists endpoints
+    // ========================================
+    async getIPLists() {
+        return this.request('/security/ip-lists');
+    }
+
+    async addToIPList(ip, listType, comment = '') {
+        return this.request(`/security/ip-lists/${listType}`, {
+            method: 'POST',
+            body: { ip, comment }
+        });
+    }
+
+    async removeFromIPList(ip, listType) {
+        return this.request(`/security/ip-lists/${listType}/${encodeURIComponent(ip)}`, {
+            method: 'DELETE'
+        });
+    }
+
+    // ========================================
+    // Security Audit endpoints
+    // ========================================
+    async generateSecurityAudit() {
+        return this.request('/security/audit');
+    }
+
+    // ========================================
+    // Lynis (Vulnerability Scanning) endpoints
+    // ========================================
+    async getLynisStatus() {
+        return this.request('/security/lynis/status');
+    }
+
+    async installLynis() {
+        return this.request('/security/lynis/install', { method: 'POST' });
+    }
+
+    async runLynisScan() {
+        return this.request('/security/lynis/scan', { method: 'POST' });
+    }
+
+    async getLynisScanStatus() {
+        return this.request('/security/lynis/scan/status');
+    }
+
+    // ========================================
+    // Auto Updates endpoints
+    // ========================================
+    async getAutoUpdatesStatus() {
+        return this.request('/security/auto-updates/status');
+    }
+
+    async installAutoUpdates() {
+        return this.request('/security/auto-updates/install', { method: 'POST' });
+    }
+
+    async enableAutoUpdates() {
+        return this.request('/security/auto-updates/enable', { method: 'POST' });
+    }
+
+    async disableAutoUpdates() {
+        return this.request('/security/auto-updates/disable', { method: 'POST' });
+    }
+
+    // ========================================
     // Workflow endpoints
     // ========================================
     async getWorkflows() {
