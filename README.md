@@ -283,10 +283,14 @@ serverkit reset-password
 serverkit backup-db
 serverkit restore-db <backup-file>
 
+# Updates & Branches
+serverkit update                      # Update to latest version
+serverkit update --branch <name>      # Switch to specific branch (e.g., dev)
+serverkit branch                      # Show current branch and commit
+
 # Utilities
 serverkit generate-keys
 serverkit logs [service]
-serverkit update
 ```
 
 ---
