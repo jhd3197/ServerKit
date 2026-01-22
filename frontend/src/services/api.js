@@ -2707,6 +2707,17 @@ class ApiService {
     async getAvailableServers() {
         return this.request('/servers/available');
     }
+
+    // Agent Downloads
+    async getAgentVersion() {
+        return this.request('/servers/agent/version');
+    }
+
+    async getAgentDownloadUrl(os, arch) {
+        // Returns the download URL, caller should redirect or fetch
+        const baseUrl = this.baseUrl.replace('/api/v1', '');
+        return `${baseUrl}/api/servers/agent/download/${os}/${arch}`;
+    }
 }
 
 export const api = new ApiService();

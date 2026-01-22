@@ -1,0 +1,415 @@
+// ============================================
+// DOWNLOADS PAGE STYLES
+// ============================================
+
+.downloads-page {
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: @space-6;
+
+        .page-header-content {
+            h1 {
+                margin-bottom: @space-2;
+            }
+
+            .page-subtitle {
+                color: @text-secondary;
+                font-size: @text-base;
+                max-width: 600px;
+            }
+        }
+    }
+
+    .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: @space-12;
+        color: @text-secondary;
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid @border-default;
+            border-top-color: @accent-primary;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: @space-4;
+        }
+    }
+
+    .alert-error {
+        background: @danger-bg;
+        border: 1px solid @danger-border;
+        border-radius: @radius-lg;
+        padding: @space-4;
+        margin-bottom: @space-6;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        p {
+            color: @danger;
+            margin: 0;
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid @danger;
+            color: @danger;
+            padding: @space-2 @space-4;
+            border-radius: @radius-md;
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &:hover {
+                background: @danger;
+                color: @white;
+            }
+        }
+    }
+
+    // Version Banner
+    .version-banner {
+        background: linear-gradient(135deg, @accent-primary 0%, #4f46e5 100%);
+        border-radius: @radius-lg;
+        padding: @space-6;
+        margin-bottom: @space-8;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .version-info {
+            display: flex;
+            flex-direction: column;
+            gap: @space-1;
+
+            .version-label {
+                font-size: @text-sm;
+                opacity: 0.8;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .version-number {
+                font-size: @text-3xl;
+                font-weight: 700;
+            }
+        }
+
+        .version-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: @space-2;
+
+            span {
+                font-size: @text-sm;
+                opacity: 0.9;
+            }
+
+            .release-notes-link {
+                color: @white;
+                text-decoration: underline;
+                font-size: @text-sm;
+                opacity: 0.9;
+                transition: opacity 0.2s;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    // Sections
+    .downloads-section {
+        margin-bottom: @space-10;
+
+        h2 {
+            font-size: @text-xl;
+            font-weight: 600;
+            margin-bottom: @space-2;
+        }
+
+        .section-description {
+            color: @text-secondary;
+            margin-bottom: @space-6;
+
+            code {
+                background: @bg-secondary;
+                padding: @space-1 @space-2;
+                border-radius: @radius-sm;
+                font-family: @font-mono;
+                font-size: @text-sm;
+            }
+        }
+    }
+
+    // Download Cards
+    .download-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: @space-4;
+    }
+
+    .download-card {
+        background: @bg-card;
+        border: 1px solid @border-default;
+        border-radius: @radius-lg;
+        padding: @space-5;
+        display: flex;
+        flex-direction: column;
+        gap: @space-4;
+        transition: all 0.2s;
+
+        &:hover {
+            border-color: @accent-primary;
+            box-shadow: 0 0 0 1px @accent-primary;
+        }
+
+        &.unavailable {
+            opacity: 0.5;
+
+            &:hover {
+                border-color: @border-default;
+                box-shadow: none;
+            }
+        }
+
+        .platform-header {
+            display: flex;
+            align-items: center;
+            gap: @space-3;
+
+            .platform-icon {
+                width: 40px;
+                height: 40px;
+                color: @text-primary;
+            }
+
+            .platform-info {
+                h3 {
+                    font-size: @text-lg;
+                    font-weight: 600;
+                    margin: 0;
+                }
+
+                .platform-arch {
+                    font-size: @text-sm;
+                    color: @text-secondary;
+                }
+            }
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: @space-2;
+            width: 100%;
+
+            svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    }
+
+    // Install Commands
+    .install-commands {
+        display: flex;
+        flex-direction: column;
+        gap: @space-4;
+    }
+
+    .command-block {
+        background: @bg-card;
+        border: 1px solid @border-default;
+        border-radius: @radius-lg;
+        overflow: hidden;
+
+        .command-header {
+            display: flex;
+            align-items: center;
+            gap: @space-3;
+            padding: @space-4;
+            border-bottom: 1px solid @border-default;
+            background: @bg-elevated;
+
+            .platform-icon {
+                width: 24px;
+                height: 24px;
+                color: @text-primary;
+            }
+
+            h3 {
+                font-size: @text-base;
+                font-weight: 600;
+                margin: 0;
+            }
+        }
+
+        .command-content {
+            position: relative;
+            padding: @space-4;
+            background: @bg-body;
+
+            pre {
+                margin: 0;
+                padding: 0;
+                background: transparent;
+                overflow-x: auto;
+
+                code {
+                    font-family: @font-mono;
+                    font-size: @text-sm;
+                    color: @text-primary;
+                    white-space: pre-wrap;
+                    word-break: break-all;
+                }
+            }
+
+            .copy-btn {
+                position: absolute;
+                top: @space-3;
+                right: @space-3;
+                background: @bg-secondary;
+                border: 1px solid @border-default;
+                border-radius: @radius-md;
+                padding: @space-2;
+                cursor: pointer;
+                color: @text-secondary;
+                transition: all 0.2s;
+
+                &:hover {
+                    background: @bg-hover;
+                    color: @text-primary;
+                    border-color: @accent-primary;
+                }
+
+                svg {
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+        }
+
+        .command-note {
+            padding: @space-3 @space-4;
+            background: @warning-bg;
+            color: @warning;
+            font-size: @text-sm;
+            margin: 0;
+            border-top: 1px solid @warning-border;
+        }
+    }
+
+    // Manual Steps
+    .manual-steps {
+        display: flex;
+        flex-direction: column;
+        gap: @space-4;
+    }
+
+    .step {
+        display: flex;
+        gap: @space-4;
+        padding: @space-4;
+        background: @bg-card;
+        border: 1px solid @border-default;
+        border-radius: @radius-lg;
+
+        .step-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: @accent-primary;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: @text-sm;
+        }
+
+        .step-content {
+            flex: 1;
+
+            h4 {
+                font-size: @text-base;
+                font-weight: 600;
+                margin: 0 0 @space-2;
+            }
+
+            p {
+                color: @text-secondary;
+                margin: 0 0 @space-2;
+                font-size: @text-sm;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                code {
+                    background: @bg-secondary;
+                    padding: @space-1 @space-2;
+                    border-radius: @radius-sm;
+                    font-family: @font-mono;
+                    font-size: @text-xs;
+                    color: @text-primary;
+                }
+            }
+
+            pre {
+                background: @bg-body;
+                padding: @space-3;
+                border-radius: @radius-md;
+                margin: @space-2 0;
+                overflow-x: auto;
+
+                code {
+                    font-family: @font-mono;
+                    font-size: @text-sm;
+                    color: @text-primary;
+                    background: transparent;
+                    padding: 0;
+                }
+            }
+
+            .step-note {
+                color: @text-tertiary;
+                font-size: @text-xs;
+                font-style: italic;
+            }
+        }
+    }
+
+    // Verification
+    .verification-command {
+        margin-top: @space-4;
+
+        pre {
+            background: @bg-card;
+            border: 1px solid @border-default;
+            padding: @space-4;
+            border-radius: @radius-lg;
+            margin: 0;
+
+            code {
+                font-family: @font-mono;
+                font-size: @text-sm;
+                color: @text-primary;
+            }
+        }
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

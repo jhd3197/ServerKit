@@ -1337,8 +1337,8 @@ system:exec:  # Requires explicit permission
     [x] Auto-update mechanism in agent
     [x] Manual update command (`serverkit-agent update`)
 
-[ ] Distribution
-    [ ] Download page in UI
+[x] Distribution
+    [x] Download page in UI
 ```
 
 ### Phase 10.8: Advanced Features

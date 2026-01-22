@@ -27,6 +27,7 @@ import Templates from './pages/Templates';
 import WorkflowBuilder from './pages/WorkflowBuilder';
 import Servers from './pages/Servers';
 import ServerDetail from './pages/ServerDetail';
+import Downloads from './pages/Downloads';
 
 function PrivateRoute({ children }) {
     const { isAuthenticated, loading, needsSetup } = useAuth();
@@ -112,6 +113,7 @@ function AppRoutes() {
                 <Route path="servers" element={<Servers />} />
                 <Route path="servers/:id" element={<ServerDetail />} />
                 <Route path="servers/:id/docker" element={<ServerDetail />} />
+                <Route path="downloads" element={<Downloads />} />
                 <Route path="firewall" element={<Navigate to="/security" replace />} />
                 <Route path="git" element={<Git />} />
                 <Route path="files" element={<FileManager />} />
