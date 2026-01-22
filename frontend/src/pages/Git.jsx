@@ -129,9 +129,19 @@ function Git() {
     };
 
     const openGitea = () => {
-        if (status?.http_port) {
+        // Use slug-based URL (/gitea) if available, fallback to port
+        if (status?.url_path) {
+            window.open(`${window.location.origin}${status.url_path}`, '_blank');
+        } else if (status?.http_port) {
             window.open(`http://${window.location.hostname}:${status.http_port}`, '_blank');
         }
+    };
+
+    const getGiteaUrl = () => {
+        if (status?.url_path) {
+            return `${window.location.origin}${status.url_path}`;
+        }
+        return `http://${window.location.hostname}:${status?.http_port}`;
     };
 
     if (loading) {
@@ -242,8 +252,8 @@ function Git() {
                                 </svg>
                             </div>
                             <div className="status-info">
-                                <span className="status-label">HTTP Port</span>
-                                <span className="status-value">{status?.http_port || 'N/A'}</span>
+                                <span className="status-label">URL Path</span>
+                                <span className="status-value">{status?.url_path || `/gitea`}</span>
                             </div>
                         </div>
                         <div className="status-card">
@@ -309,8 +319,8 @@ function Git() {
                                             <span className="info-label">HTTP URL</span>
                                             <span className="info-value">
                                                 {status?.running ? (
-                                                    <a href={`http://${window.location.hostname}:${status.http_port}`} target="_blank" rel="noopener noreferrer">
-                                                        http://{window.location.hostname}:{status.http_port}
+                                                    <a href={getGiteaUrl()} target="_blank" rel="noopener noreferrer">
+                                                        {getGiteaUrl()}
                                                     </a>
                                                 ) : 'Server not running'}
                                             </span>
@@ -353,11 +363,11 @@ function Git() {
                                     <h3>HTTP Access</h3>
                                     <p className="text-muted">Access Gitea through your web browser</p>
                                     <div className="access-url">
-                                        <code>http://{window.location.hostname}:{status?.http_port}</code>
+                                        <code>{getGiteaUrl()}</code>
                                         <button
                                             className="btn btn-sm btn-secondary"
                                             onClick={() => {
-                                                navigator.clipboard.writeText(`http://${window.location.hostname}:${status?.http_port}`);
+                                                navigator.clipboard.writeText(getGiteaUrl());
                                                 toast.success('URL copied');
                                             }}
                                         >

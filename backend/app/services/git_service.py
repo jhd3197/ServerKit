@@ -596,7 +596,8 @@ class GitService:
                 'running': False,
                 'http_port': None,
                 'ssh_port': None,
-                'url': None
+                'url': None,
+                'url_path': None
             }
 
         # Check container status
@@ -610,7 +611,8 @@ class GitService:
             'running': running,
             'http_port': app.port or config.get('http_port'),
             'ssh_port': config.get('ssh_port'),
-            'url': f"http://localhost:{app.port}" if app.port else None,
+            'url_path': '/gitea',  # Slug-based URL path
+            'url': f"http://localhost:{app.port}" if app.port else None,  # Legacy port-based URL
             'app_id': app.id,
             'version': config.get('version', '1.21')
         }
@@ -672,6 +674,7 @@ class GitService:
                       admin_password: str = None) -> Dict:
         """Install Gitea as integrated ServerKit service."""
         from app.services.template_service import TemplateService
+        from app.services.nginx_service import NginxService
 
         # Check if already installed
         status = cls.get_gitea_status()
@@ -701,6 +704,12 @@ class GitService:
             http_port = variables.get('HTTP_PORT')
             ssh_port = variables.get('SSH_PORT')
 
+            # Create nginx config for /gitea path
+            nginx_result = NginxService.create_gitea_config(int(http_port))
+            if not nginx_result.get('success'):
+                # Log warning but don't fail - Gitea still works via port
+                print(f"Warning: Failed to create Gitea nginx config: {nginx_result.get('error')}")
+
             # Save config with admin credentials and ports
             config = {
                 'admin_user': admin_user,
@@ -709,7 +718,8 @@ class GitService:
                 'ssh_port': ssh_port,
                 'db_password': variables.get('DB_PASSWORD'),
                 'installed_at': datetime.now().isoformat(),
-                'version': '1.21'
+                'version': '1.21',
+                'url_path': '/gitea'
             }
             cls._save_gitea_config(config)
 
@@ -718,6 +728,7 @@ class GitService:
                 'message': 'Gitea installed successfully',
                 'http_port': http_port,
                 'ssh_port': ssh_port,
+                'url_path': '/gitea',
                 'admin_user': admin_user
             }
 
@@ -737,12 +748,16 @@ class GitService:
         from app import db
         from app.models import Application
         from app.services.docker_service import DockerService
+        from app.services.nginx_service import NginxService
 
         app = Application.query.filter_by(name=cls.GITEA_APP_NAME).first()
         if not app:
             return {'success': False, 'error': 'Gitea is not installed'}
 
         try:
+            # Remove nginx config
+            NginxService.remove_gitea_config()
+
             # Stop and remove containers
             if app.root_path and os.path.exists(app.root_path):
                 DockerService.compose_down(app.root_path, remove_volumes=remove_data)

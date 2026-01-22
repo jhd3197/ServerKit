@@ -164,6 +164,44 @@ class NginxService:
 
     # Private URL routing templates
     PRIVATE_URL_CONFIG_NAME = 'serverkit-private-urls'
+    GITEA_CONFIG_NAME = 'serverkit-gitea'
+
+    # Gitea location block for /gitea path
+    GITEA_LOCATION_TEMPLATE = '''server {{
+    listen 80;
+    listen [::]:80;
+    server_name _;
+
+    access_log /var/log/nginx/gitea.access.log;
+    error_log /var/log/nginx/gitea.error.log;
+
+    # Gitea at /gitea path
+    location /gitea/ {{
+        proxy_pass http://127.0.0.1:{port}/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 86400;
+        proxy_connect_timeout 60;
+        proxy_send_timeout 60;
+
+        # Required for Gitea WebSocket connections
+        proxy_buffering off;
+        client_max_body_size 100M;
+    }}
+
+    # Handle /gitea without trailing slash
+    location = /gitea {{
+        return 301 /gitea/;
+    }}
+}}
+'''
 
     PRIVATE_URL_LOCATION_TEMPLATE = '''    # Private URL: /p/{slug}
     location /p/{slug}/ {{
@@ -805,3 +843,87 @@ server {{
             Dict with exists, enabled, content, and URL count
         """
         return cls.get_site_config(cls.PRIVATE_URL_CONFIG_NAME)
+
+    # ==================== GITEA CONFIGURATION ====================
+
+    @classmethod
+    def create_gitea_config(cls, port: int) -> Dict:
+        """Create Nginx configuration for Gitea at /gitea path.
+
+        Args:
+            port: The internal port Gitea is running on
+
+        Returns:
+            Dict with success status and message
+        """
+        try:
+            config = cls.GITEA_LOCATION_TEMPLATE.format(port=port)
+            config_path = os.path.join(cls.SITES_AVAILABLE, cls.GITEA_CONFIG_NAME)
+
+            # Write config file
+            process = subprocess.run(
+                ['sudo', 'tee', config_path],
+                input=config,
+                capture_output=True,
+                text=True
+            )
+            if process.returncode != 0:
+                return {'success': False, 'error': f'Failed to write config: {process.stderr}'}
+
+            # Enable the site
+            enabled_path = os.path.join(cls.SITES_ENABLED, cls.GITEA_CONFIG_NAME)
+            result = subprocess.run(
+                ['sudo', 'ln', '-sf', config_path, enabled_path],
+                capture_output=True,
+                text=True
+            )
+            if result.returncode != 0:
+                return {'success': False, 'error': f'Failed to enable config: {result.stderr}'}
+
+            # Reload Nginx
+            reload_result = cls.reload()
+            if not reload_result['success']:
+                return reload_result
+
+            return {
+                'success': True,
+                'message': 'Gitea nginx config created',
+                'config_path': config_path,
+                'url_path': '/gitea'
+            }
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def remove_gitea_config(cls) -> Dict:
+        """Remove Nginx configuration for Gitea.
+
+        Returns:
+            Dict with success status and message
+        """
+        try:
+            # Remove symlink
+            enabled_path = os.path.join(cls.SITES_ENABLED, cls.GITEA_CONFIG_NAME)
+            subprocess.run(['sudo', 'rm', '-f', enabled_path], capture_output=True, text=True)
+
+            # Remove config file
+            config_path = os.path.join(cls.SITES_AVAILABLE, cls.GITEA_CONFIG_NAME)
+            subprocess.run(['sudo', 'rm', '-f', config_path], capture_output=True, text=True)
+
+            # Reload Nginx
+            cls.reload()
+
+            return {'success': True, 'message': 'Gitea nginx config removed'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def get_gitea_config(cls) -> Dict:
+        """Get the current Gitea nginx configuration.
+
+        Returns:
+            Dict with exists, enabled, content, and path
+        """
+        return cls.get_site_config(cls.GITEA_CONFIG_NAME)
