@@ -16,7 +16,7 @@ const Login = () => {
     const [useBackupCode, setUseBackupCode] = useState(false);
     const [backupCode, setBackupCode] = useState('');
 
-    const { login, setUser, setTokens } = useAuth();
+    const { login, setUser, setTokens, registrationEnabled } = useAuth();
     const navigate = useNavigate();
 
     // Refs for TOTP input fields
@@ -262,9 +262,11 @@ const Login = () => {
                     </button>
                 </form>
 
-                <p className="auth-footer">
-                    Don't have an account? <Link to="/register">Create one</Link>
-                </p>
+                {registrationEnabled && (
+                    <p className="auth-footer">
+                        Don't have an account? <Link to="/register">Create one</Link>
+                    </p>
+                )}
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ToastContainer } from './components/Toast';
@@ -28,6 +28,52 @@ import WorkflowBuilder from './pages/WorkflowBuilder';
 import Servers from './pages/Servers';
 import ServerDetail from './pages/ServerDetail';
 import Downloads from './pages/Downloads';
+
+// Page title mapping
+const PAGE_TITLES = {
+    '/': 'Dashboard',
+    '/login': 'Login',
+    '/register': 'Register',
+    '/setup': 'Setup',
+    '/apps': 'Applications',
+    '/templates': 'Templates',
+    '/workflow': 'Workflow Builder',
+    '/domains': 'Domains',
+    '/databases': 'Databases',
+    '/ssl': 'SSL Certificates',
+    '/docker': 'Docker',
+    '/servers': 'Servers',
+    '/downloads': 'Downloads',
+    '/git': 'Git Repositories',
+    '/files': 'File Manager',
+    '/ftp': 'FTP Server',
+    '/monitoring': 'Monitoring',
+    '/backups': 'Backups',
+    '/cron': 'Cron Jobs',
+    '/security': 'Security',
+    '/terminal': 'Terminal',
+    '/settings': 'Settings',
+};
+
+function PageTitleUpdater() {
+    const location = useLocation();
+
+    useEffect(() => {
+        const path = location.pathname;
+        let title = PAGE_TITLES[path];
+
+        // Handle dynamic routes
+        if (!title) {
+            if (path.startsWith('/apps/')) title = 'Application Details';
+            else if (path.startsWith('/servers/')) title = 'Server Details';
+            else title = 'ServerKit';
+        }
+
+        document.title = title ? `${title} | ServerKit` : 'ServerKit';
+    }, [location]);
+
+    return null;
+}
 
 function PrivateRoute({ children }) {
     const { isAuthenticated, loading, needsSetup } = useAuth();
@@ -132,6 +178,7 @@ function AppRoutes() {
 function App() {
     return (
         <Router>
+            <PageTitleUpdater />
             <AuthProvider>
                 <ToastProvider>
                     <AppRoutes />
