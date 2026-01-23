@@ -1284,28 +1284,6 @@ def get_server_metrics_aggregated(server_id):
     return jsonify(result)
 
 
-@servers_bp.route('/metrics/compare', methods=['GET'])
-@jwt_required()
-def compare_server_metrics():
-    """Compare metrics across multiple servers.
-
-    Query params:
-        ids: Comma-separated server IDs
-        metric: 'cpu', 'memory', 'disk' (default: 'cpu')
-        period: '1h', '6h', '24h', '7d' (default: '24h')
-    """
-    ids_param = request.args.get('ids', '')
-    if not ids_param:
-        return jsonify({'error': 'ids parameter is required'}), 400
-
-    server_ids = [id.strip() for id in ids_param.split(',') if id.strip()]
-    metric = request.args.get('metric', 'cpu')
-    period = request.args.get('period', '24h')
-
-    result = ServerMetricsService.get_multi_server_comparison(server_ids, metric, period)
-    return jsonify(result)
-
-
 @servers_bp.route('/metrics/retention', methods=['GET'])
 @jwt_required()
 @developer_required
