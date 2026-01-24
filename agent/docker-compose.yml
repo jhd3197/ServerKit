@@ -15,7 +15,7 @@
 
 services:
   agent:
-    image: serverkit/agent:latest
+    image: jhd3197/serverkit-agent:latest
     container_name: serverkit-agent
     restart: unless-stopped
 
