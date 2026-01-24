@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build .rpm package for ServerKit Agent
-# Usage: ./build.sh <version> <architecture> <binary_path>
-# Example: ./build.sh 1.0.0 x86_64 ../../dist/serverkit-agent-linux-amd64
+# Usage: ./build.sh <version> <architecture> <binary_path> <output_dir>
+# Example: ./build.sh 1.0.0 x86_64 ../../dist/serverkit-agent-linux-amd64 ./packages
 
 set -e
 
@@ -9,6 +9,12 @@ VERSION="${1:-1.0.0}"
 ARCH="${2:-x86_64}"
 BINARY_PATH="${3:-../../dist/serverkit-agent-linux-amd64}"
 PACKAGE_NAME="serverkit-agent"
+
+# Convert paths to absolute before any cd commands
+BINARY_PATH="$(cd "$(dirname "$BINARY_PATH")" && pwd)/$(basename "$BINARY_PATH")"
+OUTPUT_DIR="${4:-./output}"
+mkdir -p "$OUTPUT_DIR"
+OUTPUT_DIR="$(cd "$OUTPUT_DIR" && pwd)"
 
 # Map Go arch to RPM arch
 case "$ARCH" in
@@ -21,6 +27,7 @@ echo "Building .rpm package..."
 echo "  Version: $VERSION"
 echo "  Architecture: $RPM_ARCH"
 echo "  Binary: $BINARY_PATH"
+echo "  Output: $OUTPUT_DIR"
 
 # Create build directory structure
 BUILD_ROOT="$(mktemp -d)"
@@ -117,7 +124,6 @@ License:        MIT
 URL:            https://github.com/serverkit/serverkit
 Source0:        serverkit-agent-%{version}.tar.gz
 
-BuildArch:      $RPM_ARCH
 Requires:       ca-certificates
 
 %description
@@ -189,12 +195,10 @@ fi
 - Release $VERSION
 EOF
 
-# Build the RPM
-rpmbuild --define "_topdir $BUILD_ROOT" -bb "$BUILD_ROOT/SPECS/serverkit-agent.spec"
+# Build the RPM (disable build-id for Go binaries, use --target for cross-arch)
+rpmbuild --define "_topdir $BUILD_ROOT" --define "_build_id_links none" --target "$RPM_ARCH" -bb "$BUILD_ROOT/SPECS/serverkit-agent.spec"
 
 # Copy output
-OUTPUT_DIR="${4:-./output}"
-mkdir -p "$OUTPUT_DIR"
 cp "$BUILD_ROOT/RPMS/$RPM_ARCH"/*.rpm "$OUTPUT_DIR/"
 
 # Cleanup

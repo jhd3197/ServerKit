@@ -1,0 +1,26 @@
+# Binaries
+serverkit-agent
+serverkit-agent.exe
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Build output
+/dist/
+/output/
+/packages/
+
+# Test binaries
+*.test
+*.test.exe
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

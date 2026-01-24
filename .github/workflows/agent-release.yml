@@ -280,8 +280,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: ${{ secrets.DOCKERHUB_USERNAME != '' }}
           tags: |
-            serverkit/agent:latest
-            serverkit/agent:${{ steps.version.outputs.version }}
+            jhd3197/serverkit-agent:latest
+            jhd3197/serverkit-agent:${{ steps.version.outputs.version }}
           build-args: |
             VERSION=${{ steps.version.outputs.version }}
             BUILD_TIME=${{ github.event.repository.updated_at }}
@@ -368,8 +368,8 @@ jobs:
 
             #### Docker
             ```bash
-            docker pull serverkit/agent:${{ steps.version.outputs.version }}
-            docker pull serverkit/agent:latest
+            docker pull jhd3197/serverkit-agent:${{ steps.version.outputs.version }}
+            docker pull jhd3197/serverkit-agent:latest
             ```
 
             ### Quick Install
@@ -401,7 +401,7 @@ jobs:
             docker run -d --name serverkit-agent \
               -v /var/run/docker.sock:/var/run/docker.sock:ro \
               -v serverkit-config:/etc/serverkit-agent \
-              serverkit/agent:${{ steps.version.outputs.version }}
+              jhd3197/serverkit-agent:${{ steps.version.outputs.version }}
             ```
 
             ### Verification
