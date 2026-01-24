@@ -408,3 +408,467 @@
     font-size: @font-size-sm;
     padding: @space-4;
 }
+
+// Firewall Tab
+.firewall-tab {
+    .firewall-header {
+        margin-bottom: @space-6;
+    }
+
+    .firewall-status-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: @space-4;
+        background: @bg-card;
+        border-radius: @radius-lg;
+        border: 1px solid @border-subtle;
+    }
+
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: @space-2;
+        font-weight: 600;
+
+        &.active {
+            color: @success;
+        }
+
+        &.inactive {
+            color: @danger;
+        }
+
+        .firewall-type {
+            color: @text-tertiary;
+            font-weight: 400;
+        }
+    }
+
+    .firewall-actions {
+        display: flex;
+        gap: @space-2;
+    }
+
+    .firewall-stats {
+        display: flex;
+        gap: @space-4;
+        margin-bottom: @space-6;
+    }
+
+    .stat-mini {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: @space-4 @space-6;
+        background: @bg-card;
+        border-radius: @radius-md;
+        border: 1px solid @border-subtle;
+        min-width: 100px;
+
+        .stat-value {
+            font-size: @font-size-xl;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            color: @text-tertiary;
+            font-size: @font-size-sm;
+        }
+    }
+
+    .subtabs {
+        display: flex;
+        gap: @space-1;
+        margin-bottom: @space-4;
+        border-bottom: 1px solid @border-subtle;
+        padding-bottom: @space-2;
+
+        .subtab {
+            padding: @space-2 @space-3;
+            border: none;
+            background: none;
+            color: @text-secondary;
+            cursor: pointer;
+            border-radius: @radius-sm;
+            font-size: @font-size-sm;
+            transition: all 0.2s;
+
+            &:hover {
+                background: @bg-hover;
+                color: @text-primary;
+            }
+
+            &.active {
+                background: @bg-hover;
+                color: @accent-primary;
+            }
+        }
+    }
+
+    .quick-ports-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: @space-3;
+    }
+
+    .quick-port-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: @space-3 @space-4;
+        background: @bg-hover;
+        border-radius: @radius-md;
+
+        .port-info {
+            display: flex;
+            flex-direction: column;
+
+            .port-name {
+                font-weight: 500;
+            }
+
+            .port-number {
+                color: @text-tertiary;
+                font-size: @font-size-sm;
+                font-family: @font-mono;
+            }
+        }
+    }
+
+    .blocked-list {
+        display: flex;
+        flex-direction: column;
+        gap: @space-2;
+    }
+
+    .blocked-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: @space-3 @space-4;
+        background: @bg-hover;
+        border-radius: @radius-md;
+
+        .blocked-ip {
+            font-family: @font-mono;
+            font-weight: 500;
+        }
+    }
+
+    .empty-state-sm {
+        text-align: center;
+        padding: @space-6;
+        color: @text-secondary;
+    }
+
+    .install-info {
+        margin-top: @space-4;
+        padding: @space-4;
+        background: @bg-hover;
+        border-radius: @radius-md;
+
+        p {
+            margin: 0;
+            font-size: @font-size-sm;
+        }
+    }
+}
+
+// Scrollable tabs for many tabs
+.tabs-nav-scrollable {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: @border-subtle;
+        border-radius: @radius-sm;
+    }
+}
+
+// Fail2ban Tab
+.fail2ban-tab {
+    .card-actions {
+        display: flex;
+        gap: @space-2;
+    }
+}
+
+// SSH Keys Tab
+.ssh-keys-tab {
+    .fingerprint {
+        font-size: @font-size-xs;
+        word-break: break-all;
+    }
+
+    .modal-lg {
+        max-width: 600px;
+    }
+
+    textarea {
+        font-family: @font-mono;
+        font-size: @font-size-sm;
+    }
+}
+
+// IP Lists Tab
+.ip-lists-tab {
+    .ip-lists-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: @space-6;
+    }
+
+    .ip-list {
+        display: flex;
+        flex-direction: column;
+        gap: @space-2;
+    }
+
+    .ip-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: @space-3 @space-4;
+        background: @bg-hover;
+        border-radius: @radius-md;
+    }
+
+    .ip-info {
+        display: flex;
+        align-items: center;
+        gap: @space-3;
+
+        code {
+            font-weight: 500;
+        }
+
+        .ip-allowed {
+            color: @success;
+        }
+
+        .ip-blocked {
+            color: @danger;
+        }
+
+        .ip-comment {
+            color: @text-secondary;
+            font-size: @font-size-sm;
+        }
+
+        .ip-date {
+            color: @text-tertiary;
+            font-size: @font-size-xs;
+        }
+    }
+}
+
+// Audit Tab
+.audit-tab {
+    .loading-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: @space-8;
+        gap: @space-4;
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+    .audit-results {
+        display: flex;
+        flex-direction: column;
+        gap: @space-6;
+    }
+
+    .audit-score {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: @space-6;
+        background: @bg-hover;
+        border-radius: @radius-lg;
+        text-align: center;
+
+        .score-value {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .score-label {
+            color: @text-secondary;
+        }
+
+        &.score-excellent {
+            border: 2px solid @success;
+            .score-value { color: @success; }
+        }
+
+        &.score-good {
+            border: 2px solid @accent-primary;
+            .score-value { color: @accent-primary; }
+        }
+
+        &.score-fair {
+            border: 2px solid @warning;
+            .score-value { color: @warning; }
+        }
+
+        &.score-poor {
+            border: 2px solid @danger;
+            .score-value { color: @danger; }
+        }
+    }
+
+    .audit-timestamp {
+        text-align: center;
+        color: @text-tertiary;
+        font-size: @font-size-sm;
+    }
+
+    .audit-section {
+        h4 {
+            margin-bottom: @space-3;
+            padding-bottom: @space-2;
+            border-bottom: 1px solid @border-subtle;
+        }
+
+        &.recommendations {
+            background: fade(@accent-primary, 10%);
+            padding: @space-4;
+            border-radius: @radius-md;
+
+            ul {
+                margin: 0;
+                padding-left: @space-6;
+
+                li {
+                    margin-bottom: @space-2;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+
+    .findings-list {
+        display: flex;
+        flex-direction: column;
+        gap: @space-2;
+    }
+
+    .finding-item {
+        display: flex;
+        align-items: center;
+        gap: @space-3;
+        padding: @space-2 @space-3;
+        background: @bg-hover;
+        border-radius: @radius-sm;
+
+        .finding-message {
+            flex: 1;
+            font-size: @font-size-sm;
+        }
+    }
+}
+
+// Vulnerability Tab
+.vulnerability-tab {
+    .scan-section {
+        margin-bottom: @space-6;
+
+        h4 {
+            margin-bottom: @space-3;
+            color: @text-secondary;
+        }
+    }
+
+    .findings-list.compact {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        background: @bg-hover;
+        border-radius: @radius-md;
+        max-height: 300px;
+        overflow-y: auto;
+
+        li {
+            padding: @space-2 @space-4;
+            font-size: @font-size-sm;
+            border-bottom: 1px solid @border-subtle;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &.warning {
+                border-left: 3px solid @warning;
+            }
+
+            &.suggestion {
+                border-left: 3px solid @accent-primary;
+            }
+        }
+    }
+}
+
+// Auto Updates Tab
+.auto-updates-tab {
+    .auto-updates-actions {
+        display: flex;
+        gap: @space-4;
+    }
+
+    .help-text {
+        background: @bg-hover;
+        padding: @space-4;
+        border-radius: @radius-md;
+
+        p {
+            margin: 0;
+        }
+    }
+}
+
+// Shared empty state
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: @space-8;
+    text-align: center;
+
+    svg {
+        color: @text-tertiary;
+        margin-bottom: @space-4;
+    }
+
+    h3 {
+        margin-bottom: @space-2;
+    }
+
+    p {
+        color: @text-secondary;
+        margin-bottom: @space-6;
+    }
+}
+
+.empty-state-sm {
+    text-align: center;
+    padding: @space-6;
+    color: @text-secondary;
+}

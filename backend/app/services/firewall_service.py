@@ -1,5 +1,6 @@
 """Firewall management service for firewalld and ufw."""
 
+import os
 import subprocess
 import re
 from typing import Dict, List, Optional
@@ -37,9 +38,23 @@ class FirewallService:
     def _check_firewalld(cls) -> Dict:
         """Check firewalld status."""
         try:
-            # Check if installed
-            result = subprocess.run(['which', 'firewall-cmd'], capture_output=True, text=True)
-            installed = result.returncode == 0
+            # Check if installed using dpkg or by checking common paths
+            installed = False
+
+            # Try dpkg first (Debian/Ubuntu)
+            result = subprocess.run(
+                ['dpkg', '-s', 'firewalld'],
+                capture_output=True, text=True
+            )
+            if result.returncode == 0 and 'Status: install ok installed' in result.stdout:
+                installed = True
+
+            # Also check if binary exists at common paths
+            if not installed:
+                for path in ['/usr/bin/firewall-cmd', '/usr/sbin/firewall-cmd']:
+                    if os.path.exists(path):
+                        installed = True
+                        break
 
             running = False
             default_zone = None
@@ -72,9 +87,23 @@ class FirewallService:
     def _check_ufw(cls) -> Dict:
         """Check ufw status."""
         try:
-            # Check if installed
-            result = subprocess.run(['which', 'ufw'], capture_output=True, text=True)
-            installed = result.returncode == 0
+            # Check if installed using dpkg or by checking common paths
+            installed = False
+
+            # Try dpkg first (Debian/Ubuntu)
+            result = subprocess.run(
+                ['dpkg', '-s', 'ufw'],
+                capture_output=True, text=True
+            )
+            if result.returncode == 0 and 'Status: install ok installed' in result.stdout:
+                installed = True
+
+            # Also check if binary exists at common paths
+            if not installed:
+                for path in ['/usr/sbin/ufw', '/usr/bin/ufw']:
+                    if os.path.exists(path):
+                        installed = True
+                        break
 
             active = False
             if installed:

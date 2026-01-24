@@ -1905,6 +1905,123 @@ class ApiService {
         return this.request('/git/restart', { method: 'POST' });
     }
 
+    // Git Webhooks
+    async getWebhooks() {
+        return this.request('/git/webhooks');
+    }
+
+    async getWebhook(webhookId) {
+        return this.request(`/git/webhooks/${webhookId}`);
+    }
+
+    async createWebhook(data) {
+        return this.request('/git/webhooks', {
+            method: 'POST',
+            body: data
+        });
+    }
+
+    async updateWebhook(webhookId, data) {
+        return this.request(`/git/webhooks/${webhookId}`, {
+            method: 'PUT',
+            body: data
+        });
+    }
+
+    async deleteWebhook(webhookId) {
+        return this.request(`/git/webhooks/${webhookId}`, { method: 'DELETE' });
+    }
+
+    async toggleWebhook(webhookId) {
+        return this.request(`/git/webhooks/${webhookId}/toggle`, { method: 'POST' });
+    }
+
+    async getWebhookLogs(webhookId, limit = 50) {
+        return this.request(`/git/webhooks/${webhookId}/logs?limit=${limit}`);
+    }
+
+    async testWebhook(webhookId) {
+        return this.request(`/git/webhooks/${webhookId}/test`, { method: 'POST' });
+    }
+
+    // Git Repositories
+    async getRepositories(limit = 50) {
+        return this.request(`/git/repos?limit=${limit}`);
+    }
+
+    async getRepository(owner, repo) {
+        return this.request(`/git/repos/${owner}/${repo}`);
+    }
+
+    async getRepoStats(owner, repo) {
+        return this.request(`/git/repos/${owner}/${repo}/stats`);
+    }
+
+    async getBranches(owner, repo) {
+        return this.request(`/git/repos/${owner}/${repo}/branches`);
+    }
+
+    async getBranch(owner, repo, branch) {
+        return this.request(`/git/repos/${owner}/${repo}/branches/${branch}`);
+    }
+
+    async getCommits(owner, repo, branch = null, page = 1, limit = 30) {
+        let url = `/git/repos/${owner}/${repo}/commits?page=${page}&limit=${limit}`;
+        if (branch) url += `&branch=${branch}`;
+        return this.request(url);
+    }
+
+    async getCommit(owner, repo, sha) {
+        return this.request(`/git/repos/${owner}/${repo}/commits/${sha}`);
+    }
+
+    async getRepoFiles(owner, repo, ref = 'main', path = '') {
+        let url = `/git/repos/${owner}/${repo}/contents?ref=${ref}`;
+        if (path) url += `&path=${path}`;
+        return this.request(url);
+    }
+
+    async getFileContent(owner, repo, filepath, ref = 'main') {
+        return this.request(`/git/repos/${owner}/${repo}/contents/${filepath}?ref=${ref}`);
+    }
+
+    async getRepoReadme(owner, repo, ref = null) {
+        let url = `/git/repos/${owner}/${repo}/readme`;
+        if (ref) url += `?ref=${ref}`;
+        return this.request(url);
+    }
+
+    async getGiteaVersion() {
+        return this.request('/git/version');
+    }
+
+    // Git Deployments
+    async getAppDeployments(appId, limit = 20) {
+        return this.request(`/git/deployments/app/${appId}?limit=${limit}`);
+    }
+
+    async getDeployment(deploymentId, includeLogs = false) {
+        return this.request(`/git/deployments/${deploymentId}?logs=${includeLogs}`);
+    }
+
+    async triggerDeploy(appId, branch = null) {
+        return this.request(`/git/deployments/app/${appId}/deploy`, {
+            method: 'POST',
+            body: branch ? { branch } : {}
+        });
+    }
+
+    async rollbackDeployment(appId, targetVersion = null) {
+        return this.request(`/git/deployments/app/${appId}/rollback`, {
+            method: 'POST',
+            body: targetVersion ? { targetVersion } : {}
+        });
+    }
+
+    async getWebhookDeployments(webhookId, limit = 20) {
+        return this.request(`/git/deployments/webhook/${webhookId}?limit=${limit}`);
+    }
+
     // ========================================
     // Cron Job endpoints
     // ========================================
@@ -2278,6 +2395,124 @@ class ApiService {
     }
 
     // ========================================
+    // Fail2ban endpoints
+    // ========================================
+    async getFail2banStatus() {
+        return this.request('/security/fail2ban/status');
+    }
+
+    async installFail2ban() {
+        return this.request('/security/fail2ban/install', { method: 'POST' });
+    }
+
+    async getFail2banJailStatus(jail) {
+        return this.request(`/security/fail2ban/jails/${jail}`);
+    }
+
+    async getAllFail2banBans() {
+        return this.request('/security/fail2ban/bans');
+    }
+
+    async fail2banUnban(ip, jail = null) {
+        return this.request('/security/fail2ban/unban', {
+            method: 'POST',
+            body: { ip, jail }
+        });
+    }
+
+    async fail2banBan(ip, jail = 'sshd') {
+        return this.request('/security/fail2ban/ban', {
+            method: 'POST',
+            body: { ip, jail }
+        });
+    }
+
+    // ========================================
+    // SSH Key endpoints
+    // ========================================
+    async getSSHKeys(user = 'root') {
+        return this.request(`/security/ssh-keys?user=${user}`);
+    }
+
+    async addSSHKey(key, user = 'root') {
+        return this.request('/security/ssh-keys', {
+            method: 'POST',
+            body: { key, user }
+        });
+    }
+
+    async removeSSHKey(keyId, user = 'root') {
+        return this.request(`/security/ssh-keys/${keyId}?user=${user}`, {
+            method: 'DELETE'
+        });
+    }
+
+    // ========================================
+    // IP Lists endpoints
+    // ========================================
+    async getIPLists() {
+        return this.request('/security/ip-lists');
+    }
+
+    async addToIPList(ip, listType, comment = '') {
+        return this.request(`/security/ip-lists/${listType}`, {
+            method: 'POST',
+            body: { ip, comment }
+        });
+    }
+
+    async removeFromIPList(ip, listType) {
+        return this.request(`/security/ip-lists/${listType}/${encodeURIComponent(ip)}`, {
+            method: 'DELETE'
+        });
+    }
+
+    // ========================================
+    // Security Audit endpoints
+    // ========================================
+    async generateSecurityAudit() {
+        return this.request('/security/audit');
+    }
+
+    // ========================================
+    // Lynis (Vulnerability Scanning) endpoints
+    // ========================================
+    async getLynisStatus() {
+        return this.request('/security/lynis/status');
+    }
+
+    async installLynis() {
+        return this.request('/security/lynis/install', { method: 'POST' });
+    }
+
+    async runLynisScan() {
+        return this.request('/security/lynis/scan', { method: 'POST' });
+    }
+
+    async getLynisScanStatus() {
+        return this.request('/security/lynis/scan/status');
+    }
+
+    // ========================================
+    // Auto Updates endpoints
+    // ========================================
+    async getAutoUpdatesStatus() {
+        return this.request('/security/auto-updates/status');
+    }
+
+    async installAutoUpdates() {
+        return this.request('/security/auto-updates/install', { method: 'POST' });
+    }
+
+    async enableAutoUpdates() {
+        return this.request('/security/auto-updates/enable', { method: 'POST' });
+    }
+
+    async disableAutoUpdates() {
+        return this.request('/security/auto-updates/disable', { method: 'POST' });
+    }
+
+    // ========================================
     // Workflow endpoints
     // ========================================
     async getWorkflows() {
@@ -2312,6 +2547,359 @@ class ApiService {
         return this.request(`/workflows/${id}/deploy`, {
             method: 'POST'
         });
+    }
+
+    // ========================================
+    // Servers (Multi-Server Management) endpoints
+    // ========================================
+    async getServers() {
+        return this.request('/servers');
+    }
+
+    async getServer(id) {
+        return this.request(`/servers/${id}`);
+    }
+
+    async createServer(data) {
+        return this.request('/servers', {
+            method: 'POST',
+            body: data
+        });
+    }
+
+    async updateServer(id, data) {
+        return this.request(`/servers/${id}`, {
+            method: 'PUT',
+            body: data
+        });
+    }
+
+    async deleteServer(id) {
+        return this.request(`/servers/${id}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async getServerStatus(id) {
+        return this.request(`/servers/${id}/status`);
+    }
+
+    async getServerMetrics(id) {
+        return this.request(`/servers/${id}/metrics`);
+    }
+
+    async pingServer(id) {
+        return this.request(`/servers/${id}/ping`, {
+            method: 'POST'
+        });
+    }
+
+    // Server Registration
+    async generateRegistrationToken(serverId) {
+        return this.request(`/servers/${serverId}/registration-token`, {
+            method: 'POST'
+        });
+    }
+
+    async registerServer(registrationData) {
+        return this.request('/servers/register', {
+            method: 'POST',
+            body: registrationData
+        });
+    }
+
+    // Server Groups
+    async getServerGroups() {
+        return this.request('/servers/groups');
+    }
+
+    async createServerGroup(data) {
+        return this.request('/servers/groups', {
+            method: 'POST',
+            body: data
+        });
+    }
+
+    async updateServerGroup(id, data) {
+        return this.request(`/servers/groups/${id}`, {
+            method: 'PUT',
+            body: data
+        });
+    }
+
+    async deleteServerGroup(id) {
+        return this.request(`/servers/groups/${id}`, {
+            method: 'DELETE'
+        });
+    }
+
+    // Remote Docker Operations (via agent)
+    async getRemoteContainers(serverId, all = false) {
+        return this.request(`/servers/${serverId}/docker/containers?all=${all}`);
+    }
+
+    async getRemoteContainer(serverId, containerId) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}`);
+    }
+
+    async startRemoteContainer(serverId, containerId) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}/start`, {
+            method: 'POST'
+        });
+    }
+
+    async stopRemoteContainer(serverId, containerId) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}/stop`, {
+            method: 'POST'
+        });
+    }
+
+    async restartRemoteContainer(serverId, containerId) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}/restart`, {
+            method: 'POST'
+        });
+    }
+
+    async removeRemoteContainer(serverId, containerId, force = false) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}?force=${force}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async getRemoteContainerStats(serverId, containerId) {
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}/stats`);
+    }
+
+    async getRemoteContainerLogs(serverId, containerId, tail = 100, since = null) {
+        const params = new URLSearchParams({ tail });
+        if (since) params.append('since', since);
+        return this.request(`/servers/${serverId}/docker/containers/${containerId}/logs?${params}`);
+    }
+
+    async getRemoteImages(serverId) {
+        return this.request(`/servers/${serverId}/docker/images`);
+    }
+
+    async pullRemoteImage(serverId, image) {
+        return this.request(`/servers/${serverId}/docker/images/pull`, {
+            method: 'POST',
+            body: { image }
+        });
+    }
+
+    async removeRemoteImage(serverId, imageId, force = false) {
+        return this.request(`/servers/${serverId}/docker/images/${imageId}?force=${force}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async getRemoteVolumes(serverId) {
+        return this.request(`/servers/${serverId}/docker/volumes`);
+    }
+
+    async getRemoteNetworks(serverId) {
+        return this.request(`/servers/${serverId}/docker/networks`);
+    }
+
+    async getRemoteSystemMetrics(serverId) {
+        return this.request(`/servers/${serverId}/system/metrics`);
+    }
+
+    async getRemoteSystemInfo(serverId) {
+        return this.request(`/servers/${serverId}/system/info`);
+    }
+
+    // Get available servers for Docker operations
+    async getAvailableServers() {
+        return this.request('/servers/available');
+    }
+
+    // Remote Docker Compose Operations
+    async getRemoteComposeProjects(serverId) {
+        return this.request(`/servers/${serverId}/docker/compose/projects`);
+    }
+
+    async getRemoteComposePs(serverId, projectPath) {
+        return this.request(`/servers/${serverId}/docker/compose/ps`, {
+            method: 'POST',
+            body: { project_path: projectPath }
+        });
+    }
+
+    async remoteComposeUp(serverId, projectPath, options = {}) {
+        return this.request(`/servers/${serverId}/docker/compose/up`, {
+            method: 'POST',
+            body: {
+                project_path: projectPath,
+                detach: options.detach !== false,
+                build: options.build || false
+            }
+        });
+    }
+
+    async remoteComposeDown(serverId, projectPath, options = {}) {
+        return this.request(`/servers/${serverId}/docker/compose/down`, {
+            method: 'POST',
+            body: {
+                project_path: projectPath,
+                volumes: options.volumes || false,
+                remove_orphans: options.removeOrphans !== false
+            }
+        });
+    }
+
+    async remoteComposeLogs(serverId, projectPath, service = null, tail = 100) {
+        return this.request(`/servers/${serverId}/docker/compose/logs`, {
+            method: 'POST',
+            body: {
+                project_path: projectPath,
+                service: service,
+                tail: tail
+            }
+        });
+    }
+
+    async remoteComposeRestart(serverId, projectPath, service = null) {
+        return this.request(`/servers/${serverId}/docker/compose/restart`, {
+            method: 'POST',
+            body: {
+                project_path: projectPath,
+                service: service
+            }
+        });
+    }
+
+    async remoteComposePull(serverId, projectPath, service = null) {
+        return this.request(`/servers/${serverId}/docker/compose/pull`, {
+            method: 'POST',
+            body: {
+                project_path: projectPath,
+                service: service
+            }
+        });
+    }
+
+    // Server Historical Metrics
+    async getServerMetricsHistory(serverId, period = '24h') {
+        return this.request(`/servers/${serverId}/metrics/history?period=${period}`);
+    }
+
+    async getServerMetricsAggregated(serverId, period = '24h', aggregation = 'hourly') {
+        return this.request(`/servers/${serverId}/metrics/aggregated?period=${period}&aggregation=${aggregation}`);
+    }
+
+    async compareServerMetrics(serverIds, metric = 'cpu', period = '24h') {
+        const ids = Array.isArray(serverIds) ? serverIds.join(',') : serverIds;
+        return this.request(`/servers/metrics/compare?ids=${ids}&metric=${metric}&period=${period}`);
+    }
+
+    async getMetricsRetentionStats() {
+        return this.request('/servers/metrics/retention');
+    }
+
+    async triggerMetricsCleanup() {
+        return this.request('/servers/metrics/cleanup', { method: 'POST' });
+    }
+
+    // Remote Terminal
+    async createTerminalSession(serverId, cols = 80, rows = 24) {
+        return this.request(`/servers/${serverId}/terminal`, {
+            method: 'POST',
+            body: { cols, rows }
+        });
+    }
+
+    async sendTerminalInput(sessionId, data) {
+        return this.request(`/servers/terminal/${sessionId}/input`, {
+            method: 'POST',
+            body: { data }
+        });
+    }
+
+    async resizeTerminal(sessionId, cols, rows) {
+        return this.request(`/servers/terminal/${sessionId}/resize`, {
+            method: 'POST',
+            body: { cols, rows }
+        });
+    }
+
+    async closeTerminalSession(sessionId) {
+        return this.request(`/servers/terminal/${sessionId}`, {
+            method: 'DELETE'
+        });
+    }
+
+    async listTerminalSessions() {
+        return this.request('/servers/terminal/sessions');
+    }
+
+    // Security Features
+    async getAllowedIPs(serverId) {
+        return this.request(`/servers/${serverId}/allowed-ips`);
+    }
+
+    async updateAllowedIPs(serverId, allowedIPs) {
+        return this.request(`/servers/${serverId}/allowed-ips`, {
+            method: 'PUT',
+            body: { allowed_ips: allowedIPs }
+        });
+    }
+
+    async getConnectionInfo(serverId) {
+        return this.request(`/servers/${serverId}/connection-info`);
+    }
+
+    async rotateAPIKey(serverId) {
+        return this.request(`/servers/${serverId}/rotate-api-key`, {
+            method: 'POST'
+        });
+    }
+
+    async getServerSecurityAlerts(serverId, options = {}) {
+        const params = new URLSearchParams();
+        if (options.status) params.append('status', options.status);
+        if (options.severity) params.append('severity', options.severity);
+        if (options.limit) params.append('limit', options.limit);
+        const query = params.toString() ? `?${params.toString()}` : '';
+        return this.request(`/servers/${serverId}/security/alerts${query}`);
+    }
+
+    async getAllSecurityAlerts(options = {}) {
+        const params = new URLSearchParams();
+        if (options.status) params.append('status', options.status);
+        if (options.severity) params.append('severity', options.severity);
+        if (options.type) params.append('type', options.type);
+        if (options.limit) params.append('limit', options.limit);
+        const query = params.toString() ? `?${params.toString()}` : '';
+        return this.request(`/servers/security/alerts${query}`);
+    }
+
+    async getSecurityAlertCounts(serverId = null) {
+        const query = serverId ? `?server_id=${serverId}` : '';
+        return this.request(`/servers/security/alerts/counts${query}`);
+    }
+
+    async acknowledgeAlert(alertId) {
+        return this.request(`/servers/security/alerts/${alertId}/acknowledge`, {
+            method: 'POST'
+        });
+    }
+
+    async resolveAlert(alertId) {
+        return this.request(`/servers/security/alerts/${alertId}/resolve`, {
+            method: 'POST'
+        });
+    }
+
+    // Agent Downloads
+    async getAgentVersion() {
+        return this.request('/servers/agent/version');
+    }
+
+    async getAgentDownloadUrl(os, arch) {
+        // Returns the download URL, caller should redirect or fetch
+        const baseUrl = this.baseUrl.replace('/api/v1', '');
+        return `${baseUrl}/api/servers/agent/download/${os}/${arch}`;
     }
 }
 

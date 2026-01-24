@@ -1,0 +1,34 @@
+# Build artifacts
+*.exe
+serverkit-agent
+agent
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Documentation (not needed in image)
+*.md
+LICENSE
+
+# Scripts (not needed in image)
+scripts/
+
+# Local config files
+config.yaml
+*.key
+*.pem
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+*_test.go
+testdata/

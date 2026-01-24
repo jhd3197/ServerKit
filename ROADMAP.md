@@ -107,45 +107,53 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ---
 
-## Phase 9: Firewall Management (Completed)
+## Phase 9: Firewall Management (Completed - Merged into Security)
 
 - [x] UFW firewall integration
 - [x] Visual rule management
 - [x] Common port presets
 - [x] Rule enable/disable
+- [x] Consolidated into Security page for unified security management
 
 ---
 
-## Phase 10: Multi-Server Management (Planned)
+## Phase 10: Multi-Server Management (In Progress)
 
-**Priority: High** | **Target: v1.1.0**
+**Priority: High**
 
-- [ ] Agent-based remote server monitoring
-- [ ] Centralized dashboard for multiple servers
-- [ ] Server grouping and tagging
-- [ ] Cross-server metrics comparison
-- [ ] Remote command execution
-- [ ] Server health overview
+- [x] Agent-based remote server monitoring (Go agent)
+- [x] Centralized dashboard for multiple servers
+- [x] Server grouping and tagging
+- [x] Cross-server metrics comparison
+- [x] Remote Docker management via agents
+- [x] Server health overview
+- [x] Agent WebSocket gateway
+- [x] HMAC-SHA256 authentication
+- [x] GitHub Actions for agent releases (Linux/Windows)
+- [x] Installation scripts endpoint
+- [x] Agent auto-update mechanism
+- [x] Agent download page in UI
+- [x] Container logs streaming for remote servers
 
 ---
 
 ## Phase 11: Git Deployment (Planned)
 
-**Priority: High** | **Target: v1.1.0**
+**Priority: High**
 
-- [ ] GitHub/GitLab webhook integration
-- [ ] Automatic deployment on push
-- [ ] Branch selection for deployment
-- [ ] Rollback to previous deployments
-- [ ] Deployment history and logs
-- [ ] Pre/post deployment scripts
-- [ ] Zero-downtime deployments
+- [x] GitHub/GitLab webhook integration
+- [x] Automatic deployment on push
+- [x] Branch selection for deployment
+- [x] Rollback to previous deployments
+- [x] Deployment history and logs
+- [x] Pre/post deployment scripts
+- [x] Zero-downtime deployments
 
 ---
 
 ## Phase 12: Backup & Restore (Planned)
 
-**Priority: High** | **Target: v1.2.0**
+**Priority: High**
 
 - [ ] Automated database backups
 - [ ] File/directory backups
@@ -160,7 +168,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 13: Email Server Management (Planned)
 
-**Priority: Medium** | **Target: v1.3.0**
+**Priority: Medium**
 
 - [ ] Postfix mail server setup
 - [ ] Dovecot IMAP/POP3 configuration
@@ -174,7 +182,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 14: Advanced SSL Features (Planned)
 
-**Priority: Medium** | **Target: v1.2.0**
+**Priority: Medium**
 
 - [ ] Wildcard SSL certificates
 - [ ] Multi-domain certificates (SAN)
@@ -186,7 +194,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 15: Team & Permissions (Planned)
 
-**Priority: Medium** | **Target: v1.4.0**
+**Priority: Medium**
 
 - [ ] Multi-user support
 - [ ] Role-based access control (RBAC)
@@ -199,7 +207,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 16: API Enhancements (Planned)
 
-**Priority: Medium** | **Target: v1.3.0**
+**Priority: Medium**
 
 - [ ] API key management
 - [ ] Rate limiting
@@ -209,23 +217,25 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ---
 
-## Phase 17: Advanced Security (Planned)
+## Phase 17: Advanced Security (Completed)
 
-**Priority: High** | **Target: v1.2.0**
+**Priority: High**
 
-- [ ] Fail2ban integration
-- [ ] SSH key management
-- [ ] IP allowlist/blocklist
-- [ ] Brute force protection
-- [ ] Security audit reports
-- [ ] Vulnerability scanning
-- [ ] Automatic security updates
+- [x] Unified Security page with all security features
+- [x] Firewall tab with UFW/firewalld management
+- [x] Fail2ban integration
+- [x] SSH key management
+- [x] IP allowlist/blocklist
+- [x] Brute force protection
+- [x] Security audit reports
+- [x] Vulnerability scanning (Lynis)
+- [x] Automatic security updates (unattended-upgrades/dnf-automatic)
 
 ---
 
 ## Phase 18: Performance Optimization (Planned)
 
-**Priority: Low** | **Target: v1.5.0**
+**Priority: Low**
 
 - [ ] Redis caching integration
 - [ ] Database query optimization
@@ -237,7 +247,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 19: Mobile App (Planned)
 
-**Priority: Low** | **Target: v2.0.0**
+**Priority: Low**
 
 - [ ] React Native mobile application
 - [ ] Push notifications
@@ -248,7 +258,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ## Phase 20: Marketplace & Extensions (Planned)
 
-**Priority: Low** | **Target: v2.0.0**
+**Priority: Low**
 
 - [ ] Plugin/extension system
 - [ ] Community marketplace

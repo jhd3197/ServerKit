@@ -31,7 +31,48 @@
 
 .docker-page-actions {
     display: flex;
+    align-items: center;
     gap: @space-3;
+}
+
+// Server Selector
+.server-selector {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    padding: @space-2 @space-3;
+    margin-right: @space-2;
+
+    svg {
+        color: @text-tertiary;
+        flex-shrink: 0;
+    }
+
+    select {
+        background: transparent;
+        border: none;
+        color: @text-primary;
+        font-size: @font-size-sm;
+        cursor: pointer;
+        padding-right: @space-4;
+        min-width: 140px;
+
+        &:focus {
+            outline: none;
+        }
+
+        option {
+            background: @bg-card;
+            color: @text-primary;
+        }
+
+        option:disabled {
+            color: @text-tertiary;
+        }
+    }
 }
 
 // Stats Row

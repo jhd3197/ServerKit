@@ -106,6 +106,16 @@ const Settings = () => {
                                 </svg>
                                 Audit Log
                             </button>
+                            <button
+                                className={`settings-nav-item ${activeTab === 'site' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('site')}
+                            >
+                                <svg viewBox="0 0 24 24" width="18" height="18">
+                                    <circle cx="12" cy="12" r="3"/>
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                                </svg>
+                                Site Settings
+                            </button>
                         </>
                     )}
                     <button
@@ -129,6 +139,7 @@ const Settings = () => {
                     {activeTab === 'system' && <SystemInfo />}
                     {activeTab === 'users' && isAdmin && <UsersTab />}
                     {activeTab === 'audit' && isAdmin && <AuditLogTab />}
+                    {activeTab === 'site' && isAdmin && <SiteSettings />}
                     {activeTab === 'about' && <AboutSection />}
                 </div>
             </div>
@@ -1919,6 +1930,86 @@ const AboutSection = () => {
                 <p className="license-text">
                     ServerKit is open source software licensed under the MIT License.
                 </p>
+            </div>
+        </div>
+    );
+};
+
+const SiteSettings = () => {
+    const [settings, setSettings] = useState({
+        registration_enabled: false
+    });
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [message, setMessage] = useState(null);
+
+    useEffect(() => {
+        loadSettings();
+    }, []);
+
+    async function loadSettings() {
+        try {
+            const data = await api.getSystemSettings();
+            setSettings({
+                registration_enabled: data.registration_enabled || false
+            });
+        } catch (err) {
+            console.error('Failed to load settings:', err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function handleToggleRegistration() {
+        setSaving(true);
+        setMessage(null);
+
+        try {
+            const newValue = !settings.registration_enabled;
+            await api.updateSystemSetting('registration_enabled', newValue);
+            setSettings({ ...settings, registration_enabled: newValue });
+            setMessage({ type: 'success', text: `User registration ${newValue ? 'enabled' : 'disabled'}` });
+        } catch (err) {
+            setMessage({ type: 'error', text: err.message || 'Failed to update setting' });
+        } finally {
+            setSaving(false);
+        }
+    }
+
+    if (loading) {
+        return <div className="settings-section"><p>Loading...</p></div>;
+    }
+
+    return (
+        <div className="settings-section">
+            <h2>Site Settings</h2>
+            <p className="section-description">Configure global site settings</p>
+
+            {message && (
+                <div className={`message ${message.type}`}>{message.text}</div>
+            )}
+
+            <div className="settings-card">
+                <h3>User Registration</h3>
+                <p>Allow new users to create accounts on the login page.</p>
+
+                <div className="form-group">
+                    <label className="toggle-switch-label">
+                        <span>Enable public registration</span>
+                        <label className="toggle-switch">
+                            <input
+                                type="checkbox"
+                                checked={settings.registration_enabled}
+                                onChange={handleToggleRegistration}
+                                disabled={saving}
+                            />
+                            <span className="toggle-slider"></span>
+                        </label>
+                    </label>
+                    <span className="form-help">
+                        When disabled, only administrators can create new user accounts.
+                    </span>
+                </div>
             </div>
         </div>
     );

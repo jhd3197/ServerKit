@@ -51,6 +51,10 @@ def create_app(config_name=None):
     from app.sockets import init_socketio
     socketio = init_socketio(app)
 
+    # Initialize Agent Gateway
+    from app.agent_gateway import init_agent_gateway
+    init_agent_gateway(socketio)
+
     # Register blueprints - Auth
     from app.api.auth import auth_bp
     app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
@@ -166,6 +170,10 @@ def create_app(config_name=None):
     # Register blueprints - Workflows
     from app.api.workflows import workflows_bp
     app.register_blueprint(workflows_bp, url_prefix='/api/v1/workflows')
+
+    # Register blueprints - Servers (Multi-server management)
+    from app.api.servers import servers_bp
+    app.register_blueprint(servers_bp, url_prefix='/api/v1/servers')
 
     # Create database tables
     with app.app_context():

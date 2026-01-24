@@ -434,4 +434,1036 @@
     .required {
         color: @danger;
     }
+
+    // Webhooks Tab
+    .webhooks-tab {
+        .webhooks-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: @space-5;
+
+            h3 {
+                margin: 0 0 @space-1 0;
+                font-size: @font-size-md;
+                font-weight: @font-weight-semibold;
+            }
+
+            .text-muted {
+                color: @text-secondary;
+                font-size: @font-size-sm;
+                margin: 0;
+            }
+        }
+
+        .loading-state {
+            display: flex;
+            justify-content: center;
+            padding: @space-10;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: @space-10;
+            background: @bg-card;
+            border-radius: @radius-xl;
+            text-align: center;
+
+            svg {
+                color: @text-tertiary;
+                margin-bottom: @space-4;
+            }
+
+            h4 {
+                margin: 0 0 @space-2 0;
+                font-size: @font-size-lg;
+                font-weight: @font-weight-semibold;
+            }
+
+            p {
+                margin: 0 0 @space-5 0;
+                color: @text-secondary;
+            }
+        }
+
+        .webhooks-list {
+            display: flex;
+            flex-direction: column;
+            gap: @space-4;
+        }
+
+        .webhook-card {
+            background: @bg-card;
+            border-radius: @radius-lg;
+            padding: @space-5;
+            border: 1px solid @border-subtle;
+            transition: border-color @transition-fast;
+
+            &:hover {
+                border-color: @border-default;
+            }
+
+            &.inactive {
+                opacity: 0.7;
+                background: @bg-hover;
+            }
+
+            .webhook-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: @space-4;
+
+                .webhook-info {
+                    display: flex;
+                    align-items: center;
+                    gap: @space-3;
+
+                    h4 {
+                        margin: 0;
+                        font-size: @font-size-md;
+                        font-weight: @font-weight-semibold;
+                    }
+                }
+
+                .webhook-status {
+                    display: flex;
+                    align-items: center;
+                    gap: @space-2;
+                    font-size: @font-size-sm;
+                    color: @text-secondary;
+
+                    .status-dot {
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 50%;
+                        background: @text-tertiary;
+
+                        &.active {
+                            background: @success;
+                        }
+
+                        &.inactive {
+                            background: @text-tertiary;
+                        }
+                    }
+                }
+            }
+
+            .webhook-details {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: @space-3;
+                margin-bottom: @space-4;
+                padding: @space-4;
+                background: @bg-hover;
+                border-radius: @radius-md;
+
+                .detail-item {
+                    display: flex;
+                    flex-direction: column;
+                    gap: @space-1;
+
+                    .label {
+                        font-size: @font-size-xs;
+                        color: @text-tertiary;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                    }
+
+                    .value {
+                        font-size: @font-size-sm;
+                        color: @text-primary;
+                        word-break: break-all;
+                    }
+                }
+            }
+
+            .webhook-actions {
+                display: flex;
+                gap: @space-2;
+                flex-wrap: wrap;
+            }
+        }
+
+        .source-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: @space-1 @space-2;
+            border-radius: @radius-md;
+            font-size: @font-size-xs;
+            font-weight: @font-weight-medium;
+            text-transform: uppercase;
+
+            &.github {
+                background: fade(#333, 15%);
+                color: #333;
+
+                @media (prefers-color-scheme: dark) {
+                    background: fade(#f0f0f0, 15%);
+                    color: #f0f0f0;
+                }
+            }
+
+            &.gitlab {
+                background: fade(#fc6d26, 15%);
+                color: #fc6d26;
+            }
+
+            &.bitbucket {
+                background: fade(#0052cc, 15%);
+                color: #0052cc;
+            }
+        }
+    }
+
+    // Webhook Modal
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: @space-4;
+
+        @media (max-width: @breakpoint-sm) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .form-group.checkbox {
+        label {
+            display: flex;
+            align-items: center;
+            gap: @space-2;
+            cursor: pointer;
+            font-weight: @font-weight-normal;
+
+            input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                cursor: pointer;
+            }
+        }
+    }
+
+    // Secret Display
+    .secret-warning {
+        display: flex;
+        align-items: center;
+        gap: @space-3;
+        padding: @space-4;
+        background: fade(@warning, 15%);
+        border: 1px solid fade(@warning, 30%);
+        border-radius: @radius-md;
+        margin-bottom: @space-4;
+
+        svg {
+            color: @warning;
+            flex-shrink: 0;
+        }
+
+        span {
+            font-weight: @font-weight-medium;
+        }
+    }
+
+    .secret-display {
+        display: flex;
+        align-items: center;
+        gap: @space-3;
+        padding: @space-4;
+        background: @bg-hover;
+        border-radius: @radius-md;
+        margin-bottom: @space-4;
+
+        code {
+            flex: 1;
+            font-family: @font-mono;
+            font-size: @font-size-sm;
+            word-break: break-all;
+        }
+    }
+
+    // Repositories Tab
+    .repositories-tab {
+        .repos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: @space-5;
+
+            h3 {
+                margin: 0;
+                font-size: @font-size-md;
+                font-weight: @font-weight-semibold;
+            }
+        }
+
+        .loading-state {
+            display: flex;
+            justify-content: center;
+            padding: @space-10;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: @space-10;
+            background: @bg-card;
+            border-radius: @radius-xl;
+            text-align: center;
+
+            svg {
+                color: @text-tertiary;
+                margin-bottom: @space-4;
+            }
+
+            h4 {
+                margin: 0 0 @space-2 0;
+                font-size: @font-size-lg;
+                font-weight: @font-weight-semibold;
+            }
+
+            p {
+                margin: 0 0 @space-5 0;
+                color: @text-secondary;
+            }
+        }
+
+        .repos-list {
+            display: flex;
+            flex-direction: column;
+            gap: @space-3;
+        }
+
+        .repo-card {
+            display: flex;
+            align-items: center;
+            padding: @space-4;
+            background: @bg-card;
+            border-radius: @radius-lg;
+            border: 1px solid @border-subtle;
+            cursor: pointer;
+            transition: all @transition-fast;
+
+            &:hover {
+                border-color: @accent-primary;
+                background: @bg-hover;
+
+                .repo-arrow {
+                    color: @accent-primary;
+                }
+            }
+
+            .repo-info {
+                flex: 1;
+                min-width: 0;
+
+                .repo-name {
+                    display: flex;
+                    align-items: center;
+                    gap: @space-2;
+                    margin-bottom: @space-2;
+
+                    .owner {
+                        color: @text-secondary;
+                    }
+
+                    .name {
+                        font-weight: @font-weight-semibold;
+                    }
+
+                    .badge {
+                        padding: 2px @space-2;
+                        border-radius: @radius-sm;
+                        font-size: @font-size-xs;
+                        font-weight: @font-weight-medium;
+
+                        &.private {
+                            background: fade(@warning, 20%);
+                            color: @warning;
+                        }
+
+                        &.fork {
+                            background: fade(@info, 20%);
+                            color: @info;
+                        }
+                    }
+                }
+
+                .repo-description {
+                    margin: 0 0 @space-2 0;
+                    font-size: @font-size-sm;
+                    color: @text-secondary;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .repo-meta {
+                    display: flex;
+                    align-items: center;
+                    gap: @space-4;
+                    font-size: @font-size-xs;
+                    color: @text-tertiary;
+
+                    .meta-item {
+                        display: flex;
+                        align-items: center;
+                        gap: @space-1;
+
+                        svg {
+                            opacity: 0.6;
+                        }
+
+                        &.updated {
+                            margin-left: auto;
+                        }
+                    }
+                }
+            }
+
+            .repo-arrow {
+                color: @text-tertiary;
+                transition: color @transition-fast;
+            }
+        }
+
+        // Repository Detail View
+        .repo-detail {
+            .repo-detail-header {
+                display: flex;
+                align-items: flex-start;
+                gap: @space-4;
+                margin-bottom: @space-5;
+                padding-bottom: @space-4;
+                border-bottom: 1px solid @border-subtle;
+
+                .btn-ghost {
+                    padding: @space-2;
+                }
+
+                .repo-title {
+                    flex: 1;
+
+                    h3 {
+                        margin: 0 0 @space-1 0;
+                        font-size: @font-size-lg;
+                        font-weight: @font-weight-semibold;
+                    }
+
+                    p {
+                        margin: 0;
+                        font-size: @font-size-sm;
+                        color: @text-secondary;
+                    }
+                }
+
+                .branch-selector {
+                    select {
+                        padding: @space-2 @space-4;
+                        background: @bg-card;
+                        border: 1px solid @border-default;
+                        border-radius: @radius-md;
+                        font-size: @font-size-sm;
+                        color: @text-primary;
+                        cursor: pointer;
+
+                        &:focus {
+                            outline: none;
+                            border-color: @accent-primary;
+                        }
+                    }
+                }
+            }
+
+            .repo-detail-tabs {
+                display: flex;
+                gap: @space-1;
+                margin-bottom: @space-4;
+                border-bottom: 1px solid @border-subtle;
+
+                .tab {
+                    display: flex;
+                    align-items: center;
+                    gap: @space-2;
+                    padding: @space-3 @space-4;
+                    background: none;
+                    border: none;
+                    font-size: @font-size-sm;
+                    font-weight: @font-weight-medium;
+                    color: @text-secondary;
+                    cursor: pointer;
+                    position: relative;
+                    transition: color @transition-fast;
+
+                    &:hover {
+                        color: @text-primary;
+                    }
+
+                    &.active {
+                        color: @accent-primary;
+
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            bottom: -1px;
+                            left: 0;
+                            right: 0;
+                            height: 2px;
+                            background: @accent-primary;
+                        }
+                    }
+                }
+            }
+
+            .repo-detail-content {
+                background: @bg-card;
+                border-radius: @radius-lg;
+                border: 1px solid @border-subtle;
+            }
+        }
+
+        // Files Browser
+        .files-browser {
+            .breadcrumb {
+                display: flex;
+                align-items: center;
+                padding: @space-3 @space-4;
+                background: @bg-hover;
+                border-bottom: 1px solid @border-subtle;
+                font-size: @font-size-sm;
+
+                button {
+                    background: none;
+                    border: none;
+                    color: @accent-primary;
+                    cursor: pointer;
+                    padding: 0;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+
+                .separator {
+                    margin: 0 @space-2;
+                    color: @text-tertiary;
+                }
+            }
+
+            .files-list {
+                .file-item {
+                    display: flex;
+                    align-items: center;
+                    gap: @space-3;
+                    padding: @space-3 @space-4;
+                    border-bottom: 1px solid @border-subtle;
+                    transition: background @transition-fast;
+
+                    &:last-child {
+                        border-bottom: none;
+                    }
+
+                    &.dir {
+                        cursor: pointer;
+
+                        &:hover {
+                            background: @bg-hover;
+                        }
+                    }
+
+                    .file-icon {
+                        color: @text-tertiary;
+                    }
+
+                    &.dir .file-icon svg {
+                        color: @info;
+                    }
+
+                    .file-name {
+                        flex: 1;
+                        font-size: @font-size-sm;
+                    }
+
+                    .file-size {
+                        font-size: @font-size-xs;
+                        color: @text-tertiary;
+                        font-family: @font-mono;
+                    }
+                }
+            }
+        }
+
+        // Commits List
+        .commits-list {
+            .commit-item {
+                display: flex;
+                align-items: flex-start;
+                gap: @space-4;
+                padding: @space-4;
+                border-bottom: 1px solid @border-subtle;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .commit-info {
+                    flex: 1;
+                    min-width: 0;
+
+                    .commit-message {
+                        font-size: @font-size-sm;
+                        font-weight: @font-weight-medium;
+                        margin-bottom: @space-1;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .commit-meta {
+                        font-size: @font-size-xs;
+                        color: @text-tertiary;
+
+                        .author {
+                            color: @text-secondary;
+                            margin-right: @space-2;
+                        }
+                    }
+                }
+
+                .commit-sha {
+                    code {
+                        padding: @space-1 @space-2;
+                        background: @bg-hover;
+                        border-radius: @radius-sm;
+                        font-size: @font-size-xs;
+                        font-family: @font-mono;
+                        color: @accent-primary;
+                    }
+                }
+            }
+
+            .btn-block {
+                width: 100%;
+                margin: @space-4;
+                width: calc(100% - @space-8);
+            }
+        }
+
+        // Branches List
+        .branches-list {
+            .branch-item {
+                display: flex;
+                align-items: center;
+                gap: @space-4;
+                padding: @space-4;
+                border-bottom: 1px solid @border-subtle;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                &.active {
+                    background: fade(@accent-primary, 5%);
+                }
+
+                .branch-info {
+                    flex: 1;
+
+                    .branch-name {
+                        display: flex;
+                        align-items: center;
+                        gap: @space-2;
+                        font-size: @font-size-sm;
+                        font-weight: @font-weight-medium;
+                        margin-bottom: @space-1;
+
+                        svg {
+                            color: @text-tertiary;
+                        }
+
+                        .badge {
+                            padding: 2px @space-2;
+                            border-radius: @radius-sm;
+                            font-size: @font-size-xs;
+                            font-weight: @font-weight-medium;
+
+                            &.default {
+                                background: fade(@success, 20%);
+                                color: @success;
+                            }
+
+                            &.protected {
+                                background: fade(@warning, 20%);
+                                color: @warning;
+                            }
+                        }
+                    }
+
+                    .branch-commit {
+                        font-size: @font-size-xs;
+                        color: @text-tertiary;
+
+                        code {
+                            color: @accent-primary;
+                            margin-right: @space-2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Deployments Tab
+    .deployments-tab {
+        .deployments-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: @space-5;
+
+            h3 {
+                margin: 0 0 @space-1 0;
+                font-size: @font-size-md;
+                font-weight: @font-weight-semibold;
+            }
+
+            .text-muted {
+                color: @text-secondary;
+                font-size: @font-size-sm;
+                margin: 0;
+            }
+        }
+
+        .loading-state {
+            display: flex;
+            justify-content: center;
+            padding: @space-10;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: @space-10;
+            background: @bg-card;
+            border-radius: @radius-xl;
+            text-align: center;
+
+            svg {
+                color: @text-tertiary;
+                margin-bottom: @space-4;
+            }
+
+            h4 {
+                margin: 0 0 @space-2 0;
+                font-size: @font-size-lg;
+                font-weight: @font-weight-semibold;
+            }
+
+            p {
+                margin: 0 0 @space-5 0;
+                color: @text-secondary;
+            }
+        }
+
+        .deployments-list {
+            display: flex;
+            flex-direction: column;
+            gap: @space-4;
+        }
+
+        .deployment-card {
+            background: @bg-card;
+            border-radius: @radius-lg;
+            padding: @space-5;
+            border: 1px solid @border-subtle;
+            border-left: 4px solid @border-subtle;
+
+            &.success {
+                border-left-color: @success;
+            }
+
+            &.failed {
+                border-left-color: @danger;
+            }
+
+            &.running {
+                border-left-color: @warning;
+            }
+
+            .deployment-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: @space-4;
+
+                .deployment-version {
+                    display: flex;
+                    align-items: center;
+                    gap: @space-3;
+
+                    .version {
+                        font-size: @font-size-lg;
+                        font-weight: @font-weight-semibold;
+                    }
+
+                    .badge {
+                        padding: 2px @space-2;
+                        border-radius: @radius-sm;
+                        font-size: @font-size-xs;
+                        font-weight: @font-weight-medium;
+
+                        &.rollback {
+                            background: fade(@info, 20%);
+                            color: @info;
+                        }
+                    }
+
+                    .status-badge {
+                        padding: @space-1 @space-2;
+                        border-radius: @radius-md;
+                        font-size: @font-size-xs;
+                        font-weight: @font-weight-medium;
+                        text-transform: uppercase;
+
+                        &.success {
+                            background: fade(@success, 15%);
+                            color: @success;
+                        }
+
+                        &.failed {
+                            background: fade(@danger, 15%);
+                            color: @danger;
+                        }
+
+                        &.running {
+                            background: fade(@warning, 15%);
+                            color: @warning;
+                        }
+                    }
+                }
+
+                .deployment-time {
+                    font-size: @font-size-sm;
+                    color: @text-tertiary;
+                }
+            }
+
+            .deployment-details {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: @space-3;
+                margin-bottom: @space-4;
+                padding: @space-4;
+                background: @bg-hover;
+                border-radius: @radius-md;
+
+                .detail-item {
+                    display: flex;
+                    align-items: center;
+                    gap: @space-2;
+                    font-size: @font-size-sm;
+
+                    .label {
+                        color: @text-tertiary;
+                    }
+
+                    .value {
+                        color: @text-primary;
+                    }
+
+                    code {
+                        padding: 2px @space-2;
+                        background: @bg-card;
+                        border-radius: @radius-sm;
+                        font-size: @font-size-xs;
+                        font-family: @font-mono;
+                        color: @accent-primary;
+                    }
+
+                    &.commit-message {
+                        grid-column: 1 / -1;
+
+                        .message {
+                            color: @text-secondary;
+                            font-style: italic;
+                        }
+                    }
+
+                    &.error {
+                        grid-column: 1 / -1;
+                        color: @danger;
+
+                        .value {
+                            color: @danger;
+                        }
+                    }
+                }
+            }
+
+            .deployment-actions {
+                display: flex;
+                gap: @space-2;
+                flex-wrap: wrap;
+            }
+        }
+    }
+
+    // Form section for webhook modal
+    .form-section {
+        margin-top: @space-5;
+        padding-top: @space-5;
+        border-top: 1px solid @border-subtle;
+
+        h4 {
+            margin: 0 0 @space-1 0;
+            font-size: @font-size-base;
+            font-weight: @font-weight-semibold;
+        }
+
+        .text-muted {
+            color: @text-secondary;
+            font-size: @font-size-sm;
+            margin: 0 0 @space-4 0;
+        }
+    }
+
+    .form-hint {
+        display: block;
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        margin-top: @space-1;
+    }
+
+    .form-group textarea {
+        width: 100%;
+        min-height: 80px;
+        padding: @space-3;
+        font-family: @font-mono;
+        font-size: @font-size-sm;
+        background: @bg-elevated;
+        border: 1px solid @border-default;
+        border-radius: @radius-md;
+        color: @text-primary;
+        resize: vertical;
+
+        &:focus {
+            outline: none;
+            border-color: @accent-primary;
+        }
+
+        &::placeholder {
+            color: @text-tertiary;
+        }
+    }
+
+    // Modal XL size
+    .modal-xl {
+        max-width: 800px;
+    }
+
+    // Deployment Logs Modal
+    .deployment-summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: @space-4;
+        padding: @space-4;
+        background: @bg-hover;
+        border-radius: @radius-md;
+        margin-bottom: @space-4;
+
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: @space-2;
+            font-size: @font-size-sm;
+
+            .label {
+                color: @text-tertiary;
+            }
+
+            .status-badge {
+                padding: @space-1 @space-2;
+                border-radius: @radius-md;
+                font-size: @font-size-xs;
+                font-weight: @font-weight-medium;
+                text-transform: uppercase;
+
+                &.success {
+                    background: fade(@success, 15%);
+                    color: @success;
+                }
+
+                &.failed {
+                    background: fade(@danger, 15%);
+                    color: @danger;
+                }
+
+                &.running {
+                    background: fade(@warning, 15%);
+                    color: @warning;
+                }
+            }
+
+            code {
+                padding: 2px @space-2;
+                background: @bg-card;
+                border-radius: @radius-sm;
+                font-size: @font-size-xs;
+                font-family: @font-mono;
+                color: @accent-primary;
+            }
+        }
+    }
+
+    .deployment-error {
+        padding: @space-4;
+        background: fade(@danger, 10%);
+        border: 1px solid fade(@danger, 30%);
+        border-radius: @radius-md;
+        margin-bottom: @space-4;
+        color: @danger;
+        font-size: @font-size-sm;
+
+        strong {
+            margin-right: @space-2;
+        }
+    }
+
+    .log-section {
+        margin-bottom: @space-4;
+
+        h4 {
+            margin: 0 0 @space-2 0;
+            font-size: @font-size-sm;
+            font-weight: @font-weight-semibold;
+            color: @text-secondary;
+        }
+
+        .log-output {
+            padding: @space-4;
+            background: @bg-hover;
+            border-radius: @radius-md;
+            font-family: @font-mono;
+            font-size: @font-size-xs;
+            color: @text-primary;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 0;
+        }
+    }
+
+    .no-logs {
+        padding: @space-6;
+        text-align: center;
+        color: @text-tertiary;
+    }
 }

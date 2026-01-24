@@ -1,11 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import api from '../services/api';
 import { useToast } from '../contexts/ToastContext';
+
+// Server context for Docker operations
+const ServerContext = createContext({ serverId: 'local', serverName: 'Local' });
+const useServer = () => useContext(ServerContext);
 
 const Docker = () => {
     const [activeTab, setActiveTab] = useState('containers');
     const [dockerStatus, setDockerStatus] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [servers, setServers] = useState([]);
+    const [selectedServer, setSelectedServer] = useState({ id: 'local', name: 'Local (this server)' });
     const [stats, setStats] = useState({
         containers: { total: 0, running: 0, stopped: 0 },
         images: { total: 0, size: '0 B' },
@@ -14,32 +20,77 @@ const Docker = () => {
     });
 
     useEffect(() => {
-        checkDockerStatus();
+        loadServers();
     }, []);
 
-    async function checkDockerStatus() {
+    useEffect(() => {
+        checkDockerStatus();
+    }, [selectedServer]);
+
+    async function loadServers() {
         try {
-            const status = await api.getDockerStatus();
-            setDockerStatus(status);
-            if (status.installed) {
-                loadStats();
+            const data = await api.getAvailableServers();
+            setServers(data.servers || []);
+        } catch (err) {
+            console.error('Failed to load servers:', err);
+            // Default to just local
+            setServers([{ id: 'local', name: 'Local (this server)', status: 'online' }]);
+        }
+    }
+
+    async function checkDockerStatus() {
+        setLoading(true);
+        try {
+            if (selectedServer.id === 'local') {
+                const status = await api.getDockerStatus();
+                setDockerStatus(status);
+                if (status.installed) {
+                    loadStats();
+                } else {
+                    setLoading(false);
+                }
+            } else {
+                // For remote servers, check if the agent is online
+                const serverData = await api.getServer(selectedServer.id);
+                if (serverData.server?.status === 'online') {
+                    setDockerStatus({ installed: true, running: true });
+                    loadStats();
+                } else {
+                    setDockerStatus({ installed: false, error: 'Server agent is offline' });
+                    setLoading(false);
+                }
             }
         } catch (err) {
             setDockerStatus({ installed: false, error: err.message });
-        } finally {
             setLoading(false);
         }
     }
 
     async function loadStats() {
         try {
-            const [containersData, imagesData, volumesData, networksData, diskUsage] = await Promise.all([
-                api.getContainers(true),
-                api.getImages(),
-                api.getVolumes(),
-                api.getNetworks(),
-                api.getDockerDiskUsage().catch(() => null)
-            ]);
+            let containersData, imagesData, volumesData, networksData;
+
+            if (selectedServer.id === 'local') {
+                [containersData, imagesData, volumesData, networksData] = await Promise.all([
+                    api.getContainers(true),
+                    api.getImages(),
+                    api.getVolumes(),
+                    api.getNetworks()
+                ]);
+            } else {
+                [containersData, imagesData, volumesData, networksData] = await Promise.all([
+                    api.getRemoteContainers(selectedServer.id, true),
+                    api.getRemoteImages(selectedServer.id),
+                    api.getRemoteVolumes(selectedServer.id),
+                    api.getRemoteNetworks(selectedServer.id)
+                ]);
+
+                // Transform remote response format
+                if (containersData.success) containersData = { containers: containersData.data };
+                if (imagesData.success) imagesData = { images: imagesData.data };
+                if (volumesData.success) volumesData = { volumes: volumesData.data };
+                if (networksData.success) networksData = { networks: networksData.data };
+            }
 
             const containers = containersData.containers || [];
             const images = imagesData.images || [];
@@ -56,13 +107,15 @@ const Docker = () => {
                 },
                 images: {
                     total: images.length,
-                    size: diskUsage?.usage?.Images?.Size || formatTotalImageSize(images)
+                    size: formatTotalImageSize(images)
                 },
                 volumes: { total: volumes.length },
                 networks: { total: networks.length }
             });
         } catch (err) {
             console.error('Failed to load stats:', err);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -135,12 +188,26 @@ const Docker = () => {
 
     const tabs = [
         { id: 'containers', label: 'Containers' },
+        { id: 'compose', label: 'Compose' },
         { id: 'images', label: 'Images' },
         { id: 'volumes', label: 'Volumes' },
         { id: 'networks', label: 'Networks' }
     ];
 
+    function handleServerChange(e) {
+        const serverId = e.target.value;
+        const server = servers.find(s => s.id === serverId) || { id: 'local', name: 'Local' };
+        setSelectedServer(server);
+    }
+
+    const serverContextValue = {
+        serverId: selectedServer.id,
+        serverName: selectedServer.name,
+        isRemote: selectedServer.id !== 'local'
+    };
+
     return (
+        <ServerContext.Provider value={serverContextValue}>
         <div className="docker-page-new">
             <div className="docker-page-header">
                 <div className="docker-page-title">
@@ -148,6 +215,16 @@ const Docker = () => {
                     <div className="docker-page-subtitle">Manage Containers, Images, and Networks</div>
                 </div>
                 <div className="docker-page-actions">
+                    <div className="server-selector">
+                        <ServerSelectorIcon />
+                        <select value={selectedServer.id} onChange={handleServerChange}>
+                            {servers.map(server => (
+                                <option key={server.id} value={server.id} disabled={server.status === 'offline'}>
+                                    {server.name} {server.status === 'offline' ? '(Offline)' : ''}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                     {activeTab === 'containers' && <RunContainerButton />}
                     {activeTab === 'images' && <PullImageButton />}
                     {activeTab === 'networks' && <CreateNetworkButton />}
@@ -201,14 +278,26 @@ const Docker = () => {
 
                 <div className="docker-panel-content">
                     {activeTab === 'containers' && <ContainersTab onStatsChange={loadStats} />}
+                    {activeTab === 'compose' && <ComposeTab onStatsChange={loadStats} />}
                     {activeTab === 'images' && <ImagesTab onStatsChange={loadStats} />}
                     {activeTab === 'networks' && <NetworksTab onStatsChange={loadStats} />}
                     {activeTab === 'volumes' && <VolumesTab onStatsChange={loadStats} />}
                 </div>
             </div>
         </div>
+        </ServerContext.Provider>
     );
 };
+
+// Server Selector Icon
+const ServerSelectorIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+        <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+        <line x1="6" y1="6" x2="6.01" y2="6"/>
+        <line x1="6" y1="18" x2="6.01" y2="18"/>
+    </svg>
+);
 
 // Action Buttons
 const RunContainerButton = () => {
@@ -362,6 +451,7 @@ const TrashIcon = () => (
 // Containers Tab
 const ContainersTab = ({ onStatsChange }) => {
     const toast = useToast();
+    const { serverId, isRemote } = useServer();
     const [containers, setContainers] = useState([]);
     const [containerStats, setContainerStats] = useState({});
     const [loading, setLoading] = useState(true);
@@ -372,12 +462,18 @@ const ContainersTab = ({ onStatsChange }) => {
 
     useEffect(() => {
         loadContainers();
-    }, [showAll]);
+    }, [showAll, serverId]);
 
     async function loadContainers() {
         setLoading(true);
         try {
-            const data = await api.getContainers(showAll);
+            let data;
+            if (isRemote) {
+                const result = await api.getRemoteContainers(serverId, showAll);
+                data = result.success ? { containers: result.data || [] } : { containers: [] };
+            } else {
+                data = await api.getContainers(showAll);
+            }
             const containerList = data.containers || [];
             setContainers(containerList);
 
@@ -385,7 +481,13 @@ const ContainersTab = ({ onStatsChange }) => {
             const runningContainers = containerList.filter(c => c.state === 'running');
             const statsPromises = runningContainers.map(async (c) => {
                 try {
-                    const statsData = await api.getContainerStats(c.id);
+                    let statsData;
+                    if (isRemote) {
+                        const result = await api.getRemoteContainerStats(serverId, c.id);
+                        statsData = result.success ? { stats: result.data } : { stats: null };
+                    } else {
+                        statsData = await api.getContainerStats(c.id);
+                    }
                     return { id: c.id, stats: statsData.stats };
                 } catch {
                     return { id: c.id, stats: null };
@@ -408,17 +510,33 @@ const ContainersTab = ({ onStatsChange }) => {
     async function handleAction(containerId, action) {
         try {
             if (action === 'start') {
-                await api.startContainer(containerId);
+                if (isRemote) {
+                    await api.startRemoteContainer(serverId, containerId);
+                } else {
+                    await api.startContainer(containerId);
+                }
                 toast.success('Container started');
             } else if (action === 'stop') {
-                await api.stopContainer(containerId);
+                if (isRemote) {
+                    await api.stopRemoteContainer(serverId, containerId);
+                } else {
+                    await api.stopContainer(containerId);
+                }
                 toast.success('Container stopped');
             } else if (action === 'restart') {
-                await api.restartContainer(containerId);
+                if (isRemote) {
+                    await api.restartRemoteContainer(serverId, containerId);
+                } else {
+                    await api.restartContainer(containerId);
+                }
                 toast.success('Container restarted');
             } else if (action === 'remove') {
                 if (!confirm('Remove this container?')) return;
-                await api.removeContainer(containerId, true);
+                if (isRemote) {
+                    await api.removeRemoteContainer(serverId, containerId, true);
+                } else {
+                    await api.removeContainer(containerId, true);
+                }
                 toast.success('Container removed');
             }
             loadContainers();
@@ -597,18 +715,25 @@ const ContainersTab = ({ onStatsChange }) => {
 // Images Tab
 const ImagesTab = ({ onStatsChange }) => {
     const toast = useToast();
+    const { serverId, isRemote } = useServer();
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         loadImages();
-    }, []);
+    }, [serverId]);
 
     async function loadImages() {
         setLoading(true);
         try {
-            const data = await api.getImages();
+            let data;
+            if (isRemote) {
+                const result = await api.getRemoteImages(serverId);
+                data = result.success ? { images: result.data || [] } : { images: [] };
+            } else {
+                data = await api.getImages();
+            }
             setImages(data.images || []);
         } catch (err) {
             console.error('Failed to load images:', err);
@@ -621,7 +746,11 @@ const ImagesTab = ({ onStatsChange }) => {
         if (!confirm('Remove this image?')) return;
 
         try {
-            await api.removeImage(imageId, true);
+            if (isRemote) {
+                await api.removeRemoteImage(serverId, imageId, true);
+            } else {
+                await api.removeImage(imageId, true);
+            }
             toast.success('Image removed successfully');
             loadImages();
             onStatsChange?.();
@@ -704,17 +833,24 @@ const ImagesTab = ({ onStatsChange }) => {
 // Networks Tab
 const NetworksTab = ({ onStatsChange }) => {
     const toast = useToast();
+    const { serverId, isRemote } = useServer();
     const [networks, setNetworks] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         loadNetworks();
-    }, []);
+    }, [serverId]);
 
     async function loadNetworks() {
         setLoading(true);
         try {
-            const data = await api.getNetworks();
+            let data;
+            if (isRemote) {
+                const result = await api.getRemoteNetworks(serverId);
+                data = result.success ? { networks: result.data || [] } : { networks: [] };
+            } else {
+                data = await api.getNetworks();
+            }
             setNetworks(data.networks || []);
         } catch (err) {
             console.error('Failed to load networks:', err);
@@ -791,17 +927,24 @@ const NetworksTab = ({ onStatsChange }) => {
 // Volumes Tab
 const VolumesTab = ({ onStatsChange }) => {
     const toast = useToast();
+    const { serverId, isRemote } = useServer();
     const [volumes, setVolumes] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         loadVolumes();
-    }, []);
+    }, [serverId]);
 
     async function loadVolumes() {
         setLoading(true);
         try {
-            const data = await api.getVolumes();
+            let data;
+            if (isRemote) {
+                const result = await api.getRemoteVolumes(serverId);
+                data = result.success ? { volumes: result.data || [] } : { volumes: [] };
+            } else {
+                data = await api.getVolumes();
+            }
             setVolumes(data.volumes || []);
         } catch (err) {
             console.error('Failed to load volumes:', err);
@@ -867,6 +1010,332 @@ const VolumesTab = ({ onStatsChange }) => {
                     </tbody>
                 </table>
             )}
+        </div>
+    );
+};
+
+// Compose Tab
+const ComposeTab = ({ onStatsChange }) => {
+    const toast = useToast();
+    const { serverId, isRemote } = useServer();
+    const [projects, setProjects] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [logsProject, setLogsProject] = useState(null);
+    const [actionLoading, setActionLoading] = useState({});
+
+    useEffect(() => {
+        loadProjects();
+    }, [serverId]);
+
+    async function loadProjects() {
+        setLoading(true);
+        try {
+            let data;
+            if (isRemote) {
+                data = await api.getRemoteComposeProjects(serverId);
+            } else {
+                data = await api.request('/docker/compose/list');
+            }
+            setProjects(Array.isArray(data) ? data : data.projects || []);
+        } catch (err) {
+            console.error('Failed to load compose projects:', err);
+            setProjects([]);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    async function handleAction(project, action) {
+        const projectPath = project.ConfigFiles || project.config_files;
+        if (!projectPath) {
+            toast.error('Project path not found');
+            return;
+        }
+
+        setActionLoading(prev => ({ ...prev, [project.Name || project.name]: true }));
+
+        try {
+            let result;
+            if (action === 'up') {
+                if (isRemote) {
+                    result = await api.remoteComposeUp(serverId, projectPath);
+                } else {
+                    result = await api.composeUp(projectPath, true, false);
+                }
+                toast.success('Project started');
+            } else if (action === 'down') {
+                if (!confirm('Stop this compose project? Containers will be removed.')) {
+                    setActionLoading(prev => ({ ...prev, [project.Name || project.name]: false }));
+                    return;
+                }
+                if (isRemote) {
+                    result = await api.remoteComposeDown(serverId, projectPath);
+                } else {
+                    result = await api.composeDown(projectPath, false, true);
+                }
+                toast.success('Project stopped');
+            } else if (action === 'restart') {
+                if (isRemote) {
+                    result = await api.remoteComposeRestart(serverId, projectPath);
+                } else {
+                    result = await api.composeRestart(projectPath);
+                }
+                toast.success('Project restarted');
+            } else if (action === 'pull') {
+                if (isRemote) {
+                    result = await api.remoteComposePull(serverId, projectPath);
+                } else {
+                    result = await api.composePull(projectPath);
+                }
+                toast.success('Images pulled');
+            }
+            loadProjects();
+            onStatsChange?.();
+        } catch (err) {
+            console.error(`Failed to ${action} project:`, err);
+            toast.error(err.message || `Failed to ${action} project`);
+        } finally {
+            setActionLoading(prev => ({ ...prev, [project.Name || project.name]: false }));
+        }
+    }
+
+    function getProjectStatus(project) {
+        const status = project.Status || project.status || '';
+        if (status.includes('running')) return 'running';
+        if (status.includes('exited') || status.includes('stopped')) return 'exited';
+        return 'unknown';
+    }
+
+    function parseRunningCount(status) {
+        // Parse status like "running(3)" or "exited(2), running(1)"
+        const match = status.match(/running\((\d+)\)/);
+        return match ? parseInt(match[1], 10) : 0;
+    }
+
+    if (loading) {
+        return <div className="docker-loading">Loading compose projects...</div>;
+    }
+
+    return (
+        <div>
+            <div className="docker-table-header">
+                <div className="docker-table-info">
+                    {projects.length} project{projects.length !== 1 ? 's' : ''} found
+                </div>
+                <button className="btn btn-secondary btn-sm" onClick={loadProjects}>
+                    Refresh
+                </button>
+            </div>
+
+            {projects.length === 0 ? (
+                <div className="docker-empty">
+                    <h3>No Compose Projects</h3>
+                    <p>No Docker Compose projects are running on this server.</p>
+                    <p className="text-muted">
+                        Start a compose project with <code>docker compose up -d</code>
+                    </p>
+                </div>
+            ) : (
+                <table className="docker-table">
+                    <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Status</th>
+                            <th>Config File</th>
+                            <th style={{ textAlign: 'right' }}>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {projects.map(project => {
+                            const name = project.Name || project.name;
+                            const status = project.Status || project.status || 'unknown';
+                            const configFiles = project.ConfigFiles || project.config_files || '';
+                            const isRunning = getProjectStatus(project) === 'running';
+                            const runningCount = parseRunningCount(status);
+                            const isLoading = actionLoading[name];
+
+                            return (
+                                <tr key={name}>
+                                    <td>
+                                        <span className="docker-container-name">{name}</span>
+                                    </td>
+                                    <td>
+                                        <span className={`docker-status-pill ${isRunning ? 'running' : 'exited'}`}>
+                                            <span className="docker-status-dot" />
+                                            {isRunning ? `Running (${runningCount})` : 'Stopped'}
+                                        </span>
+                                        <div className="docker-status-detail">{status}</div>
+                                    </td>
+                                    <td>
+                                        <span className="docker-container-id" style={{ maxWidth: '300px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            {configFiles}
+                                        </span>
+                                    </td>
+                                    <td className="docker-actions-cell">
+                                        <IconAction
+                                            title="Logs"
+                                            onClick={() => setLogsProject(project)}
+                                            disabled={isLoading}
+                                        >
+                                            <LogsIcon />
+                                        </IconAction>
+                                        {isRunning ? (
+                                            <>
+                                                <IconAction
+                                                    title="Restart"
+                                                    onClick={() => handleAction(project, 'restart')}
+                                                    disabled={isLoading}
+                                                >
+                                                    <RestartIcon />
+                                                </IconAction>
+                                                <IconAction
+                                                    title="Stop"
+                                                    onClick={() => handleAction(project, 'down')}
+                                                    disabled={isLoading}
+                                                    color="#EF4444"
+                                                >
+                                                    <StopIcon />
+                                                </IconAction>
+                                            </>
+                                        ) : (
+                                            <IconAction
+                                                title="Start"
+                                                onClick={() => handleAction(project, 'up')}
+                                                disabled={isLoading}
+                                                color="#10B981"
+                                            >
+                                                <PlayIcon />
+                                            </IconAction>
+                                        )}
+                                        <IconAction
+                                            title="Pull Images"
+                                            onClick={() => handleAction(project, 'pull')}
+                                            disabled={isLoading}
+                                        >
+                                            <DownloadIcon />
+                                        </IconAction>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            )}
+
+            {logsProject && (
+                <ComposeLogsModal
+                    project={logsProject}
+                    onClose={() => setLogsProject(null)}
+                />
+            )}
+        </div>
+    );
+};
+
+// Download Icon for Compose Pull
+const DownloadIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+    </svg>
+);
+
+// Compose Logs Modal
+const ComposeLogsModal = ({ project, onClose }) => {
+    const { serverId, isRemote } = useServer();
+    const [logs, setLogs] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [tail, setTail] = useState(200);
+    const [selectedService, setSelectedService] = useState('');
+    const [services, setServices] = useState([]);
+
+    const projectName = project.Name || project.name;
+    const projectPath = project.ConfigFiles || project.config_files || '';
+
+    useEffect(() => {
+        loadServices();
+        loadLogs();
+    }, [project, tail, selectedService]);
+
+    async function loadServices() {
+        try {
+            let containers;
+            if (isRemote) {
+                containers = await api.getRemoteComposePs(serverId, projectPath);
+            } else {
+                const result = await api.composePs(projectPath);
+                containers = result.containers || result || [];
+            }
+
+            // Extract unique service names
+            const serviceNames = [...new Set(
+                (Array.isArray(containers) ? containers : [])
+                    .map(c => c.Service || c.service)
+                    .filter(Boolean)
+            )];
+            setServices(serviceNames);
+        } catch (err) {
+            console.error('Failed to load services:', err);
+        }
+    }
+
+    async function loadLogs() {
+        setLoading(true);
+        try {
+            let data;
+            if (isRemote) {
+                data = await api.remoteComposeLogs(serverId, projectPath, selectedService || null, tail);
+            } else {
+                data = await api.composeLogs(projectPath, selectedService || null, tail);
+            }
+            setLogs(data.logs || 'No logs available');
+        } catch (err) {
+            setLogs('Failed to load logs: ' + (err.message || 'Unknown error'));
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal modal-lg" onClick={e => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h2>Logs: {projectName}</h2>
+                    <button className="modal-close" onClick={onClose}>&times;</button>
+                </div>
+                <div className="modal-body">
+                    <div className="logs-controls" style={{ marginBottom: '10px', display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <label>Service:</label>
+                        <select
+                            value={selectedService}
+                            onChange={(e) => setSelectedService(e.target.value)}
+                            style={{ padding: '4px 8px' }}
+                        >
+                            <option value="">All Services</option>
+                            {services.map(service => (
+                                <option key={service} value={service}>{service}</option>
+                            ))}
+                        </select>
+                        <label>Lines:</label>
+                        <select value={tail} onChange={(e) => setTail(Number(e.target.value))} style={{ padding: '4px 8px' }}>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                            <option value={200}>200</option>
+                            <option value={500}>500</option>
+                            <option value={1000}>1000</option>
+                        </select>
+                    </div>
+                    <pre className="log-viewer">{loading ? 'Loading...' : logs}</pre>
+                </div>
+                <div className="modal-actions">
+                    <button className="btn btn-secondary" onClick={loadLogs} disabled={loading}>
+                        {loading ? 'Loading...' : 'Refresh'}
+                    </button>
+                    <button className="btn btn-primary" onClick={onClose}>Close</button>
+                </div>
+            </div>
         </div>
     );
 };
@@ -998,19 +1467,28 @@ const RunContainerModal = ({ onClose, onCreated }) => {
 };
 
 const ContainerLogsModal = ({ container, onClose }) => {
+    const { serverId, isRemote } = useServer();
     const [logs, setLogs] = useState('');
     const [loading, setLoading] = useState(true);
+    const [tail, setTail] = useState(200);
 
     useEffect(() => {
         loadLogs();
-    }, [container]);
+    }, [container, tail]);
 
     async function loadLogs() {
+        setLoading(true);
         try {
-            const data = await api.getContainerLogs(container.id, 200);
+            let data;
+            if (isRemote) {
+                const result = await api.getRemoteContainerLogs(serverId, container.id, tail);
+                data = result.success ? { logs: result.data?.logs || '' } : { logs: '' };
+            } else {
+                data = await api.getContainerLogs(container.id, tail);
+            }
             setLogs(data.logs || 'No logs available');
         } catch (err) {
-            setLogs('Failed to load logs');
+            setLogs('Failed to load logs: ' + (err.message || 'Unknown error'));
         } finally {
             setLoading(false);
         }
@@ -1024,10 +1502,22 @@ const ContainerLogsModal = ({ container, onClose }) => {
                     <button className="modal-close" onClick={onClose}>&times;</button>
                 </div>
                 <div className="modal-body">
+                    <div className="logs-controls" style={{ marginBottom: '10px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <label>Lines:</label>
+                        <select value={tail} onChange={(e) => setTail(Number(e.target.value))} style={{ padding: '4px 8px' }}>
+                            <option value={50}>50</option>
+                            <option value={100}>100</option>
+                            <option value={200}>200</option>
+                            <option value={500}>500</option>
+                            <option value={1000}>1000</option>
+                        </select>
+                    </div>
                     <pre className="log-viewer">{loading ? 'Loading...' : logs}</pre>
                 </div>
                 <div className="modal-actions">
-                    <button className="btn btn-secondary" onClick={loadLogs}>Refresh</button>
+                    <button className="btn btn-secondary" onClick={loadLogs} disabled={loading}>
+                        {loading ? 'Loading...' : 'Refresh'}
+                    </button>
                     <button className="btn btn-primary" onClick={onClose}>Close</button>
                 </div>
             </div>

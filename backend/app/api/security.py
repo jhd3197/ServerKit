@@ -255,3 +255,232 @@ def full_scan():
     """Run a full system scan."""
     result = SecurityService.scan_directory('/', recursive=True)
     return jsonify(result), 200 if result['success'] else 400
+
+
+# ==========================================
+# FAIL2BAN
+# ==========================================
+@security_bp.route('/fail2ban/status', methods=['GET'])
+@jwt_required()
+@admin_required
+def get_fail2ban_status():
+    """Get Fail2ban status."""
+    status = SecurityService.get_fail2ban_status()
+    return jsonify(status), 200
+
+
+@security_bp.route('/fail2ban/install', methods=['POST'])
+@jwt_required()
+@admin_required
+def install_fail2ban():
+    """Install Fail2ban."""
+    result = SecurityService.install_fail2ban()
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/fail2ban/jails/<jail>', methods=['GET'])
+@jwt_required()
+@admin_required
+def get_jail_status(jail):
+    """Get status of a specific jail."""
+    result = SecurityService.get_fail2ban_jail_status(jail)
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/fail2ban/bans', methods=['GET'])
+@jwt_required()
+@admin_required
+def get_all_bans():
+    """Get all banned IPs across all jails."""
+    result = SecurityService.get_all_fail2ban_bans()
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/fail2ban/unban', methods=['POST'])
+@jwt_required()
+@admin_required
+def unban_ip():
+    """Unban an IP address."""
+    data = request.get_json()
+    if not data or 'ip' not in data:
+        return jsonify({'error': 'IP address required'}), 400
+
+    jail = data.get('jail')
+    result = SecurityService.unban_ip(data['ip'], jail)
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/fail2ban/ban', methods=['POST'])
+@jwt_required()
+@admin_required
+def ban_ip():
+    """Manually ban an IP address."""
+    data = request.get_json()
+    if not data or 'ip' not in data:
+        return jsonify({'error': 'IP address required'}), 400
+
+    jail = data.get('jail', 'sshd')
+    result = SecurityService.ban_ip(data['ip'], jail)
+    return jsonify(result), 200 if result['success'] else 400
+
+
+# ==========================================
+# SSH KEYS
+# ==========================================
+@security_bp.route('/ssh-keys', methods=['GET'])
+@jwt_required()
+@admin_required
+def get_ssh_keys():
+    """Get SSH authorized keys."""
+    user = request.args.get('user', 'root')
+    result = SecurityService.get_ssh_keys(user)
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/ssh-keys', methods=['POST'])
+@jwt_required()
+@admin_required
+def add_ssh_key():
+    """Add an SSH public key."""
+    data = request.get_json()
+    if not data or 'key' not in data:
+        return jsonify({'error': 'SSH key required'}), 400
+
+    user = data.get('user', 'root')
+    result = SecurityService.add_ssh_key(data['key'], user)
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/ssh-keys/<int:key_id>', methods=['DELETE'])
+@jwt_required()
+@admin_required
+def remove_ssh_key(key_id):
+    """Remove an SSH key."""
+    user = request.args.get('user', 'root')
+    result = SecurityService.remove_ssh_key(key_id, user)
+    return jsonify(result), 200 if result['success'] else 400
+
+
+# ==========================================
+# IP ALLOWLIST/BLOCKLIST
+# ==========================================
+@security_bp.route('/ip-lists', methods=['GET'])
+@jwt_required()
+@admin_required
+def get_ip_lists():
+    """Get IP allowlist and blocklist."""
+    result = SecurityService.get_ip_lists()
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/ip-lists/<list_type>', methods=['POST'])
+@jwt_required()
+@admin_required
+def add_to_ip_list(list_type):
+    """Add IP to allowlist or blocklist."""
+    data = request.get_json()
+    if not data or 'ip' not in data:
+        return jsonify({'error': 'IP address required'}), 400
+
+    comment = data.get('comment', '')
+    result = SecurityService.add_to_ip_list(data['ip'], list_type, comment)
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/ip-lists/<list_type>/<ip>', methods=['DELETE'])
+@jwt_required()
+@admin_required
+def remove_from_ip_list(list_type, ip):
+    """Remove IP from allowlist or blocklist."""
+    result = SecurityService.remove_from_ip_list(ip, list_type)
+    return jsonify(result), 200 if result['success'] else 400
+
+
+# ==========================================
+# SECURITY AUDIT
+# ==========================================
+@security_bp.route('/audit', methods=['GET'])
+@jwt_required()
+@admin_required
+def generate_audit():
+    """Generate a security audit report."""
+    result = SecurityService.generate_security_audit()
+    return jsonify(result), 200 if result['success'] else 400
+
+
+# ==========================================
+# VULNERABILITY SCANNING (Lynis)
+# ==========================================
+@security_bp.route('/lynis/status', methods=['GET'])
+@jwt_required()
+@admin_required
+def get_lynis_status():
+    """Get Lynis installation status."""
+    status = SecurityService.get_lynis_status()
+    return jsonify(status), 200
+
+
+@security_bp.route('/lynis/install', methods=['POST'])
+@jwt_required()
+@admin_required
+def install_lynis():
+    """Install Lynis."""
+    result = SecurityService.install_lynis()
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/lynis/scan', methods=['POST'])
+@jwt_required()
+@admin_required
+def run_lynis_scan():
+    """Start a Lynis security scan."""
+    result = SecurityService.run_lynis_scan()
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/lynis/scan/status', methods=['GET'])
+@jwt_required()
+@admin_required
+def get_lynis_scan_status():
+    """Get Lynis scan status."""
+    status = SecurityService.get_lynis_scan_status()
+    return jsonify(status), 200
+
+
+# ==========================================
+# AUTOMATIC UPDATES
+# ==========================================
+@security_bp.route('/auto-updates/status', methods=['GET'])
+@jwt_required()
+@admin_required
+def get_auto_updates_status():
+    """Get automatic updates status."""
+    status = SecurityService.get_auto_updates_status()
+    return jsonify(status), 200
+
+
+@security_bp.route('/auto-updates/install', methods=['POST'])
+@jwt_required()
+@admin_required
+def install_auto_updates():
+    """Install automatic updates package."""
+    result = SecurityService.install_auto_updates()
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/auto-updates/enable', methods=['POST'])
+@jwt_required()
+@admin_required
+def enable_auto_updates():
+    """Enable automatic security updates."""
+    result = SecurityService.enable_auto_updates()
+    return jsonify(result), 200 if result['success'] else 400
+
+
+@security_bp.route('/auto-updates/disable', methods=['POST'])
+@jwt_required()
+@admin_required
+def disable_auto_updates():
+    """Disable automatic security updates."""
+    result = SecurityService.disable_auto_updates()
+    return jsonify(result), 200 if result['success'] else 400

@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ToastContainer } from './components/Toast';
@@ -19,12 +19,61 @@ import Terminal from './pages/Terminal';
 import Settings from './pages/Settings';
 import FileManager from './pages/FileManager';
 import FTPServer from './pages/FTPServer';
-import Firewall from './pages/Firewall';
+// Firewall is now part of Security page
 import Git from './pages/Git';
 import CronJobs from './pages/CronJobs';
 import Security from './pages/Security';
 import Templates from './pages/Templates';
 import WorkflowBuilder from './pages/WorkflowBuilder';
+import Servers from './pages/Servers';
+import ServerDetail from './pages/ServerDetail';
+import Downloads from './pages/Downloads';
+
+// Page title mapping
+const PAGE_TITLES = {
+    '/': 'Dashboard',
+    '/login': 'Login',
+    '/register': 'Register',
+    '/setup': 'Setup',
+    '/apps': 'Applications',
+    '/templates': 'Templates',
+    '/workflow': 'Workflow Builder',
+    '/domains': 'Domains',
+    '/databases': 'Databases',
+    '/ssl': 'SSL Certificates',
+    '/docker': 'Docker',
+    '/servers': 'Servers',
+    '/downloads': 'Downloads',
+    '/git': 'Git Repositories',
+    '/files': 'File Manager',
+    '/ftp': 'FTP Server',
+    '/monitoring': 'Monitoring',
+    '/backups': 'Backups',
+    '/cron': 'Cron Jobs',
+    '/security': 'Security',
+    '/terminal': 'Terminal',
+    '/settings': 'Settings',
+};
+
+function PageTitleUpdater() {
+    const location = useLocation();
+
+    useEffect(() => {
+        const path = location.pathname;
+        let title = PAGE_TITLES[path];
+
+        // Handle dynamic routes
+        if (!title) {
+            if (path.startsWith('/apps/')) title = 'Application Details';
+            else if (path.startsWith('/servers/')) title = 'Server Details';
+            else title = 'ServerKit';
+        }
+
+        document.title = title ? `${title} | ServerKit` : 'ServerKit';
+    }, [location]);
+
+    return null;
+}
 
 function PrivateRoute({ children }) {
     const { isAuthenticated, loading, needsSetup } = useAuth();
@@ -107,7 +156,11 @@ function AppRoutes() {
                 <Route path="databases" element={<Databases />} />
                 <Route path="ssl" element={<div className="page">SSL Certificates</div>} />
                 <Route path="docker" element={<Docker />} />
-                <Route path="firewall" element={<Firewall />} />
+                <Route path="servers" element={<Servers />} />
+                <Route path="servers/:id" element={<ServerDetail />} />
+                <Route path="servers/:id/docker" element={<ServerDetail />} />
+                <Route path="downloads" element={<Downloads />} />
+                <Route path="firewall" element={<Navigate to="/security" replace />} />
                 <Route path="git" element={<Git />} />
                 <Route path="files" element={<FileManager />} />
                 <Route path="ftp" element={<FTPServer />} />
@@ -125,6 +178,7 @@ function AppRoutes() {
 function App() {
     return (
         <Router>
+            <PageTitleUpdater />
             <AuthProvider>
                 <ToastProvider>
                     <AppRoutes />
