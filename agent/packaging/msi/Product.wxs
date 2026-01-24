@@ -5,7 +5,7 @@
 
   Build instructions:
     1. Install WiX Toolset v4
-    2. Run: wix build Product.wxs -o serverkit-agent.msi
+    2. Run: wix build Product.wxs -o serverkit-agent.msi -define Version=1.0.0
 -->
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
 
@@ -13,7 +13,7 @@
   <Package
     Name="ServerKit Agent"
     Manufacturer="ServerKit"
-    Version="!(bind.FileVersion.ServerKitAgentExe)"
+    Version="$(var.Version)"
     UpgradeCode="E8B7F3A2-4C5D-4E6F-8A9B-0C1D2E3F4A5B"
     Scope="perMachine">
 
@@ -30,40 +30,12 @@
     <!-- Media -->
     <MediaTemplate EmbedCab="yes" />
 
-    <!-- License -->
-    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
-
-    <!-- UI -->
-    <UI>
-      <UIRef Id="WixUI_InstallDir" />
-      <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
-    </UI>
-
     <!-- Feature -->
     <Feature Id="ProductFeature" Title="ServerKit Agent" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
-      <ComponentRef Id="ServiceComponent" />
       <ComponentRef Id="ConfigComponent" />
     </Feature>
 
-    <!-- Custom Actions -->
-    <CustomAction Id="StopService"
-      Directory="INSTALLFOLDER"
-      ExeCommand="[SystemFolder]net.exe stop ServerKitAgent"
-      Execute="deferred"
-      Impersonate="no"
-      Return="ignore" />
-
-    <CustomAction Id="StartService"
-      Directory="INSTALLFOLDER"
-      ExeCommand="[SystemFolder]net.exe start ServerKitAgent"
-      Execute="deferred"
-      Impersonate="no"
-      Return="ignore" />
-
-    <InstallExecuteSequence>
-      <Custom Action="StopService" Before="InstallFiles" Condition="Installed AND NOT UPGRADINGPRODUCTCODE" />
-    </InstallExecuteSequence>
   </Package>
 
   <!-- Directory Structure -->
@@ -87,39 +59,26 @@
       <Component Id="MainExecutable" Guid="A1B2C3D4-E5F6-7890-ABCD-EF1234567890">
         <File Id="ServerKitAgentExe"
           Source="serverkit-agent.exe"
-          KeyPath="yes">
-          <Shortcut Id="StartMenuShortcut"
-            Directory="ProgramMenuFolder"
-            Name="ServerKit Agent"
-            Description="ServerKit Agent Management"
-            WorkingDirectory="INSTALLFOLDER"
-            Advertise="yes" />
-        </File>
+          KeyPath="yes" />
+        <!-- Windows Service -->
+        <ServiceInstall
+          Id="ServiceInstall"
+          Name="ServerKitAgent"
+          DisplayName="ServerKit Agent"
+          Description="ServerKit Agent - Remote server management service"
+          Type="ownProcess"
+          Start="auto"
+          ErrorControl="normal"
+          Arguments="start" />
+        <ServiceControl
+          Id="ServiceControl"
+          Name="ServerKitAgent"
+          Start="install"
+          Stop="both"
+          Remove="uninstall"
+          Wait="yes" />
       </Component>
     </ComponentGroup>
-
-    <!-- Windows Service -->
-    <Component Id="ServiceComponent" Directory="INSTALLFOLDER" Guid="B2C3D4E5-F6A7-8901-BCDE-F23456789012">
-      <File Id="ServiceExe" Source="serverkit-agent.exe" KeyPath="yes" />
-      <ServiceInstall
-        Id="ServiceInstall"
-        Name="ServerKitAgent"
-        DisplayName="ServerKit Agent"
-        Description="ServerKit Agent - Remote server management service"
-        Type="ownProcess"
-        Start="auto"
-        ErrorControl="normal"
-        Arguments="start">
-        <ServiceDependency Id="Tcpip" />
-      </ServiceInstall>
-      <ServiceControl
-        Id="ServiceControl"
-        Name="ServerKitAgent"
-        Start="install"
-        Stop="both"
-        Remove="uninstall"
-        Wait="yes" />
-    </Component>
 
     <!-- Configuration -->
     <Component Id="ConfigComponent" Directory="AgentDataFolder" Guid="C3D4E5F6-A7B8-9012-CDEF-345678901234">
