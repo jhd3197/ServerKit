@@ -189,8 +189,8 @@ fi
 - Release $VERSION
 EOF
 
-# Build the RPM
-rpmbuild --define "_topdir $BUILD_ROOT" -bb "$BUILD_ROOT/SPECS/serverkit-agent.spec"
+# Build the RPM (disable build-id for Go binaries)
+rpmbuild --define "_topdir $BUILD_ROOT" --define "_build_id_links none" -bb "$BUILD_ROOT/SPECS/serverkit-agent.spec"
 
 # Copy output
 OUTPUT_DIR="${4:-./output}"

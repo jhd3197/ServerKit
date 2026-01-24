@@ -62,9 +62,7 @@
       Return="ignore" />
 
     <InstallExecuteSequence>
-      <Custom Action="StopService" Before="InstallFiles">
-        Installed AND NOT UPGRADINGPRODUCTCODE
-      </Custom>
+      <Custom Action="StopService" Before="InstallFiles" Condition="Installed AND NOT UPGRADINGPRODUCTCODE" />
     </InstallExecuteSequence>
   </Package>
 
