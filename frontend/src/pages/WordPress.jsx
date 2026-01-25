@@ -220,7 +220,7 @@ const WordPress = () => {
                                 />
                             ))}
                         </div>
-                    ))}
+                    )}
                 </div>
             </div>
 

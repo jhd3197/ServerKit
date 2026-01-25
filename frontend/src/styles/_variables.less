@@ -36,11 +36,13 @@
 @border-default-raw: #27272a;
 @border-subtle-raw: #27272a;
 @border-active-raw: #3f3f46;
+@border-hover-raw: #3f3f46;
 
 // Themed values using CSS custom properties
 @border-default: var(--border-default);
 @border-subtle: var(--border-subtle);
 @border-active: var(--border-active);
+@border-hover: var(--border-hover);
 
 // --------------------------------------------
 // COLORS - Text (theme-sensitive)
@@ -183,3 +185,15 @@
 @breakpoint-md: 768px;
 @breakpoint-lg: 1024px;
 @breakpoint-xl: 1280px;
+
+// --------------------------------------------
+// ALIASES (for consistency across files)
+// --------------------------------------------
+@font-family-mono: @font-mono;
+@color-success: @success;
+@color-warning: @warning;
+@color-danger: @danger;
+@color-info: @info;
+@color-primary: @accent-primary;
+@bg-code: @bg-tertiary;
+@bg-input: @bg-card;
