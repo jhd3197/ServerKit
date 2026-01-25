@@ -1,196 +1,237 @@
 // ============================================
-// SIDEBAR LAYOUT
+// SIDEBAR LAYOUT - Pro Style
 // ============================================
 
 .sidebar {
     width: @sidebar-width;
-    background-color: @bg-sidebar;
-    border-right: 1px solid @border-subtle;
-    .flex-column();
+    background-color: @bg-body; // Seamless look with main content
+    border-right: 1px solid @border-default;
+    display: flex;
+    flex-direction: column;
     position: fixed;
     height: 100vh;
     z-index: @z-fixed;
+    padding: 0 1rem;
 
     @media (max-width: @breakpoint-md) {
         display: none;
     }
 }
 
-// Brand/Logo
-.brand {
-    padding: @space-6 @space-8;
-    font-size: @font-size-md;
-    font-weight: @font-weight-bold;
-    letter-spacing: -0.5px;
-    color: @text-primary;
-    .flex-start();
-    gap: @space-3;
-    border-bottom: 1px solid @border-subtle;
+// Brand Section - Clean & Minimal
+.brand-section {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
     flex-shrink: 0;
 }
 
 .brand-logo {
-    .icon-box(32px);
-    background: linear-gradient(135deg, @accent-primary, lighten(@accent-primary, 15%));
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, @accent-primary, darken(@accent-primary, 10%));
     border-radius: @radius-lg;
+    display: grid;
+    place-items: center;
     color: white;
+    box-shadow: 0 4px 12px @accent-shadow;
 }
 
-// Scrollable nav container
-.sidebar-nav-container {
+.brand-text {
+    font-size: 1rem;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+    letter-spacing: -0.01em;
+}
+
+// Scrollable Navigation Container
+.nav-scroll {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
 
-    // Custom scrollbar
+    // Hide scrollbar visually but keep functionality
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
     &::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background: @border-active;
-        border-radius: @radius-full;
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-        background: @text-tertiary;
+        display: none;
     }
 }
 
-// Menu labels
-.menu-label {
-    padding: @space-6 @space-8 @space-2;
-    font-size: @font-size-xs + 1;
+// Navigation Category Labels
+.nav-category {
+    font-size: 0.7rem;
     font-weight: @font-weight-semibold;
+    color: @text-secondary;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: @text-tertiary;
+    letter-spacing: 0.08em;
+    margin: 1.5rem 0 0.5rem 0.75rem;
+    opacity: 0.6;
+
+    &:first-of-type {
+        margin-top: 0.5rem;
+    }
 }
 
 // Navigation
 .nav {
-    .flex-column();
-    padding: 0 @space-4;
-    gap: @space-1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
+// Navigation Item
 .nav-item {
-    .flex-start();
-    gap: @space-3;
-    padding: @space-2 + 2 @space-4;
-    color: @text-secondary;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.5rem 0.75rem;
+    border-radius: @radius-lg;
+    color: @text-tertiary;
     text-decoration: none;
-    border-radius: @radius-md;
-    .transition();
+    font-size: 0.85rem;
     font-weight: @font-weight-medium;
+    transition: all 0.2s ease;
     margin-bottom: 2px;
+    position: relative;
 
+    // Pro Hover State
     &:hover {
-        background-color: rgba(255, 255, 255, 0.03);
         color: @text-primary;
+        background-color: rgba(255, 255, 255, 0.03);
     }
 
+    // Pro Active State
     &.active {
         background-color: @accent-glow;
         color: @accent-primary;
-        border-left: 3px solid @accent-primary;
-        border-radius: @radius-sm;
-    }
 
-    svg {
-        width: 16px;
-        height: 16px;
-        stroke: currentColor;
-        stroke-width: 2;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        fill: none;
+        // Active Indicator Dot
+        &::after {
+            content: '';
+            position: absolute;
+            right: 8px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: @accent-primary;
+            box-shadow: 0 0 6px @accent-primary;
+        }
     }
 }
 
-// GitHub link
-.sidebar-github-link {
+// Navigation Icon
+.nav-icon {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    opacity: 0.8;
     flex-shrink: 0;
+}
+
+// Sidebar Footer
+.sidebar-footer {
+    padding: 1rem 0;
+    margin-top: auto;
+    border-top: 1px solid @border-default;
+    flex-shrink: 0;
+}
+
+// Promo Button (GitHub Star CTA)
+.promo-btn {
     display: flex;
     align-items: center;
-    gap: @space-2;
-    padding: @space-3 @space-6;
-    margin: @space-2 @space-4;
-    color: @text-tertiary;
+    justify-content: space-between;
+    padding: 0.65rem 0.75rem;
+    margin-bottom: 0.75rem;
+    background: @bg-secondary;
+    border: 1px solid @border-default;
+    border-radius: @radius-lg;
+    color: @text-primary;
+    font-size: 0.75rem;
+    font-weight: @font-weight-semibold;
     text-decoration: none;
-    font-size: @font-size-sm;
-    border-radius: @radius-md;
-    .transition();
-
-    svg {
-        flex-shrink: 0;
-    }
+    transition: all 0.2s ease;
 
     &:hover {
-        background-color: @bg-hover;
-        color: @text-primary;
+        border-color: @text-tertiary;
+        transform: translateY(-1px);
+    }
+
+    .promo-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 }
 
-// User profile at bottom
-.user-profile {
-    flex-shrink: 0;
-    padding: @space-4;
-    border-top: 1px solid @border-subtle;
+.promo-tag {
+    font-size: 0.65rem;
+    background: rgba(245, 158, 11, 0.1);
+    color: @warning;
+    padding: 2px 6px;
+    border-radius: @radius-sm;
+    font-weight: @font-weight-bold;
 }
 
-.user-card {
+// User Mini Profile
+.user-mini {
     display: flex;
     align-items: center;
-    gap: @space-3;
-    padding: @space-3;
+    gap: 10px;
+    padding: 0.5rem;
+    cursor: pointer;
     border-radius: @radius-lg;
-    background: @bg-hover;
-    border: 1px solid @border-subtle;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: @bg-secondary;
+    }
 }
 
-.avatar {
-    .icon-box(32px);
-    background-color: @accent-primary;
-    border-radius: @radius-full;
-    color: white;
+.user-avatar {
+    width: 28px;
+    height: 28px;
+    background: @text-tertiary;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 0.75rem;
     font-weight: @font-weight-semibold;
-    font-size: @font-size-sm;
+    color: white;
 }
 
-.user-info {
+.user-meta {
     display: flex;
     flex-direction: column;
-    flex: 1;
 }
 
-.user-name {
-    font-size: @font-size-sm;
-    font-weight: @font-weight-semibold;
+.user-handle {
+    font-size: 0.8rem;
+    font-weight: @font-weight-medium;
     color: @text-primary;
 }
 
-.user-role {
-    font-size: @font-size-xs;
-    color: @text-tertiary;
-    font-family: @font-mono;
-}
+.user-status {
+    font-size: 0.7rem;
+    color: @success;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 
-.logout-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: @text-tertiary;
-    padding: @space-1;
-    border-radius: @radius-sm;
-    .transition();
-
-    &:hover {
-        color: @text-primary;
-        background: rgba(255, 255, 255, 0.05);
+    &::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        background: currentColor;
+        border-radius: 50%;
     }
 }
