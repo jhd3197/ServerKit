@@ -1,113 +1,98 @@
 # Contributing to ServerKit
 
-Thank you for your interest in contributing to ServerKit! This guide will help you get started.
+## Quick Setup
+
+### Windows (WSL2) — Recommended
+
+```powershell
+# 1. Install WSL (PowerShell as Admin)
+wsl --install -d Ubuntu-22.04
+# Restart, create user when prompted
+```
+
+```bash
+# 2. Run setup script
+cd /mnt/c/Users/YOUR_USERNAME/Documents/GitHub/ServerKit
+chmod +x ./scripts/dev/*.sh
+./scripts/dev/setup-wsl.sh
+
+# 3. Start dev servers
+./scripts/dev/start.sh
+```
+
+Open http://localhost:5173 — login: `admin` / `admin`
+
+> **Troubleshooting:** If you get `bad interpreter` error, fix line endings:
+> ```bash
+> sed -i 's/\r$//' ./scripts/dev/*.sh
+> ```
+
+### Linux / macOS
+
+```bash
+./scripts/dev/setup-linux.sh
+./scripts/dev/start.sh
+```
+
+### Docker
+
+```bash
+./scripts/dev/dev.bat up   # Windows
+docker compose -f docker-compose.dev.yml up --build  # Linux/Mac
+```
 
 ---
 
-## Table of Contents
+## Quick Reference
 
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [Development Setup](#development-setup)
-- [Project Structure](#project-structure)
-- [Making Changes](#making-changes)
-- [Coding Standards](#coding-standards)
-- [Testing](#testing)
-- [Submitting Changes](#submitting-changes)
-- [Priority Areas](#priority-areas)
+| Task | Command |
+|------|---------|
+| Start both | `./scripts/dev/start.sh` |
+| Backend only | `cd backend && source venv/bin/activate && python run.py` |
+| Frontend only | `cd frontend && npm run dev` |
+| Build frontend | `cd frontend && npm run build` |
 
 ---
 
-## Code of Conduct
+## Manual Setup
 
-- Be respectful and inclusive
-- Provide constructive feedback
-- Focus on the issue, not the person
-- Help others learn and grow
-
----
-
-## Getting Started
+<details>
+<summary>Click to expand manual setup steps</summary>
 
 ### Prerequisites
 
 - Python 3.11+
 - Node.js 20+
-- Docker (optional, for testing)
+- Docker (optional)
 - Git
 
 ### Fork and Clone
 
 ```bash
-# Fork the repository on GitHub, then:
 git clone https://github.com/YOUR_USERNAME/ServerKit.git
 cd ServerKit
 git remote add upstream https://github.com/jhd3197/ServerKit.git
 ```
 
----
-
-## Development Setup
-
 ### Backend Setup
 
 ```bash
-# Create virtual environment
 cd backend
 python -m venv venv
-
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
-
-# Install dependencies
+source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-pip install -r requirements-dev.txt  # Development dependencies
-
-# Copy environment file
-cp ../.env.example .env
-# Edit .env with your settings
-
-# Run development server
 python run.py
 ```
-
-The backend will be available at `http://localhost:5000`.
 
 ### Frontend Setup
 
 ```bash
-# In a new terminal
 cd frontend
-
-# Install dependencies
 npm install
-
-# Run development server
 npm run dev
 ```
 
-The frontend will be available at `http://localhost:5173` with hot-reload.
-
-### Running Both Together
-
-For development, run both the backend and frontend servers:
-
-```bash
-# Terminal 1 - Backend
-cd backend && python run.py
-
-# Terminal 2 - Frontend
-cd frontend && npm run dev
-```
-
-Or use Docker:
-
-```bash
-docker compose -f docker-compose.dev.yml up
-```
+</details>
 
 ---
 

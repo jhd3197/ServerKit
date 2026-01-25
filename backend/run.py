@@ -1,5 +1,10 @@
 import os
 import sys
+from dotenv import load_dotenv
+
+# Load .env file before creating app
+load_dotenv()
+
 from app import create_app, get_socketio
 
 app = create_app()
@@ -18,4 +23,13 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # Use SocketIO to run the app (supports WebSocket) - only in development
-    socketio.run(app, host='0.0.0.0', port=port, debug=debug)
+    # use_reloader with stat polling for WSL compatibility
+    socketio.run(
+        app,
+        host='0.0.0.0',
+        port=port,
+        debug=debug,
+        allow_unsafe_werkzeug=True,
+        use_reloader=True,
+        reloader_type='stat'  # Use polling instead of inotify (for WSL)
+    )
