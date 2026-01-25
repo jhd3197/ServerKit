@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Github } from 'lucide-react';
+import { Github, Star } from 'lucide-react';
 
 const Sidebar = () => {
     const { user, logout } = useAuth();
@@ -195,7 +195,7 @@ const Sidebar = () => {
                         <Github size={14} />
                         ServerKit
                     </span>
-                    <span className="promo-tag">Star</span>
+                    <span className="promo-tag"><Star size={12} /></span>
                 </a>
 
                 <div className="user-mini" onClick={logout} title="Click to logout">

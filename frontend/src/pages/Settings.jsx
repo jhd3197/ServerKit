@@ -802,21 +802,6 @@ const AppearanceSettings = () => {
                     </button>
                 </div>
             </div>
-
-            <div className="settings-card">
-                <h3>Density</h3>
-                <p>Adjust the spacing and size of elements</p>
-                <div className="density-options">
-                    <label className="radio-option">
-                        <input type="radio" name="density" value="comfortable" defaultChecked />
-                        <span>Comfortable</span>
-                    </label>
-                    <label className="radio-option">
-                        <input type="radio" name="density" value="compact" />
-                        <span>Compact</span>
-                    </label>
-                </div>
-            </div>
         </div>
     );
 };
