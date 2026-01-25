@@ -484,7 +484,12 @@ const CreateAppModal = ({ onClose }) => {
 
     function selectTemplate(templateId) {
         onClose();
-        navigate(`/templates?install=${templateId}`);
+        // WordPress has its own dedicated management page
+        if (templateId === 'wordpress') {
+            navigate('/wordpress');
+        } else {
+            navigate(`/templates?install=${templateId}`);
+        }
     }
 
     function goToAllTemplates() {
