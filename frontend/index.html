@@ -7,6 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="ServerKit - Server Management Dashboard" />
     <title>ServerKit</title>
+    <script>
+        // Prevent flash of unstyled content (FOUC) by setting theme before React loads
+        (function() {
+            const theme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 
 <body>

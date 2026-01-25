@@ -80,6 +80,7 @@ ssh user@your-server-ip "echo 'SSH works!'"
 
 ---
 
+
 ## Option 2: Run MCP Server Directly on Your Server
 
 This runs an MCP server **on your Linux server** that Claude connects to.
