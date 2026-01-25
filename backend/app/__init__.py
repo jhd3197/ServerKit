@@ -84,8 +84,10 @@ def create_app(config_name=None):
     # Register blueprints - PHP & WordPress
     from app.api.php import php_bp
     from app.api.wordpress import wordpress_bp
+    from app.api.wordpress_sites import wordpress_sites_bp
     app.register_blueprint(php_bp, url_prefix='/api/v1/php')
     app.register_blueprint(wordpress_bp, url_prefix='/api/v1/wordpress')
+    app.register_blueprint(wordpress_sites_bp, url_prefix='/api/v1/wordpress')
 
     # Register blueprints - Python
     from app.api.python import python_bp

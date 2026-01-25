@@ -29,7 +29,8 @@ const Applications = () => {
         setLoading(true);
         try {
             const data = await api.getApps();
-            const appList = data.apps || [];
+            // Filter out WordPress apps - they have their own dedicated page at /wordpress
+            const appList = (data.apps || []).filter(a => a.app_type !== 'wordpress');
             setApps(appList);
 
             // Calculate stats
