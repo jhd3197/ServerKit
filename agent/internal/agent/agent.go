@@ -1,16 +1,19 @@
 package agent
 
 import (
+	"bufio"
 	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
 	"github.com/serverkit/agent/internal/auth"
 	"github.com/serverkit/agent/internal/config"
 	"github.com/serverkit/agent/internal/docker"
+	"github.com/serverkit/agent/internal/ipc"
 	"github.com/serverkit/agent/internal/logger"
 	"github.com/serverkit/agent/internal/metrics"
 	"github.com/serverkit/agent/internal/terminal"
@@ -27,6 +30,7 @@ type Agent struct {
 	docker   *docker.Client
 	metrics  *metrics.Collector
 	terminal *terminal.Manager
+	ipc      *ipc.Server
 
 	// Active subscriptions
 	subscriptions map[string]context.CancelFunc
@@ -34,6 +38,12 @@ type Agent struct {
 
 	// Command handlers
 	handlers map[string]CommandHandler
+
+	// Lifecycle tracking
+	startTime      time.Time
+	restartCh      chan struct{}
+	lastConnected  time.Time
+	reconnectCount int
 }
 
 // CommandHandler is a function that handles a command
@@ -81,6 +91,8 @@ func New(cfg *config.Config, log *logger.Logger) (*Agent, error) {
 		terminal:      termManager,
 		subscriptions: make(map[string]context.CancelFunc),
 		handlers:      make(map[string]CommandHandler),
+		startTime:     time.Now(),
+		restartCh:     make(chan struct{}),
 	}
 
 	// Register command handlers
@@ -88,6 +100,11 @@ func New(cfg *config.Config, log *logger.Logger) (*Agent, error) {
 
 	// Set WebSocket message handler
 	wsClient.SetHandler(agent.handleMessage)
+
+	// Create IPC server if enabled
+	if cfg.IPC.Enabled {
+		agent.ipc = ipc.NewServer(cfg.IPC, log, agent)
+	}
 
 	return agent, nil
 }
@@ -147,7 +164,8 @@ func (a *Agent) registerHandlers() {
 func (a *Agent) Run(ctx context.Context) error {
 	a.log.Info("Starting agent",
 		"agent_id", a.cfg.Agent.ID,
-		"features", fmt.Sprintf("docker=%v metrics=%v", a.cfg.Features.Docker, a.cfg.Features.Metrics),
+		"version", Version,
+		"features", fmt.Sprintf("docker=%v metrics=%v ipc=%v", a.cfg.Features.Docker, a.cfg.Features.Metrics, a.cfg.IPC.Enabled),
 	)
 
 	// Verify Docker connection if enabled
@@ -157,6 +175,13 @@ func (a *Agent) Run(ctx context.Context) error {
 		} else {
 			version, _ := a.docker.Version(ctx)
 			a.log.Info("Docker connected", "version", version)
+		}
+	}
+
+	// Start IPC server if enabled
+	if a.ipc != nil {
+		if err := a.ipc.Start(ctx); err != nil {
+			a.log.Warn("Failed to start IPC server", "error", err)
 		}
 	}
 
@@ -170,8 +195,12 @@ func (a *Agent) Run(ctx context.Context) error {
 	// Start heartbeat loop
 	go a.heartbeatLoop(ctx)
 
-	// Wait for context cancellation
-	<-ctx.Done()
+	// Wait for context cancellation or restart request
+	select {
+	case <-ctx.Done():
+	case <-a.restartCh:
+		a.log.Info("Restart requested")
+	}
 
 	// Cleanup
 	a.cleanup()
@@ -434,6 +463,11 @@ func (a *Agent) cleanup() {
 	// Close all terminal sessions
 	if a.terminal != nil {
 		a.terminal.CloseAll()
+	}
+
+	// Stop IPC server
+	if a.ipc != nil {
+		a.ipc.Stop()
 	}
 
 	// Close WebSocket
@@ -926,4 +960,137 @@ func (a *Agent) handleTerminalClose(ctx context.Context, params json.RawMessage)
 	return map[string]interface{}{
 		"success": true,
 	}, nil
+}
+
+// IPC StatusProvider implementation
+
+// GetStatus returns the current agent status for the IPC API
+func (a *Agent) GetStatus() ipc.AgentStatus {
+	status := ipc.AgentStatus{
+		Running:    true,
+		Connected:  a.ws.IsConnected(),
+		Registered: a.cfg.Agent.ID != "",
+		AgentID:    a.cfg.Agent.ID,
+		AgentName:  a.cfg.Agent.Name,
+		ServerURL:  a.cfg.Server.URL,
+		Uptime:     int64(time.Since(a.startTime).Seconds()),
+		Version:    Version,
+	}
+
+	// Collect current metrics if available
+	if a.metrics != nil {
+		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		defer cancel()
+		if sysMetrics, err := a.metrics.Collect(ctx); err == nil {
+			status.CPUPercent = sysMetrics.CPUPercent
+			status.MemPercent = sysMetrics.MemoryPercent
+			status.DiskPercent = sysMetrics.DiskPercent
+		}
+	}
+
+	return status
+}
+
+// GetDetailedMetrics returns detailed system metrics for the IPC API
+func (a *Agent) GetDetailedMetrics() *ipc.DetailedMetrics {
+	if a.metrics == nil {
+		return nil
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	sysMetrics, err := a.metrics.Collect(ctx)
+	if err != nil {
+		return nil
+	}
+
+	cores := 0
+	if sysMetrics.CPUPerCore != nil {
+		cores = len(sysMetrics.CPUPerCore)
+	}
+
+	return &ipc.DetailedMetrics{
+		CPU: ipc.CPUMetrics{
+			UsagePercent: sysMetrics.CPUPercent,
+			PerCPU:       sysMetrics.CPUPerCore,
+			Cores:        cores,
+		},
+		Memory: ipc.MemoryMetrics{
+			Total:        sysMetrics.MemoryTotal,
+			Used:         sysMetrics.MemoryUsed,
+			Free:         sysMetrics.MemoryTotal - sysMetrics.MemoryUsed,
+			UsagePercent: sysMetrics.MemoryPercent,
+		},
+		Disk: ipc.DiskMetrics{
+			Total:        sysMetrics.DiskTotal,
+			Used:         sysMetrics.DiskUsed,
+			Free:         sysMetrics.DiskTotal - sysMetrics.DiskUsed,
+			UsagePercent: sysMetrics.DiskPercent,
+		},
+		Network: ipc.NetworkMetrics{
+			BytesSent:   sysMetrics.NetworkTx,
+			BytesRecv:   sysMetrics.NetworkRx,
+			PacketsSent: 0, // Not tracked in current implementation
+			PacketsRecv: 0, // Not tracked in current implementation
+		},
+		Timestamp: time.Now().UnixMilli(),
+	}
+}
+
+// GetConnectionInfo returns WebSocket connection information for the IPC API
+func (a *Agent) GetConnectionInfo() ipc.ConnectionInfo {
+	info := ipc.ConnectionInfo{
+		Connected:      a.ws.IsConnected(),
+		ServerURL:      a.cfg.Server.URL,
+		ReconnectCount: a.reconnectCount,
+	}
+
+	if !a.lastConnected.IsZero() {
+		info.LastConnected = a.lastConnected.UnixMilli()
+	}
+
+	if session := a.ws.Session(); session != nil {
+		info.SessionExpires = session.ExpiresAt.UnixMilli()
+	}
+
+	return info
+}
+
+// GetRecentLogs returns recent log lines from the log file
+func (a *Agent) GetRecentLogs(lines int) []string {
+	logFile := a.cfg.Logging.File
+	if logFile == "" {
+		return []string{}
+	}
+
+	file, err := os.Open(logFile)
+	if err != nil {
+		return []string{}
+	}
+	defer file.Close()
+
+	// Read all lines and keep the last N
+	var allLines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		allLines = append(allLines, scanner.Text())
+	}
+
+	// Return the last N lines
+	if len(allLines) <= lines {
+		return allLines
+	}
+	return allLines[len(allLines)-lines:]
+}
+
+// Restart initiates a graceful restart of the agent
+func (a *Agent) Restart() error {
+	a.log.Info("Restart requested via IPC")
+	select {
+	case a.restartCh <- struct{}{}:
+		return nil
+	default:
+		return fmt.Errorf("restart already in progress")
+	}
 }

@@ -1,11 +1,56 @@
-/frontend/node_modules
-nul
-/.claude
-/.claude_
+# Dependencies
+/frontend/node_modules/
+/backend/venv/
+/backend/__pycache__/
+**/__pycache__/
+*.pyc
+
+# Build outputs
+/frontend/dist/
+/agent/dist/
+/agent/serverkit-agent
+/agent/serverkit-agent.exe
+*.exe
+*.msi
+*.deb
+*.rpm
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Environment and secrets
 .env
-/frontend/dist
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# OS files
+.DS_Store
+Thumbs.db
+nul
+
+# Claude Code
+/.claude/
+/.claude_/
+
+# Temporary files
 *.tmp
-.planning_old
+*.temp
+*.log
+coverage.out
+coverage.html
+
+# Project specific
+.planning_old/
 .mcp.json
 new_templates/
-/.marketing
+/.marketing/
+
+# Test artifacts
+*.test
+*.out

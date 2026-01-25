@@ -1564,7 +1564,7 @@ _releases_cache = {
     'expires': None
 }
 
-GITHUB_REPO = os.environ.get('SERVERKIT_GITHUB_REPO', 'serverkit/serverkit')
+GITHUB_REPO = os.environ.get('SERVERKIT_GITHUB_REPO', 'jhd3197/ServerKit')
 
 
 def _get_latest_agent_release():

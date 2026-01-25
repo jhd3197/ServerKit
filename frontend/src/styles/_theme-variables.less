@@ -1,0 +1,119 @@
+// ============================================
+// SERVERKIT DESIGN SYSTEM - THEME VARIABLES
+// ============================================
+// CSS Custom Properties that enable runtime theme switching.
+// Must be imported FIRST before _variables.less
+// ============================================
+
+// --------------------------------------------
+// DARK THEME (Default)
+// --------------------------------------------
+:root {
+    // Background colors
+    --bg-body: #09090b;
+    --bg-sidebar: #0f0f11;
+    --bg-card: #18181b;
+    --bg-hover: #27272a;
+    --bg-elevated: #1f1f23;
+    --bg-secondary: #27272a;
+    --bg-tertiary: #3f3f46;
+
+    // Border colors
+    --border-default: #27272a;
+    --border-subtle: #27272a;
+    --border-active: #3f3f46;
+
+    // Text colors
+    --text-primary: #f4f4f5;
+    --text-secondary: #f1f1ff;
+    --text-tertiary: #bebed1;
+
+    // Shadows
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+
+    // Scrollbar
+    --scrollbar-track: #18181b;
+    --scrollbar-thumb: #3f3f46;
+    --scrollbar-thumb-hover: #52525b;
+
+    // Grid pattern
+    --grid-color: rgba(255, 255, 255, 0.02);
+}
+
+// --------------------------------------------
+// LIGHT THEME
+// --------------------------------------------
+[data-theme="light"] {
+    // Background colors
+    --bg-body: #f8fafc;
+    --bg-sidebar: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-hover: #f1f5f9;
+    --bg-elevated: #ffffff;
+    --bg-secondary: #e2e8f0;
+    --bg-tertiary: #cbd5e1;
+
+    // Border colors
+    --border-default: #e2e8f0;
+    --border-subtle: #e2e8f0;
+    --border-active: #cbd5e1;
+
+    // Text colors
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-tertiary: #64748b;
+
+    // Shadows (lighter for light theme)
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+    // Scrollbar
+    --scrollbar-track: #f1f5f9;
+    --scrollbar-thumb: #cbd5e1;
+    --scrollbar-thumb-hover: #94a3b8;
+
+    // Grid pattern (purple accent for visibility)
+    --grid-color: rgba(99, 102, 241, 0.06);
+}
+
+// --------------------------------------------
+// SYSTEM THEME (follows OS preference)
+// --------------------------------------------
+@media (prefers-color-scheme: light) {
+    [data-theme="system"] {
+        // Background colors
+        --bg-body: #f8fafc;
+        --bg-sidebar: #f1f5f9;
+        --bg-card: #ffffff;
+        --bg-hover: #f1f5f9;
+        --bg-elevated: #ffffff;
+        --bg-secondary: #e2e8f0;
+        --bg-tertiary: #cbd5e1;
+
+        // Border colors
+        --border-default: #e2e8f0;
+        --border-subtle: #e2e8f0;
+        --border-active: #cbd5e1;
+
+        // Text colors
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-tertiary: #64748b;
+
+        // Shadows
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+        // Scrollbar
+        --scrollbar-track: #f1f5f9;
+        --scrollbar-thumb: #cbd5e1;
+        --scrollbar-thumb-hover: #94a3b8;
+
+        // Grid pattern (purple accent for visibility)
+        --grid-color: rgba(99, 102, 241, 0.06);
+    }
+}

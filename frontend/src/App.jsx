@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { ToastContainer } from './components/Toast';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
@@ -179,12 +180,14 @@ function App() {
     return (
         <Router>
             <PageTitleUpdater />
-            <AuthProvider>
-                <ToastProvider>
-                    <AppRoutes />
-                    <ToastContainer />
-                </ToastProvider>
-            </AuthProvider>
+            <ThemeProvider>
+                <AuthProvider>
+                    <ToastProvider>
+                        <AppRoutes />
+                        <ToastContainer />
+                    </ToastProvider>
+                </AuthProvider>
+            </ThemeProvider>
         </Router>
     );
 }

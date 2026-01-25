@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import api from '../services/api';
 import UsersTab from '../components/settings/UsersTab';
 import AuditLogTab from '../components/settings/AuditLogTab';
@@ -747,15 +748,7 @@ Keep these codes in a safe place.`;
 };
 
 const AppearanceSettings = () => {
-    const [theme, setTheme] = useState(() => {
-        return localStorage.getItem('theme') || 'dark';
-    });
-
-    function handleThemeChange(newTheme) {
-        setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-        document.documentElement.setAttribute('data-theme', newTheme);
-    }
+    const { theme, setTheme } = useTheme();
 
     return (
         <div className="settings-section">
@@ -770,7 +763,7 @@ const AppearanceSettings = () => {
                 <div className="theme-options">
                     <button
                         className={`theme-option ${theme === 'dark' ? 'active' : ''}`}
-                        onClick={() => handleThemeChange('dark')}
+                        onClick={() => setTheme('dark')}
                     >
                         <div className="theme-preview dark">
                             <div className="preview-sidebar"></div>
@@ -783,7 +776,7 @@ const AppearanceSettings = () => {
                     </button>
                     <button
                         className={`theme-option ${theme === 'light' ? 'active' : ''}`}
-                        onClick={() => handleThemeChange('light')}
+                        onClick={() => setTheme('light')}
                     >
                         <div className="theme-preview light">
                             <div className="preview-sidebar"></div>
@@ -796,7 +789,7 @@ const AppearanceSettings = () => {
                     </button>
                     <button
                         className={`theme-option ${theme === 'system' ? 'active' : ''}`}
-                        onClick={() => handleThemeChange('system')}
+                        onClick={() => setTheme('system')}
                     >
                         <div className="theme-preview system">
                             <div className="preview-sidebar"></div>
@@ -807,21 +800,6 @@ const AppearanceSettings = () => {
                         </div>
                         <span>System</span>
                     </button>
-                </div>
-            </div>
-
-            <div className="settings-card">
-                <h3>Density</h3>
-                <p>Adjust the spacing and size of elements</p>
-                <div className="density-options">
-                    <label className="radio-option">
-                        <input type="radio" name="density" value="comfortable" defaultChecked />
-                        <span>Comfortable</span>
-                    </label>
-                    <label className="radio-option">
-                        <input type="radio" name="density" value="compact" />
-                        <span>Compact</span>
-                    </label>
                 </div>
             </div>
         </div>

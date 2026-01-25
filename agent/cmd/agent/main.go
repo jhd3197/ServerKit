@@ -10,6 +10,7 @@ import (
 	"github.com/serverkit/agent/internal/agent"
 	"github.com/serverkit/agent/internal/config"
 	"github.com/serverkit/agent/internal/logger"
+	"github.com/serverkit/agent/internal/tray"
 	"github.com/serverkit/agent/internal/updater"
 	"github.com/spf13/cobra"
 )
@@ -44,6 +45,7 @@ enabling remote Docker management, monitoring, and more.`,
 	rootCmd.AddCommand(versionCmd())
 	rootCmd.AddCommand(configCmd())
 	rootCmd.AddCommand(updateCmd())
+	rootCmd.AddCommand(trayCmd())
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -354,4 +356,74 @@ func showStatus() error {
 	// This would require checking a PID file or socket
 
 	return nil
+}
+
+func trayCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "tray",
+		Short: "Run the system tray application",
+		Long: `Start the ServerKit Agent system tray application.
+
+The tray app shows the agent status in the system tray and provides
+quick access to start/stop the service, view logs, and open the dashboard.
+
+This is typically auto-started on Windows login when installed via MSI.`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runTray()
+		},
+	}
+}
+
+func runTray() error {
+	// Load agent config to get server URL and IPC settings
+	cfg, err := config.Load(cfgFile)
+	if err != nil {
+		// Continue without config - tray can still show status
+		cfg = config.Default()
+	}
+
+	// Create and run tray application
+	app := tray.NewApp(tray.AppConfig{
+		Version:      Version,
+		IPCAddress:   cfg.IPC.Address,
+		IPCPort:      cfg.IPC.Port,
+		ServerURL:    cfg.Server.URL,
+		DashboardURL: getDashboardURL(cfg.Server.URL),
+		LogFile:      cfg.Logging.File,
+	})
+
+	// Handle signals for graceful shutdown
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		<-sigCh
+		app.Quit()
+	}()
+
+	// Run the tray app (blocking)
+	app.Run()
+	return nil
+}
+
+func getDashboardURL(serverURL string) string {
+	// Convert WebSocket URL to HTTP dashboard URL
+	// wss://server.example.com/ws/agent -> https://server.example.com
+	if serverURL == "" {
+		return ""
+	}
+	// Simple conversion - strip /ws/agent suffix and convert wss to https
+	url := serverURL
+	if len(url) > 4 && url[:4] == "wss:" {
+		url = "https:" + url[4:]
+	} else if len(url) > 3 && url[:3] == "ws:" {
+		url = "http:" + url[3:]
+	}
+	// Strip path suffix
+	for i := len(url) - 1; i >= 0; i-- {
+		if url[i] == '/' && i > 8 { // After https://
+			return url[:i]
+		}
+	}
+	return url
 }
