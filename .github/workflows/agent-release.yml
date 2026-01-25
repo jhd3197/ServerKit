@@ -60,7 +60,7 @@ jobs:
           CGO_ENABLED: 0
         run: |
           cd agent
-          go build -ldflags="-s -w -X main.Version=${{ steps.version.outputs.version }}" \
+          go build -ldflags="-s -w -X main.Version=${{ steps.version.outputs.version }} -X github.com/serverkit/agent/internal/agent.Version=${{ steps.version.outputs.version }}" \
             -o ../dist/serverkit-agent-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.suffix }} \
             ./cmd/agent
 
@@ -365,6 +365,8 @@ jobs:
             | Format | Architecture | Download |
             |--------|--------------|----------|
             | MSI | x64 | `serverkit-agent-${{ steps.version.outputs.version }}-x64.msi` |
+
+            > **New:** Run `serverkit-agent tray` to launch the **System Tray Application** which provides a visual indicator that the agent is running, along with quick access to status, logs, and service controls. The MSI installer auto-starts the tray on Windows login.
 
             #### Docker
             ```bash

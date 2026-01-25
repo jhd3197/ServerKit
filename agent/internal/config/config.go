@@ -27,6 +27,7 @@ type Config struct {
 	Security SecurityConfig `yaml:"security"`
 	Logging  LoggingConfig  `yaml:"logging"`
 	Update   UpdateConfig   `yaml:"update"`
+	IPC      IPCConfig      `yaml:"ipc"`
 }
 
 // ServerConfig holds connection settings
@@ -98,6 +99,13 @@ type UpdateConfig struct {
 	AutoInstall   bool          `yaml:"auto_install"`
 }
 
+// IPCConfig holds local IPC server settings for tray app communication
+type IPCConfig struct {
+	Enabled bool   `yaml:"enabled"`
+	Port    int    `yaml:"port"`
+	Address string `yaml:"address"`
+}
+
 // Default returns default configuration
 func Default() *Config {
 	return &Config{
@@ -144,6 +152,11 @@ func Default() *Config {
 			Enabled:       true,
 			CheckInterval: 1 * time.Hour,
 			AutoInstall:   false, // Require manual confirmation by default
+		},
+		IPC: IPCConfig{
+			Enabled: true,
+			Port:    19780,
+			Address: "127.0.0.1",
 		},
 	}
 }

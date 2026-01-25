@@ -9,6 +9,10 @@ LDFLAGS := -s -w \
 	-X main.BuildTime=$(BUILD_TIME) \
 	-X main.GitCommit=$(GIT_COMMIT)
 
+# Agent-specific LDFLAGS (includes agent package version var)
+AGENT_LDFLAGS := $(LDFLAGS) \
+	-X github.com/serverkit/agent/internal/agent.Version=$(VERSION)
+
 BINARY_NAME := serverkit-agent
 DIST_DIR := dist
 
@@ -23,7 +27,7 @@ deps:
 
 # Build for current platform
 build:
-	CGO_ENABLED=0 go build -ldflags "$(LDFLAGS)" -o $(BINARY_NAME) ./cmd/agent
+	CGO_ENABLED=0 go build -ldflags "$(AGENT_LDFLAGS)" -o $(BINARY_NAME) ./cmd/agent
 
 # Build for current platform with debug symbols
 dev:
@@ -37,29 +41,29 @@ run: build
 build-all:
 	@mkdir -p $(DIST_DIR)
 	@echo "Building for Linux amd64..."
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-linux-amd64 ./cmd/agent
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "$(AGENT_LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-linux-amd64 ./cmd/agent
 	@echo "Building for Linux arm64..."
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-linux-arm64 ./cmd/agent
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags "$(AGENT_LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-linux-arm64 ./cmd/agent
 	@echo "Building for Windows amd64..."
-	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-windows-amd64.exe ./cmd/agent
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags "$(AGENT_LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-windows-amd64.exe ./cmd/agent
 	@echo "Building for Windows arm64..."
-	CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-windows-arm64.exe ./cmd/agent
+	CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -ldflags "$(AGENT_LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-windows-arm64.exe ./cmd/agent
 	@echo "Building for macOS amd64..."
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-darwin-amd64 ./cmd/agent
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags "$(AGENT_LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-darwin-amd64 ./cmd/agent
 	@echo "Building for macOS arm64..."
-	CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-darwin-arm64 ./cmd/agent
+	CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags "$(AGENT_LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-$(VERSION)-darwin-arm64 ./cmd/agent
 	@echo "Done! Binaries in $(DIST_DIR)/"
 
 # Build Linux only
 build-linux:
 	@mkdir -p $(DIST_DIR)
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-linux-amd64 ./cmd/agent
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-linux-arm64 ./cmd/agent
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "$(AGENT_LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-linux-amd64 ./cmd/agent
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags "$(AGENT_LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-linux-arm64 ./cmd/agent
 
 # Build Windows only
 build-windows:
 	@mkdir -p $(DIST_DIR)
-	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-windows-amd64.exe ./cmd/agent
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags "$(AGENT_LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME)-windows-amd64.exe ./cmd/agent
 
 # Run tests
 test:
@@ -150,3 +154,6 @@ help:
 	@echo "  docker-buildx   Build multi-arch image (amd64, arm64)"
 	@echo ""
 	@echo "  help            Show this help"
+	@echo ""
+	@echo "Note: The agent includes a built-in tray command."
+	@echo "      Run 'serverkit-agent tray' for system tray mode."

@@ -68,6 +68,11 @@ logging:
   max_backups: 5
   max_age_days: 30
   compress: true
+
+ipc:
+  enabled: true
+  port: 19780
+  address: 127.0.0.1
 "@
     $configContent | Out-File -FilePath "$buildDir\config.yaml" -Encoding UTF8
 

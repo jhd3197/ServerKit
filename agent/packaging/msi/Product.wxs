@@ -34,6 +34,7 @@
     <Feature Id="ProductFeature" Title="ServerKit Agent" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
       <ComponentRef Id="ConfigComponent" />
+      <ComponentRef Id="TrayAutoStart" />
     </Feature>
 
   </Package>
@@ -86,6 +87,17 @@
       <RemoveFile Id="RemoveConfig" Name="config.yaml" On="uninstall" />
       <RemoveFile Id="RemoveKey" Name="agent.key" On="uninstall" />
       <RemoveFolder Id="RemoveAgentDataFolder" On="uninstall" />
+    </Component>
+
+    <!-- Auto-start tray on user login (uses main binary with tray command) -->
+    <Component Id="TrayAutoStart" Directory="INSTALLFOLDER" Guid="E5F6A7B8-C9D0-1234-EF01-567890123456">
+      <RegistryValue
+        Root="HKCU"
+        Key="Software\Microsoft\Windows\CurrentVersion\Run"
+        Name="ServerKitTray"
+        Type="string"
+        Value="&quot;[INSTALLFOLDER]serverkit-agent.exe&quot; tray"
+        KeyPath="yes" />
     </Component>
   </Fragment>
 
