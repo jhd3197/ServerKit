@@ -111,6 +111,16 @@ else
     print_success "Docker Compose already installed"
 fi
 
+# Install Node.js for frontend build (builds on host to avoid Docker memory issues)
+if ! command -v node &> /dev/null; then
+    print_info "Installing Node.js..."
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+    apt-get install -y nodejs
+    print_success "Node.js $(node --version) installed"
+else
+    print_success "Node.js $(node --version) already installed"
+fi
+
 # Clone or update repository
 print_info "Installing ServerKit to $INSTALL_DIR..."
 
@@ -241,12 +251,31 @@ cp "$INSTALL_DIR/nginx/sites-available/example.conf.template" /etc/nginx/sites-a
 
 print_success "Nginx proxy configured"
 
-# Clean up Docker networks to prevent issues
+# Clean up Docker to prevent issues
 print_info "Cleaning up Docker..."
 docker network prune -f 2>/dev/null || true
 docker container prune -f 2>/dev/null || true
 
-# Build and start frontend container
+# Ensure swap exists for low-RAM VPS servers (Vite build needs ~512MB+)
+SWAP_TOTAL=$(free -m | awk '/^Swap:/ {print $2}')
+if [ "$SWAP_TOTAL" -lt 512 ]; then
+    print_info "Creating swap space for build..."
+    if [ ! -f /swapfile ]; then
+        fallocate -l 1G /swapfile 2>/dev/null || dd if=/dev/zero of=/swapfile bs=1M count=1024 status=none
+        chmod 600 /swapfile
+        mkswap /swapfile >/dev/null
+    fi
+    swapon /swapfile 2>/dev/null || true
+fi
+
+# Build frontend on host (avoids Docker memory overhead on low-RAM VPS)
+print_info "Building frontend..."
+cd "$INSTALL_DIR/frontend"
+npm ci --prefer-offline 2>&1 | tail -1
+NODE_OPTIONS="--max-old-space-size=1024" npm run build
+print_success "Frontend built"
+
+# Package frontend into nginx container
 print_info "Building frontend container..."
 cd "$INSTALL_DIR"
 docker compose build
