@@ -31,6 +31,52 @@ const Dashboard = () => {
         return saved ? parseInt(saved, 10) : 10; // Default 10 seconds
     });
     const [lastUpdate, setLastUpdate] = useState(Date.now());
+    const [localUptime, setLocalUptime] = useState(null);
+    const [localTime, setLocalTime] = useState(null);
+    const lastServerUptime = React.useRef(null);
+    const lastServerTime = React.useRef(null);
+    const syncedAt = React.useRef(null);
+
+    // Sync local counters when server data arrives
+    useEffect(() => {
+        const serverUptime = metrics?.system?.uptime_seconds;
+        const serverTimeStr = metrics?.time?.current_time_formatted;
+        const serverTzId = metrics?.time?.timezone_id;
+
+        if (serverUptime && serverUptime !== lastServerUptime.current) {
+            lastServerUptime.current = serverUptime;
+            setLocalUptime(serverUptime);
+            syncedAt.current = Date.now();
+        }
+
+        if (serverTimeStr && serverTimeStr !== lastServerTime.current) {
+            lastServerTime.current = serverTimeStr;
+            // Parse server time into a Date object
+            try {
+                const parsed = new Date(serverTimeStr);
+                if (!isNaN(parsed)) {
+                    setLocalTime(parsed);
+                    syncedAt.current = Date.now();
+                }
+            } catch {
+                // If parsing fails, try extracting just the time portion
+            }
+        }
+    }, [metrics?.system?.uptime_seconds, metrics?.time?.current_time_formatted]);
+
+    // Tick every second - increment uptime and time locally
+    useEffect(() => {
+        const tick = setInterval(() => {
+            if (localUptime !== null) {
+                setLocalUptime(prev => prev + 1);
+            }
+            if (localTime !== null) {
+                setLocalTime(prev => new Date(prev.getTime() + 1000));
+            }
+        }, 1000);
+
+        return () => clearInterval(tick);
+    }, [localUptime !== null, localTime !== null]);
 
     // Load initial data
     useEffect(() => {
@@ -109,13 +155,18 @@ const Dashboard = () => {
         }
     }
 
-    // Get uptime from metrics.system (updated via WebSocket/polling)
-    const uptimeFormatted = formatUptime(metrics?.system?.uptime_seconds);
+    // Get uptime from local ticking counter (synced with server)
+    const uptimeFormatted = formatUptime(localUptime ?? metrics?.system?.uptime_seconds);
     // Fallback to systemInfo for static data, prefer metrics.system for live data
     const hostname = metrics?.system?.hostname || systemInfo?.hostname || 'server';
     const kernelVersion = metrics?.system?.kernel || systemInfo?.kernel || '-';
     const ipAddress = metrics?.system?.ip_address || systemInfo?.ip_address || '-';
     const serverTime = metrics?.time;
+
+    // Format the local ticking clock
+    const displayTime = localTime
+        ? localTime.toLocaleTimeString('en-US', { hour12: false })
+        : serverTime?.current_time_formatted?.split(' ')[1] || '--:--:--';
 
     if (loading && metricsLoading) {
         return <div className="loading">Loading dashboard...</div>;
@@ -132,39 +183,36 @@ const Dashboard = () => {
                     </h1>
                     <div className="server-details">
                         <span>IP: {ipAddress}</span>
+                        <span className="detail-separator">|</span>
                         <span>KERNEL: {kernelVersion}</span>
+                        <span className="detail-separator">|</span>
                         <span>UPTIME: {uptimeFormatted.days}d {String(uptimeFormatted.hours).padStart(2, '0')}h {String(uptimeFormatted.minutes).padStart(2, '0')}m</span>
                     </div>
                 </div>
-                <div className="clock-widget">
-                    <div className="clock-time">
-                        {serverTime?.current_time_formatted?.split(' ')[1] || '--:--:--'}
+                <div className="top-bar-right">
+                    <div className="clock-widget">
+                        <span className="clock-time">{displayTime}</span>
+                        <span className="clock-zone">{serverTime?.timezone_id || 'UTC'}</span>
                     </div>
-                    <div className="clock-zone">
-                        ZONE: {serverTime?.timezone_id || 'UTC'}
+                    <div className="refresh-control">
+                        <button
+                            className="btn-refresh"
+                            onClick={() => { refreshMetrics(); loadData(); }}
+                            title="Refresh now"
+                        >
+                            <RefreshCw size={14} />
+                        </button>
+                        <select
+                            value={refreshInterval}
+                            onChange={(e) => handleRefreshIntervalChange(parseInt(e.target.value, 10))}
+                            className="refresh-select"
+                            title="Auto-refresh interval"
+                        >
+                            {REFRESH_OPTIONS.map(opt => (
+                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                        </select>
                     </div>
-                </div>
-                <div className="refresh-control">
-                    <span className={`connection-status ${connected ? 'live' : 'polling'}`}>
-                        {connected ? '● LIVE' : '○ POLL'}
-                    </span>
-                    <select
-                        value={refreshInterval}
-                        onChange={(e) => handleRefreshIntervalChange(parseInt(e.target.value, 10))}
-                        className="refresh-select"
-                        title="Auto-refresh interval"
-                    >
-                        {REFRESH_OPTIONS.map(opt => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                        ))}
-                    </select>
-                    <button
-                        className="btn-refresh"
-                        onClick={() => { refreshMetrics(); loadData(); }}
-                        title="Refresh now"
-                    >
-                        <RefreshCw size={14} />
-                    </button>
                 </div>
             </div>
 
@@ -173,7 +221,7 @@ const Dashboard = () => {
                 {/* Metric Tiles */}
                 <div className="metric-tile">
                     <div className="tile-head">
-                        <span className="tile-title">Processor Load</span>
+                        <span className="tile-title">CPU</span>
                         <Zap size={16} className="tile-icon cpu" />
                     </div>
                     <div className="tile-val">{(metrics?.cpu?.percent || 0).toFixed(1)}%</div>
@@ -187,7 +235,7 @@ const Dashboard = () => {
 
                 <div className="metric-tile">
                     <div className="tile-head">
-                        <span className="tile-title">Memory Allocation</span>
+                        <span className="tile-title">RAM</span>
                         <Database size={16} className="tile-icon memory" />
                     </div>
                     <div className="tile-val">{metrics?.memory?.ram?.used_human || '0 GB'}</div>
@@ -199,7 +247,7 @@ const Dashboard = () => {
 
                 <div className="metric-tile">
                     <div className="tile-head">
-                        <span className="tile-title">Network I/O</span>
+                        <span className="tile-title">Network</span>
                         <Activity size={16} className="tile-icon network" />
                     </div>
                     <div className="tile-val">
@@ -214,7 +262,7 @@ const Dashboard = () => {
 
                 <div className="metric-tile">
                     <div className="tile-head">
-                        <span className="tile-title">Disk Operations</span>
+                        <span className="tile-title">Disk</span>
                         <HardDrive size={16} className="tile-icon disk" />
                     </div>
                     <div className="tile-val">
@@ -229,7 +277,7 @@ const Dashboard = () => {
 
                 {/* Chart Panel */}
                 <div className="chart-panel">
-                    <MetricsGraph />
+                    <MetricsGraph timezone={serverTime?.timezone_id} />
                 </div>
 
                 {/* Spec Panel */}

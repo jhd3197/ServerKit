@@ -1,0 +1,1372 @@
+// ============================================
+// WORDPRESS PAGE STYLES
+// ============================================
+
+// WordPress Standalone Page (Docker-based, mirrors Git page layout)
+.wordpress-standalone-page {
+    // Inherits .git-page styles for layout, status cards, overview tab, etc.
+
+    .empty-state-large {
+        .empty-icon svg {
+            stroke: #21759b;
+        }
+    }
+
+    .status-card.success {
+        border-left-color: @color-success;
+
+        .status-icon {
+            color: @color-success;
+        }
+    }
+
+    .status-card.danger {
+        border-left-color: @color-danger;
+
+        .status-icon {
+            color: @color-danger;
+        }
+    }
+}
+
+// WordPress Page Layout (extends Docker page styles)
+.wordpress-page {
+    .docker-empty {
+        .wp-empty-icon {
+            color: @text-tertiary;
+            margin-bottom: @space-4;
+
+            svg {
+                stroke: currentColor;
+            }
+        }
+    }
+}
+
+// Sites Grid
+.wp-sites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: @space-4;
+    padding: @space-4;
+}
+
+// Site Card
+.wp-site-card {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+        border-color: @border-hover;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+}
+
+.wp-site-card-header {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    padding: @space-4;
+    border-bottom: 1px solid @border-subtle;
+}
+
+.wp-site-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #21759b 0%, #1a5f7f 100%);
+    border-radius: @radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.wp-site-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.wp-site-name {
+    font-size: @font-size-base;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wp-site-url {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+    font-family: @font-family-mono;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.wp-site-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: @font-size-xs;
+    padding: 4px 10px;
+    border-radius: @radius-full;
+    font-weight: @font-weight-medium;
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
+
+    &.running {
+        background: fade(@color-success, 12%);
+        color: @color-success;
+
+        .status-dot {
+            background: @color-success;
+        }
+    }
+
+    &.stopped {
+        background: fade(@text-tertiary-raw, 12%);
+        color: @text-tertiary;
+
+        .status-dot {
+            background: @text-tertiary;
+        }
+    }
+}
+
+.wp-site-card-body {
+    padding: @space-4;
+}
+
+.wp-site-meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: @space-3;
+}
+
+.wp-site-meta-item {
+    .meta-label {
+        display: block;
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        margin-bottom: 2px;
+    }
+
+    .meta-value {
+        font-size: @font-size-sm;
+        color: @text-primary;
+        font-weight: @font-weight-medium;
+
+        &.git-connected {
+            color: @color-success;
+        }
+    }
+}
+
+.wp-site-badge {
+    display: inline-block;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+    padding: 2px 8px;
+    border-radius: @radius-sm;
+    margin-top: @space-3;
+
+    &.production {
+        background: fade(@color-danger, 12%);
+        color: @color-danger;
+    }
+
+    &.development {
+        background: fade(@color-info, 12%);
+        color: @color-info;
+    }
+}
+
+.wp-site-card-footer {
+    display: flex;
+    gap: @space-2;
+    padding: @space-3 @space-4;
+    border-top: 1px solid @border-subtle;
+    background: @bg-tertiary;
+    border-radius: 0 0 @radius-lg @radius-lg;
+
+    .btn {
+        flex: 1;
+        justify-content: center;
+
+        &.btn-danger {
+            flex: 0;
+            color: @color-danger;
+
+            &:hover {
+                background: fade(@color-danger, 10%);
+            }
+        }
+    }
+}
+
+// WordPress Detail Page
+.wp-detail-page {
+    .wp-icon {
+        background: linear-gradient(135deg, #21759b 0%, #1a5f7f 100%) !important;
+    }
+}
+
+// Environment Cards
+.environments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: @space-4;
+    margin-top: @space-4;
+}
+
+.wp-env-card {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+
+    &.production {
+        border-color: fade(@color-danger, 30%);
+        border-left: 3px solid @color-danger;
+    }
+
+    &.stale {
+        border-color: fade(@color-warning, 40%);
+        background: fade(@color-warning, 3%);
+    }
+}
+
+.wp-env-status-group {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+}
+
+.wp-env-stale-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+    padding: 2px 8px;
+    border-radius: @radius-sm;
+    background: fade(@color-warning, 15%);
+    color: @color-warning;
+
+    svg {
+        flex-shrink: 0;
+    }
+}
+
+.text-warning {
+    color: @color-warning !important;
+}
+
+.wp-env-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: @space-4;
+    border-bottom: 1px solid @border-subtle;
+}
+
+.wp-env-info {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+}
+
+.wp-env-badge {
+    font-size: @font-size-xs;
+    font-weight: @font-weight-bold;
+    padding: 2px 8px;
+    border-radius: @radius-sm;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &.env-production {
+        background: fade(@color-danger, 12%);
+        color: @color-danger;
+    }
+
+    &.env-staging {
+        background: fade(@color-warning, 12%);
+        color: @color-warning;
+    }
+
+    &.env-development {
+        background: fade(@color-info, 12%);
+        color: @color-info;
+    }
+}
+
+.wp-env-name {
+    font-size: @font-size-base;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+    margin: 0;
+}
+
+.wp-env-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
+
+    &.running {
+        color: @color-success;
+
+        .status-dot {
+            background: @color-success;
+        }
+    }
+
+    &.stopped {
+        color: @text-tertiary;
+
+        .status-dot {
+            background: @text-tertiary;
+        }
+    }
+}
+
+.wp-env-body {
+    padding: @space-4;
+}
+
+.wp-env-url {
+    margin-bottom: @space-3;
+
+    a {
+        font-size: @font-size-sm;
+        color: @color-primary;
+        font-family: @font-family-mono;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.wp-env-meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: @space-2;
+}
+
+.wp-env-meta-item {
+    .meta-label {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        margin-bottom: 2px;
+    }
+
+    .meta-value {
+        font-size: @font-size-sm;
+        color: @text-primary;
+
+        &.mono {
+            font-family: @font-family-mono;
+        }
+    }
+}
+
+.wp-env-footer {
+    display: flex;
+    gap: @space-2;
+    padding: @space-3 @space-4;
+    border-top: 1px solid @border-subtle;
+    background: @bg-tertiary;
+    border-radius: 0 0 @radius-lg @radius-lg;
+}
+
+// Snapshot Table
+.wp-snapshot-table {
+    .snapshot-name-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .snapshot-name {
+        font-weight: @font-weight-medium;
+        color: @text-primary;
+    }
+
+    .snapshot-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: @font-size-xs;
+        color: @color-info;
+        background: fade(@color-info, 10%);
+        padding: 2px 6px;
+        border-radius: @radius-sm;
+        width: fit-content;
+    }
+
+    .snapshot-desc {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+    }
+
+    .compressed-badge {
+        display: inline-block;
+        font-size: 10px;
+        background: fade(@color-success, 10%);
+        color: @color-success;
+        padding: 1px 4px;
+        border-radius: 3px;
+        margin-left: @space-2;
+    }
+
+    .git-context {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: @text-secondary;
+
+        svg {
+            color: @text-tertiary;
+        }
+
+        .commit-msg {
+            font-size: @font-size-xs;
+            color: @text-tertiary;
+            margin-left: @space-2;
+        }
+    }
+}
+
+// Git Connect Form
+.git-connect-form {
+    max-width: 600px;
+
+    h4 {
+        margin: 0 0 @space-2;
+    }
+
+    .hint {
+        color: @text-tertiary;
+        margin-bottom: @space-4;
+    }
+}
+
+.git-connected-card {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    padding: @space-5;
+    max-width: 600px;
+}
+
+.git-connected-header {
+    display: flex;
+    align-items: flex-start;
+    gap: @space-4;
+    margin-bottom: @space-4;
+
+    > svg {
+        color: @color-success;
+        flex-shrink: 0;
+    }
+
+    h4 {
+        margin: 0 0 @space-1;
+        font-size: @font-size-base;
+    }
+}
+
+.git-repo-url {
+    font-size: @font-size-sm;
+    font-family: @font-family-mono;
+    color: @text-secondary;
+
+    &:hover {
+        color: @color-primary;
+    }
+}
+
+.git-connected-meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: @space-3;
+    padding: @space-4;
+    background: @bg-tertiary;
+    border-radius: @radius-md;
+    margin-bottom: @space-4;
+}
+
+.git-meta-item {
+    .meta-label {
+        display: block;
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        margin-bottom: 2px;
+    }
+
+    .meta-value {
+        font-size: @font-size-sm;
+        color: @text-primary;
+
+        &.mono {
+            font-family: @font-family-mono;
+        }
+    }
+}
+
+.git-connected-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+// Commit List
+.commit-list {
+    display: flex;
+    flex-direction: column;
+    gap: @space-1;
+    max-width: 800px;
+}
+
+.commit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: @space-3;
+    padding: @space-3 @space-4;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    transition: all 0.15s ease;
+
+    &:hover {
+        border-color: @border-hover;
+    }
+
+    &.current {
+        border-color: fade(@color-success, 40%);
+        background: fade(@color-success, 4%);
+    }
+}
+
+.commit-icon {
+    color: @text-tertiary;
+    margin-top: 2px;
+
+    .current-icon {
+        color: @color-success;
+    }
+}
+
+.commit-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.commit-header {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    margin-bottom: @space-1;
+}
+
+.commit-sha {
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    color: @text-secondary;
+}
+
+.current-badge {
+    font-size: @font-size-xs;
+    background: @color-success;
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: @radius-sm;
+}
+
+.commit-date {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+    margin-left: auto;
+}
+
+.commit-message {
+    font-size: @font-size-sm;
+    color: @text-primary;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.commit-author {
+    font-size: @font-size-xs;
+    color: @text-tertiary;
+}
+
+.commit-actions {
+    display: flex;
+    gap: @space-2;
+    flex-shrink: 0;
+}
+
+.commit-message-preview {
+    font-style: italic;
+    color: @text-secondary;
+    padding: @space-3;
+    background: @bg-tertiary;
+    border-radius: @radius-md;
+    margin: @space-3 0;
+}
+
+// Git Commits Section
+.git-commits-section {
+    margin-top: @space-6;
+    padding-top: @space-6;
+    border-top: 1px solid @border-subtle;
+}
+
+// Quick Actions
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: @space-2;
+}
+
+.quick-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-2;
+    padding: @space-3;
+    background: @bg-tertiary;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    color: @text-secondary;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+    text-decoration: none;
+    transition: all 0.15s ease;
+
+    &:hover {
+        background: @bg-hover;
+        border-color: @border-hover;
+        color: @text-primary;
+    }
+}
+
+// Hint Box
+.hint-box {
+    padding: @space-4;
+    background: @bg-tertiary;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    margin-top: @space-4;
+
+    p {
+        margin: 0;
+        color: @text-secondary;
+        font-size: @font-size-sm;
+
+        &:not(:last-child) {
+            margin-bottom: @space-2;
+        }
+    }
+}
+
+// Empty State Small
+.empty-state-small {
+    padding: @space-6;
+    text-align: center;
+    color: @text-tertiary;
+
+    p {
+        margin: 0;
+
+        &:not(:last-child) {
+            margin-bottom: @space-2;
+        }
+    }
+
+    .hint {
+        font-size: @font-size-sm;
+    }
+}
+
+// Spinning animation for sync button
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinning {
+    animation: spin 1s linear infinite;
+}
+
+// ============================================
+// SKELETON LOADING STATES
+// ============================================
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        @bg-tertiary 25%,
+        fade(@border-subtle-raw, 50%) 50%,
+        @bg-tertiary 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: @radius-md;
+}
+
+// Skeleton Site Card
+.wp-site-card-skeleton {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+}
+
+.wp-site-card-skeleton-header {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    padding: @space-4;
+    border-bottom: 1px solid @border-subtle;
+}
+
+.wp-site-card-skeleton-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: @radius-md;
+    .skeleton();
+}
+
+.wp-site-card-skeleton-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: @space-2;
+}
+
+.wp-site-card-skeleton-name {
+    width: 60%;
+    height: 16px;
+    .skeleton();
+}
+
+.wp-site-card-skeleton-url {
+    width: 80%;
+    height: 12px;
+    .skeleton();
+}
+
+.wp-site-card-skeleton-status {
+    width: 64px;
+    height: 24px;
+    border-radius: @radius-full;
+    .skeleton();
+}
+
+.wp-site-card-skeleton-body {
+    padding: @space-4;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: @space-3;
+}
+
+.wp-site-card-skeleton-meta {
+    display: flex;
+    flex-direction: column;
+    gap: @space-1;
+}
+
+.wp-site-card-skeleton-label {
+    width: 50%;
+    height: 10px;
+    .skeleton();
+}
+
+.wp-site-card-skeleton-value {
+    width: 70%;
+    height: 14px;
+    .skeleton();
+}
+
+.wp-site-card-skeleton-footer {
+    display: flex;
+    gap: @space-2;
+    padding: @space-3 @space-4;
+    border-top: 1px solid @border-subtle;
+    background: @bg-tertiary;
+    border-radius: 0 0 @radius-lg @radius-lg;
+}
+
+.wp-site-card-skeleton-btn {
+    flex: 1;
+    height: 32px;
+    .skeleton();
+}
+
+// Skeleton Environment Card
+.wp-env-card-skeleton {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+}
+
+.wp-env-card-skeleton-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: @space-4;
+    border-bottom: 1px solid @border-subtle;
+}
+
+.wp-env-card-skeleton-badge {
+    width: 60px;
+    height: 20px;
+    border-radius: @radius-sm;
+    .skeleton();
+}
+
+.wp-env-card-skeleton-status {
+    width: 64px;
+    height: 20px;
+    border-radius: @radius-sm;
+    .skeleton();
+}
+
+.wp-env-card-skeleton-body {
+    padding: @space-4;
+}
+
+.wp-env-card-skeleton-url {
+    width: 70%;
+    height: 14px;
+    margin-bottom: @space-3;
+    .skeleton();
+}
+
+.wp-env-card-skeleton-meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: @space-2;
+}
+
+.wp-env-card-skeleton-meta-item {
+    .skeleton-label {
+        width: 40%;
+        height: 10px;
+        margin-bottom: 4px;
+        .skeleton();
+    }
+
+    .skeleton-value {
+        width: 60%;
+        height: 14px;
+        .skeleton();
+    }
+}
+
+.wp-env-card-skeleton-footer {
+    display: flex;
+    gap: @space-2;
+    padding: @space-3 @space-4;
+    border-top: 1px solid @border-subtle;
+    background: @bg-tertiary;
+    border-radius: 0 0 @radius-lg @radius-lg;
+}
+
+// Skeleton Stat Card
+.docker-stat-card-skeleton {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    padding: @space-4;
+    display: flex;
+    flex-direction: column;
+    gap: @space-2;
+}
+
+.docker-stat-card-skeleton-label {
+    width: 60%;
+    height: 12px;
+    .skeleton();
+}
+
+.docker-stat-card-skeleton-value {
+    width: 40%;
+    height: 28px;
+    .skeleton();
+}
+
+.docker-stat-card-skeleton-meta {
+    width: 80%;
+    height: 12px;
+    .skeleton();
+}
+
+// Skeleton Table Row
+.skeleton-table-row {
+    display: flex;
+    align-items: center;
+    gap: @space-3;
+    padding: @space-3 @space-4;
+    border-bottom: 1px solid @border-subtle;
+
+    .skeleton-cell {
+        height: 16px;
+        .skeleton();
+
+        &.cell-name { width: 25%; }
+        &.cell-tag { width: 15%; }
+        &.cell-size { width: 10%; }
+        &.cell-date { width: 15%; }
+        &.cell-actions { width: 20%; margin-left: auto; }
+    }
+}
+
+// Tab Content Loading
+.tab-loading {
+    display: flex;
+    flex-direction: column;
+    gap: @space-4;
+    padding: @space-4;
+}
+
+.tab-loading-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: @space-2;
+}
+
+.tab-loading-title {
+    width: 120px;
+    height: 24px;
+    .skeleton();
+}
+
+.tab-loading-btn {
+    width: 140px;
+    height: 36px;
+    border-radius: @radius-md;
+    .skeleton();
+}
+
+// ============================================
+// ERROR STATES
+// ============================================
+
+.error-boundary,
+.error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: @space-8;
+    text-align: center;
+    min-height: 200px;
+}
+
+.error-boundary-icon,
+.error-state-icon {
+    color: @color-danger;
+    margin-bottom: @space-4;
+    padding: @space-3;
+    background: fade(@color-danger, 10%);
+    border-radius: 50%;
+}
+
+.error-boundary h3,
+.error-state-title {
+    font-size: @font-size-lg;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+    margin: 0 0 @space-2;
+}
+
+.error-boundary-message,
+.error-state-message {
+    font-size: @font-size-sm;
+    color: @text-secondary;
+    margin: 0 0 @space-4;
+    max-width: 400px;
+}
+
+.error-state-compact {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-3 @space-4;
+    background: fade(@color-danger, 8%);
+    border: 1px solid fade(@color-danger, 20%);
+    border-radius: @radius-md;
+    color: @color-danger;
+    font-size: @font-size-sm;
+
+    svg {
+        flex-shrink: 0;
+    }
+
+    span {
+        flex: 1;
+    }
+
+    .btn {
+        flex-shrink: 0;
+    }
+}
+
+// ============================================
+// CONFIRM DIALOG ENHANCEMENTS
+// ============================================
+
+.confirm-dialog-details {
+    margin-top: @space-3;
+    padding: @space-3;
+    background: @bg-tertiary;
+    border-radius: @radius-md;
+    font-size: @font-size-sm;
+    color: @text-secondary;
+    text-align: left;
+
+    ul {
+        margin: 0;
+        padding-left: @space-4;
+
+        li {
+            margin-bottom: @space-1;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    strong {
+        color: @text-primary;
+    }
+
+    code {
+        background: @bg-code;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: @font-family-mono;
+        font-size: 0.9em;
+    }
+}
+
+// Environment Preview URL in Create Modal
+.env-preview-url {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-3;
+    background: fade(@color-success, 8%);
+    border: 1px solid fade(@color-success, 20%);
+    border-radius: @radius-md;
+    margin-bottom: @space-4;
+
+    .preview-label {
+        font-size: @font-size-xs;
+        color: @text-secondary;
+    }
+
+    .preview-url {
+        font-family: @font-family-mono;
+        font-size: @font-size-sm;
+        color: @color-success;
+        font-weight: @font-weight-medium;
+    }
+}
+
+.form-hint-domain {
+    code {
+        background: @bg-code;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: @font-family-mono;
+        font-size: 0.9em;
+    }
+}
+
+.confirm-dialog-input {
+    margin-top: @space-4;
+    text-align: left;
+
+    label {
+        display: block;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        margin-bottom: @space-2;
+
+        strong {
+            color: @text-primary;
+            font-family: @font-family-mono;
+        }
+    }
+
+    input {
+        width: 100%;
+        padding: @space-3;
+        border: 1px solid @border-subtle;
+        border-radius: @radius-md;
+        font-size: @font-size-base;
+        background: @bg-input;
+        color: @text-primary;
+
+        &:focus {
+            outline: none;
+            border-color: @color-primary;
+            box-shadow: 0 0 0 3px fade(@color-primary, 15%);
+        }
+
+        &::placeholder {
+            color: @text-tertiary;
+        }
+    }
+}
+
+// ============================================
+// RESOURCE GATE - BLOCKED STATE UI
+// ============================================
+
+.resource-gate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: @space-6;
+}
+
+.resource-gate-container {
+    max-width: 700px;
+    text-align: center;
+}
+
+.resource-gate-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background: fade(@color-warning, 12%);
+    border-radius: 50%;
+    color: @color-warning;
+    margin-bottom: @space-5;
+}
+
+.resource-gate-title {
+    font-size: @font-size-xl;
+    font-weight: @font-weight-bold;
+    color: @text-primary;
+    margin: 0 0 @space-3;
+}
+
+.resource-gate-description {
+    font-size: @font-size-base;
+    color: @text-secondary;
+    margin: 0 0 @space-6;
+    line-height: 1.6;
+
+    strong {
+        color: @color-warning;
+        font-weight: @font-weight-semibold;
+    }
+}
+
+.resource-gate-specs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-4;
+    margin-bottom: @space-6;
+
+    @media (max-width: 600px) {
+        flex-direction: column;
+        gap: @space-3;
+    }
+}
+
+.resource-gate-spec-arrow {
+    color: @text-tertiary;
+
+    @media (max-width: 600px) {
+        transform: rotate(90deg);
+    }
+}
+
+.resource-gate-spec-card {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    padding: @space-4;
+    min-width: 200px;
+
+    &.current {
+        border-color: fade(@color-danger, 40%);
+        background: fade(@color-danger, 4%);
+    }
+
+    &.required {
+        border-color: fade(@color-success, 40%);
+        background: fade(@color-success, 4%);
+    }
+}
+
+.resource-gate-spec-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-2;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+    margin-bottom: @space-3;
+    padding-bottom: @space-2;
+    border-bottom: 1px solid @border-subtle;
+}
+
+.resource-gate-spec-items {
+    display: flex;
+    flex-direction: column;
+    gap: @space-2;
+}
+
+.resource-gate-spec-item {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    font-size: @font-size-sm;
+
+    svg {
+        color: @text-tertiary;
+        flex-shrink: 0;
+    }
+
+    .spec-label {
+        color: @text-secondary;
+        flex: 1;
+    }
+
+    .spec-value {
+        font-weight: @font-weight-semibold;
+        color: @color-success;
+        font-family: @font-family-mono;
+
+        &.insufficient {
+            color: @color-danger;
+        }
+    }
+}
+
+.resource-gate-recommendation {
+    background: @bg-tertiary;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    padding: @space-4;
+    margin-bottom: @space-6;
+    text-align: left;
+
+    h4 {
+        font-size: @font-size-sm;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+        margin: 0 0 @space-2;
+    }
+
+    p {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        margin: 0;
+        line-height: 1.5;
+
+        strong {
+            color: @text-primary;
+        }
+    }
+}
+
+.resource-gate-tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: @space-3;
+
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.resource-gate-tier {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    padding: @space-3;
+    text-align: center;
+
+    &.current {
+        border-color: @color-warning;
+        background: fade(@color-warning, 6%);
+    }
+
+    .tier-name {
+        font-size: @font-size-sm;
+        font-weight: @font-weight-bold;
+        color: @text-primary;
+        margin-bottom: @space-1;
+    }
+
+    .tier-specs {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        margin-bottom: @space-2;
+    }
+
+    .tier-wp {
+        font-size: @font-size-xs;
+        font-weight: @font-weight-medium;
+        color: @color-danger;
+        padding: 2px 8px;
+        background: fade(@color-danger, 10%);
+        border-radius: @radius-sm;
+        display: inline-block;
+
+        &.allowed {
+            color: @color-success;
+            background: fade(@color-success, 10%);
+        }
+    }
+}

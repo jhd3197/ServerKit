@@ -99,13 +99,16 @@ def login():
     if not data:
         return jsonify({'error': 'No data provided'}), 400
 
-    email = data.get('email')
+    login_id = data.get('email')  # Can be email or username
     password = data.get('password')
 
-    if not all([email, password]):
-        return jsonify({'error': 'Missing email or password'}), 400
+    if not all([login_id, password]):
+        return jsonify({'error': 'Missing email/username or password'}), 400
 
-    user = User.query.filter_by(email=email).first()
+    # Try to find user by email or username
+    user = User.query.filter(
+        (User.email == login_id) | (User.username == login_id)
+    ).first()
 
     # Check if account is locked
     if user and user.is_locked:
@@ -120,7 +123,7 @@ def login():
             user.record_failed_login()
             AuditService.log_login(user.id, success=False, details={'reason': 'invalid_password'})
             db.session.commit()
-        return jsonify({'error': 'Invalid email or password'}), 401
+        return jsonify({'error': 'Invalid username/email or password'}), 401
 
     if not user.is_active:
         AuditService.log_login(user.id, success=False, details={'reason': 'account_deactivated'})

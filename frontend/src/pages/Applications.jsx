@@ -29,7 +29,8 @@ const Applications = () => {
         setLoading(true);
         try {
             const data = await api.getApps();
-            const appList = data.apps || [];
+            // Filter out WordPress apps - they have their own dedicated page at /wordpress
+            const appList = (data.apps || []).filter(a => a.app_type !== 'wordpress');
             setApps(appList);
 
             // Calculate stats
@@ -483,7 +484,12 @@ const CreateAppModal = ({ onClose }) => {
 
     function selectTemplate(templateId) {
         onClose();
-        navigate(`/templates?install=${templateId}`);
+        // WordPress has its own dedicated management page
+        if (templateId === 'wordpress') {
+            navigate('/wordpress');
+        } else {
+            navigate(`/templates?install=${templateId}`);
+        }
     }
 
     function goToAllTemplates() {

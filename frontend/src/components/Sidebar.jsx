@@ -1,20 +1,72 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Github, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
+import ServerKitLogo from '../assets/ServerKitLogo.svg';
 
 const Sidebar = () => {
     const { user, logout } = useAuth();
+    const [starAnimating, setStarAnimating] = useState(false);
+
+    useEffect(() => {
+        let playCount = 0;
+        let timeoutId;
+
+        const triggerAnimation = () => {
+            setStarAnimating(true);
+            setTimeout(() => setStarAnimating(false), 1500);
+            playCount++;
+        };
+
+        const scheduleNext = () => {
+            // Each time it plays, the next interval gets longer
+            // 1st: 8-11 min, 2nd: 16-22 min, 3rd: 24-33 min, etc.
+            const multiplier = playCount + 1;
+            const minMinutes = 8 * multiplier;
+            const maxMinutes = 11 * multiplier;
+            const delay = (Math.random() * (maxMinutes - minMinutes) + minMinutes) * 60 * 1000;
+
+            timeoutId = setTimeout(() => {
+                triggerAnimation();
+                scheduleNext();
+            }, delay);
+        };
+
+        // First play after 1 minute
+        const initialDelay = setTimeout(() => {
+            triggerAnimation();
+            scheduleNext();
+        }, 60000);
+
+        return () => {
+            clearTimeout(initialDelay);
+            clearTimeout(timeoutId);
+        };
+    }, []);
 
     return (
         <aside className="sidebar">
             <div className="brand-section">
                 <div className="brand-logo">
-                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" strokeWidth="2.5">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    </svg>
+                    <img src={ServerKitLogo} alt="ServerKit" width="42" height="42" />
                 </div>
                 <span className="brand-text">ServerKit</span>
+                <a
+                    href="https://github.com/jhd3197/ServerKit"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`brand-star ${starAnimating ? 'animating' : ''}`}
+                    title="Star on GitHub"
+                >
+                    <Star size={14} />
+                    <span className="star-particles">
+                        <span></span><span></span><span></span><span></span><span></span><span></span>
+                    </span>
+                    <span className="star-ring"></span>
+                    <span className="star-ring ring-2"></span>
+                    <span className="star-ring ring-3"></span>
+                    <span className="star-tooltip">Star us!</span>
+                </a>
             </div>
 
             <div className="nav-scroll">
@@ -57,6 +109,14 @@ const Sidebar = () => {
                             <line x1="12" y1="22.08" x2="12" y2="12"/>
                         </svg>
                         Applications
+                    </NavLink>
+                    <NavLink to="/wordpress" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                        <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                            <path d="M3.5 9h17M3.5 15h17"/>
+                        </svg>
+                        WordPress
                     </NavLink>
                     <NavLink to="/templates" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                         <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -185,19 +245,6 @@ const Sidebar = () => {
             </div>
 
             <div className="sidebar-footer">
-                <a
-                    href="https://github.com/jhd3197/ServerKit"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="promo-btn"
-                >
-                    <span className="promo-content">
-                        <Github size={14} />
-                        ServerKit
-                    </span>
-                    <span className="promo-tag"><Star size={12} /></span>
-                </a>
-
                 <div className="user-mini" onClick={logout} title="Click to logout">
                     <div className="user-avatar">
                         {user?.username?.charAt(0).toUpperCase() || 'U'}

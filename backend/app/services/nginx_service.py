@@ -165,6 +165,7 @@ class NginxService:
     # Private URL routing templates
     PRIVATE_URL_CONFIG_NAME = 'serverkit-private-urls'
     GITEA_CONFIG_NAME = 'serverkit-gitea'
+    WORDPRESS_CONFIG_NAME = 'serverkit-wordpress'
 
     # Gitea location block for /gitea path
     GITEA_LOCATION_TEMPLATE = '''server {{
@@ -199,6 +200,40 @@ class NginxService:
     # Handle /gitea without trailing slash
     location = /gitea {{
         return 301 /gitea/;
+    }}
+}}
+'''
+
+    # WordPress location block for /wordpress path
+    WORDPRESS_LOCATION_TEMPLATE = '''server {{
+    listen 80;
+    listen [::]:80;
+    server_name _;
+
+    access_log /var/log/nginx/wordpress.access.log;
+    error_log /var/log/nginx/wordpress.error.log;
+
+    # WordPress at /wordpress path
+    location /wordpress/ {{
+        proxy_pass http://127.0.0.1:{port}/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 300;
+        proxy_connect_timeout 60;
+        proxy_send_timeout 60;
+
+        # WordPress file uploads
+        client_max_body_size 256M;
+    }}
+
+    # Handle /wordpress without trailing slash
+    location = /wordpress {{
+        return 301 /wordpress/;
     }}
 }}
 '''
@@ -927,3 +962,87 @@ server {{
             Dict with exists, enabled, content, and path
         """
         return cls.get_site_config(cls.GITEA_CONFIG_NAME)
+
+    # ==================== WORDPRESS CONFIGURATION ====================
+
+    @classmethod
+    def create_wordpress_config(cls, port: int) -> Dict:
+        """Create Nginx configuration for WordPress at /wordpress path.
+
+        Args:
+            port: The internal port WordPress is running on
+
+        Returns:
+            Dict with success status and message
+        """
+        try:
+            config = cls.WORDPRESS_LOCATION_TEMPLATE.format(port=port)
+            config_path = os.path.join(cls.SITES_AVAILABLE, cls.WORDPRESS_CONFIG_NAME)
+
+            # Write config file
+            process = subprocess.run(
+                ['sudo', 'tee', config_path],
+                input=config,
+                capture_output=True,
+                text=True
+            )
+            if process.returncode != 0:
+                return {'success': False, 'error': f'Failed to write config: {process.stderr}'}
+
+            # Enable the site
+            enabled_path = os.path.join(cls.SITES_ENABLED, cls.WORDPRESS_CONFIG_NAME)
+            result = subprocess.run(
+                ['sudo', 'ln', '-sf', config_path, enabled_path],
+                capture_output=True,
+                text=True
+            )
+            if result.returncode != 0:
+                return {'success': False, 'error': f'Failed to enable config: {result.stderr}'}
+
+            # Reload Nginx
+            reload_result = cls.reload()
+            if not reload_result['success']:
+                return reload_result
+
+            return {
+                'success': True,
+                'message': 'WordPress nginx config created',
+                'config_path': config_path,
+                'url_path': '/wordpress'
+            }
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def remove_wordpress_config(cls) -> Dict:
+        """Remove Nginx configuration for WordPress.
+
+        Returns:
+            Dict with success status and message
+        """
+        try:
+            # Remove symlink
+            enabled_path = os.path.join(cls.SITES_ENABLED, cls.WORDPRESS_CONFIG_NAME)
+            subprocess.run(['sudo', 'rm', '-f', enabled_path], capture_output=True, text=True)
+
+            # Remove config file
+            config_path = os.path.join(cls.SITES_AVAILABLE, cls.WORDPRESS_CONFIG_NAME)
+            subprocess.run(['sudo', 'rm', '-f', config_path], capture_output=True, text=True)
+
+            # Reload Nginx
+            cls.reload()
+
+            return {'success': True, 'message': 'WordPress nginx config removed'}
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def get_wordpress_config(cls) -> Dict:
+        """Get the current WordPress nginx configuration.
+
+        Returns:
+            Dict with exists, enabled, content, and path
+        """
+        return cls.get_site_config(cls.WORDPRESS_CONFIG_NAME)

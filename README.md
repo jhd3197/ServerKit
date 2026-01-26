@@ -174,7 +174,7 @@ ServerKit is a lightweight, modern server control panel for managing web applica
 ### Option 1: One-Line Install (Recommended)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
+curl -fsSL https://serverkit.ai/install.sh | bash
 ```
 
 > Works on Ubuntu 22.04+ and Debian 12+. Sets up everything automatically.

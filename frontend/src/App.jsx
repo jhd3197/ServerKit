@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { ResourceTierProvider } from './contexts/ResourceTierContext';
 import { ToastContainer } from './components/Toast';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
@@ -29,6 +30,9 @@ import WorkflowBuilder from './pages/WorkflowBuilder';
 import Servers from './pages/Servers';
 import ServerDetail from './pages/ServerDetail';
 import Downloads from './pages/Downloads';
+import WordPress from './pages/WordPress';
+import WordPressDetail from './pages/WordPressDetail';
+import SSLCertificates from './pages/SSLCertificates';
 
 // Page title mapping
 const PAGE_TITLES = {
@@ -37,6 +41,7 @@ const PAGE_TITLES = {
     '/register': 'Register',
     '/setup': 'Setup',
     '/apps': 'Applications',
+    '/wordpress': 'WordPress Sites',
     '/templates': 'Templates',
     '/workflow': 'Workflow Builder',
     '/domains': 'Domains',
@@ -67,6 +72,7 @@ function PageTitleUpdater() {
         if (!title) {
             if (path.startsWith('/apps/')) title = 'Application Details';
             else if (path.startsWith('/servers/')) title = 'Server Details';
+            else if (path.startsWith('/wordpress/')) title = 'WordPress Site';
             else title = 'ServerKit';
         }
 
@@ -151,11 +157,13 @@ function AppRoutes() {
                 <Route index element={<Dashboard />} />
                 <Route path="apps" element={<Applications />} />
                 <Route path="apps/:id" element={<ApplicationDetail />} />
+                <Route path="wordpress" element={<WordPress />} />
+                <Route path="wordpress/:id" element={<WordPressDetail />} />
                 <Route path="templates" element={<Templates />} />
                 <Route path="workflow" element={<WorkflowBuilder />} />
                 <Route path="domains" element={<Domains />} />
                 <Route path="databases" element={<Databases />} />
-                <Route path="ssl" element={<div className="page">SSL Certificates</div>} />
+                <Route path="ssl" element={<SSLCertificates />} />
                 <Route path="docker" element={<Docker />} />
                 <Route path="servers" element={<Servers />} />
                 <Route path="servers/:id" element={<ServerDetail />} />
@@ -182,10 +190,12 @@ function App() {
             <PageTitleUpdater />
             <ThemeProvider>
                 <AuthProvider>
-                    <ToastProvider>
-                        <AppRoutes />
-                        <ToastContainer />
-                    </ToastProvider>
+                    <ResourceTierProvider>
+                        <ToastProvider>
+                            <AppRoutes />
+                            <ToastContainer />
+                        </ToastProvider>
+                    </ResourceTierProvider>
                 </AuthProvider>
             </ThemeProvider>
         </Router>

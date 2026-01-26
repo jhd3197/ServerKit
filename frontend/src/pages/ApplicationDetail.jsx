@@ -19,6 +19,13 @@ const ApplicationDetail = () => {
         loadApp();
     }, [id]);
 
+    // Redirect WordPress apps to the dedicated WordPress detail page
+    useEffect(() => {
+        if (app && app.app_type === 'wordpress') {
+            navigate(`/wordpress/${id}`, { replace: true });
+        }
+    }, [app, id, navigate]);
+
     async function loadApp() {
         try {
             const data = await api.getApp(id);
@@ -93,7 +100,6 @@ const ApplicationDetail = () => {
     }
 
     const isPythonApp = ['flask', 'django'].includes(app.app_type);
-    const isWordPressApp = app.app_type === 'wordpress';
     const isDockerApp = app.app_type === 'docker';
     const isRunning = app.status === 'running';
 
@@ -216,28 +222,6 @@ const ApplicationDetail = () => {
                         </div>
                     </>
                 )}
-                {isWordPressApp && (
-                    <>
-                        <div
-                            className={`app-detail-tab ${activeTab === 'plugins' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('plugins')}
-                        >
-                            Plugins
-                        </div>
-                        <div
-                            className={`app-detail-tab ${activeTab === 'themes' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('themes')}
-                        >
-                            Themes
-                        </div>
-                        <div
-                            className={`app-detail-tab ${activeTab === 'backups' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('backups')}
-                        >
-                            Backups
-                        </div>
-                    </>
-                )}
                 <div
                     className={`app-detail-tab ${activeTab === 'build' ? 'active' : ''}`}
                     onClick={() => setActiveTab('build')}
@@ -271,9 +255,6 @@ const ApplicationDetail = () => {
                 {activeTab === 'packages' && isPythonApp && <PackagesTab appId={app.id} />}
                 {activeTab === 'gunicorn' && isPythonApp && <GunicornTab appId={app.id} />}
                 {activeTab === 'commands' && isPythonApp && <CommandsTab appId={app.id} appType={app.app_type} />}
-                {activeTab === 'plugins' && isWordPressApp && <PluginsTab appId={app.id} />}
-                {activeTab === 'themes' && isWordPressApp && <ThemesTab appId={app.id} />}
-                {activeTab === 'backups' && isWordPressApp && <BackupsTab appId={app.id} />}
                 {activeTab === 'build' && <BuildTab appId={app.id} appPath={app.path} />}
                 {activeTab === 'deploy' && <DeployTab appId={app.id} appPath={app.path} />}
                 {activeTab === 'logs' && <LogsTab app={app} />}
@@ -855,226 +836,6 @@ const CommandsTab = ({ appId, appType }) => {
                     {!output.stdout && !output.stderr && (
                         <pre>{output.success ? 'Command completed successfully' : 'Command failed'}</pre>
                     )}
-                </div>
-            )}
-        </div>
-    );
-};
-
-const PluginsTab = ({ appId }) => {
-    const [plugins, setPlugins] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        loadPlugins();
-    }, [appId]);
-
-    async function loadPlugins() {
-        try {
-            const data = await api.getWordPressPlugins(appId);
-            setPlugins(data.plugins || []);
-        } catch (err) {
-            console.error('Failed to load plugins:', err);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    async function handleActivate(plugin) {
-        try {
-            await api.activateWordPressPlugin(appId, plugin);
-            loadPlugins();
-        } catch (err) {
-            console.error('Failed to activate plugin:', err);
-        }
-    }
-
-    async function handleDeactivate(plugin) {
-        try {
-            await api.deactivateWordPressPlugin(appId, plugin);
-            loadPlugins();
-        } catch (err) {
-            console.error('Failed to deactivate plugin:', err);
-        }
-    }
-
-    if (loading) {
-        return <div className="loading">Loading plugins...</div>;
-    }
-
-    return (
-        <div>
-            <h3>WordPress Plugins</h3>
-            <div className="plugins-list">
-                {plugins.map(plugin => (
-                    <div key={plugin.name} className="plugin-item">
-                        <div className="plugin-info">
-                            <span className="plugin-name">{plugin.title || plugin.name}</span>
-                            <span className="plugin-version">{plugin.version}</span>
-                        </div>
-                        <div className="plugin-actions">
-                            {plugin.status === 'active' ? (
-                                <button
-                                    className="btn btn-secondary btn-sm"
-                                    onClick={() => handleDeactivate(plugin.name)}
-                                >
-                                    Deactivate
-                                </button>
-                            ) : (
-                                <button
-                                    className="btn btn-primary btn-sm"
-                                    onClick={() => handleActivate(plugin.name)}
-                                >
-                                    Activate
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
-
-const ThemesTab = ({ appId }) => {
-    const [themes, setThemes] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        loadThemes();
-    }, [appId]);
-
-    async function loadThemes() {
-        try {
-            const data = await api.getWordPressThemes(appId);
-            setThemes(data.themes || []);
-        } catch (err) {
-            console.error('Failed to load themes:', err);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    async function handleActivate(theme) {
-        try {
-            await api.activateWordPressTheme(appId, theme);
-            loadThemes();
-        } catch (err) {
-            console.error('Failed to activate theme:', err);
-        }
-    }
-
-    if (loading) {
-        return <div className="loading">Loading themes...</div>;
-    }
-
-    return (
-        <div>
-            <h3>WordPress Themes</h3>
-            <div className="themes-list">
-                {themes.map(theme => (
-                    <div key={theme.name} className={`theme-item ${theme.status === 'active' ? 'active' : ''}`}>
-                        <div className="theme-info">
-                            <span className="theme-name">{theme.title || theme.name}</span>
-                            <span className="theme-version">{theme.version}</span>
-                        </div>
-                        {theme.status !== 'active' && (
-                            <button
-                                className="btn btn-primary btn-sm"
-                                onClick={() => handleActivate(theme.name)}
-                            >
-                                Activate
-                            </button>
-                        )}
-                        {theme.status === 'active' && (
-                            <span className="active-badge">Active</span>
-                        )}
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
-
-const BackupsTab = ({ appId }) => {
-    const toast = useToast();
-    const [backups, setBackups] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [creating, setCreating] = useState(false);
-
-    useEffect(() => {
-        loadBackups();
-    }, [appId]);
-
-    async function loadBackups() {
-        try {
-            const data = await api.getWordPressBackups(appId);
-            setBackups(data.backups || []);
-        } catch (err) {
-            console.error('Failed to load backups:', err);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    async function handleCreate() {
-        setCreating(true);
-        try {
-            await api.createWordPressBackup(appId);
-            loadBackups();
-        } catch (err) {
-            console.error('Failed to create backup:', err);
-        } finally {
-            setCreating(false);
-        }
-    }
-
-    async function handleRestore(backupName) {
-        if (!confirm(`Restore from ${backupName}? This will overwrite current data.`)) return;
-
-        try {
-            await api.restoreWordPressBackup(appId, backupName);
-            toast.success('Backup restored successfully');
-        } catch (err) {
-            toast.error('Failed to restore backup');
-            console.error('Failed to restore backup:', err);
-        }
-    }
-
-    if (loading) {
-        return <div className="loading">Loading backups...</div>;
-    }
-
-    return (
-        <div>
-            <div className="section-header">
-                <h3>Backups</h3>
-                <button className="btn btn-primary" onClick={handleCreate} disabled={creating}>
-                    {creating ? 'Creating...' : 'Create Backup'}
-                </button>
-            </div>
-
-            {backups.length === 0 ? (
-                <p className="hint">No backups yet. Create your first backup.</p>
-            ) : (
-                <div className="backups-list">
-                    {backups.map(backup => (
-                        <div key={backup.name} className="backup-item">
-                            <div className="backup-info">
-                                <span className="backup-name">{backup.name}</span>
-                                <span className="backup-size">{formatBytes(backup.size)}</span>
-                                <span className="backup-date">
-                                    {new Date(backup.created_at).toLocaleString()}
-                                </span>
-                            </div>
-                            <button
-                                className="btn btn-secondary btn-sm"
-                                onClick={() => handleRestore(backup.name)}
-                            >
-                                Restore
-                            </button>
-                        </div>
-                    ))}
                 </div>
             )}
         </div>

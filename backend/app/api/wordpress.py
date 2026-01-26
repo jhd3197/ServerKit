@@ -7,6 +7,89 @@ from app import db
 wordpress_bp = Blueprint('wordpress', __name__)
 
 
+# ==================== STANDALONE WORDPRESS (DOCKER) ENDPOINTS ====================
+
+@wordpress_bp.route('/standalone/status', methods=['GET'])
+@jwt_required()
+def get_standalone_status():
+    """Get WordPress standalone installation status."""
+    result = WordPressService.get_wordpress_standalone_status()
+    return jsonify(result), 200
+
+
+@wordpress_bp.route('/standalone/requirements', methods=['GET'])
+@jwt_required()
+def get_standalone_requirements():
+    """Get resource requirements for WordPress installation."""
+    result = WordPressService.get_wordpress_resource_requirements()
+    return jsonify(result), 200
+
+
+@wordpress_bp.route('/standalone/install', methods=['POST'])
+@jwt_required()
+def install_standalone():
+    """Install WordPress via Docker Compose."""
+    data = request.get_json() or {}
+
+    result = WordPressService.install_wordpress_standalone(
+        admin_email=data.get('adminEmail')
+    )
+
+    if result.get('success'):
+        return jsonify(result), 201
+    return jsonify(result), 400
+
+
+@wordpress_bp.route('/standalone/uninstall', methods=['POST'])
+@jwt_required()
+def uninstall_standalone():
+    """Uninstall standalone WordPress and optionally remove data."""
+    data = request.get_json() or {}
+
+    result = WordPressService.uninstall_wordpress_standalone(
+        remove_data=data.get('removeData', False)
+    )
+
+    if result.get('success'):
+        return jsonify(result), 200
+    return jsonify(result), 400
+
+
+@wordpress_bp.route('/standalone/start', methods=['POST'])
+@jwt_required()
+def start_standalone():
+    """Start WordPress containers."""
+    result = WordPressService.start_wordpress_standalone()
+
+    if result.get('success'):
+        return jsonify(result), 200
+    return jsonify(result), 400
+
+
+@wordpress_bp.route('/standalone/stop', methods=['POST'])
+@jwt_required()
+def stop_standalone():
+    """Stop WordPress containers."""
+    result = WordPressService.stop_wordpress_standalone()
+
+    if result.get('success'):
+        return jsonify(result), 200
+    return jsonify(result), 400
+
+
+@wordpress_bp.route('/standalone/restart', methods=['POST'])
+@jwt_required()
+def restart_standalone():
+    """Restart WordPress containers."""
+    result = WordPressService.restart_wordpress_standalone()
+
+    if result.get('success'):
+        return jsonify(result), 200
+    return jsonify(result), 400
+
+
+# ==================== LEGACY WP-CLI ENDPOINTS ====================
+
 def admin_required(fn):
     """Decorator to require admin role."""
     from functools import wraps

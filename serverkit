@@ -516,7 +516,7 @@ cmd_uninstall() {
         print_success "ServerKit uninstalled"
         echo ""
         echo "To reinstall, run:"
-        echo "  cd ~ && curl -fsSL https://raw.githubusercontent.com/jhd3197/ServerKit/main/install.sh | sudo bash"
+        echo "  cd ~ && curl -fsSL https://serverkit.ai/install.sh | sudo bash"
     fi
 }
 

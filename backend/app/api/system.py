@@ -2,10 +2,11 @@ import os
 import time
 import urllib.request
 import json
-from flask import Blueprint, jsonify, current_app
+from flask import Blueprint, jsonify, request, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import User
 from app.services.system_service import SystemService
+from app.services.resource_tier_service import ResourceTierService
 
 # Cache for update check (to avoid hitting GitHub API too often)
 _update_cache = {
@@ -198,6 +199,27 @@ def health_check():
         'status': 'healthy',
         'service': 'serverkit-api'
     }), 200
+
+
+@system_bp.route('/resource-tier', methods=['GET'])
+@jwt_required()
+def get_resource_tier():
+    """
+    Get server resource tier information.
+
+    Returns tier, specs, and feature permissions based on server resources.
+    Results are cached for 1 hour unless refresh=true is passed.
+    """
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+
+    if user.role != 'admin':
+        return jsonify({'error': 'Admin access required'}), 403
+
+    force_refresh = request.args.get('refresh', 'false').lower() == 'true'
+    tier_info = ResourceTierService.get_tier_info(force_refresh=force_refresh)
+
+    return jsonify(tier_info), 200
 
 
 @system_bp.route('/time', methods=['GET'])

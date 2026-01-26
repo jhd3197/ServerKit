@@ -1,0 +1,15 @@
+node_modules
+src
+public
+.git
+.gitignore
+*.md
+.env*
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+package*.json
+vite.config.js
+eslint.config.js
+index.html

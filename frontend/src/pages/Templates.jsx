@@ -119,6 +119,11 @@ const Templates = () => {
     // Auto-open install modal if template ID is in URL
     useEffect(() => {
         if (installTemplateId && templates.length > 0 && !loading) {
+            // WordPress has its own dedicated page
+            if (installTemplateId === 'wordpress') {
+                navigate('/wordpress', { replace: true });
+                return;
+            }
             const template = templates.find(t => t.id === installTemplateId);
             if (template) {
                 handleViewTemplate(template).then(() => {
@@ -240,6 +245,11 @@ const Templates = () => {
     }
 
     async function handleViewTemplate(template) {
+        // WordPress has its own dedicated page
+        if (template.id === 'wordpress') {
+            navigate('/wordpress');
+            return;
+        }
         try {
             const result = await api.getTemplate(template.id);
             if (result.template) {
