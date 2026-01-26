@@ -1,19 +1,72 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Github, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import ServerKitLogo from '../assets/ServerKitLogo.svg';
 
 const Sidebar = () => {
     const { user, logout } = useAuth();
+    const [starAnimating, setStarAnimating] = useState(false);
+
+    useEffect(() => {
+        let playCount = 0;
+        let timeoutId;
+
+        const triggerAnimation = () => {
+            setStarAnimating(true);
+            setTimeout(() => setStarAnimating(false), 1500);
+            playCount++;
+        };
+
+        const scheduleNext = () => {
+            // Each time it plays, the next interval gets longer
+            // 1st: 8-11 min, 2nd: 16-22 min, 3rd: 24-33 min, etc.
+            const multiplier = playCount + 1;
+            const minMinutes = 8 * multiplier;
+            const maxMinutes = 11 * multiplier;
+            const delay = (Math.random() * (maxMinutes - minMinutes) + minMinutes) * 60 * 1000;
+
+            timeoutId = setTimeout(() => {
+                triggerAnimation();
+                scheduleNext();
+            }, delay);
+        };
+
+        // First play after 1 minute
+        const initialDelay = setTimeout(() => {
+            triggerAnimation();
+            scheduleNext();
+        }, 60000);
+
+        return () => {
+            clearTimeout(initialDelay);
+            clearTimeout(timeoutId);
+        };
+    }, []);
 
     return (
         <aside className="sidebar">
             <div className="brand-section">
                 <div className="brand-logo">
-                    <img src={ServerKitLogo} alt="ServerKit" width="28" height="28" />
+                    <img src={ServerKitLogo} alt="ServerKit" width="42" height="42" />
                 </div>
                 <span className="brand-text">ServerKit</span>
+                <a
+                    href="https://github.com/jhd3197/ServerKit"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`brand-star ${starAnimating ? 'animating' : ''}`}
+                    title="Star on GitHub"
+                >
+                    <Star size={14} />
+                    <span className="star-particles">
+                        <span></span><span></span><span></span><span></span><span></span><span></span>
+                    </span>
+                    <span className="star-ring"></span>
+                    <span className="star-ring ring-2"></span>
+                    <span className="star-ring ring-3"></span>
+                    <span className="star-tooltip">Star us!</span>
+                </a>
             </div>
 
             <div className="nav-scroll">
@@ -192,19 +245,6 @@ const Sidebar = () => {
             </div>
 
             <div className="sidebar-footer">
-                <a
-                    href="https://github.com/jhd3197/ServerKit"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="promo-btn"
-                >
-                    <span className="promo-content">
-                        <Github size={14} />
-                        ServerKit
-                    </span>
-                    <span className="promo-tag"><Star size={12} /></span>
-                </a>
-
                 <div className="user-mini" onClick={logout} title="Click to logout">
                     <div className="user-avatar">
                         {user?.username?.charAt(0).toUpperCase() || 'U'}

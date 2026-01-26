@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
     XAxis, YAxis, CartesianGrid,
     Tooltip, ResponsiveContainer, Area, AreaChart
 } from 'recharts';
-import { Cpu, MemoryStick, HardDrive, TrendingUp, Wifi } from 'lucide-react';
+import { Cpu, MemoryStick, HardDrive, TrendingUp } from 'lucide-react';
 import api from '../services/api';
 
 // Chart colors - matching new_dashboard_3 style
 const CHART_COLORS = {
-    cpu: '#6366f1',      // Purple/Indigo (CPU Core)
-    memory: '#10b981',   // Green (Memory)
-    network: '#f59e0b'   // Amber/Orange (Network)
+    cpu: '#6366f1',      // Purple/Indigo
+    memory: '#10b981',   // Green (RAM)
+    disk: '#f59e0b'      // Amber/Orange (Disk)
 };
 
-const MetricsGraph = ({ compact = false }) => {
+const MetricsGraph = ({ compact = false, timezone }) => {
     const [data, setData] = useState(null);
     const [period, setPeriod] = useState('1h');
     const [loading, setLoading] = useState(true);
@@ -21,7 +21,7 @@ const MetricsGraph = ({ compact = false }) => {
     const [visibleMetrics, setVisibleMetrics] = useState({
         cpu: true,
         memory: true,
-        network: true
+        disk: true
     });
 
     const periods = ['1h', '6h', '24h', '7d', '30d'];
@@ -52,16 +52,48 @@ const MetricsGraph = ({ compact = false }) => {
 
     function formatTimestamp(isoString) {
         const date = new Date(isoString);
-        if (period === '1h' || period === '6h') {
-            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        } else if (period === '24h') {
-            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const tz = timezone || undefined;
+        if (period === '1h' || period === '6h' || period === '24h') {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: tz });
         } else if (period === '7d') {
-            return date.toLocaleDateString([], { weekday: 'short', hour: '2-digit' });
+            return date.toLocaleDateString([], { weekday: 'short', hour: '2-digit', timeZone: tz });
         } else {
-            return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+            return date.toLocaleDateString([], { month: 'short', day: 'numeric', timeZone: tz });
         }
     }
+
+    const chartData = data?.data?.map(point => ({
+        time: formatTimestamp(point.timestamp),
+        cpu: point.cpu.percent,
+        memory: point.memory.percent,
+        disk: point.disk.percent
+    })) || [];
+
+    // Auto-zoom: compute Y-axis ceiling from visible metrics
+    const yDomain = useMemo(() => {
+        if (chartData.length === 0) return [0, 100];
+
+        const activeKeys = Object.entries(visibleMetrics)
+            .filter(([, visible]) => visible)
+            .map(([key]) => key);
+
+        if (activeKeys.length === 0) return [0, 100];
+
+        let maxVal = 0;
+        chartData.forEach(point => {
+            activeKeys.forEach(key => {
+                if (point[key] > maxVal) maxVal = point[key];
+            });
+        });
+
+        // Add 20% headroom, floor at 10%
+        const ceiling = Math.max(10, maxVal * 1.2);
+        // Snap to nearest nice tick value
+        const steps = [5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100];
+        const niceMax = steps.find(s => s >= ceiling) || 100;
+
+        return [0, niceMax];
+    }, [chartData, visibleMetrics]);
 
     if (loading && !data) {
         return (
@@ -88,13 +120,6 @@ const MetricsGraph = ({ compact = false }) => {
             </div>
         );
     }
-
-    const chartData = data.data.map(point => ({
-        time: formatTimestamp(point.timestamp),
-        cpu: point.cpu.percent,
-        memory: point.memory.percent,
-        network: point.disk.percent  // Using disk data for network display
-    }));
 
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
@@ -167,7 +192,7 @@ const MetricsGraph = ({ compact = false }) => {
                         <span>{data.summary.memory_avg}%</span>
                     </div>
                     <div className="summary-item">
-                        <Wifi size={14} />
+                        <HardDrive size={14} />
                         <span>{data.summary.disk_avg}%</span>
                     </div>
                 </div>
@@ -186,19 +211,19 @@ const MetricsGraph = ({ compact = false }) => {
                         className={`filter-btn cpu ${visibleMetrics.cpu ? 'active' : ''}`}
                         onClick={() => toggleMetric('cpu')}
                     >
-                        CPU Core
+                        CPU
                     </button>
                     <button
                         className={`filter-btn memory ${visibleMetrics.memory ? 'active' : ''}`}
                         onClick={() => toggleMetric('memory')}
                     >
-                        Memory
+                        RAM
                     </button>
                     <button
-                        className={`filter-btn network ${visibleMetrics.network ? 'active' : ''}`}
-                        onClick={() => toggleMetric('network')}
+                        className={`filter-btn disk ${visibleMetrics.disk ? 'active' : ''}`}
+                        onClick={() => toggleMetric('disk')}
                     >
-                        Network
+                        Disk
                     </button>
                 </div>
                 <div className="period-selector">
@@ -215,7 +240,7 @@ const MetricsGraph = ({ compact = false }) => {
             </div>
 
             <div className="metrics-chart-container">
-                <ResponsiveContainer width="100%" height={280}>
+                <ResponsiveContainer width="100%" height={420}>
                     <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                         <defs>
                             {/* CPU Gradient - Purple/Indigo */}
@@ -228,10 +253,10 @@ const MetricsGraph = ({ compact = false }) => {
                                 <stop offset="5%" stopColor={CHART_COLORS.memory} stopOpacity={0.5} />
                                 <stop offset="95%" stopColor={CHART_COLORS.memory} stopOpacity={0} />
                             </linearGradient>
-                            {/* Network Gradient - Orange */}
-                            <linearGradient id="networkGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor={CHART_COLORS.network} stopOpacity={0.5} />
-                                <stop offset="95%" stopColor={CHART_COLORS.network} stopOpacity={0} />
+                            {/* Disk Gradient - Orange */}
+                            <linearGradient id="diskGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor={CHART_COLORS.disk} stopOpacity={0.5} />
+                                <stop offset="95%" stopColor={CHART_COLORS.disk} stopOpacity={0} />
                             </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="#27272a" opacity={0.5} />
@@ -243,7 +268,7 @@ const MetricsGraph = ({ compact = false }) => {
                             interval="preserveStartEnd"
                         />
                         <YAxis
-                            domain={[0, 100]}
+                            domain={yDomain}
                             tick={{ fontSize: 11, fill: '#a1a1aa' }}
                             axisLine={{ stroke: '#27272a' }}
                             tickLine={false}
@@ -252,35 +277,35 @@ const MetricsGraph = ({ compact = false }) => {
                         <Tooltip content={<CustomTooltip />} />
                         {visibleMetrics.cpu && (
                             <Area
-                                type="monotone"
+                                type="stepAfter"
                                 dataKey="cpu"
                                 stroke={CHART_COLORS.cpu}
                                 fill="url(#cpuGradient)"
-                                strokeWidth={2}
+                                strokeWidth={1.5}
                                 dot={false}
                                 name="CPU"
                             />
                         )}
                         {visibleMetrics.memory && (
                             <Area
-                                type="monotone"
+                                type="stepAfter"
                                 dataKey="memory"
                                 stroke={CHART_COLORS.memory}
                                 fill="url(#memoryGradient)"
-                                strokeWidth={2}
+                                strokeWidth={1.5}
                                 dot={false}
-                                name="Memory"
+                                name="RAM"
                             />
                         )}
-                        {visibleMetrics.network && (
+                        {visibleMetrics.disk && (
                             <Area
-                                type="monotone"
-                                dataKey="network"
-                                stroke={CHART_COLORS.network}
-                                fill="url(#networkGradient)"
-                                strokeWidth={2}
+                                type="stepAfter"
+                                dataKey="disk"
+                                stroke={CHART_COLORS.disk}
+                                fill="url(#diskGradient)"
+                                strokeWidth={1.5}
                                 dot={false}
-                                name="Network"
+                                name="Disk"
                             />
                         )}
                     </AreaChart>

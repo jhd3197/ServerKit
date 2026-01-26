@@ -13,7 +13,7 @@
 .top-bar {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
     padding-bottom: @space-4;
     border-bottom: 1px solid @border-subtle;
 }
@@ -42,22 +42,39 @@
 
 .server-details {
     display: flex;
-    gap: @space-6;
+    align-items: center;
+    gap: @space-3;
     margin-top: @space-2;
     font-size: @font-size-sm;
     color: @text-tertiary;
     font-family: @font-mono;
+
+    .detail-separator {
+        color: @border-default;
+        user-select: none;
+    }
+}
+
+// Right section: clock + refresh stacked
+.top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: @space-5;
 }
 
 .clock-widget {
-    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .clock-time {
     font-family: @font-mono;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: @font-weight-bold;
     color: @text-primary;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
 }
 
 .clock-zone {
@@ -65,7 +82,7 @@
     font-weight: @font-weight-semibold;
     font-size: @font-size-xs;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.08em;
 }
 
 // --- Grid System ---
@@ -425,28 +442,15 @@
 // --- Refresh Control ---
 .refresh-control {
     display: flex;
-    align-items: center;
-    gap: @space-3;
-    margin-left: auto;
-    padding-left: @space-4;
-}
+    flex-direction: column;
+    align-items: flex-end;
+    gap: @space-2;
+    padding-left: @space-5;
+    border-left: 1px solid @border-subtle;
 
-.connection-status {
-    font-family: @font-mono;
-    font-size: @font-size-xs;
-    font-weight: @font-weight-semibold;
-    letter-spacing: 0.05em;
-    padding: @space-1 @space-2;
-    border-radius: @radius-sm;
-
-    &.live {
-        color: @success;
-        background: @success-bg;
-    }
-
-    &.polling {
-        color: @warning;
-        background: @warning-bg;
+    .refresh-select,
+    .btn-refresh {
+        width: 100%;
     }
 }
 

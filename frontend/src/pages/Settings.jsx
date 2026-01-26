@@ -4,7 +4,8 @@ import { useTheme } from '../contexts/ThemeContext';
 import api from '../services/api';
 import UsersTab from '../components/settings/UsersTab';
 import AuditLogTab from '../components/settings/AuditLogTab';
-import { Github, FileText, HelpCircle, MessageSquare, Bug, Check, Layers, Download, CheckCircle, RefreshCw, ExternalLink, Star, X } from 'lucide-react';
+import { Github, FileText, HelpCircle, MessageSquare, Bug, Check, Download, CheckCircle, RefreshCw, ExternalLink, Star, X } from 'lucide-react';
+import ServerKitLogo from '../assets/ServerKitLogo.svg';
 
 const Settings = () => {
     const [activeTab, setActiveTab] = useState('profile');
@@ -1770,7 +1771,7 @@ const AboutSection = () => {
 
             <div className="about-card">
                 <div className="about-logo">
-                    <Layers size={48} strokeWidth={1.5} />
+                    <img src={ServerKitLogo} alt="ServerKit Logo" width="64" height="64" />
                 </div>
                 <h3>ServerKit</h3>
                 <p className="version">Version {version}</p>
