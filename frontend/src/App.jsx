@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { ResourceTierProvider } from './contexts/ResourceTierContext';
 import { ToastContainer } from './components/Toast';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
@@ -188,10 +189,12 @@ function App() {
             <PageTitleUpdater />
             <ThemeProvider>
                 <AuthProvider>
-                    <ToastProvider>
-                        <AppRoutes />
-                        <ToastContainer />
-                    </ToastProvider>
+                    <ResourceTierProvider>
+                        <ToastProvider>
+                            <AppRoutes />
+                            <ToastContainer />
+                        </ToastProvider>
+                    </ResourceTierProvider>
                 </AuthProvider>
             </ThemeProvider>
         </Router>

@@ -32,12 +32,14 @@
 .brand-logo {
     width: 28px;
     height: 28px;
-    background: linear-gradient(135deg, @accent-primary, darken(@accent-primary, 10%));
-    border-radius: @radius-lg;
     display: grid;
     place-items: center;
-    color: white;
-    box-shadow: 0 4px 12px @accent-shadow;
+    flex-shrink: 0;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
 }
 
 .brand-text {

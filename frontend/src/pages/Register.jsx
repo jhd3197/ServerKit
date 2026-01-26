@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import ServerKitLogo from '../assets/ServerKitLogo.svg';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -43,9 +44,7 @@ const Register = () => {
             <div className="auth-card">
                 <div className="auth-header">
                     <div className="brand-logo">
-                        <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" fill="none" strokeWidth="2">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
+                        <img src={ServerKitLogo} alt="ServerKit" width="40" height="40" />
                     </div>
                     <h1>ServerKit</h1>
                     <p>Create your account</p>

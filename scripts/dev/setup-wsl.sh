@@ -46,23 +46,25 @@ source venv/bin/activate
 pip install --upgrade pip -q
 pip install -r requirements.txt -q
 
-# Create instance directory in WSL-native location (SQLite doesn't work on /mnt/c)
-mkdir -p ~/.serverkit
+# Create instance directory
 mkdir -p instance
 
-# Create .env with WSL-compatible database path
-cat > .env << EOF
+# Create .env if it doesn't exist (don't overwrite existing config)
+if [ ! -f .env ]; then
+    cat > .env << EOF
 FLASK_ENV=development
 FLASK_DEBUG=1
-SECRET_KEY=dev-secret-key
-DATABASE_URL=sqlite:///$HOME/.serverkit/serverkit.db
+SECRET_KEY=dev-secret-key-change-in-production
+JWT_SECRET_KEY=jwt-secret-key-change-in-production
+DATABASE_URL=sqlite:///instance/serverkit.db
 EOF
+fi
 echo -e "${GREEN}Done!${NC}"
 
 echo -e "${YELLOW}[5/6] Setting up frontend...${NC}"
 cd "$PROJECT_ROOT/frontend"
 npm install
-[ ! -f .env.development ] && echo "VITE_API_URL=http://localhost:5000" > .env.development
+[ ! -f .env.development ] && echo "VITE_API_URL=http://localhost:5000/api/v1" > .env.development
 echo -e "${GREEN}Done!${NC}"
 
 echo -e "${YELLOW}[6/6] Creating admin user...${NC}"
@@ -74,15 +76,15 @@ sys.path.insert(0, os.getcwd())
 try:
     from app import create_app, db
     from app.models.user import User
-    from werkzeug.security import generate_password_hash
     app = create_app()
     with app.app_context():
         db.create_all()
         admin = User.query.filter_by(username='admin').first()
         if admin:
-            admin.password = generate_password_hash('admin')
+            admin.set_password('admin')
         else:
-            admin = User(username='admin', email='admin@localhost', password=generate_password_hash('admin'), is_admin=True)
+            admin = User(username='admin', email='admin@localhost', role='admin', is_active=True)
+            admin.set_password('admin')
             db.session.add(admin)
         db.session.commit()
         print("Admin user ready!")

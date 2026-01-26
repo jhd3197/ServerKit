@@ -1132,3 +1132,214 @@
         }
     }
 }
+
+// ============================================
+// RESOURCE GATE - BLOCKED STATE UI
+// ============================================
+
+.resource-gate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: @space-6;
+}
+
+.resource-gate-container {
+    max-width: 700px;
+    text-align: center;
+}
+
+.resource-gate-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background: fade(@color-warning, 12%);
+    border-radius: 50%;
+    color: @color-warning;
+    margin-bottom: @space-5;
+}
+
+.resource-gate-title {
+    font-size: @font-size-xl;
+    font-weight: @font-weight-bold;
+    color: @text-primary;
+    margin: 0 0 @space-3;
+}
+
+.resource-gate-description {
+    font-size: @font-size-base;
+    color: @text-secondary;
+    margin: 0 0 @space-6;
+    line-height: 1.6;
+
+    strong {
+        color: @color-warning;
+        font-weight: @font-weight-semibold;
+    }
+}
+
+.resource-gate-specs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-4;
+    margin-bottom: @space-6;
+
+    @media (max-width: 600px) {
+        flex-direction: column;
+        gap: @space-3;
+    }
+}
+
+.resource-gate-spec-arrow {
+    color: @text-tertiary;
+
+    @media (max-width: 600px) {
+        transform: rotate(90deg);
+    }
+}
+
+.resource-gate-spec-card {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    padding: @space-4;
+    min-width: 200px;
+
+    &.current {
+        border-color: fade(@color-danger, 40%);
+        background: fade(@color-danger, 4%);
+    }
+
+    &.required {
+        border-color: fade(@color-success, 40%);
+        background: fade(@color-success, 4%);
+    }
+}
+
+.resource-gate-spec-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-2;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-semibold;
+    color: @text-primary;
+    margin-bottom: @space-3;
+    padding-bottom: @space-2;
+    border-bottom: 1px solid @border-subtle;
+}
+
+.resource-gate-spec-items {
+    display: flex;
+    flex-direction: column;
+    gap: @space-2;
+}
+
+.resource-gate-spec-item {
+    display: flex;
+    align-items: center;
+    gap: @space-2;
+    font-size: @font-size-sm;
+
+    svg {
+        color: @text-tertiary;
+        flex-shrink: 0;
+    }
+
+    .spec-label {
+        color: @text-secondary;
+        flex: 1;
+    }
+
+    .spec-value {
+        font-weight: @font-weight-semibold;
+        color: @color-success;
+        font-family: @font-family-mono;
+
+        &.insufficient {
+            color: @color-danger;
+        }
+    }
+}
+
+.resource-gate-recommendation {
+    background: @bg-tertiary;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    padding: @space-4;
+    margin-bottom: @space-6;
+    text-align: left;
+
+    h4 {
+        font-size: @font-size-sm;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+        margin: 0 0 @space-2;
+    }
+
+    p {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        margin: 0;
+        line-height: 1.5;
+
+        strong {
+            color: @text-primary;
+        }
+    }
+}
+
+.resource-gate-tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: @space-3;
+
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.resource-gate-tier {
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-md;
+    padding: @space-3;
+    text-align: center;
+
+    &.current {
+        border-color: @color-warning;
+        background: fade(@color-warning, 6%);
+    }
+
+    .tier-name {
+        font-size: @font-size-sm;
+        font-weight: @font-weight-bold;
+        color: @text-primary;
+        margin-bottom: @space-1;
+    }
+
+    .tier-specs {
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        margin-bottom: @space-2;
+    }
+
+    .tier-wp {
+        font-size: @font-size-xs;
+        font-weight: @font-weight-medium;
+        color: @color-danger;
+        padding: 2px 8px;
+        background: fade(@color-danger, 10%);
+        border-radius: @radius-sm;
+        display: inline-block;
+
+        &.allowed {
+            color: @color-success;
+            background: fade(@color-success, 10%);
+        }
+    }
+}

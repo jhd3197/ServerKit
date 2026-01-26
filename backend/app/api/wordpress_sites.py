@@ -19,6 +19,7 @@ from app.services.wordpress_service import WordPressService
 from app.services.wordpress_env_service import WordPressEnvService
 from app.services.db_sync_service import DatabaseSyncService
 from app.services.git_wordpress_service import GitWordPressService
+from app.services.resource_tier_service import ResourceTierService
 
 wordpress_sites_bp = Blueprint('wordpress_sites', __name__)
 
@@ -55,6 +56,23 @@ def create_site():
     """Create a new WordPress site."""
     user_id = get_jwt_identity()
     data = request.get_json()
+
+    # Check resource tier - block creation on lite tier servers
+    tier_info = ResourceTierService.get_tier_info()
+    if not tier_info['features']['wordpress_create']:
+        min_req = ResourceTierService.get_minimum_requirements()
+        return jsonify({
+            'error': 'Server resources insufficient for WordPress',
+            'reason': 'wordpress_blocked',
+            'specs': tier_info['specs'],
+            'tier': tier_info['tier'],
+            'minimum_requirements': min_req,
+            'message': (
+                f"WordPress site creation requires at least {min_req['cpu_cores']} CPU cores "
+                f"and {min_req['ram_gb']}GB RAM. Your server has {tier_info['specs']['cpu_cores']} core(s) "
+                f"and {tier_info['specs']['ram_gb']}GB RAM. Consider upgrading your server."
+            )
+        }), 403
 
     # Validate required fields
     required = ['name', 'domain', 'db_name', 'db_user', 'db_password', 'admin_email']

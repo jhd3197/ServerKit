@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Plus, RefreshCw } from 'lucide-react';
 import wordpressApi from '../services/wordpress';
 import { useToast } from '../contexts/ToastContext';
+import { useResourceTier } from '../contexts/ResourceTierContext';
 import { WordPressSiteCard, CreateSiteModal } from '../components/wordpress';
+import ResourceGate from '../components/ResourceGate';
 
 const WordPress = () => {
     const toast = useToast();
+    const { canCreateWordPress, isLiteTier } = useResourceTier();
     const [sites, setSites] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -110,6 +113,17 @@ const WordPress = () => {
         </div>
     );
 
+    // Show resource gate if on lite tier and no sites exist
+    if (isLiteTier && sites.length === 0 && !loading) {
+        return (
+            <div className="docker-page-new wordpress-page">
+                <ResourceGate feature="wordpress_create">
+                    <div />
+                </ResourceGate>
+            </div>
+        );
+    }
+
     return (
         <div className="docker-page-new wordpress-page">
             <div className="docker-page-header">
@@ -120,7 +134,12 @@ const WordPress = () => {
                     </div>
                 </div>
                 <div className="docker-page-actions">
-                    <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => setShowCreateModal(true)}
+                        disabled={!canCreateWordPress}
+                        title={!canCreateWordPress ? 'Server resources insufficient for WordPress creation' : ''}
+                    >
                         <Plus size={16} /> New Site
                     </button>
                 </div>

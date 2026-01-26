@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Github, Star } from 'lucide-react';
+import ServerKitLogo from '../assets/ServerKitLogo.svg';
 
 const Sidebar = () => {
     const { user, logout } = useAuth();
@@ -10,9 +11,7 @@ const Sidebar = () => {
         <aside className="sidebar">
             <div className="brand-section">
                 <div className="brand-logo">
-                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" strokeWidth="2.5">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    </svg>
+                    <img src={ServerKitLogo} alt="ServerKit" width="28" height="28" />
                 </div>
                 <span className="brand-text">ServerKit</span>
             </div>
