@@ -2,6 +2,33 @@
 // WORDPRESS PAGE STYLES
 // ============================================
 
+// WordPress Standalone Page (Docker-based, mirrors Git page layout)
+.wordpress-standalone-page {
+    // Inherits .git-page styles for layout, status cards, overview tab, etc.
+
+    .empty-state-large {
+        .empty-icon svg {
+            stroke: #21759b;
+        }
+    }
+
+    .status-card.success {
+        border-left-color: @color-success;
+
+        .status-icon {
+            color: @color-success;
+        }
+    }
+
+    .status-card.danger {
+        border-left-color: @color-danger;
+
+        .status-icon {
+            color: @color-danger;
+        }
+    }
+}
+
 // WordPress Page Layout (extends Docker page styles)
 .wordpress-page {
     .docker-empty {

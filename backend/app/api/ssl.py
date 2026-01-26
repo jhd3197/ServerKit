@@ -111,6 +111,18 @@ def setup_auto_renewal():
     return jsonify(result), 200 if result['success'] else 400
 
 
+@ssl_bp.route('/install-certbot', methods=['POST'])
+@jwt_required()
+@admin_required
+def install_certbot():
+    """Install certbot if not already installed."""
+    if SSLService.is_certbot_installed():
+        return jsonify({'success': True, 'message': 'Certbot is already installed'}), 200
+
+    result = SSLService.install_certbot()
+    return jsonify(result), 200 if result['success'] else 400
+
+
 @ssl_bp.route('/status', methods=['GET'])
 @jwt_required()
 @admin_required

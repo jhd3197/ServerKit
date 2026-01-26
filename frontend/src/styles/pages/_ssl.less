@@ -1,0 +1,138 @@
+// ============================================
+// SSL CERTIFICATES PAGE
+// ============================================
+
+.ssl-page {
+    // Reuses .ssl-status-bar, .ssl-status-item, etc. from _domains.less
+}
+
+// Warning icon color variant
+.ssl-status-icon {
+    &.warning {
+        background: @warning-bg;
+        color: @warning;
+    }
+}
+
+// Certificate list
+.ssl-cert-list {
+    .flex-column-gap(@space-3);
+}
+
+.ssl-cert-item {
+    .list-item-base();
+    gap: @space-4;
+
+    @media (max-width: @breakpoint-md) {
+        flex-wrap: wrap;
+    }
+}
+
+.ssl-cert-item-info {
+    .flex-start();
+    gap: @space-4;
+    flex: 1;
+    min-width: 0;
+}
+
+.ssl-cert-item-icon {
+    .icon-box();
+    background: @success-bg;
+    border-radius: @radius-lg;
+    color: @success;
+
+    &.expiring {
+        background: @warning-bg;
+        color: @warning;
+    }
+}
+
+.ssl-cert-item-details {
+    min-width: 0;
+
+    h3 {
+        font-size: @font-size-base;
+        font-weight: @font-weight-semibold;
+        color: @text-primary;
+        margin-bottom: @space-1;
+    }
+}
+
+.ssl-cert-item-meta {
+    .flex-start();
+    gap: @space-4;
+    font-size: @font-size-sm;
+    color: @text-tertiary;
+    flex-wrap: wrap;
+
+    span {
+        .flex-start();
+        gap: @space-1;
+
+        &.valid {
+            color: @success;
+        }
+
+        &.expiring {
+            color: @warning;
+        }
+    }
+}
+
+.ssl-cert-item-status {
+    flex-shrink: 0;
+}
+
+.ssl-cert-item-actions {
+    display: flex;
+    gap: @space-2;
+    flex-shrink: 0;
+}
+
+// Warning banner for expiring certs
+.ssl-warning-banner {
+    .flex-start();
+    gap: @space-3;
+    padding: @space-4 @space-5;
+    background: @warning-bg;
+    border: 1px solid @warning-border;
+    border-radius: @radius-xl;
+    margin-top: @space-6;
+    color: @warning;
+
+    div {
+        flex: 1;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+
+        strong {
+            color: @warning;
+        }
+    }
+
+    .btn {
+        flex-shrink: 0;
+    }
+}
+
+// Spinning icon for renewal
+.spin {
+    animation: ssl-spin 1s linear infinite;
+}
+
+@keyframes ssl-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+// Skeleton loading
+.skeleton-box {
+    background: @bg-hover;
+    border-radius: @radius-md;
+    animation: ssl-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ssl-skeleton-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}

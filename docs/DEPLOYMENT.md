@@ -6,7 +6,7 @@ Complete guide for deploying ServerKit on Ubuntu servers.
 
 ```bash
 # One-line install
-curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
+curl -fsSL https://serverkit.ai/install.sh | bash
 
 # Or clone and install manually
 git clone https://github.com/jhd3197/serverkit.git

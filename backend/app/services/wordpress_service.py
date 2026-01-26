@@ -622,3 +622,233 @@ RewriteRule ^wp-content/uploads/.*\\.php$ - [F]
         """Generate a secure random password."""
         alphabet = string.ascii_letters + string.digits + '!@#$%^&*'
         return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+    # ========================================
+    # WORDPRESS STANDALONE (DOCKER) MANAGEMENT
+    # ========================================
+
+    WP_APP_NAME = 'serverkit-wordpress'
+    WP_CONFIG_DIR = '/etc/serverkit'
+    WP_CONFIG_FILE = os.path.join(WP_CONFIG_DIR, 'wordpress.json')
+
+    @classmethod
+    def get_wordpress_standalone_status(cls) -> Dict:
+        """Check if standalone WordPress is installed and running."""
+        from app.models import Application
+
+        app = Application.query.filter_by(name=cls.WP_APP_NAME).first()
+
+        if not app:
+            return {
+                'installed': False,
+                'running': False,
+                'http_port': None,
+                'url': None,
+                'url_path': None
+            }
+
+        running = cls._is_wordpress_running()
+        config = cls._load_wp_config()
+
+        return {
+            'installed': True,
+            'running': running,
+            'http_port': app.port or config.get('http_port'),
+            'url_path': '/wordpress',
+            'url': f"http://localhost:{app.port}" if app.port else None,
+            'app_id': app.id,
+            'version': config.get('version', '6.4')
+        }
+
+    @classmethod
+    def _is_wordpress_running(cls) -> bool:
+        """Check if WordPress container is running."""
+        try:
+            result = subprocess.run(
+                ['docker', 'ps', '--filter', f'name={cls.WP_APP_NAME}', '--format', '{{.Names}}'],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            return cls.WP_APP_NAME in result.stdout
+        except Exception:
+            return False
+
+    @classmethod
+    def _load_wp_config(cls) -> Dict:
+        """Load WordPress standalone configuration."""
+        if os.path.exists(cls.WP_CONFIG_FILE):
+            try:
+                with open(cls.WP_CONFIG_FILE, 'r') as f:
+                    return json.load(f)
+            except Exception:
+                pass
+        return {}
+
+    @classmethod
+    def _save_wp_config(cls, config: Dict) -> bool:
+        """Save WordPress standalone configuration."""
+        try:
+            os.makedirs(cls.WP_CONFIG_DIR, exist_ok=True)
+            with open(cls.WP_CONFIG_FILE, 'w') as f:
+                json.dump(config, f, indent=2)
+            return True
+        except Exception:
+            return False
+
+    @classmethod
+    def get_wordpress_resource_requirements(cls) -> Dict:
+        """Get resource requirements for WordPress installation."""
+        return {
+            'memory_min': '512MB',
+            'memory_recommended': '1GB',
+            'storage_min': '2GB',
+            'storage_recommended': '10GB',
+            'components': [
+                {'name': 'WordPress', 'memory': '~256MB', 'storage': '~500MB'},
+                {'name': 'MySQL 8.0', 'memory': '~256MB', 'storage': '~1GB'}
+            ],
+            'warning': 'Installation will spin up a MySQL database container'
+        }
+
+    @classmethod
+    def install_wordpress_standalone(cls, admin_email: str = None) -> Dict:
+        """Install WordPress as integrated ServerKit service via Docker."""
+        from app.services.template_service import TemplateService
+        from app.services.nginx_service import NginxService
+
+        status = cls.get_wordpress_standalone_status()
+        if status['installed']:
+            return {'success': False, 'error': 'WordPress is already installed'}
+
+        try:
+            result = TemplateService.install_template(
+                template_id='wordpress',
+                app_name=cls.WP_APP_NAME,
+                user_variables={},
+                user_id=1
+            )
+
+            if not result.get('success'):
+                return result
+
+            variables = result.get('variables', {})
+            http_port = variables.get('HTTP_PORT')
+
+            # Create nginx config for /wordpress path
+            nginx_result = NginxService.create_wordpress_config(int(http_port))
+            if not nginx_result.get('success'):
+                print(f"Warning: Failed to create WordPress nginx config: {nginx_result.get('error')}")
+
+            config = {
+                'admin_email': admin_email,
+                'http_port': http_port,
+                'db_password': variables.get('DB_PASSWORD'),
+                'wp_db_password': variables.get('WP_DB_PASSWORD'),
+                'installed_at': datetime.now().isoformat(),
+                'version': '6.4',
+                'url_path': '/wordpress'
+            }
+            cls._save_wp_config(config)
+
+            return {
+                'success': True,
+                'message': 'WordPress installed successfully',
+                'http_port': http_port,
+                'url_path': '/wordpress'
+            }
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def uninstall_wordpress_standalone(cls, remove_data: bool = False) -> Dict:
+        """Uninstall standalone WordPress."""
+        from app import db
+        from app.models import Application
+        from app.services.docker_service import DockerService
+        from app.services.nginx_service import NginxService
+
+        app = Application.query.filter_by(name=cls.WP_APP_NAME).first()
+        if not app:
+            return {'success': False, 'error': 'WordPress is not installed'}
+
+        try:
+            NginxService.remove_wordpress_config()
+
+            if app.root_path and os.path.exists(app.root_path):
+                DockerService.compose_down(app.root_path, remove_volumes=remove_data)
+
+                if remove_data:
+                    shutil.rmtree(app.root_path, ignore_errors=True)
+
+            db.session.delete(app)
+            db.session.commit()
+
+            if os.path.exists(cls.WP_CONFIG_FILE):
+                os.remove(cls.WP_CONFIG_FILE)
+
+            return {
+                'success': True,
+                'message': 'WordPress uninstalled successfully',
+                'data_removed': remove_data
+            }
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def start_wordpress_standalone(cls) -> Dict:
+        """Start WordPress containers."""
+        from app import db
+        from app.models import Application
+        from app.services.docker_service import DockerService
+
+        app = Application.query.filter_by(name=cls.WP_APP_NAME).first()
+        if not app:
+            return {'success': False, 'error': 'WordPress is not installed'}
+
+        if not app.root_path or not os.path.exists(app.root_path):
+            return {'success': False, 'error': 'WordPress installation path not found'}
+
+        try:
+            result = DockerService.compose_up(app.root_path, detach=True)
+            if result.get('success'):
+                app.status = 'running'
+                db.session.commit()
+                return {'success': True, 'message': 'WordPress started'}
+            return result
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def stop_wordpress_standalone(cls) -> Dict:
+        """Stop WordPress containers."""
+        from app import db
+        from app.models import Application
+        from app.services.docker_service import DockerService
+
+        app = Application.query.filter_by(name=cls.WP_APP_NAME).first()
+        if not app:
+            return {'success': False, 'error': 'WordPress is not installed'}
+
+        if not app.root_path or not os.path.exists(app.root_path):
+            return {'success': False, 'error': 'WordPress installation path not found'}
+
+        try:
+            result = DockerService.compose_stop(app.root_path)
+            if result.get('success'):
+                app.status = 'stopped'
+                db.session.commit()
+                return {'success': True, 'message': 'WordPress stopped'}
+            return result
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def restart_wordpress_standalone(cls) -> Dict:
+        """Restart WordPress containers."""
+        stop_result = cls.stop_wordpress_standalone()
+        if not stop_result.get('success'):
+            return stop_result
+        return cls.start_wordpress_standalone()

@@ -467,6 +467,14 @@ class ApiService {
         return this.request(`/ssl/certificates/${domain}`, { method: 'DELETE' });
     }
 
+    async setupAutoRenewal() {
+        return this.request('/ssl/auto-renewal', { method: 'POST' });
+    }
+
+    async installCertbot() {
+        return this.request('/ssl/install-certbot', { method: 'POST' });
+    }
+
     // Log endpoints
     async getLogFiles() {
         return this.request('/logs');
@@ -1789,6 +1797,43 @@ class ApiService {
 
     async restartGit() {
         return this.request('/git/restart', { method: 'POST' });
+    }
+
+    // ========================================
+    // WordPress Standalone endpoints
+    // ========================================
+    async getWordPressStatus() {
+        return this.request('/wordpress/standalone/status');
+    }
+
+    async getWordPressRequirements() {
+        return this.request('/wordpress/standalone/requirements');
+    }
+
+    async installWordPress(data) {
+        return this.request('/wordpress/standalone/install', {
+            method: 'POST',
+            body: data
+        });
+    }
+
+    async uninstallWordPress(removeData = false) {
+        return this.request('/wordpress/standalone/uninstall', {
+            method: 'POST',
+            body: { removeData }
+        });
+    }
+
+    async startWordPress() {
+        return this.request('/wordpress/standalone/start', { method: 'POST' });
+    }
+
+    async stopWordPress() {
+        return this.request('/wordpress/standalone/stop', { method: 'POST' });
+    }
+
+    async restartWordPress() {
+        return this.request('/wordpress/standalone/restart', { method: 'POST' });
     }
 
     // Git Webhooks

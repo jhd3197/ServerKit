@@ -32,6 +32,7 @@ import ServerDetail from './pages/ServerDetail';
 import Downloads from './pages/Downloads';
 import WordPress from './pages/WordPress';
 import WordPressDetail from './pages/WordPressDetail';
+import SSLCertificates from './pages/SSLCertificates';
 
 // Page title mapping
 const PAGE_TITLES = {
@@ -162,7 +163,7 @@ function AppRoutes() {
                 <Route path="workflow" element={<WorkflowBuilder />} />
                 <Route path="domains" element={<Domains />} />
                 <Route path="databases" element={<Databases />} />
-                <Route path="ssl" element={<div className="page">SSL Certificates</div>} />
+                <Route path="ssl" element={<SSLCertificates />} />
                 <Route path="docker" element={<Docker />} />
                 <Route path="servers" element={<Servers />} />
                 <Route path="servers/:id" element={<ServerDetail />} />

@@ -6,7 +6,7 @@
 #   - Backend: Runs directly on host (for full system access)
 #   - Frontend: Runs in Docker (nginx serving static files)
 #
-# Usage: curl -fsSL https://raw.githubusercontent.com/jhd3197/serverkit/main/install.sh | bash
+# Usage: curl -fsSL https://serverkit.ai/install.sh | bash
 #
 
 set -e
