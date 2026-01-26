@@ -11,4 +11,17 @@ export default defineConfig({
             interval: 1000,
         },
     },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+                    'vendor-charts': ['recharts'],
+                    'vendor-flow': ['@xyflow/react'],
+                    'vendor-xterm': ['@xterm/xterm', '@xterm/addon-fit', '@xterm/addon-web-links'],
+                    'vendor-icons': ['lucide-react'],
+                },
+            },
+        },
+    },
 })
