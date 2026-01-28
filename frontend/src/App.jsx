@@ -32,6 +32,8 @@ import ServerDetail from './pages/ServerDetail';
 import Downloads from './pages/Downloads';
 import WordPress from './pages/WordPress';
 import WordPressDetail from './pages/WordPressDetail';
+import WordPressProjects from './pages/WordPressProjects';
+import WordPressProject from './pages/WordPressProject';
 import SSLCertificates from './pages/SSLCertificates';
 
 // Page title mapping
@@ -42,6 +44,7 @@ const PAGE_TITLES = {
     '/setup': 'Setup',
     '/apps': 'Applications',
     '/wordpress': 'WordPress Sites',
+    '/wordpress/projects': 'WordPress Projects',
     '/templates': 'Templates',
     '/workflow': 'Workflow Builder',
     '/domains': 'Domains',
@@ -72,6 +75,7 @@ function PageTitleUpdater() {
         if (!title) {
             if (path.startsWith('/apps/')) title = 'Application Details';
             else if (path.startsWith('/servers/')) title = 'Server Details';
+            else if (path.startsWith('/wordpress/projects/')) title = 'WordPress Pipeline';
             else if (path.startsWith('/wordpress/')) title = 'WordPress Site';
             else title = 'ServerKit';
         }
@@ -159,6 +163,8 @@ function AppRoutes() {
                 <Route path="apps/:id" element={<ApplicationDetail />} />
                 <Route path="wordpress" element={<WordPress />} />
                 <Route path="wordpress/:id" element={<WordPressDetail />} />
+                <Route path="wordpress/projects" element={<WordPressProjects />} />
+                <Route path="wordpress/projects/:id" element={<WordPressProject />} />
                 <Route path="templates" element={<Templates />} />
                 <Route path="workflow" element={<WorkflowBuilder />} />
                 <Route path="domains" element={<Domains />} />

@@ -51,7 +51,7 @@ class MetricsHistory(db.Model):
     def to_dict(self):
         """Convert to dictionary for API response."""
         return {
-            'timestamp': self.timestamp.isoformat(),
+            'timestamp': self.timestamp.isoformat() + 'Z',
             'level': self.level,
             'cpu': {
                 'percent': round(self.cpu_percent, 1),

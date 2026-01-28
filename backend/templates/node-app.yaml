@@ -2,7 +2,7 @@ id: node-app
 name: Node.js Application
 version: "20"
 description: Custom Node.js application. Supports Node 18-21. Perfect for Express, Next.js, or any Node.js project.
-icon: https://nodejs.org/static/logos/nodejsLight.svg
+icon: https://serverkit.ai/imgs/template-icons/node-app.svg
 website: https://nodejs.org
 documentation: https://nodejs.org/docs/
 categories:

@@ -115,6 +115,13 @@ class ApiService {
         return data;
     }
 
+    async completeOnboarding(useCases) {
+        return this.request('/auth/complete-onboarding', {
+            method: 'POST',
+            body: { use_cases: useCases },
+        });
+    }
+
     async logout() {
         this.clearTokens();
     }
@@ -183,7 +190,14 @@ class ApiService {
     // Admin - System Settings endpoints
     // ========================================
     async getSystemSettings() {
-        return this.request('/admin/settings');
+        const data = await this.request('/admin/settings');
+        const result = {};
+        if (data.settings && Array.isArray(data.settings)) {
+            for (const setting of data.settings) {
+                result[setting.key] = setting.value;
+            }
+        }
+        return result;
     }
 
     async updateSystemSettings(settings) {

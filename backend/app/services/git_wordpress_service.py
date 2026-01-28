@@ -381,6 +381,111 @@ class GitWordPressService:
             return {'success': False, 'error': str(e)}
 
     @classmethod
+    def list_branches(cls, site_id: int) -> Dict:
+        """
+        List remote branches for a site's connected repository.
+
+        Args:
+            site_id: ID of the WordPressSite
+
+        Returns:
+            Dict with list of branches and their latest commit info
+        """
+        site = WordPressSite.query.get(site_id)
+        if not site:
+            return {'success': False, 'error': 'Site not found'}
+
+        if not site.git_repo_url:
+            return {'success': False, 'error': 'No repository connected'}
+
+        if not site.application or not site.application.root_path:
+            return {'success': False, 'error': 'Site application path not found'}
+
+        wp_content_path = os.path.join(site.application.root_path, 'wp-content')
+        git_dir = os.path.join(wp_content_path, '.git')
+
+        try:
+            if os.path.exists(git_dir):
+                # Fetch latest from remote
+                cls._run_git(wp_content_path, ['fetch', '--prune', 'origin'])
+
+                # List remote branches with latest commit info
+                log_format = '%(refname:short)|%(objectname:short)|%(subject)|%(authorname)|%(creatordate:iso8601)'
+                result = cls._run_git(wp_content_path, [
+                    'for-each-ref',
+                    '--sort=-creatordate',
+                    f'--format={log_format}',
+                    'refs/remotes/origin/'
+                ])
+            else:
+                # No local clone — use ls-remote to list branches
+                result = subprocess.run(
+                    ['git', 'ls-remote', '--heads', site.git_repo_url],
+                    capture_output=True, text=True, timeout=30
+                )
+                if result.returncode != 0:
+                    return {'success': False, 'error': f'Failed to list branches: {result.stderr}'}
+
+                branches = []
+                for line in result.stdout.strip().split('\n'):
+                    if not line:
+                        continue
+                    sha, ref = line.split('\t')
+                    branch_name = ref.replace('refs/heads/', '')
+                    branches.append({
+                        'name': branch_name,
+                        'short_sha': sha[:7],
+                        'message': '',
+                        'author': '',
+                        'date': '',
+                        'is_current': branch_name == site.git_branch,
+                    })
+                return {'success': True, 'branches': branches}
+
+            if not result['success']:
+                return result
+
+            branches = []
+            existing_multidevs = set()
+            for env in site.environments:
+                if env.environment_type == 'multidev' and env.multidev_branch:
+                    existing_multidevs.add(env.multidev_branch)
+
+            for line in result['output'].strip().split('\n'):
+                if not line:
+                    continue
+                parts = line.split('|')
+                if len(parts) < 5:
+                    continue
+
+                ref_name = parts[0]
+                # Strip 'origin/' prefix
+                branch_name = ref_name.replace('origin/', '', 1)
+
+                # Skip HEAD pointer
+                if branch_name == 'HEAD':
+                    continue
+
+                branches.append({
+                    'name': branch_name,
+                    'short_sha': parts[1],
+                    'message': parts[2],
+                    'author': parts[3],
+                    'date': parts[4],
+                    'is_current': branch_name == site.git_branch,
+                    'has_multidev': branch_name in existing_multidevs,
+                })
+
+            return {
+                'success': True,
+                'branches': branches,
+                'current_branch': site.git_branch,
+            }
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
     def rollback_to_commit(cls, site_id: int, commit_sha: str) -> Dict:
         """
         Rollback a site to a previous commit.

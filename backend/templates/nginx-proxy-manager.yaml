@@ -2,7 +2,7 @@ id: nginx-proxy-manager
 name: Nginx Proxy Manager
 version: "2.10"
 description: Easy-to-use reverse proxy with SSL management
-icon: /icons/nginx-proxy-manager.png
+icon: https://serverkit.ai/imgs/template-icons/nginx-proxy-manager.png
 categories:
   - networking
   - proxy

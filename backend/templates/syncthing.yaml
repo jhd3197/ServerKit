@@ -2,7 +2,7 @@ id: syncthing
 name: Syncthing
 version: "1.27"
 description: Continuous file synchronization for decentralized, peer-to-peer sync
-icon: https://syncthing.net/img/logo-horizontal.svg
+icon: https://serverkit.ai/imgs/template-icons/syncthing.svg
 website: https://syncthing.net
 documentation: https://docs.syncthing.net
 categories:

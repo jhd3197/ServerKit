@@ -2,7 +2,7 @@ id: phpmyadmin
 name: phpMyAdmin
 version: "5.2"
 description: Web-based MySQL and MariaDB administration tool
-icon: https://www.phpmyadmin.net/static/images/logo.png
+icon: https://serverkit.ai/imgs/template-icons/phpmyadmin.png
 website: https://www.phpmyadmin.net
 documentation: https://docs.phpmyadmin.net
 categories:

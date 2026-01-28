@@ -30,6 +30,7 @@ class TemplateService:
 
     CONFIG_DIR = '/etc/serverkit'
     TEMPLATES_DIR = '/etc/serverkit/templates'
+    LOCAL_TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'templates')
     INSTALLED_DIR = '/var/serverkit/apps'
     TEMPLATE_CONFIG = os.path.join(CONFIG_DIR, 'templates.json')
 
@@ -350,26 +351,32 @@ class TemplateService:
     def list_local_templates(cls) -> List[Dict]:
         """List locally available templates."""
         templates = []
+        seen_ids = set()
 
-        if not os.path.exists(cls.TEMPLATES_DIR):
-            return templates
+        for templates_dir in [cls.TEMPLATES_DIR, cls.LOCAL_TEMPLATES_DIR]:
+            if not os.path.exists(templates_dir):
+                continue
 
-        for filename in os.listdir(cls.TEMPLATES_DIR):
-            if filename.endswith('.yaml') or filename.endswith('.yml'):
-                filepath = os.path.join(cls.TEMPLATES_DIR, filename)
-                result = cls.parse_template(filepath)
-                if result.get('success'):
-                    template = result['template']
-                    templates.append({
-                        'id': filename.rsplit('.', 1)[0],
-                        'name': template.get('name'),
-                        'version': template.get('version'),
-                        'description': template.get('description'),
-                        'icon': template.get('icon'),
-                        'categories': template.get('categories', []),
-                        'source': 'local',
-                        'filepath': filepath
-                    })
+            for filename in os.listdir(templates_dir):
+                if filename.endswith('.yaml') or filename.endswith('.yml'):
+                    template_id = filename.rsplit('.', 1)[0]
+                    if template_id in seen_ids:
+                        continue
+                    filepath = os.path.join(templates_dir, filename)
+                    result = cls.parse_template(filepath)
+                    if result.get('success'):
+                        template = result['template']
+                        seen_ids.add(template_id)
+                        templates.append({
+                            'id': template_id,
+                            'name': template.get('name'),
+                            'version': template.get('version'),
+                            'description': template.get('description'),
+                            'icon': template.get('icon'),
+                            'categories': template.get('categories', []),
+                            'source': 'local',
+                            'filepath': filepath
+                        })
 
         return templates
 
@@ -427,17 +434,18 @@ class TemplateService:
     @classmethod
     def get_template(cls, template_id: str) -> Dict:
         """Get full template details."""
-        # Check local first
-        for ext in ['.yaml', '.yml']:
-            filepath = os.path.join(cls.TEMPLATES_DIR, f"{template_id}{ext}")
-            if os.path.exists(filepath):
-                result = cls.parse_template(filepath)
-                if result.get('success'):
-                    template = result['template']
-                    template['source'] = 'local'
-                    template['filepath'] = filepath
-                    return {'success': True, 'template': template}
-                return result
+        # Check local directories (system dir, then bundled fallback)
+        for templates_dir in [cls.TEMPLATES_DIR, cls.LOCAL_TEMPLATES_DIR]:
+            for ext in ['.yaml', '.yml']:
+                filepath = os.path.join(templates_dir, f"{template_id}{ext}")
+                if os.path.exists(filepath):
+                    result = cls.parse_template(filepath)
+                    if result.get('success'):
+                        template = result['template']
+                        template['source'] = 'local'
+                        template['filepath'] = filepath
+                        return {'success': True, 'template': template}
+                    return result
 
         # Check remote repos
         config = cls.get_config()

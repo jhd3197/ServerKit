@@ -2,7 +2,7 @@ id: mattermost
 name: Mattermost
 version: "9.2"
 description: Open-source Slack alternative for secure team collaboration and messaging
-icon: https://mattermost.com/wp-content/uploads/2022/02/icon.svg
+icon: https://serverkit.ai/imgs/template-icons/mattermost.png
 website: https://mattermost.com
 documentation: https://docs.mattermost.com
 categories:

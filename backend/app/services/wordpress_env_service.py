@@ -3,6 +3,10 @@ WordPress Environment Service
 
 Manage WordPress production/development/staging environments.
 Handles environment creation, database cloning, and synchronization.
+
+For Docker-isolated environments (compose_project_name set), delegates to
+EnvironmentPipelineService. For legacy/standalone environments, handles
+directly using host MySQL and file system operations.
 """
 
 import os
@@ -30,6 +34,10 @@ class WordPressEnvService:
         """
         Create a new environment linked to production.
 
+        If config['isolated'] is True, delegates to EnvironmentPipelineService
+        for full Docker-isolated environment creation. Otherwise uses the
+        legacy shared-host approach.
+
         Args:
             production_site_id: ID of the production WordPressSite
             env_type: 'development' or 'staging'
@@ -39,11 +47,22 @@ class WordPressEnvService:
                 - port: Optional custom port
                 - clone_db: Whether to clone the production database
                 - sync_schedule: Optional cron schedule for auto-sync
+                - isolated: If True, use Docker-isolated pipeline (default False)
             user_id: User ID creating the environment
 
         Returns:
             Dict with success status and environment info
         """
+        # Delegate to pipeline service for Docker-isolated environments
+        if config.get('isolated'):
+            from app.services.environment_pipeline_service import EnvironmentPipelineService
+            return EnvironmentPipelineService.create_project_environment(
+                production_site_id=production_site_id,
+                env_type=env_type,
+                config=config,
+                user_id=user_id
+            )
+
         # Validate environment type
         if env_type not in ['development', 'staging']:
             return {'success': False, 'error': 'Invalid environment type. Must be development or staging.'}
@@ -213,6 +232,9 @@ class WordPressEnvService:
         """
         Sync an environment from its production source.
 
+        Docker-isolated environments (those with compose_project_name) are
+        delegated to EnvironmentPipelineService for container-aware sync.
+
         Args:
             env_site_id: ID of the environment WordPressSite to sync
             options: Optional override options for sync
@@ -228,6 +250,16 @@ class WordPressEnvService:
 
         if env_site.is_production:
             return {'success': False, 'error': 'Cannot sync a production site'}
+
+        # Delegate Docker-isolated environments to pipeline service
+        if env_site.compose_project_name:
+            from app.services.environment_pipeline_service import EnvironmentPipelineService
+            return EnvironmentPipelineService.sync_from_production(
+                env_site_id=env_site_id,
+                sync_type=options.pop('sync_type', 'full'),
+                options=options,
+                user_id=options.pop('user_id', None)
+            )
 
         prod_site = env_site.production_site
         if not prod_site:
@@ -325,14 +357,18 @@ class WordPressEnvService:
 
     @classmethod
     def delete_environment(cls, env_site_id: int, delete_files: bool = True,
-                           delete_database: bool = True) -> Dict:
+                           delete_database: bool = True, user_id: int = None) -> Dict:
         """
         Delete an environment.
+
+        Docker-isolated environments are delegated to EnvironmentPipelineService
+        for proper container and Nginx cleanup.
 
         Args:
             env_site_id: ID of the environment WordPressSite
             delete_files: Whether to delete WordPress files
             delete_database: Whether to drop the database
+            user_id: ID of the user performing the deletion
 
         Returns:
             Dict with success status
@@ -343,6 +379,14 @@ class WordPressEnvService:
 
         if env_site.is_production:
             return {'success': False, 'error': 'Cannot delete a production site this way'}
+
+        # Delegate Docker-isolated environments to pipeline service
+        if env_site.compose_project_name:
+            from app.services.environment_pipeline_service import EnvironmentPipelineService
+            return EnvironmentPipelineService.delete_environment(
+                env_site_id=env_site_id,
+                user_id=user_id
+            )
 
         env_app = env_site.application
 

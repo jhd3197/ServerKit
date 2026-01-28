@@ -2,7 +2,7 @@ id: registry
 name: Docker Registry
 version: "2.8"
 description: Private Docker container image registry for storing and distributing container images
-icon: https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png
+icon: https://serverkit.ai/imgs/template-icons/registry.png
 website: https://docs.docker.com/registry/
 documentation: https://docs.docker.com/registry/
 categories:

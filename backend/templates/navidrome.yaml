@@ -2,7 +2,7 @@ id: navidrome
 name: Navidrome
 version: "0.50"
 description: Modern music server and streamer compatible with Subsonic/Airsonic
-icon: https://www.navidrome.org/logo.png
+icon: https://serverkit.ai/imgs/template-icons/navidrome.png
 website: https://www.navidrome.org
 documentation: https://www.navidrome.org/docs/
 categories:

@@ -2,7 +2,7 @@ id: minio
 name: MinIO
 version: "2024-01"
 description: High-performance, S3-compatible object storage for cloud-native applications
-icon: https://min.io/resources/img/logo/MINIO_wordmark.png
+icon: https://serverkit.ai/imgs/template-icons/minio.png
 website: https://min.io
 documentation: https://min.io/docs/minio/linux/index.html
 categories:

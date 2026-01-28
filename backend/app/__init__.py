@@ -85,9 +85,11 @@ def create_app(config_name=None):
     from app.api.php import php_bp
     from app.api.wordpress import wordpress_bp
     from app.api.wordpress_sites import wordpress_sites_bp
+    from app.api.environment_pipeline import environment_pipeline_bp
     app.register_blueprint(php_bp, url_prefix='/api/v1/php')
     app.register_blueprint(wordpress_bp, url_prefix='/api/v1/wordpress')
     app.register_blueprint(wordpress_sites_bp, url_prefix='/api/v1/wordpress')
+    app.register_blueprint(environment_pipeline_bp, url_prefix='/api/v1/wordpress/projects')
 
     # Register blueprints - Python
     from app.api.python import python_bp
@@ -191,6 +193,9 @@ def create_app(config_name=None):
         if not MetricsHistoryService.is_running():
             MetricsHistoryService.start_collection(app)
 
+        # Start auto-sync scheduler for WordPress environments
+        _start_auto_sync_scheduler(app)
+
     # Serve frontend for root path
     @app.route('/')
     def serve_index():
@@ -212,3 +217,77 @@ def create_app(config_name=None):
 def get_socketio():
     """Get the SocketIO instance."""
     return socketio
+
+
+_auto_sync_thread = None
+
+
+def _start_auto_sync_scheduler(app):
+    """Start a background thread that checks for auto-sync schedules."""
+    global _auto_sync_thread
+    if _auto_sync_thread is not None:
+        return
+
+    import threading
+    import time
+    import logging
+
+    logger = logging.getLogger(__name__)
+
+    def auto_sync_loop():
+        while True:
+            try:
+                time.sleep(60)  # Check every 60 seconds
+                with app.app_context():
+                    _check_auto_sync_schedules(logger)
+            except Exception as e:
+                logger.error(f'Auto-sync scheduler error: {e}')
+
+    _auto_sync_thread = threading.Thread(
+        target=auto_sync_loop,
+        daemon=True,
+        name='auto-sync-scheduler'
+    )
+    _auto_sync_thread.start()
+
+
+def _check_auto_sync_schedules(logger):
+    """Check all auto-sync enabled sites and run syncs that are due."""
+    from app.models.wordpress_site import WordPressSite
+    from datetime import datetime
+
+    sites = WordPressSite.query.filter_by(auto_sync_enabled=True).all()
+    if not sites:
+        return
+
+    try:
+        from croniter import croniter
+    except ImportError:
+        logger.debug('croniter not installed, skipping auto-sync check')
+        return
+
+    now = datetime.utcnow()
+
+    for site in sites:
+        if not site.auto_sync_schedule:
+            continue
+
+        try:
+            if not croniter.is_valid(site.auto_sync_schedule):
+                continue
+
+            cron = croniter(site.auto_sync_schedule, now)
+            prev_run = cron.get_prev(datetime)
+
+            # Check if a run was due in the last 90 seconds (to account for check interval)
+            seconds_since_due = (now - prev_run).total_seconds()
+            if seconds_since_due <= 90:
+                logger.info(f'Auto-sync triggered for site {site.id} ({site.name})')
+                from app.services.environment_pipeline_service import EnvironmentPipelineService
+                EnvironmentPipelineService.sync_from_production(
+                    env_site_id=site.id,
+                    sync_type='full',
+                    user_id=None
+                )
+        except Exception as e:
+            logger.error(f'Auto-sync check failed for site {site.id}: {e}')

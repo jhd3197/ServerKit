@@ -922,3 +922,55 @@
     color: @text-tertiary;
     font-style: italic;
 }
+
+// ============================================
+// ICON REFERENCE (Developer Mode)
+// ============================================
+
+.icon-reference-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: @space-2;
+    margin-top: @space-3;
+}
+
+.icon-reference-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: @space-1;
+    padding: @space-3 @space-2;
+    border: 1px solid @border-default;
+    border-radius: @radius-md;
+    background: @bg-card;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+        border-color: @accent-primary;
+        background: @bg-hover;
+    }
+
+    &.copied {
+        border-color: @success;
+        background: @success-bg;
+    }
+
+    svg {
+        color: @text-primary;
+        opacity: 0.8;
+    }
+
+    .icon-reference-name {
+        font-size: @font-size-xs;
+        color: @text-secondary;
+        text-align: center;
+        word-break: break-word;
+        line-height: 1.2;
+    }
+
+    &.copied .icon-reference-name {
+        color: @success;
+        font-weight: @font-weight-medium;
+    }
+}

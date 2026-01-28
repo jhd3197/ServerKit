@@ -27,6 +27,16 @@ class SettingsService:
             'value': 90,
             'type': 'integer',
             'description': 'Number of days to retain audit logs'
+        },
+        'onboarding_use_cases': {
+            'value': [],
+            'type': 'json',
+            'description': 'Use cases selected during onboarding wizard'
+        },
+        'dev_mode': {
+            'value': False,
+            'type': 'boolean',
+            'description': 'Enable developer mode for debugging tools and icon reference'
         }
     }
 

@@ -2,7 +2,7 @@ id: duplicati
 name: Duplicati
 version: "2.0"
 description: Free backup software to store encrypted backups online
-icon: https://www.duplicati.com/images/duplicati-logo.svg
+icon: https://serverkit.ai/imgs/template-icons/duplicati.png
 website: https://www.duplicati.com
 documentation: https://duplicati.readthedocs.io
 categories:

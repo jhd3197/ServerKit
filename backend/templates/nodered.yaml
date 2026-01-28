@@ -2,7 +2,7 @@ id: nodered
 name: Node-RED
 version: "3.1"
 description: Flow-based programming tool for wiring together hardware devices and APIs
-icon: https://nodered.org/about/resources/media/node-red-icon.svg
+icon: https://serverkit.ai/imgs/template-icons/nodered.svg
 website: https://nodered.org
 documentation: https://nodered.org/docs/
 categories:

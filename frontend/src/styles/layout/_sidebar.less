@@ -440,6 +440,12 @@
     }
 }
 
+// Sub Navigation Item (indented under parent)
+.nav-sub-item {
+    padding-left: 2.25rem;
+    font-size: 0.8rem;
+}
+
 // Navigation Icon
 .nav-icon {
     width: 18px;
@@ -459,6 +465,121 @@
     margin-top: auto;
     border-top: 1px solid @border-default;
     flex-shrink: 0;
+    position: relative;
+}
+
+// User Context Menu
+.user-context-menu {
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: @bg-elevated;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-lg;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: @space-1;
+    z-index: @z-tooltip;
+    animation: contextMenuIn 0.15s ease-out;
+}
+
+@keyframes contextMenuIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.context-menu-section {
+    padding: 6px 8px;
+}
+
+.context-menu-label {
+    font-size: 0.65rem;
+    font-weight: @font-weight-semibold;
+    color: @text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+    opacity: 0.6;
+}
+
+.theme-switcher {
+    display: flex;
+    gap: 2px;
+    background: @bg-secondary;
+    border-radius: @radius-md;
+    padding: 2px;
+}
+
+.theme-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 0;
+    border: none;
+    background: transparent;
+    color: @text-tertiary;
+    border-radius: @radius-sm;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+        color: @text-primary;
+    }
+
+    &.active {
+        background: @accent-glow;
+        color: @accent-primary;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.context-menu-divider {
+    height: 1px;
+    background: @border-subtle;
+    margin: @space-1 0;
+}
+
+.context-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    border: none;
+    background: transparent;
+    color: @text-secondary;
+    font-size: 0.82rem;
+    font-weight: @font-weight-medium;
+    border-radius: @radius-md;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.04);
+        color: @text-primary;
+    }
+
+    &.danger {
+        color: @danger;
+
+        &:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: @danger;
+        }
+    }
+}
+
+.context-menu-arrow {
+    margin-left: auto;
+    opacity: 0.4;
 }
 
 
@@ -487,6 +608,22 @@
     font-size: 0.75rem;
     font-weight: @font-weight-semibold;
     color: white;
+}
+
+.user-menu-arrow {
+    margin-left: auto;
+    color: @text-tertiary;
+    opacity: 0.5;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+
+    &.open {
+        opacity: 1;
+        transform: rotate(180deg);
+    }
+}
+
+.user-mini:hover .user-menu-arrow {
+    opacity: 0.8;
 }
 
 .user-meta {

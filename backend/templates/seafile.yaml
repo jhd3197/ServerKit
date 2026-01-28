@@ -2,7 +2,7 @@ id: seafile
 name: Seafile
 version: "11.0"
 description: Open-source file sync and share platform with built-in collaboration
-icon: https://www.seafile.com/media/img/seafile-logo.png
+icon: https://serverkit.ai/imgs/template-icons/seafile.png
 website: https://www.seafile.com
 documentation: https://manual.seafile.com
 categories:

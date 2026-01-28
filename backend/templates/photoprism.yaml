@@ -2,7 +2,7 @@ id: photoprism
 name: PhotoPrism
 version: "231128"
 description: AI-powered photo management application with face recognition and auto-tagging
-icon: https://photoprism.app/static/icons/logo.svg
+icon: https://serverkit.ai/imgs/template-icons/photoprism.svg
 website: https://photoprism.app
 documentation: https://docs.photoprism.app
 categories:

@@ -54,3 +54,4 @@ new_templates/
 # Test artifacts
 *.test
 *.out
+/template-icons

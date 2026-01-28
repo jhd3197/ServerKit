@@ -355,6 +355,8 @@ class DatabaseSyncService:
         search_replace = options.get('search_replace', {})
         new_prefix = options.get('table_prefix')
         anonymize = options.get('anonymize', False)
+        anonymize_names = options.get('anonymize_names', False)
+        reset_passwords = options.get('reset_passwords', False)
         truncate_tables = options.get('truncate_tables', [])
 
         try:
@@ -394,9 +396,15 @@ class DatabaseSyncService:
                         for search, replace in search_replace.items():
                             line = cls._safe_search_replace(line, search, replace)
 
-                        # Anonymize user data
-                        if anonymize and 'user_email' in line.lower():
-                            line = cls._anonymize_line(line)
+                        # Anonymize user data (enhanced with name and password support)
+                        if anonymize and ('user_email' in line.lower() or 'user_pass' in line.lower()
+                                          or 'display_name' in line.lower() or 'first_name' in line.lower()
+                                          or 'last_name' in line.lower() or 'nickname' in line.lower()):
+                            line = cls._anonymize_line(
+                                line,
+                                anonymize_names=anonymize_names,
+                                reset_passwords=reset_passwords
+                            )
 
                         outfile.write(line)
 
@@ -436,15 +444,84 @@ class DatabaseSyncService:
         return text
 
     @classmethod
-    def _anonymize_line(cls, line: str) -> str:
-        """Anonymize user data in a SQL line."""
+    def _anonymize_line(cls, line: str, anonymize_names: bool = False,
+                        reset_passwords: bool = False) -> str:
+        """Anonymize user data in a SQL line.
+
+        Args:
+            line: SQL line to anonymize
+            anonymize_names: Also anonymize display_name, first_name, last_name
+            reset_passwords: Replace password hashes with a known hash
+        """
         # Replace email addresses
         line = re.sub(
             r"'([^']+@[^']+)'",
             lambda m: f"'user{hash(m.group(1)) % 10000}@example.com'",
             line
         )
+
+        # Anonymize display names in user meta
+        if anonymize_names and ('display_name' in line.lower() or 'first_name' in line.lower()
+                                or 'last_name' in line.lower() or 'nickname' in line.lower()):
+            line = re.sub(
+                r"('(?:first_name|last_name|nickname|display_name)'\s*,\s*')([^']+)(')",
+                lambda m: f"{m.group(1)}User {hash(m.group(2)) % 10000}{m.group(3)}",
+                line
+            )
+
+        # Reset passwords to a known hash (password: 'changeme')
+        if reset_passwords and 'user_pass' in line.lower():
+            line = re.sub(
+                r"\$P\$[A-Za-z0-9./]{31}",
+                "$P$BchangemeHASHEDplaceholder00000",
+                line
+            )
+
         return line
+
+    @classmethod
+    def apply_sanitization_profile(cls, profile_config: dict) -> dict:
+        """Convert a sanitization profile config into db clone/sync options.
+
+        Args:
+            profile_config: Dict from SanitizationProfile.get_config()
+
+        Returns:
+            Dict of options suitable for clone_database/clone_between_containers
+        """
+        options = {}
+
+        if profile_config.get('anonymize_emails') or profile_config.get('anonymize_names'):
+            options['anonymize'] = True
+            options['anonymize_names'] = profile_config.get('anonymize_names', False)
+            options['reset_passwords'] = profile_config.get('reset_passwords', False)
+
+        if profile_config.get('truncate_tables'):
+            options['truncate_tables'] = list(profile_config['truncate_tables'])
+
+        if profile_config.get('exclude_tables'):
+            options['exclude_tables'] = list(profile_config['exclude_tables'])
+
+        if profile_config.get('custom_search_replace'):
+            options['search_replace'] = dict(profile_config['custom_search_replace'])
+
+        # WooCommerce payment data stripping - add payment tables to truncate list
+        if profile_config.get('strip_payment_data'):
+            wc_payment_tables = [
+                'wc_order_payment_lookup',
+                'woocommerce_payment_tokens',
+                'woocommerce_payment_tokenmeta',
+            ]
+            existing_truncate = options.get('truncate_tables', [])
+            for table in wc_payment_tables:
+                if table not in existing_truncate:
+                    existing_truncate.append(table)
+            options['truncate_tables'] = existing_truncate
+
+        if profile_config.get('remove_transients'):
+            options['remove_transients'] = True
+
+        return options
 
     @classmethod
     def run_search_replace(cls, db_name: str, search: str, replace: str,
@@ -575,6 +652,260 @@ class DatabaseSyncService:
 
         except Exception:
             return []
+
+    # ==================== CONTAINER-TO-CONTAINER OPERATIONS ====================
+
+    @classmethod
+    def export_from_container(cls, compose_path: str, db_name: str,
+                               db_user: str = 'root', db_password: str = None,
+                               output_path: str = None, compress: bool = True,
+                               exclude_tables: List[str] = None) -> Dict:
+        """
+        Export a database from a Docker container's MySQL instance.
+
+        Uses docker compose exec to run mysqldump inside the container.
+
+        Args:
+            compose_path: Path to the environment's docker-compose.yml
+            db_name: Database name to export
+            db_user: MySQL user
+            db_password: MySQL password
+            output_path: Where to save the dump (auto-generated if None)
+            compress: Whether to gzip the output
+            exclude_tables: Tables to exclude from the dump
+
+        Returns:
+            Dict with success status, file_path, and size_bytes
+        """
+        cls._ensure_dirs()
+
+        if not os.path.exists(compose_path):
+            return {'success': False, 'error': f'Compose file not found: {compose_path}'}
+
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        if not output_path:
+            output_path = os.path.join(cls.SNAPSHOT_DIR, f'{db_name}_{timestamp}.sql')
+            if compress:
+                output_path += '.gz'
+
+        try:
+            # Build mysqldump command to run inside container
+            dump_cmd = ['mysqldump', '-u', db_user]
+            if db_password:
+                dump_cmd.append(f'-p{db_password}')
+            dump_cmd.extend([
+                '--single-transaction',
+                '--routines',
+                '--triggers',
+                '--add-drop-table',
+            ])
+
+            if exclude_tables:
+                for table in exclude_tables:
+                    dump_cmd.extend(['--ignore-table', f'{db_name}.{table}'])
+
+            dump_cmd.append(db_name)
+
+            # Run via docker compose exec
+            full_cmd = ['docker', 'compose', '-f', compose_path, 'exec', '-T', 'db'] + dump_cmd
+
+            if compress:
+                process = subprocess.Popen(
+                    full_cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE
+                )
+                with gzip.open(output_path, 'wb') as f:
+                    while True:
+                        chunk = process.stdout.read(8192)
+                        if not chunk:
+                            break
+                        f.write(chunk)
+                process.wait()
+                if process.returncode != 0:
+                    error = process.stderr.read().decode()
+                    if os.path.exists(output_path):
+                        os.remove(output_path)
+                    return {'success': False, 'error': f'Container mysqldump failed: {error}'}
+            else:
+                with open(output_path, 'w') as f:
+                    result = subprocess.run(
+                        full_cmd, stdout=f, stderr=subprocess.PIPE, text=True, timeout=600
+                    )
+                    if result.returncode != 0:
+                        if os.path.exists(output_path):
+                            os.remove(output_path)
+                        return {'success': False, 'error': f'Container mysqldump failed: {result.stderr}'}
+
+            size_bytes = os.path.getsize(output_path)
+            return {
+                'success': True,
+                'file_path': output_path,
+                'size_bytes': size_bytes,
+                'compressed': compress,
+                'db_name': db_name,
+            }
+
+        except subprocess.TimeoutExpired:
+            if os.path.exists(output_path):
+                os.remove(output_path)
+            return {'success': False, 'error': 'Container mysqldump timed out'}
+        except Exception as e:
+            if os.path.exists(output_path):
+                os.remove(output_path)
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def import_to_container(cls, compose_path: str, snapshot_path: str,
+                             db_name: str, db_user: str = 'root',
+                             db_password: str = None) -> Dict:
+        """
+        Import a SQL dump into a Docker container's MySQL instance.
+
+        Args:
+            compose_path: Path to the environment's docker-compose.yml
+            snapshot_path: Path to the .sql or .sql.gz file to import
+            db_name: Target database name
+            db_user: MySQL user
+            db_password: MySQL password
+
+        Returns:
+            Dict with success status
+        """
+        if not os.path.exists(compose_path):
+            return {'success': False, 'error': f'Compose file not found: {compose_path}'}
+
+        if not os.path.exists(snapshot_path):
+            return {'success': False, 'error': f'Snapshot file not found: {snapshot_path}'}
+
+        try:
+            # Build mysql import command
+            import_cmd = ['docker', 'compose', '-f', compose_path, 'exec', '-T', 'db',
+                          'mysql', '-u', db_user]
+            if db_password:
+                import_cmd.append(f'-p{db_password}')
+            import_cmd.append(db_name)
+
+            if snapshot_path.endswith('.gz'):
+                with gzip.open(snapshot_path, 'rb') as f:
+                    result = subprocess.run(
+                        import_cmd,
+                        stdin=f,
+                        capture_output=True,
+                        timeout=1800
+                    )
+            else:
+                with open(snapshot_path, 'r') as f:
+                    result = subprocess.run(
+                        import_cmd,
+                        stdin=f,
+                        capture_output=True,
+                        timeout=1800
+                    )
+
+            if result.returncode != 0:
+                error = result.stderr.decode() if isinstance(result.stderr, bytes) else result.stderr
+                return {'success': False, 'error': f'Container import failed: {error}'}
+
+            return {'success': True, 'message': f'Imported {snapshot_path} into container DB {db_name}'}
+
+        except subprocess.TimeoutExpired:
+            return {'success': False, 'error': 'Container import timed out (>30 minutes)'}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def clone_between_containers(cls, source_compose_path: str, target_compose_path: str,
+                                  source_db: str, target_db: str,
+                                  source_user: str = 'root', target_user: str = 'root',
+                                  source_password: str = None, target_password: str = None,
+                                  options: Dict = None) -> Dict:
+        """
+        Clone a database from one Docker container to another with optional transformations.
+
+        Exports from source container, optionally transforms the dump,
+        then imports into the target container.
+
+        Args:
+            source_compose_path: Path to source environment's docker-compose.yml
+            target_compose_path: Path to target environment's docker-compose.yml
+            source_db: Source database name
+            target_db: Target database name
+            source_user/target_user: MySQL users
+            source_password/target_password: MySQL passwords
+            options: Transformation options (search_replace, table_prefix,
+                     anonymize, truncate_tables, exclude_tables)
+
+        Returns:
+            Dict with success status and clone info
+        """
+        options = options or {}
+        cls._ensure_dirs()
+
+        try:
+            # Step 1: Export from source container (uncompressed for transformation)
+            export_result = cls.export_from_container(
+                compose_path=source_compose_path,
+                db_name=source_db,
+                db_user=source_user,
+                db_password=source_password,
+                compress=False,
+                exclude_tables=options.get('exclude_tables', [])
+            )
+
+            if not export_result['success']:
+                return export_result
+
+            dump_file = export_result['file_path']
+            transformed_file = dump_file.replace('.sql', '_transformed.sql')
+
+            try:
+                # Step 2: Transform the dump if needed
+                needs_transform = any([
+                    options.get('search_replace'),
+                    options.get('table_prefix'),
+                    options.get('anonymize'),
+                    options.get('truncate_tables')
+                ])
+
+                if needs_transform:
+                    transform_result = cls._transform_dump(
+                        dump_file,
+                        transformed_file,
+                        options
+                    )
+                    if not transform_result['success']:
+                        return transform_result
+                    import_file = transformed_file
+                else:
+                    import_file = dump_file
+
+                # Step 3: Import into target container
+                import_result = cls.import_to_container(
+                    compose_path=target_compose_path,
+                    snapshot_path=import_file,
+                    db_name=target_db,
+                    db_user=target_user,
+                    db_password=target_password
+                )
+
+                if not import_result['success']:
+                    return import_result
+
+                return {
+                    'success': True,
+                    'message': f'Database cloned from container to container: {source_db} → {target_db}',
+                    'transformations_applied': list(options.keys()) if needs_transform else []
+                }
+
+            finally:
+                # Cleanup temp files
+                for f in [dump_file, transformed_file]:
+                    if os.path.exists(f):
+                        os.remove(f)
+
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
 
     @classmethod
     def cleanup_old_snapshots(cls, days: int = 30, keep_tagged: bool = True) -> Dict:

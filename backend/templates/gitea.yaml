@@ -2,7 +2,7 @@ id: gitea
 name: Gitea
 version: "1.21"
 description: Lightweight self-hosted Git service
-icon: /icons/gitea.png
+icon: https://serverkit.ai/imgs/template-icons/gitea.svg
 categories:
   - devops
   - git

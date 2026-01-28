@@ -1,0 +1,459 @@
+// ============================================
+// SETUP WIZARD (Onboarding)
+// ============================================
+
+.setup-wizard {
+    min-height: 100vh;
+    .flex-center();
+    padding: @space-5;
+    background: @bg-body;
+}
+
+.wizard-card {
+    width: 100%;
+    max-width: 700px;
+    background: @bg-card;
+    border: 1px solid @border-subtle;
+    border-radius: @radius-2xl;
+    padding: @space-10;
+}
+
+// --------------------------------------------
+// Header (logo + title)
+// --------------------------------------------
+.wizard-header {
+    text-align: center;
+    margin-bottom: @space-8;
+
+    .wizard-logo {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto @space-4;
+    }
+
+    h1 {
+        font-size: @font-size-2xl;
+        font-weight: @font-weight-bold;
+        margin-bottom: @space-2;
+    }
+
+    p {
+        color: @text-secondary;
+    }
+}
+
+// --------------------------------------------
+// Progress bar
+// --------------------------------------------
+.wizard-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: @space-3;
+    margin-bottom: @space-8;
+}
+
+.wizard-progress-step {
+    .flex-center();
+    width: 32px;
+    height: 32px;
+    border-radius: @radius-full;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-semibold;
+    border: 2px solid @border-default;
+    color: @text-tertiary;
+    background: transparent;
+    .transition();
+
+    &.active {
+        border-color: @accent-primary;
+        background: @accent-primary;
+        color: #fff;
+    }
+
+    &.completed {
+        border-color: @accent-primary;
+        background: fade(@accent-primary, 15%);
+        color: @accent-primary;
+    }
+}
+
+.wizard-progress-line {
+    width: 40px;
+    height: 2px;
+    background: @border-default;
+    .transition(background);
+
+    &.active {
+        background: @accent-primary;
+    }
+}
+
+// --------------------------------------------
+// Step content
+// --------------------------------------------
+.wizard-step {
+    animation: wizardFadeIn 0.3s ease;
+}
+
+@keyframes wizardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.wizard-step-title {
+    font-size: @font-size-lg;
+    font-weight: @font-weight-semibold;
+    margin-bottom: @space-2;
+}
+
+.wizard-step-description {
+    color: @text-secondary;
+    font-size: @font-size-base;
+    margin-bottom: @space-6;
+}
+
+// --------------------------------------------
+// Option grid (Step 2 — use cases)
+// --------------------------------------------
+.option-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: @space-4;
+    margin-bottom: @space-6;
+
+    @media (max-width: @breakpoint-sm) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.option-card {
+    display: flex;
+    flex-direction: column;
+    gap: @space-3;
+    padding: @space-5;
+    background: @bg-elevated;
+    border: 2px solid @border-default;
+    border-radius: @radius-xl;
+    cursor: pointer;
+    .transition();
+    position: relative;
+
+    &:hover {
+        border-color: @border-active;
+    }
+
+    &.selected {
+        border-color: @accent-primary;
+        background: fade(@accent-primary, 8%);
+    }
+
+    .option-card-icon {
+        .icon-box(40px);
+        background: @bg-secondary;
+        color: @text-secondary;
+        border-radius: @radius-lg;
+    }
+
+    .option-card-label {
+        font-weight: @font-weight-semibold;
+        font-size: @font-size-base;
+    }
+
+    .option-card-desc {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        line-height: @line-height-normal;
+    }
+
+    .option-card-check {
+        position: absolute;
+        top: @space-3;
+        right: @space-3;
+        width: 22px;
+        height: 22px;
+        border-radius: @radius-full;
+        .flex-center();
+        background: @accent-primary;
+        color: #fff;
+        opacity: 0;
+        transform: scale(0.5);
+        .transition();
+    }
+
+    &.selected .option-card-check {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+// --------------------------------------------
+// Tier grid (Step 3)
+// --------------------------------------------
+.tier-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: @space-4;
+    margin-bottom: @space-6;
+
+    @media (max-width: @breakpoint-md) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.tier-card {
+    display: flex;
+    flex-direction: column;
+    padding: @space-5;
+    background: @bg-elevated;
+    border: 2px solid @border-default;
+    border-radius: @radius-xl;
+    .transition();
+
+    &.detected {
+        border-color: @accent-primary;
+        background: fade(@accent-primary, 8%);
+    }
+
+    .tier-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: @space-4;
+    }
+
+    .tier-card-name {
+        font-weight: @font-weight-bold;
+        font-size: @font-size-md;
+    }
+
+    .tier-card-badge {
+        font-size: @font-size-xs;
+        padding: 2px 8px;
+        background: @accent-primary;
+        color: #fff;
+        border-radius: @radius-full;
+        font-weight: @font-weight-medium;
+    }
+
+    .tier-card-specs {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        margin-bottom: @space-4;
+        padding-bottom: @space-4;
+        border-bottom: 1px solid @border-default;
+    }
+
+    .tier-features {
+        display: flex;
+        flex-direction: column;
+        gap: @space-2;
+        flex: 1;
+    }
+
+    .tier-feature {
+        display: flex;
+        align-items: center;
+        gap: @space-2;
+        font-size: @font-size-sm;
+
+        .feature-icon {
+            flex-shrink: 0;
+            width: 16px;
+            height: 16px;
+        }
+
+        &.available .feature-icon {
+            color: @success;
+        }
+
+        &.unavailable {
+            color: @text-tertiary;
+
+            .feature-icon {
+                color: @text-tertiary;
+            }
+        }
+    }
+}
+
+.tier-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: @space-3;
+    padding: @space-4;
+    background: @warning-bg;
+    border: 1px solid @warning-border;
+    border-radius: @radius-lg;
+    margin-bottom: @space-6;
+
+    .tier-warning-icon {
+        flex-shrink: 0;
+        color: @warning;
+    }
+
+    .tier-warning-text {
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        line-height: @line-height-normal;
+    }
+}
+
+// --------------------------------------------
+// Summary panel (Step 4)
+// --------------------------------------------
+.summary-panel {
+    background: @bg-elevated;
+    border: 1px solid @border-default;
+    border-radius: @radius-xl;
+    padding: @space-6;
+    margin-bottom: @space-6;
+}
+
+.summary-section {
+    &:not(:last-child) {
+        margin-bottom: @space-5;
+        padding-bottom: @space-5;
+        border-bottom: 1px solid @border-default;
+    }
+}
+
+.summary-section-title {
+    font-size: @font-size-sm;
+    font-weight: @font-weight-semibold;
+    color: @text-tertiary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: @space-3;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: @space-2 0;
+
+    .summary-label {
+        color: @text-secondary;
+        font-size: @font-size-sm;
+    }
+
+    .summary-value {
+        font-weight: @font-weight-medium;
+        font-size: @font-size-sm;
+    }
+}
+
+.summary-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-2;
+}
+
+.summary-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: @space-1 @space-3;
+    background: fade(@accent-primary, 12%);
+    color: @accent-primary;
+    border-radius: @radius-full;
+    font-size: @font-size-sm;
+    font-weight: @font-weight-medium;
+}
+
+.recommendation-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @space-2;
+}
+
+.recommendation-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: @space-2;
+    padding: @space-2 @space-4;
+    background: @bg-secondary;
+    border: 1px solid @border-default;
+    border-radius: @radius-lg;
+    font-size: @font-size-sm;
+    color: @text-primary;
+}
+
+// --------------------------------------------
+// Navigation buttons
+// --------------------------------------------
+.wizard-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: @space-8;
+    padding-top: @space-6;
+    border-top: 1px solid @border-default;
+}
+
+.btn-wizard-prev {
+    .button-base();
+    color: @text-secondary;
+    border-color: @border-default;
+    background: transparent;
+
+    &:hover {
+        background: @bg-hover;
+        color: @text-primary;
+    }
+}
+
+.btn-wizard-next {
+    .button-base();
+    background: @accent-primary;
+    color: #fff;
+    margin-left: auto;
+
+    &:hover {
+        background: @accent-hover;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+// --------------------------------------------
+// Setup info banner (reused in step 1)
+// --------------------------------------------
+.wizard-info-banner {
+    display: flex;
+    gap: @space-4;
+    padding: @space-4;
+    background: fade(@accent-primary, 10%);
+    border-radius: @radius-md;
+    margin-bottom: @space-6;
+
+    .wizard-info-icon {
+        flex-shrink: 0;
+        color: @accent-primary;
+    }
+
+    p {
+        margin: 0;
+        font-size: @font-size-sm;
+        color: @text-secondary;
+        line-height: @line-height-normal;
+    }
+}
+
+// --------------------------------------------
+// Loading state
+// --------------------------------------------
+.wizard-loading {
+    .flex-center();
+    padding: @space-10;
+    color: @text-secondary;
+}

@@ -2,7 +2,7 @@ id: n8n
 name: n8n
 version: "1.22"
 description: Extendable workflow automation tool for connecting apps and services
-icon: https://n8n.io/favicon.ico
+icon: https://serverkit.ai/imgs/template-icons/n8n.ico
 website: https://n8n.io
 documentation: https://docs.n8n.io
 categories:

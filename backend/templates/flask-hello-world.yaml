@@ -2,7 +2,7 @@ id: flask-hello-world
 name: Flask - Hello World
 version: "1.0"
 description: Simple Flask app for testing and debugging. Shows server info, port, and connection status. No database needed.
-icon: https://flask.palletsprojects.com/en/2.3.x/_images/flask-logo.png
+icon: https://serverkit.ai/imgs/template-icons/flask-hello-world.ico
 website: https://flask.palletsprojects.com
 documentation: https://flask.palletsprojects.com/en/2.3.x/quickstart/
 categories:

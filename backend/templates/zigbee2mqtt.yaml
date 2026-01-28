@@ -2,7 +2,7 @@ id: zigbee2mqtt
 name: Zigbee2MQTT
 version: "1.35"
 description: Bridge Zigbee devices to MQTT without proprietary bridges or gateways
-icon: https://www.zigbee2mqtt.io/logo.png
+icon: https://serverkit.ai/imgs/template-icons/zigbee2mqtt.png
 website: https://www.zigbee2mqtt.io
 documentation: https://www.zigbee2mqtt.io/guide/getting-started/
 categories:
