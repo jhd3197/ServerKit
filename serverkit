@@ -491,6 +491,17 @@ cmd_uninstall() {
     print_header
     echo ""
     print_warning "This will remove ServerKit and all data!"
+    echo ""
+    echo "The following will be removed:"
+    echo "  - ServerKit backend service (systemd)"
+    echo "  - Frontend Docker container and images"
+    echo "  - Installation directory ($INSTALL_DIR)"
+    echo "  - Configuration (/etc/serverkit)"
+    echo "  - App data (/var/serverkit)"
+    echo "  - Logs (/var/log/serverkit)"
+    echo "  - Nginx site configs for ServerKit"
+    echo "  - CLI symlink (/usr/local/bin/serverkit)"
+    echo ""
     read -p "Are you sure? (y/N) " -n 1 -r
     echo
 
@@ -511,9 +522,26 @@ cmd_uninstall() {
         rm -rf /var/log/serverkit
         rm -rf /var/lib/serverkit
 
+        # Remove ServerKit config and app data
+        rm -rf /etc/serverkit
+        rm -rf /var/serverkit
+
+        # Remove nginx site configs installed by ServerKit
+        print_info "Removing nginx configs..."
+        rm -f /etc/nginx/sites-enabled/serverkit.conf
+        rm -f /etc/nginx/sites-available/serverkit.conf
+        rm -f /etc/nginx/sites-available/example.conf.template
+        # Reload nginx if it's still running (don't stop it — user may use it for other sites)
+        if systemctl is-active --quiet nginx 2>/dev/null; then
+            systemctl reload nginx 2>/dev/null || true
+        fi
+
         systemctl daemon-reload
 
         print_success "ServerKit uninstalled"
+        echo ""
+        echo "Note: System packages (Docker, Node.js, nginx, Python) were NOT removed."
+        echo "Remove them manually if no longer needed."
         echo ""
         echo "To reinstall, run:"
         echo "  cd ~ && curl -fsSL https://serverkit.ai/install.sh | sudo bash"
