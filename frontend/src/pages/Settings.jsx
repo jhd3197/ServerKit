@@ -4,12 +4,32 @@ import { useTheme } from '../contexts/ThemeContext';
 import api from '../services/api';
 import UsersTab from '../components/settings/UsersTab';
 import AuditLogTab from '../components/settings/AuditLogTab';
-import { Github, FileText, HelpCircle, MessageSquare, Bug, Check, Download, CheckCircle, RefreshCw, ExternalLink, Star, X } from 'lucide-react';
+import {
+    Github, FileText, HelpCircle, MessageSquare, Bug, Check, Download, CheckCircle,
+    RefreshCw, ExternalLink, Star, X, Code, Search, Container, Globe, BarChart3,
+    Database, Shield, Cloud, Video, Music, Image, Home, Server, GitBranch, Workflow,
+    HardDrive, Lock, Users, Settings as SettingsIcon, Layers, ChevronDown, Copy, Tag,
+    Cpu, AlertTriangle, Info, Activity, Terminal, Play, Square, Trash2, Plus, Package,
+    ArrowRight, ArrowLeft, Eye, Save, Clock, Calendar, Edit3, Link, Unlink, Archive,
+    Radio, Zap, MemoryStick, Monitor, Sun, Moon, ChevronRight, ChevronUp, LogOut,
+    Loader, RotateCcw, FolderOpen, Layout, Palette, Camera, Newspaper, TrendingUp,
+    Sparkles, ArrowUpCircle, AlertCircle, XCircle, GitCompare, GitCommit, Rocket,
+    Minus, Unlock, ArrowDownLeft, ArrowUpRight
+} from 'lucide-react';
 import ServerKitLogo from '../assets/ServerKitLogo.svg';
 
 const Settings = () => {
     const [activeTab, setActiveTab] = useState('profile');
     const { isAdmin } = useAuth();
+    const [devMode, setDevMode] = useState(false);
+
+    useEffect(() => {
+        if (isAdmin) {
+            api.getSystemSettings().then(data => {
+                setDevMode(data.dev_mode || false);
+            }).catch(() => {});
+        }
+    }, [isAdmin]);
 
     return (
         <div className="page settings-page">
@@ -120,6 +140,18 @@ const Settings = () => {
                             </button>
                         </>
                     )}
+                    {devMode && isAdmin && (
+                        <>
+                            <div className="settings-nav-divider">Developer</div>
+                            <button
+                                className={`settings-nav-item ${activeTab === 'developer' ? 'active' : ''}`}
+                                onClick={() => setActiveTab('developer')}
+                            >
+                                <Code size={18} />
+                                Icon Reference
+                            </button>
+                        </>
+                    )}
                     <button
                         className={`settings-nav-item ${activeTab === 'about' ? 'active' : ''}`}
                         onClick={() => setActiveTab('about')}
@@ -141,7 +173,8 @@ const Settings = () => {
                     {activeTab === 'system' && <SystemInfo />}
                     {activeTab === 'users' && isAdmin && <UsersTab />}
                     {activeTab === 'audit' && isAdmin && <AuditLogTab />}
-                    {activeTab === 'site' && isAdmin && <SiteSettings />}
+                    {activeTab === 'site' && isAdmin && <SiteSettings onDevModeChange={setDevMode} />}
+                    {activeTab === 'developer' && devMode && isAdmin && <IconReference />}
                     {activeTab === 'about' && <AboutSection />}
                 </div>
             </div>
@@ -1914,9 +1947,10 @@ const AboutSection = () => {
     );
 };
 
-const SiteSettings = () => {
+const SiteSettings = ({ onDevModeChange }) => {
     const [settings, setSettings] = useState({
-        registration_enabled: false
+        registration_enabled: false,
+        dev_mode: false
     });
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -1930,7 +1964,8 @@ const SiteSettings = () => {
         try {
             const data = await api.getSystemSettings();
             setSettings({
-                registration_enabled: data.registration_enabled || false
+                registration_enabled: data.registration_enabled || false,
+                dev_mode: data.dev_mode || false
             });
         } catch (err) {
             console.error('Failed to load settings:', err);
@@ -1939,15 +1974,18 @@ const SiteSettings = () => {
         }
     }
 
-    async function handleToggleRegistration() {
+    async function handleToggleSetting(key, label) {
         setSaving(true);
         setMessage(null);
 
         try {
-            const newValue = !settings.registration_enabled;
-            await api.updateSystemSetting('registration_enabled', newValue);
-            setSettings({ ...settings, registration_enabled: newValue });
-            setMessage({ type: 'success', text: `User registration ${newValue ? 'enabled' : 'disabled'}` });
+            const newValue = !settings[key];
+            await api.updateSystemSetting(key, newValue);
+            setSettings({ ...settings, [key]: newValue });
+            setMessage({ type: 'success', text: `${label} ${newValue ? 'enabled' : 'disabled'}` });
+            if (key === 'dev_mode' && onDevModeChange) {
+                onDevModeChange(newValue);
+            }
         } catch (err) {
             setMessage({ type: 'error', text: err.message || 'Failed to update setting' });
         } finally {
@@ -1979,7 +2017,7 @@ const SiteSettings = () => {
                             <input
                                 type="checkbox"
                                 checked={settings.registration_enabled}
-                                onChange={handleToggleRegistration}
+                                onChange={() => handleToggleSetting('registration_enabled', 'User registration')}
                                 disabled={saving}
                             />
                             <span className="toggle-slider"></span>
@@ -1990,6 +2028,146 @@ const SiteSettings = () => {
                     </span>
                 </div>
             </div>
+
+            <div className="settings-card">
+                <h3>Developer Mode</h3>
+                <p>Enable developer tools and diagnostics.</p>
+
+                <div className="form-group">
+                    <label className="toggle-switch-label">
+                        <span>Enable developer mode</span>
+                        <label className="toggle-switch">
+                            <input
+                                type="checkbox"
+                                checked={settings.dev_mode}
+                                onChange={() => handleToggleSetting('dev_mode', 'Developer mode')}
+                                disabled={saving}
+                            />
+                            <span className="toggle-slider"></span>
+                        </label>
+                    </label>
+                    <span className="form-help">
+                        Enables the Developer tab with icon reference and diagnostic tools.
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const ICON_CATALOG = {
+    'General': {
+        Search, X, Check, Copy, Plus, Trash2, Edit3, Save, Eye, Info,
+        HelpCircle, AlertTriangle, AlertCircle, ExternalLink, Link, Unlink,
+        ChevronDown, ChevronRight, ChevronUp, ArrowRight, ArrowLeft,
+        ArrowUpRight, ArrowDownLeft, ArrowUpCircle
+    },
+    'Status': {
+        CheckCircle, XCircle, Loader, RefreshCw, RotateCcw, Activity,
+        Zap, Sparkles
+    },
+    'Files & Data': {
+        FileText, FolderOpen, Archive, Download, Package, Database,
+        HardDrive, Layers, Tag
+    },
+    'Media': {
+        Image, Video, Music, Camera
+    },
+    'Development': {
+        Code, Terminal, GitBranch, GitCommit, GitCompare, Rocket,
+        Bug, Container, Workflow, Layout
+    },
+    'Infrastructure': {
+        Server, Globe, Cloud, Shield, Lock, Unlock, Cpu, MemoryStick,
+        Radio, Monitor
+    },
+    'Communication': {
+        MessageSquare, Users
+    },
+    'Navigation & UI': {
+        Home, Star, Sun, Moon, Palette, Play, Square, Calendar, Clock,
+        LogOut, SettingsIcon, Newspaper, TrendingUp, BarChart3, Minus
+    },
+    'Brands': {
+        Github
+    }
+};
+
+const IconReference = () => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [copiedIcon, setCopiedIcon] = useState(null);
+
+    function handleCopyImport(name) {
+        navigator.clipboard.writeText(name);
+        setCopiedIcon(name);
+        setTimeout(() => setCopiedIcon(null), 1500);
+    }
+
+    const filteredCatalog = Object.entries(ICON_CATALOG).reduce((acc, [group, icons]) => {
+        if (!searchQuery) {
+            acc[group] = icons;
+            return acc;
+        }
+        const filtered = Object.entries(icons).filter(([name]) =>
+            name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        if (filtered.length > 0) {
+            acc[group] = Object.fromEntries(filtered);
+        }
+        return acc;
+    }, {});
+
+    const totalIcons = Object.values(ICON_CATALOG).reduce((sum, icons) => sum + Object.keys(icons).length, 0);
+
+    return (
+        <div className="settings-section">
+            <h2>Icon Reference</h2>
+            <p className="section-description">
+                Lucide React icons available in the project ({totalIcons} icons). Click an icon name to copy it.
+            </p>
+
+            <div className="settings-card">
+                <div className="form-group">
+                    <div className="search-input-wrapper" style={{ position: 'relative' }}>
+                        <Search size={16} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }} />
+                        <input
+                            type="text"
+                            placeholder="Search icons..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="form-input"
+                            style={{ paddingLeft: 36 }}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {Object.entries(filteredCatalog).map(([group, icons]) => (
+                <div key={group} className="settings-card">
+                    <h3>{group}</h3>
+                    <div className="icon-reference-grid">
+                        {Object.entries(icons).map(([name, IconComp]) => (
+                            <button
+                                key={name}
+                                className={`icon-reference-item ${copiedIcon === name ? 'copied' : ''}`}
+                                onClick={() => handleCopyImport(name)}
+                                title={`Click to copy "${name}"`}
+                            >
+                                <IconComp size={20} />
+                                <span className="icon-reference-name">
+                                    {copiedIcon === name ? 'Copied!' : name}
+                                </span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            ))}
+
+            {Object.keys(filteredCatalog).length === 0 && (
+                <div className="settings-card">
+                    <p style={{ textAlign: 'center', opacity: 0.5 }}>No icons match "{searchQuery}"</p>
+                </div>
+            )}
         </div>
     );
 };

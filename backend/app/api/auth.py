@@ -8,7 +8,7 @@ from flask_jwt_extended import (
     get_jwt
 )
 from app import db, limiter
-from app.models import User, AuditLog
+from app.models import User, AuditLog, SystemSettings
 from app.services.settings_service import SettingsService
 from app.services.audit_service import AuditService
 
@@ -66,10 +66,6 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    # Mark setup as complete if this is the first user
-    if is_first_user:
-        SettingsService.complete_setup(user_id=user.id)
-
     # Log the user creation
     AuditService.log_user_action(
         action=AuditLog.ACTION_USER_CREATE,
@@ -89,6 +85,39 @@ def register():
         'refresh_token': refresh_token,
         'is_first_user': is_first_user
     }), 201
+
+
+ALLOWED_USE_CASES = {'wordpress', 'web-apps', 'self-hosted', 'devops'}
+
+
+@auth_bp.route('/complete-onboarding', methods=['POST'])
+@jwt_required()
+def complete_onboarding():
+    """Complete the onboarding wizard and mark setup as done."""
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+
+    if not user or user.role != User.ROLE_ADMIN:
+        return jsonify({'error': 'Admin access required'}), 403
+
+    data = request.get_json() or {}
+    use_cases = data.get('use_cases', [])
+
+    # Validate use_cases
+    if not isinstance(use_cases, list):
+        return jsonify({'error': 'use_cases must be a list'}), 400
+
+    invalid = set(use_cases) - ALLOWED_USE_CASES
+    if invalid:
+        return jsonify({'error': f'Invalid use cases: {", ".join(invalid)}'}), 400
+
+    # Save onboarding use cases
+    SettingsService.set('onboarding_use_cases', use_cases, user_id=user.id)
+
+    # Mark setup as complete
+    SettingsService.complete_setup(user_id=user.id)
+
+    return jsonify({'message': 'Onboarding completed successfully'}), 200
 
 
 @auth_bp.route('/login', methods=['POST'])

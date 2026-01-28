@@ -4,7 +4,8 @@ import {
     Search, X, Star, ExternalLink, BookOpen, Container, Globe, BarChart3,
     Database, Shield, Cloud, MessageSquare, Video, Music, Image, Home,
     Code, Server, GitBranch, Workflow, HardDrive, Lock, Users, FileText,
-    Settings, Layers, ChevronDown, Copy, Check, Tag, Cpu, HardDriveIcon
+    Settings, Layers, ChevronDown, Copy, Check, Tag, Cpu, HardDriveIcon,
+    Newspaper, TrendingUp
 } from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/ToastContext';
@@ -219,29 +220,30 @@ const Templates = () => {
 
     function getCategoryIcon(category) {
         const icons = {
-            monitoring: '📊',
-            devops: '⚙️',
-            docker: '🐳',
-            cms: '📝',
-            blog: '✍️',
-            storage: '💾',
-            collaboration: '👥',
-            git: '🔀',
-            development: '💻',
-            networking: '🌐',
-            proxy: '🔄',
-            ssl: '🔒',
-            productivity: '📋',
-            management: '📁',
-            publishing: '📰',
-            media: '🎬',
-            security: '🛡️',
-            database: '🗄️',
-            'home-automation': '🏠',
-            analytics: '📈',
-            iot: '📡'
+            monitoring: BarChart3,
+            devops: Settings,
+            docker: Container,
+            cms: FileText,
+            blog: BookOpen,
+            storage: HardDrive,
+            collaboration: Users,
+            git: GitBranch,
+            development: Code,
+            networking: Globe,
+            proxy: Workflow,
+            ssl: Lock,
+            productivity: Layers,
+            management: Server,
+            publishing: Newspaper,
+            media: Video,
+            security: Shield,
+            database: Database,
+            'home-automation': Home,
+            analytics: TrendingUp,
+            iot: Cpu
         };
-        return icons[category] || '📦';
+        const Icon = icons[category] || Container;
+        return <Icon size={14} />;
     }
 
     async function handleViewTemplate(template) {

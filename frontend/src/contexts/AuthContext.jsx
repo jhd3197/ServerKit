@@ -25,12 +25,8 @@ export function AuthProvider({ children }) {
                 checked: true
             });
 
-            // If setup is complete, check authentication
-            if (!status.needs_setup) {
-                await checkAuth();
-            } else {
-                setLoading(false);
-            }
+            // Always check auth — user may be mid-onboarding wizard with valid session
+            await checkAuth();
         } catch (error) {
             console.error('Setup status check failed:', error);
             // Fallback to checking auth directly
@@ -74,13 +70,16 @@ export function AuthProvider({ children }) {
     async function register(email, username, password) {
         const data = await api.register(email, username, password);
         setUser(data.user);
-        // After first registration, setup is complete - update status
+        return data;
+    }
+
+    async function completeOnboarding(useCases) {
+        await api.completeOnboarding(useCases);
         setSetupStatus({
             needsSetup: false,
             registrationEnabled: false,
             checked: true
         });
-        return data;
     }
 
     function logout() {
@@ -106,6 +105,7 @@ export function AuthProvider({ children }) {
         loading,
         login,
         register,
+        completeOnboarding,
         logout,
         updateUser,
         refreshUser,
