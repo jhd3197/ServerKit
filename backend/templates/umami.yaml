@@ -2,7 +2,7 @@ id: umami
 name: Umami
 version: "2.9"
 description: Simple, fast, privacy-focused alternative to Google Analytics
-icon: https://umami.is/images/umami-logo.svg
+icon: https://serverkit.ai/imgs/template-icons/umami.ico
 website: https://umami.is
 documentation: https://umami.is/docs
 categories:

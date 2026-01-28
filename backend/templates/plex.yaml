@@ -2,7 +2,7 @@ id: plex
 name: Plex Media Server
 version: "1.32"
 description: Organize and stream your personal media collection to any device
-icon: https://www.plex.tv/wp-content/uploads/2018/01/pmp-icon-1.png
+icon: https://serverkit.ai/imgs/template-icons/plex.png
 website: https://www.plex.tv
 documentation: https://support.plex.tv
 categories:

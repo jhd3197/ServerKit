@@ -2,7 +2,7 @@ id: jellyfin
 name: Jellyfin
 version: "10.8"
 description: Free and open-source media server for streaming movies, TV shows, music, and more
-icon: https://jellyfin.org/images/logo.svg
+icon: https://serverkit.ai/imgs/template-icons/jellyfin.svg
 website: https://jellyfin.org
 documentation: https://jellyfin.org/docs/
 categories:

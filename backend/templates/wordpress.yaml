@@ -2,7 +2,7 @@ id: wordpress
 name: WordPress
 version: "6.4"
 description: World's most popular content management system for blogs and websites
-icon: https://s.w.org/style/images/about/WordPress-logotype-wmark.png
+icon: https://serverkit.ai/imgs/template-icons/wordpress.png
 website: https://wordpress.org
 documentation: https://wordpress.org/documentation/
 categories:

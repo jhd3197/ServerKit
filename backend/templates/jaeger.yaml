@@ -2,7 +2,7 @@ id: jaeger
 name: Jaeger
 version: "1.52"
 description: Open-source distributed tracing system for monitoring and troubleshooting microservices
-icon: https://www.jaegertracing.io/img/jaeger-icon-color.png
+icon: https://serverkit.ai/imgs/template-icons/jaeger.png
 website: https://www.jaegertracing.io
 documentation: https://www.jaegertracing.io/docs/
 categories:

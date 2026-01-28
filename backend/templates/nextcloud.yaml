@@ -2,7 +2,7 @@ id: nextcloud
 name: Nextcloud
 version: "28.0"
 description: Self-hosted productivity platform with file sync and collaboration
-icon: /icons/nextcloud.png
+icon: https://serverkit.ai/imgs/template-icons/nextcloud.svg
 categories:
   - storage
   - collaboration

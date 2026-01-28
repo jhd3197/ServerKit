@@ -2,7 +2,7 @@ id: code-server
 name: Code Server
 version: "4.20"
 description: VS Code in the browser with full IDE features and extensions support
-icon: https://code.visualstudio.com/favicon.ico
+icon: https://serverkit.ai/imgs/template-icons/code-server.ico
 website: https://coder.com/code-server
 documentation: https://coder.com/docs/code-server/latest
 categories:

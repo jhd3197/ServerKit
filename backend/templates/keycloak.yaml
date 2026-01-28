@@ -2,7 +2,7 @@ id: keycloak
 name: Keycloak
 version: "23.0"
 description: Open-source identity and access management for modern applications
-icon: https://www.keycloak.org/resources/images/logo.svg
+icon: https://serverkit.ai/imgs/template-icons/keycloak.svg
 website: https://www.keycloak.org
 documentation: https://www.keycloak.org/documentation
 categories:

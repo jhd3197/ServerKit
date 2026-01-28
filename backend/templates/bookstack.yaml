@@ -2,7 +2,7 @@ id: bookstack
 name: BookStack
 version: "23.12"
 description: Simple, self-hosted platform for organizing and storing information
-icon: https://www.bookstackapp.com/images/bookstack-logo.svg
+icon: https://serverkit.ai/imgs/template-icons/bookstack.png
 website: https://www.bookstackapp.com
 documentation: https://www.bookstackapp.com/docs/
 categories:

@@ -2,7 +2,7 @@ id: outline
 name: Outline
 version: "0.74"
 description: Beautiful, real-time collaborative team wiki and knowledge base
-icon: https://www.getoutline.com/images/logo.svg
+icon: https://serverkit.ai/imgs/template-icons/outline.svg
 website: https://www.getoutline.com
 documentation: https://www.getoutline.com/developers
 categories:

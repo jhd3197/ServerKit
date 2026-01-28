@@ -2,7 +2,7 @@ id: php-app
 name: PHP Application
 version: "8.3"
 description: Custom PHP application with Apache. Supports PHP 8.0-8.3. Perfect for Laravel, WordPress themes, or any PHP project.
-icon: https://www.php.net/images/logos/new-php-logo.svg
+icon: https://serverkit.ai/imgs/template-icons/php-app.svg
 website: https://www.php.net
 documentation: https://www.php.net/docs.php
 categories:

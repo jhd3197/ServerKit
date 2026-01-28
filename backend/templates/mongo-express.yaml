@@ -2,7 +2,7 @@ id: mongo-express
 name: Mongo Express
 version: "1.0"
 description: Web-based MongoDB admin interface for managing databases and collections
-icon: https://www.mongodb.com/assets/images/global/favicon.ico
+icon: https://serverkit.ai/imgs/template-icons/mongo-express.ico
 website: https://github.com/mongo-express/mongo-express
 documentation: https://github.com/mongo-express/mongo-express#readme
 categories:

@@ -2,7 +2,7 @@ id: matrix-synapse
 name: Matrix Synapse
 version: "1.98"
 description: Decentralized communication server for secure, federated messaging
-icon: https://matrix.org/images/matrix-logo.svg
+icon: https://serverkit.ai/imgs/template-icons/matrix-synapse.svg
 website: https://matrix.org
 documentation: https://matrix-org.github.io/synapse/latest/
 categories:

@@ -2,7 +2,7 @@ id: wikijs
 name: Wiki.js
 version: "2.5"
 description: Modern and powerful wiki app built on Node.js
-icon: https://js.wiki/img/logo.svg
+icon: https://serverkit.ai/imgs/template-icons/wikijs.svg
 website: https://js.wiki
 documentation: https://docs.requarks.io
 categories:

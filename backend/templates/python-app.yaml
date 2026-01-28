@@ -2,7 +2,7 @@ id: python-app
 name: Python Application
 version: "3.12"
 description: Custom Python application. Supports Python 3.9-3.12. Perfect for Flask, FastAPI, Django, or any Python project.
-icon: https://www.python.org/static/community_logos/python-logo-generic.svg
+icon: https://serverkit.ai/imgs/template-icons/python-app.svg
 website: https://www.python.org
 documentation: https://docs.python.org/3/
 categories:

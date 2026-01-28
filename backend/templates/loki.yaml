@@ -2,7 +2,7 @@ id: loki
 name: Grafana Loki
 version: "2.9"
 description: Horizontally scalable, highly available log aggregation system inspired by Prometheus
-icon: https://grafana.com/static/img/logos/logo-loki.svg
+icon: https://serverkit.ai/imgs/template-icons/loki.svg
 website: https://grafana.com/oss/loki/
 documentation: https://grafana.com/docs/loki/latest/
 categories:

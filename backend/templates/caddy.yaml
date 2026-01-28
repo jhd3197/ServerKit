@@ -2,7 +2,7 @@ id: caddy
 name: Caddy
 version: "2.7"
 description: Fast, multi-platform web server with automatic HTTPS
-icon: https://caddyserver.com/resources/images/caddy-circle-lock.svg
+icon: https://serverkit.ai/imgs/template-icons/caddy.svg
 website: https://caddyserver.com
 documentation: https://caddyserver.com/docs/
 categories:

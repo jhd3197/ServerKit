@@ -2,7 +2,7 @@ id: vault
 name: HashiCorp Vault
 version: "1.15"
 description: Secrets management and data protection platform for securing sensitive data
-icon: https://www.vaultproject.io/img/logo-hashicorp.svg
+icon: https://serverkit.ai/imgs/template-icons/vault.svg
 website: https://www.vaultproject.io
 documentation: https://developer.hashicorp.com/vault/docs
 categories:

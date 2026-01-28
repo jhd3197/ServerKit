@@ -1,12 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Star } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
+import { Star, Settings, LogOut, Sun, Moon, Monitor, ChevronRight, ChevronUp } from 'lucide-react';
+import { api } from '../services/api';
 import ServerKitLogo from '../assets/ServerKitLogo.svg';
 
 const Sidebar = () => {
     const { user, logout } = useAuth();
+    const { theme, resolvedTheme, setTheme } = useTheme();
+    const navigate = useNavigate();
     const [starAnimating, setStarAnimating] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [wpInstalled, setWpInstalled] = useState(false);
+    const menuRef = useRef(null);
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        if (!menuOpen) return;
+        const handleClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setMenuOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [menuOpen]);
+
+    // Check if WordPress is installed
+    useEffect(() => {
+        api.getWordPressStatus()
+            .then(data => setWpInstalled(!!data?.installed))
+            .catch(() => setWpInstalled(false));
+    }, []);
 
     useEffect(() => {
         let playCount = 0;
@@ -118,12 +144,14 @@ const Sidebar = () => {
                         </svg>
                         WordPress
                     </NavLink>
-                    <NavLink to="/wordpress/projects" className={({ isActive }) => `nav-item nav-sub-item ${isActive ? 'active' : ''}`}>
-                        <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                        </svg>
-                        Pipeline
-                    </NavLink>
+                    {wpInstalled && (
+                        <NavLink to="/wordpress/projects" className={({ isActive }) => `nav-item nav-sub-item ${isActive ? 'active' : ''}`}>
+                            <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                            Pipeline
+                        </NavLink>
+                    )}
                     <NavLink to="/templates" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                         <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <rect x="3" y="3" width="7" height="9"/>
@@ -232,13 +260,6 @@ const Sidebar = () => {
                         </svg>
                         Terminal / Logs
                     </NavLink>
-                    <NavLink to="/settings" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                        <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <circle cx="12" cy="12" r="3"/>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                        </svg>
-                        Settings
-                    </NavLink>
                     <NavLink to="/downloads" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                         <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -250,8 +271,52 @@ const Sidebar = () => {
                 </nav>
             </div>
 
-            <div className="sidebar-footer">
-                <div className="user-mini" onClick={logout} title="Click to logout">
+            <div className="sidebar-footer" ref={menuRef}>
+                {menuOpen && (
+                    <div className="user-context-menu">
+                        <div className="context-menu-section">
+                            <div className="context-menu-label">Theme</div>
+                            <div className="theme-switcher">
+                                <button
+                                    className={`theme-btn ${theme === 'dark' ? 'active' : ''}`}
+                                    onClick={() => setTheme('dark')}
+                                    title="Dark"
+                                >
+                                    <Moon size={14} />
+                                </button>
+                                <button
+                                    className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
+                                    onClick={() => setTheme('light')}
+                                    title="Light"
+                                >
+                                    <Sun size={14} />
+                                </button>
+                                <button
+                                    className={`theme-btn ${theme === 'system' ? 'active' : ''}`}
+                                    onClick={() => setTheme('system')}
+                                    title="System"
+                                >
+                                    <Monitor size={14} />
+                                </button>
+                            </div>
+                        </div>
+                        <div className="context-menu-divider" />
+                        <button
+                            className="context-menu-item"
+                            onClick={() => { navigate('/settings'); setMenuOpen(false); }}
+                        >
+                            <Settings size={15} />
+                            Settings
+                            <ChevronRight size={14} className="context-menu-arrow" />
+                        </button>
+                        <div className="context-menu-divider" />
+                        <button className="context-menu-item danger" onClick={logout}>
+                            <LogOut size={15} />
+                            Log out
+                        </button>
+                    </div>
+                )}
+                <div className="user-mini" onClick={() => setMenuOpen(!menuOpen)}>
                     <div className="user-avatar">
                         {user?.username?.charAt(0).toUpperCase() || 'U'}
                     </div>
@@ -259,6 +324,7 @@ const Sidebar = () => {
                         <span className="user-handle">{user?.username || 'User'}</span>
                         <span className="user-status">Online</span>
                     </div>
+                    <ChevronUp size={14} className={`user-menu-arrow ${menuOpen ? 'open' : ''}`} />
                 </div>
             </div>
         </aside>

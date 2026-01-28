@@ -2,7 +2,7 @@ id: wordpress-external-db
 name: WordPress (External Database)
 version: "6.4"
 description: WordPress CMS connecting to an existing external MySQL database. Use this for dev/prod setups sharing the same database with different table prefixes.
-icon: https://s.w.org/style/images/about/WordPress-logotype-wmark.png
+icon: https://serverkit.ai/imgs/template-icons/wordpress-external-db.png
 website: https://wordpress.org
 documentation: https://wordpress.org/documentation/
 categories:

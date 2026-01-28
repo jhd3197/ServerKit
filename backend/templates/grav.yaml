@@ -2,7 +2,7 @@ id: grav
 name: Grav CMS
 version: "1.7"
 description: Modern flat-file CMS that is fast, simple, and flexible
-icon: https://getgrav.org/user/themes/flavor-flavor/images/favicon.png
+icon: https://serverkit.ai/imgs/template-icons/grav.png
 website: https://getgrav.org
 documentation: https://learn.getgrav.org
 categories:

@@ -2,7 +2,7 @@ id: sonarqube
 name: SonarQube
 version: "10.3"
 description: Continuous inspection of code quality and security vulnerabilities
-icon: https://www.sonarqube.org/logos/index/sonarqube-logo.svg
+icon: https://serverkit.ai/imgs/template-icons/sonarqube.ico
 website: https://www.sonarqube.org
 documentation: https://docs.sonarqube.org/latest/
 categories:

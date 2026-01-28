@@ -2,7 +2,7 @@ id: immich
 name: Immich
 version: "1.91"
 description: High-performance self-hosted photo and video backup solution with mobile apps
-icon: https://immich.app/img/immich-logo.svg
+icon: https://serverkit.ai/imgs/template-icons/immich.svg
 website: https://immich.app
 documentation: https://immich.app/docs/overview/introduction
 categories:

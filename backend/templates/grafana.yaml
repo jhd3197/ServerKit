@@ -2,7 +2,7 @@ id: grafana
 name: Grafana
 version: "10.2"
 description: Open-source analytics and interactive visualization platform for metrics, logs, and traces
-icon: https://raw.githubusercontent.com/grafana/grafana/main/public/img/grafana_icon.svg
+icon: https://serverkit.ai/imgs/template-icons/grafana.svg
 website: https://grafana.com
 documentation: https://grafana.com/docs/grafana/latest/
 categories:

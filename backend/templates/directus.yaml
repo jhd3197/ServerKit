@@ -2,7 +2,7 @@ id: directus
 name: Directus
 version: "10.8"
 description: Open-source data platform with instant REST and GraphQL API for any SQL database
-icon: https://directus.io/favicon.ico
+icon: https://serverkit.ai/imgs/template-icons/directus.ico
 website: https://directus.io
 documentation: https://docs.directus.io
 categories:

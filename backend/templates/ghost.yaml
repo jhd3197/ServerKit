@@ -2,7 +2,7 @@ id: ghost
 name: Ghost
 version: "5.75"
 description: Professional publishing platform for blogs and newsletters
-icon: /icons/ghost.png
+icon: https://serverkit.ai/imgs/template-icons/ghost.ico
 categories:
   - cms
   - blog

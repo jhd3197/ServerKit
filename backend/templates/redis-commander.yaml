@@ -2,7 +2,7 @@ id: redis-commander
 name: Redis Commander
 version: "0.8"
 description: Web-based Redis management tool for viewing and editing data
-icon: https://redis.io/images/redis-white.png
+icon: https://serverkit.ai/imgs/template-icons/redis-commander.ico
 website: https://github.com/joeferner/redis-commander
 documentation: https://github.com/joeferner/redis-commander#readme
 categories:

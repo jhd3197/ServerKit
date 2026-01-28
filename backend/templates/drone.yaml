@@ -2,7 +2,7 @@ id: drone
 name: Drone CI
 version: "2.22"
 description: Container-native continuous integration platform with simple pipeline configuration
-icon: https://raw.githubusercontent.com/drone/brand/master/logos/vector/drone-logo-vector-dark.svg
+icon: https://serverkit.ai/imgs/template-icons/drone.svg
 website: https://www.drone.io
 documentation: https://docs.drone.io
 categories:

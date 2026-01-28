@@ -2,7 +2,7 @@ id: excalidraw
 name: Excalidraw
 version: "0.17"
 description: Virtual whiteboard for sketching hand-drawn like diagrams
-icon: https://excalidraw.com/apple-touch-icon.png
+icon: https://serverkit.ai/imgs/template-icons/excalidraw.png
 website: https://excalidraw.com
 documentation: https://github.com/excalidraw/excalidraw
 categories:

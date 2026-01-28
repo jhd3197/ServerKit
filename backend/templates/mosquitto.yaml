@@ -2,7 +2,7 @@ id: mosquitto
 name: Eclipse Mosquitto
 version: "2.0"
 description: Lightweight MQTT message broker for IoT and home automation
-icon: https://mosquitto.org/images/mosquitto-logo-only.svg
+icon: https://serverkit.ai/imgs/template-icons/mosquitto.svg
 website: https://mosquitto.org
 documentation: https://mosquitto.org/documentation/
 categories:

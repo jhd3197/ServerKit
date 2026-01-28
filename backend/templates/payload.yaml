@@ -2,7 +2,7 @@ id: payload
 name: Payload CMS
 version: "2.5"
 description: Modern TypeScript headless CMS with powerful admin panel and customization
-icon: https://payloadcms.com/images/favicon.svg
+icon: https://serverkit.ai/imgs/template-icons/payload.svg
 website: https://payloadcms.com
 documentation: https://payloadcms.com/docs
 categories:

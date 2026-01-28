@@ -2,7 +2,7 @@ id: gitlab-runner
 name: GitLab Runner
 version: "16.6"
 description: Application that works with GitLab CI/CD to run jobs in a pipeline
-icon: https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png
+icon: https://serverkit.ai/imgs/template-icons/gitlab-runner.png
 website: https://docs.gitlab.com/runner/
 documentation: https://docs.gitlab.com/runner/
 categories:

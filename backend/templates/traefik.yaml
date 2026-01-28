@@ -2,7 +2,7 @@ id: traefik
 name: Traefik
 version: "3.0"
 description: Modern HTTP reverse proxy and load balancer with automatic HTTPS
-icon: https://traefik.io/static/traefik-logo.svg
+icon: https://serverkit.ai/imgs/template-icons/traefik.png
 website: https://traefik.io
 documentation: https://doc.traefik.io/traefik/
 categories:

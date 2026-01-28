@@ -2,7 +2,7 @@ id: homeassistant
 name: Home Assistant
 version: "2024.1"
 description: Open-source home automation platform with focus on local control and privacy
-icon: https://www.home-assistant.io/images/favicon-192x192-full.png
+icon: https://serverkit.ai/imgs/template-icons/homeassistant.png
 website: https://www.home-assistant.io
 documentation: https://www.home-assistant.io/docs/
 categories:

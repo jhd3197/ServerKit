@@ -2,7 +2,7 @@ id: jenkins
 name: Jenkins
 version: "2.426"
 description: Leading open-source automation server for building, deploying, and automating projects
-icon: https://www.jenkins.io/images/logos/jenkins/jenkins.svg
+icon: https://serverkit.ai/imgs/template-icons/jenkins.svg
 website: https://www.jenkins.io
 documentation: https://www.jenkins.io/doc/
 categories:
