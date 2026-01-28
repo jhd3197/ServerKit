@@ -47,6 +47,38 @@ class WordPressSite(db.Model):
     # Sync settings (JSON)
     sync_config = db.Column(db.Text)  # schedule, search_replace, anonymize, etc.
 
+    # Environment management
+    environment_type = db.Column(db.String(20), default='standalone')  # standalone, production, staging, development, multidev
+    multidev_branch = db.Column(db.String(200))
+    is_locked = db.Column(db.Boolean, default=False)
+    locked_by = db.Column(db.String(100))
+    locked_reason = db.Column(db.String(200))
+    lock_expires_at = db.Column(db.DateTime)
+
+    # Docker compose tracking
+    compose_project_name = db.Column(db.String(100))
+    container_prefix = db.Column(db.String(100))
+
+    # Resource limits (stored as JSON for flexibility)
+    resource_limits = db.Column(db.Text)  # JSON: {memory, cpus, db_memory, db_cpus}
+
+    # Basic Auth
+    basic_auth_enabled = db.Column(db.Boolean, default=False)
+    basic_auth_user = db.Column(db.String(100))
+    basic_auth_password_hash = db.Column(db.String(200))
+
+    # Health tracking
+    health_status = db.Column(db.String(20), default='unknown')  # healthy, degraded, unhealthy, unknown
+    last_health_check = db.Column(db.DateTime)
+
+    # Disk usage tracking
+    disk_usage_bytes = db.Column(db.BigInteger, default=0)
+    disk_usage_updated_at = db.Column(db.DateTime)
+
+    # Auto-sync
+    auto_sync_schedule = db.Column(db.String(100))  # cron expression
+    auto_sync_enabled = db.Column(db.Boolean, default=False)
+
     # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -93,6 +125,24 @@ class WordPressSite(db.Model):
             'is_production': self.is_production,
             'production_site_id': self.production_site_id,
             'sync_config': json.loads(self.sync_config) if self.sync_config else None,
+            'environment_type': self.environment_type,
+            'multidev_branch': self.multidev_branch,
+            'is_locked': self.is_locked,
+            'locked_by': self.locked_by,
+            'locked_reason': self.locked_reason,
+            'lock_expires_at': self.lock_expires_at.isoformat() if self.lock_expires_at else None,
+            'compose_project_name': self.compose_project_name,
+            'container_prefix': self.container_prefix,
+            'resource_limits': json.loads(self.resource_limits) if self.resource_limits else None,
+            'basic_auth_enabled': self.basic_auth_enabled,
+            'basic_auth_user': self.basic_auth_user,
+            'health_status': self.health_status,
+            'last_health_check': self.last_health_check.isoformat() if self.last_health_check else None,
+            'disk_usage_bytes': self.disk_usage_bytes,
+            'disk_usage_human': DatabaseSnapshot._format_size(self.disk_usage_bytes) if self.disk_usage_bytes else None,
+            'disk_usage_updated_at': self.disk_usage_updated_at.isoformat() if self.disk_usage_updated_at else None,
+            'auto_sync_schedule': self.auto_sync_schedule,
+            'auto_sync_enabled': self.auto_sync_enabled,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
         }

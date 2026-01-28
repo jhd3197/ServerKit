@@ -24,6 +24,9 @@ build_log_queues = {}  # app_id -> queue
 # Store active container log streams
 container_log_streams = {}  # sid -> {'process': Popen, 'app_id': int, 'thread': Thread, 'stop_event': Event}
 
+# Store active pipeline subscriptions
+pipeline_subscribers = {}  # sid -> set of project_ids
+
 
 def init_socketio(app):
     """Initialize SocketIO with the Flask app."""
@@ -66,6 +69,9 @@ def handle_disconnect():
 
     # Stop any container log streams for this client
     stop_container_log_stream(sid)
+
+    # Remove from pipeline subscribers
+    pipeline_subscribers.pop(sid, None)
 
 
 @socketio.on('subscribe_metrics')
@@ -450,3 +456,72 @@ def emit_container_log(app_id: int, line: str, level: str = 'info'):
         },
         'timestamp': time.time()
     }, room=f'logs_{app_id}')
+
+
+# ==================== PIPELINE EVENT STREAMING ====================
+
+@socketio.on('subscribe_pipeline')
+def handle_subscribe_pipeline(data):
+    """Subscribe to real-time pipeline events for a WordPress project.
+
+    data: {
+        'project_id': int  (production site ID)
+    }
+
+    Emits 'pipeline_event' with:
+        - project_id: int
+        - event: string (e.g. 'promotion_started', 'sync_completed')
+        - data: dict with event-specific details
+        - timestamp: float
+    """
+    sid = request.sid
+    project_id = data.get('project_id')
+
+    if not project_id:
+        emit('error', {'message': 'project_id required'})
+        return
+
+    room = f'pipeline_{project_id}'
+    join_room(room)
+
+    if sid not in pipeline_subscribers:
+        pipeline_subscribers[sid] = set()
+    pipeline_subscribers[sid].add(project_id)
+
+    emit('subscribed', {'channel': 'pipeline', 'project_id': project_id})
+
+
+@socketio.on('unsubscribe_pipeline')
+def handle_unsubscribe_pipeline(data):
+    """Unsubscribe from pipeline events for a project."""
+    sid = request.sid
+    project_id = data.get('project_id')
+
+    if project_id:
+        leave_room(f'pipeline_{project_id}')
+        if sid in pipeline_subscribers:
+            pipeline_subscribers[sid].discard(project_id)
+            if not pipeline_subscribers[sid]:
+                del pipeline_subscribers[sid]
+
+    emit('unsubscribed', {'channel': 'pipeline', 'project_id': project_id})
+
+
+def emit_pipeline_event(project_id: int, event: str, data: dict = None):
+    """Emit a pipeline event to all subscribers of a project.
+
+    Called from EnvironmentPipelineService or API endpoints to notify
+    the frontend about long-running operations (promote, sync, create).
+
+    Args:
+        project_id: Production site ID
+        event: Event type (e.g. 'promotion_started', 'sync_completed',
+               'environment_created', 'environment_deleted')
+        data: Event-specific payload
+    """
+    socketio.emit('pipeline_event', {
+        'project_id': project_id,
+        'event': event,
+        'data': data or {},
+        'timestamp': time.time()
+    }, room=f'pipeline_{project_id}')

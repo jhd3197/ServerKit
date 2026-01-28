@@ -118,6 +118,12 @@ const Sidebar = () => {
                         </svg>
                         WordPress
                     </NavLink>
+                    <NavLink to="/wordpress/projects" className={({ isActive }) => `nav-item nav-sub-item ${isActive ? 'active' : ''}`}>
+                        <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                        Pipeline
+                    </NavLink>
                     <NavLink to="/templates" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                         <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                             <rect x="3" y="3" width="7" height="9"/>
