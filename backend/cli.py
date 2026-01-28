@@ -221,23 +221,48 @@ def migrate_db():
         from sqlalchemy import text, inspect
 
         inspector = inspect(db.engine)
+        existing_tables = inspector.get_table_names()
 
-        # Get existing columns in applications table
-        existing_columns = [col['name'] for col in inspector.get_columns('applications')]
+        # Define all expected columns per table
+        expected_columns = [
+            # applications table
+            ('applications', 'private_slug', 'VARCHAR(50)'),
+            ('applications', 'private_url_enabled', 'BOOLEAN DEFAULT 0'),
+            ('applications', 'environment_type', "VARCHAR(20) DEFAULT 'standalone'"),
+            ('applications', 'linked_app_id', 'INTEGER'),
+            ('applications', 'shared_config', 'TEXT'),
+            # wordpress_sites table
+            ('wordpress_sites', 'environment_type', "VARCHAR(20) DEFAULT 'standalone'"),
+            ('wordpress_sites', 'multidev_branch', 'VARCHAR(200)'),
+            ('wordpress_sites', 'is_locked', 'BOOLEAN DEFAULT 0'),
+            ('wordpress_sites', 'locked_by', 'VARCHAR(100)'),
+            ('wordpress_sites', 'locked_reason', 'VARCHAR(200)'),
+            ('wordpress_sites', 'lock_expires_at', 'DATETIME'),
+            ('wordpress_sites', 'compose_project_name', 'VARCHAR(100)'),
+            ('wordpress_sites', 'container_prefix', 'VARCHAR(100)'),
+            ('wordpress_sites', 'resource_limits', 'TEXT'),
+            ('wordpress_sites', 'basic_auth_enabled', 'BOOLEAN DEFAULT 0'),
+            ('wordpress_sites', 'basic_auth_user', 'VARCHAR(100)'),
+            ('wordpress_sites', 'basic_auth_password_hash', 'VARCHAR(200)'),
+            ('wordpress_sites', 'health_status', "VARCHAR(20) DEFAULT 'unknown'"),
+            ('wordpress_sites', 'last_health_check', 'DATETIME'),
+            ('wordpress_sites', 'disk_usage_bytes', 'BIGINT DEFAULT 0'),
+            ('wordpress_sites', 'disk_usage_updated_at', 'DATETIME'),
+            ('wordpress_sites', 'auto_sync_schedule', 'VARCHAR(100)'),
+            ('wordpress_sites', 'auto_sync_enabled', 'BOOLEAN DEFAULT 0'),
+        ]
 
+        # Check which columns are missing
+        table_columns_cache = {}
         migrations = []
 
-        # Check and add missing columns to applications table
-        if 'private_slug' not in existing_columns:
-            migrations.append(('applications', 'private_slug', 'VARCHAR(50)'))
-        if 'private_url_enabled' not in existing_columns:
-            migrations.append(('applications', 'private_url_enabled', 'BOOLEAN DEFAULT 0'))
-        if 'environment_type' not in existing_columns:
-            migrations.append(('applications', 'environment_type', "VARCHAR(20) DEFAULT 'standalone'"))
-        if 'linked_app_id' not in existing_columns:
-            migrations.append(('applications', 'linked_app_id', 'INTEGER'))
-        if 'shared_config' not in existing_columns:
-            migrations.append(('applications', 'shared_config', 'TEXT'))
+        for table, column, col_type in expected_columns:
+            if table not in existing_tables:
+                continue
+            if table not in table_columns_cache:
+                table_columns_cache[table] = [col['name'] for col in inspector.get_columns(table)]
+            if column not in table_columns_cache[table]:
+                migrations.append((table, column, col_type))
 
         if not migrations:
             click.echo(click.style('Database is up to date. No migrations needed.', fg='green'))
