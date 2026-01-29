@@ -22,12 +22,13 @@ from app.models.application import Application
 from app.services.build_service import BuildService
 from app.services.docker_service import DockerService
 from app.services.git_service import GitService
+from app import paths
 
 
 class DeploymentService:
     """Service for orchestrating deployments."""
 
-    DEPLOYMENT_DIR = '/var/serverkit/deployments'
+    DEPLOYMENT_DIR = paths.DEPLOYMENTS_DIR
 
     @classmethod
     def create_deployment(cls, app_id: int, user_id: int = None,
@@ -135,7 +136,7 @@ class DeploymentService:
 
             if build_result.get('build_log'):
                 # Store build log path for later retrieval
-                log_dir = f"/var/log/serverkit/builds/{app_id}"
+                log_dir = os.path.join(paths.BUILD_LOG_DIR, str(app_id))
                 log_file = f"build-{deployment.created_at.isoformat().replace(':', '-')}.json"
                 deployment.build_log_path = os.path.join(log_dir, log_file)
 

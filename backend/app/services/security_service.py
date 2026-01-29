@@ -19,16 +19,17 @@ from typing import Dict, List, Optional
 from pathlib import Path
 
 from .notification_service import NotificationService
+from app import paths
 
 
 class SecurityService:
     """Service for security scanning and monitoring."""
 
-    CONFIG_DIR = '/etc/serverkit'
+    CONFIG_DIR = paths.SERVERKIT_CONFIG_DIR
     SECURITY_CONFIG = os.path.join(CONFIG_DIR, 'security.json')
     INTEGRITY_DB = os.path.join(CONFIG_DIR, 'file_integrity.json')
-    SCAN_LOG = '/var/log/serverkit/security_scans.log'
-    ALERTS_LOG = '/var/log/serverkit/security_alerts.log'
+    SCAN_LOG = os.path.join(paths.SERVERKIT_LOG_DIR, 'security_scans.log')
+    ALERTS_LOG = os.path.join(paths.SERVERKIT_LOG_DIR, 'security_alerts.log')
 
     # Scan status tracking
     _current_scan = None
@@ -50,7 +51,7 @@ class SecurityService:
                 'scan_paths': ['/var/www', '/home'],
                 'exclude_paths': ['/var/www/cache', '*.log'],
                 'scan_on_upload': True,
-                'quarantine_path': '/var/quarantine',
+                'quarantine_path': paths.SERVERKIT_QUARANTINE_DIR,
                 'max_file_size': 100 * 1024 * 1024,  # 100MB
                 'scheduled_scan': {
                     'enabled': False,
@@ -376,7 +377,7 @@ class SecurityService:
     def quarantine_file(cls, file_path: str) -> Dict:
         """Move infected file to quarantine."""
         config = cls.get_config()
-        quarantine_path = config.get('clamav', {}).get('quarantine_path', '/var/quarantine')
+        quarantine_path = config.get('clamav', {}).get('quarantine_path', paths.SERVERKIT_QUARANTINE_DIR)
 
         if not os.path.exists(file_path):
             return {'success': False, 'error': 'File not found'}
@@ -414,7 +415,7 @@ class SecurityService:
     def get_quarantined_files(cls) -> Dict:
         """List quarantined files."""
         config = cls.get_config()
-        quarantine_path = config.get('clamav', {}).get('quarantine_path', '/var/quarantine')
+        quarantine_path = config.get('clamav', {}).get('quarantine_path', paths.SERVERKIT_QUARANTINE_DIR)
 
         if not os.path.exists(quarantine_path):
             return {'success': True, 'files': []}
@@ -440,7 +441,7 @@ class SecurityService:
     def delete_quarantined_file(cls, filename: str) -> Dict:
         """Permanently delete a quarantined file."""
         config = cls.get_config()
-        quarantine_path = config.get('clamav', {}).get('quarantine_path', '/var/quarantine')
+        quarantine_path = config.get('clamav', {}).get('quarantine_path', paths.SERVERKIT_QUARANTINE_DIR)
         file_path = os.path.join(quarantine_path, filename)
 
         if not os.path.exists(file_path):

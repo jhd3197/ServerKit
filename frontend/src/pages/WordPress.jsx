@@ -1,177 +1,102 @@
 import { useState, useEffect } from 'react';
-import { api } from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import wordpressApi from '../services/wordpress';
 import { useToast } from '../contexts/ToastContext';
 import { useResourceTier } from '../contexts/ResourceTierContext';
 import ResourceGate from '../components/ResourceGate';
 import Spinner from '../components/Spinner';
-import ConfirmDialog from '../components/ConfirmDialog';
 
 function WordPress() {
-    const [status, setStatus] = useState(null);
+    const [sites, setSites] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [actionLoading, setActionLoading] = useState(false);
-    const [showInstallModal, setShowInstallModal] = useState(false);
-    const [confirmDialog, setConfirmDialog] = useState(null);
-    const [installForm, setInstallForm] = useState({
-        adminEmail: ''
-    });
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [createLoading, setCreateLoading] = useState(false);
+    const [createForm, setCreateForm] = useState({ name: '', adminEmail: '' });
 
+    const navigate = useNavigate();
     const toast = useToast();
     const { isLiteTier } = useResourceTier();
 
     useEffect(() => {
-        loadData();
+        loadSites();
     }, []);
 
-    const loadData = async () => {
+    const loadSites = async () => {
         setLoading(true);
         try {
-            await loadStatus();
+            const data = await wordpressApi.getSites();
+            setSites(data.sites || []);
         } catch (error) {
-            console.error('Failed to load WordPress data:', error);
+            console.error('Failed to load WordPress sites:', error);
+            setSites([]);
         } finally {
             setLoading(false);
         }
     };
 
-    const loadStatus = async () => {
-        try {
-            const data = await api.getWordPressStatus();
-            setStatus(data);
-        } catch (error) {
-            console.error('Failed to load status:', error);
-            setStatus({ installed: false });
-        }
-    };
-
-    const handleInstall = async () => {
-        if (!installForm.adminEmail) {
-            toast.error('Admin email is required');
+    const handleCreate = async () => {
+        if (!createForm.name) {
+            toast.error('Site name is required');
             return;
         }
 
-        setActionLoading(true);
+        setCreateLoading(true);
         try {
-            const result = await api.installWordPress(installForm);
+            const result = await wordpressApi.createSite(createForm);
             if (result.success) {
-                toast.success('WordPress installed successfully');
-                setShowInstallModal(false);
-                await loadData();
+                toast.success('WordPress site created successfully');
+                setShowCreateModal(false);
+                setCreateForm({ name: '', adminEmail: '' });
+                await loadSites();
             } else {
-                toast.error(result.error || 'Installation failed');
+                toast.error(result.error || 'Failed to create site');
             }
         } catch (error) {
-            toast.error(`Failed to install: ${error.message}`);
+            toast.error(`Failed to create site: ${error.message}`);
         } finally {
-            setActionLoading(false);
+            setCreateLoading(false);
         }
-    };
-
-    const handleUninstall = () => {
-        setConfirmDialog({
-            title: 'Uninstall WordPress',
-            message: 'Are you sure you want to uninstall WordPress? This will stop the containers but preserve your data.',
-            confirmText: 'Uninstall',
-            variant: 'danger',
-            onConfirm: async () => {
-                setActionLoading(true);
-                try {
-                    await api.uninstallWordPress(false);
-                    toast.success('WordPress uninstalled');
-                    await loadData();
-                } catch (error) {
-                    toast.error(`Failed to uninstall: ${error.message}`);
-                } finally {
-                    setActionLoading(false);
-                    setConfirmDialog(null);
-                }
-            },
-            onCancel: () => setConfirmDialog(null)
-        });
-    };
-
-    const handleStart = async () => {
-        setActionLoading(true);
-        try {
-            await api.startWordPress();
-            toast.success('WordPress started');
-            await loadStatus();
-        } catch (error) {
-            toast.error(`Failed to start: ${error.message}`);
-        } finally {
-            setActionLoading(false);
-        }
-    };
-
-    const handleStop = () => {
-        setConfirmDialog({
-            title: 'Stop WordPress',
-            message: 'Are you sure you want to stop WordPress?',
-            confirmText: 'Stop',
-            variant: 'warning',
-            onConfirm: async () => {
-                setActionLoading(true);
-                try {
-                    await api.stopWordPress();
-                    toast.success('WordPress stopped');
-                    await loadStatus();
-                } catch (error) {
-                    toast.error(`Failed to stop: ${error.message}`);
-                } finally {
-                    setActionLoading(false);
-                    setConfirmDialog(null);
-                }
-            },
-            onCancel: () => setConfirmDialog(null)
-        });
-    };
-
-    const handleRestart = async () => {
-        setActionLoading(true);
-        try {
-            await api.restartWordPress();
-            toast.success('WordPress restarted');
-            await loadStatus();
-        } catch (error) {
-            toast.error(`Failed to restart: ${error.message}`);
-        } finally {
-            setActionLoading(false);
-        }
-    };
-
-    const openWordPress = () => {
-        if (status?.url_path) {
-            window.open(`${window.location.origin}${status.url_path}`, '_blank');
-        } else if (status?.http_port) {
-            window.open(`http://${window.location.hostname}:${status.http_port}`, '_blank');
-        }
-    };
-
-    const openWpAdmin = () => {
-        if (status?.url_path) {
-            window.open(`${window.location.origin}${status.url_path}/wp-admin`, '_blank');
-        } else if (status?.http_port) {
-            window.open(`http://${window.location.hostname}:${status.http_port}/wp-admin`, '_blank');
-        }
-    };
-
-    const getWordPressUrl = () => {
-        if (status?.url_path) {
-            return `${window.location.origin}${status.url_path}`;
-        }
-        return `http://${window.location.hostname}:${status?.http_port}`;
     };
 
     if (loading) {
         return (
-            <div className="page-loading">
-                <Spinner size="lg" />
+            <div className="docker-page-new wordpress-page">
+                <div className="page-header">
+                    <div className="page-header-content">
+                        <h1>WordPress</h1>
+                        <p className="page-description">Manage your WordPress sites</p>
+                    </div>
+                </div>
+                <div className="wp-sites-grid">
+                    {[1, 2, 3].map(i => (
+                        <div key={i} className="wp-site-card-skeleton">
+                            <div className="wp-site-card-skeleton-header">
+                                <div className="wp-site-card-skeleton-icon" />
+                                <div className="wp-site-card-skeleton-info">
+                                    <div className="wp-site-card-skeleton-name" />
+                                    <div className="wp-site-card-skeleton-url" />
+                                </div>
+                                <div className="wp-site-card-skeleton-status" />
+                            </div>
+                            <div className="wp-site-card-skeleton-body">
+                                <div className="wp-site-card-skeleton-meta">
+                                    <div className="wp-site-card-skeleton-label" />
+                                    <div className="wp-site-card-skeleton-value" />
+                                </div>
+                                <div className="wp-site-card-skeleton-meta">
+                                    <div className="wp-site-card-skeleton-label" />
+                                    <div className="wp-site-card-skeleton-value" />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     }
 
-    // Not installed + lite tier -> resource gate
-    if (!status?.installed && isLiteTier) {
+    // Lite tier with no sites -> resource gate
+    if (sites.length === 0 && isLiteTier) {
         return (
             <div className="docker-page-new wordpress-page">
                 <ResourceGate feature="wordpress_create">
@@ -182,57 +107,21 @@ function WordPress() {
     }
 
     return (
-        <div className="git-page wordpress-standalone-page">
+        <div className="docker-page-new wordpress-page">
             <div className="page-header">
                 <div className="page-header-content">
                     <h1>WordPress</h1>
-                    <p className="page-description">Self-hosted WordPress powered by Docker</p>
+                    <p className="page-description">Manage your WordPress sites</p>
                 </div>
                 <div className="page-header-actions">
-                    {!status?.installed ? (
-                        <button className="btn btn-primary" onClick={() => setShowInstallModal(true)}>
-                            Install WordPress
-                        </button>
-                    ) : (
-                        <>
-                            <button
-                                className="btn btn-secondary"
-                                onClick={openWordPress}
-                                disabled={!status?.running}
-                            >
-                                Open WordPress
-                            </button>
-                            <button
-                                className="btn btn-secondary"
-                                onClick={openWpAdmin}
-                                disabled={!status?.running}
-                            >
-                                Open wp-admin
-                            </button>
-                            {status?.running ? (
-                                <button
-                                    className="btn btn-warning"
-                                    onClick={handleStop}
-                                    disabled={actionLoading}
-                                >
-                                    Stop
-                                </button>
-                            ) : (
-                                <button
-                                    className="btn btn-primary"
-                                    onClick={handleStart}
-                                    disabled={actionLoading}
-                                >
-                                    Start
-                                </button>
-                            )}
-                        </>
-                    )}
+                    <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Create Site
+                    </button>
                 </div>
             </div>
 
-            {/* Not installed - show install screen */}
-            {!status?.installed && (
+            {sites.length === 0 ? (
                 <div className="empty-state-large">
                     <div className="empty-icon">
                         <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -241,128 +130,87 @@ function WordPress() {
                             <path d="M2 12h20"/>
                         </svg>
                     </div>
-                    <h2>WordPress Not Installed</h2>
-                    <p>Deploy WordPress with MySQL using Docker Compose. One-click setup with automatic configuration.</p>
-                    <div className="resource-warning">
-                        <div className="warning-header">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-                            <strong>Resource Requirements</strong>
-                        </div>
-                        <ul>
-                            <li><strong>Memory:</strong> 512MB minimum, 1GB recommended</li>
-                            <li><strong>Storage:</strong> 2GB minimum, 10GB recommended</li>
-                            <li>Deploys WordPress + MySQL 8.0 containers</li>
-                        </ul>
-                    </div>
-                    <button className="btn btn-primary" onClick={() => setShowInstallModal(true)}>
-                        Install WordPress
+                    <h2>No WordPress Sites</h2>
+                    <p>Create your first WordPress site powered by Docker. Each site gets its own isolated environment with MySQL.</p>
+                    <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
+                        Create Site
                     </button>
+                </div>
+            ) : (
+                <div className="wp-sites-grid">
+                    {sites.map(site => (
+                        <div
+                            key={site.id}
+                            className="wp-site-card"
+                            onClick={() => navigate(`/wordpress/${site.id}`)}
+                        >
+                            <div className="wp-site-card-header">
+                                <div className="wp-site-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                        <path d="M2 12h20"/>
+                                    </svg>
+                                </div>
+                                <div className="wp-site-info">
+                                    <h3 className="wp-site-name">{site.name || site.application?.name || `Site ${site.id}`}</h3>
+                                    {site.port && (
+                                        <span className="wp-site-url">:{site.port}</span>
+                                    )}
+                                </div>
+                                <div className={`wp-site-status ${site.status === 'running' ? 'running' : 'stopped'}`}>
+                                    <span className="status-dot" />
+                                    {site.status === 'running' ? 'Running' : 'Stopped'}
+                                </div>
+                            </div>
+                            <div className="wp-site-card-body">
+                                <div className="wp-site-meta">
+                                    <div className="wp-site-meta-item">
+                                        <span className="meta-label">Version</span>
+                                        <span className="meta-value">{site.wp_version || '6.4'}</span>
+                                    </div>
+                                    <div className="wp-site-meta-item">
+                                        <span className="meta-label">Environments</span>
+                                        <span className="meta-value">{(site.environment_count || 0) + 1}</span>
+                                    </div>
+                                </div>
+                                {site.url && site.status === 'running' && (
+                                    <div className="wp-site-card-links">
+                                        <a
+                                            href={site.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="wp-site-link"
+                                            onClick={e => e.stopPropagation()}
+                                        >
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                            Open Site
+                                        </a>
+                                        <a
+                                            href={`${site.url}/wp-admin`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="wp-site-link"
+                                            onClick={e => e.stopPropagation()}
+                                        >
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                            WP Admin
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
                 </div>
             )}
 
-            {/* Installed - show status */}
-            {status?.installed && (
-                <>
-                    <div className="status-cards">
-                        <div className={`status-card ${status?.running ? 'success' : 'danger'}`}>
-                            <div className="status-icon">
-                                {status?.running ? (
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                                ) : (
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                                )}
-                            </div>
-                            <div className="status-info">
-                                <span className="status-label">Status</span>
-                                <span className="status-value">{status?.running ? 'Running' : 'Stopped'}</span>
-                            </div>
-                        </div>
-                        <div className="status-card">
-                            <div className="status-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                            </div>
-                            <div className="status-info">
-                                <span className="status-label">Version</span>
-                                <span className="status-value">{status?.version || '6.4'}</span>
-                            </div>
-                        </div>
-                        <div className="status-card">
-                            <div className="status-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                            </div>
-                            <div className="status-info">
-                                <span className="status-label">Port</span>
-                                <span className="status-value">{status?.http_port || '—'}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="overview-tab">
-                        <div className="info-card">
-                            <h3>Access</h3>
-                            <div className="info-grid">
-                                <div className="info-item">
-                                    <span className="info-label">URL</span>
-                                    <span className="info-value">
-                                        {status?.running ? (
-                                            <a href={getWordPressUrl()} target="_blank" rel="noopener noreferrer">
-                                                {getWordPressUrl()}
-                                            </a>
-                                        ) : '—'}
-                                    </span>
-                                </div>
-                                <div className="info-item">
-                                    <span className="info-label">Admin Panel</span>
-                                    <span className="info-value">
-                                        {status?.running ? (
-                                            <a href={`${getWordPressUrl()}/wp-admin`} target="_blank" rel="noopener noreferrer">
-                                                {getWordPressUrl()}/wp-admin
-                                            </a>
-                                        ) : '—'}
-                                    </span>
-                                </div>
-                                <div className="info-item">
-                                    <span className="info-label">HTTP Port</span>
-                                    <span className="info-value code">{status?.http_port || '—'}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="info-card">
-                            <h3>Actions</h3>
-                            <div className="info-grid">
-                                <div className="quick-actions">
-                                    {status?.running ? (
-                                        <>
-                                            <button className="btn btn-secondary" onClick={handleRestart} disabled={actionLoading}>
-                                                Restart
-                                            </button>
-                                            <button className="btn btn-warning" onClick={handleStop} disabled={actionLoading}>
-                                                Stop
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <button className="btn btn-primary" onClick={handleStart} disabled={actionLoading}>
-                                            Start
-                                        </button>
-                                    )}
-                                    <button className="btn btn-danger" onClick={handleUninstall} disabled={actionLoading}>
-                                        Uninstall
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </>
-            )}
-
-            {/* Install Modal */}
-            {showInstallModal && (
-                <div className="modal-overlay" onClick={() => !actionLoading && setShowInstallModal(false)}>
+            {/* Create Site Modal */}
+            {showCreateModal && (
+                <div className="modal-overlay" onClick={() => !createLoading && setShowCreateModal(false)}>
                     <div className="modal modal-lg" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
-                            <h3>Install WordPress</h3>
-                            <button className="modal-close" onClick={() => !actionLoading && setShowInstallModal(false)}>
+                            <h3>Create WordPress Site</h3>
+                            <button className="modal-close" onClick={() => !createLoading && setShowCreateModal(false)}>
                                 &times;
                             </button>
                         </div>
@@ -370,57 +218,58 @@ function WordPress() {
                             <div className="install-warning">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
                                 <div>
-                                    <strong>This will install:</strong>
+                                    <strong>This will create:</strong>
                                     <ul>
-                                        <li>WordPress 6.4 (Apache)</li>
-                                        <li>MySQL 8.0 database</li>
-                                        <li>Nginx reverse proxy at /wordpress</li>
+                                        <li>WordPress 6.4 (Apache) container</li>
+                                        <li>MySQL 8.0 database container</li>
+                                        <li>Isolated Docker network</li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div className="form-group">
                                 <label>
-                                    Admin Email <span className="required">*</span>
+                                    Site Name <span className="required">*</span>
                                 </label>
                                 <input
+                                    type="text"
+                                    value={createForm.name}
+                                    onChange={e => setCreateForm({ ...createForm, name: e.target.value })}
+                                    placeholder="my-wordpress-site"
+                                    disabled={createLoading}
+                                />
+                                <span className="form-hint">Used as the Docker project name. Letters, numbers, and hyphens only.</span>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Admin Email</label>
+                                <input
                                     type="email"
-                                    value={installForm.adminEmail}
-                                    onChange={e => setInstallForm({ ...installForm, adminEmail: e.target.value })}
+                                    value={createForm.adminEmail}
+                                    onChange={e => setCreateForm({ ...createForm, adminEmail: e.target.value })}
                                     placeholder="admin@example.com"
-                                    disabled={actionLoading}
+                                    disabled={createLoading}
                                 />
                             </div>
                         </div>
                         <div className="modal-footer">
                             <button
                                 className="btn btn-secondary"
-                                onClick={() => setShowInstallModal(false)}
-                                disabled={actionLoading}
+                                onClick={() => setShowCreateModal(false)}
+                                disabled={createLoading}
                             >
                                 Cancel
                             </button>
                             <button
                                 className="btn btn-primary"
-                                onClick={handleInstall}
-                                disabled={actionLoading || !installForm.adminEmail}
+                                onClick={handleCreate}
+                                disabled={createLoading || !createForm.name}
                             >
-                                {actionLoading ? <><Spinner size="sm" /> Installing...</> : 'Install WordPress'}
+                                {createLoading ? <><Spinner size="sm" /> Creating...</> : 'Create Site'}
                             </button>
                         </div>
                     </div>
                 </div>
-            )}
-
-            {confirmDialog && (
-                <ConfirmDialog
-                    title={confirmDialog.title}
-                    message={confirmDialog.message}
-                    confirmText={confirmDialog.confirmText}
-                    variant={confirmDialog.variant}
-                    onConfirm={confirmDialog.onConfirm}
-                    onCancel={confirmDialog.onCancel}
-                />
             )}
         </div>
     );

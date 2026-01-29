@@ -8,6 +8,27 @@ from datetime import datetime
 class DockerService:
     """Service for managing Docker containers, images, and compose stacks."""
 
+    _compose_cmd = None
+
+    @classmethod
+    def _get_compose_cmd(cls):
+        """Detect whether to use 'docker compose' (v2) or 'docker-compose' (v1)."""
+        if cls._compose_cmd is not None:
+            return cls._compose_cmd
+        try:
+            result = subprocess.run(
+                ['docker', 'compose', 'version'],
+                capture_output=True, text=True
+            )
+            if result.returncode == 0:
+                cls._compose_cmd = ['docker', 'compose']
+                return cls._compose_cmd
+        except Exception:
+            pass
+        # Fallback to docker-compose (v1)
+        cls._compose_cmd = ['docker-compose']
+        return cls._compose_cmd
+
     @staticmethod
     def is_docker_installed():
         """Check if Docker is installed and running."""
@@ -680,11 +701,11 @@ class DockerService:
 
     # ==================== DOCKER COMPOSE ====================
 
-    @staticmethod
-    def compose_up(project_path, detach=True, build=False):
+    @classmethod
+    def compose_up(cls, project_path, detach=True, build=False):
         """Start Docker Compose services."""
         try:
-            cmd = ['docker', 'compose', 'up']
+            cmd = cls._get_compose_cmd() + ['up']
             if detach:
                 cmd.append('-d')
             if build:
@@ -700,11 +721,11 @@ class DockerService:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    @staticmethod
-    def compose_down(project_path, volumes=False, remove_orphans=True):
+    @classmethod
+    def compose_down(cls, project_path, volumes=False, remove_orphans=True):
         """Stop Docker Compose services."""
         try:
-            cmd = ['docker', 'compose', 'down']
+            cmd = cls._get_compose_cmd() + ['down']
             if volumes:
                 cmd.append('-v')
             if remove_orphans:
@@ -720,8 +741,8 @@ class DockerService:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    @staticmethod
-    def compose_ps(project_path):
+    @classmethod
+    def compose_ps(cls, project_path):
         """List Docker Compose services.
 
         Handles multiple output formats from docker compose ps --format json:
@@ -733,7 +754,7 @@ class DockerService:
         """
         try:
             result = subprocess.run(
-                ['docker', 'compose', 'ps', '--format', 'json'],
+                cls._get_compose_cmd() + ['ps', '--format', 'json'],
                 cwd=project_path,
                 capture_output=True, text=True
             )
@@ -761,11 +782,11 @@ class DockerService:
         except Exception:
             return []
 
-    @staticmethod
-    def compose_logs(project_path, service=None, tail=100):
+    @classmethod
+    def compose_logs(cls, project_path, service=None, tail=100):
         """Get Docker Compose logs."""
         try:
-            cmd = ['docker', 'compose', 'logs', '--tail', str(tail)]
+            cmd = cls._get_compose_cmd() + ['logs', '--tail', str(tail)]
             if service:
                 cmd.append(service)
 
@@ -777,11 +798,11 @@ class DockerService:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    @staticmethod
-    def compose_restart(project_path, service=None):
+    @classmethod
+    def compose_restart(cls, project_path, service=None):
         """Restart Docker Compose services."""
         try:
-            cmd = ['docker', 'compose', 'restart']
+            cmd = cls._get_compose_cmd() + ['restart']
             if service:
                 cmd.append(service)
 
@@ -795,11 +816,11 @@ class DockerService:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    @staticmethod
-    def compose_pull(project_path, service=None):
+    @classmethod
+    def compose_pull(cls, project_path, service=None):
         """Pull Docker Compose images."""
         try:
-            cmd = ['docker', 'compose', 'pull']
+            cmd = cls._get_compose_cmd() + ['pull']
             if service:
                 cmd.append(service)
 
@@ -813,12 +834,12 @@ class DockerService:
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
-    @staticmethod
-    def validate_compose_file(project_path):
+    @classmethod
+    def validate_compose_file(cls, project_path):
         """Validate a Docker Compose file."""
         try:
             result = subprocess.run(
-                ['docker', 'compose', 'config', '--quiet'],
+                cls._get_compose_cmd() + ['config', '--quiet'],
                 cwd=project_path,
                 capture_output=True, text=True
             )
@@ -828,12 +849,12 @@ class DockerService:
         except Exception as e:
             return {'valid': False, 'error': str(e)}
 
-    @staticmethod
-    def get_compose_config(project_path):
+    @classmethod
+    def get_compose_config(cls, project_path):
         """Get parsed Docker Compose configuration."""
         try:
             result = subprocess.run(
-                ['docker', 'compose', 'config'],
+                cls._get_compose_cmd() + ['config'],
                 cwd=project_path,
                 capture_output=True, text=True
             )

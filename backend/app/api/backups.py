@@ -1,7 +1,9 @@
+import os
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import User, Application
 from app.services.backup_service import BackupService
+from app import paths
 
 backups_bp = Blueprint('backups', __name__)
 
@@ -166,7 +168,7 @@ def restore_database():
 def delete_backup(backup_path):
     """Delete a backup."""
     # Ensure path is within backup directory
-    full_path = f"/var/backups/serverkit/{backup_path}"
+    full_path = os.path.join(paths.SERVERKIT_BACKUP_DIR, backup_path)
     result = BackupService.delete_backup(full_path)
     return jsonify(result), 200 if result['success'] else 400
 

@@ -6,6 +6,8 @@ from datetime import datetime
 import threading
 import queue
 
+from app import paths
+
 
 class LogService:
     """Service for log management and streaming."""
@@ -24,7 +26,7 @@ class LogService:
     # Allowed directories for log file access (path traversal protection)
     ALLOWED_LOG_DIRECTORIES = [
         '/var/log',
-        '/var/serverkit',
+        paths.SERVERKIT_DIR,
         '/var/www',
         '/home',
         '/opt',
@@ -150,7 +152,7 @@ class LogService:
         """
         # Check if this is a Docker-based app
         docker_compose_paths = [
-            f'/var/serverkit/apps/{app_name}/docker-compose.yml',
+            f'{paths.APPS_DIR}/{app_name}/docker-compose.yml',
             f'/var/www/{app_name}/docker-compose.yml',
         ]
 

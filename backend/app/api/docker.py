@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import User, Application
 from app.services.docker_service import DockerService
-from app import db
+from app import db, paths
 
 docker_bp = Blueprint('docker', __name__)
 
@@ -570,7 +570,7 @@ def cleanup_all_apps():
     import shutil
     import os
 
-    apps_dir = '/var/serverkit/apps'
+    apps_dir = paths.APPS_DIR
     results = []
 
     # Get all apps from database

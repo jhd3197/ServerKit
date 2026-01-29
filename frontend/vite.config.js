@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
     plugins: [react()],
     server: {
+        port: 5274,
         // Enable polling for WSL (Windows filesystem doesn't support inotify)
         watch: {
             usePolling: true,

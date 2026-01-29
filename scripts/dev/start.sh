@@ -6,7 +6,7 @@ PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 echo "Starting ServerKit..."
 echo "  Backend:  http://localhost:5000"
-echo "  Frontend: http://localhost:5173"
+echo "  Frontend: http://localhost:5274"
 echo ""
 
 cd "$PROJECT_ROOT/backend"

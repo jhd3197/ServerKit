@@ -23,11 +23,14 @@ else:
     # Use Windows-specific logic or a placeholder
     grp = None 
 
+from app import paths
+
+
 class FileService:
     """Service for file system operations."""
 
     # Allowed root directories for browsing (security)
-    ALLOWED_ROOTS = ['/home', '/var/www', '/opt', '/srv', '/var/log', '/var/serverkit']
+    ALLOWED_ROOTS = ['/home', '/var/www', '/opt', '/srv', '/var/log', paths.SERVERKIT_DIR]
 
     # File extensions that can be edited in browser
     EDITABLE_EXTENSIONS = {

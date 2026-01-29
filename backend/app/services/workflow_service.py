@@ -11,13 +11,14 @@ from app import db
 from app.models import Workflow, Application, Domain, User
 from app.services.docker_service import DockerService
 from app.services.database_service import DatabaseService
+from app import paths
 
 
 class WorkflowService:
     """Service for deploying workflows to infrastructure."""
 
     # Base path for app deployments
-    APP_BASE_PATH = '/var/serverkit/apps'
+    APP_BASE_PATH = paths.APPS_DIR
 
     @staticmethod
     def deploy_workflow(workflow_id, user_id):

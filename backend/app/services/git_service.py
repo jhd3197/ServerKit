@@ -8,13 +8,15 @@ from datetime import datetime
 from typing import Dict, List, Optional
 from pathlib import Path
 
+from app import paths
+
 
 class GitService:
     """Service for Git deployment and webhooks."""
 
-    CONFIG_DIR = '/etc/serverkit'
+    CONFIG_DIR = paths.SERVERKIT_CONFIG_DIR
     DEPLOY_CONFIG = os.path.join(CONFIG_DIR, 'deployments.json')
-    DEPLOY_LOG = '/var/log/serverkit/deployments.log'
+    DEPLOY_LOG = os.path.join(paths.SERVERKIT_LOG_DIR, 'deployments.log')
 
     @classmethod
     def get_config(cls) -> Dict:
@@ -517,7 +519,7 @@ class GitService:
         except Exception as e:
             return {'error': str(e)}
 
-    WEBHOOK_LOG = '/var/log/serverkit/webhooks.log'
+    WEBHOOK_LOG = os.path.join(paths.SERVERKIT_LOG_DIR, 'webhooks.log')
 
     @classmethod
     def log_webhook(cls, app_id: int, provider: str, headers: List, payload: bytes) -> None:

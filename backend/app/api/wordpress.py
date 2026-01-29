@@ -1,10 +1,105 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models import User, Application
+from app.models import User, Application, WordPressSite
 from app.services.wordpress_service import WordPressService
 from app import db
 
 wordpress_bp = Blueprint('wordpress', __name__)
+
+
+def _resolve_app(site_or_app_id):
+    """Resolve an ID to an Application. Tries WordPressSite first, then Application."""
+    wp_site = WordPressSite.query.get(site_or_app_id)
+    if wp_site and wp_site.application:
+        return wp_site.application
+    return Application.query.get(site_or_app_id)
+
+
+# ==================== WORDPRESS SITES HUB ENDPOINTS ====================
+
+@wordpress_bp.route('/sites', methods=['GET'])
+@jwt_required()
+def list_sites():
+    """List all WordPress sites (production sites with environment counts)."""
+    result = WordPressService.get_sites()
+    return jsonify(result), 200
+
+
+@wordpress_bp.route('/sites', methods=['POST'])
+@jwt_required()
+def create_site():
+    """Create a new WordPress site via Docker."""
+    data = request.get_json() or {}
+    name = data.get('name')
+    admin_email = data.get('adminEmail', '')
+
+    if not name:
+        return jsonify({'error': 'Site name is required'}), 400
+
+    current_user_id = get_jwt_identity()
+    result = WordPressService.create_site(name, admin_email, current_user_id)
+
+    if result.get('success'):
+        return jsonify(result), 201
+    return jsonify(result), 400
+
+
+@wordpress_bp.route('/sites/<int:site_id>', methods=['GET'])
+@jwt_required()
+def get_site(site_id):
+    """Get site detail with environments."""
+    result = WordPressService.get_site(site_id)
+    if 'error' in result:
+        return jsonify(result), 404
+    return jsonify(result), 200
+
+
+@wordpress_bp.route('/sites/<int:site_id>', methods=['DELETE'])
+@jwt_required()
+def delete_site(site_id):
+    """Delete site and all its environments."""
+    result = WordPressService.delete_site(site_id)
+    if result.get('success'):
+        return jsonify(result), 200
+    return jsonify(result), 400
+
+
+@wordpress_bp.route('/sites/<int:site_id>/environments', methods=['GET'])
+@jwt_required()
+def list_environments(site_id):
+    """List environments for a site."""
+    result = WordPressService.get_environments(site_id)
+    if 'error' in result:
+        return jsonify(result), 404
+    return jsonify(result), 200
+
+
+@wordpress_bp.route('/sites/<int:site_id>/environments', methods=['POST'])
+@jwt_required()
+def create_environment(site_id):
+    """Create a staging or development environment."""
+    data = request.get_json() or {}
+    env_type = data.get('type', '')
+
+    if not env_type:
+        return jsonify({'error': 'Environment type is required'}), 400
+
+    current_user_id = get_jwt_identity()
+    result = WordPressService.create_environment(site_id, env_type, current_user_id)
+
+    if result.get('success'):
+        return jsonify(result), 201
+    return jsonify(result), 400
+
+
+@wordpress_bp.route('/sites/<int:site_id>/environments/<int:env_id>', methods=['DELETE'])
+@jwt_required()
+def delete_environment(site_id, env_id):
+    """Delete a non-production environment."""
+    result = WordPressService.delete_environment(env_id)
+    if result.get('success'):
+        return jsonify(result), 200
+    return jsonify(result), 400
 
 
 # ==================== STANDALONE WORDPRESS (DOCKER) ENDPOINTS ====================
@@ -145,7 +240,7 @@ def get_wordpress_info(app_id):
     """Get WordPress site info."""
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -168,7 +263,7 @@ def get_wordpress_info(app_id):
 @admin_required
 def update_wordpress(app_id):
     """Update WordPress core."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -187,7 +282,7 @@ def get_plugins(app_id):
     """Get installed plugins."""
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -204,7 +299,7 @@ def get_plugins(app_id):
 @admin_required
 def install_plugin(app_id):
     """Install a plugin."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
     data = request.get_json()
 
     if not app:
@@ -226,7 +321,7 @@ def install_plugin(app_id):
 @admin_required
 def uninstall_plugin(app_id, plugin):
     """Uninstall a plugin."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -240,7 +335,7 @@ def uninstall_plugin(app_id, plugin):
 @admin_required
 def activate_plugin(app_id, plugin):
     """Activate a plugin."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -254,7 +349,7 @@ def activate_plugin(app_id, plugin):
 @admin_required
 def deactivate_plugin(app_id, plugin):
     """Deactivate a plugin."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -268,7 +363,7 @@ def deactivate_plugin(app_id, plugin):
 @admin_required
 def update_plugins(app_id):
     """Update plugins."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
     data = request.get_json()
 
     if not app:
@@ -286,7 +381,7 @@ def get_themes(app_id):
     """Get installed themes."""
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -303,7 +398,7 @@ def get_themes(app_id):
 @admin_required
 def install_theme(app_id):
     """Install a theme."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
     data = request.get_json()
 
     if not app:
@@ -325,7 +420,7 @@ def install_theme(app_id):
 @admin_required
 def activate_theme(app_id, theme):
     """Activate a theme."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -340,7 +435,7 @@ def activate_theme(app_id, theme):
 @admin_required
 def create_backup(app_id):
     """Create a backup."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
     data = request.get_json() or {}
 
     if not app:
@@ -359,7 +454,7 @@ def list_backups(app_id):
     """List backups for a site."""
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -378,7 +473,7 @@ def list_backups(app_id):
 @admin_required
 def restore_backup(app_id):
     """Restore a backup."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
     data = request.get_json()
 
     if not app:
@@ -406,7 +501,7 @@ def delete_backup(backup_name):
 @admin_required
 def harden_wordpress(app_id):
     """Apply security hardening."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -420,7 +515,7 @@ def harden_wordpress(app_id):
 @admin_required
 def search_replace(app_id):
     """Search and replace in database."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
     data = request.get_json()
 
     if not app:
@@ -443,7 +538,7 @@ def search_replace(app_id):
 @admin_required
 def optimize_database(app_id):
     """Optimize WordPress database."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -457,7 +552,7 @@ def optimize_database(app_id):
 @admin_required
 def flush_cache(app_id):
     """Flush WordPress cache."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
 
     if not app:
         return jsonify({'error': 'Application not found'}), 404
@@ -472,7 +567,7 @@ def flush_cache(app_id):
 @admin_required
 def create_wp_user(app_id):
     """Create a WordPress user."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
     data = request.get_json()
 
     if not app:
@@ -496,7 +591,7 @@ def create_wp_user(app_id):
 @admin_required
 def reset_wp_password(app_id, user):
     """Reset a WordPress user's password."""
-    app = Application.query.get(app_id)
+    app = _resolve_app(app_id)
     data = request.get_json() or {}
 
     if not app:

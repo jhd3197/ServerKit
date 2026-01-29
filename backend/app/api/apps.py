@@ -6,6 +6,7 @@ from app import db
 from app.models import Application, User
 from app.services.docker_service import DockerService
 from app.services.log_service import LogService
+from app import paths
 
 apps_bp = Blueprint('apps', __name__)
 
@@ -384,7 +385,7 @@ def delete_app(app_id):
 
         # Delete the app folder
         try:
-            if app.root_path and app.root_path.startswith('/var/serverkit/apps/'):
+            if app.root_path and app.root_path.startswith(paths.APPS_DIR):
                 if os.path.exists(app.root_path):
                     shutil.rmtree(app.root_path)
                     cleanup_results['folder'] = {'success': True}

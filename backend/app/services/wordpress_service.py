@@ -8,13 +8,15 @@ from datetime import datetime
 from typing import Dict, List, Optional
 from pathlib import Path
 
+from app import paths
+
 
 class WordPressService:
     """Service for WordPress installation and management."""
 
     WP_CLI_PATH = '/usr/local/bin/wp'
     WP_DOWNLOAD_URL = 'https://wordpress.org/latest.tar.gz'
-    BACKUP_DIR = '/var/backups/serverkit/wordpress'
+    BACKUP_DIR = paths.WP_BACKUP_DIR
 
     # Security headers for wp-config.php
     SECURITY_CONSTANTS = '''
@@ -53,7 +55,12 @@ define('WP_AUTO_UPDATE_CORE', 'minor');
 
     @classmethod
     def wp_cli(cls, path: str, command: List[str], user: str = 'www-data') -> Dict:
-        """Execute a WP-CLI command."""
+        """Execute a WP-CLI command. Auto-detects Docker-based sites."""
+        # Check if this is a Docker-based site (has docker-compose.yml)
+        compose_file = os.path.join(path, 'docker-compose.yml')
+        if os.path.exists(compose_file):
+            return cls._wp_cli_docker(path, command)
+
         if not cls.is_wp_cli_installed():
             install_result = cls.install_wp_cli()
             if not install_result['success']:
@@ -67,6 +74,58 @@ define('WP_AUTO_UPDATE_CORE', 'minor');
                 text=True,
                 timeout=300,
                 cwd=path
+            )
+
+            return {
+                'success': result.returncode == 0,
+                'output': result.stdout,
+                'error': result.stderr if result.returncode != 0 else None
+            }
+        except subprocess.TimeoutExpired:
+            return {'success': False, 'error': 'Command timed out'}
+        except Exception as e:
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def _wp_cli_docker(cls, path: str, command: List[str]) -> Dict:
+        """Execute a WP-CLI command inside a Docker WordPress container."""
+        # Resolve container name from the Application record
+        container_name = None
+        from app.models import Application
+        app = Application.query.filter_by(root_path=path).first()
+        if app:
+            container_name = app.name
+
+        if not container_name:
+            # Fallback: derive from directory name
+            container_name = os.path.basename(path)
+
+        try:
+            # Ensure WP-CLI is available inside the container
+            check = subprocess.run(
+                ['docker', 'exec', container_name, 'which', 'wp'],
+                capture_output=True, text=True, timeout=10
+            )
+            if check.returncode != 0:
+                # Install WP-CLI inside the container
+                install_cmd = (
+                    'curl -sO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar'
+                    ' && chmod +x wp-cli.phar && mv wp-cli.phar /usr/local/bin/wp'
+                )
+                install = subprocess.run(
+                    ['docker', 'exec', container_name, 'bash', '-c', install_cmd],
+                    capture_output=True, text=True, timeout=120
+                )
+                if install.returncode != 0:
+                    return {'success': False, 'error': f'Failed to install WP-CLI in container: {install.stderr}'}
+
+            # Run wp-cli inside the WordPress container
+            cmd = ['docker', 'exec', container_name, 'wp', '--allow-root'] + command
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=60
             )
 
             return {
@@ -628,7 +687,7 @@ RewriteRule ^wp-content/uploads/.*\\.php$ - [F]
     # ========================================
 
     WP_APP_NAME = 'serverkit-wordpress'
-    WP_CONFIG_DIR = '/etc/serverkit'
+    WP_CONFIG_DIR = paths.SERVERKIT_CONFIG_DIR
     WP_CONFIG_FILE = os.path.join(WP_CONFIG_DIR, 'wordpress.json')
 
     @classmethod
@@ -852,3 +911,300 @@ RewriteRule ^wp-content/uploads/.*\\.php$ - [F]
         if not stop_result.get('success'):
             return stop_result
         return cls.start_wordpress_standalone()
+
+    # ========================================
+    # WORDPRESS SITES HUB (MULTI-SITE MANAGEMENT)
+    # ========================================
+
+    @classmethod
+    def _enrich_site_data(cls, site, site_data: Dict) -> Dict:
+        """Add runtime info (status, name, port, url) to site data dict."""
+        if site.application:
+            site_data['name'] = site.application.name
+            site_data['port'] = site.application.port
+            running = cls._check_container_running(site.application.name)
+            if running and site.application.status != 'running':
+                site.application.status = 'running'
+            elif not running and site.application.status == 'running':
+                site.application.status = 'stopped'
+            site_data['status'] = site.application.status
+
+            # Build access URL from port
+            if site.application.port:
+                site_data['url'] = f"http://localhost:{site.application.port}"
+        return site_data
+
+    @classmethod
+    def get_sites(cls) -> Dict:
+        """Get all production WordPress sites with environment counts."""
+        from app.models import WordPressSite
+
+        sites = WordPressSite.query.filter_by(is_production=True).all()
+        result = []
+
+        for site in sites:
+            site_data = site.to_dict()
+            env_count = WordPressSite.query.filter_by(production_site_id=site.id).count()
+            site_data['environment_count'] = env_count
+            cls._enrich_site_data(site, site_data)
+            result.append(site_data)
+
+        return {'sites': result}
+
+    @classmethod
+    def get_site(cls, site_id: int) -> Dict:
+        """Get a single WordPress site with its environments."""
+        from app.models import WordPressSite
+
+        site = WordPressSite.query.get(site_id)
+        if not site:
+            return {'error': 'Site not found'}
+
+        site_data = site.to_dict(include_environments=True)
+        cls._enrich_site_data(site, site_data)
+
+        # Also enrich environment data
+        if 'environments' in site_data:
+            for env_data in site_data['environments']:
+                env = WordPressSite.query.get(env_data.get('id'))
+                if env:
+                    cls._enrich_site_data(env, env_data)
+
+        return {'site': site_data}
+
+    @classmethod
+    def create_site(cls, name: str, admin_email: str, user_id: int) -> Dict:
+        """Create a new WordPress site via Docker."""
+        from app import db
+        from app.models import Application, WordPressSite
+        from app.services.template_service import TemplateService
+
+        # Sanitize name for Docker
+        safe_name = name.lower().replace(' ', '-')
+        safe_name = ''.join(c for c in safe_name if c.isalnum() or c == '-')
+
+        # Check for duplicate name
+        existing = Application.query.filter_by(name=safe_name).first()
+        if existing:
+            return {'success': False, 'error': f'A site with name "{safe_name}" already exists'}
+
+        try:
+            result = TemplateService.install_template(
+                template_id='wordpress',
+                app_name=safe_name,
+                user_variables={},
+                user_id=user_id
+            )
+
+            if not result.get('success'):
+                return result
+
+            variables = result.get('variables', {})
+            http_port = variables.get('HTTP_PORT')
+
+            # Find the Application record created by TemplateService
+            app = Application.query.filter_by(name=safe_name).first()
+            if not app:
+                return {'success': False, 'error': 'Application record not created'}
+
+            # Create WordPressSite record
+            wp_site = WordPressSite(
+                application_id=app.id,
+                admin_email=admin_email,
+                is_production=True,
+                environment_type='production',
+                wp_version='6.4',
+                compose_project_name=safe_name
+            )
+            db.session.add(wp_site)
+            db.session.commit()
+
+            return {
+                'success': True,
+                'message': 'WordPress site created successfully',
+                'site': wp_site.to_dict(),
+                'http_port': http_port
+            }
+
+        except Exception as e:
+            db.session.rollback()
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def delete_site(cls, site_id: int) -> Dict:
+        """Delete a WordPress site and all its environments."""
+        from app import db
+        from app.models import WordPressSite, Application
+        from app.services.docker_service import DockerService
+
+        site = WordPressSite.query.get(site_id)
+        if not site:
+            return {'success': False, 'error': 'Site not found'}
+
+        if not site.is_production:
+            return {'success': False, 'error': 'Can only delete production sites from this endpoint. Use delete_environment for non-production.'}
+
+        try:
+            # Delete all child environments first
+            environments = WordPressSite.query.filter_by(production_site_id=site.id).all()
+            for env in environments:
+                cls._teardown_wp_site(env)
+
+            # Delete the production site
+            cls._teardown_wp_site(site)
+
+            db.session.commit()
+            return {'success': True, 'message': 'Site and all environments deleted'}
+
+        except Exception as e:
+            db.session.rollback()
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def get_environments(cls, site_id: int) -> Dict:
+        """Get all environments for a production WordPress site."""
+        from app.models import WordPressSite
+
+        site = WordPressSite.query.get(site_id)
+        if not site:
+            return {'error': 'Site not found'}
+
+        if not site.is_production:
+            return {'error': 'Not a production site'}
+
+        # Production env first
+        prod_data = site.to_dict()
+        cls._enrich_site_data(site, prod_data)
+        environments = [prod_data]
+
+        # Child environments
+        children = WordPressSite.query.filter_by(production_site_id=site.id).all()
+        for child in children:
+            env_data = child.to_dict()
+            cls._enrich_site_data(child, env_data)
+            environments.append(env_data)
+
+        return {'environments': environments}
+
+    @classmethod
+    def create_environment(cls, site_id: int, env_type: str, user_id: int = 1) -> Dict:
+        """Create a staging or development environment for a site."""
+        from app import db
+        from app.models import WordPressSite, Application
+        from app.services.template_service import TemplateService
+
+        site = WordPressSite.query.get(site_id)
+        if not site:
+            return {'success': False, 'error': 'Site not found'}
+
+        if not site.is_production:
+            return {'success': False, 'error': 'Can only create environments from a production site'}
+
+        if env_type not in ('staging', 'development'):
+            return {'success': False, 'error': 'Environment type must be staging or development'}
+
+        # Check if this environment type already exists
+        existing = WordPressSite.query.filter_by(
+            production_site_id=site.id,
+            environment_type=env_type
+        ).first()
+        if existing:
+            return {'success': False, 'error': f'{env_type.capitalize()} environment already exists'}
+
+        # Build name from parent
+        parent_name = site.application.name if site.application else f'wp-site-{site.id}'
+        env_name = f'{parent_name}-{env_type[:3]}'  # e.g., mysite-sta, mysite-dev
+
+        try:
+            result = TemplateService.install_template(
+                template_id='wordpress',
+                app_name=env_name,
+                user_variables={},
+                user_id=user_id
+            )
+
+            if not result.get('success'):
+                return result
+
+            variables = result.get('variables', {})
+            http_port = variables.get('HTTP_PORT')
+
+            app = Application.query.filter_by(name=env_name).first()
+            if not app:
+                return {'success': False, 'error': 'Application record not created'}
+
+            wp_env = WordPressSite(
+                application_id=app.id,
+                admin_email=site.admin_email,
+                is_production=False,
+                production_site_id=site.id,
+                environment_type=env_type,
+                wp_version=site.wp_version or '6.4',
+                compose_project_name=env_name
+            )
+            db.session.add(wp_env)
+            db.session.commit()
+
+            return {
+                'success': True,
+                'message': f'{env_type.capitalize()} environment created',
+                'environment': wp_env.to_dict(),
+                'http_port': http_port
+            }
+
+        except Exception as e:
+            db.session.rollback()
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def delete_environment(cls, env_id: int) -> Dict:
+        """Delete a non-production environment."""
+        from app import db
+        from app.models import WordPressSite
+
+        env = WordPressSite.query.get(env_id)
+        if not env:
+            return {'success': False, 'error': 'Environment not found'}
+
+        if env.is_production:
+            return {'success': False, 'error': 'Cannot delete production environment. Delete the site instead.'}
+
+        try:
+            cls._teardown_wp_site(env)
+            db.session.commit()
+            return {'success': True, 'message': 'Environment deleted'}
+        except Exception as e:
+            db.session.rollback()
+            return {'success': False, 'error': str(e)}
+
+    @classmethod
+    def _teardown_wp_site(cls, wp_site) -> None:
+        """Tear down Docker stack and delete records for a WordPressSite."""
+        from app import db
+        from app.services.docker_service import DockerService
+
+        if wp_site.application and wp_site.application.root_path:
+            root_path = wp_site.application.root_path
+            if os.path.exists(root_path):
+                DockerService.compose_down(root_path, remove_volumes=True)
+                shutil.rmtree(root_path, ignore_errors=True)
+
+        if wp_site.application:
+            db.session.delete(wp_site.application)
+
+        db.session.delete(wp_site)
+
+    @classmethod
+    def _check_container_running(cls, app_name: str) -> bool:
+        """Check if a Docker container is running by app name."""
+        try:
+            import subprocess
+            result = subprocess.run(
+                ['docker', 'ps', '--filter', f'name={app_name}', '--format', '{{.Names}}'],
+                capture_output=True,
+                text=True,
+                timeout=10
+            )
+            return app_name in result.stdout
+        except Exception:
+            return False

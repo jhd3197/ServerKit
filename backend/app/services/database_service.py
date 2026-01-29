@@ -5,11 +5,13 @@ import string
 import json
 from datetime import datetime
 
+from app import paths
+
 
 class DatabaseService:
     """Service for managing MySQL/MariaDB and PostgreSQL databases."""
 
-    BACKUP_DIR = '/var/backups/serverkit/databases'
+    BACKUP_DIR = paths.DB_BACKUP_DIR
 
     # ==================== MYSQL/MARIADB ====================
 
