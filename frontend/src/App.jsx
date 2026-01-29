@@ -162,9 +162,9 @@ function AppRoutes() {
                 <Route path="apps" element={<Applications />} />
                 <Route path="apps/:id" element={<ApplicationDetail />} />
                 <Route path="wordpress" element={<WordPress />} />
-                <Route path="wordpress/:id" element={<WordPressDetail />} />
                 <Route path="wordpress/projects" element={<WordPressProjects />} />
                 <Route path="wordpress/projects/:id" element={<WordPressProject />} />
+                <Route path="wordpress/:id" element={<WordPressDetail />} />
                 <Route path="templates" element={<Templates />} />
                 <Route path="workflow" element={<WorkflowBuilder />} />
                 <Route path="domains" element={<Domains />} />

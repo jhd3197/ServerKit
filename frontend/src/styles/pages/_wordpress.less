@@ -31,6 +31,106 @@
 
 // WordPress Page Layout (extends Docker page styles)
 .wordpress-page {
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: @space-6;
+        padding: @space-4 @space-4 0;
+        flex-wrap: wrap;
+        gap: @space-4;
+
+        .page-header-content {
+            h1 {
+                font-size: @font-size-2xl;
+                font-weight: @font-weight-semibold;
+                margin: 0 0 @space-1 0;
+            }
+
+            .page-description {
+                color: @text-secondary;
+                margin: 0;
+            }
+        }
+
+        .page-header-actions {
+            display: flex;
+            gap: @space-2;
+        }
+    }
+
+    .empty-state-large {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px @space-6;
+        background: @bg-card;
+        border-radius: @radius-xl;
+        text-align: center;
+        margin: 0 @space-4;
+
+        .empty-icon {
+            color: @text-tertiary;
+            margin-bottom: @space-6;
+
+            svg {
+                stroke: #21759b;
+            }
+        }
+
+        h2 {
+            margin: 0 0 @space-3 0;
+            font-size: @font-size-2xl;
+            font-weight: @font-weight-semibold;
+        }
+
+        p {
+            margin: 0 0 @space-6 0;
+            color: @text-secondary;
+            max-width: 460px;
+        }
+    }
+
+    .install-warning {
+        display: flex;
+        gap: @space-3;
+        padding: @space-4;
+        background: fade(@color-warning, 8%);
+        border: 1px solid fade(@color-warning, 20%);
+        border-radius: @radius-md;
+        margin-bottom: @space-4;
+
+        > svg {
+            flex-shrink: 0;
+            color: @color-warning;
+            margin-top: 2px;
+        }
+
+        strong {
+            display: block;
+            margin-bottom: @space-2;
+        }
+
+        ul {
+            margin: 0;
+            padding-left: @space-4;
+            color: @text-secondary;
+            font-size: @font-size-sm;
+
+            li {
+                margin-bottom: @space-1;
+            }
+        }
+    }
+
+    .form-hint {
+        display: block;
+        font-size: @font-size-xs;
+        color: @text-tertiary;
+        margin-top: @space-1;
+    }
+
     .docker-empty {
         .wp-empty-icon {
             color: @text-tertiary;
@@ -189,6 +289,28 @@
     &.development {
         background: fade(@color-info, 12%);
         color: @color-info;
+    }
+}
+
+.wp-site-card-links {
+    display: flex;
+    gap: @space-3;
+    margin-top: @space-3;
+    padding-top: @space-3;
+    border-top: 1px solid @border-subtle;
+}
+
+.wp-site-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: @font-size-xs;
+    font-weight: @font-weight-medium;
+    color: @color-primary;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
     }
 }
 

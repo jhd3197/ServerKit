@@ -219,7 +219,7 @@ const WordPressDetail = () => {
                 <ErrorBoundary key={activeTab} onRetry={loadSite}>
                     {activeTab === 'overview' && <OverviewTab site={site} onUpdate={loadSite} />}
                     {activeTab === 'environments' && <EnvironmentsTab siteId={site.id} site={site} onUpdate={loadSite} />}
-                    {activeTab === 'database' && <DatabaseTab siteId={site.id} />}
+                    {activeTab === 'database' && <DatabaseTab siteId={site.id} site={site} />}
                     {activeTab === 'plugins' && <PluginsTab siteId={site.id} />}
                     {activeTab === 'themes' && <ThemesTab siteId={site.id} />}
                     {activeTab === 'git' && <GitTab siteId={site.id} site={site} onUpdate={loadSite} />}
@@ -402,13 +402,13 @@ const OverviewTab = ({ site, onUpdate }) => {
                                     </a>
                                 </>
                             )}
-                            {site.is_production && (
+                            {site.is_production && (site.environments || []).length < 2 && (
                                 <button
                                     className="quick-action-btn"
                                     onClick={() => setShowEnvModal(true)}
                                 >
                                     <Plus size={16} />
-                                    Create Dev Env
+                                    Create Environment
                                 </button>
                             )}
                             <button
@@ -434,13 +434,20 @@ const OverviewTab = ({ site, onUpdate }) => {
                 </div>
             </div>
 
-            {showEnvModal && (
-                <CreateEnvironmentModal
-                    onClose={() => setShowEnvModal(false)}
-                    onCreate={handleCreateEnvironment}
-                    productionDomain={site.url}
-                />
-            )}
+            {showEnvModal && (() => {
+                const envs = site.environments || [];
+                const modalHasStaging = envs.some(e => e.environment_type === 'staging');
+                const modalHasDev = envs.some(e => e.environment_type === 'development');
+                return (
+                    <CreateEnvironmentModal
+                        onClose={() => setShowEnvModal(false)}
+                        onCreate={handleCreateEnvironment}
+                        productionDomain={site.url}
+                        hasStaging={modalHasStaging}
+                        hasDev={modalHasDev}
+                    />
+                );
+            })()}
         </div>
     );
 };
@@ -571,11 +578,17 @@ const EnvironmentsTab = ({ siteId, site, onUpdate }) => {
         );
     }
 
+    // Filter out production from the environments list (it's shown separately)
+    const childEnvs = environments.filter(e => e.id !== site.id && !e.is_production);
+    const hasStaging = childEnvs.some(e => e.environment_type === 'staging');
+    const hasDev = childEnvs.some(e => e.environment_type === 'development');
+    const canCreateMore = site.is_production && (!hasStaging || !hasDev);
+
     return (
         <div className="environments-tab">
             <div className="section-header">
                 <h3>Environments</h3>
-                {site.is_production && (
+                {canCreateMore && (
                     <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
                         <Plus size={14} /> Create Environment
                     </button>
@@ -597,7 +610,7 @@ const EnvironmentsTab = ({ siteId, site, onUpdate }) => {
                 />
 
                 {/* Dev/staging environments */}
-                {environments.map(env => (
+                {childEnvs.map(env => (
                     <EnvironmentCard
                         key={env.id}
                         environment={env}
@@ -608,7 +621,7 @@ const EnvironmentsTab = ({ siteId, site, onUpdate }) => {
                 ))}
             </div>
 
-            {environments.length === 0 && site.is_production && (
+            {childEnvs.length === 0 && site.is_production && (
                 <div className="hint-box">
                     <p>No development or staging environments yet.</p>
                     <p>Create an environment to safely test changes before deploying to production.</p>
@@ -620,6 +633,8 @@ const EnvironmentsTab = ({ siteId, site, onUpdate }) => {
                     onClose={() => setShowCreateModal(false)}
                     onCreate={handleCreateEnvironment}
                     productionDomain={site.url}
+                    hasStaging={hasStaging}
+                    hasDev={hasDev}
                 />
             )}
         </div>
@@ -627,9 +642,11 @@ const EnvironmentsTab = ({ siteId, site, onUpdate }) => {
 };
 
 // Create Environment Modal
-const CreateEnvironmentModal = ({ onClose, onCreate, productionDomain }) => {
+const CreateEnvironmentModal = ({ onClose, onCreate, productionDomain, hasStaging = false, hasDev = false }) => {
+    // Default to whichever type is still available
+    const defaultType = !hasDev ? 'development' : !hasStaging ? 'staging' : 'development';
     const [formData, setFormData] = useState({
-        type: 'development',
+        type: defaultType,
         name: '',
         domain: '',
         cloneDb: true,
@@ -688,8 +705,8 @@ const CreateEnvironmentModal = ({ onClose, onCreate, productionDomain }) => {
                     <div className="form-group">
                         <label>Environment Type</label>
                         <select name="type" value={formData.type} onChange={handleChange}>
-                            <option value="development">Development</option>
-                            <option value="staging">Staging</option>
+                            {!hasDev && <option value="development">Development</option>}
+                            {!hasStaging && <option value="staging">Staging</option>}
                         </select>
                     </div>
 
@@ -768,7 +785,7 @@ const CreateEnvironmentModal = ({ onClose, onCreate, productionDomain }) => {
 };
 
 // Database Tab
-const DatabaseTab = ({ siteId }) => {
+const DatabaseTab = ({ siteId, site }) => {
     const toast = useToast();
     const [snapshots, setSnapshots] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -837,7 +854,44 @@ const DatabaseTab = ({ siteId }) => {
 
     return (
         <div className="database-tab">
-            <div className="section-header">
+            {/* Database Connection Info */}
+            <div className="app-panel">
+                <div className="app-panel-header">
+                    <Database size={16} />
+                    Database Connection
+                </div>
+                <div className="app-panel-body">
+                    <div className="app-info-grid">
+                        <div className="app-info-item">
+                            <span className="app-info-label">Database Name</span>
+                            <span className="app-info-value mono">{site?.db_name || 'wordpress'}</span>
+                        </div>
+                        <div className="app-info-item">
+                            <span className="app-info-label">Database User</span>
+                            <span className="app-info-value mono">{site?.db_user || 'wordpress'}</span>
+                        </div>
+                        <div className="app-info-item">
+                            <span className="app-info-label">Database Host</span>
+                            <span className="app-info-value mono">{site?.db_host || 'db'}</span>
+                        </div>
+                        <div className="app-info-item">
+                            <span className="app-info-label">Table Prefix</span>
+                            <span className="app-info-value mono">{site?.db_prefix || 'wp_'}</span>
+                        </div>
+                        <div className="app-info-item">
+                            <span className="app-info-label">Container</span>
+                            <span className="app-info-value mono">{site?.compose_project_name ? `${site.compose_project_name}-db` : '-'}</span>
+                        </div>
+                        <div className="app-info-item">
+                            <span className="app-info-label">Engine</span>
+                            <span className="app-info-value">MySQL 8.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Snapshots */}
+            <div className="section-header" style={{ marginTop: 24 }}>
                 <h3>Database Snapshots</h3>
                 <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>
                     <Plus size={14} /> Create Snapshot
