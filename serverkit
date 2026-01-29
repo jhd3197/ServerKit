@@ -472,6 +472,9 @@ cmd_update() {
 
     sleep 5
 
+    # Track successful update
+    curl -s "https://serverkit.ai/track/update?v=${NEW_VERSION}" >/dev/null 2>&1 || true
+
     echo ""
     print_success "ServerKit updated!"
     echo "  Branch:           $target_branch"
@@ -506,6 +509,10 @@ cmd_uninstall() {
     echo
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then
+        # Track uninstall before removing files
+        UNINSTALL_VERSION=$(get_local_version)
+        curl -s "https://serverkit.ai/track/uninstall?v=${UNINSTALL_VERSION}" >/dev/null 2>&1 || true
+
         print_info "Stopping services..."
         systemctl stop $BACKEND_SERVICE 2>/dev/null || true
         systemctl disable $BACKEND_SERVICE 2>/dev/null || true

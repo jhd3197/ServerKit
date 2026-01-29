@@ -317,6 +317,10 @@ fi
 
 echo ""
 if [ "$BACKEND_OK" = true ] && [ "$FRONTEND_OK" = true ]; then
+    # Track successful install
+    INSTALLED_VERSION=$(cat "$INSTALL_DIR/VERSION" 2>/dev/null | tr -d '\n\r ')
+    curl -s "https://serverkit.ai/track/install?v=${INSTALLED_VERSION}" >/dev/null 2>&1 || true
+
     echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo -e "${GREEN}  Installation Complete!${NC}"
     echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
