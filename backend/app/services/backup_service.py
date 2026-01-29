@@ -11,12 +11,14 @@ import threading
 import time
 import schedule
 
+from app import paths
+
 
 class BackupService:
     """Service for automated backups of applications and databases."""
 
-    BACKUP_BASE_DIR = '/var/backups/serverkit'
-    CONFIG_DIR = '/etc/serverkit'
+    BACKUP_BASE_DIR = paths.SERVERKIT_BACKUP_DIR
+    CONFIG_DIR = paths.SERVERKIT_CONFIG_DIR
     BACKUP_CONFIG = os.path.join(CONFIG_DIR, 'backups.json')
 
     # Backup types

@@ -24,14 +24,16 @@ from typing import Dict, List, Optional, Any
 from pathlib import Path
 import requests
 
+from app import paths
+
 
 class TemplateService:
     """Service for managing and deploying application templates."""
 
-    CONFIG_DIR = '/etc/serverkit'
-    TEMPLATES_DIR = '/etc/serverkit/templates'
+    CONFIG_DIR = paths.SERVERKIT_CONFIG_DIR
+    TEMPLATES_DIR = paths.TEMPLATES_DIR
     LOCAL_TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'templates')
-    INSTALLED_DIR = '/var/serverkit/apps'
+    INSTALLED_DIR = paths.APPS_DIR
     TEMPLATE_CONFIG = os.path.join(CONFIG_DIR, 'templates.json')
 
     # Default template repository

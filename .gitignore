@@ -55,3 +55,6 @@ new_templates/
 *.test
 *.out
 /template-icons
+
+# Dev data directory (local development path overrides)
+backend/dev-data/

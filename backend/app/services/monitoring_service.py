@@ -11,14 +11,15 @@ import threading
 import time
 
 from .notification_service import NotificationService
+from app import paths
 
 
 class MonitoringService:
     """Service for system monitoring and alerts."""
 
-    CONFIG_DIR = '/etc/serverkit'
+    CONFIG_DIR = paths.SERVERKIT_CONFIG_DIR
     ALERTS_CONFIG = os.path.join(CONFIG_DIR, 'alerts.json')
-    ALERTS_LOG = '/var/log/serverkit/alerts.log'
+    ALERTS_LOG = os.path.join(paths.SERVERKIT_LOG_DIR, 'alerts.log')
 
     # Default thresholds
     DEFAULT_THRESHOLDS = {

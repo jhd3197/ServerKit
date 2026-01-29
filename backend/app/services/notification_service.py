@@ -19,11 +19,13 @@ from datetime import datetime
 from typing import Dict, List, Optional
 from pathlib import Path
 
+from app import paths
+
 
 class NotificationService:
     """Service for sending notifications to various channels."""
 
-    CONFIG_DIR = '/etc/serverkit'
+    CONFIG_DIR = paths.SERVERKIT_CONFIG_DIR
     NOTIFICATIONS_CONFIG = os.path.join(CONFIG_DIR, 'notifications.json')
 
     # Severity colors (hex for Discord, named for Slack)

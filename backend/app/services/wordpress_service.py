@@ -8,13 +8,15 @@ from datetime import datetime
 from typing import Dict, List, Optional
 from pathlib import Path
 
+from app import paths
+
 
 class WordPressService:
     """Service for WordPress installation and management."""
 
     WP_CLI_PATH = '/usr/local/bin/wp'
     WP_DOWNLOAD_URL = 'https://wordpress.org/latest.tar.gz'
-    BACKUP_DIR = '/var/backups/serverkit/wordpress'
+    BACKUP_DIR = paths.WP_BACKUP_DIR
 
     # Security headers for wp-config.php
     SECURITY_CONSTANTS = '''
@@ -628,7 +630,7 @@ RewriteRule ^wp-content/uploads/.*\\.php$ - [F]
     # ========================================
 
     WP_APP_NAME = 'serverkit-wordpress'
-    WP_CONFIG_DIR = '/etc/serverkit'
+    WP_CONFIG_DIR = paths.SERVERKIT_CONFIG_DIR
     WP_CONFIG_FILE = os.path.join(WP_CONFIG_DIR, 'wordpress.json')
 
     @classmethod

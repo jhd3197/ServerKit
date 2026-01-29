@@ -12,12 +12,13 @@ import shutil
 import subprocess
 from typing import Dict
 from app.services.template_service import TemplateService
+from app import paths
 
 
 class EnvironmentDockerService:
     """Service for managing per-environment Docker Compose stacks."""
 
-    APPS_DIR = '/var/serverkit/apps'
+    APPS_DIR = paths.APPS_DIR
 
     # Docker Compose template for a WordPress environment
     COMPOSE_TEMPLATE = """services:

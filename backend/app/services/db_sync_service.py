@@ -15,11 +15,13 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 from pathlib import Path
 
+from app import paths
+
 
 class DatabaseSyncService:
     """Service for database cloning, transformation, and sync operations."""
 
-    SNAPSHOT_DIR = '/var/backups/serverkit/snapshots'
+    SNAPSHOT_DIR = paths.SNAPSHOT_DIR
     TEMP_DIR = '/tmp/serverkit_db_sync'
 
     @classmethod

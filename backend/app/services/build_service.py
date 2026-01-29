@@ -21,14 +21,16 @@ from datetime import datetime
 from typing import Dict, List, Optional, Callable, Generator
 from pathlib import Path
 
+from app import paths
+
 
 class BuildService:
     """Service for building applications from source code."""
 
-    CONFIG_DIR = '/etc/serverkit'
+    CONFIG_DIR = paths.SERVERKIT_CONFIG_DIR
     BUILD_CONFIG = os.path.join(CONFIG_DIR, 'builds.json')
-    BUILD_LOG_DIR = '/var/log/serverkit/builds'
-    BUILD_CACHE_DIR = '/var/cache/serverkit/builds'
+    BUILD_LOG_DIR = paths.BUILD_LOG_DIR
+    BUILD_CACHE_DIR = paths.BUILD_CACHE_DIR
 
     # Default build timeout (10 minutes)
     DEFAULT_TIMEOUT = 600
