@@ -179,6 +179,10 @@ def create_app(config_name=None):
     from app.api.servers import servers_bp
     app.register_blueprint(servers_bp, url_prefix='/api/v1/servers')
 
+    # Register blueprints - Email Server
+    from app.api.email import email_bp
+    app.register_blueprint(email_bp, url_prefix='/api/v1/email')
+
     # Create database tables
     with app.app_context():
         db.create_all()

@@ -8,6 +8,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ### Recently Completed
 
+- **Email Server Management** - Postfix + Dovecot + SpamAssassin + OpenDKIM + Roundcube, DNS API (Cloudflare/Route53)
 - **Two-Factor Authentication (2FA)** - TOTP-based with backup codes
 - **Notification Webhooks** - Discord, Slack, Telegram, generic webhooks
 - **ClamAV Integration** - Malware scanning with quarantine
@@ -166,17 +167,18 @@ This document outlines the development roadmap for ServerKit. Features are organ
 
 ---
 
-## Phase 13: Email Server Management (Planned)
+## Phase 13: Email Server Management (Completed)
 
 **Priority: Medium**
 
-- [ ] Postfix mail server setup
-- [ ] Dovecot IMAP/POP3 configuration
-- [ ] Email account management
-- [ ] Spam filtering (SpamAssassin)
-- [ ] DKIM/SPF/DMARC configuration
-- [ ] Webmail interface integration
-- [ ] Email forwarding rules
+- [x] Postfix mail server setup
+- [x] Dovecot IMAP/POP3 configuration
+- [x] Email account management
+- [x] Spam filtering (SpamAssassin)
+- [x] DKIM/SPF/DMARC configuration
+- [x] Webmail interface integration (Roundcube via Docker)
+- [x] Email forwarding rules
+- [x] DNS API integration (Cloudflare & Route53)
 
 ---
 
@@ -275,7 +277,7 @@ This document outlines the development roadmap for ServerKit. Features are organ
 | v1.0.0 | Production-ready stable release | Planned |
 | v1.1.0 | Multi-server, Git deployment | Planned |
 | v1.2.0 | Backups, Advanced SSL, Advanced Security | Planned |
-| v1.3.0 | Email server, API enhancements | Planned |
+| v1.3.0 | Email server, API enhancements | Email server completed |
 | v1.4.0 | Team & permissions | Planned |
 | v1.5.0 | Performance optimizations | Planned |
 | v2.0.0 | Mobile app, Marketplace | Future |
@@ -304,5 +306,5 @@ Have a feature idea? Open an issue on GitHub with the `enhancement` label.
 
 <p align="center">
   <strong>ServerKit Roadmap</strong><br>
-  Last updated: January 2026
+  Last updated: March 2026
 </p>

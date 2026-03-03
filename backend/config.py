@@ -31,6 +31,15 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
 
+class TestingConfig(Config):
+    """Config for pytest and other automated tests."""
+    TESTING = True
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL', 'sqlite:///:memory:')
+    # Reduce noise during tests
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=5)
+
+
 class ProductionConfig(Config):
     DEBUG = False
 
@@ -50,5 +59,6 @@ class ProductionConfig(Config):
 config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig,
-    'default': DevelopmentConfig
+    'testing': TestingConfig,
+    'default': DevelopmentConfig,
 }

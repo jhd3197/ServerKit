@@ -35,6 +35,7 @@ import WordPressDetail from './pages/WordPressDetail';
 import WordPressProjects from './pages/WordPressProjects';
 import WordPressProject from './pages/WordPressProject';
 import SSLCertificates from './pages/SSLCertificates';
+import Email from './pages/Email';
 
 // Page title mapping
 const PAGE_TITLES = {
@@ -56,6 +57,7 @@ const PAGE_TITLES = {
     '/git': 'Git Repositories',
     '/files': 'File Manager',
     '/ftp': 'FTP Server',
+    '/email': 'Email Server',
     '/monitoring': 'Monitoring',
     '/backups': 'Backups',
     '/cron': 'Cron Jobs',
@@ -179,6 +181,7 @@ function AppRoutes() {
                 <Route path="git" element={<Git />} />
                 <Route path="files" element={<FileManager />} />
                 <Route path="ftp" element={<FTPServer />} />
+                <Route path="email" element={<Email />} />
                 <Route path="monitoring" element={<Monitoring />} />
                 <Route path="backups" element={<Backups />} />
                 <Route path="cron" element={<CronJobs />} />

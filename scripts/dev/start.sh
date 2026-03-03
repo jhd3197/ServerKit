@@ -10,8 +10,8 @@ echo "  Frontend: http://localhost:5274"
 echo ""
 
 cd "$PROJECT_ROOT/backend"
-source venv/bin/activate
-python run.py &
+# Use venv's Python directly so we don't rely on PATH or 'source' (works with sh/bash)
+"$PROJECT_ROOT/backend/venv/bin/python" run.py &
 BACKEND_PID=$!
 
 sleep 2

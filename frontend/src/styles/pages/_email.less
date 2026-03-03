@@ -1,0 +1,460 @@
+// Email Server Page Styles
+
+.email-server {
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 16px;
+
+        .page-header-content {
+            h1 {
+                font-size: 24px;
+                font-weight: 600;
+                margin: 0 0 4px 0;
+            }
+
+            .page-description {
+                color: var(--text-secondary);
+                margin: 0;
+            }
+        }
+
+        .page-header-actions {
+            display: flex;
+            gap: 8px;
+        }
+    }
+
+    .page-loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 400px;
+    }
+
+    .empty-state-large {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 24px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        text-align: center;
+
+        .icon {
+            font-size: 64px;
+            color: var(--text-tertiary);
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            margin: 0 0 12px 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        p {
+            margin: 0 0 24px 0;
+            color: var(--text-secondary);
+            max-width: 400px;
+        }
+    }
+
+    // Tab navigation
+    .tabs-nav {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0;
+        overflow-x: auto;
+
+        .tab-btn {
+            padding: 10px 16px;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            transition: all 0.2s;
+
+            &:hover {
+                color: var(--text-primary);
+            }
+
+            &.active {
+                color: var(--accent-primary);
+                border-bottom-color: var(--accent-primary);
+            }
+        }
+    }
+
+    // Status cards grid
+    .status-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .status-card {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+
+        .status-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+
+            &.running { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+            &.stopped { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+            &.not-installed { background: rgba(156, 163, 175, 0.1); color: #9ca3af; }
+        }
+
+        .status-info {
+            flex: 1;
+            min-width: 0;
+
+            .status-name {
+                font-weight: 600;
+                font-size: 14px;
+                margin: 0 0 2px 0;
+            }
+
+            .status-detail {
+                font-size: 12px;
+                color: var(--text-secondary);
+                margin: 0;
+            }
+        }
+
+        .status-actions {
+            display: flex;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+    }
+
+    // Stats row
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+
+        .stat-card {
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+
+            .stat-value {
+                font-size: 28px;
+                font-weight: 700;
+                color: var(--text-primary);
+            }
+
+            .stat-label {
+                font-size: 12px;
+                color: var(--text-secondary);
+                margin-top: 4px;
+            }
+        }
+    }
+
+    // Domain list
+    .domain-list, .account-list, .alias-list, .forwarding-list, .provider-list, .queue-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .domain-item, .account-item, .alias-item, .forwarding-item, .provider-item, .queue-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 20px;
+        background: var(--card-bg);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        transition: border-color 0.2s;
+
+        &:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 0;
+
+            h4 {
+                margin: 0 0 4px 0;
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .item-meta {
+                font-size: 12px;
+                color: var(--text-secondary);
+                display: flex;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+        }
+
+        .item-badges {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+    }
+
+    // DNS status badges
+    .dns-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+
+        &.valid {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        &.invalid {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        &.unknown {
+            background: rgba(156, 163, 175, 0.1);
+            color: #9ca3af;
+        }
+    }
+
+    // Quota bar
+    .quota-bar {
+        width: 120px;
+        height: 6px;
+        background: var(--bg-hover);
+        border-radius: 3px;
+        overflow: hidden;
+        flex-shrink: 0;
+
+        .quota-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s;
+
+            &.low { background: #10b981; }
+            &.medium { background: #f59e0b; }
+            &.high { background: #ef4444; }
+        }
+    }
+
+    .quota-text {
+        font-size: 11px;
+        color: var(--text-secondary);
+        white-space: nowrap;
+    }
+
+    // DNS records display
+    .dns-records {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .dns-record-card {
+            padding: 16px;
+            background: var(--bg-hover);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+
+            .dns-record-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+
+                h4 {
+                    margin: 0;
+                    font-size: 13px;
+                    font-weight: 600;
+                }
+            }
+
+            .dns-record-name {
+                font-size: 12px;
+                color: var(--text-secondary);
+                margin-bottom: 6px;
+            }
+
+            .dns-record-value {
+                font-family: 'JetBrains Mono', 'Fira Code', monospace;
+                font-size: 12px;
+                background: var(--card-bg);
+                padding: 10px 12px;
+                border-radius: 6px;
+                word-break: break-all;
+                line-height: 1.5;
+                border: 1px solid var(--border-color);
+            }
+        }
+    }
+
+    // Spam config form
+    .spam-config-form {
+        max-width: 600px;
+
+        .config-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            .config-label {
+                font-size: 14px;
+                font-weight: 500;
+
+                .config-help {
+                    font-size: 12px;
+                    color: var(--text-secondary);
+                    font-weight: 400;
+                    display: block;
+                    margin-top: 2px;
+                }
+            }
+        }
+    }
+
+    // Toggle switch
+    .toggle {
+        position: relative;
+        width: 44px;
+        height: 24px;
+        border-radius: 12px;
+        background: var(--bg-hover);
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        transition: all 0.2s;
+        flex-shrink: 0;
+
+        &.active {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+
+            &::after {
+                transform: translateX(20px);
+            }
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: white;
+            transition: transform 0.2s;
+        }
+    }
+
+    // Logs display
+    .logs-container {
+        background: #1a1a2e;
+        color: #e0e0e0;
+        padding: 16px;
+        border-radius: 8px;
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-size: 12px;
+        line-height: 1.6;
+        max-height: 500px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+    // Section headers inside cards
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+
+        h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+    }
+
+    // Two column layout
+    .two-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    // Copy button
+    .copy-btn {
+        padding: 4px 8px;
+        font-size: 11px;
+        background: var(--bg-hover);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        cursor: pointer;
+        color: var(--text-secondary);
+        transition: all 0.2s;
+
+        &:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+    }
+
+    // Arrow for alias display
+    .alias-arrow {
+        color: var(--text-tertiary);
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+}

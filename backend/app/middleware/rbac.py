@@ -2,6 +2,7 @@
 from functools import wraps
 from flask import jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from app import db
 from app.models import User
 
 
@@ -9,7 +10,7 @@ def get_current_user():
     """Get the current authenticated user."""
     user_id = get_jwt_identity()
     if user_id:
-        return User.query.get(user_id)
+        return db.session.get(User, user_id)
     return None
 
 

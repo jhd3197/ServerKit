@@ -17,3 +17,9 @@ BUILD_CACHE_DIR = os.path.join(SERVERKIT_CACHE_DIR, 'builds')
 DB_BACKUP_DIR = os.path.join(SERVERKIT_BACKUP_DIR, 'databases')
 WP_BACKUP_DIR = os.path.join(SERVERKIT_BACKUP_DIR, 'wordpress')
 SNAPSHOT_DIR = os.path.join(SERVERKIT_BACKUP_DIR, 'snapshots')
+
+# Email / Mail server paths
+VMAIL_DIR = os.environ.get('VMAIL_DIR', '/var/vmail')
+VMAIL_UID = 5000
+VMAIL_GID = 5000
+EMAIL_CONFIG_DIR = os.path.join(SERVERKIT_CONFIG_DIR, 'email')
