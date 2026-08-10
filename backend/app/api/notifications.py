@@ -429,8 +429,8 @@ def add_chat_connection():
 def update_chat_connection(conn_id):
     """Update mutable chat connection metadata and credentials."""
     from app.services.chat_webhook_service import ChatWebhookService
-    data = request.get_json()
-    if data is None:
+    data = request.get_json(silent=True)
+    if data is None and not request.is_json:
         data = {}
     try:
         conn = ChatWebhookService.update(conn_id, data)

@@ -451,7 +451,7 @@ class TestApi:
         assert resp.status_code == 400
         assert 'kind cannot be changed' in resp.get_json()['error']
 
-    @pytest.mark.parametrize('payload', [[], False])
+    @pytest.mark.parametrize('payload', [[], False, None])
     def test_update_connection_rejects_falsy_non_object_json(self, app, client,
                                                               auth_headers, payload):
         conn = ChatWebhookService.add({
@@ -460,7 +460,8 @@ class TestApi:
 
         resp = client.put(
             f'/api/v1/notifications/admin/chat-connections/{conn.id}',
-            json=payload,
+            data=json.dumps(payload),
+            content_type='application/json',
             headers=auth_headers,
         )
 
