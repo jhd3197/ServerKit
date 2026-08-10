@@ -255,6 +255,74 @@ class TestSigningAndDelivery:
         assert seen['cfg']['webhook_url'] == 'https://discord/webhook'
 
 
+class TestConnectionTesting:
+    def test_inactive_connection_can_send_test_through_real_formatter(self, app, monkeypatch):
+        captured = {}
+
+        class _Resp:
+            status_code = 204
+            text = ''
+
+        def fake_post(url, json=None, timeout=None, **kwargs):
+            captured.update({'url': url, 'json': json, 'timeout': timeout})
+            return _Resp()
+
+        monkeypatch.setattr('app.services.notification_service.requests.post', fake_post)
+        conn = ChatWebhookService.add({
+            'kind': 'discord',
+            'name': 'Disabled room',
+            'url': 'https://discord.example/webhook',
+            'is_active': False,
+        })
+
+        result = ChatWebhookService.test(conn.id)
+
+        assert result == {'success': True, 'message': 'Test notification sent'}
+        assert captured['url'] == 'https://discord.example/webhook'
+        assert captured['json']['embeds'][0]['description'] == (
+            'This is a test notification from ServerKit.'
+        )
+        assert conn.last_tested_at is not None
+        assert conn.last_test_ok is True
+
+    def test_failed_connection_test_persists_failure(self, app, monkeypatch):
+        class _Resp:
+            ok = False
+            status_code = 503
+
+        monkeypatch.setattr(
+            'app.services.chat_webhook_service.requests.post',
+            lambda *args, **kwargs: _Resp(),
+        )
+        conn = ChatWebhookService.add({
+            'kind': 'webhook', 'name': 'Ops', 'url': 'https://hooks.example/failing',
+        })
+
+        result = ChatWebhookService.test(conn.id)
+
+        assert result == {'success': False, 'error': 'webhook returned 503'}
+        assert conn.last_tested_at is not None
+        assert conn.last_test_ok is False
+
+    def test_connection_test_bounds_transport_errors(self, app, monkeypatch):
+        def fail_post(*args, **kwargs):
+            raise RuntimeError('x' * 500)
+
+        monkeypatch.setattr('app.services.notification_service.requests.post', fail_post)
+        conn = ChatWebhookService.add({
+            'kind': 'discord', 'name': 'Ops', 'url': 'https://discord.example/webhook',
+        })
+
+        result = ChatWebhookService.test(conn.id)
+
+        assert result['success'] is False
+        assert result['error'] == 'x' * 300
+        assert conn.last_test_ok is False
+
+    def test_connection_test_returns_none_for_unknown_id(self, app):
+        assert ChatWebhookService.test(999999) is None
+
+
 class TestImport:
     def test_import_is_idempotent(self, app, monkeypatch):
         from app.services.notification_service import NotificationService
@@ -335,3 +403,65 @@ class TestApi:
 
         assert resp.status_code == 400
         assert 'kind cannot be changed' in resp.get_json()['error']
+
+    def test_test_connection_returns_200_on_delivery(self, app, client, auth_headers,
+                                                       monkeypatch):
+        class _Resp:
+            status_code = 204
+            text = ''
+
+        monkeypatch.setattr(
+            'app.services.notification_service.requests.post',
+            lambda *args, **kwargs: _Resp(),
+        )
+        conn = ChatWebhookService.add({
+            'kind': 'discord',
+            'name': 'Disabled room',
+            'url': 'https://discord.example/webhook',
+            'is_active': False,
+        })
+
+        resp = client.post(
+            f'/api/v1/notifications/admin/chat-connections/{conn.id}/test',
+            headers=auth_headers,
+        )
+
+        assert resp.status_code == 200
+        assert resp.get_json() == {
+            'success': True, 'message': 'Test notification sent',
+        }
+        db.session.refresh(conn)
+        assert conn.last_test_ok is True
+
+    def test_test_connection_returns_400_on_delivery_failure(self, app, client,
+                                                               auth_headers, monkeypatch):
+        class _Resp:
+            ok = False
+            status_code = 503
+
+        monkeypatch.setattr(
+            'app.services.chat_webhook_service.requests.post',
+            lambda *args, **kwargs: _Resp(),
+        )
+        conn = ChatWebhookService.add({
+            'kind': 'webhook', 'name': 'Ops', 'url': 'https://hooks.example/failing',
+        })
+
+        resp = client.post(
+            f'/api/v1/notifications/admin/chat-connections/{conn.id}/test',
+            headers=auth_headers,
+        )
+
+        assert resp.status_code == 400
+        assert resp.get_json() == {
+            'success': False, 'error': 'webhook returned 503',
+        }
+
+    def test_test_connection_returns_404_for_unknown_id(self, app, client, auth_headers):
+        resp = client.post(
+            '/api/v1/notifications/admin/chat-connections/999999/test',
+            headers=auth_headers,
+        )
+
+        assert resp.status_code == 404
+        assert resp.get_json() == {'error': 'Connection not found'}

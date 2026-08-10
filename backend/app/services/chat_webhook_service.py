@@ -236,6 +236,60 @@ class ChatWebhookService:
         return [c for c in conns if c.matches_category(category)]
 
     # ------------------------------------------------------------------
+    # Connection testing
+    # ------------------------------------------------------------------
+    @classmethod
+    def test(cls, conn_id):
+        """Synchronously send a test through a connection's real formatter.
+
+        Inactive connections remain testable so an administrator can validate
+        a destination before enabling it. The transient notification is never
+        persisted; only the connection's latest test outcome is recorded.
+        """
+        conn = db.session.get(ChatWebhookConnection, conn_id)
+        if conn is None:
+            return None
+
+        from app.notifications.models import Notification
+
+        message = 'This is a test notification from ServerKit.'
+        notification = Notification(
+            event_key='notification.test',
+            category='system',
+            severity=Notification.SEVERITY_TEST,
+            title='ServerKit test notification',
+            body=message,
+            audience=f'chat connection:{conn.id}',
+            created_at=datetime.utcnow(),
+        )
+        notification.set_data({'message': message})
+
+        try:
+            credentials = conn.credentials()
+            if conn.kind == 'webhook':
+                delivery_result = cls._deliver_webhook(
+                    conn, credentials, notification)
+            else:
+                delivery_result = cls._deliver_chat(
+                    conn, credentials, notification)
+            success = delivery_result.ok
+            error = delivery_result.error
+        except Exception as exc:  # pragma: no cover - defensive formatter guard
+            success = False
+            error = str(exc)
+
+        conn.last_tested_at = datetime.utcnow()
+        conn.last_test_ok = success
+        db.session.commit()
+
+        if success:
+            return {'success': True, 'message': 'Test notification sent'}
+        return {
+            'success': False,
+            'error': str(error or 'test notification failed')[:300],
+        }
+
+    # ------------------------------------------------------------------
     # Delivery (called by the chat channel adapter for ``conn:<id>`` targets)
     # ------------------------------------------------------------------
     @classmethod
