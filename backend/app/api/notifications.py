@@ -423,6 +423,21 @@ def add_chat_connection():
     return jsonify({'connection': conn.to_dict()}), 201
 
 
+@notifications_bp.route('/admin/chat-connections/<int:conn_id>', methods=['PUT'])
+@jwt_required()
+@admin_required
+def update_chat_connection(conn_id):
+    """Update mutable chat connection metadata and credentials."""
+    from app.services.chat_webhook_service import ChatWebhookService
+    try:
+        conn = ChatWebhookService.update(conn_id, request.get_json() or {})
+    except ValueError as exc:
+        return jsonify({'error': str(exc)}), 400
+    if conn is None:
+        return jsonify({'error': 'Connection not found'}), 404
+    return jsonify({'success': True, 'connection': conn.to_dict()}), 200
+
+
 @notifications_bp.route('/admin/chat-connections/<int:conn_id>', methods=['DELETE'])
 @jwt_required()
 @admin_required

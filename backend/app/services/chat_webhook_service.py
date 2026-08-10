@@ -85,6 +85,96 @@ class ChatWebhookService:
         return conn
 
     @classmethod
+    def update(cls, conn_id, data):
+        """Update mutable connection fields without exposing stored secrets.
+
+        Credential fields are patch-like: omitted values are preserved, empty
+        optional values clear the credential, and required destinations cannot
+        be cleared. The connection kind and default flag have dedicated
+        lifecycle semantics and cannot be changed here.
+        """
+        if not isinstance(data, dict):
+            raise ValueError('request body must be an object')
+
+        conn = db.session.get(ChatWebhookConnection, conn_id)
+        if conn is None:
+            return None
+
+        if 'kind' in data:
+            kind = (data.get('kind') or '').strip().lower()
+            if kind != conn.kind:
+                raise ValueError('connection kind cannot be changed')
+        if 'is_default' in data:
+            raise ValueError('use the default endpoint to change is_default')
+
+        new_name = conn.name
+        new_categories_json = conn.categories_json
+        new_is_active = conn.is_active
+        new_credentials_json = conn.credentials_json
+
+        if 'name' in data:
+            new_name = str(data.get('name') or '').strip()
+            if not new_name:
+                raise ValueError('name is required')
+
+        if 'categories' in data:
+            categories = data.get('categories')
+            if not isinstance(categories, list):
+                raise ValueError('categories must be a list')
+            categories = [category for category in categories if category]
+            new_categories_json = json.dumps(categories) if categories else None
+
+        if 'is_active' in data:
+            new_is_active = bool(data.get('is_active'))
+
+        url_supplied = 'url' in data or 'webhook_url' in data
+        credential_supplied = url_supplied or any(
+            field in data for field in ('secret', 'chat_id', 'bot_token')
+        )
+        if credential_supplied:
+            credentials = conn.credentials()
+            if conn.kind == 'telegram':
+                if 'chat_id' in data:
+                    chat_id = str(data.get('chat_id') or '').strip()
+                    if not chat_id:
+                        raise ValueError('telegram connection requires a chat_id')
+                    credentials['chat_id'] = chat_id
+                if 'bot_token' in data:
+                    bot_token = data.get('bot_token')
+                    if bot_token in (None, ''):
+                        credentials.pop('bot_token', None)
+                    else:
+                        credentials['bot_token'] = str(bot_token)
+            else:
+                if url_supplied:
+                    url_value = data.get('url') if 'url' in data else data.get('webhook_url')
+                    url = str(url_value or '').strip()
+                    if not url:
+                        raise ValueError(f'{conn.kind} connection requires a url')
+                    credentials['url'] = url
+                if 'secret' in data:
+                    secret = data.get('secret')
+                    if secret in (None, ''):
+                        credentials.pop('secret', None)
+                    else:
+                        credentials['secret'] = str(secret)
+
+            required = 'chat_id' if conn.kind == 'telegram' else 'url'
+            if not credentials.get(required):  # pragma: no cover - corrupt legacy row
+                raise ValueError(f'{conn.kind} connection requires a {required}')
+            new_credentials_json = json.dumps({
+                key: encrypt_secret(str(value))
+                for key, value in credentials.items()
+            })
+
+        conn.name = new_name
+        conn.categories_json = new_categories_json
+        conn.is_active = new_is_active
+        conn.credentials_json = new_credentials_json
+        db.session.commit()
+        return conn
+
+    @classmethod
     def delete(cls, conn_id):
         """Delete a connection. If it was its kind's default, promote the oldest
         remaining connection of that kind. Returns True if a row was removed."""

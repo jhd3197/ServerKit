@@ -71,6 +71,105 @@ class TestCrud:
         db.session.refresh(b)
         assert b.is_default is True
 
+    def test_update_changes_metadata_and_preserves_omitted_credentials(self, app):
+        conn = ChatWebhookService.add({
+            'kind': 'webhook',
+            'name': 'Old name',
+            'url': 'https://hooks.example/old',
+            'secret': 'keep-me',
+            'categories': ['security'],
+        })
+
+        updated = ChatWebhookService.update(conn.id, {
+            'name': 'New name',
+            'categories': ['backups'],
+            'is_active': False,
+        })
+
+        assert updated.name == 'New name'
+        assert updated.categories() == ['backups']
+        assert updated.is_active is False
+        assert updated.credentials() == {
+            'url': 'https://hooks.example/old',
+            'secret': 'keep-me',
+        }
+
+    def test_update_rotates_supplied_credentials(self, app):
+        conn = ChatWebhookService.add({
+            'kind': 'webhook',
+            'name': 'Ops',
+            'url': 'https://hooks.example/old',
+            'secret': 'old-secret',
+        })
+
+        updated = ChatWebhookService.update(conn.id, {
+            'url': 'https://hooks.example/new',
+            'secret': 'new-secret',
+        })
+
+        assert updated.credentials() == {
+            'url': 'https://hooks.example/new',
+            'secret': 'new-secret',
+        }
+        assert updated.raw_credentials()['url'] != 'https://hooks.example/new'
+        assert updated.raw_credentials()['secret'] != 'new-secret'
+
+    def test_update_clears_explicitly_empty_optional_credential(self, app):
+        conn = ChatWebhookService.add({
+            'kind': 'telegram',
+            'name': 'Bot',
+            'chat_id': '1234',
+            'bot_token': 'token-to-clear',
+        })
+
+        updated = ChatWebhookService.update(conn.id, {'bot_token': ''})
+
+        assert updated.credentials() == {'chat_id': '1234'}
+
+    def test_update_rejects_kind_change(self, app):
+        conn = ChatWebhookService.add({
+            'kind': 'discord', 'name': 'Ops', 'url': 'https://discord/hook',
+        })
+
+        with pytest.raises(ValueError, match='kind cannot be changed'):
+            ChatWebhookService.update(conn.id, {'kind': 'slack'})
+
+    def test_update_rejects_non_list_categories(self, app):
+        conn = ChatWebhookService.add({
+            'kind': 'discord', 'name': 'Ops', 'url': 'https://discord/hook',
+        })
+
+        with pytest.raises(ValueError, match='categories must be a list'):
+            ChatWebhookService.update(conn.id, {'categories': 'security'})
+
+    def test_update_rejects_empty_required_destination(self, app):
+        conn = ChatWebhookService.add({
+            'kind': 'telegram', 'name': 'Bot', 'chat_id': '1234',
+        })
+
+        with pytest.raises(ValueError, match='requires a chat_id'):
+            ChatWebhookService.update(conn.id, {'chat_id': ''})
+
+    def test_update_validation_failure_does_not_mutate_connection(self, app):
+        conn = ChatWebhookService.add({
+            'kind': 'telegram',
+            'name': 'Original',
+            'chat_id': '1234',
+            'categories': ['security'],
+        })
+
+        with pytest.raises(ValueError, match='requires a chat_id'):
+            ChatWebhookService.update(conn.id, {
+                'name': 'Changed',
+                'categories': ['apps'],
+                'is_active': False,
+                'chat_id': '',
+            })
+
+        assert conn.name == 'Original'
+        assert conn.categories() == ['security']
+        assert conn.is_active is True
+
 
 class TestCategoryRouting:
     def test_catch_all_matches_every_category(self, app):
@@ -189,3 +288,50 @@ class TestApi:
 
         dele = client.delete(f'/api/v1/notifications/admin/chat-connections/{cid}', headers=auth_headers)
         assert dele.status_code == 200
+
+    def test_update_connection(self, app, client, auth_headers):
+        conn = ChatWebhookService.add({
+            'kind': 'webhook',
+            'name': 'Old name',
+            'url': 'https://hooks.example/original-destination',
+            'secret': 'never-serialize-me',
+        })
+
+        resp = client.put(
+            f'/api/v1/notifications/admin/chat-connections/{conn.id}',
+            json={'name': 'New name', 'categories': ['apps'], 'is_active': False},
+            headers=auth_headers,
+        )
+
+        assert resp.status_code == 200
+        body = resp.get_json()
+        assert body['success'] is True
+        assert body['connection']['name'] == 'New name'
+        assert body['connection']['categories'] == ['apps']
+        assert body['connection']['is_active'] is False
+        assert 'never-serialize-me' not in json.dumps(body)
+        assert 'https://hooks.example/original-destination' not in json.dumps(body)
+
+    def test_update_connection_returns_404_for_unknown_id(self, app, client, auth_headers):
+        resp = client.put(
+            '/api/v1/notifications/admin/chat-connections/999999',
+            json={'name': 'Missing'},
+            headers=auth_headers,
+        )
+
+        assert resp.status_code == 404
+        assert resp.get_json() == {'error': 'Connection not found'}
+
+    def test_update_connection_returns_400_for_kind_change(self, app, client, auth_headers):
+        conn = ChatWebhookService.add({
+            'kind': 'discord', 'name': 'Ops', 'url': 'https://discord/hook',
+        })
+
+        resp = client.put(
+            f'/api/v1/notifications/admin/chat-connections/{conn.id}',
+            json={'kind': 'slack'},
+            headers=auth_headers,
+        )
+
+        assert resp.status_code == 400
+        assert 'kind cannot be changed' in resp.get_json()['error']
