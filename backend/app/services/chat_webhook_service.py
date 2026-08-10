@@ -286,10 +286,8 @@ class ChatWebhookService:
                 delivery_result = cls._deliver_chat(
                     conn, credentials, notification)
             success = delivery_result.ok
-            error = delivery_result.error
-        except Exception as exc:  # pragma: no cover - defensive formatter guard
+        except Exception:  # pragma: no cover - defensive formatter guard
             success = False
-            error = str(exc)
 
         conn.last_tested_at = datetime.utcnow()
         conn.last_test_ok = success
@@ -297,10 +295,12 @@ class ChatWebhookService:
 
         if success:
             return {'success': True, 'message': 'Test notification sent'}
-        return {
-            'success': False,
-            'error': str(error or 'test notification failed')[:300],
-        }
+        logger.warning(
+            'Chat connection test failed (id=%s, kind=%s)',
+            conn.id,
+            conn.kind,
+        )
+        return {'success': False, 'error': 'Test notification failed'}
 
     # ------------------------------------------------------------------
     # Delivery (called by the chat channel adapter for ``conn:<id>`` targets)

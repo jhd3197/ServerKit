@@ -325,11 +325,13 @@ class TestConnectionTesting:
 
         result = ChatWebhookService.test(conn.id)
 
-        assert result == {'success': False, 'error': 'webhook returned 503'}
+        assert result == {
+            'success': False, 'error': 'Test notification failed',
+        }
         assert conn.last_tested_at is not None
         assert conn.last_test_ok is False
 
-    def test_connection_test_bounds_transport_errors(self, app, monkeypatch):
+    def test_connection_test_hides_transport_errors(self, app, monkeypatch):
         def fail_post(*args, **kwargs):
             raise RuntimeError('x' * 500)
 
@@ -340,9 +342,29 @@ class TestConnectionTesting:
 
         result = ChatWebhookService.test(conn.id)
 
-        assert result['success'] is False
-        assert result['error'] == 'x' * 300
+        assert result == {
+            'success': False, 'error': 'Test notification failed',
+        }
         assert conn.last_test_ok is False
+
+    def test_connection_test_does_not_expose_transport_secrets(self, app, monkeypatch):
+        def fail_post(url, *args, **kwargs):
+            raise RuntimeError(f'failed POST {url}')
+
+        monkeypatch.setattr(
+            'app.services.chat_webhook_service.requests.post', fail_post,
+        )
+        secret_url = 'https://hooks.example/super-secret-token'
+        conn = ChatWebhookService.add({
+            'kind': 'webhook', 'name': 'Ops', 'url': secret_url,
+        })
+
+        result = ChatWebhookService.test(conn.id)
+
+        assert result == {
+            'success': False, 'error': 'Test notification failed',
+        }
+        assert secret_url not in json.dumps(result)
 
     def test_connection_test_returns_none_for_unknown_id(self, app):
         assert ChatWebhookService.test(999999) is None
@@ -429,6 +451,22 @@ class TestApi:
         assert resp.status_code == 400
         assert 'kind cannot be changed' in resp.get_json()['error']
 
+    @pytest.mark.parametrize('payload', [[], False])
+    def test_update_connection_rejects_falsy_non_object_json(self, app, client,
+                                                              auth_headers, payload):
+        conn = ChatWebhookService.add({
+            'kind': 'discord', 'name': 'Ops', 'url': 'https://discord/hook',
+        })
+
+        resp = client.put(
+            f'/api/v1/notifications/admin/chat-connections/{conn.id}',
+            json=payload,
+            headers=auth_headers,
+        )
+
+        assert resp.status_code == 400
+        assert resp.get_json() == {'error': 'request body must be an object'}
+
     def test_test_connection_returns_200_on_delivery(self, app, client, auth_headers,
                                                        monkeypatch):
         class _Resp:
@@ -479,7 +517,7 @@ class TestApi:
 
         assert resp.status_code == 400
         assert resp.get_json() == {
-            'success': False, 'error': 'webhook returned 503',
+            'success': False, 'error': 'Test notification failed',
         }
 
     def test_test_connection_returns_404_for_unknown_id(self, app, client, auth_headers):
