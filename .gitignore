@@ -91,6 +91,7 @@ Thumbs.db
 *.sublime-workspace
 
 # Project Specific
+.worktrees/
 .planning_old/
 .mcp.json
 new_templates/
