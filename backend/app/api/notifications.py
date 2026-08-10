@@ -450,6 +450,18 @@ def test_chat_connection(conn_id):
     return jsonify(result), 200 if result.get('success') else 400
 
 
+@notifications_bp.route('/admin/chat-connections/<int:conn_id>/default', methods=['POST'])
+@jwt_required()
+@admin_required
+def set_default_chat_connection(conn_id):
+    """Select the active administrative default for a connection kind."""
+    from app.services.chat_webhook_service import ChatWebhookService
+    conn = ChatWebhookService.set_default(conn_id)
+    if conn is None:
+        return jsonify({'error': 'Connection not found'}), 404
+    return jsonify({'success': True, 'connection': conn.to_dict()}), 200
+
+
 @notifications_bp.route('/admin/chat-connections/<int:conn_id>', methods=['DELETE'])
 @jwt_required()
 @admin_required

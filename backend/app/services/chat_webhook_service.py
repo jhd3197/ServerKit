@@ -175,6 +175,19 @@ class ChatWebhookService:
         return conn
 
     @classmethod
+    def set_default(cls, conn_id):
+        """Select and activate the administrative default for one kind."""
+        conn = db.session.get(ChatWebhookConnection, conn_id)
+        if conn is None:
+            return None
+
+        for candidate in ChatWebhookConnection.query.filter_by(kind=conn.kind).all():
+            candidate.is_default = candidate.id == conn.id
+        conn.is_active = True
+        db.session.commit()
+        return conn
+
+    @classmethod
     def delete(cls, conn_id):
         """Delete a connection. If it was its kind's default, promote the oldest
         remaining connection of that kind. Returns True if a row was removed."""

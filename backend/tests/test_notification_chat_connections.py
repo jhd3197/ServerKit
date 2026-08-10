@@ -171,6 +171,31 @@ class TestCrud:
         assert conn.is_active is True
 
 
+class TestDefaults:
+    def test_set_default_is_scoped_to_kind_and_activates_selection(self, app):
+        first_discord = ChatWebhookService.add({
+            'kind': 'discord', 'name': 'Primary', 'url': 'https://discord/primary',
+        })
+        second_discord = ChatWebhookService.add({
+            'kind': 'discord', 'name': 'Secondary', 'url': 'https://discord/secondary',
+            'is_active': False,
+        })
+        slack = ChatWebhookService.add({
+            'kind': 'slack', 'name': 'Slack', 'url': 'https://slack/default',
+        })
+
+        selected = ChatWebhookService.set_default(second_discord.id)
+
+        assert selected.id == second_discord.id
+        assert selected.is_default is True
+        assert selected.is_active is True
+        assert first_discord.is_default is False
+        assert slack.is_default is True
+
+    def test_set_default_returns_none_for_unknown_id(self, app):
+        assert ChatWebhookService.set_default(999999) is None
+
+
 class TestCategoryRouting:
     def test_catch_all_matches_every_category(self, app):
         conn = ChatWebhookService.add({'kind': 'webhook', 'name': 'All', 'url': 'https://x/all'})
@@ -460,6 +485,39 @@ class TestApi:
     def test_test_connection_returns_404_for_unknown_id(self, app, client, auth_headers):
         resp = client.post(
             '/api/v1/notifications/admin/chat-connections/999999/test',
+            headers=auth_headers,
+        )
+
+        assert resp.status_code == 404
+        assert resp.get_json() == {'error': 'Connection not found'}
+
+    def test_set_default_connection(self, app, client, auth_headers):
+        first = ChatWebhookService.add({
+            'kind': 'discord', 'name': 'First', 'url': 'https://discord/first',
+        })
+        second = ChatWebhookService.add({
+            'kind': 'discord', 'name': 'Second', 'url': 'https://discord/second',
+            'is_active': False,
+        })
+
+        resp = client.post(
+            f'/api/v1/notifications/admin/chat-connections/{second.id}/default',
+            headers=auth_headers,
+        )
+
+        assert resp.status_code == 200
+        body = resp.get_json()
+        assert body['success'] is True
+        assert body['connection']['id'] == second.id
+        assert body['connection']['is_default'] is True
+        assert body['connection']['is_active'] is True
+        db.session.refresh(first)
+        assert first.is_default is False
+
+    def test_set_default_connection_returns_404_for_unknown_id(self, app, client,
+                                                                 auth_headers):
+        resp = client.post(
+            '/api/v1/notifications/admin/chat-connections/999999/default',
             headers=auth_headers,
         )
 
