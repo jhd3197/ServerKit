@@ -367,6 +367,21 @@ const ContainersTab = ({ onStatsChange }) => {
         }
     }
 
+    // Logs and Exec are full-screen portal surfaces. Close the inspector in
+    // the same render that opens either one so its higher Docker-specific
+    // layer cannot cover the shared Drawer/Dialog portal.
+    const openContainerLogs = useCallback((container) => {
+        setSelectedContainer(null);
+        setExecContainer(null);
+        setLogsContainer(container);
+    }, []);
+
+    const openContainerExec = useCallback((container) => {
+        setSelectedContainer(null);
+        setLogsContainer(null);
+        setExecContainer(container);
+    }, []);
+
     const toggleRow = useCallback((key, on) => {
         setPicked((prev) => (on ? [...new Set([...prev, key])] : prev.filter((k) => k !== key)));
     }, []);
@@ -659,11 +674,11 @@ const ContainersTab = ({ onStatsChange }) => {
                 const isProtected = isProtectedContainer(container);
                 return (
                     <div className="dx-row-actions" onClick={(e) => e.stopPropagation()}>
-                        <button type="button" className="dx-row-action" onClick={() => setLogsContainer(container)} title={t('common.labels.logs', 'Logs')}>
+                        <button type="button" className="dx-row-action" onClick={() => openContainerLogs(container)} title={t('common.labels.logs', 'Logs')}>
                             <FileText size={13} />
                         </button>
                         {isRunning && !isRemote && (
-                            <button type="button" className="dx-row-action" onClick={() => setExecContainer(container)} title={t('app.containersTab.exec', 'Exec')}>
+                            <button type="button" className="dx-row-action" onClick={() => openContainerExec(container)} title={t('app.containersTab.exec', 'Exec')}>
                                 <TerminalLucide size={13} />
                             </button>
                         )}
@@ -837,8 +852,8 @@ const ContainersTab = ({ onStatsChange }) => {
                     container={selectedContainer}
                     stats={selectedStats}
                     onAction={handleAction}
-                    onOpenLogs={setLogsContainer}
-                    onOpenExec={setExecContainer}
+                    onOpenLogs={openContainerLogs}
+                    onOpenExec={openContainerExec}
                     onClose={() => setSelectedContainer(null)}
                 />
             )}
