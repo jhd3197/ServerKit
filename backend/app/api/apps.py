@@ -2151,7 +2151,19 @@ def get_app_logs(app_id):
     lines = request.args.get('lines', 100, type=int)
     log_type = request.args.get('type', 'all')
 
-    # For Docker apps, get docker compose logs
+    # A recorded container is the authoritative runtime for single-container
+    # deployments. Repositories may still contain an unrelated compose file,
+    # so file presence alone must not redirect their logs through compose.
+    if app.app_type == 'docker' and app.container_id:
+        if DockerService.get_container(app.container_id):
+            result = DockerService.get_container_logs(
+                app.container_id, tail=lines, timestamps=False
+            )
+            if result.get('success'):
+                return jsonify(result), 200
+
+    # Preserve the legacy Docker Compose path when there is no live recorded
+    # container (including old records that predate container_id tracking).
     if app.app_type == 'docker' and app.root_path:
         if app.server_id:
             result = RemoteDockerService.compose_logs(

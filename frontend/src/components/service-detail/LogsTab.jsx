@@ -12,6 +12,7 @@ import { copyToClipboard } from '@/utils/clipboard';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { parseStructuredLogLine } from '@/utils/structuredLog';
 
 // Log tail refresh cadence while auto-refresh is on.
 const LOG_REFRESH_MS = 5000;
@@ -113,11 +114,12 @@ const LogsTab = ({ app }) => {
 
     const filteredLines = useMemo(() => {
         if (!rawLogs) return [];
-        let lines = rawLogs.split('\n');
+        let lines = rawLogs.split('\n').map(parseStructuredLogLine);
 
         if (levelFilter !== 'all') {
-            lines = lines.filter(line => {
-                const lower = line.toLowerCase();
+            lines = lines.filter(entry => {
+                if (entry.level) return entry.level === levelFilter;
+                const lower = entry.raw.toLowerCase();
                 if (levelFilter === 'error') return lower.includes('error') || lower.includes('critical') || lower.includes('fatal');
                 if (levelFilter === 'warn') return lower.includes('warn');
                 if (levelFilter === 'info') return lower.includes('info');
@@ -128,14 +130,15 @@ const LogsTab = ({ app }) => {
 
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
-            lines = lines.filter(line => line.toLowerCase().includes(term));
+            lines = lines.filter(entry => entry.searchable.toLowerCase().includes(term));
         }
 
         return lines;
     }, [rawLogs, searchTerm, levelFilter]);
 
-    function getLineClass(line) {
-        const lower = line.toLowerCase();
+    function getLineClass(entry) {
+        if (entry.level) return `logs-viewer__line--${entry.level}`;
+        const lower = entry.raw.toLowerCase();
         if (lower.includes('error') || lower.includes('critical') || lower.includes('fatal')) return 'logs-viewer__line--error';
         if (lower.includes('warn')) return 'logs-viewer__line--warn';
         if (lower.includes('debug') || lower.includes('trace')) return 'logs-viewer__line--debug';
@@ -279,12 +282,28 @@ const LogsTab = ({ app }) => {
                             : 'No logs available.'}
                     </div>
                 ) : (
-                    filteredLines.map((line, i) => (
-                        <div key={i} className={`logs-viewer__line ${getLineClass(line)}`}>
+                    filteredLines.map((entry, i) => (
+                        <div
+                            key={`${i}-${entry.raw}`}
+                            className={`logs-viewer__line ${entry.structured ? 'logs-viewer__line--structured' : ''} ${getLineClass(entry)}`}
+                        >
                             <span className="logs-viewer__line-num">{i + 1}</span>
-                            <span className="logs-viewer__line-text">
-                                {searchTerm ? highlightSearch(line, searchTerm) : line}
-                            </span>
+                            <div className="logs-viewer__line-text">
+                                {entry.structured ? (
+                                    <>
+                                        {entry.timestamp && (
+                                            <span className="logs-viewer__timestamp">{entry.timestamp}</span>
+                                        )}
+                                        <pre className="logs-viewer__json">
+                                            {searchTerm
+                                                ? highlightSearch(entry.formatted, searchTerm)
+                                                : entry.formatted}
+                                        </pre>
+                                    </>
+                                ) : (
+                                    searchTerm ? highlightSearch(entry.raw, searchTerm) : entry.raw
+                                )}
+                            </div>
                         </div>
                     ))
                 )}
