@@ -4,6 +4,13 @@ name: Release Build Smoke Test
 # release-script-specific issues (e.g. overly broad rsync excludes that omit
 # frontend source files) before they reach main, instead of failing late in the
 # release workflow.
+#
+# On a push to dev the tarball this job builds is not thrown away: it is
+# published as a GitHub pre-release tagged v<VERSION>-dev.<sha7>, so the Cloud
+# release lab can install and upgrade-test a dev commit on a real server
+# before anything is promoted to main. Only the newest few dev builds are
+# kept; older ones and their tags are deleted. Pull-request runs still only
+# prove the build.
 
 # main is deliberately absent from `push`: on a merge to main, release.yml's
 # `build-release` job runs this very script for real moments later, so building
@@ -32,13 +39,35 @@ on:
       - '.github/workflows/release.yml'
       - 'VERSION'
 
+concurrency:
+  group: release-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-release-smoke:
     name: Build release tarball
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      dev_tag: ${{ steps.dev.outputs.tag }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      # A dev build carries the commit in its version, so the lab records it
+      # under a name that is unique, sorts after the release it is based on,
+      # and is what the installed panel reports as its own version.
+      - name: Name the dev build
+        id: dev
+        if: github.event_name == 'push'
+        run: |
+          base=$(tr -d '[:space:]' < VERSION)
+          version="${base}-dev.$(git rev-parse --short=7 HEAD)"
+          echo "$version" > VERSION
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          echo "Dev build: v$version"
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -51,7 +80,42 @@ jobs:
           sudo apt-get install -y python3-venv python3-pip rsync
 
       - name: Run release build script
+        env:
+          BUILD_ARCH: amd64
         run: bash scripts/build-release.sh
+
+      - name: Publish the dev build as a pre-release
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.dev.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: Dev build ${{ steps.dev.outputs.tag }}
+          prerelease: true
+          draft: false
+          files: |
+            serverkit-*.tar.gz
+            checksums.txt
+          body: |
+            Automated build of dev commit ${{ github.sha }} for the ServerKit Cloud release lab.
+            Not a release. Do not install this on a server you care about.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Keep only the newest dev builds
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          KEEP: "3"
+        run: |
+          gh release list --repo "$GITHUB_REPOSITORY" --limit 200 \
+            --json tagName,isPrerelease,createdAt \
+            --jq '[.[] | select(.isPrerelease and (.tagName | test("-dev\\.")))] | sort_by(.createdAt) | reverse | .['"$KEEP"':] | .[].tagName' \
+            | while read -r tag; do
+                [ -n "$tag" ] || continue
+                echo "Removing old dev build $tag"
+                gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+              done
 
   # The tarball job above proves the *source* packaging. This one proves the
   # *image* packaging, which is a different artifact with a different file list
