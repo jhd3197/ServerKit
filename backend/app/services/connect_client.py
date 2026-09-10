@@ -37,7 +37,9 @@ import requests
 
 from app import paths
 from app.services import connect_keys
-from app.services import connect_commands, connect_policy, connect_storage
+from app.services import (
+    connect_commands, connect_inventory, connect_logs, connect_policy, connect_storage,
+)
 from app.services.connect_metrics import MetricsPublisher
 from app.services.connect_updates import UpdateCheck, check_and_apply, fetch_jwks
 
@@ -61,6 +63,15 @@ STORAGE_INTERVAL_S = 300.0
 # hours is the plan's own number and the abuse control that goes with it;
 # "Check now" is the policy.report command, not a shorter interval.
 POLICY_INTERVAL_S = 6 * 3600.0
+# The inventory: on connect, then every five minutes, which
+# is the interval Cloud's own answer asks for. Diagnostics is a live reading
+# and goes at most once a minute — and only while Cloud says `collect: true`,
+# because process detail is a separate consent held there, not here. A
+# refusal backs off to a slow retry so a consent granted later takes effect
+# without a restart.
+INVENTORY_INTERVAL_S = 300.0
+DIAGNOSTICS_INTERVAL_S = 60.0
+DIAGNOSTICS_REFUSED_RETRY_S = 15 * 60.0
 
 
 def _peek_command_id(token) -> str:
@@ -681,6 +692,22 @@ class RelayClient:
         self._storage_next_at = 0.0
         self._policy_stream = 0
         self._policy_next_at = 0.0
+        # The inventory and diagnostics streams. The
+        # generation is this process's own counter; it starts over on a
+        # restart and Cloud names that rather than ignoring it.
+        self._inventory_stream = 0
+        self._inventory_generation = 0
+        self._inventory_next_at = 0.0
+        self._inventory_inflight = {}
+        self._diagnostics_stream = 0
+        self._diagnostics_next_at = 0.0
+        self._diagnostics_inflight = {}
+        # Bounded log collection. The publisher owns the
+        # buffer and the bounds; Cloud's answer to each batch owns whether
+        # to keep going and which sources are wanted.
+        self._logs = connect_logs.LogPublisher(app)
+        self._logs_stream = 0
+        self._logs_inflight = {}
 
     # -- lifecycle -----------------------------------------------------
 
@@ -808,6 +835,10 @@ class RelayClient:
             self._load_jwks(cfg)
             self._publish_storage(ws)
             self._publish_policy(ws)
+            # A fresh connection publishes the inventory straight away: the
+            # first thing Cloud shows for a server is what runs on it.
+            self._inventory_next_at = 0.0
+            self._publish_inventory(ws)
             while self.running:
                 try:
                     raw = ws.recv(timeout=PING_INTERVAL_S)
@@ -816,11 +847,17 @@ class RelayClient:
                     self._publish_metrics(ws)
                     self._publish_storage(ws)
                     self._publish_policy(ws)
+                    self._publish_inventory(ws)
+                    self._publish_diagnostics(ws)
+                    self._publish_logs(ws)
                     continue
                 self._handle_frame(ws, raw)
                 self._publish_metrics(ws)
                 self._publish_storage(ws)
                 self._publish_policy(ws)
+                self._publish_inventory(ws)
+                self._publish_diagnostics(ws)
+                self._publish_logs(ws)
             return 'stopped'
         except Exception as exc:
             from websockets.exceptions import ConnectionClosed
@@ -938,6 +975,20 @@ class RelayClient:
                     self._metrics.apply_ack(payload)
                 else:
                     self._metrics.requeue(self._metrics_inflight.pop(stream_id, []))
+            elif stream_id in self._inventory_inflight:
+                self._inventory_inflight.pop(stream_id, None)
+                self._apply_inventory_ack(frame.get('p') or {})
+            elif stream_id in self._diagnostics_inflight:
+                self._diagnostics_inflight.pop(stream_id, None)
+                self._apply_diagnostics_ack(frame.get('p') or {})
+            elif stream_id in self._logs_inflight:
+                batch = self._logs_inflight.pop(stream_id, None)
+                payload = frame.get('p') or {}
+                self._logs.apply_ack(payload)
+                if not payload.get('ok') and self._logs.collect:
+                    # Refused for a reason that is not "stop": the lines are
+                    # still wanted and their ids make the resend safe.
+                    self._logs.requeue(batch)
             return
         if frame.get('t') == 'open':
             if frame.get('k') == 'command':
@@ -1050,6 +1101,93 @@ class RelayClient:
             return
         self._policy_stream += 1
         self._send(ws, connect_policy.facts_frame(f'pol{self._policy_stream}', facts))
+
+    # -- the inventory and diagnostics streams ----------
+
+    def publish_inventory(self) -> bool:
+        """Send one inventory document now. Used after a deploy, a rename
+        or a removal so Cloud does not wait five minutes to learn of it."""
+        ws = self._ws
+        if ws is None:
+            return False
+        self._inventory_next_at = 0.0
+        return self._publish_inventory(ws)
+
+    def _publish_inventory(self, ws) -> bool:
+        now = time.monotonic()
+        if now < self._inventory_next_at:
+            return False
+        self._inventory_next_at = now + INVENTORY_INTERVAL_S
+        self._inventory_generation += 1
+        try:
+            doc = connect_inventory.build_inventory(self.app, self._inventory_generation)
+        except Exception:
+            logger.debug('Connect inventory: could not build the document', exc_info=True)
+            return False
+        self._inventory_stream += 1
+        stream_id = f'inv{self._inventory_stream}'
+        self._inventory_inflight[stream_id] = doc.get('generation')
+        return self._send(ws, connect_inventory.inventory_frame(stream_id, doc))
+
+    def _apply_inventory_ack(self, payload: dict):
+        """Cloud's answer carries the interval it wants; a refusal is logged
+        once and the next attempt waits the normal interval."""
+        if not payload.get('ok'):
+            logger.info('Connect inventory: refused (%s)', payload.get('reason') or 'unknown')
+            return
+        interval = payload.get('next_interval_s')
+        if isinstance(interval, (int, float)) and 30 <= interval <= 3600:
+            self._inventory_next_at = time.monotonic() + float(interval)
+        if payload.get('generation_reset'):
+            logger.info('Connect inventory: Cloud noted a generation reset after restart')
+
+    def _publish_diagnostics(self, ws) -> bool:
+        now = time.monotonic()
+        if now < self._diagnostics_next_at:
+            return False
+        self._diagnostics_next_at = now + DIAGNOSTICS_INTERVAL_S
+        try:
+            doc = connect_inventory.build_diagnostics(int(DIAGNOSTICS_INTERVAL_S))
+        except Exception:
+            logger.debug('Connect diagnostics: could not build the document', exc_info=True)
+            return False
+        self._diagnostics_stream += 1
+        stream_id = f'dia{self._diagnostics_stream}'
+        self._diagnostics_inflight[stream_id] = True
+        return self._send(ws, connect_inventory.inventory_frame(stream_id, doc))
+
+    def _apply_diagnostics_ack(self, payload: dict):
+        """`collect: false` is Cloud saying the consent is not held. Stop, and
+        try again slowly so a consent granted later takes effect."""
+        if payload.get('ok') and payload.get('collect', True):
+            interval = payload.get('next_interval_s')
+            if isinstance(interval, (int, float)) and 30 <= interval <= 3600:
+                self._diagnostics_next_at = time.monotonic() + float(interval)
+            return
+        self._diagnostics_next_at = time.monotonic() + DIAGNOSTICS_REFUSED_RETRY_S
+
+    # -- the logs stream ---------------------------------
+
+    def _publish_logs(self, ws) -> bool:
+        """Collect from the wanted sources and send one bounded batch when
+        one is due. Before Cloud has answered once, the first batch is
+        empty and its answer is the configuration."""
+        self._logs.retry_after_refusal()
+        try:
+            self._logs.collect_now()
+        except Exception:
+            logger.debug('Connect logs: collection failed', exc_info=True)
+        if not self._logs.due():
+            return False
+        batch = self._logs.take_batch()
+        self._logs_stream += 1
+        stream_id = f'log{self._logs_stream}'
+        self._logs_inflight[stream_id] = batch
+        sent = self._send(ws, connect_logs.logs_frame(stream_id, batch))
+        if not sent:
+            self._logs_inflight.pop(stream_id, None)
+            self._logs.requeue(batch)
+        return sent
 
     def _publish_storage(self, ws):
         """Where backups go and how they went, on its own slow cadence: this
