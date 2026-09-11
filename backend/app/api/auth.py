@@ -585,7 +585,7 @@ def update_current_user():
         config = data['sidebar_config']
         if isinstance(config, dict):
             preset = config.get('preset', 'full')
-            valid_presets = ['full', 'web', 'email', 'devops', 'minimal', 'custom']
+            valid_presets = ['recommended', 'full', 'web', 'email', 'devops', 'minimal', 'custom']
             if preset not in valid_presets:
                 return jsonify({'error': f'Invalid sidebar preset: {preset}'}), 400
             hidden = config.get('hiddenItems', [])
