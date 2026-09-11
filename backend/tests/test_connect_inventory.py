@@ -9,14 +9,15 @@ import json
 from datetime import datetime, timedelta
 
 import pytest
+from types import SimpleNamespace
 
 from app.services import connect_inventory
+from factories import make_application, make_user
 
 
 @pytest.fixture()
 def apps(app):
     from app import db
-    from app.models.application import Application
     from app.models.deployment import Deployment
     from app.models.domain import Domain
     from app.models.user import User
@@ -24,17 +25,13 @@ def apps(app):
     with app.app_context():
         user = User.query.first()
         if user is None:
-            user = User(username='inv', email='inv@example.test')
-            if hasattr(user, 'set_password'):
-                user.set_password('x' * 12)
-            db.session.add(user)
-            db.session.flush()
-        shop = Application(name='shop', app_type='wordpress', status='running',
-                           port=8080, user_id=user.id)
-        worker = Application(name='worker', app_type='docker', status='error',
-                             docker_image='registry.test/worker:1', user_id=user.id)
-        db.session.add_all([shop, worker])
-        db.session.flush()
+            user = make_user(db)
+        shop = make_application(db, name='shop', app_type='wordpress', status='running',
+                                port=8080, user_id=user.id, managed_by=None,
+                                compose_file=None, docker_image=None)
+        worker = make_application(db, name='worker', app_type='docker', status='error',
+                                  docker_image='registry.test/worker:1', user_id=user.id,
+                                  managed_by=None, compose_file=None)
         db.session.add(Domain(name='shop.example.test', is_primary=True, ssl_enabled=True,
                               ssl_expires_at=datetime.utcnow() + timedelta(days=30),
                               application_id=shop.id))
@@ -120,7 +117,7 @@ def test_a_collector_that_raises_leaves_its_section_out_and_says_why(app, apps, 
     assert 'databases' not in doc
     assert 'databases' not in doc['capabilities']
     assert doc['sections']['databases']['complete'] is False
-    assert 'docker did not answer' in doc['sections']['databases']['error']
+    assert doc['sections']['databases']['error'] == 'RuntimeError'
     # The other sections are still there.
     assert 'applications' in doc['capabilities']
 
@@ -156,3 +153,89 @@ def test_the_client_backs_off_when_cloud_refuses_diagnostics():
     assert client._diagnostics_next_at > time.monotonic() + connect_client.DIAGNOSTICS_INTERVAL_S
     client._apply_inventory_ack({'ok': True, 'next_interval_s': 300})
     assert client._inventory_next_at > time.monotonic() + 200
+
+
+@pytest.mark.parametrize('url', [
+    'https://oauth2:secret@github.com/acme/api.git?token=secret#private',
+    'git@github.com:acme/api.git?token=secret#private',
+    'https://github.com/acme/api.git#token=secret',
+])
+def test_repo_slugs_strip_queries_and_fragments(url):
+    assert connect_inventory._repo_slug(url) == 'acme/api'
+
+
+def test_admin_link_uses_primary_domains_own_tls_state():
+    secondary = SimpleNamespace(name='secondary.test', is_primary=False, ssl_enabled=True,
+                                ssl_expires_at=datetime.utcnow() + timedelta(days=30))
+    primary = SimpleNamespace(name='primary.test', is_primary=True, ssl_enabled=False)
+    row = SimpleNamespace(app_type='wordpress', live_domains=[secondary, primary])
+    domains = connect_inventory._app_domains(row)
+    assert connect_inventory._admin_url(row, domains) == 'http://primary.test/wp-admin/'
+    primary.ssl_enabled = True
+    domains = connect_inventory._app_domains(row)
+    assert connect_inventory._admin_url(row, domains) == 'https://primary.test/wp-admin/'
+
+
+def test_deleted_resources_and_their_logs_are_excluded(app, apps):
+    from app import db
+    from app.models.application import Application
+    from app.models.managed_database import ManagedDatabase
+    from app.services.connect_logs import AppOutput, DeployOutput
+
+    with app.app_context():
+        shop = db.session.get(Application, apps['shop'])
+        shop.soft_delete()
+        active = ManagedDatabase(name='active-db', engine='postgresql')
+        deleted = ManagedDatabase(name='deleted-db', engine='postgresql')
+        deleted.soft_delete()
+        db.session.add_all([active, deleted])
+        db.session.commit()
+        doc = connect_inventory.build_inventory(app)
+        assert str(shop.id) not in {r['key'] for r in doc['applications']}
+        assert str(shop.id) not in {r['app_key'] for r in doc['deployments']}
+        assert [r['name'] for r in doc['databases']] == ['active-db']
+        assert shop.id not in {r.id for r in AppOutput(app)._applications()}
+        assert shop.id not in {r.app_id for r in DeployOutput(app)._recent()}
+
+
+@pytest.mark.parametrize('consent', [None, False, 1, 'true'])
+def test_diagnostics_probes_never_collect_without_explicit_consent(monkeypatch, consent):
+    from app.services import connect_client
+    client = connect_client.RelayClient()
+
+    def forbidden(*args):
+        pytest.fail('processes and mounts must not be collected without consent')
+
+    monkeypatch.setattr(connect_inventory, 'build_diagnostics', forbidden)
+    frames = []
+    ws = SimpleNamespace(send=lambda raw: frames.append(json.loads(raw)))
+    assert client._publish_diagnostics(ws)
+    assert frames[-1]['p']['processes'] == []
+    assert frames[-1]['p']['mounts'] == []
+    payload = {'ok': True}
+    if consent is not None:
+        payload['collect'] = consent
+    client._apply_diagnostics_ack(payload)
+    client._diagnostics_next_at = 0.0  # the refusal retry window has elapsed
+    assert client._publish_diagnostics(ws)
+    assert frames[-1]['p']['processes'] == []
+    assert client._diagnostics_collect is False
+
+
+def test_explicit_diagnostics_consent_enables_next_collection(monkeypatch):
+    from app.services import connect_client
+    client = connect_client.RelayClient()
+    frames = []
+    ws = SimpleNamespace(send=lambda raw: frames.append(json.loads(raw)))
+    client._publish_diagnostics(ws)
+    client._handle_frame(ws, json.dumps({
+        's': frames[-1]['s'], 't': 'close', 'p': {'ok': True, 'collect': True},
+    }))
+    monkeypatch.setattr(connect_inventory, 'build_diagnostics',
+                        lambda *args: {'schema': 'diagnostics/1', 'processes': [{'pid': 7}]})
+    assert client._publish_diagnostics(ws)
+    assert frames[-1]['p']['processes'] == [{'pid': 7}]
+    client._handle_frame(ws, json.dumps({
+        's': frames[-1]['s'], 't': 'close', 'p': {'ok': False, 'collect': False},
+    }))
+    assert client._diagnostics_collect is False

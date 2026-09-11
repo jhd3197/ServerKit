@@ -120,8 +120,9 @@ def build_inventory(app=None, generation: int = 0) -> dict:
 
 
 def _reason(exc) -> str:
-    text = f'{type(exc).__name__}: {exc}'.strip()
-    return text[:200]
+    # Driver exceptions can contain SQL parameters or connection credentials.
+    # The full exception is logged locally by the collector.
+    return type(exc).__name__
 
 
 def _host() -> dict | None:
@@ -191,7 +192,7 @@ def _docker_version() -> str | None:
 def _applications():
     from app.models.application import Application
 
-    rows = (Application.query
+    rows = (Application.query_active()
             .order_by(Application.id.asc())
             .limit(MAX_APPLICATIONS + 1)
             .all())
@@ -267,7 +268,7 @@ def _source(row) -> dict | None:
 def _repo_slug(url) -> str | None:
     if not url:
         return None
-    text = str(url).strip()
+    text = str(url).strip().split('?', 1)[0].split('#', 1)[0]
     # git@host:owner/name.git or https://host/owner/name(.git)
     if ':' in text and '://' not in text:
         text = text.split(':', 1)[1]
@@ -287,7 +288,8 @@ def _app_domains(row) -> list:
         domains = row.live_domains
     except Exception:  # noqa: BLE001
         domains = []
-    for d in list(domains)[:MAX_DOMAINS_PER_APP]:
+    domains = sorted(domains, key=lambda d: not getattr(d, 'is_primary', False))
+    for d in domains[:MAX_DOMAINS_PER_APP]:
         entry = {'host': d.name}
         if getattr(d, 'ssl_enabled', False) and getattr(d, 'ssl_expires_at', None):
             entry['tls_expires_at'] = _utc(d.ssl_expires_at)
@@ -329,7 +331,7 @@ def _admin_url(row, domains) -> str | None:
         break
     if not primary:
         return None
-    scheme = 'https' if any(d.get('tls_expires_at') for d in domains) else 'http'
+    scheme = 'https' if domains[0].get('state') == 'active' else 'http'
     return f'{scheme}://{primary}/wp-admin/'
 
 
@@ -361,7 +363,7 @@ def _deployments():
 
     out = []
     complete = True
-    app_ids = [r.id for r in Application.query.with_entities(Application.id)
+    app_ids = [r.id for r in Application.query_active().with_entities(Application.id)
                .order_by(Application.id.asc()).limit(MAX_APPLICATIONS).all()]
     for app_id in app_ids:
         rows = (Deployment.query.filter_by(app_id=app_id)
@@ -413,7 +415,7 @@ def _databases():
     and a host; neither is read here."""
     from app.models.managed_database import ManagedDatabase
 
-    rows = (ManagedDatabase.query
+    rows = (ManagedDatabase.query_active()
             .order_by(ManagedDatabase.id.asc())
             .limit(MAX_DATABASES + 1).all())
     complete = len(rows) <= MAX_DATABASES

@@ -702,12 +702,14 @@ class RelayClient:
         self._diagnostics_stream = 0
         self._diagnostics_next_at = 0.0
         self._diagnostics_inflight = {}
+        self._diagnostics_collect = False
         # Bounded log collection. The publisher owns the
         # buffer and the bounds; Cloud's answer to each batch owns whether
         # to keep going and which sources are wanted.
         self._logs = connect_logs.LogPublisher(app)
         self._logs_stream = 0
         self._logs_inflight = {}
+        self._logs_ack_deadline = 0.0
 
     # -- lifecycle -----------------------------------------------------
 
@@ -827,6 +829,12 @@ class RelayClient:
 
         self._ws = ws
         try:
+            # Consent is connection-scoped. Reconnect using empty probes.
+            if self._diagnostics_collect:
+                self._diagnostics_next_at = 0.0
+            self._diagnostics_collect = False
+            self._logs.sources = None
+            self._logs.next_flush_at = 0.0
             self.transport = 'ws'
             self._set_state('online', None, transport='ws')
             logger.info('Connect relay: online via ws (instance %s)',
@@ -871,6 +879,13 @@ class RelayClient:
             return f'drop:{_classify_ws_failure(exc)}'
         finally:
             self._ws = None
+            for batch in reversed(list(self._logs_inflight.values())):
+                self._logs.requeue(batch)
+            self._logs_inflight.clear()
+            self._inventory_inflight.clear()
+            self._diagnostics_inflight.clear()
+            self._diagnostics_collect = False
+            self._logs.sources = None
             try:
                 ws.close()
             except Exception:
@@ -985,6 +1000,8 @@ class RelayClient:
                 batch = self._logs_inflight.pop(stream_id, None)
                 payload = frame.get('p') or {}
                 self._logs.apply_ack(payload)
+                if not self._logs.collect:
+                    self._logs_inflight.clear()
                 if not payload.get('ok') and self._logs.collect:
                     # Refused for a reason that is not "stop": the lines are
                     # still wanted and their ids make the resend safe.
@@ -1104,15 +1121,6 @@ class RelayClient:
 
     # -- the inventory and diagnostics streams ----------
 
-    def publish_inventory(self) -> bool:
-        """Send one inventory document now. Used after a deploy, a rename
-        or a removal so Cloud does not wait five minutes to learn of it."""
-        ws = self._ws
-        if ws is None:
-            return False
-        self._inventory_next_at = 0.0
-        return self._publish_inventory(ws)
-
     def _publish_inventory(self, ws) -> bool:
         now = time.monotonic()
         if now < self._inventory_next_at:
@@ -1126,8 +1134,12 @@ class RelayClient:
             return False
         self._inventory_stream += 1
         stream_id = f'inv{self._inventory_stream}'
+        self._inventory_inflight.clear()
         self._inventory_inflight[stream_id] = doc.get('generation')
-        return self._send(ws, connect_inventory.inventory_frame(stream_id, doc))
+        sent = self._send(ws, connect_inventory.inventory_frame(stream_id, doc))
+        if not sent:
+            self._inventory_inflight.pop(stream_id, None)
+        return sent
 
     def _apply_inventory_ack(self, payload: dict):
         """Cloud's answer carries the interval it wants; a refusal is logged
@@ -1147,23 +1159,38 @@ class RelayClient:
             return False
         self._diagnostics_next_at = now + DIAGNOSTICS_INTERVAL_S
         try:
-            doc = connect_inventory.build_diagnostics(int(DIAGNOSTICS_INTERVAL_S))
+            if self._diagnostics_collect:
+                doc = connect_inventory.build_diagnostics(int(DIAGNOSTICS_INTERVAL_S))
+            else:
+                doc = {'schema': connect_inventory.DIAGNOSTICS_SCHEMA,
+                       'observed_at': datetime.now(timezone.utc).isoformat(),
+                       'interval_s': int(DIAGNOSTICS_INTERVAL_S),
+                       'processes': [], 'mounts': [], 'completeness': {}}
         except Exception:
             logger.debug('Connect diagnostics: could not build the document', exc_info=True)
             return False
         self._diagnostics_stream += 1
         stream_id = f'dia{self._diagnostics_stream}'
+        self._diagnostics_inflight.clear()
         self._diagnostics_inflight[stream_id] = True
-        return self._send(ws, connect_inventory.inventory_frame(stream_id, doc))
+        sent = self._send(ws, connect_inventory.inventory_frame(stream_id, doc))
+        if not sent:
+            self._diagnostics_inflight.pop(stream_id, None)
+        return sent
 
     def _apply_diagnostics_ack(self, payload: dict):
         """`collect: false` is Cloud saying the consent is not held. Stop, and
         try again slowly so a consent granted later takes effect."""
-        if payload.get('ok') and payload.get('collect', True):
+        if payload.get('ok') and payload.get('collect') is True:
+            newly_allowed = not self._diagnostics_collect
+            self._diagnostics_collect = True
             interval = payload.get('next_interval_s')
             if isinstance(interval, (int, float)) and 30 <= interval <= 3600:
                 self._diagnostics_next_at = time.monotonic() + float(interval)
+            if newly_allowed:
+                self._diagnostics_next_at = 0.0
             return
+        self._diagnostics_collect = False
         self._diagnostics_next_at = time.monotonic() + DIAGNOSTICS_REFUSED_RETRY_S
 
     # -- the logs stream ---------------------------------
@@ -1173,6 +1200,15 @@ class RelayClient:
         one is due. Before Cloud has answered once, the first batch is
         empty and its answer is the configuration."""
         self._logs.retry_after_refusal()
+        if self._logs_inflight:
+            if time.monotonic() < self._logs_ack_deadline:
+                return False
+            for batch in self._logs_inflight.values():
+                self._logs.requeue(batch)
+            self._logs_inflight.clear()
+            self._logs.sources = None
+        if not self._logs.due():
+            return False
         try:
             self._logs.collect_now()
         except Exception:
@@ -1183,6 +1219,7 @@ class RelayClient:
         self._logs_stream += 1
         stream_id = f'log{self._logs_stream}'
         self._logs_inflight[stream_id] = batch
+        self._logs_ack_deadline = time.monotonic() + 60.0
         sent = self._send(ws, connect_logs.logs_frame(stream_id, batch))
         if not sent:
             self._logs_inflight.pop(stream_id, None)
