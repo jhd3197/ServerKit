@@ -43,17 +43,20 @@ concurrency:
   group: release-smoke-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   build-release-smoke:
     name: Build release tarball
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     outputs:
       dev_tag: ${{ steps.dev.outputs.tag }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       # A dev build carries the commit in its version, so the lab records it
       # under a name that is unique, sorts after the release it is based on,
@@ -84,13 +87,38 @@ jobs:
           BUILD_ARCH: amd64
         run: bash scripts/build-release.sh
 
+      - name: Save the dev release files
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-release
+          path: |
+            serverkit-*.tar.gz
+            checksums.txt
+          if-no-files-found: error
+          retention-days: 1
+
+  publish-dev:
+    name: Publish dev pre-release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    needs: build-release-smoke
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # No checkout or repository scripts run with the write token.
+      - name: Download the built release files
+        uses: actions/download-artifact@v4
+        with:
+          name: dev-release
+
       - name: Publish the dev build as a pre-release
         if: github.event_name == 'push'
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: ${{ steps.dev.outputs.tag }}
+          tag_name: ${{ needs.build-release-smoke.outputs.dev_tag }}
           target_commitish: ${{ github.sha }}
-          name: Dev build ${{ steps.dev.outputs.tag }}
+          name: Dev build ${{ needs.build-release-smoke.outputs.dev_tag }}
           prerelease: true
           draft: false
           files: |
