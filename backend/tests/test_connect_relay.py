@@ -366,3 +366,76 @@ def test_run_command_refreshes_a_stale_jwks_and_acks(config_dir, monkeypatch):
     ws = types.SimpleNamespace(send=lambda raw: sent.append(json.loads(raw)))
     client._run_command(ws, {'p': {'jwt': sign()}})
     assert sent and sent[0]['p']['state'] == 'running'
+
+
+# ---------- close-reason frames (the edge strips numeric close codes) ----------
+
+
+def test_a_session_close_frame_with_revoked_reason_raises():
+    """Production edge proxies answer 1005 for the relay's 4009, so revocation
+    arrives as a frame. Stream closes still route by stream id."""
+    client = connect_client.RelayClient()
+    with pytest.raises(connect_client.RelayRevoked):
+        client._handle_frame(types.SimpleNamespace(),
+                             json.dumps({'t': 'close', 'reason': 'revoked'}))
+    # Other session-level reasons and ordinary stream closes do not raise.
+    client._handle_frame(types.SimpleNamespace(),
+                         json.dumps({'t': 'close', 'reason': 'version_unsupported'}))
+    client._handle_frame(types.SimpleNamespace(),
+                         json.dumps({'s': 'met1', 't': 'close', 'p': {'ok': True}}))
+
+
+def test_a_close_frame_during_hello_is_the_refusal_reason(monkeypatch):
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    class FakeWs:
+        def __init__(self, frame):
+            self.frame = frame
+
+        def send(self, raw):
+            pass
+
+        def recv(self, timeout=None):
+            return json.dumps(self.frame)
+
+        def close(self):
+            pass
+
+    cfg = {'private_key': Ed25519PrivateKey.generate(), 'device_id': 'dev_abc123',
+           'relay_url': 'wss://relay.test/v1/device'}
+    import websockets.sync.client as ws_client
+    monkeypatch.setattr(ws_client, 'connect', lambda *a, **k: FakeWs(
+        {'t': 'close', 'reason': 'revoked'}))
+    with pytest.raises(connect_client.RelayRevoked):
+        connect_client.RelayClient()._ws_connect(cfg)
+    monkeypatch.setattr(ws_client, 'connect', lambda *a, **k: FakeWs(
+        {'t': 'close', 'reason': 'version_unsupported'}))
+    with pytest.raises(connect_client._HandshakeRefused) as exc:
+        connect_client.RelayClient()._ws_connect(cfg)
+    assert 'version_unsupported' in str(exc.value)
+
+
+def test_a_revoked_frame_mid_session_ends_it_as_revoked(monkeypatch):
+    calls = []
+
+    class FakeWs:
+        def recv(self, timeout=None):
+            if not calls:
+                calls.append(1)
+                return json.dumps({'t': 'close', 'reason': 'revoked'})
+            raise TimeoutError()
+
+        def send(self, raw):
+            pass
+
+        def close(self):
+            pass
+
+    client = connect_client.RelayClient()
+    client.running = True
+    monkeypatch.setattr(client, '_ws_connect', lambda cfg: FakeWs())
+    monkeypatch.setattr(client, '_set_state', lambda *args, **kwargs: None)
+    for name in ('_check_for_update', '_load_jwks', '_publish_storage',
+                 '_publish_policy', '_publish_inventory'):
+        monkeypatch.setattr(client, name, lambda *args: None)
+    assert client._ws_session({}) == 'revoked'

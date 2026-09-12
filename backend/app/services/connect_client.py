@@ -870,6 +870,8 @@ class RelayClient:
             return 'stopped'
         except Exception as exc:
             from websockets.exceptions import ConnectionClosed
+            if isinstance(exc, RelayRevoked):
+                return 'revoked'
             if isinstance(exc, ConnectionClosed):
                 code = exc.rcvd.code if exc.rcvd else None
                 if code == 4009:
@@ -910,6 +912,13 @@ class RelayClient:
                                 get_panel_version())
             ws.send(json.dumps(hello))
             frame = json.loads(ws.recv(timeout=HELLO_TIMEOUT_S))
+            if frame.get('t') == 'close':
+                # Edge proxies strip the close code, so the relay refuses a
+                # hello with the reason in a frame. Revocation is terminal.
+                reason = str(frame.get('reason') or 'refused')
+                if reason == 'revoked':
+                    raise RelayRevoked()
+                raise _HandshakeRefused(reason)
             if frame.get('t') != 'ready':
                 raise _HandshakeRefused('relay_unreachable')
             self.relay_instance = frame.get('instance')
@@ -981,9 +990,16 @@ class RelayClient:
         except ValueError:
             return
         if frame.get('t') == 'close':
+            stream_id = frame.get('s')
+            if stream_id is None:
+                # Session-level close. Edge proxies strip the numeric close
+                # code, so the relay sends the reason in a frame first —
+                # without it a revoked panel would keep retrying forever.
+                if frame.get('reason') == 'revoked':
+                    raise RelayRevoked()
+                return
             # The relay closes an ingest stream with ServerKit Cloud's own answer, which
             # carries the interval Cloud wants us to send at.
-            stream_id = frame.get('s')
             if stream_id in self._metrics_inflight:
                 payload = frame.get('p') or {}
                 if payload.get('ok'):
