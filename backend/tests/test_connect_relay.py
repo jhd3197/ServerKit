@@ -439,3 +439,19 @@ def test_a_revoked_frame_mid_session_ends_it_as_revoked(monkeypatch):
                  '_publish_policy', '_publish_inventory'):
         monkeypatch.setattr(client, name, lambda *args: None)
     assert client._ws_session({}) == 'revoked'
+
+
+def test_revocation_seen_in_poll_mode_stops_the_loop(config_dir, monkeypatch):
+    """_poll_session reports 'revoked'; the loop must write the state and stop,
+    not fall through and re-probe the websocket forever (the 2026-09-12 lab
+    run: a panel behind the code-stripping edge never observed revocation)."""
+    _fake_config(monkeypatch)
+    monkeypatch.setattr(connect_client.RelayClient, '_ws_session',
+                        lambda self, cfg: 'refused:relay_unreachable')
+    monkeypatch.setattr(connect_client.RelayClient, '_poll_session',
+                        lambda self, cfg, retry_at: 'revoked')
+    client = connect_client.RelayClient()
+    client.start()
+    client._thread.join(timeout=5)
+    assert not client._thread.is_alive()
+    assert connect_client._read_state_file()['state'] == 'revoked'

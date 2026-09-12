@@ -766,7 +766,14 @@ class RelayClient:
                 return
 
             if time.monotonic() < ws_blocked_until:
-                if self._poll_session(cfg, ws_blocked_until) == 'stopped':
+                outcome = self._poll_session(cfg, ws_blocked_until)
+                if outcome == 'stopped':
+                    return
+                if outcome == 'revoked':
+                    # Same terminal handling as the ws path: limited mode is
+                    # where a panel behind a code-stripping edge learns it.
+                    self._set_state('revoked', 'revoked', transport=None)
+                    logger.warning('Connect relay: device revoked on ServerKit Cloud; stopping')
                     return
                 ws_blocked_until = 0.0  # time to re-probe WS
                 continue
