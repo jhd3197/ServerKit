@@ -1,13 +1,19 @@
 """Unit tests for the relay transport helpers (no network)."""
+import base64
 import json
 import socket
 import ssl
+import time
+import types
 
+import jwt
 import pytest
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from websockets.exceptions import ConnectionClosedOK
 from websockets.frames import Close
 
-from app.services import connect_client, connect_keys
+from app.services import connect_client, connect_commands, connect_keys
 
 
 @pytest.fixture
@@ -283,3 +289,80 @@ def test_flap_logging_fires_after_limit(config_dir, monkeypatch, caplog):
         client.start()
         client._thread.join(timeout=10)
     assert any('flapping' in r.message for r in caplog.records)
+
+
+# ---------- command JWKS refresh ----------
+
+
+def _command_signer():
+    """(sign(claims) -> token, jwks) for a throwaway command key, kid 'k-new'."""
+    key = Ed25519PrivateKey.generate()
+    raw = key.public_key().public_bytes_raw()
+    jwks = {'keys': [{'kty': 'OKP', 'crv': 'Ed25519', 'kid': 'k-new',
+                      'x': base64.urlsafe_b64encode(raw).decode().rstrip('=')}]}
+    private_pem = key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption(),
+    )
+
+    def sign(**claims):
+        body = {'cmd_id': 'cmd_1', 'device_id': 'dev_abc123',
+                'action': 'policy.report', 'args': {}, 'scopes': ['policy.report'],
+                'nonce': f'n{time.time_ns()}', 'iat': int(time.time()),
+                'exp': int(time.time()) + 600}
+        body.update(claims)
+        return jwt.encode(body, private_pem, algorithm='EdDSA',
+                          headers={'kid': 'k-new'})
+
+    return sign, jwks
+
+
+def test_an_unknown_command_key_triggers_one_jwks_refetch(monkeypatch):
+    """ServerKit Cloud mints each signing key on first use, so a command can
+    legitimately arrive signed with a key this connection's JWKS predates."""
+    sign, fresh = _command_signer()
+    client = connect_client.RelayClient()
+    client._jwks = {'keys': [{'kid': 'k-old'}]}
+    calls = []
+    monkeypatch.setattr(client, '_load_jwks',
+                        lambda cfg: calls.append(cfg) or setattr(client, '_jwks', fresh))
+    client._refresh_jwks_for(sign(), {'cloud_url': 'https://cloud.test'})
+    assert len(calls) == 1
+    assert client._jwks is fresh
+
+
+def test_a_known_command_key_does_not_refetch(monkeypatch):
+    sign, fresh = _command_signer()
+    client = connect_client.RelayClient()
+    client._jwks = fresh
+    monkeypatch.setattr(client, '_load_jwks',
+                        lambda cfg: pytest.fail('refetched a known key'))
+    client._refresh_jwks_for(sign(), {'cloud_url': 'https://cloud.test'})
+
+
+def test_a_garbage_command_token_is_left_to_verification(monkeypatch):
+    client = connect_client.RelayClient()
+    client._jwks = None
+    monkeypatch.setattr(client, '_load_jwks',
+                        lambda cfg: pytest.fail('refetched a garbage token'))
+    client._refresh_jwks_for('not-a-jwt', {})
+    client._refresh_jwks_for(None, {})
+
+
+def test_run_command_refreshes_a_stale_jwks_and_acks(config_dir, monkeypatch):
+    """The full path: stale JWKS at connect, command signed with the key
+    ServerKit Cloud minted afterwards — refetch, verify, ack, run."""
+    sign, fresh = _command_signer()
+    connect_commands.NONCES._seen.clear()
+    monkeypatch.setattr(connect_client, '_read_connect_file',
+                        lambda: {'device_id': 'dev_abc123',
+                                 'cloud_url': 'https://cloud.test'})
+    client = connect_client.RelayClient()
+    client._jwks = {'keys': [{'kid': 'k-old'}]}
+    monkeypatch.setattr(client, '_load_jwks',
+                        lambda cfg: setattr(client, '_jwks', fresh))
+    sent = []
+    ws = types.SimpleNamespace(send=lambda raw: sent.append(json.loads(raw)))
+    client._run_command(ws, {'p': {'jwt': sign()}})
+    assert sent and sent[0]['p']['state'] == 'running'

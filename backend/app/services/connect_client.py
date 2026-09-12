@@ -684,9 +684,10 @@ class RelayClient:
         # once an hour, and acted on only when this install can update itself.
         self._update = UpdateCheck()
         # Signed commands and the Storage Hub's status
-        # stream. The JWKS is fetched once per connection: a
-        # command is verified against the keys Cloud published, and a key
-        # Cloud rotates is picked up on the next reconnect.
+        # stream. The JWKS is fetched once per connection and
+        # refetched when a command arrives signed with a key it
+        # does not know: Cloud mints keys on first use and rotates
+        # them on its own schedule, both between reconnects.
         self._jwks = None
         self._storage_stream = 0
         self._storage_next_at = 0.0
@@ -1031,6 +1032,24 @@ class RelayClient:
             self._jwks = None
             logger.debug('Connect commands: could not read the JWKS', exc_info=True)
 
+    def _refresh_jwks_for(self, token, cfg):
+        """ServerKit Cloud mints each signing key the first time it is used and
+        rotates it on its own schedule — both can postdate the JWKS this
+        connection fetched at connect time. One refetch when the kid is
+        unknown; a key still unknown afterwards is refused like any other bad
+        signature.
+        """
+        try:
+            import jwt
+            kid = jwt.get_unverified_header(token).get('kid') if token else None
+        except Exception:
+            return
+        if not kid:
+            return
+        known = {k.get('kid') for k in (self._jwks or {}).get('keys') or []}
+        if kid not in known:
+            self._load_jwks(cfg)
+
     def _run_command(self, ws, frame):
         """Verify, acknowledge, run, report.
 
@@ -1040,6 +1059,7 @@ class RelayClient:
         """
         payload = frame.get('p') or {}
         cfg = _read_connect_file()
+        self._refresh_jwks_for(payload.get('jwt'), cfg)
         try:
             claims = connect_commands.verify(
                 payload.get('jwt'), self._jwks, cfg.get('device_id'),
