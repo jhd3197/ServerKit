@@ -217,13 +217,15 @@ class LogService:
 
     @classmethod
     def get_docker_app_logs(cls, app_name: str, app_dir: str, lines: int = 100,
-                            compose_file: str = None) -> Dict:
+                            compose_file: str = None, timestamps: bool = False) -> Dict:
         """Get logs for a Docker Compose application."""
         try:
             cmd = ['docker', 'compose']
             if compose_file:
                 cmd.extend(['-f', compose_file])
             cmd.extend(['logs', '--tail', str(lines), '--no-color'])
+            if timestamps:
+                cmd.append('--timestamps')
 
             result = run_checked(cmd, timeout=30, cwd=app_dir)
 
@@ -236,6 +238,8 @@ class LogService:
                 if compose_file:
                     cmd.extend(['-f', compose_file])
                 cmd.extend(['logs', '--tail', str(lines), '--no-color'])
+                if timestamps:
+                    cmd.append('--timestamps')
                 result = run_checked(cmd, timeout=30, cwd=app_dir)
                 if result['success']:
                     log_lines = result['output'].split('\n') if result['output'] else []
@@ -251,10 +255,11 @@ class LogService:
 
     @classmethod
     def get_journalctl_logs(cls, unit: str = None, lines: int = 100,
-                            since: str = None, priority: str = None) -> Dict:
+                            since: str = None, priority: str = None,
+                            precise: bool = False) -> Dict:
         """Get system logs, trying journalctl → syslog → Windows Event Log."""
         if is_command_available('journalctl'):
-            return cls._read_journalctl(unit, lines, since, priority)
+            return cls._read_journalctl(unit, lines, since, priority, precise)
 
         syslog_path = cls._find_syslog()
         if syslog_path:
@@ -266,10 +271,12 @@ class LogService:
         return {'success': False, 'error': 'No system log source available — journalctl, syslog, and Windows Event Log are all unavailable'}
 
     @classmethod
-    def _read_journalctl(cls, unit: str, lines: int, since: str, priority: str) -> Dict:
+    def _read_journalctl(cls, unit: str, lines: int, since: str, priority: str,
+                        precise: bool = False) -> Dict:
         """Read logs from systemd journal."""
         try:
-            cmd = ['journalctl', '-n', str(lines), '--no-pager', '-o', 'short-iso']
+            output = 'short-iso-precise' if precise else 'short-iso'
+            cmd = ['journalctl', '-n', str(lines), '--no-pager', '-o', output]
 
             if unit:
                 cmd.extend(['-u', unit])

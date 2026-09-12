@@ -18,6 +18,30 @@ Earlier development history remains in
 The [agent](https://github.com/jhd3197/serverkit-agent/releases) has its own
 release history; historical `agent-v*` tags are not panel releases.
 
+## [1.11.1] - Unreleased
+
+### Added
+
+- Publish active applications, domains, deployments, and managed databases to
+  ServerKit Cloud, with optional process diagnostics and selected log sources.
+- Publish dev prerelease builds for the Cloud release lab from a separate,
+  push-only release job.
+
+### Fixed
+
+- Require explicit consent before sending diagnostics or collecting logs, and
+  redact structured secrets and short authorization credentials locally.
+- Recover unacknowledged log batches within their byte and expiry limits;
+  continue past oversized lines and drain deployment logs across batches.
+- Exclude recycled resources, strip credentials from repository metadata,
+  reject symlinked log files, and use the primary domain for WordPress admin links.
+- Preserve repeated application log occurrences and read the production panel
+  error log.
+- Fix backend test-factory compliance and the settings browser-test timing race.
+- Update the demo link in all four README translations.
+
+[Source changes since 1.11.0](https://github.com/jhd3197/ServerKit/compare/v1.11.0...v1.11.1).
+
 ## [1.11.0] - 2026-09-08
 
 ### Added
@@ -948,6 +972,7 @@ require their matching extensions. Review the installed extensions after updatin
 - Established the earliest published panel release covered by this backfill, with the Flask/React control panel, application and database management, Docker operations, backups and server monitoring.
 - Moved the agent into the separate serverkit-agent repository and introduced a dedicated panel release workflow.
 
+[1.11.1]: https://github.com/jhd3197/ServerKit/releases/tag/v1.11.1
 [1.11.0]: https://github.com/jhd3197/ServerKit/releases/tag/v1.11.0
 [1.10.0]: https://github.com/jhd3197/ServerKit/releases/tag/v1.10.0
 [1.9.29]: https://github.com/jhd3197/ServerKit/releases/tag/v1.9.29

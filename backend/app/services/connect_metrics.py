@@ -32,6 +32,10 @@ MAX_INTERVAL_S = 900
 BUFFER_MINUTES = 5
 MAX_SAMPLES_PER_MESSAGE = 10
 MAX_DISK_MOUNTS = 8
+# The panel's own sampler writes a row every minute, so this many consecutive
+# empty collects mean the sampler is not running — until then an empty build
+# is just the normal race against the sampler's next row.
+EMPTY_COLLECT_WARN_AFTER = 5
 
 
 def _utc(dt):
@@ -153,6 +157,8 @@ class MetricsPublisher:
         self._buffer = deque(maxlen=BUFFER_MINUTES * 4)
         self._net_prev = None
         self._last_ts = None
+        self._collect_failures = 0
+        self._empty_collects = 0
 
     # -- collection ---------------------------------------------------
 
@@ -166,8 +172,26 @@ class MetricsPublisher:
             else:
                 samples = self._build()
         except Exception:
-            logger.debug('Connect metrics: could not build a summary', exc_info=True)
+            # A build that keeps failing means nothing is ever sent, so the
+            # first failure of a streak is a warning, not another debug line.
+            self._collect_failures += 1
+            (logger.warning if self._collect_failures == 1 else logger.debug)(
+                'Connect metrics: could not build a summary (%d consecutive)', self._collect_failures,
+                exc_info=True)
             return 0
+        if self._collect_failures:
+            logger.info('Connect metrics: summary build recovered after %d failure(s)',
+                        self._collect_failures)
+            self._collect_failures = 0
+        if samples:
+            self._empty_collects = 0
+        else:
+            self._empty_collects += 1
+            # Without this line the only symptom of a dead sampler is ServerKit
+            # Cloud showing no telemetry, with nothing to act on locally.
+            if self._empty_collects == EMPTY_COLLECT_WARN_AFTER:
+                logger.warning('Connect metrics: no local samples for %d consecutive collects; '
+                               'the panel sampler may not be running', self._empty_collects)
         for sample in samples:
             self._buffer.append(sample)
         self._prune()

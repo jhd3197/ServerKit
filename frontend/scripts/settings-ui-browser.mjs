@@ -157,6 +157,10 @@ try {
         await page.getByRole('heading', { name: 'Notification Channels' }).waitFor();
         assert.equal(await page.getByRole('switch', { name: 'Slack', exact: true }).count(), 0);
         assert.equal(await page.getByRole('checkbox').count(), 0);
+        await Promise.all([
+            page.getByRole('button', { name: 'Send Test Notification' }).waitFor({ state: 'visible' }),
+            page.getByRole('button', { name: 'Save Preferences' }).waitFor({ state: 'visible' }),
+        ]);
         const testButton = await page.getByRole('button', { name: 'Send Test Notification' }).boundingBox();
         const saveButton = await page.getByRole('button', { name: 'Save Preferences' }).boundingBox();
         const footer = await page.locator('.settings-actions--footer').boundingBox();

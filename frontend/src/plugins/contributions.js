@@ -20,6 +20,7 @@
  */
 import { useEffect, useState } from 'react';
 import api from '../services/api';
+import { useAuth } from '../contexts/useAuth';
 import pluginsManifest from './plugins-manifest.json';
 import { loadRuntimeFrontends, getRuntimeModule } from './runtime/loader';
 
@@ -218,6 +219,8 @@ export function resolveCustomLayout(layoutId, layouts) {
 
 let cachedPromise = null;
 let cachedValue = null;
+// Responses from before sign-out or a newer refresh must not restore stale UI.
+let generation = 0;
 const subscribers = new Set();
 
 function notify(value) {
@@ -233,14 +236,22 @@ function notify(value) {
 // request every time it is called, so using it to mean "make sure this is
 // loaded" fetched the same envelope twice on every app load.
 export function ensureContributions() {
+    if (!api.getToken()) return refreshContributions();
     return cachedPromise || refreshContributions();
 }
 
 // Force a re-fetch. Correct after installing, enabling or removing an
 // extension; wrong as a way to say "load this if it isn't loaded".
 export function refreshContributions() {
+    const requestGeneration = ++generation;
+    if (!api.getToken()) {
+        cachedPromise = null;
+        notify(EMPTY);
+        return Promise.resolve(EMPTY);
+    }
     cachedPromise = api.getPluginContributions()
         .then(async (data) => {
+            if (requestGeneration !== generation) return cachedValue || EMPTY;
             const merged = normalizeContributions({ ...EMPTY, ...(data || {}) });
             // Load any runtime ESM bundles BEFORE notifying, so contributed
             // routes render with their components already available (fail-soft:
@@ -249,6 +260,7 @@ export function refreshContributions() {
             // built against an incompatible SDK before fetching it (plan 32 #1).
             await loadRuntimeFrontends(
                 merged.frontends, merged.panel_sdk_version || merged.sdk_version);
+            if (requestGeneration !== generation) return cachedValue || EMPTY;
             // Mark the envelope as loaded so consumers (e.g. the NotFound page)
             // can tell "contributions still loading" from "genuinely no route".
             merged.__ready = true;
@@ -256,6 +268,7 @@ export function refreshContributions() {
             return merged;
         })
         .catch(() => {
+            if (requestGeneration !== generation) return cachedValue || EMPTY;
             // If the backend contribution endpoint is unavailable (common
             // while running only the Vite dev server), use the active plugin
             // manifest baked into this frontend build instead of leaving
@@ -269,6 +282,7 @@ export function refreshContributions() {
 }
 
 export function useContributions() {
+    const { isAuthenticated } = useAuth();
     const [value, setValue] = useState(cachedValue || EMPTY);
 
     useEffect(() => {
@@ -276,7 +290,7 @@ export function useContributions() {
         ensureContributions();
         if (cachedValue) setValue(cachedValue);
         return () => subscribers.delete(setValue);
-    }, []);
+    }, [isAuthenticated]);
 
-    return value;
+    return isAuthenticated ? value : EMPTY;
 }

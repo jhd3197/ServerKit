@@ -1,13 +1,19 @@
 """Unit tests for the relay transport helpers (no network)."""
+import base64
 import json
 import socket
 import ssl
+import time
+import types
 
+import jwt
 import pytest
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from websockets.exceptions import ConnectionClosedOK
 from websockets.frames import Close
 
-from app.services import connect_client, connect_keys
+from app.services import connect_client, connect_commands, connect_keys
 
 
 @pytest.fixture
@@ -283,3 +289,169 @@ def test_flap_logging_fires_after_limit(config_dir, monkeypatch, caplog):
         client.start()
         client._thread.join(timeout=10)
     assert any('flapping' in r.message for r in caplog.records)
+
+
+# ---------- command JWKS refresh ----------
+
+
+def _command_signer():
+    """(sign(claims) -> token, jwks) for a throwaway command key, kid 'k-new'."""
+    key = Ed25519PrivateKey.generate()
+    raw = key.public_key().public_bytes_raw()
+    jwks = {'keys': [{'kty': 'OKP', 'crv': 'Ed25519', 'kid': 'k-new',
+                      'x': base64.urlsafe_b64encode(raw).decode().rstrip('=')}]}
+    private_pem = key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption(),
+    )
+
+    def sign(**claims):
+        body = {'cmd_id': 'cmd_1', 'device_id': 'dev_abc123',
+                'action': 'policy.report', 'args': {}, 'scopes': ['policy.report'],
+                'nonce': f'n{time.time_ns()}', 'iat': int(time.time()),
+                'exp': int(time.time()) + 600}
+        body.update(claims)
+        return jwt.encode(body, private_pem, algorithm='EdDSA',
+                          headers={'kid': 'k-new'})
+
+    return sign, jwks
+
+
+def test_an_unknown_command_key_triggers_one_jwks_refetch(monkeypatch):
+    """ServerKit Cloud mints each signing key on first use, so a command can
+    legitimately arrive signed with a key this connection's JWKS predates."""
+    sign, fresh = _command_signer()
+    client = connect_client.RelayClient()
+    client._jwks = {'keys': [{'kid': 'k-old'}]}
+    calls = []
+    monkeypatch.setattr(client, '_load_jwks',
+                        lambda cfg: calls.append(cfg) or setattr(client, '_jwks', fresh))
+    client._refresh_jwks_for(sign(), {'cloud_url': 'https://cloud.test'})
+    assert len(calls) == 1
+    assert client._jwks is fresh
+
+
+def test_a_known_command_key_does_not_refetch(monkeypatch):
+    sign, fresh = _command_signer()
+    client = connect_client.RelayClient()
+    client._jwks = fresh
+    monkeypatch.setattr(client, '_load_jwks',
+                        lambda cfg: pytest.fail('refetched a known key'))
+    client._refresh_jwks_for(sign(), {'cloud_url': 'https://cloud.test'})
+
+
+def test_a_garbage_command_token_is_left_to_verification(monkeypatch):
+    client = connect_client.RelayClient()
+    client._jwks = None
+    monkeypatch.setattr(client, '_load_jwks',
+                        lambda cfg: pytest.fail('refetched a garbage token'))
+    client._refresh_jwks_for('not-a-jwt', {})
+    client._refresh_jwks_for(None, {})
+
+
+def test_run_command_refreshes_a_stale_jwks_and_acks(config_dir, monkeypatch):
+    """The full path: stale JWKS at connect, command signed with the key
+    ServerKit Cloud minted afterwards — refetch, verify, ack, run."""
+    sign, fresh = _command_signer()
+    connect_commands.NONCES._seen.clear()
+    monkeypatch.setattr(connect_client, '_read_connect_file',
+                        lambda: {'device_id': 'dev_abc123',
+                                 'cloud_url': 'https://cloud.test'})
+    client = connect_client.RelayClient()
+    client._jwks = {'keys': [{'kid': 'k-old'}]}
+    monkeypatch.setattr(client, '_load_jwks',
+                        lambda cfg: setattr(client, '_jwks', fresh))
+    sent = []
+    ws = types.SimpleNamespace(send=lambda raw: sent.append(json.loads(raw)))
+    client._run_command(ws, {'p': {'jwt': sign()}})
+    assert sent and sent[0]['p']['state'] == 'running'
+
+
+# ---------- close-reason frames (the edge strips numeric close codes) ----------
+
+
+def test_a_session_close_frame_with_revoked_reason_raises():
+    """Production edge proxies answer 1005 for the relay's 4009, so revocation
+    arrives as a frame. Stream closes still route by stream id."""
+    client = connect_client.RelayClient()
+    with pytest.raises(connect_client.RelayRevoked):
+        client._handle_frame(types.SimpleNamespace(),
+                             json.dumps({'t': 'close', 'reason': 'revoked'}))
+    # Other session-level reasons and ordinary stream closes do not raise.
+    client._handle_frame(types.SimpleNamespace(),
+                         json.dumps({'t': 'close', 'reason': 'version_unsupported'}))
+    client._handle_frame(types.SimpleNamespace(),
+                         json.dumps({'s': 'met1', 't': 'close', 'p': {'ok': True}}))
+
+
+def test_a_close_frame_during_hello_is_the_refusal_reason(monkeypatch):
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    class FakeWs:
+        def __init__(self, frame):
+            self.frame = frame
+
+        def send(self, raw):
+            pass
+
+        def recv(self, timeout=None):
+            return json.dumps(self.frame)
+
+        def close(self):
+            pass
+
+    cfg = {'private_key': Ed25519PrivateKey.generate(), 'device_id': 'dev_abc123',
+           'relay_url': 'wss://relay.test/v1/device'}
+    import websockets.sync.client as ws_client
+    monkeypatch.setattr(ws_client, 'connect', lambda *a, **k: FakeWs(
+        {'t': 'close', 'reason': 'revoked'}))
+    with pytest.raises(connect_client.RelayRevoked):
+        connect_client.RelayClient()._ws_connect(cfg)
+    monkeypatch.setattr(ws_client, 'connect', lambda *a, **k: FakeWs(
+        {'t': 'close', 'reason': 'version_unsupported'}))
+    with pytest.raises(connect_client._HandshakeRefused) as exc:
+        connect_client.RelayClient()._ws_connect(cfg)
+    assert 'version_unsupported' in str(exc.value)
+
+
+def test_a_revoked_frame_mid_session_ends_it_as_revoked(monkeypatch):
+    calls = []
+
+    class FakeWs:
+        def recv(self, timeout=None):
+            if not calls:
+                calls.append(1)
+                return json.dumps({'t': 'close', 'reason': 'revoked'})
+            raise TimeoutError()
+
+        def send(self, raw):
+            pass
+
+        def close(self):
+            pass
+
+    client = connect_client.RelayClient()
+    client.running = True
+    monkeypatch.setattr(client, '_ws_connect', lambda cfg: FakeWs())
+    monkeypatch.setattr(client, '_set_state', lambda *args, **kwargs: None)
+    for name in ('_check_for_update', '_load_jwks', '_publish_storage',
+                 '_publish_policy', '_publish_inventory'):
+        monkeypatch.setattr(client, name, lambda *args: None)
+    assert client._ws_session({}) == 'revoked'
+
+
+def test_revocation_seen_in_poll_mode_stops_the_loop(config_dir, monkeypatch):
+    """_poll_session reports 'revoked'; the loop must write the state and stop,
+    not fall through and re-probe the websocket forever (the 2026-09-12 lab
+    run: a panel behind the code-stripping edge never observed revocation)."""
+    _fake_config(monkeypatch)
+    monkeypatch.setattr(connect_client.RelayClient, '_ws_session',
+                        lambda self, cfg: 'refused:relay_unreachable')
+    monkeypatch.setattr(connect_client.RelayClient, '_poll_session',
+                        lambda self, cfg, retry_at: 'revoked')
+    client = connect_client.RelayClient()
+    client.start()
+    client._thread.join(timeout=5)
+    assert not client._thread.is_alive()
+    assert connect_client._read_state_file()['state'] == 'revoked'
