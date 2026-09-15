@@ -42,9 +42,11 @@ class LogService:
             # Resolve the absolute path to prevent traversal attacks
             real_path = os.path.realpath(filepath)
 
-            # Check if the path starts with any allowed directory
+            # Compare whole path segments, the way FileService.is_path_allowed
+            # does. A bare startswith is a text test, not a containment test:
+            # '/opt-private' would pass on the strength of the root '/opt'.
             for allowed_dir in cls.ALLOWED_LOG_DIRECTORIES:
-                if real_path.startswith(allowed_dir):
+                if real_path == allowed_dir or real_path.startswith(allowed_dir + os.sep):
                     return True
 
             return False

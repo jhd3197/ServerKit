@@ -27,6 +27,13 @@ release history; historical `agent-v*` tags are not panel releases.
   official template registry's CI holds every template to the installer's
   rules before a merge publishes it.
 
+### Fixed
+
+- Hold the log viewer to its allowed directories. A folder whose name only
+  begins with an allowed root, such as `/opt-private` next to `/opt`, was
+  treated as though it sat inside that root and could be read, searched and
+  cleared through the Log Files tab.
+
 ## [1.11.4] - 2026-09-12
 
 Covers the 1.11.1 through 1.11.3 version bumps, which shipped only as dev
