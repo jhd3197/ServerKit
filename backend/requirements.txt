@@ -15,7 +15,7 @@ Flask-Migrate==4.0.7
 
 # Authentication
 Flask-JWT-Extended==4.6.0
-PyJWT==2.13.0
+PyJWT==2.15.0
 
 # CORS
 Flask-Cors==6.0.2
