@@ -13,7 +13,7 @@ debt. Regenerate with `python scripts/generate-migration-inventory.py`.
 | Concern | Door | Remaining | Ceiling | Policy |
 |---|---|---:|---:|---|
 | Identity lookups outside rbac.get_current_user() | rbac.get_current_user() | 69 | 69 | JWT-only routes; the API-key-capable population is held at 0 by a companion assertion |
-| Routes on bare @jwt_required() | auth_required() / role decorators | 601 | 601 | REGISTERED EXCEPTION: JWT-only is the deliberate default; conversion grants API-key access and happens per route, on decision |
+| Routes on bare @jwt_required() | auth_required() / role decorators | 600 | 600 | REGISTERED EXCEPTION: JWT-only is the deliberate default; conversion grants API-key access and happens per route, on decision |
 | HTTP statuses chosen by sniffing error text | typed errors from app.exceptions | 0 | 0 | INVARIANT at 0 - migration completed 2026-08-19 |
 | API crashes swallowed without recording | app.error_reporting | 0 | 0 | INVARIANT at 0 |
 | Hand-shaped {'error': ...} bodies in app/api | typed errors + the global handler | 1132 | 1150 | migrate when touched; new endpoints raise |

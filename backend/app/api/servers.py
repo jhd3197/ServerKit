@@ -24,7 +24,8 @@ from app.services.remote_command_dispatcher import dispatch_agent_command
 from app.services.agent_fleet_service import fleet_service
 from app.services.discovery_service import discovery_service
 from app.services import connection_string as connection_string_codec
-from app.middleware.rbac import admin_required, developer_required, get_current_user
+from app.middleware.rbac import admin_required, auth_required, developer_required, get_current_user
+from app.middleware.api_scope_middleware import require_scope
 from app.exceptions import ValidationError
 
 
@@ -258,9 +259,15 @@ def delete_group(group_id):
 # ==================== Servers ====================
 
 @servers_bp.route('', methods=['GET'])
-@jwt_required()
+@auth_required()
+@require_scope('servers:read')
 def list_servers():
-    """List all servers"""
+    """List all servers.
+
+    API-key capable by deliberate decision (jwt_only_census exception):
+    a Vela host holds one scoped ServerKit key and polls this route, so
+    an X-API-Key with the servers:read scope is accepted alongside JWT.
+    """
     # Query parameters
     group_id = request.args.get('group_id')
     status = request.args.get('status')

@@ -20,6 +20,14 @@ release history; historical `agent-v*` tags are not panel releases.
 
 ## [Unreleased]
 
+### Added
+
+- `GET /api/v1/servers` now accepts an API key (`X-API-Key`) carrying the
+  `servers:read` scope, in addition to the usual JWT, so external tools can
+  poll the server list read-only without a short-lived token. JWT callers are
+  unaffected; keys without the scope are refused. The Agent GUI extension's
+  read routes (`capabilities`, `frame`, `surface`) accept the same scope.
+
 ### Security
 
 - Require a one-time setup code to create the first administrator, so reaching
