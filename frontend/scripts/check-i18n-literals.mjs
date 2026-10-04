@@ -2,12 +2,19 @@
 // Plan 79 D3 ratchet — untranslated user-visible copy.
 //
 // Counts string literals that a user can READ and that are not addressed by a
-// translation key. Four shapes, because copy escapes into all four:
+// translation key. Five shapes, because copy escapes into all five:
 //
 //   1. JSX text nodes            <p>No applications yet</p>
 //   2. JSX copy attributes       <Input placeholder="Search apps" />
 //   3. Toast / confirm arguments toast.error('Failed to save')
 //   4. Copy keys in data objects { label: 'Applications' }   <- sidebarItems.js
+//   5. Inline alternatives       {saving ? 'Saving…' : 'Save'}  {`${n} services`}
+//
+// Shapes 4 and 5 look through the expression to the strings a user can end
+// up reading: both arms of a ternary, the fallback of `a || 'Unknown'`, the
+// right side of `ok && 'Ready'`, and the text of a template literal (its
+// `${}` holes stand in as {{x}}). The CONDITION of a ternary is not read --
+// `status === 'Running' ? ...` compares a value, it does not show one.
 //
 // Shape 4 is the one that usually escapes an extraction pass: a label sitting
 // in a data file is still copy, and if it is resolved at module load it also
@@ -28,6 +35,7 @@
 //   node scripts/check-i18n-literals.mjs --report --file src/pages/Apps.jsx
 //   node scripts/check-i18n-literals.mjs --update    # write the current count
 
+import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -180,9 +188,7 @@ function collectStrings(node, out) {
         return;
     }
     if (node.type === 'TemplateLiteral') {
-        for (const quasi of node.quasis) {
-            if (quasi.value.cooked) out.push({ ...quasi, value: quasi.value.cooked });
-        }
+        out.push({ loc: node.loc, value: templateText(node) });
         for (const expr of node.expressions) collectStrings(expr, out);
         return;
     }
@@ -191,6 +197,46 @@ function collectStrings(node, out) {
         collectStrings(node[key], out);
     }
 }
+
+// A template literal read as one sentence: `${n} services` is the copy
+// "{{x}} services", not the lone word "services" (which isCopy would drop as
+// a bare lowercase token).
+const HOLE = '{{x}}';
+function templateText(node) {
+    return node.quasis.map((quasi) => quasi.value.cooked ?? quasi.value.raw).join(HOLE);
+}
+
+/**
+ * The strings a user can end up READING out of an expression, without the
+ * ones it merely computes with. Ternaries yield both arms (never the test);
+ * `a || 'x'` and `a ?? 'x'` yield both sides; `ok && 'x'` only the right one;
+ * a template literal yields its text. Calls (t() included), member reads and
+ * JSX stop the walk -- JSX is visited on its own terms.
+ */
+function leafStrings(node, out) {
+    if (!node) return;
+    switch (node.type) {
+        case 'Literal':
+            if (typeof node.value === 'string') out.push(node);
+            return;
+        case 'TemplateLiteral':
+            out.push({ loc: node.loc, value: templateText(node) });
+            for (const expr of node.expressions) leafStrings(expr, out);
+            return;
+        case 'ConditionalExpression':
+            leafStrings(node.consequent, out);
+            leafStrings(node.alternate, out);
+            return;
+        case 'LogicalExpression':
+            if (node.operator !== '&&') leafStrings(node.left, out);
+            leafStrings(node.right, out);
+            return;
+        default:
+            return;
+    }
+}
+
+const INLINE_SHAPES = new Set(['ConditionalExpression', 'LogicalExpression', 'TemplateLiteral', 'Literal']);
 
 function censusFile(path, rel) {
     const source = readFileSync(path, 'utf8');
@@ -215,6 +261,8 @@ function censusFile(path, rel) {
     const keyed = new WeakSet();
     const record = (node, kind, value) => {
         const text = String(value).trim().replace(/\s+/g, ' ');
+        // `${a} ${b}` is all holes: nothing in it is copy of its own.
+        if (text.includes(HOLE) && !/[A-Za-z]{2,}/.test(text.split(HOLE).join(' '))) return;
         if (!isCopy(text)) return;
         hits.push({ line: node.loc?.start.line ?? 0, kind, text: text.slice(0, 70) });
     };
@@ -237,6 +285,20 @@ function censusFile(path, rel) {
                 record(node, 'text', node.value);
                 break;
 
+            // 5. Inline alternatives rendered as a child:
+            //    {saving ? 'Saving…' : 'Save'}   {`${n} services`}   {err || 'Failed'}
+            //    Attribute values are not children; shape 2 owns those.
+            case 'JSXElement':
+            case 'JSXFragment':
+                for (const child of node.children) {
+                    if (child.type !== 'JSXExpressionContainer') continue;
+                    if (!INLINE_SHAPES.has(child.expression?.type)) continue;
+                    const strings = [];
+                    leafStrings(child.expression, strings);
+                    for (const literal of strings) record(literal, 'expr', literal.value);
+                }
+                break;
+
             // 2. JSX copy attributes.
             case 'JSXAttribute': {
                 const name = attributeName(node);
@@ -245,7 +307,13 @@ function censusFile(path, rel) {
                         record(node, 'prop', node.value.value);
                     } else if (node.value.type === 'JSXExpressionContainer') {
                         const strings = [];
-                        collectStrings(node.value.expression, strings);
+                        // A ternary's test is a comparison, not copy:
+                        // title={status === 'Running' ? t(...) : t(...)}.
+                        if (INLINE_SHAPES.has(node.value.expression?.type)) {
+                            leafStrings(node.value.expression, strings);
+                        } else {
+                            collectStrings(node.value.expression, strings);
+                        }
                         for (const literal of strings) record(literal, 'prop', literal.value);
                     }
                     // Value handled; keep descending for nested JSX only.
@@ -299,6 +367,13 @@ function censusFile(path, rel) {
                     record(node, 'data', node.value.value);
                     return;
                 }
+                // { label: busy ? 'Saving…' : 'Save' }, { title: `Delete ${name}` }
+                if (key && COPY_KEYS.has(key) && INLINE_SHAPES.has(node.value?.type)) {
+                    const strings = [];
+                    leafStrings(node.value, strings);
+                    for (const literal of strings) record(literal, 'data', literal.value);
+                    // Keep descending: an arm may hold JSX or a t() call.
+                }
                 break;
             }
 
@@ -316,11 +391,34 @@ function censusFile(path, rel) {
     return hits;
 }
 
+/**
+ * Extension copies under plugins/ that git does not track: a sibling repo's
+ * build dropped into a dev checkout. They are censused in their own repo
+ * (`--root`), and counting them here made the host number depend on which
+ * extensions a machine happens to have installed -- a fresh clone could never
+ * reach a ceiling written on a dev box. Null when git is unavailable (release
+ * tarball): then everything on disk is counted.
+ */
+function trackedPluginDirs() {
+    if (rootArg) return null;
+    try {
+        const out = execFileSync('git', ['ls-files', '--', 'plugins'], {
+            cwd: srcDir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'],
+        });
+        return new Set(out.split('\n').filter(Boolean).map((line) => line.split('/')[1]));
+    } catch {
+        return null;
+    }
+}
+
 export function census() {
     const byFile = new Map();
+    const tracked = trackedPluginDirs();
     for (const path of walkFiles(srcDir)) {
         const rel = relative(srcDir, path).replaceAll('\\', '/');
         if (SKIP_PATH.test(rel)) continue;
+        const parts = rel.split('/');
+        if (tracked && parts[0] === 'plugins' && parts.length > 2 && !tracked.has(parts[1])) continue;
         const hits = censusFile(path, rel);
         if (hits.length) byFile.set(rel, hits);
     }
