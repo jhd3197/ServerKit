@@ -829,22 +829,6 @@ h3.svc-eyebrow {
         .form-hint { margin: 0; }
     }
 
-    // Editable label + fixed base-domain suffix inside the publish modal.
-    .svc-subdomain-input {
-        display: flex;
-        align-items: center;
-        gap: $space-2;
-
-        input { flex: 1; min-width: 0; }
-
-        &__suffix {
-            font-family: var(--mono);
-            font-size: $font-size-sm;
-            color: var(--text-dim);
-            white-space: nowrap;
-        }
-    }
-
     .ssl-checklist {
         display: flex;
         flex-direction: column;
@@ -883,26 +867,6 @@ h3.svc-eyebrow {
         border-top: 1px solid var(--border-soft);
     }
 
-    .ssl-context {
-        display: flex;
-        flex-direction: column;
-        gap: $space-2;
-    }
-
-    .ssl-context-links {
-        display: flex;
-        align-items: center;
-        gap: $space-2;
-        font-size: $font-size-xs;
-        color: var(--text-faint);
-
-        a {
-            color: var(--accent-bright);
-            text-decoration: none;
-
-            &:hover { text-decoration: underline; }
-        }
-    }
 }
 
 // ============================================

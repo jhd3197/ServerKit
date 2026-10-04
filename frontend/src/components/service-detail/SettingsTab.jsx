@@ -15,7 +15,6 @@ import {
     Gauge,
     CircleCheck,
     CircleX,
-    Sparkles,
     Zap,
     HeartPulse,
 } from 'lucide-react';
@@ -35,6 +34,8 @@ import AppWafPanel from '../apps/AppWafPanel';
 import BuildTab from '../appdetail/BuildTab';
 import DeployTab from '../appdetail/DeployTab';
 import Modal from '@/components/Modal';
+import DomainField from '@/components/DomainField';
+import { attachDomain } from '@/services/attachDomain';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -468,10 +469,11 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
     const [health, setHealth] = useState(null);
     const [checking, setChecking] = useState(false);
     const [issuing, setIssuing] = useState(false);
-    const [domainInput, setDomainInput] = useState('');
+    // What DomainField last reported: the hostname ('' until valid) and
+    // whether it is a managed subdomain or the user's own domain.
+    const [newDomain, setNewDomain] = useState({ name: '', info: null });
     const [attaching, setAttaching] = useState(false);
-    const [serverkitDomains, setServerkitDomains] = useState([]);
-    const [contextLoading, setContextLoading] = useState(true);
+    const [addOpen, setAddOpen] = useState(false);
     // localStorage seeds the field instantly (no flash on a page the user has
     // used before); the panel-wide contact fills it in when this browser has
     // no copy — which is the case the Domains modal shares.
@@ -494,16 +496,6 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // "Give it a subdomain" — publish the app at a managed <label>.<base> host.
-    const [subdomainModal, setSubdomainModal] = useState(null); // { base_domain, dns_mode }
-    const [subdomainLabel, setSubdomainLabel] = useState('');
-    const [suggesting, setSuggesting] = useState(false);
-    const [publishing, setPublishing] = useState(false);
-    // Base domains the app can be published under, and the chosen one, so a
-    // multi-base install can pick which domain the subdomain lives on.
-    const [subdomainBases, setSubdomainBases] = useState([]);
-    const [subdomainBase, setSubdomainBase] = useState('');
-
     const isPublicDomain = !!primaryDomain
         && !/^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(primaryDomain)
         && primaryDomain.includes('.');
@@ -525,90 +517,26 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
         return () => { cancelled = true; };
     }, [primaryDomain]);
 
-    useEffect(() => {
-        let cancelled = false;
-        (async () => {
-            setContextLoading(true);
-            try {
-                const domainsRes = await api.getDomains().then(d => d.domains || []).catch(() => []);
-                if (!cancelled) setServerkitDomains(domainsRes);
-            } finally {
-                if (!cancelled) setContextLoading(false);
-            }
-        })();
-        return () => { cancelled = true; };
-    }, []);
-
-    async function handleAttachDomain(e) {
+    async function handleAddDomain(e) {
         e?.preventDefault();
-        const name = domainInput.trim();
-        if (!name) { toast.error(t('app.settingsTab.enterADomainName', 'Enter a domain name')); return; }
-        if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(name)) { toast.error(t('app.settingsTab.enterAValidDomainName', 'Enter a valid domain name')); return; }
-
+        const { name, info } = newDomain;
+        if (!name) return;
         setAttaching(true);
         try {
-            const res = await api.createDomain({
-                name,
-                application_id: app.id,
-                is_primary: domains.length === 0,
-                ssl_enabled: false,
-            });
-            toast.success(res.message || t('app.settingsTab.domainAttached', 'Domain attached'));
+            const res = await attachDomain(app.id, name, info, { isPrimary: domains.length === 0 });
+            if (res.warning) toast.warning(res.warning);
+            toast.success(res.url
+                ? t('app.settingsTab.publishedAt', 'Published at {{url}}', { url: res.url })
+                : res.message || t('app.settingsTab.domainAttached', 'Domain attached'));
             window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
                 detail: { type: 'service-domain-attached' },
             }));
-            setDomainInput('');
+            setAddOpen(false);
             onUpdate();
         } catch (err) {
             toast.error(err.message || t('app.settingsTab.failedToAttachDomain', 'Failed to attach domain'));
         } finally {
             setAttaching(false);
-        }
-    }
-
-    async function handleSuggestSubdomain() {
-        setSuggesting(true);
-        try {
-            const [suggestRes, basesRes] = await Promise.all([
-                api.suggestSubdomain(app.id),
-                api.getSiteBaseDomains().catch(() => ({ base_domains: [], default: null })),
-            ]);
-            if (!suggestRes.base_domain) {
-                toast.info(t('app.settingsTab.setAManagedSitesBaseDomain', 'Set a managed-sites base domain in Settings → Sites to publish on a subdomain.'), 6000);
-                return;
-            }
-            const bases = basesRes.base_domains || [];
-            const chosen = basesRes.default || suggestRes.base_domain;
-            // Prefill the editable label from the suggestion (<label>.<base>).
-            const suggestedLabel = (suggestRes.suggestion || '').replace(`.${suggestRes.base_domain}`, '');
-            setSubdomainLabel(suggestedLabel);
-            setSubdomainBases(bases);
-            setSubdomainBase(chosen);
-            setSubdomainModal({ base_domain: chosen, dns_mode: suggestRes.dns_mode });
-        } catch (err) {
-            toast.error(err.message || t('app.settingsTab.failedToSuggestASubdomain', 'Failed to suggest a subdomain'));
-        } finally {
-            setSuggesting(false);
-        }
-    }
-
-    async function handleGiveSubdomain() {
-        setPublishing(true);
-        try {
-            const res = await api.giveSubdomain(app.id, subdomainLabel.trim(), subdomainBase || undefined);
-            if (res.success) {
-                if (res.warning) toast.warning(res.warning);
-                toast.success(res.url ? t('app.settingsTab.publishedAt', 'Published at {{url}}', { url: res.url }) : t('app.settingsTab.subdomainPublished', 'Subdomain published'));
-                setSubdomainModal(null);
-                setSubdomainLabel('');
-                onUpdate();
-            } else {
-                toast.error(res.error || t('app.settingsTab.failedToPublishSubdomain', 'Failed to publish subdomain'));
-            }
-        } catch (err) {
-            toast.error(err.message || t('app.settingsTab.failedToPublishSubdomain', 'Failed to publish subdomain'));
-        } finally {
-            setPublishing(false);
         }
     }
 
@@ -648,7 +576,6 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
     }
 
     const issued = health?.valid;
-    const attachValid = /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(domainInput.trim());
 
     const CheckItem = ({ ok, label }) => (
         <div className="ssl-check-item">
@@ -687,54 +614,29 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
                 )}
             </div>
 
-            {/* One-click publish at a managed subdomain (<slug>.<base>). Works
-                whether or not a domain is already attached. */}
-            <div className="svc-give-subdomain">
-                <Button variant="outline" onClick={handleSuggestSubdomain} disabled={suggesting}>
-                    <Sparkles size={14} />
-                    {suggesting ? 'Checking…' : 'Give it a subdomain'}
-                </Button>
-                <span className="form-hint">{t('app.settingsTab.publishThisServiceAtAServerkit', 'Publish this service at a ServerKit-managed subdomain.')}</span>
-            </div>
+            {primaryDomain && (
+                <div className="svc-give-subdomain">
+                    <Button variant="outline" onClick={() => setAddOpen(true)}>
+                        <Globe size={14} />
+                        {t('app.settingsTab.addADomain', 'Add a domain')}
+                    </Button>
+                </div>
+            )}
 
             {!primaryDomain ? (
                 <div className="ssl-guide">
                     <p className="hint">{t('app.settingsTab.noDomainIsAttachedToThis', 'No domain is attached to this service yet. Add one to expose it on a public URL and enable HTTPS.')}</p>
-                    <form className="ssl-inline-attach" onSubmit={handleAttachDomain} data-walkthrough="service-domain-attach">
-                        {contextLoading ? (
-                            <p className="hint">{t('app.settingsTab.loadingAvailableDomains', 'Loading available domains…')}</p>
-                        ) : (
-                            <div className="ssl-context">
-                                <div className="ssl-context-links">
-                                    <Link to="/domains">{t('app.settingsTab.manageDomains', 'Manage domains')}</Link>
-                                </div>
-                            </div>
-                        )}
-                        <div className="form-group">
-                            <Label>{t('common.labels.domain', 'Domain')}</Label>
-                            <Input
-                                type="text"
-                                value={domainInput}
-                                onChange={(e) => setDomainInput(e.target.value)}
-                                placeholder="example.com"
-                                disabled={attaching}
-                                list="svc-existing-domains"
-                            />
-                            <datalist id="svc-existing-domains">
-                                {serverkitDomains
-                                    .filter(d => !domains.some(ad => ad.name === d.name))
-                                    .map(d => (
-                                        <option key={d.id} value={d.name}>
-                                            {d.ssl_enabled ? 'SSL enabled' : 'No SSL'}
-                                        </option>
-                                    ))}
-                            </datalist>
-                            <span className="form-hint">{t('app.settingsTab.pickAnExistingServerkitDomainOr', 'Pick an existing ServerKit domain or type one you control, without http://')}</span>
-                        </div>
+                    <form className="ssl-inline-attach" onSubmit={handleAddDomain} data-walkthrough="service-domain-attach">
+                        <DomainField
+                            defaultLabel={app.name}
+                            exclude={domains.map((d) => d.name)}
+                            onChange={(name, info) => setNewDomain({ name, info })}
+                            disabled={attaching}
+                        />
                         <div className="app-detail-actions">
-                            <Button type="submit" disabled={!attachValid || attaching}>
+                            <Button type="submit" disabled={!newDomain.name || attaching}>
                                 <Globe size={14} />
-                                {attaching ? 'Attaching…' : 'Attach Domain'}
+                                {attaching ? t('app.settingsTab.attaching', 'Attaching…') : t('app.settingsTab.attachDomain', 'Attach domain')}
                             </Button>
                         </div>
                     </form>
@@ -783,61 +685,28 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
             )}
 
             <Modal
-                open={!!subdomainModal}
-                onClose={() => setSubdomainModal(null)}
-                title={t('app.settingsTab.giveItASubdomain', 'Give it a subdomain')}
+                open={addOpen}
+                onClose={() => setAddOpen(false)}
+                title={t('app.settingsTab.addADomain', 'Add a domain')}
             >
-                {subdomainModal && (
-                    <>
+                {addOpen && (
+                    <form onSubmit={handleAddDomain}>
                         <div className="modal-body">
-                            <p className="hint">
-                                {t('common.actions.publish', 'Publish')} <strong>{app.name}</strong> {t('app.settingsTab.atAManagedSubdomainOf', 'at a managed subdomain of')}{' '}
-                                <code>{subdomainBase || subdomainModal.base_domain}</code>.
-                            </p>
-                            {subdomainBases.length > 1 && (
-                                <div className="form-group">
-                                    <Label>{t('app.settingsTab.baseDomain', 'Base domain')}</Label>
-                                    <select
-                                        className="settings-select"
-                                        value={subdomainBase}
-                                        onChange={(e) => setSubdomainBase(e.target.value)}
-                                        disabled={publishing}
-                                    >
-                                        {subdomainBases.map((b) => (
-                                            <option key={b.domain} value={b.domain}>
-                                                {b.domain}{b.is_default ? ' (default)' : ''}{b.https_enabled ? ' — HTTPS' : ''}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <span className="form-hint">{t('app.settingsTab.whichRegisteredBaseDomainToPublish', 'Which registered base domain to publish this service under.')}</span>
-                                </div>
-                            )}
-                            <div className="form-group">
-                                <Label>{t('app.settingsTab.subdomain', 'Subdomain')}</Label>
-                                <div className="svc-subdomain-input">
-                                    <Input
-                                        type="text"
-                                        value={subdomainLabel}
-                                        onChange={(e) => setSubdomainLabel(e.target.value)}
-                                        placeholder="my-app"
-                                        disabled={publishing}
-                                    />
-                                    <span className="svc-subdomain-input__suffix">.{subdomainBase || subdomainModal.base_domain}</span>
-                                </div>
-                                <span className="form-hint">
-                                    {(subdomainBases.find((b) => b.domain === subdomainBase)?.dns_mode || subdomainModal.dns_mode) === 'wildcard'
-                                        ? 'Wildcard DNS is configured — this resolves instantly, no record needed.'
-                                        : 'Per-site mode — a DNS record will be created for this host.'}
-                                </span>
-                            </div>
+                            <DomainField
+                                defaultLabel={app.name}
+                                exclude={domains.map((d) => d.name)}
+                                onChange={(name, info) => setNewDomain({ name, info })}
+                                disabled={attaching}
+                                autoFocus
+                            />
                         </div>
                         <div className="modal-footer">
-                            <Button variant="outline" onClick={() => setSubdomainModal(null)} disabled={publishing}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button onClick={handleGiveSubdomain} disabled={publishing || !subdomainLabel.trim()}>
-                                {publishing ? 'Publishing…' : 'Publish'}
+                            <Button type="button" variant="outline" onClick={() => setAddOpen(false)} disabled={attaching}>{t('common.actions.cancel', 'Cancel')}</Button>
+                            <Button type="submit" disabled={!newDomain.name || attaching}>
+                                {attaching ? t('app.settingsTab.attaching', 'Attaching…') : t('app.settingsTab.attachDomain', 'Attach domain')}
                             </Button>
                         </div>
-                    </>
+                    </form>
                 )}
             </Modal>
         </SharedCard>

@@ -68,6 +68,7 @@
 @import 'components/_connection-status';
 @import 'components/_detail-tabs';
 @import 'components/_server-selector';
+@import 'components/_domain-field';     // shared domain input (DomainField.jsx)
 @import 'components/_schedule-picker';   // shared cron picker (CronJobs, Backups, server-detail)
 @import 'components/_contribution-graph';
 @import 'components/_command-palette';

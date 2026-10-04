@@ -9,6 +9,8 @@ import { useToast } from '../contexts/useToast.js';
 import { useAuth } from '../contexts/useAuth.js';
 import EmptyState from '../components/EmptyState';
 import Modal from '@/components/Modal';
+import DomainField from '@/components/DomainField';
+import { attachDomain } from '@/services/attachDomain';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -150,7 +152,10 @@ const Domains = () => {
     const [selectedDomain, setSelectedDomain] = useState(null);
 
     // Form states
+    // What DomainField last reported: the hostname ('' until valid) and
+    // whether it is a managed subdomain or the user's own domain.
     const [domainName, setDomainName] = useState('');
+    const [domainInfo, setDomainInfo] = useState(null);
     const [selectedAppId, setSelectedAppId] = useState('');
     const [isPrimary, setIsPrimary] = useState(false);
     const [sslEmail, setSslEmail] = useState('');
@@ -223,13 +228,10 @@ const Domains = () => {
     async function handleAddDomain(e) {
         e.preventDefault();
         if (!domainName || !selectedAppId) return;
+        const appId = parseInt(selectedAppId, 10);
         try {
             setActionLoading(true);
-            await api.createDomain({
-                name: domainName,
-                application_id: parseInt(selectedAppId, 10),
-                is_primary: isPrimary,
-            });
+            await attachDomain(appId, domainName, domainInfo, { isPrimary });
             setShowAddModal(false);
             setDomainName('');
             setSelectedAppId('');
@@ -871,10 +873,6 @@ const Domains = () => {
             <Modal open={showAddModal} onClose={() => setShowAddModal(false)} title={t('app.domains.addDomain2', 'Add Domain')}>
                 <form onSubmit={handleAddDomain}>
                     <div className="form-group">
-                        <Label>{t('app.domains.domainName', 'Domain Name')}</Label>
-                        <Input type="text" placeholder="example.com" value={domainName} onChange={e => setDomainName(e.target.value)} required />
-                    </div>
-                    <div className="form-group">
                         <Label>{t('app.domains.application', 'Application')}</Label>
                         <Select value={selectedAppId} onValueChange={setSelectedAppId} required>
                             <SelectTrigger><SelectValue placeholder={t('app.domains.selectAnApplication', 'Select an application')} /></SelectTrigger>
@@ -886,14 +884,26 @@ const Domains = () => {
                         </Select>
                     </div>
                     <div className="form-group">
-                        <label className="checkbox-label">
-                            <Checkbox checked={isPrimary} onCheckedChange={setIsPrimary} />
-                            {t('app.domains.setAsPrimaryDomain', 'Set as primary domain')}
-                        </label>
+                        <Label>{t('common.labels.domain', 'Domain')}</Label>
+                        {showAddModal && (
+                            <DomainField
+                                exclude={domains.map((d) => d.name)}
+                                onChange={(name, info) => { setDomainName(name); setDomainInfo(info); }}
+                                disabled={actionLoading}
+                            />
+                        )}
                     </div>
+                    {domainInfo?.mode !== 'subdomain' && (
+                        <div className="form-group">
+                            <label className="checkbox-label">
+                                <Checkbox checked={isPrimary} onCheckedChange={setIsPrimary} />
+                                {t('app.domains.setAsPrimaryDomain', 'Set as primary domain')}
+                            </label>
+                        </div>
+                    )}
                     <div className="modal-actions">
                         <Button type="button" variant="outline" onClick={() => setShowAddModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button type="submit" disabled={actionLoading}>{actionLoading ? 'Adding...' : 'Add Domain'}</Button>
+                        <Button type="submit" disabled={actionLoading || !domainName || !selectedAppId}>{actionLoading ? 'Adding...' : 'Add Domain'}</Button>
                     </div>
                 </form>
             </Modal>
