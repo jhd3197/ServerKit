@@ -111,7 +111,7 @@ const SetupStepAccount = ({ onComplete }) => {
                         className="btn-wizard-next btn-wizard-next--block"
                         disabled={loading}
                     >
-                        {loading ? 'Signing in...' : 'Sign In & Continue'}
+                        {loading ? t('app.setupStepAccount.signingIn', 'Signing in…') : t('app.setupStepAccount.signInAndContinue', 'Sign in and continue')}
                     </SharedButton>
                 </form>
             </div>
@@ -209,7 +209,7 @@ const SetupStepAccount = ({ onComplete }) => {
                     className="btn-wizard-next btn-wizard-next--block"
                     disabled={loading}
                 >
-                    {loading ? 'Creating account...' : 'Continue'}
+                    {loading ? t('app.setupStepAccount.creatingAccount', 'Creating account…') : t('common.actions.continue', 'Continue')}
                 </SharedButton>
             </form>
         </div>

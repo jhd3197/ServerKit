@@ -190,7 +190,7 @@ export default function WebhooksTab() {
                                             <TableCell className="settings-webhook-name">{ep.name}</TableCell>
                                             <TableCell>{ep.slug}</TableCell>
                                             <TableCell>{ep.forward_url || '—'}</TableCell>
-                                            <TableCell><Badge variant={ep.is_active ? 'default' : 'secondary'}>{ep.is_active ? 'Active' : 'Inactive'}</Badge></TableCell>
+                                            <TableCell><Badge variant={ep.is_active ? 'default' : 'secondary'}>{ep.is_active ? t('app.webhooksTab.active', 'Active') : t('app.webhooksTab.inactive', 'Inactive')}</Badge></TableCell>
                                             <TableCell className="settings-webhook-actions">
                                                 <DropdownMenu>
                                                     <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
@@ -245,7 +245,7 @@ export default function WebhooksTab() {
                                         <TableRow key={d.id}>
                                             <TableCell className="settings-webhook-event-id">{d.event_id}</TableCell>
                                             <TableCell><WebhookStatusBadge status={d.status} /></TableCell>
-                                            <TableCell>{d.signature_valid === true ? 'Valid' : d.signature_valid === false ? 'Invalid' : '—'}</TableCell>
+                                            <TableCell>{d.signature_valid === true ? t('app.webhooksTab.valid', 'Valid') : d.signature_valid === false ? t('app.webhooksTab.invalid', 'Invalid') : '—'}</TableCell>
                                             <TableCell>{formatDate(d.received_at)}</TableCell>
                                             <TableCell className="settings-webhook-actions">
                                                 <Button variant="ghost" size="icon" onClick={() => replayDelivery(d.id)} title={t('app.webhooksTab.replay', 'Replay')}>

@@ -316,14 +316,14 @@ const NotificationsTab = () => {
                     onClick={handleTestUserNotification}
                     disabled={testing === 'user' || !userPrefs.enabled}
                 >
-                    {testing === 'user' ? 'Sending...' : 'Send Test Notification'}
+                    {testing === 'user' ? t('app.notificationsTab.sending', 'Sending…') : t('app.notificationsTab.sendTestNotification', 'Send test notification')}
                 </Button>
                 <Button
                     variant="default"
                     onClick={handleSaveUserPrefs}
                     disabled={saving}
                 >
-                    {saving ? 'Saving...' : 'Save Preferences'}
+                    {saving ? t('common.saving', 'Saving…') : t('app.notificationsTab.savePreferences', 'Save preferences')}
                 </Button>
             </div>
         </div>
@@ -406,7 +406,7 @@ const NotificationsTab = () => {
                             </div>
                             <div className="channel-status">
                                 <Badge variant={config[channel.id]?.enabled ? 'success' : 'secondary'}>
-                                    {config[channel.id]?.enabled ? 'Enabled' : 'Disabled'}
+                                    {config[channel.id]?.enabled ? t('app.notificationsTab.enabled', 'Enabled') : t('app.notificationsTab.disabled', 'Disabled')}
                                 </Badge>
                                 <svg
                                     viewBox="0 0 24 24"
@@ -645,14 +645,14 @@ const NotificationsTab = () => {
                                         onClick={() => handleTestChannel(channel.id)}
                                         disabled={testing === channel.id || !config[channel.id]?.enabled}
                                     >
-                                        {testing === channel.id ? 'Testing...' : 'Send Test'}
+                                        {testing === channel.id ? t('app.notificationsTab.testing', 'Testing…') : t('app.notificationsTab.sendTest', 'Send test')}
                                     </Button>
                                     <Button
                                         variant="default"
                                         onClick={() => handleSaveChannel(channel.id)}
                                         disabled={saving}
                                     >
-                                        {saving ? 'Saving...' : 'Save'}
+                                        {saving ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                                     </Button>
                                 </div>
                             </div>

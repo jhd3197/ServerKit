@@ -63,15 +63,15 @@ const SetupStepCapacity = ({ useCases, onComplete }) => {
         const items = [
             {
                 icon: Cpu,
-                label: `${specs.cpu_cores} core${specs.cpu_cores > 1 ? 's' : ''}`,
+                label: t('app.setupStepCapacity.cpuCores', { count: specs.cpu_cores, defaultValue_one: '1 core', defaultValue_other: '{{count}} cores' }),
             },
             {
                 icon: MemoryStick,
-                label: `${specs.total_memory_gb} GB RAM`,
+                label: t('app.setupStepCapacity.memoryGb', '{{value}} GB RAM', { value: specs.total_memory_gb }),
             },
         ];
         if (specs.disk_free_gb != null) {
-            items.push({ icon: HardDrive, label: `${specs.disk_free_gb} GB disk free` });
+            items.push({ icon: HardDrive, label: t('app.setupStepCapacity.diskFreeGb', '{{value}} GB disk free', { value: specs.disk_free_gb }) });
         }
         return (
             <div className="capacity-specs">
@@ -83,7 +83,7 @@ const SetupStepCapacity = ({ useCases, onComplete }) => {
                 ))}
                 {specs.container && (
                     <span className="capacity-spec capacity-spec--muted">
-                        {specs.container} container
+                        {t('app.setupStepCapacity.containerRuntime', '{{name}} container', { name: specs.container })}
                     </span>
                 )}
             </div>
@@ -108,7 +108,7 @@ const SetupStepCapacity = ({ useCases, onComplete }) => {
 
             <div className="capacity-headline">
                 <div className="capacity-headline__summary">
-                    {headroom?.summary || 'Measuring available capacity...'}
+                    {headroom?.summary || t('app.setupStepCapacity.measuringAvailableCapacity', 'Measuring available capacity…')}
                 </div>
                 {renderSpecs()}
             </div>
@@ -204,7 +204,7 @@ const SetupStepCapacity = ({ useCases, onComplete }) => {
                     onClick={handleContinue}
                     disabled={saving}
                 >
-                    {saving ? 'Saving...' : 'Continue'}
+                    {saving ? t('common.saving', 'Saving…') : t('common.actions.continue', 'Continue')}
                 </SharedButton>
             </div>
         </div>

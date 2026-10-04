@@ -120,7 +120,7 @@ const TwoFactorPolicyCard = (props) => {
 
             <div className="form-actions">
                 <Button variant="default" onClick={handleSave} disabled={saving}>
-                    {saving ? 'Saving…' : 'Save policy'}
+                    {saving ? t('common.saving', 'Saving…') : t('app.twoFactorPolicyCard.savePolicy', 'Save policy')}
                 </Button>
                 {message && (
                     <span className={`timezone-message timezone-message--inline ${message.type}`}>

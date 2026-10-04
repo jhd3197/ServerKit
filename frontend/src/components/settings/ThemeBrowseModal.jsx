@@ -74,7 +74,7 @@ const ThemeBrowseModal = ({ open, onOpenChange }) => {
                 ) : themes.length === 0 ? (
                     <div className="theme-browse__state">
                         {t('app.themeBrowseModal.noCommunityThemesAvailableRightNow', 'No community themes available right now.')}
-                        {source === 'bundled' && ' (registry offline — showing bundled only)'}
+                        {source === 'bundled' && ` ${t('app.themeBrowseModal.registryOfflineShowingBundled', '(registry offline, showing bundled themes only)')}`}
                     </div>
                 ) : (
                     <div className="theme-browse__grid">

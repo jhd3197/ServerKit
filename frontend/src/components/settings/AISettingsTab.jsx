@@ -174,7 +174,7 @@ const AISettingsTab = () => {
 
                 <div className="settings-actions">
                     <Button variant="primary" onClick={handleSave} disabled={loadError || saving || toggling}>
-                        {saving ? 'Saving…' : 'Save'}
+                        {saving ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                     </Button>
                 </div>
             </div>

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { ProviderBrandIcon } from '../../icons/ProviderBrands';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
+import { translateLabel } from '../../../i18n/labels';
 
 export default function ProviderCard({ provider, summary, onManage }) {
     const { t } = useTranslation();
@@ -38,7 +39,7 @@ export default function ProviderCard({ provider, summary, onManage }) {
                     {summary.scopes?.length > 0 && (
                         <span className="conn-card__scopes">
                             {summary.scopes.map((s, i) => (
-                                <span key={i} className={`conn-pill conn-pill--${s.tone}`} title={s.hint}>{s.label}</span>
+                                <span key={i} className={`conn-pill conn-pill--${s.tone}`} title={translateLabel(t, s, 'hint')}>{translateLabel(t, s)}</span>
                             ))}
                         </span>
                     )}
@@ -48,7 +49,7 @@ export default function ProviderCard({ provider, summary, onManage }) {
             <div className="conn-card__actions">
                 {connected && summary.manageHref ? (
                     <Link className="conn-card__crosslink" to={summary.manageHref}>
-                        {summary.manageLabel || 'Open'} <ArrowUpRight size={14} />
+                        {summary.manageLabel || t('common.actions.open', 'Open')} <ArrowUpRight size={14} />
                     </Link>
                 ) : <span />}
 
@@ -58,7 +59,7 @@ export default function ProviderCard({ provider, summary, onManage }) {
                     <span className="conn-card__soon-tag">{t('app.providerCard.comingSoon', 'Coming soon')}</span>
                 ) : (
                     <Button variant={connected ? 'outline' : 'default'} size="sm" onClick={() => onManage(provider)}>
-                        {connected ? 'Manage' : 'Connect'}
+                        {connected ? t('app.providerCard.manage', 'Manage') : t('app.providerCard.connect', 'Connect')}
                         <ArrowRight size={15} />
                     </Button>
                 )}

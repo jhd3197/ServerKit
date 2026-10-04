@@ -434,7 +434,7 @@ const RateLimitsSection = () => {
 
             <div className="settings-card__footer">
                 <Button variant="default" onClick={handleSave} disabled={saving}>
-                    {saving ? 'Saving...' : 'Save Rate Limits'}
+                    {saving ? t('common.saving', 'Saving…') : t('app.apiSettingsTab.saveRateLimits', 'Save rate limits')}
                 </Button>
             </div>
         </div>
@@ -596,7 +596,7 @@ const WebhookSection = () => {
                                 </div>
                                 <div className="api-settings__webhook-controls">
                                     <Badge variant={sub.is_active ? 'success' : 'destructive'}>
-                                        {sub.is_active ? 'Active' : 'Inactive'}
+                                        {sub.is_active ? t('app.apiSettingsTab.active', 'Active') : t('app.apiSettingsTab.inactive', 'Inactive')}
                                     </Badge>
                                     {expandedId === sub.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                                 </div>

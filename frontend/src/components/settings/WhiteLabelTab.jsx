@@ -131,7 +131,7 @@ const WhiteLabelTab = () => {
                                     </div>
                                 ) : whiteLabel.mode === 'text_only' ? (
                                     <span className="brand-custom-text">
-                                        {whiteLabel.brandName || 'Brand'}
+                                        {whiteLabel.brandName || t('app.whiteLabelTab.brand', 'Brand')}
                                     </span>
                                 ) : (
                                     <>
@@ -143,7 +143,7 @@ const WhiteLabelTab = () => {
                                             )}
                                         </div>
                                         <span className="brand-custom-text">
-                                            {whiteLabel.brandName || 'Brand'}
+                                            {whiteLabel.brandName || t('app.whiteLabelTab.brand', 'Brand')}
                                         </span>
                                     </>
                                 )}

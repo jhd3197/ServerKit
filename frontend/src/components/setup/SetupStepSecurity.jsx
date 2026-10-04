@@ -164,7 +164,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                         onClick={handleEnable}
                         disabled={busy}
                     >
-                        {busy ? 'Starting...' : 'Enable two-factor'}
+                        {busy ? t('app.setupStepSecurity.starting', 'Starting…') : t('app.setupStepSecurity.enableTwoFactor', 'Enable two-factor')}
                     </Button>
                 </div>
             </div>
@@ -234,7 +234,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                         onClick={handleConfirm}
                         disabled={busy || code.length !== CODE_LENGTH}
                     >
-                        {busy ? 'Verifying...' : 'Verify and enable'}
+                        {busy ? t('app.setupStepSecurity.verifying', 'Verifying…') : t('app.setupStepSecurity.verifyAndEnable', 'Verify and enable')}
                     </Button>
                 </div>
             </div>
@@ -275,7 +275,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                     className="btn-wizard-next"
                     onClick={() => onComplete(true)}
                 >
-                    {savedCodes ? 'Continue' : 'I have saved these'}
+                    {savedCodes ? t('common.actions.continue', 'Continue') : t('app.setupStepSecurity.iHaveSavedThese', 'I have saved these')}
                 </Button>
             </div>
         </div>

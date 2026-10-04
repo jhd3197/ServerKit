@@ -164,7 +164,7 @@ const WebhookSubscriptionModal = ({ subscription, onClose, onSubmit }) => {
                             variant="default"
                             disabled={saving || !name.trim() || !url.trim() || selectedEvents.length === 0}
                         >
-                            {saving ? 'Saving...' : (subscription ? 'Update' : 'Create')}
+                            {saving ? t('common.saving', 'Saving…') : (subscription ? t('app.webhookSubscriptionModal.update', 'Update') : t('common.actions.create', 'Create'))}
                         </Button>
                     </div>
                 </form>

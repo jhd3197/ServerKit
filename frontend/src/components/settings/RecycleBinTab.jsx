@@ -174,7 +174,7 @@ export default function RecycleBinTab() {
                     <div>
                         <div className="sk-cell-dim">{when.toLocaleDateString()}</div>
                         <div className={`sk-cell-sub ${left <= 3 ? 'is-urgent' : ''}`}>
-                            {left > 0 ? `purges in ${left}d` : 'past retention'}
+                            {left > 0 ? t('app.recycleBinTab.purgesInDays', 'purges in {{days}}d', { days: left }) : t('app.recycleBinTab.pastRetention', 'past retention')}
                         </div>
                     </div>
                 );

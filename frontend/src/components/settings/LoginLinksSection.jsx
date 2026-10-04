@@ -175,8 +175,8 @@ const LoginLinksSection = ({ users, currentUserId }) => {
                                 <span className="login-links__item-user">{link.username}</span>
                                 <span className="login-links__item-meta">
                                     expires {formatExpiry(link.expires_at)}
-                                    {link.bound_ip ? ` · bound to ${link.bound_ip}` : ''}
-                                    {link.created_by ? ` · by ${link.created_by}` : ''}
+                                    {link.bound_ip ? ` · ${t('app.loginLinksSection.boundTo', 'bound to {{ip}}', { ip: link.bound_ip })}` : ''}
+                                    {link.created_by ? ` · ${t('app.loginLinksSection.createdBy', 'by {{name}}', { name: link.created_by })}` : ''}
                                 </span>
                             </div>
                             <Button

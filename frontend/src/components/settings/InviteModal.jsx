@@ -164,7 +164,7 @@ const InviteModal = ({ onClose, onCreated }) => {
                                         setShowPermissions(!showPermissions);
                                     }}
                                 >
-                                    {showPermissions ? 'Hide' : 'Customize'} {t('common.labels.permissions', 'Permissions')}
+                                    {showPermissions ? t('app.inviteModal.hide', 'Hide') : t('app.inviteModal.customize', 'Customize')} {t('common.labels.permissions', 'Permissions')}
                                     <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" strokeWidth="2" className="invite-caret">
                                         {showPermissions
                                             ? <polyline points="18 15 12 9 6 15"/>
@@ -185,7 +185,7 @@ const InviteModal = ({ onClose, onCreated }) => {
                     <div className="modal-footer">
                         <Button type="button" variant="ghost" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button type="submit" variant="default" disabled={loading} data-walkthrough="invite-submit">
-                            {loading ? 'Creating...' : 'Create Invitation'}
+                            {loading ? t('app.inviteModal.creating', 'Creating…') : t('app.inviteModal.createInvitation', 'Create invitation')}
                         </Button>
                     </div>
                 </form>

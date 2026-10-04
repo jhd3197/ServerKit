@@ -153,12 +153,12 @@ function SourceBody({ provider, status, config, isAdmin, onConnect, onDisconnect
                 <div className="conn-empty">
                     <span className="conn-empty__icon"><Link2 size={18} /></span>
                     <div className="conn-empty__text">
-                        <strong>{configured ? `Connect your ${provider.name} account` : `${provider.name} is not set up yet`}</strong>
+                        <strong>{configured ? t('app.connectProviderModal.connectYourAccount', 'Connect your {{name}} account', { name: provider.name }) : t('app.connectProviderModal.notSetUpYet', '{{name}} is not set up yet', { name: provider.name })}</strong>
                         <span>{configured
-                            ? 'Authorize ServerKit once, then pick repositories directly on the New Service page.'
+                            ? t('app.connectProviderModal.authorizeOnceThenPickRepositories', 'Authorize ServerKit once, then pick repositories on the new service page.')
                             : isGithub
-                                ? 'Set it up in one click below — no copying secrets — then connect your account.'
-                                : 'An admin needs to add an OAuth app below before anyone can connect.'}</span>
+                                ? t('app.connectProviderModal.setUpInOneClickBelow', 'Set it up in one click below, with no secrets to copy, then connect your account.')
+                                : t('app.connectProviderModal.anAdminNeedsToAddOauthApp', 'An admin needs to add an OAuth app below before anyone can connect.')}</span>
                     </div>
                     <Button type="button" size="sm" disabled={!configured || busy} onClick={onConnect}>
                         <PlugZap size={15} /> {t('app.connectProviderModal.connect', 'Connect')} {provider.name}
@@ -185,7 +185,7 @@ function SourceBody({ provider, status, config, isAdmin, onConnect, onDisconnect
                     )}
                     <div className="conn-form__actions">
                         <Button type="button" size="sm" onClick={onSetupApp}>
-                            <Zap size={15} /> {appSlug ? 'Re-create GitHub App' : 'Set up in one click'}
+                            <Zap size={15} /> {appSlug ? t('app.connectProviderModal.recreateGithubApp', 'Re-create GitHub App') : t('app.connectProviderModal.setUpInOneClick', 'Set up in one click')}
                         </Button>
                     </div>
                 </div>
@@ -226,7 +226,7 @@ function SourceBody({ provider, status, config, isAdmin, onConnect, onDisconnect
                                 </a>
                             )}
                             <div className="conn-form__actions">
-                                <Button type="submit" size="sm" disabled={busy}>{busy ? 'Saving…' : 'Save OAuth app'}</Button>
+                                <Button type="submit" size="sm" disabled={busy}>{busy ? t('common.saving', 'Saving…') : t('app.connectProviderModal.saveOauthApp', 'Save OAuth app')}</Button>
                             </div>
                         </form>
                     )}
@@ -314,7 +314,7 @@ function DnsBody({ provider, isAdmin, connections, onAdd, onRemove, onTest }) {
                 <p className="conn-modal__note"><ShieldCheck size={15} /> {t('app.connectProviderModal.onlyAdministratorsCanAddOrChange', 'Only administrators can add or change connections.')}</p>
             ) : (
                 <form className="conn-form" onSubmit={add}>
-                    <div className="conn-form__heading">{connections.length > 0 ? 'Add another connection' : `Connect ${provider.name}`}</div>
+                    <div className="conn-form__heading">{connections.length > 0 ? t('app.connectProviderModal.addAnotherConnection', 'Add another connection') : t('app.connectProviderModal.connectProvider', 'Connect {{name}}', { name: provider.name })}</div>
 
                     {isCloudflare && (
                         <div className="conn-scope" role="radiogroup" aria-label={t('app.connectProviderModal.accessLevel', 'Access level')}>
@@ -389,7 +389,7 @@ function DnsBody({ provider, isAdmin, connections, onAdd, onRemove, onTest }) {
                     )}
 
                     <div className="conn-form__actions">
-                        <Button type="submit" size="sm" disabled={busy || !canAdd}>{busy ? 'Connecting…' : 'Connect'}</Button>
+                        <Button type="submit" size="sm" disabled={busy || !canAdd}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
                     </div>
                 </form>
             )}
@@ -439,7 +439,7 @@ function CloudBody({ provider, isAdmin, connections, onAdd, onRemove }) {
                 <p className="conn-modal__note"><ShieldCheck size={15} /> {t('app.connectProviderModal.onlyAdministratorsCanConnectCloudAccounts', 'Only administrators can connect cloud accounts.')}</p>
             ) : (
                 <form className="conn-form" onSubmit={add}>
-                    <div className="conn-form__heading">{connections.length > 0 ? 'Add another account' : `Connect ${provider.name}`}</div>
+                    <div className="conn-form__heading">{connections.length > 0 ? t('app.connectProviderModal.addAnotherAccount', 'Add another account') : t('app.connectProviderModal.connectProvider', 'Connect {{name}}', { name: provider.name })}</div>
                     <div className="conn-form__grid">
                         <div className="form-group">
                             <Label htmlFor="cloud-name">{t('app.connectProviderModal.accountName', 'Account name')}</Label>
@@ -456,7 +456,7 @@ function CloudBody({ provider, isAdmin, connections, onAdd, onRemove }) {
                         </a>
                     )}
                     <div className="conn-form__actions">
-                        <Button type="submit" size="sm" disabled={busy || !form.api_key.trim()}>{busy ? 'Connecting…' : 'Connect'}</Button>
+                        <Button type="submit" size="sm" disabled={busy || !form.api_key.trim()}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
                     </div>
                 </form>
             )}
@@ -511,10 +511,10 @@ function StorageBody({ provider, isAdmin, storageConfig, onSave, onTest }) {
     return (
         <>
             <p className="conn-modal__note">
-                <HardDrive size={15} /> {isActive ? 'This is the active backup destination.' : 'Saving makes this the active offsite destination.'} {t('app.connectProviderModal.manageBackupsIn', 'Manage backups in')} <Link className="conn-modal__link" to="/backups">{t('app.connectProviderModal.backups', 'Backups →')}</Link>
+                <HardDrive size={15} /> {isActive ? t('app.connectProviderModal.activeBackupDestination', 'This is the active backup destination.') : t('app.connectProviderModal.savingMakesThisActive', 'Saving makes this the active offsite destination.')} {t('app.connectProviderModal.manageBackupsIn', 'Manage backups in')} <Link className="conn-modal__link" to="/backups">{t('app.connectProviderModal.backups', 'Backups →')}</Link>
             </p>
             <form className="conn-form" onSubmit={save}>
-                <div className="conn-form__heading"><KeyRound size={15} /> {provider.name} credentials</div>
+                <div className="conn-form__heading"><KeyRound size={15} /> {t('app.connectProviderModal.providerCredentials', '{{name}} credentials', { name: provider.name })}</div>
                 <div className="conn-form__grid">
                     {fields.map((f) => (
                         <div key={f.k} className={`form-group${f.wide ? ' conn-form__wide' : ''}`}>
@@ -537,7 +537,7 @@ function StorageBody({ provider, isAdmin, storageConfig, onSave, onTest }) {
                 )}
                 <div className="conn-form__actions conn-form__actions--split">
                     <Button type="button" variant="outline" size="sm" disabled={busy || !form.bucket} onClick={test}>{t('common.actions.test', 'Test')}</Button>
-                    <Button type="submit" size="sm" disabled={busy || !form.bucket}>{busy ? 'Saving…' : 'Save'}</Button>
+                    <Button type="submit" size="sm" disabled={busy || !form.bucket}>{busy ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}</Button>
                 </div>
             </form>
         </>
@@ -576,7 +576,7 @@ function RegistrarBody({ provider, isAdmin, connections, onAdd, onRemove, onTest
                         <div key={c.id} className="conn-list__row">
                             <div className="conn-list__info">
                                 <strong>{c.name}</strong>
-                                <span className="conn-list__key">{c.account_label || 'Connected'}</span>
+                                <span className="conn-list__key">{c.account_label || t('app.connectProviderModal.connected', 'Connected')}</span>
                             </div>
                             {isAdmin && (
                                 <div className="conn-list__actions">
@@ -597,7 +597,7 @@ function RegistrarBody({ provider, isAdmin, connections, onAdd, onRemove, onTest
                 <p className="conn-modal__note"><ShieldCheck size={15} /> {t('app.connectProviderModal.onlyAdministratorsCanConnectARegistrar', 'Only administrators can connect a registrar.')}</p>
             ) : (
                 <form className="conn-form" onSubmit={add}>
-                    <div className="conn-form__heading">{connections.length > 0 ? 'Add another account' : `Connect ${provider.name}`}</div>
+                    <div className="conn-form__heading">{connections.length > 0 ? t('app.connectProviderModal.addAnotherAccount', 'Add another account') : t('app.connectProviderModal.connectProvider', 'Connect {{name}}', { name: provider.name })}</div>
                     <div className="conn-form__grid">
                         <div className="form-group conn-form__wide">
                             <Label htmlFor="reg-name">{t('app.connectProviderModal.accountName', 'Account name')}</Label>
@@ -631,7 +631,7 @@ function RegistrarBody({ provider, isAdmin, connections, onAdd, onRemove, onTest
                         </a>
                     )}
                     <div className="conn-form__actions">
-                        <Button type="submit" size="sm" disabled={busy || !canAdd}>{busy ? 'Connecting…' : 'Connect'}</Button>
+                        <Button type="submit" size="sm" disabled={busy || !canAdd}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
                     </div>
                 </form>
             )}
@@ -703,7 +703,7 @@ function RegistryBody({ isAdmin, registries, onAdd, onRemove, onTest }) {
                 <p className="conn-modal__note"><ShieldCheck size={15} /> {t('app.connectProviderModal.onlyAdministratorsCanAddRegistries', 'Only administrators can add registries.')}</p>
             ) : (
                 <form className="conn-form" onSubmit={add}>
-                    <div className="conn-form__heading">{registries.length > 0 ? 'Add another registry' : 'Connect a registry'}</div>
+                    <div className="conn-form__heading">{registries.length > 0 ? t('app.connectProviderModal.addAnotherRegistry', 'Add another registry') : t('app.connectProviderModal.connectARegistry', 'Connect a registry')}</div>
 
                     <div className="conn-presets" role="radiogroup" aria-label={t('app.connectProviderModal.registryProvider', 'Registry provider')}>
                         {REGISTRY_PROVIDERS.map((p) => (
@@ -723,7 +723,7 @@ function RegistryBody({ isAdmin, registries, onAdd, onRemove, onTest }) {
                     <div className="conn-form__grid">
                         <div className="form-group">
                             <Label htmlFor="reg-name">{t('app.connectProviderModal.connectionName', 'Connection name')}</Label>
-                            <Input id="reg-name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder={`${preset.name} (team)`} />
+                            <Input id="reg-name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder={t('app.connectProviderModal.registryTeamPlaceholder', '{{name}} (team)', { name: preset.name })} />
                         </div>
                         <div className="form-group">
                             <Label htmlFor="reg-url">{t('app.connectProviderModal.registryHost', 'Registry host')}</Label>
@@ -743,7 +743,7 @@ function RegistryBody({ isAdmin, registries, onAdd, onRemove, onTest }) {
                             </div>
                         )}
                         <div className={`form-group${needsUsername ? '' : ' conn-form__wide'}`}>
-                            <Label htmlFor="reg-secret">{providerId === 'ecr' ? 'AWS credentials' : 'Password / token'}</Label>
+                            <Label htmlFor="reg-secret">{providerId === 'ecr' ? t('app.connectProviderModal.awsCredentials', 'AWS credentials') : t('app.connectProviderModal.passwordToken', 'Password / token')}</Label>
                             <Input id="reg-secret" type="password" value={form.secret} onChange={(e) => setForm((f) => ({ ...f, secret: e.target.value }))} placeholder={preset.secretHint} autoComplete="off" />
                         </div>
                     </div>
@@ -753,7 +753,7 @@ function RegistryBody({ isAdmin, registries, onAdd, onRemove, onTest }) {
                     </a>
 
                     <div className="conn-form__actions">
-                        <Button type="submit" size="sm" disabled={busy || !canAdd}>{busy ? 'Connecting…' : 'Connect'}</Button>
+                        <Button type="submit" size="sm" disabled={busy || !canAdd}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
                     </div>
                 </form>
             )}
@@ -843,7 +843,7 @@ function EmailBody({ isAdmin, relayConfig, onSave, onTest, onDisable }) {
                     <Input id="relay-user" value={form.username} onChange={(e) => setForm((f) => ({ ...f, username: e.target.value }))} placeholder={t('app.connectProviderModal.smtpUsernameApiToken', 'SMTP username / API token')} autoComplete="off" />
                 </div>
                 <div className="form-group conn-form__wide">
-                    <Label htmlFor="relay-pass">{t('common.labels.password', 'Password')}{cfg.password_set ? ' (leave blank to keep)' : ''}</Label>
+                    <Label htmlFor="relay-pass">{t('common.labels.password', 'Password')}{cfg.password_set ? ` ${t('app.connectProviderModal.leaveBlankToKeep', '(leave blank to keep)')}` : ''}</Label>
                     <Input id="relay-pass" type="password" value={form.password} onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))} placeholder={cfg.password_set ? t('app.connectProviderModal.stored', '•••••••• stored') : t('app.connectProviderModal.smtpPasswordApiToken', 'SMTP password / API token')} autoComplete="off" />
                 </div>
             </div>
@@ -867,7 +867,7 @@ function EmailBody({ isAdmin, relayConfig, onSave, onTest, onDisable }) {
                 </span>
                 <span className="conn-form__actions-group">
                     <Button type="button" variant="outline" size="sm" disabled={busy || !form.host.trim()} onClick={test}>{t('common.actions.test', 'Test')}</Button>
-                    <Button type="submit" size="sm" disabled={busy || !form.host.trim()}>{busy ? 'Saving…' : 'Save'}</Button>
+                    <Button type="submit" size="sm" disabled={busy || !form.host.trim()}>{busy ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}</Button>
                 </span>
             </div>
         </form>

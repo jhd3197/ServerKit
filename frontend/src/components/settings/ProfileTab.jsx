@@ -91,7 +91,7 @@ const ProfileTab = () => {
 
                 <div className="form-actions">
                     <Button type="submit" variant="default" disabled={loading}>
-                        {loading ? 'Saving...' : 'Save Changes'}
+                        {loading ? t('common.saving', 'Saving…') : t('app.profileTab.saveChanges', 'Save changes')}
                     </Button>
                 </div>
             </form>

@@ -64,7 +64,7 @@ const MemberActionsCard = () => {
 
             <div className="form-actions">
                 <Button variant="default" onClick={handleSave} disabled={saving}>
-                    {saving ? 'Saving…' : 'Save'}
+                    {saving ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                 </Button>
                 {message && (
                     <span className={`timezone-message timezone-message--inline ${message.type}`}>

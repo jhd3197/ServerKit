@@ -178,7 +178,7 @@ const UserModal = ({ user, onSave, onClose }) => {
                                         setShowPermissions(!showPermissions);
                                     }}
                                 >
-                                    {showPermissions ? 'Hide' : 'Customize'} {t('common.labels.permissions', 'Permissions')}
+                                    {showPermissions ? t('app.userModal.hide', 'Hide') : t('app.userModal.customize', 'Customize')} {t('common.labels.permissions', 'Permissions')}
                                     <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" strokeWidth="2">
                                         {showPermissions
                                             ? <polyline points="18 15 12 9 6 15"/>
@@ -201,7 +201,7 @@ const UserModal = ({ user, onSave, onClose }) => {
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
                         <Button type="submit" variant="default" disabled={form.isSubmitting}>
-                            {form.isSubmitting ? 'Saving...' : (isEditing ? 'Save Changes' : 'Create user')}
+                            {form.isSubmitting ? t('common.saving', 'Saving…') : (isEditing ? t('app.userModal.saveChanges', 'Save changes') : t('app.userModal.createUser', 'Create user'))}
                         </Button>
                     </div>
                 </form>

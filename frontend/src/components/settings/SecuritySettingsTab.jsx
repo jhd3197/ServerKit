@@ -100,7 +100,7 @@ const LinkedAccounts = ({ register }) => {
                                 onClick={() => handleUnlink(identity.provider)}
                                 disabled={unlinking === identity.provider}
                             >
-                                {unlinking === identity.provider ? 'Unlinking...' : 'Unlink'}
+                                {unlinking === identity.provider ? t('app.securitySettingsTab.unlinking', 'Unlinking…') : t('app.securitySettingsTab.unlink', 'Unlink')}
                             </Button>
                         </div>
                     ))}
@@ -118,7 +118,7 @@ const LinkedAccounts = ({ register }) => {
                             disabled={linkingProvider === p.id}
                         >
                             <SSOProviderIcon provider={p.id} />
-                            {linkingProvider === p.id ? 'Redirecting...' : `Link ${p.name}`}
+                            {linkingProvider === p.id ? t('app.securitySettingsTab.redirecting', 'Redirecting…') : t('app.securitySettingsTab.linkProvider', 'Link {{name}}', { name: p.name })}
                         </Button>
                     ))}
                 </div>
@@ -422,7 +422,7 @@ Keep these codes in a safe place.`;
 
                 <div className="form-actions">
                     <Button type="submit" variant="default" disabled={loading}>
-                        {loading ? 'Changing...' : 'Change Password'}
+                        {loading ? t('app.securitySettingsTab.changing', 'Changing…') : t('app.securitySettingsTab.changePassword', 'Change password')}
                     </Button>
                 </div>
             </form>
@@ -505,7 +505,7 @@ Keep these codes in a safe place.`;
                                 onClick={handleConfirm2FA}
                                 disabled={twoFALoading || verificationCode.length !== 6}
                             >
-                                {twoFALoading ? 'Verifying...' : 'Enable 2FA'}
+                                {twoFALoading ? t('app.securitySettingsTab.verifying', 'Verifying…') : t('app.securitySettingsTab.enable2fa', 'Enable 2FA')}
                             </Button>
                         </div>
                 </Modal>
@@ -542,7 +542,7 @@ Keep these codes in a safe place.`;
                                 onClick={handleDisable2FA}
                                 disabled={twoFALoading || !verificationCode}
                             >
-                                {twoFALoading ? 'Disabling...' : 'Disable 2FA'}
+                                {twoFALoading ? t('app.securitySettingsTab.disabling', 'Disabling…') : t('app.securitySettingsTab.disable2fa', 'Disable 2FA')}
                             </Button>
                         </div>
                 </Modal>
@@ -593,7 +593,7 @@ Keep these codes in a safe place.`;
                                 setBackupCodes([]);
                                 setVerificationCode('');
                             }}>
-                                {backupCodes.length > 0 ? 'Done' : 'Cancel'}
+                                {backupCodes.length > 0 ? t('common.actions.done', 'Done') : t('common.actions.cancel', 'Cancel')}
                             </Button>
                             {backupCodes.length === 0 && (
                                 <Button
@@ -601,7 +601,7 @@ Keep these codes in a safe place.`;
                                     onClick={handleRegenerateBackupCodes}
                                     disabled={twoFALoading || verificationCode.length !== 6}
                                 >
-                                    {twoFALoading ? 'Generating...' : 'Generate New Codes'}
+                                    {twoFALoading ? t('app.securitySettingsTab.generating', 'Generating…') : t('app.securitySettingsTab.generateNewCodes', 'Generate new codes')}
                                 </Button>
                             )}
                         </div>

@@ -283,7 +283,7 @@ const SystemTab = () => {
                             onClick={handleTimezoneChange}
                             disabled={savingTimezone || !selectedTimezone || selectedTimezone === metrics?.time?.timezone_id}
                         >
-                            {savingTimezone ? 'Saving...' : 'Apply'}
+                            {savingTimezone ? t('common.saving', 'Saving…') : t('app.systemTab.apply', 'Apply')}
                         </Button>
                     </div>
                     {timezoneMessage && (
@@ -374,7 +374,7 @@ const SystemTab = () => {
                             onClick={handleSaveCanonicalDomain}
                             disabled={savingDomain || !canonicalDomain}
                         >
-                            {savingDomain ? 'Saving...' : 'Save Canonical Domain'}
+                            {savingDomain ? t('common.saving', 'Saving…') : t('app.systemTab.saveCanonicalDomain', 'Save canonical domain')}
                         </Button>
                         {domainMessage && (
                             <div className={`timezone-message timezone-message--save-result ${domainMessage.type}`}>

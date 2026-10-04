@@ -236,7 +236,7 @@ const ThemeStudioModal = ({ open, onOpenChange }) => {
                     </Button>
                     {isAdmin && (
                         <Button size="sm" onClick={saveToPanel} disabled={saving}>
-                            <Save size={14} /> {saving ? 'Saving…' : 'Save to this panel'}
+                            <Save size={14} /> {saving ? t('common.saving', 'Saving…') : t('app.themeStudioModal.saveToThisPanel', 'Save to this panel')}
                         </Button>
                     )}
                 </div>

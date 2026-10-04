@@ -268,7 +268,8 @@ const MigrationHistoryTab = () => {
                             ) : (
                                 <>
                                     {t('app.migrationHistoryTab.yourDatabaseIsAt', 'Your database is at')} <code>{short(currentRev) || 'none'}</code>{t('app.migrationHistoryTab.latestIs', ', latest is')}{' '}
-                                    <code>{short(headRev) || 'unknown'}</code>. Apply to bring the schema up to date.
+                                    <code>{short(headRev) || 'unknown'}</code>.{' '}
+                                    {t('app.migrationHistoryTab.applyToBringTheSchemaUpToDate', 'Apply to bring the schema up to date.')}
                                 </>
                             )}
                         </p>
@@ -280,7 +281,7 @@ const MigrationHistoryTab = () => {
                                 disabled={applying}
                             >
                                 {applying ? (
-                                    <><Loader size={14} className="spin" /> {orphaned ? 'Repairing…' : 'Applying…'}</>
+                                    <><Loader size={14} className="spin" /> {orphaned ? t('app.migrationHistoryTab.repairing', 'Repairing…') : t('app.migrationHistoryTab.applying', 'Applying…')}</>
                                 ) : orphaned ? (
                                     <><Database size={14} /> {t('app.migrationHistoryTab.reSyncDatabase', 'Re-sync database')}</>
                                 ) : (

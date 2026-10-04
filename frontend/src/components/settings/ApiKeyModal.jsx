@@ -104,7 +104,7 @@ const ApiKeyModal = ({ onClose, onSubmit, createdKey }) => {
                     <div className="modal-footer">
                         <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button type="submit" variant="default" disabled={saving || !name.trim()}>
-                            {saving ? 'Creating...' : 'Create Key'}
+                            {saving ? t('app.apiKeyModal.creating', 'Creating…') : t('app.apiKeyModal.createKey', 'Create key')}
                         </Button>
                     </div>
                 </form>

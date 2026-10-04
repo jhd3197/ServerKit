@@ -5,6 +5,7 @@ import { Sparkles, Check, Loader, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
+import { translateLabel } from '../../i18n/labels';
 import {
     SIDEBAR_ITEMS,
     SIDEBAR_PRESETS,
@@ -210,7 +211,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                     <div className="summary-row">
                         <span className="summary-label">{t('app.setupStepSummary.twoFactor', '2FA')}</span>
                         <span className="summary-value">
-                            {twoFactorEnabled ? 'Enabled' : 'Off — you can turn it on in Settings'}
+                            {twoFactorEnabled ? t('app.setupStepSummary.enabled', 'Enabled') : t('app.setupStepSummary.offTurnOnInSettings', 'Off. You can turn it on in Settings.')}
                         </span>
                     </div>
 
@@ -261,9 +262,9 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                     <div className="summary-row">
                         <span className="summary-label">{t('app.setupStepSummary.view', 'View')}</span>
                         <span className="summary-value summary-value--action">
-                            {SIDEBAR_PRESETS[sidebarPreset]?.label || 'Recommended'}
+                            {translateLabel(t, SIDEBAR_PRESETS[sidebarPreset]) || t('nav.preset.recommended.label', 'Recommended')}
                             <span className="summary-value-note">
-                                {visibleCountForPreset(sidebarPreset)} of {SIDEBAR_ITEMS.length} items
+                                {t('app.setupStepSummary.visibleOfTotalItems', '{{visible}} of {{total}} items', { visible: visibleCountForPreset(sidebarPreset), total: SIDEBAR_ITEMS.length })}
                             </span>
                             <SharedButton variant="unstyled"
                                 type="button"
@@ -271,7 +272,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                                 onClick={() => setPresetOpen((open) => !open)}
                                 aria-expanded={presetOpen}
                             >
-                                {presetOpen ? 'Done' : 'Change'}
+                                {presetOpen ? t('common.actions.done', 'Done') : t('app.setupStepSummary.change', 'Change')}
                             </SharedButton>
                         </span>
                     </div>
@@ -363,7 +364,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                     onClick={handleFinish}
                     disabled={installing}
                 >
-                    {installing ? 'Setting up...' : 'Go to Dashboard'}
+                    {installing ? t('app.setupStepSummary.settingUp', 'Setting up…') : t('app.setupStepSummary.goToDashboard', 'Go to dashboard')}
                 </SharedButton>
             </div>
         </div>

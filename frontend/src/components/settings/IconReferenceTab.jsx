@@ -117,7 +117,7 @@ const IconReferenceTab = () => {
                             >
                                 <IconComp size={20} />
                                 <span className="icon-reference-name">
-                                    {copiedIcon === name ? 'Copied!' : name}
+                                    {copiedIcon === name ? t('app.iconReferenceTab.copied', 'Copied') : name}
                                 </span>
                             </SharedButton>
                         ))}

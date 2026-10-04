@@ -384,7 +384,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                 </SelectContent>
                             </Select>
                             <Button onClick={handleSaveBrand} disabled={savingBrand}>
-                                {savingBrand ? 'Saving…' : 'Save'}
+                                {savingBrand ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                             </Button>
                         </div>
                     </div>
@@ -433,7 +433,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                 disabled={savingPort}
                             />
                             <Button onClick={handleSaveBasePort} disabled={savingPort}>
-                                {savingPort ? 'Saving…' : 'Save'}
+                                {savingPort ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                             </Button>
                         </div>
                     </div>
@@ -445,7 +445,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
 
             <div {...register('site-base-domains', 'settings-card')}>
                 <h3>{t('app.siteSettingsTab.managedSitesBaseDomains', 'Managed services: base domains')}</h3>
-                <p>{t('app.siteSettingsTab.publishManagedSitesAt', 'Publish managed services at')} <code>&lt;name&gt;.&lt;base-domain&gt;</code>. Register one or more base domains; a new site can be created under any of them, defaulting to the one marked <strong>{t('common.labels.default', 'Default')}</strong>. Point a wildcard record <code>*.&lt;base&gt;</code> {t('app.siteSettingsTab.orPerSiteARecordsAt', '(or per-service A records) at this server.')}</p>
+                <p>{t('app.siteSettingsTab.publishManagedSitesAt', 'Publish managed services at')} <code>&lt;name&gt;.&lt;base-domain&gt;</code>. {t('app.siteSettingsTab.registerBaseDomains', 'Register one or more base domains; a new service can be created under any of them, defaulting to the one marked')} <strong>{t('common.labels.default', 'Default')}</strong>. {t('app.siteSettingsTab.pointAWildcardRecord', 'Point a wildcard record')} <code>*.&lt;base&gt;</code> {t('app.siteSettingsTab.orPerSiteARecordsAt', '(or per-service A records) at this server.')}</p>
 
                 {httpsError ? (
                     <ErrorState
@@ -469,7 +469,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                 onChange={(e) => setServerIp(e.target.value)}
                             />
                             <Button onClick={handleSaveServerIp} disabled={savingDomain}>
-                                {savingDomain ? 'Saving…' : 'Save'}
+                                {savingDomain ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                             </Button>
                         </div>
                     </div>
@@ -510,7 +510,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                         <Input type="text" placeholder="apps.example.com" value={baseDomain}
                                             onChange={(e) => setBaseDomain(e.target.value)} />
                                         <Button onClick={handleSaveDomain} disabled={savingDomain}>
-                                            {savingDomain ? 'Saving…' : 'Save'}
+                                            {savingDomain ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                                         </Button>
                                     </div>
                                 ) : (
@@ -518,7 +518,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                         <code>{b.domain}</code>
                                         {b.is_default && <Pill kind="blue" dot={false}>{t('common.labels.default', 'Default')}</Pill>}
                                         <Pill kind={b.https_enabled ? 'green' : 'gray'} dot={false}>
-                                            {b.https_enabled ? 'HTTPS' : 'HTTP only'}
+                                            {b.https_enabled ? 'HTTPS' : t('app.siteSettingsTab.httpOnly', 'HTTP only')}
                                         </Pill>
                                     </span>
                                 )}
@@ -537,7 +537,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                 </Select>
                                 <Button variant="outline" onClick={() => handleSetupHttpsFor(b)}
                                     disabled={rowBusy === b.domain || !https.providers?.length}>
-                                    {rowBusy === b.domain ? 'Working…' : (b.https_enabled ? 'Renew HTTPS' : 'Set up HTTPS')}
+                                    {rowBusy === b.domain ? t('app.siteSettingsTab.working', 'Working…') : (b.https_enabled ? t('app.siteSettingsTab.renewHttps', 'Renew HTTPS') : t('app.siteSettingsTab.setUpHttps', 'Set up HTTPS'))}
                                 </Button>
                                 {hasRegistry && !b.is_default && (
                                     <Button variant="ghost" onClick={() => handleMakeDefault(b.domain)} disabled={rowBusy === b.domain}>
@@ -581,7 +581,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                 </SelectContent>
                             </Select>
                             <Button onClick={handleAddDomain} disabled={addingDomain || !newDomain.trim()}>
-                                {addingDomain ? 'Adding…' : 'Add'}
+                                {addingDomain ? t('app.siteSettingsTab.adding', 'Adding…') : t('common.actions.add', 'Add')}
                             </Button>
                         </div>
                     </div>

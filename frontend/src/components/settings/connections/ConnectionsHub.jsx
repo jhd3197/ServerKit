@@ -133,7 +133,7 @@ export default function ConnectionsHub() {
     const onDisconnectSource = useCallback(async (provider) => {
         try {
             await api.disconnectSourceConnection(provider.provider);
-            toast.success(`${provider.name} disconnected`);
+            toast.success(t('app.connectionsHub.providerDisconnected', '{{name}} disconnected', { name: provider.name }));
             await loadData();
             setModalOpen(false);
         } catch (err) {
@@ -184,7 +184,7 @@ export default function ConnectionsHub() {
         try {
             const res = await api.addEmailDNSProvider(payload);
             if (res && res.success === false) throw new Error(res.error || 'Failed to add connection');
-            toast.success(`${payload.name} connected`);
+            toast.success(t('app.connectionsHub.providerConnected', '{{name}} connected', { name: payload.name }));
             await loadData();
             return true;
         } catch (err) {
@@ -426,72 +426,72 @@ export default function ConnectionsHub() {
                 const conn = status?.connection;
                 out[provider.id] = conn
                     ? {
-                        connected: true, statusLabel: 'Connected', statusTone: 'ok',
+                        connected: true, statusLabel: t('app.connectionsHub.statusConnected', 'Connected'), statusTone: 'ok',
                         subtitle: conn.provider_username ? `@${conn.provider_username}` : (conn.display_name || null),
-                        scopes: [{ labelKey: 'app.connectionsHub.oauth', label: 'OAuth', tone: 'neutral', hint: conn.scope || 'Authorized via OAuth' }],
-                        manageHref, manageLabel: 'New service',
+                        scopes: [{ labelKey: 'app.connectionsHub.oauth', label: 'OAuth', tone: 'neutral', hint: conn.scope || t('app.connectionsHub.authorizedViaOauth', 'Authorized via OAuth') }],
+                        manageHref, manageLabel: t('app.connectionsHub.manageNewService', 'New service'),
                     }
-                    : { connected: false, statusLabel: status?.configured ? 'Not connected' : 'Setup needed', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: status?.configured ? t('app.connectionsHub.statusNotConnected', 'Not connected') : t('app.connectionsHub.statusSetupNeeded', 'Setup needed'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'cloud') {
                 const matches = cloudByType(provider.providerType);
                 const count = matches.reduce((n, p) => n + (p.server_count || 0), 0);
                 out[provider.id] = matches.length
                     ? {
-                        connected: true, statusLabel: 'Connected', statusTone: 'ok',
-                        subtitle: count ? `${count} server${count === 1 ? '' : 's'}` : 'No servers yet',
-                        scopes: [], manageHref, manageLabel: 'Servers',
+                        connected: true, statusLabel: t('app.connectionsHub.statusConnected', 'Connected'), statusTone: 'ok',
+                        subtitle: count ? t('app.connectionsHub.serverCount', { count, defaultValue_one: '1 server', defaultValue_other: '{{count}} servers' }) : t('app.connectionsHub.noServersYet', 'No servers yet'),
+                        scopes: [], manageHref, manageLabel: t('app.connectionsHub.manageServers', 'Servers'),
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'dns') {
                 const list = dnsProviders.filter((p) => p.provider === provider.provider);
                 out[provider.id] = list.length
                     ? {
-                        connected: true, statusLabel: list.length === 1 ? 'Connected' : `${list.length} connected`, statusTone: 'ok',
+                        connected: true, statusLabel: list.length === 1 ? t('app.connectionsHub.statusConnected', 'Connected') : t('app.connectionsHub.countConnected', '{{count}} connected', { count: list.length }), statusTone: 'ok',
                         subtitle: list.map((p) => p.name).join(', '),
                         scopes: dedupeScopes(list.map(deriveScope).filter(Boolean)),
-                        manageHref: '/domains', manageLabel: 'Domains',
+                        manageHref: '/domains', manageLabel: t('app.connectionsHub.manageDomains', 'Domains'),
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'registrar') {
                 const list = registrarConnections.filter((c) => c.provider === provider.provider);
                 const mine = registrarDomains.filter((d) => d.registrar === provider.provider);
                 const expiring = mine.filter((d) => d.days_until_expiry != null && d.days_until_expiry <= 30).length;
                 out[provider.id] = list.length
                     ? {
-                        connected: true, statusLabel: 'Connected', statusTone: 'ok',
-                        subtitle: `${mine.length} domain${mine.length === 1 ? '' : 's'}${expiring ? ` · ${expiring} expiring ≤30d` : ''}`,
-                        scopes: expiring ? [{ label: `${expiring} expiring`, tone: 'warn', hintKey: 'app.connectionsHub.registrationExpiresWithin30Days', hint: 'Registration expires within 30 days' }] : [],
-                        manageHref, manageLabel: 'Domains',
+                        connected: true, statusLabel: t('app.connectionsHub.statusConnected', 'Connected'), statusTone: 'ok',
+                        subtitle: `${t('app.connectionsHub.domainCount', { count: mine.length, defaultValue_one: '1 domain', defaultValue_other: '{{count}} domains' })}${expiring ? ` · ${t('app.connectionsHub.expiringWithin30d', '{{count}} expiring ≤30d', { count: expiring })}` : ''}`,
+                        scopes: expiring ? [{ label: t('app.connectionsHub.expiringCount', '{{count}} expiring', { count: expiring }), tone: 'warn', hintKey: 'app.connectionsHub.registrationExpiresWithin30Days', hint: 'Registration expires within 30 days' }] : [],
+                        manageHref, manageLabel: t('app.connectionsHub.manageDomains', 'Domains'),
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'registry') {
                 const list = containerRegistries;
                 out[provider.id] = list.length
                     ? {
-                        connected: true, statusLabel: list.length === 1 ? 'Connected' : `${list.length} connected`, statusTone: 'ok',
+                        connected: true, statusLabel: list.length === 1 ? t('app.connectionsHub.statusConnected', 'Connected') : t('app.connectionsHub.countConnected', '{{count}} connected', { count: list.length }), statusTone: 'ok',
                         subtitle: list.map((r) => r.name).join(', '),
-                        scopes: [], manageHref, manageLabel: 'New service',
+                        scopes: [], manageHref, manageLabel: t('app.connectionsHub.manageNewService', 'New service'),
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'storage') {
                 const active = storageConfig?.provider === provider.storageProvider;
                 const sub = storageConfig?.[provider.storageProvider];
                 out[provider.id] = active && sub?.bucket
                     ? {
-                        connected: true, statusLabel: 'Active', statusTone: 'ok',
-                        subtitle: `Bucket: ${sub.bucket}`,
+                        connected: true, statusLabel: t('app.connectionsHub.statusActive', 'Active'), statusTone: 'ok',
+                        subtitle: t('app.connectionsHub.bucket', 'Bucket: {{bucket}}', { bucket: sub.bucket }),
                         scopes: [{ labelKey: 'common.labels.backups', label: 'Backups', tone: 'neutral', hintKey: 'app.connectionsHub.usedAsTheOffsiteBackupDestination', hint: 'Used as the offsite backup destination' }],
-                        manageHref, manageLabel: 'Backups',
+                        manageHref, manageLabel: t('app.connectionsHub.manageBackups', 'Backups'),
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'email') {
                 out[provider.id] = (relayConfig?.enabled && relayConfig?.host)
                     ? {
-                        connected: true, statusLabel: 'Active', statusTone: 'ok',
+                        connected: true, statusLabel: t('app.connectionsHub.statusActive', 'Active'), statusTone: 'ok',
                         subtitle: `${relayConfig.host}:${relayConfig.port || 587}`,
                         scopes: relayConfig.use_tls ? [{ label: 'TLS', tone: 'ok', hintKey: 'app.connectionsHub.starttlsEnabled', hint: 'STARTTLS enabled' }] : [],
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else {
                 out[provider.id] = { connected: false };
             }

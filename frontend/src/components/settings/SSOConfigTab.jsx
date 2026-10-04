@@ -213,7 +213,7 @@ const SSOConfigTab = () => {
                                         <AlertTriangle size={14} /> {t('app.sSOConfigTab.passwordLoginWillBeDisabledFor', 'Password sign-in will be disabled for all users.')}
                                     </span>
                                 ) : (
-                                    'Disable password sign-in and require SSO for all users'
+                                    t('app.sSOConfigTab.disablePasswordSignInRequireSso', 'Disable password sign-in and require SSO for all users')
                                 )}
                             </span>
                         </div>
@@ -242,7 +242,7 @@ const SSOConfigTab = () => {
                         disabled={generalSaving}
                     >
                         <Save size={16} />
-                        {generalSaving ? 'Saving...' : 'Save General Settings'}
+                        {generalSaving ? t('common.saving', 'Saving…') : t('app.sSOConfigTab.saveGeneralSettings', 'Save general settings')}
                     </Button>
                 </div>
             </div>
@@ -320,7 +320,7 @@ const SSOConfigTab = () => {
                                         disabled={saving[provider.id]}
                                     >
                                         <Save size={16} />
-                                        {saving[provider.id] ? 'Saving...' : 'Save'}
+                                        {saving[provider.id] ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                                     </Button>
                                     <Button
                                         variant="outline"
@@ -328,7 +328,7 @@ const SSOConfigTab = () => {
                                         disabled={testing[provider.id]}
                                     >
                                         <RefreshCw size={16} className={testing[provider.id] ? 'spinning' : ''} />
-                                        {testing[provider.id] ? 'Testing...' : 'Test Connection'}
+                                        {testing[provider.id] ? t('app.sSOConfigTab.testing', 'Testing…') : t('app.sSOConfigTab.testConnection', 'Test connection')}
                                     </Button>
                                 </div>
                             </div>
