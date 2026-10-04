@@ -1261,6 +1261,7 @@
             "connectionTestFailed": "Couldn't connect.",
             "connectionWorks": "Connection works",
             "connectionsAreManagedByAdministrators": "Connections are managed by administrators.",
+            "couldntAddConnection": "Couldn't add the connection.",
             "couldntLoad": "Couldn't load.",
             "countConnected": "{{count}} connected",
             "disconnect": "Disconnect",
@@ -5008,6 +5009,7 @@
             "autoDeployOnPush": "Auto-deploy on push",
             "automaticallyDeployWhenNewCommitsLand": "Automatically deploy when new commits land on this branch.",
             "connectAGitRepository": "Connect a Git repository",
+            "connectRepository": "Connect repository",
             "connecting": "Connecting…",
             "deployedAt": "Deployed At",
             "disabled": "Disabled",
@@ -5020,7 +5022,8 @@
             "orPasteAUrl": "or paste a URL",
             "repositoryConnected": "Repository connected",
             "repositoryUrl": "Repository URL",
-            "trackThisServiceInVersionControl": "Track this service in version control. Push to deploy."
+            "trackThisServiceInVersionControl": "Track this service in version control. Push to deploy.",
+            "trackedPaths": "Tracked paths"
         },
         "requestMetrics": {
             "cacheHit": "Cache hit ratio",

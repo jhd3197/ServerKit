@@ -44,10 +44,10 @@ const RepoConnectForm = ({
     },
     showPaths = false,
     defaultPaths = [],
-    pathsLabel = 'Tracked paths',
+    pathsLabel,
     pathsHint = '',
     urlPlaceholder = 'https://github.com/user/repo.git',
-    submitLabel = 'Connect Repository',
+    submitLabel,
     idPrefix = 'repo',
     enableGithub = true,
 }) => {
@@ -271,7 +271,7 @@ const RepoConnectForm = ({
                     id={`${idPrefix}-paths`}
                     paths={formData.paths}
                     onChange={handlePathsChange}
-                    label={pathsLabel}
+                    label={pathsLabel ?? t('app.repoConnectForm.trackedPaths', 'Tracked paths')}
                     hint={pathsHint}
                 />
             )}
@@ -292,7 +292,7 @@ const RepoConnectForm = ({
             <div className="git-connect__actions">
                 <Button type="submit" disabled={loading}>
                     <GitBranch size={14} />
-                    {loading ? t('app.repoConnectForm.connecting', 'Connecting…') : submitLabel}
+                    {loading ? t('app.repoConnectForm.connecting', 'Connecting…') : (submitLabel ?? t('app.repoConnectForm.connectRepository', 'Connect repository'))}
                 </Button>
             </div>
         </form>

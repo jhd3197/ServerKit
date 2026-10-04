@@ -22,6 +22,7 @@ import Modal from '@/components/Modal';
 import RequiresDocker from '../components/RequiresDocker';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
+import { translateLabel } from '@/i18n/labels';
 
 // Severity order for status sorting — also the page's default row order.
 const STATUS_SORT_ORDER = { running: 0, deploying: 1, building: 2, stopped: 3, failed: 4 };
@@ -244,7 +245,7 @@ const Services = () => {
                         <ServiceTile name={app.name} size={30} className="wp-list__tile" aria-hidden="true" />
                         <span>
                             <div>{app.name}</div>
-                            <div className="sk-cell-sub">{typeInfo.label}</div>
+                            <div className="sk-cell-sub">{translateLabel(t, typeInfo)}</div>
                         </span>
                     </div>
                 );

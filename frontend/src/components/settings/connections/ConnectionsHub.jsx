@@ -183,7 +183,7 @@ export default function ConnectionsHub() {
     const onAddDns = useCallback(async (payload) => {
         try {
             const res = await api.addEmailDNSProvider(payload);
-            if (res && res.success === false) throw new Error(res.error || 'Failed to add connection');
+            if (res && res.success === false) throw new Error(res.error || t('app.connectionsHub.couldntAddConnection', "Couldn't add the connection."));
             toast.success(t('app.connectionsHub.providerConnected', '{{name}} connected', { name: payload.name }));
             await loadData();
             return true;
