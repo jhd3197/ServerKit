@@ -112,18 +112,18 @@ const SSHKeysTab = () => {
 
     const handleRemoveKey = async (keyId, comment) => {
         const confirmed = await confirm({
-            title: t('app.sSHKeysTab.removeSshKey', 'Remove SSH key'),
-            message: t('app.sSHKeysTab.areYouSureYouWantTo', "Remove the SSH key{{value}}? This may lock you out if it's your only key.", { value: comment ? ` "${comment}"` : '' }),
-            confirmText: t('common.actions.remove', 'Remove'),
+            title: t('app.sSHKeysTab.removeSshKey', 'Delete SSH key'),
+            message: t('app.sSHKeysTab.areYouSureYouWantTo', "Delete the SSH key{{value}}? This may lock you out if it's your only key.", { value: comment ? ` "${comment}"` : '' }),
+            confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',
         });
         if (!confirmed) return;
         try {
             await api.removeSSHKey(keyId);
-            toast.success(t('app.sSHKeysTab.sshKeyRemoved', 'SSH key removed'));
+            toast.success(t('app.sSHKeysTab.sshKeyRemoved', 'SSH key deleted'));
             await loadKeys();
         } catch (error) {
-            toast.error(t('app.sSHKeysTab.failedToRemoveKey', 'Failed to remove key: {{message}}', { message: error.message }));
+            toast.error(t('app.sSHKeysTab.failedToRemoveKey', 'Failed to delete key: {{message}}', { message: error.message }));
         }
     };
 
@@ -172,7 +172,7 @@ const SSHKeysTab = () => {
             hideable: false,
             render: (key) => (
                 <Button variant="destructive" size="sm" onClick={() => handleRemoveKey(key.id, key.comment)}>
-                    {t('common.actions.remove', 'Remove')}
+                    {t('common.actions.delete', 'Delete')}
                 </Button>
             ),
         },

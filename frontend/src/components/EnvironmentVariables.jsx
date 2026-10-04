@@ -519,7 +519,7 @@ const EnvironmentVariables = ({ appId }) => {
     return (
         <div className="env-vars-container">
             <p className="hint">
-                {t('app.environmentVariables.environmentVariablesAreEncryptedAtRest', 'Environment variables are encrypted at rest and masked by default. Changes require an app restart to take effect.')}
+                {t('app.environmentVariables.environmentVariablesAreEncryptedAtRest', 'Environment variables are encrypted at rest and masked by default. Changes require a service restart to take effect.')}
             </p>
 
             {envVars.length === 0 ? (

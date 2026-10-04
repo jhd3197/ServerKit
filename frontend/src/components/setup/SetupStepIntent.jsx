@@ -13,8 +13,8 @@ const USE_CASE_OPTIONS = [
     },
     {
         id: 'web-apps',
-        labelKey: 'app.setupStepIntent.webApplications', label: 'Web applications',
-        descriptionKey: 'app.setupStepIntent.nodeJsPythonPhpOrDocker', description: 'Node.js, Python, PHP, or Docker-based apps',
+        labelKey: 'app.setupStepIntent.webApplications', label: 'Web services',
+        descriptionKey: 'app.setupStepIntent.nodeJsPythonPhpOrDocker', description: 'Node.js, Python, PHP, or Docker-based services',
         icon: Code,
     },
     {

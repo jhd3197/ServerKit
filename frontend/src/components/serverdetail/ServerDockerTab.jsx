@@ -167,10 +167,10 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
                 await api.restartRemoteContainer(serverId, containerId);
                 toast.success(t('app.serverDockerTab.containerRestarted', 'Container restarted'));
             } else if (action === 'remove') {
-                const removeConfirmed = await confirmDocker({ titleKey: 'app.serverDockerTab.removeContainer', title: 'Remove container', messageKey: 'app.serverDockerTab.removeThisContainer', message: 'Remove this container?' });
+                const removeConfirmed = await confirmDocker({ titleKey: 'app.serverDockerTab.removeContainer', title: 'Delete container', messageKey: 'app.serverDockerTab.removeThisContainer', message: 'Delete this container?', confirmText: t('common.actions.delete', 'Delete') });
                 if (!removeConfirmed) return;
                 await api.removeRemoteContainer(serverId, containerId, true);
-                toast.success(t('app.serverDockerTab.containerRemoved', 'Container removed'));
+                toast.success(t('app.serverDockerTab.containerRemoved', 'Container deleted'));
             }
             loadDockerData();
         } catch (err) {
@@ -277,7 +277,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
                         <Button variant="unstyled" type="button"
                             className="btn-icon danger"
                             onClick={() => handleContainerAction(container.id, 'remove')}
-                            title={t('common.actions.remove', 'Remove')}
+                            title={t('common.actions.delete', 'Delete')}
                         >
                             <TrashIcon />
                         </Button>

@@ -36,7 +36,7 @@ const TAB_LABELS = {
     logs: 'Logs',
     // 'Environment Variables' instead of 'Environment' so it isn't confused
     // with Settings → Environment Type (deployment environment).
-    environment: 'Env Vars',
+    environment: 'Environment variables',
     shell: 'Shell',
     metrics: 'Metrics',
     packages: 'Packages',

@@ -63,7 +63,7 @@ export const RunContainerButton = () => {
             <Button
                 onClick={() => setShowModal(true)}
                 disabled={isRemote}
-                title={isRemote ? t('app.containersTab.runningNewContainersIsOnlyAvailable', 'Running new containers is only available on the local Docker target right now') : t('app.containersTab.runContainer', 'Run container')}
+                title={isRemote ? t('app.containersTab.runningNewContainersIsOnlyAvailable', 'Running new containers is only available on the panel server right now') : t('app.containersTab.runContainer', 'Run container')}
             >
                 <span>+</span> {t('app.containersTab.runContainer2', 'Run container')}
             </Button>
@@ -352,14 +352,14 @@ const ContainersTab = ({ onStatsChange }) => {
                 }
                 toast.success(t('app.containersTab.containerRestarted', 'Container restarted'));
             } else if (action === 'remove') {
-                const removeConfirmed = await confirmContainer({ titleKey: 'app.containersTab.removeContainer', title: 'Remove container', messageKey: 'app.containersTab.removeThisContainer', message: 'Remove this container?' });
+                const removeConfirmed = await confirmContainer({ titleKey: 'app.containersTab.removeContainer', title: 'Delete container', messageKey: 'app.containersTab.removeThisContainer', message: 'Delete this container?', confirmText: t('common.actions.delete', 'Delete') });
                 if (!removeConfirmed) return;
                 if (isRemote) {
                     await api.removeRemoteContainer(serverId, containerId, true);
                 } else {
                     await api.removeContainer(containerId, true);
                 }
-                toast.success(t('app.containersTab.containerRemoved', 'Container removed'));
+                toast.success(t('app.containersTab.containerRemoved', 'Container deleted'));
             }
             loadContainers();
             onStatsChange?.();
@@ -701,7 +701,7 @@ const ContainersTab = ({ onStatsChange }) => {
                                 <Button variant="unstyled" type="button" className="dx-row-action is-success" onClick={() => handleAction(containerId, 'start')} title={t('common.actions.start', 'Start')}>
                                     <Play size={13} />
                                 </Button>
-                                <Button variant="unstyled" type="button" className="dx-row-action is-danger" onClick={() => handleAction(containerId, 'remove')} title={t('common.actions.remove', 'Remove')}>
+                                <Button variant="unstyled" type="button" className="dx-row-action is-danger" onClick={() => handleAction(containerId, 'remove')} title={t('common.actions.delete', 'Delete')}>
                                     <Trash2 size={13} />
                                 </Button>
                             </>
@@ -1015,7 +1015,7 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
                             <Play size={13} /> {t('common.actions.start', 'Start')}
                         </Button>
                         <Button variant="unstyled" type="button" className="dx-action-btn is-danger" onClick={() => onAction(containerId, 'remove')}>
-                            <Trash2 size={13} /> {t('common.actions.remove', 'Remove')}
+                            <Trash2 size={13} /> {t('common.actions.delete', 'Delete')}
                         </Button>
                     </>
                 )}
@@ -1041,7 +1041,7 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
                         <ContainerResourceBars stats={stats} muted={!isRunning} />
                         <div className="dx-detail-grid">
                             <div><span>{t('app.containersTab.image', 'Image')}</span><strong title={getContainerImage(container)}>{getContainerImage(container)}</strong></div>
-                            <div><span>{t('common.labels.project', 'Project')}</span><strong>{projectName}</strong></div>
+                            <div><span>{t('app.containersTab.composeProject', 'Compose project')}</span><strong>{projectName}</strong></div>
                             <div><span>{t('common.actions.restart', 'Restart')}</span><strong>{restartPolicy}</strong></div>
                             <div><span>{t('common.labels.created', 'Created')}</span><strong>{container.created || container.CreatedAt || '-'}</strong></div>
                         </div>
@@ -1096,7 +1096,7 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
 
                 {activeSection === 'env' && (
                     <>
-                        <div className="dx-section-title"><Package size={13} /> {t('app.containersTab.environment', 'Environment')}</div>
+                        <div className="dx-section-title"><Package size={13} /> {t('app.containersTab.environment', 'Environment variables')}</div>
                         <div className="dx-inspector-list">
                             {envVars.length === 0 ? (
                                 <code className="is-empty">{t('app.containersTab.noEnvironmentVariables', 'No environment variables')}</code>

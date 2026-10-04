@@ -56,8 +56,8 @@ export default function StorageTab() {
     const [saving, setSaving] = useState(false);
 
     const itemLabels = {
-        docker_images: t('app.storageTab.itemDockerImages', 'App images'),
-        docker_volumes: t('app.storageTab.itemDockerVolumes', 'App volumes'),
+        docker_images: t('app.storageTab.itemDockerImages', 'Service images'),
+        docker_volumes: t('app.storageTab.itemDockerVolumes', 'Service volumes'),
         docker_build_cache: t('app.storageTab.itemDockerBuildCache', 'Docker build cache'),
         panel_database: t('app.storageTab.itemPanelDatabase', 'Panel database'),
         backups: t('app.storageTab.itemBackups', 'Backups and upgrade snapshots'),
@@ -244,7 +244,7 @@ export default function StorageTab() {
 
             <div {...register('storage-breakdown', 'settings-card')}>
                 <h3>{t('app.storageTab.breakdown', 'What is using the disk')}</h3>
-                <p>{t('app.storageTab.breakdownHint', 'Measured now. Reclaimable is what Docker reports it could free without touching running apps.')}</p>
+                <p>{t('app.storageTab.breakdownHint', 'Measured now. Reclaimable is what Docker reports it could free without touching running services.')}</p>
                 {items.length === 0 ? (
                     <p className="storage-tab__muted">{t('app.storageTab.noItems', 'Nothing to report. Docker is not answering and no panel data was found.')}</p>
                 ) : (

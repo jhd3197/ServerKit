@@ -98,19 +98,19 @@ const PreviewList = ({ appId }) => {
 
     async function handleDestroy(preview) {
         const ok = await confirm({
-            title: t('app.previewList.destroyPreview', 'Destroy preview'),
+            title: t('app.previewList.destroyPreview', 'Delete preview'),
             message: t('app.previewList.tearDownThePreviewEnvironmentFor', 'Tear down the preview environment for PR #{{prnumber}}? This removes its temporary domain and resources.', { prnumber: preview.pr_number }),
-            confirmText: t('app.previewList.destroy', 'Destroy'),
+            confirmText: t('app.previewList.destroy', 'Delete'),
             variant: 'danger',
         });
         if (!ok) return;
         setBusyId(preview.id);
         try {
             await api.destroyPreview(appId, preview.id);
-            toast?.success?.(t('app.previewList.previewForPrDestroyed', 'Preview for PR #{{prnumber}} destroyed', { prnumber: preview.pr_number }));
+            toast?.success?.(t('app.previewList.previewForPrDestroyed', 'Preview for PR #{{prnumber}} deleted', { prnumber: preview.pr_number }));
             await load();
         } catch (err) {
-            toast?.error?.(err.message || t('app.previewList.destroyFailed', 'Destroy failed'));
+            toast?.error?.(err.message || t('app.previewList.destroyFailed', 'Delete failed'));
         } finally {
             setBusyId(null);
         }
@@ -243,7 +243,7 @@ const PreviewList = ({ appId }) => {
                                     disabled={busyId === p.id}
                                 >
                                     <Trash2 size={15} />
-                                    {t('app.previewList.destroy', 'Destroy')}
+                                    {t('app.previewList.destroy', 'Delete')}
                                 </Button>
                             </div>
                         </li>

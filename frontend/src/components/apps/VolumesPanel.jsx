@@ -192,7 +192,7 @@ const VolumesPanel = ({ app, onChanged }) => {
                     </form>
 
                     <p className="app-volumes__note">
-                        <AlertTriangle size={14} /> {t('app.volumesPanel.detachingKeepsTheDataByDefault', 'Detaching keeps the data by default. Wiping is only allowed while the app is stopped.')}
+                        <AlertTriangle size={14} /> {t('app.volumesPanel.detachingKeepsTheDataByDefault', 'Detaching keeps the data by default. Wiping is only allowed while the service is stopped.')}
                     </p>
                 </div>
             </div>

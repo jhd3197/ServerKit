@@ -109,7 +109,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             {!app.private_url_enabled ? (
                 <div className="private-url-disabled">
                     <p className="hint">
-                        {t('app.privateURLSection.enableAPrivateShareableUrlFor', 'Enable a private, shareable URL for this application. Private URLs are not publicly indexed and can be shared with specific people.')}
+                        {t('app.privateURLSection.enableAPrivateShareableUrlFor', 'Enable a private, shareable URL for this service. Private URLs are not publicly indexed and can be shared with specific people.')}
                     </p>
                     <form onSubmit={handleEnable} className="private-url-form">
                         <div className="input-group">

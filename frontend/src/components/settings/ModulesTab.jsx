@@ -39,8 +39,8 @@ const ModulesTab = () => {
     return (
         <div className="settings-section">
             <div className="section-header">
-                <h2><Layers size={20} /> {t('app.modulesTab.modules', 'Modules')}</h2>
-                <p>{t('app.modulesTab.enableOrDisableOptionalFeatureAreas', 'Enable or disable optional feature areas. Disabled modules are hidden from the sidebar and their pages become unreachable.')}</p>
+                <h2><Layers size={20} /> {t('app.modulesTab.modules', 'Features')}</h2>
+                <p>{t('app.modulesTab.enableOrDisableOptionalFeatureAreas', 'Enable or disable optional feature areas. Disabled features are hidden from the sidebar and their pages become unreachable.')}</p>
             </div>
 
             {message && (
@@ -51,7 +51,7 @@ const ModulesTab = () => {
             )}
 
             {!modules ? (
-                <EmptyState loading title={t('app.modulesTab.loadingModules', 'Loading modules…')} />
+                <EmptyState loading title={t('app.modulesTab.loadingModules', 'Loading features…')} />
             ) : (
                 <div {...register('modules-toggle', 'settings-card')}>
                     {modules.map((mod) => (

@@ -198,7 +198,7 @@ const ImagesTab = ({ onStatsChange }) => {
     }
 
     async function handleRemove(image) {
-        const confirmed = await confirmImage({ titleKey: 'app.imagesTab.removeImage', title: 'Remove image', messageKey: 'app.imagesTab.removeThisImage', message: 'Remove this image?' });
+        const confirmed = await confirmImage({ titleKey: 'app.imagesTab.removeImage', title: 'Delete image', messageKey: 'app.imagesTab.removeThisImage', message: 'Delete this image?', confirmText: t('common.actions.delete', 'Delete') });
         if (!confirmed) return;
 
         try {
@@ -208,12 +208,12 @@ const ImagesTab = ({ onStatsChange }) => {
             } else {
                 await api.removeImage(id, true);
             }
-            toast.success(t('app.imagesTab.imageRemovedSuccessfully', 'Image removed'));
+            toast.success(t('app.imagesTab.imageRemovedSuccessfully', 'Image deleted'));
             loadImages();
             onStatsChange?.();
         } catch (err) {
             console.error('Failed to remove image:', err);
-            toast.error(t('app.imagesTab.failedToRemoveImageItMay', 'Failed to remove image. It may be in use by a container.'));
+            toast.error(t('app.imagesTab.failedToRemoveImageItMay', 'Failed to delete image. It may be in use by a container.'));
         }
     }
 
@@ -315,7 +315,7 @@ const ImagesTab = ({ onStatsChange }) => {
                         type="button"
                         className="dx-row-action is-danger"
                         onClick={() => handleRemove(image)}
-                        title={t('app.imagesTab.removeImage2', 'Remove image')}
+                        title={t('app.imagesTab.removeImage2', 'Delete image')}
                     >
                         <Trash2 size={13} />
                     </Button>

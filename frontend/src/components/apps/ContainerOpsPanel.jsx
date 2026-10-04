@@ -77,7 +77,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
     async function handleApply() {
         const confirmed = await confirm({
             title: t('app.containerOpsPanel.updateImage', 'Update image'),
-            message: t('app.containerOpsPanel.pullTheLatestImageAndRecreate', 'Pull the latest image and recreate the container? The app will briefly restart.'),
+            message: t('app.containerOpsPanel.pullTheLatestImageAndRecreate', 'Pull the latest image and recreate the container? The service will briefly restart.'),
             confirmText: t('app.containerOpsPanel.updateNow', 'Update now'),
         });
         if (!confirmed) return;
@@ -119,7 +119,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
             <div className="app-panel-body">
                 {!isCompose && (
                     <p className="app-panel-hint">
-                        {t('app.containerOpsPanel.imageUpdatesApplyToDockerCompose', 'Image updates apply to Docker Compose apps. You can still check this app\'s digest, but "Update now" is only available for docker-compose apps.')}
+                        {t('app.containerOpsPanel.imageUpdatesApplyToDockerCompose', 'Image updates apply to services deployed with Docker Compose. You can still check this service\'s digest, but "Update now" is only available for Docker Compose deployments.')}
                     </p>
                 )}
 
@@ -201,7 +201,7 @@ const RegistrySection = ({ app, onChanged }) => {
             </div>
             <div className="app-panel-body">
                 <p className="app-panel-hint">
-                    {t('app.containerOpsPanel.authenticateWithStoredCredentialsBeforePulling', 'Authenticate with stored credentials before pulling this app\'s image. Add registries under')} <Link to="/settings/connections">{t('app.containerOpsPanel.settingsConnections', 'Settings → Connections')}</Link>.
+                    {t('app.containerOpsPanel.authenticateWithStoredCredentialsBeforePulling', "Authenticate with stored credentials before pulling this service's image. Add registries under")} <Link to="/settings/connections">{t('app.containerOpsPanel.settingsConnections', 'Settings → Connections')}</Link>.
                 </p>
 
                 <div className="container-ops__field">
@@ -296,10 +296,10 @@ const AutoSleepSection = ({ app, onChanged }) => {
         try {
             if (policy?.asleep) {
                 await api.wakeApp(app.id);
-                toast.success(t('app.containerOpsPanel.appWoken', 'App woken'));
+                toast.success(t('app.containerOpsPanel.appWoken', 'Service woken'));
             } else {
                 await api.sleepApp(app.id);
-                toast.success(t('app.containerOpsPanel.appPutToSleep', 'App put to sleep'));
+                toast.success(t('app.containerOpsPanel.appPutToSleep', 'Service put to sleep'));
             }
             await load();
             onChanged?.();
@@ -332,7 +332,7 @@ const AutoSleepSection = ({ app, onChanged }) => {
                     <div className="container-ops__field-text">
                         <Label htmlFor={`sleep-enabled-${app.id}`}>{t('app.containerOpsPanel.enableAutoSleep', 'Enable auto-sleep')}</Label>
                         <span className="container-ops__field-hint">
-                            {t('app.containerOpsPanel.idleAppsAreSuspendedAfterThe', 'Idle apps are suspended after the timeout below.')}
+                            {t('app.containerOpsPanel.idleAppsAreSuspendedAfterThe', 'Idle services are suspended after the timeout below.')}
                         </span>
                     </div>
                     <Switch

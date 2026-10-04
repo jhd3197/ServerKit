@@ -90,7 +90,7 @@ const CloudProvision = () => {
     const handleDestroy = async (id) => {
         try {
             await api.destroyCloudServer(id);
-            toast.success(t('app.cloudProvision.serverDestroyed', 'Server destroyed'));
+            toast.success(t('app.cloudProvision.serverDestroyed', 'Server deleted'));
             setDeleteConfirm(null);
             loadData();
         } catch (err) { toast.error(err.message); }
@@ -137,7 +137,7 @@ const CloudProvision = () => {
                                 <div className="cloud-server-card__actions">
                                     {srv.agent_installed && <Badge variant="success">{t('app.cloudProvision.agentInstalled', 'Agent installed')}</Badge>}
                                     {user?.is_admin && srv.status === 'active' && (
-                                        <Button size="sm" variant="destructive" onClick={() => setDeleteConfirm(srv)}>{t('app.cloudProvision.destroy', 'Destroy')}</Button>
+                                        <Button size="sm" variant="destructive" onClick={() => setDeleteConfirm(srv)}>{t('app.cloudProvision.destroy', 'Delete')}</Button>
                                     )}
                                 </div>
                             </SharedCard>
@@ -277,7 +277,7 @@ const CloudProvision = () => {
             </Modal>
 
             {deleteConfirm && (
-                <ConfirmDialog title={t('app.cloudProvision.destroyServer', 'Destroy server')} message={t('app.cloudProvision.destroyThisActionIsIrreversible', 'Destroy "{{name}}"? This action is irreversible.', { name: deleteConfirm.name })} onConfirm={() => handleDestroy(deleteConfirm.id)} onCancel={() => setDeleteConfirm(null)} variant="danger" />
+                <ConfirmDialog title={t('app.cloudProvision.destroyServer', 'Delete server')} message={t('app.cloudProvision.destroyThisActionIsIrreversible', 'Delete "{{name}}"? This action is irreversible.', { name: deleteConfirm.name })} onConfirm={() => handleDestroy(deleteConfirm.id)} onCancel={() => setDeleteConfirm(null)} confirmText={t('common.actions.delete', 'Delete')} variant="danger" />
             )}
         </div>
     );

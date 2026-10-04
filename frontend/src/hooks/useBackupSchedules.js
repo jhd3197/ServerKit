@@ -28,7 +28,7 @@ export function useBackupSchedules() {
     });
     const remove = useServerMutation((id) => api.removeBackupSchedule(id), {
         invalidate: [SCHEDULE_KEY],
-        onSuccess: () => toast.success(t('app.backups.scheduleRemoved', 'Schedule removed')),
+        onSuccess: () => toast.success(t('app.backups.scheduleRemoved', 'Schedule deleted')),
         onError: (error) => toast.error(error.message),
     });
     const refetch = query.refetch;

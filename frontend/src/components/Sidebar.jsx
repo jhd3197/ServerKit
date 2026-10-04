@@ -450,7 +450,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
 
             <div className="sidebar-footer" ref={menuRef}>
                 {menuOpen && (
-                    <div className="user-context-menu" id="user-context-menu" aria-label={t('nav.accountMenu', 'Account and preferences')}>
+                    <div className="user-context-menu" id="user-context-menu" aria-label={t('nav.accountMenu', 'Account and settings')}>
                         <div className="context-menu-section">
                             <div className="context-menu-label" id="theme-switcher-label">{t('nav.theme', 'Theme')}</div>
                             <div className="theme-switcher" role="group" aria-labelledby="theme-switcher-label">
@@ -570,7 +570,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                         <div className="context-menu-divider" />
                         <SharedButton variant="unstyled" type="button" className="context-menu-item danger" onClick={logout}>
                             <LogOut size={15} aria-hidden="true" />
-                            {t('common.actions.logOut', 'Log out')}
+                            {t('common.actions.logOut', 'Sign out')}
                         </SharedButton>
                     </div>
                 )}

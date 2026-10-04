@@ -76,7 +76,7 @@ export default function PortField({
     } else if (privileged && !allowPrivileged) {
         status = { tone: 'error', text: t('app.portField.privileged', 'Ports below 1024 need root. Use 1024 or higher.') };
     } else if (check && ownPort) {
-        status = { text: t('app.portField.ownPort', 'This app already uses {{port}}.', { port }) };
+        status = { text: t('app.portField.ownPort', 'This service already uses {{port}}.', { port }) };
     } else if (check?.holder?.kind === 'app') {
         status = { tone: 'error', text: t('app.portField.usedByApp', 'Used by {{name}}.', { name: check.holder.name }) };
     } else if (check?.holder) {

@@ -431,16 +431,16 @@ const IntegrityTab = () => {
 
             <SharedCard variant="legacy" className="card">
                 <SharedCardHeader variant="legacy" className="card-header">
-                    <h3>{t('app.integrityTab.applicationDocroots', 'Application docroots')} <span className="sec-count">{t('app.integrityTab.optIn', '· opt-in')}</span></h3>
+                    <h3>{t('app.integrityTab.applicationDocroots', 'Service docroots')} <span className="sec-count">{t('app.integrityTab.optIn', '· opt-in')}</span></h3>
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">
                     <p className="sec-hint sec-hint--lead">
-                        {t('app.integrityTab.watchingADocrootHashesEveryFile', 'Watching a docroot hashes every file outside upload/cache directories, so it is opt-in per application.')}
+                        {t('app.integrityTab.watchingADocrootHashesEveryFile', 'Watching a docroot hashes every file outside upload/cache directories, so it is opt-in per service.')}
                     </p>
                     {appsError ? (
                         <ErrorState compact error={appsError} onRetry={loadApps} />
                     ) : apps.length === 0 ? (
-                        <p className="sec-faint">{t('app.integrityTab.noApplicationsFound', 'No applications found.')}</p>
+                        <p className="sec-faint">{t('app.integrityTab.noApplicationsFound', 'No services found.')}</p>
                     ) : (
                         <div className="sec-finding-list">
                             {apps.map((appItem) => (

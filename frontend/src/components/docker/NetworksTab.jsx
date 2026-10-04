@@ -30,7 +30,7 @@ export const CreateNetworkButton = () => {
             <Button
                 onClick={() => setShowModal(true)}
                 disabled={isRemote}
-                title={isRemote ? t('app.networksTab.creatingNetworksIsOnlyAvailableOn', 'Creating networks is only available on the local Docker target right now') : t('app.networksTab.createNetwork', 'Create network')}
+                title={isRemote ? t('app.networksTab.creatingNetworksIsOnlyAvailableOn', 'Creating networks is only available on the panel server right now') : t('app.networksTab.createNetwork', 'Create network')}
             >
                 <span>+</span> {t('app.networksTab.createNetwork2', 'Create network')}
             </Button>
@@ -136,7 +136,7 @@ const NetworksTab = ({ onStatsChange }) => {
     }
 
     async function handleRemove(network) {
-        const confirmed = await confirmNetwork({ titleKey: 'app.networksTab.removeNetwork', title: 'Remove network', messageKey: 'app.networksTab.removeThisNetwork', message: 'Remove this network?' });
+        const confirmed = await confirmNetwork({ titleKey: 'app.networksTab.removeNetwork', title: 'Delete network', messageKey: 'app.networksTab.removeThisNetwork', message: 'Delete this network?', confirmText: t('common.actions.delete', 'Delete') });
         if (!confirmed) return;
 
         try {
@@ -145,12 +145,12 @@ const NetworksTab = ({ onStatsChange }) => {
             } else {
                 await api.removeNetwork(networkId(network));
             }
-            toast.success(t('app.networksTab.networkRemovedSuccessfully', 'Network removed'));
+            toast.success(t('app.networksTab.networkRemovedSuccessfully', 'Network deleted'));
             loadNetworks();
             onStatsChange?.();
         } catch (err) {
             console.error('Failed to remove network:', err);
-            toast.error(t('app.networksTab.failedToRemoveNetworkItMay', 'Failed to remove network. It may be in use.'));
+            toast.error(t('app.networksTab.failedToRemoveNetworkItMay', 'Failed to delete network. It may be in use.'));
         }
     }
 
@@ -237,7 +237,7 @@ const NetworksTab = ({ onStatsChange }) => {
             render: (network) => (
                 <div className="dx-row-actions">
                     {networkKind(network) === 'Built-in' ? (
-                        <span className="dx-row-protected" title={t('app.networksTab.shipsWithTheDockerDaemonIt', 'Ships with the Docker daemon, so it cannot be removed')}>
+                        <span className="dx-row-protected" title={t('app.networksTab.shipsWithTheDockerDaemonIt', 'Ships with the Docker daemon, so it cannot be deleted')}>
                             <Lock size={11} /> {t('common.labels.system', 'System')}
                         </span>
                     ) : (
@@ -245,7 +245,7 @@ const NetworksTab = ({ onStatsChange }) => {
                             type="button"
                             className="dx-row-action is-danger"
                             onClick={() => handleRemove(network)}
-                            title={t('app.networksTab.removeNetwork2', 'Remove network')}
+                            title={t('app.networksTab.removeNetwork2', 'Delete network')}
                         >
                             <Trash2 size={13} />
                         </Button>

@@ -94,7 +94,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
             )}
         >
             <p className="sk-modal__subtitle">
-                {t('app.diskReclaim.onlyReviewedSafeCandidatesAreOffered', 'Only reviewed-safe cleanup is offered: upgrade snapshots beyond the newest one, abandoned update staging, oversized logs, package caches, old journal entries and Docker build cache. Nothing here touches your apps or databases.')}
+                {t('app.diskReclaim.onlyReviewedSafeCandidatesAreOffered', 'Only reviewed-safe cleanup is offered: upgrade snapshots beyond the newest one, abandoned update staging, oversized logs, package caches, old journal entries and Docker build cache. Nothing here touches your services or databases.')}
             </p>
 
             {loading ? (

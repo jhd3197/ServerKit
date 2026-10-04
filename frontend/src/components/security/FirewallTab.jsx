@@ -307,18 +307,18 @@ const FirewallTab = () => {
 
     const handleRemovePort = async (port, protocol) => {
         const confirmed = await confirm({
-            title: t('app.firewallTab.removePortRule', 'Remove port rule'),
-            message: t('app.firewallTab.areYouSureYouWantTo4', 'Remove the rule for port {{port}}/{{protocol}}? The firewall stops applying it.', { port: port, protocol: protocol }),
-            confirmText: t('common.actions.remove', 'Remove'),
+            title: t('app.firewallTab.removePortRule', 'Delete port rule'),
+            message: t('app.firewallTab.areYouSureYouWantTo4', 'Delete the rule for port {{port}}/{{protocol}}? The firewall stops applying it.', { port: port, protocol: protocol }),
+            confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',
         });
         if (!confirmed) return;
         try {
             await api.denyPort(parseInt(port), protocol);
-            toast.success(t('app.firewallTab.portRuleRemoved', 'Port {{port}}/{{protocol}} rule removed', { port: port, protocol: protocol }));
+            toast.success(t('app.firewallTab.portRuleRemoved', 'Port {{port}}/{{protocol}} rule deleted', { port: port, protocol: protocol }));
             await loadRules();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToRemovePort', 'Failed to remove port: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToRemovePort', 'Failed to delete port rule: {{message}}', { message: error.message }));
         }
     };
 
@@ -390,7 +390,7 @@ const FirewallTab = () => {
             render: (rule) => (
                 rule.type === 'port' && (
                     <Button variant="destructive" size="sm" onClick={() => handleRemovePort(rule.port, rule.protocol)}>
-                        {t('common.actions.remove', 'Remove')}
+                        {t('common.actions.delete', 'Delete')}
                     </Button>
                 )
             ),
@@ -680,7 +680,7 @@ const FirewallTab = () => {
                             )}
                         </InfoList>
                         <p className="sec-hint">
-                            {t('app.firewallTab.stopsAppContainersFromReachingThe', 'Stops app containers from reaching the cloud metadata endpoint, preventing SSRF attacks from stealing instance credentials.')}
+                            {t('app.firewallTab.stopsAppContainersFromReachingThe', 'Stops service containers from reaching the cloud metadata endpoint, preventing SSRF attacks from stealing instance credentials.')}
                         </p>
                     </SharedCardContent>
                 </SharedCard>

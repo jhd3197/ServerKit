@@ -42,8 +42,8 @@ test('title resolution prefers static routes and handles dynamic workspace title
     assert.equal(resolveExactCoreRouteTitle('/services/123'), '');
     assert.equal(resolveCoreRouteTitle('/services/new'), 'New service');
     assert.equal(resolveCoreRouteTitle('/services/123/settings'), 'Services');
-    assert.equal(resolveCoreRouteTitle('/workspaces/42/overview'), 'Workspace Overview');
-    assert.equal(resolveCoreRouteTitle('/workspaces/42/settings/navigation'), 'Workspace Navigation Permissions');
+    assert.equal(resolveCoreRouteTitle('/workspaces/42/overview'), 'Workspace overview');
+    assert.equal(resolveCoreRouteTitle('/workspaces/42/settings/navigation'), 'Workspace navigation permissions');
     assert.equal(resolveCoreRouteTitle('/connections/callback/github'), 'GitHub connection');
     assert.equal(resolveCoreRouteTitle('/status/public'), '');
     assert.equal(resolveCoreRouteTitle('/not-a-core-route'), '');

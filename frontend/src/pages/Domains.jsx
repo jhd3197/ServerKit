@@ -409,7 +409,7 @@ const Domains = () => {
         },
         {
             key: 'site',
-            headerKey: 'app.domains.linkedSite', header: 'Linked site',
+            headerKey: 'app.domains.linkedSite', header: 'Linked service',
             type: 'enum',
             width: 'minmax(140px,1fr)',
             value: (d) => (d.application_id ? appName(d.application_id) : '—'),
@@ -660,7 +660,7 @@ const Domains = () => {
                 <EmptyState
                     icon={Globe}
                     title={t('app.domains.noDomainsYet', 'No domains yet')}
-                    description={t('app.domains.attachADomainToAnApplication', 'Attach a domain to an application, or connect a DNS provider to see its zones here.')}
+                    description={t('app.domains.attachADomainToAnApplication', 'Attach a domain to a service, or connect a DNS provider to see its zones here.')}
                     action={<Button onClick={() => setShowAddModal(true)}><Plus size={16} /> {t('app.domains.addDomain2', 'Add domain')}</Button>}
                 />
             ) : (
@@ -828,7 +828,7 @@ const Domains = () => {
                                         </div>
                                     </div>
                                     <div className="sk-spec-card">
-                                        <div className="sk-spec-card__label">{t('app.domains.linkedSite', 'Linked site')}</div>
+                                        <div className="sk-spec-card__label">{t('app.domains.linkedSite', 'Linked service')}</div>
                                         <div className="sk-spec-card__value">{drawerDomain.application_id ? appName(drawerDomain.application_id) : 'Unlinked'}</div>
                                         <div className="sk-spec-card__sub">{drawerDomain.is_primary ? 'Primary domain' : 'Alias'}</div>
                                     </div>
@@ -893,9 +893,9 @@ const Domains = () => {
             <Modal open={showAddModal} onClose={() => setShowAddModal(false)} title={t('app.domains.addDomain2', 'Add domain')}>
                 <form onSubmit={handleAddDomain}>
                     <div className="form-group">
-                        <Label>{t('app.domains.application', 'Application')}</Label>
+                        <Label>{t('app.domains.application', 'Service')}</Label>
                         <Select value={selectedAppId} onValueChange={setSelectedAppId} required>
-                            <SelectTrigger><SelectValue placeholder={t('app.domains.selectAnApplication', 'Select an application')} /></SelectTrigger>
+                            <SelectTrigger><SelectValue placeholder={t('app.domains.selectAnApplication', 'Select a service')} /></SelectTrigger>
                             <SelectContent>
                                 {apps.map(app => (
                                     <SelectItem key={app.id} value={String(app.id)}>{app.name}</SelectItem>

@@ -145,17 +145,18 @@ const CronTab = ({ serverId, serverStatus }) => {
 
     async function handleRemove(job) {
         const ok = await confirmCron({
-            titleKey: 'app.cronTab.removeCronJob', title: 'Remove cron job',
-            message: `Remove this entry from the host crontab?\n\n${job.schedule} ${job.command}`,
+            titleKey: 'app.cronTab.removeCronJob', title: 'Delete cron job',
+            message: `${t('app.cronTab.deleteThisEntryFromThe', 'Delete this entry from the host crontab?')}\n\n${job.schedule} ${job.command}`,
+            confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',
         });
         if (!ok) return;
         try {
             await api.removeRemoteCronJob(serverId, job.id);
-            toast.success(t('app.cronTab.cronJobRemoved', 'Cron job removed'));
+            toast.success(t('app.cronTab.cronJobRemoved', 'Cron job deleted'));
             loadJobs();
         } catch (err) {
-            toast.error(err.message || t('app.cronTab.failedToRemoveJob', 'Failed to remove job'));
+            toast.error(err.message || t('app.cronTab.failedToRemoveJob', 'Failed to delete job'));
         }
     }
 
@@ -266,7 +267,7 @@ const CronTab = ({ serverId, serverStatus }) => {
                     <Button variant="unstyled" type="button"
                         className="btn-icon danger"
                         onClick={() => handleRemove(job)}
-                        title={t('common.actions.remove', 'Remove')}
+                        title={t('common.actions.delete', 'Delete')}
                     >
                         <TrashIcon />
                     </Button>
@@ -322,7 +323,7 @@ const CronTab = ({ serverId, serverStatus }) => {
                 <div className="cron-tab__actions">
                     <Button variant="outline" onClick={loadJobs}>{t('common.actions.refresh', 'Refresh')}</Button>
                     <Button onClick={() => setShowAddModal(true)} disabled={status?.available === false}>
-                        {t('app.cronTab.addJob', 'Add job')}
+                        {t('app.cronTab.addJob', 'New cron job')}
                     </Button>
                 </div>
             </div>
@@ -389,7 +390,7 @@ const CronTab = ({ serverId, serverStatus }) => {
             <Modal
                 open={showAddModal}
                 onClose={() => { if (!submitting) setShowAddModal(false); }}
-                title={t('app.cronTab.addCronJob', 'Add cron job')}
+                title={t('app.cronTab.addCronJob', 'New cron job')}
             >
                 <p className="sk-modal__subtitle">
                     {t('app.cronTab.scheduleACommandOnTheHost', 'Schedule a command on the host crontab. Runs as the agent user.')}
@@ -445,7 +446,7 @@ const CronTab = ({ serverId, serverStatus }) => {
                         </div>
                         <div className="modal-actions">
                             <Button type="button" variant="outline" onClick={() => setShowAddModal(false)} disabled={submitting}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={submitting}>{submitting ? 'Adding…' : 'Add Job'}</Button>
+                            <Button type="submit" disabled={submitting}>{submitting ? t('app.cronTab.creating', 'Creating…') : t('app.cronTab.createCronJob', 'Create cron job')}</Button>
                         </div>
                     </form>
             </Modal>

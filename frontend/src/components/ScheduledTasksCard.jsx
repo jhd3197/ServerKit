@@ -60,7 +60,7 @@ const ScheduledTasksCard = ({ appId }) => {
             {loading ? (
                 <div className="scheduled-tasks-card__loading">{t('common.loading', 'Loading…')}</div>
             ) : !jobs || jobs.length === 0 ? (
-                <div className="scheduled-tasks-card__empty">{t('app.scheduledTasksCard.noScheduledTasksForThisApp', 'No scheduled tasks for this app.')}</div>
+                <div className="scheduled-tasks-card__empty">{t('app.scheduledTasksCard.noScheduledTasksForThisApp', 'No scheduled tasks for this service.')}</div>
             ) : (
                 <ul className="scheduled-tasks-card__list">
                     {jobs.map((job) => (

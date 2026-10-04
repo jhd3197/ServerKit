@@ -154,7 +154,7 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
 
             {resourceType === 'application' && localKeys && (
                 <p className="shared-vars-panel__hint shared-vars-panel__hint--note">
-                    {t('app.environmentVariablesPanel.sharedVariablesAreInjectedIntoThe', 'Shared variables are injected into the container at deploy. The app\'s own Environment tab takes precedence, so where a key also exists locally the local value is what the container uses.')}
+                    {t('app.environmentVariablesPanel.sharedVariablesAreInjectedIntoThe', "Shared variables are injected into the container at deploy. The service's own Environment variables tab takes precedence, so where a key also exists locally the local value is what the container uses.")}
                 </p>
             )}
 
@@ -198,7 +198,7 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
                                         {conflict && (
                                             <span
                                                 className="conflict-badge"
-                                                title={t('app.environmentVariablesPanel.thisKeyIsAlsoSetOn', 'This key is also set on the app\'s Environment tab. The local value is what the container uses; the shared value is overridden.')}
+                                                title={t('app.environmentVariablesPanel.thisKeyIsAlsoSetOn', "This key is also set on the service's Environment variables tab. The local value is what the container uses; the shared value is overridden.")}
                                             >
                                                 {t('app.environmentVariablesPanel.setLocallyLocalValueApplies', 'Set locally (local value applies)')}
                                             </span>

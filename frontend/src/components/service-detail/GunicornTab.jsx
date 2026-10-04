@@ -32,7 +32,7 @@ const GunicornTab = ({ appId }) => {
         setSaving(true);
         try {
             await api.updateGunicornConfig(appId, config);
-            toast.success(t('app.gunicornTab.configurationSavedRestartTheAppTo', 'Configuration saved. Restart the app to apply changes.'));
+            toast.success(t('app.gunicornTab.configurationSavedRestartTheAppTo', 'Configuration saved. Restart the service to apply changes.'));
         } catch {
             toast.error(t('app.gunicornTab.failedToSaveConfiguration', 'Failed to save configuration'));
         } finally {

@@ -1191,7 +1191,7 @@ function FileManager() {
                                         ? t('app.fileManager.remoteAgent', 'Remote agent')
                                         : isS3
                                             ? t('app.fileManager.objectStorage', 'Object storage')
-                                            : t('app.fileManager.localPanelHost', 'Local panel host')}
+                                            : t('app.fileManager.localPanelHost', 'Panel server')}
                                 </span>
                             </div>
                         </div>

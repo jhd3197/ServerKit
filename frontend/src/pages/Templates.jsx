@@ -631,7 +631,7 @@ const Templates = () => {
                     onSuccess={(appId) => {
                         setShowInstallModal(false);
                         setSelectedTemplate(null);
-                        toast.success(t('app.templates.applicationInstalledSuccessfully', 'Application installed'));
+                        toast.success(t('app.templates.applicationInstalledSuccessfully', 'Service installed'));
                         navigate(`/services/${appId}/logs`);
                     }}
                 />
@@ -932,7 +932,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
 
                     {visibleVars.length > 0 && (
                         <div className="sk-formdrawer__field">
-                            <span className="sk-formdrawer__label">{t('app.templates.configuration', 'Configuration')}</span>
+                            <span className="sk-formdrawer__label">{t('app.templates.configuration', 'Settings')}</span>
                             {visibleVars.map(variable => (
                                 <div key={variable.name} className="form-group">
                                     <label>

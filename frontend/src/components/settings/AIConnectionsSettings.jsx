@@ -94,7 +94,7 @@ export default function AIConnectionsSettings({ connections, providers, defaultI
         } finally { setBusy(false); setOperation(null); }
     };
     const remove = async () => {
-        if (!await confirm({ title: t('ai.connections.deleteTitle', 'Delete AI connection?'), message: t('ai.connections.deleteMessage', 'Remove {{name}}? Connections used by chats or selected as default cannot be deleted.', { name: draft.name }), confirmText: t('ai.connections.delete', 'Delete'), variant: 'danger' })) return;
+        if (!await confirm({ title: t('ai.connections.deleteTitle', 'Delete AI connection?'), message: t('ai.connections.deleteMessage', 'Delete {{name}}? Connections used by chats or selected as default cannot be deleted.', { name: draft.name }), confirmText: t('ai.connections.delete', 'Delete'), variant: 'danger' })) return;
         setBusy(true);
         try {
             await api.aiDeleteConnection(draft.id);

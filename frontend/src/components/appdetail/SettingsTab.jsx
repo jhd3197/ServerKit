@@ -37,7 +37,7 @@ const SettingsTab = ({ app, onUpdate }) => {
             }
         } catch { /* cron visibility is best-effort — never block the delete */ }
 
-        const firstConfirm = await confirmAppSettings({ titleKey: 'app.settingsTab.deleteApplication', title: 'Delete application', message: `Delete ${app.name}? It stops serving and moves to the recycle bin, where you can restore it for 30 days.${cronNote}` });
+        const firstConfirm = await confirmAppSettings({ titleKey: 'app.settingsTab.deleteApplication', title: 'Delete service', message: `Delete ${app.name}? It stops serving and moves to the recycle bin, where you can restore it for 30 days.${cronNote}` });
         if (!firstConfirm) return;
         const secondConfirm = await confirmAppSettings({ titleKey: 'app.settingsTab.confirmDeletion', title: 'Confirm deletion', messageKey: 'app.settingsTab.areYouSureItsContainersStop', message: 'Delete this service? Its containers stop and it stops being served. Files and data volumes are kept until you purge it from the recycle bin.' });
         if (!secondConfirm) return;
@@ -69,7 +69,7 @@ const SettingsTab = ({ app, onUpdate }) => {
     }
 
     async function handleUnlink() {
-        const confirmed = await confirmAppSettings({ titleKey: 'app.settingsTab.unlinkApplication', title: 'Unlink application', message: `Unlink ${app.name} from its linked application? Both apps will become standalone.`, variant: 'warning' });
+        const confirmed = await confirmAppSettings({ titleKey: 'app.settingsTab.unlinkApplication', title: 'Unlink service', message: `Unlink ${app.name} from its linked service? Both services will become standalone.`, variant: 'warning' });
         if (!confirmed) return;
 
         setUnlinking(true);
@@ -85,17 +85,17 @@ const SettingsTab = ({ app, onUpdate }) => {
 
     return (
         <div>
-            <h3 className="app-eyebrow">{t('app.settingsTab.applicationSettings', 'Application settings')}</h3>
+            <h3 className="app-eyebrow">{t('app.settingsTab.applicationSettings', 'Service settings')}</h3>
 
             <SharedCard variant="legacy" className="card settings-section">
-                <h4>{t('app.settingsTab.environmentConfiguration', 'Environment configuration')}</h4>
+                <h4>{t('app.settingsTab.environmentConfiguration', 'Environment settings')}</h4>
                 <div className="settings-row">
                     <div className="settings-label">
                         <span>{t('app.settingsTab.environmentType', 'Environment type')}</span>
                         <span className="settings-hint">
                             {app.has_linked_app
-                                ? 'This app is linked. Unlink to change environment type.'
-                                : 'Set how this application is used in your workflow.'}
+                                ? 'This service is linked. Unlink to change environment type.'
+                                : 'Set how this service is used in your workflow.'}
                         </span>
                     </div>
                     <div className="settings-control">
@@ -127,9 +127,9 @@ const SettingsTab = ({ app, onUpdate }) => {
                 {app.has_linked_app && (
                     <div className="settings-row settings-linked-warning">
                         <div className="settings-label">
-                            <span>{t('app.settingsTab.linkedApplication', 'Linked application')}</span>
+                            <span>{t('app.settingsTab.linkedApplication', 'Linked service')}</span>
                             <span className="settings-hint">
-                                {t('app.settingsTab.thisAppIsLinkedToAnother', 'This app is linked to another application. Unlinking will reset both apps to standalone mode.')}
+                                {t('app.settingsTab.thisAppIsLinkedToAnother', 'This service is linked to another service. Unlinking will reset both services to standalone mode.')}
                             </span>
                         </div>
                         <div className="settings-control">
@@ -138,7 +138,7 @@ const SettingsTab = ({ app, onUpdate }) => {
                                 onClick={handleUnlink}
                                 disabled={unlinking}
                             >
-                                {unlinking ? 'Unlinking...' : 'Unlink Application'}
+                                {unlinking ? 'Unlinking...' : 'Unlink service'}
                             </Button>
                         </div>
                     </div>
@@ -147,7 +147,7 @@ const SettingsTab = ({ app, onUpdate }) => {
 
             <DangerZone
                 title={t('app.settingsTab.dangerZone', 'Delete service')}
-                description={t('app.settingsTab.onceYouDeleteAnApplicationThere', "Deleting an application is permanent. You can't undo this.")}
+                description={t('app.settingsTab.onceYouDeleteAnApplicationThere', "Deleting a service is permanent. You can't undo this.")}
                 action={
                     <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
                         {deleting ? t('app.settingsTab.deleting', 'Deleting…') : t('app.settingsTab.deleteService', 'Delete service')}

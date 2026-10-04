@@ -51,7 +51,7 @@ const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShar
         header: t('common.labels.service', 'Service'),
         empty: t('app.workspaceServicesTab.noServicesInThisWorkspaceYet', 'No services in this workspace yet'),
         moveBelow: t('app.workspaceServicesTab.moveOneInBelow', 'Move one in below.'),
-        move: t('app.workspaceServicesTab.moveAnApplicationIntoThisWorkspace', 'Move an application into this workspace'),
+        move: t('app.workspaceServicesTab.moveAnApplicationIntoThisWorkspace', 'Move a service into this workspace'),
     };
     const navigate = useNavigate();
     const { sorts, setSorts } = useTableSort({ storageKey: `serverkit-table-ws-${kind}-sort` });

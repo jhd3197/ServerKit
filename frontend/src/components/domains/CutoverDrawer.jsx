@@ -222,7 +222,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                 {stage === 'target' && (
                     <div className="cutover__stage">
                         <p className="cutover__lead">
-                            {t('app.cutoverDrawer.repoint', 'Repoint')} <strong>{domain}</strong> {t('app.cutoverDrawer.atTheBoxWhereTheImported', 'at the box where the imported site now lives. Its current records are snapshotted first, so the switch can always be reverted.')}
+                            {t('app.cutoverDrawer.repoint', 'Repoint')} <strong>{domain}</strong> {t('app.cutoverDrawer.atTheBoxWhereTheImported', 'at the server where the imported site now lives. Its current records are snapshotted first, so the switch can always be reverted.')}
                         </p>
 
                         <div className="cutover__field">

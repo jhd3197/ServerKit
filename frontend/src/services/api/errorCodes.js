@@ -39,7 +39,7 @@ function translatedServerErrors() {
         'auth.registration_disabled': t(
             'errors.auth.registrationDisabled', 'Registration is disabled'),
         'auth.password_login_disabled': t(
-            'errors.auth.passwordLoginDisabled', 'Password login is disabled. Please use SSO.'),
+            'errors.auth.passwordLoginDisabled', 'Password sign-in is disabled. Please use SSO.'),
         'auth.missing_credentials': t(
             'errors.auth.missingCredentials', 'Missing email/username or password'),
         'auth.missing_fields': t(

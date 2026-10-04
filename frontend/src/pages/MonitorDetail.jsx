@@ -41,7 +41,7 @@ const SECTIONS = [
     { value: 'performance', labelKey: 'app.monitorDetail.performance', label: 'Performance', icon: <Activity size={14} /> },
     { value: 'uptime', labelKey: 'common.labels.uptime', label: 'Uptime', icon: <BarChart3 size={14} /> },
     { value: 'checks', labelKey: 'app.monitorDetail.checkLog', label: 'Check log', icon: <Rows3 size={14} /> },
-    { value: 'config', labelKey: 'app.monitorDetail.configuration', label: 'Configuration', icon: <SlidersHorizontal size={14} /> },
+    { value: 'config', labelKey: 'app.monitorDetail.configuration', label: 'Settings', icon: <SlidersHorizontal size={14} /> },
 ];
 
 const RANGES = [

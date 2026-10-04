@@ -82,7 +82,7 @@ export default function ManagedDatabasesPanel() {
             toast.success(drop ? t('app.managedDatabasesPanel.databaseDroppedAndUntracked', 'Database dropped and untracked') : t('app.managedDatabasesPanel.databaseUntracked', 'Database untracked'));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.managedDatabasesPanel.failedToRemoveDatabase', 'Failed to remove database'));
+            toast.error(err.message || t('app.managedDatabasesPanel.failedToRemoveDatabase', 'Failed to delete database'));
         } finally {
             setBusyId(null);
         }

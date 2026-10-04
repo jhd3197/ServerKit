@@ -103,7 +103,7 @@ const BuildTab = ({ appId, app }) => {
                 keep_deployments: configForm.keepDeployments
             });
             setShowConfigModal(false);
-            toast.success(t('app.buildTab.buildConfigurationSaved', 'Build configuration saved'));
+            toast.success(t('app.buildTab.buildConfigurationSaved', 'Build settings saved'));
             loadData();
         } catch (err) {
             setError(err.message);
@@ -182,7 +182,7 @@ const BuildTab = ({ appId, app }) => {
     }
 
     if (loading) {
-        return <EmptyState loading loadingVariant="form" title={t('app.buildTab.loadingBuildConfiguration', 'Loading build configuration…')} />;
+        return <EmptyState loading loadingVariant="form" title={t('app.buildTab.loadingBuildConfiguration', 'Loading build settings…')} />;
     }
 
     return (
@@ -231,7 +231,7 @@ const BuildTab = ({ appId, app }) => {
 
             <SharedCard variant="legacy" className="card">
                 <SharedCardHeader variant="legacy-row" className="card-header-row">
-                    <h3>{t('app.buildTab.buildConfiguration', 'Build configuration')}</h3>
+                    <h3>{t('app.buildTab.buildConfiguration', 'Build settings')}</h3>
                     <Button variant="outline" size="sm" onClick={() => setShowConfigModal(true)}>
                         {t('app.buildTab.configure', 'Configure')}
                     </Button>
@@ -242,7 +242,7 @@ const BuildTab = ({ appId, app }) => {
                         <InfoItem label={t('app.buildTab.timeout', 'Timeout')} value={`${buildConfig.timeout}s`} />
                     </InfoList>
                 ) : (
-                    <p className="hint">{t('app.buildTab.noBuildConfigurationClickConfigureTo', 'No build configuration. Click Configure to set up.')}</p>
+                    <p className="hint">{t('app.buildTab.noBuildConfigurationClickConfigureTo', 'No build settings. Click Configure to set up.')}</p>
                 )}
                 <SharedCardFooter variant="legacy" className="card-actions">
                     <Button
@@ -291,7 +291,7 @@ const BuildTab = ({ appId, app }) => {
                 </SharedCard>
             )}
 
-            <Modal open={showConfigModal} onClose={() => setShowConfigModal(false)} title={t('app.buildTab.buildConfiguration', 'Build configuration')}>
+            <Modal open={showConfigModal} onClose={() => setShowConfigModal(false)} title={t('app.buildTab.buildConfiguration', 'Build settings')}>
                         <form onSubmit={handleConfigureBuild}>
                             <div className="form-group">
                                 <label htmlFor="build-config-method">{t('app.buildTab.buildMethod', 'Build method')}</label>
@@ -353,7 +353,7 @@ const BuildTab = ({ appId, app }) => {
                                     {t('common.actions.cancel', 'Cancel')}
                                 </Button>
                                 <Button type="submit">
-                                    {t('app.buildTab.saveConfiguration', 'Save configuration')}
+                                    {t('app.buildTab.saveConfiguration', 'Save settings')}
                                 </Button>
                             </div>
                         </form>

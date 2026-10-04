@@ -130,7 +130,7 @@ const ComposeTab = ({ onStatsChange }) => {
     async function handleAction(project, action) {
         const projectPath = projectConfig(project);
         if (!projectPath) {
-            toast.error(t('app.composeTab.projectPathNotFound', 'Project path not found'));
+            toast.error(t('app.composeTab.projectPathNotFound', 'Compose project path not found'));
             return;
         }
 
@@ -144,7 +144,7 @@ const ComposeTab = ({ onStatsChange }) => {
                 } else {
                     await api.composeUp(projectPath, true, false);
                 }
-                toast.success(t('app.composeTab.projectStarted', 'Project started'));
+                toast.success(t('app.composeTab.projectStarted', 'Compose project started'));
             } else if (action === 'down') {
                 const downConfirmed = await confirmCompose({ titleKey: 'app.composeTab.stopComposeProject', title: 'Stop Compose project', messageKey: 'app.composeTab.stopThisComposeProjectContainersWill', message: 'Stop this compose project? Containers will be removed.' });
                 if (!downConfirmed) {
@@ -156,14 +156,14 @@ const ComposeTab = ({ onStatsChange }) => {
                 } else {
                     await api.composeDown(projectPath, false, true);
                 }
-                toast.success(t('app.composeTab.projectStopped', 'Project stopped'));
+                toast.success(t('app.composeTab.projectStopped', 'Compose project stopped'));
             } else if (action === 'restart') {
                 if (isRemote) {
                     await api.remoteComposeRestart(serverId, projectPath);
                 } else {
                     await api.composeRestart(projectPath);
                 }
-                toast.success(t('app.composeTab.projectRestarted', 'Project restarted'));
+                toast.success(t('app.composeTab.projectRestarted', 'Compose project restarted'));
             } else if (action === 'pull') {
                 if (isRemote) {
                     await api.remoteComposePull(serverId, projectPath);
@@ -176,7 +176,7 @@ const ComposeTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error(`Failed to ${action} project:`, err);
-            toast.error(err.message || t('app.composeTab.failedToProject', 'Failed to {{action}} project', { action: action }));
+            toast.error(err.message || t('app.composeTab.failedToProject', 'Failed to {{action}} compose project', { action: action }));
         } finally {
             setActionLoading(prev => ({ ...prev, [name]: false }));
         }
@@ -373,7 +373,7 @@ const ComposeTab = ({ onStatsChange }) => {
                         <SearchField
                             value={searchTerm}
                             onSearch={setSearchTerm}
-                            placeholder={t('app.composeTab.filterProjectOrConfigPath', 'Filter project or config path…')}
+                            placeholder={t('app.composeTab.filterProjectOrConfigPath', 'Filter compose project or config path…')}
                         />
                         <GridFilterButton
                             count={chrome.filterCount}
@@ -391,10 +391,10 @@ const ComposeTab = ({ onStatsChange }) => {
             {filteredProjects.length === 0 ? (
                 <EmptyState
                     icon={Package}
-                    title={projects.length === 0 ? t('app.composeTab.noComposeProjects', 'No Compose projects') : t('app.composeTab.noMatchingProjects', 'No matching projects')}
+                    title={projects.length === 0 ? t('app.composeTab.noComposeProjects', 'No compose projects') : t('app.composeTab.noMatchingProjects', 'No matching compose projects')}
                     description={projects.length === 0
                         ? t('app.composeTab.noDockerComposeProjectsAreRunning', 'No Docker Compose projects are running on this server.')
-                        : t('app.composeTab.noProjectsMatchTheCurrentSearch', 'No projects match the current search.')}
+                        : t('app.composeTab.noProjectsMatchTheCurrentSearch', 'No compose projects match the current search.')}
                     action={projects.length === 0 ? <code>{t('app.composeTab.dockerComposeUpD', 'docker compose up -d')}</code> : null}
                 />
             ) : (

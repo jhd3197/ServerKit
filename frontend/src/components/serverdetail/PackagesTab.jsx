@@ -91,8 +91,9 @@ const PackagesTab = ({ serverId, serverStatus }) => {
 
     async function handleRemove(name) {
         const ok = await confirm({
-            title: t('app.serverPackagesTab.remove', 'Remove {{name}}', { name: name }),
+            title: t('app.serverPackagesTab.remove', 'Uninstall {{name}}', { name: name }),
             message: t('app.serverPackagesTab.uninstallFromThisServer', 'Uninstall {{name}} from this server?', { name: name }),
+            confirmText: t('common.actions.uninstall', 'Uninstall'),
             variant: 'danger',
         });
         if (!ok) return;
@@ -100,7 +101,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             await api.removeRemotePackage(serverId, name);
             toast.success(`${name} removed`);
         } catch (err) {
-            toast.error(err.message || t('app.serverPackagesTab.removeFailed', 'Remove failed'));
+            toast.error(err.message || t('app.serverPackagesTab.removeFailed', 'Uninstall failed'));
         }
     }
 
@@ -230,9 +231,9 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             />
 
             <div className="server-packages__remove-tip text-muted-foreground">
-                {t('app.serverPackagesTab.tipToRemoveASpecificPackage', 'Tip: to remove a specific package, search for it and use the row\'s')}
+                {t('app.serverPackagesTab.tipToRemoveASpecificPackage', "Tip: to uninstall a specific package, search for it and use the row's")}
                 <em> {t('app.serverPackagesTab.install', 'Install')} </em>
-                {t('app.serverPackagesTab.buttonToReinstallOrOpenA', 'button to reinstall, or open a terminal session for advanced operations. Direct remove from this UI:')}
+                {t('app.serverPackagesTab.buttonToReinstallOrOpenA', 'button to reinstall, or open a terminal session for advanced operations. Direct uninstall from this UI:')}
                 <RemoveByName onRemove={handleRemove} />
             </div>
         </div>
@@ -261,7 +262,7 @@ function RemoveByName({ onRemove }) {
                 size="sm"
             />
             <Button type="submit" variant="outline" size="sm" disabled={!name.trim()}>
-                {t('common.actions.remove', 'Remove')}
+                {t('common.actions.uninstall', 'Uninstall')}
             </Button>
         </form>
     );

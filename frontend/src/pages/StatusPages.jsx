@@ -690,14 +690,14 @@ const StatusPages = () => {
             <Modal
                 open={showCreateComponent}
                 onClose={() => setShowCreateComponent(false)}
-                title={t('app.statusPages.addComponent', 'Add component')}
+                title={t('app.statusPages.addComponent', 'New component')}
                 size="lg"
                 className="status-modal"
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateComponent(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button onClick={handleCreateComponent} disabled={!compForm.name.trim() || !compForm.check_target.trim()}>
-                            {t('app.statusPages.addComponent', 'Add component')}
+                            {t('app.statusPages.createComponent', 'Create component')}
                         </Button>
                     </>
                 )}

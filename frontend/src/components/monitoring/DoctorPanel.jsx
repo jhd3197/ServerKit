@@ -309,7 +309,7 @@ const DoctorPanel = () => {
                     <EmptyState
                         icon={Server}
                         title={t('app.doctorPanel.noServersInTheFleet', 'No servers in the fleet')}
-                        description={t('app.doctorPanel.pairAnAgentFromServersTo', 'Pair an agent from Servers to include that box in the fleet sweep.')}
+                        description={t('app.doctorPanel.pairAnAgentFromServersTo', 'Pair an agent from Servers to include that server in the fleet sweep.')}
                     />
                 ) : (
                     fleetServers.map((entry) => (

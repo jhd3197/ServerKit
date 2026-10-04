@@ -93,7 +93,7 @@ const SetupStepSecurity = ({ onComplete }) => {
     if (stage === STAGE_ALREADY) {
         return (
             <div className="wizard-step">
-                <h2 className="wizard-step-title">{t('app.setupStepSecurity.twoFactorIsOn', 'Two-factor is on')}</h2>
+                <h2 className="wizard-step-title">{t('app.setupStepSecurity.twoFactorIsOn', 'Two-factor authentication is on')}</h2>
                 <p className="wizard-step-description">
                     {t('app.setupStepSecurity.thisAccountAlreadyHasTwoFactor', 'This account already has two-factor authentication enabled. You can regenerate backup codes or turn it off from Settings.')}
                 </p>
@@ -183,7 +183,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                     {setupData?.qr_code ? (
                         <img
                             src={setupData.qr_code}
-                            alt={t('app.setupStepSecurity.twoFactorQrCode', 'Two-factor QR code')}
+                            alt={t('app.setupStepSecurity.twoFactorQrCode', '2FA QR code')}
                             className="security-enroll__qr"
                         />
                     ) : (

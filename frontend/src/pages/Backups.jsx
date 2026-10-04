@@ -264,7 +264,7 @@ const Backups = () => {
                     host: backupForm.dbHost
                 } : null;
                 await api.backupApplication(parseInt(backupForm.applicationId), backupForm.includeDb, dbConfig);
-                toast.success(t('app.backups.applicationBackupCreated', 'Application backup created'));
+                toast.success(t('app.backups.applicationBackupCreated', 'Service backup created'));
             } else if (backupForm.type === 'database') {
                 await api.backupDatabase(
                     backupForm.dbType,
@@ -351,7 +351,7 @@ const Backups = () => {
     };
 
     const handleRemoveSchedule = async (scheduleId) => {
-        const confirmed = await confirm({ title: t('app.backups.removeSchedule', 'Remove schedule'), message: t('app.backups.areYouSureYouWantTo5', 'Remove this schedule? Backups stop running on it.') });
+        const confirmed = await confirm({ title: t('app.backups.removeSchedule', 'Delete schedule'), message: t('app.backups.areYouSureYouWantTo5', 'Delete this schedule? Backups stop running on it.'), confirmText: t('common.actions.delete', 'Delete') });
         if (!confirmed) return;
         await scheduleStore.remove(scheduleId);
     };
@@ -390,7 +390,7 @@ const Backups = () => {
         e.preventDefault();
         try {
             await api.updateStorageConfig(storageForm);
-            toast.success(t('app.backups.storageConfigurationSaved', 'Storage configuration saved'));
+            toast.success(t('app.backups.storageConfigurationSaved', 'Storage settings saved'));
             loadData();
         } catch (err) {
             toast.error(err.message);
@@ -604,7 +604,7 @@ const Backups = () => {
                                 setSelectedBackup(backup);
                                 setShowRestoreModal(true);
                             }}
-                            title={t('app.backups.restoreThisSnapshot', 'Restore this snapshot')}
+                            title={t('app.backups.restoreThisSnapshot', 'Restore this backup')}
                             aria-label={t('app.backups.restore', 'Restore {{name}}', { name: backup.name })}
                         >
                             <History size={15} />
@@ -628,7 +628,7 @@ const Backups = () => {
                         type="button"
                         className="bk-iconbtn bk-iconbtn--danger"
                         onClick={() => handleDeleteBackup(backup.path)}
-                        title={t('app.backups.deleteThisSnapshot', 'Delete this snapshot')}
+                        title={t('app.backups.deleteThisSnapshot', 'Delete this backup')}
                         aria-label={t('app.backups.delete', 'Delete {{name}}', { name: backup.name })}
                     >
                         <Trash2 size={15} />
@@ -694,7 +694,7 @@ const Backups = () => {
                 <SearchField
                     value={search}
                     onSearch={setSearch}
-                    placeholder={t('app.backups.searchSnapshots', 'Search snapshots…')}
+                    placeholder={t('app.backups.searchSnapshots', 'Search backups…')}
                 />
             )}
         </>
@@ -775,7 +775,7 @@ const Backups = () => {
                            that undoes it lives in the header menu. */
                         <EmptyState
                             icon={FileArchive}
-                            title={t('app.backups.noSnapshotsMatch', 'No snapshots match "{{value}}".', { value: search.trim() })}
+                            title={t('app.backups.noSnapshotsMatch', 'No backups match "{{value}}".', { value: search.trim() })}
                         />
                     ) : (
                         <div className="bk-card">
@@ -1029,7 +1029,7 @@ const Backups = () => {
                                 )}
 
                                 <div className="form-actions">
-                                    <Button type="submit">{t('app.backups.saveStorageConfig', 'Save storage config')}</Button>
+                                    <Button type="submit">{t('app.backups.saveStorageConfig', 'Save storage settings')}</Button>
                                     {storageForm.provider !== 'local' && (
                                         <Button
                                             type="button"
@@ -1161,7 +1161,7 @@ const Backups = () => {
                                     >
                                         <SelectTrigger id="backup-type"><SelectValue /></SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="application">{t('app.backups.application', 'Application')}</SelectItem>
+                                            <SelectItem value="application">{t('app.backups.application', 'Service')}</SelectItem>
                                             <SelectItem value="database">{t('app.backups.databaseOnly', 'Database only')}</SelectItem>
                                             <SelectItem value="files">{t('app.backups.filesDirectories', 'Files / directories')}</SelectItem>
                                         </SelectContent>
@@ -1171,14 +1171,14 @@ const Backups = () => {
                                 {backupForm.type === 'application' && (
                                     <>
                                         <div className="form-group">
-                                            <label htmlFor="backup-application">{t('app.backups.application', 'Application')}</label>
+                                            <label htmlFor="backup-application">{t('app.backups.application', 'Service')}</label>
                                             <Select
                                                 value={backupForm.applicationId}
                                                 onValueChange={(applicationId) => setBackupForm({...backupForm, applicationId})}
                                                 required
                                             >
                                                 <SelectTrigger id="backup-application">
-                                                    <SelectValue placeholder={t('app.backups.selectApplication', 'Select application')} />
+                                                    <SelectValue placeholder={t('app.backups.selectApplication', 'Select service')} />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     {apps.map(app => (

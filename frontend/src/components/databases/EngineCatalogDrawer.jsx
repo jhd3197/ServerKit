@@ -242,7 +242,7 @@ export default function EngineCatalogDrawer({
                                         icon={Layers}
                                         title={catalog.length === 0 ? t('app.engineCatalogDrawer.noEngineTemplatesYet', 'No engine templates yet') : t('app.engineCatalogDrawer.noEnginesMatch', 'No engines match')}
                                         description={catalog.length === 0
-                                            ? t('app.engineCatalogDrawer.anEngineIsAnAppTemplate', 'An engine is an app template carrying an engine block. Sync your template repositories to pull more in.')
+                                            ? t('app.engineCatalogDrawer.anEngineIsAnAppTemplate', 'An engine is a service template carrying an engine block. Sync your template repositories to pull more in.')
                                             : t('app.engineCatalogDrawer.tryADifferentSearchTermOr', 'Try a different search term or clear the family filter.')}
                                     />
                                 ) : (

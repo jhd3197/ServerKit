@@ -306,7 +306,7 @@ const ApiKeysSection = () => {
                 actions={(
                     <>
                         <Button variant="default" size="sm" onClick={() => setShowModal(true)}>
-                            <Plus size={14} /> {t('app.apiSettingsTab.createKey', 'Create key')}
+                            <Plus size={14} /> {t('app.apiSettingsTab.createKey', 'New key')}
                         </Button>
                         <GridFilterButton
                             count={chrome.filterCount}

@@ -141,8 +141,8 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
 
     async function handleUnlink() {
         if (!await confirm({
-            title: t('app.settingsTab.unlinkApplication', 'Unlink application'),
-            message: t('app.settingsTab.unlinkFromItsLinkedApplication', 'Unlink {{name}} from its linked application?', { name: app.name }),
+            title: t('app.settingsTab.unlinkApplication', 'Unlink service'),
+            message: t('app.settingsTab.unlinkFromItsLinkedApplication', 'Unlink {{name}} from its linked service?', { name: app.name }),
             confirmText: t('app.settingsTab.unlink', 'Unlink'),
             variant: 'danger',
         })) return;
@@ -152,7 +152,7 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
             await api.unlinkApp(app.id);
             onUpdate();
         } catch {
-            toast.error(t('app.settingsTab.failedToUnlinkApp', 'Failed to unlink app'));
+            toast.error(t('app.settingsTab.failedToUnlinkApp', 'Failed to unlink service'));
         } finally {
             setUnlinking(false);
         }
@@ -259,8 +259,8 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
                                     <span>{t('app.settingsTab.environmentType', 'Environment type')}</span>
                                     <span className="settings-hint">
                                         {app.has_linked_app
-                                            ? 'This app is linked. Unlink to change environment type.'
-                                            : 'Set how this application is used in your workflow (production, staging, development, or standalone).'}
+                                            ? 'This service is linked. Unlink to change environment type.'
+                                            : 'Set how this service is used in your workflow (production, staging, development, or standalone).'}
                                     </span>
                                 </div>
                                 <div className="settings-control">
@@ -292,9 +292,9 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
                             {app.has_linked_app && (
                                 <div className="settings-row">
                                     <div className="settings-label">
-                                        <span>{t('app.settingsTab.linkedApplication', 'Linked application')}</span>
+                                        <span>{t('app.settingsTab.linkedApplication', 'Linked service')}</span>
                                         <span className="settings-hint">
-                                            {t('app.settingsTab.unlinkingWillResetBothAppsTo', 'Unlinking will reset both apps to standalone mode.')}
+                                            {t('app.settingsTab.unlinkingWillResetBothAppsTo', 'Unlinking will reset both services to standalone mode.')}
                                         </span>
                                     </div>
                                     <div className="settings-control">
@@ -633,7 +633,7 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
                 </div>
             ) : !isPublicDomain ? (
                 <div className="ssl-guide">
-                    <p className="hint">{t('app.settingsTab.sslRequiresAPublicDomainPointed', 'SSL requires a public domain pointed at this server. This site is on')} <code>{primaryDomain}</code>{t('app.settingsTab.soACertificateCannotBeIssued', ', so a certificate cannot be issued here.')}</p>
+                    <p className="hint">{t('app.settingsTab.sslRequiresAPublicDomainPointed', 'SSL requires a public domain pointed at this server. This service is on')} <code>{primaryDomain}</code>{t('app.settingsTab.soACertificateCannotBeIssued', ', so a certificate cannot be issued here.')}</p>
                     <div className="ssl-checklist">
                         <CheckItem ok={false} label={t('app.settingsTab.publicDomainMappedToThisService', 'Public domain mapped to this service')} />
                     </div>

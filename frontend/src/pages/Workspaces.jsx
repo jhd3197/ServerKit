@@ -267,7 +267,7 @@ const Workspaces = () => {
             <Modal
                 open={showCreateModal}
                 onClose={() => setShowCreateModal(false)}
-                title={t('app.workspaces.createWorkspace', 'Create workspace')}
+                title={t('app.workspaces.createWorkspace', 'New workspace')}
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>

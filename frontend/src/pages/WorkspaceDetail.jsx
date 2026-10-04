@@ -167,7 +167,7 @@ const WorkspaceDetail = () => {
     const handleMoveApp = async (appId, workspaceId) => {
         try {
             await api.setAppWorkspace(appId, workspaceId);
-            toast.success(workspaceId ? t('app.workspaceDetail.applicationMovedIn', 'Application moved in') : t('app.workspaceDetail.applicationRemoved', 'Application removed'));
+            toast.success(workspaceId ? t('app.workspaceDetail.applicationMovedIn', 'Service moved in') : t('app.workspaceDetail.applicationRemoved', 'Service removed'));
             const data = await api.getApps({ allWorkspaces: true });
             setApps(data.apps || []);
         } catch (err) { toast.error(err.message); }
@@ -384,7 +384,7 @@ const WorkspaceDetail = () => {
             >
                 {sharingApp && (
                     <>
-                        <p className="form-hint">{t('app.workspaceDetail.grantAUserAccessToThis', 'Grant a user access to this application without transferring ownership.')}</p>
+                        <p className="form-hint">{t('app.workspaceDetail.grantAUserAccessToThis', 'Grant a user access to this service without transferring ownership.')}</p>
                         <div className="ws-rows">
                             {grants.length === 0 && <p className="form-hint">{t('app.workspaceDetail.notSharedWithAnyoneYet', 'Not shared with anyone yet.')}</p>}
                             {grants.map(g => (

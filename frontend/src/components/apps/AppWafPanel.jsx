@@ -16,7 +16,7 @@ const MODE_OPTIONS = [
 ];
 
 const MODE_HINTS = {
-    off: 'ModSecurity is disabled for this app — no rules are evaluated.',
+    off: 'ModSecurity is disabled for this service. No rules are evaluated.',
     detect: 'Rules are evaluated and matches are logged, but requests are never blocked.',
     block: 'Malicious requests that exceed the anomaly threshold are rejected.',
 };
@@ -222,7 +222,7 @@ const AppWafPanel = ({ app, onChanged }) => {
                     <div className="waf-panel__banner-text">
                         <strong>{t('app.appWafPanel.modsecurityIsNotInstalledOnThis', 'ModSecurity is not installed on this server')}</strong>
                         <span>
-                            {t('app.appWafPanel.installModsecurityAndTheOwaspCore', 'Install ModSecurity and the OWASP Core Rule Set to enable the web application firewall for this app.')}
+                            {t('app.appWafPanel.installModsecurityAndTheOwaspCore', 'Install ModSecurity and the OWASP Core Rule Set to enable the web application firewall for this service.')}
                         </span>
                     </div>
                     <Button size="sm" onClick={handleInstall} disabled={installing}>
@@ -246,7 +246,7 @@ const AppWafPanel = ({ app, onChanged }) => {
                 </div>
                 <div className="app-panel-body">
                     <p className="app-panel-hint">
-                        {t('app.appWafPanel.modsecurityWithTheOwaspCoreRule', 'ModSecurity with the OWASP Core Rule Set inspects incoming requests for common attacks (SQL injection, XSS, and more) before they reach this app.')}
+                        {t('app.appWafPanel.modsecurityWithTheOwaspCoreRule', 'ModSecurity with the OWASP Core Rule Set inspects incoming requests for common attacks (SQL injection, XSS, and more) before they reach this service.')}
                     </p>
 
                     <div className="waf-panel__mode">
@@ -288,7 +288,7 @@ const AppWafPanel = ({ app, onChanged }) => {
                     <div className="waf-panel__rules">
                         <Label htmlFor={`waf-rule-${app.id}`}>{t('app.appWafPanel.disabledCrsRuleIds', 'Disabled CRS rule IDs')}</Label>
                         <span className="container-ops__field-hint">
-                            {t('app.appWafPanel.suppressSpecificCoreRuleSetRules', 'Suppress specific Core Rule Set rules that cause false positives for this app.')}
+                            {t('app.appWafPanel.suppressSpecificCoreRuleSetRules', 'Suppress specific Core Rule Set rules that cause false positives for this service.')}
                         </span>
                         <div className="waf-panel__rules-input">
                             <Input

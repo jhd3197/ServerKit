@@ -44,7 +44,7 @@ function countNoun(node) {
 function emptyLabel(node) {
     if (node.kind === 'database') return 'No tables yet';
     if (node.kind === 'app') return 'No databases';
-    if (node.kind === 'engine' && node.engine === 'docker') return 'No Docker apps';
+    if (node.kind === 'engine' && node.engine === 'docker') return 'No Docker services';
     return 'No databases yet';
 }
 
@@ -162,8 +162,8 @@ function TreeRow({ node, depth, expanded, childrenCache, loading, activeKey, sel
                         type="button"
                         className="dbx-tree-add"
                         onClick={(e) => { e.stopPropagation(); handlers.onCreateChild(node); }}
-                        aria-label={t('app.sourceTree.createADatabaseIn', 'Create a database in {{label}}', { label: node.label })}
-                        title={t('app.sourceTree.createADatabase', 'Create a database')}
+                        aria-label={t('app.sourceTree.createADatabaseIn', 'New database in {{label}}', { label: node.label })}
+                        title={t('app.sourceTree.createADatabase', 'New database')}
                         tabIndex={-1}
                     >
                         <Plus size={12} aria-hidden="true" />

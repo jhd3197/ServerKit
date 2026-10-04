@@ -232,7 +232,7 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                 )}
 
                 <div className="form-group">
-                    <label htmlFor="dbx-attach-app">{t('app.modals.attachToApplication', 'Attach to application')}</label>
+                    <label htmlFor="dbx-attach-app">{t('app.modals.attachToApplication', 'Attach to service')}</label>
                     <Select
                         value={applicationId === '' ? NONE : String(applicationId)}
                         onValueChange={(value) => setApplicationId(value === NONE ? '' : value)}
@@ -246,8 +246,8 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                     </Select>
                     <span className="form-help">
                         {appsLoading
-                            ? 'Loading applications…'
-                            : 'Optional. An attached database is listed on the application and is cleaned up with it.'}
+                            ? 'Loading services…'
+                            : 'Optional. An attached database is listed on the service and is cleaned up with it.'}
                     </span>
                 </div>
 
@@ -307,7 +307,7 @@ export function CreateMySQLUserModal({ databases, onClose, onCreated }) {
     }
 
     return (
-        <Modal open onClose={onClose} title={t('app.modals.createMysqlUser', 'Create MySQL user')}>
+        <Modal open onClose={onClose} title={t('app.modals.createMysqlUser', 'New MySQL user')}>
             {error && <div className="error-message">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -391,7 +391,7 @@ export function CreatePostgreSQLUserModal({ databases, onClose, onCreated }) {
     }
 
     return (
-        <Modal open onClose={onClose} title={t('app.modals.createPostgresqlUser', 'Create PostgreSQL user')}>
+        <Modal open onClose={onClose} title={t('app.modals.createPostgresqlUser', 'New PostgreSQL user')}>
             {error && <div className="error-message">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">

@@ -51,7 +51,7 @@ const LogsTab = ({ app }) => {
             } else if (isPythonApp) {
                 data = await api.getPythonAppLogs(app.id, lineCount);
             } else {
-                data = { logs: 'Logs not available for this app type.' };
+                data = { logs: 'Logs not available for this service type.' };
             }
             setRawLogs(logsToText(data) || 'No logs available');
         } catch (err) {

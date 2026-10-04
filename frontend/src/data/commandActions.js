@@ -79,7 +79,7 @@ export const COMMAND_ACTIONS = [
     },
     {
         id: 'sign-out',
-        labelKey: 'app.commandActions.signOut', label: 'Sign Out',
+        labelKey: 'app.commandActions.signOut', label: 'Sign out',
         keywords: 'logout log out exit sign out',
         perform: ({ logout }) => logout && logout(),
     },

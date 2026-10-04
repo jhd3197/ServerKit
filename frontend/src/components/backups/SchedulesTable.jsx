@@ -190,7 +190,7 @@ export default function SchedulesTable({
             </div>
             <p className="bk-hint bk-hint--foot">
                 <ShieldCheck size={13} />
-                {t('app.schedulesTable.snapshotsOlderThan', 'Snapshots older than')} {retentionDays} {t('app.schedulesTable.daysArePrunedAutomaticallyPerResource', 'days are pruned automatically. Per-resource policies (with their own retention) are set on each site or database.')}
+                {t('app.schedulesTable.snapshotsOlderThan', 'Backups older than')} {retentionDays} {t('app.schedulesTable.daysArePrunedAutomaticallyPerResource', 'days are pruned automatically. Per-resource policies (with their own retention) are set on each service or database.')}
             </p>
         </>
     );

@@ -29,7 +29,7 @@ const MODES = [
         tone: 'cyan',
         tagline: 'Read-only, safe to run anywhere',
         points: [
-            'Install the agent on any Linux box — including one another panel still runs — and set it Observed.',
+            'Install the agent on any Linux server — including one another panel still runs — and set it Observed.',
             'You get metrics, a read-only survey ("flight") of what is running, doctor probes, and backups of paths you point at.',
             'Every mutating server action is refused server-side; the agent command choke point returns a clean refusal instead of letting two panels fight over the same files.',
             'Agent binary updates are refused too, unless you set the per-server "allow agent updates while observing" break-glass.',
@@ -110,7 +110,7 @@ export default function Coexistence() {
             }
         >
             <p className="coexistence__intro app-panel-hint">
-                {t('app.coexistence.serverkitHasThreeExplicitAdoptionModes', 'ServerKit has three explicit adoption modes. Pick the one that matches where the box is today; you can move between them as you migrate. The hard rule: keep exactly one owner of nginx / Apache / PHP-FPM / TLS per box. Two panels writing the same web-server config is never supported; Observe mode exists so you can adopt a box for visibility without stepping on the panel that currently owns its config.')}
+                {t('app.coexistence.serverkitHasThreeExplicitAdoptionModes', 'ServerKit has three explicit adoption modes. Pick the one that matches where the server is today; you can move between them as you migrate. The hard rule: keep exactly one owner of nginx / Apache / PHP-FPM / TLS per server. Two panels writing the same web-server config is never supported; Observe mode exists so you can adopt a server for visibility without stepping on the panel that currently owns its config.')}
             </p>
 
             <div className="overview-grid coexistence__modes">
@@ -156,7 +156,7 @@ export default function Coexistence() {
                         <EmptyState
                             icon={Eye}
                             title={t('app.coexistence.noObservedServers', 'No observed servers')}
-                            description={t('app.coexistence.pairAnAgentAndSwitchA', "Pair an agent and switch a server to Observed to survey a box another panel still runs. It's read-only and safe.")}
+                            description={t('app.coexistence.pairAnAgentAndSwitchA', "Pair an agent and switch a server to Observed to survey a server another panel still runs. It's read-only and safe.")}
                         />
                     ) : (
                         <ul className="coexistence__servers">

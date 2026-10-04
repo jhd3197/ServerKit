@@ -11,7 +11,7 @@ export const ENGINE_META = {
     mysql:      { labelKey: 'app.dbAdapter.mysqlMariadb', label: 'MySQL / MariaDB', short: 'MySQL' },
     postgresql: { labelKey: 'app.dbAdapter.postgresql', label: 'PostgreSQL',      short: 'PostgreSQL' },
     sqlite:     { labelKey: 'app.dbAdapter.sqlite', label: 'SQLite',          short: 'SQLite' },
-    docker:     { labelKey: 'app.dbAdapter.dockerApps', label: 'Docker apps',     short: 'Docker' },
+    docker:     { labelKey: 'app.dbAdapter.dockerApps', label: 'Docker services',     short: 'Docker' },
 };
 
 // A docker container can host either engine; everything else maps 1:1.

@@ -55,10 +55,10 @@ export default function PoolerCard({ app }) {
                 />
             </div>
             <p className="pooler__hint">
-                {t('app.pooler.hint', 'Runs PgBouncer in transaction mode beside this database, so many app connections share a few server connections. Apps opt in by referencing pooledUrl instead of connectionString.')}
+                {t('app.pooler.hint', 'Runs PgBouncer in transaction mode beside this database, so many client connections share a few server connections. Services opt in by referencing pooledUrl instead of connectionString.')}
             </p>
             <p className="pooler__tradeoff">
-                {t('app.pooler.tradeoff', 'Transaction pooling breaks session features: prepared statements in some drivers, LISTEN/NOTIFY, advisory locks and session SET. Apps keep the direct connection unless they switch.')}
+                {t('app.pooler.tradeoff', 'Transaction pooling breaks session features: prepared statements in some drivers, LISTEN/NOTIFY, advisory locks and session SET. Services keep the direct connection unless they switch.')}
             </p>
         </div>
     );

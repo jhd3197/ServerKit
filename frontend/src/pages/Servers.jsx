@@ -422,7 +422,7 @@ const Servers = () => {
                     icon={ServerLucideIcon}
                     title={servers.length === 0 ? t('app.servers.noServersYet', 'No servers yet') : t('app.servers.noServersMatchTheseFilters', 'No servers match these filters')}
                     description={servers.length === 0
-                        ? t('app.servers.pairAnAgentAndTheMachine', 'Pair an agent and the machine shows up here with its CPU, memory and disk alongside every other box you run.')
+                        ? t('app.servers.pairAnAgentAndTheMachine', 'Pair an agent and the server shows up here with its CPU, memory and disk alongside every other server you run.')
                         : t('app.servers.adjustTheSearchOrClearThe', 'Adjust the search or clear the column filters to see your servers.')}
                     action={servers.length === 0 ? (
                         <Button onClick={() => setShowAddModal(true)}>
@@ -648,7 +648,7 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
             <div className="server-setup-form__body">
                 <div className="pair-instructions">
                     <p>
-                        {t('app.servers.onTheTargetMachineStartThe', 'On the target machine, start the agent. It will display a 6-character pair code and a passphrase. Enter both below.')}
+                        {t('app.servers.onTheTargetMachineStartThe', 'On the target server, start the agent. It will display a 6-character pair code and a passphrase. Enter both below.')}
                     </p>
                 </div>
 
@@ -969,7 +969,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                             <div className="install-info">
                                 <h4>{t('app.servers.whatHappensNext', 'What happens next?')}</h4>
                                 <ol>
-                                    <li>{t('app.servers.openTheAgentOnYourTarget', 'Open the agent on your target machine and paste the connection string.')}</li>
+                                    <li>{t('app.servers.openTheAgentOnYourTarget', 'Open the agent on your target server and paste the connection string.')}</li>
                                     <li>{t('app.servers.theAgentRegistersAutomaticallyAndReports', 'The agent registers automatically and reports its hostname back as the server name.')}</li>
                                     <li>{t('app.servers.theRowInThisListWill', 'The row in this list will switch from')} <strong>{t('app.servers.pending', 'Pending')}</strong> to <strong>{t('app.servers.online', 'Online')}</strong>.</li>
                                 </ol>

@@ -623,7 +623,7 @@ const QueueOperations = () => {
                                 : t('app.queueOperations.adjustTheFiltersOrSearchQuery', 'Adjust the filters or search query to see your queues.')}
                             action={queues.length === 0 ? (
                                 <Button onClick={() => setShowGroupModal(true)}>
-                                    <Plus size={16} /> {t('app.queueOperations.createGroup', 'Create group')}
+                                    <Plus size={16} /> {t('app.queueOperations.newGroup', 'New group')}
                                 </Button>
                             ) : (
                                 <Button variant="outline" onClick={() => {

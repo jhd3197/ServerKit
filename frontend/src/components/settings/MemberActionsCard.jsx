@@ -48,7 +48,7 @@ const MemberActionsCard = () => {
         <div className="settings-card">
             <h3>{t('app.memberActionsCard.memberActions', 'Member actions')}</h3>
             <p className="form-help form-help--flush">
-                {t('app.memberActionsCard.letWorkspaceMembersRunASmall', "Let workspace members run a small set of curated, parameterized actions (like adjusting an app's backup frequency) for apps they can reach. Every action is validated against a fixed schema and audit-logged, so no free text ever reaches the server shell. Turn this off to disable the whole member-action surface.")}
+                {t('app.memberActionsCard.letWorkspaceMembersRunASmall', "Let workspace members run a small set of curated, parameterized actions (like adjusting a service's backup frequency) for services they can reach. Every action is validated against a fixed schema and audit-logged, so no free text ever reaches the server shell. Turn this off to disable the whole member-action surface.")}
             </p>
 
             <div className="form-group">

@@ -19,8 +19,8 @@ const HEATMAP_WEEKS = 26;
 const HEATMAP_DAYS = HEATMAP_WEEKS * 7;
 
 const TARGET_LABEL = {
-    application: ['site', 'sites'],
-    app: ['site', 'sites'],
+    application: ['service', 'services'],
+    app: ['service', 'services'],
     wordpress_site: ['site', 'sites'],
     database: ['DB', 'DBs'],
     files: ['volume', 'volumes'],
@@ -64,7 +64,7 @@ function formatDuration(seconds) {
 const LATEST_COLUMNS = [
     {
         key: 'name',
-        headerKey: 'app.backupsOverview.snapshot', header: 'Snapshot',
+        headerKey: 'app.backupsOverview.snapshot', header: 'Backup',
         sortable: true,
         hideable: false,
         sortValue: (e) => e.name || '',
@@ -153,7 +153,7 @@ export default function BackupsOverview({
             size: b.size || 0,
             duration: null,
             error: null,
-            sub: b.type === 'database' ? 'Database' : b.type === 'files' ? 'Files' : 'Application',
+            sub: b.type === 'database' ? 'Database' : b.type === 'files' ? 'Files' : 'Service',
         }));
     }, [runs, backups]);
 
@@ -313,7 +313,7 @@ export default function BackupsOverview({
                     <div className="bk-panel__head">
                         <div>
                             <h3>{t('app.backupsOverview.backupActivity', 'Backup activity')}</h3>
-                            <span className="bk-panel__sub">{t('app.backupsOverview.last', 'Last')} {HEATMAP_WEEKS} {t('app.backupsOverview.weeksDailySnapshots', 'weeks · daily snapshots')}</span>
+                            <span className="bk-panel__sub">{t('app.backupsOverview.last', 'Last')} {HEATMAP_WEEKS} {t('app.backupsOverview.weeksDailySnapshots', 'weeks · daily backups')}</span>
                         </div>
                         <div className="bk-heat__legend">
                             less
@@ -336,7 +336,7 @@ export default function BackupsOverview({
 
                     <div className="bk-heat__stats">
                         {[
-                            ['Total snapshots', events.length.toLocaleString()],
+                            ['Total backups', events.length.toLocaleString()],
                             ['This week', String(thisWeek)],
                             ['Avg duration', formatDuration(avgDuration)],
                             ['Failed (30d)', String(failed30)],
@@ -353,7 +353,7 @@ export default function BackupsOverview({
                     <div className="bk-panel__head">
                         <h3>{t('app.backupsOverview.recentActivity', 'Recent activity')}</h3>
                         <Button variant="unstyled" type="button" className="bk-link" onClick={() => onGo('snapshots')}>
-                            {t('app.backupsOverview.allSnapshots', 'All snapshots')} <ChevronRight size={14} />
+                            {t('app.backupsOverview.allSnapshots', 'All backups')} <ChevronRight size={14} />
                         </Button>
                     </div>
                     {events.length === 0 ? (
@@ -423,12 +423,12 @@ export default function BackupsOverview({
 
                 <section className="bk-panel bk-panel--flush">
                     <div className="bk-panel__head">
-                        <h3>{t('app.backupsOverview.latestSnapshots', 'Latest snapshots')}</h3>
+                        <h3>{t('app.backupsOverview.latestSnapshots', 'Latest backups')}</h3>
                     </div>
                     {latest.length === 0 ? (
                         <EmptyState
                             icon={Archive}
-                            title={t('app.backupsOverview.noSnapshotsYet', 'No snapshots yet')}
+                            title={t('app.backupsOverview.noSnapshotsYet', 'No backups yet')}
                             description={t('app.backupsOverview.runABackupOrEnableA', 'Run a backup or enable a schedule to start building an archive.')}
                         />
                     ) : (

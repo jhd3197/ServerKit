@@ -255,7 +255,7 @@ export default function Monitors() {
                 <RefreshCw size={14} /> {t('common.actions.refresh', 'Refresh')}
             </Button>
             <Button size="sm" onClick={openCreate}>
-                <Plus size={14} /> {t('app.monitors.addMonitor', 'Add monitor')}
+                <Plus size={14} /> {t('app.monitors.addMonitor', 'New monitor')}
             </Button>
         </>
     ), [q, activeFilterCount, load]);
@@ -516,7 +516,7 @@ export default function Monitors() {
                         : t('app.monitors.addAMonitorToWatchA', 'Add a monitor to watch a website, an API endpoint, a database port or a WordPress site, and get an incident when it stops answering.')}
                     action={hasFilters
                         ? <Button variant="outline" onClick={() => { setQ(''); setFilters({ status: '', type: '' }); }}>{t('common.actions.clearFilters', 'Clear filters')}</Button>
-                        : <Button onClick={openCreate}><Plus size={16} /> {t('app.monitors.addMonitor', 'Add monitor')}</Button>}
+                        : <Button onClick={openCreate}><Plus size={16} /> {t('app.monitors.addMonitor', 'New monitor')}</Button>}
                 />
             ) : (
                 <div className="mon-card">
@@ -552,7 +552,7 @@ export default function Monitors() {
             <Drawer
                 open={formOpen}
                 onOpenChange={setFormOpen}
-                title={t('app.monitors.addMonitor', 'Add monitor')}
+                title={t('app.monitors.addMonitor', 'New monitor')}
                 subtitle={t('app.monitors.probeAUrlHostOrPort', 'Probe a URL, host or port on a schedule.')}
                 icon={<Radar size={18} />}
             >
@@ -682,7 +682,7 @@ export default function Monitors() {
                     <div className="mon-form__actions">
                         <Button type="button" variant="ghost" onClick={() => setFormOpen(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button type="submit" disabled={saving} data-walkthrough="monitor-submit">
-                            {saving ? 'Adding…' : 'Add monitor'}
+                            {saving ? t('app.monitors.creating', 'Creating…') : t('app.monitors.createMonitor', 'Create monitor')}
                         </Button>
                     </div>
                 </form>

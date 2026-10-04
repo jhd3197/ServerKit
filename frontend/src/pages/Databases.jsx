@@ -627,16 +627,16 @@ export default function Databases() {
                 }
                 if (node.engine === 'mysql' && node.status === 'active') {
                     return [
-                        { labelKey: 'app.databases.createDatabase', label: 'Create database', icon: Plus, onClick: () => setModal({ type: 'mysql-db' }) },
-                        { labelKey: 'app.databases.createUser', label: 'Create user', icon: Plus, onClick: () => openUserModal('mysql') },
+                        { labelKey: 'app.databases.createDatabase', label: 'New database', icon: Plus, onClick: () => setModal({ type: 'mysql-db' }) },
+                        { labelKey: 'app.databases.createUser', label: 'New user', icon: Plus, onClick: () => openUserModal('mysql') },
                         { labelKey: 'app.databases.processes', label: 'Processes', icon: Activity, onClick: () => openProcesses({ dbType: 'mysql' }, 'mysql') },
                         { labelKey: 'common.actions.refresh', label: 'Refresh', icon: RefreshCw, onClick: () => refresh(node) },
                     ];
                 }
                 if (node.engine === 'postgresql' && node.status === 'active') {
                     return [
-                        { labelKey: 'app.databases.createDatabase', label: 'Create database', icon: Plus, onClick: () => setModal({ type: 'pg-db' }) },
-                        { labelKey: 'app.databases.createUser', label: 'Create user', icon: Plus, onClick: () => openUserModal('postgresql') },
+                        { labelKey: 'app.databases.createDatabase', label: 'New database', icon: Plus, onClick: () => setModal({ type: 'pg-db' }) },
+                        { labelKey: 'app.databases.createUser', label: 'New user', icon: Plus, onClick: () => openUserModal('postgresql') },
                         { labelKey: 'app.databases.processes', label: 'Processes', icon: Activity, onClick: () => openProcesses({ dbType: 'postgresql' }, 'postgresql') },
                         { labelKey: 'common.actions.refresh', label: 'Refresh', icon: RefreshCw, onClick: () => refresh(node) },
                     ];

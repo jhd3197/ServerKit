@@ -418,7 +418,7 @@ const Services = () => {
             emptyDescription="Connect a repository or install a template to get started"
             emptyAction={
                 <Button asChild>
-                    <Link to="/services/new">{t('app.services.createService', 'Create service')}</Link>
+                    <Link to="/services/new">{t('app.services.createService', 'New service')}</Link>
                 </Button>
             }
             filteredEmptyIcon={Layers}

@@ -99,8 +99,8 @@ export default function EmailProviders() {
     };
 
     const onDelete = async (id) => {
-        try { await api.deleteEmailProvider(id); toast.success(t('app.emailProviders.providerRemoved', 'Provider removed')); setConfirmId(null); load(); }
-        catch { toast.error(t('app.emailProviders.failedToRemove', 'Failed to remove')); }
+        try { await api.deleteEmailProvider(id); toast.success(t('app.emailProviders.providerRemoved', 'Provider deleted')); setConfirmId(null); load(); }
+        catch { toast.error(t('app.emailProviders.failedToRemove', 'Failed to delete')); }
     };
 
     return (
@@ -146,7 +146,7 @@ export default function EmailProviders() {
                                         {confirmId === p.id ? (
                                             <Button variant="destructive" size="sm" onClick={() => onDelete(p.id)}>{t('app.emailProviders.confirm', 'Confirm')}</Button>
                                         ) : (
-                                            <Button variant="ghost" size="sm" onClick={() => setConfirmId(p.id)} aria-label={t('common.actions.remove', 'Remove')}>
+                                            <Button variant="ghost" size="sm" onClick={() => setConfirmId(p.id)} aria-label={t('common.actions.delete', 'Delete')}>
                                                 <Trash2 size={14} />
                                             </Button>
                                         )}

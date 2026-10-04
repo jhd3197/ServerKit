@@ -109,7 +109,7 @@ export default function SuccessBanner({ job, appUrl, engineTarget = null, armAut
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <ExternalLink size={14} /> {t('app.successBanner.openApp', 'Open app')}
+                        <ExternalLink size={14} /> {t('app.successBanner.openApp', 'Open service')}
                     </a>
                 )}
                 {appId && (

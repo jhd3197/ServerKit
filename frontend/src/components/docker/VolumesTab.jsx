@@ -29,7 +29,7 @@ export const CreateVolumeButton = () => {
             <Button
                 onClick={() => setShowModal(true)}
                 disabled={isRemote}
-                title={isRemote ? t('app.volumesTab.creatingVolumesIsOnlyAvailableOn', 'Creating volumes is only available on the local Docker target right now') : t('app.volumesTab.createVolume', 'Create volume')}
+                title={isRemote ? t('app.volumesTab.creatingVolumesIsOnlyAvailableOn', 'Creating volumes is only available on the panel server right now') : t('app.volumesTab.createVolume', 'Create volume')}
             >
                 <span>+</span> {t('app.volumesTab.createVolume2', 'Create volume')}
             </Button>
@@ -140,7 +140,7 @@ const VolumesTab = ({ onStatsChange }) => {
     }
 
     async function handleRemove(volume) {
-        const confirmed = await confirmVolume({ titleKey: 'app.volumesTab.removeVolume', title: 'Remove volume', messageKey: 'app.volumesTab.removeThisVolumeAllDataWill', message: 'Remove this volume? All data will be lost.' });
+        const confirmed = await confirmVolume({ titleKey: 'app.volumesTab.removeVolume', title: 'Delete volume', messageKey: 'app.volumesTab.removeThisVolumeAllDataWill', message: 'Delete this volume? All data will be lost.', confirmText: t('common.actions.delete', 'Delete') });
         if (!confirmed) return;
 
         try {
@@ -149,12 +149,12 @@ const VolumesTab = ({ onStatsChange }) => {
             } else {
                 await api.removeVolume(volumeName(volume), true);
             }
-            toast.success(t('app.volumesTab.volumeRemovedSuccessfully', 'Volume removed'));
+            toast.success(t('app.volumesTab.volumeRemovedSuccessfully', 'Volume deleted'));
             loadVolumes();
             onStatsChange?.();
         } catch (err) {
             console.error('Failed to remove volume:', err);
-            toast.error(t('app.volumesTab.failedToRemoveVolumeItMay', 'Failed to remove volume. It may be in use.'));
+            toast.error(t('app.volumesTab.failedToRemoveVolumeItMay', 'Failed to delete volume. It may be in use.'));
         }
     }
 
@@ -242,7 +242,7 @@ const VolumesTab = ({ onStatsChange }) => {
                         type="button"
                         className="dx-row-action is-danger"
                         onClick={() => handleRemove(volume)}
-                        title={t('app.volumesTab.removeVolume2', 'Remove volume')}
+                        title={t('app.volumesTab.removeVolume2', 'Delete volume')}
                     >
                         <Trash2 size={13} />
                     </Button>

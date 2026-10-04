@@ -558,7 +558,7 @@ function ImportWizard() {
                         <ul className="import-wizard__plan">
                             <li>
                                 <Globe size={15} aria-hidden="true" />
-                                <span><strong>{domainCount}</strong> {t('app.importWizard.appContainer', 'app container')}{domainCount === 1 ? '' : 's'} {t('app.importWizard.onePerDomainDocrootCopiedIn', '(one per domain, docroot copied in and served behind Nginx)')}</span>
+                                <span><strong>{domainCount}</strong> {t('app.importWizard.appContainer', 'service container')}{domainCount === 1 ? '' : 's'} {t('app.importWizard.onePerDomainDocrootCopiedIn', '(one per domain, docroot copied in and served behind Nginx)')}</span>
                             </li>
                             <li className={skipDb ? 'is-skipped' : ''}>
                                 <Database size={15} aria-hidden="true" />

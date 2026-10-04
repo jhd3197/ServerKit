@@ -194,19 +194,19 @@ export default function ConnectionsHub() {
 
     const onRemoveDns = useCallback(async (record) => {
         const confirmed = await confirm({
-            title: t('app.connectionsHub.removeConnection', 'Remove connection'),
-            message: t('app.connectionsHub.removeTheConnection', 'Remove the connection "{{name}}"?', { name: record.name }),
-            confirmText: t('common.actions.remove', 'Remove'),
+            title: t('app.connectionsHub.removeConnection', 'Delete connection'),
+            message: t('app.connectionsHub.removeTheConnection', 'Delete the connection "{{name}}"?', { name: record.name }),
+            confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',
         });
         if (!confirmed) return false;
         try {
             await api.deleteEmailDNSProvider(record.id);
-            toast.success(`${record.name} removed`);
+            toast.success(t('app.connectionsHub.connectionDeleted', '{{name}} deleted', { name: record.name }));
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToRemoveConnection', 'Failed to remove connection'));
+            toast.error(err.message || t('app.connectionsHub.failedToRemoveConnection', 'Failed to delete connection'));
             return false;
         }
     }, [confirm, t, toast, loadData]);
@@ -377,19 +377,19 @@ export default function ConnectionsHub() {
 
     const onRemoveRegistry = useCallback(async (id) => {
         const confirmed = await confirm({
-            title: t('app.connectionsHub.removeContainerRegistry', 'Remove container registry'),
-            message: t('app.connectionsHub.removeThisContainerRegistryAppsThat', 'Remove this container registry? Apps that pull from it will lose access.'),
-            confirmText: t('common.actions.remove', 'Remove'),
+            title: t('app.connectionsHub.removeContainerRegistry', 'Delete container registry'),
+            message: t('app.connectionsHub.removeThisContainerRegistryAppsThat', 'Delete this container registry? Services that pull from it will lose access.'),
+            confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',
         });
         if (!confirmed) return false;
         try {
             await api.deleteContainerRegistry(id);
-            toast.success(t('app.connectionsHub.registryRemoved', 'Registry removed'));
+            toast.success(t('app.connectionsHub.registryRemoved', 'Registry deleted'));
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToRemoveRegistry', 'Failed to remove registry'));
+            toast.error(err.message || t('app.connectionsHub.failedToRemoveRegistry', 'Failed to delete registry'));
             return false;
         }
     }, [confirm, t, toast, loadData]);

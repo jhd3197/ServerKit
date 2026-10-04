@@ -34,7 +34,7 @@ const VIEWS = [
         id: 'topology',
         labelKey: 'app.appMap.runtimeTopology', label: 'Runtime topology',
         icon: Network,
-        descriptionKey: 'app.appMap.howThePanelConnectsToServers', description: 'How the panel connects to servers, agents, services and apps in production.',
+        descriptionKey: 'app.appMap.howThePanelConnectsToServers', description: 'How the panel connects to servers, agents and services in production.',
     },
 ];
 

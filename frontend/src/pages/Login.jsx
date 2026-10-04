@@ -299,7 +299,7 @@ const Login = () => {
                             variant="link"
                             onClick={handleBack}
                         >
-                            {t('auth.backToLogin', 'Back to login')}
+                            {t('auth.backToLogin', 'Back to sign in')}
                         </Button>
                     </div>
             </AuthLayout>

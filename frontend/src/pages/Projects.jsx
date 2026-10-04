@@ -223,7 +223,7 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
         <Modal open={open} onClose={() => { reset(); onOpenChange(false); }} title={t('app.projects.newProject', 'New project')}>
             <form onSubmit={handleSubmit}>
                 <p className="sk-modal__subtitle">
-                    {t('app.projects.aProjectGroupsYourApplicationsIt', 'A project groups your applications. It starts with a default "production" environment you can rename or expand.')}
+                    {t('app.projects.aProjectGroupsYourApplicationsIt', 'A project groups your services. It starts with a default "production" environment you can rename or expand.')}
                 </p>
 
                 <div className="projects-form">

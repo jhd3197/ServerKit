@@ -126,7 +126,7 @@ const Dashboard = () => {
     const selectedType = getWidgetType(widgetTypes, selectedWidget?.type);
 
     const resources = useMemo(() => ([
-        { id: 'local', labelKey: 'app.dashboard.localThisServer', label: 'Local (this server)', kind: 'panel host' },
+        { id: 'local', labelKey: 'app.dashboard.localThisServer', label: 'Local (this server)', kind: 'panel server' },
         ...servers
             .filter((s) => s && s.id && s.id !== 'local')
             .map((s) => ({ id: s.id, label: s.name || s.id, kind: 'server' })),

@@ -66,7 +66,7 @@ function AppDeploymentTimeline({ appId }) {
         return (
             <div className="deploy-timeline deploy-timeline--empty">
                 <Clock size={20} />
-                <p>{t('app.deploymentTimeline.noConfigCheckpointsYetOneIs', 'No config checkpoints yet. One is captured before each deployment.')}</p>
+                <p>{t('app.deploymentTimeline.noConfigCheckpointsYetOneIs', 'No restore points yet. One is captured before each deployment.')}</p>
             </div>
         );
     }
@@ -159,8 +159,8 @@ function eventTitle(event, t) {
     }
     if (event.type === 'deployment_snapshot') {
         return event.application_name
-            ? t('app.deploymentTimeline.deploymentCheckpointFor', 'Deployment checkpoint for {{name}}', { name: event.application_name })
-            : t('app.deploymentTimeline.deploymentCheckpoint', 'Deployment checkpoint');
+            ? t('app.deploymentTimeline.deploymentCheckpointFor', 'Deployment restore point for {{name}}', { name: event.application_name })
+            : t('app.deploymentTimeline.deploymentCheckpoint', 'Deployment restore point');
     }
     return String(event.action || t('app.deploymentTimeline.auditEvent', 'Audit event'))
         .replaceAll('.', ' ')
@@ -355,7 +355,7 @@ function ServerActivityTimeline({ serverId, refreshKey = 0 }) {
                     title={t('app.deploymentTimeline.noServerEvents', 'No timeline events yet')}
                     description={selectedTypes.length
                         ? t('app.deploymentTimeline.noFilteredEvents', 'No events match this timeline filter.')
-                        : t('app.deploymentTimeline.noServerEventsDescription', 'Quicksaves, deployments, and server audit activity will appear here.')}
+                        : t('app.deploymentTimeline.noServerEventsDescription', 'Restore points, deployments, and server audit activity will appear here.')}
                     size="lg"
                 />
             )}

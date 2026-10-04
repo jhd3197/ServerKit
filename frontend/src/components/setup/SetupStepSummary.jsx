@@ -15,7 +15,7 @@ import { Button as SharedButton } from '@/components/ui/button';
 
 const USE_CASE_LABELS = {
     wordpress: 'WordPress Sites',
-    'web-apps': 'Web Applications',
+    'web-apps': 'Web services',
     'self-hosted': 'Self-Hosted Services',
     devops: 'DevOps & Monitoring',
 };
@@ -208,7 +208,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                 <div className="summary-section">
                     <div className="summary-section-title">{t('common.labels.security', 'Security')}</div>
                     <div className="summary-row">
-                        <span className="summary-label">{t('app.setupStepSummary.twoFactor', 'Two-factor')}</span>
+                        <span className="summary-label">{t('app.setupStepSummary.twoFactor', '2FA')}</span>
                         <span className="summary-value">
                             {twoFactorEnabled ? 'Enabled' : 'Off — you can turn it on in Settings'}
                         </span>
@@ -219,7 +219,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                         installable extension differ from "minimal"; each card
                         names exactly what it would install. */}
                     <p className="recommendation-hint">
-                        {t('app.setupStepSummary.howMuchSecurityTooling', 'How much security tooling should we install? Everything here is an extension. Add or remove any of it later from the Marketplace.')}
+                        {t('app.setupStepSummary.howMuchSecurityTooling', 'How much security tooling should we install? Everything here is an extension. Install or uninstall any of it later from Extensions.')}
                     </p>
                     <div className="summary-preset-list">
                         {[
@@ -247,7 +247,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                                             <> {'— '}{exts.map((e) => e.display_name).join(', ')}</>
                                         )}
                                         {level.key !== 'minimal' && exts.length === 0 && (
-                                            <> {t('app.setupStepSummary.postureNotYetAvailable', '(not yet available from the extension registry; pick it later from the Marketplace)')}</>
+                                            <> {t('app.setupStepSummary.postureNotYetAvailable', '(not yet available from the extension registry; pick it later from Extensions)')}</>
                                         )}
                                     </span>
                                 </SharedButton>

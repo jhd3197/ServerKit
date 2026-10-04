@@ -92,7 +92,7 @@ const DeployTab = ({ appId, embedded = false }) => {
     }
 
     async function handleRemoveDeployment() {
-        const confirmed = await confirmDeploy({ titleKey: 'app.deployTab.removeDeployment', title: 'Remove deployment', messageKey: 'app.deployTab.removeDeploymentConfigurationThisWillNot', message: 'Remove deployment configuration? This will not delete the repository files.', variant: 'warning' });
+        const confirmed = await confirmDeploy({ titleKey: 'app.deployTab.removeDeployment', title: 'Remove deployment', messageKey: 'app.deployTab.removeDeploymentConfigurationThisWillNot', message: 'Remove deployment settings? This will not delete the repository files.', variant: 'warning' });
         if (!confirmed) return;
         try {
             await api.removeDeployment(appId);
@@ -140,7 +140,7 @@ const DeployTab = ({ appId, embedded = false }) => {
     }
 
     if (loading) {
-        return <EmptyState loading loadingVariant="form" title={t('app.deployTab.loadingDeploymentConfiguration', 'Loading deployment configuration…')} />;
+        return <EmptyState loading loadingVariant="form" title={t('app.deployTab.loadingDeploymentConfiguration', 'Loading deployment settings…')} />;
     }
 
     return (
@@ -253,9 +253,9 @@ const DeployTab = ({ appId, embedded = false }) => {
             {/* Config snapshot timeline + diff — additive, independent of git
                 config so it shows the deploy history & config changes for any app. */}
             <SharedCard variant="legacy" className="card deploy-timeline-card">
-                <h3>{t('app.deployTab.configCheckpoints', 'Config checkpoints')}</h3>
+                <h3>{t('app.deployTab.configCheckpoints', 'Restore points')}</h3>
                 <p className="deploy-timeline-card__hint">
-                    {t('app.deployTab.anImmutableConfigCheckpointEnvKeys', 'An immutable config checkpoint (env keys, domains, image, build method, volumes) is captured before each deployment. Secret values are masked. Open a checkpoint to diff it against the previous one or restore it.')}
+                    {t('app.deployTab.anImmutableConfigCheckpointEnvKeys', 'An immutable restore point (env keys, domains, image, build method, volumes) is captured before each deployment. Secret values are masked. Open a restore point to diff it against the previous one or restore it.')}
                 </p>
                 <DeploymentTimeline appId={appId} />
             </SharedCard>
@@ -322,7 +322,7 @@ const DeployTab = ({ appId, embedded = false }) => {
                                     {t('common.actions.cancel', 'Cancel')}
                                 </Button>
                                 <Button type="submit">
-                                    {t('app.deployTab.saveConfiguration', 'Save configuration')}
+                                    {t('app.deployTab.saveConfiguration', 'Save settings')}
                                 </Button>
                             </div>
                         </form>

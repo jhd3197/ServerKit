@@ -24,7 +24,7 @@ const CATEGORY_CHIPS = [
     { key: 'system', labelKey: 'common.labels.system', label: 'System' },
     { key: 'security', labelKey: 'common.labels.security', label: 'Security' },
     { key: 'backups', labelKey: 'common.labels.backups', label: 'Backups' },
-    { key: 'apps', labelKey: 'app.notifications.apps', label: 'Apps' },
+    { key: 'apps', labelKey: 'app.notifications.apps', label: 'Services' },
 ];
 const SEVERITY_CHIPS = [
     { key: '', labelKey: 'app.notifications.any', label: 'Any' },

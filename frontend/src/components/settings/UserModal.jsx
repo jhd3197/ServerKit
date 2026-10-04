@@ -56,7 +56,7 @@ const UserModal = ({ user, onSave, onClose }) => {
     }
 
     return (
-        <Modal open={true} onClose={onClose} title={isEditing ? t('app.userModal.editUser', 'Edit user') : t('app.userModal.addNewUser', 'Add new user')} size="md">
+        <Modal open={true} onClose={onClose} title={isEditing ? t('app.userModal.editUser', 'Edit user') : t('app.userModal.addNewUser', 'New user')} size="md">
                 <form onSubmit={form.handleSubmit}>
                     <div className="modal-body">
                         {form.submitError && <div className="error-message" role="alert">{form.submitError}</div>}
@@ -125,7 +125,7 @@ const UserModal = ({ user, onSave, onClose }) => {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="admin">{t('app.userModal.adminFullAccess', 'Admin - full access')}</SelectItem>
-                                    <SelectItem value="developer">{t('app.userModal.developerManageAppsAndDeployments', 'Developer - manage apps and deployments')}</SelectItem>
+                                    <SelectItem value="developer">{t('app.userModal.developerManageAppsAndDeployments', 'Developer - manage services and deployments')}</SelectItem>
                                     <SelectItem value="viewer">{t('app.userModal.viewerReadOnlyAccess', 'Viewer - read-only access')}</SelectItem>
                                 </SelectContent>
                             </Select>
@@ -157,7 +157,7 @@ const UserModal = ({ user, onSave, onClose }) => {
                             </div>
                             <div className="role-item">
                                 <span className="role-name">{t('app.userModal.developer', 'Developer')}</span>
-                                <span className="role-desc">{t('app.userModal.manageApplicationsDeploymentsDatabasesAndDomains', 'Manage applications, deployments, databases, and domains')}</span>
+                                <span className="role-desc">{t('app.userModal.manageApplicationsDeploymentsDatabasesAndDomains', 'Manage services, deployments, databases, and domains')}</span>
                             </div>
                             <div className="role-item">
                                 <span className="role-name">{t('app.userModal.viewer', 'Viewer')}</span>
@@ -201,7 +201,7 @@ const UserModal = ({ user, onSave, onClose }) => {
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
                         <Button type="submit" variant="default" disabled={form.isSubmitting}>
-                            {form.isSubmitting ? 'Saving...' : (isEditing ? 'Save Changes' : 'Create User')}
+                            {form.isSubmitting ? 'Saving...' : (isEditing ? 'Save Changes' : 'Create user')}
                         </Button>
                     </div>
                 </form>

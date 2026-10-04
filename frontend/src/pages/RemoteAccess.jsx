@@ -197,7 +197,7 @@ const RemoteAccess = ({ serverId }) => {
                     </p>
                 ) : (
                     <p>
-                        {t('app.remoteAccess.exposeAServiceRunningOnA', 'Expose a service running on a private machine (behind NAT, no port-forwarding) to a public hostname over a WireGuard tunnel between two of your agents.')}
+                        {t('app.remoteAccess.exposeAServiceRunningOnA', 'Expose a service running on a private server (behind NAT, no port-forwarding) to a public hostname over a WireGuard tunnel between two of your agents.')}
                     </p>
                 )}
                 {serverId && (

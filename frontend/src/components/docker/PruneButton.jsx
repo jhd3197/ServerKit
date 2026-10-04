@@ -15,10 +15,10 @@ const PruneButton = ({ onPruned }) => {
 
     async function handlePrune() {
         if (isRemote) {
-            toast.error(t('app.pruneButton.pruneIsOnlyAvailableOnThe', 'Prune is only available on the local Docker target right now'));
+            toast.error(t('app.pruneButton.pruneIsOnlyAvailableOnThe', 'Prune is only available on the panel server right now'));
             return;
         }
-        const confirmed = await confirm({ title: t('app.pruneButton.dockerCleanup', 'Docker cleanup'), message: t('app.pruneButton.removeUnusedDockerResourcesThisWill', 'Remove unused Docker resources? This will remove stopped containers, unused images, and unused networks.') });
+        const confirmed = await confirm({ title: t('app.pruneButton.dockerCleanup', 'Docker cleanup'), message: t('app.pruneButton.removeUnusedDockerResourcesThisWill', 'Delete unused Docker resources? This deletes stopped containers, unused images, and unused networks.') });
         if (!confirmed) return;
 
         setLoading(true);
@@ -40,7 +40,7 @@ const PruneButton = ({ onPruned }) => {
                 size="sm"
                 onClick={handlePrune}
                 disabled={loading || isRemote}
-                title={isRemote ? t('app.pruneButton.pruneIsOnlyAvailableOnThe', 'Prune is only available on the local Docker target right now') : t('app.pruneButton.pruneUnusedDockerResources', 'Prune unused Docker resources')}
+                title={isRemote ? t('app.pruneButton.pruneIsOnlyAvailableOnThe', 'Prune is only available on the panel server right now') : t('app.pruneButton.pruneUnusedDockerResources', 'Prune unused Docker resources')}
             >
                 {loading ? 'Cleaning...' : 'Prune Unused'}
             </Button>

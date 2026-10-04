@@ -157,7 +157,7 @@ const AboutTab = () => {
                 <p className="version">{t('common.labels.version', 'Version')} {version || (versionError ? '—' : '…')}</p>
                 {versionError && <ErrorState compact error={versionError} onRetry={fetchVersion} />}
                 <p className="description">
-                    {t('app.aboutTab.aModernLightweightServerManagementPanel', 'A modern, lightweight server management panel for managing web applications, databases, domains, and more. Built with Flask and React.')}
+                    {t('app.aboutTab.aModernLightweightServerManagementPanel', 'A modern, lightweight server management panel for managing services, databases, domains, and more. Built with Flask and React.')}
                 </p>
 
                 <div className="update-check">
@@ -208,7 +208,7 @@ const AboutTab = () => {
                                 {updatePhase === 'confirm' && (
                                     <div className="update-confirm">
                                         <AlertTriangle size={14} />
-                                        <span>{t('app.aboutTab.updateConfirm', 'This updates ServerKit and briefly restarts the panel. Hosted apps stay online. If the new version fails to start, it rolls back automatically.')}</span>
+                                        <span>{t('app.aboutTab.updateConfirm', 'This updates ServerKit and briefly restarts the panel. Hosted services stay online. If the new version fails to start, it rolls back automatically.')}</span>
                                         <Button size="sm" onClick={runUpdate}>
                                             {t('app.aboutTab.updateNow', 'Update now')}
                                         </Button>
@@ -294,7 +294,7 @@ const AboutTab = () => {
                 <ul className="feature-list">
                     <li>
                         <Check size={16} />
-                        {t('app.aboutTab.applicationManagementPhpPythonNodeJs', 'Application management (PHP, Python, Node.js, Docker)')}
+                        {t('app.aboutTab.applicationManagementPhpPythonNodeJs', 'Service management (PHP, Python, Node.js, Docker)')}
                     </li>
                     <li>
                         <Check size={16} />

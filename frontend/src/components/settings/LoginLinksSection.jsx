@@ -31,7 +31,7 @@ const LoginLinksSection = ({ users, currentUserId }) => {
             const data = await api.getLoginLinks();
             setLinks(data.links || []);
         } catch (err) {
-            setError(err.message || 'Failed to load login links');
+            setError(err.message || 'Failed to load sign-in links');
         }
     }, []);
 
@@ -58,7 +58,7 @@ const LoginLinksSection = ({ users, currentUserId }) => {
             });
             await loadLinks();
         } catch (err) {
-            setError(err.message || 'Failed to create login link');
+            setError(err.message || 'Failed to create sign-in link');
         } finally {
             setMinting(false);
         }
@@ -70,7 +70,7 @@ const LoginLinksSection = ({ users, currentUserId }) => {
             await api.revokeLoginLink(id);
             await loadLinks();
         } catch (err) {
-            setError(err.message || 'Failed to revoke login link');
+            setError(err.message || 'Failed to revoke sign-in link');
         }
     }
 
@@ -86,7 +86,7 @@ const LoginLinksSection = ({ users, currentUserId }) => {
         <div className="login-links">
             <div className="tab-header">
                 <div className="tab-header-content">
-                    <h3>{t('app.loginLinksSection.oneTimeLoginLinks', 'One-time login links')}</h3>
+                    <h3>{t('app.loginLinksSection.oneTimeLoginLinks', 'One-time sign-in links')}</h3>
                     <p>
                         {t('app.loginLinksSection.mintASingleUseSignIn', 'Mint a single-use sign-in URL for a user. The link is shown once, expires automatically, and can be bound to one IP.')}
                     </p>

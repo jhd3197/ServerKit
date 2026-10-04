@@ -11,7 +11,7 @@ import { Archive, Clock, Cloud, LayoutGrid, Settings } from 'lucide-react';
 export const BACKUP_TABS = [
     { to: '/backups', labelKey: 'common.labels.overview', label: 'Overview', end: true, icon: <LayoutGrid size={15} /> },
     { to: '/backups/schedules', labelKey: 'app.backupTabs.schedules', label: 'Schedules', icon: <Clock size={15} /> },
-    { to: '/backups/snapshots', labelKey: 'app.backupTabs.snapshots', label: 'Snapshots', icon: <Archive size={15} /> },
+    { to: '/backups/snapshots', labelKey: 'app.backupTabs.snapshots', label: 'Backups', icon: <Archive size={15} /> },
     { to: '/backups/storage', labelKey: 'common.labels.storage', label: 'Storage', icon: <Cloud size={15} /> },
     { to: '/backups/settings', labelKey: 'common.labels.settings', label: 'Settings', icon: <Settings size={15} /> },
 ];

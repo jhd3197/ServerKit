@@ -327,7 +327,7 @@ Keep these codes in a safe place.`;
                     <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
                 ) : twoFALoadError && !twoFAStatus ? (
                     <ErrorState
-                        title={t('app.securitySettingsTab.couldntLoad2fa', "Couldn't load two-factor status")}
+                        title={t('app.securitySettingsTab.couldntLoad2fa', "Couldn't load 2FA status")}
                         error={twoFALoadError}
                         onRetry={load2FAStatus}
                     />
@@ -520,7 +520,7 @@ Keep these codes in a safe place.`;
                                     <line x1="12" y1="9" x2="12" y2="13"/>
                                     <line x1="12" y1="17" x2="12.01" y2="17"/>
                                 </svg>
-                                <p>{t('app.securitySettingsTab.disabling2faWillMakeYourAccount', 'Disabling 2FA will make your account less secure. You will only need your password to log in.')}</p>
+                                <p>{t('app.securitySettingsTab.disabling2faWillMakeYourAccount', 'Disabling 2FA will make your account less secure. You will only need your password to sign in.')}</p>
                             </div>
                             <div className="form-group">
                                 <Label>{t('app.securitySettingsTab.enterAVerificationCodeOrBackup', 'Enter a verification code or backup code to disable 2FA:')}</Label>

@@ -456,7 +456,7 @@ const CronJobs = () => {
                     icon={Clock}
                     title={t('app.cronJobs.noCronJobs', 'No cron jobs')}
                     description={t('app.cronJobs.noScheduledJobsFoundCreateYour', 'No scheduled jobs found. Create your first cron job to automate tasks.')}
-                    action={<Button onClick={openCreateDrawer}><Plus size={16} /> {t('app.cronJobs.createJob', 'Create job')}</Button>}
+                    action={<Button onClick={openCreateDrawer}><Plus size={16} /> {t('app.cronJobs.newCronJob', 'New cron job')}</Button>}
                 />
             ) : (
                 <div className="cron-body">
@@ -653,7 +653,7 @@ function CronDrawer({ job, isAdmin, running, onClose, onRefresh, onRun, onEdit, 
             {job && (
             <div className="cron-drawer">
                 <section className="cron-drawer__section">
-                    <h3 className="cron-drawer__sectiontitle">{t('app.cronJobs.configuration', 'Configuration')}</h3>
+                    <h3 className="cron-drawer__sectiontitle">{t('app.cronJobs.configuration', 'Settings')}</h3>
                     <div className="cron-drawer__info">
                         <div className="cron-inforow">
                             <span className="k">{t('common.labels.schedule', 'Schedule')}</span>
@@ -939,7 +939,7 @@ function CronFormDrawer({ open, job, onClose, onSaved }) {
                             ? 'Saving…'
                             : job
                                 ? 'Save changes'
-                                : <><Plus size={15} /> {t('app.cronJobs.createJob', 'Create job')}</>}
+                                : <><Plus size={15} /> {t('app.cronJobs.createJob', 'Create cron job')}</>}
                     </Button>
                 </div>
             </form>

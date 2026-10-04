@@ -353,7 +353,7 @@ export function WidgetEditor({
                                         />
                                     </Field>
                                 ) : (
-                                    <Field label={t('app.widgetEditor.resource', 'Resource')} hint={t('app.widgetEditor.oneMachineIsConnectedSoThis', 'One machine is connected, so this widget reads it.')}>
+                                    <Field label={t('app.widgetEditor.resource', 'Resource')} hint={t('app.widgetEditor.oneMachineIsConnectedSoThis', 'One server is connected, so this widget reads it.')}>
                                         <div className="skwe-edit__static">{resolvedResource(cfg.resource)}</div>
                                     </Field>
                                 ))}
@@ -546,7 +546,7 @@ export function WidgetEditor({
                                                 />
                                             </Field>
                                         ) : (
-                                            <Field label={t('common.labels.source', 'Source')} hint={t('app.widgetEditor.oneMachineIsConnectedSoThis2', 'One machine is connected, so this widget tails it.')}>
+                                            <Field label={t('common.labels.source', 'Source')} hint={t('app.widgetEditor.oneMachineIsConnectedSoThis2', 'One server is connected, so this widget tails it.')}>
                                                 <div className="skwe-edit__static">{resolvedResource(cfg.source)}</div>
                                             </Field>
                                         )}

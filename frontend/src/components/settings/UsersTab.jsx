@@ -28,7 +28,7 @@ const statusLabel = (user) => (user.is_active ? 'Active' : 'Disabled');
 // than whatever the API happens to call the field.
 const USER_VIEWS = [
     {
-        name: 'Admins without MFA',
+        name: 'Admins without 2FA',
         state: {
             sorts: [{ key: 'user', direction: 'asc' }],
             hiddenKeys: [],
@@ -273,7 +273,7 @@ const UsersTab = () => {
         },
         {
             key: 'mfa',
-            headerKey: 'app.usersTab.mfa', header: 'MFA',
+            headerKey: 'app.usersTab.mfa', header: '2FA',
             type: 'bool',
             sortable: true,
             value: (user) => Boolean(user.totp_enabled),
@@ -304,7 +304,7 @@ const UsersTab = () => {
             // last sign in" is the access-review question, and without an
             // accessor the column had nothing behind it to sort or filter on.
             key: 'lastLogin',
-            headerKey: 'app.usersTab.lastLogin', header: 'Last login',
+            headerKey: 'app.usersTab.lastLogin', header: 'Last sign-in',
             sortable: true,
             type: 'date',
             value: (user) => user.last_login_at || null,
@@ -439,7 +439,7 @@ const UsersTab = () => {
                                 <line x1="12" y1="5" x2="12" y2="19"/>
                                 <line x1="5" y1="12" x2="19" y2="12"/>
                             </svg>
-                            {t('app.usersTab.addUser', 'Add user')}
+                            {t('app.usersTab.addUser', 'New user')}
                         </Button>
                         <GridFilterButton
                             count={chrome.filterCount}

@@ -151,7 +151,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             <EmptyState
                 icon={FileSearch}
                 title={t('app.surveyTab.surveyNotAvailable', 'Survey not available')}
-                description={t('app.surveyTab.thisAgentDoesnTSupportThe', "This agent doesn't support the read-only survey yet. Upgrade the agent to enable Observe mode. It maps what's running on the box without changing anything.")}
+                description={t('app.surveyTab.thisAgentDoesnTSupportThe', "This agent doesn't support the read-only survey yet. Upgrade the agent to enable Observe mode. It maps what's running on the server without changing anything.")}
             />
         );
     }
@@ -197,7 +197,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
                 <div className="survey-tab__suggest">
                     <AlertTriangle size={18} aria-hidden="true" />
                     <div className="survey-tab__suggest-body">
-                        <strong>{t('app.surveyTab.thisBoxLooksLikeItS', 'This box looks like it\'s run by another control panel.')}</strong>
+                        <strong>{t('app.surveyTab.thisBoxLooksLikeItS', "This server looks like it's run by another control panel.")}</strong>
                         <p>
                             {t('app.surveyTab.twoPanelsWritingWebServerConfig', 'Two panels writing web-server config will fight over ownership. Switch this server to')} <em>{t('app.surveyTab.observed', 'Observed')}</em> {t('app.surveyTab.toKeepReadOnlySurveyMetrics', "to keep read-only survey, metrics and backups while ServerKit stops making config changes, then migrate sites over when you're ready.")}
                         </p>
@@ -222,7 +222,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
                         )}
                     </div>
                     <p className="survey-tab__muted">
-                        {t('app.surveyTab.serverkitMakesNoConfigChangesOn', 'ServerKit makes no config changes on this box. Metrics, survey, doctor reads and backups of pointed paths stay on; every mutating action is refused.')}
+                        {t('app.surveyTab.serverkitMakesNoConfigChangesOn', 'ServerKit makes no config changes on this server. Metrics, survey, doctor reads and backups of pointed paths stay on; every mutating action is refused.')}
                     </p>
                     <label className="survey-tab__observed-toggle">
                         <input

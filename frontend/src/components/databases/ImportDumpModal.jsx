@@ -273,7 +273,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
                                     />
                                 </div>
                                 <p className="dbx-field-hint">
-                                    {t('app.importDumpModal.anAbsolutePathOnTheServer', 'An absolute path on the server that runs ServerKit. There is no upload endpoint, so a file on your own machine has to be copied across first (scp, the file manager, or a backup taken here).')} <code>.gz</code> {t('app.importDumpModal.isDecompressedAutomatically', 'is decompressed automatically.')}
+                                    {t('app.importDumpModal.anAbsolutePathOnTheServer', 'An absolute path on the panel server. There is no upload endpoint, so a file on your own machine has to be copied across first (scp, the file manager, or a backup taken here).')} <code>.gz</code> {t('app.importDumpModal.isDecompressedAutomatically', 'is decompressed automatically.')}
                                 </p>
                             </>
                         )}

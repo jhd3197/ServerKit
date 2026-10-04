@@ -30,7 +30,7 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
             );
             setApps(compatible);
         } catch {
-            setError('Failed to load applications');
+            setError('Failed to load services');
         } finally {
             setLoading(false);
         }
@@ -44,7 +44,7 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
     async function handleLink(e) {
         e.preventDefault();
         if (!selectedAppId) {
-            setError('Please select an application to link');
+            setError('Select a service to link');
             return;
         }
 
@@ -59,7 +59,7 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
             onLinked();
             onClose();
         } catch (err) {
-            setError(err.message || 'Failed to link applications');
+            setError(err.message || 'Failed to link services');
         } finally {
             setLinking(false);
         }
@@ -69,7 +69,7 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
 
 
     return (
-        <Modal open={true} onClose={onClose} title={t('app.linkAppModal.linkApplication', 'Link application')} className="link-app-modal">
+        <Modal open={true} onClose={onClose} title={t('app.linkAppModal.linkApplication', 'Link service')} className="link-app-modal">
                 {error && (
                     <div className="error-message">
                         <AlertCircle size={16} />
@@ -78,13 +78,13 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
                 )}
 
                 {loading ? (
-                    <div className="modal-loading">{t('app.linkAppModal.loadingCompatibleApps', 'Loading compatible apps…')}</div>
+                    <div className="modal-loading">{t('app.linkAppModal.loadingCompatibleApps', 'Loading compatible services…')}</div>
                 ) : apps.length === 0 ? (
                     <div className="link-app-empty">
                         <GitBranch size={32} />
-                        <h3>{t('app.linkAppModal.noCompatibleApps', 'No compatible apps')}</h3>
+                        <h3>{t('app.linkAppModal.noCompatibleApps', 'No compatible services')}</h3>
                         <p>
-                            {t('app.linkAppModal.thereAreNoOther', 'There are no other')} {app.app_type} {t('app.linkAppModal.applicationsAvailableToLinkCreateAnother', 'applications available to link. Create another')} {app.app_type} {t('app.linkAppModal.appFirstOrEnsureExistingApps', 'app first, or ensure existing apps are not already linked.')}
+                            {t('app.linkAppModal.thereAreNoOther', 'There are no other')} {app.app_type} {t('app.linkAppModal.applicationsAvailableToLinkCreateAnother', 'services available to link. Create another')} {app.app_type} {t('app.linkAppModal.appFirstOrEnsureExistingApps', 'service first, or ensure existing services are not already linked.')}
                         </p>
                         <SharedButton variant="outline" type="button" className="btn btn-secondary" onClick={onClose}>
                             {t('common.actions.close', 'Close')}
@@ -93,16 +93,16 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
                 ) : (
                     <form onSubmit={handleLink}>
                         <div className="link-app-current">
-                            <span className="link-app-label">{t('app.linkAppModal.currentApp', 'Current app:')}</span>
+                            <span className="link-app-label">{t('app.linkAppModal.currentApp', 'Current service:')}</span>
                             <span className="link-app-name">{app.name}</span>
                             <span className="app-type-badge">{app.app_type.toUpperCase()}</span>
                         </div>
 
                         <div className="form-group">
-                            <label htmlFor="link-app-target">{t('app.linkAppModal.linkToApplication', 'Link to application')}</label>
+                            <label htmlFor="link-app-target">{t('app.linkAppModal.linkToApplication', 'Link to service')}</label>
                             <Select value={selectedAppId} onValueChange={setSelectedAppId} required>
                                 <SelectTrigger id="link-app-target">
-                                    <SelectValue placeholder={t('app.linkAppModal.selectAnApplication', 'Select an application…')} />
+                                    <SelectValue placeholder={t('app.linkAppModal.selectAnApplication', 'Select a service…')} />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {apps.map(a => (
@@ -115,7 +115,7 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
                         </div>
 
                         <div className="form-group">
-                            <label>{t('app.linkAppModal.thisAppWillBe', 'This app will be')}</label>
+                            <label>{t('app.linkAppModal.thisAppWillBe', 'This service will be')}</label>
                             <div className="env-radio-group">
                                 {['development', 'production', 'staging'].map(env => (
                                     <label key={env} className={`env-radio-option ${asEnvironment === env ? 'selected' : ''}`}>
@@ -171,7 +171,7 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
                                         <span>{t('app.linkAppModal.propagateDatabaseCredentials', 'Propagate database credentials')}</span>
                                     </label>
                                     <span className="form-hint">
-                                        {t('app.linkAppModal.copyDatabaseConnectionSettingsFromProduction', 'Copy database connection settings from production to development app.')}
+                                        {t('app.linkAppModal.copyDatabaseConnectionSettingsFromProduction', 'Copy database connection settings from production to development service.')}
                                     </span>
                                 </div>
 
@@ -185,7 +185,7 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
                                             placeholder={t('app.linkAppModal.wpDevAutoGeneratedIfEmpty', 'wp_dev_ (auto-generated if empty)')}
                                         />
                                         <span className="form-hint">
-                                            {t('app.linkAppModal.differentPrefixAllowsBothAppsTo', 'Different prefix allows both apps to share the same database.')}
+                                            {t('app.linkAppModal.differentPrefixAllowsBothAppsTo', 'Different prefix allows both services to share the same database.')}
                                         </span>
                                     </div>
                                 )}
@@ -202,7 +202,7 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
                                 ) : (
                                     <>
                                         <Check size={16} />
-                                        {t('app.linkAppModal.linkApps', 'Link apps')}
+                                        {t('app.linkAppModal.linkApps', 'Link services')}
                                     </>
                                 )}
                             </SharedButton>

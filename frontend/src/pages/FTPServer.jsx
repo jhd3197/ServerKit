@@ -670,7 +670,7 @@ function FTPServer() {
                                 />
                                 <ListToolbar>
                                     <Button onClick={() => setShowUserModal(true)}>
-                                        {t('app.fTPServer.addUser', 'Add user')}
+                                        {t('app.fTPServer.addUser', 'New user')}
                                     </Button>
                                 </ListToolbar>
 
@@ -688,7 +688,7 @@ function FTPServer() {
                                         <EmptyState
                                             icon={UserPlus}
                                             title={t('app.fTPServer.noFtpUsersConfigured', 'No FTP users configured')}
-                                            action={<Button onClick={() => setShowUserModal(true)}>{t('app.fTPServer.createFirstUser', 'Create first user')}</Button>}
+                                            action={<Button onClick={() => setShowUserModal(true)}>{t('app.fTPServer.createFirstUser', 'New user')}</Button>}
                                         />
                                     )}
                                     footer={(
@@ -812,7 +812,7 @@ function FTPServer() {
             </Modal>
 
             {/* Create User Modal */}
-            <Modal open={showUserModal} onClose={() => setShowUserModal(false)} title={t('app.fTPServer.createFtpUser', 'Create FTP user')}>
+            <Modal open={showUserModal} onClose={() => setShowUserModal(false)} title={t('app.fTPServer.createFtpUser', 'New FTP user')}>
                             <div className="form-group">
                                 <Label>{t('app.fTPServer.username2', 'Username *')}</Label>
                                 <Input
@@ -848,7 +848,7 @@ function FTPServer() {
                                 onClick={handleCreateUser}
                                 disabled={actionLoading || !newUser.username.trim()}
                             >
-                                {actionLoading ? 'Creating...' : 'Create User'}
+                                {actionLoading ? 'Creating...' : 'Create user'}
                             </Button>
                         </div>
             </Modal>

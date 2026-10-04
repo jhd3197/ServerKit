@@ -146,13 +146,13 @@ const SSOConfigTab = () => {
     }
 
     if (loading) {
-        return <div className="settings-section"><p>{t('app.sSOConfigTab.loadingSsoConfiguration', 'Loading SSO configuration…')}</p></div>;
+        return <div className="settings-section"><p>{t('app.sSOConfigTab.loadingSsoConfiguration', 'Loading SSO settings…')}</p></div>;
     }
 
     return (
         <div className="sso-config">
             <div className="settings-section">
-                <h2><Shield size={20} /> {t('app.sSOConfigTab.ssoOauthConfiguration', 'SSO / OAuth configuration')}</h2>
+                <h2><Shield size={20} /> {t('app.sSOConfigTab.ssoOauthConfiguration', 'SSO / OAuth settings')}</h2>
                 <p className="text-secondary">
                     {t('app.sSOConfigTab.configureExternalIdentityProvidersForSingle', 'Configure external identity providers for single sign-on.')}
                 </p>
@@ -210,10 +210,10 @@ const SSOConfigTab = () => {
                             <span className="settings-hint">
                                 {forceSso ? (
                                     <span className="text-warning">
-                                        <AlertTriangle size={14} /> {t('app.sSOConfigTab.passwordLoginWillBeDisabledFor', 'Password login will be disabled for all users.')}
+                                        <AlertTriangle size={14} /> {t('app.sSOConfigTab.passwordLoginWillBeDisabledFor', 'Password sign-in will be disabled for all users.')}
                                     </span>
                                 ) : (
-                                    'Disable password login and require SSO for all users'
+                                    'Disable password sign-in and require SSO for all users'
                                 )}
                             </span>
                         </div>

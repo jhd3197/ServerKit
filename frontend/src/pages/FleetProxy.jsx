@@ -110,7 +110,7 @@ const FLEET_COLUMNS = [
     },
     {
         key: 'apps',
-        headerKey: 'app.fleetProxy.apps', header: 'Apps',
+        headerKey: 'app.fleetProxy.apps', header: 'Services',
         sortable: true,
         type: 'num',
         value: (row) => row.app_count ?? 0,

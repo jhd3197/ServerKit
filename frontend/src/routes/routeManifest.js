@@ -16,15 +16,15 @@
  * @property {string=} titlePath Optional exact title-only path for a parameterized route.
  * @property {boolean=} index Whether this is the dashboard index route.
  * @property {boolean=} devOnly Whether the page is hidden outside developer mode.
- * @property {Record<string, Record<string, string>>=} titleByParam Title overrides keyed by parameter.
+ * @property {Record<string, Record<string, {titleKey: string, title: string}>>=} titleByParam Title overrides keyed by parameter.
  */
 
 /** @type {ReadonlyArray<Readonly<CoreRoute>>} */
 export const CORE_ROUTES = Object.freeze([
     { id: 'migration', path: '/migrate', placement: 'root', component: 'DatabaseMigration', titleKey: 'app.routeManifest.databaseMigration', title: 'Database migration' },
     { id: 'setup', path: '/setup', placement: 'root', component: 'Setup', guard: 'setup', titleKey: 'app.routeManifest.setup', title: 'Setup' },
-    { id: 'login', path: '/login', placement: 'root', component: 'Login', guard: 'public', titleKey: 'app.routeManifest.login', title: 'Login' },
-    { id: 'sso-callback', path: '/login/callback/:provider', placement: 'root', component: 'SSOCallback', guard: 'public', titleKey: 'app.routeManifest.login', title: 'Login' },
+    { id: 'login', path: '/login', placement: 'root', component: 'Login', guard: 'public', titleKey: 'app.routeManifest.login', title: 'Sign in' },
+    { id: 'sso-callback', path: '/login/callback/:provider', placement: 'root', component: 'SSOCallback', guard: 'public', titleKey: 'app.routeManifest.login', title: 'Sign in' },
     { id: 'register', path: '/register', placement: 'root', component: 'Register', guard: 'public', titleKey: 'app.routeManifest.register', title: 'Register' },
     { id: 'connection-callback', path: '/connections/callback/:provider', placement: 'root', component: 'SourceConnectionCallback', guard: 'private', titleKey: 'app.routeManifest.githubConnection', title: 'GitHub connection', titlePath: '/connections/callback/github' },
     { id: 'github-app-callback', path: '/connections/github-app/callback', placement: 'root', component: 'GithubAppCallback', guard: 'private', titleKey: 'app.routeManifest.githubSetup', title: 'GitHub setup' },
@@ -73,13 +73,23 @@ export const CORE_ROUTES = Object.freeze([
     { id: 'workspace-detail', path: '/workspaces/:id', placement: 'dashboard', component: 'WorkspaceDetail', titleKey: 'common.labels.workspace', title: 'Workspace' },
     {
         id: 'workspace-detail-tab', path: '/workspaces/:id/:tab', placement: 'dashboard', component: 'WorkspaceDetail', titleKey: 'common.labels.workspace', title: 'Workspace',
-        titleByParam: { tab: { overview: 'Workspace Overview', servers: 'Workspace Servers', services: 'Workspace Services', sites: 'Workspace Sites', members: 'Workspace Members', settings: 'Workspace Settings' } },
+        titleByParam: { tab: {
+            overview: { titleKey: 'app.routeManifest.workspaceOverview', title: 'Workspace overview' },
+            servers: { titleKey: 'app.routeManifest.workspaceServers', title: 'Workspace servers' },
+            services: { titleKey: 'app.routeManifest.workspaceServices', title: 'Workspace services' },
+            sites: { titleKey: 'app.routeManifest.workspaceSites', title: 'Workspace sites' },
+            members: { titleKey: 'app.routeManifest.workspaceMembers', title: 'Workspace members' },
+            settings: { titleKey: 'app.routeManifest.workspaceSettings', title: 'Workspace settings' },
+        } },
     },
     {
         id: 'workspace-detail-section', path: '/workspaces/:id/:tab/:section', placement: 'dashboard', component: 'WorkspaceDetail', titleKey: 'common.labels.workspace', title: 'Workspace',
         titleByParam: {
-            tab: { settings: 'Workspace Settings' },
-            section: { general: 'Workspace Settings', navigation: 'Workspace Navigation Permissions' },
+            tab: { settings: { titleKey: 'app.routeManifest.workspaceSettings', title: 'Workspace settings' } },
+            section: {
+                general: { titleKey: 'app.routeManifest.workspaceSettings', title: 'Workspace settings' },
+                navigation: { titleKey: 'app.routeManifest.workspaceNavigationPermissions', title: 'Workspace navigation permissions' },
+            },
         },
     },
 
@@ -193,7 +203,7 @@ export function resolveCoreRouteTitle(pathname) {
         let title = route.title;
         if (route.titleByParam) {
             for (const [param, titles] of Object.entries(route.titleByParam)) {
-                title = titles[match.params[param]] || title;
+                title = titles[match.params[param]]?.title || title;
             }
         }
         best = { score: match.score, title };

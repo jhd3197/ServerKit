@@ -197,7 +197,7 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                             <>
                                 {t('app.overviewTab.moreSecurityTools', 'More security tools (malware scanning, brute-force protection, vulnerability scans, auto-updates) are available as extensions in the')}
                                 {' '}
-                                <Link to="/marketplace">{t('app.overviewTab.marketplaceLink', 'Marketplace')}</Link>
+                                <Link to="/marketplace">{t('app.overviewTab.marketplaceLink', 'Extensions')}</Link>
                                 {'. '}
                             </>
                         )}

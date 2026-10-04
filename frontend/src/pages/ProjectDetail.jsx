@@ -237,8 +237,8 @@ const ProjectDetail = () => {
                                 <EmptyState
                                     icon={Boxes}
                                     size="sm"
-                                    title={t('app.projectDetail.noAppsInThisEnvironment', 'No apps in this environment')}
-                                    description={t('app.projectDetail.assignAppsToThisEnvironmentWhen', 'Assign apps to this environment when creating them, or move existing apps here.')}
+                                    title={t('app.projectDetail.noAppsInThisEnvironment', 'No services in this environment')}
+                                    description={t('app.projectDetail.assignAppsToThisEnvironmentWhen', 'Assign services to this environment when creating them, or move existing services here.')}
                                 />
                             ) : (
                                 <AppList apps={envApps} />
@@ -248,7 +248,7 @@ const ProjectDetail = () => {
                         <EmptyState
                             icon={FolderKanban}
                             title={t('app.projectDetail.noEnvironments', 'No environments')}
-                            description={t('app.projectDetail.addAnEnvironmentToStartOrganizing', 'Add an environment to start organizing this project\'s apps.')}
+                            description={t('app.projectDetail.addAnEnvironmentToStartOrganizing', "Add an environment to start organizing this project's services.")}
                         />
                     )}
                 </div>
@@ -277,7 +277,7 @@ const ProjectDetail = () => {
             <ConfirmDialog
                 isOpen={Boolean(deleteEnv)}
                 title={t('app.projectDetail.deleteEnvironment2', 'Delete environment "{{value}}"?', { value: deleteEnv?.name || '' })}
-                message={t('app.projectDetail.appsAssignedToThisEnvironmentWill', 'Apps assigned to this environment will stay in the project but lose their environment assignment. This cannot be undone.')}
+                message={t('app.projectDetail.appsAssignedToThisEnvironmentWill', 'Services assigned to this environment will stay in the project but lose their environment assignment. This cannot be undone.')}
                 confirmText={t('app.projectDetail.deleteEnvironment', 'Delete environment')}
                 variant="danger"
                 onConfirm={handleDeleteEnvironment}

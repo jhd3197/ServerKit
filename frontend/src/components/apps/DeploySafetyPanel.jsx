@@ -107,7 +107,7 @@ const DeploySafetyPanel = ({ app, onChanged }) => {
                     <div className="settings-label">
                         <span>{t('app.deploySafetyPanel.allow4xx', 'Accept a 4xx answer')}</span>
                         <span className="settings-hint">
-                            {t('app.deploySafetyPanel.allow4xxHint', 'Only for a health path that sits behind a login and answers 401 or 403 when the app is up. Otherwise a 4xx means the release is broken.')}
+                            {t('app.deploySafetyPanel.allow4xxHint', 'Only for a health path that sits behind a login and answers 401 or 403 when the service is up. Otherwise a 4xx means the release is broken.')}
                         </span>
                     </div>
                     <div className="settings-control">

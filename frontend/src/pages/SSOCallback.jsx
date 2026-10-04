@@ -66,7 +66,7 @@ const SSOCallback = () => {
                         <p className="error-message">{error}</p>
                     </div>
                     <Button asChild className="btn-full">
-                        <Link to="/login">{t('app.sSOCallback.backToLogin', 'Back to login')}</Link>
+                        <Link to="/login">{t('app.sSOCallback.backToLogin', 'Back to sign in')}</Link>
                     </Button>
                 </div>
             </div>

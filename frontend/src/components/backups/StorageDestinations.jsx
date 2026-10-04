@@ -109,7 +109,7 @@ export default function StorageDestinations({
                                 </Button>
                             )}
                             <Button variant="outline" size="sm" onClick={onBrowse}>
-                                <Archive size={14} /> {t('app.storageDestinations.snapshots', 'Snapshots')}
+                                <Archive size={14} /> {t('app.storageDestinations.snapshots', 'Backups')}
                             </Button>
                         </div>
                     </article>

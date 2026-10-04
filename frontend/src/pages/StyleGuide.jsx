@@ -641,7 +641,7 @@ export default function StyleGuide() {
 
                         <SectionTitle title={t('app.styleGuide.statsGridStatcardStatsgrid', 'Stats grid (StatCard / StatsGrid)')} />
                         <StatsGrid>
-                            <StatCard icon={Server} iconVariant="apps" label={t('app.styleGuide.applications', 'Applications')} value={12} />
+                            <StatCard icon={Server} iconVariant="apps" label={t('app.styleGuide.applications', 'Services')} value={12} />
                             <StatCard icon={Database} iconVariant="databases" label={t('common.labels.databases', 'Databases')} value={5} />
                             <StatCard icon={Cloud} iconVariant="backups" label={t('common.labels.backups', 'Backups')} value={24} />
                             <StatCard icon={BarChart3} iconVariant="size" label={t('app.styleGuide.diskUsed', 'Disk used')} value={48} suffix="GB" />
@@ -678,7 +678,7 @@ export default function StyleGuide() {
 
                         <SectionTitle title={t('app.styleGuide.dangerZoneDangerzone', 'Destructive action (DangerZone)')} />
                         <DangerZone
-                            title={t('app.styleGuide.deleteApplication', 'Delete application')}
+                            title={t('app.styleGuide.deleteApplication', 'Delete service')}
                             description={t('app.styleGuide.onceDeletedThisCannotBeUndone', 'Once deleted, this cannot be undone. All data will be permanently removed.')}
                             action={<Button variant="destructive"><Trash2 size={16} /> {t('common.actions.delete', 'Delete')}</Button>}
                         />
@@ -730,9 +730,9 @@ export default function StyleGuide() {
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.appTypeEnvDbBadges', 'App type / env / DB badges')} />
+                        <SectionTitle title={t('app.styleGuide.appTypeEnvDbBadges', 'Service type / env / DB badges')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
-                            <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">{t('app.styleGuide.appTypes', 'App types')}</p>
+                            <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">{t('app.styleGuide.appTypes', 'Service types')}</p>
                             <div className="styleguide__actions styleguide__actions--spaced">
                                 <span className="app-type">PHP</span>
                                 <span className="app-type">{t('app.styleGuide.python', 'Python')}</span>
@@ -841,7 +841,7 @@ export default function StyleGuide() {
                             <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                                 <SheetContent side={sheetSide}>
                                     <SheetHeader>
-                                        <SheetTitle>{t('app.styleGuide.addService', 'Add service')}</SheetTitle>
+                                        <SheetTitle>{t('app.styleGuide.addService', 'New service')}</SheetTitle>
                                         <SheetDescription>
                                             {t('app.styleGuide.configureANewServiceThisDrawer', 'Configure a new service. This drawer pattern is the panel-style alternative to a centered modal.')}
                                         </SheetDescription>

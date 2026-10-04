@@ -147,7 +147,7 @@ export default function SlotsCard({ app }) {
                     </p>
                     {state.eligibility.eligible ? (
                         <p className="slots-card__hint">
-                            {t('app.slots.eligible', 'This app qualifies.')}{' '}
+                            {t('app.slots.eligible', 'This service qualifies.')}{' '}
                             <Link to={`/services/${app.id}/settings/health`}>
                                 {t('app.slots.turnOn', 'Turn it on in Settings')}
                             </Link>

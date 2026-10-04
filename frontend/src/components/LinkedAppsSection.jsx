@@ -48,7 +48,7 @@ const LinkedAppsSection = ({
                         disabled={loading}
                     >
                         <Link2 size={14} />
-                        {t('app.linkedAppsSection.linkApp', 'Link app')}
+                        {t('app.linkedAppsSection.linkApp', 'Link service')}
                     </SharedButton>
                 )}
             </div>
@@ -56,7 +56,7 @@ const LinkedAppsSection = ({
             <div className="linked-apps-content">
                 {/* Current app environment */}
                 <div className="current-environment">
-                    <span className="env-label">{t('app.linkedAppsSection.thisAppIs', 'This app is:')}</span>
+                    <span className="env-label">{t('app.linkedAppsSection.thisAppIs', 'This service is:')}</span>
                     <span className={`env-badge ${envColors[app.environment_type] || ''}`}>
                         {envLabels[app.environment_type] || 'Standalone'}
                     </span>
@@ -94,7 +94,7 @@ const LinkedAppsSection = ({
                                     <SharedButton variant="outline" type="button"
                                         className="btn btn-secondary btn-sm btn-icon"
                                         onClick={() => onNavigate(linkedApp.id)}
-                                        title={t('app.linkedAppsSection.viewApp', 'View app')}
+                                        title={t('app.linkedAppsSection.viewApp', 'View service')}
                                     >
                                         <ExternalLink size={14} />
                                     </SharedButton>
@@ -102,7 +102,7 @@ const LinkedAppsSection = ({
                                         className="btn btn-secondary btn-sm btn-icon"
                                         onClick={onUnlink}
                                         disabled={loading}
-                                        title={t('app.linkedAppsSection.unlinkApps', 'Unlink apps')}
+                                        title={t('app.linkedAppsSection.unlinkApps', 'Unlink services')}
                                     >
                                         <Unlink size={14} />
                                     </SharedButton>
@@ -112,20 +112,20 @@ const LinkedAppsSection = ({
                     </div>
                 ) : app.environment_type !== 'standalone' ? (
                     <div className="linked-apps-empty">
-                        <p>{t('app.linkedAppsSection.noLinkedAppsLinkAnotherApp', 'No linked apps. Link another app to share database resources.')}</p>
+                        <p>{t('app.linkedAppsSection.noLinkedAppsLinkAnotherApp', 'No linked services. Link another service to share database resources.')}</p>
                         <SharedButton variant="outline" type="button"
                             className="btn btn-secondary btn-sm"
                             onClick={onLink}
                             disabled={loading}
                         >
                             <Link2 size={14} />
-                            {t('app.linkedAppsSection.linkApp', 'Link app')}
+                            {t('app.linkedAppsSection.linkApp', 'Link service')}
                         </SharedButton>
                     </div>
                 ) : (
                     <div className="linked-apps-info">
                         <p>
-                            {t('app.linkedAppsSection.linkThisAppToAnotherTo', 'Link this app to another to create a production/development pair. Linked apps can share database credentials with different table prefixes.')}
+                            {t('app.linkedAppsSection.linkThisAppToAnotherTo', 'Link this service to another to create a production/development pair. Linked services can share database credentials with different table prefixes.')}
                         </p>
                     </div>
                 )}

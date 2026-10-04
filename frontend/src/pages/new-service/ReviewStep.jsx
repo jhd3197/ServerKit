@@ -171,7 +171,7 @@ const ReviewStep = ({ form }) => {
             {envList.length > 0 && (
                 <div className="new-service-page__env-card">
                     <div className="new-service-page__env-head">
-                        <Lock size={15} /> {t('app.reviewStep.environment', 'Environment')}
+                        <Lock size={15} /> {t('app.reviewStep.environmentVariables', 'Environment variables')}
                     </div>
                     <div className="new-service-page__env-preview">
                         {envList.map(env => (

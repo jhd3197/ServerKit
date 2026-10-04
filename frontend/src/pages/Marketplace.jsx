@@ -405,7 +405,7 @@ const Marketplace = () => {
         setBusyPlugin({ id: plugin.id, action: 'uninstall' });
         try {
             await api.uninstallPlugin(plugin.id, purge);
-            toast.success(purge ? t('app.marketplace.extensionUninstalledDataPurged', 'Extension uninstalled; data purged') : t('app.marketplace.extensionUninstalledDataKept', 'Extension uninstalled; data kept'));
+            toast.success(purge ? t('app.marketplace.extensionUninstalledDataPurged', 'Extension uninstalled; data deleted') : t('app.marketplace.extensionUninstalledDataKept', 'Extension uninstalled; data kept'));
             await loadExtensions();
         } catch (err) {
             toast.error(err.message);
@@ -943,7 +943,7 @@ const ExtensionDetailModal = ({ entry, installing, statusVariant, onClose, onIns
 
                 {configKeys.length > 0 && (
                     <div className="extension-detail__config">
-                        <p className="extension-detail__section-label">{t('app.marketplace.configuration', 'Configuration')}</p>
+                        <p className="extension-detail__section-label">{t('app.marketplace.configuration', 'Settings')}</p>
                         <ul className="extension-detail__config-list">
                             {configKeys.map((key) => (
                                 <li key={key}><code>{key}</code></li>
@@ -1103,10 +1103,10 @@ const PluginConfigDialog = ({ plugin, onClose }) => {
         setSaving(true);
         try {
             await api.updatePluginConfig(plugin.id, values || {});
-            toast.success(t('app.marketplace.extensionConfigurationSaved', 'Extension configuration saved'));
+            toast.success(t('app.marketplace.extensionConfigurationSaved', 'Extension settings saved'));
             onClose();
         } catch (err) {
-            toast.error(err.message || t('app.marketplace.failedToSaveConfiguration', 'Failed to save configuration'));
+            toast.error(err.message || t('app.marketplace.failedToSaveConfiguration', 'Failed to save settings'));
         } finally {
             setSaving(false);
         }
@@ -1184,7 +1184,7 @@ const PluginConfigDialog = ({ plugin, onClose }) => {
                         );
                     })}
                     {Object.keys(fields).length === 0 && (
-                        <p className="text-muted">{t('app.marketplace.thisExtensionDeclaresNoConfigurationFields', 'This extension declares no configuration fields.')}</p>
+                        <p className="text-muted">{t('app.marketplace.thisExtensionDeclaresNoConfigurationFields', 'This extension has no settings.')}</p>
                     )}
                 </div>
             )}
@@ -1206,14 +1206,14 @@ const PluginUninstallDialog = ({ plugin, onCancel, onConfirm }) => {
                 <>
                     <Button variant="ghost" onClick={onCancel}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button variant="outline" onClick={() => onConfirm(false)}>{t('app.marketplace.keepData', 'Keep data')}</Button>
-                    <Button variant="destructive" onClick={() => onConfirm(true)}>{t('app.marketplace.purgeData', 'Purge data')}</Button>
+                    <Button variant="destructive" onClick={() => onConfirm(true)}>{t('app.marketplace.purgeData', 'Delete data')}</Button>
                 </>
             }
         >
             <div className="plugin-uninstall-dialog">
-                <p>{t('app.marketplace.removingThisExtensionStopsItsRoutes', 'Removing this extension stops its routes and UI contributions.')}</p>
+                <p>{t('app.marketplace.removingThisExtensionStopsItsRoutes', 'Uninstalling this extension stops its routes and UI contributions.')}</p>
                 <p className="text-muted">
-                    <strong>{t('app.marketplace.keepData', 'Keep data')}</strong> {t('app.marketplace.leavesTheExtensionSDatabaseTables', 'leaves the extension\'s database tables intact so you can reinstall later.')} <strong>{t('app.marketplace.purgeData', 'Purge data')}</strong> {t('app.marketplace.permanentlyDropsTheExtensionSTables', 'permanently drops the extension\'s tables and cannot be undone.')}
+                    <strong>{t('app.marketplace.keepData', 'Keep data')}</strong> {t('app.marketplace.leavesTheExtensionSDatabaseTables', 'leaves the extension\'s database tables intact so you can reinstall later.')} <strong>{t('app.marketplace.purgeData', 'Delete data')}</strong> {t('app.marketplace.permanentlyDropsTheExtensionSTables', 'permanently drops the extension\'s tables and cannot be undone.')}
                 </p>
             </div>
         </Modal>

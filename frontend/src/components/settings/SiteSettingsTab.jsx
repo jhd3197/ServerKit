@@ -255,8 +255,8 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             setMessage({
                 type: 'success',
                 text: value === 0
-                    ? 'Base port reset — new apps use each template\'s default'
-                    : `New apps will be assigned ports starting from ${value}`
+                    ? 'Base port reset — new services use each template\'s default'
+                    : `New services will be assigned ports starting from ${value}`
             });
         } catch (err) {
             setMessage({ type: 'error', text: err.message || 'Failed to update base port' });
@@ -346,7 +346,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                             />
                         </div>
                     </div>
-                    <span className="form-help">{t('app.siteSettingsTab.shownOnThePublicSignIn', 'Shown on the public sign-in / register pages and the browser tab before login. Kept brand-neutral by default so the panel isn\'t trivially identifiable.')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.shownOnThePublicSignIn', "Shown on the public sign-in / register pages and the browser tab before sign-in. Kept brand-neutral by default so the panel isn't trivially identifiable.")}</span>
                 </div>
 
                 <div className="form-group">
@@ -364,13 +364,13 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                             />
                         </div>
                     </div>
-                    <span className="form-help">{t('app.siteSettingsTab.shownInTheBrowserTabOnce', 'Shown in the browser tab once signed in (the interior of the app).')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.shownInTheBrowserTabOnce', 'Shown in the browser tab once signed in (inside the panel).')}</span>
                 </div>
 
                 <div className="form-group">
                     <div className="settings-row">
                         <div className="settings-label">
-                            <Label htmlFor="login-layout">{t('app.siteSettingsTab.loginLayout', 'Login layout')}</Label>
+                            <Label htmlFor="login-layout">{t('app.siteSettingsTab.loginLayout', 'Sign-in layout')}</Label>
                         </div>
                         <div className="settings-control">
                             <Select value={loginLayout} onValueChange={setLoginLayout}>
@@ -388,13 +388,13 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                             </Button>
                         </div>
                     </div>
-                    <span className="form-help">{t('app.siteSettingsTab.rearrangesTheSignInPageApplies', 'Rearranges the sign-in page. Applies on the next load of the login page.')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.rearrangesTheSignInPageApplies', 'Rearranges the sign-in page. Applies on the next load of the sign-in page.')}</span>
                 </div>
             </div>
 
             <div {...register('site-registration', 'settings-card')}>
                 <h3>{t('app.siteSettingsTab.userRegistration', 'User registration')}</h3>
-                <p>{t('app.siteSettingsTab.allowNewUsersToCreateAccounts', 'Allow new users to create accounts on the login page.')}</p>
+                <p>{t('app.siteSettingsTab.allowNewUsersToCreateAccounts', 'Allow new users to create accounts on the sign-in page.')}</p>
 
                 <div className="form-group">
                     <div className="settings-row">
@@ -414,8 +414,8 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             </div>
 
             <div {...register('site-app-ports', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.managedAppPorts', 'Managed app ports')}</h3>
-                <p>{t('app.siteSettingsTab.controlTheHostPortAssignedTo', 'Control the host port assigned to new WordPress sites and other managed apps.')}</p>
+                <h3>{t('app.siteSettingsTab.managedAppPorts', 'Managed service ports')}</h3>
+                <p>{t('app.siteSettingsTab.controlTheHostPortAssignedTo', 'Control the host port assigned to new WordPress sites and other managed services.')}</p>
 
                 <div className="form-group">
                     <div className="settings-row">
@@ -438,14 +438,14 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                         </div>
                     </div>
                     <span className="form-help">
-                        {t('app.siteSettingsTab.newAppsGetTheFirstFree', 'New apps get the first free port at or above this number. Set to')} <strong>0</strong> {t('app.siteSettingsTab.toUseEachTemplateSOwn', 'to use each template\'s own default (WordPress starts at 8300). Ports already in use are always skipped, so collisions can\'t happen.')}
+                        {t('app.siteSettingsTab.newAppsGetTheFirstFree', 'New services get the first free port at or above this number. Set to')} <strong>0</strong> {t('app.siteSettingsTab.toUseEachTemplateSOwn', 'to use each template\'s own default (WordPress starts at 8300). Ports already in use are always skipped, so collisions can\'t happen.')}
                     </span>
                 </div>
             </div>
 
             <div {...register('site-base-domains', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.managedSitesBaseDomains', 'Managed sites: base domains')}</h3>
-                <p>{t('app.siteSettingsTab.publishManagedSitesAt', 'Publish managed sites at')} <code>&lt;name&gt;.&lt;base-domain&gt;</code>. Register one or more base domains; a new site can be created under any of them, defaulting to the one marked <strong>{t('common.labels.default', 'Default')}</strong>. Point a wildcard record <code>*.&lt;base&gt;</code> {t('app.siteSettingsTab.orPerSiteARecordsAt', '(or per-site A records) at this server.')}</p>
+                <h3>{t('app.siteSettingsTab.managedSitesBaseDomains', 'Managed services: base domains')}</h3>
+                <p>{t('app.siteSettingsTab.publishManagedSitesAt', 'Publish managed services at')} <code>&lt;name&gt;.&lt;base-domain&gt;</code>. Register one or more base domains; a new site can be created under any of them, defaulting to the one marked <strong>{t('common.labels.default', 'Default')}</strong>. Point a wildcard record <code>*.&lt;base&gt;</code> {t('app.siteSettingsTab.orPerSiteARecordsAt', '(or per-service A records) at this server.')}</p>
 
                 {httpsError ? (
                     <ErrorState
@@ -500,7 +500,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                 )}
 
                 {displayBases.length === 0 ? (
-                    <p className="form-help">{t('app.siteSettingsTab.noBaseDomainYetAddOne', 'No base domain yet. Add one below to start publishing sites at real subdomains.')}</p>
+                    <p className="form-help">{t('app.siteSettingsTab.noBaseDomainYetAddOne', 'No base domain yet. Add one below to start publishing services at real subdomains.')}</p>
                 ) : displayBases.map((b) => (
                     <div key={b.domain} className="form-group">
                         <div className="settings-row">
@@ -532,7 +532,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="wildcard">{t('app.siteSettingsTab.wildcardDns', 'Wildcard DNS')}</SelectItem>
-                                        <SelectItem value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-site DNS')}</SelectItem>
+                                        <SelectItem value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-service DNS')}</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <Button variant="outline" onClick={() => handleSetupHttpsFor(b)}
@@ -552,10 +552,10 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                             </div>
                         </div>
                         <span className="form-help">
-                            {t('app.siteSettingsTab.sitesPublishAt', 'Sites publish at')} <code>&lt;name&gt;.{b.domain || 'base-domain'}</code>.{' '}
+                            {t('app.siteSettingsTab.sitesPublishAt', 'Services publish at')} <code>&lt;name&gt;.{b.domain || 'base-domain'}</code>.{' '}
                             {(b.dns_mode || 'wildcard') === 'wildcard'
                                 ? <>{t('app.siteSettingsTab.point', 'Point')} <code>*.{b.domain || 'base-domain'}</code> {t('app.siteSettingsTab.atThisServer', 'at this server.')}</>
-                                : <>{t('app.siteSettingsTab.eachNewSiteGetsItsOwn', 'Each new site gets its own A record, auto-created via the provider.')}</>}
+                                : <>{t('app.siteSettingsTab.eachNewSiteGetsItsOwn', 'Each new service gets its own A record, auto-created via the provider.')}</>}
                         </span>
                     </div>
                 ))}
@@ -577,7 +577,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="wildcard">{t('app.siteSettingsTab.wildcardDns', 'Wildcard DNS')}</SelectItem>
-                                    <SelectItem value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-site DNS')}</SelectItem>
+                                    <SelectItem value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-service DNS')}</SelectItem>
                                 </SelectContent>
                             </Select>
                             <Button onClick={handleAddDomain} disabled={addingDomain || !newDomain.trim()}>
@@ -585,7 +585,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                             </Button>
                         </div>
                     </div>
-                    <span className="form-help">{t('app.siteSettingsTab.registerAnotherDomainSitesCanBe', 'Register another domain sites can be published under. Set up its wildcard HTTPS from its row above.')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.registerAnotherDomainSitesCanBe', 'Register another domain services can be published under. Set up its wildcard HTTPS from its row above.')}</span>
                 </div>
                 </>
                 )}

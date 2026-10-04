@@ -224,7 +224,7 @@ const DatabaseMigration = () => {
 
                         {!isAuthenticated && (
                             <div className="migration-login-section">
-                                <div className="wizard-step-title">{t('app.databaseMigration.adminLoginRequired', 'Admin login required')}</div>
+                                <div className="wizard-step-title">{t('app.databaseMigration.adminLoginRequired', 'Admin sign-in required')}</div>
                                 <p className="wizard-step-description">
                                     {t('app.databaseMigration.signInWithAnAdminAccount', 'Sign in with an admin account to apply the update.')}
                                 </p>

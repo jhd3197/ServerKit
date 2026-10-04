@@ -478,7 +478,7 @@ const MACHINE_COLS = new Set(['image', 'ports']);
 
 const TABLE_DEFS = {
     services: {
-        empty: 'No applications yet.',
+        empty: 'No services yet.',
         cols: [['Name', 'name'], ['Type', 'app_type'], ['Status', 'status'], ['Server', 'server_name']],
         href: (row) => `/services/${row.id}`,
     },

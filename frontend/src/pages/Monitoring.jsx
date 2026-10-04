@@ -323,7 +323,7 @@ const Monitoring = () => {
                         <div className="monitoring-panel__header">
                             <div>
                                 <h3>{t('app.monitoring.thisServer', 'This server')}</h3>
-                                <span className="mon-panel-sub">{t('app.monitoring.limitsForTheMachineRunningThe', 'Limits for the machine running the panel')}</span>
+                                <span className="mon-panel-sub">{t('app.monitoring.limitsForTheMachineRunningThe', 'Limits for the panel server')}</span>
                             </div>
                             <Button type="submit" size="sm" disabled={savingThresholds}>
                                 {savingThresholds ? 'Saving…' : 'Save rules'}
