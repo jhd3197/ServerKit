@@ -5919,8 +5919,6 @@
             "filterTemplates": "템플릿 필터링",
             "fits": "적합",
             "gitRepo": "힘내 레포",
-            "hasDocumentation": "문서 있음",
-            "hasWebsite": "웹사이트 있음",
             "importAZip": "ZIP 가져오기",
             "importFromGithub": "GitHub에서 가져오기",
             "loadingTemplates": "템플릿 로드 중",

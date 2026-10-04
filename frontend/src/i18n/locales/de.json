@@ -5919,8 +5919,6 @@
             "filterTemplates": "Filtervorlagen",
             "fits": "Passt",
             "gitRepo": "Git-Repo",
-            "hasDocumentation": "Dokumentation vorhanden",
-            "hasWebsite": "Hat eine Website",
             "importAZip": "Importieren Sie eine ZIP-Datei",
             "importFromGithub": "Von GitHub importieren",
             "loadingTemplates": "Laden von Vorlagen",

@@ -776,6 +776,9 @@
             "startCommand": "Start command",
             "usingTheRepositorySOwnDockerfile": "Using the repository's own Dockerfile."
         },
+        "catalogCard": {
+            "featured": "Featured"
+        },
         "chatBubble": {
             "closeAssistantAltA": "Close assistant (Alt+A)",
             "openAssistantAltA": "Open assistant (Alt+A)"
@@ -6371,8 +6374,6 @@
             "filterTemplates": "Filter templates",
             "fits": "Fits",
             "gitRepo": "Git repo",
-            "hasDocumentation": "Has documentation",
-            "hasWebsite": "Has website",
             "importAZip": "Import a ZIP",
             "importFromGithub": "Import from GitHub",
             "loadingTemplates": "Loading templates",

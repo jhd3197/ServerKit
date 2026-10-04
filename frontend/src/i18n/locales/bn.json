@@ -5919,8 +5919,6 @@
             "filterTemplates": "ফিল্টার টেমপ্লেট",
             "fits": "মানানসই",
             "gitRepo": "Git রেপো",
-            "hasDocumentation": "ডকুমেন্টেশন আছে",
-            "hasWebsite": "ওয়েবসাইট আছে",
             "importAZip": "একটি জিপ আমদানি করুন",
             "importFromGithub": "GitHub থেকে আমদানি করুন",
             "loadingTemplates": "টেমপ্লেট লোড হচ্ছে",

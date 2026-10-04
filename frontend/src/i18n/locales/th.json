@@ -5919,8 +5919,6 @@
             "filterTemplates": "เทมเพลตตัวกรอง",
             "fits": "พอดี",
             "gitRepo": "ที่เก็บ Git",
-            "hasDocumentation": "มีเอกสาร",
-            "hasWebsite": "มีเว็บไซต์",
             "importAZip": "นำเข้า ZIP",
             "importFromGithub": "นำเข้าจาก GitHub",
             "loadingTemplates": "กำลังโหลดเทมเพลต",

@@ -1,7 +1,6 @@
 // ============================================
-// TEMPLATES PAGE (redesign — catalog grid, see docs/REDESIGN_MAP.md #13)
-// Catalog cards use the demo's .tpl-card pattern, page-scoped here (NOT a
-// design-system primitive). Detail/install modal styles stay below.
+// TEMPLATES PAGE. Cards are the shared CatalogCard (_design-system.scss);
+// this file holds the quickstart row and the detail/install modal styles.
 // ============================================
 
 .templates-page {
@@ -22,159 +21,6 @@
         p {
             margin: 0;
             font-size: $font-size-lg;
-        }
-    }
-
-    // ── Catalog grid ────────────────────────────────────────
-    .templates-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
-        gap: 14px;
-        padding-top: $space-1;
-    }
-
-    // ── Template card (demo .tpl-card pattern) ──────────────
-    .tpl-card {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        padding: $space-4;
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-        cursor: pointer;
-        transition: border-color 0.14s, transform 0.14s, box-shadow 0.14s;
-
-        &:hover {
-            border-color: var(--border-strong);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-
-            .tpl-deploy {
-                opacity: 1;
-                pointer-events: auto;
-            }
-        }
-    }
-
-    .tpl-top {
-        display: flex;
-        align-items: center;
-        gap: $space-3;
-        margin-bottom: 11px;
-    }
-
-    .tpl-ico {
-        width: 42px;
-        height: 42px;
-        border-radius: 11px;
-        display: grid;
-        place-items: center;
-        flex-shrink: 0;
-        overflow: hidden;
-        background: var(--surface-2);
-        color: var(--accent-bright);
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 6px;
-        }
-
-        svg {
-            flex-shrink: 0;
-        }
-    }
-
-    .tpl-id {
-        min-width: 0;
-    }
-
-    .tpl-name {
-        font-size: $font-size-base;
-        font-weight: $font-weight-semibold;
-        color: $text-primary;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .tpl-ver {
-        font-family: var(--mono);
-        font-size: 10.5px;
-        color: var(--text-faint);
-        margin-top: 1px;
-    }
-
-    // Featured flag — amber star, top-right
-    .tpl-ft {
-        position: absolute;
-        top: 13px;
-        right: 13px;
-        color: var(--amber);
-
-        svg {
-            fill: currentColor;
-        }
-    }
-
-    .tpl-desc {
-        margin: 0;
-        font-size: $font-size-sm + 0.5;
-        color: var(--text-faint);
-        line-height: 1.5;
-        flex: 1;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .tpl-tags {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        flex-wrap: wrap;
-        margin-top: $space-3;
-        min-height: 26px;
-
-        .tg {
-            font-family: var(--mono);
-            font-size: 10px;
-            padding: 2px 7px;
-            border-radius: 5px;
-            background: var(--surface-2);
-            color: var(--text-dim);
-            text-transform: capitalize;
-            white-space: nowrap;
-        }
-    }
-
-    .tpl-link {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 20px;
-        height: 20px;
-        border-radius: 5px;
-        background: var(--surface-2);
-        color: var(--text-faint);
-    }
-
-    // Hover-reveal Deploy button
-    .tpl-deploy {
-        margin-left: auto;
-        height: 26px;
-        padding: 3px 10px;
-        font-size: $font-size-sm;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.14s;
-
-        &:focus-visible {
-            opacity: 1;
-            pointer-events: auto;
         }
     }
 }
@@ -250,11 +96,6 @@
         color: var(--text-ghost);
         transition: color $transition-fast, transform $transition-fast;
     }
-}
-
-// Kind badge on catalog cards ("Git repo" / "One-click").
-.tpl-kind {
-    text-transform: none;
 }
 
 // Repo-template detail body
@@ -702,20 +543,6 @@
 }
 
 // Responsive
-@media (max-width: $breakpoint-md) {
-    .templates-page {
-        .templates-grid {
-            grid-template-columns: 1fr;
-        }
-
-        // No hover on touch — keep Deploy reachable
-        .tpl-deploy {
-            opacity: 1;
-            pointer-events: auto;
-        }
-    }
-}
-
 
 .sk-srvpick__resource-picker {
     width: 100%;

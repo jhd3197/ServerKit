@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect, useMemo, useRef  } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
-    Search, Star, ExternalLink, BookOpen, Container, Globe, BarChart3,
+    Search, BookOpen, Container, Globe, BarChart3,
     Database, Shield, Cloud, MessageSquare, Video, Music, Image, Home,
     Code, Server, GitBranch, Workflow, HardDrive, Lock, Users, FileText,
     Layers, LayoutTemplate, Check, Cpu,
@@ -12,10 +12,9 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import {
     SearchField, FilterDrawer, FilterButton, countActiveFilters, Drawer,
-    DataTableFooter,
+    DataTableFooter, CatalogCard, CatalogGrid,
 } from '@/components/ds';
 import { useTableChrome, GridViewPicker, GridToolsMenu } from '@/components/ds/grid';
 import ServerPicker from '@/components/templates/ServerPicker';
@@ -549,79 +548,45 @@ const Templates = () => {
                 actions={chromeActions}
             />
 
-            {/* Templates Grid */}
-            <div className="templates-grid">
-                {deployManaged && (
-                    <ManagedCard capability="fleet" profile={managedProfile} compact />
-                )}
-                {sortedTemplates.length === 0 ? (
-                    <EmptyState
-                        icon={LayoutTemplate}
-                        title={t('app.templates.noTemplatesFound', 'No templates found')}
-                        description={hasActiveFilters ? t('app.templates.tryAdjustingYourFilters', 'Try adjusting your filters') : t('app.templates.noTemplatesAreAvailableYet', 'No templates are available yet')}
-                        action={hasActiveFilters && (
-                            <Button variant="outline" size="sm" onClick={clearAllFilters}>
-                                {t('app.templates.clearFilters', 'Clear Filters')}
-                            </Button>
-                        )}
-                    />
-                ) : (
-                    sortedTemplates.map(template => {
+            {deployManaged && (
+                <ManagedCard capability="fleet" profile={managedProfile} compact />
+            )}
+            {sortedTemplates.length === 0 ? (
+                <EmptyState
+                    icon={LayoutTemplate}
+                    title={t('app.templates.noTemplatesFound', 'No templates found')}
+                    description={hasActiveFilters ? t('app.templates.tryAdjustingYourFilters', 'Try adjusting your filters') : t('app.templates.noTemplatesAreAvailableYet', 'No templates are available yet')}
+                    action={hasActiveFilters && (
+                        <Button variant="outline" size="sm" onClick={clearAllFilters}>
+                            {t('app.templates.clearFilters', 'Clear Filters')}
+                        </Button>
+                    )}
+                />
+            ) : (
+                <CatalogGrid>
+                    {sortedTemplates.map(template => {
                         const isRepo = (template.kind || 'compose') === 'repo';
                         return (
-                            <div key={template.id} className="tpl-card" onClick={() => !deployManaged && handleDeploy(template)}>
-                                {isFeatured(template.id) && (
-                                    <span className="tpl-ft" title={t('app.templates.featured', 'Featured')}>
-                                        <Star size={14} />
-                                    </span>
-                                )}
-                                <div className="tpl-top">
-                                    <span className="tpl-ico">
-                                        {renderIcon(template, 22)}
-                                    </span>
-                                    <div className="tpl-id">
-                                        <div className="tpl-name">{template.name}</div>
-                                        <div className="tpl-ver">v{template.version}</div>
-                                    </div>
-                                </div>
-                                <p className="tpl-desc">{template.description}</p>
-                                <div className="tpl-tags">
-                                    <Badge variant={isRepo ? 'info' : 'outline'} className="tpl-kind">
-                                        {isRepo ? 'Git repo' : 'One-click'}
-                                    </Badge>
-                                    {(template.categories || []).slice(0, 2).map(cat => (
-                                        <span key={cat} className="tg">
-                                            {cat}
-                                        </span>
-                                    ))}
-                                    {template.website && (
-                                        <span className="tpl-link" title={t('app.templates.hasWebsite', 'Has website')}>
-                                            <ExternalLink size={12} />
-                                        </span>
-                                    )}
-                                    {template.documentation && (
-                                        <span className="tpl-link" title={t('app.templates.hasDocumentation', 'Has documentation')}>
-                                            <BookOpen size={12} />
-                                        </span>
-                                    )}
-                                    {!deployManaged && (
-                                    <Button
-                                        size="sm"
-                                        className="tpl-deploy"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDeploy(template);
-                                        }}
-                                    >
+                            <CatalogCard
+                                key={template.id}
+                                icon={renderIcon(template, 22)}
+                                title={template.name}
+                                sub={`v${template.version}`}
+                                tag={isRepo ? t('app.templates.gitRepo', 'Git repo') : t('app.templates.oneClick', 'One-click')}
+                                featured={isFeatured(template.id)}
+                                description={template.description}
+                                facts={(template.categories || []).slice(0, 2).join(' · ')}
+                                onClick={deployManaged ? undefined : () => handleDeploy(template)}
+                                action={!deployManaged && (
+                                    <Button variant="outline" size="sm" onClick={() => handleDeploy(template)}>
                                         <Rocket size={12} /> {t('app.templates.deploy', 'Deploy')}
                                     </Button>
-                                    )}
-                                </div>
-                            </div>
+                                )}
+                            />
                         );
-                    })
-                )}
-            </div>
+                    })}
+                </CatalogGrid>
+            )}
 
             {/* Under the cards, not above them: `templates` is what the category
                 and search query returned, `sortedTemplates` is what the kind

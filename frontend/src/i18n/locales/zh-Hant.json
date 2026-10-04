@@ -6137,8 +6137,6 @@
             "filterTemplates": "篩選範本",
             "fits": "適合",
             "gitRepo": "Git 儲存庫",
-            "hasDocumentation": "包含文件",
-            "hasWebsite": "有網站",
             "importAZip": "匯入 ZIP",
             "importFromGithub": "從 GitHub 匯入",
             "loadingTemplates": "載入範本",

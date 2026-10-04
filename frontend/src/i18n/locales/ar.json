@@ -5919,8 +5919,6 @@
             "filterTemplates": "قوالب التصفية",
             "fits": "يناسب",
             "gitRepo": "الريبو Git",
-            "hasDocumentation": "لديها وثائق",
-            "hasWebsite": "لديه موقع على الانترنت",
             "importAZip": "قم باستيراد ملف ZIP",
             "importFromGithub": "الاستيراد من GitHub",
             "loadingTemplates": "تحميل القوالب",

@@ -5939,8 +5939,6 @@
             "filterTemplates": "Filtrar plantillas",
             "fits": "Cabe",
             "gitRepo": "Repositorio git",
-            "hasDocumentation": "Con documentación",
-            "hasWebsite": "Con sitio web",
             "importAZip": "Importar un ZIP",
             "importFromGithub": "Importar desde GitHub",
             "loadingTemplates": "Cargando plantillas",

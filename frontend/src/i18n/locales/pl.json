@@ -5919,8 +5919,6 @@
             "filterTemplates": "Szablony filtrów",
             "fits": "Pasuje",
             "gitRepo": "Repozytorium Git",
-            "hasDocumentation": "Posiada dokumentację",
-            "hasWebsite": "Posiada stronę internetową",
             "importAZip": "Zaimportuj plik ZIP",
             "importFromGithub": "Import z GitHub",
             "loadingTemplates": "Ładowanie szablonów",

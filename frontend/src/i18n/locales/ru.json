@@ -5919,8 +5919,6 @@
             "filterTemplates": "Шаблоны фильтров",
             "fits": "Подходит",
             "gitRepo": "Git repo",
-            "hasDocumentation": "Имеет документацию",
-            "hasWebsite": "Имеет веб-сайт",
             "importAZip": "Импортировать ZIP-архив",
             "importFromGithub": "Импорт из GitHub",
             "loadingTemplates": "Загрузка шаблонов",

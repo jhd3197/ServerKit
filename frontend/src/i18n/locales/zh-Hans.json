@@ -5919,8 +5919,6 @@
             "filterTemplates": "过滤器模板",
             "fits": "适合",
             "gitRepo": "Git 仓库",
-            "hasDocumentation": "有文档",
-            "hasWebsite": "有网站",
             "importAZip": "导入 ZIP",
             "importFromGithub": "从 GitHub 导入",
             "loadingTemplates": "加载模板",

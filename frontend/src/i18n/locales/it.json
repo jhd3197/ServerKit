@@ -5919,8 +5919,6 @@
             "filterTemplates": "Filtra modelli",
             "fits": "Adatto",
             "gitRepo": "Deposito Git",
-            "hasDocumentation": "Ha documentazione",
-            "hasWebsite": "Ha un sito web",
             "importAZip": "Importa un ZIP",
             "importFromGithub": "Importa da GitHub",
             "loadingTemplates": "Caricamento modelli",
