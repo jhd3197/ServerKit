@@ -14,7 +14,6 @@
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
         border-radius: 6px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
         max-width: 200px;
@@ -140,8 +139,6 @@
             display: block;
             color: $text-tertiary;
             font-size: $text-xs;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
         }
 
         .v {

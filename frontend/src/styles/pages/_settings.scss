@@ -1476,8 +1476,6 @@
 
     &__base {
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
         color: var(--text-faint);
         padding: 1px 6px;
         border: 1px solid var(--border);
@@ -1749,8 +1747,6 @@
     &__group h4 {
         margin: 0 0 $space-2;
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
         color: var(--text-faint);
     }
 
@@ -1770,7 +1766,6 @@
         gap: 3px;
 
         label {
-            font-family: $font-mono;
             font-size: $text-xs;
             color: var(--text-dim);
         }
@@ -2037,8 +2032,6 @@
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
         margin-bottom: $space-2;
     }
 
@@ -2490,8 +2483,6 @@
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     padding: 0 0 $space-2 0;
     border-bottom: 1px solid $border-subtle;
     margin-bottom: $space-1;

@@ -44,7 +44,6 @@
     color: $text-secondary;
 
     &__label {
-        font-family: $font-mono;
     }
 
     &__remove {
@@ -149,8 +148,6 @@
     color: $text-tertiary;
 
     &__label {
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
         font-weight: $font-weight-semibold;
     }
 
@@ -244,8 +241,6 @@
         color: $text-tertiary;
         font-weight: $font-weight-semibold;
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
     }
 
     &__key {

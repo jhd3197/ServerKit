@@ -101,7 +101,6 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     }
 
     &__elapsed {
-        font-family: $font-mono;
     }
 
     // ---- transient state strips ----
@@ -239,7 +238,6 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         gap: 6px 20px;
         padding: 0 3px;
         color: var(--text-ghost);
-        font-family: $font-mono;
         font-size: $text-xs;
 
         b { color: $text-secondary; font-weight: $font-weight-medium; }
@@ -644,7 +642,6 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
 
     &__nav-count {
         color: $text-tertiary;
-        font-family: $font-mono;
         font-size: $text-xs;
         font-variant-numeric: tabular-nums;
         white-space: nowrap;

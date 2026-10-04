@@ -118,8 +118,6 @@
         margin: 0 0 $space-3;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
         color: var(--text-faint);
     }
 }
@@ -190,8 +188,6 @@
 
     &-label {
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
         color: var(--text-faint);
     }
 

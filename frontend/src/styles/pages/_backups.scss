@@ -65,7 +65,6 @@
     &__sub {
         display: block;
         margin-top: 3px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -143,7 +142,6 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
@@ -172,8 +170,6 @@
             display: block;
             font-family: var(--mono);
             font-size: $text-xs;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
 
@@ -231,7 +227,6 @@
 
     &__time {
         margin-top: 2px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -293,7 +288,6 @@
 
 .bk-hint--foot {
     margin-top: $space-3;
-    font-family: var(--mono);
     font-size: $text-xs;
 }
 
@@ -428,7 +422,6 @@
         font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.06em;
     }
 
     &__top {
@@ -451,7 +444,6 @@
         svg { flex-shrink: 0; color: var(--text-faint); }
 
         small {
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-normal;
             color: var(--text-faint);
@@ -544,8 +536,6 @@
         color: $text-tertiary;
         font-weight: $font-weight-semibold;
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
     }
 
     // Snapshot names are long and machine-generated, so they get the room and
@@ -754,8 +744,6 @@
         text-align: center;
         color: $text-tertiary;
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
         padding: $space-1 0;
     }
 

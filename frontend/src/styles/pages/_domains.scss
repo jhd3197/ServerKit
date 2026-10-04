@@ -41,8 +41,6 @@
     font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
 }
 
 .dom-dash {
@@ -367,7 +365,6 @@
 
     &__count {
         margin-left: $space-2;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-normal;
         color: var(--text-faint);
@@ -447,7 +444,6 @@
     font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.04em;
     background: var(--surface-3);
     color: var(--text-dim);
 
@@ -498,10 +494,7 @@
     &__label {
         flex-shrink: 0;
         width: 84px;
-        font-family: var(--mono);
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
         color: var(--text-faint);
     }
 

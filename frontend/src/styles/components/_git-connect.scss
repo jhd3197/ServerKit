@@ -301,8 +301,6 @@
             margin-bottom: 3px;
             font-family: var(--mono);
             font-size: $text-xs;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
 
@@ -333,8 +331,6 @@
     gap: $space-3;
     color: var(--text-faint);
     font-size: $text-xs;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
 
     &::before,
     &::after {

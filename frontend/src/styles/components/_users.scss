@@ -98,8 +98,6 @@
         font-weight: $font-weight-medium;
         font-size: $text-xs;
         color: $text-secondary;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
     }
 
     tr:last-child td {
@@ -292,8 +290,6 @@
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
 
     &:first-child {
         margin-top: 0;
@@ -351,8 +347,6 @@
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-secondary;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     border-bottom: 1px solid $border-default;
     position: sticky;
     top: 0;
@@ -374,8 +368,6 @@
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
     background: fade($bg-hover-raw, 50%);
 }
 
@@ -633,8 +625,6 @@
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: $text-tertiary;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
         select.form-control {
@@ -719,7 +709,6 @@
     .log-row__time {
         flex-shrink: 0;
         width: 124px;
-        font-family: $font-mono;
         font-size: $text-xs;
         color: $text-tertiary;
         font-variant-numeric: tabular-nums;
@@ -751,7 +740,6 @@
         align-items: baseline;
         gap: $space-1 $space-3;
         min-width: 0;
-        font-family: $font-mono;
         font-size: $text-xs;
         color: $text-tertiary;
     }

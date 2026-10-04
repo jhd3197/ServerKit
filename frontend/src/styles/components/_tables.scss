@@ -14,8 +14,6 @@
             font-weight: $font-weight-semibold;
             font-size: $text-xs;
             color: $text-tertiary;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
             border-bottom: 1px solid $border-default;
             white-space: nowrap;
         }
@@ -63,9 +61,7 @@ width: 100%;
         background: $bg-hover;
         color: $text-tertiary;
         font-weight: $font-weight-semibold;
-        text-transform: uppercase;
         font-size: $text-xs;
-        letter-spacing: 0.05em;
         border-bottom: 1px solid $border-subtle;
     }
 

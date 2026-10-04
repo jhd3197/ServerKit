@@ -121,8 +121,6 @@
     .meta-label {
         font-size: $text-xs;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
     }
 
     .meta-value {
@@ -269,14 +267,12 @@
     .server-pair-code {
         font-family: $font-mono;
         font-size: $text-lg;
-        letter-spacing: 0.15em;
         text-align: center;
     }
 
     .server-pair-passphrase {
         font-family: $font-mono;
         font-size: $text-lg;
-        letter-spacing: 0.08em;
     }
 
     .server-pair-error,
@@ -396,9 +392,7 @@
     align-items: center;
     gap: $space-2;
     margin-bottom: $space-3;
-    font-family: var(--mono);
     font-size: $text-xs;
-    letter-spacing: 0.02em;
 
     a {
         color: var(--text-faint);
@@ -441,8 +435,6 @@
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
         margin: 0 0 $space-4;
     }
 }
@@ -533,7 +525,6 @@
 
     &__count {
         color: var(--text-faint);
-        font-family: var(--mono);
         font-size: $text-xs;
     }
 
@@ -706,8 +697,6 @@
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
         margin: 0 0 $space-4;
     }
 }
@@ -731,10 +720,7 @@
 
     .live-stat-label {
         display: block;
-        font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
         color: var(--text-faint);
         margin-bottom: $space-1;
     }
@@ -779,8 +765,6 @@
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
         margin: 0 0 $space-4;
         text-align: center;
     }
@@ -1060,11 +1044,8 @@
 }
 
 .severity-badge {
-    font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
     padding: 2px $space-2;
     border-radius: 5px;
 
@@ -1547,11 +1528,8 @@
         z-index: 1;
         text-align: left;
         padding: 11px $space-4;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
         color: var(--text-faint);
         background: var(--surface-2);
         border-bottom: 1px solid var(--border);
@@ -1634,7 +1612,6 @@
     background: $bg-elevated;
     border: 1px solid $border-subtle;
     color: $text-secondary;
-    font-family: $font-mono;
     font-weight: $font-weight-semibold;
     font-size: $text-xs;
 
@@ -1673,7 +1650,6 @@
 .server-row__sub {
     color: $text-tertiary;
     font-size: $text-xs;
-    font-family: $font-mono;
     line-height: 1.3;
     margin-top: 2px;
 }
@@ -1702,7 +1678,6 @@
 }
 
 .server-row__lastseen {
-    font-family: $font-mono;
     font-size: $text-xs;
     color: $text-secondary;
     white-space: nowrap;
@@ -1726,7 +1701,6 @@
         color: $text-tertiary;
         font-family: $font-mono;
         font-style: normal;
-        letter-spacing: 0.04em;
     }
 
     b {
@@ -1919,7 +1893,6 @@
         background: var(--surface-2);
         border: 1px solid var(--border);
         color: var(--text-dim);
-        font-family: var(--mono);
         font-weight: $font-weight-semibold;
         font-size: $text-lg;
 
@@ -1982,9 +1955,6 @@
         }
 
         &__label {
-            font-family: var(--mono);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
             font-weight: $font-weight-semibold;
             color: var(--text-ghost);
         }
@@ -2016,7 +1986,6 @@
         gap: 9px;
         flex-wrap: wrap;
         margin-top: 8px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
 
@@ -2081,8 +2050,6 @@
         border-bottom: 1px solid $border-subtle;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: $text-tertiary;
     }
 }
@@ -2152,11 +2119,8 @@
     }
 
     &__label {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -2171,7 +2135,6 @@
     }
 
     &__sub {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -2279,7 +2242,6 @@
     padding: 0 6px;
     border-radius: $radius-full;
     @include status-variant(var(--amber), var(--amber-bg));
-    font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     line-height: 1;
@@ -2389,8 +2351,6 @@
             font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
     }
@@ -2404,7 +2364,6 @@
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
         color: var(--text-dim);
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         line-height: 1;
@@ -2494,10 +2453,8 @@
         font-size: $text-sm;
 
         th {
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.06em;
             color: var(--text-faint);
             padding: 11px $space-4;
             border-bottom: 1px solid var(--border);
@@ -2564,8 +2521,6 @@
             font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
 
             svg {
@@ -2636,7 +2591,6 @@
         background: var(--surface-2);
         border-color: var(--border);
         color: var(--text-faint);
-        font-family: var(--mono);
         font-size: $text-xs;
     }
 
@@ -2681,7 +2635,6 @@
         }
 
         &__time {
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }
@@ -2708,11 +2661,8 @@
         font-size: $text-sm;
 
         th {
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
             color: var(--text-faint);
             padding: 11px $space-3;
             border-bottom: 1px solid var(--border);
@@ -2750,7 +2700,6 @@
             font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
             color: var(--text-faint);
         }
 
@@ -2758,7 +2707,6 @@
             background: var(--surface-2);
             border-color: var(--border);
             color: var(--text-dim);
-            font-family: var(--mono);
             font-size: $text-xs;
 
             &:hover {

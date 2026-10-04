@@ -7,7 +7,6 @@
         gap: $space-3;
 
         .count {
-            font-family: var(--mono);
             font-size: $text-xl;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.02em;
@@ -18,7 +17,6 @@
         }
 
         .label {
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }
@@ -127,11 +125,8 @@
         > label {
             display: block;
             margin: 10px 0 6px;
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
     }
@@ -195,8 +190,6 @@
             font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
 

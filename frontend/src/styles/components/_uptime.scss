@@ -109,7 +109,6 @@
         display: block;
         font-size: $text-xl;
         font-weight: $font-weight-semibold;
-        font-family: $font-mono;
         color: $text-primary;
 
         &.excellent {
@@ -132,8 +131,6 @@
     .percentage-label {
         font-size: $text-xs;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
     }
 }
 
@@ -167,8 +164,6 @@
     .counter-label {
         font-size: $text-xs;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
         margin-top: $space-1;
     }
 }
@@ -324,7 +319,6 @@
     .stat-period {
         font-size: $text-xs;
         color: $text-tertiary;
-        text-transform: uppercase;
         margin-bottom: $space-1;
     }
 
@@ -373,7 +367,6 @@
     .uptime-compact-percent {
         font-size: $text-base;
         font-weight: $font-weight-semibold;
-        font-family: $font-mono;
         padding: $space-1 $space-2;
         border-radius: $radius-sm;
         @include status-variant($success, $success-bg);
@@ -392,7 +385,6 @@
     display: flex;
     align-items: baseline;
     gap: 2px;
-    font-family: $font-mono;
 
     .value {
         font-size: $text-lg;

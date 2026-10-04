@@ -69,8 +69,6 @@
         display: block;
         font-size: $text-xs;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
     }
 
     .stat-value {
@@ -189,7 +187,6 @@
     border-radius: $radius-sm;
     cursor: pointer;
     transition: all $transition-fast;
-    text-transform: uppercase;
 
     &:hover {
         color: $text-primary;

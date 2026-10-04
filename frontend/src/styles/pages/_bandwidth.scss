@@ -330,8 +330,6 @@
 
         dt {
             font-size: $text-xs;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
             color: var(--text-dim);
         }
 
@@ -397,8 +395,6 @@
     &__label {
         margin: 12px 0 6px;
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
         color: var(--text-dim);
     }
 

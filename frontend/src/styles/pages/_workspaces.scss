@@ -16,8 +16,6 @@
             font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
 
@@ -28,18 +26,14 @@
         }
 
         .form-group label {
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
 
         .form-hint {
             display: block;
             margin-top: $space-2;
-            font-family: var(--mono);
             font-size: $text-xs;
             line-height: 1.5;
             color: var(--text-faint);
@@ -79,7 +73,6 @@
 
         &__sub {
             margin-top: 2px;
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
             @include truncate();
@@ -91,11 +84,8 @@
 // ── clickable "add / move into this workspace" lists ────
 .ws-pick-label {
     margin: $space-4 0 $space-2;
-    font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--text-ghost);
 }
 
@@ -202,7 +192,6 @@
         align-items: center;
         gap: 7px;
         margin-top: 5px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
 
@@ -246,8 +235,6 @@
             font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
     }
@@ -286,8 +273,6 @@
         margin-top: 4px;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 }
@@ -324,7 +309,6 @@
     }
 
     &__tabcount {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-ghost);
     }
@@ -469,8 +453,6 @@
     &__label {
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
         color: var(--text-faint);
         margin-bottom: $space-2;
     }
@@ -523,11 +505,8 @@
     &__grouplabel {
         padding: 0 12px;
         margin-bottom: 6px;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 

@@ -45,8 +45,6 @@
     border-radius: $radius-md;
     font-weight: $font-weight-semibold;
     font-size: $text-xs;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
 }
 
 // SSL badge
@@ -80,8 +78,6 @@
     border-radius: $radius-md;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
 
     &.mysql {
         color: $color-mysql;
@@ -100,8 +96,6 @@
     border-radius: $radius-sm;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
 }
 
 // Table name tag
@@ -123,8 +117,6 @@
     border-radius: $radius-md;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
     border: 1px solid transparent;
 
     &.env-production {
@@ -161,9 +153,7 @@
     padding: 2px 8px;
     border-radius: $radius-sm;
     font-size: $text-xs;
-    text-transform: uppercase;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.5px;
 }
 
 .badge-info {

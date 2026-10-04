@@ -58,7 +58,6 @@
     &__muted {
         color: var(--text-faint);
         font-size: $text-xs;
-        letter-spacing: 0.02em;
     }
 
     &__segment.is-active &__muted {
@@ -165,8 +164,6 @@
         color: var(--text-ghost);
         font-size: $text-xs;
         font-weight: $font-weight-medium;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
     }
 
     &__option {
@@ -321,7 +318,6 @@
         padding-inline: $space-4;
         border-block-start: 1px solid var(--border-soft);
         color: var(--text-ghost);
-        font-family: var(--mono);
         font-size: $text-xs;
 
         button {

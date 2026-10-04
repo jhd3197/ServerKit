@@ -63,7 +63,6 @@
 
         small {
             display: block;
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
             @include truncate();

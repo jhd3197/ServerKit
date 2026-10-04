@@ -129,7 +129,6 @@
     margin-left: auto;
     font-family: var(--mono);
     font-size: $text-xs;
-    letter-spacing: 0.04em;
     text-transform: none;
     color: var(--text-faint);
     background: var(--surface-2);
@@ -237,7 +236,6 @@
     align-items: center;
     gap: $space-1;
     padding: 2px 7px;
-    font-family: var(--mono);
     font-size: $text-xs;
     color: var(--text-dim);
     background: var(--surface-2);
@@ -327,8 +325,6 @@
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
 
         svg {
             flex-shrink: 0;
@@ -418,10 +414,7 @@
 }
 
 .required-badge {
-    font-family: var(--mono);
     font-size: $text-xs;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
     padding: 2px $space-2;
     @include status-variant(var(--accent-bright), var(--accent-bg));
     border-radius: $radius-sm;
@@ -429,10 +422,7 @@
 }
 
 .auto-badge {
-    font-family: var(--mono);
     font-size: $text-xs;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
     padding: 2px $space-2;
     @include status-variant(var(--green), var(--green-bg));
     border-radius: $radius-sm;
@@ -479,7 +469,6 @@
     background: var(--surface-3);
     border-radius: $radius-sm;
     color: $text-secondary;
-    text-transform: uppercase;
 }
 
 .port-description {

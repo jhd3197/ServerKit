@@ -223,7 +223,6 @@ $dbx-sqlite: #3d8fd1;
     .dbx-tree-badge {
         flex-shrink: 0;
         padding: 0 6px;
-        font-family: $font-mono;
         font-size: $text-xs;
         color: $text-tertiary;
         background: $bg-tertiary;
@@ -235,7 +234,6 @@ $dbx-sqlite: #3d8fd1;
     // fact read off the loaded tree, so it sits quieter than the size badge.
     .dbx-tree-count {
         flex-shrink: 0;
-        font-family: $font-mono;
         font-size: $text-xs;
         line-height: 16px;
         color: $text-tertiary;
@@ -595,8 +593,6 @@ $dbx-sqlite: #3d8fd1;
             padding: $space-2 $space-3;
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
             color: $text-tertiary;
             border-bottom: 1px solid $border-subtle;
         }
@@ -974,7 +970,6 @@ $dbx-sqlite: #3d8fd1;
     .dbx-tree-install-count {
         margin-left: auto;
         flex-shrink: 0;
-        font-family: $font-mono;
         font-size: $text-xs;
         color: $text-tertiary;
         font-variant-numeric: tabular-nums;
@@ -1438,8 +1433,6 @@ $dbx-sqlite: #3d8fd1;
     color: $text-tertiary;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
 }
 
 .dbx-eng-glyph {
@@ -1464,7 +1457,6 @@ $dbx-sqlite: #3d8fd1;
 
 .dbx-eng-sub {
     color: $text-tertiary;
-    font-family: $font-mono;
     font-size: $text-xs;
     @include dbx-trunc;
 }
@@ -1476,7 +1468,6 @@ $dbx-sqlite: #3d8fd1;
     flex-shrink: 0;
     padding: 3px 8px;
     border-radius: $radius-sm;
-    font-family: $font-mono;
     font-size: $text-xs;
 
     &.is-running { color: $success; background: $success-bg; }
@@ -1747,8 +1738,6 @@ $dbx-sqlite: #3d8fd1;
         color: $text-tertiary;
         font-family: $font-mono;
         font-size: $text-xs;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
     }
 
     &__rows {
@@ -1992,7 +1981,6 @@ $dbx-sqlite: #3d8fd1;
     }
 
     &__meta {
-        font-family: $font-mono, monospace;
         font-size: $text-xs;
         color: var(--text-faint);
         word-break: break-all;

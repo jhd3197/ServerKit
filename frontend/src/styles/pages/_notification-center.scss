@@ -174,8 +174,6 @@
             padding: 10px 14px;
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
             color: $text-secondary;
             border-bottom: 1px solid $border-subtle;
         }
@@ -300,8 +298,6 @@
     &__badge {
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.4px;
         padding: 1px 7px;
         border-radius: 999px;
         @include status-variant($accent-primary, $accent-bg);

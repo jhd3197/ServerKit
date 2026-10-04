@@ -445,7 +445,6 @@
     &__input {
         font-family: $font-mono;
         font-size: $text-lg;
-        letter-spacing: 8px;
         text-align: center;
         max-width: 220px;
     }
@@ -495,8 +494,6 @@
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     margin-bottom: $space-3;
 }
 

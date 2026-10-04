@@ -33,8 +33,6 @@
         color: $text-secondary;
         font-weight: $font-weight-medium;
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
     }
 
     td {
@@ -246,7 +244,6 @@
 // ─── Method Badges ─────────────────────────────────────
 
 .badge--method {
-    font-family: $font-mono;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     padding: 1px 6px;

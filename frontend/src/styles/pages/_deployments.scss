@@ -25,8 +25,6 @@
         color: var(--text-ghost);
         font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
     }
 
     &__error { color: var(--red); }
@@ -59,7 +57,6 @@
 
     &__pipe-count {
         color: var(--text-ghost);
-        font-family: var(--mono);
         font-size: $text-xs;
     }
 

@@ -25,7 +25,6 @@
         padding-inline: 5px;
         place-items: center;
         border-radius: 999px;
-        font-family: var(--mono);
         font-size: $text-xs;
         line-height: 1;
     }
@@ -183,7 +182,7 @@
     &__detail-head { justify-content: space-between; gap: $space-3; }
     &__detail-head > div { min-width: 0; }
     &__detail-head h3 { overflow: hidden; font-size: $text-lg; text-overflow: ellipsis; white-space: nowrap; }
-    &__eyebrow { color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; letter-spacing: 0.08em; text-transform: uppercase; }
+    &__eyebrow { color: var(--text-faint); font-size: $text-xs; }
 
     &__meta { gap: $space-3; color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; }
     &__meta span { display: inline-flex; align-items: center; gap: 5px; }
@@ -273,8 +272,6 @@
             color: var(--amber);
             font-family: var(--mono);
             font-size: $text-xs;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
         }
 
         strong {

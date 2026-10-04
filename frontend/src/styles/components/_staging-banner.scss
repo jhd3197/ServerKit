@@ -22,8 +22,6 @@
 
     &__label {
         font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
         padding: 2px $spacing-sm;
         border-radius: $radius-sm;
         background-color: rgba(0, 0, 0, 0.16);

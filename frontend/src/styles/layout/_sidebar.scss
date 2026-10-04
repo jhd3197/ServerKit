@@ -355,8 +355,6 @@
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
     margin: 1.5rem 0 0.5rem 0.65rem;
 
     &:first-of-type {
@@ -532,12 +530,9 @@
 }
 
 .context-menu-label {
-    font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
     margin-bottom: 6px;
 }
 
@@ -682,7 +677,6 @@
     border-radius: 9px;
     display: grid;
     place-items: center;
-    font-family: var(--mono);
     font-size: $text-sm;
     font-weight: $font-weight-semibold;
     color: var(--text-primary);

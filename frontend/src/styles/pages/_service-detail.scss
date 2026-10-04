@@ -97,11 +97,8 @@
 
     // Service-type tag (brand colors arrive via inline style props)
     &__type-badge {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
         padding: 2px 7px;
         border-radius: 5px;
         border: 1px solid;
@@ -222,11 +219,8 @@
     }
 
     &__auto-deploy-badge {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
         padding: 1px 6px;
         @include status-variant(var(--green), var(--green-bg));
         border-radius: $radius-sm;
@@ -399,17 +393,13 @@ h3.svc-eyebrow {
     align-items: center;
     gap: 6px;
     margin: 0;
-    font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--text-faint);
 
     &__count {
         font-weight: $font-weight-medium;
         color: var(--text-ghost);
-        letter-spacing: 0.02em;
     }
 
     // standalone eyebrow followed by a hint paragraph (Commands tab)
@@ -457,11 +447,8 @@ h3.svc-eyebrow {
     }
 
     &__title {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -576,11 +563,8 @@ h3.svc-eyebrow {
     &__grouplabel {
         padding: 0 12px;
         margin-bottom: 6px;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -632,11 +616,8 @@ h3.svc-eyebrow {
         align-items: center;
         gap: 6px;
         margin: 0 0 $space-3;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -651,11 +632,8 @@ h3.svc-eyebrow {
 
     &__subsection-title {
         margin: 0 0 $space-3;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 }
@@ -697,8 +675,6 @@ h3.svc-eyebrow {
         border-radius: $radius-full;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
         background: var(--surface-hover);
         color: var(--text-dim);
 
@@ -743,11 +719,8 @@ h3.svc-eyebrow {
 
     &__block-title {
         margin: 0 0 $space-2;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -925,11 +898,8 @@ h3.svc-eyebrow {
         align-items: center;
         gap: 6px;
         margin: 0 0 $space-3;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -952,11 +922,8 @@ h3.svc-eyebrow {
 
     // Info badge (brand colors via inline style props)
     &__info-badge {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
         padding: 2px 7px;
         border-radius: 5px;
         border: 1px solid;
@@ -1025,10 +992,7 @@ h3.svc-eyebrow {
     }
 
     &__metric-item-label {
-        font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -1096,7 +1060,6 @@ h3.svc-eyebrow {
         display: flex;
         align-items: center;
         gap: $space-3;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
         margin-top: 2px;
@@ -1195,7 +1158,6 @@ h3.svc-eyebrow {
     }
 
     &__match-count {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--accent-bright);
         white-space: nowrap;
@@ -1236,14 +1198,12 @@ h3.svc-eyebrow {
     background: var(--surface-2);
     border-left: 1px solid var(--border-soft);
     border-right: 1px solid var(--border-soft);
-    font-family: var(--mono);
     font-size: $text-xs;
     color: var(--text-faint);
 
     &__live {
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
         padding: 1px $space-1;
         @include status-variant(var(--red), var(--red-bg));
         border-radius: $radius-sm;

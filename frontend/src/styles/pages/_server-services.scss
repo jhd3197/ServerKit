@@ -27,11 +27,8 @@
         }
 
         th {
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
             color: var(--text-faint);
             border-bottom: 1px solid var(--border);
             white-space: nowrap;

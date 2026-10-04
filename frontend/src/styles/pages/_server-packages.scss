@@ -28,8 +28,6 @@
         font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -46,7 +44,6 @@
         background: var(--surface-2);
         color: var(--text-dim);
         cursor: pointer;
-        font-family: var(--mono);
         font-size: $text-xs;
         transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
 
@@ -150,8 +147,6 @@
             font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
     }
@@ -171,7 +166,6 @@
     }
 
     &__probed-at {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
         font-variant-numeric: tabular-nums;
@@ -198,11 +192,8 @@
     }
 
     &__row-label {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
         font-weight: $font-weight-semibold;
     }
 

@@ -177,7 +177,6 @@
     &__star { color: var(--amber); flex-shrink: 0; }
 
     &__n {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-ghost);
     }
@@ -233,7 +232,6 @@
         position: absolute;
         top: -6px;
         right: -6px;
-        font-family: var(--mono);
         font-size: $text-xs;
         background: var(--accent);
         color: #fff;
@@ -284,10 +282,7 @@
     &:hover { border-color: var(--border-strong); }
 
     &__k {
-        font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -315,8 +310,6 @@
         color: var(--accent-bright);
         font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         padding: 6px 10px;
         cursor: pointer;
     }
@@ -358,10 +351,7 @@
         // 26px of right padding is the reserved lane for the "⋮" button, so the
         // label never reflows when it appears on hover.
         padding: 10px 26px 10px 14px;
-        font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.055em;
-        text-transform: uppercase;
         color: var(--text-ghost);
         user-select: none;
         min-width: 0;
@@ -455,7 +445,6 @@
         align-items: center;
         gap: 9px;
         margin-top: 2px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-ghost);
         white-space: nowrap;
@@ -542,10 +531,7 @@
         border: none;
         border-top: 1px solid var(--border-soft);
         background: var(--surface-0);
-        font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.09em;
-        text-transform: uppercase;
         color: var(--text-faint);
         cursor: pointer;
         position: sticky;
@@ -590,10 +576,7 @@
     gap: 6px;
 
     &__label {
-        font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
         color: var(--text-ghost);
     }
 
@@ -602,7 +585,6 @@
         height: 24px;
         margin-right: 6px;
         border-radius: 7px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
     }
@@ -654,8 +636,6 @@
     &__head {
         font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.11em;
-        text-transform: uppercase;
         color: var(--text-ghost);
         padding: 5px 8px 7px;
     }
@@ -907,8 +887,6 @@
     &__t {
         font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.11em;
-        text-transform: uppercase;
         color: var(--text-faint);
         flex: 1;
     }
@@ -1031,8 +1009,6 @@
     &__join {
         font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
         color: var(--text-ghost);
         padding: 1px 0 6px 2px;
     }
@@ -1081,8 +1057,6 @@
     &__lock {
         font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-ghost);
     }
 }

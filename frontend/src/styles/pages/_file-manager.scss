@@ -70,7 +70,6 @@ $ft-default:  #646b7a;
 
         .upload-tray-percent {
             margin-left: auto;
-            font-family: $font-mono;
             font-size: $text-xs;
             color: $text-secondary;
         }
@@ -207,7 +206,6 @@ $ft-default:  #646b7a;
         .crumb-separator {
             color: var(--text-ghost);
             margin: 0 1px;
-            font-family: var(--mono);
             font-size: $text-xs;
             user-select: none;
         }
@@ -246,7 +244,6 @@ $ft-default:  #646b7a;
         border-radius: $radius-sm;
         background: var(--surface-2);
         color: var(--text-faint);
-        font-family: $font-mono;
         font-size: $text-xs;
         white-space: nowrap;
 
@@ -588,7 +585,6 @@ $ft-default:  #646b7a;
             margin-block-start: 6px;
             padding-inline: 9px;
             color: var(--text-ghost);
-            font-family: $font-mono;
             font-size: $text-xs;
         }
 
@@ -647,11 +643,8 @@ $ft-default:  #646b7a;
         text-align: left;
         cursor: pointer;
         color: var(--text-ghost);
-        font-family: $font-mono;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
         @include transition(color);
 
         &:hover { background: transparent; color: var(--text-faint); }
@@ -834,8 +827,6 @@ $ft-default:  #646b7a;
             font-family: $font-mono;
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
         }
 
         select {
@@ -986,7 +977,6 @@ $ft-default:  #646b7a;
     }
 
     .disk-percent {
-        font-family: $font-mono;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         &.healthy { color: $success; }
@@ -1207,11 +1197,9 @@ $ft-default:  #646b7a;
         padding: 1px 5px;
         background: rgba(0, 0, 0, 0.6);
         border-radius: $radius-sm;
-        font-family: $font-mono;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: white;
-        letter-spacing: 0.04em;
         // demo keeps the extension visible on image thumbs at all times
         opacity: 1;
     }
@@ -1233,7 +1221,6 @@ $ft-default:  #646b7a;
     .file-card-meta {
         font-size: $text-xs;
         color: var(--text-ghost);
-        font-family: $font-mono;
     }
 
     .file-card-check {
@@ -1287,13 +1274,10 @@ $ft-default:  #646b7a;
             top: 0;
             z-index: 2;
             background: $bg-body;
-            font-family: $font-mono;
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            text-transform: uppercase;
             color: var(--text-faint);
             border-bottom: 1px solid var(--border-soft);
-            letter-spacing: 0.06em;
             align-items: center;
 
             .col-actions { text-align: right; }
@@ -1458,8 +1442,6 @@ $ft-default:  #646b7a;
 
         .status-label {
             color: var(--text-ghost);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
             font-weight: $font-weight-semibold;
             font-size: $text-xs;
         }
@@ -1655,10 +1637,7 @@ $drawer-width: 520px;
     }
 
     .meta-label {
-        font-family: $font-mono;
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
         font-weight: $font-weight-semibold;
         color: var(--text-ghost);
     }
@@ -1763,8 +1742,6 @@ $drawer-width: 520px;
             font-family: $font-mono;
             font-size: $text-xs;
             color: var(--text-ghost);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
             font-weight: $font-weight-semibold;
         }
 

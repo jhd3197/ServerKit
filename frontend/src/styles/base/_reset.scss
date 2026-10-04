@@ -33,6 +33,9 @@ body {
     font-family: $font-main;
     font-size: $text-base;
     line-height: $line-height-normal;
+    // Tabular figures so numbers line up in tables and stats without
+    // switching to monospace.
+    font-variant-numeric: tabular-nums;
     min-height: 100vh;
 }
 

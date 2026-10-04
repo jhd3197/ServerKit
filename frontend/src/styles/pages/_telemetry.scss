@@ -45,15 +45,12 @@
         gap: 8px;
         flex-wrap: wrap;
         margin-top: 4px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .telemetry-cell__source {
         color: var(--accent-bright);
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
     }
 
     .telemetry-cell__badge {
@@ -94,10 +91,7 @@
 
     &__heading {
         margin: 0;
-        font-family: var(--mono);
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
         color: var(--text-faint);
     }
 

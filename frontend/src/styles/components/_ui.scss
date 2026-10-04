@@ -554,8 +554,6 @@
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
 }
 
 .ui-select-item {
@@ -730,7 +728,6 @@
 .ui-dropdown-shortcut {
     margin-left: auto;
     font-size: $text-xs;
-    letter-spacing: 0.1em;
     opacity: 0.6;
 }
 
@@ -854,7 +851,6 @@
 .ui-command-shortcut {
     margin-left: auto;
     font-size: $text-xs;
-    letter-spacing: 0.1em;
     color: $text-tertiary;
 }
 
@@ -883,11 +879,8 @@
     &--2xl { max-width: 72rem; }
 
     .form-group > label:not(.checkbox-label) {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 

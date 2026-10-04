@@ -278,7 +278,6 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 .sk-ai-attachment__type {
     color: var(--sk-ai-fg-3);
     font-family: var(--sk-ai-mono);
-    text-transform: uppercase;
 }
 .sk-ai-attachment__label {
     overflow: hidden;
@@ -347,8 +346,6 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 .sk-ai-code__lang {
     display: block;
     font-size: $text-xs;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: var(--sk-ai-fg-3);
     margin-bottom: 4px;
 }

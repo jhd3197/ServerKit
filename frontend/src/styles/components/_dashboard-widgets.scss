@@ -171,7 +171,6 @@ $skw-z-tv: 200;
         border-radius: 5px;
         background: var(--surface-3);
         color: var(--text-ghost);
-        font-family: var(--mono);
         font-size: $text-xs;
     }
 
@@ -234,8 +233,6 @@ $skw-z-tv: 200;
     &__k {
         color: var(--text-ghost);
         font-size: $text-xs;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
     }
     &__v {
         font-family: var(--mono);
@@ -694,7 +691,6 @@ $skw-z-tv: 200;
     gap: 12px;
     padding-top: 8px;
     color: var(--text-faint);
-    font-family: var(--mono);
     font-size: $text-xs;
 
     &__item {
@@ -810,9 +806,7 @@ $skw-z-tv: 200;
         color: var(--text-ghost);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.05em;
         text-align: left;
-        text-transform: uppercase;
     }
 
     td {
@@ -843,7 +837,6 @@ $skw-z-tv: 200;
     border-radius: 5px;
     background: var(--surface-3);
     color: var(--text-faint);
-    font-family: var(--mono);
     font-size: $text-xs;
 
     &--ok,
@@ -1659,7 +1652,6 @@ $skw-z-tv: 200;
         font-size: $text-2xl;
         font-weight: $font-weight-semibold;
         line-height: 1.05;
-        letter-spacing: 0.01em;
         font-variant-numeric: tabular-nums;
     }
 
@@ -1671,8 +1663,6 @@ $skw-z-tv: 200;
     &__zone {
         color: var(--text-ghost);
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
     }
 }
 

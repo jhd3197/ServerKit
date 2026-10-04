@@ -54,7 +54,6 @@
         border-radius: 999px;
         border: 1px solid var(--border);
         background: var(--surface-2);
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--amber);
     }
@@ -107,10 +106,7 @@
 
     &__heading {
         margin: 0;
-        font-family: var(--mono);
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
         color: var(--text-faint);
     }
 

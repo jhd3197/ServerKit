@@ -80,7 +80,6 @@
             align-items: center;
             gap: 5px;
             color: var(--text-faint);
-            font-family: var(--mono);
             font-size: $text-xs;
 
             svg {
@@ -226,8 +225,6 @@
             font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
     }
@@ -434,8 +431,6 @@
             font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
         }
 
         p {
@@ -465,8 +460,6 @@
             font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
         }
 
         > div > strong {
@@ -494,11 +487,8 @@
 // and the two-column grid.
 .status-modal {
     .form-group label {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -583,7 +573,6 @@
             color: $text-tertiary;
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            text-transform: uppercase;
         }
 
         strong {

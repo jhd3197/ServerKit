@@ -118,8 +118,6 @@ $skwe-pane-w: 340px;
         color: var(--text-dim);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
     }
 
     &__row {
@@ -153,8 +151,6 @@ $skwe-pane-w: 340px;
         margin-bottom: 6px;
         color: var(--text-ghost);
         font-size: $text-xs;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
     }
 
     &__control { min-width: 0; }

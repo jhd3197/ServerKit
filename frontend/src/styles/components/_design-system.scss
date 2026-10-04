@@ -22,8 +22,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     border-radius: 6px;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
-    font-family: var(--mono);
-    letter-spacing: 0.02em;
     white-space: nowrap;
 
     &__dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
@@ -53,8 +51,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
     white-space: nowrap;
     flex-shrink: 0;
 }
@@ -82,7 +78,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.06em;
     border: 1px solid var(--border-strong);
     color: var(--text-dim);
     background: var(--surface-2);
@@ -186,7 +181,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
     // Optional mono detail row beneath the label (e.g. "Total 32 · Cached 4").
     &__sub {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
         margin-top: 3px;
@@ -370,10 +364,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     thead th {
         position: relative;
         text-align: left;
-        font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
         color: var(--text-faint);
         font-weight: $font-weight-semibold;
         padding: 11px 16px;
@@ -436,7 +427,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     // Priority number shown next to the direction chevron when more than one
     // sort level is active (shift+click stacking).
     &__sort-priority {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         line-height: 1;
@@ -480,16 +470,12 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
 
     &__group-label {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
         color: var(--text-dim);
     }
 
     &__group-count {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
         background: var(--surface);
@@ -530,7 +516,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     border-top: 1px solid var(--border-soft);
 
     &__count {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
@@ -542,7 +527,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
     &__pager { display: inline-flex; align-items: center; gap: 8px; }
     &__page {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
         min-width: 44px;
@@ -562,10 +546,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     gap: 4px;
 
     &__title {
-        font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
         color: var(--text-faint);
         font-weight: $font-weight-semibold;
         padding: 2px 6px 6px;
@@ -574,8 +555,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__section {
         font-family: var(--mono);
         font-size: $text-xs;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
         color: var(--text-ghost);
         padding: 8px 6px 3px;
         border-top: 1px solid var(--border-soft);
@@ -898,7 +877,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     animation: sk-bulkbar-in 0.16s ease-out;
 
     &__count {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text);
@@ -994,7 +972,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
@@ -1300,7 +1277,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     border-radius: var(--radius);
     padding: 14px 15px;
 
-    &__label { font-size: $text-xs; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--mono); }
+    &__label { font-size: $text-xs; color: var(--text-faint); }
     &__value { font-size: $text-base; font-weight: $font-weight-semibold; color: var(--text); margin-top: 8px; }
     &__sub { font-family: var(--mono); font-size: $text-xs; color: var(--text-faint); margin-top: 6px; }
 }
@@ -1420,7 +1397,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         border-radius: 9px;
         background: var(--violet);
         color: #fff;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         line-height: 1;
@@ -1435,10 +1411,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__group { display: flex; flex-direction: column; gap: 10px; }
 
     &__label {
-        font-family: var(--mono);
         font-size: $text-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
         color: var(--text-faint);
     }
 
@@ -1479,7 +1452,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
     // Optional per-option match count; quieter than the label it trails.
     &__chip-count {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-ghost);
     }
@@ -1529,7 +1501,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__subtitle { font-family: var(--mono); font-size: $text-xs; color: var(--text-faint); }
     &__meta { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
     &__meta-item { display: inline-flex; align-items: center; gap: 4px; }
-    &__meta-label { font-family: var(--mono); font-size: $text-xs; color: var(--text-faint); text-transform: uppercase; }
+    &__meta-label { font-size: $text-xs; color: var(--text-faint); }
     &__meta-value { font-family: var(--mono); font-size: $text-xs; color: var(--text-dim); }
     &__status { flex-shrink: 0; }
     &__actions { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
@@ -1583,7 +1555,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
     &__featured { flex-shrink: 0; color: var(--text-faint); fill: currentColor; }
     &__sub {
-        font-family: var(--mono); font-size: $text-xs; color: var(--text-faint);
         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
     &__tag { flex-shrink: 0; font-size: $text-xs; color: var(--text-faint); white-space: nowrap; }
@@ -1778,7 +1749,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         display: block;
         margin-top: 6px;
         color: $text-tertiary;
-        font-family: var(--mono);
         font-size: $text-xs;
     }
 
