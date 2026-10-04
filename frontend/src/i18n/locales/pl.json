@@ -1335,7 +1335,6 @@
             "couldNotCopy": "Nie udało się skopiować",
             "createDatabase": "Utwórz bazę danych",
             "createUser": "Utwórz użytkownika",
-            "databaseExplorer": "Eksplorator baz danych",
             "databaseSources": "Źródła baz danych",
             "deployActivity": "Wdróż działanie",
             "drop": "Upuść {{label}}",

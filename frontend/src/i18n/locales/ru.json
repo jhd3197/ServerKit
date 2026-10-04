@@ -1335,7 +1335,6 @@
             "couldNotCopy": "Не удалось скопировать",
             "createDatabase": "Создать базу данных",
             "createUser": "Создать пользователя",
-            "databaseExplorer": "Обозреватель базы данных",
             "databaseSources": "Источники базы данных",
             "deployActivity": "Развертывание деятельности",
             "drop": "Удалить {{label}}",

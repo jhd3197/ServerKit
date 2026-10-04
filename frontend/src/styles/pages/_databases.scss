@@ -64,121 +64,9 @@ $dbx-sqlite: #3d8fd1;
         svg { flex-shrink: 0; }
     }
 
-    .dbx-primary {
-        display: inline-flex;
-        align-items: center;
-        gap: $space-1;
-        padding: 6px $space-3;
-        background: $accent-primary;
-        border: none;
-        border-radius: $radius-md;
-        color: #fff;
-        font-size: $font-size-sm;
-        font-weight: $font-weight-semibold;
-        cursor: pointer;
-        box-shadow: $shadow-accent;
-        transition: background $transition-fast, transform $transition-fast;
-
-        &:hover { background: $accent-hover; }
-        &:active { transform: translateY(1px); }
-        svg { flex-shrink: 0; }
-    }
-
     .dbx-mono { font-family: $font-mono; font-size: $font-size-xs; }
     .dbx-spin { animation: dbx-spin 1s linear infinite; }
     @keyframes dbx-spin { to { transform: rotate(360deg); } }
-
-    // ─── Toolbar ──────────────────────────────────────────
-    .dbx-toolbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $space-3;
-        min-height: 54px;
-        padding: $space-2 $space-3;
-        background: $bg-card;
-        border-bottom: 1px solid $border-default;
-        flex-shrink: 0;
-    }
-
-    .dbx-toolbar-left { display: flex; align-items: center; gap: $space-2; min-width: 0; }
-    .dbx-toolbar-right { display: flex; align-items: center; gap: $space-2; }
-
-    .dbx-title {
-        display: inline-flex;
-        align-items: center;
-        gap: $space-2;
-        margin: 0;
-        font-size: $font-size-md;
-        font-weight: $font-weight-semibold;
-        letter-spacing: -0.01em;
-        color: $text-primary;
-
-        svg { color: $accent-primary; }
-    }
-
-    @media (max-width: $breakpoint-sm) {
-        .dbx-toolbar {
-            justify-content: flex-start;
-            overflow-x: auto;
-            overflow-y: hidden;
-            scrollbar-width: none;
-            -webkit-mask-image: linear-gradient(to right, black 0, black calc(100% - 28px), transparent 100%);
-            mask-image: linear-gradient(to right, black 0, black calc(100% - 28px), transparent 100%);
-
-            &::-webkit-scrollbar { display: none; }
-        }
-
-        .dbx-toolbar-left,
-        .dbx-toolbar-right { flex-shrink: 0; }
-
-        .dbx-title { white-space: nowrap; }
-    }
-
-    // ─── New menu ─────────────────────────────────────────
-    .dbx-new { position: relative; }
-
-    .dbx-menu {
-        position: absolute;
-        top: calc(100% + 6px);
-        right: 0;
-        min-width: 230px;
-        padding: 4px;
-        background: $bg-card;
-        border: 1px solid $border-default;
-        border-radius: $radius-md;
-        box-shadow: $shadow-lg;
-        z-index: $z-dropdown;
-        animation: dbx-pop 0.12s $ease-out-quart;
-
-        button {
-            display: flex;
-            align-items: center;
-            gap: $space-2;
-            width: 100%;
-            padding: $space-2 $space-3;
-            background: transparent;
-            border: none;
-            border-radius: $radius-sm;
-            color: $text-primary;
-            font-size: $font-size-sm;
-            text-align: left;
-            cursor: pointer;
-            transition: background $transition-fast;
-
-            &:hover:not(:disabled) { background: $bg-hover; }
-            &:disabled { opacity: 0.4; cursor: not-allowed; }
-            svg { flex-shrink: 0; color: $text-secondary; }
-        }
-    }
-
-    .dbx-menu-hint {
-        margin-left: auto;
-        font-size: $font-size-xs;
-        color: $text-tertiary;
-        font-style: italic;
-    }
-    .dbx-menu-sep { height: 1px; background: $border-default; margin: 4px 2px; }
 
     @keyframes dbx-pop {
         from { opacity: 0; transform: translateY(-4px); }
@@ -1214,7 +1102,7 @@ $dbx-sqlite: #3d8fd1;
 // Honor reduced-motion: drop the entrance animations and spinners.
 @media (prefers-reduced-motion: reduce) {
     .db-explorer {
-        .dbx-menu, .dbx-context { animation: none; }
+        .dbx-context { animation: none; }
         .dbx-spin { animation: none; }
     }
 }
@@ -2266,4 +2154,12 @@ $dbx-sqlite: #3d8fd1;
         flex-wrap: wrap;
         justify-content: flex-end;
     }
+}
+
+// "select a database" hint inside the New menu. The menu is portaled out of
+// `.db-explorer`, so this rule lives at the top level.
+.dbx-menu-hint {
+    margin-left: auto;
+    font-size: $font-size-xs;
+    color: $text-tertiary;
 }

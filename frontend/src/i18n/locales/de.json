@@ -1335,7 +1335,6 @@
             "couldNotCopy": "Konnte nicht kopiert werden",
             "createDatabase": "Datenbank erstellen",
             "createUser": "Benutzer erstellen",
-            "databaseExplorer": "Datenbank-Explorer",
             "databaseSources": "Datenbankquellen",
             "deployActivity": "Aktivität bereitstellen",
             "drop": "{{label}} löschen",

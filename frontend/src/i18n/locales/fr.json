@@ -1335,7 +1335,6 @@
             "couldNotCopy": "Impossible de copier",
             "createDatabase": "Créer une base de données",
             "createUser": "Créer un utilisateur",
-            "databaseExplorer": "Explorateur de base de données",
             "databaseSources": "Sources de base de données",
             "deployActivity": "Activité de déploiement",
             "drop": "Déposer {{label}}",

@@ -1335,7 +1335,6 @@
             "couldNotCopy": "Kopyalanamadı",
             "createDatabase": "Veritabanı oluştur",
             "createUser": "Kullanıcı oluştur",
-            "databaseExplorer": "Veritabanı Gezgini",
             "databaseSources": "Veritabanı kaynakları",
             "deployActivity": "Etkinliği dağıt",
             "drop": "{{label}}'yi bırakın",

@@ -1558,7 +1558,6 @@
             "couldNotCopy": "Could not copy",
             "createDatabase": "Create database",
             "createUser": "Create user",
-            "databaseExplorer": "Database Explorer",
             "databaseSources": "Database sources",
             "deployActivity": "Deploy activity",
             "drop": "Drop {{label}}",

@@ -1335,7 +1335,6 @@
             "couldNotCopy": "لا يمكن النسخ",
             "createDatabase": "إنشاء قاعدة بيانات",
             "createUser": "إنشاء مستخدم",
-            "databaseExplorer": "مستكشف قاعدة البيانات",
             "databaseSources": "مصادر قاعدة البيانات",
             "deployActivity": "نشر النشاط",
             "drop": "إسقاط {{label}}",

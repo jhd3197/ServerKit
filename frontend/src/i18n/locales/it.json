@@ -1335,7 +1335,6 @@
             "couldNotCopy": "Impossibile copiare",
             "createDatabase": "Crea banca dati",
             "createUser": "Crea utente",
-            "databaseExplorer": "Esplora database",
             "databaseSources": "Fonti della banca dati",
             "deployActivity": "Distribuire l'attività",
             "drop": "Rilascia {{label}}",

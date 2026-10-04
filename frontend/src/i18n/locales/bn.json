@@ -1335,7 +1335,6 @@
             "couldNotCopy": "কপি করা যায়নি",
             "createDatabase": "ডাটাবেস তৈরি করুন",
             "createUser": "ব্যবহারকারী তৈরি করুন",
-            "databaseExplorer": "ডাটাবেস এক্সপ্লোরার",
             "databaseSources": "ডাটাবেস সূত্র",
             "deployActivity": "কার্যকলাপ স্থাপন",
             "drop": "{{label}} বাদ দিন",

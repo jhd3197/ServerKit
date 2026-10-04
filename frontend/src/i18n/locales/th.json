@@ -1335,7 +1335,6 @@
             "couldNotCopy": "ไม่สามารถคัดลอกได้",
             "createDatabase": "สร้างฐานข้อมูล",
             "createUser": "สร้างผู้ใช้",
-            "databaseExplorer": "สำรวจฐานข้อมูล",
             "databaseSources": "แหล่งที่มาของฐานข้อมูล",
             "deployActivity": "ปรับใช้กิจกรรม",
             "drop": "วาง {{label}}",

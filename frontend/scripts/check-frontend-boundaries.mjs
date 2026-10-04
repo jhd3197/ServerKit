@@ -73,7 +73,7 @@ const LEGACY_COLOR_LITERALS = new Map(Object.entries({
     'styles/pages/_backups.scss': 1,
     'styles/pages/_bandwidth.scss': 1,
     'styles/pages/_cutover.scss': 1,
-    'styles/pages/_databases.scss': 5,
+    'styles/pages/_databases.scss': 4,
     'styles/pages/_deploy-console.scss': 14,
     'styles/pages/_doctor.scss': 1,
     'styles/pages/_domains.scss': 1,

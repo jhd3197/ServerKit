@@ -1335,7 +1335,6 @@
             "couldNotCopy": "복사할 수 없습니다.",
             "createDatabase": "데이터베이스 생성",
             "createUser": "사용자 생성",
-            "databaseExplorer": "데이터베이스 탐색기",
             "databaseSources": "데이터베이스 소스",
             "deployActivity": "활동 배포",
             "drop": "{{label}} 삭제",

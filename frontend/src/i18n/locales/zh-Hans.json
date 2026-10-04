@@ -1335,7 +1335,6 @@
             "couldNotCopy": "无法复制",
             "createDatabase": "创建数据库",
             "createUser": "创建用户",
-            "databaseExplorer": "数据库浏览器",
             "databaseSources": "数据库来源",
             "deployActivity": "部署活动",
             "drop": "删除{{label}}",

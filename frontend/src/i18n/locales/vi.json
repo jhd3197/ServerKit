@@ -1335,7 +1335,6 @@
             "couldNotCopy": "Không thể sao chép",
             "createDatabase": "Tạo cơ sở dữ liệu",
             "createUser": "Tạo người dùng",
-            "databaseExplorer": "Trình khám phá cơ sở dữ liệu",
             "databaseSources": "Nguồn cơ sở dữ liệu",
             "deployActivity": "Triển khai hoạt động",
             "drop": "Thả {{label}}",

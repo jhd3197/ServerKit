@@ -1522,7 +1522,6 @@
             "couldNotCopy": "無法複製",
             "createDatabase": "建立資料庫",
             "createUser": "建立使用者",
-            "databaseExplorer": "資料庫瀏覽器",
             "databaseSources": "資料庫來源",
             "deployActivity": "部署活動",
             "drop": "刪除 {{label}}",

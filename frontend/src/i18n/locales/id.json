@@ -1335,7 +1335,6 @@
             "couldNotCopy": "Tidak dapat menyalin",
             "createDatabase": "Buat basis data",
             "createUser": "Buat pengguna",
-            "databaseExplorer": "Penjelajah Basis Data",
             "databaseSources": "Sumber basis data",
             "deployActivity": "Terapkan aktivitas",
             "drop": "Jatuhkan {{label}}",

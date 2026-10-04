@@ -38,7 +38,11 @@ import { listTables, connKey, connLabel, quoteIdent, ENGINE_META } from '../comp
 import { copyToClipboard } from '@/utils/clipboard';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
-import { Button as SharedButton } from '@/components/ui/button';
+import { Button as SharedButton, Button } from '@/components/ui/button';
+import {
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import PageLayout from '@/layouts/PageLayout';
 
 // Cadence while an engine install is in flight.
 const ENGINE_POLL_MS = 4000;
@@ -109,7 +113,6 @@ export default function Databases() {
     const [sidebarVisible, setSidebarVisible] = useState(() => localStorage.getItem(SIDEBAR_KEY) !== 'false');
     const [filter, setFilter] = useState('');
     const [ctxMenu, setCtxMenu] = useState(null);
-    const [showNewMenu, setShowNewMenu] = useState(false);
     const [showManaged, setShowManaged] = useState(false);
     const [tunerTarget, setTunerTarget] = useState(null);
     const [modal, setModal] = useState(null); // { type, databases }
@@ -125,7 +128,6 @@ export default function Databases() {
     // What the workspace shows when there is no tab to show: an engine that is
     // still installing, an engine that is up but empty, an empty database.
     const [blank, setBlank] = useState(null);
-    const newMenuRef = useRef(null);
     const didAutoExpand = useRef(false);
     const didDeepLink = useRef(false);
 
@@ -517,17 +519,13 @@ export default function Databases() {
     }
 
     useEffect(() => {
-        if (!ctxMenu && !showNewMenu) return;
-        const close = (e) => {
-            if (showNewMenu && newMenuRef.current?.contains(e.target)) return;
-            setCtxMenu(null);
-            setShowNewMenu(false);
-        };
-        const onEsc = (e) => { if (e.key === 'Escape') { setCtxMenu(null); setShowNewMenu(false); } };
+        if (!ctxMenu) return;
+        const close = () => setCtxMenu(null);
+        const onEsc = (e) => { if (e.key === 'Escape') setCtxMenu(null); };
         document.addEventListener('click', close);
         document.addEventListener('keydown', onEsc);
         return () => { document.removeEventListener('click', close); document.removeEventListener('keydown', onEsc); };
-    }, [ctxMenu, showNewMenu]);
+    }, [ctxMenu]);
 
     async function backupDatabase(node) {
         try {
@@ -710,88 +708,68 @@ export default function Databases() {
     }), [toggle, startInstall]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
-        <div className="page-container page-container--full-bleed db-explorer">
-            {/* ─── Toolbar ─────────────────────────────── */}
-            <header className="dbx-toolbar">
-                <div className="dbx-toolbar-left">
-                    <SharedButton variant="unstyled"
-                        type="button"
-                        className="dbx-icon-btn"
+        <PageLayout
+            className="db-explorer"
+            fill
+            icon={<Database size={18} />}
+            title={t('common.labels.databases', 'Databases')}
+            actions={(
+                <>
+                    <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => setSidebarVisible((v) => !v)}
                         aria-label={sidebarVisible ? t('app.databases.hideSources', 'Hide sources') : t('app.databases.showSources', 'Show sources')}
                         title={sidebarVisible ? t('app.databases.hideSources', 'Hide sources') : t('app.databases.showSources', 'Show sources')}
                     >
-                        {sidebarVisible ? <PanelLeftClose size={16} aria-hidden="true" /> : <PanelLeftOpen size={16} aria-hidden="true" />}
-                    </SharedButton>
-                    <h1 className="dbx-title"><Database size={17} aria-hidden="true" /> {t('app.databases.databaseExplorer', 'Database Explorer')}</h1>
-                </div>
-
-                <div className="dbx-toolbar-right">
-                    <div className="dbx-new" ref={newMenuRef}>
-                        <SharedButton variant="unstyled"
-                            type="button"
-                            className="dbx-primary"
-                            onClick={() => setShowNewMenu((s) => !s)}
-                            aria-haspopup="menu"
-                            aria-expanded={showNewMenu}
-                        >
-                            <Plus size={15} aria-hidden="true" /> {t('app.databases.new', 'New')} <ChevronDown size={13} aria-hidden="true" />
-                        </SharedButton>
-                        {showNewMenu && (
-                            <div className="dbx-menu" role="menu">
-                                <SharedButton variant="unstyled"
-                                    type="button"
-                                    role="menuitem"
-                                    disabled={!newConsoleConn}
-                                    onClick={() => { if (newConsoleConn) openConsole(newConsoleConn, selectedNode.engine); setShowNewMenu(false); }}
-                                >
-                                    <Terminal size={14} aria-hidden="true" /> {t('app.databases.sqlConsole', 'SQL console')}
-                                    {!newConsoleConn && <span className="dbx-menu-hint">{t('app.databases.selectADatabase', 'select a database')}</span>}
-                                </SharedButton>
-                                <SharedButton variant="unstyled"
-                                    type="button"
-                                    role="menuitem"
-                                    onClick={() => { setModal({ type: 'new-table', preset: dbPreset(selectedNode) }); setShowNewMenu(false); }}
-                                >
-                                    <Table2 size={14} aria-hidden="true" /> {t('app.databases.tableOrCollection', 'Table or collection')}
-                                </SharedButton>
-                                <SharedButton variant="unstyled"
-                                    type="button"
-                                    role="menuitem"
-                                    onClick={() => { setModal({ type: 'import', preset: dbPreset(selectedNode) }); setShowNewMenu(false); }}
-                                >
-                                    <Download size={14} aria-hidden="true" /> {t('app.databases.importSqlDump', 'Import SQL dump…')}
-                                </SharedButton>
-                                <div className="dbx-menu-sep" />
-                                <SharedButton variant="unstyled" type="button" role="menuitem" disabled={engineState('mysql', status) !== 'active'} onClick={() => { setModal({ type: 'mysql-db' }); setShowNewMenu(false); }}>
-                                    <Database size={14} aria-hidden="true" /> {t('app.databases.mysqlDatabase', 'MySQL database')}
-                                </SharedButton>
-                                <SharedButton variant="unstyled" type="button" role="menuitem" disabled={engineState('postgresql', status) !== 'active'} onClick={() => { setModal({ type: 'pg-db' }); setShowNewMenu(false); }}>
-                                    <Database size={14} aria-hidden="true" /> {t('app.databases.postgresqlDatabase', 'PostgreSQL database')}
-                                </SharedButton>
-                                <div className="dbx-menu-sep" />
-                                <SharedButton variant="unstyled" type="button" role="menuitem" disabled={engineState('mysql', status) !== 'active'} onClick={() => { openUserModal('mysql'); setShowNewMenu(false); }}>
-                                    <Server size={14} aria-hidden="true" /> {t('app.databases.mysqlUser', 'MySQL user')}
-                                </SharedButton>
-                                <SharedButton variant="unstyled" type="button" role="menuitem" disabled={engineState('postgresql', status) !== 'active'} onClick={() => { openUserModal('postgresql'); setShowNewMenu(false); }}>
-                                    <Server size={14} aria-hidden="true" /> {t('app.databases.postgresqlUser', 'PostgreSQL user')}
-                                </SharedButton>
-                                <div className="dbx-menu-sep" />
-                                <SharedButton variant="unstyled" type="button" role="menuitem" onClick={() => { openCatalog(); setShowNewMenu(false); }}>
-                                    <Layers size={14} aria-hidden="true" /> {t('app.databases.installADatabaseEngine', 'Install a database engine…')}
-                                </SharedButton>
-                            </div>
-                        )}
-                    </div>
-                    <SharedButton variant="unstyled" type="button" className="dbx-chip" onClick={() => setShowManaged(true)}>
-                        <BookMarked size={14} aria-hidden="true" /> {t('app.databases.managed', 'Managed')}
-                    </SharedButton>
-                    <SharedButton variant="unstyled" type="button" className="dbx-chip" onClick={openBackups}>
-                        <Archive size={14} aria-hidden="true" /> {t('common.labels.backups', 'Backups')}
-                    </SharedButton>
-                </div>
-            </header>
-
+                        {sidebarVisible ? <PanelLeftClose size={15} aria-hidden="true" /> : <PanelLeftOpen size={15} aria-hidden="true" />}
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => setShowManaged(true)}>
+                        <BookMarked size={15} aria-hidden="true" /> {t('app.databases.managed', 'Managed')}
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={openBackups}>
+                        <Archive size={15} aria-hidden="true" /> {t('common.labels.backups', 'Backups')}
+                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button size="sm">
+                                <Plus size={15} aria-hidden="true" /> {t('app.databases.new', 'New')} <ChevronDown size={13} aria-hidden="true" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem disabled={!newConsoleConn} onSelect={() => openConsole(newConsoleConn, selectedNode.engine)}>
+                                <Terminal size={14} aria-hidden="true" /> {t('app.databases.sqlConsole', 'SQL console')}
+                                {!newConsoleConn && <span className="dbx-menu-hint">{t('app.databases.selectADatabase', 'select a database')}</span>}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => setModal({ type: 'new-table', preset: dbPreset(selectedNode) })}>
+                                <Table2 size={14} aria-hidden="true" /> {t('app.databases.tableOrCollection', 'Table or collection')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => setModal({ type: 'import', preset: dbPreset(selectedNode) })}>
+                                <Download size={14} aria-hidden="true" /> {t('app.databases.importSqlDump', 'Import SQL dump…')}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem disabled={engineState('mysql', status) !== 'active'} onSelect={() => setModal({ type: 'mysql-db' })}>
+                                <Database size={14} aria-hidden="true" /> {t('app.databases.mysqlDatabase', 'MySQL database')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem disabled={engineState('postgresql', status) !== 'active'} onSelect={() => setModal({ type: 'pg-db' })}>
+                                <Database size={14} aria-hidden="true" /> {t('app.databases.postgresqlDatabase', 'PostgreSQL database')}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem disabled={engineState('mysql', status) !== 'active'} onSelect={() => openUserModal('mysql')}>
+                                <Server size={14} aria-hidden="true" /> {t('app.databases.mysqlUser', 'MySQL user')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem disabled={engineState('postgresql', status) !== 'active'} onSelect={() => openUserModal('postgresql')}>
+                                <Server size={14} aria-hidden="true" /> {t('app.databases.postgresqlUser', 'PostgreSQL user')}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onSelect={() => openCatalog()}>
+                                <Layers size={14} aria-hidden="true" /> {t('app.databases.installADatabaseEngine', 'Install a database engine…')}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </>
+            )}
+        >
             {/* ─── Body: tree + workspace ─────────────────── */}
             <div className={`dbx-body ${sidebarVisible ? '' : 'is-collapsed'}`}>
                 {sidebarVisible && (
@@ -1078,6 +1056,6 @@ export default function Databases() {
                 )}
             </Modal>
 
-        </div>
+        </PageLayout>
     );
 }
