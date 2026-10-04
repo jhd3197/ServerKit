@@ -264,8 +264,8 @@ const RemoteAccess = ({ serverId }) => {
                                             <span className="ra-dot">·</span>
                                             <span>
                                                 {tunnel.last_handshake_at
-                                                    ? `handshake ${new Date(tunnel.last_handshake_at).toLocaleString()}`
-                                                    : 'no handshake yet'}
+                                                    ? t('app.remoteAccess.handshakeAt', 'handshake {{time}}', { time: new Date(tunnel.last_handshake_at).toLocaleString() })
+                                                    : t('app.remoteAccess.noHandshakeYetShort', 'no handshake yet')}
                                             </span>
                                         </div>
                                     </div>
@@ -365,7 +365,7 @@ const RemoteAccess = ({ serverId }) => {
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
                         <Button onClick={submitWizard} disabled={!wizardValid || submitting}>
-                            {submitting ? 'Publishing…' : 'Publish'}
+                            {submitting ? t('app.remoteAccess.publishing', 'Publishing…') : t('common.actions.publish', 'Publish')}
                         </Button>
                     </>
                 }
@@ -493,7 +493,7 @@ const RemoteAccess = ({ serverId }) => {
                 }
             >
                 <p className="ra-service-description">
-                    {t('app.remoteAccess.thisRemovesTheWireguardTunnel', 'This removes the WireGuard tunnel')}{teardown ? ` between ${teardown.private_server_name || teardown.private_server_id} and ${teardown.edge_server_name || teardown.edge_server_id}` : ''} {t('app.remoteAccess.andAnyServicesPublishedOverIt', 'and any services published over it. The agents\' interfaces are brought down.')}
+                    {t('app.remoteAccess.thisRemovesTheWireguardTunnel', 'This removes the WireGuard tunnel')}{teardown ? ` ${t('app.remoteAccess.betweenServers', 'between {{privateServer}} and {{edgeServer}}', { privateServer: teardown.private_server_name || teardown.private_server_id, edgeServer: teardown.edge_server_name || teardown.edge_server_id })}` : ''} {t('app.remoteAccess.andAnyServicesPublishedOverIt', 'and any services published over it. The agents\' interfaces are brought down.')}
                 </p>
             </Modal>
         </div>

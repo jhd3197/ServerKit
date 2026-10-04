@@ -208,7 +208,7 @@ export default function Errors() {
             sortValue: (e) => e.exception_type || e.message || '',
             render: (e) => (
                 <div className="sk-err__cell">
-                    <div className="sk-err__type">{e.exception_type || 'Error'}</div>
+                    <div className="sk-err__type">{e.exception_type || t('app.errors.errorType', 'Error')}</div>
                     <div className="sk-err__message" title={e.message}>{e.message}</div>
                 </div>
             ),
@@ -252,7 +252,7 @@ export default function Errors() {
             value: (e) => (e.resolved ? 'Resolved' : 'Unresolved'),
             sortValue: (e) => (e.resolved ? 'Resolved' : 'Unresolved'),
             render: (e) => (
-                <Pill kind={e.resolved ? 'green' : 'red'}>{e.resolved ? 'Resolved' : 'Unresolved'}</Pill>
+                <Pill kind={e.resolved ? 'green' : 'red'}>{e.resolved ? t('app.errors.resolved', 'Resolved') : t('app.errors.unresolved', 'Unresolved')}</Pill>
             ),
         },
     ];
@@ -378,7 +378,7 @@ export default function Errors() {
                                 <dt>{t('common.labels.status', 'Status')}</dt>
                                 <dd>
                                     <Pill kind={selected.resolved ? 'green' : 'red'}>
-                                        {selected.resolved ? 'Resolved' : 'Unresolved'}
+                                        {selected.resolved ? t('app.errors.resolved', 'Resolved') : t('app.errors.unresolved', 'Unresolved')}
                                     </Pill>
                                 </dd>
                             </div>

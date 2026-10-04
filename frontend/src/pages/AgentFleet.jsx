@@ -245,7 +245,7 @@ const AgentFleet = () => {
             sortValue: (v) => (v.is_active ? 'Active' : 'Inactive'),
             render: (v) => (
                 <Pill kind={v.is_active ? 'green' : 'gray'}>
-                    {v.is_active ? 'Active' : 'Inactive'}
+                    {v.is_active ? t('app.agentFleet.active', 'Active') : t('app.agentFleet.inactive', 'Inactive')}
                 </Pill>
             ),
         },
@@ -730,7 +730,7 @@ const AgentFleet = () => {
                             <h2>{t('app.agentFleet.networkDiscovery', 'Network discovery')}</h2>
                             <Button onClick={startDiscovery} disabled={isScanning}>
                                 {isScanning ? <RefreshCw size={18} className="fleet-refresh-spinner" /> : <Search size={18} />}
-                                {isScanning ? 'Scanning...' : 'Start Scan'}
+                                {isScanning ? t('app.agentFleet.scanning', 'Scanning…') : t('app.agentFleet.startScan', 'Start scan')}
                             </Button>
                         </div>
 
@@ -844,14 +844,14 @@ const AgentFleet = () => {
                                     </div>
                                     <div>
                                         <label className="fleet-caption">{t('app.agentFleet.agentVersion', 'Agent version')}</label>
-                                        <p className="fleet-value">v{diagnostics.agent_version || 'Unknown'}</p>
+                                        <p className="fleet-value">v{diagnostics.agent_version || t('app.agentFleet.unknown', 'Unknown')}</p>
                                     </div>
                                     <div>
                                         <label className="fleet-caption">{t('app.agentFleet.currentLatency', 'Current latency')}</label>
                                         <p className="fleet-value">
                                             {diagnostics.connection.current_latency_ms != null
                                                 ? `${diagnostics.connection.current_latency_ms.toFixed(1)} ms`
-                                                : 'N/A'}
+                                                : t('app.agentFleet.notAvailable', 'N/A')}
                                         </p>
                                     </div>
                                     <div>
@@ -859,19 +859,19 @@ const AgentFleet = () => {
                                         <p className="fleet-value">
                                             {diagnostics.connection.avg_latency_ms != null
                                                 ? `${diagnostics.connection.avg_latency_ms.toFixed(1)} ms`
-                                                : 'N/A'}
+                                                : t('app.agentFleet.notAvailable', 'N/A')}
                                         </p>
                                     </div>
                                     <div>
                                         <label className="fleet-caption">{t('common.labels.ipAddress', 'IP address')}</label>
-                                        <p className="fleet-value">{diagnostics.connection.ip_address || 'N/A'}</p>
+                                        <p className="fleet-value">{diagnostics.connection.ip_address || t('app.agentFleet.notAvailable', 'N/A')}</p>
                                     </div>
                                     <div>
                                         <label className="fleet-caption">{t('app.agentFleet.connectedSince', 'Connected since')}</label>
                                         <p className="fleet-value">
                                             {diagnostics.connection.connected_since
                                                 ? new Date(diagnostics.connection.connected_since).toLocaleString()
-                                                : 'N/A'}
+                                                : t('app.agentFleet.notAvailable', 'N/A')}
                                         </p>
                                     </div>
                                 </div>

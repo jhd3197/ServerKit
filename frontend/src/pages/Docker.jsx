@@ -188,7 +188,7 @@ const Docker = () => {
                         {t('app.docker.dockerIsNotInstalledOrNot', 'Docker is not installed or not running on this system.')}
                     </p>
                     <div className="docker-unavailable-details">
-                        <code>{dockerStatus?.error || 'Unable to connect to Docker daemon'}</code>
+                        <code>{dockerStatus?.error || t('app.docker.couldntConnectToDaemon', "Couldn't connect to the Docker daemon.")}</code>
                     </div>
                     <div className="docker-unavailable-help">
                         <h4>{t('app.docker.toUseDockerManagement', 'To use Docker management:')}</h4>

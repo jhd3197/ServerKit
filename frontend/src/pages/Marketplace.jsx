@@ -43,6 +43,7 @@ import { hasBrandMark, extensionCoverStyle } from '../components/icons/extension
 import { resolveExtensionIcon } from '../components/icons/ExtensionIcons';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
+import { t } from '@/i18n/t';
 
 const CATEGORIES = ['ai', 'games', 'monitoring', 'security', 'deployment', 'integration', 'ui', 'utility'];
 
@@ -91,7 +92,7 @@ const getRegistryCatalogEntry = (entry) => ({
     sourceDetail: 'Remote registry package',
     installKey: entry.slug,
     displayName: entry.display_name || entry.slug,
-    description: entry.description || 'No description provided.',
+    description: entry.description || t('app.marketplace.noDescriptionProvided', 'No description provided.'),
     category: entry.category || 'utility',
     version: entry.version || '0.0.0',
     author: entry.author,
@@ -184,7 +185,7 @@ const getLocalCatalogEntry = (builtin) => {
         sourceDetail: 'Bundled with ServerKit',
         installKey: builtin.slug,
         displayName: manifest.display_name || builtin.slug,
-        description: manifest.description || 'Bundled extension.',
+        description: manifest.description || t('app.marketplace.bundledExtension', 'Bundled extension.'),
         category: manifest.category || 'utility',
         version: manifest.version || '0.0.0',
         author: manifest.author,
@@ -697,7 +698,7 @@ const Marketplace = () => {
                         <>
                             <Button variant="ghost" onClick={() => setRiskTarget(null)}>{t('common.actions.cancel', 'Cancel')}</Button>
                             <Button variant="destructive" onClick={confirmRiskyInstall}>
-                                {riskTarget.updatePluginId ? 'Update anyway' : 'Install anyway'}
+                                {riskTarget.updatePluginId ? t('app.marketplace.updateAnyway', 'Update anyway') : t('app.marketplace.installAnyway', 'Install anyway')}
                             </Button>
                         </>
                     }
@@ -976,7 +977,7 @@ const ExtensionDetailModal = ({ entry, installing, statusVariant, onClose, onIns
                     ) : (
                         <Button disabled={installing} onClick={onInstall}>
                             <DownloadCloud aria-hidden="true" />
-                            {installing ? 'Installing...' : 'Install'}
+                            {installing ? t('app.marketplace.installing', 'Installing…') : t('app.marketplace.install', 'Install')}
                         </Button>
                     )}
                 </div>
@@ -1041,7 +1042,7 @@ const PluginRow = ({
                         onClick={() => onUpdate(plugin.id)}
                     >
                         <DownloadCloud aria-hidden="true" />
-                        {busy === 'update' ? 'Updating…' : 'Update'}
+                        {busy === 'update' ? t('app.marketplace.updating', 'Updating…') : t('app.marketplace.update', 'Update')}
                     </Button>
                 )}
                 {configurable && (
@@ -1065,12 +1066,12 @@ const PluginRow = ({
                     disabled={isBusy}
                     onClick={() => onToggle(plugin)}
                 >
-                    {busy === 'enable' ? 'Enabling…'
-                        : busy === 'disable' ? 'Disabling…'
-                        : plugin.status === 'active' ? 'Disable' : 'Enable'}
+                    {busy === 'enable' ? t('app.marketplace.enabling', 'Enabling…')
+                        : busy === 'disable' ? t('app.marketplace.disabling', 'Disabling…')
+                        : plugin.status === 'active' ? t('common.actions.disable', 'Disable') : t('common.actions.enable', 'Enable')}
                 </Button>
                 <Button size="sm" variant="destructive" disabled={isBusy} onClick={() => onUninstall(plugin)}>
-                    {busy === 'uninstall' ? 'Uninstalling…' : 'Uninstall'}
+                    {busy === 'uninstall' ? t('app.marketplace.uninstalling', 'Uninstalling…') : t('common.actions.uninstall', 'Uninstall')}
                 </Button>
             </div>
         </article>
@@ -1123,7 +1124,7 @@ const PluginConfigDialog = ({ plugin, onClose }) => {
                 <>
                     <Button variant="ghost" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button onClick={save} disabled={saving || values === null}>
-                        {saving ? 'Saving…' : 'Save'}
+                        {saving ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                     </Button>
                 </>
             }

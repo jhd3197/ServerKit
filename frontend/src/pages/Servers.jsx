@@ -742,7 +742,7 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
                     {t('common.actions.cancel', 'Cancel')}
                 </Button>
                 <Button type="submit" disabled={loading || formattedCode.length !== 6}>
-                    {loading ? 'Pairing…' : 'Pair Agent'}
+                    {loading ? t('app.servers.pairing', 'Pairing…') : t('app.servers.pairAgentAction', 'Pair agent')}
                 </Button>
             </div>
         </form>
@@ -923,7 +923,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                                 {t('common.actions.cancel', 'Cancel')}
                             </Button>
                             <Button type="submit" disabled={loading}>
-                                {loading ? 'Generating…' : 'Generate Connection String'}
+                                {loading ? t('app.servers.generating', 'Generating…') : t('app.servers.generateConnectionString', 'Generate connection string')}
                             </Button>
                         </div>
                     </form>

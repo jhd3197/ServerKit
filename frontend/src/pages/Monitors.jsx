@@ -338,7 +338,7 @@ export default function Monitors() {
                     <span className="mon-ico"><Globe size={15} /></span>
                     <div className="mon-namecell">
                         <div className="mon-namecell__name">{m.name}</div>
-                        <div className="mon-namecell__target">{m.check_target || 'bound site'}</div>
+                        <div className="mon-namecell__target">{m.check_target || t('app.monitors.boundSite', 'bound site')}</div>
                     </div>
                 </div>
             ),

@@ -354,7 +354,7 @@ const Deployments = () => {
                 title={t('app.deployments.autoRefreshEvery3s', 'Auto-refresh every 3s')}
             >
                 <RefreshCw size={16} className={autoRefresh ? 'spin' : ''} />
-                {autoRefresh ? 'Live' : 'Paused'}
+                {autoRefresh ? t('app.deployments.live', 'Live') : t('app.deployments.paused', 'Paused')}
             </Button>
         </>,
         [autoRefresh, simInfo?.enabled]

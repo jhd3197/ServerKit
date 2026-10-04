@@ -281,9 +281,9 @@ export default function DeliveryLog() {
                                 changes what is loaded with nothing on screen to
                                 explain it. */}
                             <span className="sk-listhead__count">
-                                {status === 'all' ? 'all statuses' : status}
+                                {status === 'all' ? t('app.deliveryLog.allStatusesLower', 'all statuses') : status}
                                 <i>&middot;</i>
-                                {channel === 'all' ? 'all channels' : channel}
+                                {channel === 'all' ? t('app.deliveryLog.allChannelsLower', 'all channels') : channel}
                             </span>
                             <GridFilterButton
                                 count={chrome.filterCount}

@@ -477,7 +477,7 @@ export default function Databases() {
         // One insights tab per container, like processes.
         const id = `insights:${engine}:${conn.container}`;
         setTabs((prev) => prev.some((t) => t.id === id) ? prev
-            : [...prev, { id, kind: 'insights', title: `Insights · ${conn.container}`, conn, engine }]);
+            : [...prev, { id, kind: 'insights', title: t('app.databases.insightsTabTitle', 'Insights · {{name}}', { name: conn.container }), conn, engine }]);
         showTab(id);
     }
 
@@ -644,14 +644,14 @@ export default function Databases() {
                 }
                 if (node.installers?.length) {
                     return [
-                        { label: `Install ${node.label}…`, icon: Download, onClick: () => startInstall(node) },
+                        { label: t('app.databases.installEngineName', 'Install {{name}}…', { name: node.label }), icon: Download, onClick: () => startInstall(node) },
                         { labelKey: 'common.actions.refresh', label: 'Refresh', icon: RefreshCw, onClick: () => refresh(node) },
                     ];
                 }
                 return [{ labelKey: 'common.actions.refresh', label: 'Refresh', icon: RefreshCw, onClick: () => refresh(node) }];
             case 'database': {
                 const actions = [
-                    { label: `New ${singular(engineUnit(node))}`, icon: Plus, onClick: () => setModal({ type: 'new-table', preset: dbPreset(node) }) },
+                    { label: t('app.databases.newUnit', 'New {{unit}}', { unit: singular(engineUnit(node)) }), icon: Plus, onClick: () => setModal({ type: 'new-table', preset: dbPreset(node) }) },
                     { labelKey: 'app.databases.openSqlConsole', label: 'Open SQL console', icon: Terminal, onClick: () => openConsole(node.conn, node.engine) },
                     { labelKey: 'app.databases.refreshTables', label: 'Refresh tables', icon: RefreshCw, onClick: () => refresh(node) },
                 ];
@@ -997,7 +997,7 @@ export default function Databases() {
                             <span className="dbx-status-item"><Database size={12} aria-hidden="true" /> {activeStatus.connText}</span>
                             {activeStatus.readonly != null && (
                                 <span className={`dbx-status-item ${activeStatus.readonly ? '' : 'is-write'}`}>
-                                    {activeStatus.readonly ? <><Lock size={11} aria-hidden="true" /> {t('app.databases.readOnly', 'Read-only')}</> : 'Writes enabled'}
+                                    {activeStatus.readonly ? <><Lock size={11} aria-hidden="true" /> {t('app.databases.readOnly', 'Read-only')}</> : t('app.databases.writesEnabled', 'Writes enabled')}
                                 </span>
                             )}
                             <span className="dbx-status-item dbx-status-muted">{t('app.databases.utf8', 'UTF-8')}</span>
@@ -1009,7 +1009,9 @@ export default function Databases() {
                 <div className="dbx-statusbar-right">
                     {activeStatus?.rangeText && <span className="dbx-status-item">{activeStatus.rangeText}</span>}
                     {activeStatus?.rowCount != null && (
-                        <span className="dbx-status-item">{activeStatus.rowCount} row{activeStatus.rowCount === 1 ? '' : 's'}{activeStatus.truncated ? ` of ${activeStatus.totalRows}` : ''}</span>
+                        <span className="dbx-status-item">{activeStatus.truncated
+                            ? t('app.databases.rowCountOfTotal', { count: activeStatus.rowCount, total: activeStatus.totalRows, defaultValue_one: '1 row of {{total}}', defaultValue_other: '{{count}} rows of {{total}}' })
+                            : t('app.databases.rowCount', { count: activeStatus.rowCount, defaultValue_one: '1 row', defaultValue_other: '{{count}} rows' })}</span>
                     )}
                     {activeStatus?.execTime != null && <span className="dbx-status-item">{activeStatus.execTime}s</span>}
                     {activeStatus && <span className="dbx-status-item is-connected">{t('app.databases.connected', 'Connected')}</span>}

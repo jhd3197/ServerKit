@@ -276,7 +276,7 @@ const Workspaces = () => {
                             onClick={handleCreate}
                             disabled={!form.name || createWorkspace.isPending}
                         >
-                            {createWorkspace.isPending ? 'Creating…' : 'Create'}
+                            {createWorkspace.isPending ? t('app.workspaces.creating', 'Creating…') : t('common.actions.create', 'Create')}
                         </Button>
                     </>
                 )}

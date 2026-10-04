@@ -325,7 +325,7 @@ export default function DeployConsole() {
                     <span><b>{jobId}</b></span>
                     <span>trigger <b>{job?.trigger || 'manual'}</b></span>
                     {sourceLabel && <span>source <b>{sourceLabel}</b></span>}
-                    <span>target <b>{job?.target_server_name || 'Local server'}</b></span>
+                    <span>target <b>{job?.target_server_name || t('app.deployConsole.localServer', 'Local server')}</b></span>
                     <span>started <b>{fmtStarted(job?.started_at || job?.created_at)}</b></span>
                 </div>
             )}

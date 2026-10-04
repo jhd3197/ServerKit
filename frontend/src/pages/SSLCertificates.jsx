@@ -560,7 +560,7 @@ const SSLCertificates = () => {
                                 <p className="hint">{t('app.sSLCertificates.issues', 'Issues')} <code>domain</code> + <code>*.domain</code> {t('app.sSLCertificates.viaYourDnsProvider', 'via your DNS provider.')}</p>
                             </div>
                             <div className="form-group">
-                                <Label htmlFor="ssl-domains">{wildcard ? 'Base Domain' : 'Domains'}</Label>
+                                <Label htmlFor="ssl-domains">{wildcard ? t('app.sSLCertificates.baseDomain', 'Base domain') : t('app.sSLCertificates.domainsLabel', 'Domains')}</Label>
                                 {/* A wildcard cert covers one base domain; HTTP-01
                                     takes a comma-separated list, so it keeps a plain input. */}
                                 {wildcard ? (
@@ -580,7 +580,7 @@ const SSLCertificates = () => {
                                         required
                                     />
                                 )}
-                                <p className="hint">{wildcard ? 'A single base domain for the wildcard cert' : 'Comma-separated list of domains'}</p>
+                                <p className="hint">{wildcard ? t('app.sSLCertificates.singleBaseDomainHint', 'A single base domain for the wildcard certificate') : t('app.sSLCertificates.commaSeparatedDomainsHint', 'Comma-separated list of domains')}</p>
                             </div>
                             {!wildcard && (
                                 <>
@@ -678,7 +678,7 @@ const SSLCertificates = () => {
                                     type="submit"
                                     disabled={actionLoading || (wildcard && !domains)}
                                 >
-                                    {actionLoading ? 'Obtaining...' : 'Obtain Certificate'}
+                                    {actionLoading ? t('app.sSLCertificates.obtaining', 'Obtaining…') : t('app.sSLCertificates.obtainCertificateAction', 'Obtain certificate')}
                                 </Button>
                             </div>
                         </form>
@@ -740,7 +740,7 @@ const SSLCertificates = () => {
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
                         <Button type="submit" disabled={actionLoading || !uploadDomain}>
-                            {actionLoading ? 'Uploading...' : 'Upload Certificate'}
+                            {actionLoading ? t('app.sSLCertificates.uploading', 'Uploading…') : t('app.sSLCertificates.uploadCertificateAction', 'Upload certificate')}
                         </Button>
                     </div>
                 </form>

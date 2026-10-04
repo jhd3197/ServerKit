@@ -194,7 +194,7 @@ export default function Incidents() {
     useTopbarActions(() => (
         <>
             <Button variant="outline" size="sm" onClick={onCheckAlerts} disabled={checking}>
-                <Siren size={14} /> {checking ? 'Checking…' : 'Check hosts'}
+                <Siren size={14} /> {checking ? t('common.checking', 'Checking…') : t('app.incidents.checkHosts', 'Check hosts')}
             </Button>
             <Button variant="outline" size="sm" onClick={load}>
                 <RefreshCw size={14} /> {t('common.actions.refresh', 'Refresh')}

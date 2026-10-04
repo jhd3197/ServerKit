@@ -200,7 +200,7 @@ export default function Recipes() {
                                         <div className="recipe-card__name">{recipe.name}</div>
                                         <div className="recipe-card__meta">
                                             v{recipe.version}{recipe.category ? ` · ${recipe.category}` : ''}
-                                            {recipe.minutes ? ` · ~${recipe.minutes} min` : ''}
+                                            {recipe.minutes ? ` · ${t('app.recipes.approxMinutes', '~{{count}} min', { count: recipe.minutes })}` : ''}
                                         </div>
                                     </div>
                                     {recipe.featured && (
@@ -251,7 +251,7 @@ export default function Recipes() {
                 open={!!selected}
                 onOpenChange={open => { if (!open) setSelected(null); }}
                 title={selected ? t('app.recipes.runTitle', 'Run {{name}}', { name: selected.name }) : ''}
-                subtitle={selected ? `recipe ${selected.slug}@${selected.version}` : ''}
+                subtitle={selected ? t('app.recipes.recipeSlugVersion', 'recipe {{slug}}@{{version}}', { slug: selected.slug, version: selected.version }) : ''}
                 icon={selected ? <RecipeIcon icon={selected.icon} /> : null}
                 width={520}
             >
@@ -269,7 +269,7 @@ export default function Recipes() {
                                         <span className="recipe-install__radio" aria-hidden="true" />
                                         <span className="recipe-install__srvname">{server.name}</span>
                                         <span className="recipe-install__srvspec">
-                                            {server.cpu_cores ? `${server.cpu_cores} vCPU · ` : ''}
+                                            {server.cpu_cores ? `${t('app.recipes.vcpuCount', '{{count}} vCPU', { count: server.cpu_cores })} · ` : ''}
                                             {formatBytes(server.total_memory, { decimals: 0 })}
                                         </span>
                                         {String(targetId) === String(server.id) && <Check size={15} />}

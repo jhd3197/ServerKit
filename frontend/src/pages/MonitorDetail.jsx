@@ -397,7 +397,7 @@ export default function MonitorDetail() {
             className="monitor-detail"
             icon={<ArrowLeft size={18} />}
             title={monitor.name}
-            meta={`${monitor.check_type} · ${monitor.check_target || 'bound site'} · every ${monitor.check_interval}s`}
+            meta={t('app.monitorDetail.headerMeta', '{{type}} · {{target}} · every {{interval}}s', { type: monitor.check_type, target: monitor.check_target || t('app.monitorDetail.boundService', 'Bound service'), interval: monitor.check_interval })}
             actions={(
                 <>
                     <FavoriteStar type="monitor" id={monitor.id} path={`/monitoring/monitors/${monitor.id}`} label={monitor.name} />
@@ -451,19 +451,19 @@ export default function MonitorDetail() {
                 >
                     <div className="mon-kpi-sub">
                         {uptime?.days
-                            ? `${uptime.days.filter((d) => d.state !== 'none' && d.state !== 'up').length} bad days`
-                            : uptimeError ? '—' : 'no history yet'}
+                            ? t('app.monitorDetail.badDays', { count: uptime.days.filter((d) => d.state !== 'none' && d.state !== 'up').length, defaultValue_one: '{{count}} bad day', defaultValue_other: '{{count}} bad days' })
+                            : uptimeError ? '—' : t('app.monitorDetail.noHistoryYet', 'No history yet')}
                     </div>
                 </MetricCard>
                 <MetricCard
                     label={t('app.monitorDetail.certificate', 'Certificate')}
                     tone={certDays == null ? 'accent' : certDays < 0 ? 'red' : certDays < 21 ? 'amber' : 'green'}
                     icon={<Lock size={17} />}
-                    value={certDays == null ? 'n/a' : certDays < 0 ? 'Expired' : certDays}
+                    value={certDays == null ? 'n/a' : certDays < 0 ? t('app.monitorDetail.expired', 'Expired') : certDays}
                     unit={certDays != null && certDays >= 0 ? 'days' : undefined}
                 >
                     <div className="mon-kpi-sub">
-                        {monitor.cert_issuer || (isHttpish ? 'not read yet' : 'no TLS on this check')}
+                        {monitor.cert_issuer || (isHttpish ? t('app.monitorDetail.notReadYet', 'Not read yet') : t('app.monitorDetail.noTlsOnThisCheck', 'No TLS on this check'))}
                     </div>
                 </MetricCard>
             </KpiBand>
@@ -555,8 +555,8 @@ export default function MonitorDetail() {
                                     <h3>{selectedDay.date}</h3>
                                     <span className="mon-panel-sub">
                                         {selectedDay.state === 'none'
-                                            ? 'Not monitored on this day'
-                                            : `${selectedDay.checks} checks · ${selectedDay.down_checks} failed · ${formatUptime(selectedDay.uptime)} uptime`}
+                                            ? t('app.monitorDetail.notMonitoredOnThisDay', 'Not monitored on this day')
+                                            : t('app.monitorDetail.daySummary', { count: selectedDay.checks, failed: selectedDay.down_checks, uptime: formatUptime(selectedDay.uptime), defaultValue_one: '{{count}} check · {{failed}} failed · {{uptime}} uptime', defaultValue_other: '{{count}} checks · {{failed}} failed · {{uptime}} uptime' })}
                                     </span>
                                 </div>
                                 <Button variant="ghost" size="sm" onClick={() => setSelectedDay(null)}>{t('common.actions.close', 'Close')}</Button>
@@ -582,14 +582,14 @@ export default function MonitorDetail() {
                                 <div><dt>{t('app.monitorDetail.expires', 'Expires')}</dt><dd>{new Date(monitor.cert_expires_at).toLocaleDateString()}</dd></div>
                                 <div>
                                     <dt>{t('app.monitorDetail.remaining', 'Remaining')}</dt>
-                                    <dd>{certDays < 0 ? `${-certDays} days ago` : `${certDays} days`}</dd>
+                                    <dd>{certDays < 0 ? t('app.monitorDetail.daysAgo', { count: -certDays, defaultValue_one: '{{count}} day ago', defaultValue_other: '{{count}} days ago' }) : t('app.monitorDetail.days', { count: certDays, defaultValue_one: '{{count}} day', defaultValue_other: '{{count}} days' })}</dd>
                                 </div>
                             </dl>
                         ) : (
                             <p className="mon-panel-hint">
                                 {isHttpish && monitor.check_target?.startsWith('https://')
-                                    ? 'Not read yet — it is captured on the next probe.'
-                                    : 'This check does not negotiate TLS.'}
+                                    ? t('app.monitorDetail.certNotReadYet', 'Not read yet. It is captured on the next probe.')
+                                    : t('app.monitorDetail.checkHasNoTls', "This check doesn't negotiate TLS.")}
                             </p>
                         )}
                     </div>
@@ -663,7 +663,7 @@ export default function MonitorDetail() {
                         <div className="mon-panel__header"><div><h3>{t('app.monitorDetail.check', 'Check')}</h3></div></div>
                         <dl className="mon-inforows">
                             <div><dt>{t('common.labels.type', 'Type')}</dt><dd>{monitor.check_type}</dd></div>
-                            <div><dt>{t('common.labels.target', 'Target')}</dt><dd>{monitor.check_target || 'bound site'}</dd></div>
+                            <div><dt>{t('common.labels.target', 'Target')}</dt><dd>{monitor.check_target || t('app.monitorDetail.boundService', 'Bound service')}</dd></div>
                             <div><dt>{t('app.monitorDetail.interval', 'Interval')}</dt><dd>{monitor.check_interval}s</dd></div>
                             <div><dt>{t('app.monitorDetail.timeout', 'Timeout')}</dt><dd>{monitor.check_timeout}s</dd></div>
                             {isHttpish && <div><dt>{t('app.monitorDetail.method', 'Method')}</dt><dd>{monitor.check_method}</dd></div>}

@@ -966,8 +966,8 @@ function FileManager() {
 
             {isS3 && (
                 <div className="file-manager-target-banner">
-                    {t('app.fileManager.browsingYour', 'Browsing your')} <strong>{t('app.fileManager.s3Bucket', 'S3 bucket')}</strong>. Upload, download, edit and delete work;
-                    folders, rename and permissions don&apos;t apply to object storage.
+                    {t('app.fileManager.browsingYour', 'Browsing your')} <strong>{t('app.fileManager.s3Bucket', 'S3 bucket')}</strong>.{' '}
+                    {t('app.fileManager.s3SupportedOperations', "Upload, download, edit and delete work; folders, rename and permissions don't apply to object storage.")}
                 </div>
             )}
 
@@ -977,8 +977,8 @@ function FileManager() {
                         <CloudUpload size={16} />
                         <span>
                             {activeUploads.length > 0
-                                ? `Uploading ${activeUploads.length} file${activeUploads.length > 1 ? 's' : ''}…`
-                                : 'Uploads complete'}
+                                ? t('app.fileManager.uploadingFiles', { count: activeUploads.length, defaultValue_one: 'Uploading 1 file…', defaultValue_other: 'Uploading {{count}} files…' })
+                                : t('app.fileManager.uploadsComplete', 'Uploads complete')}
                         </span>
                         {activeUploads.length > 0 && (
                             <span className="upload-tray-percent">{Math.round(totalUploadProgress)}%</span>
@@ -995,7 +995,7 @@ function FileManager() {
                                     <div className="upload-bar-fill" style={{ width: `${u.progress}%` }} />
                                 </div>
                                 <span className="upload-status">
-                                    {u.status === 'done' ? 'Done' : u.status === 'error' ? 'Failed' : `${Math.round(u.progress)}%`}
+                                    {u.status === 'done' ? t('common.actions.done', 'Done') : u.status === 'error' ? t('app.fileManager.uploadFailed', 'Failed') : `${Math.round(u.progress)}%`}
                                 </span>
                             </div>
                         ))}

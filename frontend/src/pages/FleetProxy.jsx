@@ -53,7 +53,7 @@ function formatTimestamp(value) {
 }
 
 function typeMeta(type) {
-    return PROXY_TYPE_META[type] || { label: type || 'Unknown', kind: 'gray' };
+    return PROXY_TYPE_META[type] || { label: type || t('app.fleetProxy.unknown', 'Unknown'), kind: 'gray' };
 }
 
 const statusLabel = (row) => dsStatusLabel(row.status);
@@ -74,7 +74,7 @@ const FLEET_COLUMNS = [
         render: (row) => (
             <Link to={`/servers/${row.server_id}/proxy`} className="fleet-proxy__server">
                 <ServerIcon size={14} />
-                <span>{row.server_name || 'Unnamed server'}</span>
+                <span>{row.server_name || t('app.fleetProxy.unnamedServer', 'Unnamed server')}</span>
             </Link>
         ),
     },

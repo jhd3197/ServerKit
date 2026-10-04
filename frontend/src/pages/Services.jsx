@@ -535,7 +535,7 @@ const MoveToProjectDialog = ({ open, onOpenChange, count, onMove }) => {
                         {t('common.actions.cancel', 'Cancel')}
                     </Button>
                     <Button type="button" onClick={handleSubmit} disabled={submitting || loadingProjects}>
-                        {submitting ? 'Moving…' : (projectValue === UNASSIGN ? 'Unassign' : 'Move')}
+                        {submitting ? t('app.services.moving', 'Moving…') : (projectValue === UNASSIGN ? t('app.services.unassign', 'Unassign') : t('app.services.move', 'Move'))}
                     </Button>
                 </>
             )}

@@ -322,7 +322,7 @@ const ServiceDetail = () => {
                                             <circle cx="6" cy="6" r="3"/>
                                             <path d="M6 21V9a9 9 0 0 0 9 9"/>
                                         </svg>
-                                        {actionLoading === 'deploy-latest' ? 'Deploying...' : 'Deploy Latest Commit'}
+                                        {actionLoading === 'deploy-latest' ? t('app.serviceDetail.deploying', 'Deploying…') : t('app.serviceDetail.deployLatestCommit', 'Deploy latest commit')}
                                     </Button>
                                 )}
                             </div>
@@ -336,7 +336,7 @@ const ServiceDetail = () => {
                             onClick={() => handleAction('restart')}
                             disabled={actionLoading === 'restart'}
                         >
-                            {actionLoading === 'restart' ? 'Restarting...' : 'Restart'}
+                            {actionLoading === 'restart' ? t('app.serviceDetail.restarting', 'Restarting…') : t('common.actions.restart', 'Restart')}
                         </Button>
                     )}
 
@@ -347,7 +347,7 @@ const ServiceDetail = () => {
                             onClick={() => handleAction('start')}
                             disabled={actionLoading === 'start'}
                         >
-                            {actionLoading === 'start' ? 'Starting...' : 'Start'}
+                            {actionLoading === 'start' ? t('app.serviceDetail.starting', 'Starting…') : t('common.actions.start', 'Start')}
                         </Button>
                     )}
 
@@ -494,11 +494,11 @@ const ServiceDetail = () => {
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
                         </svg>
-                        <span className="svc-detail__repo-url">{service.root_path || 'Local service'}</span>
+                        <span className="svc-detail__repo-url">{service.root_path || t('app.serviceDetail.localService', 'Local service')}</span>
                         {service.managed_by && (
                             <>
                                 <span className="svc-detail__repo-arrow">&rarr;</span>
-                                <span className="svc-detail__repo-branch">{service.managed_by === 'docker_compose' ? 'Docker Compose' : 'systemd'}</span>
+                                <span className="svc-detail__repo-branch">{service.managed_by === 'docker_compose' ? t('app.serviceDetail.dockerCompose', 'Docker Compose') : 'systemd'}</span>
                             </>
                         )}
                     </span>
@@ -541,7 +541,7 @@ const ServiceDetail = () => {
                                 disabled={actionLoading === 'upload-version'}
                             />
                             <FileArchive size={14} />
-                            {actionLoading === 'upload-version' ? 'Uploading...' : 'Upload New Version'}
+                            {actionLoading === 'upload-version' ? t('app.serviceDetail.uploading', 'Uploading…') : t('app.serviceDetail.uploadNewVersion', 'Upload new version')}
                         </label>
                     </div>
                     {versionsLoading ? (

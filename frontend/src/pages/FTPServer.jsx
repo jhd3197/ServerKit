@@ -223,7 +223,7 @@ function FTPServer() {
     const handleDeleteUser = async (username) => {
         setConfirmDialog({
             titleKey: 'app.fTPServer.deleteFtpUser', title: 'Delete FTP user',
-            message: `Are you sure you want to delete user "${username}"?`,
+            message: t('app.fTPServer.deleteUserMessage', 'Delete the FTP user "{{username}}"?', { username }),
             confirmTextKey: 'common.actions.delete', confirmText: 'Delete',
             variant: 'danger',
             onConfirm: async () => {
@@ -366,7 +366,7 @@ function FTPServer() {
             sortValue: (user) => (user.is_active ? 'Active' : 'Disabled'),
             render: (user) => (
                 <Pill kind={user.is_active ? 'green' : 'gray'}>
-                    {user.is_active ? 'Active' : 'Disabled'}
+                    {user.is_active ? t('app.fTPServer.active', 'Active') : t('app.fTPServer.disabled', 'Disabled')}
                 </Pill>
             ),
         },
@@ -621,7 +621,7 @@ function FTPServer() {
                                             <InfoItem label={t('common.labels.port', 'Port')} value={config.settings.listen_port || config.settings.port || 21} mono />
                                             <InfoItem label={t('app.fTPServer.anonymousAccess', 'Anonymous access')}>
                                                 <span className={`info-value ${config.settings.anonymous_enable ? 'warning' : 'success'}`}>
-                                                    {config.settings.anonymous_enable ? 'Enabled' : 'Disabled'}
+                                                    {config.settings.anonymous_enable ? t('app.fTPServer.enabled', 'Enabled') : t('app.fTPServer.disabled', 'Disabled')}
                                                 </span>
                                             </InfoItem>
                                             <InfoItem label={t('app.fTPServer.localUsers', 'Local users')} value={config.settings.local_enable ? 'Enabled' : 'Disabled'} />
@@ -629,7 +629,7 @@ function FTPServer() {
                                             <InfoItem label={t('app.fTPServer.chrootUsers', 'Chroot users')} value={config.settings.chroot_local_user ? 'Yes' : 'No'} />
                                             <InfoItem label={t('app.fTPServer.sslTls', 'SSL/TLS')}>
                                                 <span className={`info-value ${config.settings.ssl_enable ? 'success' : 'warning'}`}>
-                                                    {config.settings.ssl_enable ? 'Enabled' : 'Disabled'}
+                                                    {config.settings.ssl_enable ? t('app.fTPServer.enabled', 'Enabled') : t('app.fTPServer.disabled', 'Disabled')}
                                                 </span>
                                             </InfoItem>
                                         </InfoList>
@@ -809,7 +809,7 @@ function FTPServer() {
                                 onClick={handleInstall}
                                 disabled={actionLoading}
                             >
-                                {actionLoading ? 'Installing...' : 'Install'}
+                                {actionLoading ? t('app.fTPServer.installing', 'Installing…') : t('app.fTPServer.install', 'Install')}
                             </Button>
                         </div>
             </Modal>
@@ -851,7 +851,7 @@ function FTPServer() {
                                 onClick={handleCreateUser}
                                 disabled={actionLoading || !newUser.username.trim()}
                             >
-                                {actionLoading ? 'Creating...' : 'Create user'}
+                                {actionLoading ? t('app.fTPServer.creating', 'Creating…') : t('app.fTPServer.createUser', 'Create user')}
                             </Button>
                         </div>
             </Modal>
@@ -876,7 +876,7 @@ function FTPServer() {
                                 onClick={handleChangePassword}
                                 disabled={actionLoading}
                             >
-                                {actionLoading ? 'Changing...' : 'Change Password'}
+                                {actionLoading ? t('app.fTPServer.changing', 'Changing…') : t('app.fTPServer.changePassword', 'Change password')}
                             </Button>
                         </div>
             </Modal>

@@ -362,7 +362,7 @@ const CreateEnvironmentDialog = ({ projectId, open, onOpenChange, onCreated }) =
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
                         <Button type="submit" disabled={submitting || !name.trim()}>
-                            {submitting ? 'Creating…' : 'Create Environment'}
+                            {submitting ? t('app.projectDetail.creating', 'Creating…') : t('app.projectDetail.createEnvironmentAction', 'Create environment')}
                         </Button>
                     </div>
                 </form>

@@ -42,22 +42,22 @@ const SourceConnectionCallback = () => {
             const returnTo = sessionStorage.getItem('sourceConnectionReturnTo') || '/settings/connections';
 
             if (!code || !state) {
-                setError(`${label} did not return a valid authorization response.`);
+                setError(t('app.sourceConnectionCallback.invalidAuthorizationResponse', "{{label}} didn't return a valid authorization response.", { label }));
                 return;
             }
 
             try {
                 await api.completeSourceConnection(provider, code, state, redirectUri);
                 sessionStorage.removeItem('sourceConnectionReturnTo');
-                toast.success(`${label} connected`);
+                toast.success(t('app.sourceConnectionCallback.providerConnected', '{{label}} connected', { label }));
                 navigate(returnTo, { replace: true });
             } catch (err) {
-                setError(err.message || `Failed to connect ${label}`);
+                setError(err.message || t('app.sourceConnectionCallback.couldntConnect', "Couldn't connect {{label}}.", { label }));
             }
         }
 
         completeConnection();
-    }, [navigate, provider, searchParams, toast, label]);
+    }, [navigate, provider, searchParams, toast, label, t]);
 
     return (
         <div className="auth-page">

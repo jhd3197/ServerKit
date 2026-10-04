@@ -300,7 +300,7 @@ const ServerDetail = () => {
                         </div>
                         <div className="server-detail-header__meta">
                             <span className="server-detail-header__meta-item">
-                                {server.hostname || server.ip_address || 'No endpoint configured'}
+                                {server.hostname || server.ip_address || t('app.serverDetail.noEndpointConfigured', 'No endpoint configured')}
                             </span>
                             {server.group_name && (
                                 <>

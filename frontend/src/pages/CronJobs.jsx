@@ -23,6 +23,7 @@ import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import SchedulePicker from '../components/SchedulePicker';
 import PageLayout from '../layouts/PageLayout';
 import { useTranslation } from 'react-i18next';
+import { translateLabel } from '@/i18n/labels';
 import { toastError } from '@/utils/errorMessage';
 
 // A new job opens on a sane, non-destructive cadence rather than an empty
@@ -137,7 +138,8 @@ function jobState(job) {
     if (job.last_status === 'failure') return { key: 'failed', kind: 'red', labelKey: 'common.state.failed', label: 'Failed' };
     if (job.last_status === 'success') return { key: 'active', kind: 'green', labelKey: 'app.cronJobs.healthy', label: 'Healthy' };
     // Enabled but nothing recorded: either never fired yet, or not tracked.
-    return { key: 'active', kind: 'cyan', label: job.tracked ? 'No runs yet' : 'Untracked' };
+    if (job.tracked) return { key: 'active', kind: 'cyan', labelKey: 'app.cronJobs.noRunsYet', label: 'No runs yet' };
+    return { key: 'active', kind: 'cyan', labelKey: 'app.cronJobs.untracked', label: 'Untracked' };
 }
 
 const CronJobs = () => {
@@ -306,7 +308,7 @@ const CronJobs = () => {
                     <span className="cron-ico"><Clock size={15} /></span>
                     <div className="cron-jobcell">
                         <div className="cron-jobcell__name">
-                            {job.name || 'Unnamed job'}
+                            {job.name || t('app.cronJobs.unnamedJob', 'Unnamed job')}
                         </div>
                         <div className="sk-cell-sub cron-jobcell__cmd" title={job.command}>
                             {job.command}
@@ -359,7 +361,7 @@ const CronJobs = () => {
             sortValue: (job) => jobState(job).label,
             render: (job) => {
                 const state = jobState(job);
-                return <Pill kind={state.kind}>{state.label}</Pill>;
+                return <Pill kind={state.kind}>{translateLabel(t, state)}</Pill>;
             },
         },
         {
@@ -489,7 +491,7 @@ const CronJobs = () => {
 
                     {shown.length === 0 ? (
                         <div className="cron-empty">
-                            {q ? `No jobs match “${search.trim()}”.` : 'No jobs match this filter.'}
+                            {q ? t('app.cronJobs.noJobsMatchSearch', 'No jobs match “{{search}}”.', { search: search.trim() }) : t('app.cronJobs.noJobsMatchFilter', 'No jobs match this filter.')}
                         </div>
                     ) : (
                         <div className="cron-card">
@@ -678,7 +680,7 @@ function CronDrawer({ job, isAdmin, running, onClose, onRefresh, onRun, onEdit, 
                         </div>
                         <div className="cron-inforow">
                             <span className="k">{t('common.labels.status', 'Status')}</span>
-                            <span className="v"><Pill kind={state.kind}>{state.label}</Pill></span>
+                            <span className="v"><Pill kind={state.kind}>{translateLabel(t, state)}</Pill></span>
                         </div>
                     </div>
                 </section>
@@ -696,7 +698,7 @@ function CronDrawer({ job, isAdmin, running, onClose, onRefresh, onRun, onEdit, 
                                 {t('app.cronJobs.runTrackingIsOffForThis', 'Run tracking is off for this job, so nothing is recorded. Turning it on rewrites the crontab line to report each run\'s exit code, duration, and output tail.')}
                             </p>
                             <Button variant="outline" size="sm" onClick={handleTracking} disabled={trackingBusy}>
-                                {trackingBusy ? 'Enabling…' : 'Enable run tracking'}
+                                {trackingBusy ? t('app.cronJobs.enabling', 'Enabling…') : t('app.cronJobs.enableRunTracking', 'Enable run tracking')}
                             </Button>
                         </div>
                     ) : historyLoading ? (
@@ -799,7 +801,7 @@ function CronDrawer({ job, isAdmin, running, onClose, onRefresh, onRun, onEdit, 
                         </Button>
                         {job.tracked && (
                             <Button variant="outline" size="sm" onClick={handleTracking} disabled={trackingBusy}>
-                                {trackingBusy ? 'Disabling…' : 'Disable run tracking'}
+                                {trackingBusy ? t('app.cronJobs.disabling', 'Disabling…') : t('app.cronJobs.disableRunTracking', 'Disable run tracking')}
                             </Button>
                         )}
                         <Button variant="destructive" size="sm" onClick={() => onDelete(job)}>
@@ -939,9 +941,9 @@ function CronFormDrawer({ open, job, onClose, onSaved }) {
                     <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button type="submit" disabled={!canSave || saving}>
                         {saving
-                            ? 'Saving…'
+                            ? t('common.saving', 'Saving…')
                             : job
-                                ? 'Save changes'
+                                ? t('app.cronJobs.saveChanges', 'Save changes')
                                 : <><Plus size={15} /> {t('app.cronJobs.createJob', 'Create cron job')}</>}
                     </Button>
                 </div>

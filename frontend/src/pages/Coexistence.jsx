@@ -163,7 +163,7 @@ export default function Coexistence() {
                             {observed.map((s) => (
                                 <li key={s.id} className="coexistence__server">
                                     <div className="coexistence__server-main">
-                                        <span className="coexistence__server-name">{s.name || s.hostname || `Server ${s.id}`}</span>
+                                        <span className="coexistence__server-name">{s.name || s.hostname || t('app.coexistence.serverId', 'Server {{id}}', { id: s.id })}</span>
                                         {(s.ip_address || s.host) && (
                                             <span className="coexistence__server-ip">{s.ip_address || s.host}</span>
                                         )}

@@ -462,7 +462,7 @@ const Dashboard = () => {
                     <span className="skw-tv__name">{activeBoard?.name}</span>
                     <span className={`conn-status conn-status--${isConnected ? 'live' : 'down'}`} role="status">
                         <span className="conn-status__dot" aria-hidden="true"></span>
-                        {isConnected ? 'Live' : 'Reconnecting'}
+                        {isConnected ? t('app.dashboard.live', 'Live') : t('app.dashboard.reconnecting', 'Reconnecting')}
                     </span>
                     <span className="skw-tv__meta">
                         {selectedServer.name} · {range} {t('app.dashboard.refresh', '· refresh')} {refreshInterval ? `${refreshInterval}s` : 'off'}
@@ -644,13 +644,15 @@ const Dashboard = () => {
 
             {edit && (
                 <div className="skw-hint">
-                    <Grid2x2 size={13} aria-hidden="true" /> {t('app.dashboard.dragHeadersToMoveDragThe', 'Drag headers to move · drag the corner to resize · click a widget to configure it')}{selectedId ? ' · Delete removes it' : ''}
+                    <Grid2x2 size={13} aria-hidden="true" /> {t('app.dashboard.dragHeadersToMoveDragThe', 'Drag headers to move · drag the corner to resize · click a widget to configure it')}{selectedId ? ` · ${t('app.dashboard.deleteRemovesIt', 'Delete removes it')}` : ''}
                 </div>
             )}
 
             {widgets.length === 0 ? (
                 <div className="skw-empty-board">
-                    <div className="skw-empty-board__title">{t('app.dashboard.build', 'Build "')}{activeBoard?.name || 'this dashboard'}{'"'}</div>
+                    <div className="skw-empty-board__title">{activeBoard?.name
+                        ? t('app.dashboard.buildBoardName', 'Build "{{name}}"', { name: activeBoard.name })
+                        : t('app.dashboard.buildThisDashboard', 'Build this dashboard')}</div>
                     <div className="skw-empty-board__desc">
                         {t('app.dashboard.thisBoardHasNoWidgetsYet', 'This board has no widgets yet. Add one, or restore the layout it shipped with.')}
                     </div>

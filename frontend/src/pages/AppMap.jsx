@@ -307,7 +307,7 @@ export default function AppMap() {
                     className="app-map__legend-toggle"
                     onClick={() => setShowLegend(s => !s)}
                 >
-                    {showLegend ? 'Hide legend' : 'Show legend'}
+                    {showLegend ? t('app.appMap.hideLegend', 'Hide legend') : t('app.appMap.showLegend', 'Show legend')}
                 </SharedButton>
             </div>
 

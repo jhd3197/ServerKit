@@ -188,8 +188,8 @@ const DatabaseMigration = () => {
                                 <div className="migration-list-head">
                                     <span className="migration-list-title">
                                         {shownMigrations.length === pendingMigrations.length
-                                            ? 'Changes to apply'
-                                            : `Latest ${shownMigrations.length} of ${pendingMigrations.length} changes`}
+                                            ? t('app.databaseMigration.changesToApply', 'Changes to apply')
+                                            : t('app.databaseMigration.latestOfChanges', 'Latest {{shown}} of {{total}} changes', { shown: shownMigrations.length, total: pendingMigrations.length })}
                                     </span>
                                     {pendingMigrations.length > MIGRATION_PREVIEW_COUNT && (
                                         <Button variant="unstyled"
@@ -198,8 +198,8 @@ const DatabaseMigration = () => {
                                             onClick={() => setShowAllMigrations(v => !v)}
                                         >
                                             {showAllMigrations
-                                                ? 'Show less'
-                                                : `Show all ${pendingMigrations.length}`}
+                                                ? t('app.databaseMigration.showLess', 'Show less')
+                                                : t('app.databaseMigration.showAllCount', 'Show all {{count}}', { count: pendingMigrations.length })}
                                         </Button>
                                     )}
                                 </div>
@@ -210,7 +210,7 @@ const DatabaseMigration = () => {
                                         <div key={m.revision || i} className="migration-list-item">
                                             <Database size={14} />
                                             <code>{m.revision.substring(0, 12)}</code>
-                                            <span>{m.description || 'Schema update'}</span>
+                                            <span>{m.description || t('app.databaseMigration.schemaUpdate', 'Schema update')}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -247,7 +247,7 @@ const DatabaseMigration = () => {
                                         required
                                     />
                                     <Button type="submit" className="btn-wizard-next" disabled={loginLoading}>
-                                        {loginLoading ? <Loader size={16} className="spin" /> : 'Sign In'}
+                                        {loginLoading ? <Loader size={16} className="spin" /> : t('auth.signIn', 'Sign in')}
                                     </Button>
                                 </form>
                             </div>
@@ -357,8 +357,8 @@ const DatabaseMigration = () => {
                         <div className="wizard-step-title">{t('app.databaseMigration.applyUpdates', 'Apply updates')}</div>
                         <div className="wizard-step-description">
                             {applyLoading
-                                ? 'Applying database updates. Please do not close this page...'
-                                : `Ready to apply ${pendingCount} database update${pendingCount !== 1 ? 's' : ''}.`
+                                ? t('app.databaseMigration.applyingUpdatesKeepOpen', 'Applying database updates. Keep this page open…')
+                                : t('app.databaseMigration.readyToApplyUpdates', { count: pendingCount, defaultValue_one: 'Ready to apply 1 database update.', defaultValue_other: 'Ready to apply {{count}} database updates.' })
                             }
                         </div>
 

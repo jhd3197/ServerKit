@@ -209,7 +209,7 @@ function Downloads() {
                                             disabled={!isAvailable}
                                         >
                                             <DownloadIcon />
-                                            {isAvailable ? 'Download' : 'Not Available'}
+                                            {isAvailable ? t('common.actions.download', 'Download') : t('app.downloads.notAvailable', 'Not available')}
                                         </Button>
                                     </div>
                                 );

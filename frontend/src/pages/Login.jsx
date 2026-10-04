@@ -282,7 +282,7 @@ const Login = () => {
                         )}
 
                         <Button type="submit" className="btn-full" disabled={loading}>
-                            {loading ? 'Verifying...' : 'Verify'}
+                            {loading ? t('auth.twoFactor.verifying', 'Verifying…') : t('auth.twoFactor.verify', 'Verify')}
                         </Button>
                     </form>
 
@@ -292,7 +292,7 @@ const Login = () => {
                             variant="link"
                             onClick={() => setUseBackupCode(!useBackupCode)}
                         >
-                            {useBackupCode ? 'Use authenticator app instead' : 'Use a backup code instead'}
+                            {useBackupCode ? t('auth.twoFactor.useAuthenticatorInstead', 'Use authenticator app instead') : t('auth.twoFactor.useBackupCodeInstead', 'Use a backup code instead')}
                         </Button>
                         <Button
                             type="button"
@@ -356,7 +356,7 @@ const Login = () => {
                                 disabled={ssoLoading !== null}
                             >
                                 <SSOProviderIcon provider={p.id} />
-                                {ssoLoading === p.id ? 'Redirecting...' : `Continue with ${p.name}`}
+                                {ssoLoading === p.id ? t('auth.redirecting', 'Redirecting…') : t('auth.continueWithProvider', 'Continue with {{name}}', { name: p.name })}
                             </Button>
                         ))}
                     </div>
@@ -396,7 +396,7 @@ const Login = () => {
                         </div>
 
                         <Button type="submit" className="btn-full" disabled={loading}>
-                            {loading ? t('auth.signingIn', 'Signing in…') : t('auth.signIn', 'Sign In')}
+                            {loading ? t('auth.signingIn', 'Signing in…') : t('auth.signIn', 'Sign in')}
                         </Button>
                     </form>
                 )}

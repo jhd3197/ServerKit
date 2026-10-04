@@ -141,8 +141,8 @@ const TerminalShellTab = () => {
                         <TerminalIcon size={26} />
                         <p>
                             {anyOnline
-                                ? 'Pick a server on the left to open a shell.'
-                                : 'Interactive shells run over the ServerKit agent. Pair a server (Servers → Add Server) with shell access and it will show up here.'}
+                                ? t('app.terminal.pickServerToOpenShell', 'Pick a server on the left to open a shell.')
+                                : t('app.terminal.shellsRunOverAgent', 'Interactive shells run over the ServerKit agent. Pair a server (Servers → Add server) with shell access and it shows up here.')}
                         </p>
                     </div>
                 )}

@@ -426,7 +426,7 @@ export default function Jobs() {
         { key: 'kind', headerKey: 'common.labels.kind', header: 'Kind', sortable: true, cellClassName: 'sk-jobs__kind', render: (s) => s.kind || '—' },
         { key: 'schedule', headerKey: 'common.labels.schedule', header: 'Schedule', sortable: true, sortValue: (s) => s.schedule || s.cron || null, cellClassName: 'sk-jobs__owner', render: (s) => s.schedule || s.cron || (s.interval_seconds ? `every ${s.interval_seconds}s` : '—') },
         { key: 'next', headerKey: 'app.jobs.nextRun', header: 'Next run', cellClassName: 'sk-jobs__when', render: (s) => (s.next_run_at ? timeAgo(s.next_run_at) : '—') },
-        { key: 'enabled', headerKey: 'app.jobs.enabled', header: 'Enabled', render: (s) => <Pill kind={s.enabled ? 'green' : 'gray'}>{s.enabled ? 'On' : 'Off'}</Pill> },
+        { key: 'enabled', headerKey: 'app.jobs.enabled', header: 'Enabled', render: (s) => <Pill kind={s.enabled ? 'green' : 'gray'}>{s.enabled ? t('app.jobs.on', 'On') : t('app.jobs.off', 'Off')}</Pill> },
         {
             key: 'actions',
             header: '',
@@ -438,7 +438,7 @@ export default function Jobs() {
                         <Play size={14} /> {t('app.jobs.runNow', 'Run now')}
                     </Button>
                     <Button variant="ghost" size="sm" onClick={() => onToggleScheduled(s.id, !s.enabled)}>
-                        {s.enabled ? 'Disable' : 'Enable'}
+                        {s.enabled ? t('common.actions.disable', 'Disable') : t('common.actions.enable', 'Enable')}
                     </Button>
                 </div>
             ),

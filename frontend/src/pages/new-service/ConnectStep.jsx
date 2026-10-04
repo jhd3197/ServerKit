@@ -31,10 +31,10 @@ const ConnectStep = ({ form }) => {
         <div className="new-service-page__step">
             <div className="new-service-page__step-head">
                 <h2>
-                    {sourceMode === 'github' ? 'Pick a repository'
-                            : sourceMode === 'local' ? 'Point at the service'
-                                : sourceMode === 'upload' ? 'Upload the archive'
-                                    : 'Connect the remote'}
+                    {sourceMode === 'github' ? t('app.connectStep.pickARepository', 'Pick a repository')
+                            : sourceMode === 'local' ? t('app.connectStep.pointAtTheService', 'Point at the service')
+                                : sourceMode === 'upload' ? t('app.connectStep.uploadTheArchive', 'Upload the archive')
+                                    : t('app.connectStep.connectTheRemote', 'Connect the remote')}
                 </h2>
                 {SOURCE_NEEDS[sourceMode] && (
                     <p className="new-service-page__need">
@@ -84,9 +84,9 @@ const ConnectStep = ({ form }) => {
                                     >
                                         <span>
                                             <strong>{repo.full_name}</strong>
-                                            <small>{repo.description || repo.language || 'No description'}</small>
+                                            <small>{repo.description || repo.language || t('app.connectStep.noDescription', 'No description')}</small>
                                         </span>
-                                        <em>{repo.private ? 'Private' : 'Public'}</em>
+                                        <em>{repo.private ? t('app.connectStep.private', 'Private') : t('app.connectStep.public', 'Public')}</em>
                                     </Button>
                                 ))}
                             </div>
@@ -97,11 +97,11 @@ const ConnectStep = ({ form }) => {
                                 <SiGithub size={20} />
                             </span>
                             <div>
-                                <h3>{githubConfigured ? 'Connect GitHub' : 'GitHub connection is not configured'}</h3>
+                                <h3>{githubConfigured ? t('app.connectStep.connectGithub', 'Connect GitHub') : t('app.connectStep.githubNotConfigured', 'GitHub connection is not configured')}</h3>
                                 <p>
                                     {githubConfigured
-                                        ? 'Authorize ServerKit once, then choose a repository from your GitHub account.'
-                                        : 'Add the GitHub OAuth app credentials in Settings before connecting.'}
+                                        ? t('app.connectStep.authorizeOnceThenChoose', 'Authorize ServerKit once, then choose a repository from your GitHub account.')
+                                        : t('app.connectStep.addOauthCredentialsFirst', 'Add the GitHub OAuth app credentials in Settings before connecting.')}
                                 </p>
                             </div>
                             <div className="new-service-page__connect-actions">
@@ -181,7 +181,7 @@ const ConnectStep = ({ form }) => {
                         onClick={() => document.getElementById('upload-zip')?.click()}
                     >
                         <FileArchive size={32} />
-                        <span>{uploadFile ? uploadFile.name : 'Drag a zip here or click to browse'}</span>
+                        <span>{uploadFile ? uploadFile.name : t('app.connectStep.dragAZipHere', 'Drag a zip here or click to browse')}</span>
                         <input
                             id="upload-zip"
                             type="file"

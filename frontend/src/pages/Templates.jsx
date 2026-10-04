@@ -895,7 +895,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                                 />
                             </div>
                             <span className="sk-formdrawer__hint">
-                                {template.repo?.url || 'Builds from the template repository'}
+                                {template.repo?.url || t('app.templates.buildsFromTemplateRepository', 'Builds from the template repository')}
                             </span>
                         </div>
                     )}
@@ -912,8 +912,8 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                             </div>
                             <span className="sk-formdrawer__hint">
                                 {httpsBase
-                                    ? 'Published automatically with HTTPS once the deploy finishes'
-                                    : 'Published automatically once the deploy finishes'}
+                                    ? t('app.templates.publishedAutomaticallyWithHttps', 'Published automatically with HTTPS once the deploy finishes')
+                                    : t('app.templates.publishedAutomatically', 'Published automatically once the deploy finishes')}
                             </span>
                         </div>
                     )}
@@ -997,7 +997,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                     </Button>
                     <Button type="submit" disabled={installing}>
                         <Rocket size={15} />
-                        {installing ? 'Deploying…' : `Deploy ${template.name}`}
+                        {installing ? t('app.templates.deploying', 'Deploying…') : t('app.templates.deployName', 'Deploy {{name}}', { name: template.name })}
                     </Button>
                 </div>
             </form>

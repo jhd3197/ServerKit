@@ -74,7 +74,7 @@ function PublicStatusPage() {
                 <section className="public-status-shell public-status-shell--empty">
                     <XCircle size={32} />
                     <h1>{t('app.publicStatusPage.statusPageUnavailable', 'Status page unavailable')}</h1>
-                    <p>{error || 'Status page not found'}</p>
+                    <p>{error || t('app.publicStatusPage.statusPageNotFound', 'Status page not found')}</p>
                 </section>
             </main>
         );

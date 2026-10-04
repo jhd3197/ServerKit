@@ -327,7 +327,7 @@ const Monitoring = () => {
                                 <span className="mon-panel-sub">{t('app.monitoring.limitsForTheMachineRunningThe', 'Limits for the panel server')}</span>
                             </div>
                             <Button type="submit" size="sm" disabled={savingThresholds}>
-                                {savingThresholds ? 'Saving…' : 'Save rules'}
+                                {savingThresholds ? t('common.saving', 'Saving…') : t('app.monitoring.saveRules', 'Save rules')}
                             </Button>
                         </div>
                         <div className="metric-rule-grid">
@@ -358,7 +358,7 @@ const Monitoring = () => {
                                             />
                                         </div>
                                         <Pill kind={isTriggered ? 'amber' : 'gray'}>
-                                            {isTriggered ? 'would alert now' : 'quiet'}
+                                            {isTriggered ? t('app.monitoring.wouldAlertNow', 'Would alert now') : t('app.monitoring.quiet', 'Quiet')}
                                         </Pill>
                                     </article>
                                 );
@@ -378,13 +378,13 @@ const Monitoring = () => {
                                     <span className="mon-panel-sub">{t('app.monitoring.howOftenTheChecksRun', 'How often the checks run')}</span>
                                 </div>
                                 <Button type="submit" size="sm" disabled={savingConfig}>
-                                    {savingConfig ? 'Saving…' : 'Save'}
+                                    {savingConfig ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                                 </Button>
                             </div>
                             <div className="monitoring-switch-row">
                                 <div>
                                     <strong>{t('app.monitoring.runResourceChecks', 'Run resource checks')}</strong>
-                                    <span>{configForm.enabled ? 'Enabled' : 'Paused'}</span>
+                                    <span>{configForm.enabled ? t('app.monitoring.enabled', 'Enabled') : t('app.monitoring.paused', 'Paused')}</span>
                                 </div>
                                 <Switch
                                     checked={configForm.enabled}
@@ -434,10 +434,10 @@ const Monitoring = () => {
                                                 <strong>{channel.label}</strong>
                                                 <span>
                                                     {ready
-                                                        ? 'Sending alerts'
+                                                        ? t('app.monitoring.sendingAlerts', 'Sending alerts')
                                                         : channel.configured
-                                                            ? 'Configured but off'
-                                                            : 'Not configured'}
+                                                            ? t('app.monitoring.configuredButOff', 'Configured but off')
+                                                            : t('app.monitoring.notConfigured', 'Not configured')}
                                                 </span>
                                             </div>
                                             <Pill kind={ready ? 'green' : channel.configured ? 'amber' : 'gray'}>

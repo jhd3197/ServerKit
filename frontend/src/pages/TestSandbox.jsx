@@ -106,7 +106,7 @@ function RunResults({ run, distroMeta, logs, openLogs, onToggleLog }) {
                                 ) : log?.loading && !log?.text ? (
                                     <pre className="ts-log ts-log--muted">{t('app.testSandbox.loadingLog', 'Loading log…')}</pre>
                                 ) : (
-                                    <pre className="ts-log">{log?.text || 'No log output yet.'}</pre>
+                                    <pre className="ts-log">{log?.text || t('app.testSandbox.noLogOutputYet', 'No log output yet.')}</pre>
                                 )}
                             </div>
                         )}
@@ -441,7 +441,7 @@ const TestSandbox = () => {
                                         )}
                                         <span className="ts-distro__hint">
                                             {d.fidelity === 'proxy' && t('app.testSandbox.userlandProxy', 'userland proxy · ')}
-                                            {disabled ? 'quick only' : (d.full ? 'quick + full' : 'quick')}
+                                            {disabled ? t('app.testSandbox.quickOnly', 'quick only') : (d.full ? t('app.testSandbox.quickAndFull', 'quick + full') : t('app.testSandbox.quickLower', 'quick'))}
                                         </span>
                                     </span>
                                 </Button>
@@ -455,7 +455,15 @@ const TestSandbox = () => {
                             disabled={selected.size === 0 || isRunning || starting || !dockerAvailable}
                         >
                             <Play size={14} />
-                            {starting ? 'Starting…' : `Start ${mode} run${selected.size ? ` (${selected.size})` : ''}`}
+                            {starting
+                                ? t('app.testSandbox.starting', 'Starting…')
+                                : mode === 'full'
+                                    ? (selected.size
+                                        ? t('app.testSandbox.startFullRunCount', 'Start full run ({{count}})', { count: selected.size })
+                                        : t('app.testSandbox.startFullRun', 'Start full run'))
+                                    : (selected.size
+                                        ? t('app.testSandbox.startQuickRunCount', 'Start quick run ({{count}})', { count: selected.size })
+                                        : t('app.testSandbox.startQuickRun', 'Start quick run'))}
                         </Button>
                         {isRunning && (
                             <span className="ts-launch__note">{t('app.testSandbox.aRunIsAlreadyInProgress', 'A run is already in progress.')}</span>
@@ -479,7 +487,7 @@ const TestSandbox = () => {
                                 disabled={cancelling}
                             >
                                 <Square size={13} />
-                                {cancelling ? 'Cancelling…' : 'Cancel'}
+                                {cancelling ? t('app.testSandbox.cancelling', 'Cancelling…') : t('common.actions.cancel', 'Cancel')}
                             </Button>
                         )}
                     </CardHeader>

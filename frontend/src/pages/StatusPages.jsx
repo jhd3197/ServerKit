@@ -364,7 +364,7 @@ const StatusPages = () => {
                             <span className="status-page-item__top">
                                 <span className="status-page-item__name">{page.name}</span>
                                 <Pill kind={page.is_public ? 'green' : 'gray'} dot={false}>
-                                    {page.is_public ? 'Public' : 'Private'}
+                                    {page.is_public ? t('app.statusPages.public', 'Public') : t('app.statusPages.private', 'Private')}
                                 </Pill>
                             </span>
                             <span className="status-page-item__slug">/status/{page.slug}</span>
@@ -472,13 +472,13 @@ const StatusPages = () => {
                                                             <span className={`status-dot status-dot--${meta.tone}`} />
                                                             <div>
                                                                 <strong>{component.name}</strong>
-                                                                <span>{component.check_type.toUpperCase()} · {component.check_target || 'No target'}</span>
+                                                                <span>{component.check_type.toUpperCase()} · {component.check_target || t('app.statusPages.noTarget', 'No target')}</span>
                                                             </div>
                                                         </div>
                                                         <div className="component-row__stats">
                                                             <Pill kind={meta.pill}>{meta.label}</Pill>
                                                             <span>{formatUptime(component.uptime_30d)} uptime</span>
-                                                            <span>{component.last_response_time ? `${component.last_response_time}ms` : 'No response'}</span>
+                                                            <span>{component.last_response_time ? `${component.last_response_time}ms` : t('app.statusPages.noResponse', 'No response')}</span>
                                                             <span>{formatDate(component.last_check_at)}</span>
                                                         </div>
                                                         {isAdmin && (
@@ -592,7 +592,7 @@ const StatusPages = () => {
                                     <div>
                                         <span>{t('app.statusPages.visibility', 'Visibility')}</span>
                                         <Pill kind={selectedPage.is_public ? 'green' : 'gray'}>
-                                            {selectedPage.is_public ? 'Public' : 'Private'}
+                                            {selectedPage.is_public ? t('app.statusPages.public', 'Public') : t('app.statusPages.private', 'Private')}
                                         </Pill>
                                     </div>
                                     <div>
@@ -675,7 +675,7 @@ const StatusPages = () => {
                         >
                             <span className="status-attach-row__body">
                                 <strong>{monitor.name}</strong>
-                                <span>{monitor.check_type.toUpperCase()} · {monitor.check_target || 'bound site'}</span>
+                                <span>{monitor.check_type.toUpperCase()} · {monitor.check_target || t('app.statusPages.boundSite', 'bound site')}</span>
                             </span>
                             <Pill kind={(STATUS_META[monitor.status] || STATUS_META.operational).pill}>
                                 {(STATUS_META[monitor.status] || STATUS_META.operational).label}

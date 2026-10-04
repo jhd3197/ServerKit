@@ -136,7 +136,7 @@ const Register = () => {
                         <ServerKitLogo width={40} height={40} />
                     </div>
                     <h1>{publicTitle}</h1>
-                    <p>{inviteInfo ? `You've been invited as ${inviteInfo.role}` : 'Create your account'}</p>
+                    <p>{inviteInfo ? t('auth.invitedAsRole', "You've been invited as {{role}}", { role: inviteInfo.role }) : t('auth.createYourAccount', 'Create your account')}</p>
                 </div>
 
                 {error && <div className="error-message">{error}</div>}

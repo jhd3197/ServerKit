@@ -101,8 +101,8 @@ const ReviewStep = ({ form }) => {
                         <span><Zap size={16} /> {t('app.reviewStep.manifestDetection', 'Manifest detection')}</span>
                         <strong>
                             {activeManifestLoading
-                                ? 'Inspecting'
-                                : activeManifest?.strategy?.replace('_', ' ') || 'Detected'}
+                                ? t('app.reviewStep.inspecting', 'Inspecting…')
+                                : activeManifest?.strategy?.replace('_', ' ') || t('app.reviewStep.detected', 'Detected')}
                         </strong>
                     </div>
                     {!activeManifestLoading && activeManifest && (
@@ -139,7 +139,7 @@ const ReviewStep = ({ form }) => {
                                         </span>
                                         <div className="new-service-page__manifest-tags">
                                             {activeManifest.manifest_v1.domains.map(domain => (
-                                                <span key={domain.host}>{domain.host}{domain.ssl ? ' · SSL' : ''}</span>
+                                                <span key={domain.host}>{domain.host}{domain.ssl ? t('app.reviewStep.sslSuffix', ' · SSL') : ''}</span>
                                             ))}
                                         </div>
                                     </div>
@@ -150,7 +150,7 @@ const ReviewStep = ({ form }) => {
                                 <div className="new-service-page__manifest-grid">
                                     <div><span>{t('common.labels.type', 'Type')}</span><strong>{formatAppType(recommended.app_type)}</strong></div>
                                     <div><span>{t('app.reviewStep.build', 'Build')}</span><strong>{formatBuildMethod(recommended.build_method)}</strong></div>
-                                    <div><span>{t('common.labels.port', 'Port')}</span><strong>{recommended.port || 'Auto'}</strong></div>
+                                    <div><span>{t('common.labels.port', 'Port')}</span><strong>{recommended.port || t('app.reviewStep.auto', 'Auto')}</strong></div>
                                 </div>
                                 {(activeManifest.manifests || []).length > 0 && (
                                     <div className="new-service-page__manifest-files">
@@ -279,7 +279,7 @@ const ReviewStep = ({ form }) => {
                     <div className="new-service-page__toggle">
                         <div>
                             <Label>{t('app.reviewStep.autoDeploy', 'Auto-deploy')}</Label>
-                            <span>{sourceMode === 'upload' ? 'Deploy immediately after upload.' : 'Webhook deployment for this branch.'}</span>
+                            <span>{sourceMode === 'upload' ? t('app.reviewStep.deployAfterUpload', 'Deploy immediately after upload.') : t('app.reviewStep.webhookDeployForBranch', 'Deploy on push to this branch through the webhook.')}</span>
                         </div>
                         <Switch checked={autoDeploy} onCheckedChange={setAutoDeploy} />
                     </div>

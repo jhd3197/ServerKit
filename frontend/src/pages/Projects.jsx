@@ -256,7 +256,7 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
                         <Button type="submit" disabled={submitting || !name.trim()}>
-                            {submitting ? 'Creating…' : 'Create Project'}
+                            {submitting ? t('app.projects.creating', 'Creating…') : t('app.projects.createProjectAction', 'Create project')}
                         </Button>
                     </div>
                 </form>

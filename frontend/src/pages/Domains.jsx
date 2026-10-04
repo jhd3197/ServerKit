@@ -62,7 +62,7 @@ const sslState = (d) => {
 const sslPill = (d) => {
     const state = sslState(d);
     const days = sslDays(d);
-    if (state === 'valid') return <Pill kind="green">{days != null ? `Valid · ${days}d` : 'Valid'}</Pill>;
+    if (state === 'valid') return <Pill kind="green">{days != null ? t('app.domains.sslValidDays', 'Valid · {{days}}d', { days }) : t('app.domains.sslValid', 'Valid')}</Pill>;
     if (state === 'expiring') return <Pill kind="amber">{t('app.domains.sslExpires', 'Expires {{days}}d', { days })}</Pill>;
     if (state === 'n/a') return <span className="dom-dash">—</span>;
     return <Pill kind="gray">{t('app.domains.noSsl', 'No SSL')}</Pill>;
@@ -708,7 +708,7 @@ const Domains = () => {
                             <span>
                                 {portfolioErrors.length === 1
                                     ? `${portfolioErrors[0].config_name}: ${portfolioErrors[0].error}`
-                                    : `${portfolioErrors.length} DNS connections couldn't list their zones`}
+                                    : t('app.domains.zonesListFailed', { count: portfolioErrors.length, defaultValue_one: "{{count}} DNS connection couldn't list its zones", defaultValue_other: "{{count}} DNS connections couldn't list their zones" })}
                                 {' — '}{t('app.domains.aCloudflareTokenNeeds', 'a Cloudflare token needs')} <strong>{t('app.domains.zoneRead', 'Zone:Read')}</strong> {t('app.domains.onAllZonesToListThe', 'on all zones to list the whole account.')}
                             </span>
                         </div>
@@ -824,14 +824,14 @@ const Domains = () => {
                                         <div className="dom-specs__value">{sslPill(drawerDomain)}</div>
                                         <div className="sk-spec-card__sub">
                                             {drawerDomain.ssl_enabled
-                                                ? (drawerDomain.ssl_expires_at ? `Expires ${new Date(drawerDomain.ssl_expires_at).toLocaleDateString()}` : "Let's Encrypt")
-                                                : 'Not issued'}
+                                                ? (drawerDomain.ssl_expires_at ? t('app.domains.sslExpiresOn', 'Expires {{date}}', { date: new Date(drawerDomain.ssl_expires_at).toLocaleDateString() }) : t('app.domains.letsEncrypt', "Let's Encrypt"))
+                                                : t('app.domains.notIssued', 'Not issued')}
                                         </div>
                                     </div>
                                     <div className="sk-spec-card">
                                         <div className="sk-spec-card__label">{t('app.domains.linkedSite', 'Linked service')}</div>
-                                        <div className="sk-spec-card__value">{drawerDomain.application_id ? appName(drawerDomain.application_id) : 'Unlinked'}</div>
-                                        <div className="sk-spec-card__sub">{drawerDomain.is_primary ? 'Primary domain' : 'Alias'}</div>
+                                        <div className="sk-spec-card__value">{drawerDomain.application_id ? appName(drawerDomain.application_id) : t('app.domains.unlinked', 'Unlinked')}</div>
+                                        <div className="sk-spec-card__sub">{drawerDomain.is_primary ? t('app.domains.primaryDomain', 'Primary domain') : t('app.domains.alias', 'Alias')}</div>
                                     </div>
                                     <div className="sk-spec-card">
                                         <div className="sk-spec-card__label">{t('common.labels.status', 'Status')}</div>
@@ -846,7 +846,7 @@ const Domains = () => {
                                     <div className="sk-spec-card">
                                         <div className="sk-spec-card__label">{t('app.domains.dnsProvider', 'DNS provider')}</div>
                                         <div className="sk-spec-card__value">{drawerDomain.config_name || drawerDomain.provider}</div>
-                                        <div className="sk-spec-card__sub">{drawerDomain.adopted ? 'Managed in ServerKit' : 'Read-only'}</div>
+                                        <div className="sk-spec-card__sub">{drawerDomain.adopted ? t('app.domains.managedInServerKit', 'Managed in ServerKit') : t('app.domains.readOnly', 'Read-only')}</div>
                                     </div>
                                     <div className="sk-spec-card">
                                         <div className="sk-spec-card__label">{t('app.domains.zoneStatus', 'Zone status')}</div>
@@ -858,12 +858,12 @@ const Domains = () => {
                                     <div className="sk-spec-card">
                                         <div className="sk-spec-card__label">{t('app.domains.registration', 'Registration')}</div>
                                         <div className="sk-spec-card__value">
-                                            {regInfo?.loading ? 'Looking up…' : (formatExpiry(regInfo?.expires_at)?.relative || '—')}
+                                            {regInfo?.loading ? t('app.domains.lookingUp', 'Looking up…') : (formatExpiry(regInfo?.expires_at)?.relative || '—')}
                                         </div>
                                         <div className="sk-spec-card__sub">
-                                            {regInfo?.loading ? 'WHOIS / RDAP lookup' : (() => {
+                                            {regInfo?.loading ? t('app.domains.whoisRdapLookup', 'WHOIS / RDAP lookup') : (() => {
                                                 const exp = formatExpiry(regInfo?.expires_at);
-                                                if (!exp) return regInfo?.error ? 'Lookup unavailable' : '—';
+                                                if (!exp) return regInfo?.error ? t('app.domains.lookupUnavailable', 'Lookup unavailable') : '—';
                                                 return [exp.absolute, regInfo?.registrar].filter(Boolean).join(' · ');
                                             })()}
                                         </div>
@@ -924,7 +924,7 @@ const Domains = () => {
                     )}
                     <div className="modal-actions">
                         <Button type="button" variant="outline" onClick={() => setShowAddModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button type="submit" disabled={actionLoading || !domainName || !selectedAppId}>{actionLoading ? 'Adding...' : 'Add Domain'}</Button>
+                        <Button type="submit" disabled={actionLoading || !domainName || !selectedAppId}>{actionLoading ? t('app.domains.adding', 'Adding…') : t('app.domains.addDomain', 'Add domain')}</Button>
                     </div>
                 </form>
             </Modal>
@@ -951,13 +951,13 @@ const Domains = () => {
                             />
                             <p className="hint">
                                 {acmeContact
-                                    ? "Certificate expiry notices go here. Saved from the last certificate you issued — change it to use a different address."
-                                    : 'Required for certificate expiration notifications. It will be remembered for the next certificate.'}
+                                    ? t('app.domains.acmeContactSaved', 'Certificate expiry notices go here. Saved from the last certificate you issued; change it to use a different address.')
+                                    : t('app.domains.acmeContactRequired', 'Required for certificate expiry notices. It is remembered for the next certificate.')}
                             </p>
                         </div>
                         <div className="modal-actions">
                             <Button type="button" variant="outline" onClick={() => setShowSslModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={actionLoading}>{actionLoading ? 'Obtaining Certificate...' : 'Enable SSL'}</Button>
+                            <Button type="submit" disabled={actionLoading}>{actionLoading ? t('app.domains.obtainingCertificate', 'Obtaining certificate…') : t('app.domains.enableSsl', 'Enable SSL')}</Button>
                         </div>
                     </form>
                 )}

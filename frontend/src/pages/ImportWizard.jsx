@@ -497,7 +497,7 @@ function ImportWizard() {
                                 <ArrowLeft size={14} /> {t('common.actions.back', 'Back')}
                             </Button>
                             <Button onClick={startAnalyse} disabled={busy || !canContinueFromBackup}>
-                                {busy ? <><Spinner size="sm" /> {inputMode === 'upload' ? 'Uploading…' : 'Starting…'}</> : <>{t('app.importWizard.analyseBackup', 'Analyse backup')} <ArrowRight size={14} /></>}
+                                {busy ? <><Spinner size="sm" /> {inputMode === 'upload' ? t('app.importWizard.uploading', 'Uploading…') : t('app.importWizard.starting', 'Starting…')}</> : <>{t('app.importWizard.analyseBackup', 'Analyse backup')} <ArrowRight size={14} /></>}
                             </Button>
                         </div>
                     </div>
@@ -518,7 +518,7 @@ function ImportWizard() {
                                 <AlertTriangle size={16} aria-hidden="true" />
                                 <div>
                                     <strong>{t('app.importWizard.analysisFailed', "Couldn't analyze it.")}</strong>
-                                    <p>{imp.error || 'The archive could not be analysed.'}</p>
+                                    <p>{imp.error || t('app.importWizard.archiveCouldNotBeAnalyzed', "Couldn't analyze the archive.")}</p>
                                 </div>
                             </div>
                         )}
@@ -616,7 +616,7 @@ function ImportWizard() {
                                 <AlertTriangle size={16} aria-hidden="true" />
                                 <div>
                                     <strong>{t('app.importWizard.failedAtStep', 'Failed at step')} <code>{imp.current_step || 'unknown'}</code>.</strong>
-                                    <p>{imp.error || 'The import run failed.'}</p>
+                                    <p>{imp.error || t('app.importWizard.importRunFailed', "Couldn't finish the import.")}</p>
                                 </div>
                             </div>
                         )}
@@ -637,7 +637,7 @@ function ImportWizard() {
                         )}
 
                         <pre ref={logRef} className="import-wizard__log">
-                            {imp.log_text || 'Waiting for log output…'}
+                            {imp.log_text || t('app.importWizard.waitingForLogOutput', 'Waiting for log output…')}
                         </pre>
 
                         <div className="import-wizard__actions">
@@ -685,7 +685,7 @@ function ImportWizard() {
                                     </span>
                                     <span className="import-wizard__history-actions">
                                         <Button variant="ghost" size="sm" onClick={() => resumeImport(rec)}>
-                                            {rec.status === 'running' || rec.status === 'analyzing' ? 'Resume' : 'View'}
+                                            {rec.status === 'running' || rec.status === 'analyzing' ? t('app.importWizard.resume', 'Resume') : t('app.importWizard.view', 'View')}
                                         </Button>
                                         <Button variant="ghost" size="sm" onClick={() => removeImport(rec)} aria-label={t('app.importWizard.deleteImport3', 'Delete import')}>
                                             <Trash2 size={14} />
