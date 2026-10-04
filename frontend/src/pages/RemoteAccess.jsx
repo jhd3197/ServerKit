@@ -420,6 +420,7 @@ const RemoteAccess = ({ serverId }) => {
                                 modes={['custom']}
                                 value={form.hostname}
                                 onChange={(fqdn) => setField('hostname', fqdn)}
+                                hint={(name) => t('app.remoteAccess.pointAtEdge', 'Point {{name}} at the edge server; the tunnel carries it from there.', { name })}
                             />
                         </div>
                         <div className="ra-service-field">

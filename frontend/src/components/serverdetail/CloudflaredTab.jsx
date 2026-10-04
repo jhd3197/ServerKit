@@ -546,6 +546,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                                 modes={['custom']}
                                 value={routeHostname}
                                 onChange={setRouteHostname}
+                                hint={(name) => t('app.cloudflaredTab.routeCreatesRecord', 'Adding the route creates the Cloudflare DNS record for {{name}}.', { name })}
                                 autoFocus
                             />
                         </div>

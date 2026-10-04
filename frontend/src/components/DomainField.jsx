@@ -36,6 +36,9 @@ function loadBases() {
  *   - custom: any hostname the user controls, with the existing ServerKit
  *     domains offered as suggestions.
  *
+ * `hint(name)` replaces the own-domain DNS line when the record is not an A
+ * record at this server (a tunnel route, an edge proxy).
+ *
  * `onChange` receives the normalized hostname ('' while incomplete) and
  * `{ mode, valid, base, label, dnsMode, https }` so the caller can pick the
  * right API (give-subdomain vs create-domain) without re-deriving anything.
@@ -46,6 +49,7 @@ export default function DomainField({
     modes = ['subdomain', 'custom'],
     defaultLabel = '',
     exclude = [],
+    hint,
     disabled = false,
     autoFocus = false,
     id,
@@ -146,6 +150,8 @@ export default function DomainField({
             : { text: t('app.domainField.recordCreated', 'ServerKit creates the DNS record for {{name}}.', { name: fqdn }) };
     } else if (fqdn && existingRow) {
         status = { text: t('app.domainField.alreadyInServerkit', 'Already in ServerKit.') };
+    } else if (fqdn && hint) {
+        status = { text: hint(fqdn) };
     } else if (fqdn) {
         status = { text: t('app.domainField.pointARecord', 'Point an A record for {{name}} at this server.', { name: fqdn }) };
     } else if (activeMode === 'custom' && !allowSubdomain && modes.includes('subdomain') && basesLoaded) {
