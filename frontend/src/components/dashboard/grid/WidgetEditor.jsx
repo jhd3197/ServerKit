@@ -384,7 +384,7 @@ export function WidgetEditor({
                                         <div className="skwe-edit__pair">
                                             {[0, 1].map((index) => (
                                                 <div className="skwe-edit__pairitem" key={index}>
-                                                    <span className="skwe-edit__unit">{index ? 'red ≥' : 'amber ≥'}</span>
+                                                    <span className="skwe-edit__unit">{index ? t('app.widgetEditor.redAtLeast', 'red ≥') : t('app.widgetEditor.amberAtLeast', 'amber ≥')}</span>
                                                     <input
                                                         type="number"
                                                         className="skwe-edit__field"

@@ -246,7 +246,7 @@ const WorkspaceSettingsTab = ({ wsId, ws, onUpdate, user, isCurrent, onSetActive
                     <div className="ws-settings__actions">
                         <Button variant="outline" onClick={() => navigate(`/workspaces/${id}`)}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button onClick={handleSave} disabled={saving || !form.name}>
-                            {saving ? 'Saving…' : 'Save'}
+                            {saving ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                         </Button>
                     </div>
                 )}

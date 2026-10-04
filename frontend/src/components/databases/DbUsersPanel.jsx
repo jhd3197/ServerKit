@@ -108,9 +108,9 @@ export default function DbUsersPanel({ databaseId }) {
                                 <strong><UserRound size={13} /> {user.username}</strong>
                                 <span className="managed-db__meta">
                                     {user.tracked === false
-                                        ? 'exists on server, not created by ServerKit'
-                                        : (user.grants || []).join(', ') || 'no grants recorded'}
-                                    {user.present === false ? ' · missing on server' : ''}
+                                        ? t('app.dbUsersPanel.notCreatedByServerkit', 'exists on server, not created by ServerKit')
+                                        : (user.grants || []).join(', ') || t('app.dbUsersPanel.noGrantsRecorded', 'no grants recorded')}
+                                    {user.present === false ? ` · ${t('app.dbUsersPanel.missingOnServer', 'missing on server')}` : ''}
                                 </span>
                             </div>
                             {user.tracked !== false && (
@@ -143,7 +143,7 @@ export default function DbUsersPanel({ databaseId }) {
                     aria-label={t('app.dbUsersPanel.grants', 'Grants')}
                 />
                 <Button type="submit" size="sm" variant="outline" disabled={creating}>
-                    <Plus size={14} /> {creating ? 'Creating…' : 'Create user'}
+                    <Plus size={14} /> {creating ? t('app.dbUsersPanel.creating', 'Creating…') : t('app.dbUsersPanel.createUser', 'Create user')}
                 </Button>
             </form>
         </div>

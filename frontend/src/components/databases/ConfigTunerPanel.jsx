@@ -127,7 +127,12 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
         <div className="db-tuner">
             <div className="db-tuner__head">
                 <p className="db-tuner__hint">
-                    {t('app.configTunerPanel.suggestionsAreBasedOn', 'Suggestions are based on')} {data.ram_mb} {t('app.configTunerPanel.mbOfRam', 'MB of RAM (')}{data.ram_source === 'container_limit' ? 'container memory limit' : 'host total'}{t('app.configTunerPanel.nothingIsAppliedUntilYouChoose', '). Nothing is applied until you choose to.')}
+                    {t('app.configTunerPanel.suggestionsBasedOnRam', 'Suggestions are based on {{ram}} MB of RAM ({{source}}). Nothing is applied until you choose to.', {
+                        ram: data.ram_mb,
+                        source: data.ram_source === 'container_limit'
+                            ? t('app.configTunerPanel.containerMemoryLimit', 'container memory limit')
+                            : t('app.configTunerPanel.hostTotal', 'host total'),
+                    })}
                 </p>
                 <label className="db-tuner__dedicated">
                     <input

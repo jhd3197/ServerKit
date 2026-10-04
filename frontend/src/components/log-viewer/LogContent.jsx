@@ -57,7 +57,7 @@ const LogContent = forwardRef(function LogContent({
     if (!content) {
         return (
             <div className="lv-content lv-content-empty">
-                <p>{emptyMessage || 'Select a log file to view its contents.'}</p>
+                <p>{emptyMessage || t('app.logContent.selectALogFile', 'Select a log file to view its contents.')}</p>
             </div>
         );
     }

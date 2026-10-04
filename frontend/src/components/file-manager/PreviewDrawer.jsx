@@ -125,7 +125,7 @@ export default function PreviewDrawer({
                     ) : file.is_editable ? (
                         <div className="editor-wrap">
                             <div className="editor-toolbar">
-                                <span className="editor-status">{editing ? 'Editing' : 'Read-only'}</span>
+                                <span className="editor-status">{editing ? t('app.previewDrawer.editing', 'Editing') : t('app.previewDrawer.readOnly', 'Read-only')}</span>
                                 <div className="editor-buttons">
                                     {!editing ? (
                                         <Button size="sm" onClick={onStartEdit}>

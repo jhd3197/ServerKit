@@ -342,7 +342,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
                             onClick={() => handleMakeDynamic(r)}
                             disabled={busyKey === recordFqdn(r)}
                         >
-                            <Radio size={13} /> {busyKey === recordFqdn(r) ? 'Enabling…' : 'Make dynamic'}
+                            <Radio size={13} /> {busyKey === recordFqdn(r) ? t('app.domainDnsPanel.enabling', 'Enabling…') : t('app.domainDnsPanel.makeDynamic', 'Make dynamic')}
                         </Button>
                     )
                 );
@@ -419,7 +419,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
                     <div className="ddp__form-actions">
                         <Button variant="outline" size="sm" onClick={() => setShowAdd(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button size="sm" disabled={!form.content || saving} onClick={handleAdd}>
-                            {saving ? 'Adding…' : 'Add record'}
+                            {saving ? t('app.domainDnsPanel.adding', 'Adding…') : t('app.domainDnsPanel.addRecord', 'Add record')}
                         </Button>
                     </div>
                 </div>
@@ -454,7 +454,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
                                 <span className={`status-dot status-dot--${r.propagated ? 'success' : 'danger'}`} />
                                 <strong>{r.nameserver}</strong>
                                 <span className="ddp__prop-ip">({r.ip})</span>
-                                <span className="ddp__prop-res">{r.result?.join(', ') || 'No result'}</span>
+                                <span className="ddp__prop-res">{r.result?.join(', ') || t('app.domainDnsPanel.noResult', 'No result')}</span>
                             </div>
                         ))
                     ) : (
@@ -466,11 +466,11 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             <div className="ddp__foot">
                 {canExport && (
                     <Button variant="outline" size="sm" onClick={handleExport} disabled={exporting}>
-                        <Download size={14} /> {exporting ? 'Exporting…' : 'Export'}
+                        <Download size={14} /> {exporting ? t('app.domainDnsPanel.exporting', 'Exporting…') : t('common.actions.export', 'Export')}
                     </Button>
                 )}
                 <Button variant="outline" size="sm" onClick={handleCheckPropagation}>
-                    <Activity size={14} /> {propOpen ? 'Hide propagation' : 'Check propagation'}
+                    <Activity size={14} /> {propOpen ? t('app.domainDnsPanel.hidePropagation', 'Hide propagation') : t('app.domainDnsPanel.checkPropagation', 'Check propagation')}
                 </Button>
                 {isCloudflare && (
                     <Button variant="outline" size="sm" onClick={openCloudflareOps}>

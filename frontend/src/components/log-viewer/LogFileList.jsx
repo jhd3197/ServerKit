@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Search, RefreshCw, ChevronDown, ChevronRight, FileText, AlertTriangle, Activity, Database, Globe, Mail, Shield, Server } from 'lucide-react';
 import { LOG_GROUPS, categoriseLog, logKindFromPath, formatBytes, formatRelativeTime } from './logHelpers';
+import { translateLabel } from '@/i18n/labels';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
 import ErrorState from '@/components/ErrorState';
@@ -39,11 +40,13 @@ export default function LogFileList({ files, selectedPath, onSelect, onRefresh, 
         return order
             .map((id) => ({
                 id,
-                label: id === 'other' ? 'Other' : LOG_GROUPS.find((g) => g.id === id)?.label,
+                label: id === 'other'
+                    ? t('app.logFileList.other', 'Other')
+                    : translateLabel(t, LOG_GROUPS.find((g) => g.id === id)),
                 files: (buckets.get(id) || []).sort((a, b) => (b.size || 0) - (a.size || 0)),
             }))
             .filter((g) => g.files.length > 0);
-    }, [files, query]);
+    }, [files, query, t]);
 
     const toggleGroup = (id) => {
         const next = new Set(collapsed);

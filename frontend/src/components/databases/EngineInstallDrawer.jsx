@@ -287,7 +287,7 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                         <Button type="button" onClick={finish}>
                             {result.jobId
                                 ? <><Terminal size={15} aria-hidden="true" /> {t('app.engineInstallDrawer.openInstallLog', 'Open install log')}</>
-                                : 'Done'}
+                                : t('common.actions.done', 'Done')}
                         </Button>
                     </footer>
                 </div>
@@ -423,8 +423,8 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                                         <span className="dbx-opt-row__title">{t('app.engineInstallDrawer.exposeOnThePublicNetwork', 'Expose on the public network')}</span>
                                         <span className="dbx-opt-row__sub">
                                             {expose
-                                                ? 'The port will be reachable from the internet'
-                                                : 'Bound to 127.0.0.1 only (recommended)'}
+                                                ? t('app.engineInstallDrawer.portReachableFromInternet', 'The port will be reachable from the internet')
+                                                : t('app.engineInstallDrawer.boundToLoopback', 'Bound to 127.0.0.1 only (recommended)')}
                                         </span>
                                     </div>
                                     <Switch
@@ -459,7 +459,7 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                         </Button>
                         <Button type="submit" disabled={busy || !slugifyService(name)}>
                             <Rocket size={15} aria-hidden="true" />
-                            {busy ? 'Starting…' : `Install ${template.name}`}
+                            {busy ? t('app.engineInstallDrawer.starting', 'Starting…') : t('app.engineInstallDrawer.installName', 'Install {{name}}', { name: template.name })}
                         </Button>
                     </footer>
                 </form>

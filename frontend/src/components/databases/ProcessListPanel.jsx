@@ -200,7 +200,7 @@ export default function ProcessListPanel({ conn, engine, active, isAdmin }) {
         },
         {
             key: 'state',
-            header: isPg ? 'State' : 'Command',
+            header: isPg ? t('app.processListPanel.state', 'State') : t('app.processListPanel.command', 'Command'),
             sortable: true,
             // Declared: a server with two sessions fails the enum cardinality
             // test, and a pick-list is what makes this column useful at all.

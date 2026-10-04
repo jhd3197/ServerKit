@@ -340,7 +340,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                         </div>
                     ) : whiteLabel.mode === 'text_only' ? (
                         <span className="brand-custom-text">
-                            {whiteLabel.brandName || 'Brand'}
+                            {whiteLabel.brandName || t('nav.brandFallback', 'Brand')}
                         </span>
                     ) : (
                         <>
@@ -352,7 +352,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                                 )}
                             </div>
                             <span className="brand-custom-text">
-                                {whiteLabel.brandName || 'Brand'}
+                                {whiteLabel.brandName || t('nav.brandFallback', 'Brand')}
                             </span>
                             </>
                         )}
@@ -587,7 +587,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                             {user?.username?.charAt(0).toUpperCase() || 'U'}
                         </span>
                         <span className="user-meta">
-                            <span className="user-handle">{user?.username || 'User'}</span>
+                            <span className="user-handle">{user?.username || t('nav.userFallback', 'User')}</span>
                             <span className="user-status">{t('nav.online', 'Online')}</span>
                         </span>
                         <ChevronUp size={14} className={`user-menu-arrow ${menuOpen ? 'open' : ''}`} aria-hidden="true" />

@@ -84,7 +84,7 @@ function EnginePicker({ value, onChange, status, onInstallEngine }) {
                         </span>
                         <span className="dbx-eng-opt__text">
                             <span className="dbx-eng-opt__name">{ENGINE_META[engine].label}</span>
-                            <span className="dbx-eng-opt__sub">{running ? 'running' : 'not running'}</span>
+                            <span className="dbx-eng-opt__sub">{running ? t('app.modals.running', 'running') : t('app.modals.notRunning', 'not running')}</span>
                         </span>
                     </Button>
                 );
@@ -246,8 +246,8 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                     </Select>
                     <span className="form-help">
                         {appsLoading
-                            ? 'Loading services…'
-                            : 'Optional. An attached database is listed on the service and is cleaned up with it.'}
+                            ? t('app.modals.loadingServices', 'Loading services…')
+                            : t('app.modals.attachServiceHint', 'Optional. An attached database is listed on the service and is cleaned up with it.')}
                     </span>
                 </div>
 
@@ -259,7 +259,7 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                 </div>
                 <div className="modal-actions">
                     <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
-                    <Button type="submit" disabled={loading}>{loading ? 'Creating…' : 'Create database'}</Button>
+                    <Button type="submit" disabled={loading}>{loading ? t('app.modals.creating', 'Creating…') : t('app.modals.createDatabase', 'Create database')}</Button>
                 </div>
             </form>
         </Modal>
@@ -343,7 +343,7 @@ export function CreateMySQLUserModal({ databases, onClose, onCreated }) {
                 </div>
                 <div className="modal-actions">
                     <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
-                    <Button type="submit" disabled={loading}>{loading ? 'Creating…' : 'Create user'}</Button>
+                    <Button type="submit" disabled={loading}>{loading ? t('app.modals.creating', 'Creating…') : t('app.modals.createUser', 'Create user')}</Button>
                 </div>
             </form>
         </Modal>
@@ -416,7 +416,7 @@ export function CreatePostgreSQLUserModal({ databases, onClose, onCreated }) {
                 </div>
                 <div className="modal-actions">
                     <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
-                    <Button type="submit" disabled={loading}>{loading ? 'Creating…' : 'Create user'}</Button>
+                    <Button type="submit" disabled={loading}>{loading ? t('app.modals.creating', 'Creating…') : t('app.modals.createUser', 'Create user')}</Button>
                 </div>
             </form>
         </Modal>

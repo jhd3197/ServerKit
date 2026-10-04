@@ -777,8 +777,6 @@
             "failedToApplySettings": "ล้มเหลวในการใช้การตั้งค่า",
             "interruptionThePreviousConfigurationIsBacked": "การหยุดชะงัก การกำหนดค่าก่อนหน้านี้ได้รับการสำรองข้อมูลไว้แล้วและสามารถย้อนกลับได้",
             "isRestarted": "ถูกรีสตาร์ท",
-            "mbOfRam": "MB RAM (",
-            "nothingIsAppliedUntilYouChoose": "). ไม่มีการใช้จนกว่าคุณจะเลือก",
             "previousConfigurationRestored": "คืนค่าการกำหนดค่าก่อนหน้าแล้ว",
             "readingEngineConfiguration": "กำลังอ่านการกำหนดค่ากลไก...",
             "rollBackAndRestart": "ย้อนกลับและรีสตาร์ท",
@@ -790,7 +788,6 @@
             "setting": "การตั้งค่า",
             "settingsAppliedAndEngineRestarted": "ใช้การตั้งค่าและรีสตาร์ทเครื่องยนต์",
             "suggested": "แนะนำ",
-            "suggestionsAreBasedOn": "ข้อเสนอแนะจะขึ้นอยู่กับ",
             "targetValue": "ค่าเป้าหมาย",
             "targetValueFor": "ค่าเป้าหมายสำหรับ {{key}}",
             "theLastBackedUpConfigurationIs": "การกำหนดค่าที่สำรองข้อมูลไว้ครั้งล่าสุดจะถูกเรียกคืนและกลไกฐานข้อมูล"
@@ -1099,7 +1096,6 @@
             "removeColumn": "ลบคอลัมน์ {{value}}",
             "someDatabaseServersDidNotAnswer": "เซิร์ฟเวอร์ฐานข้อมูลบางแห่งไม่ตอบรับ ดังนั้นรายการนี้อาจไม่สมบูรณ์",
             "statementsRunAs": "คำสั่งทำงานเป็น",
-            "stayKeywordsAnythingElseIsQuoted": "stay คำหลัก สิ่งอื่นใดจะถูกยกมาเป็นข้อความ",
             "theBuilderWritesTheStatementRunning": "ผู้สร้างเขียนคำสั่ง การรันเป็นขั้นตอนที่คุณทำในไคลเอนต์ของเครื่องยนต์",
             "tryAgain": "ลองอีกครั้ง",
             "typeOfColumn": "ประเภทคอลัมน์ {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "ตรวจสอบอีกครั้ง",
-            "createA": "สร้างก",
             "deployActivity": "ปรับใช้กิจกรรม",
             "failedToInstall": "ไม่สามารถติดตั้งได้",
             "importADumpOrWriteThe": "นำเข้าดัมพ์ หรือเขียนคำสั่งด้วยตนเองในคอนโซล",
             "importDump": "นำเข้าการถ่ายโอนข้อมูล",
-            "installing": "กำลังติดตั้ง",
             "isReady": "พร้อมแล้ว",
             "listeningOn": "กำลังฟังอยู่",
             "manageService": "จัดการบริการ",
             "new": "ใหม่",
             "newDatabase": "ฐานข้อมูลใหม่",
             "openSqlConsole": "เปิดคอนโซล SQL",
-            "pullingTheImageProvisioningTheVolume": "กำลังดึงรูปภาพ จัดเตรียมโวลุ่ม และรอการตรวจสุขภาพครั้งแรก",
             "serverkitListsItHereAsSoon": "— ServerKit แสดงรายการไว้ที่นี่ทันทีที่มีอยู่",
             "theDatabaseIsConnectedAndEmpty": "ฐานข้อมูลเชื่อมต่อแล้วและว่างเปล่า สร้างของคุณเป็นครั้งแรก",
             "thisEngineHasNoBrowsableProtocol": "กลไกนี้ไม่มีโปรโตคอลที่สามารถเรียกดูได้ — ServerKit รัน แต่การเรียกดูตารางมาจากไคลเอนต์ของตัวเอง",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "ขั้นตอนปัจจุบัน:",
-            "openConsole": "เปิดคอนโซล →",
-            "troubleReachingTheDeploymentJob": "ปัญหาในการเข้าถึงงานการปรับใช้:"
+            "openConsole": "เปิดคอนโซล →"
         },
         "deploymentTimeline": {
             "audit": "การตรวจสอบ",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "ขณะนี้การติดตั้งการพึ่งพาถูกเปิดใช้งานบนแผงนี้ (",
             "dependencyInstallationIsEnabledOnThis": "เปิดใช้งานการติดตั้งการพึ่งพาบนแผงนี้ทันที (",
             "dependencyInstallationIsOffOnThis": "การติดตั้งการขึ้นต่อกันปิดอยู่บนแผงนี้ เมื่อส่วนขยายจัดส่งแพ็คเกจ Python แผงจะเขียนไฟล์ถัดจากส่วนขยายแทนที่จะติดตั้ง และแสดงรายการไว้ที่นี่",
-            "didPassThroughTheSdkGate": "ได้ผ่านประตู SDK และ",
             "everyUseOfThisCapabilityHas": "การใช้ความสามารถนี้ทุกครั้งจะต้องผ่านเกต SDK ของพาเนล และเกตไม่ได้บันทึกอะไรเลยตั้งแต่เริ่มกระบวนการพาเนล ส่วนขยายนั้นยังไม่จำเป็นต้องใช้ หรือประกาศมากกว่าที่ใช้",
             "everyUseOfThisCapabilityPasses": "การใช้ความสามารถนี้ทุกครั้งจะผ่านเกต SDK ของแผงควบคุม บันทึกแล้ว",
             "fileOnTheBackendHost": "ไฟล์บนโฮสต์แบ็กเอนด์:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "การสำรองข้อมูลบนเซิร์ฟเวอร์นี้",
             "aPathOnTheServer": "เส้นทางบนเซิร์ฟเวอร์",
             "anAbsolutePathOnTheServer": "เส้นทางสัมบูรณ์บนเซิร์ฟเวอร์ที่รัน ServerKit ไม่มีจุดสิ้นสุดการอัปโหลด ดังนั้นจึงต้องคัดลอกไฟล์ในเครื่องของคุณเองก่อน (scp, ตัวจัดการไฟล์ หรือการสำรองข้อมูลที่นี่)",
-            "andYouAreImportingInto": "และคุณกำลังนำเข้าสู่",
             "asTheDatabaseSuperuser": "ในฐานะผู้ใช้ระดับสูงของฐานข้อมูล",
-            "backUp": "สำรอง",
             "dumpFile": "ไฟล์ดัมพ์",
             "everyStatementInTheDumpIs": "ทุกคำสั่งในดัมพ์จะถูกดำเนินการกับมัน ตารางที่ดัมพ์ที่สร้างขึ้นใหม่จะสูญเสียสิ่งที่พวกเขาถืออยู่ในขณะนี้ และจะไม่มีการเลิกทำนอกเหนือจากข้อมูลสำรองข้างต้น",
             "importInto": "นำเข้ามา",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "บัญชีแบบอ่านอย่างเดียว",
             "readingTheBackupDirectory": "กำลังอ่านไดเร็กทอรีสำรอง...",
             "takesADumpThroughServerkitS": "ทำดัมพ์ผ่านเส้นทางการสำรองข้อมูลของ ServerKit ก่อนนำเข้า หากล้มเหลว การนำเข้าจะไม่ทำงาน",
-            "thatDumpWasTakenFrom": "กองขยะนั้นถูกพรากไปจาก",
             "theDumpIsPipedInto": "การถ่ายโอนข้อมูลถูกส่งเข้าไป",
             "theImportFailed": "การนำเข้าล้มเหลว",
             "thePreImportBackupFailedSo": "การสำรองข้อมูลล่วงหน้าการนำเข้าล้มเหลว ดังนั้นจึงไม่มีการนำเข้าอะไรเลย",
-            "thisRewrites": "อันนี้เขียนใหม่",
             "toConfirm": "เพื่อยืนยัน",
             "tryAgain": "ลองอีกครั้ง",
             "whereTheDumpLives": "ที่ทิ้งขยะอาศัยอยู่"
@@ -6094,7 +6081,6 @@
             "withChanges": "”กับการเปลี่ยนแปลง"
         },
         "volumesPanel": {
-            "alsoDeleteData": "ลบข้อมูลด้วย",
             "containerMountPath": "เส้นทางการเมานท์คอนเทนเนอร์",
             "detach": "ถอดออก",
             "detachingKeepsTheDataByDefault": "การแยกจะเก็บข้อมูลตามค่าเริ่มต้น อนุญาตให้เช็ดได้เฉพาะในขณะที่แอปหยุดทำงานเท่านั้น",

@@ -466,7 +466,7 @@ const FirewallTab = () => {
                                 <span className="sec-shield">
                                     <Shield size={17} />
                                 </span>
-                                <span className="status-indicator__label">{isActive == null ? 'Firewall Status Unknown' : isActive ? 'Firewall Active' : 'Firewall Inactive'}</span>
+                                <span className="status-indicator__label">{isActive == null ? t('app.firewallTab.statusUnknown', 'Firewall status unknown') : isActive ? t('app.firewallTab.firewallActive', 'Firewall active') : t('app.firewallTab.firewallInactive', 'Firewall inactive')}</span>
                                 <span className="firewall-type">{activeFirewall?.toUpperCase()}</span>
                             </div>
                             <div className="firewall-actions">
@@ -527,7 +527,7 @@ const FirewallTab = () => {
                                     <InfoItem label={t('common.labels.type', 'Type')} value={activeFirewall?.toUpperCase()} />
                                     <InfoItem label={t('common.labels.status', 'Status')}>
                                         <Pill kind={isActive ? 'green' : 'red'}>
-                                            {isActive ? 'Active' : 'Inactive'}
+                                            {isActive ? t('app.firewallTab.active', 'Active') : t('app.firewallTab.inactive', 'Inactive')}
                                         </Pill>
                                     </InfoItem>
                                     {activeFirewall === 'firewalld' && status?.firewalld?.default_zone && (
@@ -662,7 +662,7 @@ const FirewallTab = () => {
                         <h3>{t('app.firewallTab.cloudMetadataGuard2', 'Cloud metadata guard')}</h3>
                         {guard.supported ? (
                             <Pill kind={guard.active ? 'green' : 'gray'}>
-                                {guard.active ? 'Active' : 'Inactive'}
+                                {guard.active ? t('app.firewallTab.active', 'Active') : t('app.firewallTab.inactive', 'Inactive')}
                             </Pill>
                         ) : (
                             <Pill kind="gray">{t('app.firewallTab.unsupportedOnThisHost', 'Unsupported on this host')}</Pill>
@@ -706,7 +706,7 @@ const FirewallTab = () => {
                 <div className="modal-footer">
                     <Button variant="outline" onClick={() => setShowBlockIPModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button variant="destructive" onClick={handleBlockIP} disabled={actionLoading || !blockIP.trim()}>
-                        {actionLoading ? 'Blocking...' : 'Block IP'}
+                        {actionLoading ? t('app.firewallTab.blocking', 'Blocking…') : t('app.firewallTab.blockIp', 'Block IP')}
                     </Button>
                 </div>
             </Modal>
@@ -740,7 +740,7 @@ const FirewallTab = () => {
                 <div className="modal-footer">
                     <Button variant="outline" onClick={() => setShowPortModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button variant="default" onClick={handleAllowPort} disabled={actionLoading || !newPort.port}>
-                        {actionLoading ? 'Adding...' : 'Allow Port'}
+                        {actionLoading ? t('app.firewallTab.adding', 'Adding…') : t('app.firewallTab.allowPort', 'Allow port')}
                     </Button>
                 </div>
             </Modal>
@@ -769,7 +769,7 @@ const FirewallTab = () => {
                 <div className="modal-footer">
                     <Button variant="outline" onClick={() => setShowInstallModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button variant="default" onClick={handleInstall} disabled={actionLoading}>
-                        {actionLoading ? 'Installing...' : 'Install'}
+                        {actionLoading ? t('app.firewallTab.installing', 'Installing…') : t('app.firewallTab.install', 'Install')}
                     </Button>
                 </div>
             </Modal>

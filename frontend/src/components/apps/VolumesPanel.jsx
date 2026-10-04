@@ -53,11 +53,13 @@ function VolumeRow({ volume, appRunning, onDetach }) {
                                 onCheckedChange={(v) => setWipe(Boolean(v))}
                                 disabled={appRunning}
                             />
-                            <span>{t('app.volumesPanel.alsoDeleteData', 'Also delete data')}{appRunning ? ' (stop the app first)' : ' — cannot be undone'}</span>
+                            <span>{appRunning
+                                ? t('app.volumesPanel.alsoDeleteDataStopFirst', 'Also delete data (stop the service first)')
+                                : t('app.volumesPanel.alsoDeleteDataPermanent', "Also delete data. This can't be undone.")}</span>
                         </label>
                         <Button type="button" size="sm" variant="ghost" disabled={busy} onClick={() => setConfirming(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button type="button" size="sm" variant={wipe ? 'destructive' : 'default'} disabled={busy} onClick={detach}>
-                            {busy ? 'Detaching…' : (wipe ? 'Detach + wipe' : 'Detach')}
+                            {busy ? t('app.volumesPanel.detaching', 'Detaching…') : (wipe ? t('app.volumesPanel.detachAndWipe', 'Detach and wipe') : t('app.volumesPanel.detach', 'Detach'))}
                         </Button>
                     </div>
                 ) : (
@@ -187,7 +189,7 @@ const VolumesPanel = ({ app, onChanged }) => {
                         </div>
                         <div className="app-detail-actions">
                             <Button type="submit" size="sm" disabled={attaching || !canAttach}>
-                                <Plus size={15} /> {attaching ? 'Attaching…' : 'Attach volume'}
+                                <Plus size={15} /> {attaching ? t('app.volumesPanel.attaching', 'Attaching…') : t('app.volumesPanel.attachVolume', 'Attach volume')}
                             </Button>
                         </div>
                     </form>

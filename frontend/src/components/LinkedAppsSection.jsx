@@ -58,7 +58,7 @@ const LinkedAppsSection = ({
                 <div className="current-environment">
                     <span className="env-label">{t('app.linkedAppsSection.thisAppIs', 'This service is:')}</span>
                     <span className={`env-badge ${envColors[app.environment_type] || ''}`}>
-                        {envLabels[app.environment_type] || 'Standalone'}
+                        {envLabels[app.environment_type] || t('app.linkedAppsSection.standalone', 'Standalone')}
                     </span>
                 </div>
 

@@ -113,7 +113,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
         setResult(null);
         try {
             if (backupFirst) {
-                setStep(`Backing up ${target.name}…`);
+                setStep(t('app.importDumpModal.backingUp', 'Backing up {{name}}…', { name: target.name }));
                 const safety = target.engine === 'mysql'
                     ? await api.backupMySQLDatabase(target.name)
                     : await api.backupPostgreSQLDatabase(target.name);
@@ -121,28 +121,28 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
                     setResult({
                         ok: false,
                         messageKey: 'app.importDumpModal.thePreImportBackupFailedSo', message: "Couldn't back up before importing, so nothing was imported.",
-                        detail: safety?.error || 'The backup endpoint did not report success.',
+                        detail: safety?.error || t('app.importDumpModal.backupNoSuccess', "The backup endpoint didn't report success."),
                     });
                     return;
                 }
             }
-            setStep(`Importing into ${target.name}…`);
+            setStep(t('app.importDumpModal.importingInto', 'Importing into {{name}}…', { name: target.name }));
             const res = target.engine === 'mysql'
                 ? await api.restoreMySQLDatabase(target.name, backupPath)
                 : await api.restorePostgreSQLDatabase(target.name, backupPath);
             if (res?.success) {
-                setResult({ ok: true, message: res.message || `Dump imported into ${target.name}.` });
+                setResult({ ok: true, message: res.message || t('app.importDumpModal.dumpImportedInto', 'Dump imported into {{name}}.', { name: target.name }) });
                 onImported?.(target);
             } else {
-                setResult({ ok: false, messageKey: 'app.importDumpModal.theImportFailed', message: "Couldn't import the dump.", detail: res?.error || 'The server did not say why.' });
+                setResult({ ok: false, messageKey: 'app.importDumpModal.theImportFailed', message: "Couldn't import the dump.", detail: res?.error || t('app.importDumpModal.serverDidNotSayWhy', "The server didn't say why.") });
             }
         } catch (err) {
             setResult({
                 ok: false,
                 message: err?.status === 403
-                    ? 'Your account is not an administrator, so ServerKit will not import dumps for it.'
-                    : 'The import failed.',
-                detail: err?.status === 403 ? null : (err?.message || 'The request failed.'),
+                    ? t('app.importDumpModal.notAdminNoImports', 'Your account is not an administrator, so ServerKit will not import dumps for it.')
+                    : t('app.importDumpModal.theImportFailed', "Couldn't import the dump."),
+                detail: err?.status === 403 ? null : (err?.message || t('app.importDumpModal.requestFailed', "Couldn't send the request.")),
             });
         } finally {
             setStep('');
@@ -152,12 +152,12 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
 
     const footer = (
         <>
-            <Button type="button" variant="outline" onClick={onClose}>{result?.ok ? 'Done' : 'Cancel'}</Button>
+            <Button type="button" variant="outline" onClick={onClose}>{result?.ok ? t('common.actions.done', 'Done') : t('common.actions.cancel', 'Cancel')}</Button>
             <Button type="button" variant="danger" onClick={run} disabled={!ready || busy}>
                 {busy
                     ? <Loader2 size={14} className="dbx-spin" aria-hidden="true" />
                     : <FileCode2 size={14} aria-hidden="true" />}
-                {busy ? (step || 'Working…') : 'Import and overwrite'}
+                {busy ? (step || t('app.importDumpModal.working', 'Working…')) : t('app.importDumpModal.importAndOverwrite', 'Import and overwrite')}
             </Button>
         </>
     );
@@ -175,8 +175,10 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
                         <strong>{t('app.importDumpModal.noDatabaseCanAcceptADump', 'No database can accept a dump right now.')}</strong>
                         <p>
                             {loadFailed
-                                ? 'Neither MySQL nor PostgreSQL answered. Check that the server is running, then try again.'
-                                : `Importing is only wired for ${RESTORABLE.map((e) => ENGINE_META[e].short).join(' and ')} databases on this host — SQLite files and containerised databases have no restore route.`}
+                                ? t('app.importDumpModal.noEngineAnswered', 'Neither MySQL nor PostgreSQL answered. Check that the server is running, then try again.')
+                                : t('app.importDumpModal.importOnlyWiredFor', 'Importing only works for {{engines}} databases on this host. SQLite files and containerized databases have no restore route.', {
+                                    engines: RESTORABLE.map((e) => ENGINE_META[e].short).join(' / '),
+                                })}
                         </p>
                         <Button variant="unstyled" type="button" className="dbx-inline-link" onClick={load}>
                             <RefreshCw size={13} aria-hidden="true" /> {t('app.importDumpModal.tryAgain', 'Try again')}
@@ -284,7 +286,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
                             <AlertTriangle size={15} aria-hidden="true" />
                             <div>
                                 <p>
-                                    {t('app.importDumpModal.thatDumpWasTakenFrom', 'That dump was taken from')} {ENGINE_META[chosen.type]?.short || chosen.type} {t('app.importDumpModal.andYouAreImportingInto', 'and you are importing into')} {ENGINE_META[target.engine].short}. The statements are unlikely to apply cleanly.
+                                    {t('app.importDumpModal.engineMismatch', "That dump was taken from {{source}} and you're importing into {{target}}. The statements are unlikely to apply cleanly.", { source: ENGINE_META[chosen.type]?.short || chosen.type, target: ENGINE_META[target.engine].short })}
                                 </p>
                             </div>
                         </div>
@@ -293,7 +295,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
                     <label className="dbx-check">
                         <input type="checkbox" checked={backupFirst} onChange={(e) => setBackupFirst(e.target.checked)} />
                         <span>
-                            <span className="dbx-check__title">{t('app.importDumpModal.backUp', 'Back up')} {target?.name || 'the database'} first</span>
+                            <span className="dbx-check__title">{t('app.importDumpModal.backUpFirst', 'Back up {{name}} first', { name: target?.name || t('app.importDumpModal.theDatabase', 'the database') })}</span>
                             <span className="dbx-check__sub">
                                 {t('app.importDumpModal.takesADumpThroughServerkitS', 'Takes a dump through ServerKit\'s own backup route before importing. If it fails, the import does not run.')}
                             </span>
@@ -303,7 +305,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
                     <div className="dbx-notice dbx-notice--danger">
                         <AlertTriangle size={15} aria-hidden="true" />
                         <div>
-                            <strong>{t('app.importDumpModal.thisRewrites', 'This rewrites')} {target?.name || 'the database'}.</strong>
+                            <strong>{t('app.importDumpModal.thisRewritesName', 'This rewrites {{name}}.', { name: target?.name || t('app.importDumpModal.theDatabase', 'the database') })}</strong>
                             <p>
                                 {t('app.importDumpModal.everyStatementInTheDumpIs', 'Every statement in the dump is executed against it. Tables the dump recreates lose whatever they hold now, and there is no undo beyond the backup above.')}
                             </p>
@@ -336,7 +338,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
                                 ? <Check size={15} aria-hidden="true" />
                                 : <AlertTriangle size={15} aria-hidden="true" />}
                             <div>
-                                <strong>{result.message}</strong>
+                                <strong>{translateLabel(t, result, 'message')}</strong>
                                 {result.detail && <pre className="dbx-notice__detail">{result.detail}</pre>}
                             </div>
                         </div>

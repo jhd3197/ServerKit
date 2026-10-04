@@ -132,7 +132,7 @@ export function LogViewer({
                         <div className="logs-viewer__loading">{t('common.loading', 'Loading…')}</div>
                     ) : !content ? (
                         <div className="logs-viewer__empty">
-                            {contentEmpty ?? 'Select a log file to view its contents.'}
+                            {contentEmpty ?? t('app.logViewer.selectALogFile', 'Select a log file to view its contents.')}
                         </div>
                     ) : (
                         <pre>{content}</pre>

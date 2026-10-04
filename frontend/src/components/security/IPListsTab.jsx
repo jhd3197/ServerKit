@@ -262,7 +262,9 @@ const IPListsTab = () => {
                     used to be told apart by this line alone. */}
                 <GridViewPicker
                     views={chrome.views}
-                    label={`${listType} entries`}
+                    label={listType === 'allowlist'
+                        ? t('app.iPListsTab.allowlistEntries', 'Allowlist entries')
+                        : t('app.iPListsTab.blocklistEntries', 'Blocklist entries')}
                     onCreate={chrome.createView}
                     actions={(
                         <>
@@ -351,7 +353,7 @@ const IPListsTab = () => {
                 <div className="modal-footer">
                     <Button variant="outline" onClick={() => setShowAddModal(null)}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button variant="default" onClick={handleAdd} disabled={actionLoading || !newIP.trim()}>
-                        {actionLoading ? 'Adding...' : 'Add'}
+                        {actionLoading ? t('app.iPListsTab.adding', 'Adding…') : t('common.actions.add', 'Add')}
                     </Button>
                 </div>
             </Modal>

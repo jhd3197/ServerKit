@@ -48,7 +48,9 @@ export default function ErrorCard({ failedStepName, failureTail, hint, errorMess
             <div className="deploy-console__error-head">
                 <AlertTriangle size={18} />
                 <div>
-                    <strong>{t('app.errorCard.deploymentFailed', "Couldn't deploy")}{failedStepName ? ` at "${failedStepName}"` : ''}</strong>
+                    <strong>{failedStepName
+                        ? t('app.errorCard.deploymentFailedAtStep', "Couldn't deploy at “{{step}}”", { step: failedStepName })
+                        : t('app.errorCard.deploymentFailed', "Couldn't deploy")}</strong>
                     {errorMessage && <p className="deploy-console__error-msg">{errorMessage}</p>}
                 </div>
             </div>
@@ -66,7 +68,7 @@ export default function ErrorCard({ failedStepName, failureTail, hint, errorMess
             <div className="deploy-console__error-actions">
                 <SharedButton variant="unstyled" type="button" className="deploy-console__btn deploy-console__btn--primary" onClick={onRetry} disabled={retrying}>
                     <RefreshCw size={14} className={retrying ? 'deploy-console__spin' : ''} />
-                    {retrying ? 'Retrying…' : 'Retry deploy'}
+                    {retrying ? t('app.errorCard.retrying', 'Retrying…') : t('app.errorCard.retryDeploy', 'Retry deploy')}
                 </SharedButton>
                 <CopyButton
                     value={errorReport}
@@ -92,8 +94,8 @@ export default function ErrorCard({ failedStepName, failureTail, hint, errorMess
                     >
                         {showTail ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
                         {showTail
-                            ? 'Hide output'
-                            : `Show output (${tailLines.length} line${tailLines.length === 1 ? '' : 's'})`}
+                            ? t('app.errorCard.hideOutput', 'Hide output')
+                            : t('app.errorCard.showOutput', { count: tailLines.length, defaultValue_one: 'Show output (1 line)', defaultValue_other: 'Show output ({{count}} lines)' })}
                     </SharedButton>
                 )}
             </div>

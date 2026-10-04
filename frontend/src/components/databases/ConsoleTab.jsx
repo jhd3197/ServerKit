@@ -125,7 +125,7 @@ export default function ConsoleTab({ conn, tabId, active, isAdmin, initialQuery 
                     title={t('app.consoleTab.runQueryEnter', 'Run query ({{MODKEY}}+Enter)', { MODKEY: MOD_KEY })}
                 >
                     <Play size={14} aria-hidden="true" />
-                    {loading ? 'Running…' : 'Run'}
+                    {loading ? t('app.consoleTab.running', 'Running…') : t('app.consoleTab.run', 'Run')}
                     <kbd>{MOD_KEY} ↵</kbd>
                 </SharedButton>
 
@@ -138,7 +138,7 @@ export default function ConsoleTab({ conn, tabId, active, isAdmin, initialQuery 
                         title={readonly ? t('app.consoleTab.readOnlyOnlySelectShowDescribe', 'Read-only: only SELECT / SHOW / DESCRIBE') : t('app.consoleTab.writesEnabledBeCareful', 'Writes enabled: be careful')}
                     >
                         {readonly ? <Lock size={13} aria-hidden="true" /> : <Unlock size={13} aria-hidden="true" />}
-                        {readonly ? 'Read-only' : 'Writes on'}
+                        {readonly ? t('app.consoleTab.readOnly', 'Read-only') : t('app.consoleTab.writesOn', 'Writes on')}
                     </SharedButton>
                 )}
 

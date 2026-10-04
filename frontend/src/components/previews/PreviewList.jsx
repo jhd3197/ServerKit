@@ -138,7 +138,7 @@ const PreviewList = ({ appId }) => {
                         </div>
                     </div>
                     <div className="preview-settings__toggle">
-                        <Label htmlFor="preview-enabled">{enabled ? 'Enabled' : 'Disabled'}</Label>
+                        <Label htmlFor="preview-enabled">{enabled ? t('app.previewList.enabled', 'Enabled') : t('app.previewList.disabled', 'Disabled')}</Label>
                         <Switch
                             id="preview-enabled"
                             checked={enabled}

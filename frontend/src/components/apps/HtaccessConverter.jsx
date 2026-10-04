@@ -108,7 +108,7 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
                             onClick={handleConvert}
                             disabled={!source.trim() || converting}
                         >
-                            {converting ? 'Converting…' : 'Convert'}
+                            {converting ? t('app.htaccessConverter.converting', 'Converting…') : t('app.htaccessConverter.convert', 'Convert')}
                         </Button>
                     </div>
 

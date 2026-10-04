@@ -34,7 +34,7 @@ const Message = ({ message }) => {
             ))}
             {message.content ? <Markdown text={message.content} /> : null}
             {message.status === 'error' ? (
-                <div className="sk-ai-message__error">{message.error || 'Something went wrong.'}</div>
+                <div className="sk-ai-message__error">{message.error || t('app.message.somethingWentWrong', 'Something went wrong.')}</div>
             ) : null}
             {usage?.run_id && <details className="sk-ai-message__usage">
                 <summary>{usage.model} · {formatNumber(usage.total_tokens || 0)} {t('ai.usage.tokens', 'Tokens')} · {usage.cost_source === 'unknown' ? t('ai.usage.unknown', 'Unknown') : money(usage.cost || 0)}</summary>

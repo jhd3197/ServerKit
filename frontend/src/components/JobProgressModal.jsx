@@ -83,13 +83,13 @@ export default function JobProgressModal({
                         {success && <span className="text-success text-sm">{t('app.jobProgressModal.completedSuccessfully', 'Completed')}</span>}
                         {failure && (
                             <span className="text-destructive text-sm">
-                                {t('common.state.failed', 'Failed')}{done.exitCode !== null ? ` (exit ${done.exitCode})` : ''}
+                                {t('common.state.failed', 'Failed')}{done.exitCode !== null ? ` ${t('app.jobProgressModal.exitCode', '(exit {{code}})', { code: done.exitCode })}` : ''}
                                 {done.error ? `: ${done.error}` : ''}
                             </span>
                         )}
                     </div>
                     <Button variant="outline" onClick={onClose} disabled={!done}>
-                        {done ? 'Close' : 'Working…'}
+                        {done ? t('common.actions.close', 'Close') : t('app.jobProgressModal.working', 'Working…')}
                     </Button>
                 </div>
             }

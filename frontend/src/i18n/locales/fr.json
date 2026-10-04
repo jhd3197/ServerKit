@@ -777,8 +777,6 @@
             "failedToApplySettings": "Échec de l'application des paramètres",
             "interruptionThePreviousConfigurationIsBacked": "interruption. La configuration précédente est sauvegardée et peut être restaurée.",
             "isRestarted": "est redémarré.",
-            "mbOfRam": "Mo de RAM (",
-            "nothingIsAppliedUntilYouChoose": "). Rien n’est appliqué jusqu’à ce que vous le choisissiez.",
             "previousConfigurationRestored": "Configuration précédente restaurée",
             "readingEngineConfiguration": "Lecture de la configuration du moteur…",
             "rollBackAndRestart": "Revenir en arrière et redémarrer",
@@ -790,7 +788,6 @@
             "setting": "Paramètre",
             "settingsAppliedAndEngineRestarted": "Paramètres appliqués et moteur redémarré",
             "suggested": "Suggéré",
-            "suggestionsAreBasedOn": "Les suggestions sont basées sur",
             "targetValue": "Valeur cible",
             "targetValueFor": "Valeur cible pour {{key}}",
             "theLastBackedUpConfigurationIs": "La dernière configuration sauvegardée est restaurée et le moteur de base de données"
@@ -1099,7 +1096,6 @@
             "removeColumn": "Supprimer la colonne {{value}}",
             "someDatabaseServersDidNotAnswer": "Certains serveurs de bases de données n'ont pas répondu, cette liste peut donc être incomplète.",
             "statementsRunAs": "Les instructions s'exécutent comme",
-            "stayKeywordsAnythingElseIsQuoted": "restez des mots-clés, tout le reste est cité sous forme de texte.",
             "theBuilderWritesTheStatementRunning": "Le constructeur rédige la déclaration ; son exécution est une étape que vous effectuez dans le propre client du moteur.",
             "tryAgain": "Essayer à nouveau",
             "typeOfColumn": "Type de colonne {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "Revérifier",
-            "createA": "Créer un",
             "deployActivity": "Activité de déploiement",
             "failedToInstall": "échec de l'installation",
             "importADumpOrWriteThe": ", importez un dump ou écrivez vous-même l'instruction dans la console.",
             "importDump": "Importer un dump",
-            "installing": "Installation",
             "isReady": "est prêt",
             "listeningOn": "En écoute sur",
             "manageService": "Gérer le service",
             "new": "Nouveau",
             "newDatabase": "Nouvelle base de données",
             "openSqlConsole": "Ouvrir la console SQL",
-            "pullingTheImageProvisioningTheVolume": "Extraire l'image, provisionner le volume et attendre le premier bilan de santé",
             "serverkitListsItHereAsSoon": "— ServerKit le répertorie ici dès qu'il existe.",
             "theDatabaseIsConnectedAndEmpty": "La base de données est connectée et vide. Construisez votre premier",
             "thisEngineHasNoBrowsableProtocol": "Ce moteur n'a pas de protocole de navigation — ServerKit l'exécute, mais la navigation dans les tables provient de son propre client.",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "Étape actuelle :",
-            "openConsole": "Ouvrir la console →",
-            "troubleReachingTheDeploymentJob": "Problème pour atteindre la tâche de déploiement :"
+            "openConsole": "Ouvrir la console →"
         },
         "deploymentTimeline": {
             "audit": "Audit",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "L'installation des dépendances est actuellement activée sur ce panneau (",
             "dependencyInstallationIsEnabledOnThis": "L'installation des dépendances est désormais activée sur ce panneau (",
             "dependencyInstallationIsOffOnThis": "L'installation des dépendances est désactivée sur ce panneau. Lorsqu'une extension contient des packages Python, le panneau écrit le fichier à côté de l'extension au lieu de l'installer et le répertorie ici.",
-            "didPassThroughTheSdkGate": "est passé par la porte du SDK et",
             "everyUseOfThisCapabilityHas": "Chaque utilisation de cette fonctionnalité doit passer par la porte SDK du panneau, et la porte n'en a enregistré aucune depuis le démarrage du processus du panneau. Soit l’extension n’en a pas encore besoin, soit elle en déclare plus qu’elle n’en utilise.",
             "everyUseOfThisCapabilityPasses": "Chaque utilisation de cette fonctionnalité passe par la porte SDK du panneau. Enregistré",
             "fileOnTheBackendHost": "Fichier sur l'hôte backend :",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "Une sauvegarde sur ce serveur",
             "aPathOnTheServer": "Un chemin sur le serveur",
             "anAbsolutePathOnTheServer": "Un chemin absolu sur le serveur qui exécute ServerKit. Il n'y a pas de point final de téléchargement, donc un fichier sur votre propre ordinateur doit d'abord être copié (scp, le gestionnaire de fichiers ou une sauvegarde effectuée ici).",
-            "andYouAreImportingInto": "et vous importez dans",
             "asTheDatabaseSuperuser": "en tant que superutilisateur de la base de données.",
-            "backUp": "Sauvegarde",
             "dumpFile": "Fichier de vidage",
             "everyStatementInTheDumpIs": "Chaque instruction du dump est exécutée sur celui-ci. Les tables recrées par le dump perdent tout ce qu'elles contiennent actuellement, et il n'y a pas d'annulation au-delà de la sauvegarde ci-dessus.",
             "importInto": "Importer dans",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "Compte en lecture seule.",
             "readingTheBackupDirectory": "Lecture du répertoire de sauvegarde…",
             "takesADumpThroughServerkitS": "Effectue un vidage via la propre route de sauvegarde du ServerKit avant l'importation. En cas d'échec, l'importation ne s'exécute pas.",
-            "thatDumpWasTakenFrom": "Cette décharge a été prise de",
             "theDumpIsPipedInto": "La décharge est canalisée vers",
             "theImportFailed": "L'importation a échoué.",
             "thePreImportBackupFailedSo": "La sauvegarde avant importation a échoué, donc rien n'a été importé.",
-            "thisRewrites": "Cela réécrit",
             "toConfirm": "pour confirmer",
             "tryAgain": "Essayer à nouveau",
             "whereTheDumpLives": "Où vit la décharge"
@@ -6094,7 +6081,6 @@
             "withChanges": "\" avec des changements"
         },
         "volumesPanel": {
-            "alsoDeleteData": "Supprimez également les données",
             "containerMountPath": "Chemin de montage du conteneur",
             "detach": "Détacher",
             "detachingKeepsTheDataByDefault": "Le détachement conserve les données par défaut. L'effacement n'est autorisé que lorsque l'application est arrêtée.",

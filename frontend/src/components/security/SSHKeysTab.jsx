@@ -293,7 +293,7 @@ const SSHKeysTab = () => {
                 <div className="modal-footer">
                     <Button variant="outline" onClick={() => setShowAddModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button variant="default" onClick={handleAddKey} disabled={actionLoading || !newKey.trim()}>
-                        {actionLoading ? 'Adding...' : 'Add Key'}
+                        {actionLoading ? t('app.sSHKeysTab.adding', 'Adding…') : t('app.sSHKeysTab.addKey', 'Add key')}
                     </Button>
                 </div>
             </Modal>

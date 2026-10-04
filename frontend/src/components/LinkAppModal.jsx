@@ -107,7 +107,7 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
                                 <SelectContent>
                                     {apps.map(a => (
                                         <SelectItem key={a.id} value={String(a.id)}>
-                                            {a.name} (Port: {a.port || 'N/A'})
+                                            {a.name} ({t('app.linkAppModal.portLabel', 'Port: {{port}}', { port: a.port || t('app.linkAppModal.notAvailable', 'N/A') })})
                                         </SelectItem>
                                     ))}
                                 </SelectContent>

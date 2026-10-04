@@ -131,8 +131,8 @@ export default function EmailProviders() {
                                         <span className="sk-eprov__type">
                                             {p.provider}
                                             {p.from_address ? ` · ${p.from_address}` : ''}
-                                            {p.last_test_ok === true ? ' · ✓ tested' : ''}
-                                            {p.last_test_ok === false ? ' · ✗ test failed' : ''}
+                                            {p.last_test_ok === true ? ` · ${t('app.emailProviders.tested', '✓ tested')}` : ''}
+                                            {p.last_test_ok === false ? ` · ${t('app.emailProviders.testFailedBadge', '✗ test failed')}` : ''}
                                         </span>
                                     </div>
                                     <div className="sk-eprov__actions">
@@ -215,7 +215,7 @@ export default function EmailProviders() {
                             </div>
                             <div className="sk-eprov__form-actions">
                                 <Button variant="outline" size="sm" onClick={cancel} disabled={busy}>{t('common.actions.cancel', 'Cancel')}</Button>
-                                <Button size="sm" onClick={submit} disabled={busy}>{busy ? 'Adding…' : 'Add & test'}</Button>
+                                <Button size="sm" onClick={submit} disabled={busy}>{busy ? t('app.emailProviders.adding', 'Adding…') : t('app.emailProviders.addAndTest', 'Add & test')}</Button>
                             </div>
                         </div>
                     )}

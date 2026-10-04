@@ -777,8 +777,6 @@
             "failedToApplySettings": "Falha ao aplicar configurações",
             "interruptionThePreviousConfigurationIsBacked": "interrupção. A configuração anterior é armazenada em backup e pode ser revertida.",
             "isRestarted": "é reiniciado.",
-            "mbOfRam": "MB de RAM (",
-            "nothingIsAppliedUntilYouChoose": "). Nada é aplicado até que você escolha.",
             "previousConfigurationRestored": "Configuração anterior restaurada",
             "readingEngineConfiguration": "Lendo a configuração do mecanismo…",
             "rollBackAndRestart": "Reverter e reiniciar",
@@ -790,7 +788,6 @@
             "setting": "Configuração",
             "settingsAppliedAndEngineRestarted": "Configurações aplicadas e motor reiniciado",
             "suggested": "Sugerido",
-            "suggestionsAreBasedOn": "As sugestões são baseadas em",
             "targetValue": "Valor alvo",
             "targetValueFor": "Valor alvo para {{key}}",
             "theLastBackedUpConfigurationIs": "A última configuração de backup é restaurada e o mecanismo de banco de dados "
@@ -1099,7 +1096,6 @@
             "removeColumn": "Remover coluna {{value}}",
             "someDatabaseServersDidNotAnswer": "Alguns servidores de banco de dados não responderam, portanto esta lista pode estar incompleta.",
             "statementsRunAs": "As declarações são executadas como",
-            "stayKeywordsAnythingElseIsQuoted": "permaneçam palavras-chave, qualquer outra coisa será citada como texto.",
             "theBuilderWritesTheStatementRunning": "O construtor escreve a declaração; executá-lo é uma etapa que você executa no próprio cliente do mecanismo.",
             "tryAgain": "Tente novamente",
             "typeOfColumn": "Tipo de coluna {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "Verifique novamente",
-            "createA": "Crie um",
             "deployActivity": "Implantar atividade",
             "failedToInstall": "não foi possível instalar",
             "importADumpOrWriteThe": ", importe um dump ou escreva você mesmo a instrução no console.",
             "importDump": "Despejo de importação",
-            "installing": "Instalando",
             "isReady": "está pronto",
             "listeningOn": "Ouvindo",
             "manageService": "Gerenciar serviço",
             "new": "Novo",
             "newDatabase": "Novo banco de dados",
             "openSqlConsole": "Abra o console SQL",
-            "pullingTheImageProvisioningTheVolume": "Extraindo a imagem, provisionando o volume e aguardando a primeira verificação de integridade",
             "serverkitListsItHereAsSoon": "— ServerKit lista-o aqui assim que existir.",
             "theDatabaseIsConnectedAndEmpty": "O banco de dados está conectado e vazio. Construa o seu primeiro",
             "thisEngineHasNoBrowsableProtocol": "Este mecanismo não possui protocolo navegável — o ServerKit o executa, mas a navegação na tabela vem de seu próprio cliente.",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "Etapa atual:",
-            "openConsole": "Abra o console →",
-            "troubleReachingTheDeploymentJob": "Problemas para acessar o trabalho de implantação:"
+            "openConsole": "Abra o console →"
         },
         "deploymentTimeline": {
             "audit": "Auditoria",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "A instalação de dependência está atualmente habilitada neste painel (",
             "dependencyInstallationIsEnabledOnThis": "A instalação de dependência está habilitada neste painel agora (",
             "dependencyInstallationIsOffOnThis": "A instalação de dependência está desativada neste painel. Quando uma extensão envia pacotes Python, o painel grava o arquivo próximo à extensão em vez de instalá-lo e o lista aqui.",
-            "didPassThroughTheSdkGate": "passou pelo portão do SDK e",
             "everyUseOfThisCapabilityHas": "Todo uso desse recurso precisa passar pelo portão SDK do painel, e o portão não registrou nenhum desde o início do processo do painel. Ou a extensão ainda não precisou ou declara mais do que usa.",
             "everyUseOfThisCapabilityPasses": "Cada uso desse recurso passa pela porta SDK do painel. Gravado",
             "fileOnTheBackendHost": "Arquivo no host de back-end:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "Um backup neste servidor",
             "aPathOnTheServer": "Um caminho no servidor",
             "anAbsolutePathOnTheServer": "Um caminho absoluto no servidor que executa o ServerKit. Não há endpoint de upload, portanto, um arquivo em sua própria máquina deve ser copiado primeiro (scp, o gerenciador de arquivos ou um backup feito aqui).",
-            "andYouAreImportingInto": "e você está importando para",
             "asTheDatabaseSuperuser": "como superusuário do banco de dados.",
-            "backUp": "Backup",
             "dumpFile": "Arquivo de despejo",
             "everyStatementInTheDumpIs": "Cada instrução no dump é executada nele. As tabelas que o dump recria perdem tudo o que contêm agora e não há como desfazer além do backup acima.",
             "importInto": "Importar para",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "Conta somente leitura.",
             "readingTheBackupDirectory": "Lendo o diretório de backup…",
             "takesADumpThroughServerkitS": "Faz um dump na própria rota de backup do ServerKit antes de importar. Se falhar, a importação não será executada.",
-            "thatDumpWasTakenFrom": "Esse despejo foi retirado de",
             "theDumpIsPipedInto": "O despejo é canalizado",
             "theImportFailed": "A importação falhou.",
             "thePreImportBackupFailedSo": "O backup de pré-importação falhou, portanto nada foi importado.",
-            "thisRewrites": "Isso reescreve",
             "toConfirm": "confirmar",
             "tryAgain": "Tente novamente",
             "whereTheDumpLives": "Onde mora o lixão"
@@ -6094,7 +6081,6 @@
             "withChanges": "” com alterações"
         },
         "volumesPanel": {
-            "alsoDeleteData": "Exclua também os dados",
             "containerMountPath": "Caminho de montagem do contêiner",
             "detach": "Desanexar",
             "detachingKeepsTheDataByDefault": "A desanexação mantém os dados por padrão. A limpeza só é permitida enquanto o aplicativo está parado.",

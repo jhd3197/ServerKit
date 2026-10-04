@@ -200,7 +200,7 @@ const DeployTab = ({ appId, embedded = false }) => {
                                     onClick={() => handleDeploy(false)}
                                     disabled={deploying}
                                 >
-                                    {deploying ? 'Deploying...' : 'Deploy Now'}
+                                    {deploying ? t('app.deployTab.deploying', 'Deploying…') : t('app.deployTab.deployNow', 'Deploy now')}
                                 </Button>
                             </div>
                         </div>
@@ -208,7 +208,7 @@ const DeployTab = ({ appId, embedded = false }) => {
 
                     <div className="deploy-grid">
                         <SharedCard variant="legacy" className="card">
-                            <h3>{embedded ? 'Deploy Scripts' : 'Configuration'}</h3>
+                            <h3>{embedded ? t('app.deployTab.deployScripts', 'Deploy scripts') : t('app.deployTab.configuration', 'Configuration')}</h3>
                             {embedded ? (
                                 <InfoList>
                                     <InfoItem label={t('app.deployTab.preDeploy', 'Pre-deploy')} value={config.pre_deploy_script || '—'} mono />
@@ -223,7 +223,7 @@ const DeployTab = ({ appId, embedded = false }) => {
                             )}
                             <SharedCardFooter variant="legacy" className="card-actions">
                                 <Button variant="outline" size="sm" onClick={() => setShowConfigModal(true)}>
-                                    {embedded ? 'Edit Scripts' : 'Edit'}
+                                    {embedded ? t('app.deployTab.editScripts', 'Edit scripts') : t('common.actions.edit', 'Edit')}
                                 </Button>
                                 {!embedded && (
                                     <Button variant="destructive" size="sm" onClick={handleRemoveDeployment}>

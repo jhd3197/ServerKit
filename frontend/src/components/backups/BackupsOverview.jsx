@@ -268,7 +268,7 @@ export default function BackupsOverview({
                     label={t('app.backupsOverview.protectedResources', 'Protected resources')}
                 >
                     <div className="sk-kpi__sub">
-                        <span>{protection.detail || 'from the backup archive'}</span>
+                        <span>{protection.detail || t('app.backupsOverview.fromTheBackupArchive', 'from the backup archive')}</span>
                     </div>
                 </MetricCard>
                 <MetricCard
@@ -289,7 +289,7 @@ export default function BackupsOverview({
                     label={t('app.backupsOverview.successRate', 'Success rate')}
                 >
                     <div className="sk-kpi__sub">
-                        <span>{finished30.length ? `${finished30.length} runs · last 30 days` : 'no runs recorded yet'}</span>
+                        <span>{finished30.length ? t('app.backupsOverview.runsLast30Days', { count: finished30.length, defaultValue_one: '1 run · last 30 days', defaultValue_other: '{{count}} runs · last 30 days' }) : t('app.backupsOverview.noRunsRecordedYet', 'no runs recorded yet')}</span>
                     </div>
                 </MetricCard>
                 <MetricCard

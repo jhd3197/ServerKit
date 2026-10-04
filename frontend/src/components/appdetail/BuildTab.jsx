@@ -200,7 +200,7 @@ const BuildTab = ({ appId, app }) => {
                     <div className="detection-results">
                         <div className="detection-item">
                             <span className="detection-label">{t('app.buildTab.detectedMethod', 'Detected method:')}</span>
-                            <span className="detection-value">{detection.detected_method || 'None'}</span>
+                            <span className="detection-value">{detection.detected_method || t('app.buildTab.none', 'None')}</span>
                         </div>
                         {detection.dockerfile_exists && (
                             <div className="detection-item">
@@ -249,14 +249,14 @@ const BuildTab = ({ appId, app }) => {
                         onClick={() => handleDeploy(false)}
                         disabled={deploying || building}
                     >
-                        {deploying ? 'Deploying...' : 'Build & Deploy'}
+                        {deploying ? t('app.buildTab.deploying', 'Deploying…') : t('app.buildTab.buildAndDeploy', 'Build & deploy')}
                     </Button>
                     <Button
                         variant="outline"
                         onClick={() => handleBuild(false)}
                         disabled={building || deploying}
                     >
-                        {building ? 'Building...' : 'Build Only'}
+                        {building ? t('app.buildTab.building', 'Building…') : t('app.buildTab.buildOnly', 'Build only')}
                     </Button>
                 </SharedCardFooter>
             </SharedCard>

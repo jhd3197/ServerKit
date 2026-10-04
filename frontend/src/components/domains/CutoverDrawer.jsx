@@ -369,11 +369,11 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                                 <div className="cutover__verify-head">
                                     {verifyResult.matches_expected != null && (
                                         <Pill kind={verifyResult.matches_expected ? 'green' : 'amber'}>
-                                            {verifyResult.matches_expected ? 'Matches new target' : 'Not fully propagated'}
+                                            {verifyResult.matches_expected ? t('app.cutoverDrawer.matchesNewTarget', 'Matches new target') : t('app.cutoverDrawer.notFullyPropagated', 'Not fully propagated')}
                                         </Pill>
                                     )}
                                     <Pill kind={verifyResult.propagated ? 'green' : 'gray'}>
-                                        {verifyResult.propagated ? 'Propagated' : 'Propagating'}
+                                        {verifyResult.propagated ? t('app.cutoverDrawer.propagated', 'Propagated') : t('app.cutoverDrawer.propagating', 'Propagating')}
                                     </Pill>
                                 </div>
                             )}

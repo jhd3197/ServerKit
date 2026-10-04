@@ -405,7 +405,7 @@ const CreateNetworkModal = ({ onClose, onCreated }) => {
                         {t('common.actions.cancel', 'Cancel')}
                     </Button>
                     <Button type="submit" disabled={loading}>
-                        {loading ? 'Creating...' : 'Create Network'}
+                        {loading ? t('app.networksTab.creating', 'Creating…') : t('app.networksTab.createNetwork', 'Create network')}
                     </Button>
                 </div>
             </form>

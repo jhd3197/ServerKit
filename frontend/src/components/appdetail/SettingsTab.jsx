@@ -37,7 +37,7 @@ const SettingsTab = ({ app, onUpdate }) => {
             }
         } catch { /* cron visibility is best-effort — never block the delete */ }
 
-        const firstConfirm = await confirmAppSettings({ titleKey: 'app.settingsTab.deleteApplication', title: 'Delete service', message: `Delete ${app.name}? It stops serving and moves to the recycle bin, where you can restore it for 30 days.${cronNote}` });
+        const firstConfirm = await confirmAppSettings({ titleKey: 'app.settingsTab.deleteApplication', title: 'Delete service', message: t('app.settingsTab.deleteServiceConfirmMessage', 'Delete {{name}}? It stops serving and moves to the recycle bin, where you can restore it for 30 days.', { name: app.name }) + cronNote });
         if (!firstConfirm) return;
         const secondConfirm = await confirmAppSettings({ titleKey: 'app.settingsTab.confirmDeletion', title: 'Confirm deletion', messageKey: 'app.settingsTab.areYouSureItsContainersStop', message: 'Delete this service? Its containers stop and it stops being served. Files and data volumes are kept until you purge it from the recycle bin.' });
         if (!secondConfirm) return;
@@ -69,7 +69,7 @@ const SettingsTab = ({ app, onUpdate }) => {
     }
 
     async function handleUnlink() {
-        const confirmed = await confirmAppSettings({ titleKey: 'app.settingsTab.unlinkApplication', title: 'Unlink service', message: `Unlink ${app.name} from its linked service? Both services will become standalone.`, variant: 'warning' });
+        const confirmed = await confirmAppSettings({ titleKey: 'app.settingsTab.unlinkApplication', title: 'Unlink service', message: t('app.settingsTab.unlinkServiceConfirmMessage', 'Unlink {{name}} from its linked service? Both services will become standalone.', { name: app.name }), variant: 'warning' });
         if (!confirmed) return;
 
         setUnlinking(true);
@@ -94,8 +94,8 @@ const SettingsTab = ({ app, onUpdate }) => {
                         <span>{t('app.settingsTab.environmentType', 'Environment type')}</span>
                         <span className="settings-hint">
                             {app.has_linked_app
-                                ? 'This service is linked. Unlink to change environment type.'
-                                : 'Set how this service is used in your workflow.'}
+                                ? t('app.settingsTab.linkedUnlinkToChangeEnvType', 'This service is linked. Unlink to change environment type.')
+                                : t('app.settingsTab.setHowServiceIsUsed', 'Set how this service is used in your workflow.')}
                         </span>
                     </div>
                     <div className="settings-control">
@@ -138,7 +138,7 @@ const SettingsTab = ({ app, onUpdate }) => {
                                 onClick={handleUnlink}
                                 disabled={unlinking}
                             >
-                                {unlinking ? 'Unlinking...' : 'Unlink service'}
+                                {unlinking ? t('app.settingsTab.unlinking', 'Unlinking…') : t('app.settingsTab.unlinkService', 'Unlink service')}
                             </Button>
                         </div>
                     </div>

@@ -777,8 +777,6 @@
             "failedToApplySettings": "Die Einstellungen konnten nicht angewendet werden",
             "interruptionThePreviousConfigurationIsBacked": "Unterbrechung. Die vorherige Konfiguration wird gesichert und kann zurückgesetzt werden.",
             "isRestarted": "wird neu gestartet.",
-            "mbOfRam": "MB RAM (",
-            "nothingIsAppliedUntilYouChoose": "). Es wird nichts angewendet, bis Sie sich dafür entscheiden.",
             "previousConfigurationRestored": "Vorherige Konfiguration wiederhergestellt",
             "readingEngineConfiguration": "Engine-Konfiguration wird gelesen…",
             "rollBackAndRestart": "Zurücksetzen und neu starten",
@@ -790,7 +788,6 @@
             "setting": "Einstellung",
             "settingsAppliedAndEngineRestarted": "Einstellungen übernommen und Motor neu gestartet",
             "suggested": "Vorgeschlagen",
-            "suggestionsAreBasedOn": "Vorschläge basieren auf",
             "targetValue": "Zielwert",
             "targetValueFor": "Zielwert für {{key}}",
             "theLastBackedUpConfigurationIs": "Die zuletzt gesicherte Konfiguration wird wiederhergestellt und die Datenbank-Engine "
@@ -1099,7 +1096,6 @@
             "removeColumn": "Spalte {{value}} entfernen",
             "someDatabaseServersDidNotAnswer": "Einige Datenbankserver haben nicht geantwortet, daher ist diese Liste möglicherweise unvollständig.",
             "statementsRunAs": "Anweisungen werden ausgeführt als",
-            "stayKeywordsAnythingElseIsQuoted": "Bleiben Sie bei Schlüsselwörtern, alles andere wird als Text zitiert.",
             "theBuilderWritesTheStatementRunning": "Der Bauherr verfasst die Stellungnahme; Das Ausführen ist ein Schritt, den Sie im eigenen Client der Engine ausführen.",
             "tryAgain": "Versuchen Sie es erneut",
             "typeOfColumn": "Typ der Spalte {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "Überprüfen Sie es noch einmal",
-            "createA": "Erstellen Sie eine",
             "deployActivity": "Aktivität bereitstellen",
             "failedToInstall": "Installation fehlgeschlagen",
             "importADumpOrWriteThe": ", importieren Sie einen Dump oder schreiben Sie die Anweisung selbst in der Konsole.",
             "importDump": "Dump importieren",
-            "installing": "Installieren",
             "isReady": "ist fertig",
             "listeningOn": "Zuhören",
             "manageService": "Dienst verwalten",
             "new": "Neu",
             "newDatabase": "Neue Datenbank",
             "openSqlConsole": "Öffnen Sie die SQL-Konsole",
-            "pullingTheImageProvisioningTheVolume": "Das Image abrufen, das Volume bereitstellen und auf die erste Gesundheitsprüfung warten",
             "serverkitListsItHereAsSoon": "– ServerKit listet es hier auf, sobald es existiert.",
             "theDatabaseIsConnectedAndEmpty": "Die Datenbank ist verbunden und leer. Bauen Sie Ihr erstes",
             "thisEngineHasNoBrowsableProtocol": "Diese Engine verfügt über kein durchsuchbares Protokoll – ServerKit führt es aus, aber das Durchsuchen von Tabellen erfolgt über einen eigenen Client.",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "Aktueller Schritt:",
-            "openConsole": "Konsole öffnen →",
-            "troubleReachingTheDeploymentJob": "Probleme beim Erreichen des Bereitstellungsjobs:"
+            "openConsole": "Konsole öffnen →"
         },
         "deploymentTimeline": {
             "audit": "Audit",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "Die Abhängigkeitsinstallation ist derzeit in diesem Bereich aktiviert (",
             "dependencyInstallationIsEnabledOnThis": "Die Abhängigkeitsinstallation ist jetzt in diesem Bereich aktiviert (",
             "dependencyInstallationIsOffOnThis": "Die Abhängigkeitsinstallation ist in diesem Bereich deaktiviert. Wenn eine Erweiterung Python-Pakete liefert, schreibt das Panel die Datei neben die Erweiterung, anstatt sie zu installieren, und listet sie hier auf.",
-            "didPassThroughTheSdkGate": "hat das SDK-Tor passiert und",
             "everyUseOfThisCapabilityHas": "Jede Nutzung dieser Funktion muss durch das SDK-Gate des Panels erfolgen, und das Gate hat seit Beginn des Panel-Prozesses nichts aufgezeichnet. Entweder hat die Erweiterung es noch nicht benötigt, oder sie deklariert mehr als sie verwendet.",
             "everyUseOfThisCapabilityPasses": "Jede Nutzung dieser Funktion erfolgt über das SDK-Gate des Panels. Aufgezeichnet",
             "fileOnTheBackendHost": "Datei auf dem Backend-Host:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "Ein Backup auf diesem Server",
             "aPathOnTheServer": "Ein Pfad auf dem Server",
             "anAbsolutePathOnTheServer": "Ein absoluter Pfad auf dem Server, auf dem ServerKit ausgeführt wird. Es gibt keinen Upload-Endpunkt, daher muss zuerst eine Datei auf den eigenen Rechner kopiert werden (scp, der Dateimanager oder hier ein Backup erstellt).",
-            "andYouAreImportingInto": "und Sie importieren in",
             "asTheDatabaseSuperuser": "als Datenbank-Superuser.",
-            "backUp": "Sichern",
             "dumpFile": "Dump-Datei",
             "everyStatementInTheDumpIs": "Jede Anweisung im Dump wird dagegen ausgeführt. Tabellen, die durch den Dump neu erstellt werden, verlieren alles, was sie jetzt enthalten, und es gibt kein Rückgängigmachen über die obige Sicherung hinaus.",
             "importInto": "Importieren in",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "Schreibgeschütztes Konto.",
             "readingTheBackupDirectory": "Lesen des Backup-Verzeichnisses…",
             "takesADumpThroughServerkitS": "Erstellt vor dem Import einen Dump über die eigene Backup-Route von ServerKit. Wenn dies fehlschlägt, wird der Import nicht ausgeführt.",
-            "thatDumpWasTakenFrom": "Diese Müllkippe wurde entnommen",
             "theDumpIsPipedInto": "In die Mülldeponie wird eine Rohrleitung eingespeist",
             "theImportFailed": "Der Import ist fehlgeschlagen.",
             "thePreImportBackupFailedSo": "Die Sicherung vor dem Import ist fehlgeschlagen, daher wurde nichts importiert.",
-            "thisRewrites": "Dies wird umgeschrieben",
             "toConfirm": "zu bestätigen",
             "tryAgain": "Versuchen Sie es erneut",
             "whereTheDumpLives": "Wo die Müllkippe lebt"
@@ -6094,7 +6081,6 @@
             "withChanges": "” mit Änderungen"
         },
         "volumesPanel": {
-            "alsoDeleteData": "Daten auch löschen",
             "containerMountPath": "Container-Mount-Pfad",
             "detach": "Abtrennen",
             "detachingKeepsTheDataByDefault": "Beim Trennen bleiben die Daten standardmäßig erhalten. Das Löschen ist nur bei gestoppter App erlaubt.",

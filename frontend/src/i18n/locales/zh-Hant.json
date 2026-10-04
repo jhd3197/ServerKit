@@ -964,8 +964,6 @@
             "failedToApplySettings": "無法套用設定",
             "interruptionThePreviousConfigurationIsBacked": "中斷。先前的設定已備份，可隨時回復。",
             "isRestarted": "重新啟動。",
-            "mbOfRam": "MB 記憶體（",
-            "nothingIsAppliedUntilYouChoose": "）。在您選擇之前，不會套用任何內容。",
             "previousConfigurationRestored": "還原之前的設定",
             "readingEngineConfiguration": "正在讀取引擎設定…",
             "rollBackAndRestart": "回復並重新啟動",
@@ -977,7 +975,6 @@
             "setting": "設定",
             "settingsAppliedAndEngineRestarted": "應用設定並重新啟動引擎",
             "suggested": "建議",
-            "suggestionsAreBasedOn": "建議基於",
             "targetValue": "目標值",
             "targetValueFor": "{{key}} 的目標值",
             "theLastBackedUpConfigurationIs": "系統會還原最近備份的設定，資料庫引擎也會"
@@ -1286,7 +1283,6 @@
             "removeColumn": "移除欄位 {{value}}",
             "someDatabaseServersDidNotAnswer": "部分資料庫伺服器沒有回應，因此清單可能不完整。",
             "statementsRunAs": "陳述式執行身分",
-            "stayKeywordsAnythingElseIsQuoted": "保留關鍵字，其他任何內容都以文字形式引用。",
             "theBuilderWritesTheStatementRunning": "編輯器會產生陳述式；請在資料庫引擎的客戶端執行。",
             "tryAgain": "再試一次",
             "typeOfColumn": "第 {{value}} 欄的型別"
@@ -1545,19 +1541,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "再次檢查",
-            "createA": "建立一個",
             "deployActivity": "部署活動",
             "failedToInstall": "安裝失敗",
             "importADumpOrWriteThe": "、匯入傾印檔，或自行在主控台中編寫陳述式。",
             "importDump": "匯入傾印檔",
-            "installing": "安裝中",
             "isReady": "準備好了",
             "listeningOn": "正在監聽",
             "manageService": "管理服務",
             "new": "新的",
             "newDatabase": "新資料庫",
             "openSqlConsole": "開啟 SQL 主控台",
-            "pullingTheImageProvisioningTheVolume": "正在下載映像檔、佈建磁碟區，並等待首次健康檢查",
             "serverkitListsItHereAsSoon": "— ServerKit 一旦存在就將其列在這裡。",
             "theDatabaseIsConnectedAndEmpty": "資料庫已連線且為空。建構你的第一個",
             "thisEngineHasNoBrowsableProtocol": "此引擎沒有可供瀏覽的協定。ServerKit 可以啟動引擎，但須透過該引擎的客戶端瀏覽資料表。",
@@ -1656,8 +1649,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "目前步驟：",
-            "openConsole": "開啟主控台 →",
-            "troubleReachingTheDeploymentJob": "無法連線至部署作業："
+            "openConsole": "開啟主控台 →"
         },
         "deploymentTimeline": {
             "audit": "稽核",
@@ -2132,7 +2124,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "目前在此面板上啟用了相依項安裝（",
             "dependencyInstallationIsEnabledOnThis": "現在在此面板上啟用了相依項安裝（",
             "dependencyInstallationIsOffOnThis": "此面板上的相依項安裝已關閉。當擴充功能提供 Python 軟體套件時，面板會將檔案寫入擴充功能旁邊，而不是安裝它，並在此處列出它。",
-            "didPassThroughTheSdkGate": "確實透過了 SDK 門並且",
             "everyUseOfThisCapabilityHas": "每次使用此功能都必須經過面板的 SDK 權限檢查；自面板程序啟動以來，尚無使用記錄。擴充功能可能尚未用到此功能，或宣告的權限多於實際所需。",
             "everyUseOfThisCapabilityPasses": "此功能每次使用都會經過面板的 SDK 權限檢查。已記錄",
             "fileOnTheBackendHost": "後端主機上的檔案：",
@@ -2631,9 +2622,7 @@
             "aBackupOnThisServer": "此伺服器上的備份",
             "aPathOnTheServer": "伺服器上的路徑",
             "anAbsolutePathOnTheServer": "請輸入執行 ServerKit 的伺服器上的絕對路徑。此處不提供檔案上傳功能；若檔案位於您的電腦，請先透過 scp、檔案管理員或備份功能將檔案複製到伺服器。",
-            "andYouAreImportingInto": "並且您正在匯入",
             "asTheDatabaseSuperuser": "作為資料庫超級使用者。",
-            "backUp": "備份",
             "dumpFile": "傾印檔",
             "everyStatementInTheDumpIs": "系統會對此資料庫執行傾印檔中的所有陳述式。重新建立的資料表會失去現有資料；除了上方的備份之外，無法復原。",
             "importInto": "匯入到",
@@ -2649,11 +2638,9 @@
             "readOnlyAccount": "唯讀帳戶。",
             "readingTheBackupDirectory": "正在讀取備份目錄…",
             "takesADumpThroughServerkitS": "匯入前會透過 ServerKit 的備份功能建立傾印檔。若備份失敗，就不會執行匯入。",
-            "thatDumpWasTakenFrom": "該傾印是從",
             "theDumpIsPipedInto": "傾印透過管道輸送到",
             "theImportFailed": "匯入失敗。",
             "thePreImportBackupFailedSo": "匯入前備份失敗，因此未匯入任何內容。",
-            "thisRewrites": "這重寫了",
             "toConfirm": "確認",
             "tryAgain": "再試一次",
             "whereTheDumpLives": "傾印檔位置"
@@ -6327,7 +6314,6 @@
             "withChanges": "」並儲存變更"
         },
         "volumesPanel": {
-            "alsoDeleteData": "也刪除資料",
             "containerMountPath": "容器掛載路徑",
             "detach": "分離",
             "detachingKeepsTheDataByDefault": "分離時預設保留資料。僅當應用程式停止時才允許清除。",

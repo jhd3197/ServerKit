@@ -137,7 +137,7 @@ export default function FleetThresholdsPanel({ refreshKey = 0 }) {
                 </div>
                 <div>
                     <Button size="sm" variant={adding ? 'outline' : 'default'} onClick={() => setAdding((v) => !v)}>
-                        <Plus size={14} /> {adding ? 'Cancel' : 'Add rule'}
+                        <Plus size={14} /> {adding ? t('common.actions.cancel', 'Cancel') : t('app.fleetThresholdsPanel.addRule', 'Add rule')}
                     </Button>
                 </div>
             </div>

@@ -486,7 +486,7 @@ const PullImageModal = ({ onClose, onPulled }) => {
                         {t('common.actions.cancel', 'Cancel')}
                     </Button>
                     <Button type="submit" disabled={loading}>
-                        {loading ? 'Pulling...' : 'Pull Image'}
+                        {loading ? t('app.imagesTab.pulling', 'Pulling…') : t('app.imagesTab.pullImage', 'Pull image')}
                     </Button>
                 </div>
             </form>

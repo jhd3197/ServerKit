@@ -260,8 +260,8 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
                                     <span>{t('app.settingsTab.environmentType', 'Environment type')}</span>
                                     <span className="settings-hint">
                                         {app.has_linked_app
-                                            ? 'This service is linked. Unlink to change environment type.'
-                                            : 'Set how this service is used in your workflow (production, staging, development, or standalone).'}
+                                            ? t('app.settingsTab.linkedUnlinkToChangeType', 'This service is linked. Unlink it to change the environment type.')
+                                            : t('app.settingsTab.environmentTypeHint', 'Set how this service is used in your workflow (production, staging, development, or standalone).')}
                                     </span>
                                 </div>
                                 <div className="settings-control">
@@ -304,7 +304,7 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
                                             onClick={handleUnlink}
                                             disabled={unlinking}
                                         >
-                                            {unlinking ? 'Unlinking...' : 'Unlink'}
+                                            {unlinking ? t('app.settingsTab.unlinking', 'Unlinking…') : t('app.settingsTab.unlink', 'Unlink')}
                                         </Button>
                                     </div>
                                 </div>
@@ -451,7 +451,7 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
                             description={t('app.settingsTab.onceYouDeleteAServiceThere', "Deleting a service removes all its data. You can't undo this.")}
                             action={
                                 <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
-                                    {deleting ? 'Deleting...' : 'Delete Service'}
+                                    {deleting ? t('app.settingsTab.deleting', 'Deleting…') : t('app.settingsTab.deleteService', 'Delete service')}
                                 </Button>
                             }
                         />
@@ -669,7 +669,11 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
                             data-walkthrough="service-enable-ssl"
                         >
                             {issued ? <Shield size={14} /> : <Lock size={14} />}
-                            {issuing ? 'Requesting...' : issued ? 'Re-issue Certificate' : 'Enable SSL'}
+                            {issuing
+                                ? t('app.settingsTab.requesting', 'Requesting…')
+                                : issued
+                                    ? t('app.settingsTab.reissueCertificate', 'Re-issue certificate')
+                                    : t('app.settingsTab.enableSsl', 'Enable SSL')}
                         </Button>
                     </div>
                 </div>
@@ -818,7 +822,7 @@ const ManifestSection = ({ app }) => {
                         {t('app.settingsTab.managedByManifest', 'Managed by manifest')}
                     </span>
                     <span className={`svc-manifest__pill svc-manifest__pill--${manifest.status || 'pending'}`}>
-                        {statusLabels[manifest.status] || manifest.status || 'Pending'}
+                        {statusLabels[manifest.status] || manifest.status || t('app.settingsTab.pending', 'Pending')}
                     </span>
                     {(source.repo || shortCommit) && (
                         <span className="svc-manifest__source mono">
@@ -839,15 +843,15 @@ const ManifestSection = ({ app }) => {
 
             <div className="svc-manifest__actions">
                 <Button variant="outline" onClick={handleScaffold} disabled={scaffolding}>
-                    {scaffolding ? 'Generating…' : 'Download scaffold'}
+                    {scaffolding ? t('app.settingsTab.generating', 'Generating…') : t('app.settingsTab.downloadScaffold', 'Download scaffold')}
                 </Button>
                 {projectId && (
                     <>
                         <Button variant="outline" onClick={handlePlan} disabled={planning}>
-                            {planning ? 'Planning…' : 'Plan'}
+                            {planning ? t('app.settingsTab.planning', 'Planning…') : t('app.settingsTab.plan', 'Plan')}
                         </Button>
                         <Button onClick={handleApply} disabled={applying}>
-                            {applying ? 'Applying…' : 'Apply'}
+                            {applying ? t('app.settingsTab.applying', 'Applying…') : t('app.settingsTab.apply', 'Apply')}
                         </Button>
                     </>
                 )}

@@ -167,11 +167,13 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
                 tools={(
                     <div className="survey-tab__toolbar-actions">
                         <Button variant="outline" size="sm" onClick={loadCatalog}>
-                            <FileSearch size={14} /> {showCatalog ? 'Hide' : 'What we check'}
+                            <FileSearch size={14} /> {showCatalog ? t('app.surveyTab.hide', 'Hide') : t('app.surveyTab.whatWeCheck', 'What we check')}
                         </Button>
                         <Button size="sm" onClick={refly} disabled={flying || serverStatus !== 'online'}>
                             <RefreshCw size={14} className={flying ? 'spin' : ''} />
-                            {flying ? 'Surveying…' : (snapshots.length ? 'Re-fly survey' : 'Run survey')}
+                            {flying
+                                ? t('app.surveyTab.surveying', 'Surveying…')
+                                : (snapshots.length ? t('app.surveyTab.rerunSurvey', 'Run survey again') : t('app.surveyTab.runSurvey', 'Run survey'))}
                         </Button>
                     </div>
                 )}
@@ -204,7 +206,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
                         </p>
                     </div>
                     <Button size="sm" variant="outline" onClick={switchToObserved} disabled={switching}>
-                        {switching ? 'Switching…' : 'Switch to Observed'}
+                        {switching ? t('app.surveyTab.switching', 'Switching…') : t('app.surveyTab.switchToObserved', 'Switch to observed')}
                     </Button>
                 </div>
             )}

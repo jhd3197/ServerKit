@@ -59,7 +59,7 @@ export default function AdminerSsoButton({ databaseId, disabled = false }) {
     return (
         <Button type="button" size="sm" variant="outline"
             disabled={disabled || busy} onClick={launch}>
-            <ExternalLink size={14} /> {busy ? 'Opening…' : 'Open in Adminer'}
+            <ExternalLink size={14} /> {busy ? t('app.adminerSsoButton.opening', 'Opening…') : t('app.adminerSsoButton.openInAdminer', 'Open in Adminer')}
         </Button>
     );
 }

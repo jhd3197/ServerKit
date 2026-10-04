@@ -130,7 +130,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
                             className="btn btn-primary"
                             disabled={loading}
                         >
-                            {loading ? 'Enabling...' : 'Enable Private URL'}
+                            {loading ? t('app.privateURLSection.enabling', 'Enabling…') : t('app.privateURLSection.enablePrivateUrl', 'Enable private URL')}
                         </SharedButton>
                     </form>
                     <p className="slug-hint">

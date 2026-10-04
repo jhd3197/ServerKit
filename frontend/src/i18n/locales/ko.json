@@ -777,8 +777,6 @@
             "failedToApplySettings": "설정을 적용하지 못했습니다.",
             "interruptionThePreviousConfigurationIsBacked": "중단. 이전 구성이 백업되어 롤백이 가능합니다.",
             "isRestarted": "다시 시작됩니다.",
-            "mbOfRam": "MB RAM(",
-            "nothingIsAppliedUntilYouChoose": "). 선택하기 전까지는 아무 것도 적용되지 않습니다.",
             "previousConfigurationRestored": "이전 구성이 복원되었습니다.",
             "readingEngineConfiguration": "엔진 구성을 읽는 중…",
             "rollBackAndRestart": "롤백하고 다시 시작",
@@ -790,7 +788,6 @@
             "setting": "설정",
             "settingsAppliedAndEngineRestarted": "설정이 적용되고 엔진이 다시 시작되었습니다.",
             "suggested": "제안",
-            "suggestionsAreBasedOn": "제안은 다음을 기반으로 합니다.",
             "targetValue": "목표값",
             "targetValueFor": "{{key}}의 목표 값",
             "theLastBackedUpConfigurationIs": "마지막으로 백업된 구성이 복원되고 데이터베이스 엔진이 "
@@ -1099,7 +1096,6 @@
             "removeColumn": "{{value}} 열 삭제",
             "someDatabaseServersDidNotAnswer": "일부 데이터베이스 서버가 응답하지 않았으므로 이 목록이 불완전할 수 있습니다.",
             "statementsRunAs": "명령문은 다음과 같이 실행됩니다.",
-            "stayKeywordsAnythingElseIsQuoted": "키워드를 유지하세요. 다른 내용은 텍스트로 인용됩니다.",
             "theBuilderWritesTheStatementRunning": "건축업자는 성명서를 작성합니다. 이를 실행하는 것은 엔진 자체 클라이언트에서 수행하는 단계입니다.",
             "tryAgain": "다시 시도하세요",
             "typeOfColumn": "열 유형 {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "다시 확인하세요",
-            "createA": "만들기",
             "deployActivity": "활동 배포",
             "failedToInstall": "설치에 실패했습니다",
             "importADumpOrWriteThe": ", 덤프를 가져오거나 콘솔에 직접 명령문을 작성하세요.",
             "importDump": "덤프 가져오기",
-            "installing": "설치 중",
             "isReady": "준비됐어",
             "listeningOn": "듣는 중",
             "manageService": "서비스 관리",
             "new": "새로운",
             "newDatabase": "새 데이터베이스",
             "openSqlConsole": "SQL 콘솔 열기",
-            "pullingTheImageProvisioningTheVolume": "이미지 가져오기, 볼륨 프로비저닝 및 첫 번째 상태 확인 대기",
             "serverkitListsItHereAsSoon": "— ServerKit은 존재하는 즉시 여기에 나열합니다.",
             "theDatabaseIsConnectedAndEmpty": "데이터베이스가 연결되어 있고 비어 있습니다. 첫 번째 빌드",
             "thisEngineHasNoBrowsableProtocol": "이 엔진에는 검색 가능한 프로토콜이 없습니다. ServerKit이 이를 실행하지만 테이블 검색은 자체 클라이언트에서 수행됩니다.",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "현재 단계:",
-            "openConsole": "콘솔 열기 →",
-            "troubleReachingTheDeploymentJob": "배포 작업에 도달하는 중에 문제가 발생했습니다."
+            "openConsole": "콘솔 열기 →"
         },
         "deploymentTimeline": {
             "audit": "감사",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "현재 이 패널에서 종속성 설치가 활성화되어 있습니다(",
             "dependencyInstallationIsEnabledOnThis": "이제 이 패널에서 종속성 설치가 활성화되었습니다(",
             "dependencyInstallationIsOffOnThis": "이 패널에서는 종속성 설치가 꺼져 있습니다. 확장이 Python 패키지를 제공하면 패널은 확장을 설치하는 대신 확장 옆에 파일을 작성하고 여기에 나열합니다.",
-            "didPassThroughTheSdkGate": "SDK 게이트를 통과했고",
             "everyUseOfThisCapabilityHas": "이 기능을 사용할 때마다 패널의 SDK 게이트를 통과해야 하며 패널 프로세스가 시작된 이후 게이트는 아무것도 기록하지 않았습니다. 확장에 아직 필요하지 않거나 사용하는 것보다 더 많이 선언합니다.",
             "everyUseOfThisCapabilityPasses": "이 기능을 사용할 때마다 패널의 SDK 게이트를 통과합니다. 녹음됨",
             "fileOnTheBackendHost": "백엔드 호스트의 파일:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "이 서버의 백업",
             "aPathOnTheServer": "서버의 경로",
             "anAbsolutePathOnTheServer": "ServerKit을 실행하는 서버의 절대 경로입니다. 업로드 엔드포인트가 없으므로 자신의 컴퓨터에 있는 파일을 먼저 복사해야 합니다(scp, 파일 관리자 또는 여기에서 수행된 백업).",
-            "andYouAreImportingInto": "그리고 당신은 다음으로 수입하고 있습니다",
             "asTheDatabaseSuperuser": "데이터베이스 슈퍼유저로.",
-            "backUp": "백업",
             "dumpFile": "덤프 파일",
             "everyStatementInTheDumpIs": "덤프의 모든 명령문은 이에 대해 실행됩니다. 덤프가 다시 생성된 테이블은 현재 보유하고 있는 모든 내용을 잃게 되며 위의 백업 외에는 실행 취소할 수 없습니다.",
             "importInto": "다음으로 가져오기",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "읽기 전용 계정입니다.",
             "readingTheBackupDirectory": "백업 디렉터리를 읽는 중…",
             "takesADumpThroughServerkitS": "가져오기 전에 ServerKit의 자체 백업 경로를 통해 덤프를 수행합니다. 실패하면 가져오기가 실행되지 않습니다.",
-            "thatDumpWasTakenFrom": "그 덤프는 다음에서 가져왔습니다.",
             "theDumpIsPipedInto": "덤프는 파이프로 연결됩니다.",
             "theImportFailed": "가져오기에 실패했습니다.",
             "thePreImportBackupFailedSo": "가져오기 전 백업이 실패하여 아무것도 가져오지 못했습니다.",
-            "thisRewrites": "이것은 다시 작성됩니다",
             "toConfirm": "확인하기",
             "tryAgain": "다시 시도하세요",
             "whereTheDumpLives": "덤프가 사는 곳"
@@ -6094,7 +6081,6 @@
             "withChanges": "\" 변경 사항이 있는"
         },
         "volumesPanel": {
-            "alsoDeleteData": "데이터도 삭제하세요",
             "containerMountPath": "컨테이너 마운트 경로",
             "detach": "분리",
             "detachingKeepsTheDataByDefault": "분리하면 기본적으로 데이터가 유지됩니다. 삭제는 앱이 중지된 동안에만 허용됩니다.",

@@ -101,7 +101,7 @@ export function JournalControls({
 
             {onLoad && (
                 <Button onClick={onLoad} disabled={loading}>
-                    {loading ? 'Loading...' : loadLabel}
+                    {loading ? t('common.loading', 'Loading…') : loadLabel}
                 </Button>
             )}
         </div>

@@ -777,8 +777,6 @@
             "failedToApplySettings": "Gagal menerapkan pengaturan",
             "interruptionThePreviousConfigurationIsBacked": "gangguan. Konfigurasi sebelumnya telah dicadangkan dan dapat dibatalkan.",
             "isRestarted": "dimulai ulang.",
-            "mbOfRam": "MB RAM (",
-            "nothingIsAppliedUntilYouChoose": "). Tidak ada yang diterapkan sampai Anda memilihnya.",
             "previousConfigurationRestored": "Konfigurasi sebelumnya dipulihkan",
             "readingEngineConfiguration": "Membaca konfigurasi mesin…",
             "rollBackAndRestart": "Putar kembali dan mulai ulang",
@@ -790,7 +788,6 @@
             "setting": "Pengaturan",
             "settingsAppliedAndEngineRestarted": "Pengaturan diterapkan dan mesin dihidupkan ulang",
             "suggested": "Disarankan",
-            "suggestionsAreBasedOn": "Saran didasarkan pada",
             "targetValue": "Nilai sasaran",
             "targetValueFor": "Nilai target untuk {{key}}",
             "theLastBackedUpConfigurationIs": "Konfigurasi cadangan terakhir dipulihkan dan mesin basis data"
@@ -1099,7 +1096,6 @@
             "removeColumn": "Hapus kolom {{value}}",
             "someDatabaseServersDidNotAnswer": "Beberapa server database tidak menjawab, jadi daftar ini mungkin tidak lengkap.",
             "statementsRunAs": "Pernyataan dijalankan sebagai",
-            "stayKeywordsAnythingElseIsQuoted": "tinggal kata kunci, apa pun dikutip sebagai teks.",
             "theBuilderWritesTheStatementRunning": "Pembangun menulis pernyataan; menjalankannya adalah langkah yang Anda ambil di klien mesin itu sendiri.",
             "tryAgain": "Coba lagi",
             "typeOfColumn": "Jenis kolom {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "Periksa lagi",
-            "createA": "Buat sebuah",
             "deployActivity": "Terapkan aktivitas",
             "failedToInstall": "gagal dipasang",
             "importADumpOrWriteThe": ", impor dump, atau tulis sendiri pernyataannya di konsol.",
             "importDump": "Impor dump",
-            "installing": "Menginstal",
             "isReady": "sudah siap",
             "listeningOn": "Mendengarkan",
             "manageService": "Kelola layanan",
             "new": "Baru",
             "newDatabase": "Basis data baru",
             "openSqlConsole": "Buka konsol SQL",
-            "pullingTheImageProvisioningTheVolume": "Menarik gambar, menyediakan volume dan menunggu pemeriksaan kesehatan pertama",
             "serverkitListsItHereAsSoon": "— ServerKit mencantumkannya di sini segera setelah ada.",
             "theDatabaseIsConnectedAndEmpty": "Basis data terhubung dan kosong. Bangun yang pertama",
             "thisEngineHasNoBrowsableProtocol": "Mesin ini tidak memiliki protokol yang dapat dijelajahi — ServerKit menjalankannya, tetapi penjelajahan tabel berasal dari kliennya sendiri.",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "Langkah saat ini:",
-            "openConsole": "Buka konsol →",
-            "troubleReachingTheDeploymentJob": "Kesulitan mencapai tugas penerapan:"
+            "openConsole": "Buka konsol →"
         },
         "deploymentTimeline": {
             "audit": "Audit",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "Instalasi ketergantungan saat ini diaktifkan pada panel ini (",
             "dependencyInstallationIsEnabledOnThis": "Instalasi ketergantungan diaktifkan pada panel ini sekarang (",
             "dependencyInstallationIsOffOnThis": "Instalasi ketergantungan tidak aktif pada panel ini. Saat ekstensi mengirimkan paket Python, panel akan menulis file di sebelah ekstensi alih-alih menginstalnya, dan mencantumkannya di sini.",
-            "didPassThroughTheSdkGate": "memang melewati gerbang SDK dan",
             "everyUseOfThisCapabilityHas": "Setiap penggunaan kemampuan ini harus melewati gerbang SDK panel, dan gerbang tersebut tidak mencatat apa pun sejak proses panel dimulai. Entah ekstensi tersebut belum membutuhkannya, atau ia mendeklarasikan lebih dari yang digunakannya.",
             "everyUseOfThisCapabilityPasses": "Setiap penggunaan kemampuan ini melewati gerbang SDK panel. Tercatat",
             "fileOnTheBackendHost": "File di host backend:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "Cadangan di server ini",
             "aPathOnTheServer": "Jalur di server",
             "anAbsolutePathOnTheServer": "Jalur absolut pada server yang menjalankan ServerKit. Tidak ada titik akhir pengunggahan, jadi file di mesin Anda sendiri harus disalin terlebih dahulu (scp, pengelola file, atau cadangan diambil di sini).",
-            "andYouAreImportingInto": "dan Anda mengimpor ke",
             "asTheDatabaseSuperuser": "sebagai pengguna super basis data.",
-            "backUp": "Cadangan",
             "dumpFile": "berkas sampah",
             "everyStatementInTheDumpIs": "Setiap pernyataan di dump dieksekusi terhadapnya. Tabel yang dibuat ulang oleh dump akan kehilangan apa pun yang disimpannya sekarang, dan tidak ada yang dapat dibatalkan selain cadangan di atas.",
             "importInto": "Impor ke",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "Akun hanya-baca.",
             "readingTheBackupDirectory": "Membaca direktori cadangan…",
             "takesADumpThroughServerkitS": "Mengambil dump melalui rute cadangan ServerKit sendiri sebelum mengimpor. Jika gagal, impor tidak berjalan.",
-            "thatDumpWasTakenFrom": "Tempat pembuangan sampah itu diambil",
             "theDumpIsPipedInto": "Tempat pembuangan sampah disalurkan ke dalamnya",
             "theImportFailed": "Impor gagal.",
             "thePreImportBackupFailedSo": "Pencadangan pra-impor gagal, jadi tidak ada yang diimpor.",
-            "thisRewrites": "Ini menulis ulang",
             "toConfirm": "untuk mengkonfirmasi",
             "tryAgain": "Coba lagi",
             "whereTheDumpLives": "Dimana tempat pembuangan sampah itu tinggal"
@@ -6094,7 +6081,6 @@
             "withChanges": "” dengan perubahan"
         },
         "volumesPanel": {
-            "alsoDeleteData": "Hapus juga datanya",
             "containerMountPath": "Jalur pemasangan kontainer",
             "detach": "Melepaskan",
             "detachingKeepsTheDataByDefault": "Melepaskan menyimpan data secara default. Penghapusan hanya diperbolehkan saat aplikasi dihentikan.",

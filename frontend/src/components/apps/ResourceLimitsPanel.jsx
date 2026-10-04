@@ -114,7 +114,12 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
                                 <span className="resource-bar-label">CPU</span>
                                 <span className="resource-bar-value">
                                     {usage.cpu_percent != null ? `${usage.cpu_percent.toFixed(1)}%` : '—'}
-                                    {String(cpuLimit).trim() ? ` of ${String(cpuLimit).trim()} core(s)` : ''}
+                                    {String(cpuLimit).trim() ? ` ${t('app.resourceLimitsPanel.ofCores', {
+                                        count: Number(String(cpuLimit).trim()) || 0,
+                                        cores: String(cpuLimit).trim(),
+                                        defaultValue_one: 'of {{cores}} core',
+                                        defaultValue_other: 'of {{cores}} cores',
+                                    })}` : ''}
                                 </span>
                             </div>
                             <div className="resource-bar-track">
@@ -142,7 +147,9 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
                     </>
                 ) : (
                     <p className="resource-hint">
-                        {loading ? 'Loading live usage…' : 'Live usage is unavailable (service stopped or Docker stats not reachable).'}
+                        {loading
+                            ? t('app.resourceLimitsPanel.loadingLiveUsage', 'Loading live usage…')
+                            : t('app.resourceLimitsPanel.liveUsageUnavailable', "Live usage isn't available. The service is stopped or Docker stats aren't reachable.")}
                     </p>
                 )}
 
@@ -181,7 +188,7 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
 
                 <div className="app-detail-actions container-ops__actions">
                     <Button size="sm" onClick={handleSave} disabled={saving || loading || !!cpuError || !!memoryError}>
-                        {saving ? 'Saving…' : 'Save limits'}
+                        {saving ? t('common.saving', 'Saving…') : t('app.resourceLimitsPanel.saveLimits', 'Save limits')}
                     </Button>
                 </div>
             </div>

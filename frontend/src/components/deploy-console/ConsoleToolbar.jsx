@@ -58,7 +58,7 @@ export default function ConsoleToolbar({
                         </SelectTrigger>
                         <SelectContent>
                             {LEVELS.map((l) => (
-                                <SelectItem key={l} value={l}>{l === 'all' ? 'All levels' : l}</SelectItem>
+                                <SelectItem key={l} value={l}>{l === 'all' ? t('app.consoleToolbar.allLevels', 'All levels') : l}</SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
@@ -134,7 +134,7 @@ export default function ConsoleToolbar({
                     title={focused ? t('app.consoleToolbar.showTheDeploymentDetailsAgain', 'Show the deployment details again') : t('app.consoleToolbar.giveTheLogTheWholePage', 'Give the log the whole page')}
                 >
                     {focused ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-                    {focused ? 'Exit' : 'Expand'}
+                    {focused ? t('app.consoleToolbar.exit', 'Exit') : t('app.consoleToolbar.expand', 'Expand')}
                 </SharedButton>
             </div>
         </div>

@@ -257,7 +257,7 @@ export default function RemoteTerminal({ serverId, onClose }) {
                 <div className="terminal-titles">
                     <div className="terminal-title">
                         <span className={`terminal-status ${connected ? 'connected' : 'disconnected'}`} />
-                        <span>{shellName || 'Terminal'}</span>
+                        <span>{shellName || t('app.remoteTerminal.terminal', 'Terminal')}</span>
                     </div>
                     {sessionId && <span className="session-id">{sessionId}</span>}
                 </div>

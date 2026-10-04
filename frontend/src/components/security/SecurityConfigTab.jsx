@@ -190,7 +190,7 @@ const SecurityConfigTab = () => {
 
             <div className="form-actions">
                 <Button variant="default" onClick={handleSave} disabled={saving}>
-                    {saving ? 'Saving...' : 'Save Settings'}
+                    {saving ? t('common.saving', 'Saving…') : t('app.securityConfigTab.saveSettings', 'Save settings')}
                 </Button>
             </div>
         </div>

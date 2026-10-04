@@ -142,7 +142,7 @@ export default function NotificationBell() {
                                             {item.body && <span className="sk-notif__text">{item.body}</span>}
                                             <span className="sk-notif__time">
                                                 {timeAgo(item.created_at)}
-                                                {item.action_path && <span className="sk-notif__cta"> · {item.action_label || 'Open'} →</span>}
+                                                {item.action_path && <span className="sk-notif__cta"> · {item.action_label || t('common.actions.open', 'Open')} →</span>}
                                             </span>
                                         </span>
                                     </SharedButton>

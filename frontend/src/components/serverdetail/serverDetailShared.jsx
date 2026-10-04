@@ -26,7 +26,9 @@ export const SecurityAlertItem = ({ alert, onAcknowledge, onResolve }) => {
                 <p className="notification__message">
                     {alert.source_ip && <><strong>{t('app.serverDetailShared.ip', 'IP:')}</strong> {alert.source_ip}{'  '}</>}
                     {alert.details?.message || ''}
-                    {alert.details?.attempts ? ` (${alert.details.attempts} attempts)` : ''}
+                    {alert.details?.attempts
+                        ? ` ${t('app.serverDetailShared.attempts', { count: alert.details.attempts, defaultValue_one: '(1 attempt)', defaultValue_other: '({{count}} attempts)' })}`
+                        : ''}
                 </p>
                 <div className="notification__actions">
                     {alert.status === 'open' && (

@@ -54,11 +54,9 @@ const PermissionRow = ({ row }) => {
                 </p>
                 {row.uses > 0 && (
                     <p className="extension-permissions__note">
-                        {plural(row.uses, 'call')} {t('app.extensionPermissionsDialog.didPassThroughTheSdkGate', 'did pass through the SDK gate and')}
-                        {row.uses === 1 ? ' was' : ' were'} recorded
+                        {t('app.extensionPermissionsDialog.callsPassedTheGate', { count: row.uses, defaultValue_one: '1 call passed through the SDK gate and was recorded', defaultValue_other: '{{count}} calls passed through the SDK gate and were recorded' })}
                         {row.last_used_at && <> {t('app.extensionPermissionsDialog.mostRecent', '(most recent')} <ObservedAt iso={row.last_used_at} />)</>}
-                        . Calls that did not go through the gate leave no trace, so treat that
-                        as a floor, not a total.
+                        .{' '}{t('app.extensionPermissionsDialog.ungatedCallsLeaveNoTrace', "Calls that didn't go through the gate leave no trace, so treat that as a floor, not a total.")}
                     </p>
                 )}
             </li>

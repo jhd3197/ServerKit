@@ -23,6 +23,13 @@ const LOG_LEVELS = ['all', 'error', 'warn', 'info', 'debug'];
 
 const LogsTab = ({ app }) => {
     const { t } = useTranslation();
+    const levelLabels = {
+        all: t('app.logsTab.allLevels', 'All levels'),
+        error: t('app.logsTab.levelError', 'Error'),
+        warn: t('app.logsTab.levelWarn', 'Warning'),
+        info: t('app.logsTab.levelInfo', 'Info'),
+        debug: t('app.logsTab.levelDebug', 'Debug'),
+    };
     const { openDrawer } = useLogsDrawer();
     const toast = useToast();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -198,7 +205,7 @@ const LogsTab = ({ app }) => {
                         <SelectContent>
                             {LOG_LEVELS.map(l => (
                                 <SelectItem key={l} value={l}>
-                                    {l === 'all' ? 'All Levels' : l.charAt(0).toUpperCase() + l.slice(1)}
+                                    {levelLabels[l]}
                                 </SelectItem>
                             ))}
                         </SelectContent>
@@ -265,9 +272,9 @@ const LogsTab = ({ app }) => {
 
             {/* Log Source Hint */}
             <div className="logs-source-hint">
-                {isPythonApp && 'Gunicorn / systemd logs'}
-                {isDockerApp && 'Docker Compose logs'}
-                {!isPythonApp && !isDockerApp && 'Application logs'}
+                {isPythonApp && t('app.logsTab.gunicornSystemdLogs', 'Gunicorn / systemd logs')}
+                {isDockerApp && t('app.logsTab.dockerComposeLogs', 'Docker Compose logs')}
+                {!isPythonApp && !isDockerApp && t('app.logsTab.serviceLogs', 'Service logs')}
                 {autoRefresh && <span className="logs-source-hint__live">LIVE</span>}
             </div>
 
@@ -278,8 +285,8 @@ const LogsTab = ({ app }) => {
                 ) : filteredLines.length === 0 ? (
                     <div className="logs-viewer__empty">
                         {searchTerm || levelFilter !== 'all'
-                            ? 'No log lines match your filters.'
-                            : 'No logs available.'}
+                            ? t('app.logsTab.noLinesMatchFilters', 'No log lines match your filters.')
+                            : t('app.logsTab.noLogsAvailable', 'No logs available.')}
                     </div>
                 ) : (
                     filteredLines.map((entry, i) => (

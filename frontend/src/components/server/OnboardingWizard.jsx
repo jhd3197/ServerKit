@@ -252,7 +252,7 @@ const OnboardingWizard = ({ serverId, initialState, onStateChange }) => {
                         disabled={retrying}
                     >
                         <RotateCw size={14} />
-                        {retrying ? 'Retrying…' : 'Retry'}
+                        {retrying ? t('app.onboardingWizard.retrying', 'Retrying…') : t('common.actions.retry', 'Retry')}
                     </Button>
                 )}
             </div>
@@ -260,7 +260,9 @@ const OnboardingWizard = ({ serverId, initialState, onStateChange }) => {
             <div className="onboarding-wizard__progress">
                 <div className="onboarding-wizard__progress-head">
                     <span className="onboarding-wizard__progress-step">
-                        {ready ? 'Complete' : `Step ${stepNumber} of ${totalSteps}`}
+                        {ready
+                            ? t('app.onboardingWizard.complete', 'Complete')
+                            : t('app.onboardingWizard.stepOf', 'Step {{step}} of {{total}}', { step: stepNumber, total: totalSteps })}
                     </span>
                     {eta && (
                         <span className="onboarding-wizard__progress-eta">{eta}</span>
@@ -284,7 +286,7 @@ const OnboardingWizard = ({ serverId, initialState, onStateChange }) => {
             {failureLog && (
                 <div className="onboarding-wizard__error">
                     <XCircle size={16} />
-                    <span>{failureLog.message || 'Onboarding failed'}</span>
+                    <span>{failureLog.message || t('app.onboardingWizard.onboardingFailed', "Couldn't finish onboarding.")}</span>
                 </div>
             )}
 

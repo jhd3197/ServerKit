@@ -81,7 +81,7 @@ export default function StorageDestinations({
                                 <div className="bk-destcard__type">{card.type}</div>
                             </div>
                             <Pill kind={card.connected ? 'green' : 'gray'}>
-                                {card.connected ? 'connected' : 'not set up'}
+                                {card.connected ? t('app.storageDestinations.connected', 'connected') : t('app.storageDestinations.notSetUp', 'not set up')}
                             </Pill>
                         </div>
 
@@ -90,7 +90,7 @@ export default function StorageDestinations({
                         </div>
                         <div className="bk-destcard__usage">
                             <span>{formatBytes(card.bytes, { defaultValue: '0 B' })} stored</span>
-                            <span>{card.cost > 0 ? `$${card.cost.toFixed(2)}/mo` : 'no charge'}</span>
+                            <span>{card.cost > 0 ? `$${card.cost.toFixed(2)}/mo` : t('app.storageDestinations.noCharge', 'no charge')}</span>
                         </div>
 
                         <dl className="bk-destcard__rows">
@@ -105,7 +105,7 @@ export default function StorageDestinations({
                         <div className="bk-destcard__actions">
                             {card.testable && (
                                 <Button variant="outline" size="sm" onClick={onTest} disabled={testing}>
-                                    <Activity size={14} /> {testing ? 'Testing…' : 'Test'}
+                                    <Activity size={14} /> {testing ? t('app.storageDestinations.testing', 'Testing…') : t('common.actions.test', 'Test')}
                                 </Button>
                             )}
                             <Button variant="outline" size="sm" onClick={onBrowse}>
@@ -120,7 +120,7 @@ export default function StorageDestinations({
                 configuration form below rather than adding a second card. */}
             <Button variant="unstyled" type="button" className="bk-destcard bk-destcard--add" onClick={onAdd}>
                 <Plus size={24} />
-                <span>{remote ? 'Change destination' : 'Add destination'}</span>
+                <span>{remote ? t('app.storageDestinations.changeDestination', 'Change destination') : t('app.storageDestinations.addDestination', 'Add destination')}</span>
             </Button>
         </div>
     );

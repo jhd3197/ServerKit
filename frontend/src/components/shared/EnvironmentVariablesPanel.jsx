@@ -173,8 +173,8 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
             {filtered.length === 0 ? (
                 <div className="shared-vars-panel__empty">
                     {filter
-                        ? 'No matching variables'
-                        : 'No shared variable groups attached to this resource yet.'}
+                        ? t('app.environmentVariablesPanel.noMatchingVariables', 'No matching variables')
+                        : t('app.environmentVariablesPanel.noSharedGroupsYet', 'No shared variable groups attached to this resource yet.')}
                 </div>
             ) : (
                 <table className="shared-vars-table">

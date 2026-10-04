@@ -79,14 +79,14 @@ export default function DeploymentJobProgress({
             )}
             {error && (
                 <div className="alert alert-warning">
-                    {t('app.deploymentJobProgress.troubleReachingTheDeploymentJob', 'Trouble reaching the deployment job:')} {error}. Retrying…
+                    {t('app.deploymentJobProgress.troubleReachingJobRetrying', 'Trouble reaching the deployment job: {{error}}. Retrying…', { error })}
                 </div>
             )}
             <pre className="log-viewer">
                 {lines.map(log => {
                     const prefix = log.step_index ? `[${log.step_index}] ` : '';
                     return `${prefix}${log.message}`;
-                }).join('\n') || 'Waiting for deployment logs...'}
+                }).join('\n') || t('app.deploymentJobProgress.waitingForLogs', 'Waiting for deployment logs…')}
             </pre>
             {showConsoleLink && jobId && (
                 <Link to={`/deployments/${jobId}`} className="deployment-job-progress__console-link">

@@ -43,7 +43,7 @@ const PruneButton = ({ onPruned }) => {
                 disabled={loading || isRemote}
                 title={isRemote ? t('app.pruneButton.pruneIsOnlyAvailableOnThe', 'Prune is only available on the panel server right now') : t('app.pruneButton.pruneUnusedDockerResources', 'Prune unused Docker resources')}
             >
-                {loading ? 'Cleaning...' : 'Prune Unused'}
+                {loading ? t('app.pruneButton.cleaning', 'Cleaning…') : t('app.pruneButton.pruneUnused', 'Prune unused')}
             </Button>
         </>
     );

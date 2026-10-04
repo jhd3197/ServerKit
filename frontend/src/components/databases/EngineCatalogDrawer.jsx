@@ -97,7 +97,7 @@ function EngineCard({ entry, onPick }) {
                     aria-label={t('app.engineCatalogDrawer.install', 'Install {{name}}', { name: entry.name })}
                 >
                     <Download size={12} aria-hidden="true" />
-                    {entry.installed_count > 0 ? 'Add another' : 'Install'}
+                    {entry.installed_count > 0 ? t('app.engineCatalogDrawer.addAnother', 'Add another') : t('app.engineCatalogDrawer.installAction', 'Install')}
                 </SharedButton>
             )}
         />
@@ -266,7 +266,7 @@ export default function EngineCatalogDrawer({
                         disabled={syncing}
                     >
                         <RefreshCw size={13} className={syncing ? 'dbx-spin' : undefined} aria-hidden="true" />
-                        {syncing ? 'Syncing…' : 'Sync template repositories'}
+                        {syncing ? t('app.engineCatalogDrawer.syncing', 'Syncing…') : t('app.engineCatalogDrawer.syncTemplateRepositories', 'Sync template repositories')}
                     </SharedButton>
                     <Link
                         className="dbx-inline-link"

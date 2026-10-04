@@ -136,12 +136,12 @@ const ImageUpdateSection = ({ app, onChanged }) => {
 
                 <div className="app-detail-actions container-ops__actions">
                     <Button variant="outline" size="sm" onClick={handleCheck} disabled={checking}>
-                        {checking ? 'Checking…' : 'Check for update'}
+                        {checking ? t('common.checking', 'Checking…') : t('app.containerOpsPanel.checkForUpdate', 'Check for update')}
                     </Button>
                     {updateAvailable && isCompose && (
                         <Button size="sm" onClick={handleApply} disabled={applying}>
                             <ArrowUpCircle size={15} />
-                            {applying ? 'Updating…' : 'Update now'}
+                            {applying ? t('app.containerOpsPanel.updating', 'Updating…') : t('app.containerOpsPanel.updateNow', 'Update now')}
                         </Button>
                     )}
                 </div>
@@ -321,7 +321,7 @@ const AutoSleepSection = ({ app, onChanged }) => {
                 <span>{t('app.containerOpsPanel.autoSleep', 'Auto-sleep')}</span>
                 <span className="app-panel-header-actions">
                     {!loading && (
-                        <Pill kind={asleep ? 'gray' : 'green'}>{asleep ? 'Asleep' : 'Awake'}</Pill>
+                        <Pill kind={asleep ? 'gray' : 'green'}>{asleep ? t('app.containerOpsPanel.asleep', 'Asleep') : t('app.containerOpsPanel.awake', 'Awake')}</Pill>
                     )}
                 </span>
             </div>
@@ -350,8 +350,8 @@ const AutoSleepSection = ({ app, onChanged }) => {
                         <Label htmlFor={`sleep-timeout-${app.id}`}>{t('app.containerOpsPanel.idleTimeoutMinutes', 'Idle timeout (minutes)')}</Label>
                         <span className="container-ops__field-hint">
                             {policy?.last_activity_at
-                                ? `Last activity ${new Date(policy.last_activity_at).toLocaleString()}`
-                                : 'No recorded activity yet.'}
+                                ? t('app.containerOpsPanel.lastActivity', 'Last activity {{when}}', { when: new Date(policy.last_activity_at).toLocaleString() })
+                                : t('app.containerOpsPanel.noRecordedActivityYet', 'No recorded activity yet.')}
                         </span>
                     </div>
                     <Input
@@ -369,7 +369,7 @@ const AutoSleepSection = ({ app, onChanged }) => {
                 <div className="app-detail-actions container-ops__actions">
                     <Button variant="outline" size="sm" onClick={handleSleepWake} disabled={busy || loading}>
                         {asleep ? <Sun size={15} /> : <Moon size={15} />}
-                        {busy ? 'Working…' : asleep ? 'Wake now' : 'Sleep now'}
+                        {busy ? t('app.containerOpsPanel.working', 'Working…') : asleep ? t('app.containerOpsPanel.wakeNow', 'Wake now') : t('app.containerOpsPanel.sleepNow', 'Sleep now')}
                     </Button>
                 </div>
             </div>

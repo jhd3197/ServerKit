@@ -125,7 +125,7 @@ const MetricsTabContent = ({ app }) => {
                             <h4>{t('app.metricsTab.serviceStatus', 'Service status')}</h4>
                         </div>
                         <div className="metrics-tab__info">
-                            {processInfo.active ? 'Active (running)' : 'Inactive'}
+                            {processInfo.active ? t('app.metricsTab.activeRunning', 'Active (running)') : t('app.metricsTab.inactive', 'Inactive')}
                         </div>
                     </div>
 

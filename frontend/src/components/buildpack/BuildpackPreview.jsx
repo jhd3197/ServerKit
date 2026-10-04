@@ -96,10 +96,10 @@ function BuildpackPreview({ plan, dockerfile, overrides = {}, onChange, loading 
                     <strong>{BUILDER_LABEL[builder] || builder}</strong>
                     <span>
                         {present
-                            ? 'This repository ships its own Dockerfile — ServerKit will build it directly.'
+                            ? t('app.buildpackPreview.shipsOwnDockerfile', 'This repository ships its own Dockerfile. ServerKit will build it directly.')
                             : unknown
-                                ? 'Could not confidently detect the stack. Pick a build method manually or add a Dockerfile.'
-                                : 'ServerKit will generate a Dockerfile from the detected stack.'}
+                                ? t('app.buildpackPreview.couldNotDetectStack', "Couldn't detect the stack with confidence. Pick a build method manually or add a Dockerfile.")
+                                : t('app.buildpackPreview.willGenerateDockerfile', 'ServerKit will generate a Dockerfile from the detected stack.')}
                     </span>
                 </div>
                 <span className="buildpack-preview__confidence" data-level={confidenceLabel(plan.confidence).toLowerCase()}>
@@ -114,11 +114,11 @@ function BuildpackPreview({ plan, dockerfile, overrides = {}, onChange, loading 
                 </div>
                 <div className="buildpack-preview__fact">
                     <span><Zap size={13} /> {t('app.buildpackPreview.framework', 'Framework')}</span>
-                    <strong>{plan.framework || 'Generic'}</strong>
+                    <strong>{plan.framework || t('app.buildpackPreview.generic', 'Generic')}</strong>
                 </div>
                 <div className="buildpack-preview__fact">
                     <span><Boxes size={13} /> {t('common.labels.port', 'Port')}</span>
-                    <strong>{plan.port || 'Auto'}</strong>
+                    <strong>{plan.port || t('app.buildpackPreview.auto', 'Auto')}</strong>
                 </div>
             </div>
 

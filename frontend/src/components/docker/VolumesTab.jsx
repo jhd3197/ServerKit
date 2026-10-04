@@ -390,7 +390,7 @@ const CreateVolumeModal = ({ onClose, onCreated }) => {
                         {t('common.actions.cancel', 'Cancel')}
                     </Button>
                     <Button type="submit" disabled={loading}>
-                        {loading ? 'Creating...' : 'Create Volume'}
+                        {loading ? t('app.volumesTab.creating', 'Creating…') : t('app.volumesTab.createVolume', 'Create volume')}
                     </Button>
                 </div>
             </form>

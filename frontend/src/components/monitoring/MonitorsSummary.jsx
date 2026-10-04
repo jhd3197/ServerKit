@@ -154,7 +154,7 @@ export default function MonitorsSummary({ refreshKey = 0 }) {
                                     <span className="mon-monitor-row__body">
                                         <span className="mon-monitor-row__name">{monitor.name}</span>
                                         <span className="mon-monitor-row__sub">
-                                            {monitor.check_type} · {monitor.check_target || 'bound site'}
+                                            {monitor.check_type} · {monitor.check_target || t('app.monitorsSummary.boundSite', 'bound site')}
                                         </span>
                                     </span>
                                     <span className="mon-monitor-row__ms">

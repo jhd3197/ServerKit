@@ -260,7 +260,7 @@ const OverviewTab = ({ app, deployConfig }) => {
                                 <div className="overview-tab__metric-item">
                                     <span className="overview-tab__metric-item-label">{t('common.labels.status', 'Status')}</span>
                                     <span className="overview-tab__metric-item-value">
-                                        {metrics.active ? 'Active' : 'Inactive'}
+                                        {metrics.active ? t('app.overviewTab.active', 'Active') : t('app.overviewTab.inactive', 'Inactive')}
                                     </span>
                                 </div>
                                 {metrics.pid && (
@@ -295,7 +295,9 @@ const OverviewTab = ({ app, deployConfig }) => {
                         </div>
                     ) : (
                         <div className="overview-tab__no-metrics">
-                            <p>{app.isRunning ? 'No metrics available for this service type.' : 'Start the service to view metrics.'}</p>
+                            <p>{app.isRunning
+                                ? t('app.overviewTab.noMetricsForType', 'No metrics available for this service type.')
+                                : t('app.overviewTab.startToViewMetrics', 'Start the service to view metrics.')}</p>
                         </div>
                     )}
                 </div>
@@ -368,7 +370,7 @@ const OverviewTab = ({ app, deployConfig }) => {
                                     <div className={`overview-tab__deploy-dot overview-tab__deploy-dot--${tone}`} />
                                     <div className="overview-tab__deploy-info">
                                         <span className="overview-tab__deploy-message">
-                                            {deploy.commitMessage || deploy.version || `Deployment #${deployments.length - idx}`}
+                                            {deploy.commitMessage || deploy.version || t('app.overviewTab.deploymentNumber', 'Deployment #{{number}}', { number: deployments.length - idx })}
                                         </span>
                                         <span className="overview-tab__deploy-meta">
                                             {deploy.commitSha && (
@@ -380,7 +382,7 @@ const OverviewTab = ({ app, deployConfig }) => {
                                         </span>
                                     </div>
                                     <Pill kind={isLatest ? 'green' : tone}>
-                                        {isLatest ? 'Live' : statusInfo.label}
+                                        {isLatest ? t('app.overviewTab.live', 'Live') : statusInfo.label}
                                     </Pill>
                                 </div>
                             );

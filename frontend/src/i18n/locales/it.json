@@ -777,8 +777,6 @@
             "failedToApplySettings": "Impossibile applicare le impostazioni",
             "interruptionThePreviousConfigurationIsBacked": "interruzione. Viene eseguito il backup della configurazione precedente ed è possibile eseguirne il rollback.",
             "isRestarted": "viene riavviato.",
-            "mbOfRam": "MB di RAM (",
-            "nothingIsAppliedUntilYouChoose": "). Non viene applicato nulla finché non lo scegli tu.",
             "previousConfigurationRestored": "Configurazione precedente ripristinata",
             "readingEngineConfiguration": "Lettura della configurazione del motore…",
             "rollBackAndRestart": "Torna indietro e riavvia",
@@ -790,7 +788,6 @@
             "setting": "Collocamento",
             "settingsAppliedAndEngineRestarted": "Impostazioni applicate e motore riavviato",
             "suggested": "Suggerito",
-            "suggestionsAreBasedOn": "I suggerimenti sono basati su",
             "targetValue": "Valore obiettivo",
             "targetValueFor": "Valore target per {{key}}",
             "theLastBackedUpConfigurationIs": "Viene ripristinata l'ultima configurazione di cui è stato eseguito il backup e il motore del database"
@@ -1099,7 +1096,6 @@
             "removeColumn": "Rimuovere la colonna {{value}}",
             "someDatabaseServersDidNotAnswer": "Alcuni server di database non hanno risposto, quindi questo elenco potrebbe essere incompleto.",
             "statementsRunAs": "Le istruzioni vengono eseguite come",
-            "stayKeywordsAnythingElseIsQuoted": "rimani parole chiave, qualsiasi altra cosa viene citata come testo.",
             "theBuilderWritesTheStatementRunning": "Il costruttore scrive la dichiarazione; eseguirlo è un passaggio da eseguire nel client del motore.",
             "tryAgain": "Riprova",
             "typeOfColumn": "Tipologia colonna {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "Ricontrollare",
-            "createA": "Crea un",
             "deployActivity": "Distribuire l'attività",
             "failedToInstall": "installazione non riuscita",
             "importADumpOrWriteThe": ", importa un dump o scrivi tu stesso l'istruzione nella console.",
             "importDump": "Dump di importazione",
-            "installing": "Installazione",
             "isReady": "è pronto",
             "listeningOn": "Continuando ad ascoltare",
             "manageService": "Gestisci il servizio",
             "new": "Nuovo",
             "newDatabase": "Nuova banca dati",
             "openSqlConsole": "Apri la console SQL",
-            "pullingTheImageProvisioningTheVolume": "Estrazione dell'immagine, provisioning del volume e attesa del primo controllo sanitario",
             "serverkitListsItHereAsSoon": "— ServerKit lo elenca qui non appena esiste.",
             "theDatabaseIsConnectedAndEmpty": "Il database è connesso e vuoto. Costruisci il tuo primo",
             "thisEngineHasNoBrowsableProtocol": "Questo motore non ha un protocollo esplorabile: ServerKit lo esegue, ma l'esplorazione delle tabelle proviene dal proprio client.",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "Passaggio attuale:",
-            "openConsole": "Apri la console →",
-            "troubleReachingTheDeploymentJob": "Problemi nel raggiungere il processo di distribuzione:"
+            "openConsole": "Apri la console →"
         },
         "deploymentTimeline": {
             "audit": "Audit",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "L'installazione delle dipendenze è attualmente abilitata su questo pannello (",
             "dependencyInstallationIsEnabledOnThis": "L'installazione delle dipendenze è ora abilitata su questo pannello (",
             "dependencyInstallationIsOffOnThis": "L'installazione delle dipendenze è disattivata su questo pannello. Quando un'estensione fornisce pacchetti Python, il pannello scrive il file accanto all'estensione invece di installarlo e lo elenca qui.",
-            "didPassThroughTheSdkGate": "ha attraversato il gate dell'SDK e",
             "everyUseOfThisCapabilityHas": "Ogni utilizzo di questa funzionalità deve passare attraverso il gate SDK del pannello e il gate non ne ha registrato alcuno dall'avvio del processo del pannello. O l'estensione non ne ha ancora avuto bisogno, oppure dichiara più di quanto utilizza.",
             "everyUseOfThisCapabilityPasses": "Ogni utilizzo di questa funzionalità passa attraverso il gate SDK del pannello. Registrato",
             "fileOnTheBackendHost": "File sull'host backend:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "Un backup su questo server",
             "aPathOnTheServer": "Un percorso sul server",
             "anAbsolutePathOnTheServer": "Un percorso assoluto sul server che esegue ServerKit. Non esiste un endpoint di caricamento, quindi un file sul tuo computer deve essere prima copiato (scp, il file manager o un backup eseguito qui).",
-            "andYouAreImportingInto": "e stai importando in",
             "asTheDatabaseSuperuser": "come superutente del database.",
-            "backUp": "Backup",
             "dumpFile": "Scarica il file",
             "everyStatementInTheDumpIs": "Ogni istruzione nel dump viene eseguita contro di essa. Le tabelle ricreate dal dump perdono tutto ciò che contengono ora e non è possibile annullare oltre il backup sopra riportato.",
             "importInto": "Importa in",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "Conto di sola lettura.",
             "readingTheBackupDirectory": "Lettura della directory di backup…",
             "takesADumpThroughServerkitS": "Esegue un dump attraverso il percorso di backup di ServerKit prima dell'importazione. Se fallisce, l'importazione non viene eseguita.",
-            "thatDumpWasTakenFrom": "Da quella discarica è stata prelevata",
             "theDumpIsPipedInto": "La discarica viene convogliata",
             "theImportFailed": "L'importazione non è riuscita.",
             "thePreImportBackupFailedSo": "Il backup pre-importazione non è riuscito, quindi non è stato importato nulla.",
-            "thisRewrites": "Questo si riscrive",
             "toConfirm": "per confermare",
             "tryAgain": "Riprova",
             "whereTheDumpLives": "Dove vive la discarica"
@@ -6094,7 +6081,6 @@
             "withChanges": "\" con modifiche"
         },
         "volumesPanel": {
-            "alsoDeleteData": "Elimina anche i dati",
             "containerMountPath": "Percorso di montaggio del contenitore",
             "detach": "Stacca",
             "detachingKeepsTheDataByDefault": "Il distacco mantiene i dati per impostazione predefinita. La cancellazione è consentita solo mentre l'app è arrestata.",

@@ -777,8 +777,6 @@
             "failedToApplySettings": "সেটিংস প্রয়োগ করতে ব্যর্থ হয়েছে৷",
             "interruptionThePreviousConfigurationIsBacked": "বাধা পূর্ববর্তী কনফিগারেশনটি ব্যাক আপ করা হয়েছে এবং এটি রোল ব্যাক করা যেতে পারে।",
             "isRestarted": "পুনরায় চালু করা হয়।",
-            "mbOfRam": "RAM এর এমবি (",
-            "nothingIsAppliedUntilYouChoose": ") আপনি নির্বাচন না করা পর্যন্ত কিছুই প্রয়োগ করা হয় না।",
             "previousConfigurationRestored": "পূর্ববর্তী কনফিগারেশন পুনরুদ্ধার করা হয়েছে",
             "readingEngineConfiguration": "ইঞ্জিন কনফিগারেশন পড়া হচ্ছে...",
             "rollBackAndRestart": "রোল ব্যাক এবং রিস্টার্ট করুন",
@@ -790,7 +788,6 @@
             "setting": "সেটিং",
             "settingsAppliedAndEngineRestarted": "সেটিংস প্রয়োগ করা হয়েছে এবং ইঞ্জিন পুনরায় চালু হয়েছে৷",
             "suggested": "প্রস্তাবিত",
-            "suggestionsAreBasedOn": "পরামর্শ ভিত্তিক হয়",
             "targetValue": "লক্ষ্য মান",
             "targetValueFor": "{{key}} এর লক্ষ্য মান",
             "theLastBackedUpConfigurationIs": "শেষ ব্যাক-আপ কনফিগারেশন পুনরুদ্ধার করা হয় এবং ডাটাবেস ইঞ্জিন"
@@ -1099,7 +1096,6 @@
             "removeColumn": "{{value}} কলাম সরান",
             "someDatabaseServersDidNotAnswer": "কিছু ডাটাবেস সার্ভার উত্তর দেয়নি, তাই এই তালিকাটি অসম্পূর্ণ হতে পারে।",
             "statementsRunAs": "বিবৃতি হিসাবে সঞ্চালিত হয়",
-            "stayKeywordsAnythingElseIsQuoted": "থাকুন কীওয়ার্ড, অন্য কিছু টেক্সট হিসাবে উদ্ধৃত করা হয়.",
             "theBuilderWritesTheStatementRunning": "নির্মাতা বিবৃতি লেখেন; এটি চালানো একটি পদক্ষেপ যা আপনি ইঞ্জিনের নিজস্ব ক্লায়েন্টে গ্রহণ করেন।",
             "tryAgain": "আবার চেষ্টা করুন",
             "typeOfColumn": "{{value}} কলামের ধরন"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "আবার চেক করুন",
-            "createA": "সৃষ্টি a",
             "deployActivity": "কার্যকলাপ স্থাপন",
             "failedToInstall": "ইনস্টল করতে ব্যর্থ",
             "importADumpOrWriteThe": ", একটি ডাম্প আমদানি করুন, অথবা কনসোলে নিজেই বিবৃতিটি লিখুন।",
             "importDump": "আমদানি ডাম্প",
-            "installing": "ইনস্টল করা হচ্ছে",
             "isReady": "প্রস্তুত",
             "listeningOn": "শুনছি",
             "manageService": "পরিষেবা পরিচালনা করুন",
             "new": "নতুন",
             "newDatabase": "নতুন ডাটাবেস",
             "openSqlConsole": "এসকিউএল কনসোল খুলুন",
-            "pullingTheImageProvisioningTheVolume": "ইমেজ টানা, ভলিউম বিধান এবং প্রথম স্বাস্থ্য পরীক্ষার জন্য অপেক্ষা",
             "serverkitListsItHereAsSoon": "— ServerKit এটি বিদ্যমান হওয়ার সাথে সাথে এটিকে এখানে তালিকাভুক্ত করে।",
             "theDatabaseIsConnectedAndEmpty": "ডাটাবেস সংযুক্ত এবং খালি। আপনার প্রথম তৈরি করুন",
             "thisEngineHasNoBrowsableProtocol": "এই ইঞ্জিনে কোন ব্রাউজযোগ্য প্রোটোকল নেই — ServerKit এটি চালায়, কিন্তু টেবিল ব্রাউজিং এর নিজস্ব ক্লায়েন্ট থেকে আসে।",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "বর্তমান পদক্ষেপ:",
-            "openConsole": "কনসোল খুলুন →",
-            "troubleReachingTheDeploymentJob": "স্থাপনার কাজে পৌঁছাতে সমস্যা:"
+            "openConsole": "কনসোল খুলুন →"
         },
         "deploymentTimeline": {
             "audit": "অডিট",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "নির্ভরতা ইনস্টলেশন বর্তমানে এই প্যানেলে সক্ষম করা হয়েছে (",
             "dependencyInstallationIsEnabledOnThis": "এখন এই প্যানেলে নির্ভরতা ইনস্টলেশন সক্ষম করা হয়েছে (",
             "dependencyInstallationIsOffOnThis": "এই প্যানেলে নির্ভরতা ইনস্টলেশন বন্ধ আছে। যখন একটি এক্সটেনশন Python প্যাকেজ পাঠায়, প্যানেল ফাইলটি ইনস্টল করার পরিবর্তে এক্সটেনশনের পাশে লেখে এবং এটি এখানে তালিকাভুক্ত করে।",
-            "didPassThroughTheSdkGate": "SDK গেট দিয়ে পাস করেছে এবং",
             "everyUseOfThisCapabilityHas": "এই ক্ষমতার প্রতিটি ব্যবহার প্যানেলের SDK গেটের মধ্য দিয়ে যেতে হবে, এবং প্যানেল প্রক্রিয়া শুরু হওয়ার পর থেকে গেটটি কোনোটিই রেকর্ড করেনি। হয় এক্সটেনশনের এখনও এটির প্রয়োজন নেই, অথবা এটি ব্যবহার করার চেয়ে বেশি ঘোষণা করে।",
             "everyUseOfThisCapabilityPasses": "এই ক্ষমতার প্রতিটি ব্যবহার প্যানেলের SDK গেটের মধ্য দিয়ে যায়। রেকর্ড করা হয়েছে",
             "fileOnTheBackendHost": "ব্যাকএন্ড হোস্টে ফাইল:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "এই সার্ভারে একটি ব্যাকআপ",
             "aPathOnTheServer": "সার্ভারে একটি পথ",
             "anAbsolutePathOnTheServer": "সার্ভারে একটি পরম পথ যা ServerKit চালায়। কোন আপলোড এন্ডপয়েন্ট নেই, তাই আপনার নিজের মেশিনে একটি ফাইল প্রথমে কপি করতে হবে (scp, ফাইল ম্যানেজার, বা এখানে একটি ব্যাকআপ নেওয়া হয়েছে)।",
-            "andYouAreImportingInto": "এবং আপনি আমদানি করছেন",
             "asTheDatabaseSuperuser": "ডাটাবেস সুপার ইউজার হিসাবে।",
-            "backUp": "ব্যাক আপ",
             "dumpFile": "ডাম্প ফাইল",
             "everyStatementInTheDumpIs": "ডাম্পের প্রতিটি বক্তব্য এর বিরুদ্ধে কার্যকর করা হয়। ডাম্প পুনরায় তৈরি করা টেবিলগুলি তারা এখন যা কিছু রাখে তা হারায় এবং উপরের ব্যাকআপের বাইরে আর কোনো পূর্বাবস্থা নেই।",
             "importInto": "এ আমদানি করুন",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "শুধুমাত্র-পঠন অ্যাকাউন্ট।",
             "readingTheBackupDirectory": "ব্যাকআপ ডিরেক্টরি পড়া হচ্ছে...",
             "takesADumpThroughServerkitS": "আমদানি করার আগে ServerKit এর নিজস্ব ব্যাকআপ রুটের মাধ্যমে একটি ডাম্প নেয়। এটি ব্যর্থ হলে, আমদানি চালানো হয় না।",
-            "thatDumpWasTakenFrom": "সেই ডাম্প থেকে নেওয়া হয়েছিল",
             "theDumpIsPipedInto": "ডাম্প মধ্যে পাইপ করা হয়",
             "theImportFailed": "আমদানি ব্যর্থ হয়েছে.",
             "thePreImportBackupFailedSo": "প্রাক-আমদানি ব্যাকআপ ব্যর্থ হয়েছে, তাই কিছুই আমদানি করা হয়নি৷",
-            "thisRewrites": "এই পুনর্লিখন",
             "toConfirm": "নিশ্চিত করতে",
             "tryAgain": "আবার চেষ্টা করুন",
             "whereTheDumpLives": "যেখানে ডাম্প বাস করে"
@@ -6094,7 +6081,6 @@
             "withChanges": "\"পরিবর্তন সহ"
         },
         "volumesPanel": {
-            "alsoDeleteData": "এছাড়াও ডেটা মুছে দিন",
             "containerMountPath": "ধারক মাউন্ট পথ",
             "detach": "বিচ্ছিন্ন করুন",
             "detachingKeepsTheDataByDefault": "বিচ্ছিন্ন করা ডিফল্টরূপে ডেটা রাখে। অ্যাপটি বন্ধ থাকাকালীনই শুধুমাত্র মোছার অনুমতি দেওয়া হয়।",

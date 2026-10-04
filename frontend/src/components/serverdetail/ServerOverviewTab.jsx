@@ -112,8 +112,8 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                         <h4>{t('app.serverOverviewTab.serverOffline', 'Server offline')}</h4>
                         <p>
                             {server.status === 'pending'
-                                ? 'Waiting for agent installation...'
-                                : 'Unable to connect to the server agent.'}
+                                ? t('app.serverOverviewTab.waitingForAgentInstall', 'Waiting for the agent to be installed…')
+                                : t('app.serverOverviewTab.cantReachAgent', "Couldn't connect to the server agent.")}
                         </p>
                     </div>
                 </div>

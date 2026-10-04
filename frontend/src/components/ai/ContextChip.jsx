@@ -21,7 +21,7 @@ const ContextChip = () => {
             onClick={() => setIncludeContext(!includeContext)}
         >
             <MapPin size={13} />
-            <span>{includeContext ? `Asking about: ${pageContext.label}` : 'No page context'}</span>
+            <span>{includeContext ? t('app.contextChip.askingAbout', 'Asking about: {{label}}', { label: pageContext.label }) : t('app.contextChip.noPageContext', 'No page context')}</span>
         </SharedButton>
     );
 };

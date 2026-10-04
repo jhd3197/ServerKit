@@ -70,7 +70,7 @@ export default function SystemStatusCard({ server, onRefresh }) {
                         disabled={refreshing || !server.is_connected}
                         title={server.is_connected ? t('app.systemStatusCard.reRunCapabilityProbeOnThe', 'Re-run capability probe on the agent') : t('app.systemStatusCard.agentMustBeOnlineToRefresh', 'Agent must be online to refresh')}
                     >
-                        {refreshing ? 'Refreshing…' : 'Refresh'}
+                        {refreshing ? t('app.systemStatusCard.refreshing', 'Refreshing…') : t('common.actions.refresh', 'Refresh')}
                     </Button>
                 </div>
             </div>

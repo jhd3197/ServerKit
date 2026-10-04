@@ -777,8 +777,6 @@
             "failedToApplySettings": "فشل في تطبيق الإعدادات",
             "interruptionThePreviousConfigurationIsBacked": "انقطاع. تم عمل نسخة احتياطية من التكوين السابق ويمكن استرجاعه.",
             "isRestarted": "يتم إعادة تشغيله.",
-            "mbOfRam": "ميغابايت من ذاكرة الوصول العشوائي (",
-            "nothingIsAppliedUntilYouChoose": "). لا يتم تطبيق أي شيء حتى تختار ذلك.",
             "previousConfigurationRestored": "تمت استعادة التكوين السابق",
             "readingEngineConfiguration": "قراءة تكوين المحرك...",
             "rollBackAndRestart": "التراجع وإعادة التشغيل",
@@ -790,7 +788,6 @@
             "setting": "جلسة",
             "settingsAppliedAndEngineRestarted": "تم تطبيق الإعدادات وتم إعادة تشغيل المحرك",
             "suggested": "مقترح",
-            "suggestionsAreBasedOn": "تستند الاقتراحات على",
             "targetValue": "القيمة المستهدفة",
             "targetValueFor": "القيمة المستهدفة لـ {{key}}",
             "theLastBackedUpConfigurationIs": "تتم استعادة آخر تكوين احتياطي ومحرك قاعدة البيانات"
@@ -1099,7 +1096,6 @@
             "removeColumn": "قم بإزالة العمود {{value}}",
             "someDatabaseServersDidNotAnswer": "لم تقم بعض خوادم قواعد البيانات بالرد، لذا قد تكون هذه القائمة غير كاملة.",
             "statementsRunAs": "البيانات تعمل كما",
-            "stayKeywordsAnythingElseIsQuoted": "البقاء الكلمات الرئيسية، يتم نقل أي شيء آخر كنص.",
             "theBuilderWritesTheStatementRunning": "البناء يكتب البيان. تشغيله هو خطوة تتخذها في عميل المحرك الخاص.",
             "tryAgain": "حاول ثانية",
             "typeOfColumn": "نوع العمود {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "تحقق مرة أخرى",
-            "createA": "إنشاء أ",
             "deployActivity": "نشر النشاط",
             "failedToInstall": "فشل التثبيت",
             "importADumpOrWriteThe": "أو قم باستيراد ملف تفريغ أو اكتب البيان بنفسك في وحدة التحكم.",
             "importDump": "تفريغ الاستيراد",
-            "installing": "التثبيت",
             "isReady": "جاهز",
             "listeningOn": "الاستماع على",
             "manageService": "إدارة الخدمة",
             "new": "جديد",
             "newDatabase": "قاعدة بيانات جديدة",
             "openSqlConsole": "افتح وحدة تحكم SQL",
-            "pullingTheImageProvisioningTheVolume": "سحب الصورة وتوفير الحجم وانتظار الفحص الصحي الأول",
             "serverkitListsItHereAsSoon": "- ServerKit يدرجها هنا بمجرد وجودها.",
             "theDatabaseIsConnectedAndEmpty": "قاعدة البيانات متصلة وفارغة. بناء الخاص بك الأول",
             "thisEngineHasNoBrowsableProtocol": "لا يحتوي هذا المحرك على بروتوكول قابل للتصفح — حيث يقوم ServerKit بتشغيله، ولكن تصفح الجدول يأتي من العميل الخاص به.",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "الخطوة الحالية:",
-            "openConsole": "افتح وحدة التحكم →",
-            "troubleReachingTheDeploymentJob": "مشكلة في الوصول إلى مهمة النشر:"
+            "openConsole": "افتح وحدة التحكم →"
         },
         "deploymentTimeline": {
             "audit": "التدقيق",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "تثبيت التبعية ممكّن حاليًا على هذه اللوحة (",
             "dependencyInstallationIsEnabledOnThis": "تم تمكين تثبيت التبعية على هذه اللوحة الآن (",
             "dependencyInstallationIsOffOnThis": "تم إيقاف تثبيت التبعية على هذه اللوحة. عندما يقوم أحد الامتدادات بشحن حزم Python، تقوم اللوحة بكتابة الملف بجوار الامتداد بدلاً من تثبيته، وتدرجه هنا.",
-            "didPassThroughTheSdkGate": "لم تمر عبر بوابة SDK و",
             "everyUseOfThisCapabilityHas": "يجب أن يمر كل استخدام لهذه الإمكانية عبر بوابة SDK الخاصة باللوحة، ولم تسجل البوابة أي شيء منذ بدء عملية اللوحة. إما أن الامتداد لم يحتاج إليه بعد، أو أنه يعلن عن أكثر مما يستخدمه.",
             "everyUseOfThisCapabilityPasses": "ويمر كل استخدام لهذه الإمكانية عبر بوابة SDK الخاصة باللوحة. مسجلة",
             "fileOnTheBackendHost": "ملف على مضيف الواجهة الخلفية:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "نسخة احتياطية على هذا الخادم",
             "aPathOnTheServer": "مسار على الخادم",
             "anAbsolutePathOnTheServer": "مسار مطلق على الخادم الذي يقوم بتشغيل ServerKit. لا توجد نقطة نهاية للتحميل، لذلك يجب نسخ الملف الموجود على جهازك أولاً (scp، أو مدير الملفات، أو نسخة احتياطية مأخوذة هنا).",
-            "andYouAreImportingInto": "وأنت تقوم بالاستيراد إلى",
             "asTheDatabaseSuperuser": "باعتباره المستخدم المتميز لقاعدة البيانات.",
-            "backUp": "نسخ احتياطي",
             "dumpFile": "ملف تفريغ",
             "everyStatementInTheDumpIs": "يتم تنفيذ كل عبارة في التفريغ ضدها. تفقد الجداول التي يعيد إنشاءها كل ما تحتويه الآن، ولا يمكن التراجع عن النسخة الاحتياطية أعلاه.",
             "importInto": "استيراد إلى",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "حساب للقراءة فقط.",
             "readingTheBackupDirectory": "قراءة دليل النسخ الاحتياطي...",
             "takesADumpThroughServerkitS": "يأخذ تفريغًا عبر مسار النسخ الاحتياطي الخاص بـ ServerKit قبل الاستيراد. إذا فشلت، لن يتم تشغيل الاستيراد.",
-            "thatDumpWasTakenFrom": "تم أخذ هذا المكب من",
             "theDumpIsPipedInto": "يتم توصيل التفريغ بالأنابيب",
             "theImportFailed": "فشل الاستيراد.",
             "thePreImportBackupFailedSo": "فشلت النسخة الاحتياطية للاستيراد المسبق، لذلك لم يتم استيراد أي شيء.",
-            "thisRewrites": "هذا يعيد الكتابة",
             "toConfirm": "للتأكيد",
             "tryAgain": "حاول ثانية",
             "whereTheDumpLives": "حيث يعيش المكب"
@@ -6094,7 +6081,6 @@
             "withChanges": "\"مع التغييرات"
         },
         "volumesPanel": {
-            "alsoDeleteData": "احذف البيانات أيضًا",
             "containerMountPath": "مسار تركيب الحاوية",
             "detach": "فصل",
             "detachingKeepsTheDataByDefault": "يؤدي الفصل إلى الاحتفاظ بالبيانات بشكل افتراضي. لا يُسمح بالمسح إلا أثناء توقف التطبيق.",

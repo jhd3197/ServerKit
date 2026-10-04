@@ -777,8 +777,6 @@
             "failedToApplySettings": "Ayarlar uygulanamadı",
             "interruptionThePreviousConfigurationIsBacked": "kesinti. Önceki yapılandırma yedeklenir ve geri alınabilir.",
             "isRestarted": "yeniden başlatılır.",
-            "mbOfRam": "MB RAM (",
-            "nothingIsAppliedUntilYouChoose": "). Siz tercih edene kadar hiçbir şey uygulanmaz.",
             "previousConfigurationRestored": "Önceki yapılandırma geri yüklendi",
             "readingEngineConfiguration": "Motor konfigürasyonu okunuyor…",
             "rollBackAndRestart": "Geri alın ve yeniden başlatın",
@@ -790,7 +788,6 @@
             "setting": "Ayar",
             "settingsAppliedAndEngineRestarted": "Ayarlar uygulandı ve motor yeniden başlatıldı",
             "suggested": "Önerilen",
-            "suggestionsAreBasedOn": "Öneriler şunlara dayanmaktadır:",
             "targetValue": "Hedef değer",
             "targetValueFor": "{{key}} için hedef değer",
             "theLastBackedUpConfigurationIs": "En son yedeklenen yapılandırma geri yüklenir ve veritabanı motoru"
@@ -1099,7 +1096,6 @@
             "removeColumn": "{{value}} sütununu kaldır",
             "someDatabaseServersDidNotAnswer": "Bazı veritabanı sunucuları yanıt vermedi, dolayısıyla bu liste eksik olabilir.",
             "statementsRunAs": "İfadeler şu şekilde çalışır:",
-            "stayKeywordsAnythingElseIsQuoted": "anahtar kelimelerle kalın, diğer her şey metin olarak alıntılanır.",
             "theBuilderWritesTheStatementRunning": "İnşaatçı beyanı yazar; onu çalıştırmak, motorun kendi istemcisinde attığınız bir adımdır.",
             "tryAgain": "Tekrar deneyin",
             "typeOfColumn": "Sütun türü {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "Tekrar kontrol edin",
-            "createA": "Bir oluştur",
             "deployActivity": "Etkinliği dağıt",
             "failedToInstall": "yüklenemedi",
             "importADumpOrWriteThe": ", bir dökümü içe aktarın veya ifadeyi konsola kendiniz yazın.",
             "importDump": "İthalat dökümü",
-            "installing": "Kurulum",
             "isReady": "hazır",
             "listeningOn": "Dinleniyor",
             "manageService": "Hizmeti yönet",
             "new": "Yeni",
             "newDatabase": "Yeni veritabanı",
             "openSqlConsole": "SQL konsolunu aç",
-            "pullingTheImageProvisioningTheVolume": "Görüntüyü çekme, ses düzeyini sağlama ve ilk durum kontrolünü bekleme",
             "serverkitListsItHereAsSoon": "— ServerKit mevcut olduğu anda burada listelenir.",
             "theDatabaseIsConnectedAndEmpty": "Veritabanı bağlı ve boş. İlkinizi oluşturun",
             "thisEngineHasNoBrowsableProtocol": "Bu motorun göz atılabilir bir protokolü yoktur — ServerKit onu çalıştırır, ancak tablo tarama kendi istemcisinden gelir.",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "Geçerli adım:",
-            "openConsole": "Konsolu aç →",
-            "troubleReachingTheDeploymentJob": "Dağıtım işine ulaşmada sorun oluştu:"
+            "openConsole": "Konsolu aç →"
         },
         "deploymentTimeline": {
             "audit": "Denetim",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "Bağımlılık kurulumu şu anda bu panelde etkindir (",
             "dependencyInstallationIsEnabledOnThis": "Bu panelde bağımlılık kurulumu artık etkin (",
             "dependencyInstallationIsOffOnThis": "Bu panelde bağımlılık kurulumu kapalı. Bir uzantı Python paketleri gönderdiğinde panel, dosyayı yüklemek yerine uzantının yanına yazar ve burada listeler.",
-            "didPassThroughTheSdkGate": "SDK kapısından geçti ve",
             "everyUseOfThisCapabilityHas": "Bu yeteneğin her kullanımı panelin SDK kapısından geçmelidir ve kapı, panel süreci başladığından beri hiçbir kayıt kaydetmemiştir. Ya uzantının ona ihtiyacı yok ya da kullandığından fazlasını bildiriyor.",
             "everyUseOfThisCapabilityPasses": "Bu yeteneğin her kullanımı panelin SDK kapısından geçer. Kaydedildi",
             "fileOnTheBackendHost": "Arka uç ana bilgisayarındaki dosya:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "Bu sunucudaki bir yedek",
             "aPathOnTheServer": "Sunucudaki bir yol",
             "anAbsolutePathOnTheServer": "ServerKit çalıştıran sunucudaki mutlak yol. Yükleme uç noktası yoktur, bu nedenle önce kendi makinenizdeki bir dosyanın (scp, dosya yöneticisi veya buraya alınan bir yedek) kopyalanması gerekir.",
-            "andYouAreImportingInto": "ve içe aktarıyorsunuz",
             "asTheDatabaseSuperuser": "veritabanı süper kullanıcısı olarak.",
-            "backUp": "Yedekle",
             "dumpFile": "Dosyayı boşalt",
             "everyStatementInTheDumpIs": "Dökümdeki her ifade ona karşı yürütülür. Dökümün yeniden oluşturduğu tablolar şu anda sahip oldukları her şeyi kaybeder ve yukarıdaki yedeklemenin ötesinde geri alınamaz.",
             "importInto": "İçeri aktar",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "Salt okunur hesap.",
             "readingTheBackupDirectory": "Yedekleme dizini okunuyor…",
             "takesADumpThroughServerkitS": "İçe aktarmadan önce ServerKit'nin kendi yedekleme yolundan döküm alır. Başarısız olursa içe aktarma çalışmaz.",
-            "thatDumpWasTakenFrom": "O çöplük oradan alındı",
             "theDumpIsPipedInto": "Çöplük borularla döşeniyor",
             "theImportFailed": "İçe aktarma başarısız oldu.",
             "thePreImportBackupFailedSo": "İçe aktarma öncesi yedekleme başarısız olduğundan hiçbir şey içe aktarılmadı.",
-            "thisRewrites": "Bu yeniden yazar",
             "toConfirm": "onaylamak",
             "tryAgain": "Tekrar deneyin",
             "whereTheDumpLives": "Çöplüğün yaşadığı yer"
@@ -6094,7 +6081,6 @@
             "withChanges": "” değişikliklerle"
         },
         "volumesPanel": {
-            "alsoDeleteData": "Verileri de sil",
             "containerMountPath": "Konteyner montaj yolu",
             "detach": "Ayır",
             "detachingKeepsTheDataByDefault": "Ayırma işlemi, verileri varsayılan olarak korur. Silme işlemine yalnızca uygulama durdurulduğunda izin verilir.",

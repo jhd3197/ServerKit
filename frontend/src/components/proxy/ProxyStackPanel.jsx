@@ -193,7 +193,7 @@ const ProxyStackPanel = ({ serverId }) => {
                 <div className="proxy-panel__status">
                     <span className="proxy-panel__status-label">{t('common.labels.status', 'Status')}</span>
                     <Pill kind={serviceStatusKind(stack?.status)}>
-                        {savedIsNginx ? 'host nginx' : (stack?.status || 'unknown')}
+                        {savedIsNginx ? t('app.proxyStackPanel.hostNginx', 'Host nginx') : (stack?.status || 'unknown')}
                     </Pill>
                 </div>
             </header>
@@ -211,8 +211,8 @@ const ProxyStackPanel = ({ serverId }) => {
                         </strong>
                     </div>
                     <p className="proxy-panel__ingress-warning-text">
-                        {t('app.proxyStackPanel.thisServerSActiveProxyIs', 'This server\'s active proxy is')} <strong>{audit.proxy_type}</strong>{t('app.proxyStackPanel.whichExpects', ', which expects')} <strong>{PLANE_LABEL[audit.expected_plane] || audit.expected_plane}</strong>.
-                        The apps below expect the other plane:
+                        {t('app.proxyStackPanel.thisServerSActiveProxyIs', 'This server\'s active proxy is')} <strong>{audit.proxy_type}</strong>{t('app.proxyStackPanel.whichExpects', ', which expects')} <strong>{PLANE_LABEL[audit.expected_plane] || audit.expected_plane}</strong>.{' '}
+                        {t('app.proxyStackPanel.servicesBelowExpectTheOtherPlane', 'The services below expect the other plane:')}
                     </p>
                     <ul className="proxy-panel__ingress-list">
                         {(audit.apps || []).filter(a => a.mismatch).map(a => (
@@ -243,7 +243,9 @@ const ProxyStackPanel = ({ serverId }) => {
                 />
                 <div className="proxy-panel__actions">
                     <Button onClick={handleSwitch} disabled={!isDirtyType || busy}>
-                        {isDirtyType ? `Switch to ${selectedType}` : 'No change'}
+                        {isDirtyType
+                            ? t('app.proxyStackPanel.switchTo', 'Switch to {{type}}', { type: selectedType })
+                            : t('app.proxyStackPanel.noChange', 'No change')}
                     </Button>
                     {!isNginx && (
                         <Button variant="outline" onClick={handleDeploy} disabled={busy}>

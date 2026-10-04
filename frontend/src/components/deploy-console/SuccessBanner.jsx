@@ -64,10 +64,10 @@ export default function SuccessBanner({ job, appUrl, engineTarget = null, armAut
 
             {timings.length > 0 && (
                 <ul className="deploy-console__success-timings">
-                    {timings.map((t) => (
-                        <li key={t.index}>
-                            <span>{t.name || `Step ${t.index}`}</span>
-                            <span>{fmtSeconds(t.seconds)}</span>
+                    {timings.map((step) => (
+                        <li key={step.index}>
+                            <span>{step.name || t('app.successBanner.stepNumber', 'Step {{index}}', { index: step.index })}</span>
+                            <span>{fmtSeconds(step.seconds)}</span>
                         </li>
                     ))}
                 </ul>
@@ -77,8 +77,8 @@ export default function SuccessBanner({ job, appUrl, engineTarget = null, armAut
                 <div className="deploy-console__success-return">
                     <span>
                         {counting
-                            ? `Opening ${returnLabel} in Databases in ${countdown}s…`
-                            : `${returnLabel} is waiting in Databases.`}
+                            ? t('app.successBanner.openingInDatabases', 'Opening {{name}} in Databases in {{seconds}}s…', { name: returnLabel, seconds: countdown })
+                            : t('app.successBanner.waitingInDatabases', '{{name}} is waiting in Databases.', { name: returnLabel })}
                     </span>
                     {counting && (
                         <SharedButton variant="unstyled"

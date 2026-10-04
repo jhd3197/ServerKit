@@ -337,7 +337,7 @@ function WTimeseries({ cfg, ctx }) {
             <Empty>
                 {blocked
                     ? unsupportedNote(blocked.metric, blocked.resource)
-                    : 'No samples recorded in this range yet.'}
+                    : t('app.renderers.noSamplesInRange', 'No samples recorded in this range yet.')}
             </Empty>
         );
     }
@@ -420,7 +420,7 @@ function WGauge({ cfg, ctx }) {
                 </text>
             </svg>
             <div className="skw-gauge__sub">
-                {label}{metric.max ? ` · max ${metric.max}${metric.unit}` : ''}
+                {label}{metric.max ? ` · ${t('app.renderers.gaugeMax', 'max {{value}}', { value: `${metric.max}${metric.unit}` })}` : ''}
             </div>
         </div>
     );
@@ -562,7 +562,7 @@ function WLogs({ cfg, ctx }) {
     }
     if (loading && !lines.length) return <Loading />;
     if (error?.elevated) {
-        return <Empty>{label || 'This log'} {t('app.renderers.needsElevatedAccessChooseAnotherSource', 'needs elevated access. Choose another source in settings.')}</Empty>;
+        return <Empty>{label || t('app.renderers.thisLog', 'This log')} {t('app.renderers.needsElevatedAccessChooseAnotherSource', 'needs elevated access. Choose another source in settings.')}</Empty>;
     }
     if (error) return <Failed error={error} subject="logs" />;
     if (!lines.length) return <Empty>{t('app.renderers.noLogLinesAvailable', 'No log lines available.')}</Empty>;
@@ -898,7 +898,7 @@ function WClock({ cfg }) {
         label = zone || Intl.DateTimeFormat().resolvedOptions().timeZone || '';
     } catch {
         // An invalid IANA name should not blank the widget.
-        return <Empty>{`Unknown timezone “${cfg.timezone}”.`}</Empty>;
+        return <Empty>{t('app.renderers.unknownTimezone', 'Unknown time zone “{{zone}}”.', { zone: cfg.timezone })}</Empty>;
     }
 
     return (

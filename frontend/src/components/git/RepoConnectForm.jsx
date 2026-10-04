@@ -161,7 +161,7 @@ const RepoConnectForm = ({
                     </div>
                     <div className="git-connect-status__meta-item">
                         <span>{t('app.repoConnectForm.autoDeploy', 'Auto deploy')}</span>
-                        <strong>{gitStatus.auto_deploy ? 'Enabled' : 'Disabled'}</strong>
+                        <strong>{gitStatus.auto_deploy ? t('app.repoConnectForm.enabled', 'Enabled') : t('app.repoConnectForm.disabled', 'Disabled')}</strong>
                     </div>
                     {gitStatus.last_deploy_commit && (
                         <div className="git-connect-status__meta-item">
@@ -180,7 +180,7 @@ const RepoConnectForm = ({
                 <div className="git-connect-status__actions">
                     <Button variant="destructive" onClick={handleDisconnect} disabled={loading}>
                         <Unlink size={14} />
-                        {loading ? 'Disconnecting...' : 'Disconnect'}
+                        {loading ? t('app.repoConnectForm.disconnecting', 'Disconnecting…') : t('app.repoConnectForm.disconnect', 'Disconnect')}
                     </Button>
                 </div>
             </div>
@@ -292,7 +292,7 @@ const RepoConnectForm = ({
             <div className="git-connect__actions">
                 <Button type="submit" disabled={loading}>
                     <GitBranch size={14} />
-                    {loading ? 'Connecting...' : submitLabel}
+                    {loading ? t('app.repoConnectForm.connecting', 'Connecting…') : submitLabel}
                 </Button>
             </div>
         </form>

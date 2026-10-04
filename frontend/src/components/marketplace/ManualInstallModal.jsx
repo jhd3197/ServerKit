@@ -126,7 +126,7 @@ const PreviewConsent = ({ preview, installing, onInstall, onCancel }) => {
 
             {sigStatus === 'invalid' && (
                 <p className="plugin-install-consent__sig-note plugin-install-consent__sig-note--danger">
-                    {preview.signature?.error || 'The signature does not match this archive.'}
+                    {preview.signature?.error || t('app.manualInstallModal.signatureMismatch', 'The signature does not match this archive.')}
                     {' '}{t('app.manualInstallModal.theDownloadMayHaveBeenTampered', 'The download may have been tampered with. Do not install it.')}
                 </p>
             )}
@@ -175,8 +175,8 @@ const PreviewConsent = ({ preview, installing, onInstall, onCancel }) => {
                     variant={sigStatus === 'verified' ? 'default' : 'destructive'}
                 >
                     <DownloadCloud aria-hidden="true" />
-                    {installing ? 'Installing...'
-                        : sigStatus === 'verified' ? 'Install' : 'Install anyway'}
+                    {installing ? t('app.manualInstallModal.installing', 'Installing…')
+                        : sigStatus === 'verified' ? t('app.manualInstallModal.install', 'Install') : t('app.manualInstallModal.installAnyway', 'Install anyway')}
                 </Button>
             </div>
         </div>
@@ -348,7 +348,7 @@ const ManualInstallModal = ({ defaultSource = 'url', onClose, onInstalled }) => 
                                 disabled={installing || !pluginFile}
                             >
                                 <DownloadCloud aria-hidden="true" />
-                                {installing ? 'Installing...' : 'Install'}
+                                {installing ? t('app.manualInstallModal.installing', 'Installing…') : t('app.manualInstallModal.install', 'Install')}
                             </Button>
                         </div>
                         {pluginFile && (

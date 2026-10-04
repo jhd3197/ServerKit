@@ -217,17 +217,21 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
         try {
             const res = await runQuery(target.conn, statement, false);
             if (res?.success) {
-                setResult({ ok: true, message: `${unitOne.charAt(0).toUpperCase()}${unitOne.slice(1)} "${name.trim()}" created in ${target.label}.` });
+                setResult({ ok: true, message: t('app.createTableModal.createdIn', '{{unit}} "{{name}}" created in {{target}}.', {
+                    unit: `${unitOne.charAt(0).toUpperCase()}${unitOne.slice(1)}`,
+                    name: name.trim(),
+                    target: target.label,
+                }) });
                 onCreated?.(target);
             } else {
-                setResult({ ok: false, message: res?.error || 'The database rejected the statement.' });
+                setResult({ ok: false, message: res?.error || t('app.createTableModal.databaseRejectedStatement', 'The database rejected the statement.') });
             }
         } catch (err) {
             setResult({
                 ok: false,
                 message: err?.status === 403
-                    ? 'Your account is not an administrator, so ServerKit will not run write statements for it.'
-                    : (err?.message || 'The request failed.'),
+                    ? t('app.createTableModal.notAdminNoWrites', 'Your account is not an administrator, so ServerKit will not run write statements for it.')
+                    : (err?.message || t('app.createTableModal.requestFailed', "Couldn't send the request.")),
             });
         } finally {
             setBusy(false);
@@ -238,7 +242,7 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
     const footer = (
         <>
             <Button type="button" variant="outline" onClick={onClose}>
-                {result?.ok ? 'Done' : 'Cancel'}
+                {result?.ok ? t('common.actions.done', 'Done') : t('common.actions.cancel', 'Cancel')}
             </Button>
             {statement && (
                 <CopyButton
@@ -256,7 +260,7 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
                     {busy
                         ? <Loader2 size={14} className="dbx-spin" aria-hidden="true" />
                         : <Plus size={14} aria-hidden="true" />}
-                    {busy ? 'Running…' : `Create ${unitOne}`}
+                    {busy ? t('app.createTableModal.running', 'Running…') : t('app.createTableModal.create', 'Create {{unitOne}}', { unitOne })}
                 </Button>
             )}
         </>
@@ -275,8 +279,8 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
                         <strong>{t('app.createTableModal.nothingToCreateIntoYet', 'Nothing to create into yet.')}</strong>
                         <p>
                             {loadFailed
-                                ? 'ServerKit could not reach any database server. Check that MySQL or PostgreSQL is running, then try again.'
-                                : 'Create a database first — the builder writes into an existing one.'}
+                                ? t('app.createTableModal.noDatabaseServerReached', "ServerKit couldn't reach any database server. Check that MySQL or PostgreSQL is running, then try again.")
+                                : t('app.createTableModal.createDatabaseFirst', 'Create a database first. The builder writes into an existing one.')}
                         </p>
                         <Button variant="unstyled" type="button" className="dbx-inline-link" onClick={load}>
                             <RefreshCw size={13} aria-hidden="true" /> {t('app.createTableModal.tryAgain', 'Try again')}
@@ -452,8 +456,8 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
                         <p className="dbx-field-hint">
                             {target?.dialect ? (
                                 <>
-                                    {t('app.createTableModal.aWholeNumberKeyBecomes', 'A whole-number key becomes')} <code>{SQL_DIALECTS[target.dialect].keyNote}</code>.
-                                    Defaults: numbers stay numbers, {DEFAULT_KEYWORD_LIST.join(' / ')} {t('app.createTableModal.stayKeywordsAnythingElseIsQuoted', 'stay keywords, anything else is quoted as text.')}
+                                    {t('app.createTableModal.aWholeNumberKeyBecomes', 'A whole-number key becomes')} <code>{SQL_DIALECTS[target.dialect].keyNote}</code>.{' '}
+                                    {t('app.createTableModal.defaultsStayKeywords', 'Defaults: numbers stay numbers, {{keywords}} stay keywords, anything else is quoted as text.', { keywords: DEFAULT_KEYWORD_LIST.join(' / ') })}
                                 </>
                             ) : (
                                 <>{t('app.createTableModal.fieldNamesAndTypesAreWritten', 'Field names and types are written into the statement below exactly as typed.')}</>
@@ -463,7 +467,9 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
 
                     <div className="dbx-field">
                         <span className="dbx-field__label">
-                            {target?.dialect ? 'Will run' : `${target?.client || 'Client'} statement`}
+                            {target?.dialect
+                                ? t('app.createTableModal.willRun', 'Will run')
+                                : t('app.createTableModal.clientStatement', '{{client}} statement', { client: target?.client || t('app.createTableModal.client', 'Client') })}
                         </span>
                         <pre className="dbx-sqlprev">{statement}</pre>
                     </div>

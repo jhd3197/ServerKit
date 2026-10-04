@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
+import { translateLabel } from '@/i18n/labels';
 
 // WAF modes with one-line descriptions shown under the selector.
 const MODE_OPTIONS = [
@@ -227,7 +228,7 @@ const AppWafPanel = ({ app, onChanged }) => {
                         </span>
                     </div>
                     <Button size="sm" onClick={handleInstall} disabled={installing}>
-                        {installing ? 'Installing…' : 'Install'}
+                        {installing ? t('app.appWafPanel.installing', 'Installing…') : t('app.appWafPanel.install', 'Install')}
                     </Button>
                 </div>
             )}
@@ -240,7 +241,7 @@ const AppWafPanel = ({ app, onChanged }) => {
                     <span className="app-panel-header-actions">
                         {!loading && (
                             <Pill kind={MODE_PILL[policy.mode] || 'gray'}>
-                                {MODE_OPTIONS.find((m) => m.value === policy.mode)?.label || 'Off'}
+                                {translateLabel(t, MODE_OPTIONS.find((m) => m.value === policy.mode) || MODE_OPTIONS[0])}
                             </Pill>
                         )}
                     </span>
@@ -333,10 +334,10 @@ const AppWafPanel = ({ app, onChanged }) => {
 
                     <div className="app-detail-actions container-ops__actions">
                         <Button size="sm" onClick={handleSave} disabled={saving || loading}>
-                            {saving ? 'Saving…' : 'Save policy'}
+                            {saving ? t('common.saving', 'Saving…') : t('app.appWafPanel.savePolicy', 'Save policy')}
                         </Button>
                         <Button variant="outline" size="sm" onClick={handleApply} disabled={applying || loading}>
-                            {applying ? 'Applying…' : 'Re-apply'}
+                            {applying ? t('app.appWafPanel.applying', 'Applying…') : t('app.appWafPanel.reapply', 'Re-apply')}
                         </Button>
                     </div>
                 </div>
@@ -350,7 +351,7 @@ const AppWafPanel = ({ app, onChanged }) => {
                     <span className="app-panel-header-actions">
                         <Button variant="ghost" size="sm" onClick={loadEvents} disabled={eventsLoading}>
                             <RefreshCw size={14} />
-                            {eventsLoading ? 'Loading…' : 'Refresh'}
+                            {eventsLoading ? t('common.loading', 'Loading…') : t('common.actions.refresh', 'Refresh')}
                         </Button>
                     </span>
                 </div>
@@ -390,7 +391,7 @@ const AppWafPanel = ({ app, onChanged }) => {
                         </div>
                     ) : (
                         <p className="app-panel-hint">
-                            {eventsLoading ? 'Loading events…' : 'No WAF events recorded.'}
+                            {eventsLoading ? t('app.appWafPanel.loadingEvents', 'Loading events…') : t('app.appWafPanel.noWafEventsRecorded', 'No WAF events recorded.')}
                         </p>
                     )}
                 </div>

@@ -777,8 +777,6 @@
             "failedToApplySettings": "Không thể áp dụng cài đặt",
             "interruptionThePreviousConfigurationIsBacked": "gián đoạn. Cấu hình trước đó được sao lưu và có thể được khôi phục.",
             "isRestarted": "được khởi động lại.",
-            "mbOfRam": "MB RAM (",
-            "nothingIsAppliedUntilYouChoose": "). Không có gì được áp dụng cho đến khi bạn chọn.",
             "previousConfigurationRestored": "Đã khôi phục cấu hình trước đó",
             "readingEngineConfiguration": "Đọc cấu hình động cơ…",
             "rollBackAndRestart": "Quay lại và khởi động lại",
@@ -790,7 +788,6 @@
             "setting": "Cài đặt",
             "settingsAppliedAndEngineRestarted": "Đã áp dụng cài đặt và khởi động lại động cơ",
             "suggested": "được đề xuất",
-            "suggestionsAreBasedOn": "Các đề xuất dựa trên",
             "targetValue": "Giá trị mục tiêu",
             "targetValueFor": "Giá trị mục tiêu cho {{key}}",
             "theLastBackedUpConfigurationIs": "Cấu hình sao lưu cuối cùng được khôi phục và công cụ cơ sở dữ liệu"
@@ -1099,7 +1096,6 @@
             "removeColumn": "Xóa cột {{value}}",
             "someDatabaseServersDidNotAnswer": "Một số máy chủ cơ sở dữ liệu không phản hồi nên danh sách này có thể không đầy đủ.",
             "statementsRunAs": "Báo cáo chạy như",
-            "stayKeywordsAnythingElseIsQuoted": "giữ nguyên từ khóa, bất cứ điều gì khác được trích dẫn dưới dạng văn bản.",
             "theBuilderWritesTheStatementRunning": "Người xây dựng viết tuyên bố; chạy nó là một bước bạn thực hiện trong ứng dụng khách của động cơ.",
             "tryAgain": "Thử lại",
             "typeOfColumn": "Loại cột {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "Kiểm tra lại",
-            "createA": "Tạo một",
             "deployActivity": "Triển khai hoạt động",
             "failedToInstall": "không cài đặt được",
             "importADumpOrWriteThe": ", nhập kết xuất hoặc tự viết câu lệnh trong bảng điều khiển.",
             "importDump": "Bãi nhập khẩu",
-            "installing": "Đang cài đặt",
             "isReady": "đã sẵn sàng",
             "listeningOn": "Đang nghe",
             "manageService": "Quản lý dịch vụ",
             "new": "Mới",
             "newDatabase": "Cơ sở dữ liệu mới",
             "openSqlConsole": "Mở bảng điều khiển SQL",
-            "pullingTheImageProvisioningTheVolume": "Kéo hình ảnh, cung cấp âm lượng và chờ kiểm tra sức khỏe lần đầu",
             "serverkitListsItHereAsSoon": "— ServerKit liệt kê nó ở đây ngay khi nó tồn tại.",
             "theDatabaseIsConnectedAndEmpty": "Cơ sở dữ liệu được kết nối và trống rỗng. Xây dựng đầu tiên của bạn",
             "thisEngineHasNoBrowsableProtocol": "Công cụ này không có giao thức có thể duyệt - ServerKit chạy nó, nhưng việc duyệt bảng đến từ ứng dụng khách của chính nó.",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "Bước hiện tại:",
-            "openConsole": "Mở bảng điều khiển →",
-            "troubleReachingTheDeploymentJob": "Sự cố khi tiếp cận công việc triển khai:"
+            "openConsole": "Mở bảng điều khiển →"
         },
         "deploymentTimeline": {
             "audit": "Kiểm tra",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "Cài đặt phụ thuộc hiện được bật trên bảng này (",
             "dependencyInstallationIsEnabledOnThis": "Cài đặt phụ thuộc đã được bật trên bảng này ngay bây giờ (",
             "dependencyInstallationIsOffOnThis": "Cài đặt phụ thuộc bị tắt trên bảng này. Khi một tiện ích mở rộng gửi các gói Python, bảng điều khiển sẽ ghi tệp bên cạnh tiện ích mở rộng thay vì cài đặt nó và liệt kê nó ở đây.",
-            "didPassThroughTheSdkGate": "đã đi qua cổng SDK và",
             "everyUseOfThisCapabilityHas": "Mọi hoạt động sử dụng khả năng này đều phải thông qua cổng SDK của bảng điều khiển và cổng này không ghi lại gì kể từ khi quá trình bảng điều khiển bắt đầu. Tiện ích mở rộng chưa cần đến hoặc nó khai báo nhiều hơn mức sử dụng.",
             "everyUseOfThisCapabilityPasses": "Mọi hoạt động sử dụng khả năng này đều đi qua cổng SDK của bảng điều khiển. Đã ghi lại",
             "fileOnTheBackendHost": "Tệp trên máy chủ phụ trợ:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "Một bản sao lưu trên máy chủ này",
             "aPathOnTheServer": "Một đường dẫn trên máy chủ",
             "anAbsolutePathOnTheServer": "Đường dẫn tuyệt đối trên máy chủ chạy ServerKit. Không có điểm cuối tải lên, vì vậy trước tiên, một tệp trên máy của bạn phải được sao chép qua (scp, trình quản lý tệp hoặc bản sao lưu được lấy ở đây).",
-            "andYouAreImportingInto": "và bạn đang nhập vào",
             "asTheDatabaseSuperuser": "với tư cách là siêu người dùng cơ sở dữ liệu.",
-            "backUp": "Hỗ trợ",
             "dumpFile": "Kết xuất tập tin",
             "everyStatementInTheDumpIs": "Mọi câu lệnh trong kết xuất đều được thực thi dựa trên nó. Các bảng mà kết xuất tạo lại sẽ mất mọi nội dung hiện có và không thể hoàn tác ngoài bản sao lưu ở trên.",
             "importInto": "Nhập vào",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "Tài khoản chỉ đọc.",
             "readingTheBackupDirectory": "Đang đọc thư mục sao lưu…",
             "takesADumpThroughServerkitS": "Thực hiện kết xuất thông qua tuyến dự phòng riêng của ServerKit trước khi nhập. Nếu không thành công, quá trình nhập sẽ không chạy.",
-            "thatDumpWasTakenFrom": "Bãi rác đó được lấy từ",
             "theDumpIsPipedInto": "Bãi rác được dẫn vào",
             "theImportFailed": "Việc nhập không thành công.",
             "thePreImportBackupFailedSo": "Sao lưu trước khi nhập không thành công nên không có gì được nhập.",
-            "thisRewrites": "Cái này viết lại",
             "toConfirm": "để xác nhận",
             "tryAgain": "Thử lại",
             "whereTheDumpLives": "Nơi bãi rác sống"
@@ -6094,7 +6081,6 @@
             "withChanges": "” với những thay đổi"
         },
         "volumesPanel": {
-            "alsoDeleteData": "Đồng thời xóa dữ liệu",
             "containerMountPath": "Đường gắn container",
             "detach": "tách ra",
             "detachingKeepsTheDataByDefault": "Việc tách giữ giữ dữ liệu theo mặc định. Việc xóa chỉ được phép khi ứng dụng bị dừng.",

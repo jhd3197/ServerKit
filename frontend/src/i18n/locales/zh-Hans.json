@@ -777,8 +777,6 @@
             "failedToApplySettings": "无法应用设置",
             "interruptionThePreviousConfigurationIsBacked": "中断。之前的配置已备份并且可以回滚。",
             "isRestarted": "已重新启动。",
-            "mbOfRam": "MB 内存（",
-            "nothingIsAppliedUntilYouChoose": "）。在您选择之前，不会应用任何内容。",
             "previousConfigurationRestored": "恢复之前的配置",
             "readingEngineConfiguration": "正在读取引擎配置...",
             "rollBackAndRestart": "回滚并重新启动",
@@ -790,7 +788,6 @@
             "setting": "环境",
             "settingsAppliedAndEngineRestarted": "应用设置并重新启动引擎",
             "suggested": "建议",
-            "suggestionsAreBasedOn": "建议基于",
             "targetValue": "目标值",
             "targetValueFor": "{{key}} 的目标值",
             "theLastBackedUpConfigurationIs": "恢复最后备份的配置并恢复数据库引擎"
@@ -1099,7 +1096,6 @@
             "removeColumn": "删除列 {{value}}",
             "someDatabaseServersDidNotAnswer": "某些数据库服务器没有应答，因此此列表可能不完整。",
             "statementsRunAs": "语句运行为",
-            "stayKeywordsAnythingElseIsQuoted": "保留关键字，其他任何内容都以文本形式引用。",
             "theBuilderWritesTheStatementRunning": "建造者写声明；运行它是您在引擎自己的客户端中执行的步骤。",
             "tryAgain": "重试",
             "typeOfColumn": "列类型 {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "再次检查",
-            "createA": "创建一个",
             "deployActivity": "部署活动",
             "failedToInstall": "安装失败",
             "importADumpOrWriteThe": "、导入转储，或自己在控制台中编写语句。",
             "importDump": "导入转储",
-            "installing": "安装中",
             "isReady": "准备好了",
             "listeningOn": "正在收听",
             "manageService": "管理服务",
             "new": "新建",
             "newDatabase": "新数据库",
             "openSqlConsole": "打开 SQL 控制台",
-            "pullingTheImageProvisioningTheVolume": "拉取镜像、配置卷并等待第一次运行状况检查",
             "serverkitListsItHereAsSoon": "— ServerKit 一旦存在就将其列在这里。",
             "theDatabaseIsConnectedAndEmpty": "数据库已连接且为空。构建你的第一个",
             "thisEngineHasNoBrowsableProtocol": "该引擎没有可浏览的协议——ServerKit 运行它，但表浏览来自它自己的客户端。",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "当前步骤：",
-            "openConsole": "打开控制台 →",
-            "troubleReachingTheDeploymentJob": "无法完成部署作业："
+            "openConsole": "打开控制台 →"
         },
         "deploymentTimeline": {
             "audit": "审计",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "当前在此面板上启用了依赖项安装（",
             "dependencyInstallationIsEnabledOnThis": "现在在此面板上启用了依赖项安装（",
             "dependencyInstallationIsOffOnThis": "此面板上的依赖项安装已关闭。当扩展附带 Python 包时，面板会在扩展旁边写入文件而不是安装它，并将其列在此处。",
-            "didPassThroughTheSdkGate": "确实通过了 SDK 门并且",
             "everyUseOfThisCapabilityHas": "每次使用此功能都必须经过面板的 SDK 门，并且自面板进程启动以来，该门没有记录任何数据。要么扩展还不需要它，要么它声明的内容多于它使用的内容。",
             "everyUseOfThisCapabilityPasses": "此功能的每次使用都会通过面板的 SDK 入口。已录制",
             "fileOnTheBackendHost": "后端主机上的文件：",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "此服务器上的备份",
             "aPathOnTheServer": "服务器上的路径",
             "anAbsolutePathOnTheServer": "运行 ServerKit 的服务器上的绝对路径。没有上传端点，因此必须首先复制您自己计算机上的文件（scp、文件管理器或此处进行的备份）。",
-            "andYouAreImportingInto": "并且您正在导入",
             "asTheDatabaseSuperuser": "作为数据库超级用户。",
-            "backUp": "备份",
             "dumpFile": "转储文件",
             "everyStatementInTheDumpIs": "转储中的每个语句都会针对它执行。转储重新创建的表会丢失它们现在所拥有的任何内容，并且除了上面的备份之外，没有任何撤消操作。",
             "importInto": "导入到",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "只读帐户。",
             "readingTheBackupDirectory": "正在读取备份目录...",
             "takesADumpThroughServerkitS": "在导入之前通过 ServerKit 自己的备份路由进行转储。如果失败，则导入不会运行。",
-            "thatDumpWasTakenFrom": "该转储是从",
             "theDumpIsPipedInto": "转储通过管道输送到",
             "theImportFailed": "导入失败。",
             "thePreImportBackupFailedSo": "导入前备份失败，因此未导入任何内容。",
-            "thisRewrites": "这重写了",
             "toConfirm": "确认",
             "tryAgain": "重试",
             "whereTheDumpLives": "垃圾场所在的地方"
@@ -6094,7 +6081,6 @@
             "withChanges": "” 有变化"
         },
         "volumesPanel": {
-            "alsoDeleteData": "也删除数据",
             "containerMountPath": "容器挂载路径",
             "detach": "分离",
             "detachingKeepsTheDataByDefault": "分离时默认保留数据。仅当应用程序停止时才允许擦除。",

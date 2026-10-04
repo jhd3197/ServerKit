@@ -195,7 +195,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
     async function handleDelete(tunnel) {
         const ok = await confirmCf({
             titleKey: 'app.cloudflaredTab.deleteTunnel', title: 'Delete tunnel',
-            message: `Delete tunnel "${tunnel.name}"? Active connections will be force-closed.`,
+            message: t('app.cloudflaredTab.deleteTunnelMessage', 'Delete tunnel "{{name}}"? Active connections will be force-closed.', { name: tunnel.name }),
             variant: 'danger',
         });
         if (!ok) return;
@@ -526,7 +526,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                         </div>
                         <div className="modal-actions">
                             <Button type="button" variant="outline" onClick={() => setShowCreateModal(false)} disabled={creating}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={creating}>{creating ? 'Creating…' : 'Create'}</Button>
+                            <Button type="submit" disabled={creating}>{creating ? t('app.cloudflaredTab.creating', 'Creating…') : t('common.actions.create', 'Create')}</Button>
                         </div>
                     </form>
             </Modal>
@@ -553,7 +553,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                         </div>
                         <div className="modal-actions">
                             <Button type="button" variant="outline" onClick={() => setShowRouteModal(false)} disabled={routing}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={routing || !routeHostname}>{routing ? 'Adding…' : 'Add Route'}</Button>
+                            <Button type="submit" disabled={routing || !routeHostname}>{routing ? t('app.cloudflaredTab.adding', 'Adding…') : t('app.cloudflaredTab.addRouteButton', 'Add route')}</Button>
                         </div>
                     </form>
             </Modal>
@@ -611,7 +611,7 @@ const CloudflaredLoginCard = ({ login, onCancel }) => {
     if (login.status === 'error') {
         return (
             <div className="cloudflared-login-card cloudflared-login-card--error">
-                <strong>{t('app.cloudflaredTab.loginFailed2', "Couldn't sign in.")}</strong> {login.error || 'unknown error'}
+                <strong>{t('app.cloudflaredTab.loginFailed2', "Couldn't sign in.")}</strong> {login.error || t('app.cloudflaredTab.unknownError', 'Unknown error.')}
                 <Button variant="outline" size="sm" onClick={onCancel}>{t('common.actions.dismiss', 'Dismiss')}</Button>
             </div>
         );

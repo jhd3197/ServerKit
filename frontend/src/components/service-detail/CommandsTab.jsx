@@ -71,7 +71,7 @@ const CommandsTab = ({ appId, appType }) => {
                     onClick={() => handleRun()}
                     disabled={running}
                 >
-                    {running ? 'Running...' : 'Run'}
+                    {running ? t('app.commandsTab.running', 'Running…') : t('app.commandsTab.run', 'Run')}
                 </Button>
             </div>
 
@@ -80,7 +80,9 @@ const CommandsTab = ({ appId, appType }) => {
                     {output.stdout && <pre>{output.stdout}</pre>}
                     {output.stderr && <pre className="stderr">{output.stderr}</pre>}
                     {!output.stdout && !output.stderr && (
-                        <pre>{output.success ? 'Command completed successfully' : 'Command failed'}</pre>
+                        <pre>{output.success
+                            ? t('app.commandsTab.commandCompleted', 'Command completed.')
+                            : t('app.commandsTab.commandFailed', "Couldn't run the command.")}</pre>
                     )}
                 </div>
             )}

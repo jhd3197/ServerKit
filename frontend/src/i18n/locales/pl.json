@@ -777,8 +777,6 @@
             "failedToApplySettings": "Nie udało się zastosować ustawień",
             "interruptionThePreviousConfigurationIsBacked": "przerwanie. Kopia zapasowa poprzedniej konfiguracji zostanie utworzona i można ją przywrócić.",
             "isRestarted": "zostaje uruchomiony ponownie.",
-            "mbOfRam": "MB pamięci RAM (",
-            "nothingIsAppliedUntilYouChoose": "). Nic nie jest stosowane, dopóki nie zdecydujesz się na to.",
             "previousConfigurationRestored": "Przywrócono poprzednią konfigurację",
             "readingEngineConfiguration": "Odczytywanie konfiguracji silnika…",
             "rollBackAndRestart": "Cofnij się i uruchom ponownie",
@@ -790,7 +788,6 @@
             "setting": "Ustawienie",
             "settingsAppliedAndEngineRestarted": "Ustawienia zostały zastosowane i silnik uruchomiony ponownie",
             "suggested": "Sugerowane",
-            "suggestionsAreBasedOn": "Sugestie opierają się na",
             "targetValue": "Wartość docelowa",
             "targetValueFor": "Wartość docelowa dla {{key}}",
             "theLastBackedUpConfigurationIs": "Przywrócona zostanie ostatnia konfiguracja z kopii zapasowej i silnik bazy danych"
@@ -1099,7 +1096,6 @@
             "removeColumn": "Usuń kolumnę {{value}}",
             "someDatabaseServersDidNotAnswer": "Niektóre serwery baz danych nie odpowiedziały, więc ta lista może być niekompletna.",
             "statementsRunAs": "Instrukcje działają jako",
-            "stayKeywordsAnythingElseIsQuoted": "pozostań słowami kluczowymi, wszystko inne będzie cytowane jako tekst.",
             "theBuilderWritesTheStatementRunning": "Konstruktor pisze oświadczenie; uruchomienie go to krok, który należy wykonać we własnym kliencie silnika.",
             "tryAgain": "Spróbuj ponownie",
             "typeOfColumn": "Typ kolumny {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "Sprawdź ponownie",
-            "createA": "Utwórz",
             "deployActivity": "Wdróż działanie",
             "failedToInstall": "nie udało się zainstalować",
             "importADumpOrWriteThe": ", zaimportuj zrzut lub samodzielnie napisz instrukcję w konsoli.",
             "importDump": "Importuj zrzut",
-            "installing": "Instalowanie",
             "isReady": "jest gotowy",
             "listeningOn": "Słucham dalej",
             "manageService": "Zarządzaj usługą",
             "new": "Nowy",
             "newDatabase": "Nowa baza danych",
             "openSqlConsole": "Otwórz konsolę SQL",
-            "pullingTheImageProvisioningTheVolume": "Wyciąganie obrazu, udostępnianie woluminu i oczekiwanie na pierwszą kontrolę stanu",
             "serverkitListsItHereAsSoon": "— ServerKit umieszcza go tutaj, gdy tylko istnieje.",
             "theDatabaseIsConnectedAndEmpty": "Baza danych jest podłączona i pusta. Zbuduj swój pierwszy",
             "thisEngineHasNoBrowsableProtocol": "Ten silnik nie ma protokołu umożliwiającego przeglądanie — obsługuje go ServerKit, ale przeglądanie tabel odbywa się za pomocą własnego klienta.",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "Bieżący krok:",
-            "openConsole": "Otwórz konsolę →",
-            "troubleReachingTheDeploymentJob": "Problem z dotarciem do zadania wdrożenia:"
+            "openConsole": "Otwórz konsolę →"
         },
         "deploymentTimeline": {
             "audit": "Audyt",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "Instalacja zależności jest aktualnie włączona na tym panelu (",
             "dependencyInstallationIsEnabledOnThis": "Instalacja zależności jest teraz włączona na tym panelu (",
             "dependencyInstallationIsOffOnThis": "Instalacja zależności jest wyłączona na tym panelu. Gdy rozszerzenie dostarcza pakiety Python, panel zapisuje plik obok rozszerzenia zamiast go instalować i wyświetla go tutaj.",
-            "didPassThroughTheSdkGate": "przeszedł przez bramę SDK i",
             "everyUseOfThisCapabilityHas": "Każde użycie tej funkcji musi przejść przez bramkę SDK panelu, a bramka nie zarejestrowała żadnego zdarzenia od rozpoczęcia procesu panelu. Albo rozszerzenie go jeszcze nie potrzebuje, albo deklaruje więcej, niż wykorzystuje.",
             "everyUseOfThisCapabilityPasses": "Każde użycie tej możliwości przechodzi przez bramkę SDK panelu. Nagrany",
             "fileOnTheBackendHost": "Plik na hoście zaplecza:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "Kopia zapasowa na tym serwerze",
             "aPathOnTheServer": "Ścieżka na serwerze",
             "anAbsolutePathOnTheServer": "Ścieżka bezwzględna na serwerze, na którym działa ServerKit. Nie ma punktu końcowego przesyłania, więc plik na twoim komputerze musi zostać najpierw skopiowany (scp, menedżer plików lub zrobiona tutaj kopia zapasowa).",
-            "andYouAreImportingInto": "i importujesz do",
             "asTheDatabaseSuperuser": "jako superużytkownik bazy danych.",
-            "backUp": "Kopia zapasowa",
             "dumpFile": "Zrzuć plik",
             "everyStatementInTheDumpIs": "Każda instrukcja na zrzucie jest wykonywana względem niej. Tabele odtwarzane przez zrzut tracą wszystko, co obecnie przechowują i nie można ich cofnąć poza powyższą kopią zapasową.",
             "importInto": "Importuj do",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "Konto tylko do odczytu.",
             "readingTheBackupDirectory": "Czytanie katalogu kopii zapasowej…",
             "takesADumpThroughServerkitS": "Przed importem wykonuje zrzut przez własną trasę kopii zapasowej ServerKit. Jeśli się nie powiedzie, import nie zostanie uruchomiony.",
-            "thatDumpWasTakenFrom": "Z tego wysypiska zostało wzięte",
             "theDumpIsPipedInto": "Do wysypiska doprowadzony jest rurociąg",
             "theImportFailed": "Import nie powiódł się.",
             "thePreImportBackupFailedSo": "Tworzenie kopii zapasowej przed importem nie powiodło się, więc nic nie zostało zaimportowane.",
-            "thisRewrites": "To przepisuje",
             "toConfirm": "potwierdzić",
             "tryAgain": "Spróbuj ponownie",
             "whereTheDumpLives": "Gdzie mieszka śmietnik"
@@ -6094,7 +6081,6 @@
             "withChanges": "”ze zmianami"
         },
         "volumesPanel": {
-            "alsoDeleteData": "Usuń także dane",
             "containerMountPath": "Ścieżka do montażu kontenera",
             "detach": "Odłączyć",
             "detachingKeepsTheDataByDefault": "Odłączenie domyślnie zachowuje dane. Wymazywanie jest dozwolone tylko wtedy, gdy aplikacja jest zatrzymana.",

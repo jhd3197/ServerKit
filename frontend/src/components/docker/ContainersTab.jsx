@@ -1291,7 +1291,7 @@ const RunContainerModal = ({ onClose, onCreated }) => {
                         {t('common.actions.cancel', 'Cancel')}
                     </Button>
                     <Button type="submit" disabled={loading}>
-                        {loading ? 'Running...' : 'Run Container'}
+                        {loading ? t('app.containersTab.running', 'Running…') : t('app.containersTab.runContainer', 'Run container')}
                     </Button>
                 </div>
             </form>

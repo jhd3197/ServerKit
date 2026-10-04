@@ -84,7 +84,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
         try {
             const result = await api.installRemotePackages(serverId, [name]);
             const channel = result?.channel || `job:${result?.job_id}`;
-            setJob({ channel, title: `Installing ${name}` });
+            setJob({ channel, title: t('app.serverPackagesTab.installingPackage', 'Installing {{name}}', { name }) });
         } catch (err) {
             toastError(toast, t('app.serverPackagesTab.failedToStartInstall', "Couldn't start the install.", {  }), err);
         }
@@ -100,7 +100,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
         if (!ok) return;
         try {
             await api.removeRemotePackage(serverId, name);
-            toast.success(`${name} removed`);
+            toast.success(t('app.serverPackagesTab.packageRemoved', '{{name}} removed', { name }));
         } catch (err) {
             toastError(toast, t('app.serverPackagesTab.removeFailed', "Couldn't uninstall the package."), err);
         }
@@ -161,7 +161,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
                         placeholder={t('app.serverPackagesTab.searchPackages', 'Search packages…')}
                     />
                     <Button type="submit" variant="outline" disabled={searching}>
-                        {searching ? 'Searching…' : 'Search'}
+                        {searching ? t('app.serverPackagesTab.searching', 'Searching…') : t('app.serverPackagesTab.search', 'Search')}
                     </Button>
                 </form>
             </ListToolbar>
@@ -214,7 +214,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
                     <p className="text-muted-foreground">{t('common.loading', 'Loading…')}</p>
                 ) : (
                     <pre className="server-packages__raw">
-                        {installedRaw || 'No packages reported.'}
+                        {installedRaw || t('app.serverPackagesTab.noPackagesReported', 'No packages reported.')}
                     </pre>
                 )}
                 <p className="server-packages__hint text-muted-foreground">

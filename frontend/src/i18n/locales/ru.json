@@ -777,8 +777,6 @@
             "failedToApplySettings": "Не удалось применить настройки.",
             "interruptionThePreviousConfigurationIsBacked": "прерывание. Предыдущая конфигурация зарезервирована, и ее можно откатить.",
             "isRestarted": "перезапускается.",
-            "mbOfRam": "МБ ОЗУ (",
-            "nothingIsAppliedUntilYouChoose": "). Ничего не применяется до тех пор, пока вы этого не решите.",
             "previousConfigurationRestored": "Предыдущая конфигурация восстановлена",
             "readingEngineConfiguration": "Чтение конфигурации двигателя…",
             "rollBackAndRestart": "Откатиться и перезапустить",
@@ -790,7 +788,6 @@
             "setting": "Параметр",
             "settingsAppliedAndEngineRestarted": "Настройки применены и двигатель перезапущен.",
             "suggested": "Предложенный",
-            "suggestionsAreBasedOn": "Предложения основаны на",
             "targetValue": "Целевое значение",
             "targetValueFor": "Целевое значение для {{key}}",
             "theLastBackedUpConfigurationIs": "Последняя резервная копия конфигурации восстанавливается, и ядро базы данных"
@@ -1099,7 +1096,6 @@
             "removeColumn": "Удалить столбец {{value}}",
             "someDatabaseServersDidNotAnswer": "Некоторые серверы баз данных не ответили, поэтому этот список может быть неполным.",
             "statementsRunAs": "Заявления выполняются как",
-            "stayKeywordsAnythingElseIsQuoted": "оставайтесь ключевыми словами, все остальное цитируется как текст.",
             "theBuilderWritesTheStatementRunning": "Застройщик пишет заявление; его запуск — это шаг, который вы делаете в собственном клиенте движка.",
             "tryAgain": "Попробуйте еще раз",
             "typeOfColumn": "Тип столбца {{value}}"
@@ -1358,19 +1354,16 @@
         },
         "dbBlankStates": {
             "checkAgain": "Проверьте еще раз",
-            "createA": "Создайте",
             "deployActivity": "Развертывание деятельности",
             "failedToInstall": "не удалось установить",
             "importADumpOrWriteThe": ", импортируйте дамп или напишите оператор самостоятельно в консоли.",
             "importDump": "Импортировать дамп",
-            "installing": "Установка",
             "isReady": "готов",
             "listeningOn": "Слушаю",
             "manageService": "Управление сервисом",
             "new": "Новый",
             "newDatabase": "Новая база данных",
             "openSqlConsole": "Открыть консоль SQL",
-            "pullingTheImageProvisioningTheVolume": "Извлечение образа, подготовка тома и ожидание первой проверки работоспособности",
             "serverkitListsItHereAsSoon": "— ServerKit перечисляет его здесь, как только он существует.",
             "theDatabaseIsConnectedAndEmpty": "База данных подключена и пуста. Создайте свой первый",
             "thisEngineHasNoBrowsableProtocol": "У этого движка нет протокола просмотра — его запускает ServerKit, но просмотр таблиц осуществляется с помощью собственного клиента.",
@@ -1469,8 +1462,7 @@
         },
         "deploymentJobProgress": {
             "currentStep": "Текущий шаг:",
-            "openConsole": "Открыть консоль →",
-            "troubleReachingTheDeploymentJob": "Не удалось достичь задания по развертыванию:"
+            "openConsole": "Открыть консоль →"
         },
         "deploymentTimeline": {
             "audit": "Аудит",
@@ -1945,7 +1937,6 @@
             "dependencyInstallationIsCurrentlyEnabledOn": "Установка зависимостей в настоящее время включена на этой панели (",
             "dependencyInstallationIsEnabledOnThis": "Установка зависимостей теперь включена на этой панели (",
             "dependencyInstallationIsOffOnThis": "На этой панели отключена установка зависимостей. Когда расширение отправляет пакеты Python, панель записывает файл рядом с расширением, а не устанавливает его, и перечисляет его здесь.",
-            "didPassThroughTheSdkGate": "прошел через ворота SDK и",
             "everyUseOfThisCapabilityHas": "Каждое использование этой возможности должно проходить через шлюз SDK панели, и шлюз не зафиксировал ни одного случая с момента запуска процесса панели. Либо расширению это пока не нужно, либо оно декларирует больше, чем использует.",
             "everyUseOfThisCapabilityPasses": "Каждое использование этой возможности проходит через шлюз SDK панели. Записано",
             "fileOnTheBackendHost": "Файл на внутреннем хосте:",
@@ -2444,9 +2435,7 @@
             "aBackupOnThisServer": "Резервная копия на этом сервере",
             "aPathOnTheServer": "Путь на сервере",
             "anAbsolutePathOnTheServer": "Абсолютный путь на сервере, на котором работает ServerKit. Конечная точка загрузки отсутствует, поэтому сначала необходимо скопировать файл на ваш компьютер (scp, файловый менеджер или резервную копию, сделанную здесь).",
-            "andYouAreImportingInto": "и вы импортируете в",
             "asTheDatabaseSuperuser": "в качестве суперпользователя базы данных.",
-            "backUp": "Резервное копирование",
             "dumpFile": "Файл дампа",
             "everyStatementInTheDumpIs": "Каждый оператор в дампе выполняется против него. Таблицы, которые воссоздает дамп, теряют все, что они хранят сейчас, и нет возможности отмены, кроме резервной копии, указанной выше.",
             "importInto": "Импортировать в",
@@ -2462,11 +2451,9 @@
             "readOnlyAccount": "Учетная запись только для чтения.",
             "readingTheBackupDirectory": "Чтение каталога резервных копий…",
             "takesADumpThroughServerkitS": "Перед импортом создается дамп через собственный резервный маршрут ServerKit. Если это не удается, импорт не запускается.",
-            "thatDumpWasTakenFrom": "Этот дамп взят отсюда",
             "theDumpIsPipedInto": "Свалка подведена к",
             "theImportFailed": "Импорт не удался.",
             "thePreImportBackupFailedSo": "Резервное копирование перед импортом не удалось, поэтому ничего не было импортировано.",
-            "thisRewrites": "Это переписывает",
             "toConfirm": "подтвердить",
             "tryAgain": "Попробуйте еще раз",
             "whereTheDumpLives": "Где живет свалка"
@@ -6094,7 +6081,6 @@
             "withChanges": "» с изменениями"
         },
         "volumesPanel": {
-            "alsoDeleteData": "Также удалить данные",
             "containerMountPath": "Путь монтирования контейнера",
             "detach": "Отсоединить",
             "detachingKeepsTheDataByDefault": "При отключении данные сохраняются по умолчанию. Удаление разрешено только тогда, когда приложение остановлено.",

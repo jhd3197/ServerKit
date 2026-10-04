@@ -523,11 +523,11 @@ const ComposeLogsModal = ({ project, onClose }) => {
                         </SelectContent>
                     </Select>
                 </div>
-                <pre className="log-viewer">{loading ? 'Loading...' : logs}</pre>
+                <pre className="log-viewer">{loading ? t('common.loading', 'Loading…') : logs}</pre>
             </div>
             <div className="modal-actions">
                 <Button variant="outline" onClick={loadLogs} disabled={loading}>
-                    {loading ? 'Loading...' : 'Refresh'}
+                    {loading ? t('common.loading', 'Loading…') : t('common.actions.refresh', 'Refresh')}
                 </Button>
                 <Button onClick={onClose}>{t('common.actions.close', 'Close')}</Button>
             </div>

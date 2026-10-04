@@ -231,7 +231,7 @@ const DoctorPanel = () => {
                                 disabled={repairing || running}
                                 onClick={() => setConfirm({
                                     items: repairable.map((c) => c.repair_ref),
-                                    title: `Repair all ${repairable.length} repairable items?`,
+                                    title: t('app.doctorPanel.repairAllItems', { count: repairable.length, defaultValue_one: 'Repair 1 repairable item?', defaultValue_other: 'Repair all {{count}} repairable items?' }),
                                     diff: null,
                                     scope: 'host',
                                 })}
@@ -242,7 +242,7 @@ const DoctorPanel = () => {
                         )}
                         <Button size="sm" onClick={runDiagnosis} disabled={running || repairing}>
                             <Stethoscope size={14} />
-                            {running ? 'Diagnosing...' : 'Run diagnosis'}
+                            {running ? t('app.doctorPanel.diagnosing', 'Diagnosing…') : t('app.doctorPanel.runDiagnosis', 'Run diagnosis')}
                         </Button>
                     </div>
                 </div>
@@ -271,7 +271,7 @@ const DoctorPanel = () => {
                                 onToggleDiff={() => toggleDiff(check.key)}
                                 onRepair={() => setConfirm({
                                     items: [check.repair_ref],
-                                    title: `Repair "${check.title}"?`,
+                                    title: t('app.doctorPanel.repairCheck', 'Repair "{{title}}"?', { title: check.title }),
                                     diff: check.diff || null,
                                     scope: 'host',
                                 })}
@@ -297,7 +297,7 @@ const DoctorPanel = () => {
                     <div className="doctor-panel__actions">
                         <Button size="sm" onClick={runSweep} disabled={sweeping || repairing}>
                             <Stethoscope size={14} />
-                            {sweeping ? 'Sweeping...' : 'Run fleet sweep'}
+                            {sweeping ? t('app.doctorPanel.sweeping', 'Sweeping…') : t('app.doctorPanel.runFleetSweep', 'Run fleet sweep')}
                         </Button>
                     </div>
                 </div>
@@ -354,7 +354,7 @@ const DoctorPanel = () => {
                                                 onToggleDiff={() => toggleDiff(rowKey)}
                                                 onRepair={() => setConfirm({
                                                     items: [check.repair_ref],
-                                                    title: `Repair "${check.title}" on ${entry.name}?`,
+                                                    title: t('app.doctorPanel.repairCheckOnServer', 'Repair "{{title}}" on {{server}}?', { title: check.title, server: entry.name }),
                                                     diff: check.diff || null,
                                                     scope: 'fleet',
                                                 })}
@@ -378,8 +378,8 @@ const DoctorPanel = () => {
             >
                 <p className="sk-modal__subtitle">
                     {confirm?.scope === 'fleet'
-                        ? 'This restarts the service on the remote server through its agent. The action is allowlisted and written to the audit log.'
-                        : 'This rewrites the managed file(s) from ServerKit\'s configuration and reloads the affected service. Manual edits to those files will be lost.'}
+                        ? t('app.doctorPanel.fleetRepairNote', 'This restarts the service on the remote server through its agent. The action is allowlisted and written to the audit log.')
+                        : t('app.doctorPanel.localRepairNote', "This rewrites the managed files from ServerKit's configuration and reloads the affected service. Manual edits to those files will be lost.")}
                 </p>
                 {confirm?.diff && (
                     <pre className="doctor-diff doctor-diff--modal">{confirm.diff}</pre>
@@ -390,7 +390,7 @@ const DoctorPanel = () => {
                     </Button>
                     <Button onClick={() => doRepair(confirm)} disabled={repairing}>
                         <Wrench size={14} />
-                        {repairing ? 'Repairing...' : 'Repair'}
+                        {repairing ? t('app.doctorPanel.repairing', 'Repairing…') : t('app.doctorPanel.repair', 'Repair')}
                     </Button>
                 </div>
             </Modal>

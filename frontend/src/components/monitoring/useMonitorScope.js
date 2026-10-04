@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 
 // Which host the Monitoring pages are describing. Kept in the URL (`?server=`)
@@ -11,6 +12,7 @@ import api from '../../services/api';
 export const HOST_SCOPE = 'host';
 
 export function useMonitorScope() {
+    const { t } = useTranslation();
     const [params, setParams] = useSearchParams();
     const [servers, setServers] = useState([]);
 
@@ -49,7 +51,9 @@ export function useMonitorScope() {
         server,
         servers,
         setScope,
-        label: effective === HOST_SCOPE ? 'This server' : (server?.name || 'Unknown server'),
+        label: effective === HOST_SCOPE
+            ? t('app.monitorScope.thisServer', 'This server')
+            : (server?.name || t('app.monitorScope.unknownServer', 'Unknown server')),
     };
 }
 

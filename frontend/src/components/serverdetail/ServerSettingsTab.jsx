@@ -47,8 +47,8 @@ const AgentRegistrationSection = ({ server, onRegenerateToken }) => {
                     <h3>{t('app.serverSettingsTab.connectionString', 'Connection string')}</h3>
                     <p className="section-description">
                         {t('app.serverSettingsTab.generateAFreshConnectionStringTo', 'Generate a fresh connection string to pair (or re-pair) this server. Useful after reinstalling the agent: old credentials are gone, but a new string brings the agent right back to this row.')}
-                        {isOnline && ' This server is currently online; regenerating only affects re-pairing.'}
-                        {isExpired && ' The previous token has expired.'}
+                        {isOnline && ` ${t('app.serverSettingsTab.onlineRegenerateNote', 'This server is online now; a new string only affects re-pairing.')}`}
+                        {isExpired && ` ${t('app.serverSettingsTab.previousTokenExpired', 'The previous token has expired.')}`}
                     </p>
                 </div>
             </div>
@@ -239,7 +239,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                         </div>
 
                         <Button type="submit" disabled={loading}>
-                            {loading ? 'Saving...' : 'Save Changes'}
+                            {loading ? t('common.saving', 'Saving…') : t('app.serverSettingsTab.saveChanges', 'Save changes')}
                         </Button>
                     </div>
                 </form>
@@ -340,7 +340,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                             onClick={handleRotateKey}
                             disabled={rotatingKey || server.status !== 'online'}
                         >
-                            <KeyIcon /> {rotatingKey ? 'Rotating...' : 'Rotate API Key'}
+                            <KeyIcon /> {rotatingKey ? t('app.serverSettingsTab.rotating', 'Rotating…') : t('app.serverSettingsTab.rotateApiKey', 'Rotate API key')}
                         </Button>
                         {server.api_key_last_rotated && (
                             <span className="key-rotation-hint">{t('app.serverSettingsTab.lastRotated', 'Last rotated:')} {new Date(server.api_key_last_rotated).toLocaleString()}</span>
@@ -428,7 +428,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${result.regi
                 <>
                     <Button variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button onClick={handleGenerate} disabled={generating}>
-                        {generating ? 'Generating…' : 'Generate'}
+                        {generating ? t('app.serverSettingsTab.generating', 'Generating…') : t('app.serverSettingsTab.generate', 'Generate')}
                     </Button>
                 </>
             ) : (

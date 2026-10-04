@@ -298,7 +298,7 @@ const IntegrityTab = () => {
                     <h3>
                         {scopeLabel(scope)}{' '}
                         <span className="sec-count">
-                            · {SCOPE_META[key]?.hint || (scope.roots[0] || 'no docroot')}
+                            · {SCOPE_META[key]?.hint || (scope.roots[0] || t('app.integrityTab.noDocroot', 'no docroot'))}
                         </span>
                     </h3>
                     {!scope.available && <span className="sec-state sec-state--gray">{t('app.integrityTab.notPresent', 'not present')}</span>}
@@ -311,9 +311,14 @@ const IntegrityTab = () => {
                 <SharedCardContent variant="legacy" className="card-body">
                     <p className="sec-hint--lead sec-hint">
                         {baseline
-                            ? `Baseline: ${baseline.file_count} files, ${formatAge(baseline.created_at) || 'unknown age'}`
-                            : 'No baseline yet — create one to start tracking changes.'}
-                        {check && ` · Last check ${formatAge(check.checked_at) || ''}`}
+                            ? t('app.integrityTab.baselineSummary', {
+                                count: baseline.file_count,
+                                age: formatAge(baseline.created_at) || t('app.integrityTab.unknownAge', 'unknown age'),
+                                defaultValue_one: 'Baseline: 1 file, {{age}}',
+                                defaultValue_other: 'Baseline: {{count}} files, {{age}}',
+                            })
+                            : t('app.integrityTab.noBaselineYet', 'No baseline yet. Create one to start tracking changes.')}
+                        {check && ` · ${t('app.integrityTab.lastCheck', 'Last check {{age}}', { age: formatAge(check.checked_at) || '' })}`}
                     </p>
                     {/* These act on the SCOPE and are there whether or not the
                         changes list is open, so they keep their own bar; the
@@ -325,7 +330,7 @@ const IntegrityTab = () => {
                             onClick={() => runAction(key, 'baseline')}
                             disabled={!scope.available || busy !== null}
                         >
-                            {busy === `${key}:baseline` ? 'Baselining…' : 'Baseline'}
+                            {busy === `${key}:baseline` ? t('app.integrityTab.baselining', 'Baselining…') : t('app.integrityTab.baseline', 'Baseline')}
                         </Button>
                         <Button
                             variant="default"
@@ -333,7 +338,7 @@ const IntegrityTab = () => {
                             onClick={() => runAction(key, 'check')}
                             disabled={!baseline || busy !== null}
                         >
-                            {busy === `${key}:check` ? 'Checking…' : 'Check now'}
+                            {busy === `${key}:check` ? t('common.checking', 'Checking…') : t('app.integrityTab.checkNow', 'Check now')}
                         </Button>
                         {changed && (
                             <>
@@ -343,14 +348,14 @@ const IntegrityTab = () => {
                                     onClick={() => runAction(key, 'accept')}
                                     disabled={busy !== null}
                                 >
-                                    {busy === `${key}:accept` ? 'Accepting…' : 'Accept changes'}
+                                    {busy === `${key}:accept` ? t('app.integrityTab.accepting', 'Accepting…') : t('app.integrityTab.acceptChanges', 'Accept changes')}
                                 </Button>
                                 <Button
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => setExpanded(expanded === key ? null : key)}
                                 >
-                                    {expanded === key ? 'Hide changes' : 'View changes'}
+                                    {expanded === key ? t('app.integrityTab.hideChanges', 'Hide changes') : t('app.integrityTab.viewChanges', 'View changes')}
                                 </Button>
                             </>
                         )}
@@ -452,7 +457,7 @@ const IntegrityTab = () => {
                                     />
                                     <div className="sec-finding__msg">
                                         {appItem.name}{' '}
-                                        <span className="sec-mono">{appItem.root_path || 'no docroot'}</span>
+                                        <span className="sec-mono">{appItem.root_path || t('app.integrityTab.noDocroot', 'no docroot')}</span>
                                     </div>
                                 </div>
                             ))}

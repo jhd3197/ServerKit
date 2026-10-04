@@ -173,7 +173,7 @@ const LinkPanelForm = ({ onClose }) => {
                     {t('common.actions.cancel', 'Cancel')}
                 </Button>
                 <Button type="submit" disabled={submitting || status === null}>
-                    {submitting ? 'Linking…' : 'Link panel'}
+                    {submitting ? t('app.linkPanelForm.linking', 'Linking…') : t('app.linkPanelForm.linkPanel', 'Link panel')}
                 </Button>
             </div>
         </form>

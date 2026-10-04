@@ -157,7 +157,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
             sortValue: (a) => a.direction || '',
             render: (a) => (
                 <Pill kind={a.direction === 'high' ? 'red' : 'cyan'}>
-                    {a.direction === 'high' ? 'Unusually high' : 'Unusually low'}
+                    {a.direction === 'high' ? t('app.fleetCapacityPanel.unusuallyHigh', 'Unusually high') : t('app.fleetCapacityPanel.unusuallyLow', 'Unusually low')}
                 </Pill>
             ),
         },
@@ -187,7 +187,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
                             <Download size={14} /> {t('app.fleetCapacityPanel.exportCsv', 'Export CSV')}
                         </Button>
                         <Button size="sm" onClick={loadComparison} disabled={selectedServers.length === 0 || comparing}>
-                            <BarChart3 size={14} /> {comparing ? 'Comparing…' : 'Compare'}
+                            <BarChart3 size={14} /> {comparing ? t('app.fleetCapacityPanel.comparing', 'Comparing…') : t('app.fleetCapacityPanel.compare', 'Compare')}
                         </Button>
                     </div>
                 </div>
@@ -357,7 +357,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
                                 <div className={`fleet-predbox ${forecast.predictions.days_to_90pct === 0 ? 'is-red' : 'is-amber'}`}>
                                     <span className="mon-field-label">{t('app.fleetCapacityPanel.reaches90', 'Reaches 90%')}</span>
                                     <strong>
-                                        {forecast.predictions.date_90pct || 'N/A'}
+                                        {forecast.predictions.date_90pct || t('app.fleetCapacityPanel.notAvailable', 'N/A')}
                                         {forecast.predictions.days_to_90pct > 0 && (
                                             <em> ({forecast.predictions.days_to_90pct} days)</em>
                                         )}
@@ -366,7 +366,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
                                 <div className="fleet-predbox is-red">
                                     <span className="mon-field-label">{t('app.fleetCapacityPanel.reaches100', 'Reaches 100%')}</span>
                                     <strong>
-                                        {forecast.predictions.date_100pct || 'N/A'}
+                                        {forecast.predictions.date_100pct || t('app.fleetCapacityPanel.notAvailable', 'N/A')}
                                         {forecast.predictions.days_to_100pct > 0 && (
                                             <em> ({forecast.predictions.days_to_100pct} days)</em>
                                         )}

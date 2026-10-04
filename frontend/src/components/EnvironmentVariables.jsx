@@ -583,7 +583,7 @@ const EnvironmentVariables = ({ appId }) => {
                             title={allVisible ? t('app.environmentVariables.hideAllValues', 'Hide all values') : t('app.environmentVariables.showAllValues', 'Show all values')}
                         >
                             {allVisible ? <EyeOff size={14} /> : <Eye size={14} />}
-                            {allVisible ? 'Hide All' : 'Show All'}
+                            {allVisible ? t('app.environmentVariables.hideAll', 'Hide all') : t('app.environmentVariables.showAll', 'Show all')}
                         </Button>
                         <Button variant="outline" size="sm" onClick={() => setShowImportModal(true)}>
                             <Upload size={14} />
@@ -689,7 +689,7 @@ const EnvironmentVariables = ({ appId }) => {
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
                         <Button type="submit" disabled={saving}>
-                            {saving ? 'Adding...' : 'Add Variable'}
+                            {saving ? t('app.environmentVariables.adding', 'Adding…') : t('app.environmentVariables.addVariable', 'Add variable')}
                         </Button>
                     </div>
                 </form>
@@ -732,7 +732,7 @@ const EnvironmentVariables = ({ appId }) => {
                         {t('common.actions.cancel', 'Cancel')}
                     </Button>
                     <Button onClick={handleImport} disabled={saving}>
-                        {saving ? 'Importing...' : 'Import'}
+                        {saving ? t('app.environmentVariables.importing', 'Importing…') : t('common.actions.import', 'Import')}
                     </Button>
                 </div>
             </Modal>

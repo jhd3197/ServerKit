@@ -200,8 +200,8 @@ const ScheduleCard = ({ policy, remoteConfigured, onSave, saving }) => {
                         <span>{t('app.scheduleCard.copyBackupsToRemoteStorage', 'Copy backups to remote storage')}</span>
                         <span className="app-panel-hint">
                             {remoteConfigured
-                                ? 'Uses the provider configured in Backups → Storage.'
-                                : 'No remote storage configured. Set one up in Backups → Storage.'}
+                                ? t('app.scheduleCard.usesConfiguredProvider', 'Uses the provider configured in Backups → Storage.')
+                                : t('app.scheduleCard.noRemoteStorage', 'No remote storage configured. Set one up in Backups → Storage.')}
                         </span>
                     </label>
                 </div>

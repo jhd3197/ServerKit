@@ -372,7 +372,7 @@ export default function MonitoringOverview({
                         <h3>{t('app.monitoringOverview.speedTest', 'Speed test')}</h3>
                         <Button size="sm" variant="outline" onClick={onRunSpeedTest} disabled={speedTestRunning}>
                             <Zap size={14} />
-                            {speedTestRunning ? 'Running…' : 'Run test'}
+                            {speedTestRunning ? t('app.monitoringOverview.running', 'Running…') : t('app.monitoringOverview.runTest', 'Run test')}
                         </Button>
                     </div>
                     {speedTest?.last_result ? (

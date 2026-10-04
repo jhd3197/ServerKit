@@ -137,7 +137,7 @@ export default function BackupHistoryList({
             render: (run) => (
                 <div className="sk-cell-name">
                     <span className="backup-history-list__ico"><Archive size={14} /></span>
-                    <span>{run.metadata?.backup_name || `Backup #${run.id}`}</span>
+                    <span>{run.metadata?.backup_name || t('app.backupHistoryList.backupNumber', 'Backup #{{id}}', { id: run.id })}</span>
                     <Pill kind={run.kind === 'full' ? 'violet' : 'gray'} dot={false}>{run.kind}</Pill>
                 </div>
             ),

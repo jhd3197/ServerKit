@@ -102,7 +102,7 @@ const PackagesTab = ({ appId }) => {
                     placeholder={t('app.packagesTab.packageNameEGRequestsFlask', 'Package name (e.g. requests, flask==2.0.0)')}
                 />
                 <Button type="submit" disabled={installing}>
-                    {installing ? 'Installing...' : 'Install'}
+                    {installing ? t('app.packagesTab.installing', 'Installing…') : t('app.packagesTab.install', 'Install')}
                 </Button>
             </form>
 

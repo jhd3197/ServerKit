@@ -54,15 +54,17 @@ export function EngineInstallingPanel({ instance, onRefresh }) {
                     </h2>
                     <p className="dbx-blank__body">
                         {instance.error_message
-                            || 'The deploy did not finish. The install log has the reason.'}
+                            || t('app.dbBlankStates.deployDidNotFinish', "The deploy didn't finish. The install log has the reason.")}
                     </p>
                 </>
             ) : (
                 <>
-                    <h2 className="dbx-blank__title">{t('app.dbBlankStates.installing', 'Installing')} {instance.name}</h2>
+                    <h2 className="dbx-blank__title">{t('app.dbBlankStates.installingName', 'Installing {{name}}', { name: instance.name })}</h2>
                     <p className="dbx-blank__body">
-                        {t('app.dbBlankStates.pullingTheImageProvisioningTheVolume', 'Pulling the image, provisioning the volume and waiting for the first health check')}{meta.family ? ` on this ${meta.family.toLowerCase()} engine` : ''}.
-                        This usually takes about a minute.
+                        {meta.family
+                            ? t('app.dbBlankStates.pullingImageOnEngine', 'Pulling the image, provisioning the volume and waiting for the first health check on this {{family}} engine.', { family: meta.family.toLowerCase() })
+                            : t('app.dbBlankStates.pullingImage', 'Pulling the image, provisioning the volume and waiting for the first health check.')}
+                        {' '}{t('app.dbBlankStates.usuallyAboutAMinute', 'This usually takes about a minute.')}
                     </p>
                 </>
             )}
@@ -113,10 +115,11 @@ export function EngineReadyPanel({ instance, label, onNewDatabase, onOpenConsole
             <p className="dbx-blank__body">
                 {address ? <>{t('app.dbBlankStates.listeningOn', 'Listening on')} <code>{address}</code>. </> : null}
                 {onNewDatabase ? (
-                    'Create a database to start writing to it.'
+                    t('app.dbBlankStates.createDatabaseToStart', 'Create a database to start writing to it.')
                 ) : (
                     <>
-                        {t('app.dbBlankStates.createA', 'Create a')} {unitOne} from {meta.client ? <code>{meta.client}</code> : 'its client'}
+                        {t('app.dbBlankStates.createUnitFrom', 'Create a {{unit}} from', { unit: unitOne })}{' '}
+                        {meta.client ? <code>{meta.client}</code> : t('app.dbBlankStates.itsClient', 'its client')}
                         {' '}{t('app.dbBlankStates.serverkitListsItHereAsSoon', '(ServerKit lists it here as soon as it exists).')}
                     </>
                 )}
