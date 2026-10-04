@@ -8,6 +8,7 @@ import { useRecordVisit } from '@/hooks/useRecordVisit';
 import FavoriteStar from '@/components/FavoriteStar';
 import ConfirmDialog from '../components/ConfirmDialog';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import { Pill, ServiceTile } from '@/components/ds';
 import PageLayout from '../layouts/PageLayout';
@@ -73,33 +74,45 @@ const WorkspaceDetail = () => {
     const [servers, setServers] = useState([]);
     const [allUsers, setAllUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    // `loadError` is the workspace request itself; `sourceErrors` the side
+    // lists, each handed to the tab that renders it.
+    const [loadError, setLoadError] = useState(null);
+    const [sourceErrors, setSourceErrors] = useState({});
     const [deleteConfirm, setDeleteConfirm] = useState(false);
     const [sharingApp, setSharingApp] = useState(null);
     const [grants, setGrants] = useState([]);
     const [grantRole, setGrantRole] = useState('editor');
 
     const load = useCallback(async () => {
+        // The side lists settle on their own: a failed one keeps its last good
+        // rows and is recorded, so it can't read as "no members"/"no servers".
+        const failures = {};
+        const settle = (key, promise) => promise.catch((err) => { failures[key] = err; return null; });
         try {
             const [wsData, mData, appData, srvData, uData] = await Promise.all([
                 api.getWorkspace(wsId),
-                api.getWorkspaceMembers(wsId).catch(() => ({ members: [] })),
-                api.getApps({ allWorkspaces: true }).catch(() => ({ apps: [] })),
-                api.getServers({ allWorkspaces: true }).catch(() => []),
-                api.getUsers().catch(() => ({ users: [] })),
+                settle('members', api.getWorkspaceMembers(wsId)),
+                settle('apps', api.getApps({ allWorkspaces: true })),
+                settle('servers', api.getServers({ allWorkspaces: true })),
+                settle('users', api.getUsers()),
             ]);
             setWs(wsData);
             refreshActiveWorkspace(wsData);
-            setMembers(mData.members || []);
-            setApps(appData.apps || []);
-            setServers(asServerList(srvData));
-            setAllUsers(uData.users || []);
-        } catch {
-            toast.error(t('app.workspaceDetail.failedToLoadWorkspace', 'Failed to load workspace'));
-            setWs(null);
+            if (mData) setMembers(mData.members || []);
+            if (appData) setApps(appData.apps || []);
+            if (srvData) setServers(asServerList(srvData));
+            if (uData) setAllUsers(uData.users || []);
+            setSourceErrors(failures);
+            setLoadError(null);
+        } catch (err) {
+            // Only a 404 means the workspace is gone; anything else is a
+            // failure to read it, which keeps what is on screen.
+            if (err.status === 404) setWs(null);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
-    }, [wsId, refreshActiveWorkspace, toast, t]);
+    }, [wsId, refreshActiveWorkspace]);
 
     useEffect(() => { setLoading(true); load(); }, [load]);
 
@@ -203,6 +216,19 @@ const WorkspaceDetail = () => {
         );
     }
 
+    if (!ws && loadError && loadError.status !== 404) {
+        return (
+            <PageLayout className="ws-detail-page" icon={<LayoutGrid size={18} />} title={t('common.labels.workspace', 'Workspace')}>
+                <Link className="ws-detail__back" to="/workspaces"><ChevronLeft size={14} /> {t('app.workspaceDetail.allWorkspaces', 'All workspaces')}</Link>
+                <ErrorState
+                    title={t('app.workspaceDetail.couldntLoadWorkspace', "Couldn't load this workspace")}
+                    error={loadError}
+                    onRetry={load}
+                />
+            </PageLayout>
+        );
+    }
+
     if (!ws) {
         return (
             <PageLayout className="ws-detail-page" icon={<LayoutGrid size={18} />} title={t('common.labels.workspace', 'Workspace')}>
@@ -236,6 +262,14 @@ const WorkspaceDetail = () => {
         >
 
             <div className="app-detail-body">
+                {loadError && <ErrorState compact error={loadError} onRetry={load} />}
+                {!loadError && activeTab === 'overview' && Object.values(sourceErrors).some(Boolean) && (
+                    <ErrorState
+                        compact
+                        error={Object.values(sourceErrors).find(Boolean)}
+                        onRetry={load}
+                    />
+                )}
                 <div className="app-detail-header">
                     <ServiceTile name={ws.name} size={54} gradient={ws.primary_color || undefined} className="ws-detail__tile" />
                     <div className="app-detail-title-block">
@@ -290,6 +324,8 @@ const WorkspaceDetail = () => {
                             srvIn={srvIn}
                             srvOut={srvOut}
                             onMoveServer={handleMoveServer}
+                            loadError={sourceErrors.servers}
+                            onRetry={load}
                         />
                     )}
                     {activeTab === 'services' && (
@@ -299,6 +335,8 @@ const WorkspaceDetail = () => {
                             appsOut={appsOut.filter(a => a.app_type !== 'wordpress')}
                             onMoveApp={handleMoveApp}
                             onShare={loadSharing}
+                            loadError={sourceErrors.apps}
+                            onRetry={load}
                         />
                     )}
                     {activeTab === 'sites' && (
@@ -308,6 +346,8 @@ const WorkspaceDetail = () => {
                             appsOut={appsOut.filter(a => a.app_type === 'wordpress')}
                             onMoveApp={handleMoveApp}
                             onShare={loadSharing}
+                            loadError={sourceErrors.apps}
+                            onRetry={load}
                         />
                     )}
                     {activeTab === 'members' && (
@@ -317,6 +357,8 @@ const WorkspaceDetail = () => {
                             allUsers={allUsers}
                             onAddMember={handleAddMember}
                             onRemoveMember={handleRemoveMember}
+                            loadError={sourceErrors.members || sourceErrors.users}
+                            onRetry={load}
                         />
                     )}
                     {activeTab === 'settings' && (

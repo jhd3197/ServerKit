@@ -14,6 +14,7 @@ import { formatBytes } from '@/utils/formatBytes';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import SourceTree from '../components/databases/SourceTree';
 import ConsoleTab from '../components/databases/ConsoleTab';
 import TableDataTab from '../components/databases/TableDataTab';
@@ -49,6 +50,29 @@ const ENGINE_POLL_MS = 4000;
 
 
 const SIDEBAR_KEY = 'serverkit-dbx-sidebar';
+
+// Host + Docker listings for one engine, fetched side by side. A side that
+// fails contributes nothing and its error is returned as the third element.
+async function settleBoth(hostPromise, dockerPromise) {
+    const [host, docker] = await Promise.allSettled([hostPromise, dockerPromise]);
+    const failure = [host, docker].find((r) => r.status === 'rejected')?.reason || null;
+    return [
+        host.status === 'fulfilled' ? host.value || {} : {},
+        docker.status === 'fulfilled' ? docker.value || {} : {},
+        failure,
+    ];
+}
+
+// A partial listing is still worth showing; an empty one after a failure is
+// not "no databases", so it becomes the tree's error row instead.
+function nodesOrThrow(nodes, failure) {
+    if (failure && nodes.length === 0) {
+        const e = new Error(failure.message || 'request failed');
+        e.userMessage = `Couldn't load databases: ${failure.message || 'request failed'}`;
+        throw e;
+    }
+    return nodes;
+}
 
 function engineState(engine, status) {
     if (engine !== 'mysql' && engine !== 'postgresql') return 'available';
@@ -103,6 +127,7 @@ export default function Databases() {
 
     const [status, setStatus] = useState(null);
     const [statusLoading, setStatusLoading] = useState(true);
+    const [statusError, setStatusError] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
 
     const [expanded, setExpanded] = useState(new Set());
@@ -137,16 +162,24 @@ export default function Databases() {
 
     useEffect(() => { localStorage.setItem(SIDEBAR_KEY, String(sidebarVisible)); }, [sidebarVisible]);
 
+    // Which host engines are installed/running. A failure is kept, not
+    // logged away: the tree then says it couldn't check, rather than drawing
+    // the host engines as if their state were known.
+    const loadStatus = useCallback(async () => {
+        try {
+            const data = await api.getDatabaseStatus();
+            setStatus(data);
+            setStatusError(null);
+        } catch (err) {
+            setStatusError(err);
+        } finally {
+            setStatusLoading(false);
+        }
+    }, []);
+
     useEffect(() => {
         (async () => {
-            try {
-                const data = await api.getDatabaseStatus();
-                setStatus(data);
-            } catch (err) {
-                console.error('Failed to get database status:', err);
-            } finally {
-                setStatusLoading(false);
-            }
+            await loadStatus();
             try {
                 // GET /auth/me answers {user: {...}} — reading `.role` off the
                 // envelope was always undefined, so every admin was treated as
@@ -155,7 +188,7 @@ export default function Databases() {
                 setIsAdmin((me?.user?.role ?? me?.role) === 'admin');
             } catch { /* non-admin / not logged in handled by route guard */ }
         })();
-    }, []);
+    }, [loadStatus]);
 
     // The engine catalog is optional: an older backend simply doesn't serve it,
     // and the explorer has to keep working on its four built-in roots.
@@ -276,22 +309,16 @@ export default function Databases() {
     const loadChildren = useCallback(async (node) => {
         if (node.kind === 'engine') {
             if (node.engine === 'mysql') {
-                const [host, docker] = await Promise.all([
-                    api.getMySQLDatabases().catch(() => ({ databases: [] })),
-                    api.getAllDockerDatabases().catch(() => ({ databases: [] })),
-                ]);
+                const [host, docker, failure] = await settleBoth(api.getMySQLDatabases(), api.getAllDockerDatabases());
                 const hostNodes = (host.databases || []).map((db) => dbNode('mysql', { dbType: 'mysql', name: db.name }, db.name, db.size));
                 const dockerNodes = (docker.databases || []).filter((db) => db.type === 'mysql').map((db, i) => dockerDbNode('mysql', db, i));
-                return [...hostNodes, ...dockerNodes];
+                return nodesOrThrow([...hostNodes, ...dockerNodes], failure);
             }
             if (node.engine === 'postgresql') {
-                const [host, docker] = await Promise.all([
-                    api.getPostgreSQLDatabases().catch(() => ({ databases: [] })),
-                    api.getAllDockerDatabases().catch(() => ({ databases: [] })),
-                ]);
+                const [host, docker, failure] = await settleBoth(api.getPostgreSQLDatabases(), api.getAllDockerDatabases());
                 const hostNodes = (host.databases || []).map((db) => dbNode('postgresql', { dbType: 'postgresql', name: db.name }, db.name, db.size));
                 const dockerNodes = (docker.databases || []).filter((db) => db.type === 'postgresql').map((db, i) => dockerDbNode('postgresql', db, i));
-                return [...hostNodes, ...dockerNodes];
+                return nodesOrThrow([...hostNodes, ...dockerNodes], failure);
             }
             if (node.engine === 'sqlite') {
                 const d = await api.getSQLiteDatabases();
@@ -791,6 +818,13 @@ export default function Databases() {
                                 <div className="dbx-tree-loading"><RefreshCw size={14} className="dbx-spin" aria-hidden="true" /> {t('app.databases.checkingServers', 'Checking servers…')}</div>
                             ) : (
                                 <>
+                                    {statusError && (
+                                        <ErrorState
+                                            compact
+                                            message={t('app.databases.couldntCheckDatabaseServers', "Couldn't check database servers. {{reason}}", { reason: statusError.message })}
+                                            onRetry={loadStatus}
+                                        />
+                                    )}
                                     <SourceTree
                                         roots={roots}
                                         expanded={expanded}

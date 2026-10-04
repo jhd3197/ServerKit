@@ -25,6 +25,7 @@ import { sanitizeSvgInner } from '../utils/sanitizeSvg';
 import Modal from '@/components/Modal';
 import PageLoader from '../components/PageLoader';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -220,6 +221,7 @@ const Marketplace = () => {
     const toast = useToast();
     const [plugins, setPlugins] = useState([]);
     const [builtins, setBuiltins] = useState([]);
+    const [loadErrors, setLoadErrors] = useState({ installed: null, catalog: null, updates: null });
     const [registryExtensions, setRegistryExtensions] = useState([]);
     const [pluginUpdates, setPluginUpdates] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -261,23 +263,33 @@ const Marketplace = () => {
     const [permissionsTarget, setPermissionsTarget] = useState(null);
 
     const loadExtensions = useCallback(async () => {
+        // Each source settles on its own so one failing endpoint doesn't hide
+        // the others. A failed source keeps its last good list and is recorded
+        // per view, so it renders as an error rather than as "nothing here".
+        const settle = (promise) => promise.then(
+            (data) => ({ data, error: null }),
+            (error) => ({ data: null, error }),
+        );
         try {
-            const [pData, bData, rData, uData] = await Promise.all([
-                api.getInstalledPlugins().catch(() => ({ plugins: [] })),
-                api.getBuiltinExtensions().catch(() => ({ builtin: [] })),
-                api.getRegistryExtensions().catch(() => ({ extensions: [] })),
-                api.getPluginUpdates().catch(() => ({ updates: [] })),
+            const [pRes, bRes, rRes, uRes] = await Promise.all([
+                settle(api.getInstalledPlugins()),
+                settle(api.getBuiltinExtensions()),
+                settle(api.getRegistryExtensions()),
+                settle(api.getPluginUpdates()),
             ]);
-            setPlugins(pData.plugins || []);
-            setBuiltins(bData.builtin || []);
-            setRegistryExtensions(rData.extensions || []);
-            setPluginUpdates(uData.updates || []);
-        } catch {
-            toast.error(t('app.marketplace.failedToLoadExtensions', 'Failed to load extensions'));
+            if (pRes.data) setPlugins(pRes.data.plugins || []);
+            if (bRes.data) setBuiltins(bRes.data.builtin || []);
+            if (rRes.data) setRegistryExtensions(rRes.data.extensions || []);
+            if (uRes.data) setPluginUpdates(uRes.data.updates || []);
+            setLoadErrors({
+                installed: pRes.error,
+                catalog: bRes.error || rRes.error,
+                updates: uRes.error,
+            });
         } finally {
             setLoading(false);
         }
-    }, [t, toast]);
+    }, []);
 
     useEffect(() => { loadExtensions(); }, [loadExtensions]);
 
@@ -546,7 +558,16 @@ const Marketplace = () => {
                     )}
 
                     <section className="marketplace-section">
-                        {catalogEntries.length > 0 ? (
+                        {loadErrors.catalog && mergedCatalogEntries.length > 0 && (
+                            <ErrorState compact error={loadErrors.catalog} onRetry={loadExtensions} />
+                        )}
+                        {loadErrors.catalog && mergedCatalogEntries.length === 0 ? (
+                            <ErrorState
+                                title={t('app.marketplace.couldntLoadTheCatalog', "Couldn't load the extension catalog")}
+                                error={loadErrors.catalog}
+                                onRetry={loadExtensions}
+                            />
+                        ) : catalogEntries.length > 0 ? (
                             <CatalogGrid>
                                 {catalogEntries.map((entry) => (
                                     <CatalogExtensionCard
@@ -574,9 +595,22 @@ const Marketplace = () => {
                 <section className="marketplace-section">
                     <SectionHeader
                         title={t('app.marketplace.installedExtensions', 'Installed extensions')}
-                        meta={`${plugins.length} installed`}
+                        meta={loadErrors.installed && plugins.length === 0 ? undefined : `${plugins.length} installed`}
                     />
-                    {plugins.length > 0 ? (
+                    {(loadErrors.installed || loadErrors.updates) && plugins.length > 0 && (
+                        <ErrorState
+                            compact
+                            error={loadErrors.installed || loadErrors.updates}
+                            onRetry={loadExtensions}
+                        />
+                    )}
+                    {loadErrors.installed && plugins.length === 0 ? (
+                        <ErrorState
+                            title={t('app.marketplace.couldntLoadInstalledExtensions', "Couldn't load installed extensions")}
+                            error={loadErrors.installed}
+                            onRetry={loadExtensions}
+                        />
+                    ) : plugins.length > 0 ? (
                         <div className="installed-list">
                             {plugins.map((plugin) => (
                                 <PluginRow

@@ -16,6 +16,7 @@ import {
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { DataTable, DataTableFooter, Drawer, Pill, SearchField } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
@@ -135,6 +136,7 @@ export default function Incidents() {
     const [fleetAlerts, setFleetAlerts] = useState([]);
     const [monitors, setMonitors] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [selected, setSelected] = useState(null);
     const [note, setNote] = useState('');
     const [checking, setChecking] = useState(false);
@@ -147,23 +149,26 @@ export default function Incidents() {
     });
 
     const load = useCallback(async () => {
+        // A failed source keeps its last good rows (never blanks the page) and
+        // is recorded, so a failure can't read as "nothing is wrong".
+        const failures = [];
+        const settle = (promise) => promise.catch((err) => { failures.push(err); return null; });
         try {
             const [incidentsRes, statusRes, historyRes, monitorsRes, fleetRes] = await Promise.all([
-                api.getIncidents({ state: 'all', limit: 200 }).catch(() => null),
-                api.getMonitoringStatus().catch(() => null),
-                api.getAlertHistory(50).catch(() => null),
-                api.getMonitors().catch(() => null),
+                settle(api.getIncidents({ state: 'all', limit: 200 })),
+                settle(api.getMonitoringStatus()),
+                settle(api.getAlertHistory(50)),
+                settle(api.getMonitors()),
                 // Every status, deliberately: the Active/Acknowledged/Resolved
                 // split is a saved view now, not a server-side query.
-                api.getFleetAlerts({ limit: 200 }).catch(() => null),
+                settle(api.getFleetAlerts({ limit: 200 })),
             ]);
-            setIncidents(incidentsRes?.incidents || []);
-            setActiveAlerts(statusRes?.active_alerts || []);
-            setAlertHistory(historyRes?.alerts || []);
-            setMonitors(monitorsRes?.monitors || []);
-            setFleetAlerts(Array.isArray(fleetRes) ? fleetRes : []);
-        } catch {
-            // Keep the last good list rather than blanking the page.
+            if (incidentsRes) setIncidents(incidentsRes.incidents || []);
+            if (statusRes) setActiveAlerts(statusRes.active_alerts || []);
+            if (historyRes) setAlertHistory(historyRes.alerts || []);
+            if (monitorsRes) setMonitors(monitorsRes.monitors || []);
+            if (fleetRes) setFleetAlerts(Array.isArray(fleetRes) ? fleetRes : []);
+            setLoadError(failures[0] || null);
         } finally {
             setLoading(false);
         }
@@ -506,7 +511,17 @@ export default function Incidents() {
 
             <GridChips {...chrome.chipProps} />
 
-            {items.length === 0 ? (
+            {loadError && items.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={load} />
+            )}
+
+            {loadError && items.length === 0 ? (
+                <ErrorState
+                    title={t('app.incidents.couldntLoadIncidents', "Couldn't load incidents")}
+                    error={loadError}
+                    onRetry={load}
+                />
+            ) : items.length === 0 ? (
                 <EmptyState
                     icon={CheckCircle2}
                     title={t('app.incidents.nothingIsWrongRightNow', 'Nothing is wrong right now')}

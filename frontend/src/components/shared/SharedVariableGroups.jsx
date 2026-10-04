@@ -71,17 +71,20 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
     const [attachType, setAttachType] = useState(RESOURCE_TYPES[0]);
     const [attachId, setAttachId] = useState('');
 
+    const [loadError, setLoadError] = useState(null);
+
     const loadGroups = useCallback(async () => {
         try {
             setLoading(true);
             const data = await api.listVariableGroups(scopeType, scopeId);
             setGroups(data.groups || []);
-        } catch {
-            toast.error(t('app.sharedVariableGroups.failedToLoadVariableGroups', 'Failed to load variable groups'));
+            setLoadError(null);
+        } catch (err) {
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
-    }, [scopeType, scopeId, toast, t]);
+    }, [scopeType, scopeId]);
 
     const loadDetail = useCallback(async (groupId) => {
         if (!groupId) { setDetail(null); return; }
@@ -354,6 +357,9 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                 <ResourceListPage
                     className="shared-groups"
                     loading={loading}
+                    error={loadError}
+                    errorTitle={t('app.sharedVariableGroups.couldntLoadVariableGroups', "Couldn't load variable groups")}
+                    onRetry={loadGroups}
                     loadingTitle="Loading variable groups…"
                     storageKey="serverkit-list-variable-groups"
                     viewPageKey="variable-groups"

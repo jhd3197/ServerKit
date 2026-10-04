@@ -52,11 +52,11 @@ const Projects = () => {
     const { t } = useTranslation();
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [showCreate, setShowCreate] = useState(false);
     const [search, setSearch] = useState('');
     // Quick-create deep link: /projects?focus=create:project opens the dialog.
     useFocusParam('create', () => setShowCreate(true));
-    const toast = useToast();
     const navigate = useNavigate();
 
     const loadProjects = useCallback(async () => {
@@ -64,13 +64,13 @@ const Projects = () => {
         try {
             const data = await api.getProjects();
             setProjects(Array.isArray(data?.projects) ? data.projects : []);
+            setLoadError(null);
         } catch (err) {
-            console.error('Failed to load projects:', err);
-            toast.error(t('app.projects.failedToLoadProjects', 'Failed to load projects'));
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
-    }, [t, toast]);
+    }, []);
 
     useEffect(() => {
         loadProjects();
@@ -154,6 +154,9 @@ const Projects = () => {
             noun="projects"
             builtinViews={PROJECT_VIEWS}
             totalCount={projects.length}
+            error={loadError}
+            errorTitle={t('app.projects.couldntLoadProjects', "Couldn't load projects")}
+            onRetry={loadProjects}
             items={rows}
             columns={columns}
             keyField="id"

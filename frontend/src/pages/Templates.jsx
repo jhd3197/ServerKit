@@ -26,6 +26,7 @@ import { LOCAL_SERVER_ID } from '@/utils/serverTarget';
 import { useTopbarChrome } from '@/hooks/useTopbarActions';
 import { applyTableSorts, useTableSort } from '@/hooks/useTableSort';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { useManagedProfile } from '../contexts/useManagedProfile';
 import ManagedCard from '../components/ManagedCard';
 import { useTranslation } from 'react-i18next';
@@ -230,6 +231,7 @@ const Templates = () => {
     const [templates, setTemplates] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [failedIcons, setFailedIcons] = useState(new Set());
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [showInstallModal, setShowInstallModal] = useState(false);
@@ -258,18 +260,22 @@ const Templates = () => {
             const result = await api.getTemplateCategories();
             setCategories(result.categories || []);
         } catch {
-            toastError(t('app.templates.failedToLoadTemplates', 'Failed to load templates'));
+            // Categories only feed the filter drawer's options; the catalog
+            // itself reports its own load failure in the content area.
         }
-    }, [t, toastError]);
+    }, []);
 
     const loadTemplates = useCallback(async () => {
         const request = ++templatesRequest.current;
         setLoading(true);
         try {
             const result = await api.listTemplates(selectedCategory || null, searchQuery || null);
-            if (request === templatesRequest.current) setTemplates(result.templates || []);
+            if (request === templatesRequest.current) {
+                setTemplates(result.templates || []);
+                setLoadError(null);
+            }
         } catch (err) {
-            console.error('Failed to load templates:', err);
+            if (request === templatesRequest.current) setLoadError(err);
         } finally {
             if (request === templatesRequest.current) setLoading(false);
         }
@@ -556,7 +562,16 @@ const Templates = () => {
             {deployManaged && (
                 <ManagedCard capability="fleet" profile={managedProfile} compact />
             )}
-            {sortedTemplates.length === 0 ? (
+            {loadError && templates.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={loadTemplates} />
+            )}
+            {loadError && templates.length === 0 ? (
+                <ErrorState
+                    title={t('app.templates.couldntLoadTemplates', "Couldn't load templates")}
+                    error={loadError}
+                    onRetry={loadTemplates}
+                />
+            ) : sortedTemplates.length === 0 ? (
                 <EmptyState
                     icon={LayoutTemplate}
                     title={t('app.templates.noTemplatesFound', 'No templates found')}

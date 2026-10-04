@@ -106,9 +106,9 @@ const Services = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const toast = useToast();
-    const toastError = toast.error;
     const [apps, setApps] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [actionLoading, setActionLoading] = useState(null);
     const [selectedIds, setSelectedIds] = useState(new Set());
@@ -120,12 +120,13 @@ const Services = () => {
         try {
             const data = await api.getApps();
             setApps(data.apps || []);
-        } catch {
-            toastError(t('app.services.failedToLoadServices', 'Failed to load services'));
+            setLoadError(null);
+        } catch (err) {
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
-    }, [t, toastError]);
+    }, []);
 
     useEffect(() => {
         loadApps();
@@ -388,6 +389,9 @@ const Services = () => {
             noun="services"
             builtinViews={SERVICE_VIEWS}
             totalCount={apps.length}
+            error={loadError}
+            errorTitle={t('app.services.couldntLoadServices', "Couldn't load services")}
+            onRetry={loadApps}
             items={filteredApps}
             columns={columns}
             keyField="id"

@@ -12,6 +12,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import PageLayout from '../layouts/PageLayout';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '../contexts/useAuth.js';
 import { useToast } from '../contexts/useToast.js';
@@ -86,6 +87,7 @@ export default function DeliveryLog() {
     const [channel, setChannel] = useState('all');
     const [filtersOpen, setFiltersOpen] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
 
     const load = useCallback(async () => {
         try {
@@ -94,8 +96,11 @@ export default function DeliveryLog() {
             if (channel !== 'all') params.channel = channel;
             const data = await api.getDeliveryLog(params);
             setDeliveries(data.deliveries || []);
-        } catch {
-            // leave the last good state on screen
+            setLoadError(null);
+        } catch (err) {
+            // Leave the last good state on screen; the error renders above it,
+            // or in its place when nothing has loaded yet.
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -112,8 +117,8 @@ export default function DeliveryLog() {
             await api.retryDelivery(id);
             toast.success(t('app.deliveryLog.deliveryReQueued', 'Delivery re-queued'));
             load();
-        } catch {
-            toast.error(t('app.deliveryLog.retryFailed', 'Retry failed'));
+        } catch (err) {
+            toast.error(t('app.deliveryLog.couldntRetryDelivery', "Couldn't retry the delivery. {{reason}}", { reason: err.message }));
         }
     };
 
@@ -290,8 +295,18 @@ export default function DeliveryLog() {
 
                 <GridChips {...chrome.chipProps} />
 
+                {loadError && deliveries.length > 0 && (
+                    <ErrorState compact error={loadError} onRetry={load} />
+                )}
+
                 {loading && deliveries.length === 0 ? (
                     <EmptyState loading loadingVariant="table" title={t('common.loading', 'Loading…')} />
+                ) : loadError && deliveries.length === 0 ? (
+                    <ErrorState
+                        title={t('app.deliveryLog.couldntLoadDeliveries', "Couldn't load deliveries")}
+                        error={loadError}
+                        onRetry={load}
+                    />
                 ) : deliveries.length === 0 ? (
                     <EmptyState
                         icon={Inbox}

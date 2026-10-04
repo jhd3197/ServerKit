@@ -24,6 +24,7 @@ import {
 } from '@/components/ds/grid';
 import { Button } from '@/components/ui/button';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -171,6 +172,7 @@ export default function Jobs() {
     const [q, setQ] = useState('');
     const [page, setPage] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [loadErrors, setLoadErrors] = useState({ jobs: null, scheduled: null });
 
     // Table sort + column visibility, controlled so saved views can drive
     // them — same localStorage keys the DataTables used when uncontrolled.
@@ -211,15 +213,26 @@ export default function Jobs() {
             // No /jobs/stats call any more: its whole-table group-bys only ever
             // fed the count line above the table, and the footer counts the
             // rows the query actually returned.
-            const [jobsRes, schedRes] = await Promise.all([
+            // Each tab's request settles on its own. A failure keeps the last
+            // good rows on screen and is recorded for that tab, so it renders
+            // as an error instead of "No jobs have run yet".
+            const [jobsRes, schedRes] = await Promise.allSettled([
                 api.getJobs(params),
-                api.getScheduledJobs().catch(() => null),
+                api.getScheduledJobs(),
             ]);
-            setJobs(jobsRes?.jobs || []);
-            setTotal(jobsRes?.total ?? (jobsRes?.jobs?.length || 0));
-            setScheduled(schedRes?.scheduled || schedRes?.jobs || schedRes || []);
-        } catch {
-            // Keep the last good state on screen rather than blanking the page.
+            if (jobsRes.status === 'fulfilled') {
+                const data = jobsRes.value;
+                setJobs(data?.jobs || []);
+                setTotal(data?.total ?? (data?.jobs?.length || 0));
+            }
+            if (schedRes.status === 'fulfilled') {
+                const data = schedRes.value;
+                setScheduled(data?.scheduled || data?.jobs || data || []);
+            }
+            setLoadErrors({
+                jobs: jobsRes.status === 'rejected' ? jobsRes.reason : null,
+                scheduled: schedRes.status === 'rejected' ? schedRes.reason : null,
+            });
         } finally {
             setLoading(false);
         }
@@ -448,7 +461,16 @@ export default function Jobs() {
                     />
                 </div>
 
-                {scheduledView ? (
+                {scheduledView && loadErrors.scheduled && scheduled.length > 0 && (
+                    <ErrorState compact error={loadErrors.scheduled} onRetry={load} />
+                )}
+                {scheduledView && loadErrors.scheduled && scheduled.length === 0 ? (
+                    <ErrorState
+                        title={t('app.jobs.couldntLoadScheduledJobs', "Couldn't load scheduled jobs")}
+                        error={loadErrors.scheduled}
+                        onRetry={load}
+                    />
+                ) : scheduledView ? (
                     <DataTable
                         columns={scheduledColumns}
                         data={scheduled}
@@ -487,6 +509,17 @@ export default function Jobs() {
                             </div>
                         )}
 
+                        {loadErrors.jobs && jobs.length > 0 && (
+                            <ErrorState compact error={loadErrors.jobs} onRetry={load} />
+                        )}
+
+                        {loadErrors.jobs && jobs.length === 0 ? (
+                            <ErrorState
+                                title={t('app.jobs.couldntLoadJobs', "Couldn't load jobs")}
+                                error={loadErrors.jobs}
+                                onRetry={load}
+                            />
+                        ) : (
                         <DataTable
                             columns={chrome.columns}
                             data={jobs}
@@ -508,6 +541,7 @@ export default function Jobs() {
                             emptyTitle={hasFilters ? 'No jobs match these filters.' : 'No jobs have run yet.'}
                             emptyMessage=""
                         />
+                        )}
                     </>
                 )}
             </div>

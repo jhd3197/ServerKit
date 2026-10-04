@@ -45,13 +45,13 @@ const VAULT_VIEWS = [
 export default function Vaults() {
     const { t } = useTranslation();
     const toast = useToast();
-    const toastError = toast.error;
     const { confirm } = useConfirm();
     const { activeWorkspaceId: workspaceScopeId, isAllWorkspaces } = useWorkspace();
 
     const [vaults, setVaults] = useState([]);
     const [workspaces, setWorkspaces] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
 
     const activeWorkspaceId = isAllWorkspaces ? '' : workspaceScopeId;
     const [vaultForm, setVaultForm] = useState({ open: false, name: '', description: '', workspace_id: activeWorkspaceId });
@@ -70,12 +70,13 @@ export default function Vaults() {
             ]);
             setVaults(v.vaults || []);
             setWorkspaces(w.workspaces || []);
+            setLoadError(null);
         } catch (err) {
-            toastError(t('app.vaults.loadFailed', 'Load failed: {{message}}', { message: err.message }));
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
-    }, [t, toastError]);
+    }, []);
 
     useEffect(() => {
         loadAll();
@@ -365,6 +366,9 @@ export default function Vaults() {
             noun="vaults"
             builtinViews={VAULT_VIEWS}
             totalCount={vaults.length}
+            error={loadError}
+            errorTitle={t('app.vaults.couldntLoadVaults', "Couldn't load vaults")}
+            onRetry={loadAll}
             items={vaultRows}
             columns={vaultColumns}
             keyField="id"

@@ -40,6 +40,7 @@ import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useAuth } from '../contexts/useAuth.js';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { statusKind } from '@/components/ds/status';
 import { useTranslation } from 'react-i18next';
 
@@ -115,6 +116,7 @@ export default function Telemetry() {
 
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [hasMore, setHasMore] = useState(false);
     const [page, setPage] = useState(1);
     const [sources, setSources] = useState([]);
@@ -165,13 +167,16 @@ export default function Telemetry() {
             setEvents((prev) => (replace ? fresh : [...prev, ...fresh]));
             setHasMore(fresh.length === PAGE_SIZE);
             setPage(nextPage);
+            setLoadError(null);
         } catch (err) {
-            toastError(t('app.telemetry.failedToLoadTelemetry', 'Failed to load telemetry: {{message}}', { message: err.message }));
+            // Rendered in the list area (with Retry) rather than as a toast
+            // that fades and leaves "No events recorded yet" behind.
+            setLoadError(err);
             setHasMore(false);
         } finally {
             setLoading(false);
         }
-    }, [filters, q, toastError, t]);
+    }, [filters, q]);
 
     useEffect(() => {
         loadFilterOptions();
@@ -395,7 +400,17 @@ export default function Telemetry() {
                 </div>
             )}
 
-            {events.length === 0 && !loading ? (
+            {loadError && events.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={() => fetchEvents(1, true)} />
+            )}
+
+            {loadError && events.length === 0 && !loading ? (
+                <ErrorState
+                    title={t('app.telemetry.couldntLoadTelemetry', "Couldn't load telemetry")}
+                    error={loadError}
+                    onRetry={() => fetchEvents(1, true)}
+                />
+            ) : events.length === 0 && !loading ? (
                 <EmptyState
                     icon={Info}
                     title={hasFilters ? t('app.telemetry.noEventsMatch', 'No events match') : t('app.telemetry.noEventsRecordedYet', 'No events recorded yet')}

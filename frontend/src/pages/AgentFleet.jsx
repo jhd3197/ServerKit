@@ -26,12 +26,23 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MetricCard, KpiBand, Pill, Gauge, DataTable, DataTableFooter, statusKind } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
+import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
+
+const isNumber = (value) => typeof value === 'number' && Number.isFinite(value);
+
+// The backend sends None for rates it can't compute yet (no commands run).
+const formatPercent = (value, digits) => {
+    if (!isNumber(value)) return '—';
+    return `${digits == null ? value : value.toFixed(digits)}%`;
+};
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
 
 const AgentFleet = () => {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('dashboard');
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [health, setHealth] = useState(null);
     const [versions, setVersions] = useState([]);
     const [discoveredAgents, setDiscoveredAgents] = useState([]);
@@ -45,11 +56,11 @@ const AgentFleet = () => {
     const [rolloutBatchSize, setRolloutBatchSize] = useState(5);
     const [rolloutDelay, setRolloutDelay] = useState(10);
     const toast = useToast();
-    const toastError = toast.error;
 
 
     const fetchData = useCallback(async () => {
         setLoading(true);
+        setLoadError(null);
         try {
             if (activeTab === 'dashboard') {
                 const data = await api.getFleetHealth();
@@ -78,12 +89,13 @@ const AgentFleet = () => {
                 setQueuedCommands(data);
             }
         } catch (error) {
-            console.error('Error fetching fleet data:', error);
-            toastError(t('app.agentFleet.failedToFetchFleetData', 'Failed to fetch fleet data'));
+            // Rendered in the tab's content area (with Retry), not as a toast
+            // that leaves the tab blank once it fades.
+            setLoadError(error);
         } finally {
             setLoading(false);
         }
-    }, [activeTab, t, toastError]);
+    }, [activeTab]);
 
     useEffect(() => {
         fetchData();
@@ -433,6 +445,17 @@ const AgentFleet = () => {
         },
     ];
 
+    // Whether the open tab has anything to show, so a failed (re)load keeps
+    // existing rows and only replaces the tab when there is nothing yet.
+    const tabHasData = {
+        dashboard: Boolean(health),
+        versions: versions.length > 0,
+        rollouts: rollouts.length > 0 || versions.length > 0,
+        discovery: discoveredAgents.length > 0,
+        approvals: pendingServers.length > 0,
+        queue: queuedCommands.length > 0,
+    }[activeTab] ?? false;
+
     return (
         <div className="sk-tabgroup__inner">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -459,7 +482,18 @@ const AgentFleet = () => {
                 </TabsList>
             </Tabs>
 
+            {loadError && !tabHasData ? (
+                <ErrorState
+                    title={t('app.agentFleet.couldntLoadFleetData', "Couldn't load fleet data")}
+                    error={loadError}
+                    onRetry={fetchData}
+                />
+            ) : loading && !tabHasData ? (
+                <EmptyState loading loadingVariant="panel" title={t('common.loading', 'Loading…')} />
+            ) : (
             <div className="tab-content fleet-tab-content">
+                {loadError && <ErrorState compact error={loadError} onRetry={fetchData} />}
+
                 {/* ==================== Dashboard ==================== */}
                 {activeTab === 'dashboard' && health && (
                     <div className="fleet-section-stack">
@@ -467,7 +501,7 @@ const AgentFleet = () => {
                             <MetricCard icon={<Server size={16} />} tone="accent" label={t('app.agentFleet.totalAgents', 'Total Agents')} value={health.total_servers} />
                             <MetricCard icon={<CheckCircle size={16} />} tone="green" label={t('app.agentFleet.online', 'Online')} value={health.online_servers} />
                             <MetricCard icon={<AlertCircle size={16} />} tone="red" label={t('app.agentFleet.offline', 'Offline')} value={health.offline_servers} />
-                            <MetricCard icon={<Zap size={16} />} tone="cyan" label={t('app.agentFleet.successRate', 'Success Rate')} value={`${health.command_success_rate}%`} />
+                            <MetricCard icon={<Zap size={16} />} tone="cyan" label={t('app.agentFleet.successRate', 'Success Rate')} value={formatPercent(health.command_success_rate)} />
                         </KpiBand>
 
                         <div className="fleet-health-grid">
@@ -479,15 +513,15 @@ const AgentFleet = () => {
                                     <div className="fleet-metric-stack">
                                         <div className="fleet-summary-row">
                                             <span className="fleet-metric-label">{t('app.agentFleet.overallUptime', 'Overall Uptime')}</span>
-                                            <span className="fleet-uptime-value">{health.uptime_percentage?.toFixed(2)}%</span>
+                                            <span className="fleet-uptime-value">{formatPercent(health.uptime_percentage, 2)}</span>
                                         </div>
                                         <Gauge value={health.uptime_percentage} color="var(--green)" />
 
                                         <div className="fleet-summary-row fleet-summary-row--latency">
                                             <span className="fleet-metric-label">{t('app.agentFleet.avgHeartbeatLatency', 'Avg Heartbeat Latency')}</span>
-                                            <span className="fleet-value">{health.avg_heartbeat_latency} ms</span>
+                                            <span className="fleet-value">{isNumber(health.avg_heartbeat_latency) ? `${health.avg_heartbeat_latency} ms` : '—'}</span>
                                         </div>
-                                        <Gauge value={Math.min(100, health.avg_heartbeat_latency / 2)} color="var(--cyan)" />
+                                        <Gauge value={Math.min(100, (health.avg_heartbeat_latency || 0) / 2)} color="var(--cyan)" />
 
                                         {health.queued_commands > 0 && (
                                             <div className="fleet-warnrow fleet-warnrow--spaced">
@@ -900,6 +934,7 @@ const AgentFleet = () => {
                     </div>
                 )}
             </div>
+            )}
         </div>
     );
 };

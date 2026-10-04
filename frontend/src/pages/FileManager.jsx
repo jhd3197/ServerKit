@@ -3,6 +3,7 @@ import { api } from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import ConfirmDialog from '../components/ConfirmDialog';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import {
     Folder, FolderOpen, File, Upload, FolderPlus,
@@ -210,6 +211,10 @@ function FileManager() {
     const [entries, setEntries] = useState([]);
     const [parentPath, setParentPath] = useState(null);
     const [loading, setLoading] = useState(true);
+    // The open folder's own load failure, shown in the listing in place of
+    // "This folder is empty". Navigation into a folder that fails still
+    // toasts and steps back, since the previous folder is what stays shown.
+    const [dirError, setDirError] = useState(null);
     const [showHidden, setShowHidden] = useState(false);
 
     // ─── search ──────────────────────────────────────────
@@ -396,9 +401,15 @@ function FileManager() {
             setParentPath(data.parent ?? deriveParent(data.path || path));
             setCurrentPath(data.path || path);
             lastValidPathRef.current = data.path || path;
+            setDirError(null);
         } catch (error) {
-            toast.error(t('app.fileManager.failedToLoadDirectory', 'Failed to load directory: {{message}}', { message: error.message }));
-            if (path !== lastValidPathRef.current) setCurrentPath(lastValidPathRef.current);
+            if (path !== lastValidPathRef.current) {
+                toast.error(t('app.fileManager.failedToLoadDirectory', 'Failed to load directory: {{message}}', { message: error.message }));
+                setCurrentPath(lastValidPathRef.current);
+            } else {
+                setEntries([]);
+                setDirError(error);
+            }
         } finally {
             setLoading(false);
         }
@@ -1309,6 +1320,12 @@ function FileManager() {
 
                         {loading ? (
                             <EmptyState loading loadingVariant="tree" title={t('app.fileManager.loadingFiles', 'Loading files')} />
+                        ) : dirError && !searchResults ? (
+                            <ErrorState
+                                title={t('app.fileManager.couldntOpenThisFolder', "Couldn't open this folder")}
+                                error={dirError}
+                                onRetry={() => loadDirectory(currentPath)}
+                            />
                         ) : sortedFiltered.length === 0 ? (
                             <EmptyState
                                 icon={FolderOpen}

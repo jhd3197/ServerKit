@@ -17,6 +17,7 @@ import { useConfirm } from '../hooks/useConfirm';
 import { useRecordVisit } from '@/hooks/useRecordVisit';
 import FavoriteStar from '@/components/FavoriteStar';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import UptimeBars from '../components/monitoring/UptimeBars';
 import { monitorStateOf } from '../components/monitoring/monitorShared';
 import {
@@ -143,6 +144,8 @@ export default function MonitorDetail() {
     const [uptime, setUptime] = useState(null);
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
+    const [loadError, setLoadError] = useState(null);
+    const [uptimeError, setUptimeError] = useState(null);
     const [section, setSection] = useState('performance');
     const [rangeHours, setRangeHours] = useState(24);
     const [selectedDay, setSelectedDay] = useState(null);
@@ -162,13 +165,21 @@ export default function MonitorDetail() {
             const [monitorRes, historyRes, uptimeRes] = await Promise.all([
                 api.getMonitor(monitorId),
                 api.getMonitorHistory(monitorId, { hours: rangeHours, limit: 300 }),
-                api.getMonitorUptime(monitorId, 90).catch(() => null),
+                // The 90-day bars are optional: a failure is recorded so the
+                // uptime panel says so, instead of reading as "no history yet".
+                api.getMonitorUptime(monitorId, 90).then(
+                    (data) => { setUptimeError(null); return data; },
+                    (err) => { setUptimeError(err); return undefined; },
+                ),
             ]);
             setMonitor(monitorRes);
             setChecks(historyRes?.checks || []);
-            setUptime(uptimeRes || null);
+            if (uptimeRes !== undefined) setUptime(uptimeRes || null);
+            setLoadError(null);
+            setNotFound(false);
         } catch (err) {
-            if (String(err.message || '').toLowerCase().includes('not found')) setNotFound(true);
+            if (err.status === 404 || String(err.message || '').toLowerCase().includes('not found')) setNotFound(true);
+            else setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -301,6 +312,18 @@ export default function MonitorDetail() {
         );
     }
 
+    if (loadError && !monitor) {
+        return (
+            <PageLayout className="monitor-detail" icon={<ArrowLeft size={18} />} title={t('app.monitorDetail.monitor', 'Monitor')}>
+                <ErrorState
+                    title={t('app.monitorDetail.couldntLoadMonitor', "Couldn't load this monitor")}
+                    error={loadError}
+                    onRetry={load}
+                />
+            </PageLayout>
+        );
+    }
+
     if (notFound || !monitor) {
         return (
             <PageLayout className="monitor-detail" icon={<ArrowLeft size={18} />} title={t('app.monitorDetail.monitor', 'Monitor')}>
@@ -401,6 +424,8 @@ export default function MonitorDetail() {
                 <span>{monitor.name}</span>
             </nav>
 
+            {loadError && <ErrorState compact error={loadError} onRetry={load} />}
+
             <KpiBand>
                 <MetricCard
                     label={t('app.monitorDetail.responseNow', 'Response now')} tone="cyan" icon={<Zap size={17} />}
@@ -424,7 +449,9 @@ export default function MonitorDetail() {
                     value={downMinutes ?? '—'} unit={downMinutes != null ? 'min' : undefined}
                 >
                     <div className="mon-kpi-sub">
-                        {uptime?.days ? `${uptime.days.filter((d) => d.state !== 'none' && d.state !== 'up').length} bad days` : 'no history yet'}
+                        {uptime?.days
+                            ? `${uptime.days.filter((d) => d.state !== 'none' && d.state !== 'up').length} bad days`
+                            : uptimeError ? '—' : 'no history yet'}
                     </div>
                 </MetricCard>
                 <MetricCard
@@ -506,6 +533,9 @@ export default function MonitorDetail() {
                                 ))}
                             </div>
                         </div>
+                        {uptimeError && (
+                            <ErrorState compact error={uptimeError} onRetry={load} />
+                        )}
                         <UptimeBars
                             days={uptime?.days || []}
                             selected={selectedDay?.date}

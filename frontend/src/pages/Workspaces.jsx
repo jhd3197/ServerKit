@@ -104,9 +104,10 @@ const Workspaces = () => {
     const {
         data: workspaces = [],
         isLoading: loading,
+        error: loadError,
+        refetch: refetchWorkspaces,
     } = useServerQuery(['workspaces'], loadWorkspaces, {
         staleTime: 30_000,
-        onError: () => toast.error(t('app.workspaces.failedToLoadWorkspaces', 'Failed to load workspaces')),
     });
     const createWorkspace = useServerMutation(
         (values) => api.createWorkspace(values),
@@ -231,6 +232,9 @@ const Workspaces = () => {
             noun="workspaces"
             builtinViews={WORKSPACE_VIEWS}
             totalCount={workspaces.length}
+            error={loadError}
+            errorTitle={t('app.workspaces.couldntLoadWorkspaces', "Couldn't load workspaces")}
+            onRetry={() => refetchWorkspaces().catch(() => {})}
             items={shownWorkspaces}
             columns={columns}
             keyField="id"

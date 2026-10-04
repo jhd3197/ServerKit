@@ -175,6 +175,9 @@ const LogFilesTab = () => {
     const [loading, setLoading] = useState(true);
     const [loadingContent, setLoadingContent] = useState(false);
     const [error, setError] = useState(null);
+    // The file list's own failure, kept apart from `error` (which any action
+    // can set) so the viewer never says "no log files" when it couldn't look.
+    const [listError, setListError] = useState(null);
     const [lastUpdated, setLastUpdated] = useState(null);
 
     const [lineCount, setLineCount] = useState(() => {
@@ -231,11 +234,12 @@ const LogFilesTab = () => {
         }
         setLoading(true);
         setError(null);
+        setListError(null);
         try {
             const data = await api.getLogFiles();
             setLogFiles(data.logs || []);
         } catch (err) {
-            setError(err.message);
+            setListError(err);
         } finally {
             setLoading(false);
         }
@@ -390,6 +394,7 @@ const LogFilesTab = () => {
                     onSelect={handleSelectFile}
                     onRefresh={loadLogFiles}
                     loading={loading}
+                    error={listError}
                 />
 
                 <div className="lv-viewer">
@@ -429,7 +434,11 @@ const LogFilesTab = () => {
                         content={selectedLog ? logContent : ''}
                         loading={loadingContent}
                         emptyMessage={
-                            isRemote && logFiles.length === 0
+                            loading && logFiles.length === 0
+                                ? t('app.terminal.loadingLogFiles', 'Loading log files…')
+                            : listError && logFiles.length === 0
+                                ? t('app.terminal.couldntLoadLogFiles', "Couldn't load the log files. Use Refresh in the list to try again.")
+                            : isRemote && logFiles.length === 0
                                 ? t('app.terminal.remoteLogBrowsingIsnTSupported', 'Remote log browsing isn\'t supported yet for {{name}}.', { name: target.name })
                                 : logFiles.length === 0
                                     ? t('app.terminal.noLogFilesWereFoundOn', 'No log files were found on this server.')

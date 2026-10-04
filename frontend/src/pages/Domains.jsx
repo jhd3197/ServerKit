@@ -8,6 +8,7 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useAuth } from '../contexts/useAuth.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import DomainField from '@/components/DomainField';
 import { attachDomain } from '@/services/attachDomain';
@@ -135,6 +136,7 @@ const Domains = () => {
     const [portfolioErrors, setPortfolioErrors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [loadError, setLoadError] = useState(null);
     const [search, setSearch] = useState('');
     const [drawerDomain, setDrawerDomain] = useState(null);
     const [regInfo, setRegInfo] = useState(null);            // lazy registration lookup for the open drawer
@@ -208,18 +210,28 @@ const Domains = () => {
                 promise,
                 new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), ms)),
             ]);
+            // Each source fails on its own: a dead DNS provider must not hide
+            // the app-linked domains. A failed source keeps its last good rows
+            // and is recorded, so it can never read as "no domains".
+            const failures = [];
+            const settle = (promise, ms) => timeout(promise, ms).catch((err) => {
+                failures.push(err);
+                return null;
+            });
             const [domainsData, appsData, portfolioData] = await Promise.all([
-                timeout(api.getDomains(), 10000).catch(() => ({ domains: [] })),
-                timeout(api.getApps(), 10000).catch(() => ({ apps: [] })),
-                timeout(api.getDnsPortfolio(), 15000).catch(() => ({ domains: [], errors: [] })),
+                settle(api.getDomains(), 10000),
+                settle(api.getApps(), 10000),
+                settle(api.getDnsPortfolio(), 15000),
             ]);
-            setDomains(domainsData.domains || []);
-            setApps(appsData.apps || []);
-            setPortfolio(portfolioData.domains || []);
-            setPortfolioErrors(portfolioData.errors || []);
+            if (domainsData) setDomains(domainsData.domains || []);
+            if (appsData) setApps(appsData.apps || []);
+            if (portfolioData) {
+                setPortfolio(portfolioData.domains || []);
+                setPortfolioErrors(portfolioData.errors || []);
+            }
+            setLoadError(failures[0] || null);
         } catch (err) {
-            setError('Failed to load data');
-            console.error(err);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -638,6 +650,12 @@ const Domains = () => {
 
             {loading ? (
                 <EmptyState loading loadingVariant="table" title={t('app.domains.loadingDomains', 'Loading domains…')} />
+            ) : loadError && rows.length === 0 ? (
+                <ErrorState
+                    title={t('app.domains.couldntLoadDomains', "Couldn't load domains")}
+                    error={loadError}
+                    onRetry={loadData}
+                />
             ) : rows.length === 0 ? (
                 <EmptyState
                     icon={Globe}
@@ -647,6 +665,8 @@ const Domains = () => {
                 />
             ) : (
                 <div className="domains-body">
+                    {loadError && <ErrorState compact error={loadError} onRetry={loadData} />}
+
                     <GridViewPicker
                         views={grid.views}
                         label="domains"

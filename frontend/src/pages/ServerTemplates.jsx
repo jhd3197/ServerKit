@@ -8,6 +8,7 @@ import { useAuth } from '../contexts/useAuth.js';
 import PageLoader from '../components/PageLoader';
 import ConfirmDialog from '../components/ConfirmDialog';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import { LayoutTemplate } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -219,6 +220,9 @@ const ServerTemplates = () => {
     const [templates, setTemplates] = useState([]);
     const [library, setLibrary] = useState({});
     const [loading, setLoading] = useState(true);
+    // Per tab, so a failed library doesn't hide your own templates (or the
+    // other way round). Each keeps its last good data on a failed reload.
+    const [loadErrors, setLoadErrors] = useState({ templates: null, library: null });
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showAssignModal, setShowAssignModal] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -249,23 +253,28 @@ const ServerTemplates = () => {
 
     const loadData = useCallback(async () => {
         try {
-            const [tData, lData] = await Promise.all([
+            const [tRes, lRes] = await Promise.allSettled([
                 api.getServerTemplates(),
                 api.getServerTemplateLibrary(),
             ]);
-            const mine = tData.templates || [];
-            setTemplates(mine);
-            setLibrary(lData.templates || {});
+            const mine = tRes.status === 'fulfilled' ? (tRes.value?.templates || []) : null;
+            if (mine) setTemplates(mine);
+            if (lRes.status === 'fulfilled') setLibrary(lRes.value?.templates || {});
+            setLoadErrors({
+                templates: tRes.status === 'rejected' ? tRes.reason : null,
+                library: lRes.status === 'rejected' ? lRes.reason : null,
+            });
             // Pick the opening tab from the data, once. `?? ` so a reload
             // (after creating or deleting one) never yanks the tab out from
-            // under whoever is reading it.
-            setActiveTab(current => current ?? (mine.length > 0 ? 'templates' : 'library'));
-        } catch {
-            toast.error(t('app.serverTemplates.failedToLoadTemplates', 'Failed to load templates'));
+            // under whoever is reading it. A failed list opens on its own tab,
+            // so the error is what you see rather than an empty neighbour.
+            setActiveTab(current => current ?? (
+                !mine || mine.length > 0 ? 'templates' : 'library'
+            ));
         } finally {
             setLoading(false);
         }
-    }, [t, toast]);
+    }, []);
 
     useEffect(() => {
         loadData();
@@ -556,7 +565,16 @@ const ServerTemplates = () => {
                 </TabsList>
 
                 <TabsContent value="templates">
-                    {templates.length === 0 ? (
+                    {loadErrors.templates && templates.length > 0 && (
+                        <ErrorState compact error={loadErrors.templates} onRetry={loadData} />
+                    )}
+                    {loadErrors.templates && templates.length === 0 ? (
+                        <ErrorState
+                            title={t('app.serverTemplates.couldntLoadTemplates', "Couldn't load templates")}
+                            error={loadErrors.templates}
+                            onRetry={loadData}
+                        />
+                    ) : templates.length === 0 ? (
                         <EmptyState
                             icon={LayoutTemplate}
                             title={t('app.serverTemplates.noTemplatesYet', 'No templates yet')}
@@ -596,6 +614,22 @@ const ServerTemplates = () => {
                 </TabsContent>
 
                 <TabsContent value="library">
+                    {loadErrors.library && Object.keys(library).length > 0 && (
+                        <ErrorState compact error={loadErrors.library} onRetry={loadData} />
+                    )}
+                    {loadErrors.library && Object.keys(library).length === 0 ? (
+                        <ErrorState
+                            title={t('app.serverTemplates.couldntLoadTheLibrary', "Couldn't load the template library")}
+                            error={loadErrors.library}
+                            onRetry={loadData}
+                        />
+                    ) : Object.keys(library).length === 0 ? (
+                        <EmptyState
+                            icon={LayoutTemplate}
+                            title={t('app.serverTemplates.theLibraryIsEmpty', 'The library is empty')}
+                            description={t('app.serverTemplates.noReadyMadeTemplatesAreAvailable', 'No ready-made templates are available. You can still create one from scratch.')}
+                        />
+                    ) : (
                     <CatalogGrid className="server-templates-library">
                         {Object.entries(library).map(([key, tmpl]) => (
                             <CatalogCard
@@ -623,6 +657,7 @@ const ServerTemplates = () => {
                             />
                         ))}
                     </CatalogGrid>
+                    )}
                 </TabsContent>
             </Tabs>
 

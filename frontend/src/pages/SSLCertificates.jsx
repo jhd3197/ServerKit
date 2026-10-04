@@ -99,6 +99,7 @@ const SSLCertificates = () => {
     const { confirm } = useConfirm();
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [actionLoading, setActionLoading] = useState(false);
     const [renewingDomain, setRenewingDomain] = useState(null);
     const [search, setSearch] = useState('');
@@ -133,8 +134,9 @@ const SSLCertificates = () => {
             setLoading(true);
             const data = await api.getSSLStatus();
             setStatus(data);
+            setLoadError(null);
         } catch (err) {
-            console.error('Failed to load SSL status:', err);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -294,6 +296,9 @@ const SSLCertificates = () => {
     }
 
     const certbotInstalled = status?.certbot_installed ?? false;
+    // Only a status the server actually returned can say Certbot is missing;
+    // a failed request must not turn into an "Install Certbot" prompt.
+    const certbotMissing = status != null && !certbotInstalled;
 
     // Every derived field lands on the row itself rather than in a column
     // accessor: the table renders `row[key]` when a column has no `render`, and
@@ -456,7 +461,7 @@ const SSLCertificates = () => {
     // [page actions] [search] [filter] [⋮], and the table hoists the last two.
     useTopbarActions(() => (
         <>
-            {!certbotInstalled && (
+            {certbotMissing && (
                 <Button size="sm" onClick={handleInstallCertbot} disabled={actionLoading}>
                     <Download size={15} />
                     {t('app.sSLCertificates.installCertbot', 'Install Certbot')}
@@ -492,7 +497,7 @@ const SSLCertificates = () => {
             </Button>
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.sSLCertificates.searchCertificates', 'Search certificates…')} />
         </>
-    ), [actionLoading, certbotInstalled, certificates.length, search]);
+    ), [actionLoading, certbotInstalled, certbotMissing, certificates.length, search]);
 
     return (
         <>
@@ -505,6 +510,9 @@ const SSLCertificates = () => {
                 noun="certificates"
                 builtinViews={SSL_BUILTIN_VIEWS}
                 totalCount={certificates.length}
+                error={loadError}
+                errorTitle={t('app.sSLCertificates.couldntLoadCertificates', "Couldn't load certificates")}
+                onRetry={loadData}
                 items={rows}
                 columns={columns}
                 keyField="id"

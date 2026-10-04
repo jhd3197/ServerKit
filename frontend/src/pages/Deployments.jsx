@@ -4,6 +4,7 @@ import { RefreshCw, Loader2, PlayCircle, FlaskConical } from 'lucide-react';
 import api from '../services/api';
 import Modal from '../components/Modal';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { Button } from '@/components/ui/button';
 import { DataTable, DataTableFooter, Pill, SearchField, SegControl, statusKind } from '@/components/ds';
 import {
@@ -94,6 +95,7 @@ const Deployments = () => {
     const navigate = useNavigate();
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [search, setSearch] = useState('');
     const [autoRefresh, setAutoRefresh] = useState(true);
 
@@ -134,8 +136,11 @@ const Deployments = () => {
             setJobs(rows);
             setHasMore(rows.length >= limit);
             setLoaded(limit);
+            setLoadError(null);
         } catch (err) {
-            console.error('Failed to load deployment jobs', err);
+            // Keep whatever is on screen; the error renders above it (or in
+            // place of the table when nothing has loaded yet).
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -369,6 +374,17 @@ const Deployments = () => {
 
             <GridChips {...chrome.chipProps} />
 
+            {loadError && jobs.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={() => loadJobs(loaded)} />
+            )}
+
+            {loadError && jobs.length === 0 ? (
+                <ErrorState
+                    title={t('app.deployments.couldntLoadDeployments', "Couldn't load deployments")}
+                    error={loadError}
+                    onRetry={() => loadJobs(loaded)}
+                />
+            ) : (
             <DataTable
                 columns={chrome.columns}
                 data={searched}
@@ -405,6 +421,7 @@ const Deployments = () => {
                     />
                 )}
             />
+            )}
 
             <GridFilterDrawer {...chrome.drawerProps} />
 

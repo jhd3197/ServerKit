@@ -17,6 +17,7 @@ import {
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import {
     DataTable, DataTableFooter, Drawer, FilterButton, FilterDrawer,
     Pill, SearchField, Sparkline, countActiveFilters,
@@ -190,6 +191,7 @@ export default function Monitors() {
 
     const [monitors, setMonitors] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [q, setQ] = useState('');
     const [filters, setFilters] = useState({ status: '', type: '' });
     const [filtersOpen, setFiltersOpen] = useState(false);
@@ -206,8 +208,11 @@ export default function Monitors() {
                 q: q || undefined, status: filters.status || undefined, type: filters.type || undefined,
             });
             setMonitors(listRes?.monitors || []);
-        } catch {
-            // Keep the last good list on screen rather than blanking the page.
+            setLoadError(null);
+        } catch (err) {
+            // Keep the last good list on screen rather than blanking the page;
+            // the error shows above it, or in its place on a first load.
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -490,8 +495,18 @@ export default function Monitors() {
 
             <GridChips {...chrome.chipProps} />
 
+            {loadError && monitors.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={load} />
+            )}
+
             {loading && monitors.length === 0 ? (
                 <EmptyState loading loadingVariant="table" title={t('app.monitors.loadingMonitors', 'Loading monitors')} />
+            ) : loadError && monitors.length === 0 ? (
+                <ErrorState
+                    title={t('app.monitors.couldntLoadMonitors', "Couldn't load monitors")}
+                    error={loadError}
+                    onRetry={load}
+                />
             ) : monitors.length === 0 ? (
                 <EmptyState
                     icon={Radar}

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Spinner from '../components/Spinner';
+import ErrorState from '../components/ErrorState';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
 
@@ -187,6 +188,9 @@ function ImportWizard() {
     // Previous imports (history list)
     const [history, setHistory] = useState([]);
     const [historyLoading, setHistoryLoading] = useState(true);
+    const [historyError, setHistoryError] = useState(null);
+    // Set while polling the active import fails; cleared by the next good poll.
+    const [pollError, setPollError] = useState(null);
 
     const logRef = useRef(null);
 
@@ -194,8 +198,9 @@ function ImportWizard() {
         try {
             const data = await api.getImports();
             setHistory(data.imports || []);
-        } catch {
-            setHistory([]);
+            setHistoryError(null);
+        } catch (err) {
+            setHistoryError(err);
         } finally {
             setHistoryLoading(false);
         }
@@ -211,8 +216,11 @@ function ImportWizard() {
         try {
             const data = await api.getImport(imp.id);
             if (data.import) setImp(data.import);
-        } catch {
-            // transient poll failure — keep polling
+            setPollError(null);
+        } catch (err) {
+            // Keep polling (it may be transient), but say the status shown is
+            // stale rather than letting it sit there looking live.
+            setPollError(err);
         }
     }, POLL_MS, {
         enabled: Boolean(imp?.id)
@@ -513,6 +521,12 @@ function ImportWizard() {
                                 </div>
                             </div>
                         )}
+                        {pollError && (
+                            <ErrorState
+                                compact
+                                message={t('app.importWizard.couldntRefreshImportStatus', "Couldn't refresh the import status. {{reason}}", { reason: pollError.message })}
+                            />
+                        )}
                         {analysis && <AnalysisReport analysis={analysis} />}
                         <div className="import-wizard__actions">
                             <Button variant="outline" onClick={resetWizard}>
@@ -614,6 +628,13 @@ function ImportWizard() {
                             </div>
                         )}
 
+                        {pollError && (
+                            <ErrorState
+                                compact
+                                message={t('app.importWizard.couldntRefreshImportStatus', "Couldn't refresh the import status. {{reason}}", { reason: pollError.message })}
+                            />
+                        )}
+
                         <pre ref={logRef} className="import-wizard__log">
                             {imp.log_text || 'Waiting for log output…'}
                         </pre>
@@ -639,8 +660,17 @@ function ImportWizard() {
                 {/* Previous imports */}
                 <section className="import-wizard__history">
                     <h2>{t('app.importWizard.previousImports', 'Previous imports')}</h2>
+                    {historyError && history.length > 0 && (
+                        <ErrorState compact error={historyError} onRetry={loadHistory} />
+                    )}
                     {historyLoading ? (
                         <p className="import-wizard__muted">{t('common.loading', 'Loading…')}</p>
+                    ) : historyError && history.length === 0 ? (
+                        <ErrorState
+                            title={t('app.importWizard.couldntLoadPreviousImports', "Couldn't load previous imports")}
+                            error={historyError}
+                            onRetry={loadHistory}
+                        />
                     ) : history.length === 0 ? (
                         <p className="import-wizard__muted">{t('app.importWizard.noImportsYet', 'No imports yet.')}</p>
                     ) : (

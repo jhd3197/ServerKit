@@ -8,6 +8,7 @@ import { Pill } from '@/components/ds';
 import PageLayout from '../layouts/PageLayout';
 import { Button } from '@/components/ui/button';
 import EmptyState from '@/components/EmptyState';
+import ErrorState from '@/components/ErrorState';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 
@@ -72,6 +73,7 @@ export default function Coexistence() {
     const { t } = useTranslation();
     const [servers, setServers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
 
     const load = useCallback(async () => {
         setLoading(true);
@@ -79,11 +81,12 @@ export default function Coexistence() {
             const res = await api.getServers();
             const list = Array.isArray(res) ? res : (res?.servers || []);
             setServers(list);
+            setLoadError(null);
         } catch (err) {
-            // Informational content stands on its own — an unavailable server
-            // list must never blank the page.
-            console.error('Failed to load servers for coexistence view:', err);
+            // Informational content stands on its own: an unavailable server
+            // list only errors its own panel, never the page.
             setServers([]);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -137,12 +140,18 @@ export default function Coexistence() {
                     <Eye size={16} />
                     <span>{t('app.coexistence.observedServers', 'Observed servers')}</span>
                     <span className="app-panel-header-actions app-panel-hint">
-                        {observed.length} {t('app.coexistence.pairedInReadOnlyMode', 'paired in read-only mode')}
+                        {loadError ? '—' : observed.length} {t('app.coexistence.pairedInReadOnlyMode', 'paired in read-only mode')}
                     </span>
                 </div>
                 <div className="app-panel-body">
                     {loading ? (
                         <EmptyState loading loadingVariant="table" title={t('app.coexistence.loadingServers', 'Loading servers')} />
+                    ) : loadError ? (
+                        <ErrorState
+                            title={t('app.coexistence.couldntLoadServers', "Couldn't load servers")}
+                            error={loadError}
+                            onRetry={load}
+                        />
                     ) : observed.length === 0 ? (
                         <EmptyState
                             icon={Eye}

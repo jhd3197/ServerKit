@@ -4,6 +4,7 @@ import { ChevronRight, Folder, Plus, RefreshCw, Server as ServerLucideIcon, X } 
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -258,6 +259,7 @@ const Servers = () => {
     const [servers, setServers] = useState([]);
     const [groups, setGroups] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [showAddModal, setShowAddModal] = useState(false);
     // Quick-create deep link: /servers?focus=create:server opens the add modal.
     useFocusParam('create', () => setShowAddModal(true));
@@ -300,19 +302,26 @@ const Servers = () => {
     const loadData = useCallback(async () => {
         setLoading(true);
         try {
-            const [serversData, groupsData] = await Promise.all([
+            // Settled separately: failing groups must not hide the servers.
+            const [serversRes, groupsRes] = await Promise.allSettled([
                 api.getServers(),
                 api.getServerGroups(),
             ]);
-            setServers(Array.isArray(serversData) ? serversData : []);
-            setGroups(Array.isArray(groupsData) ? groupsData : []);
-        } catch (err) {
-            console.error('Failed to load servers:', err);
-            toast.error(t('app.servers.failedToLoadServers', 'Failed to load servers'));
+            if (serversRes.status === 'fulfilled') {
+                setServers(Array.isArray(serversRes.value) ? serversRes.value : []);
+            }
+            if (groupsRes.status === 'fulfilled') {
+                setGroups(Array.isArray(groupsRes.value) ? groupsRes.value : []);
+            }
+            setLoadError(
+                (serversRes.status === 'rejected' && serversRes.reason)
+                || (groupsRes.status === 'rejected' && groupsRes.reason)
+                || null,
+            );
         } finally {
             setLoading(false);
         }
-    }, [t, toast]);
+    }, []);
 
     useEffect(() => {
         loadData();
@@ -398,7 +407,17 @@ const Servers = () => {
 
             <GridChips {...chrome.chipProps} />
 
-            {filteredServers.length === 0 ? (
+            {loadError && servers.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={loadData} />
+            )}
+
+            {loadError && servers.length === 0 ? (
+                <ErrorState
+                    title={t('app.servers.couldntLoadServers', "Couldn't load servers")}
+                    error={loadError}
+                    onRetry={loadData}
+                />
+            ) : filteredServers.length === 0 ? (
                 <EmptyState
                     icon={ServerLucideIcon}
                     title={servers.length === 0 ? t('app.servers.noServersYet', 'No servers yet') : t('app.servers.noServersMatchTheseFilters', 'No servers match these filters')}

@@ -44,6 +44,9 @@ const Settings = () => {
     const [activeTab, setActiveTab] = useTabParam('/settings', VALID_TABS);
     const { isAdmin } = useAuth();
     const [devMode, setDevMode] = useState(false);
+    // Whether the dev-mode answer is in (success or failure), so a direct
+    // link to /settings/developer waits for it before deciding.
+    const [devModeKnown, setDevModeKnown] = useState(false);
     const navigate = useNavigate();
     const { tab: requestedTab } = useParams();
 
@@ -60,9 +63,18 @@ const Settings = () => {
         if (isAdmin) {
             api.getSystemSettings().then(data => {
                 setDevMode(data.dev_mode || false);
-            }).catch(() => {});
+            }).catch(() => {}).finally(() => setDevModeKnown(true));
         }
     }, [isAdmin]);
+
+    // A tab this user can't open rendered an empty content area on a direct
+    // link. Send it to Profile instead: admin tabs for non-admins, and the
+    // developer tab once dev mode is known to be off.
+    const tabUnavailable = (!isAdmin && ADMIN_TABS.includes(activeTab))
+        || (activeTab === 'developer' && isAdmin && devModeKnown && !devMode);
+    useEffect(() => {
+        if (tabUnavailable) navigate('/settings/profile', { replace: true });
+    }, [tabUnavailable, navigate]);
 
     return (
         <PageLayout
