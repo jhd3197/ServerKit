@@ -7,7 +7,7 @@
     gap: $space-1;
     min-width: 0;
 
-    &__label { font-size: $font-size-xs; color: var(--text-dim); }
+    &__label { font-size: $text-xs; color: var(--text-dim); }
 
     &__box {
         display: flex;
@@ -28,7 +28,7 @@
         padding: 0;
         background: none;
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text);
         overflow: hidden;
         text-overflow: ellipsis;
@@ -60,13 +60,13 @@
         flex-wrap: wrap;
         gap: $space-2;
         margin: 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: var(--text-dim);
 
         &.is-error { color: var(--red); }
     }
 
-    &__suggest { height: auto; padding: 0; font-size: $font-size-xs; }
+    &__suggest { height: auto; padding: 0; font-size: $text-xs; }
 }
 
 .sk-env-editor {
@@ -87,7 +87,7 @@
     &__error {
         grid-column: 1 / -1;
         margin: 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: var(--red);
     }
 
@@ -98,7 +98,7 @@
         gap: $space-3;
     }
 
-    &__hint { font-size: $font-size-xs; color: var(--text-faint); }
+    &__hint { font-size: $text-xs; color: var(--text-faint); }
 }
 
 .sk-server-picker { min-width: 220px; }

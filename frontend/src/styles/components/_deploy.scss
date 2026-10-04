@@ -48,14 +48,14 @@
 
         .repo-url {
             font-family: var(--mono);
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: var(--text);
             word-break: break-all;
         }
 
         .repo-branch {
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--accent-bright);
         }
     }
@@ -86,7 +86,7 @@
         }
 
         span {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: var(--text);
         }
     }
@@ -94,25 +94,25 @@
     .form-help {
         display: block;
         margin-top: $space-1;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     textarea {
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         resize: vertical;
         min-height: 80px;
     }
 
     .text-danger {
         color: $danger;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .text-muted {
         color: var(--text-faint);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -176,7 +176,7 @@
 
     .repo-branch {
         display: block;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -207,7 +207,7 @@
     code {
         flex: 1;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
         white-space: nowrap;
         overflow: hidden;
@@ -234,7 +234,7 @@
 
     h4 {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-secondary;
     }
@@ -265,7 +265,7 @@
 .provider-badge {
     display: inline-block;
     padding: $space-1 $space-2;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     border-radius: $radius-sm;
     text-transform: capitalize;
@@ -287,7 +287,7 @@
 }
 
 .webhook-log-time {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -296,7 +296,7 @@
 }
 
 .webhook-log-size {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
@@ -306,7 +306,7 @@
     background: $bg-body;
     border-radius: $radius-sm;
     font-family: $font-mono;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
     white-space: pre-wrap;
     word-break: break-all;
@@ -342,7 +342,7 @@
 .script-section {
     h4 {
         margin: 0 0 $space-2 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -353,7 +353,7 @@
     background: $bg-hover;
     border-radius: $radius-md;
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-primary;
     white-space: pre-wrap;
     word-break: break-all;

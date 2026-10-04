@@ -15,7 +15,7 @@
 }
 
 .card h3 {
-    font-size: $font-size-md;
+    font-size: $text-md;
     font-weight: $font-weight-semibold;
     color: $text-primary;
     margin-bottom: $space-1;
@@ -24,7 +24,7 @@
 .card-link {
     color: $text-secondary;
     text-decoration: none;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     @include transition(color);
 
     &:hover {
@@ -36,8 +36,8 @@
 .app-icon {
     @include icon-box(48px);
     border-radius: $radius-xl - 2;
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
     color: white;
 }
 
@@ -47,7 +47,7 @@
     padding-top: $space-5;
     border-top: 1px solid $border-subtle;
     @include flex-between();
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .stat-strip__label {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -105,7 +105,7 @@
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-lg;
+    font-size: $text-lg;
     font-weight: $font-weight-semibold;
     color: $text-primary;
     line-height: 1.2;
@@ -121,13 +121,13 @@
 }
 
 .stat-strip__suffix {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-tertiary;
 }
 
 .stat-strip__detail {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -173,7 +173,7 @@
     .stat-strip {
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     }
-    .stat-strip__value { font-size: $font-size-md; }
+    .stat-strip__value { font-size: $text-md; }
 }
 
 // Legacy `.stats-grid` / `.stat-card` KPI tile system removed (Plan 20 #20) —
@@ -269,7 +269,7 @@
     margin-bottom: $space-5;
 
     h3 {
-        font-size: $font-size-md;
+        font-size: $text-md;
         font-weight: $font-weight-semibold;
     }
 }

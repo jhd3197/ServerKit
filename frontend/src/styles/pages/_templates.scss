@@ -20,7 +20,7 @@
 
         p {
             margin: 0;
-            font-size: $font-size-lg;
+            font-size: $text-lg;
         }
     }
 }
@@ -80,15 +80,15 @@
     &__title {
         display: block;
         color: $text-primary;
-        font-size: 13.5px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
     }
 
     &__sub {
         display: block;
         margin-top: 2px;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &__arrow {
@@ -106,7 +106,7 @@
 
     &__url {
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--accent-bright);
         word-break: break-all;
     }
@@ -115,7 +115,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: $space-3;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
 
         code {
@@ -128,7 +128,7 @@
 .detail-source-tag {
     margin-left: auto;
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     letter-spacing: 0.04em;
     text-transform: none;
     color: var(--text-faint);
@@ -149,7 +149,7 @@
     gap: $space-1;
     padding: 2px 8px;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
     @include status-variant(var(--green), var(--green-bg));
     border-radius: $radius-sm;
 }
@@ -163,7 +163,7 @@
 .env-preview-chip {
     padding: 2px 8px;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
     color: var(--text-dim);
     background: var(--surface-2);
     border-radius: $radius-sm;
@@ -176,7 +176,7 @@
 
 .env-preview-note {
     margin: $space-2 0 0;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
 }
 
 // Template icon (detail modal header)
@@ -200,13 +200,13 @@
     }
 
     .template-icon-placeholder {
-        font-size: $font-size-3xl;
+        font-size: $text-2xl;
     }
 }
 
 .template-icon-placeholder {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
+    font-size: $text-xl;
+    font-weight: $font-weight-semibold;
     color: var(--accent-bright);
 }
 
@@ -218,7 +218,7 @@
 
 .template-version {
     font-family: var(--mono);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--accent-bright);
     padding: $space-1 $space-2;
@@ -238,7 +238,7 @@
     gap: $space-1;
     padding: 2px 7px;
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: $text-xs;
     color: var(--text-dim);
     background: var(--surface-2);
     border-radius: 5px;
@@ -324,7 +324,7 @@
         gap: $space-2;
         margin: 0 0 $space-3 0;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
         text-transform: uppercase;
@@ -370,12 +370,12 @@
     border-radius: $radius-md;
 
     .requirement-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
     .requirement-value {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
         font-family: var(--mono);
@@ -412,14 +412,14 @@
 
 .variable-name {
     font-family: var(--mono);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--accent-bright);
 }
 
 .required-badge {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     padding: 2px $space-2;
@@ -430,7 +430,7 @@
 
 .auto-badge {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     padding: 2px $space-2;
@@ -440,12 +440,12 @@
 }
 
 .variable-description {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
 .variable-default {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: var(--text-faint);
     font-family: var(--mono);
 }
@@ -474,7 +474,7 @@
 
 .port-protocol {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     padding: $space-1;
     background: var(--surface-3);
     border-radius: $radius-sm;
@@ -483,7 +483,7 @@
 }
 
 .port-description {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
@@ -496,7 +496,7 @@
 
     code {
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-code);
     }
 }
@@ -505,7 +505,7 @@
 .install-modal {
     h4 {
         margin: $space-4 0 $space-3 0;
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         padding-top: $space-4;
         border-top: 1px solid var(--border-soft);
@@ -521,7 +521,7 @@
 
     span {
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         text-transform: capitalize;
         white-space: nowrap;
@@ -574,13 +574,13 @@
 
     &__headline {
         color: $text-primary;
-        font-size: 12.5px;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
     }
 
     &__detail {
         color: $text-tertiary;
-        font-size: 11.5px;
+        font-size: $text-xs;
         line-height: 1.45;
     }
 

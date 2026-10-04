@@ -5,14 +5,14 @@
 .table {
     width: 100%;
     border-collapse: collapse;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     thead {
         th {
             padding: $space-3 $space-4;
             text-align: left;
             font-weight: $font-weight-semibold;
-            font-size: $font-size-xs + 1;
+            font-size: $text-xs;
             color: $text-tertiary;
             text-transform: uppercase;
             letter-spacing: 0.03em;
@@ -42,7 +42,7 @@
 
             code {
                 font-family: $font-mono;
-                font-size: $font-size-xs;
+                font-size: $text-xs;
                 background: $bg-elevated;
                 padding: $space-1 $space-2;
                 border-radius: $radius-sm;
@@ -55,7 +55,7 @@
 .data-table {
 width: 100%;
     border-collapse: collapse;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     th {
         text-align: left;
@@ -64,7 +64,7 @@ width: 100%;
         color: $text-tertiary;
         font-weight: $font-weight-semibold;
         text-transform: uppercase;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         letter-spacing: 0.05em;
         border-bottom: 1px solid $border-subtle;
     }
@@ -73,7 +73,7 @@ width: 100%;
         padding: $space-3;
         border-bottom: 1px solid $border-subtle;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -89,12 +89,12 @@ width: 100%;
     .container-id {
         display: block;
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
     .mono {
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 }

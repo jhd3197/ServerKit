@@ -54,7 +54,7 @@
 
         small {
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
         }
     }
 
@@ -65,7 +65,7 @@
     &__message {
         padding: $space-6 $space-3;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         text-align: center;
 
         &--error {

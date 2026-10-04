@@ -34,8 +34,8 @@
     }
 
     h1 {
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         margin-bottom: $space-2;
     }
 
@@ -88,8 +88,8 @@
     }
 
     .auth-split__name {
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
     }
 
     .auth-split__card {
@@ -122,7 +122,7 @@
     border-radius: $radius-lg;
     background: $bg-card;
     color: $text-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     cursor: pointer;
     transition: all $transition-fast;
@@ -148,7 +148,7 @@
     gap: $space-4;
     margin: $space-6 0;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     &::before,
     &::after {
@@ -179,13 +179,13 @@
     text-align: center;
 
     &__title {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         margin-bottom: $space-2;
     }
 
     &__creds {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         margin-bottom: $space-3;
 
@@ -199,7 +199,7 @@
         border: none;
         padding: 0;
         color: $accent-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         cursor: pointer;
 

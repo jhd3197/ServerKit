@@ -124,10 +124,10 @@
 // --------------------------------------------
 // TEXT
 // --------------------------------------------
-.text-xs { font-size: 0.75rem; }
-.text-sm { font-size: 0.875rem; }
-.text-lg { font-size: 1.125rem; }
-.text-xl { font-size: 1.25rem; }
+.text-xs { font-size: $text-xs; }
+.text-sm { font-size: $text-base; }
+.text-lg { font-size: $text-lg; }
+.text-xl { font-size: $text-lg; }
 .text-gray-300 { color: $text-tertiary; }
 .text-gray-400 { color: $text-tertiary; }
 .text-gray-500 { color: $text-secondary; }
@@ -279,7 +279,7 @@
 .-mx-1 { margin-left: -0.25rem; margin-right: -0.25rem; }
 
 // ---- Typography (semantic color names mapped to theme tokens) ----
-.text-2xl { font-size: 1.5rem; }
+.text-2xl { font-size: $text-xl; }
 .text-foreground { color: $text-primary; }
 .text-muted-foreground { color: $text-tertiary; }
 .text-accent-foreground { color: $text-primary; }

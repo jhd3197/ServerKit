@@ -15,7 +15,7 @@
         border: 1px solid var(--border-soft);
         border-radius: 6px;
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
         max-width: 200px;
         overflow: hidden;
@@ -54,7 +54,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
 
         svg { flex-shrink: 0; color: $text-secondary; }
@@ -66,7 +66,7 @@
         padding: 2px 8px;
         border: 1px dashed $border-subtle;
         border-radius: 999px;
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -113,7 +113,7 @@
     &__name {
         overflow: hidden;
         color: $text-primary;
-        font-size: 14.5px;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -124,7 +124,7 @@
         margin-bottom: 14px;
         color: $text-secondary;
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
@@ -139,7 +139,7 @@
         .l {
             display: block;
             color: $text-tertiary;
-            font-size: 10px;
+            font-size: $text-xs;
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
@@ -149,7 +149,7 @@
             overflow: hidden;
             margin-top: 3px;
             color: $text-primary;
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-semibold;
             text-overflow: ellipsis;
             white-space: nowrap;

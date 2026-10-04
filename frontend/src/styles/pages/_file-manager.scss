@@ -62,7 +62,7 @@ $ft-default:  #646b7a;
         padding: $space-3 $space-4;
         background: var(--surface-2);
         border-bottom: 1px solid $border-default;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
 
@@ -71,7 +71,7 @@ $ft-default:  #646b7a;
         .upload-tray-percent {
             margin-left: auto;
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-secondary;
         }
 
@@ -91,7 +91,7 @@ $ft-default:  #646b7a;
         gap: $space-3;
         align-items: center;
         padding: $space-2 $space-4;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
 
         .upload-name {
             color: $text-primary;
@@ -192,7 +192,7 @@ $ft-default:  #646b7a;
         min-width: 0;
         overflow: hidden;
         font-family: $font-mono;
-        font-size: 12.5px;
+        font-size: $text-sm;
         gap: 1px;
 
         .crumb-segment {
@@ -208,7 +208,7 @@ $ft-default:  #646b7a;
             color: var(--text-ghost);
             margin: 0 1px;
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             user-select: none;
         }
         .crumb {
@@ -247,7 +247,7 @@ $ft-default:  #646b7a;
         background: var(--surface-2);
         color: var(--text-faint);
         font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         white-space: nowrap;
 
         svg { color: var(--accent-bright); }
@@ -281,7 +281,7 @@ $ft-default:  #646b7a;
             background: transparent;
             border: none;
             padding: 6px $space-3 6px 32px;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-primary;
             width: 100%;
 
@@ -316,7 +316,7 @@ $ft-default:  #646b7a;
         border: 1px solid var(--border);
         border-radius: 8px;
         color: var(--text-dim);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         cursor: pointer;
         white-space: nowrap;
@@ -367,7 +367,7 @@ $ft-default:  #646b7a;
         background: var(--surface-2);
         color: var(--text-faint);
         font-family: $font-mono;
-        font-size: 10.5px;
+        font-size: $text-xs;
         transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
 
         &:hover,
@@ -446,7 +446,7 @@ $ft-default:  #646b7a;
         align-items: center;
         gap: $space-2;
         color: var(--accent-bright);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
 
         svg {
@@ -469,7 +469,7 @@ $ft-default:  #646b7a;
         border: 1px solid var(--border);
         border-radius: 8px;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         cursor: pointer;
         @include transition(all);
@@ -589,7 +589,7 @@ $ft-default:  #646b7a;
             padding-inline: 9px;
             color: var(--text-ghost);
             font-family: $font-mono;
-            font-size: 9.5px;
+            font-size: $text-xs;
         }
 
         &__dot {
@@ -648,7 +648,7 @@ $ft-default:  #646b7a;
         cursor: pointer;
         color: var(--text-ghost);
         font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.12em;
         text-transform: uppercase;
@@ -748,7 +748,7 @@ $ft-default:  #646b7a;
         border: none;
         border-radius: $radius-sm;
         color: var(--text-dim);
-        font-size: 12.5px;
+        font-size: $text-sm;
         text-align: left;
         cursor: pointer;
         @include transition(all);
@@ -789,7 +789,7 @@ $ft-default:  #646b7a;
         border-radius: $radius-sm;
         color: var(--text-dim);
         cursor: pointer;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         text-align: left;
         @include transition(all);
@@ -812,7 +812,7 @@ $ft-default:  #646b7a;
             min-width: 20px;
             color: var(--text-ghost);
             font-family: $font-mono;
-            font-size: 10px;
+            font-size: $text-xs;
             text-align: right;
         }
 
@@ -832,7 +832,7 @@ $ft-default:  #646b7a;
             gap: $space-1;
             color: var(--text-ghost);
             font-family: $font-mono;
-            font-size: 10px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.12em;
             text-transform: uppercase;
@@ -846,7 +846,7 @@ $ft-default:  #646b7a;
             border: 1px solid var(--border);
             border-radius: $radius-sm;
             color: $text-primary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             outline: none;
             cursor: pointer;
 
@@ -860,7 +860,7 @@ $ft-default:  #646b7a;
     .folder-tree {
         display: flex;
         flex-direction: column;
-        font-size: 13px;
+        font-size: $text-sm;
     }
 
     .tree-node {
@@ -924,7 +924,7 @@ $ft-default:  #646b7a;
     .tree-name {
         flex: 1;
         @include truncate();
-        font-size: 13px;
+        font-size: $text-sm;
     }
 
     .tree-children {
@@ -934,7 +934,7 @@ $ft-default:  #646b7a;
 
     .tree-empty {
         padding: 4px $space-2;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-style: italic;
     }
@@ -945,13 +945,13 @@ $ft-default:  #646b7a;
         align-items: center;
         gap: $space-1;
         font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         color: var(--text-ghost);
 
         &--footer {
             justify-content: flex-end;
             padding: 5px $space-2 0;
-            font-size: 9px;
+            font-size: $text-xs;
         }
     }
 
@@ -981,13 +981,13 @@ $ft-default:  #646b7a;
 
     .disk-mount-point {
         font-family: $font-mono;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     .disk-percent {
         font-family: $font-mono;
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         &.healthy { color: $success; }
         &.warning { color: $warning; }
@@ -1011,7 +1011,7 @@ $ft-default:  #646b7a;
         display: flex;
         justify-content: space-between;
         font-family: $font-mono;
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -1040,7 +1040,7 @@ $ft-default:  #646b7a;
 
         svg { margin-bottom: $space-4; opacity: 0.6; }
         h3 {
-            font-size: $font-size-lg;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             color: $text-primary;
             margin: 0 0 $space-2;
@@ -1049,7 +1049,7 @@ $ft-default:  #646b7a;
             margin: 0;
             color: $text-secondary;
             max-width: 360px;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: 1.5;
         }
     }
@@ -1074,14 +1074,14 @@ $ft-default:  #646b7a;
             svg { color: $accent-primary; margin-bottom: $space-3; }
             h3 {
                 margin: 0 0 $space-2;
-                font-size: $font-size-xl;
+                font-size: $text-lg;
                 font-weight: $font-weight-semibold;
                 color: $text-primary;
             }
             p {
                 margin: 0;
                 color: $text-secondary;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
 
                 code {
                     background: $bg-tertiary;
@@ -1195,7 +1195,7 @@ $ft-default:  #646b7a;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }
@@ -1208,8 +1208,8 @@ $ft-default:  #646b7a;
         background: rgba(0, 0, 0, 0.6);
         border-radius: $radius-sm;
         font-family: $font-mono;
-        font-size: 9px;
-        font-weight: $font-weight-bold;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         color: white;
         letter-spacing: 0.04em;
         // demo keeps the extension visible on image thumbs at all times
@@ -1223,7 +1223,7 @@ $ft-default:  #646b7a;
     }
 
     .file-card-name {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-primary;
         font-weight: $font-weight-medium;
         @include truncate();
@@ -1231,7 +1231,7 @@ $ft-default:  #646b7a;
     }
 
     .file-card-meta {
-        font-size: 10px;
+        font-size: $text-xs;
         color: var(--text-ghost);
         font-family: $font-mono;
     }
@@ -1288,7 +1288,7 @@ $ft-default:  #646b7a;
             z-index: 2;
             background: $bg-body;
             font-family: $font-mono;
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             text-transform: uppercase;
             color: var(--text-faint);
@@ -1345,21 +1345,21 @@ $ft-default:  #646b7a;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     color: $text-primary;
-                    font-size: 13px;
+                    font-size: $text-sm;
                 }
-                .link-indicator { color: $text-tertiary; font-size: $font-size-xs; }
+                .link-indicator { color: $text-tertiary; font-size: $text-xs; }
             }
 
             .col-size,
             .col-modified {
                 font-family: $font-mono;
-                font-size: 12px;
+                font-size: $text-xs;
                 color: var(--text-dim);
             }
             .col-permissions,
             .col-owner {
                 font-family: $font-mono;
-                font-size: 11.5px;
+                font-size: $text-xs;
                 color: var(--text-faint);
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -1436,7 +1436,7 @@ $ft-default:  #646b7a;
         border-top: 1px solid var(--border-soft);
         border-radius: 0;
         font-family: $font-mono;
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
         flex-wrap: wrap;
         gap: $space-3;
@@ -1461,7 +1461,7 @@ $ft-default:  #646b7a;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             font-weight: $font-weight-semibold;
-            font-size: 9px;
+            font-size: $text-xs;
         }
 
         .status-value {
@@ -1509,7 +1509,7 @@ $ft-default:  #646b7a;
             border: none;
             border-radius: $radius-sm;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             text-align: left;
             cursor: pointer;
             @include transition(background);
@@ -1538,7 +1538,7 @@ $ft-default:  #646b7a;
         padding: $space-3;
         background: $bg-tertiary;
         border-radius: $radius-md;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         p { margin: 0 0 $space-2 0; font-weight: $font-weight-medium; }
         ul {
@@ -1604,7 +1604,7 @@ $drawer-width: 520px;
 
         h3 {
             margin: 0 0 2px;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: $text-primary;
             overflow: hidden;
@@ -1614,7 +1614,7 @@ $drawer-width: 520px;
         .preview-drawer-path {
             margin: 0;
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -1656,7 +1656,7 @@ $drawer-width: 520px;
 
     .meta-label {
         font-family: $font-mono;
-        font-size: 9px;
+        font-size: $text-xs;
         text-transform: uppercase;
         letter-spacing: 0.08em;
         font-weight: $font-weight-semibold;
@@ -1664,11 +1664,11 @@ $drawer-width: 520px;
     }
 
     .meta-value {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
         @include truncate();
 
-        &.mono { font-family: $font-mono; font-size: $font-size-xs; }
+        &.mono { font-family: $font-mono; font-size: $text-xs; }
     }
 }
 
@@ -1689,7 +1689,7 @@ $drawer-width: 520px;
     border: 1px solid var(--border);
     border-radius: 8px;
     color: $text-primary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     cursor: pointer;
     @include transition(all);
@@ -1714,7 +1714,7 @@ $drawer-width: 520px;
 
     .meta-label {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
 
         &.is-spaced { margin-bottom: 6px; }
@@ -1761,7 +1761,7 @@ $drawer-width: 520px;
 
         .editor-status {
             font-family: $font-mono;
-            font-size: 10px;
+            font-size: $text-xs;
             color: var(--text-ghost);
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -1775,7 +1775,7 @@ $drawer-width: 520px;
         flex: 1;
         padding: $space-4;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-relaxed;
         background: $bg-body;
         border: none;
@@ -1795,7 +1795,7 @@ $drawer-width: 520px;
         padding: $space-3 0;
         background: var(--bg-code);
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         line-height: 1.65;
 
         &__line {
@@ -1820,7 +1820,7 @@ $drawer-width: 520px;
             white-space: pre;
             color: var(--text-code, var(--text));
 
-            .tok-kw { color: var(--accent-bright); font-weight: 500; }
+            .tok-kw { color: var(--accent-bright); font-weight: $font-weight-medium; }
             .tok-str { color: var(--green); }
             .tok-num { color: var(--amber); }
             .tok-cmt { color: var(--text-ghost); }
@@ -1917,7 +1917,7 @@ $drawer-width: 520px;
     border-radius: $radius-md;
     background: var(--accent-bg-soft);
     color: var(--text-primary);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     border: 1px solid fade($accent-primary-raw, 25%);
     flex-shrink: 0;
 }

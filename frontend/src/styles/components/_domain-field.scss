@@ -18,7 +18,7 @@
     &__suffix,
     &__dot {
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-dim);
         white-space: nowrap;
     }
@@ -35,7 +35,7 @@
 
     &__status {
         margin: 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: var(--text-dim);
 
         &.is-error { color: var(--red); }

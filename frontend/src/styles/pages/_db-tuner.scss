@@ -17,13 +17,13 @@
     &__hint {
         flex: 1;
         margin: 0;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
         color: $text-secondary;
     }
 
     &__error {
         margin: 0;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
         color: $color-danger;
     }
 
@@ -31,7 +31,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
         color: $text-secondary;
         white-space: nowrap;
         cursor: pointer;
@@ -46,7 +46,7 @@
     &__table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
 
         th,
         td {
@@ -58,7 +58,7 @@
 
         th {
             color: $text-secondary;
-            font-weight: 600;
+            font-weight: $font-weight-semibold;
             background: $bg-secondary;
             white-space: nowrap;
         }
@@ -82,7 +82,7 @@
         display: block;
         margin-top: 2px;
         color: $text-muted;
-        font-size: 0.75rem;
+        font-size: $text-xs;
         max-width: 340px;
     }
 
@@ -93,7 +93,7 @@
 
         &--suggest {
             color: $accent-primary;
-            font-weight: 600;
+            font-weight: $font-weight-semibold;
         }
     }
 
@@ -105,7 +105,7 @@
         border-radius: $radius-md;
         color: $text-primary;
         font-family: $font-mono;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
 
         &:focus {
             outline: none;
@@ -116,7 +116,7 @@
     &__range {
         display: block;
         margin-top: 2px;
-        font-size: 0.6875rem;
+        font-size: $text-xs;
         color: $text-muted;
     }
 

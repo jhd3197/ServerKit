@@ -24,7 +24,7 @@
         border-radius: 4px;
         color: var(--text-ghost);
         font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: $text-xs;
         letter-spacing: 0.08em;
         text-transform: uppercase;
     }
@@ -60,14 +60,14 @@
     &__pipe-count {
         color: var(--text-ghost);
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 
     // ---- test-deployment (simulated) scenario picker ----
     &__sim-intro {
         margin: 0 0 $space-3;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.5;
     }
 
@@ -77,7 +77,7 @@
         gap: $space-2;
         margin-bottom: $space-3;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 
@@ -115,8 +115,8 @@
         gap: 2px;
         min-width: 0;
 
-        strong { color: $text-primary; font-size: $font-size-sm; font-weight: $font-weight-semibold; }
-        span { color: $text-tertiary; font-size: $font-size-xs; line-height: 1.4; }
+        strong { color: $text-primary; font-size: $text-xs; font-weight: $font-weight-semibold; }
+        span { color: $text-tertiary; font-size: $text-xs; line-height: 1.4; }
     }
 }
 

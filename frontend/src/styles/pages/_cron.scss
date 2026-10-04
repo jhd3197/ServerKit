@@ -5,7 +5,7 @@
 .cron-page {
     .cron-servicenote {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--amber);
     }
 
@@ -15,7 +15,7 @@
         gap: $space-2;
         margin-top: $space-3;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
 
         svg { flex-shrink: 0; }
@@ -33,7 +33,7 @@
         padding: $space-10;
         text-align: center;
         color: var(--text-faint);
-        font-size: 13px;
+        font-size: $text-sm;
         background: var(--surface);
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
@@ -61,7 +61,7 @@
 
     .cron-cell-mono {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
         white-space: nowrap;
     }
@@ -93,7 +93,7 @@
 
         &__desc {
             margin-top: 2px;
-            font-size: 12px;
+            font-size: $text-xs;
             font-weight: $font-weight-normal;
             color: var(--text-dim);
         }
@@ -112,7 +112,7 @@
         gap: 5px;
         padding: 2px 8px;
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
         background: var(--surface-2);
         border: 1px solid var(--border);
@@ -127,7 +127,7 @@
 
     .cron-sched-readable {
         margin-top: 3px;
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -158,7 +158,7 @@
 
 .run-output-label {
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -175,7 +175,7 @@
     margin: 0;
     padding: $space-3 $space-4;
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: $text-xs;
     line-height: 1.62;
     background: var(--bg-code);
     color: var(--text-code);
@@ -220,14 +220,14 @@
 
     &__sectiontitle {
         margin: 0;
-        font-size: 14px;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
 
     &__hint {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -276,7 +276,7 @@
     .k {
         flex: 0 0 118px;
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -286,14 +286,14 @@
     .v {
         flex: 1;
         min-width: 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text);
         word-break: break-word;
     }
 
     &__cmd {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
     }
 }
 
@@ -313,7 +313,7 @@
 
     .l {
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -322,7 +322,7 @@
 
     .v {
         margin-top: $space-1;
-        font-size: 15px;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: var(--text);
 
@@ -335,7 +335,7 @@
     .s {
         margin-top: $space-2;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -357,7 +357,7 @@
         align-items: center;
         gap: $space-2;
         margin-bottom: $space-3;
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-semibold;
         color: var(--text);
 
@@ -370,7 +370,7 @@
     &__loading,
     &__empty {
         padding: $space-2 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-faint);
     }
 
@@ -401,19 +401,19 @@
     }
 
     &__name {
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text);
         @include truncate();
     }
 
     &__sched {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     &__cron {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -425,7 +425,7 @@
     }
 
     &__next {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
         white-space: nowrap;
     }
@@ -438,7 +438,7 @@
     }
 
     &__status-hint {
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
     }
@@ -468,12 +468,12 @@
     gap: $space-3;
 
     &__empty {
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-faint);
     }
 
     &__rate {
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -493,7 +493,7 @@
         gap: $space-2;
         padding: $space-2 0;
         border-top: 1px solid var(--border-soft);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
 
         &:first-child { border-top: 0; }
@@ -503,7 +503,7 @@
     &__dur,
     &__exit {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -528,7 +528,7 @@
         gap: $space-2;
 
         > label {
-            font-size: 12px;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: var(--text-dim);
         }
@@ -537,7 +537,7 @@
     &__input {
         width: 100%;
         padding: 9px 11px;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text);
         background: var(--surface-2);
         border: 1px solid var(--border);
@@ -553,7 +553,7 @@
 
         &--mono {
             font-family: var(--mono);
-            font-size: 12.5px;
+            font-size: $text-sm;
         }
     }
 
@@ -563,7 +563,7 @@
     }
 
     &__hint {
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -572,7 +572,7 @@
         padding: 10px 12px;
         overflow-x: auto;
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         line-height: 1.5;
         color: var(--text-dim);
         white-space: pre;

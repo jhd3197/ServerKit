@@ -48,13 +48,13 @@
         min-width: 0;
 
         strong {
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: $text-primary;
         }
 
         span {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
             line-height: 1.5;
         }
@@ -63,7 +63,7 @@
     &__confidence {
         flex-shrink: 0;
         padding: $space-1 $space-2;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         text-transform: uppercase;
         letter-spacing: 0.04em;
@@ -106,14 +106,14 @@
             display: inline-flex;
             align-items: center;
             gap: $space-1;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             text-transform: uppercase;
             letter-spacing: 0.04em;
             color: $text-tertiary;
         }
 
         strong {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: $text-primary;
             text-transform: capitalize;
@@ -129,7 +129,7 @@
         gap: $space-1;
 
         li {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
             line-height: 1.5;
         }
@@ -170,7 +170,7 @@
         border: none;
         cursor: pointer;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         transition: background $transition-fast;
 
@@ -194,7 +194,7 @@
         padding: $space-4;
         background: $bg-body;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.6;
         color: $text-primary;
         max-height: 360px;
@@ -210,7 +210,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }

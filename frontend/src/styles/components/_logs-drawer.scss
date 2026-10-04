@@ -45,7 +45,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-semibold;
         color: var(--text);
         white-space: nowrap;
@@ -71,7 +71,7 @@
 
     .session-id {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
         overflow: hidden;
@@ -122,6 +122,6 @@
         border-top: 1px solid var(--border-soft);
         @include status-variant(var(--red), var(--red-bg));
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }

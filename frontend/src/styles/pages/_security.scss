@@ -27,7 +27,7 @@
                 align-items: center;
                 gap: 6px;
                 font-family: var(--mono);
-                font-size: 10.5px;
+                font-size: $text-xs;
                 font-weight: $font-weight-semibold;
                 letter-spacing: 0.08em;
                 text-transform: uppercase;
@@ -135,7 +135,7 @@
         gap: 10px;
         padding: 9px 0;
         border-top: 1px solid var(--border-soft);
-        font-size: 13px;
+        font-size: $text-sm;
         line-height: 1.45;
 
         &:first-child { border-top: none; }
@@ -150,7 +150,7 @@
 
         &--more {
             font-family: var(--mono);
-            font-size: 11.5px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -158,7 +158,7 @@
     // Inline helpers
     .sec-mono {
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
@@ -179,24 +179,24 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-size: 11.5px;
+            font-size: $text-xs;
 
             &--red { color: var(--red); }
         }
 
         .sec-proto {
-            font-size: 11px;
+            font-size: $text-xs;
             text-transform: uppercase;
             letter-spacing: 0.04em;
         }
 
         .sec-rich-rule {
-            font-size: 11px;
+            font-size: $text-xs;
             word-break: break-all;
         }
 
         .sec-fp {
-            font-size: 11px;
+            font-size: $text-xs;
             word-break: break-all;
         }
 
@@ -206,7 +206,7 @@
     // Hint / note copy
     .sec-hint {
         margin: $space-4 0 0;
-        font-size: 12px;
+        font-size: $text-xs;
         line-height: 1.55;
         color: var(--text-faint);
 
@@ -219,7 +219,7 @@
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
         border-radius: var(--radius-sm);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-dim);
 
         p { margin: 0; line-height: 1.55; }
@@ -283,7 +283,7 @@
         width: 104px;
         height: 104px;
         flex-shrink: 0;
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
 
         svg { color: var(--text-faint); }
@@ -296,7 +296,7 @@
 
     .sec-posture__verdict {
         margin: 0 0 $space-3;
-        font-size: 14px;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
@@ -319,18 +319,18 @@
 
         &__val {
             font-family: var(--mono);
-            font-size: 19px;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             line-height: 1.1;
             letter-spacing: -0.02em;
             color: var(--text);
 
-            &--text { font-size: 14px; }
+            &--text { font-size: $text-base; }
         }
 
         &__label {
             font-family: var(--mono);
-            font-size: 9.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.06em;
             text-transform: uppercase;
@@ -357,7 +357,7 @@
         min-height: 46px;
         padding: 6px 0;
         border-top: 1px solid var(--border-soft);
-        font-size: 13px;
+        font-size: $text-sm;
 
         &:first-child { border-top: none; }
 
@@ -376,7 +376,7 @@
 
     .sec-posture__detail {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
     }
@@ -447,14 +447,14 @@
 
         h4 {
             margin: 0 0 $space-1;
-            font-size: 14px;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: var(--text);
         }
 
         .scan-desc {
             margin-bottom: $space-4;
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
 
@@ -509,7 +509,7 @@
         border: 1px solid var(--border-soft);
         border-radius: var(--radius-sm);
         color: var(--text);
-        font-size: 12.5px;
+        font-size: $text-sm;
 
         &:focus {
             outline: none;
@@ -532,7 +532,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -572,7 +572,7 @@
 
         p {
             margin: 0;
-            font-size: 13px;
+            font-size: $text-sm;
 
             &:not(:last-child) {
                 margin-bottom: $space-1;
@@ -595,7 +595,7 @@
 .integrity-tab {
     .description {
         margin-bottom: $space-5;
-        font-size: 13px;
+        font-size: $text-sm;
         line-height: 1.55;
         color: var(--text-dim);
     }
@@ -654,14 +654,14 @@
         }
 
         &__label {
-            font-size: 13.5px;
+            font-size: $text-sm;
             font-weight: $font-weight-semibold;
             color: var(--text);
         }
 
         .firewall-type {
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             letter-spacing: 0.05em;
             color: var(--text-faint);
         }
@@ -690,7 +690,7 @@
 
         .stat-value {
             font-family: var(--mono);
-            font-size: 22px;
+            font-size: $text-xl;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.02em;
             line-height: 1.1;
@@ -699,7 +699,7 @@
         .stat-label {
             margin-top: 5px;
             font-family: var(--mono);
-            font-size: 10px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.06em;
             text-transform: uppercase;
@@ -735,14 +735,14 @@
             min-width: 0;
 
             .port-name {
-                font-size: 13px;
+                font-size: $text-sm;
                 font-weight: $font-weight-medium;
             }
 
             .port-number {
                 margin-top: 2px;
                 font-family: var(--mono);
-                font-size: 11px;
+                font-size: $text-xs;
                 color: var(--text-faint);
             }
         }
@@ -763,7 +763,7 @@
 
         .blocked-ip {
             font-family: var(--mono);
-            font-size: 12.5px;
+            font-size: $text-sm;
             font-weight: $font-weight-medium;
             color: var(--red);
         }
@@ -778,7 +778,7 @@
 
         p {
             margin: 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 }
@@ -828,7 +828,7 @@
 
     .sec-audit-meta {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -838,7 +838,7 @@
             padding-bottom: $space-2;
             border-bottom: 1px solid var(--border-soft);
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -863,7 +863,7 @@
 
                 li {
                     margin-bottom: $space-2;
-                    font-size: 13px;
+                    font-size: $text-sm;
                     line-height: 1.5;
                     color: var(--text-dim);
 
@@ -887,14 +887,14 @@
         border-bottom: 1px solid var(--border-soft);
 
         &__title {
-            font-size: 14px;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
         }
 
         &__sub {
             margin-top: 5px;
             font-family: var(--mono);
-            font-size: 11.5px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -907,7 +907,7 @@
         h4 {
             margin: 0 0 $space-2;
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -940,7 +940,7 @@
 
 .help-text {
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // Scrollable tabs for many tabs
@@ -982,8 +982,8 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-weight: 600;
-            font-size: 13.5px;
+            font-weight: $font-weight-semibold;
+            font-size: $text-sm;
             margin-bottom: 12px;
 
             svg { color: var(--accent-bright); }
@@ -996,14 +996,14 @@
 
         &__v {
             font-family: var(--mono);
-            font-size: 18px;
-            font-weight: 600;
+            font-size: $text-lg;
+            font-weight: $font-weight-semibold;
 
             &--amber { color: var(--amber); }
         }
 
         &__l {
-            font-size: 10px;
+            font-size: $text-xs;
             color: var(--text-faint);
             text-transform: uppercase;
             letter-spacing: 0.05em;

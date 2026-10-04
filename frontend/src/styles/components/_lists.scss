@@ -19,12 +19,12 @@
         &:last-child { border-bottom: none; }
 
         .info-label {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
 
         .info-value {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: $text-primary;
         }
@@ -56,32 +56,32 @@
     }
 
     .info-value {
-        font-weight: 500;
+        font-weight: $font-weight-medium;
     }
 
     .info-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
     .info-value {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
 
         &.mono {
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
         }
     }
 }
 
 .info-label {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
 .info-value {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-primary;
 
@@ -162,7 +162,7 @@
 .plugin-version,
 .theme-version {
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .plugin-actions,
@@ -177,7 +177,7 @@
     padding: 2px $space-2;
     margin-left: $space-2;
     border-radius: $radius-sm;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $warning;
     background: fade($warning-raw, 12%);
@@ -190,7 +190,7 @@
     margin-bottom: $space-3;
     border-radius: $radius-md;
     background: fade($warning-raw, 8%);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // Backups list
@@ -217,7 +217,7 @@
 .backup-size,
 .backup-date {
     color: $text-tertiary;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
 }
 
 // Domains list

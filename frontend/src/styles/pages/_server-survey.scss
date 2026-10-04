@@ -21,12 +21,12 @@
 
     &__muted {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__mono {
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__section {
@@ -40,7 +40,7 @@
         align-items: center;
         gap: $space-2;
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-secondary;
         text-transform: uppercase;
@@ -49,7 +49,7 @@
 
     &__count {
         margin-left: auto;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
         text-transform: none;
@@ -65,7 +65,7 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $success;
 
         svg { color: $success; }
@@ -97,7 +97,7 @@
 
     &__service-ports {
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -111,7 +111,7 @@
     &__table {
         width: 100%;
         border-collapse: collapse;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         th, td {
             padding: $space-2 $space-3;
@@ -138,7 +138,7 @@
 
         li {
             padding: $space-1 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -170,7 +170,7 @@
         flex-direction: column;
         gap: $space-3;
 
-        li { font-size: $font-size-sm; }
+        li { font-size: $text-xs; }
     }
 
     &__catalog-locs {
@@ -181,7 +181,7 @@
 
         code {
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             padding: 1px 6px;
             background: $bg-card;
             border: 1px solid $border-subtle;
@@ -211,7 +211,7 @@
         gap: $space-2;
 
         li {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
             line-height: 1.5;
         }
@@ -241,7 +241,7 @@
 
         p {
             margin: 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
             line-height: 1.5;
         }
@@ -269,7 +269,7 @@
         display: flex;
         align-items: flex-start;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
         cursor: pointer;
 
@@ -296,7 +296,7 @@
     border-radius: $radius-lg;
 
     &__text {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: 1.5;
 
@@ -311,7 +311,7 @@
     display: inline-block;
     margin-left: $space-2;
     padding: 1px 8px;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     @include status-variant($warning, $warning-bg);
     border: 1px solid $warning-border;

@@ -100,7 +100,7 @@
         border-radius: $radius-xl;
         padding: $space-3 $space-3 $space-3 $space-10;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         &::placeholder {
             color: $text-tertiary;
@@ -119,14 +119,14 @@
     gap: $space-1;
 
     .meta-label {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
 
     .meta-value {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         min-width: 0;
         overflow: hidden;
@@ -179,7 +179,7 @@
         border: none;
         border-radius: calc(#{$radius-md} - 1px);
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         cursor: pointer;
         transition: all 0.15s ease;
@@ -207,13 +207,13 @@
 
     p {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: 1.5;
 
         code {
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $accent-primary;
             background: rgba($accent-primary-raw, 0.12);
             padding: 1px 5px;
@@ -261,21 +261,21 @@
         display: block;
         margin-top: 6px;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.4;
     }
 
     // Pairing inputs read as machine strings, not prose.
     .server-pair-code {
         font-family: $font-mono;
-        font-size: $font-size-xl;
+        font-size: $text-lg;
         letter-spacing: 0.15em;
         text-align: center;
     }
 
     .server-pair-passphrase {
         font-family: $font-mono;
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         letter-spacing: 0.08em;
     }
 
@@ -303,7 +303,7 @@
     border: 1px dashed $border-subtle;
     border-radius: $radius-md;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -317,7 +317,7 @@
 
     &__chevron {
         display: inline-block;
-        font-size: 16px;
+        font-size: $text-md;
         line-height: 1;
         color: $accent-primary;
         transition: transform 0.15s ease;
@@ -330,7 +330,7 @@
     &__hint {
         margin-left: auto;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-normal;
     }
 
@@ -368,7 +368,7 @@
     }
 
     h3 {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         margin: 0 0 $space-2;
@@ -397,7 +397,7 @@
     gap: $space-2;
     margin-bottom: $space-3;
     font-family: var(--mono);
-    font-size: 11.5px;
+    font-size: $text-xs;
     letter-spacing: 0.02em;
 
     a {
@@ -438,7 +438,7 @@
     padding: $space-5;
 
     h3 {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-tertiary;
         text-transform: uppercase;
@@ -465,7 +465,7 @@
     }
 
     h4 {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         color: $text-primary;
         margin: 0 0 $space-2;
     }
@@ -489,7 +489,7 @@
     }
 
     h4 {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         color: var(--text);
         margin: 0 0 $space-2;
     }
@@ -497,7 +497,7 @@
     p {
         color: var(--text-dim);
         margin: 0;
-        font-size: 13px;
+        font-size: $text-sm;
     }
 }
 
@@ -534,7 +534,7 @@
     &__count {
         color: var(--text-faint);
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
     }
 
     &__actions {
@@ -550,14 +550,14 @@
 
     &__command {
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
         word-break: break-all;
     }
 
     &__description {
         color: var(--text-faint);
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         margin-top: 2px;
     }
 
@@ -601,14 +601,14 @@
         border: 1px solid fade($accent-primary-raw, 22%);
         border-radius: var(--radius-sm);
         color: var(--text-dim);
-        font-size: 13px;
+        font-size: $text-sm;
 
         code {
             background: var(--surface-2);
             padding: 0 $space-1;
             border-radius: 4px;
             font-family: var(--mono);
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: var(--text);
         }
 
@@ -630,7 +630,7 @@
     background: transparent;
     border: none;
     color: var(--text-faint);
-    font-size: 13px;
+    font-size: $text-sm;
     font-weight: $font-weight-medium;
     padding: 11px 14px;
     cursor: pointer;
@@ -664,7 +664,7 @@
     gap: $space-1;
     padding: $space-1 $space-2;
     border-radius: $radius-sm;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
 
     &.running {
@@ -703,7 +703,7 @@
 
     h4 {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
         text-transform: uppercase;
@@ -732,7 +732,7 @@
     .live-stat-label {
         display: block;
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         letter-spacing: 0.06em;
         text-transform: uppercase;
         color: var(--text-faint);
@@ -741,7 +741,7 @@
 
     .live-stat-value {
         display: block;
-        font-size: $font-size-md;
+        font-size: $text-md;
         font-weight: $font-weight-semibold;
         font-family: var(--mono);
         letter-spacing: -0.02em;
@@ -776,7 +776,7 @@
     }
 
     h3 {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-tertiary;
         text-transform: uppercase;
@@ -812,8 +812,8 @@
 
     .gauge-text {
         font-family: $font-mono;
-        font-size: 20px;
-        font-weight: $font-weight-bold;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         fill: $text-primary;
         text-anchor: middle;
         dominant-baseline: middle;
@@ -828,7 +828,7 @@
     display: flex;
     justify-content: space-between;
     padding: $space-2 0;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     border-top: 1px solid $border-subtle;
 
     &:first-child {
@@ -864,13 +864,13 @@
 
     span:first-of-type {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         flex: 1;
     }
 
     .value {
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
     }
 }
@@ -923,7 +923,7 @@
 
 .subsection {
     h4 {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         margin: 0 0 $space-2;
@@ -935,7 +935,7 @@
 }
 
 .ip-empty {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-tertiary;
     padding: $space-4;
     text-align: center;
@@ -957,12 +957,12 @@
     code {
         flex: 1;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
     }
 
     .badge-success {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         padding: 2px $space-2;
         @include status-variant($success, $success-bg);
         border-radius: $radius-sm;
@@ -980,7 +980,7 @@
         border-radius: $radius-md;
         padding: $space-2 $space-3;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         &::placeholder {
             color: $text-tertiary;
@@ -999,13 +999,13 @@
     background: fade($warning-raw, 10%);
     border: 1px solid fade($warning-raw, 25%);
     border-radius: $radius-md;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $warning;
 }
 
 .security-notice {
     margin-top: $space-3;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -1016,7 +1016,7 @@
 }
 
 .key-rotation-hint {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -1047,21 +1047,21 @@
 
     .alert-type {
         flex: 1;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
         text-transform: capitalize;
     }
 
     .alert-time {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 }
 
 .severity-badge {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -1079,7 +1079,7 @@
 .alert-item-details {
     display: flex;
     gap: $space-4;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
     margin-bottom: $space-3;
 }
@@ -1097,7 +1097,7 @@
     margin-bottom: $space-6;
 
     h3 {
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         margin: 0 0 $space-4;
@@ -1105,7 +1105,7 @@
 
     .section-description {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin-bottom: $space-4;
     }
 
@@ -1143,14 +1143,14 @@
 
         h3 {
             margin: 0 0 $space-1;
-            font-size: $font-size-lg;
+            font-size: $text-lg;
             letter-spacing: -0.01em;
         }
 
         .section-description {
             margin: 0;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: 1.5;
         }
     }
@@ -1183,7 +1183,7 @@
     align-items: center;
     gap: $space-2;
     font-family: var(--mono);
-    font-size: 11.5px;
+    font-size: $text-xs;
     color: var(--text-dim);
     margin-bottom: $space-5;
 }
@@ -1229,7 +1229,7 @@
 
     > span {
         flex: 1;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
     }
@@ -1239,7 +1239,7 @@
     padding: $space-4 $space-5;
     margin: 0;
     font-family: $font-mono;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     line-height: $line-height-relaxed;
     color: $text-secondary;
     background: $bg-body;
@@ -1316,13 +1316,13 @@
 
     strong {
         display: block;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         margin-bottom: $space-1;
     }
 
     .success-subtitle {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
         margin: 0;
         line-height: $line-height-normal;
@@ -1356,7 +1356,7 @@
 
     summary {
         cursor: pointer;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         padding: $space-2 0;
 
@@ -1374,7 +1374,7 @@
     border-radius: $radius-lg;
 
     h4 {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         margin: 0 0 $space-3;
@@ -1384,7 +1384,7 @@
         margin: 0 0 $space-4;
         padding-left: $space-5;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-relaxed;
     }
 
@@ -1394,7 +1394,7 @@
 
     .text-muted {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 }
 
@@ -1414,7 +1414,7 @@
         border-radius: $radius-md;
         padding: $space-3;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         &::placeholder {
             color: $text-tertiary;
@@ -1451,7 +1451,7 @@
         border-radius: $radius-sm;
         padding: $space-2;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         &:focus {
             outline: none;
@@ -1463,7 +1463,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
 
         svg {
@@ -1472,7 +1472,7 @@
     }
 
     .group-count {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -1486,7 +1486,7 @@
     text-align: center;
     padding: $space-6;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // ============================================
@@ -1504,7 +1504,7 @@
 
     h1 {
         margin: 0;
-        font-size: $font-size-3xl;
+        font-size: $text-2xl;
         line-height: 1.1;
         letter-spacing: -0.02em;
         color: $text-primary;
@@ -1514,7 +1514,7 @@
     p {
         margin: $space-1 0 0;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-family: $font-mono;
     }
 
@@ -1539,7 +1539,7 @@
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     thead th {
         position: sticky;
@@ -1548,7 +1548,7 @@
         text-align: left;
         padding: 11px $space-4;
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         text-transform: uppercase;
         letter-spacing: 0.06em;
@@ -1589,7 +1589,7 @@
 
     .muted {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 }
 
@@ -1635,8 +1635,8 @@
     border: 1px solid $border-subtle;
     color: $text-secondary;
     font-family: $font-mono;
-    font-weight: $font-weight-bold;
-    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    font-size: $text-xs;
 
     &--online {
         background: $success-bg;
@@ -1672,7 +1672,7 @@
 
 .server-row__sub {
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-family: $font-mono;
     line-height: 1.3;
     margin-top: 2px;
@@ -1686,7 +1686,7 @@
     border-radius: $radius-full;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
     white-space: nowrap;
 }
@@ -1703,7 +1703,7 @@
 
 .server-row__lastseen {
     font-family: $font-mono;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
     white-space: nowrap;
 }
@@ -1719,7 +1719,7 @@
         grid-template-columns: 30px 1fr 36px;
         align-items: center;
         gap: $space-2;
-        font-size: 11px;
+        font-size: $text-xs;
     }
 
     em {
@@ -1761,7 +1761,7 @@
     gap: 6px;
     padding: 3px 10px 3px 8px;
     border-radius: $radius-full;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     text-transform: capitalize;
     border: 1px solid transparent;
@@ -1842,7 +1842,7 @@
         border-radius: $radius-md;
         background: transparent;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         text-align: left;
         text-decoration: none;
         cursor: pointer;
@@ -1920,8 +1920,8 @@
         border: 1px solid var(--border);
         color: var(--text-dim);
         font-family: var(--mono);
-        font-weight: $font-weight-bold;
-        font-size: $font-size-xl;
+        font-weight: $font-weight-semibold;
+        font-size: $text-lg;
 
         &--online {
             background: var(--green-bg);
@@ -1954,7 +1954,7 @@
 
         h1 {
             margin: 0;
-            font-size: 19px;
+            font-size: $text-lg;
             line-height: 1.2;
             letter-spacing: -0.02em;
             color: var(--text);
@@ -1971,7 +1971,7 @@
         border: 1px solid var(--border-soft);
         border-radius: 6px;
         color: var(--text-faint);
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         cursor: pointer;
         transition: all 0.12s ease;
 
@@ -1992,7 +1992,7 @@
         &__value {
             color: var(--text-dim);
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             background: transparent;
             padding: 0;
             max-width: 22ch;
@@ -2002,7 +2002,7 @@
         }
 
         &--mono &__value {
-            font-size: 11px;
+            font-size: $text-xs;
         }
 
         svg {
@@ -2017,7 +2017,7 @@
         flex-wrap: wrap;
         margin-top: 8px;
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
 
         .dotsep {
@@ -2040,7 +2040,7 @@
     &__description {
         margin: $space-3 0 0;
         color: var(--text-dim);
-        font-size: 13px;
+        font-size: $text-sm;
         line-height: $line-height-relaxed;
         max-width: 720px;
     }
@@ -2079,8 +2079,8 @@
         margin: 0 0 $space-3;
         padding-bottom: $space-2;
         border-bottom: 1px solid $border-subtle;
-        font-size: 11px;
-        font-weight: $font-weight-bold;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         color: $text-tertiary;
@@ -2095,7 +2095,7 @@
 
     .info-value {
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-primary;
     }
 }
@@ -2153,7 +2153,7 @@
 
     &__label {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -2162,7 +2162,7 @@
 
     &__value {
         font-family: var(--mono);
-        font-size: 21px;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         letter-spacing: -0.02em;
         color: var(--text);
@@ -2172,7 +2172,7 @@
 
     &__sub {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -2223,7 +2223,7 @@
         padding: 11px 0;
         border-bottom: 1px solid var(--border-soft);
         min-height: 40px;
-        font-size: 13px;
+        font-size: $text-sm;
 
         &:last-child { border-bottom: 0; }
     }
@@ -2233,7 +2233,7 @@
         align-items: center;
         gap: $space-3;
         min-width: 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-faint);
 
         svg {
@@ -2247,7 +2247,7 @@
     .info-value {
         min-width: 0;
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         font-weight: $font-weight-normal;
         color: var(--text);
         text-align: right;
@@ -2256,7 +2256,7 @@
         white-space: nowrap;
 
         &.mono {
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text-dim);
         }
     }
@@ -2280,7 +2280,7 @@
     border-radius: $radius-full;
     @include status-variant(var(--amber), var(--amber-bg));
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     line-height: 1;
     font-feature-settings: "tnum";
@@ -2332,7 +2332,7 @@
 
     &__message {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: $line-height-relaxed;
     }
@@ -2366,8 +2366,8 @@
     text-align: center;
 
     svg { color: $text-tertiary; margin-bottom: $space-2; }
-    h4 { margin: 0; color: $text-primary; font-size: $font-size-lg; }
-    p { margin: 0; color: $text-secondary; font-size: $font-size-sm; }
+    h4 { margin: 0; color: $text-primary; font-size: $text-lg; }
+    p { margin: 0; color: $text-secondary; font-size: $text-xs; }
 }
 
 .alerts-tab {
@@ -2387,7 +2387,7 @@
         h3 {
             margin: 0;
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -2405,7 +2405,7 @@
         border: 1px solid var(--border-soft);
         color: var(--text-dim);
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         line-height: 1;
     }
@@ -2431,7 +2431,7 @@
 
     &__time {
         margin-left: auto;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-variant-numeric: tabular-nums;
     }
@@ -2445,7 +2445,7 @@
         button {
             height: 30px;
             padding: 0 $space-3;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             border-radius: $radius-md;
         }
@@ -2473,7 +2473,7 @@
 
     .tab {
         padding: 11px 14px;
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-medium;
         color: var(--text-faint);
 
@@ -2491,11 +2491,11 @@
     // ---- Dense tables (docker containers/images, cron jobs, tunnels) ----
     // .sk-dtable spec applied to the existing .data-table markup.
     .data-table {
-        font-size: 13px;
+        font-size: $text-sm;
 
         th {
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.06em;
             color: var(--text-faint);
@@ -2506,7 +2506,7 @@
 
         td {
             padding: 13px $space-4;
-            font-size: 13px;
+            font-size: $text-sm;
             color: var(--text-dim);
             border-bottom: 1px solid var(--border-soft);
             vertical-align: middle;
@@ -2522,19 +2522,19 @@
 
         .container-name {
             color: var(--text);
-            font-weight: 550;
+            font-weight: $font-weight-semibold;
         }
 
         .container-id {
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-faint);
             margin-top: 2px;
         }
 
         .mono {
             font-family: var(--mono);
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text-dim);
         }
     }
@@ -2562,7 +2562,7 @@
             padding-bottom: 10px;
             border-bottom: 1px solid var(--border-soft);
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -2579,7 +2579,7 @@
     .offline-message {
         svg { color: var(--text-ghost); }
         h4 { color: var(--text); }
-        p { color: var(--text-dim); font-size: 13px; }
+        p { color: var(--text-dim); font-size: $text-sm; }
     }
 
     // ---- Settings tab (quiet form cards, accent-washed icon chips) ----
@@ -2598,13 +2598,13 @@
         }
 
         .form-section__header h3 {
-            font-size: $font-size-md;
+            font-size: $text-md;
             color: var(--text);
         }
 
         .form-section__header .section-description {
             color: var(--text-faint);
-            font-size: 12.5px;
+            font-size: $text-sm;
         }
 
         .form-section__icon {
@@ -2627,7 +2627,7 @@
         border-radius: var(--radius-sm);
 
         code {
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text);
         }
     }
@@ -2637,12 +2637,12 @@
         border-color: var(--border);
         color: var(--text-faint);
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
     }
 
     .key-rotation-hint {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -2654,7 +2654,7 @@
 
     .security-notice {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -2671,18 +2671,18 @@
         }
 
         &__title {
-            font-size: 13.5px;
+            font-size: $text-sm;
             color: var(--text);
         }
 
         &__message {
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--text-dim);
         }
 
         &__time {
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
 
@@ -2705,11 +2705,11 @@
     // ---- Services (systemd) tab — dense-table skin over the component's
     // base styles in _server-packages.scss / _server-services.scss ----
     .server-services__table {
-        font-size: 13px;
+        font-size: $text-sm;
 
         th {
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.06em;
             text-transform: uppercase;
@@ -2721,7 +2721,7 @@
 
         td {
             padding: 11px $space-3;
-            font-size: 13px;
+            font-size: $text-sm;
             color: var(--text-dim);
             border-bottom: 1px solid var(--border-soft);
         }
@@ -2736,7 +2736,7 @@
 
         .mono {
             font-family: var(--mono);
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text);
         }
     }
@@ -2748,7 +2748,7 @@
         &__results h3,
         &__installed h3 {
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             color: var(--text-faint);
@@ -2759,7 +2759,7 @@
             border-color: var(--border);
             color: var(--text-dim);
             font-family: var(--mono);
-            font-size: 12px;
+            font-size: $text-xs;
 
             &:hover {
                 background: var(--accent-bg);
@@ -2778,7 +2778,7 @@
         &__raw {
             background: var(--bg-code);
             color: var(--text-dim);
-            font-size: 12px;
+            font-size: $text-xs;
         }
 
         &__list-item {
@@ -2791,13 +2791,13 @@
 
         &__list-name {
             font-family: var(--mono);
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text-dim);
         }
 
         &__remove-tip {
             background: var(--surface-2);
-            font-size: 12.5px;
+            font-size: $text-sm;
         }
     }
 }

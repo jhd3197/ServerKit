@@ -10,7 +10,7 @@
 
     &--compact {
         gap: 10px;
-        font-size: 12.5px;
+        font-size: $text-sm;
     }
 
     // --- Presets: chip grid ---
@@ -41,8 +41,8 @@
         }
     }
 
-    &__preset-label { font-weight: 600; font-size: 12.5px; }
-    &__preset-desc { font-size: 11px; color: var(--text-faint); }
+    &__preset-label { font-weight: $font-weight-semibold; font-size: $text-sm; }
+    &__preset-desc { font-size: $text-xs; color: var(--text-faint); }
 
     // --- Builder ---
     &__builder {
@@ -59,8 +59,8 @@
 
         > label {
             min-width: 74px;
-            font-size: 12px;
-            font-weight: 500;
+            font-size: $text-xs;
+            font-weight: $font-weight-medium;
             color: var(--text-faint);
         }
 
@@ -80,8 +80,8 @@
         border: 1px solid var(--border);
         background: var(--surface-2);
         color: var(--text-faint);
-        font-size: 12px;
-        font-weight: 500;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         cursor: pointer;
         transition: 0.14s;
 
@@ -119,7 +119,7 @@
 
         code {
             font-family: var(--mono);
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text);
             background: var(--surface-2);
             border: 1px solid var(--border);
@@ -128,7 +128,7 @@
             min-width: 34px;
             text-align: center;
         }
-        em { font-style: normal; font-size: 10px; color: var(--text-faint); }
+        em { font-style: normal; font-size: $text-xs; color: var(--text-faint); }
     }
 
     // --- Shared preview footer ---
@@ -150,13 +150,13 @@
 
         code {
             font-family: var(--mono);
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--text);
         }
     }
 
     &__human {
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -171,7 +171,7 @@
         align-items: center;
         gap: 8px;
         flex-wrap: wrap;
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 

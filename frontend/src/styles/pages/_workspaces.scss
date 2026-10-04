@@ -14,7 +14,7 @@
         h4 {
             margin: 0 0 $space-3;
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -29,7 +29,7 @@
 
         .form-group label {
             font-family: var(--mono);
-            font-size: 10px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -40,7 +40,7 @@
             display: block;
             margin-top: $space-2;
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             line-height: 1.5;
             color: var(--text-faint);
         }
@@ -69,8 +69,8 @@
             min-width: 0;
 
             strong {
-                font-size: 13px;
-                font-weight: 550;
+                font-size: $text-sm;
+                font-weight: $font-weight-semibold;
                 color: var(--text);
             }
 
@@ -80,7 +80,7 @@
         &__sub {
             margin-top: 2px;
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-faint);
             @include truncate();
         }
@@ -92,7 +92,7 @@
 .ws-pick-label {
     margin: $space-4 0 $space-2;
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -136,7 +136,7 @@
     &__name {
         flex: 1;
         min-width: 0;
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-medium;
         color: var(--text);
         @include truncate();
@@ -160,7 +160,7 @@
         gap: 4px;
         margin: $space-4 0 $space-3;
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         text-decoration: none;
         transition: color 0.14s;
@@ -190,7 +190,7 @@
 
         h1 {
             margin: 0;
-            font-size: 21px;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.01em;
             color: var(--text);
@@ -203,7 +203,7 @@
         gap: 7px;
         margin-top: 5px;
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
 
         .dotsep { color: var(--text-ghost); }
@@ -219,7 +219,7 @@
 
     &__desc {
         margin: $space-3 0 0;
-        font-size: 13px;
+        font-size: $text-sm;
         line-height: 1.55;
         color: var(--text-dim);
         max-width: 720px;
@@ -244,7 +244,7 @@
         h3 {
             margin: 0 0 $space-2;
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -276,7 +276,7 @@
 
     &__value {
         font-family: var(--mono);
-        font-size: 24px;
+        font-size: $text-xl;
         font-weight: $font-weight-semibold;
         color: var(--text);
         line-height: 1.2;
@@ -284,7 +284,7 @@
 
     &__label {
         margin-top: 4px;
-        font-size: 11.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         letter-spacing: 0.04em;
         text-transform: uppercase;
@@ -309,7 +309,7 @@
         border: none;
         border-bottom: 2px solid transparent;
         margin-bottom: -1px;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-dim);
         cursor: pointer;
         transition: color 0.14s, border-color 0.14s;
@@ -325,7 +325,7 @@
 
     &__tabcount {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-ghost);
     }
 
@@ -349,7 +349,7 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
         cursor: pointer;
         white-space: nowrap;
@@ -426,7 +426,7 @@
 
     .ws-detail__desc {
         margin: 0;
-        font-size: 13px;
+        font-size: $text-sm;
         line-height: 1.55;
         color: var(--text-dim);
         max-width: 720px;
@@ -467,7 +467,7 @@
     margin-top: $space-3;
 
     &__label {
-        font-size: 12px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -485,7 +485,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text);
         cursor: pointer;
 
@@ -524,7 +524,7 @@
         padding: 0 12px;
         margin-bottom: 6px;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -541,7 +541,7 @@
         border-radius: 8px;
         background: transparent;
         color: var(--text-dim);
-        font-size: 13px;
+        font-size: $text-sm;
         cursor: pointer;
         transition: background-color 0.14s, color 0.14s;
 
@@ -565,7 +565,7 @@
 
     &__section-title {
         margin: 0 0 $space-3;
-        font-size: 15px;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }

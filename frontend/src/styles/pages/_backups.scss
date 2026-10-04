@@ -56,7 +56,7 @@
 
         h3 {
             margin: 0;
-            font-size: 14px;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: var(--text);
         }
@@ -66,7 +66,7 @@
         display: block;
         margin-top: 3px;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -80,7 +80,7 @@
     border: 0;
     background: none;
     color: var(--text-faint);
-    font-size: 12px;
+    font-size: $text-xs;
     cursor: pointer;
     white-space: nowrap;
 
@@ -92,7 +92,7 @@
     align-items: center;
     gap: 7px;
     margin: 0;
-    font-size: 12.5px;
+    font-size: $text-sm;
     color: var(--text-faint);
 
     svg { flex-shrink: 0; }
@@ -144,7 +144,7 @@
         align-items: center;
         gap: 4px;
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
 
@@ -171,7 +171,7 @@
         span {
             display: block;
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--text-faint);
@@ -181,8 +181,8 @@
             display: block;
             margin-top: 3px;
             font-family: var(--mono);
-            font-size: 18px;
-            font-weight: 600;
+            font-size: $text-lg;
+            font-weight: $font-weight-semibold;
             color: var(--text);
         }
     }
@@ -222,17 +222,17 @@
     &__body { min-width: 0; flex: 1; }
 
     &__txt {
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-dim);
         line-height: 1.4;
 
-        b { color: var(--text); font-weight: 600; }
+        b { color: var(--text); font-weight: $font-weight-semibold; }
     }
 
     &__time {
         margin-top: 2px;
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -262,7 +262,7 @@
         background: var(--surface-3);
         color: var(--text-dim);
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 }
 
@@ -271,7 +271,7 @@
     align-items: center;
     gap: 6px;
     font-family: var(--mono);
-    font-size: 11.5px;
+    font-size: $text-xs;
     color: var(--text-faint);
     white-space: nowrap;
 
@@ -294,7 +294,7 @@
 .bk-hint--foot {
     margin-top: $space-3;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
 }
 
 // ---------- Storage destinations (mock `BkStorage`) ----------
@@ -342,8 +342,8 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        font-size: 14px;
-        font-weight: 600;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
         color: var(--text);
         @include truncate();
     }
@@ -351,7 +351,7 @@
     &__type {
         margin-top: 2px;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -361,7 +361,7 @@
         gap: $space-3;
         margin-top: 7px;
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -377,7 +377,7 @@
         }
 
         dt {
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
 
@@ -385,7 +385,7 @@
             margin: 0;
             min-width: 0;
             font-family: var(--mono);
-            font-size: 11.5px;
+            font-size: $text-xs;
             color: var(--text-dim);
             @include truncate();
         }
@@ -413,7 +413,7 @@
 
         &:hover { color: var(--accent-bright); border-color: var(--accent-dim); }
 
-        span { font-size: 13px; font-weight: 500; }
+        span { font-size: $text-sm; font-weight: $font-weight-medium; }
     }
 }
 
@@ -426,8 +426,8 @@
         border-radius: 4px;
         @include status-variant(var(--accent-bright), var(--accent-bg));
         font-family: var(--mono);
-        font-size: 9.5px;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         letter-spacing: 0.06em;
     }
 
@@ -444,16 +444,16 @@
         align-items: center;
         gap: 8px;
         min-width: 0;
-        font-size: 13px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         color: var(--text);
 
         svg { flex-shrink: 0; color: var(--text-faint); }
 
         small {
             font-family: var(--mono);
-            font-size: 10.5px;
-            font-weight: 400;
+            font-size: $text-xs;
+            font-weight: $font-weight-normal;
             color: var(--text-faint);
             @include truncate();
         }
@@ -462,7 +462,7 @@
     &__size {
         flex-shrink: 0;
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
 
         em { font-style: normal; color: var(--text-faint); margin-left: 5px; }
@@ -530,7 +530,7 @@
 .bk-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: $font-size-base;
+    font-size: $text-base;
 
     th,
     td {
@@ -543,7 +543,7 @@
     th {
         color: $text-tertiary;
         font-weight: $font-weight-semibold;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         text-transform: uppercase;
         letter-spacing: 0.04em;
     }
@@ -581,13 +581,13 @@
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
 .bk-when {
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     white-space: nowrap;
 }
 
@@ -596,12 +596,12 @@
     flex-wrap: wrap;
     gap: $space-2;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .bk-sched {
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
@@ -617,7 +617,7 @@
     background: $warning-bg;
     border: 1px solid $warning-border;
     color: $warning;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // ---------- Backup history list ----------
@@ -645,13 +645,13 @@
 
     &__storage {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__when {
         margin-left: auto;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         white-space: nowrap;
     }
 
@@ -682,7 +682,7 @@
         background: $bg-hover;
         border: 1px solid $border-subtle;
         color: $text-secondary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &__toggle {
@@ -693,7 +693,7 @@
         border: none;
         color: $accent-primary;
         cursor: pointer;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -738,7 +738,7 @@
         border-radius: $radius-sm;
         padding: $space-1 $space-2;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         cursor: pointer;
 
         &:hover { border-color: $border-active; color: $text-primary; }
@@ -753,7 +753,7 @@
     &__dow {
         text-align: center;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         text-transform: uppercase;
         letter-spacing: 0.04em;
         padding: $space-1 0;
@@ -794,7 +794,7 @@
     }
 
     &__daynum {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -811,7 +811,7 @@
         border-radius: $radius-full;
         background: $accent-primary;
         color: #fff;
-        font-size: 9px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 }
@@ -839,7 +839,7 @@
         display: flex;
         justify-content: space-between;
         gap: $space-3;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         padding: $space-2 0;
         border-bottom: 1px solid $border-subtle;
@@ -864,7 +864,7 @@
         background: $danger-bg;
         border: 1px solid $danger-border;
         color: $danger;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__actions {
@@ -929,18 +929,18 @@
 
     &__when {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__meta {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &__sub {
         margin-left: auto;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__detail {
@@ -961,19 +961,19 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
     &__probe-empty {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-style: italic;
     }
 
     &__error {
         color: $danger;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -1000,7 +1000,7 @@
     &__toggle-sub {
         display: block;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__status {
@@ -1042,7 +1042,7 @@
 
         label {
             color: $text-tertiary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -1056,7 +1056,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -1064,7 +1064,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -1089,7 +1089,7 @@
 
     &__label {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 
@@ -1138,7 +1138,7 @@
         background: $warning-bg;
         border: 1px solid $warning-border;
         color: $warning;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 

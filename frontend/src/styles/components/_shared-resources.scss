@@ -18,7 +18,7 @@
 
     &__hint {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__add {
@@ -40,7 +40,7 @@
     border: 1px solid $border-subtle;
     border-radius: $radius-sm;
     padding: $space-1 $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 
     &__label {
@@ -58,7 +58,7 @@
         border-radius: $radius-sm;
         color: $text-tertiary;
         cursor: pointer;
-        font-size: 16px;
+        font-size: $text-md;
         line-height: 1;
         transition: color 0.15s, background 0.15s;
 
@@ -78,7 +78,7 @@
 
     &--loading {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         padding: $space-6;
     }
 
@@ -94,12 +94,12 @@
 
     &__count {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__hint {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin: 0;
     }
 
@@ -110,7 +110,7 @@
         border: 1px solid $border-subtle;
         border-radius: $radius-sm;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         &::placeholder {
             color: $text-tertiary;
@@ -124,7 +124,7 @@
         background: $bg-card;
         border: 1px dashed $border-subtle;
         border-radius: $radius-md;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__hint--note {
@@ -145,13 +145,13 @@
     flex-wrap: wrap;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 
     &__label {
         text-transform: uppercase;
         letter-spacing: 0.04em;
-        font-weight: 600;
+        font-weight: $font-weight-semibold;
     }
 
     &__item {
@@ -177,8 +177,8 @@
     align-items: center;
     padding: 1px $space-2;
     border-radius: $radius-sm;
-    font-size: $font-size-xs;
-    font-weight: 600;
+    font-size: $text-xs;
+    font-weight: $font-weight-semibold;
     line-height: 1.5;
     border: 1px solid transparent;
     text-transform: capitalize;
@@ -216,8 +216,8 @@
     padding: 1px $space-2;
     border-radius: $radius-sm;
     font-family: $font-main;
-    font-size: $font-size-xs;
-    font-weight: 600;
+    font-size: $text-xs;
+    font-weight: $font-weight-semibold;
     line-height: 1.5;
     @include status-variant($warning, $warning-bg);
     border: 1px solid $warning-border;
@@ -230,7 +230,7 @@
 .shared-vars-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     th,
     td {
@@ -242,15 +242,15 @@
 
     th {
         color: $text-tertiary;
-        font-weight: 600;
-        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        font-size: $text-xs;
         text-transform: uppercase;
         letter-spacing: 0.04em;
     }
 
     &__key {
         font-family: $font-mono;
-        font-weight: 600;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
@@ -266,7 +266,7 @@
 
     &__target-all {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &__group {
@@ -337,7 +337,7 @@
 
     &__hint {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__item {
@@ -357,13 +357,13 @@
         }
 
         &-name {
-            font-weight: 600;
+            font-weight: $font-weight-semibold;
             color: $text-primary;
         }
 
         &-meta {
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             margin-top: $space-1;
         }
     }
@@ -383,7 +383,7 @@
 
     &__desc {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin: 0;
     }
 }

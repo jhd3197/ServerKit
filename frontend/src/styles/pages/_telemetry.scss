@@ -22,12 +22,12 @@
         border-left: 3px solid var(--violet);
         border-radius: 8px;
         background: var(--surface-2);
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
 
         code {
             font-family: var(--mono);
-            font-size: 11.5px;
+            font-size: $text-xs;
             color: var(--violet);
         }
     }
@@ -35,8 +35,8 @@
     .telemetry-table { margin-top: 16px; }
 
     .telemetry-cell__message {
-        font-size: 13px;
-        font-weight: 500;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
     }
 
     .telemetry-cell__meta {
@@ -46,7 +46,7 @@
         flex-wrap: wrap;
         margin-top: 4px;
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -65,7 +65,7 @@
 
     .telemetry-cell__when {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
     }
@@ -95,7 +95,7 @@
     &__heading {
         margin: 0;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: var(--text-faint);
@@ -110,14 +110,14 @@
         border: 1px solid var(--border-soft);
         background: var(--surface-2);
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         line-height: 1.55;
         color: var(--text-dim);
     }
 
     code {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
     }
 
     // Same definition rows the monitor surfaces use.
@@ -137,12 +137,12 @@
             &:last-child { border-bottom: none; }
         }
 
-        dt { font-size: 12.5px; color: var(--text-faint); }
+        dt { font-size: $text-sm; color: var(--text-faint); }
 
         dd {
             margin: 0;
             font-family: var(--mono);
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--text-dim);
             text-align: right;
             word-break: break-word;

@@ -77,19 +77,19 @@
             gap: $space-1;
 
             .version-label {
-                font-size: $font-size-sm;
+                font-size: $text-xs;
                 opacity: 0.8;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
             }
 
             .version-number {
-                font-size: $font-size-3xl;
-                font-weight: 700;
+                font-size: $text-2xl;
+                font-weight: $font-weight-semibold;
             }
 
             .version-date {
-                font-size: $font-size-sm;
+                font-size: $text-xs;
                 opacity: 0.75;
             }
         }
@@ -106,7 +106,7 @@
             color: $white;
             padding: $space-2 $space-4;
             border-radius: $radius-md;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             cursor: pointer;
             transition: all 0.2s;
 
@@ -122,8 +122,8 @@
             border: none;
             padding: $space-2 $space-5;
             border-radius: $radius-md;
-            font-size: $font-size-sm;
-            font-weight: 600;
+            font-size: $text-xs;
+            font-weight: $font-weight-semibold;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -147,8 +147,8 @@
         margin-bottom: $space-10;
 
         h2 {
-            font-size: $font-size-xl;
-            font-weight: 600;
+            font-size: $text-lg;
+            font-weight: $font-weight-semibold;
             margin-bottom: $space-2;
         }
 
@@ -161,7 +161,7 @@
                 padding: $space-1 $space-2;
                 border-radius: $radius-sm;
                 font-family: $font-mono;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
             }
         }
     }
@@ -218,13 +218,13 @@
 
         .platform-info {
             h3 {
-                font-size: $font-size-lg;
-                font-weight: 600;
+                font-size: $text-lg;
+                font-weight: $font-weight-semibold;
                 margin: 0 0 $space-1;
             }
 
             .platform-arch {
-                font-size: $font-size-sm;
+                font-size: $text-xs;
                 color: $text-secondary;
             }
         }
@@ -272,8 +272,8 @@
             }
 
             h3 {
-                font-size: $font-size-base;
-                font-weight: 600;
+                font-size: $text-base;
+                font-weight: $font-weight-semibold;
                 margin: 0;
             }
         }
@@ -286,7 +286,7 @@
         .command-note {
             padding: $space-3 $space-4;
             @include status-variant($warning, $warning-bg);
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             margin: 0;
             border-top: 1px solid $warning-border;
         }
@@ -316,8 +316,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            font-size: $font-size-sm;
+            font-weight: $font-weight-semibold;
+            font-size: $text-xs;
             color: $white;
         }
 
@@ -325,15 +325,15 @@
             flex: 1;
 
             h4 {
-                font-size: $font-size-base;
-                font-weight: 600;
+                font-size: $text-base;
+                font-weight: $font-weight-semibold;
                 margin: 0 0 $space-2;
             }
 
             p {
                 color: $text-secondary;
                 margin: 0 0 $space-2;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
 
                 &:last-child {
                     margin-bottom: 0;
@@ -344,14 +344,14 @@
                     padding: $space-1 $space-2;
                     border-radius: $radius-sm;
                     font-family: $font-mono;
-                    font-size: $font-size-xs;
+                    font-size: $text-xs;
                     color: $text-primary;
                 }
             }
 
             .step-note {
                 color: $text-tertiary;
-                font-size: $font-size-xs;
+                font-size: $text-xs;
                 font-style: italic;
             }
         }

@@ -195,7 +195,7 @@ const MetricsGraph = ({ compact = false, timezone, serverId }) => {
                                 </linearGradient>
                             </defs>
                             <XAxis dataKey="time" tick={false} axisLine={false} />
-                            <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} axisLine={false} tickLine={false} />
+                            <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
                             <Tooltip content={<CustomTooltip />} />
                             <Area
                                 type="monotone"
@@ -288,14 +288,14 @@ const MetricsGraph = ({ compact = false, timezone, serverId }) => {
                         <CartesianGrid strokeDasharray="3 3" stroke="#27272a" opacity={0.5} />
                         <XAxis
                             dataKey="time"
-                            tick={{ fontSize: 11, fill: '#a1a1aa' }}
+                            tick={{ fontSize: 12, fill: '#a1a1aa' }}
                             axisLine={{ stroke: '#27272a' }}
                             tickLine={false}
                             interval="preserveStartEnd"
                         />
                         <YAxis
                             domain={yDomain}
-                            tick={{ fontSize: 11, fill: '#a1a1aa' }}
+                            tick={{ fontSize: 12, fill: '#a1a1aa' }}
                             axisLine={{ stroke: '#27272a' }}
                             tickLine={false}
                             tickFormatter={(value) => `${value}%`}

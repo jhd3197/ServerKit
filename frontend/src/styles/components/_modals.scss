@@ -34,7 +34,7 @@
     border-bottom: 1px solid $border-subtle;
 
     h2 {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
     }
 }
@@ -43,7 +43,7 @@
     background: none;
     border: none;
     color: $text-tertiary;
-    font-size: $font-size-2xl;
+    font-size: $text-xl;
     cursor: pointer;
     line-height: 1;
     padding: $space-1;
@@ -108,21 +108,21 @@
 .app-type-icon {
     @include icon-box(48px);
     border-radius: $radius-xl;
-    font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
     color: white;
     margin: 0 auto $space-4;
 }
 
 .app-type-card h3 {
-    font-size: $font-size-base;
+    font-size: $text-base;
     font-weight: $font-weight-semibold;
     margin-bottom: $space-1;
     color: $text-primary;
 }
 
 .app-type-card p {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-tertiary;
     line-height: $line-height-normal;
 }
@@ -164,13 +164,13 @@
 }
 
 .confirm-dialog-title {
-    font-size: $font-size-lg;
+    font-size: $text-lg;
     font-weight: $font-weight-semibold;
     margin-bottom: $space-2;
 }
 
 .confirm-dialog-message {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
     line-height: $line-height-relaxed;
 }

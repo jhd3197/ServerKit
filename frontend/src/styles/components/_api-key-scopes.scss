@@ -39,17 +39,17 @@
 }
 
 .api-key-scopes__master-title {
-    font-weight: 600;
-    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    font-size: $text-xs;
 }
 
 .api-key-scopes__master-desc {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
 .api-key-scopes__loading {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
     margin: 0;
 }
@@ -75,11 +75,11 @@
 
 .api-key-scopes__group-title {
     margin: 0;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: $text-secondary;
-    font-weight: 600;
+    font-weight: $font-weight-semibold;
 }
 
 .api-key-scopes__item {
@@ -103,19 +103,19 @@
 }
 
 .api-key-scopes__item-label {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-primary;
-    font-weight: 500;
+    font-weight: $font-weight-medium;
 }
 
 .api-key-scopes__item-key {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
     font-family: $font-mono;
 }
 
 .api-key-scopes__item-desc {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 

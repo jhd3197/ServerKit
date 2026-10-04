@@ -66,7 +66,7 @@
     gap: $space-2;
     margin-bottom: $space-4;
     color: $text-secondary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -83,7 +83,7 @@
             border: none;
             background: transparent;
             color: $accent-primary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             cursor: pointer;
 
@@ -120,7 +120,7 @@
     border-radius: $radius-xl;
     background: transparent;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     text-align: left;
     cursor: pointer;
     transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
@@ -144,7 +144,7 @@
         border-radius: $radius-full;
         background: $bg-secondary;
         color: $text-secondary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 
@@ -178,7 +178,7 @@
 
     small {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         text-transform: lowercase;
     }
 
@@ -196,7 +196,7 @@
     border-radius: $radius-full;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    font-size: 10px;
+    font-size: $text-xs;
     color: $text-tertiary;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -228,8 +228,8 @@
     span {
         color: $accent-primary;
         font-family: $font-mono;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-bold;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         letter-spacing: 0.16em;
         text-transform: uppercase;
     }
@@ -237,14 +237,14 @@
     h1 {
         margin: 0;
         color: $text-primary;
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         letter-spacing: -0.02em;
     }
 
     em {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-style: normal;
     }
 }
@@ -293,12 +293,12 @@
     align-items: center;
     gap: $space-2;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     strong {
         color: $text-primary;
-        font-size: $font-size-lg;
-        font-weight: $font-weight-bold;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
     }
 }
 
@@ -307,7 +307,7 @@
     border: none;
     background: transparent;
     color: $accent-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     cursor: pointer;
 
     &:hover {
@@ -331,14 +331,14 @@
     td {
         padding: $space-3 $space-4;
         text-align: left;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         border-bottom: 1px solid $border-subtle;
     }
 
     th {
         color: $text-tertiary;
         font-weight: $font-weight-semibold;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         letter-spacing: 0.05em;
         text-transform: uppercase;
         background: $bg-secondary;
@@ -381,7 +381,7 @@
 
 .queue-row-sub {
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-family: $font-mono;
 }
 
@@ -390,7 +390,7 @@
     align-items: center;
     gap: $space-1;
     color: $text-secondary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
 
     svg {
         color: $text-tertiary;
@@ -439,7 +439,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
 }
 
 .queue-send-destination {
@@ -455,7 +455,7 @@
         background: $bg-secondary;
         color: $text-primary;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -470,7 +470,7 @@
         border-radius: $radius-lg;
         padding: $space-3;
         overflow: auto;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         max-height: 300px;
     }
 }
@@ -489,7 +489,7 @@
 .modal-header-sub {
     display: block;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-family: $font-mono;
 }
 
@@ -513,7 +513,7 @@
     border: none;
     background: transparent;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     cursor: pointer;
 
@@ -564,7 +564,7 @@
     background: $bg-elevated;
     border: 1px solid $border-subtle;
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -615,8 +615,8 @@
 
     h2 {
         margin: 0;
-        font-size: $font-size-lg;
-        font-weight: $font-weight-bold;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 }

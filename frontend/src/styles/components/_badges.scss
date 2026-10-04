@@ -44,7 +44,7 @@
     padding: 5px $space-3;
     border-radius: $radius-md;
     font-weight: $font-weight-semibold;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     letter-spacing: 0.5px;
     text-transform: uppercase;
 }
@@ -57,7 +57,7 @@
     @include status-variant($success, $success-bg);
     padding: 6px $space-3;
     border-radius: $radius-md;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
 }
 
@@ -66,7 +66,7 @@
     @include status-variant($success, $success-bg);
     padding: $space-1 $space-3;
     border-radius: $radius-full;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
 }
 
@@ -78,7 +78,7 @@
     background: $bg-hover;
     padding: 5px $space-3;
     border-radius: $radius-md;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -98,7 +98,7 @@
     color: $accent-primary;
     padding: $space-1 - 2 $space-2;
     border-radius: $radius-sm;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -121,7 +121,7 @@
     gap: $space-1;
     padding: 5px $space-3;
     border-radius: $radius-md;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     text-transform: uppercase;
     letter-spacing: 0.3px;
@@ -160,7 +160,7 @@
     white-space: nowrap;
     padding: 2px 8px;
     border-radius: $radius-sm;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     text-transform: uppercase;
     font-weight: $font-weight-semibold;
     letter-spacing: 0.5px;
@@ -203,7 +203,7 @@
     padding: 4px $space-2;
     border: 1px solid transparent;
     border-radius: $radius-md;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     line-height: 1;
     letter-spacing: 0;

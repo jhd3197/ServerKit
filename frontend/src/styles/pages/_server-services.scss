@@ -18,7 +18,7 @@
     &__table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 13px;
+        font-size: $text-sm;
 
         th, td {
             padding: 11px 12px;
@@ -28,8 +28,8 @@
 
         th {
             font-family: var(--mono);
-            font-size: 10.5px;
-            font-weight: 600;
+            font-size: $text-xs;
+            font-weight: $font-weight-semibold;
             letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--text-faint);
@@ -52,14 +52,14 @@
 
         .mono {
             font-family: var(--mono);
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text);
         }
     }
 
     &__desc {
         color: var(--text-dim);
-        font-size: 12.5px;
+        font-size: $text-sm;
         max-width: 360px;
         overflow: hidden;
         text-overflow: ellipsis;

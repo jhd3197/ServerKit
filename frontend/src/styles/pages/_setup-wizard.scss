@@ -32,8 +32,8 @@
     }
 
     h1 {
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         margin-bottom: $space-2;
     }
 
@@ -58,7 +58,7 @@
     width: 32px;
     height: 32px;
     border-radius: $radius-full;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     border: 2px solid $border-default;
     color: $text-tertiary;
@@ -108,14 +108,14 @@
 }
 
 .wizard-step-title {
-    font-size: $font-size-lg;
+    font-size: $text-lg;
     font-weight: $font-weight-semibold;
     margin-bottom: $space-2;
 }
 
 .wizard-step-description {
     color: $text-secondary;
-    font-size: $font-size-base;
+    font-size: $text-base;
     margin-bottom: $space-6;
 }
 
@@ -163,11 +163,11 @@
 
     .option-card-label {
         font-weight: $font-weight-semibold;
-        font-size: $font-size-base;
+        font-size: $text-base;
     }
 
     .option-card-desc {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: $line-height-normal;
     }
@@ -229,12 +229,12 @@
     }
 
     .tier-card-name {
-        font-weight: $font-weight-bold;
-        font-size: $font-size-md;
+        font-weight: $font-weight-semibold;
+        font-size: $text-md;
     }
 
     .tier-card-badge {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         padding: 2px 8px;
         background: $accent-primary;
         color: #fff;
@@ -243,7 +243,7 @@
     }
 
     .tier-card-specs {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         margin-bottom: $space-4;
         padding-bottom: $space-4;
@@ -261,7 +261,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         .feature-icon {
             flex-shrink: 0;
@@ -313,7 +313,7 @@
     border-radius: $radius-xl;
 
     &__summary {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         line-height: $line-height-tight;
@@ -331,7 +331,7 @@
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 
     &--muted {
@@ -352,7 +352,7 @@
 
     code {
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         padding: 1px 5px;
         background: $bg-tertiary;
         border-radius: $radius-sm;
@@ -364,7 +364,7 @@
     }
 
     .tier-warning-text {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: $line-height-normal;
     }
@@ -394,7 +394,7 @@
     }
 
     &__desc {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: $line-height-normal;
         margin: 0;
@@ -433,7 +433,7 @@
     }
 
     &__manual-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         margin-bottom: $space-2;
     }
@@ -444,7 +444,7 @@
 
     &__input {
         font-family: $font-mono;
-        font-size: $font-size-xl;
+        font-size: $text-lg;
         letter-spacing: 8px;
         text-align: center;
         max-width: 220px;
@@ -467,7 +467,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $success;
     }
 }
@@ -492,7 +492,7 @@
 }
 
 .summary-section-title {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
     text-transform: uppercase;
@@ -508,12 +508,12 @@
 
     .summary-label {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .summary-value {
         font-weight: $font-weight-medium;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     // Sidebar-profile row: label, item count, and the "Change" toggle that
@@ -536,7 +536,7 @@
     padding: 0;
     cursor: pointer;
     color: $primary-color;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
 
     &:hover {
@@ -582,13 +582,13 @@
         justify-content: space-between;
         gap: $space-2;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
     }
 
     &__desc {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.4;
     }
 }
@@ -606,7 +606,7 @@
     background: fade($accent-primary-raw, 12%);
     color: $accent-primary;
     border-radius: $radius-full;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
 }
 
@@ -624,7 +624,7 @@
     background: $bg-secondary;
     border: 1px solid $border-default;
     border-radius: $radius-lg;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-primary;
 }
 
@@ -633,7 +633,7 @@
 // --------------------------------------------
 .recommendation-hint {
     margin: 0 0 $space-3;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
@@ -672,13 +672,13 @@
     }
 
     &__name {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
     }
 
     &__desc {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -689,7 +689,7 @@
     }
 
     &__status {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         flex-shrink: 0;
 
         &--installed {
@@ -710,7 +710,7 @@
 
 .recommendation-error {
     margin: $space-3 0 0;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $danger-color;
 
     a {
@@ -796,7 +796,7 @@
 
     p {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: $line-height-normal;
     }

@@ -24,7 +24,7 @@
 
     p {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: 1.5;
     }
@@ -39,7 +39,7 @@
     padding-top: $space-6;
     border-top: 1px solid $border-default;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     svg {
         color: $success;
@@ -59,14 +59,14 @@
         .tab-header-content {
             h3 {
                 margin: 0 0 $space-1 0;
-                font-size: $font-size-lg;
-                font-weight: 600;
+                font-size: $text-lg;
+                font-weight: $font-weight-semibold;
             }
 
             p {
                 margin: 0;
                 color: $text-secondary;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
             }
         }
     }
@@ -95,8 +95,8 @@
 
     th {
         background: $bg-hover;
-        font-weight: 500;
-        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        font-size: $text-xs;
         color: $text-secondary;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -133,8 +133,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 600;
-        font-size: $font-size-md;
+        font-weight: $font-weight-semibold;
+        font-size: $text-md;
         flex-shrink: 0;
     }
 
@@ -144,25 +144,25 @@
         gap: 2px;
 
         .username {
-            font-weight: 500;
+            font-weight: $font-weight-medium;
             display: flex;
             align-items: center;
             gap: $space-2;
         }
 
         .email {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
         }
     }
 
     .you-badge {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         padding: 2px 6px;
         background: $accent-primary;
         color: #fff;
         border-radius: $radius-sm;
-        font-weight: 500;
+        font-weight: $font-weight-medium;
     }
 
     .status-badge {
@@ -170,8 +170,8 @@
         align-items: center;
         padding: 4px 10px;
         border-radius: $radius-full;
-        font-size: $font-size-xs;
-        font-weight: 500;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
 
         &.active {
             background: fade($success-raw, 15%);
@@ -185,7 +185,7 @@
     }
 
     .date-cell {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         white-space: nowrap;
     }
@@ -203,7 +203,7 @@
 .form-help {
     display: block;
     margin-top: $space-1;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -215,8 +215,8 @@
 
     h4 {
         margin: 0 0 $space-4 0;
-        font-size: $font-size-sm;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         color: $text-secondary;
     }
 
@@ -230,13 +230,13 @@
         }
 
         .role-name {
-            font-weight: 500;
+            font-weight: $font-weight-medium;
             min-width: 80px;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
 
         .role-desc {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
         }
     }
@@ -251,14 +251,14 @@
 
         h3 {
             margin: 0 0 $space-1 0;
-            font-size: $font-size-lg;
-            font-weight: 600;
+            font-size: $text-lg;
+            font-weight: $font-weight-semibold;
         }
 
         p {
             margin: 0;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 }
@@ -277,7 +277,7 @@
     border-top: 1px solid $border-default;
 
     .pagination-info {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -289,7 +289,7 @@
     padding: $space-3 $space-3 $space-1;
     margin-top: $space-3;
     font-family: var(--mono);
-    font-size: 0.62rem;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
     text-transform: uppercase;
@@ -348,8 +348,8 @@
     gap: $space-2;
     padding: $space-2 $space-4;
     background: $bg-hover;
-    font-size: $font-size-xs;
-    font-weight: 600;
+    font-size: $text-xs;
+    font-weight: $font-weight-semibold;
     color: $text-secondary;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -371,8 +371,8 @@
 
 .permission-group-label {
     padding: $space-2 $space-4;
-    font-size: $font-size-xs;
-    font-weight: 600;
+    font-size: $text-xs;
+    font-weight: $font-weight-semibold;
     color: $text-tertiary;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -392,7 +392,7 @@
 }
 
 .permission-feature-name {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .customize-permissions-section {
@@ -424,14 +424,14 @@
         .tab-header-content {
             h4 {
                 margin: 0 0 $space-1 0;
-                font-size: $font-size-md;
-                font-weight: 600;
+                font-size: $text-md;
+                font-weight: $font-weight-semibold;
             }
 
             p {
                 margin: 0;
                 color: $text-secondary;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
             }
         }
     }
@@ -442,8 +442,8 @@
     align-items: center;
     padding: 3px 8px;
     border-radius: $radius-full;
-    font-size: $font-size-xs;
-    font-weight: 500;
+    font-size: $text-xs;
+    font-weight: $font-weight-medium;
     text-transform: capitalize;
 
     &.pending {
@@ -476,15 +476,15 @@
 
         h3 {
             margin: 0 0 $space-1 0;
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: $text-xl;
+            font-weight: $font-weight-semibold;
             color: $text-primary;
         }
 
         p {
             margin: 0;
             color: $text-secondary;
-            font-size: $font-size-md;
+            font-size: $text-md;
         }
     }
 }
@@ -500,7 +500,7 @@
     padding-bottom: $space-5;
     border-bottom: 1px solid $border-subtle;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     &__item {
         display: inline-flex;
@@ -510,7 +510,7 @@
 
     &__value {
         font-family: $font-mono;
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         font-variant-numeric: tabular-nums;
@@ -527,8 +527,8 @@
 
     h4 {
         margin: 0 0 $space-6 0;
-        font-size: $font-size-lg;
-        font-weight: 600;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 }
@@ -552,8 +552,8 @@
         justify-content: center;
         background: $bg-hover;
         border-radius: 50%;
-        font-weight: 700;
-        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -565,8 +565,8 @@
     }
 
     .active-user-name {
-        font-size: $font-size-sm;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
@@ -585,8 +585,8 @@
     }
 
     .active-user-count {
-        font-size: $font-size-sm;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         color: $text-secondary;
         white-space: nowrap;
     }
@@ -603,8 +603,8 @@
 
         h4 {
             margin: 0;
-            font-size: $font-size-lg;
-            font-weight: 600;
+            font-size: $text-lg;
+            font-weight: $font-weight-semibold;
             color: $text-primary;
         }
     }
@@ -630,8 +630,8 @@
             display: flex;
             align-items: center;
             gap: $space-2;
-            font-size: $font-size-xs;
-            font-weight: 600;
+            font-size: $text-xs;
+            font-weight: $font-weight-semibold;
             color: $text-tertiary;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -644,7 +644,7 @@
             background: $bg-card;
             border: 1px solid $border-default;
             border-radius: $radius-md;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-primary;
             cursor: pointer;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -692,7 +692,7 @@
     gap: $space-2 $space-3;
     padding: $space-2 $space-4;
     border-bottom: 1px solid $border-subtle;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     transition: background-color $transition-fast;
 
     &:last-child { border-bottom: none; }
@@ -720,7 +720,7 @@
         flex-shrink: 0;
         width: 124px;
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
@@ -752,7 +752,7 @@
         gap: $space-1 $space-3;
         min-width: 0;
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -793,7 +793,7 @@
 
         // The caption only: a bare `span` also matched the Select's value.
         > span {
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-secondary;
         }
 
@@ -806,7 +806,7 @@
             border: 1px solid $border-default;
             border-radius: $radius-md;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -815,14 +815,14 @@
         align-items: center;
         gap: $space-2;
         padding-bottom: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         cursor: pointer;
     }
 
     &__note {
         margin-top: $space-2;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -835,8 +835,8 @@
 
         &-title {
             margin: 0 0 $space-2;
-            font-size: $font-size-sm;
-            font-weight: 600;
+            font-size: $text-xs;
+            font-weight: $font-weight-semibold;
         }
     }
 
@@ -861,13 +861,13 @@
     }
 
     &__item-user {
-        font-size: $font-size-sm;
-        font-weight: 500;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         margin-right: $space-2;
     }
 
     &__item-meta {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 }

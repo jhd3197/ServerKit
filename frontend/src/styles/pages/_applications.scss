@@ -85,7 +85,7 @@
         border: none;
         padding: 7px 0;
         color: var(--text);
-        font-size: 13px;
+        font-size: $text-sm;
         outline: none;
         box-shadow: none;
         min-width: 0;
@@ -117,8 +117,8 @@
     place-items: center;
     flex-shrink: 0;
     font-family: var(--mono);
-    font-size: 14px;
-    font-weight: $font-weight-bold;
+    font-size: $text-base;
+    font-weight: $font-weight-semibold;
 }
 
 // Mono type chip (brand colors via inline style props)
@@ -126,7 +126,7 @@
     display: inline-flex;
     align-items: center;
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -141,7 +141,7 @@
     flex-direction: column;
     gap: 3px;
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: $text-xs;
 
     a {
         display: inline-flex;
@@ -163,7 +163,7 @@
 
 .apps-none {
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: $text-xs;
     color: var(--text-ghost);
 }
 
@@ -185,7 +185,7 @@
     &__label {
         width: 28px;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.05em;
         text-transform: uppercase;
@@ -196,7 +196,7 @@
     &__val {
         width: 36px;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-dim);
         text-align: right;
         flex-shrink: 0;
@@ -262,7 +262,7 @@
         border-radius: 8px;
         padding: 6px 10px;
         color: var(--text);
-        font-size: 13px;
+        font-size: $text-sm;
         cursor: pointer;
 
         &:focus {
@@ -277,7 +277,7 @@
         border-radius: var(--radius);
         color: var(--text-code);
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
     }
 }
 
@@ -288,7 +288,7 @@
 // Used by components/LinkAppModal.jsx
 .app-type-badge {
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -299,7 +299,7 @@
 
 // Used by pages/Firewall.jsx
 .port-status {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     margin-left: $space-2;
 
     &.accessible {
@@ -316,7 +316,7 @@
     text-align: center;
     padding: $space-6;
     color: var(--text-faint);
-    font-size: 13px;
+    font-size: $text-sm;
 }
 
 // Icon-only button (legacy global utility; LinkedAppsSection consumes it)
@@ -355,7 +355,7 @@
     align-items: center;
     gap: $space-2;
     font-family: var(--mono);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: var(--text-faint);
 
     a {
@@ -405,8 +405,8 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
     color: #fff;
 
     img {
@@ -431,7 +431,7 @@
         gap: 11px;
         flex-wrap: wrap;
         margin: 0;
-        font-size: 21px;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         letter-spacing: -0.02em;
         color: var(--text);
@@ -451,7 +451,7 @@
     flex-wrap: wrap;
     margin-top: 4px;
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: $text-xs;
     color: var(--text-dim);
 
     a {
@@ -477,8 +477,8 @@
     padding: 3px 9px;
     border-radius: 6px;
     font-family: var(--mono);
-    font-size: 11.5px;
-    font-weight: 500;
+    font-size: $text-xs;
+    font-weight: $font-weight-medium;
     letter-spacing: 0.02em;
     white-space: nowrap;
 
@@ -546,7 +546,7 @@
     border: none;
     border-radius: 7px;
     color: var(--text-dim);
-    font-size: 13px;
+    font-size: $text-sm;
     font-weight: $font-weight-medium;
     cursor: pointer;
     white-space: nowrap;
@@ -624,7 +624,7 @@
     padding: 12px 17px;
     border-bottom: 1px solid var(--border-soft);
     font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -675,7 +675,7 @@
 
 .app-panel-hint {
     margin: 0 0 $space-3;
-    font-size: 13px;
+    font-size: $text-sm;
     line-height: 1.5;
     color: var(--text-dim);
 
@@ -688,7 +688,7 @@
 .app-path-value {
     display: inline-block;
     font-family: var(--mono);
-    font-size: 11.5px;
+    font-size: $text-xs;
     color: var(--text-dim);
     background: var(--surface-2);
     border: 1px solid var(--border-soft);
@@ -700,7 +700,7 @@
 // Port reachability hint inside the info value
 .port-indicator {
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
     color: var(--red);
 
     &.accessible {
@@ -728,7 +728,7 @@
         margin-bottom: 0;
         border-radius: 8px;
         color: var(--text-dim);
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-normal;
 
         &:hover {
@@ -751,7 +751,7 @@
         gap: 6px;
         margin: 0 0 $space-3;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -768,7 +768,7 @@
             gap: 6px;
             margin: 0;
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -790,7 +790,7 @@
             gap: 6px;
             margin: 0 0 $space-3;
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -798,7 +798,7 @@
         }
 
         h4 {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text);
         }
@@ -835,13 +835,13 @@
 
     .info-label {
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .info-value {
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text);
         overflow-wrap: anywhere;
         text-align: right;
@@ -850,13 +850,13 @@
     // ---- Build auto-detection grid ----
     .detection-label {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         letter-spacing: 0.06em;
         color: var(--text-faint);
     }
 
     .detection-value {
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-medium;
         color: var(--text);
     }
@@ -900,7 +900,7 @@
 
     .deployment-version {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         @include status-variant(var(--accent-bright), var(--accent-bg));
         padding: 2px 7px;
         border-radius: 5px;
@@ -911,13 +911,13 @@
         align-items: center;
         gap: $space-3;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .deployment-date {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -946,7 +946,7 @@
 
         a {
             font-family: var(--mono);
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--accent-bright);
             text-decoration: none;
             overflow-wrap: anywhere;
@@ -959,7 +959,7 @@
 
     .ssl-badge {
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.05em;
         text-transform: uppercase;
@@ -987,13 +987,13 @@
     }
 
     .resource-bar-label {
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
     .resource-bar-value {
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
@@ -1023,7 +1023,7 @@
     .resource-hint {
         margin: $space-3 0 0;
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -1051,8 +1051,8 @@
         place-items: center;
         border-radius: 8px;
         font-family: var(--mono);
-        font-size: 14px;
-        font-weight: $font-weight-bold;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
         flex-shrink: 0;
 
         &.healthy {
@@ -1069,7 +1069,7 @@
 
         h4 {
             margin: 0;
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-semibold;
             color: var(--text);
         }
@@ -1077,7 +1077,7 @@
         p {
             margin: 2px 0 0;
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-dim);
         }
     }
@@ -1085,7 +1085,7 @@
     .diag-issues {
         margin: $space-3 0 0;
         padding-left: $space-5;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--red);
 
         li {
@@ -1122,13 +1122,13 @@
 
     .package-name {
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--accent-bright);
     }
 
     .package-version {
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -1142,7 +1142,7 @@
         border-color: var(--border-soft);
         color: var(--text-code);
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .command-output {
@@ -1152,7 +1152,7 @@
 
         pre {
             color: var(--text-code);
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
 
         &.error {
@@ -1170,7 +1170,7 @@
         border-radius: var(--radius);
         color: var(--text-code);
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
     }
 
     // ---- Logs tab chrome ----
@@ -1188,7 +1188,7 @@
             gap: 6px;
             margin: 0;
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -1204,7 +1204,7 @@
         .hint {
             margin: 0;
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -1213,7 +1213,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-dim);
         cursor: pointer;
         white-space: nowrap;
@@ -1226,7 +1226,7 @@
     // ---- Config modals (Build / Deploy) — mono eyebrow field labels ----
     .modal .form-group > label:not(.checkbox-label) {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.06em;
         text-transform: uppercase;
@@ -1298,7 +1298,7 @@
     }
 
     &__field-hint {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
         line-height: 1.4;
     }
@@ -1316,7 +1316,7 @@
         border-radius: $radius-md;
         background: var(--surface-2, var(--bg-card));
         color: var(--text-strong, inherit);
-        font-size: 13px;
+        font-size: $text-sm;
 
         &:focus {
             outline: none;
@@ -1346,7 +1346,7 @@
         gap: 6px;
 
         label {
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--text-dim);
         }
     }
@@ -1373,7 +1373,7 @@
 
 .app-volumes {
     &__empty {
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-faint);
         padding: $space-3 0;
     }
@@ -1394,7 +1394,7 @@
 
         &--head {
             border-top: none;
-            font-size: 12px;
+            font-size: $text-xs;
             text-transform: uppercase;
             letter-spacing: 0.04em;
             color: var(--text-faint);
@@ -1408,7 +1408,7 @@
 
     &__cell {
         min-width: 0;
-        font-size: 13px;
+        font-size: $text-sm;
 
         &--name {
             display: flex;
@@ -1419,7 +1419,7 @@
 
     &__mono {
         font-family: $font-mono, monospace;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
         word-break: break-all;
     }
@@ -1448,7 +1448,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -1474,7 +1474,7 @@
         align-items: center;
         gap: 6px;
         margin-top: $spacing-md;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -1511,7 +1511,7 @@
         min-width: 0;
 
         span {
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--text-dim);
             line-height: 1.4;
         }
@@ -1529,7 +1529,7 @@
     }
 
     &__mode-hint {
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
         line-height: 1.4;
     }
@@ -1570,7 +1570,7 @@
         border: 1px solid var(--border-soft);
         border-radius: $radius-full;
         background: var(--surface-2, var(--bg-card));
-        font-size: 12.5px;
+        font-size: $text-sm;
     }
 
     &__chip-remove {
@@ -1600,7 +1600,7 @@
     &__table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 13px;
+        font-size: $text-sm;
 
         th,
         td {
@@ -1611,8 +1611,8 @@
         }
 
         th {
-            font-size: 11.5px;
-            font-weight: 600;
+            font-size: $text-xs;
+            font-weight: $font-weight-semibold;
             text-transform: uppercase;
             letter-spacing: 0.04em;
             color: var(--text-faint);

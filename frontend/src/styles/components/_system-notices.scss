@@ -18,7 +18,7 @@
     padding: $space-3 $space-4;
     border-radius: $radius-md;
     border: 1px solid transparent;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     line-height: 1.5;
     background: $bg-card;
 
@@ -53,7 +53,7 @@
         height: auto;
         min-width: 0;
         padding: $space-1 $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         gap: $space-1;
     }
 

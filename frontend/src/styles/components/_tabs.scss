@@ -32,7 +32,7 @@
     border: none;
     padding: $space-3 $space-5;
     color: $text-secondary;
-    font-size: $font-size-base;
+    font-size: $text-base;
     font-weight: $font-weight-medium;
     cursor: pointer;
     border-bottom: 2px solid transparent;
@@ -91,7 +91,7 @@
     background: none;
     border: none;
     color: $text-secondary;
-    font-size: $font-size-base;
+    font-size: $text-base;
     font-weight: $font-weight-medium;
     text-align: left;
     cursor: pointer;
@@ -140,7 +140,7 @@ display: inline-flex;
     background: transparent;
     border: none;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     padding: $space-3 $space-4;
     cursor: pointer;

@@ -17,7 +17,7 @@
         min-width: 0;
         margin: 0;
         color: var(--text-secondary);
-        font-size: 13px;
+        font-size: $text-sm;
         line-height: 1.55;
         max-width: 640px;
     }
@@ -41,7 +41,7 @@
             outline: none;
             background: transparent;
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: $text-sm;
         }
     }
 
@@ -79,7 +79,7 @@
     &__source {
         margin-top: $spacing-md;
         text-align: center;
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-ghost);
     }
 }
@@ -117,15 +117,15 @@
     }
 
     &__name {
-        font-weight: 600;
-        font-size: 14px;
+        font-weight: $font-weight-semibold;
+        font-size: $text-base;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
     &__meta {
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-tertiary);
         margin-top: 1px;
     }
@@ -136,7 +136,7 @@
 
     &__desc {
         margin: 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         line-height: 1.5;
         color: var(--text-secondary);
         // Two-line clamp keeps every card the same height.
@@ -155,7 +155,7 @@
             padding: 2px 8px;
             border-radius: $radius-sm;
             border: 1px solid var(--border-color);
-            font-size: 10.5px;
+            font-size: $text-xs;
             color: var(--text-tertiary);
 
             &.is-hard {
@@ -176,7 +176,7 @@
     &__steps {
         flex: 1;
         min-width: 0;
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-ghost);
     }
 }
@@ -188,14 +188,14 @@
 
     .form-label {
         display: block;
-        font-size: 12.5px;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         margin-bottom: 6px;
     }
 
     .form-hint {
         margin: 4px 0 0;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-tertiary);
     }
 
@@ -207,7 +207,7 @@
         border-radius: $radius-md;
         background: var(--bg-input, var(--bg-card));
         color: var(--text-primary);
-        font-size: 13px;
+        font-size: $text-sm;
     }
 
     &__servers {
@@ -255,19 +255,19 @@
     &__srvname {
         flex: 1;
         min-width: 0;
-        font-size: 13px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
     }
 
     &__srvspec {
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-tertiary);
     }
 
     &__nosrv {
         margin: 0;
         padding: 12px;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-tertiary);
     }
 
@@ -278,7 +278,7 @@
 
     &__blocked {
         margin: 8px 0 0;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--red);
     }
 
@@ -301,7 +301,7 @@
     gap: 8px;
     padding: 8px 12px;
     border-bottom: 1px solid var(--border-color);
-    font-size: 12.5px;
+    font-size: $text-sm;
 
     &:last-child { border-bottom: none; }
 
@@ -315,7 +315,7 @@
 
     &__need,
     &__have {
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-tertiary);
         min-width: 64px;
         text-align: end;
@@ -328,7 +328,7 @@
     gap: 8px;
     padding: 8px 12px;
     border-bottom: 1px solid var(--border-color);
-    font-size: 12.5px;
+    font-size: $text-sm;
 
     &:last-child { border-bottom: none; }
 
@@ -337,7 +337,7 @@
     &__k { flex: 1; min-width: 0; }
 
     &__url {
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--primary-color);
     }
 }

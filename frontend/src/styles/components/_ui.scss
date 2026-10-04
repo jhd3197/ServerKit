@@ -20,7 +20,7 @@
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     font-weight: $font-weight-medium;
     line-height: 1;
     color: $text-secondary;
@@ -45,7 +45,7 @@
     border-radius: $radius-lg;
     color: $text-primary;
     font-family: inherit;
-    font-size: $font-size-base;
+    font-size: $text-base;
     line-height: 1.5;
     @include transition(border-color);
 
@@ -84,7 +84,7 @@
         border: none;
         color: $text-primary;
         font-weight: $font-weight-medium;
-        font-size: $font-size-sm + 1;
+        font-size: $text-sm;
         cursor: pointer;
     }
 }
@@ -204,7 +204,7 @@
 }
 
 .ui-card-title {
-    font-size: $font-size-md;
+    font-size: $text-md;
     font-weight: $font-weight-semibold;
     line-height: 1.2;
     color: $text-primary;
@@ -212,7 +212,7 @@
 }
 
 .ui-card-description {
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     color: $text-tertiary;
     line-height: 1.45;
     margin: 0;
@@ -244,7 +244,7 @@
     width: 100%;
     caption-side: bottom;
     border-collapse: collapse;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
 }
 
 .ui-table-header tr {
@@ -284,7 +284,7 @@
     vertical-align: middle;
     color: $text-tertiary;
     font-weight: $font-weight-medium;
-    font-size: $font-size-xs + 1;
+    font-size: $text-xs;
 }
 
 .ui-table-cell {
@@ -296,7 +296,7 @@
 .ui-table-caption {
     margin-top: $space-4;
     color: $text-tertiary;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
 }
 
 // --------------------------------------------
@@ -389,7 +389,7 @@
 }
 
 .ui-dialog-title {
-    font-size: $font-size-lg;
+    font-size: $text-lg;
     font-weight: $font-weight-semibold;
     line-height: 1.2;
     color: $text-primary;
@@ -397,7 +397,7 @@
 }
 
 .ui-dialog-description {
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     color: $text-tertiary;
     line-height: 1.5;
     margin: 0;
@@ -517,7 +517,7 @@
         padding-block: 0;
         padding-inline: $space-2;
         gap: $space-1;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         .ui-select-icon { width: 14px; height: 14px; }
     }
@@ -551,7 +551,7 @@
 
 .ui-select-label {
     padding: $space-1 + 2 $space-2;
-    font-size: $font-size-xs + 1;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
     text-transform: uppercase;
@@ -565,7 +565,7 @@
     width: 100%;
     padding: $space-2 $space-2 $space-2 $space-8;
     border-radius: $radius-md;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     color: $text-primary;
     cursor: default;
     user-select: none;
@@ -665,7 +665,7 @@
     gap: $space-2;
     padding: $space-1 + 2 $space-2; // 6px 8px
     border-radius: $radius-sm;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     color: $text-primary;
     cursor: default;
     user-select: none;
@@ -714,7 +714,7 @@
 
 .ui-dropdown-label {
     padding: $space-1 + 2 $space-2;
-    font-size: $font-size-xs + 1;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
 
@@ -729,7 +729,7 @@
 
 .ui-dropdown-shortcut {
     margin-left: auto;
-    font-size: $font-size-xs + 1;
+    font-size: $text-xs;
     letter-spacing: 0.1em;
     opacity: 0.6;
 }
@@ -776,7 +776,7 @@
     outline: none;
     color: $text-primary;
     font-family: inherit;
-    font-size: $font-size-base;
+    font-size: $text-base;
 
     &::placeholder { color: $text-tertiary; }
 
@@ -796,7 +796,7 @@
 .ui-command-empty {
     padding: $space-6 0;
     text-align: center;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     color: $text-tertiary;
 }
 
@@ -807,7 +807,7 @@
 
     [cmdk-group-heading] {
         padding: $space-1 + 2 $space-2;
-        font-size: $font-size-xs + 1;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
     }
@@ -826,7 +826,7 @@
     gap: $space-2;
     padding: $space-1 + 2 $space-2;
     border-radius: $radius-sm;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     color: $text-primary;
     cursor: default;
     user-select: none;
@@ -853,7 +853,7 @@
 
 .ui-command-shortcut {
     margin-left: auto;
-    font-size: $font-size-xs + 1;
+    font-size: $text-xs;
     letter-spacing: 0.1em;
     color: $text-tertiary;
 }
@@ -884,7 +884,7 @@
 
     .form-group > label:not(.checkbox-label) {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -895,7 +895,7 @@
         display: block;
         margin-top: $space-2;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -913,7 +913,7 @@
 .sk-modal__subtitle {
     margin: 0 0 $space-4;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     line-height: 1.5;
 }
 
@@ -993,7 +993,7 @@
 
 .sk-confirm__details {
     margin: $space-1 + 2 0 0;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     color: $text-tertiary;
 }
 

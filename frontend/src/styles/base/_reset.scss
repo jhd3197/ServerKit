@@ -22,7 +22,7 @@
 }
 
 html {
-    font-size: 16px;
+    font-size: $text-md;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -31,7 +31,7 @@ body {
     background-color: $bg-body;
     color: $text-primary;
     font-family: $font-main;
-    font-size: $font-size-base;
+    font-size: $text-base;
     line-height: $line-height-normal;
     min-height: 100vh;
 }

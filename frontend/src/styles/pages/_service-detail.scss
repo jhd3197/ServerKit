@@ -83,7 +83,7 @@
             .ui-button {
                 height: 32px;
                 padding: 0 10px;
-                font-size: 12.5px;
+                font-size: $text-sm;
                 gap: 6px;
             }
         }
@@ -98,7 +98,7 @@
     // Service-type tag (brand colors arrive via inline style props)
     &__type-badge {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.06em;
         text-transform: uppercase;
@@ -138,7 +138,7 @@
             background: none;
             border: none;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             cursor: pointer;
             border-radius: $radius-md;
             text-decoration: none;
@@ -184,7 +184,7 @@
         border: 1px solid var(--border);
         border-radius: $radius-full;
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-dim);
         cursor: pointer;
         transition: border-color $transition-fast, background $transition-fast;
@@ -207,7 +207,7 @@
     }
 
     &__repo-url {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
     }
 
@@ -216,14 +216,14 @@
     }
 
     &__repo-branch {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--accent-bright);
         font-weight: $font-weight-medium;
     }
 
     &__auto-deploy-badge {
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.05em;
         text-transform: uppercase;
@@ -240,7 +240,7 @@
         background: none;
         border: 1px dashed var(--border-strong);
         border-radius: $radius-full;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-faint);
         cursor: pointer;
         transition: all $transition-fast;
@@ -268,7 +268,7 @@
 
         h3 {
             margin: 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-primary);
         }
@@ -283,7 +283,7 @@
         border: 1px solid var(--accent-dim);
         border-radius: $radius-md;
         color: var(--accent-bright);
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         cursor: pointer;
         transition: background $transition-fast;
@@ -323,7 +323,7 @@
 
     &__version-name {
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-primary);
     }
@@ -331,7 +331,7 @@
     &__version-date {
         margin-left: auto;
         color: var(--text-faint);
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &__version-current {
@@ -340,7 +340,7 @@
         border: 1px solid rgba(61, 220, 151, 0.2);
         border-radius: $radius-full;
         color: var(--green);
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
     }
 
@@ -364,7 +364,7 @@
         border-color: var(--border-soft);
         color: var(--text-code);
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .command-output {
@@ -374,7 +374,7 @@
 
         pre {
             color: var(--text-code);
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
 
         &.error {
@@ -400,7 +400,7 @@ h3.svc-eyebrow {
     gap: 6px;
     margin: 0;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -439,7 +439,7 @@ h3.svc-eyebrow {
 // SHELL TAB — console re-tinted to tokens
 // ============================================
 .shell-tab {
-    &__container-select { font-size: $font-size-sm; }
+    &__container-select { font-size: $text-xs; }
 
     &__container {
         border: 1px solid var(--border-soft);
@@ -458,7 +458,7 @@ h3.svc-eyebrow {
 
     &__title {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -470,7 +470,7 @@ h3.svc-eyebrow {
         padding: $space-4;
         min-height: 400px;
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-code);
         overflow-y: auto;
         max-height: 600px;
@@ -506,7 +506,7 @@ h3.svc-eyebrow {
     &__prompt {
         color: var(--accent-bright);
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         flex-shrink: 0;
     }
 
@@ -516,7 +516,7 @@ h3.svc-eyebrow {
         border: none;
         color: $text-primary;
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         outline: none;
     }
 }
@@ -577,7 +577,7 @@ h3.svc-eyebrow {
         padding: 0 12px;
         margin-bottom: 6px;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -595,7 +595,7 @@ h3.svc-eyebrow {
         border-radius: 8px;
         background: none;
         color: var(--text-dim);
-        font-size: 13.5px;
+        font-size: $text-sm;
         font-weight: $font-weight-medium;
         text-align: left;
         cursor: pointer;
@@ -633,7 +633,7 @@ h3.svc-eyebrow {
         gap: 6px;
         margin: 0 0 $space-3;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -652,7 +652,7 @@ h3.svc-eyebrow {
     &__subsection-title {
         margin: 0 0 $space-3;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -683,7 +683,7 @@ h3.svc-eyebrow {
         align-items: center;
         gap: 6px;
         color: var(--text-dim);
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-medium;
 
         svg { color: var(--accent-bright); }
@@ -695,7 +695,7 @@ h3.svc-eyebrow {
         min-height: 22px;
         padding: 0 10px;
         border-radius: $radius-full;
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         text-transform: uppercase;
         letter-spacing: 0.04em;
@@ -710,7 +710,7 @@ h3.svc-eyebrow {
 
     &__source {
         color: var(--text-faint);
-        font-size: 12px;
+        font-size: $text-xs;
         overflow-wrap: anywhere;
     }
 
@@ -744,7 +744,7 @@ h3.svc-eyebrow {
     &__block-title {
         margin: 0 0 $space-2;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -760,7 +760,7 @@ h3.svc-eyebrow {
         border: 1px solid var(--border-soft);
         border-radius: 8px;
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         line-height: 1.5;
         color: var(--text);
     }
@@ -779,7 +779,7 @@ h3.svc-eyebrow {
             align-items: center;
             gap: $space-2;
             flex-wrap: wrap;
-            font-size: 13px;
+            font-size: $text-sm;
             color: var(--text-dim);
         }
     }
@@ -793,14 +793,14 @@ h3.svc-eyebrow {
         padding: 0 8px;
         border-radius: $radius-full;
         @include status-variant(var(--accent-bright), var(--accent-bg));
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         text-transform: capitalize;
 
         &.is-error { background: rgba(239, 68, 68, 0.14); color: $danger; }
     }
 
-    &__step-service { color: var(--text); font-size: 12px; }
+    &__step-service { color: var(--text); font-size: $text-xs; }
     &__step-desc { color: var(--text-dim); }
 }
 
@@ -843,7 +843,7 @@ h3.svc-eyebrow {
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
@@ -926,7 +926,7 @@ h3.svc-eyebrow {
         gap: 6px;
         margin: 0 0 $space-3;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -946,14 +946,14 @@ h3.svc-eyebrow {
 
     &__see-all {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     // Info badge (brand colors via inline style props)
     &__info-badge {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.06em;
         text-transform: uppercase;
@@ -967,7 +967,7 @@ h3.svc-eyebrow {
         align-items: center;
         gap: $space-1;
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--accent-bright);
         text-decoration: none;
 
@@ -994,7 +994,7 @@ h3.svc-eyebrow {
         justify-content: space-between;
         align-items: center;
         margin-bottom: $space-2;
-        font-size: $font-size-sm + 1;
+        font-size: $text-sm;
         color: $text-secondary;
     }
 
@@ -1007,7 +1007,7 @@ h3.svc-eyebrow {
     &__metric-detail {
         display: block;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
         margin-top: $space-1;
     }
@@ -1026,7 +1026,7 @@ h3.svc-eyebrow {
 
     &__metric-item-label {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         letter-spacing: 0.05em;
         text-transform: uppercase;
         color: var(--text-faint);
@@ -1034,7 +1034,7 @@ h3.svc-eyebrow {
 
     &__metric-item-value {
         font-family: var(--mono);
-        font-size: $font-size-base - 1;
+        font-size: $text-sm;
         font-weight: $font-weight-medium;
         color: $text-primary;
     }
@@ -1043,7 +1043,7 @@ h3.svc-eyebrow {
         padding: $space-6;
         text-align: center;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     // Recent Deployments list — dense rows
@@ -1083,7 +1083,7 @@ h3.svc-eyebrow {
     }
 
     &__deploy-message {
-        font-size: $font-size-base - 1;
+        font-size: $text-sm;
         color: $text-primary;
         font-weight: $font-weight-medium;
         display: block;
@@ -1097,7 +1097,7 @@ h3.svc-eyebrow {
         align-items: center;
         gap: $space-3;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
         margin-top: 2px;
     }
@@ -1129,7 +1129,7 @@ h3.svc-eyebrow {
 
     &__title {
         margin: 0 0 $space-3 0;
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
     }
 }
@@ -1184,7 +1184,7 @@ h3.svc-eyebrow {
             border: none;
             padding: $space-1 0;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             outline: none;
             min-width: 0;
 
@@ -1196,7 +1196,7 @@ h3.svc-eyebrow {
 
     &__match-count {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--accent-bright);
         white-space: nowrap;
     }
@@ -1211,7 +1211,7 @@ h3.svc-eyebrow {
         display: flex;
         align-items: center;
         gap: $space-1;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
         cursor: pointer;
         white-space: nowrap;
@@ -1237,12 +1237,12 @@ h3.svc-eyebrow {
     border-left: 1px solid var(--border-soft);
     border-right: 1px solid var(--border-soft);
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
     color: var(--text-faint);
 
     &__live {
-        font-size: 9px;
-        font-weight: $font-weight-bold;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         padding: 1px $space-1;
         @include status-variant(var(--red), var(--red-bg));

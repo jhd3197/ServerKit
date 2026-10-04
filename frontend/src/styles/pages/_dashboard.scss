@@ -18,8 +18,8 @@
 
 .server-identity {
     h1 {
-        font-size: 1.5rem;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         letter-spacing: -0.02em;
         display: flex;
         align-items: center;
@@ -44,8 +44,8 @@
     @include focus-ring();
 
     &__name {
-        font-size: 1.5rem;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         letter-spacing: -0.02em;
         font-family: $font-mono;
         color: $text-primary;
@@ -76,7 +76,7 @@
 
     &__head {
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--text-ghost);
@@ -127,7 +127,7 @@
 
     &__name {
         font-weight: $font-weight-semibold;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text);
         white-space: nowrap;
         overflow: hidden;
@@ -136,7 +136,7 @@
 
     &__meta {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         margin-top: 1px;
     }
@@ -158,7 +158,7 @@
     align-items: center;
     gap: $space-3;
     margin-top: $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-tertiary;
     font-family: $font-mono;
 
@@ -183,8 +183,8 @@
 
 .clock-time {
     font-family: $font-mono;
-    font-size: 1.25rem;
-    font-weight: $font-weight-bold;
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
     color: $text-primary;
     letter-spacing: -0.01em;
     font-variant-numeric: tabular-nums;
@@ -193,7 +193,7 @@
 .clock-zone {
     color: $accent-primary;
     font-weight: $font-weight-semibold;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     text-transform: uppercase;
     letter-spacing: 0.08em;
 }
@@ -260,7 +260,7 @@
 }
 
 .tile-title {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     text-transform: uppercase;
     color: $text-tertiary;
@@ -276,20 +276,20 @@
 
 .tile-val {
     font-family: $font-mono;
-    font-size: 1.75rem;
-    font-weight: $font-weight-bold;
+    font-size: $text-2xl;
+    font-weight: $font-weight-semibold;
     color: $text-primary;
 }
 
 .tile-val-unit {
-    font-size: $font-size-base;
+    font-size: $text-base;
     font-weight: $font-weight-normal;
     color: $text-tertiary;
     margin-left: $space-1;
 }
 
 .tile-sub {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-tertiary;
     margin-top: $space-2;
     display: flex;
@@ -332,7 +332,7 @@
 
     .graph-title {
         font-weight: $font-weight-semibold;
-        font-size: $font-size-base;
+        font-size: $text-base;
         color: $text-primary;
     }
 
@@ -371,7 +371,7 @@
 }
 
 .spec-panel-title {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     text-transform: uppercase;
     color: $text-tertiary;
     font-weight: $font-weight-semibold;
@@ -383,7 +383,7 @@
     justify-content: space-between;
     border-bottom: 1px solid $border-subtle;
     padding-bottom: $space-3;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     &:last-child {
         border: none;
@@ -413,7 +413,7 @@
     border-radius: $radius-md;
     color: $text-primary;
     font-weight: $font-weight-semibold;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     cursor: pointer;
     text-align: left;
     display: flex;
@@ -472,7 +472,7 @@
     }
 
     &__title {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         text-transform: uppercase;
         color: $text-tertiary;
         font-weight: $font-weight-semibold;
@@ -483,7 +483,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         text-decoration: none;
         border-radius: $radius-sm;
@@ -498,7 +498,7 @@
     &__empty {
         padding: $space-5 0;
         text-align: center;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 }
@@ -589,7 +589,7 @@
     }
 
     .tile-val {
-        font-size: 1.5rem;
+        font-size: $text-xl;
     }
 }
 
@@ -614,7 +614,7 @@
     border-radius: $radius-sm;
     color: $text-primary;
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     padding: $space-1 $space-2;
     cursor: pointer;
     outline: none;
@@ -666,7 +666,7 @@
     width: auto;
     padding: 0 10px;
     border-radius: 8px;
-    font-size: 12px;
+    font-size: $text-xs;
 }
 
 .skw-bar__ctl .skw-refresh-trigger {

@@ -18,15 +18,15 @@
 
     &__title {
         color: $text-primary;
-        font-size: 12.5px;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         white-space: nowrap;
     }
 
     &__score {
         color: var(--amber);
-        font-size: 12px;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         font-variant-numeric: tabular-nums;
     }
 
@@ -53,7 +53,7 @@
     &__muted {
         overflow: hidden;
         color: $text-tertiary;
-        font-size: 11.5px;
+        font-size: $text-xs;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
@@ -85,8 +85,8 @@
         gap: $space-2;
         cursor: pointer;
         color: $success;
-        font-size: 12.5px;
-        font-weight: 500;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
 
         &:hover {
             border-color: var(--border-default, #{$border-default});
@@ -133,13 +133,13 @@
     }
 
     &__title {
-        font-size: 13px;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__detail {
-        font-size: 12px;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 

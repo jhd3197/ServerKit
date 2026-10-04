@@ -13,13 +13,13 @@
 
         h4 {
             margin: 0;
-            font-size: $font-size-md;
-            font-weight: 600;
+            font-size: $text-md;
+            font-weight: $font-weight-semibold;
 
             .username {
                 color: $accent-primary;
                 margin-left: $space-2;
-                font-weight: 500;
+                font-weight: $font-weight-medium;
             }
         }
 
@@ -27,7 +27,7 @@
             display: flex;
             align-items: center;
             gap: $space-2;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
 
             .legend-cells {

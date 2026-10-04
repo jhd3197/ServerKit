@@ -21,7 +21,7 @@
         color: $text-tertiary;
 
         .muted {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -41,7 +41,7 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-base;
+    font-size: $text-base;
     font-weight: $font-weight-semibold;
     color: $text-primary;
 }
@@ -67,7 +67,7 @@
 
     .stat-label {
         display: block;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -75,8 +75,8 @@
 
     .stat-value {
         display: block;
-        font-size: $font-size-lg;
-        font-weight: $font-weight-bold;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         font-family: $font-mono;
         color: $text-primary;
     }
@@ -132,7 +132,7 @@
     min-width: 140px;
 
     .tooltip-time {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         margin-bottom: $space-2;
         padding-bottom: $space-2;
@@ -144,7 +144,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         padding: $space-1 0;
     }
 
@@ -162,7 +162,7 @@
 
     .tooltip-value {
         font-family: $font-mono;
-        font-weight: $font-weight-bold;
+        font-weight: $font-weight-semibold;
         min-width: 48px;
         text-align: right;
     }
@@ -184,7 +184,7 @@
     border: 1px solid transparent;
     color: $text-tertiary;
     padding: 6px 12px;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     border-radius: $radius-sm;
     cursor: pointer;
@@ -233,7 +233,7 @@
     display: flex;
     align-items: center;
     gap: $space-3;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
     padding: $space-1 $space-3;
     border-radius: $radius-full;
@@ -291,7 +291,7 @@
         margin-bottom: $space-3;
 
         .graph-title {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 }
@@ -308,7 +308,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
 
         svg {

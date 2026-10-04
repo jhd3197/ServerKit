@@ -203,10 +203,10 @@ export default function StyleGuide() {
                         <SectionTitle title={t('app.styleGuide.fontSizes', 'Font Sizes')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             {[
-                                ['$font-size-xs', '10px'], ['$font-size-sm', '12px'],
-                                ['$font-size-base', '14px'], ['$font-size-md', '16px'],
-                                ['$font-size-lg', '18px'], ['$font-size-xl', '20px'],
-                                ['$font-size-2xl', '24px'], ['$font-size-3xl', '30px'],
+                                ['$text-xs', '12px'], ['$text-sm', '13px'],
+                                ['$text-base', '14px'], ['$text-md', '16px'],
+                                ['$text-lg', '18px'], ['$text-xl', '24px'],
+                                ['$text-2xl', '32px'],
                             ].map(([token, size]) => (
                                 <div key={token} className="styleguide__token-row">
                                     <span className="styleguide__token-name styleguide__token-name--font">{token}</span>
@@ -217,7 +217,7 @@ export default function StyleGuide() {
 
                         <SectionTitle title={t('app.styleGuide.fontWeights', 'Font Weights')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
-                            {[['Normal (400)', 400], ['Medium (500)', 500], ['Semibold (600)', 600], ['Bold (700)', 700]].map(([label, weight]) => (
+                            {[['Normal (400)', 400], ['Medium (500)', 500], ['Semibold (600)', 600]].map(([label, weight]) => (
                                 <p key={weight} className="styleguide__weight-sample" style={{ fontWeight: weight }}>
                                     {label} {t('app.styleGuide.theQuickBrownFoxJumpsOver2', '— The quick brown fox jumps over the lazy dog')}
                                 </p>

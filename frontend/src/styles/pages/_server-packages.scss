@@ -26,8 +26,8 @@
     &__installed h3 {
         margin: 0 0 0.5rem;
         font-family: var(--mono);
-        font-size: 10.5px;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         color: var(--text-faint);
@@ -47,7 +47,7 @@
         color: var(--text-dim);
         cursor: pointer;
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
 
         &:hover {
@@ -87,7 +87,7 @@
 
     &__list-name {
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
         white-space: nowrap;
         overflow: hidden;
@@ -104,17 +104,17 @@
         background: var(--bg-code);
         color: var(--text-dim);
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         white-space: pre-wrap;
     }
 
     &__hint {
-        font-size: 0.85rem;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
     &__remove-tip {
-        font-size: 12.5px;
+        font-size: $text-sm;
         padding: 0.75rem;
         border: 1px dashed var(--border);
         border-radius: var(--radius-sm);
@@ -148,8 +148,8 @@
         h3 {
             margin: 0;
             font-family: var(--mono);
-            font-size: 10.5px;
-            font-weight: 600;
+            font-size: $text-xs;
+            font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--text-faint);
@@ -166,13 +166,13 @@
         display: flex;
         align-items: center;
         gap: 0.65rem;
-        font-size: 0.85rem;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
     &__probed-at {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
         font-variant-numeric: tabular-nums;
     }
@@ -199,15 +199,15 @@
 
     &__row-label {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        font-weight: 600;
+        font-weight: $font-weight-semibold;
     }
 
     &__row-value {
-        font-size: 0.875rem;
+        font-size: $text-base;
         color: var(--text);
         display: flex;
         align-items: center;
@@ -242,7 +242,7 @@
     border: 1px solid rgba(251, 111, 111, 0.35);
     border-radius: var(--radius-sm);
     @include status-variant(var(--red), var(--red-bg));
-    font-size: 0.9rem;
+    font-size: $text-base;
 }
 
 .docker-empty-state {
@@ -262,7 +262,7 @@
 
     code {
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         padding: 0.05rem 0.3rem;
         border-radius: 0.25rem;
         background: var(--surface-3);
@@ -304,7 +304,7 @@
     }
 
     &__hint {
-        font-size: 0.85rem;
+        font-size: $text-sm;
         color: var(--text-dim);
         margin: 0;
     }
@@ -322,7 +322,7 @@
         background: var(--bg-code);
         color: var(--text-code);
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         white-space: pre-wrap;
         margin: 0;
     }

@@ -18,7 +18,7 @@
     &__muted {
         margin: 0;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__note {
@@ -27,7 +27,7 @@
         border: 1px solid transparent;
         border-radius: $radius-md;
         @include status-variant($text-primary, $warning-bg, $warning-border);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__input {
@@ -63,20 +63,20 @@
 
     &__percent {
         color: $text-primary;
-        font-size: $font-size-2xl;
+        font-size: $text-xl;
         font-weight: $font-weight-semibold;
         font-variant-numeric: tabular-nums;
     }
 
     &__detail {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__free {
         margin-inline-start: auto;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__bar {
@@ -105,13 +105,13 @@
     &__label {
         min-width: 0;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
     }
 
     &__size {
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-variant-numeric: tabular-nums;
         text-align: end;
     }
@@ -119,7 +119,7 @@
     &__reclaim {
         grid-column: 1 / -1;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
 
         &:empty { display: none; }
     }

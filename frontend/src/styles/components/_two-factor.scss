@@ -13,8 +13,8 @@
 .totp-input {
     width: 48px;
     height: 56px;
-    font-size: 24px;
-    font-weight: 600;
+    font-size: $text-xl;
+    font-weight: $font-weight-semibold;
     text-align: center;
     border: 2px solid $border-subtle;
     border-radius: $radius-md;
@@ -47,7 +47,7 @@
     border: none;
     color: $accent-primary;
     cursor: pointer;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     padding: 0;
 
     &:hover {
@@ -87,7 +87,7 @@
     p {
         margin: 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -108,7 +108,7 @@
 
     .two-fa-info {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .two-fa-backup-info {
@@ -122,7 +122,7 @@
 
         .warning-text {
             color: $warning;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -152,8 +152,8 @@
         background: $accent-primary;
         color: white;
         border-radius: 50%;
-        font-weight: 600;
-        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        font-size: $text-xs;
         flex-shrink: 0;
     }
 
@@ -167,7 +167,7 @@
         p {
             color: $text-secondary;
             margin: 0 0 $space-4 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 }
@@ -195,7 +195,7 @@
 
 .manual-entry {
     margin-top: $space-4;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 
     summary {
@@ -219,8 +219,8 @@
 }
 
 .verification-input {
-    font-size: 24px;
-    font-weight: 600;
+    font-size: $text-xl;
+    font-weight: $font-weight-semibold;
     text-align: center;
     letter-spacing: 0.5em;
     padding: $space-4;
@@ -246,13 +246,13 @@
     p {
         margin: 0;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
 .error-text {
     color: $danger;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     margin-top: $space-1;
 }
 

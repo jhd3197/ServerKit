@@ -71,7 +71,7 @@
     color: $text-secondary;
 
     span {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -118,12 +118,12 @@
     min-height: 60vh;
     padding: $space-12;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .loading-sm {
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     padding: $space-4;
 }
 

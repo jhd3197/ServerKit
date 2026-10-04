@@ -62,7 +62,7 @@
         background: $bg-elevated;
         border: 1px solid $border-subtle;
         color: inherit;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
 
         svg { display: block; }
@@ -81,7 +81,7 @@
     }
 
     &__stepper-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
     }
 
@@ -103,14 +103,14 @@
         h2 {
             margin: 0;
             color: $text-primary;
-            font-size: $font-size-xl;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
         }
 
         p {
             margin: 0;
             color: $text-tertiary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: 1.5;
         }
     }
@@ -184,13 +184,13 @@
         gap: 3px;
 
         strong {
-            font-size: 14px;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
         }
 
         span {
             color: var(--text-faint);
-            font-size: 12px;
+            font-size: $text-xs;
             line-height: 1.45;
         }
     }
@@ -250,14 +250,14 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
 
         span {
             margin-top: 2px;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
         }
     }
 
@@ -320,7 +320,7 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             overflow-wrap: anywhere;
         }
@@ -328,7 +328,7 @@
         small {
             margin-top: 3px;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.35;
             overflow-wrap: anywhere;
         }
@@ -339,7 +339,7 @@
             border: 1px solid $border-subtle;
             border-radius: $radius-full;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             font-style: normal;
         }
     }
@@ -353,7 +353,7 @@
         border: 1px dashed $border-subtle;
         border-radius: $radius-md;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__connect-empty {
@@ -366,7 +366,7 @@
         h3 {
             margin: 0;
             color: $text-primary;
-            font-size: $font-size-lg;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
         }
 
@@ -374,7 +374,7 @@
             max-width: 460px;
             margin: $space-2 auto 0;
             color: $text-tertiary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: 1.5;
         }
     }
@@ -442,14 +442,14 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
 
         small,
         em {
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.35;
         }
 
@@ -545,7 +545,7 @@
     &__tpl-tile-name {
         max-width: 100%;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         white-space: nowrap;
         overflow: hidden;
@@ -564,7 +564,7 @@
         background: none;
         border: none;
         color: $accent-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         cursor: pointer;
 
@@ -589,7 +589,7 @@
         strong {
             display: block;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
 
@@ -597,7 +597,7 @@
             display: block;
             margin-top: 2px;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.4;
         }
     }
@@ -607,7 +607,7 @@
         align-items: center;
         gap: 6px;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         text-decoration: none;
 
         &:hover { color: $accent-primary; }
@@ -620,7 +620,7 @@
 
         label {
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
         }
 
@@ -631,7 +631,7 @@
             border: 1px solid $border-subtle;
             border-radius: $radius-md;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
 
             &:focus {
                 outline: none;
@@ -673,7 +673,7 @@
         }
 
         span {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
         }
 
@@ -710,7 +710,7 @@
             align-items: center;
             gap: $space-2;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
         }
 
@@ -720,7 +720,7 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             text-transform: capitalize;
         }
@@ -731,7 +731,7 @@
         align-items: center;
         gap: $space-2;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
 
         svg { color: $accent-primary; }
@@ -740,7 +740,7 @@
     &__env-note {
         margin: 0;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.45;
     }
 
@@ -766,13 +766,13 @@
 
         span {
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
         }
 
         strong {
             margin-top: 2px;
             color: $text-primary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
     }
@@ -795,7 +795,7 @@
         border: 1px solid $border-subtle;
         border-radius: $radius-full;
         color: $text-secondary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1;
     }
 
@@ -842,7 +842,7 @@
 
     &__manifest-service-name {
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         overflow-wrap: anywhere;
     }
@@ -855,14 +855,14 @@
         background: rgba(99, 102, 241, 0.12);
         border-radius: $radius-full;
         color: $accent-primary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         text-transform: capitalize;
     }
 
     &__manifest-port {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-family: $font-mono;
     }
 
@@ -875,7 +875,7 @@
         background: rgba(16, 185, 129, 0.1);
         border-radius: $radius-full;
         color: $success;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
     }
 
@@ -889,7 +889,7 @@
         align-items: center;
         gap: $space-2;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         text-transform: uppercase;
         letter-spacing: 0.03em;
@@ -914,7 +914,7 @@
             border: 1px solid $border-subtle;
             border-radius: $radius-full;
             color: $text-secondary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             overflow-wrap: anywhere;
         }
     }
@@ -937,14 +937,14 @@
 
         label {
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
         }
 
         span {
             margin-top: 3px;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.4;
         }
     }
@@ -959,7 +959,7 @@
         border: 1px solid $border-subtle;
         border-radius: $radius-md;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         svg {
             color: $text-secondary;
@@ -990,7 +990,7 @@
             display: flex;
             align-items: center;
             gap: $space-2;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
         }
 
@@ -1012,7 +1012,7 @@
     &__advanced-note {
         margin: 0;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.5;
     }
 

@@ -58,20 +58,20 @@
         }
 
         &__name {
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-semibold;
             @include truncate();
         }
 
         .sk-pill {
             padding: 1px 7px;
-            font-size: 10px;
+            font-size: $text-xs;
         }
 
         &__slug {
             color: var(--text-faint);
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             @include truncate();
         }
 
@@ -81,7 +81,7 @@
             gap: 5px;
             color: var(--text-faint);
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
 
             svg {
                 color: var(--text-ghost);
@@ -121,7 +121,7 @@
 
         h2 {
             margin: $space-3 0 $space-1;
-            font-size: 19px;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.01em;
             line-height: 1.15;
@@ -130,7 +130,7 @@
         p {
             margin: 0;
             color: var(--text-dim);
-            font-size: 13px;
+            font-size: $text-sm;
             max-width: 760px;
         }
 
@@ -140,7 +140,7 @@
     }
 
     .status-overall-pill {
-        font-size: 12px;
+        font-size: $text-xs;
         padding: 4px 11px;
     }
 
@@ -192,7 +192,7 @@
 
         .sk-spec-card__value {
             font-family: var(--mono);
-            font-size: 19px;
+            font-size: $text-lg;
             letter-spacing: -0.01em;
         }
 
@@ -224,7 +224,7 @@
         h3 {
             margin: 0 0 $space-2;
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -260,14 +260,14 @@
             }
 
             strong {
-                font-size: 13.5px;
-                font-weight: 550;
+                font-size: $text-sm;
+                font-weight: $font-weight-semibold;
                 @include truncate();
             }
 
             span {
                 font-family: var(--mono);
-                font-size: 11.5px;
+                font-size: $text-xs;
                 color: var(--text-faint);
                 @include truncate();
             }
@@ -282,7 +282,7 @@
 
             > span {
                 font-family: var(--mono);
-                font-size: 11px;
+                font-size: $text-xs;
                 color: var(--text-faint);
                 white-space: nowrap;
             }
@@ -355,14 +355,14 @@
                 strong {
                     display: block;
                     margin-bottom: 3px;
-                    font-size: 13.5px;
-                    font-weight: 550;
+                    font-size: $text-sm;
+                    font-weight: $font-weight-semibold;
                 }
 
                 span {
                     color: var(--text-faint);
                     font-family: var(--mono);
-                    font-size: 11px;
+                    font-size: $text-xs;
                 }
             }
         }
@@ -378,7 +378,7 @@
         p {
             margin: 0;
             color: var(--text-dim);
-            font-size: 13px;
+            font-size: $text-sm;
             line-height: 1.5;
         }
 
@@ -426,20 +426,20 @@
         span {
             color: var(--text-faint);
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
         }
 
         strong {
             color: var(--text-dim);
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
 
         p {
-            font-size: 12.5px;
+            font-size: $text-sm;
         }
     }
 
@@ -463,7 +463,7 @@
             display: block;
             color: var(--text-faint);
             font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -473,7 +473,7 @@
             display: block;
             margin-top: $space-2;
             font-family: var(--mono);
-            font-size: 13px;
+            font-size: $text-sm;
             overflow-wrap: anywhere;
         }
 
@@ -495,7 +495,7 @@
 .status-modal {
     .form-group label {
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -504,7 +504,7 @@
 
     .form-help {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -581,7 +581,7 @@
         span {
             display: block;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             text-transform: uppercase;
         }
@@ -589,7 +589,7 @@
         strong {
             display: block;
             margin-top: $space-2;
-            font-size: $font-size-xl;
+            font-size: $text-lg;
         }
 
         @media (max-width: 700px) {
@@ -623,7 +623,7 @@
 
         > h3 {
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -662,7 +662,7 @@
             justify-content: flex-end;
             gap: $space-2;
             color: $text-secondary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
         }
 
         @media (max-width: 760px) {
@@ -690,14 +690,14 @@
         }
 
         h3 {
-            font-size: $font-size-base;
+            font-size: $text-base;
         }
 
         span {
             display: block;
             margin-top: 3px;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
         }
 
         p {

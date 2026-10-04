@@ -5,7 +5,7 @@
 .env-vars-container {
     .hint {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin-bottom: $space-5;
     }
 }
@@ -20,7 +20,7 @@
 
 .env-cell-value {
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
     word-break: break-all;
 }
@@ -91,7 +91,7 @@
 
     .env-key {
         font-family: $font-mono;
-        font-weight: 600;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
         display: flex;
         align-items: center;
@@ -100,7 +100,7 @@
 
     .env-value {
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         word-break: break-all;
         padding: $space-1 0;
@@ -116,8 +116,8 @@
     padding: 1px $space-2;
     border-radius: $radius-sm;
     font-family: $font-mono;
-    font-size: $font-size-xs;
-    font-weight: 600;
+    font-size: $text-xs;
+    font-weight: $font-weight-semibold;
     line-height: 1.5;
     color: $accent-primary;
     background: rgba($accent-primary-raw, 0.12);
@@ -152,7 +152,7 @@
 .import-textarea {
     width: 100%;
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     background: $bg-body;
     border: 1px solid $border-subtle;
     border-radius: $radius-sm;

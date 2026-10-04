@@ -17,8 +17,8 @@
             align-items: center;
             gap: $space-2;
             margin: 0;
-            font-size: $font-size-lg;
-            font-weight: 500;
+            font-size: $text-lg;
+            font-weight: $font-weight-medium;
             color: $text-primary;
 
             svg {
@@ -31,14 +31,14 @@
 .private-url-disabled {
     .hint {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin-bottom: $space-4;
         line-height: 1.5;
     }
 
     .slug-hint {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         margin-top: $space-2;
     }
 }
@@ -65,7 +65,7 @@
         padding: $space-2 $space-3;
         color: $text-tertiary;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         height: 40px;
         display: flex;
         align-items: center;
@@ -120,7 +120,7 @@
     align-items: center;
     gap: $space-1;
     color: $success;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     svg {
         width: 14px;

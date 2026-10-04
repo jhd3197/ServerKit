@@ -20,7 +20,7 @@
     border-radius: 8px;
     background: var(--surface-2);
     color: var(--text-dim);
-    font-size: 12.5px;
+    font-size: $text-sm;
     cursor: pointer;
     transition: border-color 0.14s, color 0.14s;
 
@@ -57,14 +57,14 @@
         > span {
             flex: 1;
             min-width: 0;
-            font-size: 12.5px;
+            font-size: $text-sm;
             @include truncate();
         }
 
         small {
             display: block;
             font-family: var(--mono);
-            font-size: 10px;
+            font-size: $text-xs;
             color: var(--text-faint);
             @include truncate();
         }

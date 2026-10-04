@@ -149,8 +149,8 @@
 }
 
 .mobile-topbar__name {
-    font-size: 1.05rem;
-    font-weight: $font-weight-bold;
+    font-size: $text-md;
+    font-weight: $font-weight-semibold;
     color: $text-primary;
     letter-spacing: -0.01em;
     @include truncate();
@@ -189,8 +189,8 @@
 }
 
 .brand-text {
-    font-size: 1.15rem;
-    font-weight: $font-weight-bold;
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
     color: $text-primary;
     letter-spacing: -0.02em;
 }
@@ -255,8 +255,8 @@
 }
 
 .brand-custom-text {
-    font-size: 1.15rem;
-    font-weight: $font-weight-bold;
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
     letter-spacing: -0.02em;
     color: $text-primary;
     white-space: nowrap;
@@ -308,7 +308,7 @@
     border: 1px solid $border-default;
     border-radius: $radius-md;
     color: $text-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     cursor: pointer;
     transition: border-color $transition-base, background-color $transition-base;
 
@@ -352,7 +352,7 @@
 // Navigation Category Labels — mono, uppercase, ghost (redesign)
 .nav-category {
     font-family: var(--mono);
-    font-size: 0.66rem;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
     text-transform: uppercase;
@@ -380,8 +380,8 @@
     border-radius: 8px;
     color: var(--text-dim);
     text-decoration: none;
-    font-size: 0.84rem;
-    font-weight: 450;
+    font-size: $text-sm;
+    font-weight: $font-weight-normal;
     transition: background-color 0.14s ease, color 0.14s ease;
     margin-bottom: 2px;
     position: relative;
@@ -408,7 +408,7 @@
     &.active {
         background: linear-gradient(90deg, var(--accent-bg), var(--accent-bg-soft));
         color: var(--text-primary);
-        font-weight: 500;
+        font-weight: $font-weight-medium;
 
         .nav-icon { stroke: var(--accent-bright); }
 
@@ -475,7 +475,7 @@
 // Sub Navigation Item (indented under parent)
 .nav-sub-item {
     padding-left: 2.25rem;
-    font-size: 0.8rem;
+    font-size: $text-sm;
 }
 
 // Navigation Icon
@@ -533,7 +533,7 @@
 
 .context-menu-label {
     font-family: var(--mono);
-    font-size: 0.6rem;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
     text-transform: uppercase;
@@ -588,7 +588,7 @@
     border: 1px solid var(--border);
     background: var(--surface-2);
     color: var(--text-faint);
-    font-size: 0.65rem;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     border-radius: 6px;
     cursor: pointer;
@@ -623,7 +623,7 @@
     border: none;
     background: transparent;
     color: $text-secondary;
-    font-size: 0.82rem;
+    font-size: $text-sm;
     font-weight: $font-weight-medium;
     border-radius: $radius-md;
     cursor: pointer;
@@ -683,7 +683,7 @@
     display: grid;
     place-items: center;
     font-family: var(--mono);
-    font-size: 0.78rem;
+    font-size: $text-sm;
     font-weight: $font-weight-semibold;
     color: var(--text-primary);
 }
@@ -710,14 +710,14 @@
 }
 
 .user-handle {
-    font-size: 0.8rem;
-    font-weight: 550;
+    font-size: $text-sm;
+    font-weight: $font-weight-semibold;
     color: var(--text-primary);
 }
 
 .user-status {
     font-family: var(--mono);
-    font-size: 0.64rem;
+    font-size: $text-xs;
     color: var(--green);
     display: flex;
     align-items: center;

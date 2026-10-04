@@ -9,10 +9,10 @@ h1, h2, h3, h4, h5, h6 {
     letter-spacing: -0.5px;
 }
 
-h1 { font-size: $font-size-2xl; }
-h2 { font-size: $font-size-lg; }
-h3 { font-size: $font-size-md; }
-h4 { font-size: $font-size-base; }
+h1 { font-size: $text-xl; }
+h2 { font-size: $text-lg; }
+h3 { font-size: $text-md; }
+h4 { font-size: $text-base; }
 
 // Text utilities
 .text-primary { color: $text-primary; }
@@ -36,12 +36,12 @@ font-weight: $font-weight-medium;
 font-weight: $font-weight-semibold;
 }
 .font-bold {
-font-weight: $font-weight-bold;
+font-weight: $font-weight-semibold;
 }
 
 // Mono text
 .mono {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-family: $font-mono;
 }
 
@@ -54,12 +54,12 @@ font-weight: $font-weight-bold;
 .subtitle {
     color: $text-tertiary;
     margin-top: $space-1;
-    font-size: $font-size-base;
+    font-size: $text-base;
 }
 
 // Section titles
 .section-title {
-    font-size: $font-size-lg;
+    font-size: $text-lg;
     margin-bottom: $space-5;
     font-weight: $font-weight-semibold;
 }

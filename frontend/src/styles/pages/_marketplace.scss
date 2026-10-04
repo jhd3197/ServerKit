@@ -35,7 +35,7 @@
         margin-bottom: $space-3;
         color: $accent-primary;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         letter-spacing: 0.1em;
         text-transform: uppercase;
@@ -78,7 +78,7 @@
         h2 {
             margin: 0;
             color: $text-primary;
-            font-size: $font-size-lg;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             letter-spacing: 0;
         }
@@ -110,7 +110,7 @@
 
     .marketplace-installed-label {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .installed-list {
@@ -173,7 +173,7 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-base;
+            font-size: $text-base;
         }
     }
 
@@ -189,7 +189,7 @@
     .installed-item__error {
         margin: $space-1 0 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
     }
 
@@ -327,7 +327,7 @@
         flex-wrap: wrap;
         gap: $space-3;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__repo-link {
@@ -350,7 +350,7 @@
     &__desc {
         margin: 0;
         color: $text-secondary;
-        font-size: $font-size-base;
+        font-size: $text-base;
         line-height: $line-height-normal;
     }
 
@@ -379,7 +379,7 @@
     &__section-label {
         margin: 0 0 $space-2;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
     }
 
@@ -405,7 +405,7 @@
         list-style: none;
 
         code {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
         }
     }
@@ -427,7 +427,7 @@
     h3 {
         margin: 0 0 $space-1;
         color: $text-primary;
-        font-size: $font-size-md;
+        font-size: $text-md;
         font-weight: $font-weight-semibold;
     }
 
@@ -474,7 +474,7 @@
     background: transparent;
     color: $text-secondary;
     font-family: inherit;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     font-weight: $font-weight-semibold;
     cursor: pointer;
     transition:
@@ -501,7 +501,7 @@
 .plugin-install-source {
     p {
         margin: 0 0 $space-3;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -534,7 +534,7 @@
 .plugin-file-note {
     margin-top: $space-2;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // Two-step GitHub install: consent card shown after resolve, before install.
@@ -555,7 +555,7 @@
 
         h4 {
             margin: 0 0 $space-1;
-            font-size: $font-size-lg;
+            font-size: $text-lg;
         }
     }
 
@@ -565,7 +565,7 @@
         align-items: center;
         gap: $space-3;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         code {
             font-family: $font-mono;
@@ -587,7 +587,7 @@
     &__desc {
         margin: 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
     }
 
@@ -595,7 +595,7 @@
     // unsigned / unknown-publisher, red when the signature failed to verify.
     &__sig-note {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
         color: $text-tertiary;
 
@@ -606,7 +606,7 @@
 
     &__label {
         margin: 0 0 $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-secondary;
     }
@@ -629,7 +629,7 @@
             display: flex;
             align-items: flex-start;
             gap: $space-2;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $warning;
 
             svg {
@@ -686,12 +686,12 @@
     }
 
     &__label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 
     &__hint {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: $line-height-normal;
     }
 }
@@ -721,21 +721,21 @@
 
         h4 {
             margin: 0;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
         }
     }
 
     &__count {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     // The observation-window caveat under a section heading.
     &__scope {
         margin: 0;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
     }
 
@@ -775,7 +775,7 @@
 
         code {
             font-family: $font-mono;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-primary;
             overflow-wrap: anywhere;
         }
@@ -784,12 +784,12 @@
     &__note {
         margin: 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
 
         code {
             font-family: $font-mono;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             padding: 1px 4px;
             border-radius: $radius-sm;
             background: $bg-code;
@@ -810,7 +810,7 @@
         padding-top: $space-2;
         border-top: 1px solid $border-subtle;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: $line-height-normal;
     }
 
@@ -826,7 +826,7 @@
         background: $bg-code;
         color: $text-secondary;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
         white-space: pre;
     }
@@ -840,7 +840,7 @@
         p {
             margin: 0;
             color: $danger;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: $line-height-normal;
         }
     }

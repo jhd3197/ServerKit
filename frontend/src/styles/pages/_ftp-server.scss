@@ -29,7 +29,7 @@
             h3 {
                 margin: 0 0 $space-3;
                 font-family: var(--mono);
-                font-size: 10.5px;
+                font-size: $text-xs;
                 font-weight: $font-weight-semibold;
                 letter-spacing: 0.08em;
                 text-transform: uppercase;
@@ -48,7 +48,7 @@
             gap: $space-4;
             padding: 10px 0;
             border-bottom: 1px solid var(--border-soft);
-            font-size: 13px;
+            font-size: $text-sm;
 
             &:first-child { padding-top: 0; }
             &:last-child { border-bottom: none; padding-bottom: 0; }
@@ -59,7 +59,7 @@
 
             .info-value {
                 font-family: var(--mono);
-                font-size: 12.5px;
+                font-size: $text-sm;
                 font-weight: $font-weight-medium;
                 color: var(--text);
 
@@ -79,8 +79,8 @@
 
         .sk-dtable {
             .user-name {
-                font-size: 13px;
-                font-weight: 550;
+                font-size: $text-sm;
+                font-weight: $font-weight-semibold;
                 color: var(--text);
                 margin-right: $space-2;
             }
@@ -117,7 +117,7 @@
         pre {
             margin: 0;
             font-family: var(--mono);
-            font-size: 12px;
+            font-size: $text-xs;
             line-height: 1.6;
             white-space: pre-wrap;
             word-break: break-all;
@@ -135,7 +135,7 @@
 
         p {
             margin: 0;
-            font-size: 13px;
+            font-size: $text-sm;
             line-height: 1.6;
             color: $text-secondary;
 

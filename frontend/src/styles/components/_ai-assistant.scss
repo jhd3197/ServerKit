@@ -178,8 +178,8 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 }
 
 .sk-ai-header__title { display: flex; flex-direction: column; line-height: 1.1; }
-.sk-ai-header__name { font-weight: 600; font-size: 14px; }
-.sk-ai-header__by { font-size: 11px; color: var(--sk-ai-fg-3); }
+.sk-ai-header__name { font-weight: $font-weight-semibold; font-size: $text-base; }
+.sk-ai-header__by { font-size: $text-xs; color: var(--sk-ai-fg-3); }
 .sk-ai-header__actions { display: flex; align-items: center; gap: 6px; }
 
 .sk-ai-iconbtn {
@@ -210,7 +210,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     border: none;
     background: transparent;
     color: var(--sk-ai-fg-2);
-    font-size: 12px;
+    font-size: $text-xs;
     padding: 4px 10px;
     border-radius: 999px;
     cursor: pointer;
@@ -225,7 +225,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     margin: 10px 14px 0;
     padding: 4px 10px;
     border-radius: 999px;
-    font-size: 12px;
+    font-size: $text-xs;
     cursor: pointer;
     border: 1px solid var(--sk-ai-border);
     background: var(--sk-ai-glow);
@@ -265,7 +265,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     border-radius: 999px;
     background: var(--sk-ai-bg-body);
     color: var(--sk-ai-fg-2);
-    font-size: 11px;
+    font-size: $text-xs;
 
     &.is-warning {
         border-color: fade($warning-raw, 48%);
@@ -316,26 +316,26 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 .sk-ai-message--assistant { align-items: stretch; }
 .sk-ai-message__error {
     color: #fca5a5;
-    font-size: 13px;
+    font-size: $text-sm;
     border: 1px solid fade($danger-raw, 40%);
     border-radius: 8px;
     padding: 8px 10px;
 }
 
 .sk-ai-markdown {
-    font-size: 14px;
+    font-size: $text-base;
     line-height: 1.55;
     color: var(--sk-ai-fg);
     p { margin: 0 0 8px; }
     p:last-child { margin-bottom: 0; }
     a { color: var(--sk-ai-accent); }
-    strong { font-weight: 600; }
+    strong { font-weight: $font-weight-semibold; }
 }
 
 .sk-ai-code {
     @include status-variant(var(--sk-ai-code-fg), var(--sk-ai-code-bg));
     font-family: var(--sk-ai-mono);
-    font-size: 12.5px;
+    font-size: $text-sm;
     border: 1px solid var(--sk-ai-border);
     border-radius: 8px;
     padding: 10px 12px;
@@ -346,7 +346,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 }
 .sk-ai-code__lang {
     display: block;
-    font-size: 10px;
+    font-size: $text-xs;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--sk-ai-fg-3);
@@ -377,17 +377,17 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     background: transparent;
     border: none;
     color: var(--sk-ai-fg);
-    font-size: 13px;
+    font-size: $text-sm;
     cursor: pointer;
     text-align: left;
 }
-.sk-ai-tool-card__name { font-family: var(--sk-ai-mono); font-size: 12.5px; flex: 1; }
+.sk-ai-tool-card__name { font-family: var(--sk-ai-mono); font-size: $text-sm; flex: 1; }
 .sk-ai-tool-card__status { display: inline-flex; color: var(--sk-ai-fg-2); }
 .sk-ai-tool-card__status--done { color: #4ade80; }
 .sk-ai-tool-card__status--error { color: #f87171; }
 .sk-ai-tool-card__chev { color: var(--sk-ai-fg-3); transition: transform 0.15s ease; &.is-open { transform: rotate(180deg); } }
 .sk-ai-tool-card__body { padding: 0 10px 10px; }
-.sk-ai-tool-card__label { font-size: 11px; color: var(--sk-ai-fg-3); margin: 6px 0 2px; }
+.sk-ai-tool-card__label { font-size: $text-xs; color: var(--sk-ai-fg-3); margin: 6px 0 2px; }
 .sk-ai-tool-card__result { max-height: 240px; overflow: auto; }
 .sk-ai-spin { animation: sk-ai-spin 1s linear infinite; }
 
@@ -401,8 +401,8 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     flex-direction: column;
     gap: 8px;
 }
-.sk-ai-confirm__head { display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 13px; }
-.sk-ai-confirm__summary { font-size: 13px; color: var(--sk-ai-fg); margin: 0; }
+.sk-ai-confirm__head { display: flex; align-items: center; gap: 6px; font-weight: $font-weight-semibold; font-size: $text-sm; }
+.sk-ai-confirm__summary { font-size: $text-sm; color: var(--sk-ai-fg); margin: 0; }
 .sk-ai-confirm__params { max-height: 160px; overflow: auto; }
 .sk-ai-confirm__actions { display: flex; justify-content: flex-end; gap: 8px; }
 
@@ -410,7 +410,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 .sk-ai-btn {
     border-radius: 8px;
     padding: 6px 14px;
-    font-size: 13px;
+    font-size: $text-sm;
     cursor: pointer;
     border: 1px solid var(--sk-ai-border);
     @include status-variant(var(--sk-ai-fg), var(--sk-ai-bg));
@@ -453,11 +453,11 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     color: var(--sk-ai-fg);
     padding: 10px 12px;
     font-family: var(--sk-ai-sans);
-    font-size: 14px;
+    font-size: $text-base;
     line-height: 1.4;
     max-height: 160px;
     &:focus { outline: none; border-color: var(--sk-ai-accent); box-shadow: 0 0 0 3px var(--sk-ai-glow); }
-    @media (max-width: 768px) { font-size: 16px; }   // avoid iOS zoom-on-focus
+    @media (max-width: 768px) { font-size: $text-md; }   // avoid iOS zoom-on-focus
 }
 .sk-ai-composer__btn {
     flex: none;
@@ -476,7 +476,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 }
 
 // ---------------------------------------------------------------- Typing
-.sk-ai-typing { display: flex; align-items: center; gap: 8px; color: var(--sk-ai-fg-3); font-size: 12px; }
+.sk-ai-typing { display: flex; align-items: center; gap: 8px; color: var(--sk-ai-fg-3); font-size: $text-xs; }
 .sk-ai-typing__dots { display: inline-flex; gap: 3px; }
 .sk-ai-typing__dots i {
     width: 6px; height: 6px; border-radius: 50%;
@@ -493,9 +493,9 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     display: flex; align-items: center; justify-content: center;
     background: var(--sk-ai-glow); color: var(--sk-ai-accent);
 }
-.sk-ai-empty__title { margin: 6px 0 0; font-size: 16px; }
-.sk-ai-empty__sub { margin: 0; font-size: 12px; color: var(--sk-ai-fg-3); }
-.sk-ai-empty__hint { font-size: 13px; color: var(--sk-ai-fg-2); max-width: 260px; }
+.sk-ai-empty__title { margin: 6px 0 0; font-size: $text-md; }
+.sk-ai-empty__sub { margin: 0; font-size: $text-xs; color: var(--sk-ai-fg-3); }
+.sk-ai-empty__hint { font-size: $text-sm; color: var(--sk-ai-fg-2); max-width: 260px; }
 .sk-ai-empty__prompts { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; width: 100%; }
 .sk-ai-suggested {
     border: 1px solid var(--sk-ai-border);
@@ -503,7 +503,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     color: var(--sk-ai-fg);
     border-radius: 10px;
     padding: 8px 12px;
-    font-size: 13px;
+    font-size: $text-sm;
     cursor: pointer;
     text-align: left;
     &:hover { background: var(--sk-ai-hover); }
@@ -526,11 +526,11 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 .sk-ai-convo__new {
     width: 100%; display: flex; align-items: center; gap: 6px;
     padding: 8px; border: none; background: transparent; color: var(--sk-ai-fg);
-    border-radius: 8px; cursor: pointer; font-size: 13px;
+    border-radius: 8px; cursor: pointer; font-size: $text-sm;
     &:hover { background: var(--sk-ai-hover); }
 }
 .sk-ai-convo__list { max-height: 280px; overflow-y: auto; margin-top: 4px; }
-.sk-ai-convo__empty { color: var(--sk-ai-fg-3); font-size: 12px; padding: 8px; text-align: center; }
+.sk-ai-convo__empty { color: var(--sk-ai-fg-3); font-size: $text-xs; padding: 8px; text-align: center; }
 .sk-ai-convo__item {
     display: flex; align-items: center; gap: 4px; border-radius: 8px;
     &:hover { background: var(--sk-ai-hover); }
@@ -538,7 +538,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 }
 .sk-ai-convo__title {
     flex: 1; text-align: left; border: none; background: transparent; color: var(--sk-ai-fg);
-    padding: 7px 8px; font-size: 13px; cursor: pointer;
+    padding: 7px 8px; font-size: $text-sm; cursor: pointer;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .sk-ai-convo__del {

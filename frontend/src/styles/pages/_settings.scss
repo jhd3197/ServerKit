@@ -73,7 +73,7 @@
     padding: $space-2 $space-3;
     border-radius: $radius-sm;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     cursor: pointer;
     transition: all $transition-fast;
@@ -100,7 +100,7 @@
     border: none;
     border-radius: $radius-md;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     cursor: pointer;
     transition: all $transition-fast;
@@ -188,7 +188,7 @@
         margin-bottom: $space-2;
 
         h2 {
-            font-size: $font-size-lg;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             margin: 0 0 $space-1 0;
         }
@@ -196,12 +196,12 @@
         p {
             color: $text-secondary;
             margin: 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
     h3 {
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         margin: 0 0 $space-3 0;
         color: $text-primary;
@@ -221,7 +221,7 @@
 
     > p {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin: 0 0 $space-4 0;
     }
 }
@@ -246,7 +246,7 @@
     }
 
     h3 {
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         margin: 0;
@@ -254,7 +254,7 @@
 
     p {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin: $space-1 0 0 0;
     }
 }
@@ -269,7 +269,7 @@
         border: 1px solid $border-subtle;
         border-radius: $radius-full;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
 
         &--connected {
@@ -304,14 +304,14 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
 
         span {
             margin-top: 2px;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
         }
     }
 
@@ -327,14 +327,14 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
 
         span {
             margin-top: 3px;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.45;
         }
     }
@@ -357,7 +357,7 @@
         border: 1px solid $border-subtle;
         border-radius: $radius-md;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         overflow-wrap: anywhere;
 
         svg {
@@ -389,7 +389,7 @@
     padding: $space-6;
     text-align: center;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .settings-card__footer {
@@ -433,7 +433,7 @@
 
         .session-details {
             display: block;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }
@@ -472,7 +472,7 @@
     }
 
     span {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
     }
@@ -573,7 +573,7 @@
     }
 
     span {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
     }
 }
@@ -606,7 +606,7 @@
 
         .notification-desc {
             display: block;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }
@@ -714,7 +714,7 @@
     }
 
     span {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
     }
@@ -850,7 +850,7 @@
     margin-top: $space-2;
     padding: $space-2 $space-3;
     border-radius: $radius-md;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     &.success {
         background: fade($success-raw, 15%);
@@ -881,19 +881,19 @@
     }
 
     h3 {
-        font-size: $font-size-xl;
+        font-size: $text-lg;
         margin-bottom: $space-1;
     }
 
     .version {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin-bottom: $space-4;
     }
 
     .description {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-relaxed;
         max-width: 500px;
         margin: 0 auto;
@@ -905,7 +905,7 @@
         border-top: 1px solid $border-subtle;
 
         .btn-sm {
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             padding: $space-2 $space-3;
             display: inline-flex;
             align-items: center;
@@ -921,7 +921,7 @@
             align-items: center;
             justify-content: center;
             gap: $space-2;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
 
             &.current {
                 color: $success;
@@ -952,7 +952,7 @@
                     color: $accent-primary;
                     cursor: pointer;
                     text-decoration: underline;
-                    font-size: $font-size-sm;
+                    font-size: $text-xs;
                     padding: 0;
                     margin-left: $space-2;
 
@@ -970,7 +970,7 @@
             flex-wrap: wrap;
             gap: $space-2;
             margin-top: $space-3;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $warning;
 
             span {
@@ -981,7 +981,7 @@
 
         .update-capability-note {
             margin-top: $space-2;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-muted;
         }
 
@@ -998,7 +998,7 @@
                 background: $bg-elevated;
                 border: 1px solid $border-subtle;
                 border-radius: $radius-md;
-                font-size: $font-size-xs;
+                font-size: $text-xs;
                 text-align: start;
                 white-space: pre-wrap;
                 word-break: break-word;
@@ -1055,13 +1055,13 @@
 
         h4 {
             margin: 0 0 $space-2;
-            font-size: $font-size-md;
+            font-size: $text-md;
             font-weight: $font-weight-semibold;
         }
 
         p {
             margin: 0 0 $space-4;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
             line-height: $line-height-relaxed;
         }
@@ -1101,7 +1101,7 @@
         align-items: center;
         gap: $space-2;
         padding: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
 
         svg {
@@ -1129,7 +1129,7 @@
     border-radius: $radius-md;
     color: $text-secondary;
     text-decoration: none;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     transition: all $transition-fast;
 
     svg {
@@ -1148,7 +1148,7 @@
 // License Text
 .license-text {
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     margin: 0;
 }
 
@@ -1186,7 +1186,7 @@
 
     .settings-hint {
         display: block;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 }
@@ -1205,7 +1205,7 @@
     border: 1px solid $border-subtle;
     border-radius: $radius-md;
     color: $text-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     cursor: pointer;
     transition: border-color $transition-fast;
 
@@ -1225,7 +1225,7 @@
 }
 
 .settings-saving {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
     font-style: italic;
 }
@@ -1269,7 +1269,7 @@
     }
 
     .icon-reference-name {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
         text-align: center;
         word-break: break-word;
@@ -1326,7 +1326,7 @@
 }
 
 .accent-label {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-primary;
 }
@@ -1338,7 +1338,7 @@
 
 .accent-custom-label {
     display: block;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-secondary;
     margin-bottom: $space-2;
@@ -1371,7 +1371,7 @@
 
 .accent-custom-hex {
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
@@ -1381,7 +1381,7 @@
     gap: 4px;
     margin-left: auto;
     padding: 4px 10px;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-dim);
     background: transparent;
@@ -1469,13 +1469,13 @@
     }
 
     &__name {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
 
     &__base {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         text-transform: uppercase;
         letter-spacing: 0.04em;
         color: var(--text-faint);
@@ -1486,7 +1486,7 @@
 
     &__desc {
         margin: 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.4;
         color: var(--text-dim);
     }
@@ -1503,7 +1503,7 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--accent-primary);
     }
@@ -1512,7 +1512,7 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--amber);
     }
@@ -1530,7 +1530,7 @@
         align-items: center;
         gap: 4px;
         padding: 3px 8px;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--text-dim);
         background: transparent;
@@ -1560,7 +1560,7 @@
     gap: $space-2;
     padding: $space-5 $space-3;
     color: var(--text-dim);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     .spin { animation: theme-spin 1s linear infinite; }
 }
@@ -1601,19 +1601,19 @@
     }
 
     .theme-browse__name {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
 
     .theme-browse__author {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .theme-browse__desc {
         margin: 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.4;
         color: var(--text-dim);
     }
@@ -1622,7 +1622,7 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--green);
     }
@@ -1633,7 +1633,7 @@
         justify-content: center;
         gap: 5px;
         padding: 5px 10px;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--text);
         background: var(--surface-3);
@@ -1674,14 +1674,14 @@
 
         // Direct child only: the Select and SegControl inside carry spans of their own.
         > span {
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: var(--text-dim);
         }
 
         input {
             padding: 6px 10px;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: var(--text);
             background: var(--surface);
             border: 1px solid var(--border);
@@ -1703,7 +1703,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-dim);
 
         input[type="color"] {
@@ -1725,7 +1725,7 @@
 
         button {
             padding: 5px 12px;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: var(--text-dim);
             background: transparent;
@@ -1748,7 +1748,7 @@
 
     &__group h4 {
         margin: 0 0 $space-2;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         color: var(--text-faint);
@@ -1771,7 +1771,7 @@
 
         label {
             font-family: $font-mono;
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-dim);
         }
     }
@@ -1797,7 +1797,7 @@
             min-width: 0;
             padding: 5px 8px;
             font-family: $font-mono;
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text);
             background: var(--surface);
             border: 1px solid var(--border);
@@ -1847,7 +1847,7 @@
 }
 
 .widget-item__label {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-primary;
 }
@@ -1931,13 +1931,13 @@
     }
 
     .whitelabel-mode__label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
     }
 
     .whitelabel-mode__desc {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 }
@@ -1951,7 +1951,7 @@
     .form-group {
         label {
             display: block;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: $text-secondary;
             margin-bottom: $space-2;
@@ -1965,7 +1965,7 @@
             border: 1px solid $border-subtle;
             border-radius: $radius-md;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             transition: border-color $transition-fast;
 
             &:focus {
@@ -2001,12 +2001,12 @@
         }
 
         span {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
     .whitelabel-upload__hint {
-        font-size: $font-size-xs !important;
+        font-size: $text-xs !important;
         color: $text-tertiary;
         opacity: 0.7;
     }
@@ -2034,7 +2034,7 @@
 
     .whitelabel-preview__label {
         display: block;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-tertiary;
         text-transform: uppercase;
@@ -2081,13 +2081,13 @@
 
         h4 {
             margin: 0 0 $space-2;
-            font-size: $font-size-md;
+            font-size: $text-md;
             font-weight: $font-weight-semibold;
         }
 
         p {
             margin: 0 0 $space-3;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
             line-height: $line-height-relaxed;
         }
@@ -2122,7 +2122,7 @@
     .form-group {
         label {
             display: block;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: $text-secondary;
             margin-bottom: $space-2;
@@ -2136,7 +2136,7 @@
             border: 1px solid $border-subtle;
             border-radius: $radius-md;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
 
             &:focus {
                 outline: none;
@@ -2176,7 +2176,7 @@
     }
 
     .sso-provider-config__status {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         padding: $space-1 $space-2;
         border-radius: $radius-full;
         font-weight: $font-weight-medium;
@@ -2197,7 +2197,7 @@
         .form-group {
             label {
                 display: block;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
                 font-weight: $font-weight-medium;
                 color: $text-secondary;
                 margin-bottom: $space-2;
@@ -2211,7 +2211,7 @@
                 border: 1px solid $border-subtle;
                 border-radius: $radius-md;
                 color: $text-primary;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
                 font-family: $font-mono;
 
                 &:focus {
@@ -2268,7 +2268,7 @@
     }
 
     .linked-account__email {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -2297,7 +2297,7 @@
 
     .settings-section-desc {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin: 0;
         line-height: $line-height-normal;
     }
@@ -2313,7 +2313,7 @@
 }
 
 .sidebar-item-count {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
     background: $bg-secondary;
     padding: $space-1 $space-2;
@@ -2384,13 +2384,13 @@
     }
 
     .preset-card-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     .preset-card-desc {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         line-height: $line-height-normal;
     }
@@ -2426,7 +2426,7 @@
 
     .migration-pending-desc {
         margin: 0 0 $space-3;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -2441,7 +2441,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         cursor: pointer;
         user-select: none;
@@ -2455,7 +2455,7 @@
     align-items: center;
     gap: $space-2;
     margin-bottom: $space-4;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 
     svg { color: $success; flex-shrink: 0; }
@@ -2465,7 +2465,7 @@
 .migration-pending-desc code,
 .migration-uptodate code {
     font-family: $font-mono;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     padding: 1px 5px;
     background: $bg-tertiary;
     border-radius: $radius-sm;
@@ -2487,7 +2487,7 @@
 }
 
 .sidebar-items-group-label {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
     text-transform: uppercase;
@@ -2524,7 +2524,7 @@
     transition: opacity $transition-fast;
 
     span {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
         font-weight: $font-weight-medium;
     }
@@ -2560,7 +2560,7 @@
 .settings-site-action-label { display: flex; align-items: center; gap: 0.5rem; }
 .settings-webhook-actions { text-align: right; }
 .settings-webhook-action-icon { margin-inline-end: 0.5rem; }
-.settings-webhook-event-id { @include truncate(); font-size: 0.75rem; max-width: 200px; }
+.settings-webhook-event-id { @include truncate(); font-size: $text-xs; max-width: 200px; }
 
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
 .settings-webhook-row { cursor: pointer; }
@@ -2591,7 +2591,7 @@
         padding: 0;
     }
     &__name { flex: 1; overflow-wrap: anywhere; font-family: $font-mono; }
-    &__name small { display: block; margin-top: $space-1; color: $text-secondary; font-size: $font-size-xs; }
+    &__name small { display: block; margin-top: $space-1; color: $text-secondary; font-size: $text-xs; }
     &__filters { padding: $space-3; display: flex; align-items: center; gap: $space-3; }
     @media (max-width: $breakpoint-sm) {
         flex-direction: column;
@@ -2624,14 +2624,14 @@
 .sk-ai-usage { min-width: 0;
     .stat-strip { margin-block: $space-4; }
     .stat-strip__item { background: $bg-body; }
-    .stat-strip__item > strong { font-family: $font-mono; font-size: $font-size-lg; }
+    .stat-strip__item > strong { font-family: $font-mono; font-size: $text-lg; }
     .card-header { flex-wrap: wrap; gap: $space-3; }
     h4 { margin-top: $space-5; }
 }
 .sk-ai-task-selector { padding: $space-3; min-width: 0;
-    summary { cursor: pointer; color: $text-secondary; font-size: $font-size-xs; }
+    summary { cursor: pointer; color: $text-secondary; font-size: $text-xs; }
     .sk-ai-binding { margin-top: $space-3; }
 }
-.sk-ai-message__usage { font-size: $font-size-xs; color: $text-secondary; border-top: 1px solid $border-subtle; margin-top: $space-3; padding-top: $space-2; overflow-wrap: anywhere;
+.sk-ai-message__usage { font-size: $text-xs; color: $text-secondary; border-top: 1px solid $border-subtle; margin-top: $space-3; padding-top: $space-2; overflow-wrap: anywhere;
     summary { cursor: pointer; }
 }

@@ -26,7 +26,7 @@
         place-items: center;
         border-radius: 999px;
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         line-height: 1;
     }
 
@@ -68,8 +68,8 @@
     &__heading { gap: $space-3; min-width: 0; }
     &__heading h2,
     &__detail-head h3 { margin: 0; color: var(--text); }
-    &__heading h2 { font-size: $font-size-base; }
-    &__heading > div > span { color: var(--text-faint); font-family: var(--mono); font-size: 10px; }
+    &__heading h2 { font-size: $text-base; }
+    &__heading > div > span { color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; }
     &__header-actions { gap: $space-1; }
 
     &__icon {
@@ -94,7 +94,7 @@
             gap: 6px;
             color: var(--text-dim);
 
-            span { color: var(--text-faint); font-family: var(--mono); font-size: 10px; }
+            span { color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; }
             &.is-active { background: var(--surface-hover); color: var(--text); }
         }
     }
@@ -141,8 +141,8 @@
 
         strong,
         small { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        strong { color: var(--text); font-size: $font-size-sm; }
-        small { color: var(--text-faint); font-family: var(--mono); font-size: 10px; }
+        strong { color: var(--text); font-size: $text-xs; }
+        small { color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; }
     }
 
     &__row-unread {
@@ -161,7 +161,7 @@
         place-items: center;
         padding: $space-4;
         color: var(--text-faint);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         text-align: center;
     }
 
@@ -182,14 +182,14 @@
 
     &__detail-head { justify-content: space-between; gap: $space-3; }
     &__detail-head > div { min-width: 0; }
-    &__detail-head h3 { overflow: hidden; font-size: $font-size-lg; text-overflow: ellipsis; white-space: nowrap; }
-    &__eyebrow { color: var(--text-faint); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+    &__detail-head h3 { overflow: hidden; font-size: $text-lg; text-overflow: ellipsis; white-space: nowrap; }
+    &__eyebrow { color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; letter-spacing: 0.08em; text-transform: uppercase; }
 
-    &__meta { gap: $space-3; color: var(--text-faint); font-family: var(--mono); font-size: 10px; }
+    &__meta { gap: $space-3; color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; }
     &__meta span { display: inline-flex; align-items: center; gap: 5px; }
 
     &__progress { display: grid; gap: $space-2; }
-    &__progress-copy { justify-content: space-between; color: var(--text-dim); font-size: $font-size-xs; }
+    &__progress-copy { justify-content: space-between; color: var(--text-dim); font-size: $text-xs; }
     &__progress progress {
         width: 100%;
         height: 5px;
@@ -222,7 +222,7 @@
         border: 1px solid transparent;
         border-radius: $radius-md;
         @include status-variant(var(--red), var(--red-bg), var(--red));
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &__handoff {
@@ -247,14 +247,14 @@
         > p {
             margin: 0;
             color: var(--text-dim);
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.55;
         }
 
         .form-field { gap: $space-1; }
-        .form-field__label { color: var(--text); font-size: $font-size-xs; }
+        .form-field__label { color: var(--text); font-size: $text-xs; }
         .form-field__hint,
-        .form-field__error { margin-block: $space-1 0; font-size: 10px; }
+        .form-field__error { margin-block: $space-1 0; font-size: $text-xs; }
         input { font-family: var(--mono); }
     }
 
@@ -272,7 +272,7 @@
         span:not(.operations-dock__handoff-icon) {
             color: var(--amber);
             font-family: var(--mono);
-            font-size: 9px;
+            font-size: $text-xs;
             letter-spacing: 0.1em;
             text-transform: uppercase;
         }
@@ -280,7 +280,7 @@
         strong {
             overflow: hidden;
             color: var(--text);
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
@@ -314,7 +314,7 @@
         border-radius: $radius-md;
         background: var(--bg-code);
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         line-height: 1.6;
         scrollbar-width: thin;
     }

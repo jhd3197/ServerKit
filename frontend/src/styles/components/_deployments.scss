@@ -107,7 +107,7 @@
         align-items: center;
         gap: $space-1;
         color: $text-tertiary;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
     }
 
     &__details {
@@ -125,14 +125,14 @@
         border: 1px solid $border-subtle;
         border-radius: $radius-md;
         color: $text-secondary;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
         font-family: $font-mono;
     }
 
     &__summary {
         margin: 0;
         color: $text-secondary;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
     }
 
     &--server {
@@ -182,7 +182,7 @@
     &__count {
         color: $text-tertiary;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         white-space: nowrap;
     }
 
@@ -195,20 +195,20 @@
         h3 {
             margin: 0;
             color: $text-primary;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
         }
 
         span {
             color: $text-tertiary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
     &__coverage-note {
         margin: 0;
         color: $warning;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__error,
@@ -235,7 +235,7 @@
         h2 {
             margin: 0;
             color: $text-primary;
-            font-size: $font-size-xl;
+            font-size: $text-lg;
         }
 
         p {
@@ -278,7 +278,7 @@
         justify-content: space-between;
         gap: $space-3;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         &--empty {
             justify-content: flex-start;
@@ -329,7 +329,7 @@
     &__hint {
         margin: 0 0 $space-4;
         color: $text-secondary;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
         max-width: 70ch;
     }
 }
@@ -377,8 +377,8 @@
     }
 
     &__summary-label {
-        font-size: 0.6875rem;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         text-transform: uppercase;
         letter-spacing: 0.04em;
         color: $text-tertiary;
@@ -387,7 +387,7 @@
     &__summary {
         margin: 0;
         color: $text-primary;
-        font-size: 0.9375rem;
+        font-size: $text-base;
         line-height: 1.4;
     }
 
@@ -399,8 +399,8 @@
 
     &__section-title {
         margin: 0;
-        font-size: 0.8125rem;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         color: $text-secondary;
         text-transform: uppercase;
         letter-spacing: 0.04em;
@@ -409,7 +409,7 @@
     &__none {
         margin: 0;
         color: $text-tertiary;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
     }
 
     &__lines {
@@ -428,7 +428,7 @@
         padding: 2px $space-2;
         border-radius: $radius-sm;
         font-family: $font-mono;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
         min-width: 0;
 
         &--add {
@@ -445,7 +445,7 @@
     }
 
     &__sign {
-        font-weight: 700;
+        font-weight: $font-weight-semibold;
         width: 12px;
         display: inline-block;
         text-align: center;
@@ -470,7 +470,7 @@
         gap: $space-2;
         flex-wrap: wrap;
         font-family: $font-mono;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
     }
 
     &__old {
@@ -489,7 +489,7 @@
     &__confirm-text {
         margin-right: auto;
         color: $text-secondary;
-        font-size: 0.875rem;
+        font-size: $text-base;
     }
 
     &__point-meta {
@@ -512,13 +512,13 @@
         h3 {
             margin: 0;
             color: $text-primary;
-            font-size: $font-size-base;
+            font-size: $text-base;
         }
 
         p {
             margin: $space-1 0 0;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: $line-height-normal;
         }
     }
@@ -536,7 +536,7 @@
             margin: 0;
             padding-inline-start: $space-5;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -570,14 +570,14 @@
         h3 {
             margin: 0 0 $space-2;
             color: $text-primary;
-            font-size: $font-size-base;
+            font-size: $text-base;
         }
 
         ul {
             margin: 0;
             padding-inline-start: $space-5;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 }

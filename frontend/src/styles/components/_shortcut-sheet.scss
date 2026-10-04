@@ -18,7 +18,7 @@
 
         dt {
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
 
         dd {
@@ -37,7 +37,7 @@
             background: $bg-elevated;
             color: $text-secondary;
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.4;
             white-space: nowrap;
         }

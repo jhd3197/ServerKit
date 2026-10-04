@@ -36,7 +36,7 @@
 
     // Typography
     font-family: inherit;
-    font-size: $font-size-base; // 14px
+    font-size: $text-base; // 14px
     font-weight: $font-weight-medium;
     line-height: 1;
 
@@ -125,7 +125,7 @@
     height: 32px;
     min-width: 72px;
     padding: 0 $space-3 + 2; // 14px
-    font-size: $font-size-sm + 1; // 13px
+    font-size: $text-sm; // 13px
     border-radius: $radius-md;
     gap: $space-1 + 2; // 6px
 
@@ -139,7 +139,7 @@
     height: 44px;
     min-width: 128px;
     padding: 0 $space-6 + 4; // 28px
-    font-size: $font-size-md; // 16px
+    font-size: $text-md; // 16px
 
     svg {
         width: 18px;
@@ -155,7 +155,7 @@ height: auto;
     border: none;
     color: $accent-primary;
     cursor: pointer;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     text-decoration: none;
 
     // Named sizes retain their geometry while links keep zero padding.
@@ -240,7 +240,7 @@ display: flex;
     height: auto;
     min-width: 0;
     padding: $space-1 $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     @include flex-start();
     gap: $space-1;
     @include transition(color);
@@ -254,7 +254,7 @@ display: flex;
 
 .btn-xs {
     padding: 2px 6px;
-    font-size: 11px;
+    font-size: $text-xs;
 
     svg {
         stroke: currentColor;

@@ -5,7 +5,7 @@
     padding: $spacing-lg 0;
     text-align: center;
     color: $text-muted;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     &--error p {
         color: var(--amber);
@@ -38,12 +38,12 @@
 
 .disk-reclaim__item-title {
     grid-area: title;
-    font-weight: 500;
+    font-weight: $font-weight-medium;
 }
 
 .disk-reclaim__item-detail {
     grid-area: detail;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-muted;
 }
 
@@ -62,5 +62,5 @@
     margin-top: $spacing-sm;
     padding-top: $spacing-md;
     border-top: 2px solid $border-color;
-    font-weight: 600;
+    font-weight: $font-weight-semibold;
 }

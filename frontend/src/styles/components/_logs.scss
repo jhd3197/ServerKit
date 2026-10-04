@@ -21,7 +21,7 @@
         border: 1px solid $border-subtle;
         border-radius: $radius-md;
         color: $text-primary;
-        font-size: $font-size-sm + 1;
+        font-size: $text-sm;
     }
 }
 
@@ -55,7 +55,7 @@
         h3 {
             margin: 0;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
     }
@@ -116,7 +116,7 @@
 
 .log-file-name {
     color: inherit;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -127,7 +127,7 @@
 .log-file-size {
     color: $text-tertiary;
     font-family: $font-mono;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
 }
 
 .logs-viewer {
@@ -142,12 +142,12 @@
     max-height: 600px;
     overflow-y: auto;
     font-family: var(--mono);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     line-height: 1.7;
     scroll-behavior: smooth;
 
     &__loading, &__empty {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         padding: $space-8;
         text-align: center;
         color: var(--text-faint);
@@ -204,7 +204,7 @@
         display: block;
         margin-bottom: $space-1;
         color: var(--text-faint);
-        font-size: 11px;
+        font-size: $text-xs;
     }
 
     &__json {
@@ -266,7 +266,7 @@
         width: auto;
         height: 36px;
         min-width: 120px;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -275,7 +275,7 @@
     align-items: center;
     gap: $space-2;
     color: $text-secondary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     white-space: nowrap;
 }
 
@@ -291,7 +291,7 @@
         margin: 0;
         color: var(--text-code);
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.7;
         white-space: pre-wrap;
         word-break: break-word;
@@ -300,7 +300,7 @@
 
 .empty-hint {
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     padding: $space-4;
 }
 

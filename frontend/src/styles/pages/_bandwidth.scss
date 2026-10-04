@@ -27,7 +27,7 @@
 
     &__month {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
         white-space: nowrap;
     }
@@ -37,14 +37,14 @@
 .overview-tab__bandwidth {
     &-month {
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
     &-caption {
         display: block;
         margin-top: 6px;
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -53,7 +53,7 @@
 // from the timed access log). Component: service-detail/RequestMetricsCard.
 .request-metrics {
     &__window {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
@@ -71,13 +71,13 @@
     }
 
     &__label {
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     &__value {
         font-family: var(--mono);
-        font-size: 18px;
+        font-size: $text-lg;
         color: var(--text);
     }
 
@@ -110,7 +110,7 @@
     }
 
     &__kind {
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
@@ -118,7 +118,7 @@
 
     &__env {
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
         overflow: hidden;
         text-overflow: ellipsis;
@@ -127,7 +127,7 @@
 
     &__empty {
         margin: 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -137,7 +137,7 @@
         justify-content: space-between;
         gap: 12px;
         margin-bottom: 10px;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -149,7 +149,7 @@
 
     &__failure-mode {
         margin: 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 }
@@ -184,30 +184,30 @@
 
     &__label,
     &__sub {
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     &__value {
         font-family: var(--mono);
-        font-size: 18px;
+        font-size: $text-lg;
         color: var(--text);
     }
 
     &__title {
         margin: 8px 0 0;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text);
     }
 
     &__table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 12.5px;
+        font-size: $text-sm;
 
         th {
             text-align: start;
-            font-weight: 500;
+            font-weight: $font-weight-medium;
             color: var(--text-dim);
             padding: 6px 8px;
             border-bottom: 1px solid var(--border-soft);
@@ -234,7 +234,7 @@
         align-items: flex-start;
         gap: 8px;
         margin: 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
 
         p { margin: 0; }
@@ -251,7 +251,7 @@
     &__hint,
     &__tradeoff {
         margin: 0 0 6px;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -262,7 +262,7 @@
 // Component: service-detail/HintsCard.
 .hints {
     &__window {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
@@ -288,24 +288,24 @@
     &__signal {
         margin: 0;
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text);
     }
 
     &__hint {
         margin: 0;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text);
     }
 
     &__failure {
         margin: 0;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     &__action {
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--accent-bright);
 
         &--here { color: var(--text-dim); }
@@ -329,7 +329,7 @@
         gap: 12px;
 
         dt {
-            font-size: 12px;
+            font-size: $text-xs;
             text-transform: uppercase;
             letter-spacing: 0.04em;
             color: var(--text-dim);
@@ -346,14 +346,14 @@
 
     &__release {
         font-family: var(--mono);
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text);
     }
 
     &__meta,
     &__hint {
         margin: 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -376,7 +376,7 @@
     &__reasons {
         margin: 6px 0 0;
         padding-inline-start: 18px;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
 
         li + li { margin-top: 4px; }
@@ -390,13 +390,13 @@
 .slot-split {
     &__downtime {
         margin: 0 0 12px;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--amber);
     }
 
     &__label {
         margin: 12px 0 6px;
-        font-size: 12px;
+        font-size: $text-xs;
         text-transform: uppercase;
         letter-spacing: 0.04em;
         color: var(--text-dim);
@@ -408,7 +408,7 @@
         padding: 10px 12px;
         overflow: auto;
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         background: var(--bg-code);
         border: 1px solid var(--border-soft);
         border-radius: 6px;

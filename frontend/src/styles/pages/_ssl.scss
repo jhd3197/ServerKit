@@ -27,7 +27,7 @@
 
 // Expiry, coloured by urgency (tones come from formatExpiry).
 .ssl-expiry {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
 
     &--green { color: $success; }

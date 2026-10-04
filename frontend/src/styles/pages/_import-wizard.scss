@@ -15,7 +15,7 @@
         align-items: center;
         gap: $space-3;
         margin: 0 0 $space-4;
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
@@ -39,7 +39,7 @@
         gap: $space-2;
         padding: $space-2 $space-3;
         border-radius: $radius-full;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
         white-space: nowrap;
 
@@ -80,7 +80,7 @@
         height: 22px;
         border: 1px solid $border-default;
         border-radius: $radius-full;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         flex-shrink: 0;
     }
@@ -108,7 +108,7 @@
 
     &__muted {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     // --------------------------------------------
@@ -141,13 +141,13 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-base;
+            font-size: $text-base;
         }
 
         p {
             margin: 0;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: 1.5;
         }
 
@@ -200,7 +200,7 @@
         border-radius: $radius-sm;
         background: transparent;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         cursor: pointer;
 
         &.is-active {
@@ -271,7 +271,7 @@
         gap: $space-3;
         padding: $space-4;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__report {
@@ -285,7 +285,7 @@
         flex-wrap: wrap;
         gap: $space-4;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         code {
             color: $text-primary;
@@ -298,7 +298,7 @@
             align-items: center;
             gap: $space-2;
             margin: 0 0 $space-3;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: $text-primary;
         }
@@ -313,7 +313,7 @@
     &__table {
         width: 100%;
         border-collapse: collapse;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         th,
         td {
@@ -339,7 +339,7 @@
 
         code {
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-secondary;
         }
     }
@@ -357,13 +357,13 @@
         padding: $space-1 $space-3;
         background: $bg-tertiary;
         border-radius: $radius-full;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
 
         em {
             font-style: normal;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
         }
     }
 
@@ -374,7 +374,7 @@
         border: 1px solid $border-subtle;
         border-radius: $radius-md;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         overflow-x: auto;
     }
@@ -388,7 +388,7 @@
         padding: $space-4;
         margin-bottom: $space-4;
         border-radius: $radius-md;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         svg {
             flex-shrink: 0;
@@ -461,7 +461,7 @@
             border: 1px solid $border-subtle;
             border-radius: $radius-md;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
 
             svg {
                 flex-shrink: 0;
@@ -493,7 +493,7 @@
     // Step 5 — run log
     // --------------------------------------------
     &__current-step {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-normal;
         color: $text-tertiary;
 
@@ -510,7 +510,7 @@
         border: 1px solid $border-subtle;
         border-radius: $radius-md;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.6;
         color: $text-secondary;
         overflow-y: auto;
@@ -523,7 +523,7 @@
     // --------------------------------------------
     &__history {
         h2 {
-            font-size: $font-size-base;
+            font-size: $text-base;
         }
     }
 
@@ -545,7 +545,7 @@
         gap: $space-4;
         padding: $space-3 $space-4;
         border-bottom: 1px solid $border-subtle;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         &:last-child {
             border-bottom: none;

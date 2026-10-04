@@ -30,7 +30,7 @@
 
         h3 {
             margin: 0;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: $text-primary;
         }
@@ -40,7 +40,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-variant-numeric: tabular-nums;
 
@@ -64,14 +64,14 @@
     }
 
     &__progress-step {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-secondary;
         font-variant-numeric: tabular-nums;
     }
 
     &__progress-eta {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-variant-numeric: tabular-nums;
     }
@@ -105,7 +105,7 @@
         background: $danger-bg;
         border: 1px solid $danger-border;
         color: $danger;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.4;
 
         svg {
@@ -182,7 +182,7 @@
     &__step-label {
         font-weight: $font-weight-medium;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__step--pending &__step-label {
@@ -191,7 +191,7 @@
 
     &__step-desc {
         margin: 2px 0 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -205,7 +205,7 @@
     }
 
     &__log {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         padding-left: $space-2;
         border-left: 2px solid $border-color;
@@ -241,7 +241,7 @@
         background: none;
         border: none;
         border-bottom: 1px solid $border-color;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         text-transform: uppercase;
         letter-spacing: 0.04em;
@@ -287,7 +287,7 @@
         gap: $space-3;
         padding: 2px $space-3;
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.6;
         color: $text-secondary;
 
@@ -314,7 +314,7 @@
 
     &__loading {
         margin: $space-3 0 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 

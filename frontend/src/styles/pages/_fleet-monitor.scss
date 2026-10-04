@@ -23,7 +23,7 @@
     border: 1px solid $warning-border;
     border-radius: $radius-md;
     color: $warning;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // Accent-washed icon chip (discovery cards)
@@ -95,7 +95,7 @@
 
     &__note {
         margin-left: auto;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -120,11 +120,11 @@
 
         &:hover { border-color: $border-default; }
 
-        &-name { font-weight: 600; }
+        &-name { font-weight: $font-weight-semibold; }
 
         &-counts {
             margin-left: auto;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
         }
     }

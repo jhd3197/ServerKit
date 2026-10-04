@@ -49,7 +49,7 @@
     border-bottom: 1px solid $border-subtle;
 
     h1 {
-        font-size: $font-size-2xl;
+        font-size: $text-xl;
         font-weight: $font-weight-semibold;
         letter-spacing: -0.5px;
     }
@@ -245,7 +245,7 @@
     }
 
     &__label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--text-dim);
         letter-spacing: 0.02em;

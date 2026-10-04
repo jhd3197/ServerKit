@@ -59,14 +59,14 @@
     }
 
     &__card-name {
-        font-size: 13px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
     }
 
     &__card-desc {
         margin-block-start: 3px;
         color: var(--text-faint);
-        font-size: 11.5px;
+        font-size: $text-xs;
         line-height: 1.5;
     }
 
@@ -76,7 +76,7 @@
         gap: 6px;
         padding: 9px 13px 12px;
         color: var(--text-faint);
-        font-size: 10.5px;
+        font-size: $text-xs;
 
         svg { flex: 0 0 auto; }
     }
@@ -129,8 +129,8 @@
             gap: 3px;
         }
 
-        strong { font-size: 12.5px; font-weight: 550; }
-        small { color: var(--text-faint); font-size: 10.5px; }
+        strong { font-size: $text-sm; font-weight: $font-weight-semibold; }
+        small { color: var(--text-faint); font-size: $text-xs; }
     }
 
     // Running recipe — step rail left, story right (prototype cp-split).
@@ -166,8 +166,8 @@
 
         strong {
             overflow: hidden;
-            font-size: 12.5px;
-            font-weight: 550;
+            font-size: $text-sm;
+            font-weight: $font-weight-semibold;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
@@ -175,7 +175,7 @@
         .mono {
             margin-block-start: 2px;
             color: var(--text-faint);
-            font-size: 10.5px;
+            font-size: $text-xs;
         }
     }
 
@@ -196,7 +196,7 @@
         background: transparent;
         color: var(--text-dim);
         font: inherit;
-        font-size: 12.5px;
+        font-size: $text-sm;
         text-align: start;
         cursor: pointer;
         @include focus-ring();
@@ -224,7 +224,7 @@
         border: 1px solid var(--border-strong);
         border-radius: 50%;
         color: var(--text-faint);
-        font-size: 10px;
+        font-size: $text-xs;
 
         .shell-recipes__step.is-done & {
             @include status-variant(var(--green), var(--green-bg), var(--green));
@@ -248,15 +248,15 @@
 
     &__eyebrow {
         color: var(--text-ghost);
-        font-size: 10px;
+        font-size: $text-xs;
         letter-spacing: 0.06em;
         text-transform: uppercase;
     }
 
     &__step-heading {
         margin: 2px 0 10px;
-        font-size: 14px;
-        font-weight: 550;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
     }
 
     &__body {
@@ -265,7 +265,7 @@
         margin: 0;
         overflow-y: auto;
         color: var(--text-dim);
-        font-size: 13px;
+        font-size: $text-sm;
         line-height: 1.7;
         text-wrap: pretty;
     }

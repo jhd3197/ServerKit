@@ -13,7 +13,7 @@
     color: $text-secondary;
 
     h3 {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         margin: 0 0 $space-2 0;
@@ -21,7 +21,7 @@
 
     p {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -46,7 +46,7 @@
     padding: $space-4;
     overflow-y: auto;
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     margin-bottom: $space-3;
 }
 
@@ -91,7 +91,7 @@
 
     &.exec-info {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &.exec-loading {
@@ -128,7 +128,7 @@
     background: transparent;
     color: $text-primary;
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     outline: none;
 
     &::placeholder {
@@ -171,7 +171,7 @@
     }
 
     h2 {
-        font-size: $font-size-xl;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         margin: 0 0 $space-2 0;
         color: $text-primary;
@@ -179,7 +179,7 @@
 
     .docker-unavailable-message {
         color: $text-secondary;
-        font-size: $font-size-base;
+        font-size: $text-base;
         margin: 0 0 $space-4 0;
     }
 
@@ -194,7 +194,7 @@
             border: 1px solid $border-subtle;
             border-radius: $radius-md;
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
             word-break: break-all;
             text-align: left;
@@ -210,7 +210,7 @@
         margin-bottom: $space-6;
 
         h4 {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             margin: 0 0 $space-3 0;
             color: $text-primary;
@@ -221,7 +221,7 @@
             padding-left: $space-5;
 
             li {
-                font-size: $font-size-sm;
+                font-size: $text-xs;
                 color: $text-secondary;
                 margin-bottom: $space-2;
 
@@ -281,7 +281,7 @@
     padding: 8px $space-4;
     border-radius: $radius-md;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     cursor: pointer;
     white-space: nowrap;
@@ -320,7 +320,7 @@
     display: inline-flex;
     padding: 1px 8px;
     border-radius: $radius-full;
-    font-size: 10px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -338,7 +338,7 @@
     background: $bg-tertiary;
     border-radius: $radius-sm;
     font-family: $font-mono;
-    font-size: 10px;
+    font-size: $text-xs;
     color: $text-secondary;
     @include truncate();
     max-width: 220px;
@@ -350,7 +350,7 @@
     padding: 1px 6px;
     background: $bg-tertiary;
     border-radius: $radius-sm;
-    font-size: 10px;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -424,7 +424,7 @@
     align-items: center;
     gap: $space-2;
     color: $text-secondary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     cursor: pointer;
     // Sits in the view row next to the search box now, where a flex parent will
     // happily wrap "Include stopped" onto two lines and make the row taller
@@ -468,7 +468,7 @@
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     th,
     td {
@@ -484,7 +484,7 @@
         background: $bg-card;
         color: $text-tertiary;
         text-align: left;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 
@@ -544,7 +544,7 @@
 .dx-muted-line {
     display: block;
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     @include truncate();
 
     &.mono {
@@ -560,7 +560,7 @@
     background: $bg-tertiary;
     color: $text-secondary;
     font-family: $font-mono;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     @include truncate();
 }
 
@@ -599,14 +599,14 @@
 
     span {
         color: $text-tertiary;
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 
     strong {
         color: $text-secondary;
         font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         text-align: right;
     }
@@ -660,7 +660,7 @@
     justify-content: center;
     gap: $space-2;
     padding: 0 $space-3;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     cursor: pointer;
     @include transition(all);
 
@@ -692,7 +692,7 @@
     border: 1px dashed $border-default;
     border-radius: $radius-sm;
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     white-space: nowrap;
     cursor: default;
 }
@@ -706,7 +706,7 @@
     border: 1px dashed $border-default;
     border-radius: $radius-sm;
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     white-space: nowrap;
     cursor: default;
 }
@@ -744,7 +744,7 @@
     h3 {
         margin: 0;
         color: $text-primary;
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         @include truncate();
     }
@@ -752,7 +752,7 @@
     span {
         color: $text-tertiary;
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 }
 
@@ -764,7 +764,7 @@
     padding: $space-3 $space-4;
     border-bottom: 1px solid $border-subtle;
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
 }
 
 .dx-inspector-actions {
@@ -787,7 +787,7 @@
         border-radius: $radius-sm;
         background: transparent;
         color: $text-secondary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         padding: $space-2 $space-3;
         text-transform: capitalize;
         cursor: pointer;
@@ -812,7 +812,7 @@
 
 .dx-inspector-loading {
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     padding: $space-4 0;
 }
 
@@ -832,14 +832,14 @@
     span {
         display: block;
         color: $text-tertiary;
-        font-size: 10px;
+        font-size: $text-xs;
         margin-bottom: 4px;
     }
 
     strong {
         display: block;
         color: $text-primary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         @include truncate();
     }
@@ -850,7 +850,7 @@
     align-items: center;
     gap: $space-2;
     color: $text-secondary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
 }
 
@@ -863,7 +863,7 @@
     span {
         min-width: 0;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         @include truncate();
     }
 
@@ -874,7 +874,7 @@
         border-radius: $radius-sm;
         color: $text-secondary;
         font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         padding: 3px $space-2;
         @include truncate();
     }
@@ -892,7 +892,7 @@
         border-radius: $radius-sm;
         color: $text-secondary;
         font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         padding: $space-2;
         white-space: pre-wrap;
         word-break: break-word;
@@ -1051,7 +1051,7 @@
     }
 
     &__head {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 

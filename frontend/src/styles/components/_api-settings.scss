@@ -21,7 +21,7 @@
 .api-settings__table {
     width: 100%;
     border-collapse: collapse;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     th, td {
         padding: $space-2 $space-3;
@@ -31,8 +31,8 @@
 
     th {
         color: $text-secondary;
-        font-weight: 500;
-        font-size: $font-size-xs;
+        font-weight: $font-weight-medium;
+        font-size: $text-xs;
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
@@ -47,7 +47,7 @@
 
     code {
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         padding: 2px 6px;
         background: $bg-elevated;
         border-radius: $radius-sm;
@@ -61,7 +61,7 @@
 }
 
 .api-settings__key-name {
-    font-weight: 500;
+    font-weight: $font-weight-medium;
 }
 
 .api-settings__key-prefix {
@@ -70,7 +70,7 @@
 
 .api-settings__muted {
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
 }
 
 .api-settings__actions {
@@ -80,7 +80,7 @@
 
 .api-settings__error-count {
     color: $danger;
-    font-weight: 600;
+    font-weight: $font-weight-semibold;
 }
 
 // ─── Rate Limits ───────────────────────────────────────
@@ -97,8 +97,8 @@
         gap: $space-1;
 
         label {
-            font-size: $font-size-sm;
-            font-weight: 500;
+            font-size: $text-xs;
+            font-weight: $font-weight-medium;
             color: $text-secondary;
         }
     }
@@ -140,13 +140,13 @@
 }
 
 .api-settings__webhook-name {
-    font-weight: 600;
+    font-weight: $font-weight-semibold;
     color: $text-primary;
 }
 
 .api-settings__webhook-url {
     font-family: $font-mono;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -180,7 +180,7 @@
 
 .api-settings__deliveries {
     h4 {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         margin-bottom: $space-2;
     }
@@ -197,7 +197,7 @@
     padding: $space-4;
 
     h4 {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         margin-bottom: $space-3;
     }
@@ -237,7 +237,7 @@
     padding: $space-4;
 
     h4 {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         margin-bottom: $space-2;
     }
@@ -247,8 +247,8 @@
 
 .badge--method {
     font-family: $font-mono;
-    font-size: $font-size-xs;
-    font-weight: 600;
+    font-size: $text-xs;
+    font-weight: $font-weight-semibold;
     padding: 1px 6px;
     border-radius: $radius-sm;
 }
@@ -291,7 +291,7 @@
 .badge--subtle {
     background: $bg-elevated;
     color: $text-secondary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     padding: 1px 6px;
     border-radius: $radius-sm;
 }
@@ -310,7 +310,7 @@
         border: 1px solid $warning-border;
         border-radius: $radius-md;
         color: $warning;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin-bottom: $space-4;
     }
 
@@ -346,12 +346,12 @@
     }
 
     .api-key-modal__tier-label {
-        font-weight: 600;
-        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        font-size: $text-xs;
     }
 
     .api-key-modal__tier-desc {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         opacity: 0.7;
     }
 
@@ -370,7 +370,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         padding: $space-1;
         cursor: pointer;
 
@@ -412,7 +412,7 @@
         gap: $space-2;
         padding: $space-1;
         cursor: pointer;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         input[type="checkbox"] {
             accent-color: $accent-primary;
@@ -429,7 +429,7 @@
         gap: $space-2;
         padding: $space-1;
         cursor: pointer;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         &:hover {
             background: $bg-hover;
@@ -443,13 +443,13 @@
 
     .webhook-modal__event-type {
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-primary;
     }
 
     .webhook-modal__event-desc {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     .form-row {

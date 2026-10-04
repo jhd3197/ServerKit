@@ -36,8 +36,8 @@
         border-radius: 999px;
         background: $danger;
         color: #fff;
-        font-size: 10px;
-        font-weight: 700;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         line-height: 17px;
         text-align: center;
         box-shadow: 0 0 0 2px $bg-card;
@@ -71,8 +71,8 @@
     }
 
     &__heading {
-        font-weight: 600;
-        font-size: 14px;
+        font-weight: $font-weight-semibold;
+        font-size: $text-base;
         color: $text-primary;
     }
 
@@ -84,8 +84,8 @@
         background: none;
         cursor: pointer;
         color: $accent-primary;
-        font-size: 12px;
-        font-weight: 500;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
 
         &:hover { text-decoration: underline; }
     }
@@ -99,7 +99,7 @@
         padding: 28px 14px;
         text-align: center;
         color: $text-secondary;
-        font-size: 13px;
+        font-size: $text-sm;
     }
 
     &__item {
@@ -134,13 +134,13 @@
     }
 
     &__title {
-        font-size: 13px;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__text {
-        font-size: 12px;
+        font-size: $text-xs;
         color: $text-secondary;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -150,7 +150,7 @@
     }
 
     &__time {
-        font-size: 11px;
+        font-size: $text-xs;
         color: $text-secondary;
         opacity: 0.8;
     }
@@ -193,8 +193,8 @@
         background: none;
         cursor: pointer;
         color: $accent-primary;
-        font-size: 13px;
-        font-weight: 500;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
         border-top: 1px solid $border-subtle;
 
         &:hover { background: $bg-hover; }

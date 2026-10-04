@@ -35,8 +35,8 @@
 
         h3 {
             margin: 0 0 $space-1;
-            font-size: $font-size-lg;
-            font-weight: 500;
+            font-size: $text-lg;
+            font-weight: $font-weight-medium;
             color: $text-primary;
         }
     }
@@ -44,12 +44,12 @@
     &__hint {
         margin: 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.5;
 
         code {
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             background: $bg-tertiary;
             padding: 1px 5px;
             border-radius: $radius-sm;
@@ -81,7 +81,7 @@
         input {
             flex: 1;
             font-family: $font-mono;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 }
@@ -94,8 +94,8 @@
 
     h4 {
         margin: 0;
-        font-size: $font-size-md;
-        font-weight: 500;
+        font-size: $text-md;
+        font-weight: $font-weight-medium;
         color: $text-primary;
     }
 
@@ -141,14 +141,14 @@
 
     &__pr {
         font-family: $font-mono;
-        font-size: $font-size-sm;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__name {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -160,7 +160,7 @@
         align-items: center;
         gap: $space-3;
         flex-wrap: wrap;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &__branch,

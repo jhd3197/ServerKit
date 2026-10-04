@@ -1,6 +1,6 @@
 
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
-.sk-form-hint { font-size: 0.75rem; color: $text-tertiary; }
+.sk-form-hint { font-size: $text-xs; color: $text-tertiary; }
 
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
 .sk-form-stack > * + * { margin-top: 1rem; }

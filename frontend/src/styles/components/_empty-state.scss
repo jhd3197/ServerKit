@@ -18,7 +18,7 @@
     }
 
     h3 {
-        font-size: $font-size-md;
+        font-size: $text-md;
         font-weight: $font-weight-semibold;
         margin-bottom: $space-2;
     }
@@ -45,14 +45,14 @@
     }
 
     &__title {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-secondary;
         margin: 0 0 $spacing-sm;
     }
 
     &__description {
-        font-size: $font-size-sm + 1;
+        font-size: $text-sm;
         color: $text-tertiary;
         max-width: 400px;
         margin: 0 0 $spacing-md;
@@ -76,7 +76,7 @@
         border: none;
         padding: 0;
         cursor: pointer;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
         text-decoration: underline;
         text-underline-offset: 2px;
@@ -97,11 +97,11 @@
         }
 
         .empty-state__title {
-            font-size: $font-size-2xl;
+            font-size: $text-xl;
         }
 
         .empty-state__description {
-            font-size: $font-size-base;
+            font-size: $text-base;
             max-width: 480px;
             margin-bottom: $space-6;
         }

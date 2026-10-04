@@ -16,7 +16,7 @@
     background: var(--bg-sidebar);
     color: var(--text-faint);
     font-family: $font-main;
-    font-size: 11.5px;
+    font-size: $text-xs;
 
     &__segment,
     .statusbar-select {
@@ -57,7 +57,7 @@
 
     &__muted {
         color: var(--text-faint);
-        font-size: 10.5px;
+        font-size: $text-xs;
         letter-spacing: 0.02em;
     }
 
@@ -163,7 +163,7 @@
     &__head {
         padding: 7px 10px 5px;
         color: var(--text-ghost);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         letter-spacing: 0.12em;
         text-transform: uppercase;
@@ -210,8 +210,8 @@
 
     &__name {
         overflow: hidden;
-        font-size: 13px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
@@ -219,7 +219,7 @@
     &__meta {
         margin-block-start: 1px;
         color: var(--text-faint);
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 
     &__check {
@@ -283,7 +283,7 @@
         border-radius: $radius-sm;
         background: transparent;
         color: var(--text-ghost);
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         white-space: nowrap;
         cursor: pointer;
         @include focus-ring();
@@ -311,7 +311,7 @@
         flex: 1;
         place-items: center;
         color: var(--text-faint);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__footer {
@@ -322,7 +322,7 @@
         border-block-start: 1px solid var(--border-soft);
         color: var(--text-ghost);
         font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
 
         button {
             border: 0;
@@ -354,7 +354,7 @@
         border-radius: 6px;
         background: transparent;
         color: var(--text-faint);
-        font-size: 12.5px;
+        font-size: $text-sm;
         white-space: nowrap;
         cursor: pointer;
         transition: color 120ms ease, background-color 120ms ease;
@@ -367,7 +367,7 @@
     &__badge {
         padding: 1px 5px;
         border-radius: 20px;
-        font-size: 10px;
+        font-size: $text-xs;
         @include status-variant(var(--accent-bright), var(--accent-bg));
     }
 
@@ -454,13 +454,13 @@
             white-space: nowrap;
         }
 
-        strong { font-size: 12.5px; font-weight: $font-weight-medium; }
-        span { margin-block-start: 1px; color: var(--text-ghost); font-size: 11px; }
+        strong { font-size: $text-sm; font-weight: $font-weight-medium; }
+        span { margin-block-start: 1px; color: var(--text-ghost); font-size: $text-xs; }
     }
 
     &__meta {
         color: var(--text-ghost);
-        font-size: 10.5px;
+        font-size: $text-xs;
         white-space: nowrap;
     }
 

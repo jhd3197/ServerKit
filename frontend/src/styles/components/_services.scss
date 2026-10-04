@@ -17,7 +17,7 @@
     background: $bg-card;
     border: 1px solid $border-subtle;
     border-radius: $radius-lg;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
 }
 
 .service-dot {
@@ -42,13 +42,13 @@
 
 .service-status {
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // Live indicator (pulsing dot)
 .live-indicator {
     color: $success;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
 
     &::before {

@@ -39,7 +39,7 @@
     border-radius: $radius-sm;
     @include status-variant(var(--accent-bright), var(--accent-bg));
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -48,7 +48,7 @@
 .dom-dash {
     color: var(--text-ghost);
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: $text-xs;
 }
 
 .dom-chev { color: var(--text-ghost); }
@@ -59,13 +59,13 @@
     padding: 1px 6px;
     border-radius: $radius-sm;
     @include status-variant($success, $success-bg);
-    font-size: 10px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
 }
 
 // Registration expiry, coloured by urgency.
 .dom-expiry {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
 
     &--green { color: $success; }
@@ -76,7 +76,7 @@
     // what you copy, the relative is what you judge.
     &__rel {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-ghost);
         margin-top: 1px;
     }
@@ -90,7 +90,7 @@
     gap: 5px;
     min-width: 0;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
 
     &__bar {
         display: block;
@@ -126,7 +126,7 @@
     border: 1px solid $border-subtle;
     border-radius: $radius-md;
     background: fade($warning-raw, 8%);
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
 
     svg { color: $warning; flex-shrink: 0; }
@@ -149,7 +149,7 @@
 
     &__title {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
@@ -160,7 +160,7 @@
 
     &__hint {
         margin: 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -168,7 +168,7 @@
         margin: 0;
         padding: $space-4;
         text-align: center;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
         background: var(--surface-2);
         border-radius: $radius-md;
@@ -196,7 +196,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         cursor: pointer;
     }
@@ -230,7 +230,7 @@
         align-items: center;
         gap: 6px;
         margin: 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $success;
 
         svg { flex-shrink: 0; }
@@ -240,14 +240,14 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
 
         &--on { color: #f6821f; font-weight: $font-weight-medium; }
     }
 
     &__src {
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
         padding: 1px 6px;
@@ -283,7 +283,7 @@
         gap: 4px;
         padding: 1px 7px;
         border-radius: $radius-full;
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         @include status-variant(var(--accent-bright), var(--accent-bg));
 
@@ -307,7 +307,7 @@
         align-items: center;
         gap: $space-2;
         padding: $space-2 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         border-bottom: 1px solid $border-subtle;
 
         &:last-child { border-bottom: none; }
@@ -318,7 +318,7 @@
     &__prop-res {
         margin-left: auto;
         font-family: var(--mono);
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -349,11 +349,11 @@
     &__section { display: flex; flex-direction: column; align-items: flex-start; gap: $space-2; }
     &__sectiontitle {
         margin: 0;
-        font-size: 14px;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
-    &__hint { margin: 0; font-size: $font-size-sm; color: $text-tertiary; }
+    &__hint { margin: 0; font-size: $text-xs; color: $text-tertiary; }
 
     &__danger {
         padding-top: $space-4;
@@ -368,7 +368,7 @@
     &__count {
         margin-left: $space-2;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-normal;
         color: var(--text-faint);
     }
@@ -423,13 +423,13 @@
     color: $success;
 
     h4 {
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         margin-bottom: $space-1;
     }
 
     p {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
 
         strong { color: $text-primary; }
@@ -445,8 +445,8 @@
     padding: 2px 7px;
     border-radius: 5px;
     font-family: var(--mono);
-    font-size: 10.5px;
-    font-weight: 600;
+    font-size: $text-xs;
+    font-weight: $font-weight-semibold;
     letter-spacing: 0.04em;
     background: var(--surface-3);
     color: var(--text-dim);
@@ -470,7 +470,7 @@
         display: flex;
         align-items: center;
         gap: $spacing-sm;
-        font-size: 13.5px;
+        font-size: $text-sm;
         color: var(--text);
 
         svg { color: var(--amber); flex-shrink: 0; }
@@ -481,7 +481,7 @@
         background: none;
         border: none;
         color: var(--text-dim);
-        font-size: 20px;
+        font-size: $text-lg;
         line-height: 1;
         cursor: pointer;
 
@@ -499,7 +499,7 @@
         flex-shrink: 0;
         width: 84px;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         text-transform: uppercase;
         letter-spacing: 0.06em;
         color: var(--text-faint);
@@ -513,7 +513,7 @@
         border-radius: $radius-sm;
         padding: $spacing-xs $spacing-sm;
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text);
         word-break: break-all;
     }

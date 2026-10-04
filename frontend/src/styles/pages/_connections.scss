@@ -15,7 +15,7 @@
         padding: $space-8;
         text-align: center;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__warning {
@@ -26,7 +26,7 @@
         background: fade($warning-raw, 10%);
         border: 1px solid fade($warning-raw, 30%);
         border-radius: $radius-md;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
 
         svg {
@@ -50,14 +50,14 @@
     &__category-head {
         h3 {
             margin: 0;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: $text-primary;
         }
 
         p {
             margin: 2px 0 0;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }
@@ -117,14 +117,14 @@
 
     &__name {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__blurb {
         margin: 2px 0 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         line-height: 1.45;
     }
@@ -137,7 +137,7 @@
     }
 
     &__subtitle {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -169,7 +169,7 @@
         display: inline-flex;
         align-items: center;
         gap: 3px;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
         text-decoration: none;
@@ -181,7 +181,7 @@
     }
 
     &__soon-tag {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
     }
@@ -196,7 +196,7 @@
     padding: 1px $space-2;
     border: 1px solid $border-subtle;
     border-radius: $radius-full;
-    font-size: 11px;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-secondary;
 
@@ -259,7 +259,7 @@
         align-items: center;
         gap: $space-2;
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -306,7 +306,7 @@
         strong {
             display: block;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
 
@@ -314,7 +314,7 @@
             display: block;
             margin-top: 2px;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
         }
     }
 }
@@ -331,7 +331,7 @@
         strong {
             display: block;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
 
@@ -339,7 +339,7 @@
             display: block;
             margin-top: 3px;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.45;
         }
     }
@@ -388,7 +388,7 @@
         strong {
             display: block;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
     }
@@ -397,7 +397,7 @@
         display: block;
         margin-top: 2px;
         font-family: $font-mono;
-        font-size: 11px;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -419,7 +419,7 @@
 
     &__status {
         padding: $space-3 $space-4;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
 
         &--error { color: $danger; }
@@ -431,14 +431,14 @@
         justify-content: center;
         gap: $space-2;
         padding: $space-4;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
     &__table {
         width: 100%;
         border-collapse: collapse;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
 
         th {
             position: sticky;
@@ -510,7 +510,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
 
@@ -519,7 +519,7 @@
 
     &__blurb {
         margin: 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.5;
         color: $text-tertiary;
     }
@@ -529,7 +529,7 @@
         align-items: center;
         gap: $space-2;
         flex-wrap: wrap;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
 
         svg { color: $success; }
@@ -563,7 +563,7 @@
         background: none;
         border: none;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         cursor: pointer;
 
         span {
@@ -589,7 +589,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
@@ -609,7 +609,7 @@
         align-items: center;
         gap: $space-2;
         flex-wrap: wrap;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
 
         code {
@@ -624,7 +624,7 @@
         align-items: center;
         gap: $space-1;
         width: max-content;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: var(--accent-bright);
         text-decoration: none;
 
@@ -676,14 +676,14 @@
         display: flex;
         align-items: center;
         gap: $space-1;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__rec {
         margin-left: auto;
-        font-size: 10px;
+        font-size: $text-xs;
         text-transform: uppercase;
         letter-spacing: 0.04em;
         font-weight: $font-weight-semibold;
@@ -691,7 +691,7 @@
     }
 
     &__desc {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         line-height: 1.45;
     }
@@ -708,7 +708,7 @@
         background: $bg-card;
         border: 1px solid $border-subtle;
         border-radius: $radius-full;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-secondary;
         cursor: pointer;
@@ -731,7 +731,7 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
     cursor: pointer;
 }
@@ -774,7 +774,7 @@
 
         h2 {
             margin: 0;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: $text-primary;
         }
@@ -789,7 +789,7 @@
         padding: 0 6px;
         border-radius: $radius-full;
         background: var(--surface-2);
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-secondary;
     }
@@ -798,7 +798,7 @@
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $warning;
     }
@@ -811,7 +811,7 @@
         background: transparent;
         border: 1px solid $border-subtle;
         border-radius: $radius-md;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-secondary;
         cursor: pointer;
@@ -843,7 +843,7 @@
     }
 
     &__domain {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         overflow: hidden;
@@ -852,12 +852,12 @@
     }
 
     &__via {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
     &__expiry {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         padding: 2px $space-2;
         border-radius: $radius-full;
@@ -872,13 +872,13 @@
     }
 
     &__date {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         white-space: nowrap;
     }
 
     &__renew {
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
 

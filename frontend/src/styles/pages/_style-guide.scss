@@ -25,7 +25,7 @@
     }
 
     &__font-sample { font-family: $font-main; margin-bottom: $space-4; }
-    &__code-sample { font-family: $font-mono; font-size: $font-size-base; }
+    &__code-sample { font-family: $font-mono; font-size: $text-base; }
     &__weight-sample { margin-bottom: $space-2; }
 
     &__token-row {
@@ -39,7 +39,7 @@
 
     &__token-name {
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
 
         &--font { min-width: 160px; }
@@ -50,12 +50,12 @@
     &__token-value {
         min-width: 50px;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
     &__description {
-        font-size: $font-size-base;
+        font-size: $text-base;
         color: $text-secondary;
 
         &--muted { color: $text-tertiary; }
@@ -75,7 +75,7 @@
     }
 
     &__full-width-button { width: 100%; margin-bottom: $space-4; }
-    &__progress-value { font-family: $font-mono; font-size: $font-size-base; }
+    &__progress-value { font-family: $font-mono; font-size: $text-base; }
     &__progress-labels { display: flex; justify-content: space-between; margin-bottom: $space-1; }
     &__modal-field { margin-top: $space-4; }
     &__drawer-fields {
@@ -111,7 +111,7 @@
         }
     }
     &__layout-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: $space-3; }
-    &__swatch-text { font-size: $font-size-base; font-weight: $font-weight-semibold; }
+    &__swatch-text { font-size: $text-base; font-weight: $font-weight-semibold; }
 
     // Nav tabs for sections
     &__nav {
@@ -128,7 +128,7 @@
         align-items: center;
         gap: $space-2;
         padding: $space-2 $space-3;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
         background: transparent;
@@ -154,7 +154,7 @@
     }
 
     &__section-title {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         margin-bottom: $space-3;
@@ -186,14 +186,14 @@
     }
 
     &__swatch-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
     }
 
     &__swatch-token {
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -228,7 +228,7 @@
         background: $bg-elevated;
         border: 1px solid $border-default;
         border-radius: $radius-md;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         text-align: center;
     }

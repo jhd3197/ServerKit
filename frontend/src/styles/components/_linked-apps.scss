@@ -17,7 +17,7 @@
         align-items: center;
         gap: $space-2;
         margin: 0;
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
@@ -38,7 +38,7 @@
     border-radius: $radius-md;
 
     .env-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -48,7 +48,7 @@
     align-items: center;
     gap: $space-3;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     &::before,
     &::after {
@@ -112,13 +112,13 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .linked-app-port {
     color: $text-tertiary;
     font-family: $font-mono;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
 }
 
 .linked-app-actions {
@@ -136,7 +136,7 @@
     p {
         margin: 0 0 $space-3;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .btn {
@@ -160,7 +160,7 @@
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $accent-primary;
     margin-bottom: $space-2;
@@ -170,7 +170,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: $space-3;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
     font-family: $font-mono;
 
@@ -206,7 +206,7 @@
 
     .link-app-label {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .link-app-name {
@@ -226,12 +226,12 @@
 
     h3 {
         margin: 0 0 $space-2;
-        font-size: $font-size-lg;
+        font-size: $text-lg;
     }
 
     p {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin-bottom: $space-4;
     }
 }
@@ -268,7 +268,7 @@
     }
 
     .env-radio-label {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -281,7 +281,7 @@
 }
 
 .link-preview-title {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -308,7 +308,7 @@
 }
 
 .link-preview-name {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-primary;
 }
@@ -337,7 +337,7 @@
     gap: 4px;
     padding: 2px 8px;
     border-radius: $radius-full;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
 
     .status-dot {

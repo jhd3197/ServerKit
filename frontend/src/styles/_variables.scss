@@ -150,19 +150,35 @@ $color-star: #f59e0b;
 $font-main: var(--sans, 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif);
 $font-mono: var(--mono, 'IBM Plex Mono', ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, monospace);
 
-$font-size-xs: 10px;
-$font-size-sm: 12px;
-$font-size-base: 14px;
-$font-size-md: 16px;
-$font-size-lg: 18px;
-$font-size-xl: 20px;
-$font-size-2xl: 24px;
-$font-size-3xl: 30px;
+// Type scale: seven sizes, nothing in between. 14px body and 12px floor
+// follow the dense-product norm (GitHub Primer, IBM Carbon productive,
+// Atlassian, which raised its minimum from 11px to 12px for legibility).
+// 13px is the one extra step, for table cells and secondary text.
+// Pages use these tokens only; scripts/check-type-scale.mjs enforces it.
+$text-xs: 12px;    // captions, meta, table headers, badges (the floor)
+$text-sm: 13px;    // table cells, secondary text, form hints
+$text-base: 14px;  // body, inputs, buttons
+$text-md: 16px;    // section titles
+$text-lg: 18px;    // card, drawer and modal titles
+$text-xl: 24px;    // page titles
+$text-2xl: 32px;   // display numbers
 
+// Three weights: regular, medium for labels, semibold for titles/emphasis.
 $font-weight-normal: 400;
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
-$font-weight-bold: 700;
+
+// Legacy names, kept so extension stylesheets compiled against the host keep
+// building. Core code uses the $text-* names (the check rejects these).
+$font-size-xs: $text-xs;
+$font-size-sm: $text-xs;
+$font-size-base: $text-base;
+$font-size-md: $text-md;
+$font-size-lg: $text-lg;
+$font-size-xl: $text-lg;
+$font-size-2xl: $text-xl;
+$font-size-3xl: $text-2xl;
+$font-weight-bold: $font-weight-semibold;
 
 $line-height-tight: 1.25;
 $line-height-normal: 1.5;

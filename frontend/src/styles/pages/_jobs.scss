@@ -34,7 +34,7 @@
 .sk-jobs__owner {
     color: $text-tertiary;
     font-family: $font-mono;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
 }
 
 .sk-jobs__when {
@@ -44,7 +44,7 @@
 
 .sk-jobs__error {
     margin-top: 3px;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $danger;
     max-width: 320px;
     overflow: hidden;

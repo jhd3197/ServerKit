@@ -83,7 +83,7 @@ const edge = (id, source, target, label, animated = false) => ({
     animated,
     type: 'smoothstep',
     style: { stroke: 'var(--border-default)', strokeWidth: 1.5 },
-    labelStyle: { fontSize: 10, fill: 'var(--text-secondary)' },
+    labelStyle: { fontSize: 12, fill: 'var(--text-secondary)' },
     labelBgStyle: { fill: 'var(--bg-card)' },
     markerEnd: { type: MarkerType.ArrowClosed, color: 'var(--border-default)' },
 });

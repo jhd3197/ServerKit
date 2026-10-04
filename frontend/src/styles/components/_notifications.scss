@@ -28,7 +28,7 @@
         align-items: center;
         gap: $space-2;
         flex-wrap: wrap;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         min-width: 0;
     }
@@ -54,7 +54,7 @@
     border-radius: $radius-md;
     cursor: pointer;
     color: $text-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     .form-group & { display: flex; margin-bottom: 0; color: $text-primary; }
     > span { flex: 1; order: -1; }
@@ -119,13 +119,13 @@
 
     h3 {
         margin: 0 0 $space-1 0;
-        font-size: $font-size-md;
+        font-size: $text-md;
     }
 
     p {
         margin: 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -156,7 +156,7 @@
     align-items: center;
 
     span {
-        font-weight: 500;
+        font-weight: $font-weight-medium;
     }
 }
 
@@ -205,7 +205,7 @@
         }
     }
 
-    &__name { font-weight: 600; }
+    &__name { font-weight: $font-weight-semibold; }
 
     &__body {
         display: flex;
@@ -231,11 +231,11 @@
         min-width: 180px;
     }
 
-    &__title { color: $text-primary; font-size: 0.9rem; }
+    &__title { color: $text-primary; font-size: $text-base; }
 
     &__key {
         color: $text-tertiary;
-        font-size: 0.75rem;
+        font-size: $text-xs;
         font-family: $font-mono;
     }
 
@@ -252,7 +252,7 @@
         border-radius: $radius-sm;
         color: $text-secondary;
         padding: $space-1 $space-2;
-        font-size: 0.75rem;
+        font-size: $text-xs;
         cursor: pointer;
 
         &:hover:not(:disabled) { background: $bg-hover; color: $text-primary; }
@@ -269,13 +269,13 @@
     border-radius: $radius-sm;
     background: $bg-card;
     color: $text-secondary;
-    font-size: 0.75rem;
+    font-size: $text-xs;
     cursor: pointer;
     text-transform: capitalize;
 
     &__state {
-        font-size: 0.68rem;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         opacity: 0.85;
     }
 
@@ -320,7 +320,7 @@
 
     .notif-defaults-grid__chan {
         text-align: center;
-        font-size: 0.75rem;
+        font-size: $text-xs;
         color: $text-secondary;
         text-transform: capitalize;
     }
@@ -331,9 +331,9 @@
     }
 
     .notif-defaults-grid__cat {
-        font-size: 0.85rem;
+        font-size: $text-sm;
         color: $text-primary;
-        font-weight: 500;
+        font-weight: $font-weight-medium;
     }
 
     .notif-defaults-grid__cell {
@@ -372,8 +372,8 @@
         color: $accent-primary;
     }
 
-    &__label { font-weight: 600; font-size: 0.9rem; }
-    &__hint { font-size: 0.75rem; color: $text-tertiary; }
+    &__label { font-weight: $font-weight-semibold; font-size: $text-base; }
+    &__hint { font-size: $text-xs; color: $text-tertiary; }
 
     &.active &__hint { color: $accent-primary; opacity: 0.85; }
 }

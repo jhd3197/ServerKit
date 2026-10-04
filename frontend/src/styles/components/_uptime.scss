@@ -40,7 +40,7 @@
     }
 
     h3 {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         margin: 0 0 $space-1 0;
@@ -51,7 +51,7 @@
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 
     .status-dot {
@@ -107,8 +107,8 @@
 
     .percentage-value {
         display: block;
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         font-family: $font-mono;
         color: $text-primary;
 
@@ -130,7 +130,7 @@
     }
 
     .percentage-label {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -157,15 +157,15 @@
     min-width: 60px;
 
     .counter-value {
-        font-size: 32px;
-        font-weight: $font-weight-bold;
+        font-size: $text-2xl;
+        font-weight: $font-weight-semibold;
         font-family: $font-mono;
         color: $text-primary;
         line-height: 1;
     }
 
     .counter-label {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -174,8 +174,8 @@
 }
 
 .counter-separator {
-    font-size: 32px;
-    font-weight: $font-weight-bold;
+    font-size: $text-2xl;
+    font-weight: $font-weight-semibold;
     font-family: $font-mono;
     color: $text-tertiary;
     margin: 0 $space-1;
@@ -194,7 +194,7 @@
     margin-bottom: $space-3;
 
     .graph-title {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-secondary;
     }
@@ -210,7 +210,7 @@
 
 .period-btn {
     padding: $space-1 $space-3;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-tertiary;
     background: transparent;
@@ -273,7 +273,7 @@
     display: flex;
     justify-content: space-between;
     margin-top: $space-2;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -322,15 +322,15 @@
     border-radius: $radius-md;
 
     .stat-period {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         text-transform: uppercase;
         margin-bottom: $space-1;
     }
 
     .stat-value {
-        font-size: $font-size-md;
-        font-weight: $font-weight-bold;
+        font-size: $text-md;
+        font-weight: $font-weight-semibold;
         font-family: $font-mono;
         color: $text-primary;
 
@@ -366,13 +366,13 @@
     gap: $space-3;
 
     .uptime-compact-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
     .uptime-compact-percent {
-        font-size: $font-size-base;
-        font-weight: $font-weight-bold;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
         font-family: $font-mono;
         padding: $space-1 $space-2;
         border-radius: $radius-sm;
@@ -395,13 +395,13 @@
     font-family: $font-mono;
 
     .value {
-        font-size: $font-size-lg;
-        font-weight: $font-weight-bold;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     .unit {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
         margin-right: $space-1;
     }
@@ -413,12 +413,12 @@
         min-width: 50px;
 
         .counter-value {
-            font-size: 24px;
+            font-size: $text-xl;
         }
     }
 
     .counter-separator {
-        font-size: 24px;
+        font-size: $text-xl;
     }
 
     .uptime-legend {

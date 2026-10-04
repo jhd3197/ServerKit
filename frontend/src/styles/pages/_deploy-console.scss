@@ -57,8 +57,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
 
     &__title {
         margin: 0;
-        font-size: 18px;
-        font-weight: 600;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
         min-width: 0;
         flex: 1;
@@ -76,8 +76,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         gap: $space-1;
         padding: 3px 10px;
         border-radius: 999px;
-        font-size: $font-size-sm;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         text-transform: capitalize;
 
         &--pending { background: var(--surface-3); color: var(--text-faint); }
@@ -95,7 +95,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
 
     &__step-count,
     &__elapsed {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-variant-numeric: tabular-nums;
     }
@@ -112,7 +112,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         gap: $space-2;
         padding: $space-2 $space-3;
         border-radius: $radius-md;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__degraded {
@@ -186,8 +186,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         align-items: center;
         gap: 8px;
         color: var(--text-ghost);
-        font-size: 12.5px;
-        font-weight: 500;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
 
         svg { flex-shrink: 0; }
     }
@@ -227,7 +227,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         margin-top: 6px;
         color: $text-tertiary;
         font-family: $font-mono;
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 
     &__seg--running &__seg-dur { color: var(--amber); }
@@ -240,9 +240,9 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         padding: 0 3px;
         color: var(--text-ghost);
         font-family: $font-mono;
-        font-size: 11.5px;
+        font-size: $text-xs;
 
-        b { color: $text-secondary; font-weight: 500; }
+        b { color: $text-secondary; font-weight: $font-weight-medium; }
     }
 
     // ---- toolbar ----
@@ -268,7 +268,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         align-items: center;
         gap: 4px;
         padding: 4px 8px;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         border-radius: $radius-md;
         border: 1px solid $border-subtle;
         background: transparent;
@@ -287,7 +287,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         height: auto;
         gap: 4px;
         padding: 4px 6px;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         border-radius: $radius-md;
         border: 1px solid $border-subtle;
         background: $bg-card;
@@ -315,7 +315,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
             border: none;
             background: transparent;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             outline: none;
             width: 100%;
             min-width: 0;
@@ -395,7 +395,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         padding: $space-2 $space-3;
         background: $dc-surface;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.55;
         color: #c9d1d9;
 
@@ -448,7 +448,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         border: none;
         background: var(--accent-primary);
         color: #fff;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         cursor: pointer;
         box-shadow: $shadow-lg;
     }
@@ -476,7 +476,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__error-msg {
         margin: 2px 0 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__error-hint {
@@ -488,7 +488,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         border-radius: $radius-md;
         background: rgba($warning-raw, 0.12);
         color: $warning;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__error-tail {
@@ -499,7 +499,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         background: $dc-surface;
         border-radius: $radius-md;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.5;
         color: #c9d1d9;
         white-space: pre-wrap;
@@ -534,7 +534,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     }
 
     &__success-dur {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -548,7 +548,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         li {
             display: flex;
             justify-content: space-between;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
             padding: 2px 0;
             border-bottom: 1px solid $dc-surface-line;
@@ -569,7 +569,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         padding-top: $space-2;
         border-top: 1px solid $dc-surface-line;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     // ---- shared buttons ----
@@ -582,8 +582,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         border: 1px solid $border-subtle;
         background: $bg-card;
         color: $text-primary;
-        font-size: $font-size-sm;
-        font-weight: 500;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         cursor: pointer;
 
         &:hover { background: $bg-hover; }
@@ -624,8 +624,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         border: 1px solid transparent;
         background: var(--surface-3);
         color: $text-secondary;
-        font-size: 11.5px;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         cursor: pointer;
         white-space: nowrap;
 
@@ -645,7 +645,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__nav-count {
         color: $text-tertiary;
         font-family: $font-mono;
-        font-size: 11px;
+        font-size: $text-xs;
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
     }
@@ -668,7 +668,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         background: #131a24;
         color: $text-secondary;
         font-family: $font-mono;
-        font-size: 11.5px;
+        font-size: $text-xs;
         text-align: left;
         cursor: pointer;
 
@@ -677,20 +677,20 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     }
 
     &__sec-name {
-        font-weight: 600;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
         white-space: nowrap;
     }
 
     &__sec-meta {
         color: var(--text-ghost);
-        font-size: 10.5px;
+        font-size: $text-xs;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
-    &__sec-err { color: $dc-error; font-weight: 600; }
+    &__sec-err { color: $dc-error; font-weight: $font-weight-semibold; }
 
     // The line prev/next landed on, so the eye finds it after the scroll.
     &__line.is-current {
@@ -720,7 +720,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         border: none;
         background: transparent;
         color: $text-secondary;
-        font-size: 12px;
+        font-size: $text-xs;
         cursor: pointer;
         border-radius: $radius-md;
 

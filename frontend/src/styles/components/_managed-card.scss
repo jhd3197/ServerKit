@@ -23,8 +23,8 @@
 
     &__title {
         margin: 0;
-        font-size: $font-size-xl;
-        font-weight: 600;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
     }
 
     &__body {
@@ -43,7 +43,7 @@
         gap: $spacing-sm;
 
         .managed-card__title {
-            font-size: $font-size-lg;
+            font-size: $text-lg;
         }
     }
 }
@@ -58,7 +58,7 @@
     border: 1px solid rgba($warning-color, 0.35);
     border-radius: $radius-md;
     color: $text-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .managed-spec-list {
@@ -72,7 +72,7 @@
     display: flex;
     justify-content: space-between;
     gap: $spacing-md;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .managed-spec-key {
