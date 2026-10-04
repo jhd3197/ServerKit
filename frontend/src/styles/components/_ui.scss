@@ -510,6 +510,17 @@
         color: $text-tertiary;
         flex-shrink: 0;
     }
+
+    &--sm {
+        width: auto;
+        height: 30px;
+        padding-block: 0;
+        padding-inline: $space-2;
+        gap: $space-1;
+        font-size: $font-size-sm;
+
+        .ui-select-icon { width: 14px; height: 14px; }
+    }
 }
 
 .ui-select-content {

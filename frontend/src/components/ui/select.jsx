@@ -7,10 +7,12 @@ const Select = SelectPrimitive.Root;
 const SelectGroup = SelectPrimitive.Group;
 const SelectValue = SelectPrimitive.Value;
 
-const SelectTrigger = React.forwardRef(({ className, children, ...props }, ref) => (
+// size="sm" is the compact trigger for toolbars, table footers and inline
+// rows: content-width and 30px tall instead of a full-width 40px form field.
+const SelectTrigger = React.forwardRef(({ className, children, size, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
-    className={cn('ui-select-trigger', className)}
+    className={cn('ui-select-trigger', size === 'sm' && 'ui-select-trigger--sm', className)}
     {...props}
   >
     {children}
