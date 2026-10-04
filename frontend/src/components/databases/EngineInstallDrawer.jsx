@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Box, Share2, Database, Rocket, Eye, EyeOff, RefreshCw, Copy, ShieldAlert,
+    Box, Database, Rocket, RefreshCw, ShieldAlert,
     CheckCircle2, HardDrive, RotateCw, Terminal,
 } from 'lucide-react';
 import api from '../../services/api';
@@ -11,7 +11,10 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '../../contexts/useToast.js';
 import EngineGlyph from './EngineGlyph';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '@/components/CopyField';
+import PortField from '@/components/PortField';
+import { InfoList, InfoItem } from '@/components/InfoList';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
 import {
     engineMeta, engineVersions, generatePassword, partitionVariables, seedVariables,
@@ -37,49 +40,26 @@ import {
 function SecretRow({ password, onRegenerate, disabled }) {
     const { t } = useTranslation();
     const toast = useToast();
-    const [revealed, setRevealed] = useState(false);
-
-    const copy = () => {
-        copyToClipboard(password).then((ok) => (ok
-            ? toast.success(t('app.engineInstallDrawer.passwordCopied', 'Password copied'))
-            : toast.error(t('app.engineInstallDrawer.couldNotCopyThePassword', 'Could not copy the password'))));
-    };
 
     return (
         <div className="dbx-secret">
-            <span className="dbx-secret__value">{revealed ? password : '•'.repeat(20)}</span>
-            <span className="dbx-secret__actions">
+            <CopyField
+                value={password}
+                secret
+                onCopy={() => toast.success(t('app.engineInstallDrawer.passwordCopied', 'Password copied'))}
+            />
+            {onRegenerate && (
                 <Button variant="unstyled"
                     type="button"
                     className="dbx-icon-xs"
-                    onClick={() => setRevealed((r) => !r)}
-                    aria-label={revealed ? t('app.engineInstallDrawer.hidePassword', 'Hide password') : t('app.engineInstallDrawer.revealPassword', 'Reveal password')}
-                    title={revealed ? t('app.engineInstallDrawer.hide', 'Hide') : t('app.engineInstallDrawer.reveal', 'Reveal')}
+                    onClick={onRegenerate}
+                    disabled={disabled}
+                    aria-label={t('app.engineInstallDrawer.generateANewPassword', 'Generate a new password')}
+                    title={t('app.engineInstallDrawer.regenerate', 'Regenerate')}
                 >
-                    {revealed ? <EyeOff size={13} aria-hidden="true" /> : <Eye size={13} aria-hidden="true" />}
+                    <RefreshCw size={13} aria-hidden="true" />
                 </Button>
-                {onRegenerate && (
-                    <Button variant="unstyled"
-                        type="button"
-                        className="dbx-icon-xs"
-                        onClick={() => { onRegenerate(); setRevealed(true); }}
-                        disabled={disabled}
-                        aria-label={t('app.engineInstallDrawer.generateANewPassword', 'Generate a new password')}
-                        title={t('app.engineInstallDrawer.regenerate', 'Regenerate')}
-                    >
-                        <RefreshCw size={13} aria-hidden="true" />
-                    </Button>
-                )}
-                <Button variant="unstyled"
-                    type="button"
-                    className="dbx-icon-xs"
-                    onClick={copy}
-                    aria-label={t('app.engineInstallDrawer.copyPasswordToClipboard', 'Copy password to clipboard')}
-                    title={t('common.actions.copy', 'Copy')}
-                >
-                    <Copy size={13} aria-hidden="true" />
-                </Button>
-            </span>
+            )}
         </div>
     );
 }
@@ -95,20 +75,31 @@ function VariableField({ variable, value, onChange }) {
                 {variable.required && ' *'}
             </label>
             {variable.options ? (
-                <select
+                <Select
+                    value={value == null || value === '' ? '' : String(value)}
+                    onValueChange={onChange}
+                    required={variable.required}
+                    name={variable.name}
+                >
+                    <SelectTrigger id={id}>
+                        <SelectValue placeholder={t('app.engineInstallDrawer.select', 'Select…')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {variable.options.map((opt) => <SelectItem key={opt} value={String(opt)}>{opt}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+            ) : variable.type === 'port' ? (
+                <PortField
                     id={id}
                     value={value ?? ''}
-                    onChange={(e) => onChange(e.target.value)}
+                    onChange={(next) => onChange(next === '' ? '' : String(next))}
+                    placeholder={variable.default != null ? String(variable.default) : ''}
                     required={variable.required}
-                >
-                    <option value="">{t('app.engineInstallDrawer.select', 'Select…')}</option>
-                    {variable.options.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-                </select>
+                />
             ) : (
                 <Input
                     id={id}
-                    type={variable.type === 'port' ? 'number' : 'text'}
-                    inputMode={variable.type === 'port' ? 'numeric' : undefined}
+                    type="text"
                     value={value ?? ''}
                     onChange={(e) => onChange(e.target.value)}
                     placeholder={variable.default != null ? String(variable.default) : ''}
@@ -273,22 +264,15 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                             </span>
                         </div>
 
-                        <dl className="dbx-kv">
-                            <div className="dbx-kv__row">
-                                <dt>{t('common.labels.service', 'Service')}</dt>
-                                <dd className="dbx-kv__mono">{result.app?.name || slugifyService(name)}</dd>
-                            </div>
+                        <InfoList className="dbx-kv">
+                            <InfoItem label={t('common.labels.service', 'Service')} value={result.app?.name || slugifyService(name)} mono />
                             {meta.admin_user && (
-                                <div className="dbx-kv__row">
-                                    <dt>{t('app.engineInstallDrawer.adminUser', 'Admin user')}</dt>
-                                    <dd className="dbx-kv__mono">{meta.admin_user}</dd>
-                                </div>
+                                <InfoItem label={t('app.engineInstallDrawer.adminUser', 'Admin user')} value={meta.admin_user} mono />
                             )}
-                            <div className="dbx-kv__row">
-                                <dt>{t('common.labels.password', 'Password')}</dt>
-                                <dd><SecretRow password={result.secret} /></dd>
-                            </div>
-                        </dl>
+                            <InfoItem label={t('common.labels.password', 'Password')}>
+                                <SecretRow password={result.secret} />
+                            </InfoItem>
+                        </InfoList>
                         <p className="dbx-field-hint">
                             {t('app.engineInstallDrawer.copyThePasswordNowItIs', 'Copy the password now — it is stored in ServerKit\'s secret store and is not shown again.')}
                         </p>
@@ -360,16 +344,12 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                         {(parts.portVar || meta.default_port != null) && (
                             <div className="dbx-field">
                                 <label className="dbx-field__label" htmlFor="dbx-eng-port">{t('common.labels.port', 'Port')}</label>
-                                <div className="dbx-input">
-                                    <Share2 size={15} aria-hidden="true" />
-                                    <input
-                                        id="dbx-eng-port"
-                                        type="text"
-                                        inputMode="numeric"
-                                        value={port}
-                                        onChange={(e) => setPort(e.target.value.replace(/\D/g, ''))}
-                                    />
-                                </div>
+                                <PortField
+                                    id="dbx-eng-port"
+                                    value={port}
+                                    onChange={(next) => setPort(next === '' ? '' : String(next))}
+                                    placeholder={meta.default_port != null ? String(meta.default_port) : undefined}
+                                />
                                 {parts.portVar?.description && (
                                     <p className="dbx-field-hint">{parts.portVar.description}</p>
                                 )}
@@ -388,26 +368,20 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                         {(parts.passwordVar || meta.admin_user) && (
                             <div className="dbx-field">
                                 <span className="dbx-field__label">{t('app.engineInstallDrawer.adminCredentials', 'Admin credentials')}</span>
-                                <dl className="dbx-kv">
+                                <InfoList className="dbx-kv">
                                     {meta.admin_user && (
-                                        <div className="dbx-kv__row">
-                                            <dt>{t('common.labels.user', 'User')}</dt>
-                                            <dd className="dbx-kv__mono">{meta.admin_user}</dd>
-                                        </div>
+                                        <InfoItem label={t('common.labels.user', 'User')} value={meta.admin_user} mono />
                                     )}
                                     {parts.passwordVar && (
-                                        <div className="dbx-kv__row">
-                                            <dt>{t('common.labels.password', 'Password')}</dt>
-                                            <dd>
-                                                <SecretRow
-                                                    password={password}
-                                                    disabled={busy}
-                                                    onRegenerate={() => setPassword(generatePassword())}
-                                                />
-                                            </dd>
-                                        </div>
+                                        <InfoItem label={t('common.labels.password', 'Password')}>
+                                            <SecretRow
+                                                password={password}
+                                                disabled={busy}
+                                                onRegenerate={() => setPassword(generatePassword())}
+                                            />
+                                        </InfoItem>
                                     )}
-                                </dl>
+                                </InfoList>
                                 {parts.passwordVar && (
                                     <p className="dbx-field-hint">
                                         {t('app.engineInstallDrawer.shownOnceStoredInServerkitS', 'Shown once. Stored in ServerKit\'s secret store — never in a log or a second API response.')}
@@ -460,19 +434,15 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                                     />
                                 </div>
                                 {meta.data_path && (
-                                    <div className="dbx-kv__row">
-                                        <dt className="dbx-kv__key">
-                                            <HardDrive size={12} aria-hidden="true" /> {t('app.engineInstallDrawer.dataPath', 'Data path')}
-                                        </dt>
-                                        <dd className="dbx-kv__mono">{meta.data_path}</dd>
-                                    </div>
+                                    <InfoItem
+                                        label={<><HardDrive size={12} aria-hidden="true" /> {t('app.engineInstallDrawer.dataPath', 'Data path')}</>}
+                                        value={meta.data_path}
+                                        mono
+                                    />
                                 )}
-                                <div className="dbx-kv__row">
-                                    <dt className="dbx-kv__key">
-                                        <RotateCw size={12} aria-hidden="true" /> {t('app.engineInstallDrawer.restartPolicy', 'Restart policy')}
-                                    </dt>
-                                    <dd className="dbx-kv__ok">unless-stopped</dd>
-                                </div>
+                                <InfoItem label={<><RotateCw size={12} aria-hidden="true" /> {t('app.engineInstallDrawer.restartPolicy', 'Restart policy')}</>}>
+                                    <span className="info-value dbx-kv__ok">unless-stopped</span>
+                                </InfoItem>
                             </div>
                             {expose && (
                                 <p className="dbx-warn-line">

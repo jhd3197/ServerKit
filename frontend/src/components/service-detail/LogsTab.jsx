@@ -8,7 +8,8 @@ import DeploymentJobProgress from '../DeploymentJobProgress';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
-import { copyToClipboard } from '@/utils/clipboard';
+import { CopyButton } from '@/components/CopyButton';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
@@ -150,9 +151,6 @@ const LogsTab = ({ app }) => {
         downloadBlob(rawLogs, `${app.name}-logs-${new Date().toISOString().slice(0, 10)}.txt`);
     }
 
-    function handleCopy() {
-        copyToClipboard(rawLogs);
-    }
 
     const matchCount = searchTerm ? filteredLines.length : null;
 
@@ -193,27 +191,29 @@ const LogsTab = ({ app }) => {
                             <span className="logs-toolbar__match-count">{matchCount} matches</span>
                         )}
                     </div>
-                    <select
-                        className="logs-toolbar__select"
-                        value={levelFilter}
-                        onChange={(e) => setLevelFilter(e.target.value)}
-                    >
-                        {LOG_LEVELS.map(l => (
-                            <option key={l} value={l}>
-                                {l === 'all' ? 'All Levels' : l.charAt(0).toUpperCase() + l.slice(1)}
-                            </option>
-                        ))}
-                    </select>
-                    <select
-                        className="logs-toolbar__select"
-                        value={lineCount}
-                        onChange={(e) => setLineCount(Number(e.target.value))}
-                    >
-                        <option value={100}>{t('app.logsTab.100Lines', '100 lines')}</option>
-                        <option value={200}>{t('app.logsTab.200Lines', '200 lines')}</option>
-                        <option value={500}>{t('app.logsTab.500Lines', '500 lines')}</option>
-                        <option value={1000}>{t('app.logsTab.1000Lines', '1000 lines')}</option>
-                    </select>
+                    <Select value={levelFilter} onValueChange={setLevelFilter}>
+                        <SelectTrigger className="logs-toolbar__select" aria-label={t('app.logsTab.logLevel', 'Log level')}>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {LOG_LEVELS.map(l => (
+                                <SelectItem key={l} value={l}>
+                                    {l === 'all' ? 'All Levels' : l.charAt(0).toUpperCase() + l.slice(1)}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <Select value={String(lineCount)} onValueChange={(value) => setLineCount(Number(value))}>
+                        <SelectTrigger className="logs-toolbar__select" aria-label={t('app.logsTab.lineCount', 'Lines')}>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="100">{t('app.logsTab.100Lines', '100 lines')}</SelectItem>
+                            <SelectItem value="200">{t('app.logsTab.200Lines', '200 lines')}</SelectItem>
+                            <SelectItem value="500">{t('app.logsTab.500Lines', '500 lines')}</SelectItem>
+                            <SelectItem value="1000">{t('app.logsTab.1000Lines', '1000 lines')}</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div className="logs-toolbar__right">
                     <label className="logs-toolbar__toggle">
@@ -225,12 +225,11 @@ const LogsTab = ({ app }) => {
                         <span>{t('app.logsTab.live', 'Live')}</span>
                     </label>
                     <div className="logs-toolbar__divider" />
-                    <Button variant="ghost" size="icon" onClick={handleCopy} title={t('app.logsTab.copyLogs', 'Copy logs')}>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                        </svg>
-                    </Button>
+                    <CopyButton
+                        value={rawLogs}
+                        label={t('app.logsTab.copyLogs', 'Copy logs')}
+                        copiedLabel={t('app.copyField.copied', 'Copied')}
+                    />
                     <Button variant="ghost" size="icon" onClick={handleDownload} title={t('app.logsTab.downloadLogs', 'Download logs')}>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>

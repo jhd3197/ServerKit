@@ -5,6 +5,7 @@ import Modal from '../Modal';
 import FormField from '../FormField';
 import DeploymentTimeline from '../deployments/DeploymentTimeline';
 import { Button } from '../ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '../ui/select';
 import { useToast } from '../../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
 
@@ -168,20 +169,23 @@ export default function ServerRestorePointsTab({ serverId }) {
                             htmlFor="restore-point-app"
                             required
                         >
-                            <select
-                                id="restore-point-app"
-                                value={selectedAppId}
-                                onChange={(event) => {
-                                    setSelectedAppId(event.target.value);
+                            <Select
+                                value={selectedAppId === '' || selectedAppId == null ? '' : String(selectedAppId)}
+                                onValueChange={(value) => {
+                                    setSelectedAppId(value);
                                     setSaveError(null);
                                 }}
                                 required
                             >
-                                <option value="">{t('app.serverRestorePoints.selectApplication', 'Select an application')}</option>
-                                {serverApps.map((app) => (
-                                    <option key={app.id} value={app.id}>{app.name}</option>
-                                ))}
-                            </select>
+                                <SelectTrigger id="restore-point-app">
+                                    <SelectValue placeholder={t('app.serverRestorePoints.selectApplication', 'Select an application')} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {serverApps.map((app) => (
+                                        <SelectItem key={app.id} value={String(app.id)}>{app.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </FormField>
                         <FormField
                             label={t('app.serverRestorePoints.label', 'Label (optional)')}

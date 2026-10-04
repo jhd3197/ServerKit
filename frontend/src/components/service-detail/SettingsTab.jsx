@@ -35,6 +35,7 @@ import BuildTab from '../appdetail/BuildTab';
 import DeployTab from '../appdetail/DeployTab';
 import Modal from '@/components/Modal';
 import DomainField from '@/components/DomainField';
+import { InfoList, InfoItem } from '@/components/InfoList';
 import { attachDomain } from '@/services/attachDomain';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -586,33 +587,22 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
 
     return (
         <SharedCard variant="legacy" className="card settings-section svc-domain-panel" data-walkthrough="service-domain-panel">
-            <div className="app-info-grid">
-                <div className="app-info-item">
-                    <span className="app-info-label">{t('app.settingsTab.primaryDomain', 'Primary Domain')}</span>
-                    <span className="app-info-value mono">{primaryDomain || 'None configured'}</span>
-                </div>
-                <div className="app-info-item">
-                    <span className="app-info-label">{t('app.settingsTab.sslStatus', 'SSL Status')}</span>
-                    <span className="app-info-value">
-                        {!primaryDomain ? '—' : checking ? 'Checking…' : issued ? 'Active' : 'Not Secured'}
-                    </span>
-                </div>
+            <InfoList>
+                <InfoItem label={t('app.settingsTab.primaryDomain', 'Primary Domain')} value={primaryDomain || 'None configured'} mono />
+                <InfoItem
+                    label={t('app.settingsTab.sslStatus', 'SSL Status')}
+                    value={!primaryDomain ? '—' : checking ? 'Checking…' : issued ? 'Active' : 'Not Secured'}
+                />
                 {issued && health.expires_at && (
-                    <div className="app-info-item">
-                        <span className="app-info-label">{t('app.settingsTab.expires', 'Expires')}</span>
-                        <span className="app-info-value">
-                            {new Date(health.expires_at).toLocaleDateString()}
-                            {typeof health.days_remaining === 'number' ? ` (${health.days_remaining}d)` : ''}
-                        </span>
-                    </div>
+                    <InfoItem
+                        label={t('app.settingsTab.expires', 'Expires')}
+                        value={`${new Date(health.expires_at).toLocaleDateString()}${typeof health.days_remaining === 'number' ? ` (${health.days_remaining}d)` : ''}`}
+                    />
                 )}
                 {issued && health.issuer && (
-                    <div className="app-info-item">
-                        <span className="app-info-label">{t('app.settingsTab.issuer', 'Issuer')}</span>
-                        <span className="app-info-value">{health.issuer}</span>
-                    </div>
+                    <InfoItem label={t('app.settingsTab.issuer', 'Issuer')} value={health.issuer} />
                 )}
-            </div>
+            </InfoList>
 
             {primaryDomain && (
                 <div className="svc-give-subdomain">

@@ -1,15 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-    AlertTriangle, Check, ChevronDown, Database, FileCode2, HardDrive, Loader2,
+    AlertTriangle, Check, Database, FileCode2, HardDrive, Loader2,
     RefreshCw, ShieldAlert,
 } from 'lucide-react';
 import api from '../../services/api';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { SegControl } from '@/components/ds';
 import { EngineIcon } from '../icons/DatabaseBrands';
 import { formatBytes } from '@/utils/formatBytes';
 import { ENGINE_META } from './dbAdapter';
 import { useTranslation } from 'react-i18next';
+import { translateLabel } from '@/i18n/labels';
 
 // Import a SQL dump into an existing database.
 //
@@ -194,16 +197,18 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
 
                     <div className="dbx-field">
                         <label className="dbx-field__label" htmlFor="dbx-import-target">{t('app.importDumpModal.importInto', 'Import into')}</label>
-                        <div className="dbx-select">
-                            <select id="dbx-import-target" value={targetKey} onChange={(e) => setTargetKey(e.target.value)}>
+                        <Select value={targetKey} onValueChange={setTargetKey}>
+                            <SelectTrigger id="dbx-import-target" className="dbx-select">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
                                 {databases.map((d) => (
-                                    <option key={d.key} value={d.key}>
+                                    <SelectItem key={d.key} value={d.key}>
                                         {ENGINE_META[d.engine].short} · {d.name}
-                                    </option>
+                                    </SelectItem>
                                 ))}
-                            </select>
-                            <ChevronDown size={14} aria-hidden="true" />
-                        </div>
+                            </SelectContent>
+                        </Select>
                         {target && (
                             <p className="dbx-field-hint">
                                 <span className="dbx-builder__target-ico"><EngineIcon engine={target.engine} size={13} /></span>
@@ -215,19 +220,13 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
 
                     <div className="dbx-field">
                         <span className="dbx-field__label">{t('app.importDumpModal.dumpFile', 'Dump file')}</span>
-                        <div className="dbx-choice" role="group" aria-label={t('app.importDumpModal.whereTheDumpLives', 'Where the dump lives')}>
-                            {SOURCES.map((s) => (
-                                <Button variant="unstyled"
-                                    key={s.id}
-                                    type="button"
-                                    className={`dbx-choice__btn${source === s.id ? ' is-on' : ''}`}
-                                    onClick={() => setSource(s.id)}
-                                    aria-pressed={source === s.id}
-                                >
-                                    {s.label}
-                                </Button>
-                            ))}
-                        </div>
+                        <SegControl
+                            className="dbx-choice"
+                            aria-label={t('app.importDumpModal.whereTheDumpLives', 'Where the dump lives')}
+                            value={source}
+                            onChange={setSource}
+                            options={SOURCES.map((s) => ({ value: s.id, label: translateLabel(t, s) }))}
+                        />
 
                         {source === 'backup' ? (
                             <div className="dbx-dumps">

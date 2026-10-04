@@ -7,6 +7,7 @@ import { useDeployments } from '../../hooks/useDeployments';
 import { getDeployStatus, formatRelativeTime, formatDuration } from '../../utils/serviceTypes';
 import { formatBytes } from '../../utils/formatBytes';
 import BandwidthSparkline from '../BandwidthSparkline';
+import { InfoList, InfoItem } from '../InfoList';
 import ScheduledTasksCard from '../ScheduledTasksCard';
 import RequestMetricsCard from './RequestMetricsCard';
 import AttachmentsCard from './AttachmentsCard';
@@ -144,10 +145,9 @@ const OverviewTab = ({ app, deployConfig }) => {
                 {/* Service Info Card */}
                 <div className="overview-tab__card">
                     <h3 className="overview-tab__card-title">{t('app.overviewTab.serviceInfo', 'Service Info')}</h3>
-                    <div className="overview-tab__info-list">
-                        <div className="sk-info-row">
-                            <span className="k">{t('common.labels.type', 'Type')}</span>
-                            <span className="v">
+                    <InfoList className="overview-tab__info-list">
+                        <InfoItem label={t('common.labels.type', 'Type')}>
+                            <span className="info-value">
                                 <span
                                     className="overview-tab__info-badge"
                                     style={{ backgroundColor: app.typeInfo.bgColor, color: app.typeInfo.color, borderColor: app.typeInfo.borderColor }}
@@ -155,11 +155,10 @@ const OverviewTab = ({ app, deployConfig }) => {
                                     {app.typeInfo.label}
                                 </span>
                             </span>
-                        </div>
+                        </InfoItem>
                         {app.domain && (
-                            <div className="sk-info-row">
-                                <span className="k">{t('common.labels.domain', 'Domain')}</span>
-                                <span className="v">
+                            <InfoItem label={t('common.labels.domain', 'Domain')}>
+                                <span className="info-value">
                                     <a
                                         href={`https://${app.domain}`}
                                         target="_blank"
@@ -174,12 +173,11 @@ const OverviewTab = ({ app, deployConfig }) => {
                                         </svg>
                                     </a>
                                 </span>
-                            </div>
+                            </InfoItem>
                         )}
                         {app.port && (
-                            <div className="sk-info-row">
-                                <span className="k">{t('common.labels.port', 'Port')}</span>
-                                <span className="v">
+                            <InfoItem label={t('common.labels.port', 'Port')}>
+                                <span className="info-value">
                                     {/* A port with no domain in front of it is
                                         still reachable — the number alone made
                                         you assemble the URL yourself. */}
@@ -196,34 +194,31 @@ const OverviewTab = ({ app, deployConfig }) => {
                                         </a>
                                     ) : app.port}
                                 </span>
-                            </div>
+                            </InfoItem>
                         )}
-                        <div className="sk-info-row">
-                            <span className="k">{t('common.labels.created', 'Created')}</span>
-                            <span className="v">
+                        <InfoItem label={t('common.labels.created', 'Created')}>
+                            <span className="info-value">
                                 {new Date(app.created_at).toLocaleDateString('en-US', {
                                     year: 'numeric', month: 'short', day: 'numeric'
                                 })}
                             </span>
-                        </div>
+                        </InfoItem>
                         {deployConfig && (
-                            <div className="sk-info-row">
-                                <span className="k">{t('app.overviewTab.repository', 'Repository')}</span>
-                                <span className="v">
+                            <InfoItem label={t('app.overviewTab.repository', 'Repository')}>
+                                <span className="info-value">
                                     {extractRepoDisplay(deployConfig.repo_url)}
                                     <span className="overview-tab__branch">{deployConfig.branch || 'main'}</span>
                                 </span>
-                            </div>
+                            </InfoItem>
                         )}
                         {app.environment_type && app.environment_type !== 'standalone' && (
-                            <div className="sk-info-row">
-                                <span className="k">{t('app.overviewTab.environment', 'Environment')}</span>
-                                <span className="v">
+                            <InfoItem label={t('app.overviewTab.environment', 'Environment')}>
+                                <span className="info-value">
                                     <EnvTag env={ENV_LABEL[app.environment_type] || app.environment_type.toUpperCase()} />
                                 </span>
-                            </div>
+                            </InfoItem>
                         )}
-                    </div>
+                    </InfoList>
                 </div>
 
                 {/* Resource Usage Card */}
@@ -450,21 +445,19 @@ const RelatedResourcesCard = ({ app, related }) => {
                         </div>
                     )}
                     {backup?.enabled && (
-                        <div className="sk-info-row">
-                            <span className="k">{t('common.labels.backups', 'Backups')}</span>
-                            <span className="v">
+                        <InfoItem label={t('common.labels.backups', 'Backups')}>
+                            <span className="info-value">
                                 {backup.frequency || 'scheduled'}
                                 {backup.last_status && <Pill kind={backup.last_status === 'success' ? 'green' : 'amber'}>{backup.last_status}</Pill>}
                             </span>
-                        </div>
+                        </InfoItem>
                     )}
                     {deployments?.count > 0 && (
-                        <div className="sk-info-row">
-                            <span className="k">{t('app.overviewTab.deployments', 'Deployments')}</span>
-                            <span className="v">
+                        <InfoItem label={t('app.overviewTab.deployments', 'Deployments')}>
+                            <span className="info-value">
                                 <Link to={`/services/${app.id}/events`}>{deployments.count} total</Link>
                             </span>
-                        </div>
+                        </InfoItem>
                     )}
                 </div>
             )}

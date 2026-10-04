@@ -8,6 +8,7 @@ import { InfoList, InfoItem } from '../InfoList';
 import BuildpackPreview from '../buildpack/BuildpackPreview';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { Pill, statusKind } from '@/components/ds';
 import Modal from '@/components/Modal';
 import { useTranslation } from 'react-i18next';
@@ -293,16 +294,19 @@ const BuildTab = ({ appId, app }) => {
             <Modal open={showConfigModal} onClose={() => setShowConfigModal(false)} title={t('app.buildTab.buildConfiguration', 'Build Configuration')}>
                         <form onSubmit={handleConfigureBuild}>
                             <div className="form-group">
-                                <label>{t('app.buildTab.buildMethod', 'Build Method')}</label>
-                                <select
+                                <label htmlFor="build-config-method">{t('app.buildTab.buildMethod', 'Build Method')}</label>
+                                <Select
                                     value={configForm.buildMethod}
-                                    onChange={e => setConfigForm({...configForm, buildMethod: e.target.value})}
+                                    onValueChange={value => setConfigForm({...configForm, buildMethod: value})}
                                 >
-                                    <option value="auto">{t('app.buildTab.autoDetect', 'Auto-detect')}</option>
-                                    <option value="dockerfile">{t('app.buildTab.dockerfile2', 'Dockerfile')}</option>
-                                    <option value="docker-compose">{t('app.buildTab.dockerCompose2', 'Docker Compose')}</option>
-                                    <option value="custom">{t('app.buildTab.custom', 'Custom')}</option>
-                                </select>
+                                    <SelectTrigger id="build-config-method"><SelectValue /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="auto">{t('app.buildTab.autoDetect', 'Auto-detect')}</SelectItem>
+                                        <SelectItem value="dockerfile">{t('app.buildTab.dockerfile2', 'Dockerfile')}</SelectItem>
+                                        <SelectItem value="docker-compose">{t('app.buildTab.dockerCompose2', 'Docker Compose')}</SelectItem>
+                                        <SelectItem value="custom">{t('app.buildTab.custom', 'Custom')}</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             {configForm.buildMethod === 'dockerfile' && (
                                 <div className="form-group">

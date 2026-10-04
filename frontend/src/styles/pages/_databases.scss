@@ -1268,67 +1268,61 @@ $dbx-sqlite: #3d8fd1;
 }
 
 // ─── Key / value facts ────────────────────────────────────
+// InfoList rows boxed for the drawer; the option list reuses the row look.
 .dbx-kv {
     margin: 0;
+    gap: 0;
     border: 1px solid $border-default;
     border-radius: $radius-md;
     overflow: hidden;
 
-    &__row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    &__ok { color: $success; }
+}
+
+.dbx-kv,
+.dbx-optlist {
+    .info-item {
         gap: $space-3;
         padding: 9px 13px;
-        border-top: 1px solid $border-subtle;
-        &:first-child { border-top: none; }
+        border-bottom: none;
 
-        dt, .dbx-kv__key {
+        .info-label {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            margin: 0;
             flex-shrink: 0;
             color: $text-tertiary;
             font-size: $font-size-xs;
             svg { color: $text-tertiary; }
         }
 
-        dd {
-            margin: 0;
+        .info-value {
             min-width: 0;
-            color: $text-primary;
             font-size: $font-size-sm;
+            font-weight: $font-weight-normal;
             text-align: right;
+
+            &.mono {
+                font-family: $font-mono;
+                font-size: $font-size-xs;
+                word-break: break-all;
+            }
         }
-    }
 
-    &__mono {
-        font-family: $font-mono;
-        font-size: $font-size-xs;
-        word-break: break-all;
+        .info-value.dbx-kv__ok { color: $success; }
     }
-
-    &__ok { color: $success; }
 }
 
+.dbx-kv .info-item + .info-item { border-top: 1px solid $border-subtle; }
+
 // The password is the one thing on the panel you cannot recover later, so it
-// gets reveal, regenerate and copy in the same row as the dots.
+// gets reveal, regenerate and copy in the same row.
 .dbx-secret {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 6px;
-
-    &__value {
-        font-family: $font-mono;
-        font-size: $font-size-xs;
-        letter-spacing: 0.06em;
-        color: $text-primary;
-        word-break: break-all;
-    }
-
-    &__actions { display: inline-flex; gap: 2px; flex-shrink: 0; }
+    min-width: 0;
 }
 
 .dbx-icon-xs {
@@ -1566,44 +1560,16 @@ $dbx-sqlite: #3d8fd1;
 // ============================================
 
 // ─── Shared: select, notices, statement preview ───────────
-.dbx-select {
-    position: relative;
-    display: flex;
-    align-items: center;
+// Radix select triggers in the builder and import modals.
+.dbx-select.ui-select-trigger {
+    width: 100%;
 
-    select {
-        appearance: none;
-        width: 100%;
-        padding: 8px 30px 8px 11px;
-        background: $bg-elevated;
-        border: 1px solid $border-default;
-        border-radius: $radius-md;
-        color: $text-primary;
-        font-family: inherit;
-        font-size: $font-size-sm;
-        cursor: pointer;
-
-        &:focus {
-            outline: none;
-            border-color: $accent-primary;
-            box-shadow: 0 0 0 3px $accent-glow;
-        }
-    }
-
-    > svg {
-        position: absolute;
-        right: 10px;
-        color: $text-tertiary;
-        pointer-events: none;
-    }
-
-    &--sm {
-        select {
-            padding: 5px 22px 5px 8px;
-            font-family: $font-mono;
-            font-size: 11.5px;
-        }
-        > svg { right: 6px; }
+    &.dbx-select--sm {
+        height: auto;
+        min-width: 0;
+        padding: 5px 8px;
+        font-family: $font-mono;
+        font-size: 11.5px;
     }
 }
 
@@ -1823,33 +1789,7 @@ $dbx-sqlite: #3d8fd1;
 }
 
 .dbx-choice {
-    display: flex;
-    gap: 4px;
     margin-bottom: $space-3;
-    padding: 3px;
-    background: $bg-tertiary;
-    border-radius: $radius-md;
-
-    &__btn {
-        flex: 1;
-        padding: 6px 10px;
-        background: transparent;
-        border: none;
-        border-radius: $radius-sm;
-        color: $text-secondary;
-        font-family: inherit;
-        font-size: $font-size-xs;
-        cursor: pointer;
-        transition: background $transition-fast, color $transition-fast;
-
-        &:hover { color: $text-primary; }
-        &:focus-visible { outline: 2px solid $accent-primary; outline-offset: -2px; }
-        &.is-on {
-            background: $bg-card;
-            color: $accent-primary;
-            box-shadow: $shadow-sm;
-        }
-    }
 }
 
 .dbx-dumps {
@@ -2014,6 +1954,7 @@ $dbx-sqlite: #3d8fd1;
 
     &__secret {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         gap: $spacing-md;
@@ -2021,7 +1962,7 @@ $dbx-sqlite: #3d8fd1;
         border: 1px dashed var(--border-soft);
         border-radius: 6px;
 
-        code { word-break: break-all; }
+        .sk-copy-field { flex: 1 1 220px; }
     }
 
     &__user-form {
@@ -2071,4 +2012,14 @@ $dbx-sqlite: #3d8fd1;
     margin-left: auto;
     font-size: $font-size-xs;
     color: $text-tertiary;
+}
+
+// Created-credentials result in the explorer's create modals: one CopyField
+// per credential.
+.dbx-credentials {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+
+    > p { margin: 0; }
 }

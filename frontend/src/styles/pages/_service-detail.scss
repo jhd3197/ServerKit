@@ -1201,17 +1201,10 @@ h3.svc-eyebrow {
         white-space: nowrap;
     }
 
+    // Radix select triggers, sized to their content in the toolbar row.
     &__select {
-        background: var(--surface-2);
-        border: 1px solid var(--border);
-        border-radius: $radius-md;
-        padding: $space-1 $space-2;
-        color: $text-secondary;
-        font-size: $font-size-sm;
-        outline: none;
-        cursor: pointer;
-
-        &:focus { border-color: var(--accent-primary); }
+        width: auto;
+        min-width: 8rem;
     }
 
     &__toggle {

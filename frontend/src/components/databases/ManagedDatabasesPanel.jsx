@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Pill } from '../ds';
 import AdminerSsoButton from './AdminerSsoButton';
 import DbUsersPanel from './DbUsersPanel';
-import { copyToClipboard } from '@/utils/clipboard';
+import { useClipboard } from '@/hooks/useClipboard';
 import { useTranslation } from 'react-i18next';
 
 // Durable list of the databases ServerKit tracks (provisioned or adopted),
@@ -17,6 +17,7 @@ export default function ManagedDatabasesPanel() {
     const { t } = useTranslation();
     const toast = useToast();
     const { confirm } = useConfirm();
+    const { copy } = useClipboard();
     const [rows, setRows] = useState([]);
     const [loading, setLoading] = useState(true);
     const [busyId, setBusyId] = useState(null);
@@ -41,9 +42,9 @@ export default function ManagedDatabasesPanel() {
         try {
             const data = await api.revealManagedConnectionUri(row.id);
             const uri = data?.connection_uri;
-            if (uri && await copyToClipboard(uri)) {
-                toast.success(t('app.managedDatabasesPanel.connectionStringCopiedRevealWasAudited', 'Connection string copied (reveal was audited)'));
-            } else if (uri) {
+            // The string is fetched (and audited) on demand, so it is never
+            // on screen; when the clipboard refuses, show it instead.
+            if (uri && !(await copy(uri, t('app.managedDatabasesPanel.connectionStringCopiedRevealWasAudited', 'Connection string copied (reveal was audited)')))) {
                 toast.info(uri);
             }
         } catch (err) {

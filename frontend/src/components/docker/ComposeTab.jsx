@@ -12,6 +12,7 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { Button } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { Package, Play, Square, RotateCw, FileText, Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -23,6 +24,10 @@ import {
 // `docker compose ls --format json` capitalises its keys; the label-scanning
 // fallback in docker_service builds the same shape by hand. Read through one
 // accessor each so a payload from either path lands in the same column.
+// Radix Select items cannot carry an empty value; this stands for "all services".
+const ALL_SERVICES = '__all';
+const LOG_LINE_OPTIONS = [50, 100, 200, 500, 1000];
+
 const projectName = (project) => project.Name || project.name || '';
 const projectStatus = (project) => project.Status || project.status || '';
 const projectConfig = (project) => project.ConfigFiles || project.config_files || '';
@@ -490,25 +495,26 @@ const ComposeLogsModal = ({ project, onClose }) => {
         <Modal open onClose={onClose} title={t('app.composeTab.logs2', 'Logs: {{name}}', { name: name })} size="lg">
             <div className="modal-body">
                 <div className="logs-controls docker-compose-log-controls">
-                    <label>{t('app.composeTab.service', 'Service:')}</label>
-                    <select
-                        value={selectedService}
-                        onChange={(e) => setSelectedService(e.target.value)}
-                        className="docker-compose-log-select"
+                    <label htmlFor="compose-log-service">{t('app.composeTab.service', 'Service:')}</label>
+                    <Select
+                        value={selectedService === '' ? ALL_SERVICES : selectedService}
+                        onValueChange={(value) => setSelectedService(value === ALL_SERVICES ? '' : value)}
                     >
-                        <option value="">{t('app.composeTab.allServices', 'All Services')}</option>
-                        {services.map(service => (
-                            <option key={service} value={service}>{service}</option>
-                        ))}
-                    </select>
-                    <label>{t('app.composeTab.lines', 'Lines:')}</label>
-                    <select value={tail} onChange={(e) => setTail(Number(e.target.value))} className="docker-compose-log-select">
-                        <option value={50}>50</option>
-                        <option value={100}>100</option>
-                        <option value={200}>200</option>
-                        <option value={500}>500</option>
-                        <option value={1000}>1000</option>
-                    </select>
+                        <SelectTrigger id="compose-log-service" className="docker-compose-log-select"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value={ALL_SERVICES}>{t('app.composeTab.allServices', 'All Services')}</SelectItem>
+                            {services.map(service => (
+                                <SelectItem key={service} value={service}>{service}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <label htmlFor="compose-log-lines">{t('app.composeTab.lines', 'Lines:')}</label>
+                    <Select value={String(tail)} onValueChange={(value) => setTail(Number(value))}>
+                        <SelectTrigger id="compose-log-lines" className="docker-compose-log-select"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {LOG_LINE_OPTIONS.map((n) => <SelectItem key={n} value={String(n)}>{n}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
                 </div>
                 <pre className="log-viewer">{loading ? 'Loading...' : logs}</pre>
             </div>

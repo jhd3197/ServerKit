@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Copy, Plus, Trash2, UserRound } from 'lucide-react';
+import { Plus, Trash2, UserRound } from 'lucide-react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import { Button } from '@/components/ui/button';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '@/components/CopyField';
 import { useTranslation } from 'react-i18next';
 
 // Users ServerKit created on a managed database (tracked rows merged with the
@@ -72,24 +72,21 @@ export default function DbUsersPanel({ databaseId }) {
         }
     }
 
-    async function copySecret() {
-        if (oneTimeSecret && await copyToClipboard(oneTimeSecret.password)) {
-            toast.success(t('app.dbUsersPanel.passwordCopied', 'Password copied'));
-        }
-    }
 
     return (
         <div className="managed-db__users">
             {oneTimeSecret && (
                 <div className="managed-db__secret">
                     <span className="managed-db__meta">
-                        {t('app.dbUsersPanel.passwordFor', 'Password for')} <strong>{oneTimeSecret.username}</strong>:{' '}
-                        <code>{oneTimeSecret.password}</code> {t('app.dbUsersPanel.shownOnceSaveItNow', '— shown once, save it now.')}
+                        {t('app.dbUsersPanel.passwordFor', 'Password for')} <strong>{oneTimeSecret.username}</strong>{' '}
+                        {t('app.dbUsersPanel.shownOnceSaveItNow', '— shown once, save it now.')}
                     </span>
+                    <CopyField
+                        value={oneTimeSecret.password}
+                        secret
+                        onCopy={() => toast.success(t('app.dbUsersPanel.passwordCopied', 'Password copied'))}
+                    />
                     <div className="managed-db__actions">
-                        <Button type="button" size="sm" variant="outline" onClick={copySecret}>
-                            <Copy size={14} /> {t('common.actions.copy', 'Copy')}
-                        </Button>
                         <Button type="button" size="sm" variant="ghost"
                             onClick={() => setOneTimeSecret(null)}>
                             {t('common.actions.dismiss', 'Dismiss')}

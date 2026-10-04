@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Boxes, ChevronDown, FileCode2, Layers, Terminal, Zap } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import PortField from '@/components/PortField';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
 
@@ -145,14 +146,13 @@ function BuildpackPreview({ plan, dockerfile, overrides = {}, onChange, loading 
                     )}
                     <div className="buildpack-preview__field">
                         <Label htmlFor="bp-port">{t('common.labels.port', 'Port')}</Label>
-                        <Input
+                        {/* The port the app listens on inside its container. */}
+                        <PortField
                             id="bp-port"
-                            type="number"
+                            host={false}
                             value={portValue}
-                            onChange={(e) => emit('port', e.target.value)}
+                            onChange={(next) => emit('port', next === '' ? '' : String(next))}
                             placeholder={String(plan.port || '')}
-                            min="1"
-                            max="65535"
                         />
                     </div>
                     <div className="buildpack-preview__field buildpack-preview__field--wide">

@@ -3,7 +3,8 @@ import { useCallback, useState, useEffect  } from 'react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
-import { useClipboard } from '@/hooks/useClipboard';
+import CopyField from '@/components/CopyField';
+import { InfoList, InfoItem } from '../InfoList';
 import { DangerZone } from '../DangerZone';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,10 +27,10 @@ import {
     NetworkIcon,
     TrashIcon,
     TagIcon,
-    TerminalIcon,
-    CopyIcon,
-    WindowsIcon,
 } from './serverDetailShared';
+
+// Radix Select items cannot carry an empty value; this stands for "no group".
+const NO_GROUP = '__none';
 
 const AgentRegistrationSection = ({ server, onRegenerateToken }) => {
     const { t } = useTranslation();
@@ -220,13 +221,20 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                         </div>
 
                         <div className="form-group">
-                            <label>{t('app.serverSettingsTab.group', 'Group')}</label>
-                            <select name="group_id" value={formData.group_id} onChange={handleChange}>
-                                <option value="">{t('app.serverSettingsTab.noGroup', 'No Group')}</option>
-                                {groups.map(group => (
-                                    <option key={group.id} value={group.id}>{group.name}</option>
-                                ))}
-                            </select>
+                            <label htmlFor="server-settings-group">{t('app.serverSettingsTab.group', 'Group')}</label>
+                            <Select
+                                name="group_id"
+                                value={formData.group_id === '' || formData.group_id == null ? NO_GROUP : String(formData.group_id)}
+                                onValueChange={(value) => setFormData(prev => ({ ...prev, group_id: value === NO_GROUP ? '' : value }))}
+                            >
+                                <SelectTrigger id="server-settings-group"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value={NO_GROUP}>{t('app.serverSettingsTab.noGroup', 'No Group')}</SelectItem>
+                                    {groups.map(group => (
+                                        <SelectItem key={group.id} value={String(group.id)}>{group.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
 
                         <Button type="submit" disabled={loading}>
@@ -254,20 +262,19 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                     </div>
 
                     {connectionInfo && (
-                        <div className="security-info-bar">
-                            <div className="security-info-item">
-                                <span className="security-info-label">{t('app.serverSettingsTab.connectionIp', 'Connection IP')}</span>
-                                <span className="security-info-value">
-                                    <code>{connectionInfo.ip_address || 'Not connected'}</code>
-                                </span>
-                            </div>
+                        <InfoList className="security-info-bar">
+                            <InfoItem
+                                label={t('app.serverSettingsTab.connectionIp', 'Connection IP')}
+                                value={connectionInfo.ip_address || 'Not connected'}
+                                mono
+                            />
                             {connectionInfo.connected_since && (
-                                <div className="security-info-item">
-                                    <span className="security-info-label">{t('app.serverSettingsTab.connectedSince', 'Connected Since')}</span>
-                                    <span className="security-info-value">{new Date(connectionInfo.connected_since).toLocaleString()}</span>
-                                </div>
+                                <InfoItem
+                                    label={t('app.serverSettingsTab.connectedSince', 'Connected Since')}
+                                    value={new Date(connectionInfo.connected_since).toLocaleString()}
+                                />
                             )}
-                        </div>
+                        </InfoList>
                     )}
 
                     <div className="subsection">
@@ -376,7 +383,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
 export const TokenModal = ({ server, onClose, onGenerated }) => {
     const { t } = useTranslation();
     const toast = useToast();
-    const { copy } = useClipboard({ successMessage: 'Copied to clipboard' });
+
     const [expiresIn, setExpiresIn] = useState(7 * 24 * 60 * 60);
     const [generating, setGenerating] = useState(false);
     // Result of the most recent generation in *this* modal session. We
@@ -463,46 +470,27 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${result.regi
                             </span>
                         </div>
 
-                        <div className="connection-string-field">
-                            <div className="connection-string-field__header">
-                                <KeyIcon />
-                                <span>{t('app.serverSettingsTab.connectionString3', 'Connection string')}</span>
-                                <Button variant="outline" size="sm" onClick={() => copy(result.connection_string)}>
-                                    <CopyIcon /> {t('common.actions.copy', 'Copy')}
-                                </Button>
-                            </div>
-                            <pre className="connection-string-field__value">{result.connection_string}</pre>
+                        <div className="server-connection-string">
+                            <CopyField
+                                label={t('app.serverSettingsTab.connectionString3', 'Connection string')}
+                                value={result.connection_string}
+                                multiline
+                            />
                         </div>
 
                         <details className="install-fallback">
                             <summary>{t('app.serverSettingsTab.needToInstallTheAgentFirst', 'Need to install the agent first? Use the one-liner installer.')}</summary>
                             <div className="install-tabs install-tabs--after-summary">
-                                <div className="install-tab">
-                                    <div className="install-tab-header">
-                                        <TerminalIcon />
-                                        <div className="install-tab-title">
-                                            <span>{t('app.serverSettingsTab.linux', 'Linux')}</span>
-                                            <span className="install-tab-description">{t('app.serverSettingsTab.curlTarSudoAndSystemd', 'curl, tar, sudo, and systemd')}</span>
-                                        </div>
-                                        <Button variant="outline" size="sm" onClick={() => copy(linuxScript)}>
-                                            <CopyIcon /> {t('common.actions.copy', 'Copy')}
-                                        </Button>
-                                    </div>
-                                    <pre className="install-script">{linuxScript}</pre>
-                                </div>
-                                <div className="install-tab">
-                                    <div className="install-tab-header">
-                                        <WindowsIcon />
-                                        <div className="install-tab-title">
-                                            <span>{t('app.serverSettingsTab.windowsPowershell', 'Windows (PowerShell)')}</span>
-                                            <span className="install-tab-description">{t('app.serverSettingsTab.runAsAdministrator', 'Run as Administrator')}</span>
-                                        </div>
-                                        <Button variant="outline" size="sm" onClick={() => copy(windowsScript)}>
-                                            <CopyIcon /> {t('common.actions.copy', 'Copy')}
-                                        </Button>
-                                    </div>
-                                    <pre className="install-script">{windowsScript}</pre>
-                                </div>
+                                <CopyField
+                                    label={`${t('app.serverSettingsTab.linux', 'Linux')} · ${t('app.serverSettingsTab.curlTarSudoAndSystemd', 'curl, tar, sudo, and systemd')}`}
+                                    value={linuxScript}
+                                    multiline
+                                />
+                                <CopyField
+                                    label={`${t('app.serverSettingsTab.windowsPowershell', 'Windows (PowerShell)')} · ${t('app.serverSettingsTab.runAsAdministrator', 'Run as Administrator')}`}
+                                    value={windowsScript}
+                                    multiline
+                                />
                             </div>
                         </details>
                     </>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-    Plus, Trash2, Copy, Check, AlertTriangle, Loader2, Table2, ShieldAlert, RefreshCw, ChevronDown,
+    Plus, Trash2, Check, AlertTriangle, Loader2, Table2, ShieldAlert, RefreshCw,
 } from 'lucide-react';
 import api from '../../services/api';
 import Modal from '@/components/Modal';
@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 import { EngineIcon } from '../icons/DatabaseBrands';
 import EngineGlyph from './EngineGlyph';
 import { runQuery, connKey, ENGINE_META } from './dbAdapter';
-import { copyToClipboard } from '@/utils/clipboard';
+import { CopyButton } from '@/components/CopyButton';
+import { Select, SelectTrigger, SelectContent, SelectGroup, SelectLabel, SelectItem, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
 import {
     engineBrandKey, engineInitialDatabase, engineInstanceKey, engineMeta,
@@ -34,7 +35,6 @@ import {
 //  * a non-admin operator → the builder still generates and copies, and says
 //    why it will not run.
 
-const COPY_RESET_MS = 1800;
 
 function targetFromConn(conn, engine, label, sub) {
     const dialect = dialectOf(conn);
@@ -86,8 +86,6 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
     const [cols, setCols] = useState([]);
     const [busy, setBusy] = useState(false);
     const [result, setResult] = useState(null); // { ok, message }
-    const [copied, setCopied] = useState(false);
-    const copyTimer = useRef(null);
 
     // The page re-polls its engine list while an install is in flight, so the
     // props change under us. Read them through refs: reloading the target list
@@ -96,8 +94,6 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
     enginesRef.current = engines;
     const presetRef = useRef(preset);
     presetRef.current = preset;
-
-    useEffect(() => () => clearTimeout(copyTimer.current), []);
 
     // The four listings the explorer's tree is built from. Each one is allowed
     // to fail on its own — a stopped PostgreSQL must not hide a running MySQL.
@@ -238,27 +234,23 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
         }
     }
 
-    function copy() {
-        copyToClipboard(statement).then((ok) => {
-            if (!ok) {
-                setResult({ ok: false, messageKey: 'app.createTableModal.couldNotCopyToTheClipboard', message: 'Could not copy to the clipboard.' });
-                return;
-            }
-            setCopied(true);
-            clearTimeout(copyTimer.current);
-            copyTimer.current = setTimeout(() => setCopied(false), COPY_RESET_MS);
-        });
-    }
 
     const footer = (
         <>
             <Button type="button" variant="outline" onClick={onClose}>
                 {result?.ok ? 'Done' : 'Cancel'}
             </Button>
-            <Button type="button" variant="outline" onClick={copy} disabled={!statement}>
-                {copied ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
-                {copied ? 'Copied' : 'Copy statement'}
-            </Button>
+            {statement && (
+                <CopyButton
+                    value={statement}
+                    variant="outline"
+                    size="default"
+                    label={t('app.createTableModal.copyStatement', 'Copy statement')}
+                    copiedLabel={t('app.copyField.copied', 'Copied')}
+                >
+                    {t('app.createTableModal.copyStatement', 'Copy statement')}
+                </CopyButton>
+            )}
             {canRun && (
                 <Button type="button" onClick={run} disabled={busy || issues.length > 0}>
                     {busy
@@ -303,29 +295,29 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
                     <div className="dbx-field-row">
                         <div className="dbx-field">
                             <label className="dbx-field__label" htmlFor="dbx-builder-target">{t('app.createTableModal.database', 'Database')}</label>
-                            <div className="dbx-select">
-                                <select
-                                    id="dbx-builder-target"
-                                    value={targetKey}
-                                    onChange={(e) => setTargetKey(e.target.value)}
-                                >
-                                    {targets.some((t) => t.dialect) && (
-                                        <optgroup label={t('app.createTableModal.databasesServerkitCanWriteTo', 'Databases ServerKit can write to')}>
-                                            {targets.filter((t) => t.dialect).map((t) => (
-                                                <option key={t.key} value={t.key}>{t.label} · {t.sub}</option>
+                            <Select value={targetKey} onValueChange={setTargetKey}>
+                                <SelectTrigger id="dbx-builder-target" className="dbx-select">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {targets.some((row) => row.dialect) && (
+                                        <SelectGroup>
+                                            <SelectLabel>{t('app.createTableModal.databasesServerkitCanWriteTo', 'Databases ServerKit can write to')}</SelectLabel>
+                                            {targets.filter((row) => row.dialect).map((row) => (
+                                                <SelectItem key={row.key} value={row.key}>{row.label} · {row.sub}</SelectItem>
                                             ))}
-                                        </optgroup>
+                                        </SelectGroup>
                                     )}
-                                    {targets.some((t) => !t.dialect) && (
-                                        <optgroup label={t('app.createTableModal.generateOnlyNoClientBridge', 'Generate only — no client bridge')}>
-                                            {targets.filter((t) => !t.dialect).map((t) => (
-                                                <option key={t.key} value={t.key}>{t.label} · {t.sub}</option>
+                                    {targets.some((row) => !row.dialect) && (
+                                        <SelectGroup>
+                                            <SelectLabel>{t('app.createTableModal.generateOnlyNoClientBridge', 'Generate only — no client bridge')}</SelectLabel>
+                                            {targets.filter((row) => !row.dialect).map((row) => (
+                                                <SelectItem key={row.key} value={row.key}>{row.label} · {row.sub}</SelectItem>
                                             ))}
-                                        </optgroup>
+                                        </SelectGroup>
                                     )}
-                                </select>
-                                <ChevronDown size={14} aria-hidden="true" />
-                            </div>
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div className="dbx-field">
                             <label className="dbx-field__label" htmlFor="dbx-builder-name">
@@ -403,16 +395,17 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
                                                 aria-label={t('app.createTableModal.nameOfColumn', 'Name of column {{value}}', { value: i + 1 })}
                                             />
                                         </div>
-                                        <div className="dbx-select dbx-select--sm">
-                                            <select
-                                                value={c.type}
-                                                onChange={(e) => setCol(i, 'type', e.target.value)}
+                                        <Select value={c.type} onValueChange={(value) => setCol(i, 'type', value)}>
+                                            <SelectTrigger
+                                                className="dbx-select dbx-select--sm"
                                                 aria-label={t('app.createTableModal.typeOfColumn', 'Type of column {{value}}', { value: i + 1 })}
                                             >
-                                                {types.map((t) => <option key={t} value={t}>{t}</option>)}
-                                            </select>
-                                            <ChevronDown size={12} aria-hidden="true" />
-                                        </div>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {types.map((type) => <SelectItem key={type} value={type}>{type}</SelectItem>)}
+                                            </SelectContent>
+                                        </Select>
                                         <Button variant="unstyled"
                                             type="button"
                                             className={`dbx-cbox${c.pk ? ' is-on' : ''}`}

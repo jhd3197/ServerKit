@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { InfoList, InfoItem } from '../InfoList';
 import { useTranslation } from 'react-i18next';
 
 // Short SHA helper for image digests (handles "sha256:abcdef..." or bare hashes)
@@ -19,6 +21,9 @@ function shortDigest(digest) {
     return value.slice(0, 12);
 }
 
+
+// Radix Select items cannot carry an empty value; this stands for "no registry".
+const NO_REGISTRY = '__none';
 
 function formatStatusLabel(status) {
     if (!status) return 'Not checked';
@@ -118,22 +123,14 @@ const ImageUpdateSection = ({ app, onChanged }) => {
                     </p>
                 )}
 
-                <div className="app-info-grid container-ops__digests">
-                    <div className="app-info-item">
-                        <span className="app-info-label">{t('app.containerOpsPanel.currentDigest', 'Current digest')}</span>
-                        <span className="app-info-value mono">{shortDigest(info?.current_digest)}</span>
-                    </div>
-                    <div className="app-info-item">
-                        <span className="app-info-label">{t('app.containerOpsPanel.latestDigest', 'Latest digest')}</span>
-                        <span className="app-info-value mono">{shortDigest(info?.latest_digest)}</span>
-                    </div>
-                    <div className="app-info-item">
-                        <span className="app-info-label">{t('app.containerOpsPanel.lastChecked', 'Last checked')}</span>
-                        <span className="app-info-value">
-                            {checkedAt ? new Date(checkedAt).toLocaleString() : 'Never'}
-                        </span>
-                    </div>
-                </div>
+                <InfoList className="container-ops__digests">
+                    <InfoItem label={t('app.containerOpsPanel.currentDigest', 'Current digest')} value={shortDigest(info?.current_digest)} mono />
+                    <InfoItem label={t('app.containerOpsPanel.latestDigest', 'Latest digest')} value={shortDigest(info?.latest_digest)} mono />
+                    <InfoItem
+                        label={t('app.containerOpsPanel.lastChecked', 'Last checked')}
+                        value={checkedAt ? new Date(checkedAt).toLocaleString() : 'Never'}
+                    />
+                </InfoList>
 
                 <div className="app-detail-actions container-ops__actions">
                     <Button variant="outline" size="sm" onClick={handleCheck} disabled={checking}>
@@ -214,20 +211,23 @@ const RegistrySection = ({ app, onChanged }) => {
                             {t('app.containerOpsPanel.publicImagesPullAnonymouslyPickA', 'Public images pull anonymously; pick a registry for private images.')}
                         </span>
                     </div>
-                    <select
-                        id={`registry-${app.id}`}
-                        className="container-ops__select"
-                        value={selected}
-                        onChange={(e) => handleChange(e.target.value)}
+                    <Select
+                        value={selected === '' || selected == null ? NO_REGISTRY : String(selected)}
+                        onValueChange={(value) => handleChange(value === NO_REGISTRY ? '' : value)}
                         disabled={loading || saving}
                     >
-                        <option value="">{t('app.containerOpsPanel.publicNoAuth', 'Public (no auth)')}</option>
-                        {registries.map((r) => (
-                            <option key={r.id} value={r.id}>
-                                {r.name} · {r.login_host}
-                            </option>
-                        ))}
-                    </select>
+                        <SelectTrigger id={`registry-${app.id}`} className="container-ops__select">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value={NO_REGISTRY}>{t('app.containerOpsPanel.publicNoAuth', 'Public (no auth)')}</SelectItem>
+                            {registries.map((r) => (
+                                <SelectItem key={r.id} value={String(r.id)}>
+                                    {r.name} · {r.login_host}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
             </div>
         </div>

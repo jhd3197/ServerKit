@@ -17,10 +17,13 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import PortField from '@/components/PortField';
+import EnvEditor from '@/components/EnvEditor';
+import { CopyButton } from '@/components/CopyButton';
+import { envToObject } from '@/utils/dotenv';
 import {
     Box, X, Trash2, Play, Square, RotateCw,
-    Terminal as TerminalLucide, FileText, Activity, Clock3, Copy,
+    Terminal as TerminalLucide, FileText, Activity, Clock3, Plus,
     Database, Gauge, Package, Server as ServerIcon, Lock,
 } from 'lucide-react';
 import {
@@ -40,7 +43,6 @@ import {
     getContainerProjectName,
 } from './dockerHelpers';
 import { ContainerResourceBars } from './dockerShared';
-import { copyToClipboard } from '@/utils/clipboard';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
@@ -952,10 +954,6 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
     const health = details?.State?.Health?.Status || getContainerStatusLabel(container);
     const projectName = getContainerProjectName(container, details);
 
-    async function copyContainerId() {
-        if (await copyToClipboard(containerId)) toast.success(t('app.containersTab.containerIdCopied', 'Container ID copied'));
-        else toast.error(t('app.containersTab.couldNotCopyContainerId', 'Could not copy container ID'));
-    }
 
     return (
         <>
@@ -969,9 +967,14 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
                     <h3 title={getContainerName(container)}>{getContainerName(container)}</h3>
                     <span>{shortId(containerId)}</span>
                 </div>
-                <Button variant="unstyled" type="button" className="dx-row-action" onClick={copyContainerId} title={t('app.containersTab.copyContainerId', 'Copy container ID')}>
-                    <Copy size={13} />
-                </Button>
+                <CopyButton
+                    value={containerId}
+                    variant="unstyled"
+                    className="dx-row-action"
+                    label={t('app.containersTab.copyContainerId', 'Copy container ID')}
+                    copiedLabel={t('app.containersTab.containerIdCopied', 'Container ID copied')}
+                    onCopy={() => toast.success(t('app.containersTab.containerIdCopied', 'Container ID copied'))}
+                />
                 <Button variant="unstyled" type="button" className="dx-row-action" onClick={onClose} title={t('app.containersTab.closeDetails', 'Close details')}>
                     <X size={13} />
                 </Button>
@@ -1123,21 +1126,38 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
     );
 };
 
+// Port rows → the `-p` specs docker run takes: "8080:80", or just "80" to let
+// Docker pick the host side. A host port alone publishes the same port inside.
+function portMappings(rows) {
+    return rows
+        .map(({ host, container }) => {
+            if (host !== '' && container !== '') return `${host}:${container}`;
+            if (container !== '') return String(container);
+            if (host !== '') return `${host}:${host}`;
+            return null;
+        })
+        .filter(Boolean);
+}
+
 const RunContainerModal = ({ onClose, onCreated }) => {
     const { t } = useTranslation();
     const [formData, setFormData] = useState({
         image: '',
         name: '',
-        ports: '',
         volumes: '',
-        env: '',
     });
+    // [{ host, container }] — each row becomes one `-p host:container`.
+    const [ports, setPorts] = useState([{ host: '', container: '' }]);
+    const [env, setEnv] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     function handleChange(e) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
+
+    const setPortRow = (index, patch) => setPorts(ports.map((row, i) => (i === index ? { ...row, ...patch } : row)));
+    const removePortRow = (index) => setPorts(ports.length > 1 ? ports.filter((_, i) => i !== index) : [{ host: '', container: '' }]);
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -1148,14 +1168,9 @@ const RunContainerModal = ({ onClose, onCreated }) => {
             const data = {
                 image: formData.image,
                 name: formData.name || undefined,
-                ports: formData.ports ? formData.ports.split(',').map(p => p.trim()) : [],
+                ports: portMappings(ports),
                 volumes: formData.volumes ? formData.volumes.split(',').map(v => v.trim()) : [],
-                env: formData.env ? Object.fromEntries(
-                    formData.env.split('\n').filter(l => l.includes('=')).map(l => {
-                        const [key, ...rest] = l.split('=');
-                        return [key.trim(), rest.join('=').trim()];
-                    })
-                ) : {},
+                env: envToObject(env),
             };
 
             await api.runContainer(data);
@@ -1197,14 +1212,50 @@ const RunContainerModal = ({ onClose, onCreated }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>{t('app.containersTab.portsCommaSeparated', 'Ports (comma-separated)')}</label>
-                    <Input
-                        type="text"
-                        name="ports"
-                        value={formData.ports}
-                        onChange={handleChange}
-                        placeholder="8080:80, 443:443"
-                    />
+                    <label>{t('app.containersTab.ports', 'Ports')}</label>
+                    <div className="dx-run-ports">
+                        <div className="dx-run-ports__head">
+                            <span>{t('app.containersTab.hostPort', 'Host port')}</span>
+                            <span aria-hidden="true" />
+                            <span>{t('app.containersTab.containerPort', 'Container port')}</span>
+                            <span aria-hidden="true" />
+                        </div>
+                        {ports.map((row, index) => (
+                            // Rows have no identity beyond their position while being typed.
+                            <div className="dx-run-ports__row" key={index}>
+                                <PortField
+                                    value={row.host}
+                                    onChange={(host) => setPortRow(index, { host })}
+                                    placeholder="8080"
+                                />
+                                <span className="dx-run-ports__sep" aria-hidden="true">:</span>
+                                <PortField
+                                    host={false}
+                                    value={row.container}
+                                    onChange={(container) => setPortRow(index, { container })}
+                                    placeholder="80"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => removePortRow(index)}
+                                    aria-label={t('app.containersTab.removePortMapping', 'Remove port mapping')}
+                                >
+                                    <Trash2 size={14} />
+                                </Button>
+                            </div>
+                        ))}
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="dx-run-ports__add"
+                            onClick={() => setPorts([...ports, { host: '', container: '' }])}
+                        >
+                            <Plus size={14} /> {t('app.containersTab.addPort', 'Add port')}
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="form-group">
@@ -1219,14 +1270,8 @@ const RunContainerModal = ({ onClose, onCreated }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>{t('app.containersTab.environmentVariablesOnePerLineKey', 'Environment Variables (one per line, KEY=value)')}</label>
-                    <Textarea
-                        name="env"
-                        value={formData.env}
-                        onChange={handleChange}
-                        placeholder={t('app.containersTab.nodeEnvProductionApiKeyXxx', 'NODE_ENV=production\nAPI_KEY=xxx')}
-                        rows={4}
-                    />
+                    <label>{t('app.containersTab.environmentVariables', 'Environment Variables')}</label>
+                    <EnvEditor value={env} onChange={setEnv} />
                 </div>
 
                 <div className="modal-actions">

@@ -15,7 +15,8 @@ import EmptyState from '../EmptyState';
 import { Cloud } from 'lucide-react';
 import Modal from '@/components/Modal';
 import { Label } from '@/components/ui/label';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '@/components/CopyField';
+import DomainField from '@/components/DomainField';
 import { rooms } from '@/constants/events';
 import { useTranslation } from 'react-i18next';
 import {
@@ -540,18 +541,17 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                 <form onSubmit={handleRoute} className="sk-form-stack">
                         <div className="sk-form-field">
                             <Label htmlFor="cf-host">{t('app.cloudflaredTab.hostname', 'Hostname')}</Label>
-                            <Input
+                            <DomainField
                                 id="cf-host"
+                                modes={['custom']}
                                 value={routeHostname}
-                                onChange={(e) => setRouteHostname(e.target.value)}
-                                placeholder="app.example.com"
-                                required
+                                onChange={setRouteHostname}
                                 autoFocus
                             />
                         </div>
                         <div className="modal-actions">
                             <Button type="button" variant="outline" onClick={() => setShowRouteModal(false)} disabled={routing}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={routing}>{routing ? 'Adding…' : 'Add Route'}</Button>
+                            <Button type="submit" disabled={routing || !routeHostname}>{routing ? 'Adding…' : 'Add Route'}</Button>
                         </div>
                     </form>
             </Modal>
@@ -581,6 +581,7 @@ const CloudflaredLoginCard = ({ login, onCancel }) => {
                 <p>
                     <strong>{t('app.cloudflaredTab.step12', 'Step 1 / 2:')}</strong> {t('app.cloudflaredTab.openTheFollowingUrlInYour', 'open the following URL in your browser, sign in to Cloudflare, and pick the zone you want to associate with this agent.')}
                 </p>
+                <CopyField value={login.authUrl} />
                 <div className="cloudflared-login-card__actions">
                     <a
                         href={login.authUrl}
@@ -590,13 +591,6 @@ const CloudflaredLoginCard = ({ login, onCancel }) => {
                     >
                         {t('app.cloudflaredTab.openCloudflareLogin', 'Open Cloudflare login')}
                     </a>
-                    <Button variant="unstyled"
-                        type="button"
-                        className="btn btn-outline"
-                        onClick={() => copyToClipboard(login.authUrl)}
-                    >
-                        {t('app.cloudflaredTab.copyUrl', 'Copy URL')}
-                    </Button>
                 </div>
                 <p className="cloudflared-login-card__hint">
                     <strong>{t('app.cloudflaredTab.step22', 'Step 2 / 2:')}</strong> {t('app.cloudflaredTab.waitingForTheAgentToReceive', 'waiting for the agent to receive cert.pem from Cloudflare. This page will refresh automatically once authorisation completes.')}

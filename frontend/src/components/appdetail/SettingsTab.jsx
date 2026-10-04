@@ -4,6 +4,7 @@ import api from '../../services/api';
 import { useConfirm } from '../../hooks/useConfirm';
 import { DangerZone } from '../DangerZone';
 import { Button } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { EnvTag } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import { Card as SharedCard } from '@/components/ui/card';
@@ -103,17 +104,21 @@ const SettingsTab = ({ app, onUpdate }) => {
                                 {envLabels[app.environment_type] || app.environment_type}
                             </EnvTag>
                         ) : (
-                            <select
+                            <Select
                                 value={environmentType}
-                                onChange={(e) => handleEnvironmentChange(e.target.value)}
+                                onValueChange={handleEnvironmentChange}
                                 disabled={savingEnvironment}
-                                className="settings-select"
                             >
-                                <option value="standalone">{t('app.settingsTab.standalone', 'Standalone')}</option>
-                                <option value="development">{t('app.settingsTab.development', 'Development')}</option>
-                                <option value="staging">{t('app.settingsTab.staging', 'Staging')}</option>
-                                <option value="production">{t('app.settingsTab.production', 'Production')}</option>
-                            </select>
+                                <SelectTrigger className="settings-select" aria-label={t('app.settingsTab.environmentType', 'Environment Type')}>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="standalone">{t('app.settingsTab.standalone', 'Standalone')}</SelectItem>
+                                    <SelectItem value="development">{t('app.settingsTab.development', 'Development')}</SelectItem>
+                                    <SelectItem value="staging">{t('app.settingsTab.staging', 'Staging')}</SelectItem>
+                                    <SelectItem value="production">{t('app.settingsTab.production', 'Production')}</SelectItem>
+                                </SelectContent>
+                            </Select>
                         )}
                         {savingEnvironment && <span className="settings-saving">{t('common.editing.saving', 'Saving…')}</span>}
                     </div>

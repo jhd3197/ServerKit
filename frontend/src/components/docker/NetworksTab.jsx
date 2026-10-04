@@ -4,7 +4,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import EmptyState from '../EmptyState';
 import Modal from '@/components/Modal';
-import { DataTable, DataTableFooter, Pill, SearchField } from '@/components/ds';
+import { DataTable, DataTableFooter, Pill, SearchField, SegControl } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
@@ -391,11 +391,12 @@ const CreateNetworkModal = ({ onClose, onCreated }) => {
 
                 <div className="form-group">
                     <label>{t('app.networksTab.driver', 'Driver')}</label>
-                    <select value={driver} onChange={(e) => setDriver(e.target.value)}>
-                        <option value="bridge">bridge</option>
-                        <option value="overlay">overlay</option>
-                        <option value="macvlan">macvlan</option>
-                    </select>
+                    <SegControl
+                        aria-label={t('app.networksTab.driver', 'Driver')}
+                        value={driver}
+                        onChange={setDriver}
+                        options={['bridge', 'overlay', 'macvlan']}
+                    />
                 </div>
 
                 <div className="modal-actions">

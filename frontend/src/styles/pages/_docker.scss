@@ -257,10 +257,6 @@
     padding: $space-5;
 }
 
-.dx-target-select {
-    min-width: 160px;
-}
-
 .dx-stat {
     display: flex;
     align-items: center;
@@ -1035,7 +1031,35 @@
 
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
 .docker-compose-log-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
-.docker-compose-log-select { padding-inline-start: 0.5rem; padding-inline-end: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.docker-compose-log-select.ui-select-trigger { width: auto; min-width: 8rem; }
 
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
 .docker-compose-actions-column { text-align: right; }
+
+// Run Container modal: host → container port rows.
+.dx-run-ports {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    &__head,
+    &__row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+        gap: $space-2;
+        align-items: start;
+    }
+
+    &__head {
+        font-size: $font-size-xs;
+        color: $text-tertiary;
+    }
+
+    &__sep {
+        padding-top: $space-2;
+        color: $text-tertiary;
+        font-family: $font-mono;
+    }
+
+    &__add { align-self: flex-start; }
+}
