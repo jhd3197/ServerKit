@@ -29,6 +29,18 @@ test('recognizes typing and contenteditable targets', () => {
     assert.equal(isEditableTarget({ tagName: 'div', isContentEditable: false }), false);
 });
 
+test('treats a Radix Select trigger or open list like a native select', () => {
+    // closest() stand-in: matches when the selector names this node's role.
+    const withRole = (tagName, role) => ({
+        tagName,
+        isContentEditable: false,
+        closest: (selector) => (selector.includes(`[role="${role}"]`) ? {} : null),
+    });
+    assert.equal(isEditableTarget(withRole('BUTTON', 'combobox')), true);
+    assert.equal(isEditableTarget(withRole('DIV', 'listbox')), true);
+    assert.equal(isEditableTarget(withRole('BUTTON', 'menuitem')), false);
+});
+
 test('dispatches the highest-priority matching command and unregisters cleanly', () => {
     const registry = createShortcutRegistry();
     const called = [];
