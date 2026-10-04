@@ -852,6 +852,7 @@
             "openCloudflareLogin": "Open Cloudflare login",
             "openTheFollowingUrlInYour": "open the following URL in your browser, sign in to Cloudflare, and pick the zone you want to associate with this agent.",
             "provisionsANewCloudflareTunnelOn": "Provisions a new Cloudflare Tunnel on this server.",
+            "routeCreatesRecord": "Adding the route creates the Cloudflare DNS record for {{name}}.",
             "routeSubdomain": "Route subdomain",
             "routeSubdomain2": "Route Subdomain{{value}}",
             "serverOffline": "Server Offline",
@@ -3090,6 +3091,7 @@
         },
         "logViewer": {
             "autoRefresh": "Auto-refresh",
+            "linesToShow": "Lines to show",
             "logFiles": "Log Files",
             "noLogFilesFound": "No log files found",
             "searchPattern": "Search pattern…"
@@ -4291,6 +4293,7 @@
             "pickAPublicIpEdgeServer": "Pick a public-IP edge server and ServerKit will pair it with {{value}} over WireGuard.",
             "pickAPublicIpEdgeServer2": "Pick a public-IP edge server and a private host, and ServerKit will pair them over WireGuard and publish your service — no router changes needed.",
             "pickTwoDifferentServers": "Pick two different servers: the edge fronts the private host.",
+            "pointAtEdge": "Point {{name}} at the edge server; the tunnel carries it from there.",
             "privateHostWhereTheServiceRuns": "Private host (where the service runs)",
             "publicHostname": "Public hostname",
             "putAUsernamePasswordInFront": "Put a username/password in front of the service.",
