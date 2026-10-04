@@ -17,6 +17,7 @@ import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useTranslation } from 'react-i18next';
 import { t } from '../../i18n/t';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
+import { errorReason } from '@/utils/errorMessage';
 
 // Both lists have the same columns; only the accent tone and the remove
 // target differ, so one factory builds both. Two accessors per column on
@@ -179,7 +180,7 @@ const IPListsTab = () => {
             setNewComment('');
             await loadLists();
         } catch (error) {
-            toast.error(t('app.iPListsTab.failedToAddIp', 'Failed to add IP: {{message}}', { message: error.message }));
+            toast.error(t('app.iPListsTab.failedToAddIp', 'Failed to add IP: {{message}}', { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -205,14 +206,14 @@ const IPListsTab = () => {
                             toast.success(t('app.iPListsTab.ipRestoredTo', 'IP restored to {{listType}}', { listType: listType }));
                             await loadLists();
                         } catch (error) {
-                            toast.error(t('app.iPListsTab.couldNotRestoreIp', 'Could not restore IP: {{message}}', { message: error.message }));
+                            toast.error(t('app.iPListsTab.couldNotRestoreIp', 'Could not restore IP: {{message}}', { message: errorReason(error) }));
                         }
                     },
                 },
             });
             await loadLists();
         } catch (error) {
-            toast.error(t('app.iPListsTab.failedToRemoveIp', 'Failed to remove IP: {{message}}', { message: error.message }));
+            toast.error(t('app.iPListsTab.failedToRemoveIp', 'Failed to remove IP: {{message}}', { message: errorReason(error) }));
         }
     };
 

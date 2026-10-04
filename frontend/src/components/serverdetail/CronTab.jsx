@@ -31,6 +31,7 @@ import {
     PlayIcon,
     TrashIcon,
 } from './serverDetailShared';
+import { toastError } from '@/utils/errorMessage';
 
 // Built-in saved views. A remote cron entry is only
 // { id, schedule, command, enabled, name?, description? } — the agent parses
@@ -139,7 +140,7 @@ const CronTab = ({ serverId, serverStatus }) => {
             toast.success(t('app.cronTab.job', 'Job {{value}}', { value: !job.enabled ? 'enabled' : 'disabled' }));
             loadJobs();
         } catch (err) {
-            toast.error(err.message || t('app.cronTab.failedToToggleJob', 'Failed to toggle job'));
+            toastError(toast, t('app.cronTab.failedToToggleJob', 'Failed to toggle job'), err);
         }
     }
 
@@ -156,7 +157,7 @@ const CronTab = ({ serverId, serverStatus }) => {
             toast.success(t('app.cronTab.cronJobRemoved', 'Cron job deleted'));
             loadJobs();
         } catch (err) {
-            toast.error(err.message || t('app.cronTab.failedToRemoveJob', 'Failed to delete job'));
+            toastError(toast, t('app.cronTab.failedToRemoveJob', 'Failed to delete job'), err);
         }
     }
 
@@ -182,7 +183,7 @@ const CronTab = ({ serverId, serverStatus }) => {
             setForm({ name: '', schedule: '0 * * * *', command: '' });
             loadJobs();
         } catch (err) {
-            toast.error(err.message || t('app.cronTab.failedToAddCronJob', 'Failed to add cron job'));
+            toastError(toast, t('app.cronTab.failedToAddCronJob', 'Failed to add cron job'), err);
         } finally {
             setSubmitting(false);
         }

@@ -15,6 +15,7 @@ import { useWorkspace } from '../contexts/useWorkspace.js';
 import { useAuth } from '../contexts/useAuth.js';
 import { useServerMutation, useServerQuery } from '../hooks/useServerQuery';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Preset views. `servers` and `users` are quota CEILINGS, not usage, so there
 // is no column to express "near capacity" against.
@@ -137,7 +138,7 @@ const Workspaces = () => {
             setShowCreateModal(false);
             setForm({ name: '', description: '', max_servers: 0, max_users: 0, primary_color: '#6d7cff' });
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.workspaces.couldntCreate', "Couldn't create the workspace."), err);
         }
     };
 

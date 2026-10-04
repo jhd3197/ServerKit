@@ -16,6 +16,7 @@ import EmptyState from '../EmptyState';
 import ErrorState from '../ErrorState';
 import CopyField from '@/components/CopyField';
 import { useTranslation } from 'react-i18next';
+import { errorReason } from '@/utils/errorMessage';
 
 const formatDate = (d) => (d ? new Date(d).toLocaleString() : '—');
 
@@ -75,7 +76,7 @@ export default function WebhooksTab() {
             loadAll();
             toast.success(t('app.webhooksTab.endpointCreated', 'Endpoint created'));
         } catch (err) {
-            toast.error(t('app.webhooksTab.failedToCreateEndpoint', 'Failed to create endpoint: {{message}}', { message: err.message }));
+            toast.error(t('app.webhooksTab.failedToCreateEndpoint', 'Failed to create endpoint: {{message}}', { message: errorReason(err) }));
         }
     }
 
@@ -91,7 +92,7 @@ export default function WebhooksTab() {
             loadAll();
             toast.success(t('app.webhooksTab.endpointDeleted', 'Endpoint deleted'));
         } catch (err) {
-            toast.error(t('app.webhooksTab.failedToDeleteEndpoint', 'Failed to delete endpoint: {{message}}', { message: err.message }));
+            toast.error(t('app.webhooksTab.failedToDeleteEndpoint', 'Failed to delete endpoint: {{message}}', { message: errorReason(err) }));
         }
     }
 
@@ -102,7 +103,7 @@ export default function WebhooksTab() {
             loadAll();
             if (selectedEndpoint?.id === id) openEndpoint(data.endpoint.id);
         } catch (err) {
-            toast.error(t('app.webhooksTab.regenerateFailed', 'Regenerate failed: {{message}}', { message: err.message }));
+            toast.error(t('app.webhooksTab.regenerateFailed', 'Regenerate failed: {{message}}', { message: errorReason(err) }));
         }
     }
 
@@ -113,7 +114,7 @@ export default function WebhooksTab() {
             setSelectedEndpoint(endpoint);
             setDeliveries(deliveries || []);
         } catch (err) {
-            toast.error(t('app.webhooksTab.failedToLoadEndpoint', 'Failed to load endpoint: {{message}}', { message: err.message }));
+            toast.error(t('app.webhooksTab.failedToLoadEndpoint', 'Failed to load endpoint: {{message}}', { message: errorReason(err) }));
         }
     }
 
@@ -129,7 +130,7 @@ export default function WebhooksTab() {
                 toast.success(t('app.webhooksTab.replayedDelivery', 'Replayed delivery'));
             }
         } catch (err) {
-            toast.error(t('app.webhooksTab.replayFailed', 'Replay failed: {{message}}', { message: err.message }));
+            toast.error(t('app.webhooksTab.replayFailed', 'Replay failed: {{message}}', { message: errorReason(err) }));
         }
     }
 

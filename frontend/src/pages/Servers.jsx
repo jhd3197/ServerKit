@@ -27,6 +27,7 @@ import useFocusParam from '@/hooks/useFocusParam';
 import LinkPanelForm from '../components/servers/LinkPanelForm';
 import { useTranslation } from 'react-i18next';
 import { t } from '../i18n/t';
+import { toastError } from '@/utils/errorMessage';
 
 // Radix Select items cannot use '' — stands in for "no group".
 const NO_GROUP = '__none';
@@ -501,7 +502,7 @@ const Servers = () => {
                                     setSelectedIds(new Set());
                                     loadData();
                                 } catch (err) {
-                                    toast.error(err.message || t('app.servers.couldNotSetTheGroup', 'Could not set the group'));
+                                    toastError(toast, t('app.servers.couldNotSetTheGroup', 'Could not set the group'), err);
                                 } finally {
                                     setBulkBusy(false);
                                 }
@@ -1012,7 +1013,7 @@ const ManageGroupsModal = ({ groups, onClose, onUpdated }) => {
             const data = await api.getServerGroups();
             setGroupList(Array.isArray(data) ? data : []);
         } catch (err) {
-            toast.error(err.message || t('app.servers.failedToCreateGroup', 'Failed to create group'));
+            toastError(toast, t('app.servers.failedToCreateGroup', 'Failed to create group'), err);
         } finally {
             setLoading(false);
         }
@@ -1027,7 +1028,7 @@ const ManageGroupsModal = ({ groups, onClose, onUpdated }) => {
             const data = await api.getServerGroups();
             setGroupList(Array.isArray(data) ? data : []);
         } catch (err) {
-            toast.error(err.message || t('app.servers.failedToUpdateGroup', 'Failed to update group'));
+            toastError(toast, t('app.servers.failedToUpdateGroup', 'Failed to update group'), err);
         }
     }
 
@@ -1045,7 +1046,7 @@ const ManageGroupsModal = ({ groups, onClose, onUpdated }) => {
             const data = await api.getServerGroups();
             setGroupList(Array.isArray(data) ? data : []);
         } catch (err) {
-            toast.error(err.message || t('app.servers.failedToDeleteGroup', 'Failed to delete group'));
+            toastError(toast, t('app.servers.failedToDeleteGroup', 'Failed to delete group'), err);
         }
     }
 

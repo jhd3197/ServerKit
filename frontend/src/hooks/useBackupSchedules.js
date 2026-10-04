@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useServerMutation, useServerQuery } from './useServerQuery';
+import { toastError } from '@/utils/errorMessage';
 
 const SCHEDULE_KEY = ['backups', 'schedules'];
 const EMPTY_SCHEDULES = [];
@@ -15,7 +16,7 @@ export function useBackupSchedules() {
     const toast = useToast();
     const query = useServerQuery(SCHEDULE_KEY, () => api.getBackupSchedules(), {
         refetchInterval: 60_000,
-        onError: (error) => toast.error(error.message),
+        onError: (error) => toastError(toast, t('app.backups.couldntLoadSchedules', "Couldn't load backup schedules."), error),
     });
     const create = useServerMutation((values) => api.addBackupSchedule(
         values.name, values.backupType, values.target, values.scheduleTime,
@@ -24,12 +25,12 @@ export function useBackupSchedules() {
     const toggle = useServerMutation((schedule) => api.updateBackupSchedule(schedule.id, { enabled: !schedule.enabled }), {
         invalidate: [SCHEDULE_KEY],
         onSuccess: (_, schedule) => toast.success(t('app.backups.schedule', 'Schedule {{value}}', { value: schedule.enabled ? 'disabled' : 'enabled' })),
-        onError: (error) => toast.error(error.message),
+        onError: (error) => toastError(toast, t('app.backups.couldntToggleSchedule', "Couldn't turn the schedule on or off."), error),
     });
     const remove = useServerMutation((id) => api.removeBackupSchedule(id), {
         invalidate: [SCHEDULE_KEY],
         onSuccess: () => toast.success(t('app.backups.scheduleRemoved', 'Schedule deleted')),
-        onError: (error) => toast.error(error.message),
+        onError: (error) => toastError(toast, t('app.backups.couldntDeleteSchedule', "Couldn't delete the schedule."), error),
     });
     const refetch = query.refetch;
     const reportError = toast.error;

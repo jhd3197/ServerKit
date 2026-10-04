@@ -8,6 +8,7 @@ import { useToast } from '../../contexts/useToast.js';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { toastError } from '@/utils/errorMessage';
 
 // Browse & install community themes from the registry (plan 60, Phase 3).
 // Offline-tolerant: if the registry is unreachable the panel falls back to the
@@ -28,7 +29,7 @@ const ThemeBrowseModal = ({ open, onOpenChange }) => {
             setThemes(Array.isArray(data?.themes) ? data.themes : []);
             setSource(data?.source || null);
         } catch (e) {
-            toast.error(e?.message || t('app.themeBrowseModal.couldNotLoadTheThemeRegistry', 'Could not load the theme registry'));
+            toastError(toast, t('app.themeBrowseModal.couldNotLoadTheThemeRegistry', 'Could not load the theme registry'), e);
             setThemes([]);
         } finally {
             setLoading(false);
@@ -50,7 +51,7 @@ const ThemeBrowseModal = ({ open, onOpenChange }) => {
             )));
             toast.success(t('app.themeBrowseModal.themeInstalledFindItInThe', 'Theme installed. Find it in the gallery.'));
         } catch (e) {
-            toast.error(e?.message || t('app.themeBrowseModal.couldNotInstallThatTheme', 'Could not install that theme'));
+            toastError(toast, t('app.themeBrowseModal.couldNotInstallThatTheme', 'Could not install that theme'), e);
         } finally {
             setInstalling(null);
         }

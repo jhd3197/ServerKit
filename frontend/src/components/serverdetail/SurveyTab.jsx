@@ -18,6 +18,7 @@ import {
     Radio,
     Network,
 } from 'lucide-react';
+import { toastError } from '@/utils/errorMessage';
 
 // Survey tab (plan 27/28) — the read-only "Server Map" for a paired agent.
 //
@@ -98,7 +99,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             toast.success(t('app.surveyTab.surveyComplete', 'Survey complete'));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.surveyTab.surveyFailed', 'Survey failed'));
+            toastError(toast, t('app.surveyTab.surveyFailed', 'Survey failed'), err);
         } finally {
             setFlying(false);
         }
@@ -114,7 +115,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             setCatalog(data);
             setShowCatalog(true);
         } catch (err) {
-            toast.error(err.message || t('app.surveyTab.failedToLoadProbeIndex', 'Failed to load probe index'));
+            toastError(toast, t('app.surveyTab.failedToLoadProbeIndex', 'Failed to load probe index'), err);
         }
     }
 
@@ -127,7 +128,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             const obs = await api.getServerObservedStatus(serverId).catch(() => null);
             if (obs) setObserved(obs);
         } catch (err) {
-            toast.error(err.message || t('app.surveyTab.failedToSwitchMode', 'Failed to switch mode'));
+            toastError(toast, t('app.surveyTab.failedToSwitchMode', 'Failed to switch mode'), err);
         } finally {
             setSwitching(false);
         }
@@ -140,7 +141,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             const obs = await api.getServerObservedStatus(serverId).catch(() => null);
             if (obs) setObserved(obs);
         } catch (err) {
-            toast.error(err.message || t('app.surveyTab.failedToUpdateSetting', 'Failed to update setting'));
+            toastError(toast, t('app.surveyTab.failedToUpdateSetting', 'Failed to update setting'), err);
         } finally {
             setSwitching(false);
         }

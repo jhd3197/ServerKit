@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Must match app/services/deploy_settings.py DEFAULTS / _RULES.
 const TIMEOUT_DEFAULT = 120;
@@ -44,7 +45,7 @@ const DeploySafetyPanel = ({ app, onChanged }) => {
             toast.success(t('app.deploySafetyPanel.saved', 'Health check settings saved'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.deploySafetyPanel.saveFailed', 'Failed to save health check settings'));
+            toastError(toast, t('app.deploySafetyPanel.saveFailed', 'Failed to save health check settings'), err);
         } finally {
             setSaving(false);
         }

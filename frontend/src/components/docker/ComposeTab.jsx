@@ -20,6 +20,7 @@ import {
     unwrapRemoteData,
     normalizeListResponse,
 } from './dockerHelpers';
+import { toastError } from '@/utils/errorMessage';
 
 // `docker compose ls --format json` capitalises its keys; the label-scanning
 // fallback in docker_service builds the same shape by hand. Read through one
@@ -176,7 +177,7 @@ const ComposeTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error(`Failed to ${action} project:`, err);
-            toast.error(err.message || t('app.composeTab.failedToProject', 'Failed to {{action}} compose project', { action: action }));
+            toastError(toast, t('app.composeTab.failedToProject', 'Failed to {{action}} compose project', { action: action }), err);
         } finally {
             setActionLoading(prev => ({ ...prev, [name]: false }));
         }

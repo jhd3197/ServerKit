@@ -15,6 +15,7 @@ import LogContent from '../log-viewer/LogContent';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Unit log tail cadence while auto-refresh is on.
 const LOG_TAIL_MS = 3000;
@@ -150,7 +151,7 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
                 setUnits(data?.units || []);
             }
         } catch (err) {
-            toast.error(err.message || t('app.servicesTab.failedToLoadServices', 'Failed to load services'));
+            toastError(toast, t('app.servicesTab.failedToLoadServices', 'Failed to load services'), err);
         } finally {
             setLoading(false);
         }
@@ -211,7 +212,7 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
             // re-fetching the list is simpler and keeps the filter consistent.
             loadUnits();
         } catch (err) {
-            toast.error(err.message || t('app.servicesTab.failedTo', 'Failed to {{action}} {{unit}}', { action: action, unit: unit }));
+            toastError(toast, t('app.servicesTab.failedTo', 'Failed to {{action}} {{unit}}', { action: action, unit: unit }), err);
         } finally {
             setBusyUnit(null);
         }
@@ -266,7 +267,7 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
             await api.reloadRemoteSystemdDaemon(serverId);
             toast.success(t('app.servicesTab.systemctlDaemonReloadCompleted', 'systemctl daemon-reload completed'));
         } catch (err) {
-            toast.error(err.message || t('app.servicesTab.daemonReloadFailed', 'daemon-reload failed'));
+            toastError(toast, t('app.servicesTab.daemonReloadFailed', 'daemon-reload failed'), err);
         } finally {
             setBusyUnit(null);
         }

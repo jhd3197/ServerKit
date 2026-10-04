@@ -16,6 +16,7 @@ import { useConfirm } from '../../hooks/useConfirm';
 import useSettingFocus from '../../hooks/useSettingFocus';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { errorReason } from '@/utils/errorMessage';
 
 // Revisions in this project are short descriptive slugs (e.g. 016_resource_grants),
 // so show them in full rather than truncating mid-word.
@@ -204,7 +205,7 @@ const MigrationHistoryTab = () => {
                     const name = b?.path ? b.path.split(/[\\/]/).pop() : null;
                     toast.success(name ? t('app.migrationHistoryTab.databaseBackedUp', 'Database backed up ({{name}})', { name: name }) : t('app.migrationHistoryTab.databaseBackedUp2', 'Database backed up'));
                 } catch (err) {
-                    toast.error(t('app.migrationHistoryTab.backupFailedMigrationsNotApplied', 'Backup failed: {{value}}. Migrations were not applied.', { value: err.message || 'unknown error' }));
+                    toast.error(t('app.migrationHistoryTab.backupFailedMigrationsNotApplied', 'Backup failed: {{value}}. Migrations were not applied.', { value: errorReason(err) }));
                     return;
                 }
             }
@@ -212,7 +213,7 @@ const MigrationHistoryTab = () => {
             toast.success(t('app.migrationHistoryTab.migrationsAppliedNowAt', 'Migrations applied (now at {{value}})', { value: short(res?.revision || headRev) }));
             await load();
         } catch (err) {
-            toast.error(t('app.migrationHistoryTab.migrationFailed', 'Migration failed: {{value}}', { value: err.message || 'unknown error' }));
+            toast.error(t('app.migrationHistoryTab.migrationFailed', 'Migration failed: {{value}}', { value: errorReason(err) }));
         } finally {
             setApplying(false);
         }

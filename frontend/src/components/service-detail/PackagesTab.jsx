@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import EmptyState from '../EmptyState';
 import { DataTable, DataTableFooter } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // DataTable columns. Cell markup and classNames are identical to the
 // hand-rolled table they replace, so _service-detail.scss keeps applying
@@ -73,8 +74,8 @@ const PackagesTab = ({ appId }) => {
         try {
             await api.freezePythonRequirements(appId);
             toast.success(t('app.packagesTab.requirementsTxtUpdated', 'requirements.txt updated'));
-        } catch {
-            toast.error(t('app.packagesTab.failedToFreezeRequirements', 'Failed to freeze requirements'));
+        } catch (err) {
+            toastError(toast, t('app.packagesTab.failedToFreezeRequirements', 'Failed to freeze requirements'), err);
         }
     }
 

@@ -43,6 +43,7 @@ import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
 import { statusKind } from '@/components/ds/status';
 import { useTranslation } from 'react-i18next';
+import { errorReason } from '@/utils/errorMessage';
 
 const SEVERITY_ORDER = ['critical', 'error', 'warning', 'info', 'debug'];
 
@@ -111,7 +112,7 @@ const BUILTIN_VIEWS = [
 export default function Telemetry() {
     const { t } = useTranslation();
     const { isAdmin } = useAuth();
-    const { success: toastSuccess, error: toastError } = useToast();
+    const { success: toastSuccess, error: showError } = useToast();
     const { confirm } = useConfirm();
 
     const [events, setEvents] = useState([]);
@@ -195,7 +196,7 @@ export default function Telemetry() {
             toastSuccess(t('app.telemetry.testEventEmitted', 'Test event emitted'));
             fetchEvents(1, true);
         } catch (err) {
-            toastError(t('app.telemetry.failedToEmitTestEvent', 'Failed to emit test event: {{message}}', { message: err.message }));
+            showError(t('app.telemetry.failedToEmitTestEvent', 'Failed to emit test event: {{message}}', { message: errorReason(err) }));
         }
     };
 
@@ -214,7 +215,7 @@ export default function Telemetry() {
             toastSuccess(t('app.telemetry.deletedOldEvents', 'Deleted {{deleted}} old events', { deleted: data.deleted }));
             fetchEvents(1, true);
         } catch (err) {
-            toastError(t('app.telemetry.cleanupFailed', 'Cleanup failed: {{message}}', { message: err.message }));
+            showError(t('app.telemetry.cleanupFailed', 'Cleanup failed: {{message}}', { message: errorReason(err) }));
         }
     };
 

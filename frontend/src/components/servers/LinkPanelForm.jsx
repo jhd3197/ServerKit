@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const POLL_INTERVAL = 5000;
 
@@ -73,7 +74,7 @@ const LinkPanelForm = ({ onClose }) => {
             setUnlinkOpen(false);
             setStatus({ linked: false });
         } catch (err) {
-            toast.error(err?.data?.error || err.message || t('app.linkPanelForm.failedToUnlinkPanel', 'Failed to unlink panel'));
+            toastError(toast, t('app.linkPanelForm.failedToUnlinkPanel', 'Failed to unlink panel'), err);
         }
     }
 

@@ -20,6 +20,7 @@ import { timeAgo } from '../utils/time';
 import EmailProviders from '../components/EmailProviders';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { errorReason } from '@/utils/errorMessage';
 
 const STATUSES = ['all', 'pending', 'sent', 'failed', 'skipped'];
 const CHANNELS = ['all', 'inapp', 'email', 'discord', 'slack', 'telegram', 'webhook'];
@@ -118,7 +119,7 @@ export default function DeliveryLog() {
             toast.success(t('app.deliveryLog.deliveryReQueued', 'Delivery re-queued'));
             load();
         } catch (err) {
-            toast.error(t('app.deliveryLog.couldntRetryDelivery', "Couldn't retry the delivery. {{reason}}", { reason: err.message }));
+            toast.error(t('app.deliveryLog.couldntRetryDelivery', "Couldn't retry the delivery. {{reason}}", { reason: errorReason(err) }));
         }
     };
 

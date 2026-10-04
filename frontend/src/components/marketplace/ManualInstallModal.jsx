@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import DocsLink from '@/components/DocsLink';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const INSTALL_SOURCES = [
     { id: 'url', label: 'URL', icon: Globe2 },
@@ -214,7 +215,7 @@ const ManualInstallModal = ({ defaultSource = 'url', onClose, onInstalled }) => 
             const result = await api.previewPlugin(pluginUrl.trim());
             setPreview(result);
         } catch (err) {
-            toast.error(err.message || t('app.manualInstallModal.couldNotResolveThatExtension', 'Could not resolve that extension'));
+            toastError(toast, t('app.manualInstallModal.couldNotResolveThatExtension', 'Could not resolve that extension'), err);
         } finally {
             setPreviewing(false);
         }
@@ -230,7 +231,7 @@ const ManualInstallModal = ({ defaultSource = 'url', onClose, onInstalled }) => 
             toast.success(t('app.manualInstallModal.extensionInstalledRestartBackendToActivate', 'Extension "{{displayname}}" installed. Restart backend to activate routes.', { displayname: result.display_name }));
             onInstalled();
         } catch (err) {
-            toast.error(err.message || t('app.manualInstallModal.extensionInstallationFailed', 'Extension installation failed'));
+            toastError(toast, t('app.manualInstallModal.extensionInstallationFailed', 'Extension installation failed'), err);
         } finally {
             setInstalling(false);
         }
@@ -254,7 +255,7 @@ const ManualInstallModal = ({ defaultSource = 'url', onClose, onInstalled }) => 
             toast.success(t('app.manualInstallModal.extensionInstalledRestartBackendToActivate', 'Extension "{{displayname}}" installed. Restart backend to activate routes.', { displayname: result.display_name }));
             onInstalled();
         } catch (err) {
-            toast.error(err.message || t('app.manualInstallModal.extensionInstallationFailed', 'Extension installation failed'));
+            toastError(toast, t('app.manualInstallModal.extensionInstallationFailed', 'Extension installation failed'), err);
         } finally {
             setInstalling(false);
         }

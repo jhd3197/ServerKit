@@ -24,6 +24,7 @@ import { useConfirm } from '@/hooks/useConfirm';
 import { useClipboard } from '@/hooks/useClipboard';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // What a masked value renders as. Unchanged from the list this table replaces:
 // every env var is stored as a secret, so every value is dots until the row's
@@ -73,7 +74,7 @@ const EVERY_SERVICE = '__all';
 const EnvironmentVariables = ({ appId }) => {
     const { t } = useTranslation();
     const toast = useToast();
-    const toastError = toast.error;
+    const showError = toast.error;
     const { confirm } = useConfirm();
     const { copy } = useClipboard();
     const [envVars, setEnvVars] = useState([]);
@@ -130,12 +131,12 @@ const EnvironmentVariables = ({ appId }) => {
             const data = await api.getEnvVars(appId);
             setEnvVars(data.env_vars || []);
         } catch (err) {
-            toastError(t('app.environmentVariables.failedToLoadEnvironmentVariables', 'Failed to load environment variables'));
+            toastError(showError, t('app.environmentVariables.failedToLoadEnvironmentVariables', 'Failed to load environment variables'), err);
             console.error('Failed to load env vars:', err);
         } finally {
             setLoading(false);
         }
-    }, [appId, t, toastError]);
+    }, [appId, t, showError]);
 
     useEffect(() => {
         loadEnvVars();
@@ -171,7 +172,7 @@ const EnvironmentVariables = ({ appId }) => {
             setShowAddModal(false);
             loadEnvVars();
         } catch (err) {
-            toast.error(err.message || t('app.environmentVariables.failedToAddEnvironmentVariable', 'Failed to add environment variable'));
+            toastError(toast, t('app.environmentVariables.failedToAddEnvironmentVariable', 'Failed to add environment variable'), err);
         } finally {
             setSaving(false);
         }
@@ -195,7 +196,7 @@ const EnvironmentVariables = ({ appId }) => {
             setEditTargetService('');
             loadEnvVars();
         } catch (err) {
-            toast.error(err.message || t('app.environmentVariables.failedToUpdateEnvironmentVariable', 'Failed to update environment variable'));
+            toastError(toast, t('app.environmentVariables.failedToUpdateEnvironmentVariable', 'Failed to update environment variable'), err);
         } finally {
             setSaving(false);
         }
@@ -213,7 +214,7 @@ const EnvironmentVariables = ({ appId }) => {
             toast.success(t('app.environmentVariables.environmentVariableDeleted', 'Environment variable deleted'));
             loadEnvVars();
         } catch (err) {
-            toast.error(err.message || t('app.environmentVariables.failedToDeleteEnvironmentVariable', 'Failed to delete environment variable'));
+            toastError(toast, t('app.environmentVariables.failedToDeleteEnvironmentVariable', 'Failed to delete environment variable'), err);
         }
     }
 
@@ -255,8 +256,8 @@ const EnvironmentVariables = ({ appId }) => {
             const data = await api.exportEnvFile(appId, includeSecrets);
             downloadBlob(data.content, data.filename || 'app.env');
             toast.success(t('app.environmentVariables.environmentFileExported', 'Environment file exported'));
-        } catch {
-            toast.error(t('app.environmentVariables.failedToExport', 'Failed to export'));
+        } catch (err) {
+            toastError(toast, t('app.environmentVariables.failedToExport', 'Failed to export'), err);
         }
     }
 
@@ -274,7 +275,7 @@ const EnvironmentVariables = ({ appId }) => {
             setImportContent('');
             loadEnvVars();
         } catch (err) {
-            toast.error(err.message || t('app.environmentVariables.failedToImport', 'Failed to import'));
+            toastError(toast, t('app.environmentVariables.failedToImport', 'Failed to import'), err);
         } finally {
             setSaving(false);
         }
@@ -296,8 +297,8 @@ const EnvironmentVariables = ({ appId }) => {
             const data = await api.getEnvVarHistory(appId);
             setHistory(data.history || []);
             setShowHistoryModal(true);
-        } catch {
-            toast.error(t('app.environmentVariables.failedToLoadHistory', 'Failed to load history'));
+        } catch (err) {
+            toastError(toast, t('app.environmentVariables.failedToLoadHistory', 'Failed to load history'), err);
         }
     }
 
@@ -317,8 +318,8 @@ const EnvironmentVariables = ({ appId }) => {
             await api.clearEnvVars(appId);
             toast.success(t('app.environmentVariables.allEnvironmentVariablesCleared', 'All environment variables cleared'));
             loadEnvVars();
-        } catch {
-            toast.error(t('app.environmentVariables.failedToClear', 'Failed to clear'));
+        } catch (err) {
+            toastError(toast, t('app.environmentVariables.failedToClear', 'Failed to clear'), err);
         }
     }
 

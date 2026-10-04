@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
+import { toastError } from '@/utils/errorMessage';
 
 const RECORD_TYPES = ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'SRV', 'CAA', 'NS'];
 const PROXYABLE = ['A', 'AAAA', 'CNAME'];
@@ -152,7 +153,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             setForm(EMPTY_FORM);
             await load();
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.failedToAddRecord', 'Failed to add record'));
+            toastError(toast, t('app.domainDnsPanel.failedToAddRecord', 'Failed to add record'), e);
         } finally {
             setSaving(false);
         }
@@ -168,7 +169,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             toast.success(t('app.domainDnsPanel.dynamicDnsEnabled', 'Dynamic DNS enabled'));
             await loadHosts();
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.failedToEnableDynamicDns', 'Failed to enable dynamic DNS'));
+            toastError(toast, t('app.domainDnsPanel.failedToEnableDynamicDns', 'Failed to enable dynamic DNS'), e);
         } finally {
             setBusyKey(null);
         }
@@ -181,7 +182,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             toast.success(t('app.domainDnsPanel.tokenRegenerated', 'Token regenerated'));
             await loadHosts();
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.failedToRegenerateToken', 'Failed to regenerate token'));
+            toastError(toast, t('app.domainDnsPanel.failedToRegenerateToken', 'Failed to regenerate token'), e);
         }
     }
 
@@ -197,7 +198,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             toast.success(t('app.domainDnsPanel.dynamicDnsDisabled', 'Dynamic DNS disabled'));
             await loadHosts();
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.failedToDisableDynamicDns', 'Failed to disable dynamic DNS'));
+            toastError(toast, t('app.domainDnsPanel.failedToDisableDynamicDns', 'Failed to disable dynamic DNS'), e);
         }
     }
 
@@ -209,7 +210,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             const data = await api.exportDNSZone(zid);
             downloadBlob(data.zone_file || '', `${domain.name}.txt`);
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.exportFailed', 'Export failed'));
+            toastError(toast, t('app.domainDnsPanel.exportFailed', 'Export failed'), e);
         } finally {
             setExporting(false);
         }
@@ -223,7 +224,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             const d = await api.checkDNSPropagation(domain.name);
             setPropResults(d.results || []);
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.propagationCheckFailed', 'Propagation check failed'));
+            toastError(toast, t('app.domainDnsPanel.propagationCheckFailed', 'Propagation check failed'), e);
             setPropResults([]);
         } finally {
             setPropLoading(false);
@@ -235,7 +236,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             const zid = await ensureZone();
             navigate(`/cloudflare/zones/${zid}`);
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.couldNotOpenCloudflare', 'Could not open Cloudflare'));
+            toastError(toast, t('app.domainDnsPanel.couldNotOpenCloudflare', 'Could not open Cloudflare'), e);
         }
     }
 

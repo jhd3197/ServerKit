@@ -20,6 +20,7 @@ import {
     normalizeListResponse,
     shortId,
 } from './dockerHelpers';
+import { toastError } from '@/utils/errorMessage';
 
 export const CreateNetworkButton = () => {
     const { t } = useTranslation();
@@ -150,7 +151,7 @@ const NetworksTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error('Failed to remove network:', err);
-            toast.error(t('app.networksTab.failedToRemoveNetworkItMay', 'Failed to delete network. It may be in use.'));
+            toastError(toast, t('app.networksTab.failedToRemoveNetworkItMay', 'Failed to delete network. It may be in use.'), err);
         }
     }
 

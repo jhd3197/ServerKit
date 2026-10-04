@@ -37,6 +37,7 @@ import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { formatCompact, formatFull } from '../utils/formatNumber';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Radix Select items cannot use '' — stands in for "no group filter".
 const ALL_GROUPS = '__all';
@@ -147,11 +148,11 @@ const QueueOperations = () => {
             setGroups(groupsRes.groups || []);
             setStats(statsRes);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueOperations.couldntLoadStats', "Couldn't load queue stats."), err);
         } finally {
             setLoading(false);
         }
-    }, [toast]);
+    }, [t, toast]);
 
     const loadQueues = useCallback(async (groupSlug) => {
         try {
@@ -166,9 +167,9 @@ const QueueOperations = () => {
             );
             setQueues(lists.flat());
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueOperations.couldntLoadQueues', "Couldn't load queues."), err);
         }
-    }, [groups, toast]);
+    }, [groups, t, toast]);
 
     useEffect(() => {
         loadData();
@@ -233,7 +234,7 @@ const QueueOperations = () => {
             setGroupForm({ name: '', description: '' });
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueOperations.couldntCreateGroup', "Couldn't create the group."), err);
         }
     };
 
@@ -247,8 +248,8 @@ const QueueOperations = () => {
         let config = {};
         try {
             config = JSON.parse(queueForm.config);
-        } catch {
-            toast.error(t('app.queueOperations.configMustBeValidJson', 'Config must be valid JSON'));
+        } catch (err) {
+            toastError(toast, t('app.queueOperations.configMustBeValidJson', 'Config must be valid JSON'), err);
             return;
         }
         try {
@@ -263,7 +264,7 @@ const QueueOperations = () => {
             loadQueues(selectedGroup);
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueOperations.couldntCreateQueue', "Couldn't create the queue."), err);
         }
     };
 
@@ -280,7 +281,7 @@ const QueueOperations = () => {
             loadQueues(selectedGroup);
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueOperations.couldntDeleteQueue', "Couldn't delete the queue."), err);
         }
     };
 
@@ -299,8 +300,8 @@ const QueueOperations = () => {
         let payload = {};
         try {
             payload = JSON.parse(sendForm.payload);
-        } catch {
-            toast.error(t('app.queueOperations.payloadMustBeValidJson', 'Payload must be valid JSON'));
+        } catch (err) {
+            toastError(toast, t('app.queueOperations.payloadMustBeValidJson', 'Payload must be valid JSON'), err);
             return;
         }
         try {
@@ -313,7 +314,7 @@ const QueueOperations = () => {
             loadQueues(selectedGroup);
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueOperations.couldntSend', "Couldn't send the message."), err);
         }
     };
 

@@ -5,6 +5,7 @@ import { useConfirm } from '../../hooks/useConfirm';
 import { Button } from '@/components/ui/button';
 import { useServer } from './dockerHelpers';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const PruneButton = ({ onPruned }) => {
     const { t } = useTranslation();
@@ -26,8 +27,8 @@ const PruneButton = ({ onPruned }) => {
             await api.request('/docker/cleanup', { method: 'POST', body: {} });
             toast.success(t('app.pruneButton.dockerCleanupCompleted', 'Docker cleanup completed'));
             onPruned?.();
-        } catch {
-            toast.error(t('app.pruneButton.failedToCleanupDockerResources', 'Failed to cleanup Docker resources'));
+        } catch (err) {
+            toastError(toast, t('app.pruneButton.failedToCleanupDockerResources', 'Failed to cleanup Docker resources'), err);
         } finally {
             setLoading(false);
         }

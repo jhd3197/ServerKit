@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Docker memory limit: number + one-letter unit (b/k/m/g), e.g. "512m", "2g".
 const MEMORY_LIMIT_RE = /^\d+(\.\d+)?(b|k|m|g)$/i;
@@ -81,7 +82,7 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
                 : t('app.resourceLimitsPanel.resourceLimitsSaved', 'Resource limits saved'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.resourceLimitsPanel.failedToSaveResourceLimits', 'Failed to save resource limits'));
+            toastError(toast, t('app.resourceLimitsPanel.failedToSaveResourceLimits', 'Failed to save resource limits'), err);
         } finally {
             setSaving(false);
         }

@@ -31,6 +31,7 @@ import useEditingSession from '../hooks/useEditingSession';
 import { useShortcut, useShortcutCommands } from '../hooks/useShortcut';
 import { useUnsavedChangesGuard } from '../hooks/useUnsavedChangesGuard';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Auto-refresh choices, in seconds. 0 means "don't".
 const REFRESH_OPTIONS = [
@@ -306,8 +307,8 @@ const Dashboard = () => {
             toast.success(t('app.dashboard.dashboardSaved', 'Dashboard saved'), {
                 description: t('app.dashboard.widget', '{{length}} widget{{value}} · {{value2}}', { length: savedWidgets.length, value: savedWidgets.length === 1 ? '' : 's', value2: activeBoard?.name }),
             });
-        } catch {
-            toast.error(t('app.dashboard.couldNotSave', 'Could not save'), { description: t('app.dashboard.yourLayoutIsStillHereTry', 'Your layout is still here. Try again.') });
+        } catch (err) {
+            toastError(toast, t('app.dashboard.couldNotSave', 'Could not save'), err, { description: t('app.dashboard.yourLayoutIsStillHereTry', 'Your layout is still here. Try again.') });
         }
     }, [activeBoard?.name, saveActive, saveEditing, t, toast]);
 
@@ -378,8 +379,8 @@ const Dashboard = () => {
             const board = await resetActiveBoard();
             resetEditing(board?.widgets || []);
             toast.info(t('app.dashboard.resetToTheShippedLayout', 'Reset to the shipped layout'), { description: activeBoard?.name });
-        } catch {
-            toast.error(t('app.dashboard.couldNotReset', 'Could not reset'), { description: t('app.dashboard.thisBoardHasNoShippedDefault', 'This board has no shipped default.') });
+        } catch (err) {
+            toastError(toast, t('app.dashboard.couldNotReset', 'Could not reset'), err, { description: t('app.dashboard.thisBoardHasNoShippedDefault', 'This board has no shipped default.') });
         }
     };
 

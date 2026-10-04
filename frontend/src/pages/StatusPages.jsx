@@ -29,6 +29,7 @@ import {
     Trash2,
     Unlink,
 } from 'lucide-react';
+import { toastError } from '@/utils/errorMessage';
 
 // pill → ds Pill kind · tone → .status-dot modifier · dot → .comp-dots square
 const STATUS_META = {
@@ -160,7 +161,7 @@ const StatusPages = () => {
             setIncidents(iData.incidents || []);
             setUnattached((mData?.monitors || []).filter((m) => m.page_id == null));
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToLoadPageDetails', 'Failed to load page details'));
+            toastError(toast, t('app.statusPages.failedToLoadPageDetails', 'Failed to load page details'), err);
         }
     };
 
@@ -173,7 +174,7 @@ const StatusPages = () => {
             setShowAttach(false);
             await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.couldNotAddTheMonitor', 'Could not add the monitor'));
+            toastError(toast, t('app.statusPages.couldNotAddTheMonitor', 'Could not add the monitor'), err);
         }
     };
 
@@ -185,7 +186,7 @@ const StatusPages = () => {
             toast.success(t('app.statusPages.removedFromThisPage', '{{name}} removed from this page', { name: component.name }));
             await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.couldNotRemoveTheMonitor', 'Could not remove the monitor'));
+            toastError(toast, t('app.statusPages.couldNotRemoveTheMonitor', 'Could not remove the monitor'), err);
         }
     };
 
@@ -208,7 +209,7 @@ const StatusPages = () => {
                 setIncidents([]);
             }
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToLoadStatusPages', 'Failed to load status pages'));
+            toastError(toast, t('app.statusPages.failedToLoadStatusPages', 'Failed to load status pages'), err);
         } finally {
             setLoading(false);
         }
@@ -243,7 +244,7 @@ const StatusPages = () => {
             setPages((current) => [...current, page].sort((a, b) => a.name.localeCompare(b.name)));
             await loadPageDetails(page);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToCreateStatusPage', 'Failed to create status page'));
+            toastError(toast, t('app.statusPages.failedToCreateStatusPage', 'Failed to create status page'), err);
         }
     };
 
@@ -257,7 +258,7 @@ const StatusPages = () => {
             await loadPageDetails(selectedPage);
             await loadPages();
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToAddComponent', 'Failed to add component'));
+            toastError(toast, t('app.statusPages.failedToAddComponent', 'Failed to add component'), err);
         }
     };
 
@@ -267,7 +268,7 @@ const StatusPages = () => {
             toast.success(t('app.statusPages.check', 'Check {{status}}{{value}}', { status: result.status, value: result.response_time ? ` in ${result.response_time}ms` : '' }));
             if (selectedPage) await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.checkFailed', 'Check failed'));
+            toastError(toast, t('app.statusPages.checkFailed', 'Check failed'), err);
         }
     };
 
@@ -280,7 +281,7 @@ const StatusPages = () => {
             setIncidentForm(defaultIncidentForm);
             await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToCreateIncident', 'Failed to create incident'));
+            toastError(toast, t('app.statusPages.failedToCreateIncident', 'Failed to create incident'), err);
         }
     };
 
@@ -294,7 +295,7 @@ const StatusPages = () => {
             toast.success(t('app.statusPages.incidentSetTo', 'Incident set to {{statusLabel}}', { statusLabel: statusLabel }));
             if (selectedPage) await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToUpdateIncident', 'Failed to update incident'));
+            toastError(toast, t('app.statusPages.failedToUpdateIncident', 'Failed to update incident'), err);
         }
     };
 
@@ -325,7 +326,7 @@ const StatusPages = () => {
             setDeleteConfirm(null);
             if (selectedPage) await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.deleteFailed', 'Delete failed'));
+            toastError(toast, t('app.statusPages.deleteFailed', 'Delete failed'), err);
         }
     };
 

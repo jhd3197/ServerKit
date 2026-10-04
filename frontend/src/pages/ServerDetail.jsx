@@ -31,6 +31,7 @@ import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/useAuth.js';
 import ServerRestorePointsTab from '../components/serverdetail/ServerRestorePointsTab';
+import { toastError } from '@/utils/errorMessage';
 
 // Live host metrics cadence while the server is online.
 const METRICS_POLL_MS = 10000;
@@ -132,8 +133,8 @@ const ServerDetail = () => {
             setSecurityAlerts(prev => prev.map(a =>
                 a.id === alertId ? { ...a, status: 'acknowledged' } : a
             ));
-        } catch {
-            toast.error(t('app.serverDetail.failedToAcknowledgeAlert', 'Failed to acknowledge alert'));
+        } catch (err) {
+            toastError(toast, t('app.serverDetail.failedToAcknowledgeAlert', 'Failed to acknowledge alert'), err);
         }
     }
 
@@ -141,8 +142,8 @@ const ServerDetail = () => {
         try {
             await api.resolveAlert(alertId);
             setSecurityAlerts(prev => prev.filter(a => a.id !== alertId));
-        } catch {
-            toast.error(t('app.serverDetail.failedToResolveAlert', 'Failed to resolve alert'));
+        } catch (err) {
+            toastError(toast, t('app.serverDetail.failedToResolveAlert', 'Failed to resolve alert'), err);
         }
     }
 
@@ -166,7 +167,7 @@ const ServerDetail = () => {
             toast.success(t('app.serverDetail.serverRemovedSuccessfully', 'Server removed'));
             navigate('/servers');
         } catch (err) {
-            toast.error(err.message || t('app.serverDetail.failedToRemoveServer', 'Failed to remove server'));
+            toastError(toast, t('app.serverDetail.failedToRemoveServer', 'Failed to remove server'), err);
         }
     }
 
@@ -179,8 +180,8 @@ const ServerDetail = () => {
             } else {
                 toast.error(t('app.serverDetail.serverDidNotRespond', 'Server did not respond'));
             }
-        } catch {
-            toast.error(t('app.serverDetail.failedToPingServer', 'Failed to ping server'));
+        } catch (err) {
+            toastError(toast, t('app.serverDetail.failedToPingServer', 'Failed to ping server'), err);
         }
     }
 

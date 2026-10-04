@@ -13,6 +13,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { InfoList, InfoItem } from '../InfoList';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Short SHA helper for image digests (handles "sha256:abcdef..." or bare hashes)
 function shortDigest(digest) {
@@ -68,7 +69,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
             }
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.containerOpsPanel.failedToCheckForUpdates', 'Failed to check for updates'));
+            toastError(toast, t('app.containerOpsPanel.failedToCheckForUpdates', 'Failed to check for updates'), err);
         } finally {
             setChecking(false);
         }
@@ -93,7 +94,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
                 if (refreshed) setInfo(refreshed);
             } catch { /* optional */ }
         } catch (err) {
-            toast.error(err.message || t('app.containerOpsPanel.failedToApplyUpdate', 'Failed to apply update'));
+            toastError(toast, t('app.containerOpsPanel.failedToApplyUpdate', 'Failed to apply update'), err);
         } finally {
             setApplying(false);
         }
@@ -186,7 +187,7 @@ const RegistrySection = ({ app, onChanged }) => {
             toast.success(next ? t('app.containerOpsPanel.registryAttached', 'Registry attached') : t('app.containerOpsPanel.registryDetachedPullsAreAnonymous', 'Registry detached. Pulls are anonymous.'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.containerOpsPanel.failedToUpdateRegistry', 'Failed to update registry'));
+            toastError(toast, t('app.containerOpsPanel.failedToUpdateRegistry', 'Failed to update registry'), err);
             setSelected(app.registry_id ?? '');
         } finally {
             setSaving(false);
@@ -271,7 +272,7 @@ const AutoSleepSection = ({ app, onChanged }) => {
             toast.success(t('app.containerOpsPanel.autoSleepPolicySaved', 'Auto-sleep policy saved'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.containerOpsPanel.failedToSavePolicy', 'Failed to save policy'));
+            toastError(toast, t('app.containerOpsPanel.failedToSavePolicy', 'Failed to save policy'), err);
             load();
         } finally {
             setSaving(false);
@@ -304,7 +305,7 @@ const AutoSleepSection = ({ app, onChanged }) => {
             await load();
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.containerOpsPanel.actionFailed', 'Action failed'));
+            toastError(toast, t('app.containerOpsPanel.actionFailed', 'Action failed'), err);
         } finally {
             setBusy(false);
         }

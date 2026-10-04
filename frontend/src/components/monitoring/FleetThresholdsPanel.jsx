@@ -16,6 +16,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { METRIC_LABELS } from './fleetMetrics';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const DEFAULT_THRESHOLD = {
     metric: 'cpu',
@@ -52,8 +53,8 @@ export default function FleetThresholdsPanel({ refreshKey = 0 }) {
             setDraft(DEFAULT_THRESHOLD);
             setAdding(false);
             reload();
-        } catch {
-            toast.error(t('app.fleetThresholdsPanel.failedToSaveThreshold', 'Failed to save threshold'));
+        } catch (err) {
+            toastError(toast, t('app.fleetThresholdsPanel.failedToSaveThreshold', 'Failed to save threshold'), err);
         }
     };
 
@@ -61,8 +62,8 @@ export default function FleetThresholdsPanel({ refreshKey = 0 }) {
         try {
             await api.deleteFleetThreshold(id);
             reload();
-        } catch {
-            toast.error(t('app.fleetThresholdsPanel.failedToDeleteThreshold', 'Failed to delete threshold'));
+        } catch (err) {
+            toastError(toast, t('app.fleetThresholdsPanel.failedToDeleteThreshold', 'Failed to delete threshold'), err);
         }
     };
 

@@ -1,6 +1,7 @@
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { t } from '@/i18n/t';
+import { errorReason } from '@/utils/errorMessage';
 
 /**
  * Consistent error state for pages and panels. Shows an icon, title, message,
@@ -20,7 +21,7 @@ export function ErrorState({
     compact = false,
     className = '',
 }) {
-    const errorMessage = message || error?.message
+    const errorMessage = message || errorReason(error)
         || t('common.error.loadingData', 'An error occurred while loading data');
 
     if (compact) {

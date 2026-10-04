@@ -5,6 +5,7 @@ import { useConfirm } from '../hooks/useConfirm';
 import CopyField from './CopyField';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { toastError } from '@/utils/errorMessage';
 
 const PrivateURLSection = ({ app, onUpdate }) => {
     const { t } = useTranslation();
@@ -26,7 +27,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             onUpdate();
             setCustomSlug('');
         } catch (error) {
-            toast.error(error.message || t('app.privateURLSection.failedToEnablePrivateUrl', 'Failed to enable private URL'));
+            toastError(toast, t('app.privateURLSection.failedToEnablePrivateUrl', 'Failed to enable private URL'), error);
         } finally {
             setLoading(false);
         }
@@ -45,7 +46,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             toast.success(t('app.privateURLSection.privateUrlDisabled', 'Private URL disabled'));
             onUpdate();
         } catch (error) {
-            toast.error(error.message || t('app.privateURLSection.failedToDisablePrivateUrl', 'Failed to disable private URL'));
+            toastError(toast, t('app.privateURLSection.failedToDisablePrivateUrl', 'Failed to disable private URL'), error);
         } finally {
             setLoading(false);
         }
@@ -64,7 +65,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             toast.success(t('app.privateURLSection.privateUrlRegenerated', 'Private URL regenerated'));
             onUpdate();
         } catch (error) {
-            toast.error(error.message || t('app.privateURLSection.failedToRegenerate', 'Failed to regenerate'));
+            toastError(toast, t('app.privateURLSection.failedToRegenerate', 'Failed to regenerate'), error);
         } finally {
             setLoading(false);
         }
@@ -82,7 +83,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             setEditMode(false);
             setCustomSlug('');
         } catch (error) {
-            toast.error(error.message || t('app.privateURLSection.failedToUpdateSlug', 'Failed to update slug'));
+            toastError(toast, t('app.privateURLSection.failedToUpdateSlug', 'Failed to update slug'), error);
         } finally {
             setLoading(false);
         }

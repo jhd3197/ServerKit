@@ -35,6 +35,7 @@ import PluginSlot from '../components/PluginSlot';
 import { formatExpiry } from '../utils/expiry';
 import { useTranslation } from 'react-i18next';
 import { t } from '../i18n/t';
+import { toastError } from '@/utils/errorMessage';
 
 const DAY = 86400000;
 const norm = (s) => (s || '').toLowerCase().replace(/\.$/, '');
@@ -603,7 +604,7 @@ const Domains = () => {
         if (!fromCurrent) grid.setCfg(grid.base);
         grid.views.saveView(name)
             .then(() => toast.success(t('app.domains.viewSaved', 'View "{{name}}" saved', { name: name })))
-            .catch(() => toast.error(t('app.domains.couldNotSaveTheView', 'Could not save the view')));
+            .catch((err) => toastError(toast, t('app.domains.couldNotSaveTheView', 'Could not save the view'), err));
     };
 
     // ── top bar ──────────────────────────────────────────────

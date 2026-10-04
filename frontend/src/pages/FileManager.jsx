@@ -31,6 +31,7 @@ import { TREE_ROOTS, getFileType, formatBytes } from '../components/file-manager
 import { useClipboard } from '@/hooks/useClipboard';
 import { useTranslation } from 'react-i18next';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
+import { errorReason } from '@/utils/errorMessage';
 
 // Demo rail shortcuts (Quick access) — one-click jumps to the paths people
 // actually visit on a ServerKit host. "Stack" starts at the default install
@@ -404,7 +405,7 @@ function FileManager() {
             setDirError(null);
         } catch (error) {
             if (path !== lastValidPathRef.current) {
-                toast.error(t('app.fileManager.failedToLoadDirectory', 'Failed to load directory: {{message}}', { message: error.message }));
+                toast.error(t('app.fileManager.failedToLoadDirectory', 'Failed to load directory: {{message}}', { message: errorReason(error) }));
                 setCurrentPath(lastValidPathRef.current);
             } else {
                 setEntries([]);
@@ -504,7 +505,7 @@ function FileManager() {
             const data = await api.searchFiles(currentPath, searchQuery);
             setSearchResults(data.results || []);
         } catch (error) {
-            toast.error(t('app.fileManager.searchFailed', 'Search failed: {{message}}', { message: error.message }));
+            toast.error(t('app.fileManager.searchFailed', 'Search failed: {{message}}', { message: errorReason(error) }));
         } finally {
             setLoading(false);
         }
@@ -544,7 +545,7 @@ function FileManager() {
                     const data = await fileApi.read(entry.path);
                     setFileContent(data.content);
                 } catch (error) {
-                    toast.error(t('app.fileManager.failedToReadFile', 'Failed to read file: {{message}}', { message: error.message }));
+                    toast.error(t('app.fileManager.failedToReadFile', 'Failed to read file: {{message}}', { message: errorReason(error) }));
                 }
             }
         }
@@ -587,7 +588,7 @@ function FileManager() {
             setEditing(false);
             loadDirectory(currentPath);
         } catch (error) {
-            toast.error(t('app.fileManager.failedToSave', 'Failed to save: {{message}}', { message: error.message }));
+            toast.error(t('app.fileManager.failedToSave', 'Failed to save: {{message}}', { message: errorReason(error) }));
         }
     };
 
@@ -601,7 +602,7 @@ function FileManager() {
             setNewFileName('');
             loadDirectory(currentPath);
         } catch (error) {
-            toast.error(t('app.fileManager.failedToCreateFile', 'Failed to create file: {{message}}', { message: error.message }));
+            toast.error(t('app.fileManager.failedToCreateFile', 'Failed to create file: {{message}}', { message: errorReason(error) }));
         }
     };
 
@@ -624,7 +625,7 @@ function FileManager() {
                 } catch { /* ignore */ }
             }
         } catch (error) {
-            toast.error(t('app.fileManager.failedToCreateFolder', 'Failed to create folder: {{message}}', { message: error.message }));
+            toast.error(t('app.fileManager.failedToCreateFolder', 'Failed to create folder: {{message}}', { message: errorReason(error) }));
         }
     };
 
@@ -671,7 +672,7 @@ function FileManager() {
             setNewName('');
             loadDirectory(currentPath);
         } catch (error) {
-            toast.error(t('app.fileManager.failedToRename', 'Failed to rename: {{message}}', { message: error.message }));
+            toast.error(t('app.fileManager.failedToRename', 'Failed to rename: {{message}}', { message: errorReason(error) }));
         }
     };
 
@@ -686,7 +687,7 @@ function FileManager() {
             setNewPermissions('');
             loadDirectory(currentPath);
         } catch (error) {
-            toast.error(t('app.fileManager.failed2', 'Failed: {{message}}', { message: error.message }));
+            toast.error(t('app.fileManager.failed2', 'Failed: {{message}}', { message: errorReason(error) }));
         }
     };
 

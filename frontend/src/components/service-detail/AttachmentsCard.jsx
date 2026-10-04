@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '../../contexts/useToast.js';
 import { useAuth } from '../../contexts/useAuth.js';
 import { useConfirm } from '@/hooks/useConfirm';
+import { toastError } from '@/utils/errorMessage';
 
 // Kind -> the template installed when none exists yet. Must match what the
 // backend accepts for that kind (app_attachment_service.CONNECTION_KINDS).
@@ -83,7 +84,7 @@ export default function AttachmentsCard({ app }) {
             setChoices(data);
             if (data.services?.length) setSelected(String(data.services[0].id));
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.attachments.couldntLoadAttachable', "Couldn't load the services you can attach."), err);
             setKind(null);
         }
     }
@@ -97,7 +98,7 @@ export default function AttachmentsCard({ app }) {
             setKind(null);
             load();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.attachments.couldntAttach', "Couldn't attach the service."), err);
         } finally {
             setBusy(false);
         }
@@ -116,7 +117,7 @@ export default function AttachmentsCard({ app }) {
             if (!serviceId) throw new Error(t('app.attachments.installNoId', 'Installed, but the new service could not be found. Attach it from the list.'));
             await attach(serviceId);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.attachments.couldntInstallAndAttach', "Couldn't install and attach the service."), err);
             setBusy(false);
         }
     }
@@ -135,7 +136,7 @@ export default function AttachmentsCard({ app }) {
             setNeedsRedeploy(true);
             load();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.attachments.couldntDetach', "Couldn't detach the service."), err);
         }
     }
 
@@ -146,7 +147,7 @@ export default function AttachmentsCard({ app }) {
             toast.success(t('app.attachments.redeploying', 'Redeploy started'));
             setNeedsRedeploy(false);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.attachments.couldntRedeploy', "Couldn't redeploy the service."), err);
         } finally {
             setBusy(false);
         }

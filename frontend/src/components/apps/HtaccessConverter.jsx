@@ -7,6 +7,7 @@ import { CopyButton } from '@/components/CopyButton';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Paste-in .htaccess -> nginx converter for the per-site custom nginx rules
 // editor. Pairs with the site-import feature: imported cPanel sites carry
@@ -35,7 +36,7 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
                 toast.info(t('app.htaccessConverter.nothingToConvertNoDirectivesFound', 'Nothing to convert. No directives found.'));
             }
         } catch (err) {
-            toast.error(err.message || t('app.htaccessConverter.conversionFailed', 'Conversion failed'));
+            toastError(toast, t('app.htaccessConverter.conversionFailed', 'Conversion failed'), err);
         } finally {
             setConverting(false);
         }

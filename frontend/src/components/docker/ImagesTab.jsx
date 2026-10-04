@@ -21,6 +21,7 @@ import {
     useServer,
     normalizeListResponse,
 } from './dockerHelpers';
+import { toastError } from '@/utils/errorMessage';
 
 export const PullImageButton = () => {
     const { t } = useTranslation();
@@ -213,7 +214,7 @@ const ImagesTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error('Failed to remove image:', err);
-            toast.error(t('app.imagesTab.failedToRemoveImageItMay', 'Failed to delete image. It may be in use by a container.'));
+            toastError(toast, t('app.imagesTab.failedToRemoveImageItMay', 'Failed to delete image. It may be in use by a container.'), err);
         }
     }
 

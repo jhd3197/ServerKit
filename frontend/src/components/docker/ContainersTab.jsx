@@ -46,6 +46,7 @@ import { ContainerResourceBars } from './dockerShared';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Container stats cadence.
 const STATS_REFRESH_MS = 10000;
@@ -365,7 +366,7 @@ const ContainersTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error(`Failed to ${action} container:`, err);
-            toast.error(err.message || t('app.containersTab.failedToContainer', 'Failed to {{action}} container', { action: action }));
+            toastError(toast, t('app.containersTab.failedToContainer', 'Failed to {{action}} container', { action: action }), err);
         }
     }
 

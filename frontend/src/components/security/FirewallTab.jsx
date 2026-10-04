@@ -22,6 +22,7 @@ import { Ban, Shield } from 'lucide-react';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
+import { errorReason } from '@/utils/errorMessage';
 
 const RULE_TYPE_TONES = {
     port: 'accent',
@@ -201,7 +202,7 @@ const FirewallTab = () => {
             setGuard(data);
             toast.success(t('app.firewallTab.cloudMetadataGuard', 'Cloud metadata guard {{value}}', { value: enabled ? 'enabled' : 'disabled' }));
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToUpdateMetadataGuard', 'Failed to update metadata guard: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToUpdateMetadataGuard', 'Failed to update metadata guard: {{message}}', { message: errorReason(error) }));
             await loadGuard();
         } finally {
             setGuardLoading(false);
@@ -215,7 +216,7 @@ const FirewallTab = () => {
             toast.success(t('app.firewallTab.firewallEnabled', 'Firewall enabled'));
             await loadStatus();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToEnableFirewall', 'Failed to enable firewall: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToEnableFirewall', 'Failed to enable firewall: {{message}}', { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -235,7 +236,7 @@ const FirewallTab = () => {
             toast.success(t('app.firewallTab.firewallDisabled', 'Firewall disabled'));
             await loadStatus();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToDisableFirewall', 'Failed to disable firewall: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToDisableFirewall', 'Failed to disable firewall: {{message}}', { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -252,7 +253,7 @@ const FirewallTab = () => {
             await loadBlockedIPs();
             await loadRules();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToBlockIp', 'Failed to block IP: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToBlockIp', 'Failed to block IP: {{message}}', { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -272,7 +273,7 @@ const FirewallTab = () => {
             await loadBlockedIPs();
             await loadRules();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToUnblockIp', 'Failed to unblock IP: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToUnblockIp', 'Failed to unblock IP: {{message}}', { message: errorReason(error) }));
         }
     };
 
@@ -286,7 +287,7 @@ const FirewallTab = () => {
             setNewPort({ port: '', protocol: 'tcp' });
             await loadRules();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToAllowPort', 'Failed to allow port: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToAllowPort', 'Failed to allow port: {{message}}', { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -299,7 +300,7 @@ const FirewallTab = () => {
             toast.success(t('app.firewallTab.portAllowed', 'Port {{port}}/{{protocol}} allowed', { port: port, protocol: protocol }));
             await loadRules();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToAllowPort', 'Failed to allow port: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToAllowPort', 'Failed to allow port: {{message}}', { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -318,7 +319,7 @@ const FirewallTab = () => {
             toast.success(t('app.firewallTab.portRuleRemoved', 'Port {{port}}/{{protocol}} rule deleted', { port: port, protocol: protocol }));
             await loadRules();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToRemovePort', 'Failed to delete port rule: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToRemovePort', 'Failed to delete port rule: {{message}}', { message: errorReason(error) }));
         }
     };
 
@@ -330,7 +331,7 @@ const FirewallTab = () => {
             setShowInstallModal(false);
             await loadData();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToInstallFirewall', 'Failed to install firewall: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToInstallFirewall', 'Failed to install firewall: {{message}}', { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }

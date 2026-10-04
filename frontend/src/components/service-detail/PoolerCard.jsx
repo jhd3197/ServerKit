@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '../../contexts/useToast.js';
+import { toastError } from '@/utils/errorMessage';
 
 // Opt-in PgBouncer beside an installed PostgreSQL (plan 86 §D1). Renders only
 // for PostgreSQL installs. Apps keep the direct connection unless they switch
@@ -37,7 +38,7 @@ export default function PoolerCard({ app }) {
                     : t('app.pooler.off', 'Pooler removed'));
             }
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.pooler.couldntChangePooler', "Couldn't change the connection pooler."), err);
         } finally {
             setSaving(false);
         }

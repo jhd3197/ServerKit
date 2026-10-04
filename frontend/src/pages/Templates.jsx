@@ -30,6 +30,7 @@ import ErrorState from '../components/ErrorState';
 import { useManagedProfile } from '../contexts/useManagedProfile';
 import ManagedCard from '../components/ManagedCard';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Featured templates (curated list)
 const FEATURED_TEMPLATES = [
@@ -225,7 +226,7 @@ const Templates = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const toast = useToast();
-    const toastError = toast.error;
+    const showError = toast.error;
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [templates, setTemplates] = useState([]);
@@ -292,10 +293,10 @@ const Templates = () => {
             if (result.template) {
                 setSelectedTemplate(result.template);
             }
-        } catch {
-            toastError(t('app.templates.failedToLoadTemplateDetails', 'Failed to load template details'));
+        } catch (err) {
+            toastError(showError, t('app.templates.failedToLoadTemplateDetails', 'Failed to load template details'), err);
         }
-    }, [navigate, t, toastError]);
+    }, [navigate, t, showError]);
 
     useEffect(() => {
         loadCategories();
@@ -419,8 +420,8 @@ const Templates = () => {
                 setSelectedTemplate(result.template);
                 setShowInstallModal(true);
             }
-        } catch {
-            toast.error(t('app.templates.failedToLoadTemplateDetails', 'Failed to load template details'));
+        } catch (err) {
+            toastError(toast, t('app.templates.failedToLoadTemplateDetails', 'Failed to load template details'), err);
         }
     }
 

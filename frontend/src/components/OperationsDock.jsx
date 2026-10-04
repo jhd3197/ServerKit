@@ -30,6 +30,7 @@ import FormField from './FormField';
 import ShellDockTabs from './ShellDockTabs';
 import Pill from './ds/Pill';
 import { statusKind, statusLabel } from './ds/status';
+import { toastError } from '@/utils/errorMessage';
 
 const VIEWS = ['active', 'attention', 'history'];
 
@@ -300,7 +301,7 @@ export default function OperationsDock({ hideLauncher = false, statusbarMode = f
             await refresh();
             toast.success(t('app.operationsDock.cancelQueued', 'Cancellation requested'));
         } catch (error) {
-            toast.error(error?.message || t('app.operationsDock.actionFailed', 'Operation action failed'));
+            toastError(toast, t('app.operationsDock.actionFailed', 'Operation action failed'), error);
         }
     };
 
@@ -312,7 +313,7 @@ export default function OperationsDock({ hideLauncher = false, statusbarMode = f
             await refresh();
             toast.success(t('app.operationsDock.retryQueued', 'Retry queued'));
         } catch (error) {
-            toast.error(error?.message || t('app.operationsDock.actionFailed', 'Operation action failed'));
+            toastError(toast, t('app.operationsDock.actionFailed', 'Operation action failed'), error);
         }
     };
 

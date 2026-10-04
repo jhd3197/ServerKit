@@ -5,6 +5,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Curated config tuner: a small set of vetted engine settings with RAM-aware
 // suggested values. Shows current vs suggested; the operator picks which
@@ -91,7 +92,7 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
             toast.success(t('app.configTunerPanel.settingsAppliedAndEngineRestarted', 'Settings applied and engine restarted'));
             await load(dedicated);
         } catch (err) {
-            toast.error(err.message || t('app.configTunerPanel.failedToApplySettings', 'Failed to apply settings'));
+            toastError(toast, t('app.configTunerPanel.failedToApplySettings', 'Failed to apply settings'), err);
         } finally {
             setBusy(false);
         }
@@ -112,7 +113,7 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
             toast.success(t('app.configTunerPanel.previousConfigurationRestored', 'Previous configuration restored'));
             await load(dedicated);
         } catch (err) {
-            toast.error(err.message || t('app.configTunerPanel.rollbackFailed', 'Rollback failed'));
+            toastError(toast, t('app.configTunerPanel.rollbackFailed', 'Rollback failed'), err);
         } finally {
             setBusy(false);
         }

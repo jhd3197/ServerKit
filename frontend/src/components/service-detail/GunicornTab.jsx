@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import EmptyState from '../EmptyState';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const GunicornTab = ({ appId }) => {
     const { t } = useTranslation();
@@ -33,8 +34,8 @@ const GunicornTab = ({ appId }) => {
         try {
             await api.updateGunicornConfig(appId, config);
             toast.success(t('app.gunicornTab.configurationSavedRestartTheAppTo', 'Configuration saved. Restart the service to apply changes.'));
-        } catch {
-            toast.error(t('app.gunicornTab.failedToSaveConfiguration', 'Failed to save configuration'));
+        } catch (err) {
+            toastError(toast, t('app.gunicornTab.failedToSaveConfiguration', 'Failed to save configuration'), err);
         } finally {
             setSaving(false);
         }

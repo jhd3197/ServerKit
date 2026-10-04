@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Cloud, Server } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const CloudProvision = () => {
     const { t } = useTranslation();
@@ -42,8 +43,8 @@ const CloudProvision = () => {
             setProviders(pData.providers || []);
             setServers(sData.servers || []);
             setCosts(cData);
-        } catch {
-            toast.error(t('app.cloudProvision.failedToLoadCloudData', 'Failed to load cloud data'));
+        } catch (err) {
+            toastError(toast, t('app.cloudProvision.failedToLoadCloudData', 'Failed to load cloud data'), err);
         } finally {
             setLoading(false);
         }
@@ -68,14 +69,14 @@ const CloudProvision = () => {
             toast.success(t('app.cloudProvision.providerAdded', 'Provider added'));
             setShowCreateProvider(false);
             loadData();
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.cloudProvision.couldntAddProvider', "Couldn't add the provider."), err); }
     };
 
     const loadProviderOptions = async (type) => {
         try {
             const data = await api.getCloudProviderOptions(type);
             setProviderOptions(data);
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.cloudProvision.couldntLoadOptions', "Couldn't load the provider's options."), err); }
     };
 
     const handleCreateServer = async () => {
@@ -84,7 +85,7 @@ const CloudProvision = () => {
             toast.success(t('app.cloudProvision.serverProvisioningInitiated', 'Server provisioning initiated'));
             setShowCreateServer(false);
             loadData();
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.cloudProvision.couldntCreateServer', "Couldn't create the server."), err); }
     };
 
     const handleDestroy = async (id) => {
@@ -93,7 +94,7 @@ const CloudProvision = () => {
             toast.success(t('app.cloudProvision.serverDestroyed', 'Server deleted'));
             setDeleteConfirm(null);
             loadData();
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.cloudProvision.couldntDestroyServer', "Couldn't destroy the server."), err); }
     };
 
     const providerTypes = {

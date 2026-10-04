@@ -23,6 +23,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import Modal from '@/components/Modal';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const ProjectDetail = () => {
     const { t } = useTranslation();
@@ -84,7 +85,7 @@ const ProjectDetail = () => {
         try {
             await api.reorderEnvironments(Number(id), next.map(e => e.id));
         } catch (err) {
-            toast.error(err.message || t('app.projectDetail.failedToReorderEnvironments', 'Failed to reorder environments'));
+            toastError(toast, t('app.projectDetail.failedToReorderEnvironments', 'Failed to reorder environments'), err);
             loadProject();
         }
     }
@@ -97,7 +98,7 @@ const ProjectDetail = () => {
             setDeleteEnv(null);
             loadProject();
         } catch (err) {
-            toast.error(err.message || t('app.projectDetail.failedToDeleteEnvironment', 'Failed to delete environment'));
+            toastError(toast, t('app.projectDetail.failedToDeleteEnvironment', 'Failed to delete environment'), err);
             setDeleteEnv(null);
         }
     }
@@ -329,7 +330,7 @@ const CreateEnvironmentDialog = ({ projectId, open, onOpenChange, onCreated }) =
             setName('');
             onCreated();
         } catch (err) {
-            toast.error(err.message || t('app.projectDetail.failedToCreateEnvironment', 'Failed to create environment'));
+            toastError(toast, t('app.projectDetail.failedToCreateEnvironment', 'Failed to create environment'), err);
         } finally {
             setSubmitting(false);
         }

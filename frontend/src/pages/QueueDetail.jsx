@@ -33,6 +33,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const STATUS_ORDER = ['pending', 'in_flight', 'completed', 'failed', 'dead_letter'];
 
@@ -139,12 +140,12 @@ const QueueDetail = () => {
             setQueue(queueRes.queue || null);
             setGroup(groupRes?.group || null);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueDetail.couldntLoadQueue', "Couldn't load the queue."), err);
             navigate('/queue');
         } finally {
             setLoading(false);
         }
-    }, [groupSlug, queueSlug, navigate, toast]);
+    }, [groupSlug, queueSlug, navigate, t, toast]);
 
     const loadMessages = useCallback(async (status) => {
         try {
@@ -154,9 +155,9 @@ const QueueDetail = () => {
             });
             setMessages(res.messages || []);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueDetail.couldntLoadMessages', "Couldn't load messages."), err);
         }
-    }, [groupSlug, queueSlug, toast]);
+    }, [groupSlug, queueSlug, t, toast]);
 
     useEffect(() => {
         loadMeta();
@@ -186,8 +187,8 @@ const QueueDetail = () => {
         let payload = {};
         try {
             payload = JSON.parse(sendForm.payload);
-        } catch {
-            toast.error(t('app.queueDetail.payloadMustBeValidJson', 'Payload must be valid JSON'));
+        } catch (err) {
+            toastError(toast, t('app.queueDetail.payloadMustBeValidJson', 'Payload must be valid JSON'), err);
             return;
         }
         try {
@@ -200,7 +201,7 @@ const QueueDetail = () => {
             setSendForm({ payload: '{}', priority: 0, delay_ms: 0 });
             loadMessages(statusFilter);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueDetail.couldntSend', "Couldn't send the message."), err);
         }
     };
 
@@ -210,7 +211,7 @@ const QueueDetail = () => {
             toast.success(t('app.queueDetail.messageRequeued', 'Message requeued'));
             loadMessages(statusFilter);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueDetail.couldntRequeue', "Couldn't requeue the message."), err);
         }
     };
 
@@ -227,7 +228,7 @@ const QueueDetail = () => {
             if (selectedMessage?.id === msg.id) setSelectedMessage(null);
             loadMessages(statusFilter);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueDetail.couldntDelete', "Couldn't delete the message."), err);
         }
     };
 

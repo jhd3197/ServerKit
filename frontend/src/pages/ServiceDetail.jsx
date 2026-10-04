@@ -29,6 +29,7 @@ import { Pill, ServiceTile, PageTopbar, statusKind } from '@/components/ds';
 import FavoriteStar from '@/components/FavoriteStar';
 import { useRecordVisit } from '@/hooks/useRecordVisit';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const TAB_LABELS = {
     overview: 'Overview',
@@ -76,7 +77,7 @@ const ServiceDetail = () => {
     const { id, tab: rawTab } = useParams();
     const navigate = useNavigate();
     const toast = useToast();
-    const toastError = toast.error;
+    const showError = toast.error;
     const { confirm } = useConfirm();
     const { service, deployConfig, loading, error, reload, performAction, deleteService } = useService(id);
     // Active tab lives in the URL (/services/:id/:tab) so it's shareable and
@@ -117,9 +118,9 @@ const ServiceDetail = () => {
                 setVersions(data.versions || []);
                 setCurrentVersion(data.current);
             })
-            .catch(() => toastError(t('app.serviceDetail.failedToLoadVersions', 'Failed to load versions')))
+            .catch((err) => toastError(showError, t('app.serviceDetail.failedToLoadVersions', 'Failed to load versions'), err))
             .finally(() => setVersionsLoading(false));
-    }, [service?.source, id, toastError, t]);
+    }, [service?.source, id, showError, t]);
 
     // Close menus on outside click
     useEffect(() => {
@@ -153,7 +154,7 @@ const ServiceDetail = () => {
                 stop: t('app.serviceDetail.couldntStopService', "Couldn't stop the service."),
                 restart: t('app.serviceDetail.couldntRestartService', "Couldn't restart the service."),
             };
-            toast.error(err?.data?.error || err?.message || failed[action] || t('app.serviceDetail.couldntUpdateService', "Couldn't update the service"));
+            toastError(toast, failed[action] || t('app.serviceDetail.couldntUpdateService', "Couldn't update the service"), err);
         } finally {
             setActionLoading(null);
             setShowDeployMenu(false);
@@ -185,7 +186,7 @@ const ServiceDetail = () => {
             toast.success(t('app.serviceDetail.deploymentStarted', 'Deployment started'));
             await reload();
         } catch (err) {
-            toast.error(err.message || t('app.serviceDetail.failedToDeployLatestCommit', 'Failed to deploy latest commit'));
+            toastError(toast, t('app.serviceDetail.failedToDeployLatestCommit', 'Failed to deploy latest commit'), err);
         } finally {
             setActionLoading(null);
             setShowDeployMenu(false);
@@ -202,7 +203,7 @@ const ServiceDetail = () => {
             setVersions(data.versions || []);
             setCurrentVersion(data.current);
         } catch (err) {
-            toast.error(err.message || t('app.serviceDetail.failedToRollback', 'Failed to rollback'));
+            toastError(toast, t('app.serviceDetail.failedToRollback', 'Failed to rollback'), err);
         } finally {
             setActionLoading(null);
         }
@@ -225,7 +226,7 @@ const ServiceDetail = () => {
             setVersions(data.versions || []);
             setCurrentVersion(data.current);
         } catch (err) {
-            toast.error(err.message || t('app.serviceDetail.failedToUploadNewVersion', 'Failed to upload new version'));
+            toastError(toast, t('app.serviceDetail.failedToUploadNewVersion', 'Failed to upload new version'), err);
         } finally {
             setActionLoading(null);
         }
@@ -242,7 +243,7 @@ const ServiceDetail = () => {
             await deleteService();
             navigate('/services');
         } catch (err) {
-            toast.error(err?.data?.error || err?.message || t('app.serviceDetail.failedToDeleteService', 'Failed to delete service'));
+            toastError(toast, t('app.serviceDetail.failedToDeleteService', 'Failed to delete service'), err);
             setActionLoading(null);
         }
     }

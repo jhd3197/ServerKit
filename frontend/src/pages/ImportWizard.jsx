@@ -19,6 +19,7 @@ import Spinner from '../components/Spinner';
 import ErrorState from '../components/ErrorState';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { errorReason } from '@/utils/errorMessage';
 
 const POLL_MS = 2000;
 
@@ -276,7 +277,7 @@ function ImportWizard() {
             // Reflect the analyze kick-off immediately; the poller takes over.
             setImp((prev) => (prev ? { ...prev, status: 'analyzing' } : prev));
         } catch (error) {
-            toast.error(t('app.importWizard.importFailedToStart', 'Import failed to start: {{message}}', { message: error.message }));
+            toast.error(t('app.importWizard.importFailedToStart', 'Import failed to start: {{message}}', { message: errorReason(error) }));
         } finally {
             setBusy(false);
             setUploadProgress(null);
@@ -291,7 +292,7 @@ function ImportWizard() {
             setImp((prev) => (prev ? { ...prev, status: 'running', error: null } : prev));
             setStep(5);
         } catch (error) {
-            toast.error(t('app.importWizard.failedToStartTheImportRun', 'Failed to start the import run: {{message}}', { message: error.message }));
+            toast.error(t('app.importWizard.failedToStartTheImportRun', 'Failed to start the import run: {{message}}', { message: errorReason(error) }));
         } finally {
             setBusy(false);
         }
@@ -310,7 +311,7 @@ function ImportWizard() {
                 setStep(3);
             }
         } catch (error) {
-            toast.error(t('app.importWizard.failedToLoadImport', 'Failed to load import: {{message}}', { message: error.message }));
+            toast.error(t('app.importWizard.failedToLoadImport', 'Failed to load import: {{message}}', { message: errorReason(error) }));
         }
     };
 
@@ -328,7 +329,7 @@ function ImportWizard() {
             await loadHistory();
             toast.success(t('app.importWizard.importDeleted', 'Import deleted'));
         } catch (error) {
-            toast.error(t('app.importWizard.failedToDeleteImport', 'Failed to delete import: {{message}}', { message: error.message }));
+            toast.error(t('app.importWizard.failedToDeleteImport', 'Failed to delete import: {{message}}', { message: errorReason(error) }));
         }
     };
 
@@ -538,7 +539,7 @@ function ImportWizard() {
                                         await api.analyzeImport(imp.id);
                                         setImp((prev) => (prev ? { ...prev, status: 'analyzing', error: null } : prev));
                                     } catch (error) {
-                                        toast.error(t('app.importWizard.failedToReAnalyse', 'Failed to re-analyse: {{message}}', { message: error.message }));
+                                        toast.error(t('app.importWizard.failedToReAnalyse', 'Failed to re-analyse: {{message}}', { message: errorReason(error) }));
                                     }
                                 }}>
                                     <RotateCcw size={14} /> {t('app.importWizard.reAnalyse', 'Re-analyse')}

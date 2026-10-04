@@ -10,6 +10,7 @@ import { SIDEBAR_ITEMS } from '../sidebarItems';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
 import { Card as SharedCard } from '@/components/ui/card';
+import { toastError } from '@/utils/errorMessage';
 
 const SETTINGS_GROUPS = [
     {
@@ -201,7 +202,7 @@ const WorkspaceSettingsTab = ({ wsId, ws, onUpdate, user, isCurrent, onSetActive
             toast.success(t('app.workspaceSettingsTab.workspaceUpdated', 'Workspace updated'));
             onUpdate();
         } catch (err) {
-            toast.error(err.message || t('app.workspaceSettingsTab.failedToUpdateWorkspace', 'Failed to update workspace'));
+            toastError(toast, t('app.workspaceSettingsTab.failedToUpdateWorkspace', 'Failed to update workspace'), err);
         } finally {
             setSaving(false);
         }

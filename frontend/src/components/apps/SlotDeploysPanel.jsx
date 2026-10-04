@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Must match app/services/deploy_settings.py DEFAULTS / _RULES.
 const WATCH_DEFAULT = 60;
@@ -65,7 +66,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                 : (data.note || t('app.slotDeploysPanel.disabled', 'Slot deploys off')));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.slotDeploysPanel.toggleFailed', 'Could not change slot deploys'));
+            toastError(toast, t('app.slotDeploysPanel.toggleFailed', 'Could not change slot deploys'), err);
         } finally {
             setToggling(false);
         }
@@ -87,7 +88,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
             toast.success(t('app.slotDeploysPanel.saved', 'Rollout settings saved'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.slotDeploysPanel.saveFailed', 'Failed to save rollout settings'));
+            toastError(toast, t('app.slotDeploysPanel.saveFailed', 'Failed to save rollout settings'), err);
         } finally {
             setSaving(false);
         }
@@ -97,7 +98,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
         try {
             setSplit(await api.previewAppComposeSplit(app.id));
         } catch (err) {
-            toast.error(err.message || t('app.slotDeploysPanel.splitPreviewFailed', 'Could not preview the split'));
+            toastError(toast, t('app.slotDeploysPanel.splitPreviewFailed', 'Could not preview the split'), err);
         }
     }
 
@@ -110,7 +111,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
             toast.success(t('app.slotDeploysPanel.splitDone', 'Stateful compose services moved. The service now deploys through slots.'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.slotDeploysPanel.splitFailed', 'The split failed'));
+            toastError(toast, t('app.slotDeploysPanel.splitFailed', 'The split failed'), err);
         } finally {
             setSplitting(false);
         }

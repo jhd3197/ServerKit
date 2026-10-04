@@ -20,6 +20,7 @@ import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
 import { timeAgo } from '../utils/time';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const PAGE_SIZE = 50;
 
@@ -157,7 +158,7 @@ export default function Errors() {
             setSelected(null);
             refresh();
         } catch (err) {
-            toast.error(err.message || t('app.errors.updateFailed', 'Update failed'));
+            toastError(toast, t('app.errors.updateFailed', 'Update failed'), err);
         }
     };
 
@@ -175,7 +176,7 @@ export default function Errors() {
             setSelected(null);
             refresh();
         } catch (err) {
-            toast.error(err.message || t('app.errors.deleteFailed', 'Delete failed'));
+            toastError(toast, t('app.errors.deleteFailed', 'Delete failed'), err);
         }
     };
 

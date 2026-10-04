@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Tunnel / service status → status-pill tone.
 const pillKind = (status) => statusKind(status);
@@ -79,7 +80,7 @@ const RemoteAccess = ({ serverId }) => {
             );
             setServices(Object.fromEntries(entries));
         } catch (e) {
-            toast.error(e.message || t('app.remoteAccess.failedToLoadTunnels', 'Failed to load tunnels'));
+            toastError(toast, t('app.remoteAccess.failedToLoadTunnels', 'Failed to load tunnels'), e);
         } finally {
             setLoading(false);
         }
@@ -149,7 +150,7 @@ const RemoteAccess = ({ serverId }) => {
             closeWizard();
             load();
         } catch (e) {
-            toast.error(e.message || t('app.remoteAccess.failedToExposeService', 'Failed to expose service'));
+            toastError(toast, t('app.remoteAccess.failedToExposeService', 'Failed to expose service'), e);
         } finally {
             setSubmitting(false);
         }
@@ -163,7 +164,7 @@ const RemoteAccess = ({ serverId }) => {
             setTeardown(null);
             load();
         } catch (e) {
-            toast.error(e.message || t('app.remoteAccess.failedToTearDownTunnel', 'Failed to tear down tunnel'));
+            toastError(toast, t('app.remoteAccess.failedToTearDownTunnel', 'Failed to tear down tunnel'), e);
         }
     };
 
@@ -173,7 +174,7 @@ const RemoteAccess = ({ serverId }) => {
             toast.success(t('app.remoteAccess.removed', 'Removed {{hostname}}', { hostname: svc.hostname }));
             load();
         } catch (e) {
-            toast.error(e.message || t('app.remoteAccess.failedToRemoveService', 'Failed to remove service'));
+            toastError(toast, t('app.remoteAccess.failedToRemoveService', 'Failed to remove service'), e);
         }
     };
 

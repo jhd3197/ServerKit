@@ -14,6 +14,7 @@ import {
     formatMemory,
 } from './engineHelpers';
 import { Button as SharedButton } from '@/components/ui/button';
+import { toastError } from '@/utils/errorMessage';
 
 // "Add a database engine" — the browse half of the install flow.
 //
@@ -161,7 +162,7 @@ export default function EngineCatalogDrawer({
             toast.success(t('app.engineCatalogDrawer.templateRepositoriesSynced', 'Template repositories synced'));
             await onSynced?.();
         } catch (err) {
-            toast.error(err.message || t('app.engineCatalogDrawer.couldNotSyncTemplateRepositories', 'Could not sync template repositories'));
+            toastError(toast, t('app.engineCatalogDrawer.couldNotSyncTemplateRepositories', 'Could not sync template repositories'), err);
         } finally {
             setSyncing(false);
         }

@@ -23,6 +23,7 @@ import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import SchedulePicker from '../components/SchedulePicker';
 import PageLayout from '../layouts/PageLayout';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // A new job opens on a sane, non-destructive cadence rather than an empty
 // expression the picker would have to render as invalid.
@@ -233,7 +234,7 @@ const CronJobs = () => {
                             toast.success(t('app.cronJobs.cronJobRestored', 'Cron job "{{name}}" restored', { name: job.name }));
                             loadData();
                         } catch (err) {
-                            toast.error(err.message || t('app.cronJobs.couldNotRestoreTheCronJob', 'Could not restore the cron job'));
+                            toastError(toast, t('app.cronJobs.couldNotRestoreTheCronJob', 'Could not restore the cron job'), err);
                         }
                     },
                 },
@@ -241,7 +242,7 @@ const CronJobs = () => {
             setDrawerJob(null);
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.cronJobs.couldntDeleteJob', "Couldn't delete the cron job."), err);
         }
     };
 
@@ -251,7 +252,7 @@ const CronJobs = () => {
             toast.success(t('app.cronJobs.cronJob', 'Cron job {{value}}', { value: !currentEnabled ? 'enabled' : 'disabled' }));
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.cronJobs.couldntToggleJob', "Couldn't turn the cron job on or off."), err);
         }
     };
 
@@ -269,10 +270,10 @@ const CronJobs = () => {
                 });
                 loadData();
             } else {
-                toast.error(result.error || t('app.cronJobs.jobExecutionFailed', 'Job execution failed'));
+                toastError(toast, t('app.cronJobs.jobExecutionFailed', 'Job execution failed'), result.error);
             }
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.cronJobs.couldntRunJob', "Couldn't run the cron job."), err);
         } finally {
             setRunningJobId(null);
         }
@@ -624,7 +625,7 @@ function CronDrawer({ job, isAdmin, running, onClose, onRefresh, onRun, onEdit, 
             onClose();
             onRefresh?.();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.cronJobs.couldntChangeTracking', "Couldn't change run tracking."), err);
         } finally {
             setTrackingBusy(false);
         }
@@ -858,7 +859,7 @@ function CronFormDrawer({ open, job, onClose, onSaved }) {
             }
             onSaved();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.cronJobs.couldntCreateJob', "Couldn't create the cron job."), err);
         } finally {
             setSaving(false);
         }

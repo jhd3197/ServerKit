@@ -34,6 +34,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const POLL_MS = 15000;
 
@@ -356,7 +357,7 @@ export default function MonitorDetail() {
             if (successMessage) toast.success(successMessage);
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.monitorDetail.actionFailed', 'Action failed'));
+            toastError(toast, t('app.monitorDetail.actionFailed', 'Action failed'), err);
         } finally {
             setBusy(false);
         }
@@ -387,7 +388,7 @@ export default function MonitorDetail() {
             toast.success(t('app.monitorDetail.monitorDeleted', 'Monitor deleted'));
             navigate('/monitoring/monitors');
         } catch (err) {
-            toast.error(err.message || t('app.monitorDetail.couldNotDeleteTheMonitor', 'Could not delete the monitor'));
+            toastError(toast, t('app.monitorDetail.couldNotDeleteTheMonitor', 'Could not delete the monitor'), err);
         }
     };
 

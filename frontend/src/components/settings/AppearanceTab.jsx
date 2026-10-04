@@ -13,6 +13,7 @@ import ThemeBrowseModal from './ThemeBrowseModal';
 import ThemeStudioModal from './ThemeStudioModal';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const ACCENT_PRESETS = [
     { labelKey: 'app.appearanceTab.indigo', label: 'Indigo', color: '#6366f1' },
@@ -49,7 +50,7 @@ const AppearanceTab = () => {
             if (imported?.slug) setSkin(imported.slug);
             toast.success(t('app.appearanceTab.importedTheme', 'Imported theme "{{value}}"', { value: imported?.name || imported?.slug }));
         } catch (err) {
-            toast.error(err?.message || t('app.appearanceTab.couldNotImportThatThemeJson', 'Could not import that theme.json'));
+            toastError(toast, t('app.appearanceTab.couldNotImportThatThemeJson', 'Could not import that theme.json'), err);
         }
     };
 

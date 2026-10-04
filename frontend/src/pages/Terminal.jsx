@@ -35,6 +35,7 @@ import { Button as SharedButton } from '@/components/ui/button';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
+import { errorReason } from '@/utils/errorMessage';
 
 // 'logs' stays first so the default landing keeps working on installs with no
 // paired agents (the interactive shell needs a connected agent).
@@ -321,7 +322,7 @@ const LogFilesTab = () => {
             toast.success(t('app.terminal.logFileTruncated', 'Log file truncated'));
             loadLogFiles();
         } catch (err) {
-            toast.error(t('app.terminal.failed', 'Failed: {{message}}', { message: err.message }));
+            toast.error(t('app.terminal.failed', 'Failed: {{message}}', { message: errorReason(err) }));
         }
     }
 
@@ -847,7 +848,7 @@ const ProcessesTab = () => {
             setLastUpdated(new Date());
         } catch (err) {
             console.error('Failed to load processes:', err);
-            toast.error(t('app.terminal.failed', 'Failed: {{message}}', { message: err.message }));
+            toast.error(t('app.terminal.failed', 'Failed: {{message}}', { message: errorReason(err) }));
         } finally {
             setLoading(false);
         }
@@ -891,7 +892,7 @@ const ProcessesTab = () => {
             loadProcesses();
             setSelectedProcess(null);
         } catch (err) {
-            toast.error(t('app.terminal.failed', 'Failed: {{message}}', { message: err.message }));
+            toast.error(t('app.terminal.failed', 'Failed: {{message}}', { message: errorReason(err) }));
         }
     }
 

@@ -15,6 +15,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Built-in saved views. Neither one names a `kind`: the registry decides what
 // lands here, so a preset that spelled out 'domain' would be a list this file
@@ -108,7 +109,7 @@ export default function RecycleBinTab() {
             else toast.success(t('app.recycleBinTab.restored', 'Restored {{noun}} "{{label}}"', { noun: row.noun, label: row.label }));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.recycleBinTab.restoreFailed', 'Restore failed'));
+            toastError(toast, t('app.recycleBinTab.restoreFailed', 'Restore failed'), err);
         } finally {
             setBusyId(null);
         }
@@ -121,7 +122,7 @@ export default function RecycleBinTab() {
             toast.success(t('app.recycleBinTab.permanentlyDeleted', 'Permanently deleted "{{label}}"', { label: row.label }));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.recycleBinTab.deleteFailed', 'Delete failed'));
+            toastError(toast, t('app.recycleBinTab.deleteFailed', 'Delete failed'), err);
         } finally {
             setBusyId(null);
             setPurgeTarget(null);

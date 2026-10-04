@@ -23,6 +23,7 @@ import {
     OfflineIcon,
     TrashIcon,
 } from './serverDetailShared';
+import { toastError } from '@/utils/errorMessage';
 
 // CloudflaredTab — manage Cloudflare named tunnels via the agent.
 //
@@ -167,7 +168,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             setCreateName('');
             loadTunnels();
         } catch (err) {
-            toast.error(err.message || t('app.cloudflaredTab.failedToCreateTunnel', 'Failed to create tunnel'));
+            toastError(toast, t('app.cloudflaredTab.failedToCreateTunnel', 'Failed to create tunnel'), err);
         } finally {
             setCreating(false);
         }
@@ -185,7 +186,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             setRouteHostname('');
             setRouteTunnel(null);
         } catch (err) {
-            toast.error(err.message || t('app.cloudflaredTab.failedToAddRoute', 'Failed to add route'));
+            toastError(toast, t('app.cloudflaredTab.failedToAddRoute', 'Failed to add route'), err);
         } finally {
             setRouting(false);
         }
@@ -203,7 +204,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             toast.success(t('app.cloudflaredTab.tunnelDeleted', 'Tunnel deleted'));
             loadTunnels();
         } catch (err) {
-            toast.error(err.message || t('app.cloudflaredTab.failedToDeleteTunnel', 'Failed to delete tunnel'));
+            toastError(toast, t('app.cloudflaredTab.failedToDeleteTunnel', 'Failed to delete tunnel'), err);
         }
     }
 
@@ -249,7 +250,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             };
             stopStream = joinServerStream(room, 'server_stream', onStream);
         } catch (err) {
-            toast.error(err.message || t('app.cloudflaredTab.failedToStartLogin', 'Failed to start login'));
+            toastError(toast, t('app.cloudflaredTab.failedToStartLogin', 'Failed to start login'), err);
             setLogin(null);
         }
     }

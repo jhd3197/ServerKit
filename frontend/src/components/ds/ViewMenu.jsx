@@ -5,6 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { useToast } from '@/contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Saved-view picker (CRM style: Twenty view switcher / Frappe view dropdown).
 // Lists built-in views plus the user's saved views for the page; clicking a
@@ -34,7 +35,7 @@ export function ViewMenu({ views, className }) {
             setName('');
             toast.success(t('app.viewMenu.viewSaved', 'View "{{trimmed}}" saved', { trimmed: trimmed }));
         } catch (err) {
-            toast.error(err?.data?.error || err?.message || t('app.viewMenu.couldNotSaveTheView', 'Could not save the view'));
+            toastError(toast, t('app.viewMenu.couldNotSaveTheView', 'Could not save the view'), err);
         } finally {
             setSaving(false);
         }
@@ -45,7 +46,7 @@ export function ViewMenu({ views, className }) {
             await updateActiveView();
             toast.success(t('app.viewMenu.viewUpdated', 'View "{{name}}" updated', { name: activeView.name }));
         } catch (err) {
-            toast.error(err?.data?.error || err?.message || t('app.viewMenu.couldNotUpdateTheView', 'Could not update the view'));
+            toastError(toast, t('app.viewMenu.couldNotUpdateTheView', 'Could not update the view'), err);
         }
     };
 
@@ -54,7 +55,7 @@ export function ViewMenu({ views, className }) {
             await removeView(view);
             toast.success(t('app.viewMenu.viewDeleted', 'View "{{name}}" deleted', { name: view.name }));
         } catch (err) {
-            toast.error(err?.data?.error || err?.message || t('app.viewMenu.couldNotDeleteTheView', 'Could not delete the view'));
+            toastError(toast, t('app.viewMenu.couldNotDeleteTheView', 'Could not delete the view'), err);
         }
     };
 

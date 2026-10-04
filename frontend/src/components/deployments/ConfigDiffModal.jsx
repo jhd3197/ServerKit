@@ -7,6 +7,7 @@ import { Pill } from '@/components/ds';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 function displayValue(value, notSet) {
     if (value === null || value === undefined || value === '') return notSet;
@@ -231,10 +232,10 @@ const ConfigDiffModal = ({
                     : t('app.configDiffModal.configurationRestoredRedeployTriggered', 'Configuration restored. Redeploy triggered.'));
                 onRestored?.(res);
             } else {
-                toast.error(res.error || t('app.configDiffModal.restoreFailed', 'Restore failed'));
+                toastError(toast, t('app.configDiffModal.restoreFailed', 'Restore failed'), res.error);
             }
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.configDiffModal.restoreFailed', 'Restore failed'), err);
         } finally {
             setRestoring(false);
         }

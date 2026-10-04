@@ -7,6 +7,7 @@ import { Pill } from '@/components/ds';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
 import { formatRelativeShort } from '@/utils/intl';
+import { toastError } from '@/utils/errorMessage';
 
 // A/B slot deploys (plan 87 §F). Shows which slot serves, which one is the
 // standby and for how long it stays warm, with the instant switch back. When
@@ -59,7 +60,7 @@ export default function SlotsCard({ app }) {
             toast.success(t('app.slots.switchedBack', 'Traffic is back on the previous release.'));
             load();
         } catch (err) {
-            toast.error(err.message || t('app.slots.switchBackFailed', 'Switching back failed'));
+            toastError(toast, t('app.slots.switchBackFailed', 'Switching back failed'), err);
         } finally {
             setSwitching(false);
         }
@@ -83,7 +84,7 @@ export default function SlotsCard({ app }) {
             toast.success(t('app.slots.restoredDb', 'Database restored to before v{{version}}', { version: offer.version }));
             load();
         } catch (err) {
-            toast.error(err.message || t('app.slots.restoreDbFailed', 'Restoring the database failed'));
+            toastError(toast, t('app.slots.restoreDbFailed', 'Restoring the database failed'), err);
         } finally {
             setRestoring(false);
         }

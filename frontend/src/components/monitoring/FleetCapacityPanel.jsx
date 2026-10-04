@@ -13,6 +13,7 @@ import ServerPicker from '@/components/ServerPicker';
 import { CHART_COLORS, METRIC_LABELS } from './fleetMetrics';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // The three fleet-wide questions that only make sense across servers: how do
 // these boxes compare, which one is behaving unlike itself, and when does a
@@ -66,8 +67,8 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
         setComparing(true);
         try {
             setCompData(await api.getFleetComparison(selectedServers, compMetric, compPeriod));
-        } catch {
-            toast.error(t('app.fleetCapacityPanel.failedToLoadComparisonData', 'Failed to load comparison data'));
+        } catch (err) {
+            toastError(toast, t('app.fleetCapacityPanel.failedToLoadComparisonData', 'Failed to load comparison data'), err);
         } finally {
             setComparing(false);
         }
@@ -77,8 +78,8 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
         if (!forecastServer) return;
         try {
             setForecast(await api.getCapacityForecast(forecastServer, forecastMetric));
-        } catch {
-            toast.error(t('app.fleetCapacityPanel.failedToLoadForecast', 'Failed to load forecast'));
+        } catch (err) {
+            toastError(toast, t('app.fleetCapacityPanel.failedToLoadForecast', 'Failed to load forecast'), err);
         }
     };
 
@@ -87,8 +88,8 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
         try {
             const blob = await api.exportFleetCsv(selectedServers, compMetric, compPeriod);
             downloadBlob(blob, `fleet_${compMetric}_${compPeriod}.csv`);
-        } catch {
-            toast.error(t('app.fleetCapacityPanel.exportFailed', 'Export failed'));
+        } catch (err) {
+            toastError(toast, t('app.fleetCapacityPanel.exportFailed', 'Export failed'), err);
         }
     };
 

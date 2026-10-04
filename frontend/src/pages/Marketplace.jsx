@@ -42,6 +42,7 @@ import { ExtensionBrandMark } from '../components/icons/ExtensionBrands';
 import { hasBrandMark, extensionCoverStyle } from '../components/icons/extensionBrandData';
 import { resolveExtensionIcon } from '../components/icons/ExtensionIcons';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const CATEGORIES = ['ai', 'games', 'monitoring', 'security', 'deployment', 'integration', 'ui', 'utility'];
 
@@ -334,7 +335,7 @@ const Marketplace = () => {
             toast.success(t('app.marketplace.installedHotReloadShouldPickIt', 'Installed "{{displayname}}". Hot-reload should pick it up; restart backend if blueprint routes do not appear.', { displayname: result.display_name }));
             loadExtensions();
         } catch (err) {
-            toast.error(err.message || t('app.marketplace.localInstallFailed', 'Local install failed'));
+            toastError(toast, t('app.marketplace.localInstallFailed', 'Local install failed'), err);
         } finally {
             setInstalling(false);
         }
@@ -352,7 +353,7 @@ const Marketplace = () => {
             if (err.status === 409 && err.data?.requires_acknowledgment) {
                 setRiskTarget({ slug, reason: err.data?.reason || 'unreviewed' });
             } else {
-                toast.error(err.message || t('app.marketplace.registryInstallFailed', 'Registry install failed'));
+                toastError(toast, t('app.marketplace.registryInstallFailed', 'Registry install failed'), err);
             }
         } finally {
             setInstalling(false);
@@ -408,7 +409,7 @@ const Marketplace = () => {
             toast.success(purge ? t('app.marketplace.extensionUninstalledDataPurged', 'Extension uninstalled; data deleted') : t('app.marketplace.extensionUninstalledDataKept', 'Extension uninstalled; data kept'));
             await loadExtensions();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.marketplace.couldntUninstall', "Couldn't uninstall the extension."), err);
         } finally {
             setBusyPlugin(null);
         }
@@ -427,7 +428,7 @@ const Marketplace = () => {
             if (err.status === 409 && err.data?.requires_acknowledgment) {
                 setRiskTarget({ updatePluginId: pluginId, reason: err.data?.reason || 'unsigned' });
             } else {
-                toast.error(err.message || t('app.marketplace.extensionUpdateFailed', 'Extension update failed'));
+                toastError(toast, t('app.marketplace.extensionUpdateFailed', 'Extension update failed'), err);
             }
         } finally {
             setBusyPlugin(null);
@@ -447,7 +448,7 @@ const Marketplace = () => {
             }
             await loadExtensions();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.marketplace.couldntToggle', "Couldn't turn the extension on or off."), err);
         } finally {
             setBusyPlugin(null);
         }
@@ -1106,7 +1107,7 @@ const PluginConfigDialog = ({ plugin, onClose }) => {
             toast.success(t('app.marketplace.extensionConfigurationSaved', 'Extension settings saved'));
             onClose();
         } catch (err) {
-            toast.error(err.message || t('app.marketplace.failedToSaveConfiguration', 'Failed to save settings'));
+            toastError(toast, t('app.marketplace.failedToSaveConfiguration', 'Failed to save settings'), err);
         } finally {
             setSaving(false);
         }

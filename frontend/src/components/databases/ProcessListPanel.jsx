@@ -14,6 +14,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { toastError } from '@/utils/errorMessage';
 
 const REFRESH_MS = 5000;
 const QUERY_PREVIEW_LEN = 120;
@@ -142,7 +143,7 @@ export default function ProcessListPanel({ conn, engine, active, isAdmin }) {
             toast.success(t('app.processListPanel.process2', 'Process {{id}} {{value}}', { id: proc.id, value: engineKind === 'postgresql' ? 'terminated' : 'killed' }));
             load(true);
         } catch (err) {
-            toast.error(err.message || t('app.processListPanel.failedToProcess', 'Failed to {{value}} process {{id}}', { value: verb.toLowerCase(), id: proc.id }));
+            toastError(toast, t('app.processListPanel.failedToProcess', 'Failed to {{value}} process {{id}}', { value: verb.toLowerCase(), id: proc.id }), err);
         } finally {
             setKilling(null);
         }

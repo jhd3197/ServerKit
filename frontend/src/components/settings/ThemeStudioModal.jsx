@@ -14,6 +14,7 @@ import { DEFAULT_THEME_SLUG, BUNDLED_THEME_MAP } from '../../data/bundledThemes'
 import api from '../../services/api';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const REGISTRY_REPO = 'https://github.com/jhd3197/serverkit-themes';
 
@@ -112,7 +113,7 @@ const ThemeStudioModal = ({ open, onOpenChange }) => {
             toast.success(t('app.themeStudioModal.savedToThisPanel', 'Saved "{{value}}" to this panel', { value: saved?.name }));
             onOpenChange(false);
         } catch (e) {
-            toast.error(e?.message || t('app.themeStudioModal.couldNotSaveTheTheme', 'Could not save the theme'));
+            toastError(toast, t('app.themeStudioModal.couldNotSaveTheTheme', 'Could not save the theme'), e);
         } finally {
             setSaving(false);
         }

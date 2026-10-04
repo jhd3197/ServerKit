@@ -228,7 +228,9 @@ const ADOPTION_CEILINGS = [
         name: 'per-page toast.error extractions in pages/ (E1: query-layer error presentation)',
         ceiling: 206,
         include: (file) => file.startsWith('pages/'),
-        pattern: /toast\s*\.\s*error\s*\(/g,
+        // toastError(toast, …) (utils/errorMessage) is the same per-page
+        // presentation with the server reason attached, so it counts too.
+        pattern: /toast\s*\.\s*error\s*\(|\btoastError\s*\(/g,
     },
     {
         name: 'hand-rolled form-group blocks (F2: FormField/useForm)',

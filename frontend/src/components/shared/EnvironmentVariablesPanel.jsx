@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 /**
  * Read-mostly facade showing the *resolved* shared variables for a resource —
@@ -73,7 +74,7 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
                 resolved = data.variables || [];
                 attachedGroups = data.groups || [];
             } catch (err) {
-                toast.error(t('app.environmentVariablesPanel.failedToLoadSharedVariables', 'Failed to load shared variables'));
+                toastError(toast, t('app.environmentVariablesPanel.failedToLoadSharedVariables', 'Failed to load shared variables'), err);
                 console.error('Failed to load resolved variables:', err);
             }
         }

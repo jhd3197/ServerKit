@@ -11,6 +11,7 @@ import EmptyState from '@/components/EmptyState';
 import DiskReclaimModal from '@/components/monitoring/DiskReclaimModal';
 import formatBytes from '@/utils/formatBytes';
 import { formatDateTime, formatPercent, formatRelative } from '@/utils/intl';
+import { toastError } from '@/utils/errorMessage';
 
 // The four day-count windows plus the rollback window: integers, 0 = off.
 const NUMBER_KEYS = [
@@ -134,7 +135,7 @@ export default function StorageTab() {
             toast.success(t('app.storageTab.retentionSaved', 'Retention settings saved'));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.storageTab.saveFailed', 'Could not save retention settings'));
+            toastError(toast, t('app.storageTab.saveFailed', 'Could not save retention settings'), err);
         } finally {
             setSaving(false);
         }

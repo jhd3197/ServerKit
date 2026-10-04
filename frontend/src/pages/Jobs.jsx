@@ -33,6 +33,7 @@ import { useToast } from '../contexts/useToast.js';
 import { timeAgo } from '../utils/time';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const titleCase = (value = '') => value.charAt(0).toUpperCase() + value.slice(1);
 
@@ -281,19 +282,19 @@ export default function Jobs() {
 
     const onRetry = async (id) => {
         try { await api.retryJob(id); toast.success(t('app.jobs.jobReQueued', 'Job re-queued')); load(); }
-        catch { toast.error(t('app.jobs.retryFailed', 'Retry failed')); }
+        catch (err) { toastError(toast, t('app.jobs.retryFailed', 'Retry failed'), err); }
     };
     const onCancel = async (id) => {
         try { await api.cancelJob(id); toast.success(t('app.jobs.jobCancelled', 'Job cancelled')); load(); }
-        catch { toast.error(t('app.jobs.cancelFailed', 'Cancel failed')); }
+        catch (err) { toastError(toast, t('app.jobs.cancelFailed', 'Cancel failed'), err); }
     };
     const onRunScheduled = async (id) => {
         try { await api.runScheduledJob(id); toast.success(t('app.jobs.scheduledJobTriggered', 'Scheduled job triggered')); load(); }
-        catch { toast.error(t('app.jobs.triggerFailed', 'Trigger failed')); }
+        catch (err) { toastError(toast, t('app.jobs.triggerFailed', 'Trigger failed'), err); }
     };
     const onToggleScheduled = async (id, enabled) => {
         try { await api.setScheduledJobEnabled(id, enabled); load(); }
-        catch { toast.error(t('app.jobs.updateFailed', 'Update failed')); }
+        catch (err) { toastError(toast, t('app.jobs.updateFailed', 'Update failed'), err); }
     };
 
     // Declared above the admin gate because useTableChrome is a hook and the

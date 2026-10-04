@@ -11,6 +11,7 @@ import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
 import { useOperations } from '@/contexts/OperationsContext';
 import DiskReclaimModal from './DiskReclaimModal';
+import { toastError } from '@/utils/errorMessage';
 
 
 // The fleet sweep fans out across agents over the network, so it is a job
@@ -116,7 +117,7 @@ const DoctorPanel = () => {
                 bad > 0 ? `Diagnosis finished — ${bad} finding${bad !== 1 ? 's' : ''}` : 'Diagnosis finished — all clear'
             );
         } catch (err) {
-            toast.error(err.message || t('app.doctorPanel.diagnosisFailed', 'Diagnosis failed'));
+            toastError(toast, t('app.doctorPanel.diagnosisFailed', 'Diagnosis failed'), err);
         } finally {
             setRunning(false);
         }
@@ -137,7 +138,7 @@ const DoctorPanel = () => {
                 await loadFleet();
                 toast.success(t('app.doctorPanel.fleetSweepFinished', 'Fleet sweep finished'));
             } else {
-                toast.error(job.error_message || t('app.doctorPanel.fleetSweepDidNotFinish', 'Fleet sweep did not finish'));
+                toastError(toast, t('app.doctorPanel.fleetSweepDidNotFinish', 'Fleet sweep did not finish'), job.error_message);
             }
         } catch {
             // Transient poll failure — the next tick retries.
@@ -152,7 +153,7 @@ const DoctorPanel = () => {
             pollSweep(res.job_id);
         } catch (err) {
             setSweeping(false);
-            toast.error(err.message || t('app.doctorPanel.couldNotQueueTheFleetSweep', 'Could not queue the fleet sweep'));
+            toastError(toast, t('app.doctorPanel.couldNotQueueTheFleetSweep', 'Could not queue the fleet sweep'), err);
         }
     };
 
@@ -199,7 +200,7 @@ const DoctorPanel = () => {
                 setReport(fresh.report);
             }
         } catch (err) {
-            toast.error(err.message || t('app.doctorPanel.repairFailed2', 'Repair failed'));
+            toastError(toast, t('app.doctorPanel.repairFailed2', 'Repair failed'), err);
         } finally {
             setRepairing(false);
             setConfirm(null);

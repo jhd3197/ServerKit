@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // A single volume row with an inline detach confirm (the "also delete data"
 // checkbox is off by default and disabled while the app is running, so a detach
@@ -85,7 +86,7 @@ const VolumesPanel = ({ app, onChanged }) => {
             const data = await api.getAppVolumes(app.id);
             setVolumes(data?.volumes || []);
         } catch (err) {
-            toast.error(err.message || t('app.volumesPanel.failedToLoadVolumes', 'Failed to load volumes'));
+            toastError(toast, t('app.volumesPanel.failedToLoadVolumes', 'Failed to load volumes'), err);
         } finally {
             setLoading(false);
         }
@@ -107,7 +108,7 @@ const VolumesPanel = ({ app, onChanged }) => {
             await load();
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.volumesPanel.failedToAttachVolume', 'Failed to attach volume'));
+            toastError(toast, t('app.volumesPanel.failedToAttachVolume', 'Failed to attach volume'), err);
         } finally {
             setAttaching(false);
         }
@@ -120,7 +121,7 @@ const VolumesPanel = ({ app, onChanged }) => {
             await load();
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.volumesPanel.failedToDetachVolume', 'Failed to detach volume'));
+            toastError(toast, t('app.volumesPanel.failedToDetachVolume', 'Failed to detach volume'), err);
         }
     }
 

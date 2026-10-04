@@ -18,6 +18,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useTranslation } from 'react-i18next';
 import { Card as SharedCard } from '@/components/ui/card';
+import { errorReason } from '@/utils/errorMessage';
 
 // What the Comment cell renders when a key carries none. It has to be a real
 // value, not '': `ruleIsArmed` drops any rule whose value is empty, so
@@ -104,7 +105,7 @@ const SSHKeysTab = () => {
             setNewKey('');
             await loadKeys();
         } catch (error) {
-            toast.error(t('app.sSHKeysTab.failedToAddKey', 'Failed to add key: {{message}}', { message: error.message }));
+            toast.error(t('app.sSHKeysTab.failedToAddKey', 'Failed to add key: {{message}}', { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -123,7 +124,7 @@ const SSHKeysTab = () => {
             toast.success(t('app.sSHKeysTab.sshKeyRemoved', 'SSH key deleted'));
             await loadKeys();
         } catch (error) {
-            toast.error(t('app.sSHKeysTab.failedToRemoveKey', 'Failed to delete key: {{message}}', { message: error.message }));
+            toast.error(t('app.sSHKeysTab.failedToRemoveKey', 'Failed to delete key: {{message}}', { message: errorReason(error) }));
         }
     };
 

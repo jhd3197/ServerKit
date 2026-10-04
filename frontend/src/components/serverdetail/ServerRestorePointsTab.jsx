@@ -8,6 +8,7 @@ import { Button } from '../ui/button';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '../ui/select';
 import { useToast } from '../../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 export default function ServerRestorePointsTab({ serverId }) {
     const { t } = useTranslation();
@@ -76,7 +77,7 @@ export default function ServerRestorePointsTab({ serverId }) {
             toast.success(t('app.serverRestorePoints.quicksaveCreated', 'Environment restore point saved'));
         } catch (err) {
             setSaveError(err.message);
-            toast.error(err.message || t('app.serverRestorePoints.quicksaveFailed', 'Failed to save restore point'));
+            toastError(toast, t('app.serverRestorePoints.quicksaveFailed', 'Failed to save restore point'), err);
         } finally {
             setSaving(false);
         }

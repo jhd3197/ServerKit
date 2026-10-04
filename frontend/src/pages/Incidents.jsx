@@ -30,6 +30,7 @@ import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
 import { METRIC_LABELS } from '../components/monitoring/fleetMetrics';
 import { impactTone, INCIDENT_STATES } from '../components/monitoring/monitorShared';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Built-in views. This page used to carry THREE old affordances at once — a KPI
 // band whose tiles set a filter, an Active/Resolved/All segment row, and the
@@ -184,7 +185,7 @@ export default function Incidents() {
             toast[count > 0 ? 'warning' : 'success'](`${count} host alert${count === 1 ? '' : 's'} firing`);
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.incidents.alertCheckFailed', 'Alert check failed'));
+            toastError(toast, t('app.incidents.alertCheckFailed', 'Alert check failed'), err);
         } finally {
             setChecking(false);
         }
@@ -324,8 +325,8 @@ export default function Incidents() {
                 ? api.acknowledgeFleetAlert(item.alertId)
                 : api.resolveFleetAlert(item.alertId));
             await load();
-        } catch {
-            toast.error(t('app.incidents.failedToAlert', 'Failed to {{value}} alert', { value: action === 'ack' ? 'acknowledge' : 'resolve' }));
+        } catch (err) {
+            toastError(toast, t('app.incidents.failedToAlert', 'Failed to {{value}} alert', { value: action === 'ack' ? 'acknowledge' : 'resolve' }), err);
         }
     }, [load, t, toast]);
 
@@ -341,7 +342,7 @@ export default function Incidents() {
             setSelected(null);
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.incidents.couldNotPostTheUpdate', 'Could not post the update'));
+            toastError(toast, t('app.incidents.couldNotPostTheUpdate', 'Could not post the update'), err);
         }
     };
 

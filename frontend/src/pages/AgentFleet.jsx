@@ -37,6 +37,7 @@ const formatPercent = (value, digits) => {
     return `${digits == null ? value : value.toFixed(digits)}%`;
 };
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
+import { toastError } from '@/utils/errorMessage';
 
 const AgentFleet = () => {
     const { t } = useTranslation();
@@ -120,8 +121,8 @@ const AgentFleet = () => {
             const data = await api.getDiscoveredAgents();
             setDiscoveredAgents(data);
             toast.success(t('app.agentFleet.discoveredAgents', 'Discovered {{length}} agents', { length: data.length }));
-        } catch {
-            toast.error(t('app.agentFleet.discoveryScanFailed', 'Discovery scan failed'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.discoveryScanFailed', 'Discovery scan failed'), err);
         } finally {
             setIsScanning(false);
         }
@@ -132,8 +133,8 @@ const AgentFleet = () => {
             await api.approveRegistration(serverId);
             toast.success(t('app.agentFleet.agentRegistrationApproved', 'Agent registration approved'));
             fetchData();
-        } catch {
-            toast.error(t('app.agentFleet.failedToApproveAgent', 'Failed to approve agent'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToApproveAgent', 'Failed to approve agent'), err);
         }
     };
 
@@ -142,8 +143,8 @@ const AgentFleet = () => {
             await api.rejectRegistration(serverId);
             toast.success(t('app.agentFleet.agentRegistrationRejected', 'Agent registration rejected'));
             fetchData();
-        } catch {
-            toast.error(t('app.agentFleet.failedToRejectAgent', 'Failed to reject agent'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToRejectAgent', 'Failed to reject agent'), err);
         }
     };
 
@@ -168,8 +169,8 @@ const AgentFleet = () => {
                 toast.success(t('app.agentFleet.stagedRolloutStarted', 'Staged rollout started'));
             }
             fetchData();
-        } catch {
-            toast.error(t('app.agentFleet.failedToTriggerUpgrade', 'Failed to trigger upgrade'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToTriggerUpgrade', 'Failed to trigger upgrade'), err);
         }
     };
 
@@ -178,8 +179,8 @@ const AgentFleet = () => {
             await api.cancelRollout(rolloutId);
             toast.success(t('app.agentFleet.rolloutCancelled', 'Rollout cancelled'));
             fetchData();
-        } catch {
-            toast.error(t('app.agentFleet.failedToCancelRollout', 'Failed to cancel rollout'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToCancelRollout', 'Failed to cancel rollout'), err);
         }
     };
 
@@ -188,8 +189,8 @@ const AgentFleet = () => {
             await api.retryCommand(commandId);
             toast.success(t('app.agentFleet.commandRetryTriggered', 'Command retry triggered'));
             fetchData();
-        } catch {
-            toast.error(t('app.agentFleet.failedToRetryCommand', 'Failed to retry command'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToRetryCommand', 'Failed to retry command'), err);
         }
     };
 
@@ -197,8 +198,8 @@ const AgentFleet = () => {
         try {
             const data = await api.getServerDiagnostics(serverId);
             setDiagnostics(data);
-        } catch {
-            toast.error(t('app.agentFleet.failedToLoadDiagnostics', 'Failed to load diagnostics'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToLoadDiagnostics', 'Failed to load diagnostics'), err);
         }
     };
 

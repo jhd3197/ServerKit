@@ -4,6 +4,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Surfaces everything the agent's capability probe reports: detected
 // runtimes (python/node/php/go/ruby/java versions), runtime version
@@ -36,7 +37,7 @@ export default function SystemStatusCard({ server, onRefresh }) {
             toast.success(t('app.systemStatusCard.capabilitiesReProbed', 'Capabilities re-probed'));
             if (onRefresh) await onRefresh();
         } catch (err) {
-            toast.error(err.message || t('app.systemStatusCard.refreshFailed', 'Refresh failed'));
+            toastError(toast, t('app.systemStatusCard.refreshFailed', 'Refresh failed'), err);
         } finally {
             setRefreshing(false);
         }

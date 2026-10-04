@@ -6,6 +6,7 @@ import { useConfirm } from '../../hooks/useConfirm';
 import { Button } from '@/components/ui/button';
 import CopyField from '@/components/CopyField';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Users ServerKit created on a managed database (tracked rows merged with the
 // live engine list). Create returns the password exactly once — it is shown
@@ -27,7 +28,7 @@ export default function DbUsersPanel({ databaseId }) {
             const data = await api.getManagedDbUsers(databaseId);
             setUsers(data?.users || []);
         } catch (err) {
-            toast.error(err.message || t('app.dbUsersPanel.failedToLoadDatabaseUsers', 'Failed to load database users'));
+            toastError(toast, t('app.dbUsersPanel.failedToLoadDatabaseUsers', 'Failed to load database users'), err);
         } finally {
             setLoading(false);
         }
@@ -49,7 +50,7 @@ export default function DbUsersPanel({ databaseId }) {
             setNewGrants('ALL');
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.dbUsersPanel.failedToCreateUser', 'Failed to create user'));
+            toastError(toast, t('app.dbUsersPanel.failedToCreateUser', 'Failed to create user'), err);
         } finally {
             setCreating(false);
         }
@@ -68,7 +69,7 @@ export default function DbUsersPanel({ databaseId }) {
             toast.success(t('app.dbUsersPanel.userDropped', 'User dropped'));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.dbUsersPanel.failedToDropUser', 'Failed to drop user'));
+            toastError(toast, t('app.dbUsersPanel.failedToDropUser', 'Failed to drop user'), err);
         }
     }
 

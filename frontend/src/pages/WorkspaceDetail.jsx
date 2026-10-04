@@ -28,6 +28,7 @@ import WorkspaceMembersTab from '../components/workspaces/WorkspaceMembersTab';
 import WorkspaceSettingsTab from '../components/workspaces/WorkspaceSettingsTab';
 import { useWorkspace } from '../contexts/useWorkspace.js';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const VALID_TABS = ['overview', 'servers', 'services', 'sites', 'members', 'settings'];
 
@@ -128,7 +129,7 @@ const WorkspaceDetail = () => {
             await api.archiveWorkspace(wsId);
             toast.success(t('app.workspaceDetail.workspaceArchived', 'Workspace archived'));
             load();
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.workspaceDetail.couldntArchive', "Couldn't archive the workspace."), err); }
     };
 
     const handleRestore = async () => {
@@ -136,7 +137,7 @@ const WorkspaceDetail = () => {
             await api.restoreWorkspace(wsId);
             toast.success(t('app.workspaceDetail.workspaceRestored', 'Workspace restored'));
             load();
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.workspaceDetail.couldntRestore', "Couldn't restore the workspace."), err); }
     };
 
     const handleDelete = async () => {
@@ -145,7 +146,7 @@ const WorkspaceDetail = () => {
             if (isCurrent) clearActiveWorkspace();
             toast.success(t('app.workspaceDetail.workspaceDeleted', 'Workspace deleted'));
             navigate('/workspaces');
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.workspaceDetail.couldntDelete', "Couldn't delete the workspace."), err); }
     };
 
     const handleAddMember = async (userId) => {
@@ -153,7 +154,7 @@ const WorkspaceDetail = () => {
             await api.addWorkspaceMember(wsId, userId);
             toast.success(t('app.workspaceDetail.memberAdded', 'Member added'));
             load();
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.workspaceDetail.couldntAddMember', "Couldn't add the member."), err); }
     };
 
     const handleRemoveMember = async (memberId) => {
@@ -161,7 +162,7 @@ const WorkspaceDetail = () => {
             await api.removeWorkspaceMember(memberId);
             toast.success(t('app.workspaceDetail.memberRemoved', 'Member removed'));
             load();
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.workspaceDetail.couldntRemoveMember', "Couldn't remove the member."), err); }
     };
 
     const handleMoveApp = async (appId, workspaceId) => {
@@ -170,7 +171,7 @@ const WorkspaceDetail = () => {
             toast.success(workspaceId ? t('app.workspaceDetail.applicationMovedIn', 'Service moved in') : t('app.workspaceDetail.applicationRemoved', 'Service removed'));
             const data = await api.getApps({ allWorkspaces: true });
             setApps(data.apps || []);
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.workspaceDetail.couldntMoveService', "Couldn't move the service."), err); }
     };
 
     const handleMoveServer = async (serverId, workspaceId) => {
@@ -178,7 +179,7 @@ const WorkspaceDetail = () => {
             await api.setServerWorkspace(serverId, workspaceId);
             toast.success(workspaceId ? t('app.workspaceDetail.serverMovedIn', 'Server moved in') : t('app.workspaceDetail.serverRemoved', 'Server removed'));
             setServers(asServerList(await api.getServers({ allWorkspaces: true })));
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.workspaceDetail.couldntMoveServer', "Couldn't move the server."), err); }
     };
 
     const loadSharing = async (appObj) => {
@@ -186,7 +187,7 @@ const WorkspaceDetail = () => {
             const gData = await api.getAppGrants(appObj.id);
             setGrants(gData.grants || []);
             setSharingApp(appObj);
-        } catch { toast.error(t('app.workspaceDetail.failedToLoadSharing', 'Failed to load sharing')); }
+        } catch (err) { toastError(toast, t('app.workspaceDetail.failedToLoadSharing', 'Failed to load sharing'), err); }
     };
 
     const handleGrant = async (userId) => {
@@ -195,7 +196,7 @@ const WorkspaceDetail = () => {
             toast.success(t('app.workspaceDetail.accessGranted', 'Access granted'));
             const gData = await api.getAppGrants(sharingApp.id);
             setGrants(gData.grants || []);
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.workspaceDetail.couldntGrant', "Couldn't grant access."), err); }
     };
 
     const handleRevoke = async (grantId) => {
@@ -204,7 +205,7 @@ const WorkspaceDetail = () => {
             toast.success(t('app.workspaceDetail.accessRevoked', 'Access revoked'));
             const gData = await api.getAppGrants(sharingApp.id);
             setGrants(gData.grants || []);
-        } catch (err) { toast.error(err.message); }
+        } catch (err) { toastError(toast, t('app.workspaceDetail.couldntRevoke', "Couldn't revoke access."), err); }
     };
 
     // Pre-load states take the same shell as the loaded page.

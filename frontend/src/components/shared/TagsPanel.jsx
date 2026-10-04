@@ -4,6 +4,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 /**
  * Reusable polymorphic tags panel for any resource.
@@ -46,7 +47,7 @@ const TagsPanel = ({ resourceType, resourceId, readOnly = false }) => {
             setNewTag('');
             load();
         } catch (err) {
-            toast.error(err.message || t('app.tagsPanel.failedToAddTag', 'Failed to add tag'));
+            toastError(toast, t('app.tagsPanel.failedToAddTag', 'Failed to add tag'), err);
         } finally {
             setSaving(false);
         }
@@ -57,7 +58,7 @@ const TagsPanel = ({ resourceType, resourceId, readOnly = false }) => {
             await api.removeResourceTag(resourceType, resourceId, tag);
             setTags((prev) => prev.filter((t) => t.tag !== tag));
         } catch (err) {
-            toast.error(err.message || t('app.tagsPanel.failedToRemoveTag', 'Failed to remove tag'));
+            toastError(toast, t('app.tagsPanel.failedToRemoveTag', 'Failed to remove tag'), err);
         }
     }
 

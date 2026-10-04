@@ -6,6 +6,7 @@ import { Pill } from '../ds';
 import { CheckCircle2, Loader2, Circle, XCircle, RotateCw, Clock, ChevronDown } from 'lucide-react';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Onboarding status cadence while non-terminal.
 const ONBOARDING_POLL_MS = 3000;
@@ -137,7 +138,7 @@ const OnboardingWizard = ({ serverId, initialState, onStateChange }) => {
             toast.success(t('app.onboardingWizard.retryingOnboarding', 'Retrying onboarding'));
             loadStatus();
         } catch (err) {
-            toast.error(err.message || t('app.onboardingWizard.failedToRetryOnboarding', 'Failed to retry onboarding'));
+            toastError(toast, t('app.onboardingWizard.failedToRetryOnboarding', 'Failed to retry onboarding'), err);
         } finally {
             setRetrying(false);
         }

@@ -44,6 +44,7 @@ import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import PageLayout from '@/layouts/PageLayout';
+import { toastError } from '@/utils/errorMessage';
 
 // Cadence while an engine install is in flight.
 const ENGINE_POLL_MS = 4000;
@@ -562,8 +563,8 @@ export default function Databases() {
         try {
             const res = node.engine === 'mysql' ? await api.backupMySQLDatabase(node.label) : await api.backupPostgreSQLDatabase(node.label);
             if (res.success) toast.success(t('app.databases.backupCreated', 'Backup created: {{backuppath}}', { backuppath: res.backup_path }));
-        } catch {
-            toast.error(t('app.databases.failedToCreateBackup', 'Failed to create backup'));
+        } catch (err) {
+            toastError(toast, t('app.databases.failedToCreateBackup', 'Failed to create backup'), err);
         }
     }
 
@@ -582,8 +583,8 @@ export default function Databases() {
             const eng = roots.find((r) => r.engine === node.engine);
             if (eng) refresh(eng);
             setTabs((prev) => prev.filter((t) => !(t.conn && connKey(t.conn) === connKey(node.conn))));
-        } catch {
-            toast.error(t('app.databases.failedToDropDatabase', 'Failed to drop database'));
+        } catch (err) {
+            toastError(toast, t('app.databases.failedToDropDatabase', 'Failed to drop database'), err);
         }
     }
 

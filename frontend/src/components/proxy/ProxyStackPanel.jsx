@@ -8,6 +8,7 @@ import { Pill, SegControl, serviceStatusKind } from '../ds';
 import EmptyState from '../EmptyState';
 import { AlertTriangle, CheckCircle2, Network } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Human label for an ingress plane, used in the mismatch banner copy.
 const PLANE_LABEL = {
@@ -107,7 +108,7 @@ const ProxyStackPanel = ({ serverId }) => {
             await load();
             await loadAudit();
         } catch (err) {
-            toast.error(err.message || t('app.proxyStackPanel.failedToSwitchProxy', 'Failed to switch proxy'));
+            toastError(toast, t('app.proxyStackPanel.failedToSwitchProxy', 'Failed to switch proxy'), err);
         } finally {
             setBusy(false);
         }
@@ -120,7 +121,7 @@ const ProxyStackPanel = ({ serverId }) => {
             toast.success(t('app.proxyStackPanel.customSnippetSaved', 'Custom snippet saved'));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.proxyStackPanel.failedToSaveSnippet', 'Failed to save snippet'));
+            toastError(toast, t('app.proxyStackPanel.failedToSaveSnippet', 'Failed to save snippet'), err);
         } finally {
             setBusy(false);
         }
@@ -133,12 +134,12 @@ const ProxyStackPanel = ({ serverId }) => {
             if (res.success) {
                 toast.success(res.reloaded ? t('app.proxyStackPanel.configRegeneratedAndReloaded', 'Config regenerated and reloaded') : t('app.proxyStackPanel.configRegenerated', 'Config regenerated'));
             } else {
-                toast.error(res.error || t('app.proxyStackPanel.regenerateFailed', 'Regenerate failed'));
+                toastError(toast, t('app.proxyStackPanel.regenerateFailed', 'Regenerate failed'), res.error);
             }
             await load();
             await loadAudit();
         } catch (err) {
-            toast.error(err.message || t('app.proxyStackPanel.failedToRegenerateConfig', 'Failed to regenerate config'));
+            toastError(toast, t('app.proxyStackPanel.failedToRegenerateConfig', 'Failed to regenerate config'), err);
         } finally {
             setBusy(false);
         }
@@ -153,14 +154,14 @@ const ProxyStackPanel = ({ serverId }) => {
             });
             const deploy = res.deploy;
             if (deploy && deploy.success === false) {
-                toast.error(deploy.error || t('app.proxyStackPanel.deployFailedBestEffort', 'Deploy failed (best-effort)'));
+                toastError(toast, t('app.proxyStackPanel.deployFailedBestEffort', 'Deploy failed (best-effort)'), deploy.error);
             } else {
                 toast.success(t('app.proxyStackPanel.stackDeployed', 'Stack deployed'));
             }
             await load();
             await loadAudit();
         } catch (err) {
-            toast.error(err.message || t('app.proxyStackPanel.failedToDeployStack', 'Failed to deploy stack'));
+            toastError(toast, t('app.proxyStackPanel.failedToDeployStack', 'Failed to deploy stack'), err);
         } finally {
             setBusy(false);
         }

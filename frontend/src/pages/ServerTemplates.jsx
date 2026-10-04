@@ -25,6 +25,7 @@ import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
 } from '@/components/ds/grid';
+import { toastError } from '@/utils/errorMessage';
 
 // Two surfaces, two treatments — on purpose.
 //
@@ -292,7 +293,7 @@ const ServerTemplates = () => {
             setShowCreateModal(false);
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.serverTemplates.couldntCreate', "Couldn't create the template."), err);
         }
     };
 
@@ -302,7 +303,7 @@ const ServerTemplates = () => {
             toast.success(t('app.serverTemplates.templateCreatedFromLibrary', 'Template created from library'));
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.serverTemplates.couldntCreateFromLibrary', "Couldn't add the template from the library."), err);
         }
     };
 
@@ -313,7 +314,7 @@ const ServerTemplates = () => {
             setDeleteConfirm(null);
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.serverTemplates.couldntDelete', "Couldn't delete the template."), err);
         }
     };
 
@@ -324,7 +325,7 @@ const ServerTemplates = () => {
             setShowAssignModal(false);
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.serverTemplates.couldntAssign', "Couldn't assign the template."), err);
         }
     };
 

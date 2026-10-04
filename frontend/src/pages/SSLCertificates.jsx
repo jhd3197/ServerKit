@@ -23,6 +23,7 @@ import {
 import DomainField from '../components/DomainField';
 import { formatExpiry } from '../utils/expiry';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const DAY = 86400000;
 
@@ -173,10 +174,10 @@ const SSLCertificates = () => {
                 setWildcard(false);
                 loadData();
             } else {
-                toast.error(result.error || t('app.sSLCertificates.failedToObtainCertificate', 'Failed to obtain certificate'));
+                toastError(toast, t('app.sSLCertificates.failedToObtainCertificate', 'Failed to obtain certificate'), result.error);
             }
         } catch (err) {
-            toast.error(err.message || t('app.sSLCertificates.failedToObtainCertificate', 'Failed to obtain certificate'));
+            toastError(toast, t('app.sSLCertificates.failedToObtainCertificate', 'Failed to obtain certificate'), err);
         } finally {
             setActionLoading(false);
         }
@@ -198,10 +199,10 @@ const SSLCertificates = () => {
                 setUploadChain('');
                 loadData();
             } else {
-                toast.error(result?.error || t('app.sSLCertificates.failedToUploadCertificate', 'Failed to upload certificate'));
+                toastError(toast, t('app.sSLCertificates.failedToUploadCertificate', 'Failed to upload certificate'), result?.error);
             }
         } catch (err) {
-            toast.error(err.message || t('app.sSLCertificates.failedToUploadCertificate', 'Failed to upload certificate'));
+            toastError(toast, t('app.sSLCertificates.failedToUploadCertificate', 'Failed to upload certificate'), err);
         } finally {
             setActionLoading(false);
         }
@@ -215,10 +216,10 @@ const SSLCertificates = () => {
                 toast.success(t('app.sSLCertificates.certificateForRenewed', 'Certificate for {{domain}} renewed', { domain: domain }));
                 loadData();
             } else {
-                toast.error(result.error || t('app.sSLCertificates.renewalFailed', 'Renewal failed'));
+                toastError(toast, t('app.sSLCertificates.renewalFailed', 'Renewal failed'), result.error);
             }
         } catch (err) {
-            toast.error(err.message || t('app.sSLCertificates.renewalFailed', 'Renewal failed'));
+            toastError(toast, t('app.sSLCertificates.renewalFailed', 'Renewal failed'), err);
         } finally {
             setRenewingDomain(null);
         }
@@ -232,10 +233,10 @@ const SSLCertificates = () => {
                 toast.success(t('app.sSLCertificates.allCertificatesRenewed', 'All certificates renewed'));
                 loadData();
             } else {
-                toast.error(result.error || t('app.sSLCertificates.renewalFailed', 'Renewal failed'));
+                toastError(toast, t('app.sSLCertificates.renewalFailed', 'Renewal failed'), result.error);
             }
         } catch (err) {
-            toast.error(err.message || t('app.sSLCertificates.renewalFailed', 'Renewal failed'));
+            toastError(toast, t('app.sSLCertificates.renewalFailed', 'Renewal failed'), err);
         } finally {
             setActionLoading(false);
         }
@@ -252,10 +253,10 @@ const SSLCertificates = () => {
                 toast.success(t('app.sSLCertificates.certificateForRevoked', 'Certificate for {{domain}} revoked', { domain: domain }));
                 loadData();
             } else {
-                toast.error(result.error || t('app.sSLCertificates.revocationFailed', 'Revocation failed'));
+                toastError(toast, t('app.sSLCertificates.revocationFailed', 'Revocation failed'), result.error);
             }
         } catch (err) {
-            toast.error(err.message || t('app.sSLCertificates.revocationFailed', 'Revocation failed'));
+            toastError(toast, t('app.sSLCertificates.revocationFailed', 'Revocation failed'), err);
         } finally {
             setActionLoading(false);
         }
@@ -268,10 +269,10 @@ const SSLCertificates = () => {
             if (result.success) {
                 toast.success(result.message || t('app.sSLCertificates.autoRenewalConfigured', 'Auto-renewal configured'));
             } else {
-                toast.error(result.error || t('app.sSLCertificates.failedToSetupAutoRenewal', 'Failed to setup auto-renewal'));
+                toastError(toast, t('app.sSLCertificates.failedToSetupAutoRenewal', 'Failed to setup auto-renewal'), result.error);
             }
         } catch (err) {
-            toast.error(err.message || t('app.sSLCertificates.failedToSetupAutoRenewal', 'Failed to setup auto-renewal'));
+            toastError(toast, t('app.sSLCertificates.failedToSetupAutoRenewal', 'Failed to setup auto-renewal'), err);
         } finally {
             setActionLoading(false);
         }
@@ -286,10 +287,10 @@ const SSLCertificates = () => {
                 toast.success(t('app.sSLCertificates.certbotInstalledSuccessfully', 'Certbot installed'));
                 loadData();
             } else {
-                toast.error(result.error || t('app.sSLCertificates.failedToInstallCertbot', 'Failed to install Certbot'));
+                toastError(toast, t('app.sSLCertificates.failedToInstallCertbot', 'Failed to install Certbot'), result.error);
             }
         } catch (err) {
-            toast.error(err.message || t('app.sSLCertificates.failedToInstallCertbot', 'Failed to install Certbot'));
+            toastError(toast, t('app.sSLCertificates.failedToInstallCertbot', 'Failed to install Certbot'), err);
         } finally {
             setActionLoading(false);
         }

@@ -19,6 +19,7 @@ import {
     useServer,
     normalizeListResponse,
 } from './dockerHelpers';
+import { toastError } from '@/utils/errorMessage';
 
 export const CreateVolumeButton = () => {
     const { t } = useTranslation();
@@ -154,7 +155,7 @@ const VolumesTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error('Failed to remove volume:', err);
-            toast.error(t('app.volumesTab.failedToRemoveVolumeItMay', 'Failed to delete volume. It may be in use.'));
+            toastError(toast, t('app.volumesTab.failedToRemoveVolumeItMay', 'Failed to delete volume. It may be in use.'), err);
         }
     }
 

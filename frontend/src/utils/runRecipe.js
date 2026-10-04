@@ -1,3 +1,4 @@
+import { toastError } from './errorMessage.js';
 // useServerMutation exposes an async `mutate`; recipe navigation waits for its
 // job ID, while this adapter owns the catalog's success/failure messages.
 export async function runRecipe({ startRun, toast, t }, body, { serverName }) {
@@ -8,7 +9,7 @@ export async function runRecipe({ startRun, toast, t }, body, { serverName }) {
         }));
         return result.job_id;
     } catch (err) {
-        toast.error(err.message || t('app.recipes.startFailed', 'Could not start the recipe'));
+        toastError(toast, t('app.recipes.startFailed', 'Could not start the recipe'), err);
         return null;
     }
 }

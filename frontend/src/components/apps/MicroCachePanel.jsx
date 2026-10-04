@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { useConfirm } from '@/hooks/useConfirm';
 import { formatPercent } from '@/utils/intl';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Must match NginxService.MICROCACHE_TTL_DEFAULT / MICROCACHE_TTL_MAX.
 const TTL_DEFAULT = 10;
@@ -70,7 +71,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
             }
         } catch (err) {
             setEnabled(!next);
-            toast.error(err.message || t('app.microCachePanel.failedToUpdateMicroCache', 'Failed to update micro-cache'));
+            toastError(toast, t('app.microCachePanel.failedToUpdateMicroCache', 'Failed to update micro-cache'), err);
         }
     }
 
@@ -79,7 +80,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
             await save(enabled, ttlNumber);
             toast.success(t('app.microCachePanel.cacheLifetimeSaved', 'Cache lifetime saved'));
         } catch (err) {
-            toast.error(err.message || t('app.microCachePanel.failedToUpdateMicroCache', 'Failed to update micro-cache'));
+            toastError(toast, t('app.microCachePanel.failedToUpdateMicroCache', 'Failed to update micro-cache'), err);
         }
     }
 
@@ -92,7 +93,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
             onChanged?.();
         } catch (err) {
             setImmutable(!next);
-            toast.error(err.message);
+            toastError(toast, t('app.microCachePanel.couldntUpdateImmutableAssets', "Couldn't update immutable asset caching."), err);
         }
     }
 
@@ -107,7 +108,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
             const data = await api.purgeMicroCache(app.id);
             toast.success(data.message || t('app.microCachePanel.microCacheCleared', 'Micro-cache cleared'));
         } catch (err) {
-            toast.error(err.message || t('app.microCachePanel.failedToClearTheMicroCache', 'Failed to clear the micro-cache'));
+            toastError(toast, t('app.microCachePanel.failedToClearTheMicroCache', 'Failed to clear the micro-cache'), err);
         } finally {
             setPurging(false);
         }

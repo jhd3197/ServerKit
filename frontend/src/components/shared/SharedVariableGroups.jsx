@@ -13,6 +13,7 @@ import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { SearchField, Pill, ServiceTile } from '@/components/ds';
 import { useConfirm } from '@/hooks/useConfirm';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const RESOURCE_TYPES = ['application', 'database', 'service', 'wordpress', 'server'];
 
@@ -91,8 +92,8 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
         try {
             const data = await api.getVariableGroup(groupId);
             setDetail(data);
-        } catch {
-            toast.error(t('app.sharedVariableGroups.failedToLoadGroup', 'Failed to load group'));
+        } catch (err) {
+            toastError(toast, t('app.sharedVariableGroups.failedToLoadGroup', 'Failed to load group'), err);
         }
     }, [t, toast]);
 
@@ -114,7 +115,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             await loadGroups();
             setSelectedId(group.id);
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToCreateGroup', 'Failed to create group'));
+            toastError(toast, t('app.sharedVariableGroups.failedToCreateGroup', 'Failed to create group'), err);
         }
     }
 
@@ -130,7 +131,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             if (selectedId === groupId) setSelectedId(null);
             loadGroups();
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToDeleteGroup', 'Failed to delete group'));
+            toastError(toast, t('app.sharedVariableGroups.failedToDeleteGroup', 'Failed to delete group'), err);
         }
     }
 
@@ -149,7 +150,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToAddVariable', 'Failed to add variable'));
+            toastError(toast, t('app.sharedVariableGroups.failedToAddVariable', 'Failed to add variable'), err);
         }
     }
 
@@ -159,7 +160,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToDeleteVariable', 'Failed to delete variable'));
+            toastError(toast, t('app.sharedVariableGroups.failedToDeleteVariable', 'Failed to delete variable'), err);
         }
     }
 
@@ -173,7 +174,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToAttachGroup', 'Failed to attach group'));
+            toastError(toast, t('app.sharedVariableGroups.failedToAttachGroup', 'Failed to attach group'), err);
         }
     }
 
@@ -183,7 +184,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToDetach', 'Failed to detach'));
+            toastError(toast, t('app.sharedVariableGroups.failedToDetach', 'Failed to detach'), err);
         }
     }
 

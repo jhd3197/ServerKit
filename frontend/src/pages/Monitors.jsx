@@ -39,6 +39,7 @@ import useFocusParam from '@/hooks/useFocusParam';
 import { CHECK_TYPES, MONITOR_STATUS, monitorStateOf } from '../components/monitoring/monitorShared';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const POLL_MS = 15000;
 
@@ -279,7 +280,7 @@ export default function Monitors() {
             setFormOpen(false);
             load();
         } catch (err) {
-            toast.error(err.message || t('app.monitors.couldNotCreateTheMonitor', 'Could not create the monitor'));
+            toastError(toast, t('app.monitors.couldNotCreateTheMonitor', 'Could not create the monitor'), err);
         } finally {
             setSaving(false);
         }
@@ -291,7 +292,7 @@ export default function Monitors() {
             toast.success(monitor.is_paused ? t('app.monitors.resumed', 'Resumed {{name}}', { name: monitor.name }) : t('app.monitors.paused', 'Paused {{name}}', { name: monitor.name }));
             load();
         } catch (err) {
-            toast.error(err.message || t('app.monitors.couldNotChangeTheMonitor', 'Could not change the monitor'));
+            toastError(toast, t('app.monitors.couldNotChangeTheMonitor', 'Could not change the monitor'), err);
         }
     };
 
@@ -306,7 +307,7 @@ export default function Monitors() {
             }));
             load();
         } catch (err) {
-            toast.error(err.message || t('app.monitors.checkFailed', 'Check failed'));
+            toastError(toast, t('app.monitors.checkFailed', 'Check failed'), err);
         }
     };
 

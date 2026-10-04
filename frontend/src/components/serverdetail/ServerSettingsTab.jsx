@@ -28,6 +28,7 @@ import {
     TrashIcon,
     TagIcon,
 } from './serverDetailShared';
+import { toastError } from '@/utils/errorMessage';
 
 // Radix Select items cannot carry an empty value; this stands for "no group".
 const NO_GROUP = '__none';
@@ -113,7 +114,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
             setNewIP('');
             toast.success(t('app.serverSettingsTab.ipAllowlistUpdated', 'IP allowlist updated'));
         } catch (err) {
-            toast.error(err.details?.[0] || err.message || t('app.serverSettingsTab.invalidIpPattern', 'Invalid IP pattern'));
+            toastError(toast, t('app.serverSettingsTab.invalidIpPattern', 'Invalid IP pattern'), err.details?.[0] || err);
         }
     }
 
@@ -124,7 +125,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
             setAllowedIPs(updated);
             toast.success(t('app.serverSettingsTab.ipRemovedFromAllowlist', 'IP removed from allowlist'));
         } catch (err) {
-            toast.error(err.message || t('app.serverSettingsTab.failedToUpdateAllowlist', 'Failed to update allowlist'));
+            toastError(toast, t('app.serverSettingsTab.failedToUpdateAllowlist', 'Failed to update allowlist'), err);
         }
     }
 
@@ -137,10 +138,10 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
             if (result.success) {
                 toast.success(t('app.serverSettingsTab.credentialRotationInitiatedAgentWillUpdate', 'Credential rotation initiated. Agent will update shortly.'));
             } else {
-                toast.error(result.error || t('app.serverSettingsTab.failedToRotateCredentials', 'Failed to rotate credentials'));
+                toastError(toast, t('app.serverSettingsTab.failedToRotateCredentials', 'Failed to rotate credentials'), result.error);
             }
         } catch (err) {
-            toast.error(err.message || t('app.serverSettingsTab.failedToRotateCredentials', 'Failed to rotate credentials'));
+            toastError(toast, t('app.serverSettingsTab.failedToRotateCredentials', 'Failed to rotate credentials'), err);
         } finally {
             setRotatingKey(false);
         }
@@ -155,7 +156,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
             toast.success(t('app.serverSettingsTab.serverUpdatedSuccessfully', 'Server updated'));
             onUpdate();
         } catch (err) {
-            toast.error(err.message || t('app.serverSettingsTab.failedToUpdateServer', 'Failed to update server'));
+            toastError(toast, t('app.serverSettingsTab.failedToUpdateServer', 'Failed to update server'), err);
         } finally {
             setLoading(false);
         }
@@ -401,7 +402,7 @@ export const TokenModal = ({ server, onClose, onGenerated }) => {
             onGenerated?.(data);
             toast.success(t('app.serverSettingsTab.connectionStringGenerated', 'Connection string generated'));
         } catch (err) {
-            toast.error(err.message || t('app.serverSettingsTab.failedToGenerateConnectionString', 'Failed to generate connection string'));
+            toastError(toast, t('app.serverSettingsTab.failedToGenerateConnectionString', 'Failed to generate connection string'), err);
         } finally {
             setGenerating(false);
         }

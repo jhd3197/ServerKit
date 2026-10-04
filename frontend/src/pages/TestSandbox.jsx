@@ -13,6 +13,7 @@ import {
     FlaskConical, Play, Square, ChevronDown, ChevronRight,
     Zap, Package, AlertTriangle, RefreshCw,
 } from 'lucide-react';
+import { toastError } from '@/utils/errorMessage';
 
 const POLL_MS = 2500;
 const HISTORY_LIMIT = 20;
@@ -162,12 +163,12 @@ const TestSandbox = () => {
             setRuns(list);
             return list;
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.testSandbox.couldntLoadRuns', "Couldn't load runs."), err);
             return [];
         } finally {
             setRunsLoading(false);
         }
-    }, [toast]);
+    }, [t, toast]);
 
     useEffect(() => {
         (async () => {
@@ -199,11 +200,11 @@ const TestSandbox = () => {
                     `Run finished: ${passed}/${total} passed${failed ? ` (${failed} failed)` : ''}`
                 );
             } else if (res.run.status === 'error') {
-                toast.error(res.run.error || t('app.testSandbox.runFailed', 'Run failed'));
+                toastError(toast, t('app.testSandbox.runFailed', 'Run failed'), res.run.error);
             }
             loadRuns();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.testSandbox.couldntRefreshRun', "Couldn't refresh the run."), err);
         }
     }, POLL_MS, {
         enabled: activeRun?.status === 'running',
@@ -300,7 +301,7 @@ const TestSandbox = () => {
             toast.success(t('app.testSandbox.startedRunAcrossDistroS', 'Started {{mode}} run across {{length}} distro(s)', { mode: mode, length: res.run.distros.length }));
             loadRuns();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.testSandbox.couldntStart', "Couldn't start the run."), err);
         } finally {
             setStarting(false);
         }
@@ -316,7 +317,7 @@ const TestSandbox = () => {
             setActiveRun(res.run);
             loadRuns();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.testSandbox.couldntCancel', "Couldn't cancel the run."), err);
         } finally {
             setCancelling(false);
         }
@@ -335,7 +336,7 @@ const TestSandbox = () => {
             const res = await api.getTestSandboxRun(run.id);
             setExpandedRuns((prev) => ({ ...prev, [run.id]: res.run }));
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.testSandbox.couldntLoadRun', "Couldn't load the run."), err);
         }
     };
 

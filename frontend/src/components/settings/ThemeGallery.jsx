@@ -7,6 +7,7 @@ import { DEFAULT_THEME_SLUG } from '../../data/bundledThemes';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { toastError } from '@/utils/errorMessage';
 
 // Theme Gallery — cards for every selectable skin (bundled seeds + installed).
 // Apply is instant (tokens are already local); hovering previews live and
@@ -30,7 +31,7 @@ const ThemeGallery = () => {
             await refreshPanelDefault();
             toast.success(t('app.themeGallery.panelDefaultThemeUpdated', 'Panel default theme updated'));
         } catch (e) {
-            toast.error(e?.message || t('app.themeGallery.couldNotSetTheDefaultTheme', 'Could not set the default theme'));
+            toastError(toast, t('app.themeGallery.couldNotSetTheDefaultTheme', 'Could not set the default theme'), e);
         } finally {
             setBusy(null);
         }
@@ -43,7 +44,7 @@ const ThemeGallery = () => {
             await Promise.all([refreshInstalledThemes(), refreshPanelDefault()]);
             toast.success(t('app.themeGallery.themeRemoved', 'Theme removed'));
         } catch (e) {
-            toast.error(e?.message || t('app.themeGallery.couldNotRemoveTheTheme', 'Could not remove the theme'));
+            toastError(toast, t('app.themeGallery.couldNotRemoveTheTheme', 'Could not remove the theme'), e);
         } finally {
             setBusy(null);
         }

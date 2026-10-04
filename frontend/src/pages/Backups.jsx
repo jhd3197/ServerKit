@@ -34,6 +34,7 @@ import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useTranslation } from 'react-i18next';
 import useFocusParam from '../hooks/useFocusParam';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
+import { toastError } from '@/utils/errorMessage';
 
 // `backups` is kept as an alias so old /backups/backups links still resolve to
 // the archive, which now answers to `snapshots`.
@@ -290,7 +291,7 @@ const Backups = () => {
             resetBackupForm();
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.backups.couldntCreateBackup', "Couldn't create the backup."), err);
         }
     };
 
@@ -302,7 +303,7 @@ const Backups = () => {
             toast.success(t('app.backups.backupDeleted', 'Backup deleted'));
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.backups.couldntDeleteBackup', "Couldn't delete the backup."), err);
         }
     };
 
@@ -313,7 +314,7 @@ const Backups = () => {
             toast.success(t('app.backups.backupUploadedToRemoteStorage', 'Backup uploaded to remote storage'));
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.backups.couldntUploadBackup', "Couldn't upload the backup to remote storage."), err);
         } finally {
             setUploadingBackup(null);
         }
@@ -338,7 +339,7 @@ const Backups = () => {
             setSelectedBackup(null);
             toast.success(t('app.backups.backupRestoredSuccessfully', 'Backup restored'));
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.backups.couldntRestore', "Couldn't restore the backup."), err);
         }
     };
 
@@ -363,7 +364,7 @@ const Backups = () => {
             toast.success(t('app.backups.settingsSaved', 'Settings saved'));
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.backups.couldntSaveConfig', "Couldn't save the backup settings."), err);
         }
     };
 
@@ -380,7 +381,7 @@ const Backups = () => {
             const summary = await api.getBackupCostSummary().catch(() => null);
             setCostSummary(summary || null);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.backups.couldntSaveRates', "Couldn't save the storage cost rates."), err);
         } finally {
             setSavingRates(false);
         }
@@ -393,7 +394,7 @@ const Backups = () => {
             toast.success(t('app.backups.storageConfigurationSaved', 'Storage settings saved'));
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.backups.couldntSaveStorage', "Couldn't save the storage settings."), err);
         }
     };
 
@@ -404,10 +405,10 @@ const Backups = () => {
             if (result.success) {
                 toast.success(result.message);
             } else {
-                toast.error(result.error);
+                toastError(toast, t('app.backups.couldntConnectStorage', "Couldn't connect to the storage."), result.error);
             }
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.backups.couldntConnectStorage', "Couldn't connect to the storage."), err);
         } finally {
             setTestingConnection(false);
         }
@@ -421,7 +422,7 @@ const Backups = () => {
             toast.success(result.message);
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.backups.couldntCleanUp', "Couldn't clean up old backups."), err);
         }
     };
 

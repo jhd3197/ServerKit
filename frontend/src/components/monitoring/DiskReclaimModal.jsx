@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/contexts/useToast.js';
 import { useOperations } from '@/contexts/OperationsContext';
 import formatBytes from '@/utils/formatBytes';
+import { toastError } from '@/utils/errorMessage';
 
 /**
  * Curated "safe" disk reclaim. Shows what a fresh measurement says can be
@@ -69,7 +70,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
             );
             onClose();
         } catch (err) {
-            toast.error(err.message || t('app.diskReclaim.reclaimFailed', 'Reclaim failed'));
+            toastError(toast, t('app.diskReclaim.reclaimFailed', 'Reclaim failed'), err);
             setRunning(false);
         }
     };

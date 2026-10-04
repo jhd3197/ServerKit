@@ -14,6 +14,7 @@ import {
     PlayIcon,
     TrashIcon,
 } from './serverDetailShared';
+import { toastError } from '@/utils/errorMessage';
 
 // The /servers/<id>/docker/* endpoints return raw arrays from Flask
 // (route extracts result.get('data') before jsonify). The agent envelope's
@@ -174,7 +175,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
             }
             loadDockerData();
         } catch (err) {
-            toast.error(err.message || t('app.serverDockerTab.failedToContainer', 'Failed to {{action}} container', { action: action }));
+            toastError(toast, t('app.serverDockerTab.failedToContainer', 'Failed to {{action}} container', { action: action }), err);
         }
     }
 

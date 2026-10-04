@@ -15,6 +15,7 @@ import {
 import EmptyState from '../components/EmptyState';
 import { useTranslation } from 'react-i18next';
 import { t } from '../i18n/t';
+import { toastError } from '@/utils/errorMessage';
 
 // Fleet-wide reverse-proxy dashboard (Phase 4 of C6). Aggregates every
 // server's managed-proxy posture into one table: which proxy each server runs
@@ -323,7 +324,7 @@ const FleetProxy = () => {
             setError(null);
         } catch (err) {
             setError(err.message || 'Failed to load fleet proxy overview');
-            toast.error(t('app.fleetProxy.failedToLoadFleetProxyOverview', 'Failed to load fleet proxy overview'));
+            toastError(toast, t('app.fleetProxy.failedToLoadFleetProxyOverview', 'Failed to load fleet proxy overview'), err);
         } finally {
             setLoading(false);
         }

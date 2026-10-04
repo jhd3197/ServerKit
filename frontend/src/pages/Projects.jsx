@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Modal from '@/components/Modal';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Preset views. A project list is short, so these are about SHAPE rather than
 // status: which projects are actually carrying anything, and which are empty
@@ -213,7 +214,7 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
             reset();
             onCreated();
         } catch (err) {
-            toast.error(err.message || t('app.projects.failedToCreateProject', 'Failed to create project'));
+            toastError(toast, t('app.projects.failedToCreateProject', 'Failed to create project'), err);
         } finally {
             setSubmitting(false);
         }

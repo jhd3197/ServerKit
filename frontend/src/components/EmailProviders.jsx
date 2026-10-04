@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import PortField from './PortField';
 import { useToast } from '../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const FIELD_LABELS = {
     host: 'Host', port: 'Port', username: 'Username', password: 'Password', use_tls: 'Use TLS',
@@ -74,7 +75,7 @@ export default function EmailProviders() {
             cancel();
             load();
         } catch (e) {
-            toast.error(e?.message || t('app.emailProviders.failedToAddProvider', 'Failed to add provider'));
+            toastError(toast, t('app.emailProviders.failedToAddProvider', 'Failed to add provider'), e);
         } finally {
             setBusy(false);
         }
@@ -84,10 +85,10 @@ export default function EmailProviders() {
         setBusy(true);
         try {
             const r = await api.testEmailProvider(id);
-            if (r.success) toast.success(t('app.emailProviders.credentialsOk', 'Credentials OK')); else toast.error(r.error || t('app.emailProviders.testFailed', 'Test failed'));
+            if (r.success) toast.success(t('app.emailProviders.credentialsOk', 'Credentials OK')); else toastError(toast, t('app.emailProviders.testFailed', 'Test failed'), r.error);
             load();
-        } catch {
-            toast.error(t('app.emailProviders.testFailed', 'Test failed'));
+        } catch (err) {
+            toastError(toast, t('app.emailProviders.testFailed', 'Test failed'), err);
         } finally {
             setBusy(false);
         }
@@ -95,12 +96,12 @@ export default function EmailProviders() {
 
     const onDefault = async (id) => {
         try { await api.setDefaultEmailProvider(id); toast.success(t('app.emailProviders.defaultTransportUpdated', 'Default transport updated')); load(); }
-        catch { toast.error(t('app.emailProviders.failedToSetDefault', 'Failed to set default')); }
+        catch (err) { toastError(toast, t('app.emailProviders.failedToSetDefault', 'Failed to set default'), err); }
     };
 
     const onDelete = async (id) => {
         try { await api.deleteEmailProvider(id); toast.success(t('app.emailProviders.providerRemoved', 'Provider deleted')); setConfirmId(null); load(); }
-        catch { toast.error(t('app.emailProviders.failedToRemove', 'Failed to delete')); }
+        catch (err) { toastError(toast, t('app.emailProviders.failedToRemove', 'Failed to delete'), err); }
     };
 
     return (

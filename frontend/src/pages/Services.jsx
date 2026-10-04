@@ -21,6 +21,7 @@ import {
 import Modal from '@/components/Modal';
 import RequiresDocker from '../components/RequiresDocker';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Severity order for status sorting — also the page's default row order.
 const STATUS_SORT_ORDER = { running: 0, deploying: 1, building: 2, stopped: 3, failed: 4 };
@@ -145,8 +146,8 @@ const Services = () => {
             else if (action === 'stop') await api.stopApp(appId);
             else if (action === 'restart') await api.restartApp(appId);
             await loadApps();
-        } catch {
-            toast.error(t('app.services.failedToService', 'Failed to {{action}} service', { action: action }));
+        } catch (err) {
+            toastError(toast, t('app.services.failedToService', 'Failed to {{action}} service', { action: action }), err);
         } finally {
             setActionLoading(null);
         }
@@ -166,8 +167,8 @@ const Services = () => {
             toast.success(t('app.services.sentToServiceS', '{{action}} sent to {{size}} service(s)', { action: action, size: selectedIds.size }));
             setSelectedIds(new Set());
             await loadApps();
-        } catch {
-            toast.error(t('app.services.bulkFailed', 'Bulk {{action}} failed', { action: action }));
+        } catch (err) {
+            toastError(toast, t('app.services.bulkFailed', 'Bulk {{action}} failed', { action: action }), err);
         } finally {
             setBulkLoading(false);
         }
@@ -442,7 +443,7 @@ const Services = () => {
                         setSelectedIds(new Set());
                         await loadApps();
                     } catch (err) {
-                        toast.error(err.message || t('app.services.failedToMoveServices', 'Failed to move services'));
+                        toastError(toast, t('app.services.failedToMoveServices', 'Failed to move services'), err);
                     } finally {
                         setBulkLoading(false);
                     }
@@ -459,7 +460,7 @@ const Services = () => {
 const MoveToProjectDialog = ({ open, onOpenChange, count, onMove }) => {
     const { t } = useTranslation();
     const toast = useToast();
-    const toastError = toast.error;
+    const showError = toast.error;
     const [projects, setProjects] = useState([]);
     const [environments, setEnvironments] = useState([]);
     const [projectValue, setProjectValue] = useState(UNASSIGN);
@@ -477,9 +478,9 @@ const MoveToProjectDialog = ({ open, onOpenChange, count, onMove }) => {
         setLoadingProjects(true);
         api.getProjects()
             .then((data) => setProjects(Array.isArray(data?.projects) ? data.projects : []))
-            .catch(() => toastError(t('app.services.failedToLoadProjects', 'Failed to load projects')))
+            .catch((err) => toastError(showError, t('app.services.failedToLoadProjects', 'Failed to load projects'), err))
             .finally(() => setLoadingProjects(false));
-    }, [open, toastError, t]);
+    }, [open, showError, t]);
 
     async function handleProjectChange(value) {
         setProjectValue(value);
@@ -491,8 +492,8 @@ const MoveToProjectDialog = ({ open, onOpenChange, count, onMove }) => {
             const data = await api.getProject(value);
             const envs = Array.isArray(data?.project?.environments) ? data.project.environments : [];
             setEnvironments(envs);
-        } catch {
-            toast.error(t('app.services.failedToLoadEnvironments', 'Failed to load environments'));
+        } catch (err) {
+            toastError(toast, t('app.services.failedToLoadEnvironments', 'Failed to load environments'), err);
         } finally {
             setLoadingEnvs(false);
         }

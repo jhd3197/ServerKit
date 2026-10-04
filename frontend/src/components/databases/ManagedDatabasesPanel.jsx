@@ -9,6 +9,7 @@ import AdminerSsoButton from './AdminerSsoButton';
 import DbUsersPanel from './DbUsersPanel';
 import { useClipboard } from '@/hooks/useClipboard';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Durable list of the databases ServerKit tracks (provisioned or adopted),
 // beside the live explorer. Reveal/copy a real connection string (audited),
@@ -29,7 +30,7 @@ export default function ManagedDatabasesPanel() {
             const data = await api.getManagedDatabases();
             setRows(data?.databases || []);
         } catch (err) {
-            toast.error(err.message || t('app.managedDatabasesPanel.failedToLoadManagedDatabases', 'Failed to load managed databases'));
+            toastError(toast, t('app.managedDatabasesPanel.failedToLoadManagedDatabases', 'Failed to load managed databases'), err);
         } finally {
             setLoading(false);
         }
@@ -48,7 +49,7 @@ export default function ManagedDatabasesPanel() {
                 toast.info(uri);
             }
         } catch (err) {
-            toast.error(err.message || t('app.managedDatabasesPanel.failedToRevealConnectionString', 'Failed to reveal connection string'));
+            toastError(toast, t('app.managedDatabasesPanel.failedToRevealConnectionString', 'Failed to reveal connection string'), err);
         } finally {
             setBusyId(null);
         }
@@ -60,7 +61,7 @@ export default function ManagedDatabasesPanel() {
             await api.protectManagedDatabase(row.id);
             toast.success(t('app.managedDatabasesPanel.backupPolicyCreatedTuneItUnder', 'Backup policy created. Tune it under Backups.'));
         } catch (err) {
-            toast.error(err.message || t('app.managedDatabasesPanel.failedToProtectDatabase', 'Failed to protect database'));
+            toastError(toast, t('app.managedDatabasesPanel.failedToProtectDatabase', 'Failed to protect database'), err);
         } finally {
             setBusyId(null);
         }
@@ -82,7 +83,7 @@ export default function ManagedDatabasesPanel() {
             toast.success(drop ? t('app.managedDatabasesPanel.databaseDroppedAndUntracked', 'Database dropped and untracked') : t('app.managedDatabasesPanel.databaseUntracked', 'Database untracked'));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.managedDatabasesPanel.failedToRemoveDatabase', 'Failed to delete database'));
+            toastError(toast, t('app.managedDatabasesPanel.failedToRemoveDatabase', 'Failed to delete database'), err);
         } finally {
             setBusyId(null);
         }
