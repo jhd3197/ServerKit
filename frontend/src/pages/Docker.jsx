@@ -5,9 +5,10 @@ import EmptyState from '../components/EmptyState';
 import { Button } from '@/components/ui/button';
 import { MetricCard, KpiBand } from '@/components/ds';
 import {
-    Box, Layers, HardDrive, Network as NetworkIcon,
-    Trash2, Activity, Package, Server as ServerIcon,
-} from 'lucide-react';
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
+import PageLayout from '@/layouts/PageLayout';
+import { Box, Layers, HardDrive, Network as NetworkIcon, Package } from 'lucide-react';
 import {
     ServerContext,
     VALID_TABS,
@@ -25,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 
 const Docker = () => {
     const { t } = useTranslation();
-    const [activeTab, setActiveTab] = useTabParam('/docker', VALID_TABS);
+    const [activeTab] = useTabParam('/docker', VALID_TABS);
     const [dockerStatus, setDockerStatus] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedServer, setSelectedServer] = useState(LOCAL_DOCKER_TARGET);
@@ -170,11 +171,9 @@ const Docker = () => {
         return <EmptyState loading loadingVariant="table" title={t('app.docker.checkingDockerStatus', 'Checking Docker status…')} />;
     }
 
-    // No page header here: the unavailable panel below is its own heading, and
-    // the workspace this falls back from carries no top bar either.
     if (!dockerStatus?.installed) {
         return (
-            <div className="page-container docker-page">
+            <PageLayout className="docker-page" icon={<Box size={18} />} title={t('common.labels.docker', 'Docker')}>
                 <div className="docker-unavailable">
                     <div className="docker-unavailable-icon">
                         <svg viewBox="0 0 24 24" width="64" height="64" stroke="currentColor" fill="none" strokeWidth="1">
@@ -209,19 +208,18 @@ const Docker = () => {
                         {t('app.docker.retryConnection', 'Retry Connection')}
                     </Button>
                 </div>
-            </div>
+            </PageLayout>
         );
     }
 
     const tabs = [
-        { id: 'containers', labelKey: 'app.docker.containers', label: 'Containers', icon: Box, count: stats.containers.total },
-        { id: 'compose', labelKey: 'app.docker.compose', label: 'Compose', icon: Package, count: null },
-        { id: 'images', labelKey: 'app.docker.images', label: 'Images', icon: Layers, count: stats.images.total },
-        { id: 'volumes', labelKey: 'app.docker.volumes', label: 'Volumes', icon: HardDrive, count: stats.volumes.total },
-        { id: 'networks', labelKey: 'app.docker.networks', label: 'Networks', icon: NetworkIcon, count: stats.networks.total }
-    ];
+        { id: 'containers', label: t('app.docker.containers', 'Containers'), icon: Box },
+        { id: 'compose', label: t('app.docker.compose', 'Compose'), icon: Package },
+        { id: 'images', label: t('app.docker.images', 'Images'), icon: Layers },
+        { id: 'volumes', label: t('app.docker.volumes', 'Volumes'), icon: HardDrive },
+        { id: 'networks', label: t('app.docker.networks', 'Networks'), icon: NetworkIcon },
+    ].map(({ id, label, icon: Icon }) => ({ to: `/docker/${id}`, label, icon: <Icon size={15} /> }));
 
-    const activeTabMeta = tabs.find(tab => tab.id === activeTab) || tabs[0];
     const hasMultipleTargets = availableServers.length > 1;
 
     const serverContextValue = {
@@ -233,125 +231,61 @@ const Docker = () => {
     return (
         <RequiresDocker what="Container management">
         <ServerContext.Provider value={serverContextValue}>
-        <div className="page-container page-container--full-bleed docker-page-new dx-page">
-            <div className="dx-workspace">
-                <aside className="dx-docker-sidebar">
+        <PageLayout
+            className="docker-page"
+            contentClassName="dx-page"
+            fill
+            icon={<Box size={18} />}
+            title={t('common.labels.docker', 'Docker')}
+            tabs={tabs}
+            actions={(
+                <>
                     {hasMultipleTargets && (
-                        <section className="dx-sidebar-section">
-                            <div className="dx-sidebar-section-header">
-                                <ServerIcon size={14} />
-                                <span>{t('app.docker.targets', 'Targets')}</span>
-                            </div>
-                            <div className="dx-resource-nav">
+                        <Select
+                            value={String(selectedServer.id)}
+                            onValueChange={(id) => setSelectedServer(
+                                availableServers.find(server => String(server.id) === id) || LOCAL_DOCKER_TARGET
+                            )}
+                        >
+                            <SelectTrigger className="dx-target-select" aria-label={t('app.docker.targets', 'Targets')}>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
                                 {availableServers.map(server => (
-                                    <Button variant="unstyled" type="button"
-                                        key={server.id}
-                                        className={`dx-resource-nav-item ${selectedServer.id === server.id ? 'active' : ''}`}
-                                        onClick={() => setSelectedServer(server)}
-                                    >
-                                        <ServerIcon size={15} />
-                                        <span>{server.name || server.hostname || server.id}</span>
-                                        <strong>{server.status || 'online'}</strong>
-                                    </Button>
+                                    <SelectItem key={server.id} value={String(server.id)}>
+                                        {server.name || server.hostname || server.id}
+                                    </SelectItem>
                                 ))}
-                            </div>
-                        </section>
+                            </SelectContent>
+                        </Select>
                     )}
+                    <PruneButton onPruned={loadStats} />
+                    {activeTab === 'containers' && <RunContainerButton />}
+                    {activeTab === 'images' && <PullImageButton />}
+                    {activeTab === 'networks' && <CreateNetworkButton />}
+                    {activeTab === 'volumes' && <CreateVolumeButton />}
+                </>
+            )}
+        >
+            <KpiBand>
+                <MetricCard tone="accent" icon={<Box size={16} />} value={stats.containers.total} label={t('app.docker.containers', 'Containers')}>
+                    <div className="sk-kpi__sub"><span>{stats.containers.running} running</span></div>
+                </MetricCard>
+                <MetricCard tone="cyan" icon={<Layers size={16} />} value={stats.images.total} label={t('app.docker.images', 'Images')}>
+                    <div className="sk-kpi__sub"><span>{stats.images.size}</span></div>
+                </MetricCard>
+                <MetricCard tone="violet" icon={<HardDrive size={16} />} value={stats.volumes.total} label={t('app.docker.volumes', 'Volumes')} />
+                <MetricCard tone="green" icon={<NetworkIcon size={16} />} value={stats.networks.total} label={t('app.docker.networks', 'Networks')} />
+            </KpiBand>
 
-                    <section className="dx-sidebar-section">
-                        <div className="dx-sidebar-section-header">
-                            <Box size={14} />
-                            <span>{t('app.docker.resources', 'Resources')}</span>
-                        </div>
-                        <div className="dx-resource-nav">
-                            {tabs.map(tab => {
-                                const Icon = tab.icon;
-                                return (
-                                    <Button variant="unstyled" type="button"
-                                        key={tab.id}
-                                        className={`dx-resource-nav-item ${activeTab === tab.id ? 'active' : ''}`}
-                                        onClick={() => setActiveTab(tab.id)}
-                                    >
-                                        <Icon size={15} />
-                                        <span>{tab.label}</span>
-                                        {tab.count !== null && <strong>{tab.count}</strong>}
-                                    </Button>
-                                );
-                            })}
-                        </div>
-                    </section>
-
-                    <section className="dx-sidebar-section">
-                        <div className="dx-sidebar-section-header">
-                            <Activity size={14} />
-                            <span>{t('app.docker.inventory', 'Inventory')}</span>
-                        </div>
-                        <div className="dx-inventory-list">
-                            <div className="dx-inventory-item">
-                                <span>{t('app.docker.running', 'Running')}</span>
-                                <strong>{stats.containers.running}</strong>
-                            </div>
-                            <div className="dx-inventory-item">
-                                <span>{t('app.docker.stopped', 'Stopped')}</span>
-                                <strong>{stats.containers.stopped}</strong>
-                            </div>
-                            <div className="dx-inventory-item">
-                                <span>{t('app.docker.images', 'Images')}</span>
-                                <strong>{stats.images.size}</strong>
-                            </div>
-                            <div className="dx-inventory-item">
-                                <span>{t('app.docker.volumes', 'Volumes')}</span>
-                                <strong>{stats.volumes.total}</strong>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section className="dx-sidebar-section">
-                        <div className="dx-sidebar-section-header">
-                            <Trash2 size={14} />
-                            <span>{t('app.docker.maintenance', 'Maintenance')}</span>
-                        </div>
-                        <div className="dx-sidebar-section-content">
-                            <PruneButton onPruned={loadStats} />
-                        </div>
-                    </section>
-                </aside>
-
-                <main className="dx-main">
-                    <KpiBand>
-                        <MetricCard tone="accent" icon={<Box size={16} />} value={stats.containers.total} label={t('app.docker.containers', 'Containers')}>
-                            <div className="sk-kpi__sub"><span>{stats.containers.running} running</span></div>
-                        </MetricCard>
-                        <MetricCard tone="cyan" icon={<Layers size={16} />} value={stats.images.total} label={t('app.docker.images', 'Images')}>
-                            <div className="sk-kpi__sub"><span>{stats.images.size}</span></div>
-                        </MetricCard>
-                        <MetricCard tone="violet" icon={<HardDrive size={16} />} value={stats.volumes.total} label={t('app.docker.volumes', 'Volumes')} />
-                        <MetricCard tone="green" icon={<NetworkIcon size={16} />} value={stats.networks.total} label={t('app.docker.networks', 'Networks')} />
-                    </KpiBand>
-                    <div className="dx-workbar">
-                        <div className="dx-workbar-title">
-                            <span>{t('common.labels.docker', 'Docker')}</span>
-                            <strong>{activeTabMeta.label}</strong>
-                            {hasMultipleTargets && <em>{selectedServer.name || selectedServer.id}</em>}
-                        </div>
-                        <div className="dx-workbar-actions">
-                            {activeTab === 'containers' && <RunContainerButton />}
-                            {activeTab === 'images' && <PullImageButton />}
-                            {activeTab === 'networks' && <CreateNetworkButton />}
-                            {activeTab === 'volumes' && <CreateVolumeButton />}
-                        </div>
-                    </div>
-
-                    <div className="dx-panel">
-                        {activeTab === 'containers' && <ContainersTab onStatsChange={loadStats} />}
-                        {activeTab === 'compose' && <ComposeTab onStatsChange={loadStats} />}
-                        {activeTab === 'images' && <ImagesTab onStatsChange={loadStats} />}
-                        {activeTab === 'networks' && <NetworksTab onStatsChange={loadStats} />}
-                        {activeTab === 'volumes' && <VolumesTab onStatsChange={loadStats} />}
-                    </div>
-                </main>
+            <div className="dx-panel">
+                {activeTab === 'containers' && <ContainersTab onStatsChange={loadStats} />}
+                {activeTab === 'compose' && <ComposeTab onStatsChange={loadStats} />}
+                {activeTab === 'images' && <ImagesTab onStatsChange={loadStats} />}
+                {activeTab === 'networks' && <NetworksTab onStatsChange={loadStats} />}
+                {activeTab === 'volumes' && <VolumesTab onStatsChange={loadStats} />}
             </div>
-        </div>
+        </PageLayout>
         </ServerContext.Provider>
         </RequiresDocker>
     );

@@ -53,7 +53,7 @@ export const CORE_ROUTES = Object.freeze([
     { id: 'legacy-dynamic-dns', path: '/dynamic-dns', placement: 'dashboard', redirect: '/domains', titleKey: 'app.routeManifest.dynamicDns', title: 'Dynamic DNS' },
     { id: 'databases', path: '/databases', placement: 'dashboard', component: 'Databases', titleKey: 'common.labels.databases', title: 'Databases' },
     { id: 'databases-tab', path: '/databases/:tab', placement: 'dashboard', component: 'Databases', titleKey: 'common.labels.databases', title: 'Databases' },
-    { id: 'docker', path: '/docker', placement: 'dashboard', component: 'Docker', titleKey: 'common.labels.docker', title: 'Docker' },
+    { id: 'docker', path: '/docker', placement: 'dashboard', redirect: '/docker/containers', titleKey: 'common.labels.docker', title: 'Docker' },
     { id: 'docker-tab', path: '/docker/:tab', placement: 'dashboard', component: 'Docker', titleKey: 'common.labels.docker', title: 'Docker' },
 
     { id: 'servers', path: '/servers', placement: 'dashboard', group: 'servers', component: 'Servers', titleKey: 'common.labels.servers', title: 'Servers' },

@@ -29,7 +29,7 @@ import GlobalStatusBar from '../components/GlobalStatusBar';
 
 // The Automations extension (tramo) contributes /automations/edit/:slug with
 // layout:'full', so it's picked up dynamically via fullPagePaths below.
-const FULL_PAGE_ROUTES = ['/files', '/docker'];
+const FULL_PAGE_ROUTES = ['/files'];
 
 const DashboardLayout = () => {
     const { t } = useTranslation();
