@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
-import { AlertTriangle, RefreshCw, Copy, Sparkles, ChevronDown, ChevronRight } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Sparkles, ChevronDown, ChevronRight } from 'lucide-react';
 import { AIContext } from '../../contexts/useServerkitAI.js';
-import { copyToClipboard } from '@/utils/clipboard';
+import { CopyButton } from '@/components/CopyButton';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
 
@@ -25,14 +25,11 @@ export default function ErrorCard({ failedStepName, failureTail, hint, errorMess
     const tailText = Array.isArray(failureTail) ? failureTail.join('\n') : (failureTail || '');
     const tailLines = tailText ? tailText.split('\n') : [];
 
-    const copyError = () => {
-        const blob = [
-            failedStepName ? `Failed step: ${failedStepName}` : null,
-            errorMessage ? `Error: ${errorMessage}` : null,
-            tailText ? `\n${tailText}` : null,
-        ].filter(Boolean).join('\n');
-        copyToClipboard(blob);
-    };
+    const errorReport = [
+        failedStepName ? `Failed step: ${failedStepName}` : null,
+        errorMessage ? `Error: ${errorMessage}` : null,
+        tailText ? `\n${tailText}` : null,
+    ].filter(Boolean).join('\n');
 
     const askAI = () => {
         if (!ai?.open) return;
@@ -71,9 +68,16 @@ export default function ErrorCard({ failedStepName, failureTail, hint, errorMess
                     <RefreshCw size={14} className={retrying ? 'deploy-console__spin' : ''} />
                     {retrying ? 'Retrying…' : 'Retry deploy'}
                 </SharedButton>
-                <SharedButton variant="unstyled" type="button" className="deploy-console__btn" onClick={copyError}>
-                    <Copy size={14} /> {t('app.errorCard.copyError', 'Copy error')}
-                </SharedButton>
+                <CopyButton
+                    value={errorReport}
+                    variant="unstyled"
+                    size="default"
+                    className="deploy-console__btn"
+                    label={t('app.errorCard.copyError', 'Copy error')}
+                    copiedLabel={t('app.copyField.copied', 'Copied')}
+                >
+                    {t('app.errorCard.copyError', 'Copy error')}
+                </CopyButton>
                 {ai?.open && (
                     <SharedButton variant="unstyled" type="button" className="deploy-console__btn" onClick={askAI}>
                         <Sparkles size={14} /> {t('app.errorCard.askAi', 'Ask AI')}

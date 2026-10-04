@@ -4,6 +4,7 @@ import api from '../services/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import PortField from './PortField';
 import { useToast } from '../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
 
@@ -188,10 +189,22 @@ export default function EmailProviders() {
                                                 STARTTLS
                                             </label>
                                         </Field>
+                                    ) : f === 'port' ? (
+                                        // The relay's SMTP port (25/465/587): a remote port,
+                                        // never one this host binds, so no host check.
+                                        <Field key={f} label={FIELD_LABELS[f] || f}>
+                                            <PortField
+                                                host={false}
+                                                allowPrivileged
+                                                placeholder="587"
+                                                value={form.port || ''}
+                                                onChange={(v) => onField('port', v === '' ? '' : String(v))}
+                                            />
+                                        </Field>
                                     ) : (
                                         <Field key={f} label={FIELD_LABELS[f] || f}>
                                             <Input
-                                                type={spec.secrets.includes(f) ? 'password' : (f === 'port' ? 'number' : 'text')}
+                                                type={spec.secrets.includes(f) ? 'password' : 'text'}
                                                 value={form[f] || ''}
                                                 onChange={(e) => onField(f, e.target.value)}
                                             />

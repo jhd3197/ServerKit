@@ -4,6 +4,7 @@ import api from '../services/api';
 import Modal from './Modal';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 
 const LinkAppModal = ({ app, onClose, onLinked }) => {
     const { t } = useTranslation();
@@ -98,19 +99,19 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
                         </div>
 
                         <div className="form-group">
-                            <label>{t('app.linkAppModal.linkToApplication', 'Link to Application')}</label>
-                            <select
-                                value={selectedAppId}
-                                onChange={(e) => setSelectedAppId(e.target.value)}
-                                required
-                            >
-                                <option value="">{t('app.linkAppModal.selectAnApplication', 'Select an application…')}</option>
-                                {apps.map(a => (
-                                    <option key={a.id} value={a.id}>
-                                        {a.name} (Port: {a.port || 'N/A'})
-                                    </option>
-                                ))}
-                            </select>
+                            <label htmlFor="link-app-target">{t('app.linkAppModal.linkToApplication', 'Link to Application')}</label>
+                            <Select value={selectedAppId} onValueChange={setSelectedAppId} required>
+                                <SelectTrigger id="link-app-target">
+                                    <SelectValue placeholder={t('app.linkAppModal.selectAnApplication', 'Select an application…')} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {apps.map(a => (
+                                        <SelectItem key={a.id} value={String(a.id)}>
+                                            {a.name} (Port: {a.port || 'N/A'})
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
 
                         <div className="form-group">

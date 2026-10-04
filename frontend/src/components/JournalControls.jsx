@@ -1,9 +1,14 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
 
+// Radix Select reserves '' for "no selection", so "All" travels as a sentinel
+// and is turned back into '' before it reaches the caller.
+const ALL_PRIORITIES = '__all';
+
 const PRIORITY_OPTIONS = [
-    { value: '', labelKey: 'common.labels.all', label: 'All' },
+    { value: ALL_PRIORITIES, labelKey: 'common.labels.all', label: 'All' },
     { value: '0', labelKey: 'app.journalControls.emergency', label: 'Emergency' },
     { value: '1', labelKey: 'app.journalControls.alert', label: 'Alert' },
     { value: '2', labelKey: 'app.journalControls.critical', label: 'Critical' },
@@ -62,22 +67,35 @@ export function JournalControls({
             {onLineCountChange && (
                 <div className="control-group">
                     <label>{t('app.journalControls.lines', 'Lines')}</label>
-                    <select value={lineCount} onChange={(e) => onLineCountChange(parseInt(e.target.value, 10))}>
-                        {lineCountOptions.map(n => (
-                            <option key={n} value={n}>{n}</option>
-                        ))}
-                    </select>
+                    <Select value={String(lineCount)} onValueChange={(v) => onLineCountChange(parseInt(v, 10))}>
+                        <SelectTrigger aria-label={t('app.journalControls.lines', 'Lines')}>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {lineCountOptions.map(n => (
+                                <SelectItem key={n} value={String(n)}>{n}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
             )}
 
             {showPriority && onPriorityChange && (
                 <div className="control-group">
                     <label>{t('app.journalControls.priority', 'Priority')}</label>
-                    <select value={priority ?? ''} onChange={(e) => onPriorityChange(e.target.value)}>
-                        {PRIORITY_OPTIONS.map(o => (
-                            <option key={o.value} value={o.value}>{o.label}</option>
-                        ))}
-                    </select>
+                    <Select
+                        value={priority == null || priority === '' ? ALL_PRIORITIES : String(priority)}
+                        onValueChange={(v) => onPriorityChange(v === ALL_PRIORITIES ? '' : v)}
+                    >
+                        <SelectTrigger aria-label={t('app.journalControls.priority', 'Priority')}>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {PRIORITY_OPTIONS.map(o => (
+                                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
             )}
 

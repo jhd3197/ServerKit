@@ -1,6 +1,7 @@
 import { Search, RefreshCw, Download, Trash2, Maximize2, Minimize2, X, ArrowDownToLine, Hash, WrapText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 
 export default function LogToolbar({
     searchPattern, onSearchChange, onSearchSubmit, onSearchClear,
@@ -31,16 +32,20 @@ export default function LogToolbar({
                         </SharedButton>
                     )}
                 </div>
-                <select
-                    className="lv-select"
-                    value={lineCount}
-                    onChange={(e) => onLineCountChange(parseInt(e.target.value, 10))}
-                    title={t('app.logToolbar.linesToFetch', 'Lines to fetch')}
-                >
-                    {lineCountOptions.map((n) => (
-                        <option key={n} value={n}>{n.toLocaleString()} lines</option>
-                    ))}
-                </select>
+                <Select value={String(lineCount)} onValueChange={(v) => onLineCountChange(parseInt(v, 10))}>
+                    <SelectTrigger
+                        className="lv-select"
+                        title={t('app.logToolbar.linesToFetch', 'Lines to fetch')}
+                        aria-label={t('app.logToolbar.linesToFetch', 'Lines to fetch')}
+                    >
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {lineCountOptions.map((n) => (
+                            <SelectItem key={n} value={String(n)}>{n.toLocaleString()} lines</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             </div>
 
             <div className="lv-toolbar-right">

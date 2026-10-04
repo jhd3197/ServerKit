@@ -2,7 +2,7 @@ import { useState } from 'react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
-import { useClipboard } from '../hooks/useClipboard';
+import CopyField from './CopyField';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
 
@@ -10,7 +10,6 @@ const PrivateURLSection = ({ app, onUpdate }) => {
     const { t } = useTranslation();
     const toast = useToast();
     const { confirm } = useConfirm();
-    const { copy } = useClipboard({ successMessage: 'URL copied to clipboard' });
     const [loading, setLoading] = useState(false);
     const [customSlug, setCustomSlug] = useState('');
     const [editMode, setEditMode] = useState(false);
@@ -89,10 +88,6 @@ const PrivateURLSection = ({ app, onUpdate }) => {
         }
     }
 
-    function copyToClipboard() {
-        copy(privateUrl);
-    }
-
     function handleSlugInput(e) {
         // Only allow lowercase letters, numbers, and hyphens
         const value = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
@@ -145,21 +140,9 @@ const PrivateURLSection = ({ app, onUpdate }) => {
                 <div className="private-url-enabled">
                     <div className="private-url-display">
                         <div className="url-box">
-                            <span className="url-label">{t('app.privateURLSection.yourPrivateUrl', 'Your private URL:')}</span>
-                            <code className="url-value">{privateUrl}</code>
+                            <CopyField label={t('app.privateURLSection.yourPrivateUrl', 'Your private URL:')} value={privateUrl} />
                         </div>
                         <div className="url-actions">
-                            <SharedButton variant="outline" type="button"
-                                className="btn btn-secondary btn-sm"
-                                onClick={copyToClipboard}
-                                title={t('app.privateURLSection.copyToClipboard', 'Copy to clipboard')}
-                            >
-                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" strokeWidth="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                                </svg>
-                                {t('common.actions.copy', 'Copy')}
-                            </SharedButton>
                             <SharedButton variant="outline" type="button"
                                 className="btn btn-secondary btn-sm"
                                 onClick={handleRegenerate}

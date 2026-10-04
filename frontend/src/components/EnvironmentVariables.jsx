@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import Modal from './Modal';
 import EmptyState from './EmptyState';
 import { DataTable, DataTableFooter, ListToolbar, SearchField } from '@/components/ds';
@@ -66,6 +67,8 @@ const ENV_VIEWS = [
         },
     },
 ];
+
+const EVERY_SERVICE = '__all';
 
 const EnvironmentVariables = ({ appId }) => {
     const { t } = useTranslation();
@@ -654,17 +657,20 @@ const EnvironmentVariables = ({ appId }) => {
                     </div>
                     {composeServices.length > 0 && (
                         <div className="form-group">
-                            <Label>{t('app.environmentVariables.appliesTo', 'Applies to')}</Label>
-                            <select
-                                className="env-target-select__control"
-                                value={newTargetService}
-                                onChange={(e) => setNewTargetService(e.target.value)}
+                            <Label htmlFor="env-add-target">{t('app.environmentVariables.appliesTo', 'Applies to')}</Label>
+                            {/* Radix reserves '' for "no selection": "All services" rides a sentinel. */}
+                            <Select
+                                value={newTargetService || EVERY_SERVICE}
+                                onValueChange={(v) => setNewTargetService(v === EVERY_SERVICE ? '' : v)}
                             >
-                                <option value="">{t('app.environmentVariables.allServices', 'All services')}</option>
-                                {composeServices.map((svc) => (
-                                    <option key={svc} value={svc}>{svc}</option>
-                                ))}
-                            </select>
+                                <SelectTrigger id="env-add-target"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value={EVERY_SERVICE}>{t('app.environmentVariables.allServices', 'All services')}</SelectItem>
+                                    {composeServices.map((svc) => (
+                                        <SelectItem key={svc} value={svc}>{svc}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                     )}
                     <p className="hint env-modal-hint">

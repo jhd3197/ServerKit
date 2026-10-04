@@ -689,6 +689,14 @@ $lk-default:  #646b7a;
         border-color: var(--border-strong);
         outline: none;
     }
+
+    // The Radix trigger (LogToolbar) keeps the compact toolbar size rather
+    // than the full-width 40px form field it defaults to.
+    &.ui-select-trigger {
+        width: auto;
+        height: auto;
+        gap: $space-1;
+    }
 }
 
 .lv-icon-btn {
@@ -992,7 +1000,7 @@ $lk-default:  #646b7a;
         }
 
         input,
-        select {
+        .ui-select-trigger {
             min-height: 36px;
             padding: $space-2 $space-3;
             border: 1px solid $border-subtle;
@@ -1003,6 +1011,11 @@ $lk-default:  #646b7a;
 
         input {
             width: 200px;
+        }
+
+        .ui-select-trigger {
+            height: auto;
+            min-width: 120px;
         }
     }
 }

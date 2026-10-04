@@ -6,6 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { DataTable, DataTableFooter } from '@/components/ds';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import ServerPicker from '@/components/ServerPicker';
+
+// ServerPicker's "no server" entry: a threshold without server_id is the
+// fleet default.
+const FLEET_DEFAULT = '__fleet';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { METRIC_LABELS } from './fleetMetrics';
@@ -21,7 +27,7 @@ const DEFAULT_THRESHOLD = {
 // Per-server limits, sitting under the panel host's own limits on the Rules
 // tab: same idea, wider scope. Two lists rather than one because they are two
 // backends — the host's four values are a single config, these are rows.
-export default function FleetThresholdsPanel({ servers = [], refreshKey = 0 }) {
+export default function FleetThresholdsPanel({ refreshKey = 0 }) {
     const { t } = useTranslation();
     const toast = useToast();
     const [thresholds, setThresholds] = useState([]);
@@ -138,27 +144,26 @@ export default function FleetThresholdsPanel({ servers = [], refreshKey = 0 }) {
             {adding && (
                 <div className="mon-threshold-form">
                     <div className="form-group">
-                        <Label htmlFor="fleet-threshold-server">{t('app.fleetThresholdsPanel.appliesTo', 'Applies to')}</Label>
-                        <select
-                            id="fleet-threshold-server"
-                            value={draft.server_id || ''}
-                            onChange={(e) => setDraft((p) => ({ ...p, server_id: e.target.value || undefined }))}
-                        >
-                            <option value="">{t('app.fleetThresholdsPanel.everyServerFleetDefault', 'Every server (fleet default)')}</option>
-                            {servers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-                        </select>
+                        <Label>{t('app.fleetThresholdsPanel.appliesTo', 'Applies to')}</Label>
+                        <ServerPicker
+                            value={draft.server_id || FLEET_DEFAULT}
+                            onChange={(id) => setDraft((p) => ({ ...p, server_id: id === FLEET_DEFAULT ? undefined : id }))}
+                            includeLocal={false}
+                            onlineOnly={false}
+                            extraOptions={[{ value: FLEET_DEFAULT, label: t('app.fleetThresholdsPanel.everyServerFleetDefault', 'Every server (fleet default)') }]}
+                            label={t('app.fleetThresholdsPanel.appliesTo', 'Applies to')}
+                        />
                     </div>
                     <div className="form-group">
                         <Label htmlFor="fleet-threshold-metric">{t('app.fleetThresholdsPanel.metric', 'Metric')}</Label>
-                        <select
-                            id="fleet-threshold-metric"
-                            value={draft.metric}
-                            onChange={(e) => setDraft((p) => ({ ...p, metric: e.target.value }))}
-                        >
-                            <option value="cpu">CPU</option>
-                            <option value="memory">{t('common.labels.memory', 'Memory')}</option>
-                            <option value="disk">{t('common.labels.disk', 'Disk')}</option>
-                        </select>
+                        <Select value={draft.metric} onValueChange={(metric) => setDraft((p) => ({ ...p, metric }))}>
+                            <SelectTrigger id="fleet-threshold-metric"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="cpu">CPU</SelectItem>
+                                <SelectItem value="memory">{t('common.labels.memory', 'Memory')}</SelectItem>
+                                <SelectItem value="disk">{t('common.labels.disk', 'Disk')}</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="form-group">
                         <Label htmlFor="fleet-threshold-warning">{t('app.fleetThresholdsPanel.warning2', 'Warning (%)')}</Label>

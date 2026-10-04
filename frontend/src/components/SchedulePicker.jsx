@@ -275,17 +275,18 @@ export default function SchedulePicker({ value = '', onChange, compact = false, 
             {mode === 'builder' && (
                 <div className="schedule-picker__builder">
                     <div className="schedule-picker__row">
-                        <label htmlFor="sp-frequency">{t('app.schedulePicker.frequency', 'Frequency')}</label>
-                        <select
-                            id="sp-frequency"
+                        <label id="sp-frequency">{t('app.schedulePicker.frequency', 'Frequency')}</label>
+                        <SegControl
+                            aria-labelledby="sp-frequency"
                             value={builder.frequency}
-                            onChange={(e) => patchBuilder({ frequency: e.target.value })}
-                        >
-                            <option value="hourly">{t('app.schedulePicker.hourly', 'Hourly')}</option>
-                            <option value="daily">{t('app.schedulePicker.daily', 'Daily')}</option>
-                            <option value="weekly">{t('app.schedulePicker.weekly', 'Weekly')}</option>
-                            <option value="monthly">{t('app.schedulePicker.monthly', 'Monthly')}</option>
-                        </select>
+                            onChange={(frequency) => patchBuilder({ frequency })}
+                            options={[
+                                { value: 'hourly', label: t('app.schedulePicker.hourly', 'Hourly') },
+                                { value: 'daily', label: t('app.schedulePicker.daily', 'Daily') },
+                                { value: 'weekly', label: t('app.schedulePicker.weekly', 'Weekly') },
+                                { value: 'monthly', label: t('app.schedulePicker.monthly', 'Monthly') },
+                            ]}
+                        />
                     </div>
 
                     {builder.frequency !== 'hourly' && (

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Popover, PopoverTrigger, PopoverContent } from '../ui/popover';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '../ui/select';
 import { Command, CommandInput, CommandList, CommandEmpty, CommandItem } from '../ui/command';
 
 // Model IDs are opaque: preserve gateway aliases (including slashes) verbatim.
@@ -34,13 +35,18 @@ export default function ModelPicker({ id, value, models, onChange, disabled }) {
                         <CommandInput placeholder={t('ai.connections.searchModels', 'Search models…')} />
                         <div className="sk-model-picker__filters">
                             <label htmlFor={`${id}-filter`}>{t('ai.models.capability', 'Capability')}</label>
-                            <select id={`${id}-filter`} value={filter} onChange={(event) => setFilter(event.target.value)}>
-                                <option value="all">{t('ai.models.all', 'All models')}</option>
-                                <option value="tools">{t('ai.models.tools', 'Tool calling')}</option>
-                                <option value="vision">{t('ai.models.vision', 'Vision')}</option>
-                                <option value="reasoning">{t('ai.models.reasoning', 'Reasoning')}</option>
-                                <option value="structured">{t('ai.models.structured', 'Structured output')}</option>
-                            </select>
+                            <Select value={filter} onValueChange={setFilter}>
+                                <SelectTrigger id={`${id}-filter`}><SelectValue /></SelectTrigger>
+                                {/* The list portals out of the DOM but React still bubbles its
+                                    keys to the Command root, where Enter would pick a model. */}
+                                <SelectContent onKeyDown={(event) => event.stopPropagation()}>
+                                    <SelectItem value="all">{t('ai.models.all', 'All models')}</SelectItem>
+                                    <SelectItem value="tools">{t('ai.models.tools', 'Tool calling')}</SelectItem>
+                                    <SelectItem value="vision">{t('ai.models.vision', 'Vision')}</SelectItem>
+                                    <SelectItem value="reasoning">{t('ai.models.reasoning', 'Reasoning')}</SelectItem>
+                                    <SelectItem value="structured">{t('ai.models.structured', 'Structured output')}</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                         <CommandList>
                             <CommandEmpty>{t('ai.connections.noModels', 'No matching models. Enter a model ID manually.')}</CommandEmpty>

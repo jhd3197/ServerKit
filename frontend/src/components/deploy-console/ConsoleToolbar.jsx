@@ -1,6 +1,7 @@
 import { ArrowDown, ArrowUp, Copy, Download, Maximize2, Minimize2, Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 
 const LEVELS = ['all', 'info', 'warn', 'error', 'debug'];
 
@@ -50,14 +51,18 @@ export default function ConsoleToolbar({
                 >
                     {t('app.consoleToolbar.timestamps', 'Timestamps')}
                 </SharedButton>
-                <label className="deploy-console__level">
-                    <span className="sr-only">{t('app.consoleToolbar.logLevel', 'Log level')}</span>
-                    <select value={level} onChange={(e) => onLevelChange(e.target.value)}>
-                        {LEVELS.map((l) => (
-                            <option key={l} value={l}>{l === 'all' ? 'All levels' : l}</option>
-                        ))}
-                    </select>
-                </label>
+                <div className="deploy-console__level">
+                    <Select value={level} onValueChange={onLevelChange}>
+                        <SelectTrigger aria-label={t('app.consoleToolbar.logLevel', 'Log level')}>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {LEVELS.map((l) => (
+                                <SelectItem key={l} value={l}>{l === 'all' ? 'All levels' : l}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
                 {errorCount > 0 && (
                     <SharedButton variant="unstyled"
                         type="button"

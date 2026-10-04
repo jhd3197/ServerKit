@@ -8,6 +8,8 @@ import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { DataTable, DataTableFooter, Pill } from '@/components/ds';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import ServerPicker from '@/components/ServerPicker';
 import { CHART_COLORS, METRIC_LABELS } from './fleetMetrics';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
@@ -209,11 +211,14 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
                     </div>
                     <div className="form-group">
                         <span className="mon-field-label">{t('app.fleetCapacityPanel.metric', 'Metric')}</span>
-                        <select value={compMetric} onChange={(e) => setCompMetric(e.target.value)}>
-                            {Object.entries(METRIC_LABELS).map(([k, v]) => (
-                                <option key={k} value={k}>{v}</option>
-                            ))}
-                        </select>
+                        <Select value={compMetric} onValueChange={setCompMetric}>
+                            <SelectTrigger aria-label={t('app.fleetCapacityPanel.metric', 'Metric')}><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {Object.entries(METRIC_LABELS).map(([k, v]) => (
+                                    <SelectItem key={k} value={k}>{v}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="form-group">
                         <span className="mon-field-label">{t('app.fleetCapacityPanel.period', 'Period')}</span>
@@ -306,18 +311,24 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
                 <div className="mon-compare-controls">
                     <div className="form-group">
                         <span className="mon-field-label">{t('common.labels.server', 'Server')}</span>
-                        <select value={forecastServer} onChange={(e) => setForecastServer(e.target.value)}>
-                            <option value="">{t('app.fleetCapacityPanel.selectAServer', 'Select a server…')}</option>
-                            {servers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-                        </select>
+                        <ServerPicker
+                            value={forecastServer}
+                            onChange={(id) => setForecastServer(id)}
+                            includeLocal={false}
+                            onlineOnly={false}
+                            label={t('app.fleetCapacityPanel.selectAServer', 'Select a server…')}
+                        />
                     </div>
                     <div className="form-group">
                         <span className="mon-field-label">{t('app.fleetCapacityPanel.metric', 'Metric')}</span>
-                        <select value={forecastMetric} onChange={(e) => setForecastMetric(e.target.value)}>
-                            <option value="disk">{t('common.labels.disk', 'Disk')}</option>
-                            <option value="memory">{t('common.labels.memory', 'Memory')}</option>
-                            <option value="cpu">CPU</option>
-                        </select>
+                        <Select value={forecastMetric} onValueChange={setForecastMetric}>
+                            <SelectTrigger aria-label={t('app.fleetCapacityPanel.metric', 'Metric')}><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="disk">{t('common.labels.disk', 'Disk')}</SelectItem>
+                                <SelectItem value="memory">{t('common.labels.memory', 'Memory')}</SelectItem>
+                                <SelectItem value="cpu">CPU</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
 
