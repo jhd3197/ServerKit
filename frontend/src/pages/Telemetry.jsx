@@ -110,7 +110,7 @@ const BUILTIN_VIEWS = [
 export default function Telemetry() {
     const { t } = useTranslation();
     const { isAdmin } = useAuth();
-    const { showToast } = useToast();
+    const { success: toastSuccess, error: toastError } = useToast();
     const { confirm } = useConfirm();
 
     const [events, setEvents] = useState([]);
@@ -166,12 +166,12 @@ export default function Telemetry() {
             setHasMore(fresh.length === PAGE_SIZE);
             setPage(nextPage);
         } catch (err) {
-            showToast(t('app.telemetry.failedToLoadTelemetry', 'Failed to load telemetry: {{message}}', { message: err.message }), 'error');
+            toastError(t('app.telemetry.failedToLoadTelemetry', 'Failed to load telemetry: {{message}}', { message: err.message }));
             setHasMore(false);
         } finally {
             setLoading(false);
         }
-    }, [filters, q, showToast, t]);
+    }, [filters, q, toastError, t]);
 
     useEffect(() => {
         loadFilterOptions();
@@ -187,10 +187,10 @@ export default function Telemetry() {
                 severity: 'info',
                 payload: { from_ui: true },
             });
-            showToast(t('app.telemetry.testEventEmitted', 'Test event emitted'), 'success');
+            toastSuccess(t('app.telemetry.testEventEmitted', 'Test event emitted'));
             fetchEvents(1, true);
         } catch (err) {
-            showToast(t('app.telemetry.failedToEmitTestEvent', 'Failed to emit test event: {{message}}', { message: err.message }), 'error');
+            toastError(t('app.telemetry.failedToEmitTestEvent', 'Failed to emit test event: {{message}}', { message: err.message }));
         }
     };
 
@@ -206,10 +206,10 @@ export default function Telemetry() {
         }
         try {
             const data = await api.cleanupTelemetryEvents(90);
-            showToast(t('app.telemetry.deletedOldEvents', 'Deleted {{deleted}} old events', { deleted: data.deleted }), 'success');
+            toastSuccess(t('app.telemetry.deletedOldEvents', 'Deleted {{deleted}} old events', { deleted: data.deleted }));
             fetchEvents(1, true);
         } catch (err) {
-            showToast(t('app.telemetry.cleanupFailed', 'Cleanup failed: {{message}}', { message: err.message }), 'error');
+            toastError(t('app.telemetry.cleanupFailed', 'Cleanup failed: {{message}}', { message: err.message }));
         }
     };
 
