@@ -200,7 +200,7 @@
 
     &__dot {
         width: 28px;
-        height: 28px;
+        height: 28px; // geometry: icon tile
         border-radius: $radius-card;
         display: grid;
         place-items: center;
@@ -318,7 +318,7 @@
 
     &__ico {
         width: 38px;
-        height: 38px;
+        height: 38px; // geometry: icon tile
         border-radius: $radius-card;
         display: grid;
         place-items: center;
@@ -409,11 +409,14 @@
     &__row + &__row { margin-top: $space-3; }
 
     &__tag {
-        padding: 1px $space-tight;
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
         border-radius: $radius-badge;
         @include status-variant(var(--accent-bright), var(--accent-bg));
         font-size: $text-xs;
-        font-weight: $font-weight-semibold;
+        font-weight: $font-weight-medium;
     }
 
     &__top {
@@ -492,8 +495,8 @@
     .bk-iconbtn {
         display: grid;
         place-items: center;
-        width: 30px;
-        height: 30px;
+        width: $control-sm;
+        height: $control-sm;
         padding: 0;
         border: 0;
         border-radius: $radius-control;
@@ -697,11 +700,11 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
+        width: $control-sm;
+        height: $control-sm;
         background: transparent;
         border: 1px solid $border-subtle;
-        border-radius: $radius-badge;
+        border-radius: $radius-control;
         color: $text-secondary;
         cursor: pointer;
 
@@ -741,7 +744,7 @@
 
     &__cell {
         position: relative;
-        min-height: 44px;
+        min-height: 44px; // geometry: calendar day cell
         padding: $space-1;
         border: 1px solid $border-subtle;
         border-radius: $radius-badge;

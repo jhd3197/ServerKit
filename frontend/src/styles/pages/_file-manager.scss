@@ -164,9 +164,9 @@ $ft-default:  #646b7a;
         .nav-btn {
             background: transparent;
             border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: $radius-card;
+            width: $control-sm;
+            height: $control-sm;
+            border-radius: $radius-control;
             color: var(--text-dim);
             cursor: pointer;
             display: flex;
@@ -233,12 +233,13 @@ $ft-default:  #646b7a;
     }
 
     .file-mount-chip {
+        height: 20px; // geometry: badge height (20px badge spec)
         display: inline-flex;
         align-items: center;
         min-width: 0;
         gap: $space-tight;
         margin-inline-start: $space-1;
-        padding: $space-1 $space-2;
+        padding: 0 $space-tight;
         border: 1px solid var(--border-soft);
         border-radius: $radius-badge;
         background: var(--surface-2);
@@ -307,10 +308,11 @@ $ft-default:  #646b7a;
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: $space-tight $space-3;
+        height: $control-md;
+        padding: 0 $space-3;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: $radius-card;
+        border-radius: $radius-control;
         color: var(--text-dim);
         font-size: $text-xs;
         font-weight: $font-weight-medium;
@@ -354,7 +356,7 @@ $ft-default:  #646b7a;
         align-items: center;
         justify-content: flex-start;
         width: auto;
-        height: 32px;
+        height: $control-md;
         min-width: 0;
         gap: $space-tight;
         padding-inline: $space-2 $space-tight;
@@ -400,7 +402,7 @@ $ft-default:  #646b7a;
             background: transparent;
             border: none;
             width: 30px;
-            height: 26px;
+            height: $control-sm;
             border-radius: $radius-control;
             color: var(--text-faint);
             cursor: pointer;
@@ -565,7 +567,7 @@ $ft-default:  #646b7a;
             background: $bg-body;
             padding: $space-4;
             z-index: $z-modal;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+            box-shadow: $shadow-overlay;
         }
     }
 
@@ -594,7 +596,7 @@ $ft-default:  #646b7a;
             background: var(--green);
             box-shadow: none;
 
-            &.is-cloud { background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
+            &.is-cloud { background: var(--cyan); }
         }
 
         &__close {
@@ -604,7 +606,7 @@ $ft-default:  #646b7a;
             z-index: 2;
             display: none;
             width: 25px;
-            height: 25px;
+            height: 25px; // geometry: close glyph pinned inside a source tab
             place-items: center;
             border: 0;
             border-radius: $radius-badge;
@@ -699,8 +701,8 @@ $ft-default:  #646b7a;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 26px;
-        height: 26px;
+        width: $control-sm;
+        height: $control-sm;
         margin-right: $space-hair;
         background: transparent;
         border: none;
@@ -827,7 +829,7 @@ $ft-default:  #646b7a;
 
         select {
             width: 100%;
-            min-height: 28px;
+            min-height: $control-sm;
             padding: $space-1 $space-2;
             background: var(--surface-2);
             border: 1px solid var(--border);
@@ -1186,14 +1188,17 @@ $ft-default:  #646b7a;
     }
 
     .ext-badge {
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
         position: absolute;
         bottom: 4px;
         left: 4px;
-        padding: 1px $space-tight;
+        padding: 0 $space-tight;
         background: rgba(0, 0, 0, 0.6);
         border-radius: $radius-badge;
         font-size: $text-xs;
-        font-weight: $font-weight-semibold;
+        font-weight: $font-weight-medium;
         color: white;
         // demo keeps the extension visible on image thumbs at all times
         opacity: 1;
@@ -1468,7 +1473,7 @@ $ft-default:  #646b7a;
         background: var(--surface-2);
         border: 1px solid var(--border-strong);
         border-radius: $radius-card;
-        box-shadow: var(--shadow-lg);
+        box-shadow: $shadow-raised;
         min-width: 200px;
         padding: $space-tight;
         z-index: $z-tooltip;
@@ -1551,7 +1556,7 @@ $drawer-width: 520px;
     max-width: 100%;
     background: var(--surface);
     border-left: 1px solid var(--border-soft);
-    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.4);
+    box-shadow: $shadow-overlay;
     z-index: $z-modal;
     display: flex;
     flex-direction: column;
@@ -1712,7 +1717,7 @@ $drawer-width: 520px;
             max-width: 100%;
             max-height: 100%;
             border-radius: $radius-control;
-            box-shadow: var(--shadow-lg);
+            box-shadow: none;
         }
     }
 

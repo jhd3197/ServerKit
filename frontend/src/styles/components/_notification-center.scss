@@ -10,10 +10,10 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 34px;
-        height: 34px;
+        width: $control-md;
+        height: $control-md;
         border: 1px solid $border-subtle;
-        border-radius: $radius-card;
+        border-radius: $radius-control;
         background: $bg-card;
         color: $text-secondary;
         cursor: pointer;
@@ -30,17 +30,18 @@
         position: absolute;
         top: -5px;
         right: -5px;
-        min-width: 17px;
-        height: 17px;
+        // Counter bubble: 16px round.
+        min-width: 16px;
+        height: 16px;
         padding: 0 $space-1;
         border-radius: $radius-full;
         background: $danger;
         color: #fff;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        line-height: 17px;
+        line-height: 16px;
         text-align: center;
-        box-shadow: 0 0 0 2px $bg-card;
+        box-shadow: 0 0 0 2px $bg-card; // geometry: cutout ring separating the counter from the bell
     }
 
     &__panel {
@@ -53,7 +54,7 @@
         background: $bg-elevated;
         border: 1px solid $border-default;
         border-radius: $radius-overlay;
-        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+        box-shadow: $shadow-raised;
         z-index: 1000;
         overflow: hidden;
         display: flex;
@@ -221,7 +222,7 @@
     .sk-notif__bell {
         width: 38px;
         height: auto;
-        min-height: 34px;
+        min-height: $control-md;
         align-self: stretch;
     }
 }
@@ -232,10 +233,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: $control-md;
+    height: $control-md;
     border: 1px solid $border-subtle;
-    border-radius: $radius-card;
+    border-radius: $radius-control;
     background: $bg-card;
     color: $text-secondary;
     cursor: pointer;
@@ -253,8 +254,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: $control-sm;
+    height: $control-sm;
     border: none;
     border-radius: $radius-control;
     background: transparent;
@@ -323,8 +324,8 @@
         }
 
         .sk-notif__bell {
-            width: 34px;
-            min-height: 34px;
+            width: $control-md;
+            min-height: $control-md;
             align-self: center;
         }
     }

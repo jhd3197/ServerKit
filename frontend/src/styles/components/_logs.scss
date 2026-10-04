@@ -34,7 +34,7 @@
     overflow: hidden;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-overlay;
+    border-radius: $radius-card;
 }
 
 .logs-sidebar {
@@ -95,7 +95,7 @@
 
 .log-icon {
     width: 32px;
-    height: 32px;
+    height: 32px; // geometry: icon tile
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -260,11 +260,11 @@
         }
     }
 
-    // Shared Select trigger, kept at the search box's 36px and sized to content
-    // so it sits in the toolbar instead of claiming a form-field row.
+    // Shared Select trigger, kept at the search box's height and sized to
+    // content so it sits in the toolbar instead of claiming a form-field row.
     .lines-select {
         width: auto;
-        height: 36px;
+        height: $control-md;
         min-width: 120px;
         font-size: $text-xs;
     }

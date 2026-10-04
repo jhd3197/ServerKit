@@ -111,7 +111,7 @@
 // same convention as the Services list type icon)
 .apps-type-ico {
     width: 34px;
-    height: 34px;
+    height: 34px; // geometry: icon tile
     border-radius: $radius-card;
     display: grid;
     place-items: center;
@@ -122,12 +122,13 @@
 
 // Mono type chip (brand colors via inline style props)
 .apps-type-chip {
+    height: 20px; // geometry: badge height (20px badge spec)
     display: inline-flex;
     align-items: center;
     font-size: $text-xs;
-    font-weight: $font-weight-semibold;
-    padding: $space-hair $space-2;
-    border-radius: $radius-control;
+    font-weight: $font-weight-medium;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
     border: 1px solid;
     white-space: nowrap;
 }
@@ -208,8 +209,8 @@
 }
 
 .apps-icon-action {
-    width: 27px;
-    height: 27px;
+    width: $control-sm;
+    height: $control-sm;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -278,11 +279,14 @@
 
 // Used by components/LinkAppModal.jsx
 .app-type-badge {
+    display: inline-flex;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
     font-size: $text-xs;
-    font-weight: $font-weight-semibold;
+    font-weight: $font-weight-medium;
     @include status-variant(var(--accent-bright), var(--accent-bg));
-    padding: $space-hair $space-2;
-    border-radius: $radius-control;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
 }
 
 // Used by pages/Firewall.jsx
@@ -378,7 +382,7 @@
     padding: $space-5 $space-6;
     background: var(--surface);
     border: 1px solid var(--border-soft);
-    border-radius: var(--radius-lg);
+    border-radius: $radius-card;
 }
 
 .app-detail-icon {
@@ -387,7 +391,7 @@
     height: 52px;
     border-radius: $radius-overlay;
     border: 1px solid fade(#fff, 8%);
-    box-shadow: var(--shadow-sm);
+    box-shadow: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -457,11 +461,12 @@
 // Status badge (WordPressProject still renders this class; ApplicationDetail
 // uses the ds Pill) — sk-pill visual spec.
 .app-status-badge {
+    height: 20px; // geometry: badge height (20px badge spec)
     display: inline-flex;
     align-items: center;
     gap: $space-tight;
-    padding: $space-1 $space-2;
-    border-radius: $radius-control;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     white-space: nowrap;
@@ -488,18 +493,13 @@
     flex-shrink: 0;
 
     .running & {
-        box-shadow: 0 0 6px currentColor;
         animation: pulse-green 2s ease-in-out infinite;
     }
 }
 
 @keyframes pulse-green {
-    0%, 100% {
-        box-shadow: 0 0 0 0 fade($success-raw, 40%);
-    }
-    50% {
-        box-shadow: 0 0 0 4px fade($success-raw, 0%);
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
 }
 
 // Tabs navigation (WordPress pages render these classes; ApplicationDetail
@@ -525,7 +525,8 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    padding: $space-2 $space-3;
+    height: $control-md;
+    padding: 0 $space-3;
     background: transparent;
     border: none;
     border-radius: $radius-control;
@@ -755,8 +756,6 @@
     .card {
         background: var(--surface);
         border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-        box-shadow: none;
 
         > h3,
         .card-header-row h3 {
@@ -924,11 +923,14 @@
     }
 
     .ssl-badge {
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
         font-size: $text-xs;
-        font-weight: $font-weight-semibold;
+        font-weight: $font-weight-medium;
         @include status-variant(var(--green), var(--green-bg));
-        padding: $space-hair $space-2;
-        border-radius: $radius-control;
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
         flex-shrink: 0;
     }
 
@@ -1007,7 +1009,7 @@
 
     .diag-icon {
         width: 30px;
-        height: 30px;
+        height: 30px; // geometry: icon tile
         display: grid;
         place-items: center;
         border-radius: $radius-card;

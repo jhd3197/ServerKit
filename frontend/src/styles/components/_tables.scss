@@ -7,15 +7,21 @@
     border-collapse: collapse;
     font-size: $text-xs;
 
+    // Header 32, rows min 40 (height on a cell is a minimum), cell padding
+    // $space-3 with $space-4 at the outer edges.
     thead {
         th {
-            padding: $space-3 $space-4;
+            height: $control-md;
+            padding: 0 $space-3;
             text-align: left;
             font-weight: $font-weight-semibold;
             font-size: $text-xs;
             color: $text-tertiary;
             border-bottom: 1px solid $border-default;
             white-space: nowrap;
+
+            &:first-child { padding-inline-start: $space-4; }
+            &:last-child { padding-inline-end: $space-4; }
         }
     }
 
@@ -33,8 +39,12 @@
             }
         }
 
+        td:first-child { padding-inline-start: $space-4; }
+        td:last-child { padding-inline-end: $space-4; }
+
         td {
-            padding: $space-3 $space-4;
+            height: $control-lg;
+            padding: $space-2 $space-3;
             color: $text-primary;
             vertical-align: middle;
 
@@ -57,7 +67,8 @@ width: 100%;
 
     th {
         text-align: left;
-        padding: $space-3;
+        height: $control-md;
+        padding: 0 $space-3;
         background: $bg-hover;
         color: $text-tertiary;
         font-weight: $font-weight-semibold;
@@ -66,7 +77,8 @@ width: 100%;
     }
 
     td {
-        padding: $space-3;
+        height: $control-lg;
+        padding: $space-2 $space-3;
         border-bottom: 1px solid $border-subtle;
         font-family: $font-mono;
         font-size: $text-xs;
@@ -75,6 +87,9 @@ width: 100%;
 
     tr:hover { background: $bg-hover; }
     tr:last-child td { border-bottom: none; }
+
+    th:first-child, td:first-child { padding-inline-start: $space-4; }
+    th:last-child, td:last-child { padding-inline-end: $space-4; }
 
     .container-name {
         display: block;

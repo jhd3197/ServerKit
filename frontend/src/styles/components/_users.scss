@@ -124,7 +124,7 @@
 
     .user-avatar {
         width: 40px;
-        height: 40px;
+        height: 40px; // geometry: avatar
         border-radius: 50%;
         background: $accent-primary;
         color: #fff;
@@ -536,7 +536,7 @@
 
     .active-user-rank {
         width: 28px;
-        height: 28px;
+        height: 28px; // geometry: rank medallion, not a control
         display: flex;
         align-items: center;
         justify-content: center;
@@ -627,7 +627,7 @@
 
         select.form-control {
             min-width: 200px;
-            height: 38px;
+            height: $control-md;
             padding: 0 $space-3;
             background: $bg-card;
             border: 1px solid $border-default;
@@ -640,7 +640,7 @@
             &:focus {
                 outline: none;
                 border-color: $accent-primary;
-                box-shadow: 0 0 0 3px fade($accent-primary-raw, 10%);
+                box-shadow: $focus-ring;
             }
 
             &:hover {
@@ -650,7 +650,7 @@
     }
 
     .btn-clear {
-        height: 38px;
+        height: $control-md;
         display: flex;
         align-items: center;
         gap: $space-2;

@@ -306,13 +306,15 @@
 
 // Observed-mode chip on the server list rows.
 .server-row__mode-chip {
-    display: inline-block;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
+    display: inline-flex;
     margin-left: $space-2;
-    padding: 1px $space-2;
+    padding: 0 $space-tight;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     @include status-variant($warning, $warning-bg);
     border: 1px solid $warning-border;
-    border-radius: $radius-full;
+    border-radius: $radius-badge;
     vertical-align: middle;
 }

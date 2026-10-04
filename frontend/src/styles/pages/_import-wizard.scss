@@ -77,7 +77,7 @@
         align-items: center;
         justify-content: center;
         width: 22px;
-        height: 22px;
+        height: 22px; // geometry: stepper dot
         border: 1px solid $border-default;
         border-radius: $radius-full;
         font-size: $text-xs;
@@ -167,7 +167,7 @@
         align-items: center;
         justify-content: center;
         width: 36px;
-        height: 36px;
+        height: 36px; // geometry: icon tile
         border-radius: $radius-control;
         @include status-variant($accent-primary, $accent-bg);
     }
@@ -351,12 +351,13 @@
     }
 
     &__chip {
+        height: 20px; // geometry: badge height (20px badge spec)
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: $space-1 $space-3;
+        padding: 0 $space-tight;
         background: $bg-tertiary;
-        border-radius: $radius-full;
+        border-radius: $radius-badge;
         font-size: $text-xs;
         color: $text-primary;
 

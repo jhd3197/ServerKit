@@ -22,7 +22,7 @@
     .statusbar-select {
         display: inline-flex;
         align-items: center;
-        height: 22px;
+        height: 22px; // geometry: fixed 22px status-bar segment (chrome)
         min-width: 0;
         gap: $space-2;
         padding-inline: $space-2;
@@ -76,9 +76,9 @@
         width: 6px;
         height: 6px;
 
-        &.is-online { background: var(--green); box-shadow: 0 0 6px var(--green); }
-        &.is-idle { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
-        &.is-down { background: var(--red); box-shadow: 0 0 6px var(--red); }
+        &.is-online { background: var(--green); }
+        &.is-idle { background: var(--amber); }
+        &.is-down { background: var(--red); }
     }
 
     &__pip {
@@ -154,7 +154,7 @@
     border: 1px solid var(--border-strong);
     border-radius: $radius-overlay;
     background: var(--surface-2);
-    box-shadow: var(--shadow-lg);
+    box-shadow: $shadow-raised;
     animation: statusbar-menu-enter 140ms ease-out;
 
     &--wide { min-width: 308px; }
@@ -193,9 +193,9 @@
         background: var(--accent);
 
         &.is-ghost { background: var(--text-ghost); }
-        &.is-online { background: var(--green); box-shadow: 0 0 6px var(--green); }
-        &.is-idle { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
-        &.is-down { background: var(--red); box-shadow: 0 0 6px var(--red); }
+        &.is-online { background: var(--green); }
+        &.is-idle { background: var(--amber); }
+        &.is-down { background: var(--red); }
     }
 
     &__copy {
@@ -244,7 +244,7 @@
     overflow: hidden;
     border-block-start: 1px solid var(--border-strong);
     background: var(--surface);
-    box-shadow: 0 -20px 45px rgba(0, 0, 0, 0.18);
+    box-shadow: $shadow-overlay;
     animation: shell-panel-enter 160ms ease-out;
 
     &.is-expanded { height: min(62vh, 720px); }
@@ -257,7 +257,7 @@
     }
 
     &__head {
-        min-height: 38px;
+        min-height: 38px; // geometry: dock header strip (chrome), holds 28px controls
         flex: 0 0 auto;
         gap: $space-2;
         padding-inline: $space-2 $space-2;
@@ -275,7 +275,7 @@
 
     &__filters button,
     &__action {
-        min-height: 22px;
+        min-height: $control-sm;
         border: 0;
         border-radius: $radius-badge;
         background: transparent;
@@ -312,7 +312,7 @@
     }
 
     &__footer {
-        min-height: 34px;
+        min-height: 34px; // geometry: dock footer strip (chrome)
         justify-content: space-between;
         gap: $space-3;
         padding-inline: $space-4;
@@ -344,7 +344,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        height: 26px;
+        height: $control-sm;
         padding: 0 $space-3;
         border: 0;
         border-radius: $radius-control;
@@ -362,7 +362,7 @@
 
     &__badge {
         padding: 1px $space-tight;
-        border-radius: $radius-overlay;
+        border-radius: $radius-badge;
         font-size: $text-xs;
         @include status-variant(var(--accent-bright), var(--accent-bg));
     }
@@ -371,8 +371,8 @@
 
     &__control {
         display: grid;
-        width: 26px;
-        height: 26px;
+        width: $control-sm;
+        height: $control-sm;
         flex: 0 0 auto;
         place-items: center;
         border: 0;
@@ -387,8 +387,8 @@
 
     // The refresh IconButton passed in as a control matches the square look.
     .icon-button {
-        width: 26px;
-        height: 26px;
+        width: $control-sm;
+        height: $control-sm;
         border: 0;
         background: transparent;
     }
@@ -432,8 +432,8 @@
         border-radius: 50%;
         background: var(--text-faint);
 
-        .is-critical & { background: var(--red); box-shadow: 0 0 6px var(--red); }
-        .is-warning & { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+        .is-critical & { background: var(--red); }
+        .is-warning & { background: var(--amber); }
         .is-success & { background: var(--green); }
         .is-info & { background: var(--cyan); }
     }
@@ -494,7 +494,7 @@
         border: 0;
         border-block-start: 1px solid var(--border-strong);
         border-radius: 0;
-        box-shadow: 0 -20px 45px rgba(0, 0, 0, 0.18);
+        box-shadow: $shadow-overlay;
         animation: shell-panel-enter 160ms ease-out;
     }
 
@@ -502,7 +502,7 @@
 
     .operations-dock__header {
         grid-area: header;
-        min-height: 38px;
+        min-height: 38px; // geometry: dock header strip (chrome), holds 28px controls
         padding: 0 $space-2;
         border-block-end: 1px solid var(--border-soft);
     }

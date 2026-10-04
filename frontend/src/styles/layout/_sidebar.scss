@@ -31,7 +31,7 @@
 
         &.sidebar--mobile-open {
             transform: translateX(0);
-            box-shadow: 8px 0 32px rgba(0, 0, 0, 0.45);
+            box-shadow: $shadow-overlay;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -49,7 +49,7 @@
         align-items: center;
         justify-content: center;
         width: 44px;
-        height: 44px;
+        height: 44px; // geometry: mobile-only 44px touch target
         margin: $space-2 0 $space-1 auto;
         border: none;
         background: transparent;
@@ -112,7 +112,7 @@
     align-items: center;
     justify-content: center;
     width: 44px;
-    height: 44px;
+    height: 44px; // geometry: mobile-only 44px touch target
     flex-shrink: 0;
     border: none;
     background: transparent;
@@ -138,7 +138,7 @@
     display: grid;
     place-items: center;
     width: 26px;
-    height: 26px;
+    height: 26px; // geometry: logo image box
     flex-shrink: 0;
 
     img {
@@ -169,14 +169,14 @@
 // Demo logo: a periwinkle gradient tile with a white server glyph.
 .brand-logo {
     width: 34px;
-    height: 34px;
+    height: 34px; // geometry: brand logo tile
     border-radius: $radius-card;
     display: grid;
     place-items: center;
     flex-shrink: 0;
     color: #fff;
     background: linear-gradient(160deg, var(--accent-bright), var(--accent));
-    box-shadow: 0 4px 14px -2px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    box-shadow: none;
 
     svg {
         stroke: #fff;
@@ -222,7 +222,7 @@
 
 .brand-custom-logo {
     width: 32px;
-    height: 32px;
+    height: 32px; // geometry: custom brand logo box
     border-radius: $radius-control;
     overflow: hidden;
     display: grid;
@@ -267,12 +267,12 @@
 // Quick-create now lives in the brand row: logo → name → GitHub star → create.
 // The square accent treatment matches the prototype's compact app-chrome tool.
 .quick-create.quick-create--header {
-    width: 27px;
-    height: 27px;
+    width: $control-sm;
+    height: $control-sm;
     border: none;
-    border-radius: $radius-card;
-    background: linear-gradient(160deg, var(--accent-bright), var(--accent));
-    box-shadow: 0 2px 8px -1px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    border-radius: $radius-control;
+    background: var(--accent);
+    box-shadow: none;
     color: #fff;
     flex-shrink: 0;
     transition: filter 0.15s, transform 0.15s;
@@ -443,13 +443,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: $control-sm;
+    height: $control-sm;
     border: none;
     background: transparent;
     color: $text-tertiary;
     cursor: pointer;
-    border-radius: $radius-badge;
+    border-radius: $radius-control;
     flex-shrink: 0;
     transition: all 0.15s ease;
     margin-right: $space-1;
@@ -507,7 +507,7 @@
     background: var(--surface-2);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: $shadow-raised;
     padding: $space-1;
     z-index: $z-tooltip;
     animation: contextMenuIn 0.15s ease-out;
@@ -670,7 +670,7 @@
 
 .user-avatar {
     width: 32px;
-    height: 32px;
+    height: 32px; // geometry: avatar
     background: linear-gradient(150deg, var(--surface-3), var(--surface-2));
     border: 1px solid var(--border-strong);
     border-radius: $radius-card;
@@ -722,7 +722,6 @@
         height: 5px;
         background: currentColor;
         border-radius: 50%;
-        box-shadow: 0 0 6px currentColor;
     }
 }
 
@@ -751,7 +750,7 @@
             &:hover,
             &:focus-within {
                 width: $sidebar-width;
-                box-shadow: 8px 0 32px rgba(0, 0, 0, 0.28);
+                box-shadow: $shadow-overlay;
             }
 
             // Collapsed state: bare icon rail. font-size: 0 hides nav text while

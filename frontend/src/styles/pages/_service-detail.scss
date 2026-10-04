@@ -79,28 +79,24 @@
             flex-wrap: wrap;
             justify-content: flex-end;
             row-gap: $space-tight;
-
-            .ui-button {
-                height: 32px;
-                padding: 0 $space-3;
-                font-size: $text-sm;
-                gap: $space-tight;
-            }
         }
     }
 
     // Gradient initial avatar (ds ServiceTile — size via props)
     &__tile {
         border-radius: $radius-overlay;
-        box-shadow: var(--shadow-sm);
+        box-shadow: none;
     }
 
     // Service-type tag (brand colors arrive via inline style props)
     &__type-badge {
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
         font-size: $text-xs;
-        font-weight: $font-weight-semibold;
-        padding: $space-hair $space-2;
-        border-radius: $radius-control;
+        font-weight: $font-weight-medium;
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
         border: 1px solid;
     }
 
@@ -119,7 +115,7 @@
         padding: $space-1;
         min-width: 200px;
         z-index: $z-dropdown;
-        box-shadow: var(--shadow-md);
+        box-shadow: $shadow-raised;
 
         &--right {
             left: auto;
@@ -219,9 +215,12 @@
     }
 
     &__auto-deploy-badge {
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
         font-size: $text-xs;
-        font-weight: $font-weight-semibold;
-        padding: 1px $space-tight;
+        font-weight: $font-weight-medium;
+        padding: 0 $space-tight;
         @include status-variant(var(--green), var(--green-bg));
         border-radius: $radius-badge;
     }
@@ -574,9 +573,10 @@ h3.svc-eyebrow {
                      // to its label, so each item's box was a different width
         align-items: center;
         gap: $space-2;
-        padding: $space-2 $space-3;
+        min-height: $control-md;
+        padding: 0 $space-3;
         border: none;
-        border-radius: $radius-card;
+        border-radius: $radius-control;
         background: none;
         color: var(--text-dim);
         font-size: $text-sm;
@@ -670,11 +670,11 @@ h3.svc-eyebrow {
     &__pill {
         display: inline-flex;
         align-items: center;
-        min-height: 22px;
-        padding: 0 $space-3;
-        border-radius: $radius-full;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
         font-size: $text-xs;
-        font-weight: $font-weight-semibold;
+        font-weight: $font-weight-medium;
         background: var(--surface-hover);
         color: var(--text-dim);
 
@@ -762,12 +762,12 @@ h3.svc-eyebrow {
     &__step-type {
         display: inline-flex;
         align-items: center;
-        min-height: 20px;
-        padding: 0 $space-2;
-        border-radius: $radius-full;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
         @include status-variant(var(--accent-bright), var(--accent-bg));
         font-size: $text-xs;
-        font-weight: $font-weight-semibold;
+        font-weight: $font-weight-medium;
         text-transform: capitalize;
 
         &.is-error { background: rgba(239, 68, 68, 0.14); color: $danger; }
@@ -853,11 +853,10 @@ h3.svc-eyebrow {
     flex-direction: column;
     gap: $space-5;
 
-    // Lift the KPI tiles so they read as deliberate stat cards rather than flat
-    // boxes that dissolve into the page (dark --surface ≈ --bg-body).
+    // A firmer border (no shadow: cards stay flat) keeps the KPI tiles from
+    // dissolving into the page (dark --surface ≈ --bg-body).
     .sk-kpi {
         border-color: var(--border);
-        box-shadow: var(--shadow-sm);
     }
 
     // KPI strip (ds MetricCard) — legacy grid, kept for any non-KpiBand use
@@ -884,9 +883,9 @@ h3.svc-eyebrow {
     &__card {
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow-sm);
-        padding: $space-4 $space-5;
+        border-radius: $radius-card;
+        box-shadow: none;
+        padding: $space-4;
 
         &--full {
             grid-column: 1 / -1;
@@ -921,10 +920,13 @@ h3.svc-eyebrow {
 
     // Info badge (brand colors via inline style props)
     &__info-badge {
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
         font-size: $text-xs;
-        font-weight: $font-weight-semibold;
-        padding: $space-hair $space-2;
-        border-radius: $radius-control;
+        font-weight: $font-weight-medium;
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
         border: 1px solid;
     }
 
@@ -1030,9 +1032,9 @@ h3.svc-eyebrow {
         flex-shrink: 0;
         background: var(--text-ghost);
 
-        &--green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+        &--green { background: var(--green); }
         &--red   { background: var(--red); }
-        &--amber { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+        &--amber { background: var(--amber); }
         &--cyan  { background: var(--cyan); }
         &--gray  { background: var(--text-faint); }
     }

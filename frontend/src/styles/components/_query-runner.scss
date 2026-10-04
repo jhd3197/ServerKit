@@ -88,8 +88,8 @@
     }
 
     .modal-close {
-        width: 32px;
-        height: 32px;
+        width: $control-sm;
+        height: $control-sm;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -155,8 +155,8 @@
         flex-shrink: 0;
 
         .btn-icon {
-            width: 24px;
-            height: 24px;
+            width: $control-sm;
+            height: $control-sm;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -274,7 +274,7 @@
         &:focus {
             outline: none;
             border-color: $accent-primary;
-            box-shadow: 0 0 0 3px $accent-glow;
+            box-shadow: $focus-ring;
         }
 
         &::placeholder {

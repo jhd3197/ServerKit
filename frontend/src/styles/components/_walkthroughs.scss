@@ -44,7 +44,7 @@
     &__card-icon {
         display: grid;
         width: 28px;
-        height: 28px;
+        height: 28px; // geometry: icon tile
         margin-block-end: $space-3;
         place-items: center;
         border-radius: $radius-card;
@@ -218,7 +218,7 @@
     &__step-marker {
         display: grid;
         width: 20px;
-        height: 20px;
+        height: 20px; // geometry: step marker disc
         flex: 0 0 auto;
         place-items: center;
         border: 1px solid var(--border-strong);

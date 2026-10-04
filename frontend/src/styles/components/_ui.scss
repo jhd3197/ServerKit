@@ -142,7 +142,7 @@
     position: relative;
     flex-shrink: 0;
     width: 36px;
-    height: 20px;
+    height: 20px; // geometry: switch track
     padding: 0;
     border: none;
     border-radius: $radius-full;
@@ -172,7 +172,7 @@
         margin: $space-hair;
         background: #fff;
         border-radius: 50%;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); // geometry: draws the knob's edge against a light track
         transition: transform 150ms ease;
         transform: translateX(0);
     }
@@ -189,7 +189,7 @@
     background: $bg-card;
     color: $text-primary;
     border: 1px solid $border-subtle;
-    border-radius: $radius-overlay;
+    border-radius: $radius-card;
     box-shadow: none;
     display: flex;
     flex-direction: column;
@@ -199,7 +199,7 @@
     display: flex;
     flex-direction: column;
     gap: $space-tight; // 6px
-    padding: $space-6;
+    padding: $space-4;
 }
 
 .ui-card-title {
@@ -218,7 +218,7 @@
 }
 
 .ui-card-content {
-    padding: 0 $space-6 $space-6;
+    padding: 0 $space-4 $space-4;
     flex: 1;
 }
 
@@ -226,7 +226,7 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    padding: 0 $space-6 $space-6;
+    padding: 0 $space-4 $space-4;
 }
 
 // --------------------------------------------
@@ -277,8 +277,8 @@
 }
 
 .ui-table-head {
-    height: $control-md;
-    padding: 0 $space-4;
+    height: $control-md; // table header spec: 32
+    padding: 0 $space-3;
     text-align: left;
     vertical-align: middle;
     color: $text-tertiary;
@@ -287,10 +287,18 @@
 }
 
 .ui-table-cell {
-    padding: $space-3 $space-4; // 13px 16px
+    // Rows: min 40 (height on a cell is a minimum; two-line rows grow).
+    height: $control-lg;
+    padding: $space-2 $space-3;
     vertical-align: middle;
     color: $text-primary;
 }
+
+// Outer edges get $space-4.
+.ui-table-head:first-child,
+.ui-table-cell:first-child { padding-inline-start: $space-4; }
+.ui-table-head:last-child,
+.ui-table-cell:last-child { padding-inline-end: $space-4; }
 
 .ui-table-caption {
     margin-top: $space-4;
@@ -543,7 +551,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 24px;
+    height: 24px; // geometry: menu scroll arrow strip, not a control
     cursor: default;
     color: $text-tertiary;
 }
@@ -765,8 +773,8 @@
 .ui-command-input {
     flex: 1;
     width: 100%;
-    height: 44px;
-    padding: $space-3 0;
+    height: $control-lg; // borderless search row heading the command list
+    padding: 0;
     background: transparent;
     border: none;
     outline: none;
@@ -957,7 +965,7 @@
     justify-content: center;
     flex-shrink: 0;
     width: 48px;
-    height: 48px;
+    height: 48px; // geometry: icon medallion
     border-radius: 50%;
     border: 1px solid transparent;
 

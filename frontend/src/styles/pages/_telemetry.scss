@@ -54,7 +54,10 @@
     }
 
     .telemetry-cell__badge {
-        padding: 1px $space-tight;
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
         border-radius: $radius-badge;
         border: 1px solid var(--border);
         color: var(--text-dim);
@@ -71,8 +74,8 @@
     // Severity accent down the left edge of a row — the one visual the DataTable
     // does not provide and the whole point of skimming an event log.
     tr.is-critical,
-    tr.is-error { box-shadow: inset 3px 0 0 var(--red); }
-    tr.is-warning { box-shadow: inset 3px 0 0 var(--amber); }
+    tr.is-error { box-shadow: inset 3px 0 0 var(--red); } // geometry: draws the severity rule
+    tr.is-warning { box-shadow: inset 3px 0 0 var(--amber); } // geometry: draws the severity rule
     tr.is-debug { opacity: 0.72; }
 
     .telemetry-loading {

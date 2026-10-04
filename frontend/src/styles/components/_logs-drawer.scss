@@ -10,7 +10,7 @@
     background: var(--surface);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius);
-    box-shadow: var(--shadow-lg);
+    box-shadow: none;
     overflow: hidden;
 
     .terminal-header {
@@ -26,8 +26,8 @@
     // Icon tile (demo SSH drawer: green terminal tile)
     .terminal-ico {
         width: 28px;
-        height: 28px;
-        border-radius: $radius-card;
+        height: 28px; // geometry: icon tile
+        border-radius: $radius-control;
         display: grid;
         place-items: center;
         @include status-variant(var(--green), var(--green-bg));
@@ -86,8 +86,8 @@
     }
 
     .terminal-close-btn {
-        width: 28px;
-        height: 28px;
+        width: $control-sm;
+        height: $control-sm;
         display: grid;
         place-items: center;
         background: transparent;

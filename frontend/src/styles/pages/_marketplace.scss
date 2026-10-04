@@ -1,9 +1,6 @@
 // Marketplace page styles
 
 .marketplace-page {
-    .card {
-        border-radius: $radius-card;
-    }
 
     .marketplace-hero {
         position: relative;
@@ -101,7 +98,7 @@
 
         .extension-card__glyph {
             width: 20px;
-            height: 20px;
+            height: 20px; // geometry: icon
         }
     }
 
@@ -137,7 +134,7 @@
         align-items: center;
         justify-content: center;
         width: 34px;
-        height: 34px;
+        height: 34px; // geometry: icon tile
         flex: 0 0 34px;
         border-radius: $radius-card;
 
@@ -210,7 +207,7 @@
 
         svg {
             width: 30px;
-            height: 30px;
+            height: 30px; // geometry: icon
         }
     }
 
@@ -293,7 +290,7 @@
 
         .extension-card__glyph {
             width: 46px;
-            height: 46px;
+            height: 46px; // geometry: icon
         }
 
         .extension-card__icon {
@@ -438,7 +435,7 @@
     align-items: center;
     justify-content: center;
     width: 38px;
-    height: 38px;
+    height: 38px; // geometry: icon tile
     flex: 0 0 38px;
     border-radius: $radius-card;
     color: $accent-primary;
@@ -464,7 +461,7 @@
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    height: 32px;
+    height: $control-sm;
     padding: 0 $space-3;
     border: 1px solid transparent;
     border-radius: $radius-control;

@@ -46,7 +46,7 @@
 
     &__divider {
         width: 1px;
-        height: 20px;
+        height: 20px; // geometry: divider rule
         margin-inline: $space-1;
         background: $border-default;
     }

@@ -64,12 +64,12 @@
 
     &__dismiss {
         display: grid;
-        width: 26px;
-        height: 26px;
+        width: $control-sm;
+        height: $control-sm;
         flex: 0 0 auto;
         place-items: center;
         border: 0;
-        border-radius: $radius-badge;
+        border-radius: $radius-control;
         background: transparent;
         color: $text-tertiary;
         cursor: pointer;
@@ -99,7 +99,7 @@
     }
 
     &--loading {
-        min-height: 46px;
+        min-height: 46px; // geometry: reserves the loaded banner's height (no layout jump)
     }
 
     @media (max-width: $breakpoint-md) {

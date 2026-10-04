@@ -8,6 +8,15 @@
     padding: $space-5;
 }
 
+// Sign-in screens are the one place controls default to the large size.
+.auth-container {
+    .btn:not(.btn-sm):not(.btn-link):not(.btn-icon),
+    .ui-input,
+    .ui-select-trigger {
+        height: $control-lg;
+    }
+}
+
 .auth-card {
     width: 100%;
     max-width: 400px;
@@ -23,7 +32,7 @@
 
     .brand-logo {
         width: 48px;
-        height: 48px;
+        height: 48px; // geometry: logo
         margin: 0 auto $space-4;
         // ServerKitLogo renders its own gradient tile, so suppress the global
         // .brand-logo tile (_sidebar.scss) here — otherwise the self-tiled logo
@@ -117,9 +126,10 @@
     justify-content: center;
     gap: $space-3;
     width: 100%;
-    padding: $space-3 $space-4;
+    height: $control-lg;
+    padding: 0 $space-4;
     border: 1px solid $border-subtle;
-    border-radius: $radius-card;
+    border-radius: $radius-control;
     background: $bg-card;
     color: $text-primary;
     font-size: $text-xs;

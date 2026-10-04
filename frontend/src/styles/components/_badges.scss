@@ -2,6 +2,21 @@
 // BADGE COMPONENTS
 // ============================================
 
+// Badge spec, shared by every legacy badge/pill/tag class here and in
+// _status-badge.scss: 20px tall, $radius-badge, 0 $space-tight, $text-xs
+// medium. min-height rather than height so a badge never clips its text.
+@mixin badge-geometry() {
+    display: inline-flex;
+    align-items: center;
+    min-height: 20px; // geometry: badge height (20px badge spec)
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
+    font-size: $text-xs;
+    font-weight: $font-weight-medium;
+    line-height: 1;
+    white-space: nowrap;
+}
+
 // Status badge
 
 .status-dot {
@@ -40,44 +55,28 @@
 
 // App type badge
 .app-type {
+    @include badge-geometry();
     background: $bg-hover;
-    padding: $space-tight $space-3;
-    border-radius: $radius-control;
-    font-weight: $font-weight-semibold;
-    font-size: $text-xs;
 }
 
 // SSL badge
 .ssl-badge {
-    display: inline-flex;
-    align-items: center;
+    @include badge-geometry();
     gap: $space-1;
     @include status-variant($success, $success-bg);
-    padding: $space-tight $space-3;
-    border-radius: $radius-control;
-    font-size: $text-xs;
-    font-weight: $font-weight-semibold;
 }
 
 // Active badge (for themes/plugins)
 .active-badge {
+    @include badge-geometry();
     @include status-variant($success, $success-bg);
-    padding: $space-1 $space-3;
-    border-radius: $radius-full;
-    font-size: $text-xs;
-    font-weight: $font-weight-semibold;
 }
 
 // Database type badge
 .db-type-badge {
-    display: inline-flex;
-    align-items: center;
+    @include badge-geometry();
     gap: $space-1;
     background: $bg-hover;
-    padding: $space-tight $space-3;
-    border-radius: $radius-control;
-    font-size: $text-xs;
-    font-weight: $font-weight-semibold;
 
     &.mysql {
         color: $color-mysql;
@@ -90,33 +89,24 @@
 
 // Privilege tag
 .privilege-tag {
+    @include badge-geometry();
     background: $accent-glow;
     color: $accent-primary;
-    padding: $space-hair $space-2;
-    border-radius: $radius-badge;
-    font-size: $text-xs;
-    font-weight: $font-weight-semibold;
 }
 
 // Table name tag
 .table-tag {
     background: $bg-hover;
     border: 1px solid $border-subtle;
-    padding: $space-tight $space-3;
-    border-radius: $radius-control;
     @include mono-text();
+    @include badge-geometry();
     color: $text-secondary;
 }
 
 // Environment badge
 .env-badge {
-    display: inline-flex;
-    align-items: center;
+    @include badge-geometry();
     gap: $space-1;
-    padding: $space-tight $space-3;
-    border-radius: $radius-control;
-    font-size: $text-xs;
-    font-weight: $font-weight-semibold;
     border: 1px solid transparent;
 
     &.env-production {
@@ -144,16 +134,8 @@
 
 // Global Badge Base
 .badge {
-    display: inline-flex;
-    align-items: center;
+    @include badge-geometry();
     justify-content: center;
-    min-height: 1.5rem;
-    line-height: 1;
-    white-space: nowrap;
-    padding: $space-hair $space-2;
-    border-radius: $radius-badge;
-    font-size: $text-xs;
-    font-weight: $font-weight-semibold;
 }
 
 .badge-info {
@@ -185,19 +167,11 @@
 
 [data-slot="badge"] {
     box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
+    @include badge-geometry();
     justify-content: center;
     gap: $space-1;
-    min-height: 22px;
-    padding: $space-1 $space-2;
     border: 1px solid transparent;
-    border-radius: $radius-control;
-    font-size: $text-xs;
-    font-weight: $font-weight-semibold;
-    line-height: 1;
     letter-spacing: 0;
-    white-space: nowrap;
     overflow: visible;
     text-shadow: none;
     box-shadow: none;
@@ -242,9 +216,6 @@
     }
 
     &.status-badge-token {
-        min-height: 24px;
-        padding: $space-1 $space-2;
-        border-radius: $radius-full;
         gap: $space-tight;
     }
 }

@@ -30,7 +30,9 @@ $dbx-sqlite: #3d8fd1;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: $space-2;
+        width: $control-sm;
+        height: $control-sm;
+        padding: 0;
         background: transparent;
         border: 1px solid transparent;
         border-radius: $radius-control;
@@ -47,7 +49,8 @@ $dbx-sqlite: #3d8fd1;
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: $space-tight $space-3;
+        height: $control-sm;
+        padding: 0 $space-3;
         background: $bg-tertiary;
         border: 1px solid transparent;
         border-radius: $radius-control;
@@ -258,8 +261,8 @@ $dbx-sqlite: #3d8fd1;
         color: $text-tertiary;
 
         .dbx-status-dot { width: 7px; height: 7px; border-radius: $radius-full; background: currentColor; }
-        &.is-active { color: $success; .dbx-status-dot { box-shadow: 0 0 6px currentColor; } }
-        &.is-inactive { color: $warning; .dbx-status-dot { box-shadow: 0 0 6px currentColor; } }
+        &.is-active { color: $success; }
+        &.is-inactive { color: $warning; }
         &.is-missing { color: $text-tertiary; }
     }
 
@@ -333,7 +336,8 @@ $dbx-sqlite: #3d8fd1;
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: $space-2 $space-2 $space-2 $space-3;
+        height: $control-md;
+        padding: 0 $space-2 0 $space-3;
         max-width: 220px;
         background: transparent;
         border: 1px solid transparent;
@@ -354,7 +358,7 @@ $dbx-sqlite: #3d8fd1;
             border-color: $border-default;
             position: relative;
             // accent rule along the top edge marks the live tab
-            box-shadow: inset 0 2px 0 $accent-primary;
+            box-shadow: inset 0 2px 0 $accent-primary; // geometry: draws the active-tab top rule
         }
 
         // engine-tinted icon
@@ -369,7 +373,12 @@ $dbx-sqlite: #3d8fd1;
 
     // demo's `+` new-tab pill at the end of the strip
     .dbx-tab-new {
-        padding: $space-2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: $control-sm;
+        height: $control-sm;
+        padding: 0;
         align-self: center;
         border-radius: $radius-control;
         color: $text-tertiary;
@@ -565,16 +574,17 @@ $dbx-sqlite: #3d8fd1;
     }
 
     .dbx-editor-badge {
+        height: 20px; // geometry: badge height (20px badge spec)
         position: absolute;
         bottom: 10px;
         right: 14px;
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        padding: $space-hair $space-2;
+        padding: 0 $space-tight;
         background: $bg-card;
         border: 1px solid $border-default;
-        border-radius: $radius-full;
+        border-radius: $radius-badge;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
@@ -738,7 +748,8 @@ $dbx-sqlite: #3d8fd1;
             align-items: center;
             gap: $space-1;
             width: 100%;
-            padding: $space-2 $space-3;
+            min-height: $control-md;
+            padding: 0 $space-3;
             background: transparent;
             border: none;
             color: inherit;
@@ -805,9 +816,11 @@ $dbx-sqlite: #3d8fd1;
     .dbx-pk { color: $color-star; flex-shrink: 0; }
 
     .dbx-engine-tag {
-        display: inline-block;
-        padding: 1px $space-2;
-        border-radius: $radius-full;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
+        display: inline-flex;
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         &.is-mysql { background: fade($color-mysql, 16%); color: $color-mysql; }
@@ -854,7 +867,7 @@ $dbx-sqlite: #3d8fd1;
         align-items: center;
         justify-content: space-between;
         gap: $space-3;
-        min-height: 32px;
+        min-height: 32px; // geometry: fixed status-bar chrome
         padding: $space-1 $space-3;
         background: $bg-card;
         border-top: 1px solid $border-default;
@@ -883,7 +896,6 @@ $dbx-sqlite: #3d8fd1;
                 height: 6px;
                 border-radius: $radius-full;
                 background: currentColor;
-                box-shadow: 0 0 6px currentColor;
             }
         }
     }
@@ -919,15 +931,16 @@ $dbx-sqlite: #3d8fd1;
         align-items: center;
         gap: $space-1;
         flex-shrink: 0;
-        padding: 1px $space-2;
+        height: 20px; // geometry: inline action inside a dense tree row (badge-sized)
+        padding: 0 $space-2;
         background: $accent-glow;
         border: 1px solid transparent;
-        border-radius: $radius-full;
+        border-radius: $radius-control;
         color: $accent-primary;
         font-family: inherit;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
-        line-height: 1.6;
+        line-height: 1;
         cursor: pointer;
         transition: background $transition-fast, color $transition-fast, border-color $transition-fast;
 
@@ -947,7 +960,8 @@ $dbx-sqlite: #3d8fd1;
         gap: $space-2;
         width: 100%;
         margin: $space-2 0 $space-1;
-        padding: $space-2 $space-3;
+        min-height: $control-md;
+        padding: 0 $space-3;
         background: transparent;
         border: 1px dashed $border-active;
         border-radius: $radius-control;
@@ -1066,7 +1080,7 @@ $dbx-sqlite: #3d8fd1;
         background: $bg-card;
         border: 1px solid $border-default;
         border-radius: $radius-control;
-        box-shadow: $shadow-overlay;
+        box-shadow: $shadow-raised;
         z-index: $z-tooltip;
         animation: dbx-pop 0.12s $ease-out-quart;
 
@@ -1171,7 +1185,7 @@ $dbx-sqlite: #3d8fd1;
         &:focus {
             outline: none;
             border-color: $accent-primary;
-            box-shadow: 0 0 0 3px $accent-glow;
+            box-shadow: $focus-ring;
         }
     }
 }
@@ -1218,7 +1232,8 @@ $dbx-sqlite: #3d8fd1;
     display: flex;
     align-items: center;
     gap: $space-2;
-    padding: $space-2 $space-3;
+    min-height: $control-md;
+    padding: 0 $space-3;
     background: $bg-elevated;
     border: 1px solid $border-default;
     border-radius: $radius-control;
@@ -1226,7 +1241,7 @@ $dbx-sqlite: #3d8fd1;
 
     &:focus-within {
         border-color: $accent-primary;
-        box-shadow: 0 0 0 3px $accent-glow;
+        box-shadow: $focus-ring;
     }
 
     > svg { flex-shrink: 0; color: $text-tertiary; }
@@ -1322,7 +1337,7 @@ $dbx-sqlite: #3d8fd1;
     display: grid;
     place-items: center;
     width: 24px;
-    height: 24px;
+    height: 24px; // geometry: inline icon button inside a 32px compact grid cell
     padding: 0;
     background: transparent;
     border: none;
@@ -1437,7 +1452,7 @@ $dbx-sqlite: #3d8fd1;
     display: grid;
     place-items: center;
     width: 24px;
-    height: 24px;
+    height: 24px; // geometry: engine glyph icon
     flex-shrink: 0;
     color: $text-secondary;
 }
@@ -1460,11 +1475,12 @@ $dbx-sqlite: #3d8fd1;
 }
 
 .dbx-eng-badge {
+    height: 20px; // geometry: badge height (20px badge spec)
     display: inline-flex;
     align-items: center;
     gap: $space-tight;
     flex-shrink: 0;
-    padding: $space-1 $space-2;
+    padding: 0 $space-tight;
     border-radius: $radius-badge;
     font-size: $text-xs;
 
@@ -1564,7 +1580,8 @@ $dbx-sqlite: #3d8fd1;
 
 // Compact variant of the shared .dbx-input, for the column grid's cells.
 .dbx-input--sm {
-    padding: $space-tight $space-2;
+    min-height: $control-sm;
+    padding: 0 $space-2;
     input {
         font-family: $font-mono;
         font-size: $text-xs;
@@ -1755,7 +1772,7 @@ $dbx-sqlite: #3d8fd1;
     display: grid;
     place-items: center;
     width: 22px;
-    height: 22px;
+    height: 22px; // geometry: drawn checkbox sized to the compact grid cell
     padding: 0;
     background: transparent;
     border: 1.5px solid $border-active;

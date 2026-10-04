@@ -13,7 +13,7 @@
     display: grid;
     place-items: center;
     width: 26px;
-    height: 26px;
+    height: 26px; // geometry: icon tile
     flex-shrink: 0;
     border-radius: $radius-control;
     @include status-variant($success, $success-bg);

@@ -269,8 +269,6 @@
 
     &:hover {
         border-color: $border-hover;
-        transform: translateY(-1px);
-        box-shadow: $shadow-raised;
     }
 
 }
@@ -312,16 +310,18 @@
     border-radius: 50%;
     flex-shrink: 0;
 
-    &.running { background: $success; box-shadow: 0 0 0 3px fade($success-raw, 16%); opacity: 1; }
+    &.running { background: $success; opacity: 1; }
     &.stopped { background: $text-tertiary; opacity: 0.4; }
 }
 
 .dx-status-pill {
     display: inline-flex;
-    padding: 1px $space-2;
-    border-radius: $radius-full;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
     font-size: $text-xs;
-    font-weight: $font-weight-semibold;
+    font-weight: $font-weight-medium;
     background: $bg-tertiary;
     color: $text-tertiary;
 
@@ -514,7 +514,7 @@
         }
 
         &.is-selected {
-            box-shadow: inset 3px 0 0 $accent-primary;
+            box-shadow: inset 3px 0 0 $accent-primary; // geometry: draws the selected-row rule
         }
     }
 }
@@ -551,9 +551,11 @@
 }
 
 .dx-code-pill {
-    display: inline-flex;
+    display: inline-block;
+    height: 20px; // geometry: badge height (20px badge spec)
+    line-height: 20px; // block, not flex, so the truncate ellipsis still works
     max-width: 100%;
-    padding: $space-hair $space-2;
+    padding: 0 $space-tight;
     border-radius: $radius-badge;
     background: $bg-tertiary;
     color: $text-secondary;
@@ -617,10 +619,10 @@
 }
 
 .dx-row-action {
-    width: 28px;
-    height: 28px;
+    width: $control-sm;
+    height: $control-sm;
     border: 1px solid $border-default;
-    border-radius: $radius-badge;
+    border-radius: $radius-control;
     background: transparent;
     color: $text-tertiary;
     display: inline-flex;
@@ -647,9 +649,9 @@
 }
 
 .dx-action-btn {
-    min-height: 30px;
+    min-height: $control-md;
     border: 1px solid $border-default;
-    border-radius: $radius-badge;
+    border-radius: $radius-control;
     background: $bg-card;
     color: $text-secondary;
     display: inline-flex;
@@ -684,10 +686,10 @@
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    height: 28px;
+    height: $control-sm;
     padding: 0 $space-2;
     border: 1px dashed $border-default;
-    border-radius: $radius-badge;
+    border-radius: $radius-control;
     color: $text-tertiary;
     font-size: $text-xs;
     white-space: nowrap;
@@ -695,13 +697,13 @@
 }
 
 .dx-action-protected {
-    min-height: 30px;
+    min-height: $control-md;
     display: inline-flex;
     align-items: center;
     gap: $space-2;
     padding: 0 $space-3;
     border: 1px dashed $border-default;
-    border-radius: $radius-badge;
+    border-radius: $radius-control;
     color: $text-tertiary;
     font-size: $text-xs;
     white-space: nowrap;
@@ -724,7 +726,7 @@
 
 .dx-inspector-icon {
     width: 38px;
-    height: 38px;
+    height: 38px; // geometry: icon tile
     border-radius: $radius-control;
     background: fade($info-raw, 12%);
     color: $info;
@@ -973,6 +975,11 @@
         padding: $space-3;
     }
 
+    // The header takes the shared 32px header height; cells keep their padding.
+    th {
+        padding-block: 0;
+    }
+
     tbody tr {
         background: $bg-card;
 
@@ -1007,7 +1014,7 @@
     border: none;
     border-left: 1px solid $border-default;
     border-radius: 0;
-    box-shadow: -10px 0 36px rgba(0, 0, 0, 0.42);
+    box-shadow: $shadow-overlay;
     z-index: $z-modal;
     animation: drawer-slide 0.24s cubic-bezier(0.32, 0.72, 0.24, 1);
 }

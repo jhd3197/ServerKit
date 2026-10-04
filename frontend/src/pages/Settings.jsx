@@ -26,11 +26,11 @@ import CloudTab from '../components/settings/CloudTab';
 import StorageTab from '../components/settings/StorageTab';
 import PluginSlot from '../components/PluginSlot';
 import { Activity, CloudCog, Code, Database, HardDrive, Layers, Link2, PaintBucket, Sparkles, Trash2, Webhook, Settings as SettingsIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { SegControl } from '@/components/ds';
 import PageLayout from '../layouts/PageLayout';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
 
 const VALID_TABS = ['profile', 'security', 'connections', 'cloud', 'appearance', 'sidebar', 'whitelabel', 'notifications', 'system', 'users', 'activity', 'site', 'sso', 'api', 'webhooks', 'ai', 'migrations', 'recyclebin', 'storage', 'developer', 'about'];
 
@@ -98,8 +98,8 @@ const Settings = () => {
                     )}
                     {activeGroup === 'account' && (
                         <>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'profile' ? 'active' : ''}`}
                         onClick={() => setActiveTab('profile')}
                     >
@@ -109,8 +109,8 @@ const Settings = () => {
                         </svg>
                         {t('app.settings.profile', 'Profile')}
                     </Button>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'security' ? 'active' : ''}`}
                         onClick={() => setActiveTab('security')}
                     >
@@ -120,8 +120,8 @@ const Settings = () => {
                         </svg>
                         {t('common.labels.security', 'Security')}
                     </Button>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'notifications' ? 'active' : ''}`}
                         onClick={() => setActiveTab('notifications')}
                     >
@@ -132,8 +132,8 @@ const Settings = () => {
                         {t('app.settings.notifications', 'Notifications')}
                     </Button>
                     <div className="settings-nav-divider">{t('app.settings.preferences', 'Preferences')}</div>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'appearance' ? 'active' : ''}`}
                         onClick={() => setActiveTab('appearance')}
                     >
@@ -150,8 +150,8 @@ const Settings = () => {
                         </svg>
                         {t('app.settings.appearance', 'Appearance')}
                     </Button>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'sidebar' ? 'active' : ''}`}
                         onClick={() => setActiveTab('sidebar')}
                     >
@@ -161,8 +161,8 @@ const Settings = () => {
                         </svg>
                         {t('app.settings.sidebar', 'Sidebar')}
                     </Button>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'whitelabel' ? 'active' : ''}`}
                         onClick={() => setActiveTab('whitelabel')}
                     >
@@ -172,8 +172,8 @@ const Settings = () => {
                             {import.meta.env.DEV && !devMode && !isAdmin && (
                                 <>
                                     <div className="settings-nav-divider">{t('app.settings.localDev', 'Local Dev')}</div>
-                                    <Button
-                                        variant="ghost"
+                                    <Button variant="unstyled"
+                                        type="button"
                                         className="settings-nav-item"
                                         onClick={() => navigate('/style-guide')}
                                     >
@@ -182,8 +182,8 @@ const Settings = () => {
                                     </Button>
                                 </>
                             )}
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'about' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('about')}
                             >
@@ -198,8 +198,8 @@ const Settings = () => {
                     )}
                     {activeGroup === 'admin' && isAdmin && (
                         <>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'users' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('users')}
                             >
@@ -211,24 +211,24 @@ const Settings = () => {
                                 </svg>
                                 {t('app.settings.users', 'Users')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'activity' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('activity')}
                             >
                                 <Activity size={18} />
                                 {t('app.settings.activity', 'Activity')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'recyclebin' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('recyclebin')}
                             >
                                 <Trash2 size={18} />
                                 {t('app.settings.recycleBin', 'Recycle bin')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'site' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('site')}
                             >
@@ -238,24 +238,24 @@ const Settings = () => {
                                 </svg>
                                 {t('app.settings.siteSettings', 'Site Settings')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'connections' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('connections')}
                             >
                                 <Link2 size={18} />
                                 {t('app.settings.connections', 'Connections')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'cloud' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('cloud')}
                             >
                                 <CloudCog size={18} />
                                 {t('app.settings.serverkitCloud', 'ServerKit Cloud')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'sso' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('sso')}
                             >
@@ -266,48 +266,48 @@ const Settings = () => {
                                 </svg>
                                 SSO
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'api' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('api')}
                             >
                                 <Code size={18} />
                                 API
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'webhooks' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('webhooks')}
                             >
                                 <Webhook size={18} />
                                 {t('app.settings.webhooks', 'Webhooks')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'ai' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('ai')}
                             >
                                 <Sparkles size={18} />
                                 {t('app.settings.aiAssistant', 'AI Assistant')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'migrations' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('migrations')}
                             >
                                 <Database size={18} />
                                 {t('app.settings.migrations', 'Migrations')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'storage' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('storage')}
                             >
                                 <HardDrive size={18} />
                                 {t('app.settings.storage', 'Storage')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'system' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('system')}
                             >
@@ -322,8 +322,8 @@ const Settings = () => {
                                 <>
                                     <div className="settings-nav-divider">{devMode ? 'Developer' : 'Local Dev'}</div>
                                     {devMode && (
-                                        <Button
-                                            variant="ghost"
+                                        <Button variant="unstyled"
+                                            type="button"
                                             className={`settings-nav-item ${activeTab === 'developer' ? 'active' : ''}`}
                                             onClick={() => setActiveTab('developer')}
                                         >
@@ -331,8 +331,8 @@ const Settings = () => {
                                             {t('app.settings.iconReference', 'Icon Reference')}
                                         </Button>
                                     )}
-                                    <Button
-                                        variant="ghost"
+                                    <Button variant="unstyled"
+                                        type="button"
                                         className="settings-nav-item"
                                         onClick={() => navigate('/style-guide')}
                                     >

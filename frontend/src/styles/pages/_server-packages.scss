@@ -37,8 +37,9 @@
     }
 
     &__chip {
-        padding: 0.4rem 0.85rem;
-        border-radius: $radius-full;
+        height: $control-sm;
+        padding: 0 $space-3;
+        border-radius: $radius-control;
         border: 1px solid var(--border);
         background: var(--surface-2);
         color: var(--text-dim);
@@ -182,7 +183,7 @@
         align-items: center;
         padding: 0.6rem 0;
         border-bottom: 1px solid var(--border-soft);
-        min-height: 40px;
+        min-height: 40px; // geometry: table-row height (40 default row)
 
         &:last-child {
             border-bottom: none;

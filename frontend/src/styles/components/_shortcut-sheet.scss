@@ -8,7 +8,7 @@
         align-items: center;
         justify-content: space-between;
         gap: $space-4;
-        min-height: 42px;
+        min-height: $control-lg; // list row: 40 (table row spec)
         padding-block: $space-2;
         border-block-end: 1px solid $border-subtle;
 

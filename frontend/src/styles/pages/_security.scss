@@ -12,9 +12,6 @@
         .card {
             background: var(--surface);
             border: 1px solid var(--border-soft);
-            border-radius: var(--radius);
-            padding: $space-5;
-            box-shadow: none;
         }
 
         .card-header {
@@ -40,8 +37,8 @@
         .card.sec-flush {
             padding: 0;
 
-            .card-header { padding: $space-5 $space-4 0; }
-            > .card-body { padding: 0 $space-4 $space-5; }
+            .card-header { padding: $space-4 $space-4 0; }
+            > .card-body { padding: 0 $space-4 $space-4; }
         }
 
         // Stateful card borders
@@ -343,7 +340,7 @@
         display: flex;
         align-items: center;
         gap: $space-3;
-        min-height: 46px;
+        min-height: 40px; // geometry: list-row height (40 default row)
         padding: $space-tight 0;
         border-top: 1px solid var(--border-soft);
         font-size: $text-sm;
@@ -453,7 +450,7 @@
         display: grid;
         place-items: center;
         width: 38px;
-        height: 38px;
+        height: 38px; // geometry: icon tile
         margin-bottom: $space-3;
         border-radius: $radius-card;
         background: var(--surface-2);
@@ -492,10 +489,10 @@
         flex: 1;
         min-width: 0;
         padding: 0 $space-2;
-        height: 32px;
+        height: $control-md;
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
-        border-radius: var(--radius-sm);
+        border-radius: $radius-control;
         color: var(--text);
         font-size: $text-sm;
 
@@ -555,7 +552,7 @@
 
         .spinner {
             width: 32px;
-            height: 32px;
+            height: 32px; // geometry: spinner icon
         }
 
         p {
@@ -624,7 +621,7 @@
             display: grid;
             place-items: center;
             width: 32px;
-            height: 32px;
+            height: 32px; // geometry: icon tile
             border-radius: $radius-card;
             flex-shrink: 0;
         }
@@ -790,7 +787,7 @@
 
         .spinner {
             width: 40px;
-            height: 40px;
+            height: 40px; // geometry: spinner icon
         }
     }
 

@@ -68,8 +68,8 @@
     padding: $space-2;
     background: var(--surface-2);
     border: 1px solid var(--border-strong);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    border-radius: $radius-overlay;
+    box-shadow: $shadow-raised;
     color: var(--text);
 
     &__head {
@@ -606,7 +606,7 @@
 
     &:focus {
         border-color: $accent-primary;
-        box-shadow: 0 0 0 2px $accent-glow;
+        box-shadow: $focus-ring;
     }
 }
 
@@ -643,10 +643,10 @@
 // the compact mono look of the other bar controls.
 .skw-bar__ctl .skw-refresh-trigger,
 .skw-bar__ctl .skw-serverpick {
-    height: 32px;
+    height: $control-md;
     width: auto;
     padding: 0 $space-3;
-    border-radius: $radius-card;
+    border-radius: $radius-control;
     font-size: $text-xs;
 }
 

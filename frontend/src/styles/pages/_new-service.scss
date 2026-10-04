@@ -57,7 +57,7 @@
         display: grid;
         place-items: center;
         width: 24px;
-        height: 24px;
+        height: 24px; // geometry: stepper dot
         border-radius: $radius-full;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
@@ -165,7 +165,7 @@
         display: grid;
         place-items: center;
         width: 42px;
-        height: 42px;
+        height: 42px; // geometry: icon tile
         flex-shrink: 0;
         border-radius: $radius-card;
         background: var(--surface-2);
@@ -218,7 +218,7 @@
         display: grid;
         place-items: center;
         width: 36px;
-        height: 36px;
+        height: 36px; // geometry: icon tile
         flex-shrink: 0;
         border-radius: $radius-card;
         background: $bg-elevated;
@@ -239,7 +239,7 @@
 
         img {
             width: 36px;
-            height: 36px;
+            height: 36px; // geometry: avatar
             border-radius: $radius-full;
         }
 
@@ -308,7 +308,7 @@
 
         &--active {
             border-color: rgba(20, 184, 166, 0.55);
-            box-shadow: inset 0 0 0 1px rgba(20, 184, 166, 0.18);
+            box-shadow: inset 0 0 0 1px rgba(20, 184, 166, 0.18); // geometry: inset border
         }
 
         span,
@@ -419,7 +419,7 @@
 
         &--active {
             border-color: rgba(20, 184, 166, 0.55);
-            box-shadow: inset 0 0 0 1px rgba(20, 184, 166, 0.18);
+            box-shadow: inset 0 0 0 1px rgba(20, 184, 166, 0.18); // geometry: inset border
 
             > svg {
                 color: $success;
@@ -518,7 +518,7 @@
 
         &--active {
             border-color: rgba(20, 184, 166, 0.55);
-            box-shadow: inset 0 0 0 1px rgba(20, 184, 166, 0.18);
+            box-shadow: inset 0 0 0 1px rgba(20, 184, 166, 0.18); // geometry: inset border
         }
     }
 
@@ -526,7 +526,7 @@
         display: grid;
         place-items: center;
         width: 44px;
-        height: 44px;
+        height: 44px; // geometry: icon tile
         border-radius: $radius-card;
         background: var(--surface-2);
         color: var(--accent-bright);
@@ -625,7 +625,7 @@
         }
 
         input {
-            min-height: 40px;
+            min-height: $control-md;
             width: 100%;
             background: $bg-elevated;
             border: 1px solid $border-subtle;
@@ -636,7 +636,7 @@
             &:focus {
                 outline: none;
                 border-color: $accent-primary;
-                box-shadow: 0 0 0 3px $accent-glow;
+                box-shadow: $focus-ring;
             }
         }
     }
@@ -790,12 +790,13 @@
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        min-height: 24px;
-        padding: 0 $space-2;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
         border: 1px solid $border-subtle;
-        border-radius: $radius-full;
+        border-radius: $radius-badge;
         color: $text-secondary;
         font-size: $text-xs;
+        font-weight: $font-weight-medium;
         line-height: 1;
     }
 
@@ -833,7 +834,6 @@
         align-items: center;
         gap: $space-2;
         flex-wrap: wrap;
-        min-height: 32px;
         padding: $space-2 $space-3;
         background: $bg-card;
         border: 1px solid $border-subtle;
@@ -850,10 +850,10 @@
     &__manifest-badge {
         display: inline-flex;
         align-items: center;
-        min-height: 20px;
-        padding: 0 $space-2;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
         background: rgba(99, 102, 241, 0.12);
-        border-radius: $radius-full;
+        border-radius: $radius-badge;
         color: $accent-primary;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
@@ -869,11 +869,11 @@
     &__manifest-chip {
         display: inline-flex;
         align-items: center;
-        min-height: 20px;
-        padding: 0 $space-2;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
         margin-left: auto;
         background: rgba(16, 185, 129, 0.1);
-        border-radius: $radius-full;
+        border-radius: $radius-badge;
         color: $success;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
@@ -906,13 +906,14 @@
         span {
             display: inline-flex;
             align-items: center;
-            min-height: 24px;
-            padding: 0 $space-2;
+            min-height: 20px; // geometry: badge height (20px badge spec; long values wrap)
+            padding: 0 $space-tight;
             background: $bg-card;
             border: 1px solid $border-subtle;
-            border-radius: $radius-full;
+            border-radius: $radius-badge;
             color: $text-secondary;
             font-size: $text-xs;
+            font-weight: $font-weight-medium;
             overflow-wrap: anywhere;
         }
     }
@@ -951,8 +952,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        min-height: 40px;
-        padding: 0 $space-3;
+        padding: $space-2 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
         border-radius: $radius-control;
@@ -970,7 +970,7 @@
         align-items: center;
         justify-content: space-between;
         gap: $space-3;
-        min-height: 44px;
+        min-height: $control-md;
         padding: 0 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;

@@ -7,6 +7,22 @@
     @include flex-center();
     padding: $space-5;
     background: $bg-body;
+
+    // Setup is the other screen (with sign-in) where controls default to the
+    // large size.
+    .btn:not(.btn-sm):not(.btn-link):not(.btn-icon),
+    .btn-wizard-next,
+    .btn-wizard-prev,
+    .ui-input,
+    .ui-select-trigger {
+        height: $control-lg;
+    }
+
+    .btn-wizard-next,
+    .btn-wizard-prev {
+        padding-block: 0;
+        border-radius: $radius-control;
+    }
 }
 
 .wizard-card {
@@ -27,7 +43,7 @@
 
     .wizard-logo {
         width: 48px;
-        height: 48px;
+        height: 48px; // geometry: logo
         margin: 0 auto $space-4;
     }
 
@@ -56,7 +72,7 @@
 .wizard-progress-step {
     @include flex-center();
     width: 32px;
-    height: 32px;
+    height: 32px; // geometry: stepper dot
     border-radius: $radius-full;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
@@ -177,7 +193,7 @@
         top: $space-3;
         right: $space-3;
         width: 22px;
-        height: 22px;
+        height: 22px; // geometry: check badge icon
         border-radius: $radius-full;
         @include flex-center();
         background: $accent-primary;
@@ -234,11 +250,14 @@
     }
 
     .tier-card-badge {
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
         font-size: $text-xs;
-        padding: $space-hair $space-2;
+        padding: 0 $space-tight;
         background: $accent-primary;
         color: #fff;
-        border-radius: $radius-full;
+        border-radius: $radius-badge;
         font-weight: $font-weight-medium;
     }
 
@@ -599,10 +618,11 @@
 .summary-tag {
     display: inline-flex;
     align-items: center;
-    padding: $space-1 $space-3;
+    height: 20px; // geometry: badge height (20px badge spec)
+    padding: 0 $space-tight;
     background: fade($accent-primary-raw, 12%);
     color: $accent-primary;
-    border-radius: $radius-full;
+    border-radius: $radius-badge;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
 }

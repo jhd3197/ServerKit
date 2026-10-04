@@ -84,7 +84,7 @@ $skwe-pane-w: 340px;
     &__frame {
         flex: none;
         max-width: 100%;
-        box-shadow: var(--shadow-lg);
+        box-shadow: none;
     }
 
     &__caption {
@@ -178,7 +178,7 @@ $skwe-pane-w: 340px;
         &:focus-visible {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-bg);
+            box-shadow: $focus-ring;
         }
     }
 
@@ -285,8 +285,8 @@ $skwe-pane-w: 340px;
     // Row delete. Stays neutral until hovered; a column of red bins would
     // shout over the settings themselves.
     &__del {
-        width: 26px;
-        height: 26px;
+        width: $control-sm;
+        height: $control-sm;
         display: grid;
         place-items: center;
         border: none;
@@ -396,7 +396,7 @@ $skwe-pane-w: 340px;
 
         &:focus-visible {
             outline: none;
-            box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--accent);
+            box-shadow: $focus-ring;
         }
     }
 }
@@ -408,14 +408,14 @@ $skwe-pane-w: 340px;
     display: flex;
     align-items: center;
     gap: $space-hair;
-    padding: $space-hair;
+    padding: 1px; // 28px buttons + 1px inset + border = 32
     border: 1px solid var(--border);
-    border-radius: $radius-card;
+    border-radius: $radius-control;
     background: var(--surface-2);
 
     &__btn {
-        width: 26px;
-        height: 26px;
+        width: $control-sm;
+        height: $control-sm;
         flex-shrink: 0;
         display: grid;
         place-items: center;
@@ -497,7 +497,7 @@ $skwe-pane-w: 340px;
         // selecting one cannot shift the row.
         &.is-on {
             border-color: var(--text);
-            box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--text-faint);
+            box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--text-faint); // geometry: selection ring drawn around a color swatch
         }
     }
 }

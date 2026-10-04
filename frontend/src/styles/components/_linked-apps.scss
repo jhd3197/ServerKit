@@ -91,7 +91,7 @@
     align-items: center;
     justify-content: center;
     width: 36px;
-    height: 36px;
+    height: 36px; // geometry: icon tile
     background: $accent-glow;
     color: $accent-primary;
     border-radius: $radius-control;
@@ -315,7 +315,7 @@
     align-items: center;
     justify-content: center;
     width: 32px;
-    height: 32px;
+    height: 32px; // geometry: connector icon disc
     background: $accent-glow;
     color: $accent-primary;
     border-radius: 50%;

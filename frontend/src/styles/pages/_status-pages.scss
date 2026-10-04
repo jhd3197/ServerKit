@@ -541,7 +541,7 @@
     }
 
     .public-status-badge {
-        min-height: 34px;
+        min-height: 34px; // geometry: public status summary banner, not a chip
         padding: $space-2 $space-3;
     }
 

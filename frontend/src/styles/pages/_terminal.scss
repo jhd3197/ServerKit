@@ -111,7 +111,7 @@ $lk-default:  #646b7a;
         background: var(--text-ghost);
         flex-shrink: 0;
 
-        &.is-on { background: var(--green); box-shadow: 0 0 5px var(--green); }
+        &.is-on { background: var(--green); }
     }
 
     &__name {
@@ -363,8 +363,9 @@ $lk-default:  #646b7a;
         width: 100%;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: $radius-card;
-        padding: $space-tight $space-2 $space-tight $space-8;
+        height: $control-md;
+        border-radius: $radius-control;
+        padding: 0 $space-2 0 $space-8;
         font-size: $text-sm;
         color: $text-primary;
         @include transition(all);
@@ -660,8 +661,9 @@ $lk-default:  #646b7a;
 .lv-select {
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: $radius-card;
-    padding: $space-tight $space-2;
+    border-radius: $radius-control;
+    height: $control-md;
+    padding: 0 $space-2;
     font-size: $text-sm;
     color: $text-primary;
     cursor: pointer;
@@ -672,20 +674,21 @@ $lk-default:  #646b7a;
         outline: none;
     }
 
-    // The Radix trigger (LogToolbar) keeps the compact toolbar size rather
-    // than the full-width 40px form field it defaults to.
+    // The Radix trigger (LogToolbar) sizes to its value, not the full-width
+    // form field it defaults to.
     &.ui-select-trigger {
         width: auto;
-        height: auto;
         gap: $space-1;
     }
 }
 
 .lv-icon-btn {
+    width: $control-sm;
+    height: $control-sm;
     background: transparent;
     border: none;
-    padding: $space-tight;
-    border-radius: $radius-card;
+    padding: 0;
+    border-radius: $radius-control;
     color: var(--text-dim);
     cursor: pointer;
     display: flex;
@@ -712,10 +715,11 @@ $lk-default:  #646b7a;
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    padding: $space-tight $space-3;
+    height: $control-md;
+    padding: 0 $space-3;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: $radius-card;
+    border-radius: $radius-control;
     color: var(--text-dim);
     font-size: $text-sm;
     font-weight: $font-weight-medium;
@@ -739,15 +743,14 @@ $lk-default:  #646b7a;
 
     &.on {
         background: var(--green);
-        box-shadow: 0 0 0 0 fade($success-raw, 60%);
         animation: lv-pulse 1.6s ease-out infinite;
     }
 }
 
 @keyframes lv-pulse {
-    0%   { box-shadow: 0 0 0 0 fade($success-raw, 60%); }
-    70%  { box-shadow: 0 0 0 8px fade($success-raw, 0%); }
-    100% { box-shadow: 0 0 0 0 fade($success-raw, 0%); }
+    0%   { opacity: 1; }
+    70%  { opacity: 0.4; }
+    100% { opacity: 1; }
 }
 
 // ─── Content (the log well) ───────────────────────────
@@ -797,7 +800,7 @@ $lk-default:  #646b7a;
     font-weight: $font-weight-semibold;
     color: #fff;
     background: var(--red, #dc2626);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: $shadow-raised;
     pointer-events: none;
 }
 
@@ -982,8 +985,8 @@ $lk-default:  #646b7a;
 
         input,
         .ui-select-trigger {
-            min-height: 36px;
-            padding: $space-2 $space-3;
+            min-height: $control-md;
+            padding: 0 $space-3;
             border: 1px solid $border-subtle;
             border-radius: $radius-control;
             background: $bg-card;
@@ -1014,10 +1017,10 @@ $lk-default:  #646b7a;
 }
 
 .unit-chip {
-    min-height: 24px;
-    padding: $space-1 $space-3;
+    min-height: $control-sm;
+    padding: 0 $space-3;
     border: 1px solid $border-subtle;
-    border-radius: $radius-full;
+    border-radius: $radius-control;
     background: $bg-card;
     font-size: $text-xs;
     color: $text-secondary;
@@ -1190,8 +1193,8 @@ $lk-default:  #646b7a;
     }
 
     .process-action-button {
-        width: 28px;
-        height: 28px;
+        width: $control-sm;
+        height: $control-sm;
     }
 }
 

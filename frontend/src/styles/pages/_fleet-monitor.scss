@@ -66,8 +66,8 @@
 .fleet-modal {
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-card;
-    box-shadow: var(--shadow-lg);
+    border-radius: $radius-overlay;
+    box-shadow: $shadow-overlay;
 }
 
 // The heatmap grid that used to live here is gone: colour-coded cells were a

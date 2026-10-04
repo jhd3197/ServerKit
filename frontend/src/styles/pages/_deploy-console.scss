@@ -42,8 +42,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
+        width: $control-md;
+        height: $control-md;
         border-radius: $radius-control;
         border: 1px solid $border-subtle;
         color: $text-secondary;
@@ -74,10 +74,11 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        padding: $space-1 $space-3;
-        border-radius: $radius-full;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
         font-size: $text-xs;
-        font-weight: $font-weight-semibold;
+        font-weight: $font-weight-medium;
         text-transform: capitalize;
 
         &--pending { background: var(--surface-3); color: var(--text-faint); }
@@ -264,7 +265,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        padding: $space-1 $space-2;
+        height: $control-sm;
+        padding: 0 $space-2;
         font-size: $text-xs;
         border-radius: $radius-control;
         border: 1px solid $border-subtle;
@@ -306,7 +308,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         color: $text-tertiary;
         flex: 1 1 160px;
         max-width: 280px;
-        min-height: 28px;
+        min-height: $control-sm;
 
         input {
             border: none;
@@ -369,7 +371,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         // still catches the eye.
         &--error {
             background: $dc-error;
-            box-shadow: 0 0 3px rgba($dc-error, 0.9);
+            box-shadow: 0 0 3px rgba($dc-error, 0.9); // geometry: deploy-console minimap error tick bleed (exempt segment)
             min-height: 2px;
         }
     }
@@ -447,7 +449,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         color: #fff;
         font-size: $text-xs;
         cursor: pointer;
-        box-shadow: $shadow-overlay;
+        box-shadow: $shadow-raised;
     }
 
     // ---- error card ----
@@ -691,7 +693,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     // The line prev/next landed on, so the eye finds it after the scroll.
     &__line.is-current {
         background: rgba(255, 255, 255, 0.07);
-        box-shadow: inset 2px 0 0 var(--accent-bright);
+        box-shadow: inset 2px 0 0 var(--accent-bright); // geometry: draws the current-line rule
     }
 
     // Skip layout and paint for lines that are off-screen. This is what keeps a

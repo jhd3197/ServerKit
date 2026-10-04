@@ -25,7 +25,7 @@
     &:focus {
         border-color: $accent-primary;
         outline: none;
-        box-shadow: 0 0 0 3px fade($accent-primary-raw, 20%);
+        box-shadow: $focus-ring;
     }
 
     &::placeholder {
@@ -70,7 +70,7 @@
 
     .two-fa-icon {
         width: 48px;
-        height: 48px;
+        height: 48px; // geometry: icon tile
         display: flex;
         align-items: center;
         justify-content: center;
@@ -145,7 +145,7 @@
 
     .step-number {
         width: 28px;
-        height: 28px;
+        height: 28px; // geometry: step number disc, not a control
         display: flex;
         align-items: center;
         justify-content: center;

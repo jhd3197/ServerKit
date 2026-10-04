@@ -68,7 +68,7 @@
         place-items: center;
         flex-shrink: 0;
         width: 36px;
-        height: 36px;
+        height: 36px; // geometry: icon tile
         border-radius: $radius-control;
         background: var(--surface-2);
         border: 1px solid $border-subtle;
@@ -126,12 +126,15 @@
 }
 
 .detail-source-tag {
+    display: inline-flex;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
     margin-left: auto;
     font-size: $text-xs;
     text-transform: none;
     color: var(--text-faint);
     background: var(--surface-2);
-    padding: $space-hair $space-2;
+    padding: 0 $space-tight;
     border-radius: $radius-badge;
 }
 
@@ -159,7 +162,10 @@
 }
 
 .env-preview-chip {
-    padding: $space-hair $space-2;
+    display: inline-flex;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
+    padding: 0 $space-tight;
     font-family: var(--mono);
     font-size: $text-xs;
     color: var(--text-dim);
@@ -231,14 +237,15 @@
 }
 
 .category-badge {
+    height: 20px; // geometry: badge height (20px badge spec)
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    padding: $space-hair $space-2;
+    padding: 0 $space-tight;
     font-size: $text-xs;
     color: var(--text-dim);
     background: var(--surface-2);
-    border-radius: $radius-control;
+    border-radius: $radius-badge;
     text-transform: capitalize;
 }
 
@@ -256,7 +263,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-lg);
+    box-shadow: $shadow-overlay;
     animation: drawer-slide-in 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 
     .modal-header {
@@ -411,19 +418,25 @@
 }
 
 .required-badge {
+    display: inline-flex;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
     font-size: $text-xs;
-    padding: $space-hair $space-2;
+    padding: 0 $space-tight;
     @include status-variant(var(--accent-bright), var(--accent-bg));
     border-radius: $radius-badge;
-    font-weight: $font-weight-semibold;
+    font-weight: $font-weight-medium;
 }
 
 .auto-badge {
+    display: inline-flex;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
     font-size: $text-xs;
-    padding: $space-hair $space-2;
+    padding: 0 $space-tight;
     @include status-variant(var(--green), var(--green-bg));
     border-radius: $radius-badge;
-    font-weight: $font-weight-semibold;
+    font-weight: $font-weight-medium;
 }
 
 .variable-description {

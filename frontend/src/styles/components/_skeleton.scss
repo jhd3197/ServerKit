@@ -34,14 +34,14 @@
 
     &--title {
         width: 40%;
-        height: 20px;
+        height: 20px; // geometry: skeleton title bar (content placeholder)
         border-radius: $radius-control;
     }
 
     &--avatar {
         flex: none;
         width: 48px;
-        height: 48px;
+        height: 48px; // geometry: skeleton avatar
         border-radius: $radius-card;
     }
 

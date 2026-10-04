@@ -13,11 +13,11 @@
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    height: 32px;
+    height: $control-md;
     padding: 0 $space-3;
     max-width: 210px;
     border: 1px solid var(--border);
-    border-radius: $radius-card;
+    border-radius: $radius-control;
     background: var(--surface-2);
     color: var(--text-dim);
     font-size: $text-sm;

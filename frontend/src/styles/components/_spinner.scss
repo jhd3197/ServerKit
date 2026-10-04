@@ -20,22 +20,22 @@
 
     &-md {
         width: 24px;
-        height: 24px;
+        height: 24px; // geometry: spinner (icon size)
 
         .spinner-ring {
             width: 24px;
-            height: 24px;
+            height: 24px; // geometry: spinner (icon size)
             border-width: 3px;
         }
     }
 
     &-lg {
         width: 40px;
-        height: 40px;
+        height: 40px; // geometry: spinner (icon size)
 
         .spinner-ring {
             width: 40px;
-            height: 40px;
+            height: 40px; // geometry: spinner (icon size)
             border-width: 4px;
         }
     }

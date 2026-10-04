@@ -71,7 +71,7 @@
     // job cell: accent icon tile + name / description / mono command
     .cron-ico {
         width: 30px;
-        height: 30px;
+        height: 30px; // geometry: icon tile
         border-radius: $radius-card;
         display: grid;
         place-items: center;
@@ -529,14 +529,19 @@
         color: var(--text);
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
+        border-radius: $radius-control;
         outline: none;
+
+        &:not(textarea) {
+            height: $control-md;
+            padding-block: 0;
+        }
 
         &::placeholder { color: var(--text-ghost); }
 
         &:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-bg);
+            box-shadow: $focus-ring;
         }
 
         &--mono {

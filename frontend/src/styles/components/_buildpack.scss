@@ -33,7 +33,7 @@
         align-items: center;
         justify-content: center;
         width: 32px;
-        height: 32px;
+        height: 32px; // geometry: icon tile
         flex-shrink: 0;
         border-radius: $radius-control;
         background: fade($accent-primary-raw, 12%);

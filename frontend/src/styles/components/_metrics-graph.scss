@@ -5,8 +5,8 @@
 .metrics-graph-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-overlay;
-    padding: $space-6;
+    border-radius: $radius-card;
+    padding: $space-4;
     margin-bottom: $space-6;
 
     &.loading,
@@ -125,7 +125,7 @@
     border: 1px solid var(--border-strong);
     border-radius: $radius-card;
     padding: $space-3 $space-4;
-    box-shadow: var(--shadow-lg);
+    box-shadow: $shadow-raised;
     min-width: 140px;
 
     .tooltip-time {
@@ -265,12 +265,12 @@
 
     &.memory {
         background: var(--green);
-        box-shadow: 0 0 8px rgba(61, 220, 151, 0.5);
+        box-shadow: none;
     }
 
     &.disk {
         background: var(--amber);
-        box-shadow: 0 0 8px rgba(245, 185, 69, 0.5);
+        box-shadow: none;
     }
 }
 
@@ -278,7 +278,7 @@
 .metrics-graph-compact {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-overlay;
+    border-radius: $radius-card;
     padding: $space-4;
     margin-bottom: $space-6;
 

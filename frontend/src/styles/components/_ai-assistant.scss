@@ -55,7 +55,7 @@ $sk-ai-z: 1100;
     background: var(--sk-ai-accent);
     color: #fff;
     cursor: pointer;
-    box-shadow: 0 6px 20px var(--sk-ai-glow), 0 2px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: $shadow-raised;
     transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), background 0.18s ease;
 
     &:hover { background: var(--sk-ai-accent-hover); transform: translateY(-2px); }
@@ -87,7 +87,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
         bottom: 88px;
         right: 16px;
         width: 48px;
-        height: 48px;
+        height: 48px; // geometry: floating action bubble (mobile size)
         &.is-raised { bottom: 152px; }
     }
 }
@@ -134,7 +134,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     flex-direction: column;
     background: var(--sk-ai-bg);
     border-left: 1px solid var(--sk-ai-border);
-    box-shadow: var(--sk-ai-shadow);
+    box-shadow: $shadow-overlay;
     font-family: var(--sk-ai-sans);
     color: var(--sk-ai-fg);
     animation: sk-ai-slide-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
@@ -152,7 +152,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     display: flex;
     align-items: center;
     flex: 0 0 auto;
-    min-height: 38px;
+    min-height: 38px; // geometry: console tab strip (chrome), matches the dock header
     padding: 0 $space-2;
     border-bottom: 1px solid var(--sk-ai-border);
 }
@@ -186,9 +186,9 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
-    border-radius: $radius-card;
+    width: $control-sm;
+    height: $control-sm;
+    border-radius: $radius-control;
     border: 1px solid transparent;
     background: transparent;
     color: var(--sk-ai-fg-2);
@@ -432,9 +432,9 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     gap: $space-2;
 }
 .sk-ai-composer__attach.sk-resource-picker__trigger {
-    min-width: 40px;
-    width: 40px;
-    height: 40px;
+    min-width: $control-md;
+    width: $control-md;
+    height: $control-md;
     padding: 0;
     justify-content: center;
 
@@ -444,23 +444,24 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 .sk-ai-composer__input {
     flex: 1;
     resize: none;
-    border-radius: $radius-card;
+    border-radius: $radius-control;
     border: 1px solid var(--sk-ai-border);
     background: var(--sk-ai-bg-body);
     color: var(--sk-ai-fg);
-    padding: $space-3 $space-3;
+    min-height: $control-md; // matches the 32px attach/send buttons beside it
+    padding: $space-1 $space-3;
     font-family: var(--sk-ai-sans);
     font-size: $text-base;
     line-height: 1.4;
     max-height: 160px;
-    &:focus { outline: none; border-color: var(--sk-ai-accent); box-shadow: 0 0 0 3px var(--sk-ai-glow); }
+    &:focus { outline: none; border-color: var(--sk-ai-accent); box-shadow: $focus-ring; }
     @media (max-width: 768px) { font-size: $text-md; }   // avoid iOS zoom-on-focus
 }
 .sk-ai-composer__btn {
     flex: none;
-    width: 40px;
-    height: 40px;
-    border-radius: $radius-card;
+    width: $control-md;
+    height: $control-md;
+    border-radius: $radius-control;
     border: none;
     background: var(--sk-ai-accent);
     color: #fff;
@@ -516,7 +517,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     background: var(--sk-ai-elevated);
     border: 1px solid var(--sk-ai-border);
     border-radius: $radius-card;
-    box-shadow: var(--sk-ai-shadow);
+    box-shadow: $shadow-raised;
     padding: $space-tight;
     z-index: 3;
 }
@@ -556,13 +557,13 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     color: var(--sk-ai-fg);
     display: inline-flex; align-items: center; justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: $shadow-raised;
 }
 
 // ---------------------------------------------------------------- Animations
 @keyframes sk-ai-slide-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
 @keyframes sk-ai-fade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes sk-ai-pulse { 0%, 100% { box-shadow: 0 6px 20px var(--sk-ai-glow), 0 2px 8px rgba(0,0,0,0.25); } 50% { box-shadow: 0 0 0 6px var(--sk-ai-glow); } }
+@keyframes sk-ai-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.72; } }
 @keyframes sk-ai-spin { to { transform: rotate(360deg); } }
 @keyframes sk-ai-bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
 

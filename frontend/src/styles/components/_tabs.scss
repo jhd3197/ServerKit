@@ -30,7 +30,8 @@
     gap: $space-2;
     background: none;
     border: none;
-    padding: $space-3 $space-5;
+    height: $control-lg; // underline tabs: 40
+    padding: 0 $space-4;
     color: $text-secondary;
     font-size: $text-base;
     font-weight: $font-weight-medium;

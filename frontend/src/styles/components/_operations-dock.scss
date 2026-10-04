@@ -6,7 +6,7 @@
     font-family: $font-main;
 
     &__launcher {
-        min-height: 42px;
+        min-height: $control-md;
         gap: $space-2;
         border: 1px solid var(--border-strong);
         border-radius: $radius-full;
@@ -21,7 +21,7 @@
     &__unread {
         display: inline-grid;
         min-width: 20px;
-        height: 20px;
+        height: 20px; // geometry: count badge (20px badge spec)
         padding-inline: $space-tight;
         place-items: center;
         border-radius: $radius-full;
@@ -74,7 +74,7 @@
     &__icon {
         display: grid;
         width: 30px;
-        height: 30px;
+        height: 30px; // geometry: icon tile
         flex: 0 0 auto;
         place-items: center;
         border-radius: $radius-control;
@@ -210,7 +210,7 @@
         background: var(--surface);
 
         &.is-complete { @include status-variant(var(--green), var(--green), var(--green)); }
-        &.is-current { @include status-variant(var(--cyan), null, var(--cyan)); box-shadow: 0 0 0 3px var(--cyan-bg); }
+        &.is-current { @include status-variant(var(--cyan), null, var(--cyan)); }
     }
 
     &__error {
@@ -285,7 +285,7 @@
     &__handoff-icon {
         display: grid;
         width: 28px;
-        height: 28px;
+        height: 28px; // geometry: icon tile
         flex: 0 0 auto;
         place-items: center;
         border: 1px solid var(--amber);

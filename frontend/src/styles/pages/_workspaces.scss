@@ -427,10 +427,10 @@
 // applies if the modal is ever portaled outside the page block.
 .workspace-color-input {
     width: 48px;
-    height: 32px;
+    height: $control-md;
     padding: $space-hair;
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
+    border-radius: $radius-control;
     background: var(--surface-2);
     cursor: pointer;
 }

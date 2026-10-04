@@ -66,7 +66,7 @@ $skw-z-tv: 200;
         .skw-varpick,
         .skw-iconbtn,
         .skw-barbtn {
-            height: 32px;
+            height: $control-md;
             flex-shrink: 0;
         }
 
@@ -138,9 +138,10 @@ $skw-z-tv: 200;
     display: flex;
     align-items: center;
     gap: $space-2;
-    padding: $space-2 $space-3;
+    height: $control-md;
+    padding: 0 $space-3;
     border: 1px solid transparent;
-    border-radius: $radius-card;
+    border-radius: $radius-control;
     background: none;
     color: var(--text-faint);
     font-family: inherit;
@@ -200,10 +201,10 @@ $skw-z-tv: 200;
     display: flex;
     align-items: center;
     gap: $space-2;
-    height: 32px;
+    height: $control-md;
     padding: 0 $space-3;
     border: 1px solid var(--border);
-    border-radius: $radius-card;
+    border-radius: $radius-control;
     background: var(--surface-2);
     color: var(--text);
     font-family: inherit;
@@ -242,12 +243,12 @@ $skw-z-tv: 200;
 
 // Square icon button used across the bar and the widget head.
 .skw-iconbtn {
-    width: 32px;
-    height: 32px;
+    width: $control-md;
+    height: $control-md;
     display: grid;
     place-items: center;
     border: 1px solid var(--border);
-    border-radius: $radius-card;
+    border-radius: $radius-control;
     background: var(--surface-2);
     color: var(--text-faint);
     cursor: pointer;
@@ -262,7 +263,7 @@ $skw-z-tv: 200;
     // Head actions are smaller and borderless — they live inside a 30px row.
     &--bare {
         width: 24px;
-        height: 24px;
+        height: 24px; // geometry: widget head is sized by the dashboard grid (GRID_ROW 88); 28 would eat 1-row widget bodies
         border-color: transparent;
         background: none;
 
@@ -379,7 +380,7 @@ $skw-z-tv: 200;
     &.is-selected,
     &.is-sel {
         border-color: var(--accent-bright);
-        box-shadow: 0 0 0 3px var(--accent-bg);
+        box-shadow: $focus-ring;
     }
 
     &__head {
@@ -514,7 +515,7 @@ $skw-z-tv: 200;
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-md);
+    box-shadow: $shadow-raised;
 
     &__item {
         display: flex;
@@ -1149,7 +1150,7 @@ $skw-z-tv: 200;
         display: grid;
         place-items: center;
         width: 24px;
-        height: 24px;
+        height: 24px; // geometry: fixed glyph chip, not a control
         flex-shrink: 0;
         border-radius: $radius-control;
         background: var(--surface-3);
@@ -1410,7 +1411,7 @@ $skw-z-tv: 200;
     background: var(--surface);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: $shadow-overlay;
     overflow: hidden;
     animation: skw-modal-in 0.18s cubic-bezier(0.2, 0.7, 0.3, 1);
 
@@ -1500,7 +1501,7 @@ $skw-z-tv: 200;
 .skw-empty-board {
     padding: $space-16 $space-5;
     border: 1.5px dashed var(--border-strong);
-    border-radius: var(--radius-lg);
+    border-radius: $radius-card;
     text-align: center;
 
     &__title { margin: 0 0 6px; color: var(--text); font-size: $text-base; font-weight: $font-weight-semibold; }
@@ -1540,7 +1541,7 @@ $skw-z-tv: 200;
 
     &__icon {
         width: 34px;
-        height: 34px;
+        height: 34px; // geometry: icon tile
         margin-bottom: $space-3;
         display: grid;
         place-items: center;
@@ -1717,7 +1718,7 @@ $skw-z-tv: 200;
         border: 1px solid var(--border);
         border-radius: var(--radius);
         background: var(--surface-2);
-        box-shadow: var(--shadow-md);
+        box-shadow: $shadow-raised;
         pointer-events: none;
 
         &--flip {

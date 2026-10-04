@@ -73,7 +73,7 @@
         &--current {
             background: $success;
             border-color: $success;
-            box-shadow: 0 0 0 4px $success-bg;
+            box-shadow: none;
         }
     }
 
@@ -152,7 +152,7 @@
         .deploy-timeline__marker {
             inset-inline-start: 0;
             width: 28px;
-            height: 28px;
+            height: 28px; // geometry: timeline marker icon disc
             display: inline-flex;
             align-items: center;
             justify-content: center;

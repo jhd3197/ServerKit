@@ -279,7 +279,7 @@
 .command-palette__more {
     display: flex;
     width: calc(100% - 8px);
-    height: 29px;
+    height: $control-sm;
     align-items: center;
     justify-content: center;
     gap: $space-2;
@@ -313,15 +313,15 @@
 
 @keyframes setting-focus-flash {
     0% {
-        box-shadow: 0 0 0 3px var(--accent-bright);
+        box-shadow: $focus-ring;
         background-color: var(--accent-bg-soft);
     }
     70% {
-        box-shadow: 0 0 0 3px var(--accent-bright);
+        box-shadow: $focus-ring;
         background-color: var(--accent-bg-soft);
     }
     100% {
-        box-shadow: 0 0 0 0 transparent;
+        box-shadow: 0 0 0 0 transparent; // geometry: end frame of the focus-ring flash
         background-color: transparent;
     }
 }

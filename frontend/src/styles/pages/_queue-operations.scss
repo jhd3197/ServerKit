@@ -21,7 +21,7 @@
         linear-gradient(135deg, $accent-glow, transparent 55%),
         $bg-card;
     color: $text-secondary;
-    box-shadow: $shadow-overlay;
+    box-shadow: none;
 
     svg {
         color: $accent-primary;
@@ -188,10 +188,11 @@
 }
 
 .queue-group-badge {
+    height: 20px; // geometry: badge height (20px badge spec)
     display: inline-flex;
     align-items: center;
-    padding: 1px $space-2;
-    border-radius: $radius-full;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
     font-size: $text-xs;
@@ -545,16 +546,17 @@
 }
 
 .queue-readonly-badge {
+    height: 20px; // geometry: badge height (20px badge spec)
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    padding: $space-1 $space-3;
-    border-radius: $radius-full;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
     color: $text-tertiary;
     font-size: $text-xs;
-    font-weight: $font-weight-semibold;
+    font-weight: $font-weight-medium;
 
     svg {
         color: $text-tertiary;

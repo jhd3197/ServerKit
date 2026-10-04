@@ -7,13 +7,14 @@
 .services-page {
     // Source badge (repo / manual / upload) used inside the shared .sk-dtable.
     &__src-badge {
+        height: 20px; // geometry: badge height (20px badge spec)
         display: inline-flex;
         align-items: center;
         gap: $space-tight;
-        padding: $space-1 $space-2;
+        padding: 0 $space-tight;
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
-        border-radius: $radius-control;
+        border-radius: $radius-badge;
         font-size: $text-xs;
         color: var(--text-dim);
         max-width: 200px;

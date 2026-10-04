@@ -61,19 +61,19 @@
         background: $bg-tertiary;
         border: 1px solid $border-subtle;
         border-right: none;
-        border-radius: $radius-badge 0 0 $radius-badge;
-        padding: $space-2 $space-3;
+        border-radius: $radius-control 0 0 $radius-control;
+        padding: 0 $space-3;
         color: $text-tertiary;
         font-family: $font-mono;
         font-size: $text-xs;
-        height: 40px;
+        height: $control-md; // matches the 32px slug input it prefixes
         display: flex;
         align-items: center;
     }
 
     .slug-input {
         flex: 1;
-        border-radius: 0 $radius-badge $radius-badge 0;
+        border-radius: 0 $radius-control $radius-control 0;
         font-family: $font-mono;
         min-width: 150px;
     }

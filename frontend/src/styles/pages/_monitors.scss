@@ -22,7 +22,7 @@
     // Neutral icon tile (rule editors, channel tiles, host cards)
     .mon-ico {
         width: 30px;
-        height: 30px;
+        height: 30px; // geometry: icon tile
         border-radius: $radius-card;
         display: grid;
         place-items: center;
@@ -32,7 +32,7 @@
 
         &--sm {
             width: 26px;
-            height: 26px;
+            height: 26px; // geometry: icon tile
             border-radius: $radius-control;
         }
     }
@@ -195,7 +195,7 @@
 
         &__ico {
             width: 28px;
-            height: 28px;
+            height: 28px; // geometry: icon tile
             border-radius: $radius-card;
             display: grid;
             place-items: center;
@@ -223,13 +223,13 @@
 
         &__spark {
             display: block;
-            height: 38px;
+            height: 38px; // geometry: sparkline chart box
 
             svg { width: 100%; height: 100%; }
 
             &--empty {
                 border-bottom: 1px dashed var(--border-soft);
-                height: 37px;
+                height: 37px; // geometry: empty sparkline baseline (chart box)
             }
         }
 
@@ -1025,7 +1025,7 @@
         border-radius: 50%;
         background: var(--text-ghost);
 
-        &--red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+        &--red { background: var(--red); }
         &--amber { background: var(--amber); }
         &--cyan { background: var(--cyan); }
         &--green { background: var(--green); }

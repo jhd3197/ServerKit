@@ -4,14 +4,17 @@
 
 .card {
     @include card-base();
-    padding: $space-6;
+    // Card spec: $radius-card, 1px border, $space-4 padding, flat.
+    border-radius: $radius-card;
+    box-shadow: none;
+    padding: $space-4;
     position: relative;
     overflow: hidden;
 }
 
 .card-header {
     @include flex-between();
-    margin-bottom: $space-5;
+    margin-bottom: $space-4;
 }
 
 .card h3 {
@@ -158,7 +161,7 @@
 
     &.is-active {
         background: $bg-hover;
-        box-shadow: inset 3px 0 0 $accent-primary;
+        box-shadow: inset 3px 0 0 $accent-primary; // geometry: inset edge marker drawn as a border
     }
 
     &:focus-visible {
@@ -179,7 +182,7 @@
 // kept: it is a standalone icon chip still used by StyleGuide demos.
 .stat-icon {
     width: 48px;
-    height: 48px;
+    height: 48px; // geometry: icon tile
     display: flex;
     align-items: center;
     justify-content: center;
@@ -188,7 +191,7 @@
 
     svg {
         width: 24px;
-        height: 24px;
+        height: 24px; // geometry: icon size
         stroke: currentColor;
         stroke-width: 2;
         fill: none;
@@ -275,10 +278,10 @@
 // Danger zone card
 .danger-zone {
     @include flex-between();
-    padding: $space-6;
+    padding: $space-4;
     border: 1px solid fade($danger-raw, 30%);
     background: fade($danger-raw, 5%);
-    border-radius: $radius-overlay;
+    border-radius: $radius-card;
 
     h3, h4 {
         color: $danger;

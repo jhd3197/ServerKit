@@ -381,10 +381,11 @@
 }
 
 .sk-notif-chip {
-    padding: $space-1 $space-3;
+    height: $control-sm;
+    padding: 0 $space-3;
     font-size: $text-xs;
     border: 1px solid $border-subtle;
-    border-radius: $radius-full;
+    border-radius: $radius-control;
     background: $bg-card;
     color: $text-secondary;
     cursor: pointer;

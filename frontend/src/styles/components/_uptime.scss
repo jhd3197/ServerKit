@@ -5,8 +5,8 @@
 .uptime-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-overlay;
-    padding: $space-6;
+    border-radius: $radius-card;
+    padding: $space-4;
 
     &.loading,
     &.error {
@@ -225,7 +225,7 @@
 .uptime-graph {
     display: flex;
     gap: $space-hair;
-    height: 32px;
+    height: 32px; // geometry: uptime bar strip (chart)
     background: $bg-hover;
     border-radius: $radius-control;
     overflow: hidden;
