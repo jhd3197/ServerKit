@@ -114,7 +114,7 @@ export default function SchedulesTable({
             cellClassName: 'sk-cell-dim',
             render: (schedule) => {
                 const next = nextFire(schedule);
-                if (schedule.schedule_error) return <span title={schedule.schedule_error}>{t('app.schedulesTable.invalidSchedule', 'Invalid schedule')}</span>;
+                if (schedule.schedule_error) return <span title={schedule.schedule_error}>{t('app.schedulesTable.invalidSchedule', "Schedule isn't valid")}</span>;
                 return schedule.enabled
                     ? (next ? <span title={schedule.next_run_at}>{untilLabel(next, now)}</span> : '—')
                     : <span className="bk-paused">paused</span>;

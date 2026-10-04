@@ -310,7 +310,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
         return (
             <div className="settings-section">
                 <ErrorState
-                    title={t('app.siteSettingsTab.couldntLoadSiteSettings', "Couldn't load site settings")}
+                    title={t('app.siteSettingsTab.couldntLoadSiteSettings', "Couldn't load site settings.")}
                     error={loadError}
                     onRetry={loadSettings}
                 />
@@ -449,7 +449,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
 
                 {httpsError ? (
                     <ErrorState
-                        title={t('app.siteSettingsTab.couldntLoadBaseDomains', "Couldn't load base domains")}
+                        title={t('app.siteSettingsTab.couldntLoadBaseDomains', "Couldn't load base domains.")}
                         error={httpsError}
                         onRetry={loadHttps}
                     />

@@ -85,7 +85,7 @@ const ProjectDetail = () => {
         try {
             await api.reorderEnvironments(Number(id), next.map(e => e.id));
         } catch (err) {
-            toastError(toast, t('app.projectDetail.failedToReorderEnvironments', 'Failed to reorder environments'), err);
+            toastError(toast, t('app.projectDetail.failedToReorderEnvironments', "Couldn't reorder environments."), err);
             loadProject();
         }
     }
@@ -98,7 +98,7 @@ const ProjectDetail = () => {
             setDeleteEnv(null);
             loadProject();
         } catch (err) {
-            toastError(toast, t('app.projectDetail.failedToDeleteEnvironment', 'Failed to delete environment'), err);
+            toastError(toast, t('app.projectDetail.failedToDeleteEnvironment', "Couldn't delete the environment."), err);
             setDeleteEnv(null);
         }
     }
@@ -232,7 +232,7 @@ const ProjectDetail = () => {
                         <>
                             <div className="project-env-panel__header">
                                 <h2>{activeEnv.name}</h2>
-                                <span>{envApps.length} app{envApps.length === 1 ? '' : 's'}</span>
+                                <span>{t('app.projectDetail.serviceCount', { count: envApps.length, defaultValue_one: '1 service', defaultValue_other: '{{count}} services' })}</span>
                             </div>
                             {envApps.length === 0 ? (
                                 <EmptyState
@@ -330,7 +330,7 @@ const CreateEnvironmentDialog = ({ projectId, open, onOpenChange, onCreated }) =
             setName('');
             onCreated();
         } catch (err) {
-            toastError(toast, t('app.projectDetail.failedToCreateEnvironment', 'Failed to create environment'), err);
+            toastError(toast, t('app.projectDetail.failedToCreateEnvironment', "Couldn't create the environment."), err);
         } finally {
             setSubmitting(false);
         }

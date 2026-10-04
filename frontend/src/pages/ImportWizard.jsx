@@ -277,7 +277,7 @@ function ImportWizard() {
             // Reflect the analyze kick-off immediately; the poller takes over.
             setImp((prev) => (prev ? { ...prev, status: 'analyzing' } : prev));
         } catch (error) {
-            toast.error(t('app.importWizard.importFailedToStart', 'Import failed to start: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.importWizard.importFailedToStart', "Couldn't start the import. {{message}}", { message: errorReason(error) }));
         } finally {
             setBusy(false);
             setUploadProgress(null);
@@ -292,7 +292,7 @@ function ImportWizard() {
             setImp((prev) => (prev ? { ...prev, status: 'running', error: null } : prev));
             setStep(5);
         } catch (error) {
-            toast.error(t('app.importWizard.failedToStartTheImportRun', 'Failed to start the import run: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.importWizard.failedToStartTheImportRun', "Couldn't start the import run. {{message}}", { message: errorReason(error) }));
         } finally {
             setBusy(false);
         }
@@ -311,7 +311,7 @@ function ImportWizard() {
                 setStep(3);
             }
         } catch (error) {
-            toast.error(t('app.importWizard.failedToLoadImport', 'Failed to load import: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.importWizard.failedToLoadImport', "Couldn't load the import. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -329,7 +329,7 @@ function ImportWizard() {
             await loadHistory();
             toast.success(t('app.importWizard.importDeleted', 'Import deleted'));
         } catch (error) {
-            toast.error(t('app.importWizard.failedToDeleteImport', 'Failed to delete import: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.importWizard.failedToDeleteImport', "Couldn't delete the import. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -517,7 +517,7 @@ function ImportWizard() {
                             <div className="import-wizard__callout import-wizard__callout--danger">
                                 <AlertTriangle size={16} aria-hidden="true" />
                                 <div>
-                                    <strong>{t('app.importWizard.analysisFailed', 'Analysis failed.')}</strong>
+                                    <strong>{t('app.importWizard.analysisFailed', "Couldn't analyze it.")}</strong>
                                     <p>{imp.error || 'The archive could not be analysed.'}</p>
                                 </div>
                             </div>
@@ -539,7 +539,7 @@ function ImportWizard() {
                                         await api.analyzeImport(imp.id);
                                         setImp((prev) => (prev ? { ...prev, status: 'analyzing', error: null } : prev));
                                     } catch (error) {
-                                        toast.error(t('app.importWizard.failedToReAnalyse', 'Failed to re-analyse: {{message}}', { message: errorReason(error) }));
+                                        toast.error(t('app.importWizard.failedToReAnalyse', "Couldn't re-analyze. {{message}}", { message: errorReason(error) }));
                                     }
                                 }}>
                                     <RotateCcw size={14} /> {t('app.importWizard.reAnalyse', 'Re-analyse')}
@@ -559,11 +559,11 @@ function ImportWizard() {
                         <ul className="import-wizard__plan">
                             <li>
                                 <Globe size={15} aria-hidden="true" />
-                                <span><strong>{domainCount}</strong> {t('app.importWizard.appContainer', 'service container')}{domainCount === 1 ? '' : 's'} {t('app.importWizard.onePerDomainDocrootCopiedIn', '(one per domain, docroot copied in and served behind Nginx)')}</span>
+                                <span>{t('app.importWizard.serviceContainers', { count: domainCount, defaultValue_one: '1 service container (one per domain, docroot copied in and served behind Nginx)', defaultValue_other: '{{count}} service containers (one per domain, docroot copied in and served behind Nginx)' })}</span>
                             </li>
                             <li className={skipDb ? 'is-skipped' : ''}>
                                 <Database size={15} aria-hidden="true" />
-                                <span><strong>{dbCount}</strong> {t('app.importWizard.managedDatabase', 'managed database')}{dbCount === 1 ? '' : 's'} {t('app.importWizard.restoredFromTheArchiveSDumps', 'restored from the archive\'s dumps')}{skipDb && ' (skipped)'}</span>
+                                <span>{t('app.importWizard.managedDatabases', { count: dbCount, defaultValue_one: "1 managed database restored from the archive's dumps", defaultValue_other: "{{count}} managed databases restored from the archive's dumps" })}{skipDb && ` ${t('app.importWizard.skipped', '(skipped)')}`}</span>
                             </li>
                             <li className={skipCrontab ? 'is-skipped' : ''}>
                                 <Clock size={15} aria-hidden="true" />
@@ -574,7 +574,7 @@ function ImportWizard() {
                             <div className="import-wizard__callout import-wizard__callout--warning">
                                 <AlertTriangle size={16} aria-hidden="true" />
                                 <div>
-                                    <p>{analysis.mail_accounts_count} {t('app.importWizard.mailAccount', 'mail account')}{analysis.mail_accounts_count === 1 ? '' : 's'} {t('app.importWizard.foundInTheBackupWillNot', 'found in the backup will not be imported. Mail is handled by the mail extension.')}</p>
+                                    <p>{t('app.importWizard.mailAccountsSkipped', { count: analysis.mail_accounts_count, defaultValue_one: "1 mail account in the backup won't be imported. The mail extension handles mail.", defaultValue_other: "{{count}} mail accounts in the backup won't be imported. The mail extension handles mail." })}</p>
                                 </div>
                             </div>
                         )}
@@ -668,7 +668,7 @@ function ImportWizard() {
                         <p className="import-wizard__muted">{t('common.loading', 'Loading…')}</p>
                     ) : historyError && history.length === 0 ? (
                         <ErrorState
-                            title={t('app.importWizard.couldntLoadPreviousImports', "Couldn't load previous imports")}
+                            title={t('app.importWizard.couldntLoadPreviousImports', "Couldn't load previous imports.")}
                             error={historyError}
                             onRetry={loadHistory}
                         />

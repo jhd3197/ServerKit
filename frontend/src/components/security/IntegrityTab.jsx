@@ -404,7 +404,7 @@ const IntegrityTab = () => {
     if (!status) {
         return loadError ? (
             <ErrorState
-                title={t('app.integrityTab.couldntLoadIntegrity', "Couldn't load file integrity status")}
+                title={t('app.integrityTab.couldntLoadIntegrity', "Couldn't load file integrity status.")}
                 error={loadError}
                 onRetry={load}
             />

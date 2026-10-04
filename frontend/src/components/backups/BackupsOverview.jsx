@@ -372,7 +372,7 @@ export default function BackupsOverview({
                                     <div className="bk-feed__body">
                                         <div className="bk-feed__txt">
                                             {e.status === 'failed'
-                                                ? <>{t('app.backupsOverview.backupFailed', 'Backup failed ·')} <b>{e.name}</b>{e.error ? ` — ${e.error}` : ''}</>
+                                                ? <>{t('app.backupsOverview.backupFailed', "Couldn't back up ·")} <b>{e.name}</b>{e.error ? ` — ${e.error}` : ''}</>
                                                 : e.status === 'running'
                                                     ? <>{t('app.backupsOverview.backupRunning', 'Backup running ·')} <b>{e.name}</b></>
                                                     : <>{t('app.backupsOverview.backupCompleted', 'Backup completed ·')} <b>{e.name}</b>{e.size ? ` (${formatBytes(e.size)})` : ''}</>}
@@ -400,7 +400,7 @@ export default function BackupsOverview({
                                 <span className="bk-dest__name">
                                     {row.tone === 'local' ? <HardDrive size={14} /> : <Cloud size={14} />}
                                     {row.name}
-                                    {row.primary && <span className="bk-dest__tag">PRIMARY</span>}
+                                    {row.primary && <span className="bk-dest__tag">{t('app.backups.primary', 'Primary')}</span>}
                                     <small>{row.sub}</small>
                                 </span>
                                 <span className="bk-dest__size">

@@ -82,7 +82,7 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
                 : t('app.resourceLimitsPanel.resourceLimitsSaved', 'Resource limits saved'));
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.resourceLimitsPanel.failedToSaveResourceLimits', 'Failed to save resource limits'), err);
+            toastError(toast, t('app.resourceLimitsPanel.failedToSaveResourceLimits', "Couldn't save the resource limits."), err);
         } finally {
             setSaving(false);
         }

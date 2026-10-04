@@ -133,7 +133,7 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
             setEnvironmentType(newType);
             onUpdate();
         } catch (err) {
-            toastError(toast, t('app.settingsTab.failedToUpdateEnvironmentType', 'Failed to update environment type'), err);
+            toastError(toast, t('app.settingsTab.failedToUpdateEnvironmentType', "Couldn't update the environment type."), err);
             setEnvironmentType(app.environment_type || 'standalone');
         } finally {
             setSavingEnvironment(false);
@@ -153,7 +153,7 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
             await api.unlinkApp(app.id);
             onUpdate();
         } catch (err) {
-            toastError(toast, t('app.settingsTab.failedToUnlinkApp', 'Failed to unlink service'), err);
+            toastError(toast, t('app.settingsTab.failedToUnlinkApp', "Couldn't unlink the service."), err);
         } finally {
             setUnlinking(false);
         }
@@ -179,7 +179,7 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
             toast.success(t('app.settingsTab.movedToTheRecycleBin', '"{{name}}" moved to the recycle bin', { name: app.name }));
             navigate('/services');
         } catch (err) {
-            toastError(toast, t('app.settingsTab.failedToDeleteService', 'Failed to delete service'), err);
+            toastError(toast, t('app.settingsTab.failedToDeleteService', "Couldn't delete the service."), err);
             setDeleting(false);
         }
     }
@@ -536,7 +536,7 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
             setAddOpen(false);
             onUpdate();
         } catch (err) {
-            toastError(toast, t('app.settingsTab.failedToAttachDomain', 'Failed to attach domain'), err);
+            toastError(toast, t('app.settingsTab.failedToAttachDomain', "Couldn't attach the domain."), err);
         } finally {
             setAttaching(false);
         }
@@ -568,10 +568,10 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
                 }));
                 onUpdate();
             } else {
-                toastError(toast, t('app.settingsTab.certificateRequestFailed', 'Certificate request failed'), res.error);
+                toastError(toast, t('app.settingsTab.certificateRequestFailed', "Couldn't request the certificate."), res.error);
             }
         } catch (err) {
-            toastError(toast, t('app.settingsTab.certificateRequestFailed', 'Certificate request failed'), err);
+            toastError(toast, t('app.settingsTab.certificateRequestFailed', "Couldn't request the certificate."), err);
         } finally {
             setIssuing(false);
         }
@@ -751,7 +751,7 @@ const ManifestSection = ({ app }) => {
             const yaml = res?.yaml || res?.manifest || '';
             setScaffold(yaml);
         } catch (err) {
-            toastError(toast, t('app.settingsTab.failedToGenerateScaffold', 'Failed to generate scaffold'), err);
+            toastError(toast, t('app.settingsTab.failedToGenerateScaffold', "Couldn't generate the scaffold."), err);
         } finally {
             setScaffolding(false);
         }
@@ -770,7 +770,7 @@ const ManifestSection = ({ app }) => {
             const res = await api.planManifest(projectId, {});
             setPlan(res?.plan || null);
         } catch (err) {
-            toastError(toast, t('app.settingsTab.failedToPlanManifest', 'Failed to plan manifest'), err);
+            toastError(toast, t('app.settingsTab.failedToPlanManifest', "Couldn't plan the manifest."), err);
         } finally {
             setPlanning(false);
         }
@@ -789,14 +789,14 @@ const ManifestSection = ({ app }) => {
             const res = await api.applyManifest(projectId, {});
             setApplyResult(res || null);
             if (res?.success) {
-                toast.success(t('app.settingsTab.appliedChangeS', 'Applied {{value}} change(s)', { value: res.applied ?? 0 }));
+                toast.success(t('app.settingsTab.appliedChanges', { count: res.applied ?? 0, defaultValue_one: 'Applied 1 change', defaultValue_other: 'Applied {{count}} changes' }));
                 const refreshed = await api.getManifest(projectId).catch(() => null);
                 setManifest(refreshed?.manifest || manifest);
             } else {
                 toast.error(t('app.settingsTab.applyFinishedWithErrors', 'Apply finished with errors'));
             }
         } catch (err) {
-            toastError(toast, t('app.settingsTab.failedToApplyManifest', 'Failed to apply manifest'), err);
+            toastError(toast, t('app.settingsTab.failedToApplyManifest', "Couldn't apply the manifest."), err);
         } finally {
             setApplying(false);
         }
@@ -865,7 +865,7 @@ const ManifestSection = ({ app }) => {
 
             {plan && (
                 <div className="svc-manifest__block">
-                    <h4 className="svc-manifest__block-title">{t('app.settingsTab.plan', 'Plan (')}{plan.step_count ?? (plan.steps || []).length} step(s))</h4>
+                    <h4 className="svc-manifest__block-title">{t('app.settingsTab.planSteps', { count: plan.step_count ?? (plan.steps || []).length, defaultValue_one: 'Plan (1 step)', defaultValue_other: 'Plan ({{count}} steps)' })}</h4>
                     {plan.summary && <p className="hint">{plan.summary}</p>}
                     {(plan.steps || []).length > 0 && (
                         <ul className="svc-manifest__steps">

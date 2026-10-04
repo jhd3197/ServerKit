@@ -30,7 +30,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
         setError(null);
         api.getDiskReclaimReport()
             .then(setReport)
-            .catch((err) => setError(err.message || t('app.diskReclaim.couldNotMeasure', 'Could not measure reclaimable space')))
+            .catch((err) => setError(err.message || t('app.diskReclaim.couldNotMeasure', "Couldn't measure reclaimable space.")))
             .finally(() => setLoading(false));
     }, [t]);
 
@@ -70,7 +70,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
             );
             onClose();
         } catch (err) {
-            toastError(toast, t('app.diskReclaim.reclaimFailed', 'Reclaim failed'), err);
+            toastError(toast, t('app.diskReclaim.reclaimFailed', "Couldn't reclaim space."), err);
             setRunning(false);
         }
     };

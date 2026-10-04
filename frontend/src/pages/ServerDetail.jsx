@@ -134,7 +134,7 @@ const ServerDetail = () => {
                 a.id === alertId ? { ...a, status: 'acknowledged' } : a
             ));
         } catch (err) {
-            toastError(toast, t('app.serverDetail.failedToAcknowledgeAlert', 'Failed to acknowledge alert'), err);
+            toastError(toast, t('app.serverDetail.failedToAcknowledgeAlert', "Couldn't acknowledge the alert."), err);
         }
     }
 
@@ -143,7 +143,7 @@ const ServerDetail = () => {
             await api.resolveAlert(alertId);
             setSecurityAlerts(prev => prev.filter(a => a.id !== alertId));
         } catch (err) {
-            toastError(toast, t('app.serverDetail.failedToResolveAlert', 'Failed to resolve alert'), err);
+            toastError(toast, t('app.serverDetail.failedToResolveAlert', "Couldn't resolve the alert."), err);
         }
     }
 
@@ -167,7 +167,7 @@ const ServerDetail = () => {
             toast.success(t('app.serverDetail.serverRemovedSuccessfully', 'Server removed'));
             navigate('/servers');
         } catch (err) {
-            toastError(toast, t('app.serverDetail.failedToRemoveServer', 'Failed to remove server'), err);
+            toastError(toast, t('app.serverDetail.failedToRemoveServer', "Couldn't remove the server."), err);
         }
     }
 
@@ -181,7 +181,7 @@ const ServerDetail = () => {
                 toast.error(t('app.serverDetail.serverDidNotRespond', 'Server did not respond'));
             }
         } catch (err) {
-            toastError(toast, t('app.serverDetail.failedToPingServer', 'Failed to ping server'), err);
+            toastError(toast, t('app.serverDetail.failedToPingServer', "Couldn't ping the server."), err);
         }
     }
 
@@ -214,7 +214,7 @@ const ServerDetail = () => {
     if (error) {
         return (
             <div className="error-page">
-                <h2>{t('app.serverDetail.errorLoadingServer', 'Error loading server')}</h2>
+                <h2>{t('app.serverDetail.errorLoadingServer', "Couldn't load the server.")}</h2>
                 <p>{error}</p>
                 <Button asChild><Link to="/servers">{t('app.serverDetail.backToServers', 'Back to servers')}</Link></Button>
             </div>

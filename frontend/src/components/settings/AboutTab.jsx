@@ -98,7 +98,7 @@ const AboutTab = () => {
             await api.startPanelUpdate();
         } catch (error) {
             setUpdatePhase('failed');
-            setUpdateError(error?.message || t('app.aboutTab.updateStartFailed', 'Failed to start the update'));
+            setUpdateError(error?.message || t('app.aboutTab.updateStartFailed', "Couldn't start the update."));
             return;
         }
         setUpdatePhase('running');
@@ -126,7 +126,7 @@ const AboutTab = () => {
                     notRunningPolls += 1;
                     if (st.log?.outcome === 'rolled_back') {
                         setUpdatePhase('failed');
-                        setUpdateError(t('app.aboutTab.updateRolledBack', 'The update failed and was rolled back. The previous version is still running.'));
+                        setUpdateError(t('app.aboutTab.updateRolledBack', "The update didn't finish, so it was rolled back. The previous version is still running."));
                         return;
                     }
                     if (notRunningPolls >= 5) {

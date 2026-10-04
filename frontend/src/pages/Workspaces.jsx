@@ -234,7 +234,7 @@ const Workspaces = () => {
             builtinViews={WORKSPACE_VIEWS}
             totalCount={workspaces.length}
             error={loadError}
-            errorTitle={t('app.workspaces.couldntLoadWorkspaces', "Couldn't load workspaces")}
+            errorTitle={t('app.workspaces.couldntLoadWorkspaces', "Couldn't load workspaces.")}
             onRetry={() => refetchWorkspaces().catch(() => {})}
             items={shownWorkspaces}
             columns={columns}

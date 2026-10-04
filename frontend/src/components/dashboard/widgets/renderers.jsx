@@ -77,7 +77,7 @@ function Failed({ error, subject = 'data' }) {
     }
     return (
         <div className="skw-empty skw-empty--error">
-            {t('app.renderers.couldNotLoad', 'Could not load')} {subject}
+            {t('app.renderers.couldNotLoad', "Couldn't load")} {subject}
             {error?.message ? ` — ${error.message}` : '.'}
         </div>
     );
@@ -948,7 +948,7 @@ class WidgetBoundary extends Component {
 
     render() {
         if (this.state.failed) {
-            return <div className="skw-empty skw-empty--error">{t('app.renderers.thisWidgetFailedToRender', 'This widget failed to render.')}</div>;
+            return <div className="skw-empty skw-empty--error">{t('app.renderers.thisWidgetFailedToRender', "This widget couldn't render.")}</div>;
         }
         return this.props.children;
     }

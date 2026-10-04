@@ -86,7 +86,7 @@ const VolumesPanel = ({ app, onChanged }) => {
             const data = await api.getAppVolumes(app.id);
             setVolumes(data?.volumes || []);
         } catch (err) {
-            toastError(toast, t('app.volumesPanel.failedToLoadVolumes', 'Failed to load volumes'), err);
+            toastError(toast, t('app.volumesPanel.failedToLoadVolumes', "Couldn't load volumes."), err);
         } finally {
             setLoading(false);
         }
@@ -108,7 +108,7 @@ const VolumesPanel = ({ app, onChanged }) => {
             await load();
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.volumesPanel.failedToAttachVolume', 'Failed to attach volume'), err);
+            toastError(toast, t('app.volumesPanel.failedToAttachVolume', "Couldn't attach the volume."), err);
         } finally {
             setAttaching(false);
         }
@@ -121,7 +121,7 @@ const VolumesPanel = ({ app, onChanged }) => {
             await load();
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.volumesPanel.failedToDetachVolume', 'Failed to detach volume'), err);
+            toastError(toast, t('app.volumesPanel.failedToDetachVolume', "Couldn't detach the volume."), err);
         }
     }
 

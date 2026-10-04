@@ -280,7 +280,7 @@ export default function Monitors() {
             setFormOpen(false);
             load();
         } catch (err) {
-            toastError(toast, t('app.monitors.couldNotCreateTheMonitor', 'Could not create the monitor'), err);
+            toastError(toast, t('app.monitors.couldNotCreateTheMonitor', "Couldn't create the monitor."), err);
         } finally {
             setSaving(false);
         }
@@ -292,7 +292,7 @@ export default function Monitors() {
             toast.success(monitor.is_paused ? t('app.monitors.resumed', 'Resumed {{name}}', { name: monitor.name }) : t('app.monitors.paused', 'Paused {{name}}', { name: monitor.name }));
             load();
         } catch (err) {
-            toastError(toast, t('app.monitors.couldNotChangeTheMonitor', 'Could not change the monitor'), err);
+            toastError(toast, t('app.monitors.couldNotChangeTheMonitor', "Couldn't change the monitor."), err);
         }
     };
 
@@ -307,7 +307,7 @@ export default function Monitors() {
             }));
             load();
         } catch (err) {
-            toastError(toast, t('app.monitors.checkFailed', 'Check failed'), err);
+            toastError(toast, t('app.monitors.checkFailed', "Couldn't run the check."), err);
         }
     };
 
@@ -504,7 +504,7 @@ export default function Monitors() {
                 <EmptyState loading loadingVariant="table" title={t('app.monitors.loadingMonitors', 'Loading monitors')} />
             ) : loadError && monitors.length === 0 ? (
                 <ErrorState
-                    title={t('app.monitors.couldntLoadMonitors', "Couldn't load monitors")}
+                    title={t('app.monitors.couldntLoadMonitors', "Couldn't load monitors.")}
                     error={loadError}
                     onRetry={load}
                 />

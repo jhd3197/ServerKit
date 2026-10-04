@@ -80,7 +80,7 @@ const RemoteAccess = ({ serverId }) => {
             );
             setServices(Object.fromEntries(entries));
         } catch (e) {
-            toastError(toast, t('app.remoteAccess.failedToLoadTunnels', 'Failed to load tunnels'), e);
+            toastError(toast, t('app.remoteAccess.failedToLoadTunnels', "Couldn't load tunnels."), e);
         } finally {
             setLoading(false);
         }
@@ -150,7 +150,7 @@ const RemoteAccess = ({ serverId }) => {
             closeWizard();
             load();
         } catch (e) {
-            toastError(toast, t('app.remoteAccess.failedToExposeService', 'Failed to expose service'), e);
+            toastError(toast, t('app.remoteAccess.failedToExposeService', "Couldn't expose the service."), e);
         } finally {
             setSubmitting(false);
         }
@@ -164,7 +164,7 @@ const RemoteAccess = ({ serverId }) => {
             setTeardown(null);
             load();
         } catch (e) {
-            toastError(toast, t('app.remoteAccess.failedToTearDownTunnel', 'Failed to tear down tunnel'), e);
+            toastError(toast, t('app.remoteAccess.failedToTearDownTunnel', "Couldn't tear down the tunnel."), e);
         }
     };
 
@@ -174,7 +174,7 @@ const RemoteAccess = ({ serverId }) => {
             toast.success(t('app.remoteAccess.removed', 'Removed {{hostname}}', { hostname: svc.hostname }));
             load();
         } catch (e) {
-            toastError(toast, t('app.remoteAccess.failedToRemoveService', 'Failed to remove service'), e);
+            toastError(toast, t('app.remoteAccess.failedToRemoveService', "Couldn't remove the service."), e);
         }
     };
 

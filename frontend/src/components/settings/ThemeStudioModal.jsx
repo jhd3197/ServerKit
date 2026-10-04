@@ -113,7 +113,7 @@ const ThemeStudioModal = ({ open, onOpenChange }) => {
             toast.success(t('app.themeStudioModal.savedToThisPanel', 'Saved "{{value}}" to this panel', { value: saved?.name }));
             onOpenChange(false);
         } catch (e) {
-            toastError(toast, t('app.themeStudioModal.couldNotSaveTheTheme', 'Could not save the theme'), e);
+            toastError(toast, t('app.themeStudioModal.couldNotSaveTheTheme', "Couldn't save the theme."), e);
         } finally {
             setSaving(false);
         }

@@ -97,7 +97,7 @@ export default function StorageTab() {
             setOverview(data);
             setForm(toForm(data?.retention));
         } catch (err) {
-            setError(err.message || t('app.storageTab.couldNotLoad', 'Could not load the storage overview'));
+            setError(err.message || t('app.storageTab.couldNotLoad', "Couldn't load the storage overview."));
         } finally {
             setLoading(false);
         }
@@ -135,7 +135,7 @@ export default function StorageTab() {
             toast.success(t('app.storageTab.retentionSaved', 'Retention settings saved'));
             await load();
         } catch (err) {
-            toastError(toast, t('app.storageTab.saveFailed', 'Could not save retention settings'), err);
+            toastError(toast, t('app.storageTab.saveFailed', "Couldn't save the retention settings."), err);
         } finally {
             setSaving(false);
         }
@@ -154,7 +154,7 @@ export default function StorageTab() {
             <div className="settings-section">
                 <EmptyState
                     icon={HardDrive}
-                    title={t('app.storageTab.couldNotLoad', 'Could not load the storage overview')}
+                    title={t('app.storageTab.couldNotLoad', "Couldn't load the storage overview.")}
                     description={error}
                     action={(
                         <Button variant="outline" onClick={load}>

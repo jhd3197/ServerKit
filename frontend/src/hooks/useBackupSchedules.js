@@ -24,7 +24,9 @@ export function useBackupSchedules() {
     ), { invalidate: [SCHEDULE_KEY] });
     const toggle = useServerMutation((schedule) => api.updateBackupSchedule(schedule.id, { enabled: !schedule.enabled }), {
         invalidate: [SCHEDULE_KEY],
-        onSuccess: (_, schedule) => toast.success(t('app.backups.schedule', 'Schedule {{value}}', { value: schedule.enabled ? 'disabled' : 'enabled' })),
+        onSuccess: (_, schedule) => toast.success(schedule.enabled
+            ? t('app.backups.scheduleOff', 'Schedule turned off')
+            : t('app.backups.scheduleOn', 'Schedule turned on')),
         onError: (error) => toastError(toast, t('app.backups.couldntToggleSchedule', "Couldn't turn the schedule on or off."), error),
     });
     const remove = useServerMutation((id) => api.removeBackupSchedule(id), {

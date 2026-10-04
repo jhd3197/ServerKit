@@ -47,7 +47,7 @@ const TagsPanel = ({ resourceType, resourceId, readOnly = false }) => {
             setNewTag('');
             load();
         } catch (err) {
-            toastError(toast, t('app.tagsPanel.failedToAddTag', 'Failed to add tag'), err);
+            toastError(toast, t('app.tagsPanel.failedToAddTag', "Couldn't add the tag."), err);
         } finally {
             setSaving(false);
         }
@@ -58,7 +58,7 @@ const TagsPanel = ({ resourceType, resourceId, readOnly = false }) => {
             await api.removeResourceTag(resourceType, resourceId, tag);
             setTags((prev) => prev.filter((t) => t.tag !== tag));
         } catch (err) {
-            toastError(toast, t('app.tagsPanel.failedToRemoveTag', 'Failed to remove tag'), err);
+            toastError(toast, t('app.tagsPanel.failedToRemoveTag', "Couldn't remove the tag."), err);
         }
     }
 

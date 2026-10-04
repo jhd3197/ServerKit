@@ -74,7 +74,7 @@ const LinkPanelForm = ({ onClose }) => {
             setUnlinkOpen(false);
             setStatus({ linked: false });
         } catch (err) {
-            toastError(toast, t('app.linkPanelForm.failedToUnlinkPanel', 'Failed to unlink panel'), err);
+            toastError(toast, t('app.linkPanelForm.failedToUnlinkPanel', "Couldn't unlink the panel."), err);
         }
     }
 

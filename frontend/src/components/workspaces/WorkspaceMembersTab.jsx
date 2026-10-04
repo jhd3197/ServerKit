@@ -146,7 +146,7 @@ const WorkspaceMembersTab = ({ members, allUsers, onAddMember, onRemoveMember, l
                 className="ws-detail__tablecard"
                 emptyState={loadError ? (
                     <ErrorState
-                        title={t('app.workspaceMembersTab.couldntLoadMembers', "Couldn't load members")}
+                        title={t('app.workspaceMembersTab.couldntLoadMembers', "Couldn't load members.")}
                         error={loadError}
                         onRetry={onRetry}
                     />

@@ -73,7 +73,7 @@ const TwoFactorPolicyCard = (props) => {
             <div className="settings-card" {...props}>
                 <h3>{t('app.twoFactorPolicyCard.twoFactorAuthenticationPolicy', 'Two-factor authentication policy')}</h3>
                 <ErrorState
-                    title={t('app.twoFactorPolicyCard.couldntLoadPolicy', "Couldn't load the 2FA policy")}
+                    title={t('app.twoFactorPolicyCard.couldntLoadPolicy', "Couldn't load the 2FA policy.")}
                     error={loadError}
                     onRetry={loadPolicy}
                 />

@@ -414,7 +414,7 @@ const Servers = () => {
 
             {loadError && servers.length === 0 ? (
                 <ErrorState
-                    title={t('app.servers.couldntLoadServers', "Couldn't load servers")}
+                    title={t('app.servers.couldntLoadServers', "Couldn't load servers.")}
                     error={loadError}
                     onRetry={loadData}
                 />
@@ -498,11 +498,11 @@ const Servers = () => {
                                     const groupName = groupId === 'none'
                                         ? 'Ungrouped'
                                         : groups.find((g) => String(g.id) === groupId)?.name;
-                                    toast.success(t('app.servers.movedServerSTo', 'Moved {{size}} server(s) to {{groupName}}', { size: selectedIds.size, groupName: groupName }));
+                                    toast.success(t('app.servers.movedServersTo', { count: selectedIds.size, groupName: groupName, defaultValue_one: 'Moved 1 server to {{groupName}}', defaultValue_other: 'Moved {{count}} servers to {{groupName}}' }));
                                     setSelectedIds(new Set());
                                     loadData();
                                 } catch (err) {
-                                    toastError(toast, t('app.servers.couldNotSetTheGroup', 'Could not set the group'), err);
+                                    toastError(toast, t('app.servers.couldNotSetTheGroup', "Couldn't set the group."), err);
                                 } finally {
                                     setBulkBusy(false);
                                 }
@@ -1013,7 +1013,7 @@ const ManageGroupsModal = ({ groups, onClose, onUpdated }) => {
             const data = await api.getServerGroups();
             setGroupList(Array.isArray(data) ? data : []);
         } catch (err) {
-            toastError(toast, t('app.servers.failedToCreateGroup', 'Failed to create group'), err);
+            toastError(toast, t('app.servers.failedToCreateGroup', "Couldn't create the group."), err);
         } finally {
             setLoading(false);
         }
@@ -1028,7 +1028,7 @@ const ManageGroupsModal = ({ groups, onClose, onUpdated }) => {
             const data = await api.getServerGroups();
             setGroupList(Array.isArray(data) ? data : []);
         } catch (err) {
-            toastError(toast, t('app.servers.failedToUpdateGroup', 'Failed to update group'), err);
+            toastError(toast, t('app.servers.failedToUpdateGroup', "Couldn't update the group."), err);
         }
     }
 
@@ -1046,7 +1046,7 @@ const ManageGroupsModal = ({ groups, onClose, onUpdated }) => {
             const data = await api.getServerGroups();
             setGroupList(Array.isArray(data) ? data : []);
         } catch (err) {
-            toastError(toast, t('app.servers.failedToDeleteGroup', 'Failed to delete group'), err);
+            toastError(toast, t('app.servers.failedToDeleteGroup', "Couldn't delete the group."), err);
         }
     }
 

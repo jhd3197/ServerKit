@@ -184,7 +184,7 @@ const SystemTab = () => {
 
             {metricsError && !metrics && (
                 <ErrorState
-                    title={t('app.systemTab.couldntLoadSystemInformation', "Couldn't load system information")}
+                    title={t('app.systemTab.couldntLoadSystemInformation', "Couldn't load system information.")}
                     error={metricsError}
                     onRetry={loadMetrics}
                 />
@@ -309,7 +309,7 @@ const SystemTab = () => {
                     <EmptyState loading title={t('app.systemTab.loadingDomainSettings', 'Loading domain settings…')} />
                 ) : domainError ? (
                     <ErrorState
-                        title={t('app.systemTab.couldntLoadDomainSettings', "Couldn't load domain settings")}
+                        title={t('app.systemTab.couldntLoadDomainSettings', "Couldn't load domain settings.")}
                         error={domainError}
                         onRetry={loadDomainInfo}
                     />

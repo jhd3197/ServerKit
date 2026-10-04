@@ -28,7 +28,8 @@ const NO_REGISTRY = '__none';
 
 function formatStatusLabel(status) {
     if (!status) return 'Not checked';
-    return status.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    const words = status.replace(/_/g, ' ');
+    return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
 // ============================================================
@@ -69,7 +70,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
             }
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.containerOpsPanel.failedToCheckForUpdates', 'Failed to check for updates'), err);
+            toastError(toast, t('app.containerOpsPanel.failedToCheckForUpdates', "Couldn't check for updates."), err);
         } finally {
             setChecking(false);
         }
@@ -94,7 +95,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
                 if (refreshed) setInfo(refreshed);
             } catch { /* optional */ }
         } catch (err) {
-            toastError(toast, t('app.containerOpsPanel.failedToApplyUpdate', 'Failed to apply update'), err);
+            toastError(toast, t('app.containerOpsPanel.failedToApplyUpdate', "Couldn't apply the update."), err);
         } finally {
             setApplying(false);
         }
@@ -187,7 +188,7 @@ const RegistrySection = ({ app, onChanged }) => {
             toast.success(next ? t('app.containerOpsPanel.registryAttached', 'Registry attached') : t('app.containerOpsPanel.registryDetachedPullsAreAnonymous', 'Registry detached. Pulls are anonymous.'));
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.containerOpsPanel.failedToUpdateRegistry', 'Failed to update registry'), err);
+            toastError(toast, t('app.containerOpsPanel.failedToUpdateRegistry', "Couldn't update the registry."), err);
             setSelected(app.registry_id ?? '');
         } finally {
             setSaving(false);
@@ -272,7 +273,7 @@ const AutoSleepSection = ({ app, onChanged }) => {
             toast.success(t('app.containerOpsPanel.autoSleepPolicySaved', 'Auto-sleep policy saved'));
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.containerOpsPanel.failedToSavePolicy', 'Failed to save policy'), err);
+            toastError(toast, t('app.containerOpsPanel.failedToSavePolicy', "Couldn't save the policy."), err);
             load();
         } finally {
             setSaving(false);
@@ -305,7 +306,7 @@ const AutoSleepSection = ({ app, onChanged }) => {
             await load();
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.containerOpsPanel.actionFailed', 'Action failed'), err);
+            toastError(toast, t('app.containerOpsPanel.actionFailed', "Couldn't run that action."), err);
         } finally {
             setBusy(false);
         }

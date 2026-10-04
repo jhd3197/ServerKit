@@ -153,7 +153,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             setForm(EMPTY_FORM);
             await load();
         } catch (e) {
-            toastError(toast, t('app.domainDnsPanel.failedToAddRecord', 'Failed to add record'), e);
+            toastError(toast, t('app.domainDnsPanel.failedToAddRecord', "Couldn't add the record."), e);
         } finally {
             setSaving(false);
         }
@@ -169,7 +169,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             toast.success(t('app.domainDnsPanel.dynamicDnsEnabled', 'Dynamic DNS enabled'));
             await loadHosts();
         } catch (e) {
-            toastError(toast, t('app.domainDnsPanel.failedToEnableDynamicDns', 'Failed to enable dynamic DNS'), e);
+            toastError(toast, t('app.domainDnsPanel.failedToEnableDynamicDns', "Couldn't turn on dynamic DNS."), e);
         } finally {
             setBusyKey(null);
         }
@@ -182,7 +182,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             toast.success(t('app.domainDnsPanel.tokenRegenerated', 'Token regenerated'));
             await loadHosts();
         } catch (e) {
-            toastError(toast, t('app.domainDnsPanel.failedToRegenerateToken', 'Failed to regenerate token'), e);
+            toastError(toast, t('app.domainDnsPanel.failedToRegenerateToken', "Couldn't regenerate the token."), e);
         }
     }
 
@@ -198,7 +198,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             toast.success(t('app.domainDnsPanel.dynamicDnsDisabled', 'Dynamic DNS disabled'));
             await loadHosts();
         } catch (e) {
-            toastError(toast, t('app.domainDnsPanel.failedToDisableDynamicDns', 'Failed to disable dynamic DNS'), e);
+            toastError(toast, t('app.domainDnsPanel.failedToDisableDynamicDns', "Couldn't turn off dynamic DNS."), e);
         }
     }
 
@@ -210,7 +210,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             const data = await api.exportDNSZone(zid);
             downloadBlob(data.zone_file || '', `${domain.name}.txt`);
         } catch (e) {
-            toastError(toast, t('app.domainDnsPanel.exportFailed', 'Export failed'), e);
+            toastError(toast, t('app.domainDnsPanel.exportFailed', "Couldn't export the records."), e);
         } finally {
             setExporting(false);
         }
@@ -224,7 +224,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             const d = await api.checkDNSPropagation(domain.name);
             setPropResults(d.results || []);
         } catch (e) {
-            toastError(toast, t('app.domainDnsPanel.propagationCheckFailed', 'Propagation check failed'), e);
+            toastError(toast, t('app.domainDnsPanel.propagationCheckFailed', "Couldn't check propagation."), e);
             setPropResults([]);
         } finally {
             setPropLoading(false);
@@ -236,7 +236,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             const zid = await ensureZone();
             navigate(`/cloudflare/zones/${zid}`);
         } catch (e) {
-            toastError(toast, t('app.domainDnsPanel.couldNotOpenCloudflare', 'Could not open Cloudflare'), e);
+            toastError(toast, t('app.domainDnsPanel.couldNotOpenCloudflare', "Couldn't open Cloudflare."), e);
         }
     }
 

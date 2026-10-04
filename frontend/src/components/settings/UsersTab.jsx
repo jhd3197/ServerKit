@@ -119,7 +119,7 @@ const UsersTab = () => {
             setUsers(data.users || []);
             setError('');
         } catch (err) {
-            setError(err.message || t('app.usersTab.loadFailed', 'Failed to load users'));
+            setError(err.message || t('app.usersTab.loadFailed', "Couldn't load users."));
         } finally {
             setLoading(false);
         }
@@ -168,7 +168,7 @@ const UsersTab = () => {
             await api.deleteUser(user.id);
             await loadUsers();
         } catch (err) {
-            setError(err.message || t('app.usersTab.deleteFailed', 'Failed to delete user'));
+            setError(err.message || t('app.usersTab.deleteFailed', "Couldn't delete the user."));
         } finally {
             actionInFlight.current = false;
             setPendingUserId(null);
@@ -183,7 +183,7 @@ const UsersTab = () => {
             await api.updateUser(user.id, { is_active: !user.is_active });
             await loadUsers();
         } catch (err) {
-            setError(err.message || t('app.usersTab.updateFailed', 'Failed to update user status'));
+            setError(err.message || t('app.usersTab.updateFailed', "Couldn't update the user's status."));
         } finally {
             actionInFlight.current = false;
             setPendingUserId(null);

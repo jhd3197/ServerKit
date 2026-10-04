@@ -77,7 +77,7 @@ export default function ServerRestorePointsTab({ serverId }) {
             toast.success(t('app.serverRestorePoints.quicksaveCreated', 'Environment restore point saved'));
         } catch (err) {
             setSaveError(err.message);
-            toastError(toast, t('app.serverRestorePoints.quicksaveFailed', 'Failed to save restore point'), err);
+            toastError(toast, t('app.serverRestorePoints.quicksaveFailed', "Couldn't save the restore point."), err);
         } finally {
             setSaving(false);
         }

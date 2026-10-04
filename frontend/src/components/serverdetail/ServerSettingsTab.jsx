@@ -114,7 +114,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
             setNewIP('');
             toast.success(t('app.serverSettingsTab.ipAllowlistUpdated', 'IP allowlist updated'));
         } catch (err) {
-            toastError(toast, t('app.serverSettingsTab.invalidIpPattern', 'Invalid IP pattern'), err.details?.[0] || err);
+            toastError(toast, t('app.serverSettingsTab.invalidIpPattern', 'Enter an IP address or CIDR range, like 192.168.1.0/24.'), err.details?.[0] || err);
         }
     }
 
@@ -125,7 +125,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
             setAllowedIPs(updated);
             toast.success(t('app.serverSettingsTab.ipRemovedFromAllowlist', 'IP removed from allowlist'));
         } catch (err) {
-            toastError(toast, t('app.serverSettingsTab.failedToUpdateAllowlist', 'Failed to update allowlist'), err);
+            toastError(toast, t('app.serverSettingsTab.failedToUpdateAllowlist', "Couldn't update the allowlist."), err);
         }
     }
 
@@ -138,10 +138,10 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
             if (result.success) {
                 toast.success(t('app.serverSettingsTab.credentialRotationInitiatedAgentWillUpdate', 'Credential rotation initiated. Agent will update shortly.'));
             } else {
-                toastError(toast, t('app.serverSettingsTab.failedToRotateCredentials', 'Failed to rotate credentials'), result.error);
+                toastError(toast, t('app.serverSettingsTab.failedToRotateCredentials', "Couldn't rotate the credentials."), result.error);
             }
         } catch (err) {
-            toastError(toast, t('app.serverSettingsTab.failedToRotateCredentials', 'Failed to rotate credentials'), err);
+            toastError(toast, t('app.serverSettingsTab.failedToRotateCredentials', "Couldn't rotate the credentials."), err);
         } finally {
             setRotatingKey(false);
         }
@@ -156,7 +156,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
             toast.success(t('app.serverSettingsTab.serverUpdatedSuccessfully', 'Server updated'));
             onUpdate();
         } catch (err) {
-            toastError(toast, t('app.serverSettingsTab.failedToUpdateServer', 'Failed to update server'), err);
+            toastError(toast, t('app.serverSettingsTab.failedToUpdateServer', "Couldn't update the server."), err);
         } finally {
             setLoading(false);
         }
@@ -402,7 +402,7 @@ export const TokenModal = ({ server, onClose, onGenerated }) => {
             onGenerated?.(data);
             toast.success(t('app.serverSettingsTab.connectionStringGenerated', 'Connection string generated'));
         } catch (err) {
-            toastError(toast, t('app.serverSettingsTab.failedToGenerateConnectionString', 'Failed to generate connection string'), err);
+            toastError(toast, t('app.serverSettingsTab.failedToGenerateConnectionString', "Couldn't generate the connection string."), err);
         } finally {
             setGenerating(false);
         }

@@ -55,7 +55,7 @@ const CloudTab = () => {
                     <EmptyState loading loadingVariant="form" loadingRows={3} title={t('app.settings.cloud.loadingConnection', 'Loading connection status…')} />
                 ) : connectError ? (
                     <ErrorState
-                        title={t('app.settings.cloud.couldntLoadConnection', "Couldn't load Cloud connection status")}
+                        title={t('app.settings.cloud.couldntLoadConnection', "Couldn't load Cloud connection status.")}
                         error={connectError}
                         onRetry={loadConnect}
                     />

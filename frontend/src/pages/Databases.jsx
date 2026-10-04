@@ -121,7 +121,7 @@ export default function Databases() {
     const { confirm } = useConfirm();
     const { copy } = useClipboard({
         successMessage: t('app.databases.copiedName', 'Copied name'),
-        errorMessage: t('app.databases.couldNotCopy', 'Could not copy'),
+        errorMessage: t('app.databases.couldNotCopy', "Couldn't copy."),
     });
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -564,7 +564,7 @@ export default function Databases() {
             const res = node.engine === 'mysql' ? await api.backupMySQLDatabase(node.label) : await api.backupPostgreSQLDatabase(node.label);
             if (res.success) toast.success(t('app.databases.backupCreated', 'Backup created: {{backuppath}}', { backuppath: res.backup_path }));
         } catch (err) {
-            toastError(toast, t('app.databases.failedToCreateBackup', 'Failed to create backup'), err);
+            toastError(toast, t('app.databases.failedToCreateBackup', "Couldn't create the backup."), err);
         }
     }
 
@@ -584,7 +584,7 @@ export default function Databases() {
             if (eng) refresh(eng);
             setTabs((prev) => prev.filter((t) => !(t.conn && connKey(t.conn) === connKey(node.conn))));
         } catch (err) {
-            toastError(toast, t('app.databases.failedToDropDatabase', 'Failed to drop database'), err);
+            toastError(toast, t('app.databases.failedToDropDatabase', "Couldn't drop the database."), err);
         }
     }
 

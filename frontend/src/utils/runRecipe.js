@@ -9,7 +9,7 @@ export async function runRecipe({ startRun, toast, t }, body, { serverName }) {
         }));
         return result.job_id;
     } catch (err) {
-        toastError(toast, t('app.recipes.startFailed', 'Could not start the recipe'), err);
+        toastError(toast, t('app.recipes.startFailed', "Couldn't start the recipe."), err);
         return null;
     }
 }

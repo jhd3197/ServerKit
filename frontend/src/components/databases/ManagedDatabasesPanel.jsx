@@ -30,7 +30,7 @@ export default function ManagedDatabasesPanel() {
             const data = await api.getManagedDatabases();
             setRows(data?.databases || []);
         } catch (err) {
-            toastError(toast, t('app.managedDatabasesPanel.failedToLoadManagedDatabases', 'Failed to load managed databases'), err);
+            toastError(toast, t('app.managedDatabasesPanel.failedToLoadManagedDatabases', "Couldn't load managed databases."), err);
         } finally {
             setLoading(false);
         }
@@ -49,7 +49,7 @@ export default function ManagedDatabasesPanel() {
                 toast.info(uri);
             }
         } catch (err) {
-            toastError(toast, t('app.managedDatabasesPanel.failedToRevealConnectionString', 'Failed to reveal connection string'), err);
+            toastError(toast, t('app.managedDatabasesPanel.failedToRevealConnectionString', "Couldn't reveal the connection string."), err);
         } finally {
             setBusyId(null);
         }
@@ -61,7 +61,7 @@ export default function ManagedDatabasesPanel() {
             await api.protectManagedDatabase(row.id);
             toast.success(t('app.managedDatabasesPanel.backupPolicyCreatedTuneItUnder', 'Backup policy created. Tune it under Backups.'));
         } catch (err) {
-            toastError(toast, t('app.managedDatabasesPanel.failedToProtectDatabase', 'Failed to protect database'), err);
+            toastError(toast, t('app.managedDatabasesPanel.failedToProtectDatabase', "Couldn't protect the database."), err);
         } finally {
             setBusyId(null);
         }
@@ -83,7 +83,7 @@ export default function ManagedDatabasesPanel() {
             toast.success(drop ? t('app.managedDatabasesPanel.databaseDroppedAndUntracked', 'Database dropped and untracked') : t('app.managedDatabasesPanel.databaseUntracked', 'Database untracked'));
             await load();
         } catch (err) {
-            toastError(toast, t('app.managedDatabasesPanel.failedToRemoveDatabase', 'Failed to delete database'), err);
+            toastError(toast, t('app.managedDatabasesPanel.failedToRemoveDatabase', "Couldn't delete the database."), err);
         } finally {
             setBusyId(null);
         }

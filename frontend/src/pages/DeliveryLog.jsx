@@ -304,7 +304,7 @@ export default function DeliveryLog() {
                     <EmptyState loading loadingVariant="table" title={t('common.loading', 'Loading…')} />
                 ) : loadError && deliveries.length === 0 ? (
                     <ErrorState
-                        title={t('app.deliveryLog.couldntLoadDeliveries', "Couldn't load deliveries")}
+                        title={t('app.deliveryLog.couldntLoadDeliveries', "Couldn't load deliveries.")}
                         error={loadError}
                         onRetry={load}
                     />

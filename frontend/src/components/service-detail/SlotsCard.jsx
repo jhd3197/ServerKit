@@ -60,7 +60,7 @@ export default function SlotsCard({ app }) {
             toast.success(t('app.slots.switchedBack', 'Traffic is back on the previous release.'));
             load();
         } catch (err) {
-            toastError(toast, t('app.slots.switchBackFailed', 'Switching back failed'), err);
+            toastError(toast, t('app.slots.switchBackFailed', "Couldn't switch back."), err);
         } finally {
             setSwitching(false);
         }
@@ -84,7 +84,7 @@ export default function SlotsCard({ app }) {
             toast.success(t('app.slots.restoredDb', 'Database restored to before v{{version}}', { version: offer.version }));
             load();
         } catch (err) {
-            toastError(toast, t('app.slots.restoreDbFailed', 'Restoring the database failed'), err);
+            toastError(toast, t('app.slots.restoreDbFailed', "Couldn't restore the database."), err);
         } finally {
             setRestoring(false);
         }

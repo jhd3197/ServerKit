@@ -380,7 +380,7 @@ const Deployments = () => {
 
             {loadError && jobs.length === 0 ? (
                 <ErrorState
-                    title={t('app.deployments.couldntLoadDeployments', "Couldn't load deployments")}
+                    title={t('app.deployments.couldntLoadDeployments', "Couldn't load deployments.")}
                     error={loadError}
                     onRetry={() => loadJobs(loaded)}
                 />

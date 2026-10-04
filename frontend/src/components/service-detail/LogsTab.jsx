@@ -169,7 +169,7 @@ const LogsTab = ({ app }) => {
             )}
             {deployError && (
                 <div className="alert alert-danger">
-                    <strong>{t('app.logsTab.deploymentFailed', 'Deployment failed:')}</strong> {deployError}
+                    <strong>{t('app.logsTab.deploymentFailed', "Couldn't deploy.")}</strong> {deployError}
                 </div>
             )}
 

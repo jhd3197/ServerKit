@@ -44,7 +44,7 @@ const CloudProvision = () => {
             setServers(sData.servers || []);
             setCosts(cData);
         } catch (err) {
-            toastError(toast, t('app.cloudProvision.failedToLoadCloudData', 'Failed to load cloud data'), err);
+            toastError(toast, t('app.cloudProvision.failedToLoadCloudData', "Couldn't load cloud data."), err);
         } finally {
             setLoading(false);
         }

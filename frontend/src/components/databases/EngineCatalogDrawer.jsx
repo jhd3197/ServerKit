@@ -162,7 +162,7 @@ export default function EngineCatalogDrawer({
             toast.success(t('app.engineCatalogDrawer.templateRepositoriesSynced', 'Template repositories synced'));
             await onSynced?.();
         } catch (err) {
-            toastError(toast, t('app.engineCatalogDrawer.couldNotSyncTemplateRepositories', 'Could not sync template repositories'), err);
+            toastError(toast, t('app.engineCatalogDrawer.couldNotSyncTemplateRepositories', "Couldn't sync template repositories."), err);
         } finally {
             setSyncing(false);
         }

@@ -196,7 +196,7 @@ export default function Telemetry() {
             toastSuccess(t('app.telemetry.testEventEmitted', 'Test event emitted'));
             fetchEvents(1, true);
         } catch (err) {
-            showError(t('app.telemetry.failedToEmitTestEvent', 'Failed to emit test event: {{message}}', { message: errorReason(err) }));
+            showError(t('app.telemetry.failedToEmitTestEvent', "Couldn't emit the test event. {{message}}", { message: errorReason(err) }));
         }
     };
 
@@ -215,7 +215,7 @@ export default function Telemetry() {
             toastSuccess(t('app.telemetry.deletedOldEvents', 'Deleted {{deleted}} old events', { deleted: data.deleted }));
             fetchEvents(1, true);
         } catch (err) {
-            showError(t('app.telemetry.cleanupFailed', 'Cleanup failed: {{message}}', { message: errorReason(err) }));
+            showError(t('app.telemetry.cleanupFailed', "Couldn't clean up events. {{message}}", { message: errorReason(err) }));
         }
     };
 
@@ -407,7 +407,7 @@ export default function Telemetry() {
 
             {loadError && events.length === 0 && !loading ? (
                 <ErrorState
-                    title={t('app.telemetry.couldntLoadTelemetry', "Couldn't load telemetry")}
+                    title={t('app.telemetry.couldntLoadTelemetry', "Couldn't load telemetry.")}
                     error={loadError}
                     onRetry={() => fetchEvents(1, true)}
                 />

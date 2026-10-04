@@ -37,7 +37,7 @@ export default function SystemStatusCard({ server, onRefresh }) {
             toast.success(t('app.systemStatusCard.capabilitiesReProbed', 'Capabilities re-probed'));
             if (onRefresh) await onRefresh();
         } catch (err) {
-            toastError(toast, t('app.systemStatusCard.refreshFailed', 'Refresh failed'), err);
+            toastError(toast, t('app.systemStatusCard.refreshFailed', "Couldn't refresh."), err);
         } finally {
             setRefreshing(false);
         }

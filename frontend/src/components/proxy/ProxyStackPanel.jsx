@@ -108,7 +108,7 @@ const ProxyStackPanel = ({ serverId }) => {
             await load();
             await loadAudit();
         } catch (err) {
-            toastError(toast, t('app.proxyStackPanel.failedToSwitchProxy', 'Failed to switch proxy'), err);
+            toastError(toast, t('app.proxyStackPanel.failedToSwitchProxy', "Couldn't switch the proxy."), err);
         } finally {
             setBusy(false);
         }
@@ -121,7 +121,7 @@ const ProxyStackPanel = ({ serverId }) => {
             toast.success(t('app.proxyStackPanel.customSnippetSaved', 'Custom snippet saved'));
             await load();
         } catch (err) {
-            toastError(toast, t('app.proxyStackPanel.failedToSaveSnippet', 'Failed to save snippet'), err);
+            toastError(toast, t('app.proxyStackPanel.failedToSaveSnippet', "Couldn't save the snippet."), err);
         } finally {
             setBusy(false);
         }
@@ -134,12 +134,12 @@ const ProxyStackPanel = ({ serverId }) => {
             if (res.success) {
                 toast.success(res.reloaded ? t('app.proxyStackPanel.configRegeneratedAndReloaded', 'Config regenerated and reloaded') : t('app.proxyStackPanel.configRegenerated', 'Config regenerated'));
             } else {
-                toastError(toast, t('app.proxyStackPanel.regenerateFailed', 'Regenerate failed'), res.error);
+                toastError(toast, t('app.proxyStackPanel.regenerateFailed', "Couldn't regenerate the config."), res.error);
             }
             await load();
             await loadAudit();
         } catch (err) {
-            toastError(toast, t('app.proxyStackPanel.failedToRegenerateConfig', 'Failed to regenerate config'), err);
+            toastError(toast, t('app.proxyStackPanel.failedToRegenerateConfig', "Couldn't regenerate the config."), err);
         } finally {
             setBusy(false);
         }
@@ -154,14 +154,14 @@ const ProxyStackPanel = ({ serverId }) => {
             });
             const deploy = res.deploy;
             if (deploy && deploy.success === false) {
-                toastError(toast, t('app.proxyStackPanel.deployFailedBestEffort', 'Deploy failed (best-effort)'), deploy.error);
+                toastError(toast, t('app.proxyStackPanel.deployFailedBestEffort', "Couldn't deploy the stack (best effort)."), deploy.error);
             } else {
                 toast.success(t('app.proxyStackPanel.stackDeployed', 'Stack deployed'));
             }
             await load();
             await loadAudit();
         } catch (err) {
-            toastError(toast, t('app.proxyStackPanel.failedToDeployStack', 'Failed to deploy stack'), err);
+            toastError(toast, t('app.proxyStackPanel.failedToDeployStack', "Couldn't deploy the stack."), err);
         } finally {
             setBusy(false);
         }
@@ -207,7 +207,7 @@ const ProxyStackPanel = ({ serverId }) => {
                     <div className="proxy-panel__ingress-warning-head">
                         <AlertTriangle size={16} />
                         <strong>
-                            {audit.mismatch_count} app{audit.mismatch_count === 1 ? '' : 's'} {t('app.proxyStackPanel.onTheWrongIngressPlane', 'on the wrong ingress plane')}
+                            {t('app.proxyStackPanel.servicesOnWrongPlane', { count: audit.mismatch_count, defaultValue_one: '1 service on the wrong ingress plane', defaultValue_other: '{{count}} services on the wrong ingress plane' })}
                         </strong>
                     </div>
                     <p className="proxy-panel__ingress-warning-text">
@@ -230,7 +230,7 @@ const ProxyStackPanel = ({ serverId }) => {
             {audit && audit.mismatch_count === 0 && audit.app_count > 0 && (
                 <div className="proxy-panel__ingress-ok">
                     <CheckCircle2 size={14} />
-                    {t('common.labels.all', 'All')} {audit.app_count} app{audit.app_count === 1 ? '' : 's'} {t('app.proxyStackPanel.alignedWithThisServerSIngress', 'aligned with this server\'s ingress plane.')}
+                    {t('app.proxyStackPanel.allServicesAligned', { count: audit.app_count, defaultValue_one: "The 1 service is aligned with this server's ingress plane.", defaultValue_other: "All {{count}} services are aligned with this server's ingress plane." })}
                 </div>
             )}
 

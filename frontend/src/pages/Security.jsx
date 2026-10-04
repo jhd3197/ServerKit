@@ -73,7 +73,7 @@ const Security = () => {
                 )}
                 {activeTab === 'overview' && (loadError && !status ? (
                     <ErrorState
-                        title={t('app.security.couldntLoadSecurityStatus', "Couldn't load security status")}
+                        title={t('app.security.couldntLoadSecurityStatus', "Couldn't load security status.")}
                         error={loadError}
                         onRetry={reload}
                     />

@@ -126,7 +126,7 @@ export default function ConnectionsHub() {
             const { auth_url } = await api.startSourceConnection(provider.provider, redirectUri);
             window.location.href = auth_url;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToStartConnection', 'Failed to start {{name}} connection', { name: provider.name }), err);
+            toastError(toast, t('app.connectionsHub.failedToStartConnection', "Couldn't start the {{name}} connection.", { name: provider.name }), err);
         }
     }, [t, toast]);
 
@@ -137,7 +137,7 @@ export default function ConnectionsHub() {
             await loadData();
             setModalOpen(false);
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToDisconnect', 'Failed to disconnect'), err);
+            toastError(toast, t('app.connectionsHub.failedToDisconnect', "Couldn't disconnect."), err);
         }
     }, [toast, loadData, t]);
 
@@ -161,7 +161,7 @@ export default function ConnectionsHub() {
             document.body.appendChild(form);
             form.submit();
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToStartGithubAppSetup', 'Failed to start GitHub App setup'), err);
+            toastError(toast, t('app.connectionsHub.failedToStartGithubAppSetup', "Couldn't start the GitHub App setup."), err);
         }
     }, [t, toast]);
 
@@ -174,7 +174,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToSaveOauthApp', 'Failed to save OAuth app'), err);
+            toastError(toast, t('app.connectionsHub.failedToSaveOauthApp', "Couldn't save the OAuth app."), err);
             return false;
         }
     }, [toast, t, loadData]);
@@ -188,7 +188,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToAddConnection', 'Failed to add connection'), err);
+            toastError(toast, t('app.connectionsHub.failedToAddConnection', "Couldn't add the connection."), err);
             return false;
         }
     }, [toast, loadData, t]);
@@ -207,7 +207,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToRemoveConnection', 'Failed to delete connection'), err);
+            toastError(toast, t('app.connectionsHub.failedToRemoveConnection', "Couldn't delete the connection."), err);
             return false;
         }
     }, [confirm, t, toast, loadData]);
@@ -216,10 +216,10 @@ export default function ConnectionsHub() {
         try {
             const res = await api.testEmailDNSProvider(id);
             if (res && res.success) toast.success(res.message || t('app.connectionsHub.connectionWorks', 'Connection works'));
-            else toastError(toast, t('app.connectionsHub.connectionTestFailed', 'Connection test failed'), res && res.error);
+            else toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), res && res.error);
             return res;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.connectionTestFailed', 'Connection test failed'), err);
+            toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), err);
             return null;
         }
     }, [t, toast]);
@@ -232,7 +232,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToConnectProvider', 'Failed to connect provider'), err);
+            toastError(toast, t('app.connectionsHub.failedToConnectProvider', "Couldn't connect the provider."), err);
             return false;
         }
     }, [toast, t, loadData]);
@@ -251,7 +251,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToDisconnect', 'Failed to disconnect'), err);
+            toastError(toast, t('app.connectionsHub.failedToDisconnect', "Couldn't disconnect."), err);
             return false;
         }
     }, [confirm, t, toast, loadData]);
@@ -265,7 +265,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToSaveStorage', 'Failed to save storage'), err);
+            toastError(toast, t('app.connectionsHub.failedToSaveStorage', "Couldn't save the storage settings."), err);
             return false;
         }
     }, [toast, t, loadData]);
@@ -274,10 +274,10 @@ export default function ConnectionsHub() {
         try {
             const res = await api.testStorageConnection(config);
             if (res && res.success) toast.success(res.message || t('app.connectionsHub.connectionWorks', 'Connection works'));
-            else toastError(toast, t('app.connectionsHub.connectionTestFailed', 'Connection test failed'), res && res.error);
+            else toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), res && res.error);
             return res;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.connectionTestFailed', 'Connection test failed'), err);
+            toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), err);
             return null;
         }
     }, [t, toast]);
@@ -290,7 +290,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToSaveRelay', 'Failed to save relay'), err);
+            toastError(toast, t('app.connectionsHub.failedToSaveRelay', "Couldn't save the relay."), err);
             return false;
         }
     }, [toast, t, loadData]);
@@ -299,10 +299,10 @@ export default function ConnectionsHub() {
         try {
             const res = await api.testEmailRelay(payload);
             if (res && res.success) toast.success(res.message || t('app.connectionsHub.connectionWorks', 'Connection works'));
-            else toastError(toast, t('app.connectionsHub.connectionTestFailed', 'Connection test failed'), res && res.error);
+            else toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), res && res.error);
             return res;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.connectionTestFailed', 'Connection test failed'), err);
+            toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), err);
             return null;
         }
     }, [t, toast]);
@@ -314,7 +314,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToDisableRelay', 'Failed to disable relay'), err);
+            toastError(toast, t('app.connectionsHub.failedToDisableRelay', "Couldn't turn off the relay."), err);
             return false;
         }
     }, [toast, t, loadData]);
@@ -327,7 +327,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToConnectRegistrar', 'Failed to connect registrar'), err);
+            toastError(toast, t('app.connectionsHub.failedToConnectRegistrar', "Couldn't connect the registrar."), err);
             return false;
         }
     }, [toast, t, loadData]);
@@ -346,7 +346,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToDisconnect', 'Failed to disconnect'), err);
+            toastError(toast, t('app.connectionsHub.failedToDisconnect', "Couldn't disconnect."), err);
             return false;
         }
     }, [confirm, t, toast, loadData]);
@@ -355,10 +355,10 @@ export default function ConnectionsHub() {
         try {
             const res = await api.testRegistrarConnection(id);
             if (res && res.success) toast.success(res.message || t('app.connectionsHub.connectionWorks', 'Connection works'));
-            else toastError(toast, t('app.connectionsHub.connectionTestFailed', 'Connection test failed'), res && res.error);
+            else toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), res && res.error);
             return res;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.connectionTestFailed', 'Connection test failed'), err);
+            toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), err);
             return null;
         }
     }, [t, toast]);
@@ -371,7 +371,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToAddRegistry', 'Failed to add registry'), err);
+            toastError(toast, t('app.connectionsHub.failedToAddRegistry', "Couldn't add the registry."), err);
             return false;
         }
     }, [toast, t, loadData]);
@@ -390,7 +390,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.failedToRemoveRegistry', 'Failed to delete registry'), err);
+            toastError(toast, t('app.connectionsHub.failedToRemoveRegistry', "Couldn't delete the registry."), err);
             return false;
         }
     }, [confirm, t, toast, loadData]);
@@ -399,10 +399,10 @@ export default function ConnectionsHub() {
         try {
             const res = await api.testContainerRegistry(id);
             if (res && res.success) toast.success(res.message || t('app.connectionsHub.loginWorks', 'Login works'));
-            else toastError(toast, t('app.connectionsHub.loginFailed', 'Login failed'), res && res.error);
+            else toastError(toast, t('app.connectionsHub.loginFailed', "Couldn't sign in."), res && res.error);
             return res;
         } catch (err) {
-            toastError(toast, t('app.connectionsHub.loginFailed', 'Login failed'), err);
+            toastError(toast, t('app.connectionsHub.loginFailed', "Couldn't sign in."), err);
             return null;
         }
     }, [t, toast]);
@@ -416,7 +416,7 @@ export default function ConnectionsHub() {
             if (provider.comingSoon) { out[provider.id] = { connected: false }; continue; }
             const failedKey = provider.kind === 'source' ? provider.provider : provider.kind;
             if (failed[failedKey]) {
-                out[provider.id] = { connected: false, loadFailed: true, statusLabel: t('app.connectionsHub.couldntLoad', "Couldn't load"), statusTone: 'danger', scopes: [] };
+                out[provider.id] = { connected: false, loadFailed: true, statusLabel: t('app.connectionsHub.couldntLoad', "Couldn't load."), statusTone: 'danger', scopes: [] };
                 continue;
             }
             const manageHref = provider.manageHref;
@@ -525,7 +525,7 @@ export default function ConnectionsHub() {
                 <div className="connections-hub__warning">
                     <ShieldAlert size={16} />
                     <span>
-                        {unencryptedCount} {t('app.connectionsHub.connectedAccount', 'connected account')}{unencryptedCount === 1 ? '' : 's'} {unencryptedCount === 1 ? 'has' : 'have'} {t('app.connectionsHub.credentialsNotEncryptedAtRestRestart', 'credentials not encrypted at rest. Restart the panel to migrate them, or check that')} <code>SERVERKIT_ENCRYPTION_KEY</code> {t('app.connectionsHub.isSet', 'is set.')}
+                        {t('app.connectionsHub.unencryptedAccounts', { count: unencryptedCount, defaultValue_one: '1 connected account has credentials not encrypted at rest. Restart the panel to migrate them, or check that', defaultValue_other: '{{count}} connected accounts have credentials not encrypted at rest. Restart the panel to migrate them, or check that' })} <code>SERVERKIT_ENCRYPTION_KEY</code> {t('app.connectionsHub.isSet', 'is set.')}
                     </span>
                 </div>
             )}

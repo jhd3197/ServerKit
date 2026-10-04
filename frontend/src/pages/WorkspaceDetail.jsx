@@ -187,7 +187,7 @@ const WorkspaceDetail = () => {
             const gData = await api.getAppGrants(appObj.id);
             setGrants(gData.grants || []);
             setSharingApp(appObj);
-        } catch (err) { toastError(toast, t('app.workspaceDetail.failedToLoadSharing', 'Failed to load sharing'), err); }
+        } catch (err) { toastError(toast, t('app.workspaceDetail.failedToLoadSharing', "Couldn't load sharing."), err); }
     };
 
     const handleGrant = async (userId) => {
@@ -222,7 +222,7 @@ const WorkspaceDetail = () => {
             <PageLayout className="ws-detail-page" icon={<LayoutGrid size={18} />} title={t('common.labels.workspace', 'Workspace')}>
                 <Link className="ws-detail__back" to="/workspaces"><ChevronLeft size={14} /> {t('app.workspaceDetail.allWorkspaces', 'All workspaces')}</Link>
                 <ErrorState
-                    title={t('app.workspaceDetail.couldntLoadWorkspace', "Couldn't load this workspace")}
+                    title={t('app.workspaceDetail.couldntLoadWorkspace', "Couldn't load this workspace.")}
                     error={loadError}
                     onRetry={load}
                 />
@@ -284,7 +284,7 @@ const WorkspaceDetail = () => {
                         <div className="app-detail-subtitle">
                             <span>/{ws.slug}</span>
                             <span className="separator">·</span>
-                            <span>{members.length} member{members.length !== 1 ? 's' : ''}</span>
+                            <span>{t('app.workspaceDetail.memberCount', { count: members.length, defaultValue_one: '1 member', defaultValue_other: '{{count}} members' })}</span>
                             {since && <><span className="separator">·</span><span>since {since}</span></>}
                         </div>
                     </div>

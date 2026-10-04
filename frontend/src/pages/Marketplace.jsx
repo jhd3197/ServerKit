@@ -335,7 +335,7 @@ const Marketplace = () => {
             toast.success(t('app.marketplace.installedHotReloadShouldPickIt', 'Installed "{{displayname}}". Hot-reload should pick it up; restart backend if blueprint routes do not appear.', { displayname: result.display_name }));
             loadExtensions();
         } catch (err) {
-            toastError(toast, t('app.marketplace.localInstallFailed', 'Local install failed'), err);
+            toastError(toast, t('app.marketplace.localInstallFailed', "Couldn't install from the local file."), err);
         } finally {
             setInstalling(false);
         }
@@ -353,7 +353,7 @@ const Marketplace = () => {
             if (err.status === 409 && err.data?.requires_acknowledgment) {
                 setRiskTarget({ slug, reason: err.data?.reason || 'unreviewed' });
             } else {
-                toastError(toast, t('app.marketplace.registryInstallFailed', 'Registry install failed'), err);
+                toastError(toast, t('app.marketplace.registryInstallFailed', "Couldn't install from the registry."), err);
             }
         } finally {
             setInstalling(false);
@@ -428,7 +428,7 @@ const Marketplace = () => {
             if (err.status === 409 && err.data?.requires_acknowledgment) {
                 setRiskTarget({ updatePluginId: pluginId, reason: err.data?.reason || 'unsigned' });
             } else {
-                toastError(toast, t('app.marketplace.extensionUpdateFailed', 'Extension update failed'), err);
+                toastError(toast, t('app.marketplace.extensionUpdateFailed', "Couldn't update the extension."), err);
             }
         } finally {
             setBusyPlugin(null);
@@ -564,7 +564,7 @@ const Marketplace = () => {
                         )}
                         {loadErrors.catalog && mergedCatalogEntries.length === 0 ? (
                             <ErrorState
-                                title={t('app.marketplace.couldntLoadTheCatalog', "Couldn't load the extension catalog")}
+                                title={t('app.marketplace.couldntLoadTheCatalog', "Couldn't load the extension catalog.")}
                                 error={loadErrors.catalog}
                                 onRetry={loadExtensions}
                             />
@@ -607,7 +607,7 @@ const Marketplace = () => {
                     )}
                     {loadErrors.installed && plugins.length === 0 ? (
                         <ErrorState
-                            title={t('app.marketplace.couldntLoadInstalledExtensions', "Couldn't load installed extensions")}
+                            title={t('app.marketplace.couldntLoadInstalledExtensions', "Couldn't load installed extensions.")}
                             error={loadErrors.installed}
                             onRetry={loadExtensions}
                         />
@@ -1107,7 +1107,7 @@ const PluginConfigDialog = ({ plugin, onClose }) => {
             toast.success(t('app.marketplace.extensionConfigurationSaved', 'Extension settings saved'));
             onClose();
         } catch (err) {
-            toastError(toast, t('app.marketplace.failedToSaveConfiguration', 'Failed to save settings'), err);
+            toastError(toast, t('app.marketplace.failedToSaveConfiguration', "Couldn't save the settings."), err);
         } finally {
             setSaving(false);
         }

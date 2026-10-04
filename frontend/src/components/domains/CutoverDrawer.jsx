@@ -414,8 +414,10 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                                         ? <CheckCircle2 size={16} aria-hidden="true" />
                                         : <AlertTriangle size={16} aria-hidden="true" />}
                                     <p>
-                                        {t('app.cutoverDrawer.restored', 'Restored')} {revertResult.results?.length ?? 0} record{(revertResult.results?.length ?? 0) === 1 ? '' : 's'}
-                                        {revertResult.deleted_count ? `, deleted ${revertResult.deleted_count} created record${revertResult.deleted_count === 1 ? '' : 's'}` : ''}.
+                                        {t('app.cutoverDrawer.restoredRecords', { count: revertResult.results?.length ?? 0, defaultValue_one: 'Restored 1 record.', defaultValue_other: 'Restored {{count}} records.' })}
+                                        {revertResult.deleted_count
+                                            ? ` ${t('app.cutoverDrawer.deletedCreatedRecords', { count: revertResult.deleted_count, defaultValue_one: 'Deleted 1 record the cutover created.', defaultValue_other: 'Deleted {{count}} records the cutover created.' })}`
+                                            : ''}
                                     </p>
                                 </div>
                             ) : (
@@ -438,7 +440,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                 <ConfirmDialog
                     isOpen={confirmOpen}
                     title={t('app.cutoverDrawer.applyDnsCutover', 'Apply DNS cutover?')}
-                    message={t('app.cutoverDrawer.thisRepointsRecordSForAt', 'This repoints {{value}} record(s) for {{domain}} at {{value2}}. The snapshot lets you revert.', { value: recordTypes.join(', '), domain: domain, value2: target.trim() })}
+                    message={t('app.cutoverDrawer.repointsRecords', { count: recordTypes.length, types: recordTypes.join(', '), domain: domain, target: target.trim(), defaultValue_one: 'This repoints the {{types}} record for {{domain}} at {{target}}. The snapshot lets you revert.', defaultValue_other: 'This repoints the {{types}} records for {{domain}} at {{target}}. The snapshot lets you revert.' })}
                     confirmText={t('app.cutoverDrawer.applyCutover', 'Apply cutover')}
                     variant="danger"
                     onConfirm={applyCutover}

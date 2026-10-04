@@ -151,7 +151,7 @@ const NetworksTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error('Failed to remove network:', err);
-            toastError(toast, t('app.networksTab.failedToRemoveNetworkItMay', 'Failed to delete network. It may be in use.'), err);
+            toastError(toast, t('app.networksTab.failedToRemoveNetworkItMay', "Couldn't delete the network. A container may still use it."), err);
         }
     }
 

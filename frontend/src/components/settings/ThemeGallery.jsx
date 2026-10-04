@@ -31,7 +31,7 @@ const ThemeGallery = () => {
             await refreshPanelDefault();
             toast.success(t('app.themeGallery.panelDefaultThemeUpdated', 'Panel default theme updated'));
         } catch (e) {
-            toastError(toast, t('app.themeGallery.couldNotSetTheDefaultTheme', 'Could not set the default theme'), e);
+            toastError(toast, t('app.themeGallery.couldNotSetTheDefaultTheme', "Couldn't set the default theme."), e);
         } finally {
             setBusy(null);
         }
@@ -44,7 +44,7 @@ const ThemeGallery = () => {
             await Promise.all([refreshInstalledThemes(), refreshPanelDefault()]);
             toast.success(t('app.themeGallery.themeRemoved', 'Theme removed'));
         } catch (e) {
-            toastError(toast, t('app.themeGallery.couldNotRemoveTheTheme', 'Could not remove the theme'), e);
+            toastError(toast, t('app.themeGallery.couldNotRemoveTheTheme', "Couldn't remove the theme."), e);
         } finally {
             setBusy(null);
         }

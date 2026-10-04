@@ -201,7 +201,7 @@ const Monitoring = () => {
             toast.success(t('app.monitoring.monitoringDeliverySaved', 'Monitoring delivery saved'));
             await loadData();
         } catch (err) {
-            toastError(toast, t('app.monitoring.failedToSaveMonitoringSettings', 'Failed to save monitoring settings'), err);
+            toastError(toast, t('app.monitoring.failedToSaveMonitoringSettings', "Couldn't save the monitoring settings."), err);
         } finally {
             setSavingConfig(false);
         }
@@ -220,7 +220,7 @@ const Monitoring = () => {
             toast.success(t('app.monitoring.alertRulesSaved', 'Alert rules saved'));
             await loadData();
         } catch (err) {
-            toastError(toast, t('app.monitoring.failedToSaveAlertRules', 'Failed to save alert rules'), err);
+            toastError(toast, t('app.monitoring.failedToSaveAlertRules', "Couldn't save the alert rules."), err);
         } finally {
             setSavingThresholds(false);
         }
@@ -237,14 +237,14 @@ const Monitoring = () => {
                 const res = await loadSpeedTest();
                 const latest = res?.last_result;
                 if (latest?.tested_at && latest.tested_at !== previousTestedAt) {
-                    if (latest.success === false) toastError(toast, t('app.monitoring.speedTestFailed', 'Speed test failed'), latest.error);
+                    if (latest.success === false) toastError(toast, t('app.monitoring.speedTestFailed', "Couldn't finish the speed test."), latest.error);
                     else toast.success(t('app.monitoring.speedTestComplete', 'Speed test complete'));
                     return;
                 }
             }
             toast.warning(t('app.monitoring.speedTestIsStillRunningRefresh', 'Speed test is still running. Refresh in a moment.'));
         } catch (err) {
-            toastError(toast, t('app.monitoring.failedToStartSpeedTest', 'Failed to start speed test'), err);
+            toastError(toast, t('app.monitoring.failedToStartSpeedTest', "Couldn't start the speed test."), err);
         } finally {
             setSpeedTestRunning(false);
         }

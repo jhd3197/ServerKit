@@ -137,10 +137,12 @@ const CronTab = ({ serverId, serverStatus }) => {
     async function handleToggle(job) {
         try {
             await api.toggleRemoteCronJob(serverId, job.id, !job.enabled);
-            toast.success(t('app.cronTab.job', 'Job {{value}}', { value: !job.enabled ? 'enabled' : 'disabled' }));
+            toast.success(!job.enabled
+                ? t('app.cronTab.jobOn', 'Job turned on')
+                : t('app.cronTab.jobOff', 'Job turned off'));
             loadJobs();
         } catch (err) {
-            toastError(toast, t('app.cronTab.failedToToggleJob', 'Failed to toggle job'), err);
+            toastError(toast, t('app.cronTab.failedToToggleJob', "Couldn't turn the job on or off."), err);
         }
     }
 
@@ -157,7 +159,7 @@ const CronTab = ({ serverId, serverStatus }) => {
             toast.success(t('app.cronTab.cronJobRemoved', 'Cron job deleted'));
             loadJobs();
         } catch (err) {
-            toastError(toast, t('app.cronTab.failedToRemoveJob', 'Failed to delete job'), err);
+            toastError(toast, t('app.cronTab.failedToRemoveJob', "Couldn't delete the job."), err);
         }
     }
 
@@ -183,7 +185,7 @@ const CronTab = ({ serverId, serverStatus }) => {
             setForm({ name: '', schedule: '0 * * * *', command: '' });
             loadJobs();
         } catch (err) {
-            toastError(toast, t('app.cronTab.failedToAddCronJob', 'Failed to add cron job'), err);
+            toastError(toast, t('app.cronTab.failedToAddCronJob', "Couldn't add the cron job."), err);
         } finally {
             setSubmitting(false);
         }

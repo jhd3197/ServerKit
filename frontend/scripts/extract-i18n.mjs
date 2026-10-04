@@ -103,6 +103,34 @@ function defaultValueOf(node) {
     return null;
 }
 
+// Plurals: `t('k', { count, defaultValue_one: '1 file', defaultValue_other:
+// '{{count}} files' })`. i18next resolves `k_one` / `k_other` by the
+// language's plural rules, so the extractor writes those keys, never a bare
+// `k`. A hand-rolled `file{{s}}` or `file(s)` cannot be translated: other
+// languages have more than two forms, and check-i18n accepts a translator's
+// `k_few` / `k_many` next to the English pair.
+export const PLURAL_SUFFIXES = ['zero', 'one', 'two', 'few', 'many', 'other'];
+
+/** { one: '…', other: '…' } declared at a call site, or null. */
+function pluralDefaultsOf(node) {
+    const [, second, third] = node.arguments;
+    for (const candidate of [second, third]) {
+        if (candidate?.type !== 'ObjectExpression') continue;
+        const forms = {};
+        for (const property of candidate.properties) {
+            if (property.type !== 'Property' || property.computed) continue;
+            const name = property.key.name || property.key.value;
+            const match = /^defaultValue_(\w+)$/.exec(name);
+            if (match && PLURAL_SUFFIXES.includes(match[1])
+                && property.value.type === 'Literal' && typeof property.value.value === 'string') {
+                forms[match[1]] = property.value.value;
+            }
+        }
+        if (forms.one !== undefined || forms.other !== undefined) return forms;
+    }
+    return null;
+}
+
 // Declarative keys in data files.
 //
 // A label sitting in a data table (sidebarItems.js, tab tables, column defs)
@@ -232,6 +260,17 @@ export function collect() {
                     // bundle renders the raw key path to a user.
                     if (!hasDefault(node)) {
                         problems.push(`${site}: t() has a computed key and no defaultValue`);
+                    }
+                    return;
+                }
+                const plural = pluralDefaultsOf(node);
+                if (plural) {
+                    if (plural.other === undefined) {
+                        problems.push(`${site}: t('${first.value}') declares plural defaults without defaultValue_other`);
+                        return;
+                    }
+                    for (const [suffix, form] of Object.entries(plural)) {
+                        record(`${first.value}_${suffix}`, form, site);
                     }
                     return;
                 }

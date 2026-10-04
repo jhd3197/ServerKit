@@ -48,7 +48,7 @@ export default function ErrorCard({ failedStepName, failureTail, hint, errorMess
             <div className="deploy-console__error-head">
                 <AlertTriangle size={18} />
                 <div>
-                    <strong>{t('app.errorCard.deploymentFailed', 'Deployment failed')}{failedStepName ? ` at "${failedStepName}"` : ''}</strong>
+                    <strong>{t('app.errorCard.deploymentFailed', "Couldn't deploy")}{failedStepName ? ` at "${failedStepName}"` : ''}</strong>
                     {errorMessage && <p className="deploy-console__error-msg">{errorMessage}</p>}
                 </div>
             </div>

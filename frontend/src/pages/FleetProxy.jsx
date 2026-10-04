@@ -324,7 +324,7 @@ const FleetProxy = () => {
             setError(null);
         } catch (err) {
             setError(err.message || 'Failed to load fleet proxy overview');
-            toastError(toast, t('app.fleetProxy.failedToLoadFleetProxyOverview', 'Failed to load fleet proxy overview'), err);
+            toastError(toast, t('app.fleetProxy.failedToLoadFleetProxyOverview', "Couldn't load the fleet proxy overview."), err);
         } finally {
             setLoading(false);
         }

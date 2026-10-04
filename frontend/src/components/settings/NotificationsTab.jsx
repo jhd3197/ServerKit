@@ -59,7 +59,7 @@ const NotificationsTab = () => {
             .catch((error) => {
                 if (!active) return;
                 setLoadError(true);
-                setMessage({ type: 'error', text: error.message || t('notifications.loadFailed', 'Could not load notification settings. Reload to try again.') });
+                setMessage({ type: 'error', text: error.message || t('notifications.loadFailed', "Couldn't load notification settings. Reload to try again.") });
             })
             .finally(() => { if (active) setLoading(false); });
         return () => { active = false; };
@@ -136,7 +136,7 @@ const NotificationsTab = () => {
         return <EmptyState loading title={t('app.notificationsTab.loadingNotificationSettings', 'Loading notification settings…')} />;
     }
 
-    if (loadError) return <EmptyState title={t('notifications.loadFailed', 'Could not load notification settings. Reload to try again.')}
+    if (loadError) return <EmptyState title={t('notifications.loadFailed', "Couldn't load notification settings. Reload to try again.")}
         description={message?.text} action={<Button onClick={() => setLoadAttempt((attempt) => attempt + 1)}>{t('common.retry', 'Retry')}</Button>} />;
 
     const userPrefsUI = (

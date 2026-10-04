@@ -104,7 +104,7 @@ function RecipeHandoffCard({ operation, onSubmitted, t }) {
         } catch (submitError) {
             setError(submitError?.message || t(
                 'app.operationsDock.handoffFailed',
-                'Could not submit this handoff',
+                "Couldn't submit this handoff.",
             ));
         } finally {
             setSubmitting(false);
@@ -301,7 +301,7 @@ export default function OperationsDock({ hideLauncher = false, statusbarMode = f
             await refresh();
             toast.success(t('app.operationsDock.cancelQueued', 'Cancellation requested'));
         } catch (error) {
-            toastError(toast, t('app.operationsDock.actionFailed', 'Operation action failed'), error);
+            toastError(toast, t('app.operationsDock.actionFailed', "Couldn't run that action on the operation."), error);
         }
     };
 
@@ -313,7 +313,7 @@ export default function OperationsDock({ hideLauncher = false, statusbarMode = f
             await refresh();
             toast.success(t('app.operationsDock.retryQueued', 'Retry queued'));
         } catch (error) {
-            toastError(toast, t('app.operationsDock.actionFailed', 'Operation action failed'), error);
+            toastError(toast, t('app.operationsDock.actionFailed', "Couldn't run that action on the operation."), error);
         }
     };
 

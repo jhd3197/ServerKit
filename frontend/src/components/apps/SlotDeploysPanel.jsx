@@ -66,7 +66,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                 : (data.note || t('app.slotDeploysPanel.disabled', 'Slot deploys off')));
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.slotDeploysPanel.toggleFailed', 'Could not change slot deploys'), err);
+            toastError(toast, t('app.slotDeploysPanel.toggleFailed', "Couldn't change slot deploys."), err);
         } finally {
             setToggling(false);
         }
@@ -88,7 +88,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
             toast.success(t('app.slotDeploysPanel.saved', 'Rollout settings saved'));
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.slotDeploysPanel.saveFailed', 'Failed to save rollout settings'), err);
+            toastError(toast, t('app.slotDeploysPanel.saveFailed', "Couldn't save the rollout settings."), err);
         } finally {
             setSaving(false);
         }
@@ -98,7 +98,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
         try {
             setSplit(await api.previewAppComposeSplit(app.id));
         } catch (err) {
-            toastError(toast, t('app.slotDeploysPanel.splitPreviewFailed', 'Could not preview the split'), err);
+            toastError(toast, t('app.slotDeploysPanel.splitPreviewFailed', "Couldn't preview the split."), err);
         }
     }
 
@@ -111,7 +111,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
             toast.success(t('app.slotDeploysPanel.splitDone', 'Stateful compose services moved. The service now deploys through slots.'));
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.slotDeploysPanel.splitFailed', 'The split failed'), err);
+            toastError(toast, t('app.slotDeploysPanel.splitFailed', "Couldn't split traffic."), err);
         } finally {
             setSplitting(false);
         }

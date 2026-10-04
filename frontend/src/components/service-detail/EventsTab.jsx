@@ -306,7 +306,7 @@ const EventsTab = ({ appId }) => {
         return (
             <EmptyState
                 icon={History}
-                title={t('app.eventsTab.failedToLoadActivity', 'Failed to load activity')}
+                title={t('app.eventsTab.failedToLoadActivity', "Couldn't load activity.")}
                 description={error}
                 action={<Button variant="outline" onClick={refresh}>{t('common.actions.retry', 'Retry')}</Button>}
             />

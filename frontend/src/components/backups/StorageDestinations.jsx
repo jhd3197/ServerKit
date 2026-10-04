@@ -12,7 +12,7 @@ const PROVIDER_META = {
 // Where the archive can land, as a card per destination — the design mock's
 // Storage section. Local disk is always present (it is where a backup is
 // written before anything is uploaded); a configured remote joins it and takes
-// the PRIMARY badge, because that is the copy that survives losing the box.
+// the Primary badge, because that is the copy that survives losing the box.
 export default function StorageDestinations({
     stats, storageConfig, costSummary, onTest, onBrowse, onAdd, testing,
 }) {
@@ -76,7 +76,7 @@ export default function StorageDestinations({
                             <div className="bk-destcard__id">
                                 <div className="bk-destcard__name">
                                     {card.name}
-                                    {card.primary && <span className="bk-dest__tag">PRIMARY</span>}
+                                    {card.primary && <span className="bk-dest__tag">{t('app.backups.primary', 'Primary')}</span>}
                                 </div>
                                 <div className="bk-destcard__type">{card.type}</div>
                             </div>

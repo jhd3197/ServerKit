@@ -76,7 +76,7 @@ export default function WebhooksTab() {
             loadAll();
             toast.success(t('app.webhooksTab.endpointCreated', 'Endpoint created'));
         } catch (err) {
-            toast.error(t('app.webhooksTab.failedToCreateEndpoint', 'Failed to create endpoint: {{message}}', { message: errorReason(err) }));
+            toast.error(t('app.webhooksTab.failedToCreateEndpoint', "Couldn't create the endpoint. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -92,7 +92,7 @@ export default function WebhooksTab() {
             loadAll();
             toast.success(t('app.webhooksTab.endpointDeleted', 'Endpoint deleted'));
         } catch (err) {
-            toast.error(t('app.webhooksTab.failedToDeleteEndpoint', 'Failed to delete endpoint: {{message}}', { message: errorReason(err) }));
+            toast.error(t('app.webhooksTab.failedToDeleteEndpoint', "Couldn't delete the endpoint. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -103,7 +103,7 @@ export default function WebhooksTab() {
             loadAll();
             if (selectedEndpoint?.id === id) openEndpoint(data.endpoint.id);
         } catch (err) {
-            toast.error(t('app.webhooksTab.regenerateFailed', 'Regenerate failed: {{message}}', { message: errorReason(err) }));
+            toast.error(t('app.webhooksTab.regenerateFailed', "Couldn't regenerate the secret. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -114,7 +114,7 @@ export default function WebhooksTab() {
             setSelectedEndpoint(endpoint);
             setDeliveries(deliveries || []);
         } catch (err) {
-            toast.error(t('app.webhooksTab.failedToLoadEndpoint', 'Failed to load endpoint: {{message}}', { message: errorReason(err) }));
+            toast.error(t('app.webhooksTab.failedToLoadEndpoint', "Couldn't load the endpoint. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -130,7 +130,7 @@ export default function WebhooksTab() {
                 toast.success(t('app.webhooksTab.replayedDelivery', 'Replayed delivery'));
             }
         } catch (err) {
-            toast.error(t('app.webhooksTab.replayFailed', 'Replay failed: {{message}}', { message: errorReason(err) }));
+            toast.error(t('app.webhooksTab.replayFailed', "Couldn't replay the delivery. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -147,7 +147,7 @@ export default function WebhooksTab() {
     if (loadError && !loaded) {
         return (
             <ErrorState
-                title={t('app.webhooksTab.couldntLoadWebhooks', "Couldn't load webhook endpoints")}
+                title={t('app.webhooksTab.couldntLoadWebhooks', "Couldn't load webhook endpoints.")}
                 error={loadError}
                 onRetry={loadAll}
             />

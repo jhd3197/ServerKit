@@ -29,7 +29,7 @@ const ThemeBrowseModal = ({ open, onOpenChange }) => {
             setThemes(Array.isArray(data?.themes) ? data.themes : []);
             setSource(data?.source || null);
         } catch (e) {
-            toastError(toast, t('app.themeBrowseModal.couldNotLoadTheThemeRegistry', 'Could not load the theme registry'), e);
+            toastError(toast, t('app.themeBrowseModal.couldNotLoadTheThemeRegistry', "Couldn't load the theme registry."), e);
             setThemes([]);
         } finally {
             setLoading(false);
@@ -51,7 +51,7 @@ const ThemeBrowseModal = ({ open, onOpenChange }) => {
             )));
             toast.success(t('app.themeBrowseModal.themeInstalledFindItInThe', 'Theme installed. Find it in the gallery.'));
         } catch (e) {
-            toastError(toast, t('app.themeBrowseModal.couldNotInstallThatTheme', 'Could not install that theme'), e);
+            toastError(toast, t('app.themeBrowseModal.couldNotInstallThatTheme', "Couldn't install that theme."), e);
         } finally {
             setInstalling(null);
         }

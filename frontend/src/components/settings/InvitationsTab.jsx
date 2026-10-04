@@ -98,7 +98,7 @@ const InvitationsTab = () => {
             setInvitations(data.invitations || []);
             setError('');
         } catch (err) {
-            setError(err.message || t('app.invitationsTab.loadFailed', 'Failed to load invitations'));
+            setError(err.message || t('app.invitationsTab.loadFailed', "Couldn't load invitations."));
         } finally {
             setLoading(false);
         }
@@ -114,7 +114,7 @@ const InvitationsTab = () => {
             await api.revokeInvitation(id);
             await loadInvitations();
         } catch (err) {
-            setError(err.message || t('app.invitationsTab.revokeFailed', 'Failed to revoke invitation'));
+            setError(err.message || t('app.invitationsTab.revokeFailed', "Couldn't revoke the invitation."));
         } finally {
             actionInFlight.current = false;
             setPendingId(null);
@@ -129,7 +129,7 @@ const InvitationsTab = () => {
             await api.resendInvitation(id);
             setError('');
         } catch (err) {
-            setError(err.message || t('app.invitationsTab.resendFailed', 'Failed to resend invitation'));
+            setError(err.message || t('app.invitationsTab.resendFailed', "Couldn't resend the invitation."));
         } finally {
             actionInFlight.current = false;
             setPendingId(null);

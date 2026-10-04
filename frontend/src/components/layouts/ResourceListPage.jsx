@@ -344,7 +344,7 @@ export default function ResourceListPage({
             )}
             {error && resolvedTotal === 0 ? (
                 <ErrorState
-                    title={errorTitle || t('app.resourceListPage.couldntLoad', "Couldn't load {{noun}}", { noun })}
+                    title={errorTitle || t('app.resourceListPage.couldntLoad', "Couldn't load {{noun}}.", { noun })}
                     error={errorObj}
                     onRetry={onRetry}
                 />

@@ -156,8 +156,8 @@ const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShar
                 emptyState={loadError ? (
                     <ErrorState
                         title={kind === 'sites'
-                            ? t('app.workspaceApplicationsTab.couldntLoadSites', "Couldn't load sites")
-                            : t('app.workspaceApplicationsTab.couldntLoadServices', "Couldn't load services")}
+                            ? t('app.workspaceApplicationsTab.couldntLoadSites', "Couldn't load sites.")
+                            : t('app.workspaceApplicationsTab.couldntLoadServices', "Couldn't load services.")}
                         error={loadError}
                         onRetry={onRetry}
                     />

@@ -62,7 +62,7 @@ const SSOCallback = () => {
             <div className="auth-container">
                 <div className="auth-card">
                     <div className="auth-header">
-                        <h1>{t('app.sSOCallback.authenticationFailed', 'Authentication failed')}</h1>
+                        <h1>{t('app.sSOCallback.authenticationFailed', "Couldn't sign you in.")}</h1>
                         <p className="error-message">{error}</p>
                     </div>
                     <Button asChild className="btn-full">

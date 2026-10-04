@@ -163,7 +163,7 @@ export function useNewServiceForm() {
             const data = await api.getGithubSourceStatus();
             setGithubStatus(data);
         } catch (err) {
-            toastError(toast, t('app.useNewServiceForm.failedToLoadGithubConnection', 'Failed to load GitHub connection'), err);
+            toastError(toast, t('app.useNewServiceForm.failedToLoadGithubConnection', "Couldn't load the GitHub connection."), err);
         }
     }, [t, toast]);
 
@@ -173,7 +173,7 @@ export function useNewServiceForm() {
             const data = await api.listGithubRepositories({ search, perPage: 80 });
             setRepos(data.repos || []);
         } catch (err) {
-            toastError(toast, t('app.useNewServiceForm.failedToLoadGithubRepositories', 'Failed to load GitHub repositories'), err);
+            toastError(toast, t('app.useNewServiceForm.failedToLoadGithubRepositories', "Couldn't load GitHub repositories."), err);
         } finally {
             setReposLoading(false);
         }
@@ -186,7 +186,7 @@ export function useNewServiceForm() {
             setBranches(data.branches || []);
         } catch (err) {
             setBranches([]);
-            toastError(toast, t('app.useNewServiceForm.failedToLoadBranches', 'Failed to load branches'), err);
+            toastError(toast, t('app.useNewServiceForm.failedToLoadBranches', "Couldn't load branches."), err);
         } finally {
             setBranchesLoading(false);
         }
@@ -267,7 +267,7 @@ export function useNewServiceForm() {
             .catch((err) => {
                 if (!cancelled) {
                     setRepoManifest(null);
-                    toastError(toast, t('app.useNewServiceForm.failedToInspectManifests', 'Failed to inspect repository manifests'), err);
+                    toastError(toast, t('app.useNewServiceForm.failedToInspectManifests', "Couldn't inspect the repository manifests."), err);
                 }
             })
             .finally(() => { if (!cancelled) setRepoManifestLoading(false); });
@@ -316,7 +316,7 @@ export function useNewServiceForm() {
             const { auth_url } = await api.startSourceConnection('github', redirectUri);
             window.location.href = auth_url;
         } catch (err) {
-            toastError(toast, t('app.useNewServiceForm.failedToStartGithubConnection', 'Failed to start GitHub connection'), err);
+            toastError(toast, t('app.useNewServiceForm.failedToStartGithubConnection', "Couldn't start the GitHub connection."), err);
         }
     }
 
@@ -466,7 +466,7 @@ export function useNewServiceForm() {
                 }
             }
         } catch (err) {
-            toastError(toast, t('app.useNewServiceForm.failedToCreateService', 'Failed to create service'), err);
+            toastError(toast, t('app.useNewServiceForm.failedToCreateService', "Couldn't create the service."), err);
         } finally {
             setSubmitting(false);
         }

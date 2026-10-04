@@ -168,7 +168,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             setCreateName('');
             loadTunnels();
         } catch (err) {
-            toastError(toast, t('app.cloudflaredTab.failedToCreateTunnel', 'Failed to create tunnel'), err);
+            toastError(toast, t('app.cloudflaredTab.failedToCreateTunnel', "Couldn't create the tunnel."), err);
         } finally {
             setCreating(false);
         }
@@ -186,7 +186,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             setRouteHostname('');
             setRouteTunnel(null);
         } catch (err) {
-            toastError(toast, t('app.cloudflaredTab.failedToAddRoute', 'Failed to add route'), err);
+            toastError(toast, t('app.cloudflaredTab.failedToAddRoute', "Couldn't add the route."), err);
         } finally {
             setRouting(false);
         }
@@ -204,7 +204,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             toast.success(t('app.cloudflaredTab.tunnelDeleted', 'Tunnel deleted'));
             loadTunnels();
         } catch (err) {
-            toastError(toast, t('app.cloudflaredTab.failedToDeleteTunnel', 'Failed to delete tunnel'), err);
+            toastError(toast, t('app.cloudflaredTab.failedToDeleteTunnel', "Couldn't delete the tunnel."), err);
         }
     }
 
@@ -235,7 +235,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                 if (ev.phase === 'done') {
                     if (ev.error) {
                         setLogin((cur) => cur ? { ...cur, status: 'error', error: ev.error } : cur);
-                        toast.error(t('app.cloudflaredTab.loginFailed', 'Login failed: {{error}}', { error: ev.error }));
+                        toast.error(t('app.cloudflaredTab.loginFailed', "Couldn't sign in. {{error}}", { error: ev.error }));
                     } else {
                         setLogin((cur) => cur ? { ...cur, status: 'done', certPath: ev?.extra?.cert_path } : cur);
                         toast.success(t('app.cloudflaredTab.cloudflareLoginComplete', 'Cloudflare login complete'));
@@ -250,7 +250,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             };
             stopStream = joinServerStream(room, 'server_stream', onStream);
         } catch (err) {
-            toastError(toast, t('app.cloudflaredTab.failedToStartLogin', 'Failed to start login'), err);
+            toastError(toast, t('app.cloudflaredTab.failedToStartLogin', "Couldn't start the sign-in."), err);
             setLogin(null);
         }
     }
@@ -611,7 +611,7 @@ const CloudflaredLoginCard = ({ login, onCancel }) => {
     if (login.status === 'error') {
         return (
             <div className="cloudflared-login-card cloudflared-login-card--error">
-                <strong>{t('app.cloudflaredTab.loginFailed2', 'Login failed:')}</strong> {login.error || 'unknown error'}
+                <strong>{t('app.cloudflaredTab.loginFailed2', "Couldn't sign in.")}</strong> {login.error || 'unknown error'}
                 <Button variant="outline" size="sm" onClick={onCancel}>{t('common.actions.dismiss', 'Dismiss')}</Button>
             </div>
         );

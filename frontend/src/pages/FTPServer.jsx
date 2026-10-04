@@ -176,9 +176,9 @@ function FTPServer() {
             await loadStatus();
         } catch (error) {
             const failed = {
-                start: t('app.fTPServer.couldntStartFtp', "Couldn't start the FTP server. {{message}}", { message: errorReason(error) }),
-                stop: t('app.fTPServer.couldntStopFtp', "Couldn't stop the FTP server. {{message}}", { message: errorReason(error) }),
-                restart: t('app.fTPServer.couldntRestartFtp', "Couldn't restart the FTP server. {{message}}", { message: errorReason(error) }),
+                start: t('app.fTPServer.couldntStartFtp', "Couldn't start the FTP server. {{message}}.", { message: errorReason(error) }),
+                stop: t('app.fTPServer.couldntStopFtp', "Couldn't stop the FTP server. {{message}}.", { message: errorReason(error) }),
+                restart: t('app.fTPServer.couldntRestartFtp', "Couldn't restart the FTP server. {{message}}.", { message: errorReason(error) }),
             };
             toast.error(failed[action] || error.message);
         } finally {
@@ -194,7 +194,7 @@ function FTPServer() {
             setShowInstallModal(false);
             await loadData();
         } catch (error) {
-            toast.error(t('app.fTPServer.failedToInstall', 'Failed to install: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fTPServer.failedToInstall', "Couldn't install. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -214,7 +214,7 @@ function FTPServer() {
             setNewUser({ username: '', password: '', homeDir: '' });
             await loadUsers();
         } catch (error) {
-            toast.error(t('app.fTPServer.failedToCreateUser', 'Failed to create user: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fTPServer.failedToCreateUser', "Couldn't create the user. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -232,7 +232,7 @@ function FTPServer() {
                     toast.success(t('app.fTPServer.userDeletedSuccessfully', 'User deleted'));
                     await loadUsers();
                 } catch (error) {
-                    toast.error(t('app.fTPServer.failedToDeleteUser', 'Failed to delete user: {{message}}', { message: errorReason(error) }));
+                    toast.error(t('app.fTPServer.failedToDeleteUser', "Couldn't delete the user. {{message}}", { message: errorReason(error) }));
                 }
                 setConfirmDialog(null);
             },
@@ -243,10 +243,12 @@ function FTPServer() {
     const handleToggleUser = async (username, currentStatus) => {
         try {
             await api.toggleFTPUser(username, !currentStatus);
-            toast.success(t('app.fTPServer.userSuccessfully', 'User {{value}}', { value: currentStatus ? 'disabled' : 'enabled' }));
+            toast.success(currentStatus
+                ? t('app.fTPServer.userOff', 'User turned off')
+                : t('app.fTPServer.userOn', 'User turned on'));
             await loadUsers();
         } catch (error) {
-            toast.error(t('app.fTPServer.failedToToggleUser', 'Failed to toggle user: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fTPServer.failedToToggleUser', "Couldn't turn the user on or off. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -260,7 +262,7 @@ function FTPServer() {
             setPasswordTarget(null);
             setNewPassword('');
         } catch (error) {
-            toast.error(t('app.fTPServer.failedToChangePassword', 'Failed to change password: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fTPServer.failedToChangePassword', "Couldn't change the password. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -272,7 +274,7 @@ function FTPServer() {
             toast.success(t('app.fTPServer.sessionDisconnected', 'Session disconnected'));
             await loadConnections();
         } catch (error) {
-            toast.error(t('app.fTPServer.failedToDisconnect', 'Failed to disconnect: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fTPServer.failedToDisconnect', "Couldn't disconnect. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -286,7 +288,7 @@ function FTPServer() {
                 toastError(toast, t('app.fTPServer.couldntConnect', "Couldn't connect to the FTP server."), result.error);
             }
         } catch (error) {
-            toast.error(t('app.fTPServer.connectionTestFailed', 'Connection test failed: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fTPServer.connectionTestFailed', "Couldn't connect. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }

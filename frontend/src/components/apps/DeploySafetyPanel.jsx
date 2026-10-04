@@ -45,7 +45,7 @@ const DeploySafetyPanel = ({ app, onChanged }) => {
             toast.success(t('app.deploySafetyPanel.saved', 'Health check settings saved'));
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.deploySafetyPanel.saveFailed', 'Failed to save health check settings'), err);
+            toastError(toast, t('app.deploySafetyPanel.saveFailed', "Couldn't save the health check settings."), err);
         } finally {
             setSaving(false);
         }

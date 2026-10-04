@@ -105,7 +105,7 @@ const SSHKeysTab = () => {
             setNewKey('');
             await loadKeys();
         } catch (error) {
-            toast.error(t('app.sSHKeysTab.failedToAddKey', 'Failed to add key: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.sSHKeysTab.failedToAddKey', "Couldn't add the key. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -124,7 +124,7 @@ const SSHKeysTab = () => {
             toast.success(t('app.sSHKeysTab.sshKeyRemoved', 'SSH key deleted'));
             await loadKeys();
         } catch (error) {
-            toast.error(t('app.sSHKeysTab.failedToRemoveKey', 'Failed to delete key: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.sSHKeysTab.failedToRemoveKey', "Couldn't delete the key. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -241,7 +241,7 @@ const SSHKeysTab = () => {
                 </SharedCard>
             ) : loadError && keys.length === 0 ? (
                 <ErrorState
-                    title={t('app.sSHKeysTab.couldntLoadSshKeys', "Couldn't load SSH keys")}
+                    title={t('app.sSHKeysTab.couldntLoadSshKeys', "Couldn't load SSH keys.")}
                     error={loadError}
                     onRetry={loadKeys}
                 />

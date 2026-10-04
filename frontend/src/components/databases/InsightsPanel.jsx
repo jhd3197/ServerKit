@@ -38,7 +38,7 @@ export default function InsightsPanel({ conn, engine, isAdmin }) {
             setData(await api.getDockerDbInsights(conn.container, type, conn.user, conn.password));
             setError('');
         } catch (err) {
-            setError(err.message || t('app.dbInsights.failedToLoad', 'Failed to load insights'));
+            setError(err.message || t('app.dbInsights.failedToLoad', "Couldn't load insights."));
         } finally {
             inFlight.current = false;
         }

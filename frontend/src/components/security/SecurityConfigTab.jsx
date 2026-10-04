@@ -66,7 +66,7 @@ const SecurityConfigTab = () => {
     if (loadError && !config) {
         return (
             <ErrorState
-                title={t('app.securityConfigTab.couldntLoadSettings', "Couldn't load security settings")}
+                title={t('app.securityConfigTab.couldntLoadSettings', "Couldn't load security settings.")}
                 error={loadError}
                 onRetry={loadConfig}
             />

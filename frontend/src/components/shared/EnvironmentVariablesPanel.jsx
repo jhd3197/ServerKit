@@ -74,7 +74,7 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
                 resolved = data.variables || [];
                 attachedGroups = data.groups || [];
             } catch (err) {
-                toastError(toast, t('app.environmentVariablesPanel.failedToLoadSharedVariables', 'Failed to load shared variables'), err);
+                toastError(toast, t('app.environmentVariablesPanel.failedToLoadSharedVariables', "Couldn't load shared variables."), err);
                 console.error('Failed to load resolved variables:', err);
             }
         }
@@ -128,7 +128,7 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
             <div className="shared-vars-panel__header">
                 <h3>{t('app.environmentVariablesPanel.sharedVariables', 'Shared variables')}</h3>
                 <span className="shared-vars-panel__count">
-                    {variables.length} {t('app.environmentVariablesPanel.resolved', 'resolved ·')} {groups.length} group{groups.length !== 1 ? 's' : ''}
+                    {t('app.environmentVariablesPanel.resolvedCount', '{{count}} resolved', { count: variables.length })} · {t('app.environmentVariablesPanel.groupCount', { count: groups.length, defaultValue_one: '1 group', defaultValue_other: '{{count}} groups' })}
                 </span>
             </div>
 

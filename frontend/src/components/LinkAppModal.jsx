@@ -95,7 +95,7 @@ const LinkAppModal = ({ app, onClose, onLinked }) => {
                         <div className="link-app-current">
                             <span className="link-app-label">{t('app.linkAppModal.currentApp', 'Current service:')}</span>
                             <span className="link-app-name">{app.name}</span>
-                            <span className="app-type-badge">{app.app_type.toUpperCase()}</span>
+                            <span className="app-type-badge">{app.app_type}</span>
                         </div>
 
                         <div className="form-group">

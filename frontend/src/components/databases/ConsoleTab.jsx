@@ -81,7 +81,7 @@ export default function ConsoleTab({ conn, tabId, active, isAdmin, initialQuery 
             if (result.success) {
                 setResults(result);
                 saveToHistory(sql);
-                toast.success(t('app.consoleTab.rowS', '{{rowcount}} row{{value}} · {{executiontime}}s', { rowcount: result.row_count, value: result.row_count === 1 ? '' : 's', executiontime: result.execution_time }));
+                toast.success(t('app.consoleTab.rowsIn', { count: result.row_count, executiontime: result.execution_time, defaultValue_one: '1 row · {{executiontime}}s', defaultValue_other: '{{count}} rows · {{executiontime}}s' }));
             } else {
                 setError(result.error || 'Query failed.');
             }

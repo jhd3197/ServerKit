@@ -282,19 +282,19 @@ export default function Jobs() {
 
     const onRetry = async (id) => {
         try { await api.retryJob(id); toast.success(t('app.jobs.jobReQueued', 'Job re-queued')); load(); }
-        catch (err) { toastError(toast, t('app.jobs.retryFailed', 'Retry failed'), err); }
+        catch (err) { toastError(toast, t('app.jobs.retryFailed', "Couldn't retry the job."), err); }
     };
     const onCancel = async (id) => {
         try { await api.cancelJob(id); toast.success(t('app.jobs.jobCancelled', 'Job cancelled')); load(); }
-        catch (err) { toastError(toast, t('app.jobs.cancelFailed', 'Cancel failed'), err); }
+        catch (err) { toastError(toast, t('app.jobs.cancelFailed', "Couldn't cancel the job."), err); }
     };
     const onRunScheduled = async (id) => {
         try { await api.runScheduledJob(id); toast.success(t('app.jobs.scheduledJobTriggered', 'Scheduled job triggered')); load(); }
-        catch (err) { toastError(toast, t('app.jobs.triggerFailed', 'Trigger failed'), err); }
+        catch (err) { toastError(toast, t('app.jobs.triggerFailed', "Couldn't run the scheduled job."), err); }
     };
     const onToggleScheduled = async (id, enabled) => {
         try { await api.setScheduledJobEnabled(id, enabled); load(); }
-        catch (err) { toastError(toast, t('app.jobs.updateFailed', 'Update failed'), err); }
+        catch (err) { toastError(toast, t('app.jobs.updateFailed', "Couldn't update the scheduled job."), err); }
     };
 
     // Declared above the admin gate because useTableChrome is a hook and the
@@ -467,7 +467,7 @@ export default function Jobs() {
                 )}
                 {scheduledView && loadErrors.scheduled && scheduled.length === 0 ? (
                     <ErrorState
-                        title={t('app.jobs.couldntLoadScheduledJobs', "Couldn't load scheduled jobs")}
+                        title={t('app.jobs.couldntLoadScheduledJobs', "Couldn't load scheduled jobs.")}
                         error={loadErrors.scheduled}
                         onRetry={load}
                     />
@@ -516,7 +516,7 @@ export default function Jobs() {
 
                         {loadErrors.jobs && jobs.length === 0 ? (
                             <ErrorState
-                                title={t('app.jobs.couldntLoadJobs', "Couldn't load jobs")}
+                                title={t('app.jobs.couldntLoadJobs', "Couldn't load jobs.")}
                                 error={loadErrors.jobs}
                                 onRetry={load}
                             />

@@ -68,14 +68,14 @@ export default function EmailProviders() {
             (spec.fields || []).forEach((f) => { if (form[f] !== undefined) payload[f] = form[f]; });
             const res = await api.addEmailProvider(payload);
             if (res?.test && res.test.success === false) {
-                toast.warning(t('app.emailProviders.addedButTestFailed', 'Added, but test failed: {{value}}', { value: res.test.error || 'check credentials' }));
+                toast.warning(t('app.emailProviders.addedButTestFailed', "Added, but the test didn't pass. {{value}}", { value: res.test.error || 'check credentials' }));
             } else {
                 toast.success(t('app.emailProviders.emailProviderAdded', 'Email provider added'));
             }
             cancel();
             load();
         } catch (e) {
-            toastError(toast, t('app.emailProviders.failedToAddProvider', 'Failed to add provider'), e);
+            toastError(toast, t('app.emailProviders.failedToAddProvider', "Couldn't add the provider."), e);
         } finally {
             setBusy(false);
         }
@@ -85,10 +85,10 @@ export default function EmailProviders() {
         setBusy(true);
         try {
             const r = await api.testEmailProvider(id);
-            if (r.success) toast.success(t('app.emailProviders.credentialsOk', 'Credentials OK')); else toastError(toast, t('app.emailProviders.testFailed', 'Test failed'), r.error);
+            if (r.success) toast.success(t('app.emailProviders.credentialsOk', 'Credentials OK')); else toastError(toast, t('app.emailProviders.testFailed', "The test didn't pass."), r.error);
             load();
         } catch (err) {
-            toastError(toast, t('app.emailProviders.testFailed', 'Test failed'), err);
+            toastError(toast, t('app.emailProviders.testFailed', "The test didn't pass."), err);
         } finally {
             setBusy(false);
         }
@@ -96,12 +96,12 @@ export default function EmailProviders() {
 
     const onDefault = async (id) => {
         try { await api.setDefaultEmailProvider(id); toast.success(t('app.emailProviders.defaultTransportUpdated', 'Default transport updated')); load(); }
-        catch (err) { toastError(toast, t('app.emailProviders.failedToSetDefault', 'Failed to set default'), err); }
+        catch (err) { toastError(toast, t('app.emailProviders.failedToSetDefault', "Couldn't set the default."), err); }
     };
 
     const onDelete = async (id) => {
         try { await api.deleteEmailProvider(id); toast.success(t('app.emailProviders.providerRemoved', 'Provider deleted')); setConfirmId(null); load(); }
-        catch (err) { toastError(toast, t('app.emailProviders.failedToRemove', 'Failed to delete'), err); }
+        catch (err) { toastError(toast, t('app.emailProviders.failedToRemove', "Couldn't delete the provider."), err); }
     };
 
     return (

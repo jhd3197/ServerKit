@@ -109,7 +109,7 @@ export default function RecycleBinTab() {
             else toast.success(t('app.recycleBinTab.restored', 'Restored {{noun}} "{{label}}"', { noun: row.noun, label: row.label }));
             await load();
         } catch (err) {
-            toastError(toast, t('app.recycleBinTab.restoreFailed', 'Restore failed'), err);
+            toastError(toast, t('app.recycleBinTab.restoreFailed', "Couldn't restore it."), err);
         } finally {
             setBusyId(null);
         }
@@ -122,7 +122,7 @@ export default function RecycleBinTab() {
             toast.success(t('app.recycleBinTab.permanentlyDeleted', 'Permanently deleted "{{label}}"', { label: row.label }));
             await load();
         } catch (err) {
-            toastError(toast, t('app.recycleBinTab.deleteFailed', 'Delete failed'), err);
+            toastError(toast, t('app.recycleBinTab.deleteFailed', "Couldn't delete it."), err);
         } finally {
             setBusyId(null);
             setPurgeTarget(null);
@@ -238,7 +238,7 @@ export default function RecycleBinTab() {
                 <EmptyState loading loadingVariant="table" title={t('app.recycleBinTab.loadingDeletedRecords', 'Loading deleted records…')} />
             ) : loadError && (!loaded || items.length === 0) ? (
                 <ErrorState
-                    title={t('app.recycleBinTab.couldntLoadRecycleBin', "Couldn't load the recycle bin")}
+                    title={t('app.recycleBinTab.couldntLoadRecycleBin', "Couldn't load the recycle bin.")}
                     error={loadError}
                     onRetry={load}
                 />

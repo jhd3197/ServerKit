@@ -36,7 +36,7 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
                 toast.info(t('app.htaccessConverter.nothingToConvertNoDirectivesFound', 'Nothing to convert. No directives found.'));
             }
         } catch (err) {
-            toastError(toast, t('app.htaccessConverter.conversionFailed', 'Conversion failed'), err);
+            toastError(toast, t('app.htaccessConverter.conversionFailed', "Couldn't convert the file."), err);
         } finally {
             setConverting(false);
         }

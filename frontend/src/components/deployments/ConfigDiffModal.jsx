@@ -232,10 +232,10 @@ const ConfigDiffModal = ({
                     : t('app.configDiffModal.configurationRestoredRedeployTriggered', 'Configuration restored. Redeploy triggered.'));
                 onRestored?.(res);
             } else {
-                toastError(toast, t('app.configDiffModal.restoreFailed', 'Restore failed'), res.error);
+                toastError(toast, t('app.configDiffModal.restoreFailed', "Couldn't restore the config."), res.error);
             }
         } catch (err) {
-            toastError(toast, t('app.configDiffModal.restoreFailed', 'Restore failed'), err);
+            toastError(toast, t('app.configDiffModal.restoreFailed', "Couldn't restore the config."), err);
         } finally {
             setRestoring(false);
         }

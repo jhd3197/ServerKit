@@ -104,7 +104,7 @@ export function GridFilterDrawer({
             open={open}
             onOpenChange={onOpenChange}
             title={t('app.gridFilterDrawer.filtersFields', 'Filters and fields')}
-            subtitle={t('app.gridFilterDrawer.conditionFieldsShown', '{{length}} condition{{value}} · {{length2}} fields shown', { length: rules.length, value: rules.length === 1 ? '' : 's', length2: cfg.cols.length })}
+            subtitle={`${t('app.gridFilterDrawer.conditions', { count: rules.length, defaultValue_one: '1 condition', defaultValue_other: '{{count}} conditions' })} · ${t('app.gridFilterDrawer.fieldsShown', { count: cfg.cols.length, defaultValue_one: '1 field shown', defaultValue_other: '{{count}} fields shown' })}`}
             icon={<Filter size={18} />}
             iconColor="var(--accent-bright)"
             width={470}

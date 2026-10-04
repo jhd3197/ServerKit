@@ -74,7 +74,7 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
     async function applySelected() {
         if (!selectedKeys.length) return;
         const ok = await confirm({
-            title: t('app.configTunerPanel.applySetting', 'Apply {{length}} setting{{value}}?', { length: selectedKeys.length, value: selectedKeys.length === 1 ? '' : 's' }),
+            title: t('app.configTunerPanel.applySettings', { count: selectedKeys.length, defaultValue_one: 'Apply 1 setting?', defaultValue_other: 'Apply {{count}} settings?' }),
             message: t('app.configTunerPanel.applyingRestartsTheDatabaseEngineConnected', 'Applying restarts the database engine, so connected services will see a short ')
                 + t('app.configTunerPanel.interruptionThePreviousConfigurationIsBacked', 'interruption. The previous configuration is backed up and can be rolled back.'),
             confirmText: t('app.configTunerPanel.applyAndRestart', 'Apply and restart'),
@@ -92,7 +92,7 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
             toast.success(t('app.configTunerPanel.settingsAppliedAndEngineRestarted', 'Settings applied and engine restarted'));
             await load(dedicated);
         } catch (err) {
-            toastError(toast, t('app.configTunerPanel.failedToApplySettings', 'Failed to apply settings'), err);
+            toastError(toast, t('app.configTunerPanel.failedToApplySettings', "Couldn't apply the settings."), err);
         } finally {
             setBusy(false);
         }
@@ -113,7 +113,7 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
             toast.success(t('app.configTunerPanel.previousConfigurationRestored', 'Previous configuration restored'));
             await load(dedicated);
         } catch (err) {
-            toastError(toast, t('app.configTunerPanel.rollbackFailed', 'Rollback failed'), err);
+            toastError(toast, t('app.configTunerPanel.rollbackFailed', "Couldn't roll back."), err);
         } finally {
             setBusy(false);
         }

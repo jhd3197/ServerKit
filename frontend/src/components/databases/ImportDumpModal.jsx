@@ -120,7 +120,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
                 if (!safety?.success) {
                     setResult({
                         ok: false,
-                        messageKey: 'app.importDumpModal.thePreImportBackupFailedSo', message: 'The pre-import backup failed, so nothing was imported.',
+                        messageKey: 'app.importDumpModal.thePreImportBackupFailedSo', message: "Couldn't back up before importing, so nothing was imported.",
                         detail: safety?.error || 'The backup endpoint did not report success.',
                     });
                     return;
@@ -134,7 +134,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
                 setResult({ ok: true, message: res.message || `Dump imported into ${target.name}.` });
                 onImported?.(target);
             } else {
-                setResult({ ok: false, messageKey: 'app.importDumpModal.theImportFailed', message: 'The import failed.', detail: res?.error || 'The server did not say why.' });
+                setResult({ ok: false, messageKey: 'app.importDumpModal.theImportFailed', message: "Couldn't import the dump.", detail: res?.error || 'The server did not say why.' });
             }
         } catch (err) {
             setResult({

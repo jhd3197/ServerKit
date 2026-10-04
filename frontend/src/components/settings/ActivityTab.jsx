@@ -142,7 +142,7 @@ const ActivityTab = () => {
 
             {summaryError && !summary && (
                 <ErrorState
-                    title={t('app.activityTab.couldntLoadSummary', "Couldn't load activity summary")}
+                    title={t('app.activityTab.couldntLoadSummary', "Couldn't load activity summary.")}
                     error={summaryError}
                     onRetry={loadSummary}
                 />
@@ -265,7 +265,7 @@ const ActivityTab = () => {
                     </div>
                 ) : logsError && logs.length === 0 ? (
                     <ErrorState
-                        title={t('app.activityTab.couldntLoadAuditLogs', "Couldn't load audit logs")}
+                        title={t('app.activityTab.couldntLoadAuditLogs', "Couldn't load audit logs.")}
                         error={logsError}
                         onRetry={loadLogs}
                     />

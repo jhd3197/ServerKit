@@ -118,7 +118,7 @@ const ServiceDetail = () => {
                 setVersions(data.versions || []);
                 setCurrentVersion(data.current);
             })
-            .catch((err) => toastError(showError, t('app.serviceDetail.failedToLoadVersions', 'Failed to load versions'), err))
+            .catch((err) => toastError(showError, t('app.serviceDetail.failedToLoadVersions', "Couldn't load versions."), err))
             .finally(() => setVersionsLoading(false));
     }, [service?.source, id, showError, t]);
 
@@ -154,7 +154,7 @@ const ServiceDetail = () => {
                 stop: t('app.serviceDetail.couldntStopService', "Couldn't stop the service."),
                 restart: t('app.serviceDetail.couldntRestartService', "Couldn't restart the service."),
             };
-            toastError(toast, failed[action] || t('app.serviceDetail.couldntUpdateService', "Couldn't update the service"), err);
+            toastError(toast, failed[action] || t('app.serviceDetail.couldntUpdateService', "Couldn't update the service."), err);
         } finally {
             setActionLoading(null);
             setShowDeployMenu(false);
@@ -186,7 +186,7 @@ const ServiceDetail = () => {
             toast.success(t('app.serviceDetail.deploymentStarted', 'Deployment started'));
             await reload();
         } catch (err) {
-            toastError(toast, t('app.serviceDetail.failedToDeployLatestCommit', 'Failed to deploy latest commit'), err);
+            toastError(toast, t('app.serviceDetail.failedToDeployLatestCommit', "Couldn't deploy the latest commit."), err);
         } finally {
             setActionLoading(null);
             setShowDeployMenu(false);
@@ -203,7 +203,7 @@ const ServiceDetail = () => {
             setVersions(data.versions || []);
             setCurrentVersion(data.current);
         } catch (err) {
-            toastError(toast, t('app.serviceDetail.failedToRollback', 'Failed to rollback'), err);
+            toastError(toast, t('app.serviceDetail.failedToRollback', "Couldn't roll back."), err);
         } finally {
             setActionLoading(null);
         }
@@ -226,7 +226,7 @@ const ServiceDetail = () => {
             setVersions(data.versions || []);
             setCurrentVersion(data.current);
         } catch (err) {
-            toastError(toast, t('app.serviceDetail.failedToUploadNewVersion', 'Failed to upload new version'), err);
+            toastError(toast, t('app.serviceDetail.failedToUploadNewVersion', "Couldn't upload the new version."), err);
         } finally {
             setActionLoading(null);
         }
@@ -243,7 +243,7 @@ const ServiceDetail = () => {
             await deleteService();
             navigate('/services');
         } catch (err) {
-            toastError(toast, t('app.serviceDetail.failedToDeleteService', 'Failed to delete service'), err);
+            toastError(toast, t('app.serviceDetail.failedToDeleteService', "Couldn't delete the service."), err);
             setActionLoading(null);
         }
     }

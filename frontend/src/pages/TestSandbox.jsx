@@ -200,7 +200,7 @@ const TestSandbox = () => {
                     `Run finished: ${passed}/${total} passed${failed ? ` (${failed} failed)` : ''}`
                 );
             } else if (res.run.status === 'error') {
-                toastError(toast, t('app.testSandbox.runFailed', 'Run failed'), res.run.error);
+                toastError(toast, t('app.testSandbox.runFailed', "Couldn't finish the run."), res.run.error);
             }
             loadRuns();
         } catch (err) {
@@ -298,7 +298,7 @@ const TestSandbox = () => {
         try {
             const res = await api.startTestSandboxRun([...selected], mode);
             setActiveRun(res.run);
-            toast.success(t('app.testSandbox.startedRunAcrossDistroS', 'Started {{mode}} run across {{length}} distro(s)', { mode: mode, length: res.run.distros.length }));
+            toast.success(t('app.testSandbox.startedRunAcross', { count: res.run.distros.length, mode: mode, defaultValue_one: 'Started {{mode}} run on 1 distro', defaultValue_other: 'Started {{mode}} run across {{count}} distros' }));
             loadRuns();
         } catch (err) {
             toastError(toast, t('app.testSandbox.couldntStart', "Couldn't start the run."), err);

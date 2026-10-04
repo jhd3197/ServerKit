@@ -366,7 +366,13 @@ const ContainersTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error(`Failed to ${action} container:`, err);
-            toastError(toast, t('app.containersTab.failedToContainer', 'Failed to {{action}} container', { action: action }), err);
+            const failed = {
+                start: t('app.containersTab.couldntStartContainer', "Couldn't start the container."),
+                stop: t('app.containersTab.couldntStopContainer', "Couldn't stop the container."),
+                restart: t('app.containersTab.couldntRestartContainer', "Couldn't restart the container."),
+                remove: t('app.containersTab.couldntDeleteContainer', "Couldn't delete the container."),
+            };
+            toastError(toast, failed[action] || t('app.containersTab.couldntUpdateContainer', "Couldn't update the container."), err);
         }
     }
 
@@ -422,16 +428,21 @@ const ContainersTab = ({ onStatsChange }) => {
         setBulkBusy(false);
 
         if (failed.length) {
-            toast.error(`${failed.length} failed: ${failed.slice(0, 3).join(', ')}${failed.length > 3 ? '…' : ''}`);
+            toast.error(t('app.containersTab.bulkFailed', {
+                count: failed.length,
+                names: `${failed.slice(0, 3).join(', ')}${failed.length > 3 ? '…' : ''}`,
+                defaultValue_one: "Couldn't change 1 container: {{names}}",
+                defaultValue_other: "Couldn't change {{count}} containers: {{names}}",
+            }));
         } else {
-            const verb = action === 'start'
-                ? t('app.containersTab.started', 'started')
+            const done = action === 'start'
+                ? t('app.containersTab.bulkStarted', { count: ok, defaultValue_one: '1 container started', defaultValue_other: '{{count}} containers started' })
                 : action === 'stop'
-                    ? t('app.containersTab.stopped', 'stopped')
-                    : t('app.containersTab.restarted', 'restarted');
+                    ? t('app.containersTab.bulkStopped', { count: ok, defaultValue_one: '1 container stopped', defaultValue_other: '{{count}} containers stopped' })
+                    : t('app.containersTab.bulkRestarted', { count: ok, defaultValue_one: '1 container restarted', defaultValue_other: '{{count}} containers restarted' });
             toast.success(skipped
-                ? t('app.containersTab.bulkActionDoneWithSkipped', '{{count}} containers {{verb}} · {{skipped}} system containers skipped', { count: ok, verb: verb, skipped: skipped })
-                : t('app.containersTab.bulkActionDone', '{{count}} containers {{verb}}', { count: ok, verb: verb }));
+                ? `${done} · ${t('app.containersTab.systemSkipped', { count: skipped, defaultValue_one: '1 system container skipped', defaultValue_other: '{{count}} system containers skipped' })}`
+                : done);
         }
         setPicked([]);
         loadContainers();

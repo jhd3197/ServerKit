@@ -321,7 +321,7 @@ const Domains = () => {
         try {
             const result = await api.verifyDomain(domain.id);
             if (!result.verified) {
-                toast.error(t('app.domains.domainVerificationFailed', 'Domain verification failed: {{error}}', { error: result.error }));
+                toast.error(t('app.domains.domainVerificationFailed', "Couldn't verify the domain. {{error}}", { error: result.error }));
             } else if (result.warning) {
                 // The name resolves, but something about it will break
                 // issuance later (a stray AAAA record, today). A green
@@ -604,7 +604,7 @@ const Domains = () => {
         if (!fromCurrent) grid.setCfg(grid.base);
         grid.views.saveView(name)
             .then(() => toast.success(t('app.domains.viewSaved', 'View "{{name}}" saved', { name: name })))
-            .catch((err) => toastError(toast, t('app.domains.couldNotSaveTheView', 'Could not save the view'), err));
+            .catch((err) => toastError(toast, t('app.domains.couldNotSaveTheView', "Couldn't save the view."), err));
     };
 
     // ── top bar ──────────────────────────────────────────────
@@ -653,7 +653,7 @@ const Domains = () => {
                 <EmptyState loading loadingVariant="table" title={t('app.domains.loadingDomains', 'Loading domains…')} />
             ) : loadError && rows.length === 0 ? (
                 <ErrorState
-                    title={t('app.domains.couldntLoadDomains', "Couldn't load domains")}
+                    title={t('app.domains.couldntLoadDomains', "Couldn't load domains.")}
                     error={loadError}
                     onRetry={loadData}
                 />

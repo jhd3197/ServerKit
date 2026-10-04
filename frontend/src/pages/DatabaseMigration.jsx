@@ -320,7 +320,7 @@ const DatabaseMigration = () => {
                             <div className="backup-status backup-status--error">
                                 <XCircle size={20} />
                                 <div>
-                                    <strong>{t('app.databaseMigration.backupFailed', 'Backup failed')}</strong>
+                                    <strong>{t('app.databaseMigration.backupFailed', "Couldn't back up the database.")}</strong>
                                     <span>{backupResult.error}</span>
                                 </div>
                             </div>
@@ -381,7 +381,7 @@ const DatabaseMigration = () => {
                             <div className="migration-error">
                                 <XCircle size={20} />
                                 <div>
-                                    <strong>{t('app.databaseMigration.updateFailed', 'Update failed')}</strong>
+                                    <strong>{t('app.databaseMigration.updateFailed', "Couldn't update the database.")}</strong>
                                     <span>{applyError}</span>
                                 </div>
                                 <Button variant="ghost" className="btn-wizard-prev" onClick={handleApply}>

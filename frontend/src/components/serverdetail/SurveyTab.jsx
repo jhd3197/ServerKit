@@ -99,7 +99,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             toast.success(t('app.surveyTab.surveyComplete', 'Survey complete'));
             await load();
         } catch (err) {
-            toastError(toast, t('app.surveyTab.surveyFailed', 'Survey failed'), err);
+            toastError(toast, t('app.surveyTab.surveyFailed', "Couldn't run the survey."), err);
         } finally {
             setFlying(false);
         }
@@ -115,7 +115,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             setCatalog(data);
             setShowCatalog(true);
         } catch (err) {
-            toastError(toast, t('app.surveyTab.failedToLoadProbeIndex', 'Failed to load probe index'), err);
+            toastError(toast, t('app.surveyTab.failedToLoadProbeIndex', "Couldn't load the probe index."), err);
         }
     }
 
@@ -128,7 +128,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             const obs = await api.getServerObservedStatus(serverId).catch(() => null);
             if (obs) setObserved(obs);
         } catch (err) {
-            toastError(toast, t('app.surveyTab.failedToSwitchMode', 'Failed to switch mode'), err);
+            toastError(toast, t('app.surveyTab.failedToSwitchMode', "Couldn't switch modes."), err);
         } finally {
             setSwitching(false);
         }
@@ -141,7 +141,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             const obs = await api.getServerObservedStatus(serverId).catch(() => null);
             if (obs) setObserved(obs);
         } catch (err) {
-            toastError(toast, t('app.surveyTab.failedToUpdateSetting', 'Failed to update setting'), err);
+            toastError(toast, t('app.surveyTab.failedToUpdateSetting', "Couldn't update the setting."), err);
         } finally {
             setSwitching(false);
         }

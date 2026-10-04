@@ -138,7 +138,7 @@ const OnboardingWizard = ({ serverId, initialState, onStateChange }) => {
             toast.success(t('app.onboardingWizard.retryingOnboarding', 'Retrying onboarding'));
             loadStatus();
         } catch (err) {
-            toastError(toast, t('app.onboardingWizard.failedToRetryOnboarding', 'Failed to retry onboarding'), err);
+            toastError(toast, t('app.onboardingWizard.failedToRetryOnboarding', "Couldn't retry onboarding."), err);
         } finally {
             setRetrying(false);
         }

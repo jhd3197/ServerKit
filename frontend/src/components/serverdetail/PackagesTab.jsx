@@ -47,7 +47,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             setInstalledRaw(data?.output || '');
             setManager(data?.manager || '');
         } catch (err) {
-            toastError(toast, t('app.serverPackagesTab.failedToLoadPackages', 'Failed to load packages'), err);
+            toastError(toast, t('app.serverPackagesTab.failedToLoadPackages', "Couldn't load packages."), err);
         } finally {
             setLoadingInstalled(false);
         }
@@ -73,7 +73,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             const data = await api.searchRemotePackages(serverId, q, 100);
             setSearchResults(data?.results || []);
         } catch (err) {
-            toastError(toast, t('app.serverPackagesTab.searchFailed', 'Search failed'), err);
+            toastError(toast, t('app.serverPackagesTab.searchFailed', "Couldn't search packages."), err);
             setSearchResults([]);
         } finally {
             setSearching(false);
@@ -86,7 +86,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             const channel = result?.channel || `job:${result?.job_id}`;
             setJob({ channel, title: `Installing ${name}` });
         } catch (err) {
-            toastError(toast, t('app.serverPackagesTab.failedToStartInstall', 'Failed to start install', {  }), err);
+            toastError(toast, t('app.serverPackagesTab.failedToStartInstall', "Couldn't start the install.", {  }), err);
         }
     }
 
@@ -102,7 +102,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             await api.removeRemotePackage(serverId, name);
             toast.success(`${name} removed`);
         } catch (err) {
-            toastError(toast, t('app.serverPackagesTab.removeFailed', 'Uninstall failed'), err);
+            toastError(toast, t('app.serverPackagesTab.removeFailed', "Couldn't uninstall the package."), err);
         }
     }
 
@@ -111,7 +111,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             await api.updateRemotePackageCache(serverId);
             toast.success(t('app.serverPackagesTab.packageCacheUpdated', 'Package cache updated ({{value}})', { value: manager || 'manager' }));
         } catch (err) {
-            toastError(toast, t('app.serverPackagesTab.updateFailed', 'Update failed'), err);
+            toastError(toast, t('app.serverPackagesTab.updateFailed', "Couldn't update the package."), err);
         }
     }
 
@@ -126,7 +126,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             const channel = result?.channel || `job:${result?.job_id}`;
             setJob({ channel, titleKey: 'app.serverPackagesTab.upgradingAllPackages', title: 'Upgrading all packages' });
         } catch (err) {
-            toastError(toast, t('app.serverPackagesTab.upgradeFailedToStart', 'Upgrade failed to start'), err);
+            toastError(toast, t('app.serverPackagesTab.upgradeFailedToStart', "Couldn't start the upgrade."), err);
         }
     }
 

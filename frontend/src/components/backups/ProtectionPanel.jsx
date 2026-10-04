@@ -77,7 +77,7 @@ export default function ProtectionPanel({ targetType, targetId, targetName, show
             setView(policyView);
             setRuns(runsResp?.runs || []);
         } catch (err) {
-            toastError(toast, t('app.protectionPanel.failedToLoadProtectionSettings', 'Failed to load protection settings'), err);
+            toastError(toast, t('app.protectionPanel.failedToLoadProtectionSettings', "Couldn't load protection settings."), err);
         } finally {
             setLoading(false);
         }
@@ -110,7 +110,7 @@ export default function ProtectionPanel({ targetType, targetId, targetName, show
             setView(updated);
             toast.success(enabled ? t('app.protectionPanel.automaticBackupsEnabled', 'Automatic backups enabled') : t('app.protectionPanel.automaticBackupsDisabled', 'Automatic backups disabled'));
         } catch (err) {
-            toastError(toast, t('app.protectionPanel.failedToUpdateProtection', 'Failed to update protection'), err);
+            toastError(toast, t('app.protectionPanel.failedToUpdateProtection', "Couldn't update protection."), err);
         } finally {
             setSaving(false);
         }
@@ -123,7 +123,7 @@ export default function ProtectionPanel({ targetType, targetId, targetName, show
             setView(updated);
             toast.success(t('app.protectionPanel.scheduleSaved', 'Schedule saved'));
         } catch (err) {
-            toastError(toast, t('app.protectionPanel.failedToSaveSchedule', 'Failed to save schedule'), err);
+            toastError(toast, t('app.protectionPanel.failedToSaveSchedule', "Couldn't save the schedule."), err);
         } finally {
             setSaving(false);
         }
@@ -137,7 +137,7 @@ export default function ProtectionPanel({ targetType, targetId, targetName, show
             toast.success(t('app.protectionPanel.backupStarted', 'Backup started'));
             scheduleReloads();
         } catch (err) {
-            toastError(toast, t('app.protectionPanel.failedToStartBackup', 'Failed to start backup'), err);
+            toastError(toast, t('app.protectionPanel.failedToStartBackup', "Couldn't start the backup."), err);
         } finally {
             setBackingUp(false);
         }
@@ -150,7 +150,7 @@ export default function ProtectionPanel({ targetType, targetId, targetName, show
             toast.success(t('app.protectionPanel.restoreDrillStarted', 'Restore drill started'));
             scheduleReloads();
         } catch (err) {
-            toastError(toast, t('app.protectionPanel.failedToStartRestoreDrill', 'Failed to start restore drill'), err);
+            toastError(toast, t('app.protectionPanel.failedToStartRestoreDrill', "Couldn't start the restore drill."), err);
         } finally {
             setDrilling(false);
         }
@@ -171,7 +171,7 @@ export default function ProtectionPanel({ targetType, targetId, targetName, show
             setDetailRun(null);
             scheduleReloads();
         } catch (err) {
-            toastError(toast, t('app.protectionPanel.failedToStartRestore', 'Failed to start restore'), err);
+            toastError(toast, t('app.protectionPanel.failedToStartRestore', "Couldn't start the restore."), err);
         }
     }, [restoreRun, targetType, targetId, showMaintenanceModeOption, toast, t, scheduleReloads]);
 
@@ -182,7 +182,7 @@ export default function ProtectionPanel({ targetType, targetId, targetName, show
             else toast.warning(t('app.protectionPanel.remoteCopyCouldNotBeVerified', 'Remote copy could not be verified'));
             load();
         } catch (err) {
-            toastError(toast, t('app.protectionPanel.verificationFailed', 'Verification failed'), err);
+            toastError(toast, t('app.protectionPanel.verificationFailed', "Couldn't verify the backup."), err);
         }
     }, [targetType, targetId, toast, t, load]);
 
@@ -200,7 +200,7 @@ export default function ProtectionPanel({ targetType, targetId, targetName, show
             if (detailRun?.id === run.id) setDetailRun(null);
             load();
         } catch (err) {
-            toastError(toast, t('app.protectionPanel.failedToDeleteBackup', 'Failed to delete backup'), err);
+            toastError(toast, t('app.protectionPanel.failedToDeleteBackup', "Couldn't delete the backup."), err);
         }
     }, [confirm, t, targetType, targetId, toast, detailRun?.id, load]);
 

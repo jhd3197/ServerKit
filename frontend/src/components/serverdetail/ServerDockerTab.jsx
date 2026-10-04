@@ -175,7 +175,13 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
             }
             loadDockerData();
         } catch (err) {
-            toastError(toast, t('app.serverDockerTab.failedToContainer', 'Failed to {{action}} container', { action: action }), err);
+            const failed = {
+                start: t('app.serverDockerTab.couldntStartContainer', "Couldn't start the container."),
+                stop: t('app.serverDockerTab.couldntStopContainer', "Couldn't stop the container."),
+                restart: t('app.serverDockerTab.couldntRestartContainer', "Couldn't restart the container."),
+                remove: t('app.serverDockerTab.couldntDeleteContainer', "Couldn't delete the container."),
+            };
+            toastError(toast, failed[action] || t('app.serverDockerTab.couldntUpdateContainer', "Couldn't update the container."), err);
         }
     }
 
@@ -292,7 +298,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
         <div className="docker-tab">
             {loadError && (
                 <div className="docker-tab__error">
-                    <strong>{t('app.serverDockerTab.couldnTLoadDockerData', 'Couldn\'t load Docker data:')}</strong> {loadError}
+                    <strong>{t('app.serverDockerTab.couldnTLoadDockerData', "Couldn't load Docker data.")}</strong> {loadError}
                     <Button size="sm" variant="outline" onClick={loadDockerData}>{t('common.actions.retry', 'Retry')}</Button>
                 </div>
             )}

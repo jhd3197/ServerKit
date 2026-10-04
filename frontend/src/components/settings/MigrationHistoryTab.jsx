@@ -105,7 +105,6 @@ const MigrationHistoryTab = () => {
     const currentRev = status?.current_revision;
     const headRev = status?.head_revision;
     const count = pending.length;
-    const plural = count === 1 ? '' : 's';
 
     // The DB records a revision that no longer exists in the migration scripts
     // (renamed during development). The schema is already in sync, so applying
@@ -185,13 +184,13 @@ const MigrationHistoryTab = () => {
 
     async function runMigrations() {
         const ok = await confirm({
-            title: orphaned ? t('app.migrationHistoryTab.reSyncDatabaseVersion', 'Re-sync database version?') : t('app.migrationHistoryTab.applyMigration', 'Apply {{count}} migration{{plural}}?', { count: count, plural: plural }),
+            title: orphaned ? t('app.migrationHistoryTab.reSyncDatabaseVersion', 'Re-sync database version?') : t('app.migrationHistoryTab.applyMigrations', { count, defaultValue_one: 'Apply 1 migration?', defaultValue_other: 'Apply {{count}} migrations?' }),
             message: orphaned
                 ? t('app.migrationHistoryTab.yourSchemaAlreadyMatchesThisRepairs', 'Your schema already matches {{value}}; this repairs the version pointer{{value2}}.', { value: short(headRev) || 'head', value2: backupFirst ? ' after creating a backup' : ' (no backup will be created)' })
                 : backupFirst
                     ? t('app.migrationHistoryTab.aDatabaseBackupIsCreatedFirst', 'A database backup is created first, then the schema is upgraded from {{value}} to {{value2}}.', { value: short(currentRev) || 'none', value2: short(headRev) || 'head' })
                     : t('app.migrationHistoryTab.theSchemaIsUpgradedFromTo', 'The schema is upgraded from {{value}} to {{value2}}. No backup will be created.', { value: short(currentRev) || 'none', value2: short(headRev) || 'head' }),
-            confirmText: orphaned ? t('app.migrationHistoryTab.reSyncDatabase', 'Re-sync database') : t('app.migrationHistoryTab.applyMigration2', 'Apply migration{{plural}}', { plural: plural }),
+            confirmText: orphaned ? t('app.migrationHistoryTab.reSyncDatabase', 'Re-sync database') : t('app.migrationHistoryTab.applyMigrationsButton', { count, defaultValue_one: 'Apply migration', defaultValue_other: 'Apply migrations' }),
             cancelText: t('common.actions.cancel', 'Cancel'),
             variant: 'warning',
         });
@@ -205,7 +204,7 @@ const MigrationHistoryTab = () => {
                     const name = b?.path ? b.path.split(/[\\/]/).pop() : null;
                     toast.success(name ? t('app.migrationHistoryTab.databaseBackedUp', 'Database backed up ({{name}})', { name: name }) : t('app.migrationHistoryTab.databaseBackedUp2', 'Database backed up'));
                 } catch (err) {
-                    toast.error(t('app.migrationHistoryTab.backupFailedMigrationsNotApplied', 'Backup failed: {{value}}. Migrations were not applied.', { value: errorReason(err) }));
+                    toast.error(t('app.migrationHistoryTab.backupFailedMigrationsNotApplied', "Couldn't back up, so no migrations ran. {{value}}", { value: errorReason(err) }));
                     return;
                 }
             }
@@ -213,7 +212,7 @@ const MigrationHistoryTab = () => {
             toast.success(t('app.migrationHistoryTab.migrationsAppliedNowAt', 'Migrations applied (now at {{value}})', { value: short(res?.revision || headRev) }));
             await load();
         } catch (err) {
-            toast.error(t('app.migrationHistoryTab.migrationFailed', 'Migration failed: {{value}}', { value: errorReason(err) }));
+            toast.error(t('app.migrationHistoryTab.migrationFailed', "Couldn't run the migration. {{value}}", { value: errorReason(err) }));
         } finally {
             setApplying(false);
         }
@@ -234,7 +233,7 @@ const MigrationHistoryTab = () => {
         return (
             <div className="settings-section">
                 <ErrorState
-                    title={t('app.migrationHistoryTab.couldntLoadMigrationHistory', "Couldn't load migration history")}
+                    title={t('app.migrationHistoryTab.couldntLoadMigrationHistory', "Couldn't load migration history.")}
                     error={error}
                     onRetry={load}
                 />
@@ -256,7 +255,9 @@ const MigrationHistoryTab = () => {
                     <ArrowUpCircle size={20} className="migration-pending-icon" aria-hidden="true" />
                     <div className="migration-pending-body">
                         <p className="migration-pending-title">
-                            {orphaned ? 'Database version needs repair' : `${count} migration${plural} pending`}
+                            {orphaned
+                                ? t('app.migrationHistoryTab.versionNeedsRepair', 'Database version needs repair')
+                                : t('app.migrationHistoryTab.migrationsPending', { count, defaultValue_one: '1 migration pending', defaultValue_other: '{{count}} migrations pending' })}
                         </p>
                         <p className="migration-pending-desc">
                             {orphaned ? (
@@ -283,7 +284,7 @@ const MigrationHistoryTab = () => {
                                 ) : orphaned ? (
                                     <><Database size={14} /> {t('app.migrationHistoryTab.reSyncDatabase', 'Re-sync database')}</>
                                 ) : (
-                                    <><Database size={14} /> {t('app.migrationHistoryTab.apply', 'Apply')} {count} migration{plural}</>
+                                    <><Database size={14} /> {t('app.migrationHistoryTab.applyCount', { count, defaultValue_one: 'Apply 1 migration', defaultValue_other: 'Apply {{count}} migrations' })}</>
                                 )}
                             </SharedButton>
                             <label className="migration-backup-toggle">

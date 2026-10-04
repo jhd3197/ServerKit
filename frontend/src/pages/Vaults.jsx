@@ -97,7 +97,7 @@ export default function Vaults() {
             loadAll();
             toast.success(t('app.vaults.vaultCreated', 'Vault created'));
         } catch (err) {
-            toast.error(t('app.vaults.failedToCreateVault', 'Failed to create vault: {{message}}', { message: errorReason(err) }));
+            toast.error(t('app.vaults.failedToCreateVault', "Couldn't create the vault. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -113,7 +113,7 @@ export default function Vaults() {
             loadAll();
             toast.success(t('app.vaults.vaultDeleted', 'Vault deleted'));
         } catch (err) {
-            toast.error(t('app.vaults.failedToDeleteVault', 'Failed to delete vault: {{message}}', { message: errorReason(err) }));
+            toast.error(t('app.vaults.failedToDeleteVault', "Couldn't delete the vault. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -129,7 +129,7 @@ export default function Vaults() {
             openVault(selectedVault.id);
             toast.success(t('app.vaults.secretCreated', 'Secret created'));
         } catch (err) {
-            toast.error(t('app.vaults.failedToCreateSecret', 'Failed to create secret: {{message}}', { message: errorReason(err) }));
+            toast.error(t('app.vaults.failedToCreateSecret', "Couldn't create the secret. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -139,7 +139,7 @@ export default function Vaults() {
             const { secrets } = await api.listSecrets(id);
             setSelectedVault({ ...vault, secrets });
         } catch (err) {
-            toast.error(t('app.vaults.failedToLoadVault', 'Failed to load vault: {{message}}', { message: errorReason(err) }));
+            toast.error(t('app.vaults.failedToLoadVault', "Couldn't load the vault. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -149,7 +149,7 @@ export default function Vaults() {
             setRevealSecretId(secret.id);
             setRevealedValue(data.value || '');
         } catch (err) {
-            toast.error(t('app.vaults.revealFailed', 'Reveal failed: {{message}}', { message: errorReason(err) }));
+            toast.error(t('app.vaults.revealFailed', "Couldn't reveal the secret. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -164,7 +164,7 @@ export default function Vaults() {
             openVault(selectedVault.id);
             toast.success(t('app.vaults.secretDeleted', 'Secret deleted'));
         } catch (err) {
-            toast.error(t('app.vaults.failedToDeleteSecret', 'Failed to delete secret: {{message}}', { message: errorReason(err) }));
+            toast.error(t('app.vaults.failedToDeleteSecret', "Couldn't delete the secret. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -368,7 +368,7 @@ export default function Vaults() {
             builtinViews={VAULT_VIEWS}
             totalCount={vaults.length}
             error={loadError}
-            errorTitle={t('app.vaults.couldntLoadVaults', "Couldn't load vaults")}
+            errorTitle={t('app.vaults.couldntLoadVaults', "Couldn't load vaults.")}
             onRetry={loadAll}
             items={vaultRows}
             columns={vaultColumns}

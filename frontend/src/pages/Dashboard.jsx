@@ -305,10 +305,10 @@ const Dashboard = () => {
             setEdit(false);
             setSelectedId(null);
             toast.success(t('app.dashboard.dashboardSaved', 'Dashboard saved'), {
-                description: t('app.dashboard.widget', '{{length}} widget{{value}} · {{value2}}', { length: savedWidgets.length, value: savedWidgets.length === 1 ? '' : 's', value2: activeBoard?.name }),
+                description: t('app.dashboard.widgetsOnBoard', { count: savedWidgets.length, board: activeBoard?.name, defaultValue_one: '1 widget · {{board}}', defaultValue_other: '{{count}} widgets · {{board}}' }),
             });
         } catch (err) {
-            toastError(toast, t('app.dashboard.couldNotSave', 'Could not save'), err, { description: t('app.dashboard.yourLayoutIsStillHereTry', 'Your layout is still here. Try again.') });
+            toastError(toast, t('app.dashboard.couldNotSave', "Couldn't save the board."), err, { description: t('app.dashboard.yourLayoutIsStillHereTry', 'Your layout is still here. Try again.') });
         }
     }, [activeBoard?.name, saveActive, saveEditing, t, toast]);
 
@@ -380,7 +380,7 @@ const Dashboard = () => {
             resetEditing(board?.widgets || []);
             toast.info(t('app.dashboard.resetToTheShippedLayout', 'Reset to the shipped layout'), { description: activeBoard?.name });
         } catch (err) {
-            toastError(toast, t('app.dashboard.couldNotReset', 'Could not reset'), err, { description: t('app.dashboard.thisBoardHasNoShippedDefault', 'This board has no shipped default.') });
+            toastError(toast, t('app.dashboard.couldNotReset', "Couldn't reset the board."), err, { description: t('app.dashboard.thisBoardHasNoShippedDefault', 'This board has no shipped default.') });
         }
     };
 

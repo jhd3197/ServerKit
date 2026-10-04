@@ -571,7 +571,7 @@ const ServerTemplates = () => {
                     )}
                     {loadErrors.templates && templates.length === 0 ? (
                         <ErrorState
-                            title={t('app.serverTemplates.couldntLoadTemplates', "Couldn't load templates")}
+                            title={t('app.serverTemplates.couldntLoadTemplates', "Couldn't load templates.")}
                             error={loadErrors.templates}
                             onRetry={loadData}
                         />
@@ -620,7 +620,7 @@ const ServerTemplates = () => {
                     )}
                     {loadErrors.library && Object.keys(library).length === 0 ? (
                         <ErrorState
-                            title={t('app.serverTemplates.couldntLoadTheLibrary', "Couldn't load the template library")}
+                            title={t('app.serverTemplates.couldntLoadTheLibrary', "Couldn't load the template library.")}
                             error={loadErrors.library}
                             onRetry={loadData}
                         />

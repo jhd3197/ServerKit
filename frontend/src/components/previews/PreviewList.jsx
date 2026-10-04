@@ -40,7 +40,7 @@ const PreviewList = ({ appId }) => {
             setTemplate(conf?.domain_template || DEFAULT_TEMPLATE);
         } catch (err) {
             console.error('Failed to load previews:', err);
-            toastError(toast, t('app.previewList.couldNotLoadPrPreviews', 'Could not load PR previews'), err);
+            toastError(toast, t('app.previewList.couldNotLoadPrPreviews', "Couldn't load PR previews."), err);
         } finally {
             setLoading(false);
         }
@@ -57,7 +57,7 @@ const PreviewList = ({ appId }) => {
             toast?.success?.(t('app.previewList.previewSettingsSaved', 'Preview settings saved'));
         } catch (err) {
             console.error('Failed to save preview settings:', err);
-            toastError(toast, t('app.previewList.couldNotSaveSettings', 'Could not save settings'), err);
+            toastError(toast, t('app.previewList.couldNotSaveSettings', "Couldn't save the settings."), err);
         } finally {
             setSaving(false);
         }
@@ -78,7 +78,7 @@ const PreviewList = ({ appId }) => {
             toast?.success?.(t('app.previewList.reconciledPreviewsAgainstOpenPrs', 'Reconciled previews against open PRs'));
             await load();
         } catch (err) {
-            toastError(toast, t('app.previewList.syncFailed', 'Sync failed'), err);
+            toastError(toast, t('app.previewList.syncFailed', "Couldn't sync previews."), err);
         } finally {
             setSyncing(false);
         }
@@ -91,7 +91,7 @@ const PreviewList = ({ appId }) => {
             toast?.success?.(t('app.previewList.redeployingPreviewForPr', 'Redeploying preview for PR #{{prnumber}}', { prnumber: preview.pr_number }));
             await load();
         } catch (err) {
-            toastError(toast, t('app.previewList.redeployFailed', 'Redeploy failed'), err);
+            toastError(toast, t('app.previewList.redeployFailed', "Couldn't redeploy the preview."), err);
         } finally {
             setBusyId(null);
         }
@@ -111,7 +111,7 @@ const PreviewList = ({ appId }) => {
             toast?.success?.(t('app.previewList.previewForPrDestroyed', 'Preview for PR #{{prnumber}} deleted', { prnumber: preview.pr_number }));
             await load();
         } catch (err) {
-            toastError(toast, t('app.previewList.destroyFailed', 'Delete failed'), err);
+            toastError(toast, t('app.previewList.destroyFailed', "Couldn't delete the preview."), err);
         } finally {
             setBusyId(null);
         }

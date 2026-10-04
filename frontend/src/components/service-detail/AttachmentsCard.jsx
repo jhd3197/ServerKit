@@ -111,7 +111,7 @@ export default function AttachmentsCard({ app }) {
             const installed = await api.installTemplate(
                 templateId, `${app.name}-${kind}`, {}, { wait: true });
             if (installed.job?.status === 'failed') {
-                throw new Error(installed.job.error_message || t('app.attachments.installFailed', 'The install failed.'));
+                throw new Error(installed.job.error_message || t('app.attachments.installFailed', "Couldn't install it."));
             }
             const serviceId = installed.job?.app_id;
             if (!serviceId) throw new Error(t('app.attachments.installNoId', 'Installed, but the new service could not be found. Attach it from the list.'));

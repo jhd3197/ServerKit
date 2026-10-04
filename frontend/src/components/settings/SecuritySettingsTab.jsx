@@ -235,7 +235,7 @@ const SecuritySettingsTab = () => {
                 detail: { type: 'two-factor-enabled' },
             }));
         } catch (err) {
-            setTwoFAError(err.message || 'Invalid verification code');
+            setTwoFAError(err.message || t('auth.codeMismatch', "That code didn't match. Enter the current 6-digit code from your authenticator app."));
         } finally {
             setTwoFALoading(false);
         }
@@ -255,7 +255,7 @@ const SecuritySettingsTab = () => {
             setVerificationCode('');
             load2FAStatus();
         } catch (err) {
-            setTwoFAError(err.message || 'Invalid verification code');
+            setTwoFAError(err.message || t('auth.codeMismatch', "That code didn't match. Enter the current 6-digit code from your authenticator app."));
         } finally {
             setTwoFALoading(false);
         }
@@ -276,7 +276,7 @@ const SecuritySettingsTab = () => {
             setVerificationCode('');
             load2FAStatus();
         } catch (err) {
-            setTwoFAError(err.message || 'Invalid verification code');
+            setTwoFAError(err.message || t('auth.codeMismatch', "That code didn't match. Enter the current 6-digit code from your authenticator app."));
         } finally {
             setTwoFALoading(false);
         }
@@ -327,7 +327,7 @@ Keep these codes in a safe place.`;
                     <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
                 ) : twoFALoadError && !twoFAStatus ? (
                     <ErrorState
-                        title={t('app.securitySettingsTab.couldntLoad2fa', "Couldn't load 2FA status")}
+                        title={t('app.securitySettingsTab.couldntLoad2fa', "Couldn't load 2FA status.")}
                         error={twoFALoadError}
                         onRetry={load2FAStatus}
                     />

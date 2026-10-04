@@ -19,7 +19,7 @@ export function useRecipeCatalog() {
             // The backend serves last-good/bundled when upstream is down, so
             // failures here are local (auth/network); surface once.
             staleTime: 60_000,
-            onError: (err) => toastError(toast, t('app.recipes.loadFailed', 'Could not load the recipe catalog'), err),
+            onError: (err) => toastError(toast, t('app.recipes.loadFailed', "Couldn't load the recipe catalog."), err),
         },
     );
 

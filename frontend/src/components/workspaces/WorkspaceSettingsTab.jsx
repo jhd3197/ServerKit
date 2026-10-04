@@ -202,7 +202,7 @@ const WorkspaceSettingsTab = ({ wsId, ws, onUpdate, user, isCurrent, onSetActive
             toast.success(t('app.workspaceSettingsTab.workspaceUpdated', 'Workspace updated'));
             onUpdate();
         } catch (err) {
-            toastError(toast, t('app.workspaceSettingsTab.failedToUpdateWorkspace', 'Failed to update workspace'), err);
+            toastError(toast, t('app.workspaceSettingsTab.failedToUpdateWorkspace', "Couldn't update the workspace."), err);
         } finally {
             setSaving(false);
         }

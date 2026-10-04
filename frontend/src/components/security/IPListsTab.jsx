@@ -180,7 +180,7 @@ const IPListsTab = () => {
             setNewComment('');
             await loadLists();
         } catch (error) {
-            toast.error(t('app.iPListsTab.failedToAddIp', 'Failed to add IP: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.iPListsTab.failedToAddIp', "Couldn't add the IP. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -206,14 +206,14 @@ const IPListsTab = () => {
                             toast.success(t('app.iPListsTab.ipRestoredTo', 'IP restored to {{listType}}', { listType: listType }));
                             await loadLists();
                         } catch (error) {
-                            toast.error(t('app.iPListsTab.couldNotRestoreIp', 'Could not restore IP: {{message}}', { message: errorReason(error) }));
+                            toast.error(t('app.iPListsTab.couldNotRestoreIp', "Couldn't restore the IP. {{message}}", { message: errorReason(error) }));
                         }
                     },
                 },
             });
             await loadLists();
         } catch (error) {
-            toast.error(t('app.iPListsTab.failedToRemoveIp', 'Failed to remove IP: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.iPListsTab.failedToRemoveIp', "Couldn't remove the IP. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -314,7 +314,7 @@ const IPListsTab = () => {
     if (loadError && !loaded) {
         return (
             <ErrorState
-                title={t('app.iPListsTab.couldntLoadIpLists', "Couldn't load IP lists")}
+                title={t('app.iPListsTab.couldntLoadIpLists', "Couldn't load IP lists.")}
                 error={loadError}
                 onRetry={loadLists}
             />

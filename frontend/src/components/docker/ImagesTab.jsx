@@ -214,7 +214,7 @@ const ImagesTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error('Failed to remove image:', err);
-            toastError(toast, t('app.imagesTab.failedToRemoveImageItMay', 'Failed to delete image. It may be in use by a container.'), err);
+            toastError(toast, t('app.imagesTab.failedToRemoveImageItMay', "Couldn't delete the image. A container may still use it."), err);
         }
     }
 

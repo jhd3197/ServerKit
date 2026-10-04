@@ -188,7 +188,7 @@ const QueueDetail = () => {
         try {
             payload = JSON.parse(sendForm.payload);
         } catch (err) {
-            toastError(toast, t('app.queueDetail.payloadMustBeValidJson', 'Payload must be valid JSON'), err);
+            toastError(toast, t('app.queueDetail.payloadMustBeValidJson', 'Payload must be valid JSON, like {"key": "value"}.'), err);
             return;
         }
         try {
@@ -465,7 +465,7 @@ const QueueDetail = () => {
                             <div><strong>{t('app.queueDetail.attempts2', 'Attempts:')}</strong> {selectedMessage.attempts} / {selectedMessage.max_attempts}</div>
                             <div><strong>{t('app.queueDetail.created2', 'Created:')}</strong> {new Date(selectedMessage.created_at).toLocaleString()}</div>
                             {selectedMessage.error_message && (
-                                <div className="queue-message-error"><strong>{t('app.queueDetail.error', 'Error:')}</strong> {selectedMessage.error_message}</div>
+                                <div className="queue-message-error"><strong>{t('app.queueDetail.error', 'Reason:')}</strong> {selectedMessage.error_message}</div>
                             )}
                             <div className="queue-message-section"><strong>{t('app.queueDetail.payload2', 'Payload:')}</strong>
                                 <pre>{JSON.stringify(selectedMessage.payload, null, 2)}</pre>

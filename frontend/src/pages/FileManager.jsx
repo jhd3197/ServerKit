@@ -145,7 +145,7 @@ function FileManager() {
     const isS3 = target.kind === 's3';
     const { copy: copyText } = useClipboard({
         successMessage: t('app.fileManager.pathCopied', 'Path copied'),
-        errorMessage: t('app.fileManager.couldNotCopyPath', 'Could not copy path'),
+        errorMessage: t('app.fileManager.couldNotCopyPath', "Couldn't copy the path."),
     });
     const previousTargetRef = useRef({ kind: 'local', server_id: null });
 
@@ -405,7 +405,7 @@ function FileManager() {
             setDirError(null);
         } catch (error) {
             if (path !== lastValidPathRef.current) {
-                toast.error(t('app.fileManager.failedToLoadDirectory', 'Failed to load directory: {{message}}', { message: errorReason(error) }));
+                toast.error(t('app.fileManager.failedToLoadDirectory', "Couldn't load the folder. {{message}}", { message: errorReason(error) }));
                 setCurrentPath(lastValidPathRef.current);
             } else {
                 setEntries([]);
@@ -505,7 +505,7 @@ function FileManager() {
             const data = await api.searchFiles(currentPath, searchQuery);
             setSearchResults(data.results || []);
         } catch (error) {
-            toast.error(t('app.fileManager.searchFailed', 'Search failed: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fileManager.searchFailed', "Couldn't search. {{message}}", { message: errorReason(error) }));
         } finally {
             setLoading(false);
         }
@@ -545,7 +545,7 @@ function FileManager() {
                     const data = await fileApi.read(entry.path);
                     setFileContent(data.content);
                 } catch (error) {
-                    toast.error(t('app.fileManager.failedToReadFile', 'Failed to read file: {{message}}', { message: errorReason(error) }));
+                    toast.error(t('app.fileManager.failedToReadFile', "Couldn't read the file. {{message}}", { message: errorReason(error) }));
                 }
             }
         }
@@ -588,7 +588,7 @@ function FileManager() {
             setEditing(false);
             loadDirectory(currentPath);
         } catch (error) {
-            toast.error(t('app.fileManager.failedToSave', 'Failed to save: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fileManager.failedToSave', "Couldn't save. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -602,7 +602,7 @@ function FileManager() {
             setNewFileName('');
             loadDirectory(currentPath);
         } catch (error) {
-            toast.error(t('app.fileManager.failedToCreateFile', 'Failed to create file: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fileManager.failedToCreateFile', "Couldn't create the file. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -625,7 +625,7 @@ function FileManager() {
                 } catch { /* ignore */ }
             }
         } catch (error) {
-            toast.error(t('app.fileManager.failedToCreateFolder', 'Failed to create folder: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fileManager.failedToCreateFolder', "Couldn't create the folder. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -650,8 +650,8 @@ function FileManager() {
                         failures.push(`${it.name}: ${error.message}`);
                     }
                 }
-                if (failures.length === 0) toast.success(t('app.fileManager.deletedItem', 'Deleted {{length}} item{{value}}', { length: items.length, value: items.length > 1 ? 's' : '' }));
-                else toast.error(t('app.fileManager.failed', 'Failed: {{value}}', { value: failures.join(', ') }));
+                if (failures.length === 0) toast.success(t('app.fileManager.deletedItems', { count: items.length, defaultValue_one: 'Deleted 1 item', defaultValue_other: 'Deleted {{count}} items' }));
+                else toast.error(t('app.fileManager.failed', "Couldn't finish for: {{value}}", { value: failures.join(', ') }));
                 if (previewFile && items.some((i) => i.path === previewFile.path)) setPreviewFile(null);
                 clearSelection();
                 loadDirectory(currentPath);
@@ -672,7 +672,7 @@ function FileManager() {
             setNewName('');
             loadDirectory(currentPath);
         } catch (error) {
-            toast.error(t('app.fileManager.failedToRename', 'Failed to rename: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fileManager.failedToRename', "Couldn't rename it. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -687,7 +687,7 @@ function FileManager() {
             setNewPermissions('');
             loadDirectory(currentPath);
         } catch (error) {
-            toast.error(t('app.fileManager.failed2', 'Failed: {{message}}', { message: errorReason(error) }));
+            toast.error(t('app.fileManager.failed2', "Couldn't do that. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -732,7 +732,7 @@ function FileManager() {
                 setUploads((p) => p.map((u) => u.id === itemId ? { ...u, status: 'error', error: error.message } : u));
             }
         }
-        if (succeeded > 0) toast.success(t('app.fileManager.uploadedOfFile', 'Uploaded {{succeeded}} of {{length}} file{{value}}', { succeeded: succeeded, length: fileList.length, value: fileList.length > 1 ? 's' : '' }));
+        if (succeeded > 0) toast.success(t('app.fileManager.uploadedFiles', { count: fileList.length, succeeded, defaultValue_one: 'Uploaded {{succeeded}} of 1 file', defaultValue_other: 'Uploaded {{succeeded}} of {{count}} files' }));
         loadDirectory(currentPath);
         setTimeout(() => {
             setUploads((p) => p.filter((u) => u.status === 'uploading' || u.status === 'pending'));
@@ -1323,7 +1323,7 @@ function FileManager() {
                             <EmptyState loading loadingVariant="tree" title={t('app.fileManager.loadingFiles', 'Loading files')} />
                         ) : dirError && !searchResults ? (
                             <ErrorState
-                                title={t('app.fileManager.couldntOpenThisFolder', "Couldn't open this folder")}
+                                title={t('app.fileManager.couldntOpenThisFolder', "Couldn't open this folder.")}
                                 error={dirError}
                                 onRetry={() => loadDirectory(currentPath)}
                             />

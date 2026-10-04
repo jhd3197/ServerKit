@@ -71,7 +71,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
             }
         } catch (err) {
             setEnabled(!next);
-            toastError(toast, t('app.microCachePanel.failedToUpdateMicroCache', 'Failed to update micro-cache'), err);
+            toastError(toast, t('app.microCachePanel.failedToUpdateMicroCache', "Couldn't update the micro-cache."), err);
         }
     }
 
@@ -80,7 +80,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
             await save(enabled, ttlNumber);
             toast.success(t('app.microCachePanel.cacheLifetimeSaved', 'Cache lifetime saved'));
         } catch (err) {
-            toastError(toast, t('app.microCachePanel.failedToUpdateMicroCache', 'Failed to update micro-cache'), err);
+            toastError(toast, t('app.microCachePanel.failedToUpdateMicroCache', "Couldn't update the micro-cache."), err);
         }
     }
 
@@ -108,7 +108,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
             const data = await api.purgeMicroCache(app.id);
             toast.success(data.message || t('app.microCachePanel.microCacheCleared', 'Micro-cache cleared'));
         } catch (err) {
-            toastError(toast, t('app.microCachePanel.failedToClearTheMicroCache', 'Failed to clear the micro-cache'), err);
+            toastError(toast, t('app.microCachePanel.failedToClearTheMicroCache', "Couldn't clear the micro-cache."), err);
         } finally {
             setPurging(false);
         }

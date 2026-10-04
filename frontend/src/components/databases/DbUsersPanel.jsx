@@ -28,7 +28,7 @@ export default function DbUsersPanel({ databaseId }) {
             const data = await api.getManagedDbUsers(databaseId);
             setUsers(data?.users || []);
         } catch (err) {
-            toastError(toast, t('app.dbUsersPanel.failedToLoadDatabaseUsers', 'Failed to load database users'), err);
+            toastError(toast, t('app.dbUsersPanel.failedToLoadDatabaseUsers', "Couldn't load database users."), err);
         } finally {
             setLoading(false);
         }
@@ -50,7 +50,7 @@ export default function DbUsersPanel({ databaseId }) {
             setNewGrants('ALL');
             await load();
         } catch (err) {
-            toastError(toast, t('app.dbUsersPanel.failedToCreateUser', 'Failed to create user'), err);
+            toastError(toast, t('app.dbUsersPanel.failedToCreateUser', "Couldn't create the user."), err);
         } finally {
             setCreating(false);
         }
@@ -69,7 +69,7 @@ export default function DbUsersPanel({ databaseId }) {
             toast.success(t('app.dbUsersPanel.userDropped', 'User dropped'));
             await load();
         } catch (err) {
-            toastError(toast, t('app.dbUsersPanel.failedToDropUser', 'Failed to drop user'), err);
+            toastError(toast, t('app.dbUsersPanel.failedToDropUser', "Couldn't drop the user."), err);
         }
     }
 

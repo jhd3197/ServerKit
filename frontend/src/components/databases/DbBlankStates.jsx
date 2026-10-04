@@ -50,7 +50,7 @@ export function EngineInstallingPanel({ instance, onRefresh }) {
             {failed ? (
                 <>
                     <h2 className="dbx-blank__title">
-                        <ShieldAlert size={17} aria-hidden="true" /> {instance.name} {t('app.dbBlankStates.failedToInstall', 'failed to install')}
+                        <ShieldAlert size={17} aria-hidden="true" /> {instance.name} {t('app.dbBlankStates.failedToInstall', "didn't install")}
                     </h2>
                     <p className="dbx-blank__body">
                         {instance.error_message

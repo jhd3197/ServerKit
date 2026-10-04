@@ -215,7 +215,7 @@ const ManualInstallModal = ({ defaultSource = 'url', onClose, onInstalled }) => 
             const result = await api.previewPlugin(pluginUrl.trim());
             setPreview(result);
         } catch (err) {
-            toastError(toast, t('app.manualInstallModal.couldNotResolveThatExtension', 'Could not resolve that extension'), err);
+            toastError(toast, t('app.manualInstallModal.couldNotResolveThatExtension', "Couldn't find that extension."), err);
         } finally {
             setPreviewing(false);
         }
@@ -231,7 +231,7 @@ const ManualInstallModal = ({ defaultSource = 'url', onClose, onInstalled }) => 
             toast.success(t('app.manualInstallModal.extensionInstalledRestartBackendToActivate', 'Extension "{{displayname}}" installed. Restart backend to activate routes.', { displayname: result.display_name }));
             onInstalled();
         } catch (err) {
-            toastError(toast, t('app.manualInstallModal.extensionInstallationFailed', 'Extension installation failed'), err);
+            toastError(toast, t('app.manualInstallModal.extensionInstallationFailed', "Couldn't install the extension."), err);
         } finally {
             setInstalling(false);
         }
@@ -255,7 +255,7 @@ const ManualInstallModal = ({ defaultSource = 'url', onClose, onInstalled }) => 
             toast.success(t('app.manualInstallModal.extensionInstalledRestartBackendToActivate', 'Extension "{{displayname}}" installed. Restart backend to activate routes.', { displayname: result.display_name }));
             onInstalled();
         } catch (err) {
-            toastError(toast, t('app.manualInstallModal.extensionInstallationFailed', 'Extension installation failed'), err);
+            toastError(toast, t('app.manualInstallModal.extensionInstallationFailed', "Couldn't install the extension."), err);
         } finally {
             setInstalling(false);
         }

@@ -114,10 +114,12 @@ const DoctorPanel = () => {
             setReport(res.report);
             const bad = (res.report?.checks || []).filter((c) => c.status !== 'ok').length;
             toast[bad > 0 ? 'warning' : 'success'](
-                bad > 0 ? `Diagnosis finished — ${bad} finding${bad !== 1 ? 's' : ''}` : 'Diagnosis finished — all clear'
+                bad > 0
+                    ? t('app.doctorPanel.diagnosisFindings', { count: bad, defaultValue_one: 'Diagnosis finished: 1 finding', defaultValue_other: 'Diagnosis finished: {{count}} findings' })
+                    : t('app.doctorPanel.diagnosisClear', 'Diagnosis finished: all clear')
             );
         } catch (err) {
-            toastError(toast, t('app.doctorPanel.diagnosisFailed', 'Diagnosis failed'), err);
+            toastError(toast, t('app.doctorPanel.diagnosisFailed', "Couldn't run the diagnosis."), err);
         } finally {
             setRunning(false);
         }
@@ -153,7 +155,7 @@ const DoctorPanel = () => {
             pollSweep(res.job_id);
         } catch (err) {
             setSweeping(false);
-            toastError(toast, t('app.doctorPanel.couldNotQueueTheFleetSweep', 'Could not queue the fleet sweep'), err);
+            toastError(toast, t('app.doctorPanel.couldNotQueueTheFleetSweep', "Couldn't queue the fleet sweep."), err);
         }
     };
 
@@ -179,17 +181,18 @@ const DoctorPanel = () => {
             // has not happened yet.
             const queued = results.filter((r) => r.success && r.job_id);
             if (failed.length > 0) {
-                toast.error(t('app.doctorPanel.repairFailed', '{{length}} repair{{value}} failed: {{value2}}', { length: failed.length, value: failed.length !== 1 ? 's' : '', value2: failed[0].error || 'see report' }));
+                toastError(toast, t('app.doctorPanel.repairsFailed', { count: failed.length, defaultValue_one: "Couldn't finish 1 repair.", defaultValue_other: "Couldn't finish {{count}} repairs." }),
+                    failed[0].error || t('app.doctorPanel.seeReport', 'See the report for details.'));
             } else if (queued.length > 0) {
                 toast.success(
-                    t('app.doctorPanel.startedBackgroundJobTheRepairFinishes', 'Started {{length}} background job{{value}}. The repair finishes there.', { length: queued.length, value: queued.length !== 1 ? 's' : '' }),
+                    t('app.doctorPanel.startedJobs', { count: queued.length, defaultValue_one: 'Started 1 background job. The repair finishes there.', defaultValue_other: 'Started {{count}} background jobs. The repair finishes there.' }),
                     {
                         duration: 10000,
                         action: { label: t('app.doctorPanel.viewJobs', 'View jobs'), onClick: () => navigate('/monitoring/jobs') },
                     },
                 );
             } else {
-                toast.success(t('app.doctorPanel.repairedItem', 'Repaired {{length}} item{{value}}', { length: items.length, value: items.length !== 1 ? 's' : '' }));
+                toast.success(t('app.doctorPanel.repairedItems', { count: items.length, defaultValue_one: 'Repaired 1 item', defaultValue_other: 'Repaired {{count}} items' }));
             }
             if (scope === 'fleet') {
                 // Rows only change when a sweep re-probes; re-read what we have.
@@ -200,7 +203,7 @@ const DoctorPanel = () => {
                 setReport(fresh.report);
             }
         } catch (err) {
-            toastError(toast, t('app.doctorPanel.repairFailed2', 'Repair failed'), err);
+            toastError(toast, t('app.doctorPanel.repairFailed2', "Couldn't repair it."), err);
         } finally {
             setRepairing(false);
             setConfirm(null);

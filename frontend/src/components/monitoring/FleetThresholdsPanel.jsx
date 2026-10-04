@@ -54,7 +54,7 @@ export default function FleetThresholdsPanel({ refreshKey = 0 }) {
             setAdding(false);
             reload();
         } catch (err) {
-            toastError(toast, t('app.fleetThresholdsPanel.failedToSaveThreshold', 'Failed to save threshold'), err);
+            toastError(toast, t('app.fleetThresholdsPanel.failedToSaveThreshold', "Couldn't save the threshold."), err);
         }
     };
 
@@ -63,7 +63,7 @@ export default function FleetThresholdsPanel({ refreshKey = 0 }) {
             await api.deleteFleetThreshold(id);
             reload();
         } catch (err) {
-            toastError(toast, t('app.fleetThresholdsPanel.failedToDeleteThreshold', 'Failed to delete threshold'), err);
+            toastError(toast, t('app.fleetThresholdsPanel.failedToDeleteThreshold', "Couldn't delete the threshold."), err);
         }
     };
 

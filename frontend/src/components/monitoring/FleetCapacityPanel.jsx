@@ -68,7 +68,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
         try {
             setCompData(await api.getFleetComparison(selectedServers, compMetric, compPeriod));
         } catch (err) {
-            toastError(toast, t('app.fleetCapacityPanel.failedToLoadComparisonData', 'Failed to load comparison data'), err);
+            toastError(toast, t('app.fleetCapacityPanel.failedToLoadComparisonData', "Couldn't load comparison data."), err);
         } finally {
             setComparing(false);
         }
@@ -79,7 +79,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
         try {
             setForecast(await api.getCapacityForecast(forecastServer, forecastMetric));
         } catch (err) {
-            toastError(toast, t('app.fleetCapacityPanel.failedToLoadForecast', 'Failed to load forecast'), err);
+            toastError(toast, t('app.fleetCapacityPanel.failedToLoadForecast', "Couldn't load the forecast."), err);
         }
     };
 
@@ -89,7 +89,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
             const blob = await api.exportFleetCsv(selectedServers, compMetric, compPeriod);
             downloadBlob(blob, `fleet_${compMetric}_${compPeriod}.csv`);
         } catch (err) {
-            toastError(toast, t('app.fleetCapacityPanel.exportFailed', 'Export failed'), err);
+            toastError(toast, t('app.fleetCapacityPanel.exportFailed', "Couldn't export the data."), err);
         }
     };
 

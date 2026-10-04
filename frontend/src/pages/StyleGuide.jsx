@@ -768,7 +768,7 @@ export default function StyleGuide() {
                                 <CheckCircle size={16} /> {t('app.styleGuide.operationCompletedSuccessfully', 'Operation completed.')}
                             </div>
                             <div className="alert alert-danger">
-                                <AlertTriangle size={16} /> {t('app.styleGuide.failedToConnectToTheServer', 'Failed to connect to the server.')}
+                                <AlertTriangle size={16} /> {t('app.styleGuide.failedToConnectToTheServer', "Couldn't connect to the server.")}
                             </div>
                             <div className="alert alert-warning">
                                 <AlertCircle size={16} /> {t('app.styleGuide.sslCertificateExpiresIn7Days', 'SSL certificate expires in 7 days.')}
@@ -781,7 +781,7 @@ export default function StyleGuide() {
                         <SectionTitle title={t('app.styleGuide.alertWithCloseButton', 'Alert with close button')} />
                         <div className="styleguide__examples styleguide__examples--compact">
                             <div className="alert alert-danger">
-                                {t('app.styleGuide.somethingWentWrongWhileSaving', 'Something went wrong while saving.')}
+                                {t('app.styleGuide.somethingWentWrongWhileSaving', "Couldn't save. Try again.")}
                                 <Button variant="unstyled" className="alert-close">&times;</Button>
                             </div>
                         </div>
@@ -1278,7 +1278,7 @@ export default function StyleGuide() {
                         <SectionTitle title={t('app.styleGuide.errorBannerAtPageLevel', 'Error banner at page level')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.shownBelowPageHeaderWhenAn', 'Shown below page header when an API call fails.')}</p>
                         <div className="alert alert-danger">
-                            {t('app.styleGuide.failedToLoadServicesPleaseTry', 'Failed to load services. Please try again.')}
+                            {t('app.styleGuide.failedToLoadServicesPleaseTry', "Couldn't load services. Try again.")}
                             <Button variant="unstyled" className="alert-close">&times;</Button>
                         </div>
 

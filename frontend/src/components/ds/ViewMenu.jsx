@@ -35,7 +35,7 @@ export function ViewMenu({ views, className }) {
             setName('');
             toast.success(t('app.viewMenu.viewSaved', 'View "{{trimmed}}" saved', { trimmed: trimmed }));
         } catch (err) {
-            toastError(toast, t('app.viewMenu.couldNotSaveTheView', 'Could not save the view'), err);
+            toastError(toast, t('app.viewMenu.couldNotSaveTheView', "Couldn't save the view."), err);
         } finally {
             setSaving(false);
         }
@@ -46,7 +46,7 @@ export function ViewMenu({ views, className }) {
             await updateActiveView();
             toast.success(t('app.viewMenu.viewUpdated', 'View "{{name}}" updated', { name: activeView.name }));
         } catch (err) {
-            toastError(toast, t('app.viewMenu.couldNotUpdateTheView', 'Could not update the view'), err);
+            toastError(toast, t('app.viewMenu.couldNotUpdateTheView', "Couldn't update the view."), err);
         }
     };
 
@@ -55,7 +55,7 @@ export function ViewMenu({ views, className }) {
             await removeView(view);
             toast.success(t('app.viewMenu.viewDeleted', 'View "{{name}}" deleted', { name: view.name }));
         } catch (err) {
-            toastError(toast, t('app.viewMenu.couldNotDeleteTheView', 'Could not delete the view'), err);
+            toastError(toast, t('app.viewMenu.couldNotDeleteTheView', "Couldn't delete the view."), err);
         }
     };
 

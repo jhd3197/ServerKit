@@ -75,7 +75,7 @@ const PackagesTab = ({ appId }) => {
             await api.freezePythonRequirements(appId);
             toast.success(t('app.packagesTab.requirementsTxtUpdated', 'requirements.txt updated'));
         } catch (err) {
-            toastError(toast, t('app.packagesTab.failedToFreezeRequirements', 'Failed to freeze requirements'), err);
+            toastError(toast, t('app.packagesTab.failedToFreezeRequirements', "Couldn't freeze the requirements."), err);
         }
     }
 

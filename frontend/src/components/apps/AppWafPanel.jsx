@@ -125,13 +125,13 @@ const AppWafPanel = ({ app, onChanged }) => {
         try {
             const result = await api.installWaf();
             if (result?.success === false) {
-                toastError(toast, t('app.appWafPanel.failedToInstallModsecurity', 'Failed to install ModSecurity'), result);
+                toastError(toast, t('app.appWafPanel.failedToInstallModsecurity', "Couldn't install ModSecurity."), result);
             } else {
                 toast.success(result?.message || t('app.appWafPanel.modsecurityInstalled', 'ModSecurity installed'));
             }
             await loadStatus();
         } catch (err) {
-            toastError(toast, t('app.appWafPanel.failedToInstallModsecurity', 'Failed to install ModSecurity'), err);
+            toastError(toast, t('app.appWafPanel.failedToInstallModsecurity', "Couldn't install ModSecurity."), err);
         } finally {
             setInstalling(false);
         }
@@ -185,7 +185,7 @@ const AppWafPanel = ({ app, onChanged }) => {
             toast.success(t('app.appWafPanel.wafPolicySaved', 'WAF policy saved'));
             onChanged?.();
         } catch (err) {
-            toastError(toast, t('app.appWafPanel.failedToSaveWafPolicy', 'Failed to save WAF policy'), err);
+            toastError(toast, t('app.appWafPanel.failedToSaveWafPolicy', "Couldn't save the WAF policy."), err);
         } finally {
             setSaving(false);
         }
@@ -196,7 +196,7 @@ const AppWafPanel = ({ app, onChanged }) => {
         try {
             const result = await api.applyWaf(app.id);
             if (result?.success === false) {
-                toastError(toast, t('app.appWafPanel.failedToApplyWafRules', 'Failed to apply WAF rules'), result);
+                toastError(toast, t('app.appWafPanel.failedToApplyWafRules', "Couldn't apply the WAF rules."), result);
             } else if (result?.manual_include) {
                 toast.warning(
                     t('app.appWafPanel.rulesWrittenButNoVhostWas', 'Rules written, but no vhost was found. Include it manually: {{manualinclude}}', { manualinclude: result.manual_include }),
@@ -206,7 +206,7 @@ const AppWafPanel = ({ app, onChanged }) => {
                 toast.success(result?.message || t('app.appWafPanel.wafRulesAppliedAndNginxReloaded', 'WAF rules applied and nginx reloaded.'));
             }
         } catch (err) {
-            toastError(toast, t('app.appWafPanel.failedToApplyWafRules', 'Failed to apply WAF rules'), err);
+            toastError(toast, t('app.appWafPanel.failedToApplyWafRules', "Couldn't apply the WAF rules."), err);
         } finally {
             setApplying(false);
         }

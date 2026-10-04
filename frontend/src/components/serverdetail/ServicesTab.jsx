@@ -151,7 +151,7 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
                 setUnits(data?.units || []);
             }
         } catch (err) {
-            toastError(toast, t('app.servicesTab.failedToLoadServices', 'Failed to load services'), err);
+            toastError(toast, t('app.servicesTab.failedToLoadServices', "Couldn't load services."), err);
         } finally {
             setLoading(false);
         }
@@ -207,12 +207,20 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
         try {
             if (isLocal) await api.controlService(unit, action);
             else await api.controlRemoteService(serverId, unit, action);
-            toast.success(`${unit}: ${action} ok`);
+            toast.success(action === 'start'
+                ? t('app.servicesTab.unitStarted', '{{unit}} started', { unit })
+                : action === 'stop'
+                    ? t('app.servicesTab.unitStopped', '{{unit}} stopped', { unit })
+                    : t('app.servicesTab.unitRestarted', '{{unit}} restarted', { unit }));
             // Refresh state — only the affected row needs a reload but
             // re-fetching the list is simpler and keeps the filter consistent.
             loadUnits();
         } catch (err) {
-            toastError(toast, t('app.servicesTab.failedTo', 'Failed to {{action}} {{unit}}', { action: action, unit: unit }), err);
+            toastError(toast, action === 'start'
+                ? t('app.servicesTab.couldntStartUnit', "Couldn't start {{unit}}.", { unit })
+                : action === 'stop'
+                    ? t('app.servicesTab.couldntStopUnit', "Couldn't stop {{unit}}.", { unit })
+                    : t('app.servicesTab.couldntRestartUnit', "Couldn't restart {{unit}}.", { unit }), err);
         } finally {
             setBusyUnit(null);
         }
@@ -267,7 +275,7 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
             await api.reloadRemoteSystemdDaemon(serverId);
             toast.success(t('app.servicesTab.systemctlDaemonReloadCompleted', 'systemctl daemon-reload completed'));
         } catch (err) {
-            toastError(toast, t('app.servicesTab.daemonReloadFailed', 'daemon-reload failed'), err);
+            toastError(toast, t('app.servicesTab.daemonReloadFailed', "Couldn't run daemon-reload."), err);
         } finally {
             setBusyUnit(null);
         }

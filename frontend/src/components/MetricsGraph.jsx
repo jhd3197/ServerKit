@@ -132,7 +132,7 @@ const MetricsGraph = ({ compact = false, timezone, serverId }) => {
     if (error) {
         return (
             <div className="metrics-graph-card error">
-                <span>{t('app.metricsGraph.failedToLoadMetricsHistory', 'Failed to load metrics history')}</span>
+                <span>{t('app.metricsGraph.failedToLoadMetricsHistory', "Couldn't load metrics history.")}</span>
             </div>
         );
     }

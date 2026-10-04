@@ -234,7 +234,7 @@ const CronJobs = () => {
                             toast.success(t('app.cronJobs.cronJobRestored', 'Cron job "{{name}}" restored', { name: job.name }));
                             loadData();
                         } catch (err) {
-                            toastError(toast, t('app.cronJobs.couldNotRestoreTheCronJob', 'Could not restore the cron job'), err);
+                            toastError(toast, t('app.cronJobs.couldNotRestoreTheCronJob', "Couldn't restore the cron job."), err);
                         }
                     },
                 },
@@ -249,7 +249,9 @@ const CronJobs = () => {
     const handleToggleJob = async (jobId, currentEnabled) => {
         try {
             await api.toggleCronJob(jobId, !currentEnabled);
-            toast.success(t('app.cronJobs.cronJob', 'Cron job {{value}}', { value: !currentEnabled ? 'enabled' : 'disabled' }));
+            toast.success(!currentEnabled
+                ? t('app.cronJobs.cronJobOn', 'Cron job turned on')
+                : t('app.cronJobs.cronJobOff', 'Cron job turned off'));
             loadData();
         } catch (err) {
             toastError(toast, t('app.cronJobs.couldntToggleJob', "Couldn't turn the cron job on or off."), err);
@@ -270,7 +272,7 @@ const CronJobs = () => {
                 });
                 loadData();
             } else {
-                toastError(toast, t('app.cronJobs.jobExecutionFailed', 'Job execution failed'), result.error);
+                toastError(toast, t('app.cronJobs.jobExecutionFailed', "Couldn't run the job."), result.error);
             }
         } catch (err) {
             toastError(toast, t('app.cronJobs.couldntRunJob', "Couldn't run the cron job."), err);

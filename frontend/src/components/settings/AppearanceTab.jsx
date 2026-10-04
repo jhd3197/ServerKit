@@ -50,7 +50,7 @@ const AppearanceTab = () => {
             if (imported?.slug) setSkin(imported.slug);
             toast.success(t('app.appearanceTab.importedTheme', 'Imported theme "{{value}}"', { value: imported?.name || imported?.slug }));
         } catch (err) {
-            toastError(toast, t('app.appearanceTab.couldNotImportThatThemeJson', 'Could not import that theme.json'), err);
+            toastError(toast, t('app.appearanceTab.couldNotImportThatThemeJson', "Couldn't import that theme.json."), err);
         }
     };
 

@@ -48,7 +48,7 @@ const AuditTab = () => {
                 <SharedCardContent variant="legacy" className="card-body">
                     {error && !loading && (
                         <ErrorState
-                            title={t('app.auditTab.couldntRunAudit', "Couldn't run the security audit")}
+                            title={t('app.auditTab.couldntRunAudit', "Couldn't run the security audit.")}
                             error={error}
                             onRetry={runAudit}
                             compact={!!audit}

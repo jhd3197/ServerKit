@@ -93,7 +93,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             const data = await api.getVariableGroup(groupId);
             setDetail(data);
         } catch (err) {
-            toastError(toast, t('app.sharedVariableGroups.failedToLoadGroup', 'Failed to load group'), err);
+            toastError(toast, t('app.sharedVariableGroups.failedToLoadGroup', "Couldn't load the group."), err);
         }
     }, [t, toast]);
 
@@ -115,7 +115,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             await loadGroups();
             setSelectedId(group.id);
         } catch (err) {
-            toastError(toast, t('app.sharedVariableGroups.failedToCreateGroup', 'Failed to create group'), err);
+            toastError(toast, t('app.sharedVariableGroups.failedToCreateGroup', "Couldn't create the group."), err);
         }
     }
 
@@ -131,7 +131,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             if (selectedId === groupId) setSelectedId(null);
             loadGroups();
         } catch (err) {
-            toastError(toast, t('app.sharedVariableGroups.failedToDeleteGroup', 'Failed to delete group'), err);
+            toastError(toast, t('app.sharedVariableGroups.failedToDeleteGroup', "Couldn't delete the group."), err);
         }
     }
 
@@ -150,7 +150,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toastError(toast, t('app.sharedVariableGroups.failedToAddVariable', 'Failed to add variable'), err);
+            toastError(toast, t('app.sharedVariableGroups.failedToAddVariable', "Couldn't add the variable."), err);
         }
     }
 
@@ -160,7 +160,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toastError(toast, t('app.sharedVariableGroups.failedToDeleteVariable', 'Failed to delete variable'), err);
+            toastError(toast, t('app.sharedVariableGroups.failedToDeleteVariable', "Couldn't delete the variable."), err);
         }
     }
 
@@ -174,7 +174,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toastError(toast, t('app.sharedVariableGroups.failedToAttachGroup', 'Failed to attach group'), err);
+            toastError(toast, t('app.sharedVariableGroups.failedToAttachGroup', "Couldn't attach the group."), err);
         }
     }
 
@@ -184,7 +184,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toastError(toast, t('app.sharedVariableGroups.failedToDetach', 'Failed to detach'), err);
+            toastError(toast, t('app.sharedVariableGroups.failedToDetach', "Couldn't detach the group."), err);
         }
     }
 
@@ -359,7 +359,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                     className="shared-groups"
                     loading={loading}
                     error={loadError}
-                    errorTitle={t('app.sharedVariableGroups.couldntLoadVariableGroups', "Couldn't load variable groups")}
+                    errorTitle={t('app.sharedVariableGroups.couldntLoadVariableGroups', "Couldn't load variable groups.")}
                     onRetry={loadGroups}
                     loadingTitle="Loading variable groups…"
                     storageKey="serverkit-list-variable-groups"

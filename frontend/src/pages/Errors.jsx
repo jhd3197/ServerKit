@@ -158,7 +158,7 @@ export default function Errors() {
             setSelected(null);
             refresh();
         } catch (err) {
-            toastError(toast, t('app.errors.updateFailed', 'Update failed'), err);
+            toastError(toast, t('app.errors.updateFailed', "Couldn't update it."), err);
         }
     };
 
@@ -176,7 +176,7 @@ export default function Errors() {
             setSelected(null);
             refresh();
         } catch (err) {
-            toastError(toast, t('app.errors.deleteFailed', 'Delete failed'), err);
+            toastError(toast, t('app.errors.deleteFailed', "Couldn't delete it."), err);
         }
     };
 

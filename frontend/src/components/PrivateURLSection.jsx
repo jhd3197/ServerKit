@@ -27,7 +27,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             onUpdate();
             setCustomSlug('');
         } catch (error) {
-            toastError(toast, t('app.privateURLSection.failedToEnablePrivateUrl', 'Failed to enable private URL'), error);
+            toastError(toast, t('app.privateURLSection.failedToEnablePrivateUrl', "Couldn't turn on the private URL."), error);
         } finally {
             setLoading(false);
         }
@@ -46,7 +46,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             toast.success(t('app.privateURLSection.privateUrlDisabled', 'Private URL disabled'));
             onUpdate();
         } catch (error) {
-            toastError(toast, t('app.privateURLSection.failedToDisablePrivateUrl', 'Failed to disable private URL'), error);
+            toastError(toast, t('app.privateURLSection.failedToDisablePrivateUrl', "Couldn't turn off the private URL."), error);
         } finally {
             setLoading(false);
         }
@@ -65,7 +65,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             toast.success(t('app.privateURLSection.privateUrlRegenerated', 'Private URL regenerated'));
             onUpdate();
         } catch (error) {
-            toastError(toast, t('app.privateURLSection.failedToRegenerate', 'Failed to regenerate'), error);
+            toastError(toast, t('app.privateURLSection.failedToRegenerate', "Couldn't regenerate the URL."), error);
         } finally {
             setLoading(false);
         }
@@ -83,7 +83,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             setEditMode(false);
             setCustomSlug('');
         } catch (error) {
-            toastError(toast, t('app.privateURLSection.failedToUpdateSlug', 'Failed to update slug'), error);
+            toastError(toast, t('app.privateURLSection.failedToUpdateSlug', "Couldn't update the slug."), error);
         } finally {
             setLoading(false);
         }

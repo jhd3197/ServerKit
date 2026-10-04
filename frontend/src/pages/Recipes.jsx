@@ -228,11 +228,9 @@ export default function Recipes() {
                                 </div>
                                 <div className="recipe-card__foot">
                                     <span className="recipe-card__steps">
-                                        {t('app.recipes.stepsLine', '{{steps}} steps · {{handoffs}} secret ask{{plural}}', {
-                                            steps: recipe.steps ?? '?',
-                                            handoffs: handoffCount || 0,
-                                            plural: handoffCount === 1 ? '' : 's',
-                                        })}
+                                        {t('app.recipes.stepsCount', { count: recipe.steps ?? 0, defaultValue_one: '1 step', defaultValue_other: '{{count}} steps' })}
+                                        {' · '}
+                                        {t('app.recipes.secretAsks', { count: handoffCount || 0, defaultValue_one: '1 secret ask', defaultValue_other: '{{count}} secret asks' })}
                                     </span>
                                     <SharedButton variant="primary"
                                         type="button"

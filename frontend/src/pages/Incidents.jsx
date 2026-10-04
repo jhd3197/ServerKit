@@ -182,10 +182,10 @@ export default function Incidents() {
         try {
             const result = await api.checkAlerts();
             const count = result.alerts?.length || 0;
-            toast[count > 0 ? 'warning' : 'success'](`${count} host alert${count === 1 ? '' : 's'} firing`);
+            toast[count > 0 ? 'warning' : 'success'](t('app.incidents.hostAlertsFiring', { count, defaultValue_one: '1 host alert firing', defaultValue_other: '{{count}} host alerts firing' }));
             await load();
         } catch (err) {
-            toastError(toast, t('app.incidents.alertCheckFailed', 'Alert check failed'), err);
+            toastError(toast, t('app.incidents.alertCheckFailed', "Couldn't check alerts."), err);
         } finally {
             setChecking(false);
         }
@@ -326,7 +326,9 @@ export default function Incidents() {
                 : api.resolveFleetAlert(item.alertId));
             await load();
         } catch (err) {
-            toastError(toast, t('app.incidents.failedToAlert', 'Failed to {{value}} alert', { value: action === 'ack' ? 'acknowledge' : 'resolve' }), err);
+            toastError(toast, action === 'ack'
+                ? t('app.incidents.couldntAcknowledgeAlert', "Couldn't acknowledge the alert.")
+                : t('app.incidents.couldntResolveAlert', "Couldn't resolve the alert."), err);
         }
     }, [load, t, toast]);
 
@@ -342,7 +344,7 @@ export default function Incidents() {
             setSelected(null);
             await load();
         } catch (err) {
-            toastError(toast, t('app.incidents.couldNotPostTheUpdate', 'Could not post the update'), err);
+            toastError(toast, t('app.incidents.couldNotPostTheUpdate', "Couldn't post the update."), err);
         }
     };
 
@@ -518,7 +520,7 @@ export default function Incidents() {
 
             {loadError && items.length === 0 ? (
                 <ErrorState
-                    title={t('app.incidents.couldntLoadIncidents', "Couldn't load incidents")}
+                    title={t('app.incidents.couldntLoadIncidents', "Couldn't load incidents.")}
                     error={loadError}
                     onRetry={load}
                 />

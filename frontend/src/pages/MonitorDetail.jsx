@@ -317,7 +317,7 @@ export default function MonitorDetail() {
         return (
             <PageLayout className="monitor-detail" icon={<ArrowLeft size={18} />} title={t('app.monitorDetail.monitor', 'Monitor')}>
                 <ErrorState
-                    title={t('app.monitorDetail.couldntLoadMonitor', "Couldn't load this monitor")}
+                    title={t('app.monitorDetail.couldntLoadMonitor', "Couldn't load this monitor.")}
                     error={loadError}
                     onRetry={load}
                 />
@@ -357,7 +357,7 @@ export default function MonitorDetail() {
             if (successMessage) toast.success(successMessage);
             await load();
         } catch (err) {
-            toastError(toast, t('app.monitorDetail.actionFailed', 'Action failed'), err);
+            toastError(toast, t('app.monitorDetail.actionFailed', "Couldn't run that action."), err);
         } finally {
             setBusy(false);
         }
@@ -388,7 +388,7 @@ export default function MonitorDetail() {
             toast.success(t('app.monitorDetail.monitorDeleted', 'Monitor deleted'));
             navigate('/monitoring/monitors');
         } catch (err) {
-            toastError(toast, t('app.monitorDetail.couldNotDeleteTheMonitor', 'Could not delete the monitor'), err);
+            toastError(toast, t('app.monitorDetail.couldNotDeleteTheMonitor', "Couldn't delete the monitor."), err);
         }
     };
 
@@ -481,7 +481,7 @@ export default function MonitorDetail() {
                         <div>
                             <h3>{t('app.monitorDetail.responseTime', 'Response time')}</h3>
                             <span className="mon-panel-sub">
-                                {series.length} sample{series.length === 1 ? '' : 's'} {t('app.monitorDetail.inThisWindow', 'in this window')}
+                                {t('app.monitorDetail.samplesInWindow', { count: series.length, defaultValue_one: '1 sample in this window', defaultValue_other: '{{count}} samples in this window' })}
                             </span>
                         </div>
                         <SegControl
@@ -688,7 +688,7 @@ export default function MonitorDetail() {
                         <dl className="mon-inforows">
                             <div>
                                 <dt>{t('app.monitorDetail.openAnIncidentAfter', 'Open an incident after')}</dt>
-                                <dd>{(monitor.retries ?? 0) + 1} {t('app.monitorDetail.failedCheck', 'failed check')}{(monitor.retries ?? 0) + 1 === 1 ? '' : 's'}</dd>
+                                <dd>{t('app.monitorDetail.failedChecks', { count: (monitor.retries ?? 0) + 1, defaultValue_one: '1 failed check', defaultValue_other: '{{count}} failed checks' })}</dd>
                             </div>
                             <div><dt>{t('app.monitorDetail.currentFailureStreak', 'Current failure streak')}</dt><dd>{monitor.consecutive_failures ?? 0}</dd></div>
                             <div>

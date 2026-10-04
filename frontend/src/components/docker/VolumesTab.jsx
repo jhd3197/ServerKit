@@ -155,7 +155,7 @@ const VolumesTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error('Failed to remove volume:', err);
-            toastError(toast, t('app.volumesTab.failedToRemoveVolumeItMay', 'Failed to delete volume. It may be in use.'), err);
+            toastError(toast, t('app.volumesTab.failedToRemoveVolumeItMay', "Couldn't delete the volume. A container may still use it."), err);
         }
     }
 

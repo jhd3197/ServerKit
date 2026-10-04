@@ -148,7 +148,7 @@ export default function Coexistence() {
                         <EmptyState loading loadingVariant="table" title={t('app.coexistence.loadingServers', 'Loading servers')} />
                     ) : loadError ? (
                         <ErrorState
-                            title={t('app.coexistence.couldntLoadServers', "Couldn't load servers")}
+                            title={t('app.coexistence.couldntLoadServers', "Couldn't load servers.")}
                             error={loadError}
                             onRetry={load}
                         />

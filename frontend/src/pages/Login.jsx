@@ -69,7 +69,7 @@ const Login = () => {
                 navigate(consumeRedirect(), { replace: true });
             })
             .catch((err) => {
-                setError(err.message || 'Invalid or expired login link');
+                setError(err.message || t('auth.linkExpired', 'This sign-in link is invalid or has expired. Request a new one.'));
                 setRedeemingLink(false);
                 navigate('/login', { replace: true });
             });
@@ -154,7 +154,7 @@ const Login = () => {
 
             navigate(consumeRedirect());
         } catch (err) {
-            setError(err.message || 'Invalid verification code');
+            setError(err.message || t('auth.codeMismatch', "That code didn't match. Enter the current 6-digit code from your authenticator app."));
             // Clear the code inputs on error
             if (!useBackupCode) {
                 setTotpCode(['', '', '', '', '', '']);
@@ -164,7 +164,7 @@ const Login = () => {
             twoFactorInFlight.current = false;
             setLoading(false);
         }
-    }, [useBackupCode, backupCode, totpCode, tempToken, setUser, navigate]);
+    }, [useBackupCode, backupCode, totpCode, tempToken, setUser, navigate, t]);
 
     function handleTotpChange(index, value) {
         // Only allow digits

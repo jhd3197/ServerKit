@@ -156,7 +156,7 @@ const Projects = () => {
             builtinViews={PROJECT_VIEWS}
             totalCount={projects.length}
             error={loadError}
-            errorTitle={t('app.projects.couldntLoadProjects', "Couldn't load projects")}
+            errorTitle={t('app.projects.couldntLoadProjects', "Couldn't load projects.")}
             onRetry={loadProjects}
             items={rows}
             columns={columns}
@@ -214,7 +214,7 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
             reset();
             onCreated();
         } catch (err) {
-            toastError(toast, t('app.projects.failedToCreateProject', 'Failed to create project'), err);
+            toastError(toast, t('app.projects.failedToCreateProject', "Couldn't create the project."), err);
         } finally {
             setSubmitting(false);
         }

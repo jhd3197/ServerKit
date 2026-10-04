@@ -249,7 +249,7 @@ const QueueOperations = () => {
         try {
             config = JSON.parse(queueForm.config);
         } catch (err) {
-            toastError(toast, t('app.queueOperations.configMustBeValidJson', 'Config must be valid JSON'), err);
+            toastError(toast, t('app.queueOperations.configMustBeValidJson', 'Config must be valid JSON, like {"key": "value"}.'), err);
             return;
         }
         try {
@@ -301,7 +301,7 @@ const QueueOperations = () => {
         try {
             payload = JSON.parse(sendForm.payload);
         } catch (err) {
-            toastError(toast, t('app.queueOperations.payloadMustBeValidJson', 'Payload must be valid JSON'), err);
+            toastError(toast, t('app.queueOperations.payloadMustBeValidJson', 'Payload must be valid JSON, like {"key": "value"}.'), err);
             return;
         }
         try {

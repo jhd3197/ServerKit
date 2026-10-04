@@ -152,7 +152,7 @@ const WorkspaceServersTab = ({ wsId, srvIn, srvOut, onMoveServer, loadError, onR
                 className="ws-detail__tablecard"
                 emptyState={loadError ? (
                     <ErrorState
-                        title={t('app.workspaceServersTab.couldntLoadServers', "Couldn't load servers")}
+                        title={t('app.workspaceServersTab.couldntLoadServers', "Couldn't load servers.")}
                         error={loadError}
                         onRetry={onRetry}
                     />

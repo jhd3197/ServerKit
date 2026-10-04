@@ -14,7 +14,7 @@ import { errorReason } from '@/utils/errorMessage';
  *   />
  */
 export function ErrorState({
-    title = t('common.error.failedToLoad', 'Failed to load'),
+    title = t('common.error.failedToLoad', "Couldn't load this."),
     message,
     error,
     onRetry,
@@ -22,7 +22,7 @@ export function ErrorState({
     className = '',
 }) {
     const errorMessage = message || errorReason(error)
-        || t('common.error.loadingData', 'An error occurred while loading data');
+        || t('common.error.loadingData', 'The server returned an error. Try again.');
 
     if (compact) {
         return (

@@ -101,7 +101,7 @@ const EventsTab = () => {
                         <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
                     ) : eventsError && events.length === 0 ? (
                         <ErrorState
-                            title={t('app.eventsTab.couldntLoadSecurityEvents', "Couldn't load security events")}
+                            title={t('app.eventsTab.couldntLoadSecurityEvents', "Couldn't load security events.")}
                             error={eventsError}
                             onRetry={loadEvents}
                         />

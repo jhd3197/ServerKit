@@ -161,7 +161,7 @@ const StatusPages = () => {
             setIncidents(iData.incidents || []);
             setUnattached((mData?.monitors || []).filter((m) => m.page_id == null));
         } catch (err) {
-            toastError(toast, t('app.statusPages.failedToLoadPageDetails', 'Failed to load page details'), err);
+            toastError(toast, t('app.statusPages.failedToLoadPageDetails', "Couldn't load the page details."), err);
         }
     };
 
@@ -174,7 +174,7 @@ const StatusPages = () => {
             setShowAttach(false);
             await loadPageDetails(selectedPage);
         } catch (err) {
-            toastError(toast, t('app.statusPages.couldNotAddTheMonitor', 'Could not add the monitor'), err);
+            toastError(toast, t('app.statusPages.couldNotAddTheMonitor', "Couldn't add the monitor."), err);
         }
     };
 
@@ -186,7 +186,7 @@ const StatusPages = () => {
             toast.success(t('app.statusPages.removedFromThisPage', '{{name}} removed from this page', { name: component.name }));
             await loadPageDetails(selectedPage);
         } catch (err) {
-            toastError(toast, t('app.statusPages.couldNotRemoveTheMonitor', 'Could not remove the monitor'), err);
+            toastError(toast, t('app.statusPages.couldNotRemoveTheMonitor', "Couldn't remove the monitor."), err);
         }
     };
 
@@ -209,7 +209,7 @@ const StatusPages = () => {
                 setIncidents([]);
             }
         } catch (err) {
-            toastError(toast, t('app.statusPages.failedToLoadStatusPages', 'Failed to load status pages'), err);
+            toastError(toast, t('app.statusPages.failedToLoadStatusPages', "Couldn't load status pages."), err);
         } finally {
             setLoading(false);
         }
@@ -244,7 +244,7 @@ const StatusPages = () => {
             setPages((current) => [...current, page].sort((a, b) => a.name.localeCompare(b.name)));
             await loadPageDetails(page);
         } catch (err) {
-            toastError(toast, t('app.statusPages.failedToCreateStatusPage', 'Failed to create status page'), err);
+            toastError(toast, t('app.statusPages.failedToCreateStatusPage', "Couldn't create the status page."), err);
         }
     };
 
@@ -258,7 +258,7 @@ const StatusPages = () => {
             await loadPageDetails(selectedPage);
             await loadPages();
         } catch (err) {
-            toastError(toast, t('app.statusPages.failedToAddComponent', 'Failed to add component'), err);
+            toastError(toast, t('app.statusPages.failedToAddComponent', "Couldn't add the component."), err);
         }
     };
 
@@ -268,7 +268,7 @@ const StatusPages = () => {
             toast.success(t('app.statusPages.check', 'Check {{status}}{{value}}', { status: result.status, value: result.response_time ? ` in ${result.response_time}ms` : '' }));
             if (selectedPage) await loadPageDetails(selectedPage);
         } catch (err) {
-            toastError(toast, t('app.statusPages.checkFailed', 'Check failed'), err);
+            toastError(toast, t('app.statusPages.checkFailed', "Couldn't run the check."), err);
         }
     };
 
@@ -281,7 +281,7 @@ const StatusPages = () => {
             setIncidentForm(defaultIncidentForm);
             await loadPageDetails(selectedPage);
         } catch (err) {
-            toastError(toast, t('app.statusPages.failedToCreateIncident', 'Failed to create incident'), err);
+            toastError(toast, t('app.statusPages.failedToCreateIncident', "Couldn't create the incident."), err);
         }
     };
 
@@ -295,7 +295,7 @@ const StatusPages = () => {
             toast.success(t('app.statusPages.incidentSetTo', 'Incident set to {{statusLabel}}', { statusLabel: statusLabel }));
             if (selectedPage) await loadPageDetails(selectedPage);
         } catch (err) {
-            toastError(toast, t('app.statusPages.failedToUpdateIncident', 'Failed to update incident'), err);
+            toastError(toast, t('app.statusPages.failedToUpdateIncident', "Couldn't update the incident."), err);
         }
     };
 
@@ -326,7 +326,7 @@ const StatusPages = () => {
             setDeleteConfirm(null);
             if (selectedPage) await loadPageDetails(selectedPage);
         } catch (err) {
-            toastError(toast, t('app.statusPages.deleteFailed', 'Delete failed'), err);
+            toastError(toast, t('app.statusPages.deleteFailed', "Couldn't delete the status page."), err);
         }
     };
 
@@ -370,7 +370,7 @@ const StatusPages = () => {
                             <span className="status-page-item__slug">/status/{page.slug}</span>
                             <span className="status-page-item__meta">
                                 <Globe2 size={13} />
-                                {page.component_count} component{page.component_count !== 1 ? 's' : ''}
+                                {t('app.statusPages.componentCount', { count: page.component_count, defaultValue_one: '1 component', defaultValue_other: '{{count}} components' })}
                             </span>
                         </Button>
                     ))}

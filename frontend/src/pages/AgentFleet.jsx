@@ -122,7 +122,7 @@ const AgentFleet = () => {
             setDiscoveredAgents(data);
             toast.success(t('app.agentFleet.discoveredAgents', 'Discovered {{length}} agents', { length: data.length }));
         } catch (err) {
-            toastError(toast, t('app.agentFleet.discoveryScanFailed', 'Discovery scan failed'), err);
+            toastError(toast, t('app.agentFleet.discoveryScanFailed', "Couldn't run the discovery scan."), err);
         } finally {
             setIsScanning(false);
         }
@@ -134,7 +134,7 @@ const AgentFleet = () => {
             toast.success(t('app.agentFleet.agentRegistrationApproved', 'Agent registration approved'));
             fetchData();
         } catch (err) {
-            toastError(toast, t('app.agentFleet.failedToApproveAgent', 'Failed to approve agent'), err);
+            toastError(toast, t('app.agentFleet.failedToApproveAgent', "Couldn't approve the agent."), err);
         }
     };
 
@@ -144,7 +144,7 @@ const AgentFleet = () => {
             toast.success(t('app.agentFleet.agentRegistrationRejected', 'Agent registration rejected'));
             fetchData();
         } catch (err) {
-            toastError(toast, t('app.agentFleet.failedToRejectAgent', 'Failed to reject agent'), err);
+            toastError(toast, t('app.agentFleet.failedToRejectAgent', "Couldn't reject the agent."), err);
         }
     };
 
@@ -170,7 +170,7 @@ const AgentFleet = () => {
             }
             fetchData();
         } catch (err) {
-            toastError(toast, t('app.agentFleet.failedToTriggerUpgrade', 'Failed to trigger upgrade'), err);
+            toastError(toast, t('app.agentFleet.failedToTriggerUpgrade', "Couldn't start the upgrade."), err);
         }
     };
 
@@ -180,7 +180,7 @@ const AgentFleet = () => {
             toast.success(t('app.agentFleet.rolloutCancelled', 'Rollout cancelled'));
             fetchData();
         } catch (err) {
-            toastError(toast, t('app.agentFleet.failedToCancelRollout', 'Failed to cancel rollout'), err);
+            toastError(toast, t('app.agentFleet.failedToCancelRollout', "Couldn't cancel the rollout."), err);
         }
     };
 
@@ -190,7 +190,7 @@ const AgentFleet = () => {
             toast.success(t('app.agentFleet.commandRetryTriggered', 'Command retry triggered'));
             fetchData();
         } catch (err) {
-            toastError(toast, t('app.agentFleet.failedToRetryCommand', 'Failed to retry command'), err);
+            toastError(toast, t('app.agentFleet.failedToRetryCommand', "Couldn't retry the command."), err);
         }
     };
 
@@ -199,7 +199,7 @@ const AgentFleet = () => {
             const data = await api.getServerDiagnostics(serverId);
             setDiagnostics(data);
         } catch (err) {
-            toastError(toast, t('app.agentFleet.failedToLoadDiagnostics', 'Failed to load diagnostics'), err);
+            toastError(toast, t('app.agentFleet.failedToLoadDiagnostics', "Couldn't load diagnostics."), err);
         }
     };
 
@@ -485,7 +485,7 @@ const AgentFleet = () => {
 
             {loadError && !tabHasData ? (
                 <ErrorState
-                    title={t('app.agentFleet.couldntLoadFleetData', "Couldn't load fleet data")}
+                    title={t('app.agentFleet.couldntLoadFleetData', "Couldn't load fleet data.")}
                     error={loadError}
                     onRetry={fetchData}
                 />

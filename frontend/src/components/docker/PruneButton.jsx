@@ -28,7 +28,7 @@ const PruneButton = ({ onPruned }) => {
             toast.success(t('app.pruneButton.dockerCleanupCompleted', 'Docker cleanup completed'));
             onPruned?.();
         } catch (err) {
-            toastError(toast, t('app.pruneButton.failedToCleanupDockerResources', 'Failed to cleanup Docker resources'), err);
+            toastError(toast, t('app.pruneButton.failedToCleanupDockerResources', "Couldn't clean up Docker resources."), err);
         } finally {
             setLoading(false);
         }

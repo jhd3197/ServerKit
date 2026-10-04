@@ -177,7 +177,13 @@ const ComposeTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error(`Failed to ${action} project:`, err);
-            toastError(toast, t('app.composeTab.failedToProject', 'Failed to {{action}} compose project', { action: action }), err);
+            const failed = {
+                up: t('app.composeTab.couldntStartProject', "Couldn't start the compose project."),
+                down: t('app.composeTab.couldntStopProject', "Couldn't stop the compose project."),
+                restart: t('app.composeTab.couldntRestartProject', "Couldn't restart the compose project."),
+                pull: t('app.composeTab.couldntPullImages', "Couldn't pull the images."),
+            };
+            toastError(toast, failed[action] || t('app.composeTab.couldntUpdateProject', "Couldn't update the compose project."), err);
         } finally {
             setActionLoading(prev => ({ ...prev, [name]: false }));
         }

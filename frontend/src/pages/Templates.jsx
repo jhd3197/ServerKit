@@ -294,7 +294,7 @@ const Templates = () => {
                 setSelectedTemplate(result.template);
             }
         } catch (err) {
-            toastError(showError, t('app.templates.failedToLoadTemplateDetails', 'Failed to load template details'), err);
+            toastError(showError, t('app.templates.failedToLoadTemplateDetails', "Couldn't load the template details."), err);
         }
     }, [navigate, t, showError]);
 
@@ -421,7 +421,7 @@ const Templates = () => {
                 setShowInstallModal(true);
             }
         } catch (err) {
-            toastError(toast, t('app.templates.failedToLoadTemplateDetails', 'Failed to load template details'), err);
+            toastError(toast, t('app.templates.failedToLoadTemplateDetails', "Couldn't load the template details."), err);
         }
     }
 
@@ -568,7 +568,7 @@ const Templates = () => {
             )}
             {loadError && templates.length === 0 ? (
                 <ErrorState
-                    title={t('app.templates.couldntLoadTemplates', "Couldn't load templates")}
+                    title={t('app.templates.couldntLoadTemplates', "Couldn't load templates.")}
                     error={loadError}
                     onRetry={loadTemplates}
                 />

@@ -50,7 +50,7 @@ export default function AdminerSsoButton({ databaseId, disabled = false }) {
             postToAdminer(descriptor);
             toast.success(t('app.adminerSsoButton.openedAdminerWithA5Minute', 'Opened Adminer with a 5-minute scoped credential'));
         } catch (err) {
-            toastError(toast, t('app.adminerSsoButton.failedToLaunchAdminer', 'Failed to launch Adminer'), err);
+            toastError(toast, t('app.adminerSsoButton.failedToLaunchAdminer', "Couldn't open Adminer."), err);
         } finally {
             setBusy(false);
         }
