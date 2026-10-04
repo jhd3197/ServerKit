@@ -27,7 +27,7 @@
     .terminal-ico {
         width: 28px;
         height: 28px;
-        border-radius: 8px;
+        border-radius: $radius-card;
         display: grid;
         place-items: center;
         @include status-variant(var(--green), var(--green-bg));
@@ -60,7 +60,7 @@
 
         &.connected {
             background: var(--green);
-            box-shadow: 0 0 7px var(--green);
+            box-shadow: none;
             animation: sk-overlay-blink 1.4s infinite;
         }
 
@@ -92,7 +92,7 @@
         place-items: center;
         background: transparent;
         border: none;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: var(--text-faint);
         cursor: pointer;
         transition: background $transition-fast, color $transition-fast;

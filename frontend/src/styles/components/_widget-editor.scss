@@ -53,8 +53,8 @@ $skwe-pane-w: 340px;
         min-height: 0;
         display: flex;
         flex-direction: column;
-        gap: 9px;
-        padding: 16px 18px;
+        gap: $space-2;
+        padding: $space-4 $space-5;
         border-right: 1px solid var(--border-soft);
     }
 
@@ -68,7 +68,7 @@ $skwe-pane-w: 340px;
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        padding: 18px;
+        padding: $space-5;
         overflow: auto;
         border: 1px solid var(--border-soft);
         border-radius: var(--radius-lg);
@@ -100,20 +100,20 @@ $skwe-pane-w: 340px;
         width: $skwe-pane-w;
         min-height: 0;
         overflow: auto;
-        padding: 16px 18px 26px;
+        padding: $space-4 $space-5 $space-6;
         background: var(--surface);
         @include custom-scrollbar;
     }
 
     &__group {
-        margin-bottom: 22px;
+        margin-bottom: $space-6;
 
         &:last-child { margin-bottom: 0; }
     }
 
     &__grouphead {
-        margin-bottom: 13px;
-        padding-bottom: 7px;
+        margin-bottom: $space-3;
+        padding-bottom: $space-2;
         border-bottom: 1px solid var(--border-soft);
         color: var(--text-dim);
         font-size: $text-xs;
@@ -121,7 +121,7 @@ $skwe-pane-w: 340px;
     }
 
     &__row {
-        margin-bottom: 15px;
+        margin-bottom: $space-4;
 
         &:last-child { margin-bottom: 0; }
 
@@ -130,7 +130,7 @@ $skwe-pane-w: 340px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
+            gap: $space-3;
 
             .skwe-edit__label { margin-bottom: 0; }
             .skwe-edit__control { flex: none; }
@@ -148,7 +148,7 @@ $skwe-pane-w: 340px;
 
     &__label {
         display: block;
-        margin-bottom: 6px;
+        margin-bottom: $space-tight;
         color: var(--text-ghost);
         font-size: $text-xs;
     }
@@ -163,9 +163,9 @@ $skwe-pane-w: 340px;
     &__field,
     &__textarea {
         width: 100%;
-        padding: 7px 9px;
+        padding: $space-2 $space-2;
         border: 1px solid var(--border);
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: var(--surface-2);
         color: var(--text);
         font-family: inherit;
@@ -188,7 +188,7 @@ $skwe-pane-w: 340px;
         width: 100%;
         min-width: 0;
         border-color: var(--border);
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: var(--surface-2);
         color: var(--text);
         font-size: $text-sm;
@@ -213,9 +213,9 @@ $skwe-pane-w: 340px;
     // (a single connected machine). Dashed, so it does not pretend to be a
     // control you can open.
     &__static {
-        padding: 7px 9px;
+        padding: $space-2 $space-2;
         border: 1px dashed var(--border);
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: var(--surface-2);
         color: var(--text-dim);
         font-size: $text-xs;
@@ -227,7 +227,7 @@ $skwe-pane-w: 340px;
     // Explanatory line under a control — quieter than the caption above it, so
     // a row still reads caption → control → aside.
     &__hint {
-        margin: 6px 0 0;
+        margin: $space-tight 0 0;
         color: var(--text-faint);
         font-size: $text-xs;
         line-height: 1.45;
@@ -237,7 +237,7 @@ $skwe-pane-w: 340px;
     &__pair {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
 
         > .skwe-edit__pairitem,
         > .skwe-stepper { flex: 1; min-width: 0; }
@@ -246,7 +246,7 @@ $skwe-pane-w: 340px;
     &__pairitem {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
     }
 
     // Leading sigil glued to a field ("amber ≥"). A sibling rather than
@@ -263,21 +263,21 @@ $skwe-pane-w: 340px;
     &__series {
         display: flex;
         flex-direction: column;
-        gap: 7px;
+        gap: $space-2;
     }
 
     &__ser {
         display: grid;
         grid-template-columns: 18px 1fr 1fr 26px;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
 
         // Single-machine install: the resource picker is gone, so the metric
         // select takes the rest of the row.
         &--solo { grid-template-columns: 18px 1fr 26px; }
 
         .skwe-edit__select.ui-select-trigger {
-            padding-inline: 8px;
+            padding-inline: $space-2;
             font-size: $text-xs;
         }
     }
@@ -290,7 +290,7 @@ $skwe-pane-w: 340px;
         display: grid;
         place-items: center;
         border: none;
-        border-radius: 6px;
+        border-radius: $radius-control;
         background: none;
         color: var(--text-ghost);
         cursor: pointer;
@@ -306,12 +306,12 @@ $skwe-pane-w: 340px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
+        gap: $space-tight;
         width: 100%;
-        margin-top: 2px;
-        padding: 6px 10px;
+        margin-top: $space-hair;
+        padding: $space-tight $space-3;
         border: 1px dashed var(--border-strong);
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: none;
         color: var(--text-faint);
         font-family: inherit;
@@ -328,7 +328,7 @@ $skwe-pane-w: 340px;
     }
 
     &__empty {
-        padding: 2px 0 4px;
+        padding: $space-hair 0 $space-1;
         color: var(--text-faint);
         font-size: $text-xs;
         line-height: 1.45;
@@ -340,7 +340,7 @@ $skwe-pane-w: 340px;
     &__checks {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: $space-tight;
         max-height: 210px;
         overflow: auto;
         @include custom-scrollbar;
@@ -349,8 +349,8 @@ $skwe-pane-w: 340px;
     &__check {
         display: flex;
         align-items: center;
-        gap: 9px;
-        padding: 3px 2px;
+        gap: $space-2;
+        padding: $space-1 $space-hair;
         color: var(--text-dim);
         font-size: $text-sm;
         cursor: pointer;
@@ -370,9 +370,9 @@ $skwe-pane-w: 340px;
     &__foot {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         flex-shrink: 0;
-        padding: 12px 18px;
+        padding: $space-3 $space-5;
         border-top: 1px solid var(--border-soft);
         background: var(--surface);
     }
@@ -388,7 +388,7 @@ $skwe-pane-w: 340px;
         height: 16px;
         padding: 0;
         border: 1px solid var(--border-strong);
-        border-radius: 5px;
+        border-radius: $radius-control;
         cursor: pointer;
         transition: 0.12s;
 
@@ -407,10 +407,10 @@ $skwe-pane-w: 340px;
 .skwe-stepper {
     display: flex;
     align-items: center;
-    gap: 2px;
-    padding: 2px;
+    gap: $space-hair;
+    padding: $space-hair;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-card;
     background: var(--surface-2);
 
     &__btn {
@@ -420,7 +420,7 @@ $skwe-pane-w: 340px;
         display: grid;
         place-items: center;
         border: none;
-        border-radius: 6px;
+        border-radius: $radius-control;
         background: none;
         color: var(--text-faint);
         cursor: pointer;
@@ -433,7 +433,7 @@ $skwe-pane-w: 340px;
     &__val {
         flex: 1;
         min-width: 0;
-        padding: 0 6px;
+        padding: 0 $space-tight;
         color: var(--text-dim);
         font-size: $text-xs;
         text-align: center;
@@ -478,16 +478,16 @@ $skwe-pane-w: 340px;
 .skwe-palette {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: $space-tight;
     width: auto;
-    padding: 8px;
+    padding: $space-2;
 
     &__dot {
         width: 18px;
         height: 18px;
         padding: 0;
         border: 1px solid var(--border-strong);
-        border-radius: 5px;
+        border-radius: $radius-control;
         cursor: pointer;
         transition: 0.12s;
 

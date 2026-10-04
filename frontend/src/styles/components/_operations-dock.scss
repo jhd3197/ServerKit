@@ -9,10 +9,10 @@
         min-height: 42px;
         gap: $space-2;
         border: 1px solid var(--border-strong);
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: var(--surface);
         color: var(--text);
-        box-shadow: $shadow-lg;
+        box-shadow: $shadow-overlay;
 
         svg.is-active { color: var(--cyan); }
     }
@@ -22,9 +22,9 @@
         display: inline-grid;
         min-width: 20px;
         height: 20px;
-        padding-inline: 5px;
+        padding-inline: $space-tight;
         place-items: center;
-        border-radius: 999px;
+        border-radius: $radius-full;
         font-size: $text-xs;
         line-height: 1;
     }
@@ -39,9 +39,9 @@
         height: min(720px, calc(100vh - #{$space-8}));
         overflow: hidden;
         border: 1px solid var(--border-strong);
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: var(--surface);
-        box-shadow: $shadow-lg;
+        box-shadow: $shadow-overlay;
     }
 
     &__header,
@@ -77,7 +77,7 @@
         height: 30px;
         flex: 0 0 auto;
         place-items: center;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         @include status-variant(var(--cyan), var(--cyan-bg));
     }
 
@@ -90,7 +90,7 @@
         .btn {
             flex: 1;
             justify-content: center;
-            gap: 6px;
+            gap: $space-tight;
             color: var(--text-dim);
 
             span { color: var(--text-faint); font-size: $text-xs; }
@@ -146,8 +146,8 @@
 
     &__row-unread {
         position: absolute;
-        inset-block-start: 7px;
-        inset-inline-end: 7px;
+        inset-block-start: $space-2;
+        inset-inline-end: $space-2;
         width: 6px;
         height: 6px;
         border-radius: 50%;
@@ -194,7 +194,7 @@
         height: 5px;
         overflow: hidden;
         border: 0;
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: var(--surface-hover);
         accent-color: var(--accent-primary);
     }
@@ -219,7 +219,7 @@
         gap: $space-2;
         padding: $space-2 $space-3;
         border: 1px solid transparent;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         @include status-variant(var(--red), var(--red-bg), var(--red));
         font-size: $text-xs;
     }
@@ -231,7 +231,7 @@
         padding: $space-3;
         overflow: hidden;
         border: 1px solid var(--amber);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: var(--amber-bg);
 
         &::before {
@@ -289,7 +289,7 @@
         flex: 0 0 auto;
         place-items: center;
         border: 1px solid var(--amber);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: var(--amber);
         background: var(--surface);
     }
@@ -307,7 +307,7 @@
         overflow: auto;
         padding: $space-3;
         border: 1px solid var(--border-soft);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: var(--bg-code);
         font-family: var(--mono);
         font-size: $text-xs;
@@ -329,7 +329,7 @@
 
     @media (max-width: $breakpoint-md) {
         inset-inline: $space-3;
-        inset-block-end: 72px;
+        inset-block-end: $space-16;
 
         &__panel {
             width: auto;

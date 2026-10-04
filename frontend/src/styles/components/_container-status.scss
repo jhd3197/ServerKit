@@ -15,7 +15,7 @@
         display: inline-flex;
         align-items: center;
         padding: 1px $space-1;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: $warning-bg;
         border: 1px solid $warning-border;
         color: $warning;
@@ -39,8 +39,8 @@
         padding: $space-2 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-default;
-        border-radius: $radius-md;
-        box-shadow: $shadow-lg;
+        border-radius: $radius-control;
+        box-shadow: $shadow-overlay;
         font-size: $text-xs;
         line-height: 1.4;
         color: $text-secondary;

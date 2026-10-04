@@ -91,7 +91,7 @@
     &__panel {
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-xl;
+        border-radius: $radius-overlay;
         padding: $space-6;
     }
 
@@ -133,7 +133,7 @@
         padding: $space-5;
         background: $bg-elevated;
         border: 1px solid $border-default;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         text-align: left;
         text-decoration: none;
         cursor: pointer;
@@ -168,7 +168,7 @@
         justify-content: center;
         width: 36px;
         height: 36px;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         @include status-variant($accent-primary, $accent-bg);
     }
 
@@ -188,7 +188,7 @@
         padding: $space-1;
         margin-bottom: $space-4;
         background: $bg-tertiary;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__mode-btn {
@@ -197,7 +197,7 @@
         gap: $space-2;
         padding: $space-2 $space-3;
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: transparent;
         color: $text-secondary;
         font-size: $text-xs;
@@ -216,7 +216,7 @@
         gap: $space-2;
         padding: $space-10 $space-6;
         border: 1px dashed $border-active;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         color: $text-secondary;
         text-align: center;
         cursor: pointer;
@@ -307,7 +307,7 @@
     &__table-wrap {
         overflow-x: auto;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__table {
@@ -372,7 +372,7 @@
         padding: $space-3;
         background: $bg-code;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-family: $font-mono;
         font-size: $text-xs;
         color: $text-secondary;
@@ -387,12 +387,12 @@
         gap: $space-3;
         padding: $space-4;
         margin-bottom: $space-4;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-size: $text-xs;
 
         svg {
             flex-shrink: 0;
-            margin-top: 2px;
+            margin-top: $space-hair;
         }
 
         p {
@@ -459,7 +459,7 @@
             padding: $space-3 $space-4;
             background: $bg-elevated;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             color: $text-secondary;
             font-size: $text-xs;
 
@@ -508,7 +508,7 @@
         padding: $space-4;
         background: $bg-code;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-family: $font-mono;
         font-size: $text-xs;
         line-height: 1.6;
@@ -534,7 +534,7 @@
         padding: 0;
         list-style: none;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: $bg-card;
         overflow: hidden;
     }

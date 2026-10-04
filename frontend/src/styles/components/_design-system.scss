@@ -15,11 +15,13 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 // Pill — status badge (dot + label)
 // ------------------------------------------------------------
 .sk-pill {
+    // Badge spec: 20px tall, 4px radius, 12px/500, tinted fill, flat dot.
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 3px 9px;
-    border-radius: 6px;
+    height: 20px;
+    gap: $space-tight;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     white-space: nowrap;
@@ -46,10 +48,11 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 %sk-state {
     display: inline-flex;
     align-items: center;
-    padding: 3px 9px;
-    border-radius: 6px;
+    height: 20px;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
     font-size: $text-xs;
-    font-weight: $font-weight-semibold;
+    font-weight: $font-weight-medium;
     white-space: nowrap;
     flex-shrink: 0;
 }
@@ -72,10 +75,11 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 .sk-tag {
     display: inline-flex;
     align-items: center;
-    padding: 2px 7px;
-    border-radius: 5px;
+    height: 20px;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
     font-size: $text-xs;
-    font-weight: $font-weight-semibold;
+    font-weight: $font-weight-medium;
     border: 1px solid var(--border-strong);
     color: var(--text-dim);
     background: var(--surface-2);
@@ -90,18 +94,18 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 // ------------------------------------------------------------
 .sk-seg {
     display: inline-flex;
-    gap: 2px;
+    gap: $space-hair;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 3px;
+    border-radius: $radius-card;
+    padding: $space-1;
 
     &__btn {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        padding: 6px 12px;
-        border-radius: 6px;
+        gap: $space-2;
+        padding: $space-tight $space-3;
+        border-radius: $radius-control;
         font-size: $text-sm;
         color: var(--text-faint);
         font-weight: $font-weight-medium;
@@ -129,7 +133,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     background: var(--surface);
     border: 1px solid var(--border-soft);
     border-radius: var(--radius);
-    padding: 11px 13px;
+    padding: $space-3 $space-3;
     position: relative;
     overflow: hidden;
     transition: border-color 0.15s;
@@ -137,7 +141,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    gap: 11px;
+    gap: $space-3;
     // The spark spans the full width on its own line under the row.
     grid-template-areas: "icon body trend" "spark spark spark";
 
@@ -181,9 +185,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__sub {
         font-size: $text-xs;
         color: var(--text-faint);
-        margin-top: 3px;
+        margin-top: $space-1;
         display: flex;
-        gap: 12px;
+        gap: $space-3;
         flex-wrap: wrap;
     }
     &__trend {
@@ -200,7 +204,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     // — the design mock's `.kpi-spark`.
     &__spark {
         grid-area: spark;
-        margin: 8px -13px -11px;
+        margin: $space-2 -13px -11px;
         line-height: 0;
         opacity: 0.9;
 
@@ -220,14 +224,14 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 .sk-kpiband-wrap {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: $space-3;
  margin-bottom: $space-5;
 }
 
 .sk-kpiband {
     display: grid;
     grid-template-columns: repeat(var(--kpi-cols, 4), minmax(0, 1fr));
-    gap: 14px;
+    gap: $space-4;
 
     &--dense { gap: 10px; }
 
@@ -253,7 +257,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         align-self: flex-start;
         background: none;
         border: none;
-        padding: 2px 0;
+        padding: $space-hair $space-tight;
         font-size: $text-xs;
         color: var(--accent-bright);
         cursor: pointer;
@@ -264,8 +268,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__strip {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px 20px;
-        padding: 10px 12px;
+        gap: $space-2 $space-5;
+        padding: $space-3 $space-3;
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
         background: var(--surface);
@@ -291,7 +295,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 // ------------------------------------------------------------
 .sk-gauge {
     height: 5px;
-    border-radius: 3px;
+    border-radius: $radius-badge;
     background: var(--surface-3);
     overflow: hidden;
 
@@ -302,7 +306,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 // ServiceTile — gradient initial avatar
 // ------------------------------------------------------------
 .sk-tile {
-    border-radius: 10px;
+    border-radius: $radius-card;
     display: grid;
     place-items: center;
     font-weight: $font-weight-semibold;
@@ -363,7 +367,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         font-size: $text-xs;
         color: var(--text-faint);
         font-weight: $font-weight-semibold;
-        padding: 11px 16px;
+        padding: $space-3 $space-4;
         border-bottom: 1px solid var(--border);
 
         // Header cells that carry a "⋮" reserve its lane, so the label never
@@ -383,16 +387,16 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     // Filtered-to-nothing: the header stays, because the control that undoes it
     // lives in the header menu.
     &__nomatch td {
-        padding: 34px 16px !important;
+        padding: $space-8 $space-4 !important;
         text-align: center;
         color: var(--text-faint);
         font-size: $text-sm;
 
         button {
-            margin-left: 10px;
-            padding: 5px 10px;
+            margin-left: $space-3;
+            padding: $space-tight $space-3;
             border: 1px solid var(--border);
-            border-radius: 7px;
+            border-radius: $radius-control;
             background: var(--surface-2);
             color: var(--text-dim);
             font-size: $text-xs;
@@ -450,7 +454,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         user-select: none;
 
         td {
-            padding: 7px 16px !important;
+            padding: $space-2 $space-4 !important;
             background: var(--surface-2);
             border-bottom: 1px solid var(--border-soft);
         }
@@ -479,8 +483,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         color: var(--text-faint);
         background: var(--surface);
         border: 1px solid var(--border-soft);
-        border-radius: 999px;
-        padding: 1px 7px;
+        border-radius: $radius-full;
+        padding: 1px $space-2;
     }
 }
 
@@ -510,8 +514,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    padding: 9px 16px;
+    gap: $space-3;
+    padding: $space-2 $space-4;
     border-top: 1px solid var(--border-soft);
 
     &__count {
@@ -539,30 +543,30 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 // ------------------------------------------------------------
 .sk-tablemenu {
     width: 15rem;
-    padding: 10px;
+    padding: $space-3;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: $space-1;
 
     &__title {
         font-size: $text-xs;
         color: var(--text-faint);
         font-weight: $font-weight-semibold;
-        padding: 2px 6px 6px;
+        padding: $space-hair $space-tight $space-tight;
     }
 
     &__section {
         font-size: $text-xs;
         color: var(--text-ghost);
-        padding: 8px 6px 3px;
+        padding: $space-2 $space-tight $space-1;
         border-top: 1px solid var(--border-soft);
-        margin-top: 4px;
+        margin-top: $space-1;
     }
 
     &__empty {
         font-size: $text-xs;
         color: var(--text-faint);
-        padding: 6px;
+        padding: $space-tight;
     }
 
     &__list { display: flex; flex-direction: column; gap: 1px; }
@@ -570,11 +574,11 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__item {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         width: 100%;
-        padding: 6px 8px;
+        padding: $space-tight $space-2;
         border: none;
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: transparent;
         color: var(--text-dim);
         font-size: $text-sm;
@@ -595,9 +599,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__row {
         display: flex;
         align-items: center;
-        gap: 6px;
-        padding: 4px 6px;
-        border-radius: 7px;
+        gap: $space-tight;
+        padding: $space-1 $space-tight;
+        border-radius: $radius-control;
         background: var(--surface-2);
     }
 
@@ -628,7 +632,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         width: 24px;
         height: 24px;
         border: none;
-        border-radius: 6px;
+        border-radius: $radius-control;
         background: transparent;
         color: var(--text-faint);
         cursor: pointer;
@@ -642,9 +646,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__footer {
         display: flex;
         justify-content: flex-end;
-        gap: 8px;
-        padding-top: 8px;
-        margin-top: 4px;
+        gap: $space-2;
+        padding-top: $space-2;
+        margin-top: $space-1;
         border-top: 1px solid var(--border-soft);
     }
 }
@@ -656,17 +660,17 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 .sk-sortchips {
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: $space-2;
     flex-wrap: wrap;
-    padding: 8px 2px 0;
+    padding: $space-2 $space-hair 0;
 
     &__chip {
         display: inline-flex;
         align-items: center;
-        gap: 2px;
+        gap: $space-hair;
         height: 24px;
-        padding-left: 9px;
-        border-radius: 999px;
+        padding-left: $space-2;
+        border-radius: $radius-full;
         background: var(--accent-bg-soft);
         border: 1px solid var(--accent-dim);
         color: var(--accent-bright);
@@ -679,15 +683,15 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         opacity: 0.8;
-        margin-right: 2px;
+        margin-right: $space-hair;
     }
 
     &__body {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: $space-tight;
         height: 100%;
-        padding: 0 4px 0 0;
+        padding: 0 $space-1 0 0;
         border: none;
         background: none;
         color: inherit;
@@ -704,9 +708,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         justify-content: center;
         width: 18px;
         height: 18px;
-        margin-right: 3px;
+        margin-right: $space-1;
         border: none;
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: transparent;
         color: inherit;
         opacity: 0.7;
@@ -719,7 +723,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__reset {
         border: none;
         background: none;
-        padding: 0 4px;
+        padding: 0 $space-1;
         color: var(--text-faint);
         font-size: $text-xs;
         font-family: inherit;
@@ -739,18 +743,18 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__dot {
         width: 7px;
         height: 7px;
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: var(--amber);
-        margin-left: 2px;
+        margin-left: $space-hair;
         flex-shrink: 0;
     }
 
     &__row {
         display: flex;
         align-items: center;
-        gap: 2px;
-        border-radius: 7px;
-        padding-right: 4px;
+        gap: $space-hair;
+        border-radius: $radius-control;
+        padding-right: $space-1;
         transition: background 0.12s;
 
         &:hover { background: var(--surface-2); }
@@ -762,8 +766,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         min-width: 0;
         display: flex;
         align-items: center;
-        gap: 7px;
-        padding: 6px 8px;
+        gap: $space-2;
+        padding: $space-tight $space-2;
         border: none;
         background: none;
         color: var(--text-dim);
@@ -790,7 +794,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         width: 24px;
         height: 24px;
         border: none;
-        border-radius: 6px;
+        border-radius: $radius-control;
         background: transparent;
         color: var(--text-faint);
         cursor: pointer;
@@ -811,27 +815,27 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__update {
         display: flex;
         justify-content: flex-end;
-        gap: 4px;
-        padding: 6px 2px 2px;
+        gap: $space-1;
+        padding: $space-tight $space-hair $space-hair;
         border-top: 1px solid var(--border-soft);
-        margin-top: 4px;
+        margin-top: $space-1;
     }
 
     &__save {
         display: flex;
-        gap: 8px;
-        padding-top: 8px;
-        margin-top: 4px;
+        gap: $space-2;
+        padding-top: $space-2;
+        margin-top: $space-1;
         border-top: 1px solid var(--border-soft);
 
         input {
             flex: 1;
             min-width: 0;
             height: 30px;
-            padding: 0 10px;
+            padding: 0 $space-3;
             background: var(--surface-2);
             border: 1px solid var(--border-soft);
-            border-radius: 8px;
+            border-radius: $radius-card;
             color: var(--text);
             font-size: $text-sm;
             font-family: inherit;
@@ -856,8 +860,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     z-index: 60;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 7px 9px 7px 16px;
+    gap: $space-3;
+    padding: $space-2 $space-2 $space-2 $space-4;
     // It floats over a dark page in a dark pill, so at --surface with a hairline
     // border it read as a smudge rather than a control. Lifted one step to
     // --surface-2, given an accent-tinted rim and a deeper, wider shadow: the
@@ -865,7 +869,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     // greys a few percent apart never will.
     background: var(--surface-2);
     border: 1px solid var(--border-strong);
-    border-radius: 999px;
+    border-radius: $radius-full;
     box-shadow:
         0 18px 44px rgba(0, 0, 0, 0.55),
         0 2px 10px rgba(0, 0, 0, 0.4),
@@ -887,7 +891,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__actions {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         min-width: 0;
         overflow-x: auto;
         scrollbar-width: none;
@@ -898,10 +902,10 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             flex-shrink: 0;
             display: inline-flex;
             align-items: center;
-            gap: 7px;
-            padding: 6px 11px;
+            gap: $space-2;
+            padding: $space-tight $space-3;
             border: none;
-            border-radius: 8px;
+            border-radius: $radius-card;
             background: transparent;
             font-size: $text-sm;
             color: var(--text-dim);
@@ -922,7 +926,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         width: 26px;
         height: 26px;
         border: none;
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: var(--surface-2);
         color: var(--text-faint);
         cursor: pointer;
@@ -967,7 +971,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__count {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
         font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
@@ -980,7 +984,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         height: 32px;
         padding: 0 $space-3;
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: $radius-card;
         background: var(--surface-2);
         color: var(--text-dim);
         font-size: $text-sm;
@@ -1016,13 +1020,13 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: 0 10px;
+        padding: 0 $space-3;
         width: 240px;
         max-width: 100%;
         height: 32px;
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
-        border-radius: 8px;
+        border-radius: $radius-card;
         color: var(--text-faint);
         transition: border-color 0.14s;
 
@@ -1047,20 +1051,20 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     // Lives in the ListToolbar tools slot.
     &__viewswitch {
         display: flex;
-        gap: 2px;
+        gap: $space-hair;
         flex-shrink: 0;
-        padding: 3px;
+        padding: $space-1;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: 9px;
+        border-radius: $radius-card;
 
         button {
             display: grid;
             place-items: center;
-            padding: 6px 9px;
+            padding: $space-tight $space-2;
             background: none;
             border: none;
-            border-radius: 6px;
+            border-radius: $radius-control;
             color: var(--text-faint);
             cursor: pointer;
             transition: background 0.14s, color 0.14s;
@@ -1081,7 +1085,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__cards {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 14px;
+        gap: $space-4;
     }
 
     &__cardtile {
@@ -1106,10 +1110,10 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 .sk-topbar {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: $space-4;
     min-height: 60px;
-    padding: 10px 4px;
-    margin-bottom: 4px;
+    padding: $space-3 $space-1;
+    margin-bottom: $space-1;
     // Its own surface, so the bar reads as chrome rather than as the first row
     // of the content — and the same surface as the sidebar, so the two frame
     // the page together. Solid rather than the design mock's translucent fill:
@@ -1127,7 +1131,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__actions {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         flex-shrink: 0;
 
         // House rule: the top bar has FIXED SLOTS, not a publication order.
@@ -1167,7 +1171,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        margin-left: 6px;
+        margin-left: $space-tight;
         flex: 1 1 auto;
         min-width: 0;
         overflow: hidden;
@@ -1178,12 +1182,12 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__tabs-inner {
         display: inline-flex;
         align-items: center;
-        gap: 2px;
+        gap: $space-hair;
         max-width: 100%;
-        padding: 3px;
+        padding: $space-1;
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 10px;
+        border-radius: $radius-card;
     }
 
     // Title-less group header: the tabs lead the bar from the left edge and
@@ -1195,15 +1199,15 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             margin-left: 0;
         }
         .sk-topbar__tabs-inner {
-            gap: 4px;
+            gap: $space-1;
             padding: 0;
             background: none;
             border: none;
             border-radius: 0;
         }
         .sk-topbar__tab {
-            padding: 7px 13px;
-            border-radius: 9px;
+            padding: $space-2 $space-3;
+            border-radius: $radius-card;
             color: var(--text-faint);
             &:hover { background: var(--surface-2); color: var(--text); }
             &.is-active { background: var(--accent-bg); color: var(--text); font-weight: $font-weight-semibold; }
@@ -1213,9 +1217,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__tab {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 6px 11px;
-        border-radius: 7px;
+        gap: $space-tight;
+        padding: $space-tight $space-3;
+        border-radius: $radius-control;
         font-size: $text-sm;
         // Uniform weight across states so activating a tab never re-flows its
         // neighbours; the active tab is set apart by fill + colour, not weight.
@@ -1271,7 +1275,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     background: var(--surface);
     border: 1px solid var(--border-soft);
     border-radius: var(--radius);
-    padding: 14px 15px;
+    padding: $space-4 $space-4;
 
     &__label { font-size: $text-xs; color: var(--text-faint); }
     &__value { font-size: $text-base; font-weight: $font-weight-semibold; color: var(--text); margin-top: 8px; }
@@ -1283,8 +1287,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    padding: 11px 0;
+    gap: $space-4;
+    padding: $space-3 0;
     border-top: 1px solid var(--border-soft);
     font-size: $text-sm;
     &:first-child { border-top: none; }
@@ -1310,7 +1314,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
     &__head {
         display: flex; align-items: center; gap: 12px;
-        padding: 15px 18px; border-bottom: 1px solid var(--border-soft); flex-shrink: 0;
+        padding: $space-4 $space-5; border-bottom: 1px solid var(--border-soft); flex-shrink: 0;
 
         // Title+subtitle column; min-width 0 lets long titles ellipsis
         // instead of pushing the header extra off the panel.
@@ -1327,7 +1331,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         flex: 1;
         overflow: auto;
         min-height: 0;
-        padding: 18px 18px 28px;
+        padding: $space-5 $space-5 $space-8;
 
         &--flush { padding: 0; }
     }
@@ -1356,8 +1360,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__input {
         width: 100%;
         height: 32px;
-        padding: 0 12px 0 34px;
-        border-radius: 8px;
+        padding: 0 $space-3 0 $space-8;
+        border-radius: $radius-card;
         border: 1px solid var(--border);
         background: var(--surface-2);
         color: var(--text);
@@ -1388,9 +1392,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         justify-content: center;
         min-width: 17px;
         height: 17px;
-        padding: 0 5px;
-        margin-left: 2px;
-        border-radius: 9px;
+        padding: 0 $space-tight;
+        margin-left: $space-hair;
+        border-radius: $radius-card;
         background: var(--violet);
         color: #fff;
         font-size: $text-xs;
@@ -1402,7 +1406,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 .sk-filter {
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: $space-6;
 
     &__group { display: flex; flex-direction: column; gap: 10px; }
 
@@ -1418,17 +1422,17 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__extra {
         display: flex;
         flex-direction: column;
-        gap: 14px;
-        padding-top: 4px;
+        gap: $space-4;
+        padding-top: $space-1;
         border-top: 1px solid var(--border-soft);
     }
 
     &__chip {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 6px 13px;
-        border-radius: 999px;
+        gap: $space-tight;
+        padding: $space-tight $space-3;
+        border-radius: $radius-full;
         border: 1px solid var(--border);
         background: var(--surface-2);
         color: var(--text-dim);
@@ -1458,9 +1462,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 10px;
-        padding-top: 6px;
-        margin-top: 4px;
+        gap: $space-3;
+        padding-top: $space-tight;
+        margin-top: $space-1;
         border-top: 1px solid var(--border-soft);
     }
 }
@@ -1472,14 +1476,14 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 .sk-resource-list {
     display: flex; flex-direction: column;
     border: 1px solid var(--border-soft);
-    border-radius: 12px;
+    border-radius: $radius-overlay;
     background: var(--surface);
     overflow: hidden;
 }
 
 .sk-resource-card {
     display: flex; align-items: center; gap: 12px;
-    padding: 12px 16px;
+    padding: $space-3 $space-4;
     border-bottom: 1px solid var(--border-soft);
     background: var(--surface);
     transition: background 0.12s;
@@ -1512,7 +1516,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 .sk-catalog-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 12px;
+    gap: $space-3;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -1521,7 +1525,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 .sk-catalog-card {
     display: flex; flex-direction: column; gap: 10px;
     min-width: 0;
-    padding: 14px;
+    padding: $space-4;
     background: var(--surface);
     border: 1px solid var(--border-soft);
     border-radius: var(--radius-lg);
@@ -1632,7 +1636,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     label,
     &__label {
         display: block;
-        margin-bottom: 7px;
+        margin-bottom: $space-2;
         color: $text-secondary;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
@@ -1644,10 +1648,10 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     // like the rest of it without the page having to remember.
     select {
         width: 100%;
-        padding: 8px 11px;
+        padding: $space-2 $space-3;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-primary;
         font-family: inherit;
         font-size: $text-xs;
@@ -1684,8 +1688,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
 
     code {
-        padding: 1px 5px;
-        border-radius: $radius-sm;
+        padding: 1px $space-tight;
+        border-radius: $radius-badge;
         background: var(--surface-3);
         font-family: var(--mono);
         font-size: $text-xs;
@@ -1695,11 +1699,11 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__input {
         display: flex;
         align-items: center;
-        gap: 9px;
-        padding: 8px 11px;
+        gap: $space-2;
+        padding: $space-2 $space-3;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         transition: border-color $transition-fast, box-shadow $transition-fast;
 
         &:focus-within {
@@ -1743,7 +1747,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
     &__hint {
         display: block;
-        margin-top: 6px;
+        margin-top: $space-tight;
         color: $text-tertiary;
         font-size: $text-xs;
     }
@@ -1768,7 +1772,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         padding: $space-3 $space-4;
         background: rgba($warning-raw, 0.08);
         border: 1px solid rgba($warning-raw, 0.2);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         > svg { flex-shrink: 0; margin-top: 2px; color: $warning; }
 

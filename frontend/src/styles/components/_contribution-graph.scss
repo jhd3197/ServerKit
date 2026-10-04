@@ -2,7 +2,7 @@
     padding: $space-4;
     background: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-bottom: $space-6;
 
     .graph-header {
@@ -32,12 +32,12 @@
 
             .legend-cells {
                 display: flex;
-                gap: 2px;
+                gap: $space-hair;
 
                 .cell {
                     width: 10px;
                     height: 10px;
-                    border-radius: 2px;
+                    border-radius: $radius-badge;
                 }
             }
         }
@@ -61,20 +61,20 @@
 
     .graph-grid {
         display: flex;
-        gap: 3px;
+        gap: $space-1;
         min-width: fit-content;
     }
 
     .graph-week {
         display: flex;
         flex-direction: column;
-        gap: 3px;
+        gap: $space-1;
     }
 
     .graph-cell {
         width: 12px;
         height: 12px;
-        border-radius: 2px;
+        border-radius: $radius-badge;
         transition: transform 0.1s ease;
 
         &:hover {

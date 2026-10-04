@@ -5,7 +5,7 @@
 .metrics-graph-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     padding: $space-6;
     margin-bottom: $space-6;
 
@@ -52,7 +52,7 @@
     gap: $space-6;
     padding: $space-4;
     background: $bg-hover;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-5;
 }
 
@@ -83,7 +83,7 @@
 .metrics-chart-container {
     margin-bottom: $space-4;
     background: linear-gradient(180deg, var(--bg-hover) 0%, transparent 100%);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-2 0;
 
     &.compact {
@@ -123,7 +123,7 @@
     background: var(--surface-2);
     backdrop-filter: blur(8px);
     border: 1px solid var(--border-strong);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-3 $space-4;
     box-shadow: var(--shadow-lg);
     min-width: 140px;
@@ -170,8 +170,8 @@
     align-items: center;
     gap: $space-2;
     background: $bg-hover;
-    padding: 4px;
-    border-radius: $radius-md;
+    padding: $space-1;
+    border-radius: $radius-control;
     border: 1px solid $border-subtle;
 }
 
@@ -179,10 +179,10 @@
     background: transparent;
     border: 1px solid transparent;
     color: $text-tertiary;
-    padding: 6px 12px;
+    padding: $space-tight $space-3;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -243,7 +243,7 @@
 .legend-line {
     width: 24px;
     height: 3px;
-    border-radius: 2px;
+    border-radius: $radius-badge;
     position: relative;
 
     &::after {
@@ -260,7 +260,7 @@
 
     &.cpu {
         background: var(--accent-bright);
-        box-shadow: 0 0 8px var(--accent-glow);
+        box-shadow: none;
     }
 
     &.memory {
@@ -278,7 +278,7 @@
 .metrics-graph-compact {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     padding: $space-4;
     margin-bottom: $space-6;
 

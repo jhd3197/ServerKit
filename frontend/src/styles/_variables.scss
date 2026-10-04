@@ -187,7 +187,9 @@ $line-height-relaxed: 1.6;
 // --------------------------------------------
 // SPACING
 // --------------------------------------------
+$space-hair: 2px;  // hairline offsets only
 $space-1: 4px;
+$space-tight: 6px;  // compact chips and badges
 $space-2: 8px;
 $space-3: 12px;
 $space-4: 16px;
@@ -208,20 +210,47 @@ $spacing-xl: $space-8;
 // --------------------------------------------
 // BORDER RADIUS
 // --------------------------------------------
-$radius-sm: 4px;
-$radius-md: 6px;
-$radius-lg: 8px;
-$radius-xl: 12px;
-$radius-2xl: 16px;
+// Four radii, driven by the theme (--radius-sm/--radius/--radius-lg in
+// _theme-variables.scss and the theme JSON), so a tight-radius theme reaches
+// every corner. Badges never exceed 4px.
+$radius-badge: min(4px, var(--radius-sm, 6px));
+$radius-control: var(--radius-sm, 6px);   // buttons, inputs, selects, chips
+$radius-card: var(--radius, 8px);         // cards, panels, tables
+$radius-overlay: var(--radius-lg, 12px);  // modals, drawers, popovers
 $radius-full: 9999px;
+
+// Legacy names on the same four radii (extension stylesheets compile
+// against these); core uses the names above. check-geometry rejects them.
+$radius-sm: $radius-badge;
+$radius-md: $radius-control;
+$radius-lg: $radius-card;
+$radius-xl: $radius-overlay;
+$radius-2xl: $radius-overlay;
+
+// --------------------------------------------
+// CONTROL HEIGHTS
+// --------------------------------------------
+// Three sizes for every button, input, select and segmented control.
+// 32 is the default (dense-product norm: Primer, Atlassian); 28 for row
+// actions and toolbars; 40 only on sign-in and setup screens.
+$control-sm: 28px;
+$control-md: 32px;
+$control-lg: 40px;
 
 // --------------------------------------------
 // SHADOWS (theme-sensitive)
 // --------------------------------------------
-$shadow-sm: var(--shadow-sm);
-$shadow-md: var(--shadow-md);
-$shadow-lg: var(--shadow-lg);
-$shadow-accent: 0 4px 12px $accent-shadow;
+// Two elevations and a focus ring. Cards and controls are flat; only things
+// that float over the page cast a shadow. No glows.
+$shadow-raised: var(--shadow-md);   // menus, popovers, dropdowns, toasts
+$shadow-overlay: var(--shadow-lg);  // modals, drawers
+$focus-ring: 0 0 0 2px var(--accent-bg, rgba(99, 102, 241, 0.35));
+
+// Legacy names (extensions); core uses the names above.
+$shadow-sm: none;
+$shadow-md: $shadow-raised;
+$shadow-lg: $shadow-overlay;
+$shadow-accent: none;
 
 // --------------------------------------------
 // TRANSITIONS

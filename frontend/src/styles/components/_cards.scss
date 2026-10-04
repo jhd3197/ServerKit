@@ -35,7 +35,7 @@
 // Application/Service icon
 .app-icon {
     @include icon-box(48px);
-    border-radius: $radius-xl - 2;
+    border-radius: $radius-card;
     font-size: $text-lg;
     font-weight: $font-weight-semibold;
     color: white;
@@ -76,7 +76,7 @@
     gap: 1px;
     background: $border-subtle;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: hidden;
     margin-bottom: $space-6;
 }
@@ -84,7 +84,7 @@
 .stat-strip__item {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: $space-tight;
     min-width: 0;
     padding: $space-4 $space-5;
     background: $bg-card;
@@ -183,7 +183,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     flex-shrink: 0;
 
     svg {
@@ -237,14 +237,14 @@
 .progress-bar {
     height: 4px;
     background: $bg-hover;
-    border-radius: $radius-sm - 2;
+    border-radius: $radius-badge;
     overflow: hidden;
     margin-top: $space-1;
 }
 
 .progress-fill {
     height: 100%;
-    border-radius: $radius-sm - 2;
+    border-radius: $radius-badge;
     @include transition(width);
 }
 
@@ -278,7 +278,7 @@
     padding: $space-6;
     border: 1px solid fade($danger-raw, 30%);
     background: fade($danger-raw, 5%);
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
 
     h3, h4 {
         color: $danger;

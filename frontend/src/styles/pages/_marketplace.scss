@@ -2,7 +2,7 @@
 
 .marketplace-page {
     .card {
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     .marketplace-hero {
@@ -15,7 +15,7 @@
         padding: $space-6;
         overflow: hidden;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: $bg-card;
     }
 
@@ -139,7 +139,7 @@
         width: 34px;
         height: 34px;
         flex: 0 0 34px;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         svg {
             width: 17px;
@@ -206,7 +206,7 @@
     }
 
     .marketplace-empty {
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         svg {
             width: 30px;
@@ -255,7 +255,7 @@
 // `secondary` variant selector specificity and wins on source order to apply
 // the accent tint.
 [data-slot='badge'].extension-firstparty {
-    gap: 4px;
+    gap: $space-1;
     border-color: var(--accent-dim);
     @include status-variant(var(--accent-bright), var(--accent-bg));
     font-weight: $font-weight-semibold;
@@ -279,7 +279,7 @@
         display: grid;
         place-items: center;
         height: 128px;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         overflow: hidden;
 
         &--icon {
@@ -361,7 +361,7 @@
         width: 100%;
         height: auto;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-elevated;
         object-fit: cover;
     }
@@ -440,7 +440,7 @@
     width: 38px;
     height: 38px;
     flex: 0 0 38px;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     color: $accent-primary;
     background: fade($accent-primary-raw, 12%);
 
@@ -456,7 +456,7 @@
     margin-bottom: $space-4;
     padding: $space-1;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     background: $bg-body;
 }
 
@@ -467,7 +467,7 @@
     height: 32px;
     padding: 0 $space-3;
     border: 1px solid transparent;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: transparent;
     color: $text-secondary;
     font-family: inherit;
@@ -541,7 +541,7 @@
     gap: $space-4;
     padding: $space-4;
     border: 1px solid $border-color;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     background: $bg-elevated;
 
     &__head {
@@ -633,7 +633,7 @@
                 flex-shrink: 0;
                 width: 15px;
                 height: 15px;
-                margin-top: 2px;
+                margin-top: $space-hair;
             }
         }
     }
@@ -752,7 +752,7 @@
         padding: $space-3;
         border: 1px solid $border-subtle;
         border-left: 2px solid $border-active;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-elevated;
 
         // Left edge carries the verdict so a scan down the list reads the
@@ -787,8 +787,8 @@
         code {
             font-family: $font-mono;
             font-size: $text-xs;
-            padding: 1px 4px;
-            border-radius: $radius-sm;
+            padding: 1px $space-1;
+            border-radius: $radius-badge;
             background: $bg-code;
             color: $text-primary;
             overflow-wrap: anywhere;
@@ -819,7 +819,7 @@
         overflow: auto;
         padding: $space-3;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-code;
         color: $text-secondary;
         font-family: $font-mono;

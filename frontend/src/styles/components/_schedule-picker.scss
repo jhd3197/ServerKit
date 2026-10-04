@@ -6,10 +6,10 @@
 .schedule-picker {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: $space-4;
 
     &--compact {
-        gap: 10px;
+        gap: $space-3;
         font-size: $text-sm;
     }
 
@@ -17,16 +17,16 @@
     &__presets {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 8px;
+        gap: $space-2;
     }
 
     &__preset {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         text-align: left;
-        padding: 9px 11px;
-        border-radius: var(--radius, 8px);
+        padding: $space-2 $space-3;
+        border-radius: var(--radius, $radius-card);
         border: 1px solid var(--border);
         background: var(--surface-2);
         color: var(--text-dim);
@@ -48,13 +48,13 @@
     &__builder {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: $space-3;
     }
 
     &__row {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: $space-3;
         flex-wrap: wrap;
 
         > label {
@@ -69,14 +69,14 @@
 
     &__days {
         display: inline-flex;
-        gap: 4px;
+        gap: $space-1;
         flex-wrap: wrap;
     }
 
     &__day {
         min-width: 40px;
-        padding: 6px 8px;
-        border-radius: 7px;
+        padding: $space-tight $space-2;
+        border-radius: $radius-control;
         border: 1px solid var(--border);
         background: var(--surface-2);
         color: var(--text-faint);
@@ -96,7 +96,7 @@
     &__advanced {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: $space-2;
     }
 
     &__cron-input {
@@ -105,7 +105,7 @@
 
     &__fieldhints {
         display: flex;
-        gap: 8px;
+        gap: $space-2;
         flex-wrap: wrap;
     }
 
@@ -122,8 +122,8 @@
             color: var(--text);
             background: var(--surface-2);
             border: 1px solid var(--border);
-            border-radius: 5px;
-            padding: 2px 7px;
+            border-radius: $radius-control;
+            padding: $space-hair $space-2;
             min-width: 34px;
             text-align: center;
         }
@@ -134,9 +134,9 @@
     &__footer {
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        padding: 11px 12px;
-        border-radius: var(--radius, 8px);
+        gap: $space-tight;
+        padding: $space-3 $space-3;
+        border-radius: var(--radius, $radius-card);
         border: 1px solid var(--border-soft);
         background: var(--surface);
     }
@@ -144,7 +144,7 @@
     &__cronline {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         flex-wrap: wrap;
 
         code {
@@ -168,7 +168,7 @@
     &__nextruns {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         flex-wrap: wrap;
         font-size: $text-xs;
         color: var(--text-faint);
@@ -179,7 +179,7 @@
     &__nextrun {
         color: var(--text-dim);
         background: var(--surface-2);
-        border-radius: 5px;
-        padding: 1px 7px;
+        border-radius: $radius-control;
+        padding: 1px $space-2;
     }
 }

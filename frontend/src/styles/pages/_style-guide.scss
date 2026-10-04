@@ -133,7 +133,7 @@
         color: $text-tertiary;
         background: transparent;
         border: 1px solid transparent;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         cursor: pointer;
         transition: all $transition-fast;
 
@@ -178,7 +178,7 @@
     &__swatch-preview {
         width: 100%;
         height: 64px;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         border: 1px solid $border-default;
         display: flex;
         align-items: center;
@@ -201,7 +201,7 @@
     &__spacing-bar {
         height: $space-4;
         background: $accent-primary;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         min-width: 4px;
     }
 
@@ -218,7 +218,7 @@
         width: 80px;
         height: 80px;
         background: $bg-card;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         border: 1px solid $border-default;
     }
 
@@ -227,7 +227,7 @@
         padding: $space-2 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-default;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-size: $text-xs;
         color: $text-secondary;
         text-align: center;

@@ -15,9 +15,9 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 80px $space-6;
+        padding: $space-16 $space-6;
         background: $bg-card;
-        border-radius: $radius-xl;
+        border-radius: $radius-overlay;
         text-align: center;
 
         .icon {
@@ -97,7 +97,7 @@
             justify-content: center;
             padding: $space-12;
             background: $bg-card;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
             color: $text-tertiary;
 
             .icon {
@@ -124,7 +124,7 @@
         .info-card,
         .protection-summary {
             background: $bg-card;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
             padding: $space-5;
 
             h3 {
@@ -200,7 +200,7 @@
     .rules-tab {
         .rules-table {
             background: $bg-card;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
             overflow: hidden;
 
             table {
@@ -229,7 +229,7 @@
                         font-size: $text-xs;
                         background: $bg-hover;
                         padding: $space-1 $space-2;
-                        border-radius: $radius-sm;
+                        border-radius: $radius-badge;
                     }
                 }
 
@@ -254,7 +254,7 @@
             align-items: center;
             padding: $space-4;
             background: $bg-card;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
             border: 1px solid $border-subtle;
 
             .blocked-info {
@@ -297,7 +297,7 @@
             align-items: center;
             padding: $space-4;
             background: $bg-card;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
             border: 1px solid $border-subtle;
 
             .port-info {
@@ -322,7 +322,7 @@
     .install-info {
         padding: $space-4;
         background: $bg-hover;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         margin-top: $space-4;
 
         p {

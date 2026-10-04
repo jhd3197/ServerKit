@@ -39,10 +39,10 @@
 %ui-field-base {
     display: block;
     width: 100%;
-    padding: 0 $space-3 + 1; // 13px
+    padding: 0 $space-3;
     background: $bg-body;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-control;
     color: $text-primary;
     font-family: inherit;
     font-size: $text-base;
@@ -57,7 +57,7 @@
     &:focus-visible {
         border-color: $accent-primary;
         outline: none;
-        box-shadow: 0 0 0 3px fade($accent-primary-raw, 18%);
+        box-shadow: $focus-ring;
     }
 
     &:disabled,
@@ -68,18 +68,17 @@
 
     &[aria-invalid='true'] {
         border-color: $danger;
-        box-shadow: 0 0 0 3px fade($danger-raw, 18%);
     }
 }
 
 .ui-input {
     @extend %ui-field-base;
-    height: 40px;
+    height: $control-md;
 
     &::file-selector-button {
         margin-right: $space-3;
         padding: 0 $space-2;
-        height: 28px;
+        height: $control-sm - 8px;
         background: transparent;
         border: none;
         color: $text-primary;
@@ -92,8 +91,8 @@
 .ui-textarea {
     @extend %ui-field-base;
     min-height: 80px;
-    padding-top: $space-2 + 1;
-    padding-bottom: $space-2 + 1;
+    padding-top: 0;
+    padding-bottom: 0;
     resize: vertical;
 }
 
@@ -105,7 +104,7 @@
     width: 16px;
     height: 16px;
     border: 1px solid $border-active;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     background: $bg-body;
     cursor: pointer;
     @include transition();
@@ -170,7 +169,7 @@
         display: block;
         width: 16px;
         height: 16px;
-        margin: 2px;
+        margin: $space-hair;
         background: #fff;
         border-radius: 50%;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -190,8 +189,8 @@
     background: $bg-card;
     color: $text-primary;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
-    box-shadow: $shadow-sm;
+    border-radius: $radius-overlay;
+    box-shadow: none;
     display: flex;
     flex-direction: column;
 }
@@ -199,7 +198,7 @@
 .ui-card-header {
     display: flex;
     flex-direction: column;
-    gap: $space-1 + 2; // 6px
+    gap: $space-tight; // 6px
     padding: $space-6;
 }
 
@@ -278,7 +277,7 @@
 }
 
 .ui-table-head {
-    height: 40px;
+    height: $control-md;
     padding: 0 $space-4;
     text-align: left;
     vertical-align: middle;
@@ -288,7 +287,7 @@
 }
 
 .ui-table-cell {
-    padding: $space-3 + 1 $space-4; // 13px 16px
+    padding: $space-3 $space-4; // 13px 16px
     vertical-align: middle;
     color: $text-primary;
 }
@@ -325,8 +324,8 @@
     padding: $space-6;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
-    box-shadow: $shadow-lg;
+    border-radius: $radius-overlay;
+    box-shadow: $shadow-overlay;
     overflow-y: auto;
     @include custom-scrollbar();
 
@@ -341,11 +340,11 @@
     top: $space-4;
     right: $space-4;
     width: 28px;
-    height: 28px;
+    height: $control-sm;
     padding: 0;
     background: transparent;
     border: none;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-tertiary;
     cursor: pointer;
     display: inline-flex;
@@ -372,7 +371,7 @@
 .ui-dialog-header {
     display: flex;
     flex-direction: column;
-    gap: $space-1 + 2;
+    gap: $space-tight;
     text-align: left;
 }
 
@@ -419,7 +418,7 @@
     padding: $space-6;
     background: $bg-card;
     border-color: $border-subtle;
-    box-shadow: $shadow-lg;
+    box-shadow: $shadow-overlay;
     overflow-y: auto;
     @include custom-scrollbar();
 
@@ -486,7 +485,7 @@
 // --------------------------------------------
 .ui-select-trigger {
     @extend %ui-field-base;
-    height: 40px;
+    height: $control-md;
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
@@ -513,11 +512,11 @@
 
     &--sm {
         width: auto;
-        height: 30px;
+        height: $control-sm;
         padding-block: 0;
         padding-inline: $space-2;
         gap: $space-1;
-        font-size: $text-xs;
+        font-size: $text-sm;
 
         .ui-select-icon { width: 14px; height: 14px; }
     }
@@ -531,8 +530,8 @@
     overflow: hidden;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-md;
+    border-radius: $radius-card;
+    box-shadow: $shadow-raised;
     color: $text-primary;
 }
 
@@ -550,7 +549,7 @@
 }
 
 .ui-select-label {
-    padding: $space-1 + 2 $space-2;
+    padding: $space-tight $space-2;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
@@ -562,7 +561,7 @@
     align-items: center;
     width: 100%;
     padding: $space-2 $space-2 $space-2 $space-8;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     font-size: $text-sm;
     color: $text-primary;
     cursor: default;
@@ -613,8 +612,8 @@
     padding: $space-1;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-md;
+    border-radius: $radius-card;
+    box-shadow: $shadow-raised;
     color: $text-primary;
     outline: none;
 }
@@ -627,8 +626,8 @@
     padding: $space-4;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
-    box-shadow: $shadow-md;
+    border-radius: $radius-control;
+    box-shadow: $shadow-raised;
     color: $text-primary;
     outline: none;
 }
@@ -644,13 +643,13 @@
     padding: $space-1;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
-    box-shadow: $shadow-md;
+    border-radius: $radius-control;
+    box-shadow: $shadow-raised;
     color: $text-primary;
 }
 
 .ui-dropdown-sub-content {
-    box-shadow: $shadow-lg;
+    box-shadow: $shadow-overlay;
 }
 
 .ui-dropdown-item,
@@ -661,8 +660,8 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    padding: $space-1 + 2 $space-2; // 6px 8px
-    border-radius: $radius-sm;
+    padding: $space-tight $space-2; // 6px 8px
+    border-radius: $radius-badge;
     font-size: $text-sm;
     color: $text-primary;
     cursor: default;
@@ -711,7 +710,7 @@
 }
 
 .ui-dropdown-label {
-    padding: $space-1 + 2 $space-2;
+    padding: $space-tight $space-2;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
@@ -742,7 +741,7 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-elevated;
     color: $text-primary;
 }
@@ -803,7 +802,7 @@
     color: $text-primary;
 
     [cmdk-group-heading] {
-        padding: $space-1 + 2 $space-2;
+        padding: $space-tight $space-2;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
@@ -821,8 +820,8 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    padding: $space-1 + 2 $space-2;
-    border-radius: $radius-sm;
+    padding: $space-tight $space-2;
+    border-radius: $radius-badge;
     font-size: $text-sm;
     color: $text-primary;
     cursor: default;
@@ -895,7 +894,7 @@
 .sk-modal__header {
     display: flex;
     flex-direction: column;
-    gap: $space-1 + 2;
+    gap: $space-tight;
     padding: $space-4 $space-10 $space-4 $space-6; // right pad clears the close btn
     border-bottom: 1px solid $border-subtle;
 }
@@ -984,7 +983,7 @@
 }
 
 .sk-confirm__details {
-    margin: $space-1 + 2 0 0;
+    margin: $space-tight 0 0;
     font-size: $text-sm;
     color: $text-tertiary;
 }

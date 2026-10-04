@@ -5,7 +5,7 @@
 .private-url-section {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: $space-5;
     margin-bottom: $space-5;
 
@@ -61,7 +61,7 @@
         background: $bg-tertiary;
         border: 1px solid $border-subtle;
         border-right: none;
-        border-radius: $radius-sm 0 0 $radius-sm;
+        border-radius: $radius-badge 0 0 $radius-badge;
         padding: $space-2 $space-3;
         color: $text-tertiary;
         font-family: $font-mono;
@@ -73,7 +73,7 @@
 
     .slug-input {
         flex: 1;
-        border-radius: 0 $radius-sm $radius-sm 0;
+        border-radius: 0 $radius-badge $radius-badge 0;
         font-family: $font-mono;
         min-width: 150px;
     }
@@ -83,7 +83,7 @@
     .private-url-display {
         background: fade($success-raw, 10%);
         border: 1px solid fade($success-raw, 30%);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         padding: $space-4;
         margin-bottom: $space-4;
     }

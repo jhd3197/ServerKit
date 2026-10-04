@@ -19,7 +19,7 @@
         padding: $space-2 $space-3;
         background: $bg-body;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-primary;
         font-size: $text-sm;
     }
@@ -34,7 +34,7 @@
     overflow: hidden;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
 }
 
 .logs-sidebar {
@@ -76,7 +76,7 @@
     gap: $space-2;
     padding: $space-2;
     border: 1px solid transparent;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     color: $text-secondary;
     cursor: pointer;
     transition: background $transition-fast, border-color $transition-fast, color $transition-fast;
@@ -99,7 +99,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-elevated;
     color: $text-tertiary;
 
@@ -111,7 +111,7 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: $space-hair;
 }
 
 .log-file-name {
@@ -220,7 +220,7 @@
     &__highlight {
         background: rgba(245, 185, 69, 0.35);
         color: var(--text);
-        border-radius: 2px;
+        border-radius: $radius-badge;
         padding: 0 1px;
     }
 }
@@ -320,7 +320,7 @@
 .command-output {
     background: $bg-body;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
     margin-top: $space-5;
 

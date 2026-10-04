@@ -10,8 +10,8 @@
     display: flex;
     align-items: center;
     height: var(--sk-statusbar-height);
-    gap: 2px;
-    padding-inline: 6px;
+    gap: $space-hair;
+    padding-inline: $space-tight;
     border-block-start: 1px solid var(--border-soft);
     background: var(--bg-sidebar);
     color: var(--text-faint);
@@ -24,10 +24,10 @@
         align-items: center;
         height: 22px;
         min-width: 0;
-        gap: 7px;
-        padding-inline: 8px;
+        gap: $space-2;
+        padding-inline: $space-2;
         border: 0;
-        border-radius: 5px;
+        border-radius: $radius-control;
         background: transparent;
         color: var(--text-faint);
         font: inherit;
@@ -95,7 +95,7 @@
             height: 3px;
             overflow: hidden;
             border: 0;
-            border-radius: 999px;
+            border-radius: $radius-full;
             background: var(--surface-3);
             appearance: none;
 
@@ -150,9 +150,9 @@
     min-width: 280px;
     max-height: min(46vh, 380px);
     overflow-y: auto;
-    padding: 5px;
+    padding: $space-tight;
     border: 1px solid var(--border-strong);
-    border-radius: 12px;
+    border-radius: $radius-overlay;
     background: var(--surface-2);
     box-shadow: var(--shadow-lg);
     animation: statusbar-menu-enter 140ms ease-out;
@@ -160,7 +160,7 @@
     &--wide { min-width: 308px; }
 
     &__head {
-        padding: 7px 10px 5px;
+        padding: $space-2 $space-3 $space-tight;
         color: var(--text-ghost);
         font-size: $text-xs;
         font-weight: $font-weight-medium;
@@ -170,10 +170,10 @@
         display: flex;
         align-items: center;
         width: 100%;
-        gap: 11px;
-        padding: 9px 10px;
+        gap: $space-3;
+        padding: $space-2 $space-3;
         border: 0;
-        border-radius: 9px;
+        border-radius: $radius-card;
         background: transparent;
         color: var(--text);
         font: inherit;
@@ -260,7 +260,7 @@
         min-height: 38px;
         flex: 0 0 auto;
         gap: $space-2;
-        padding-inline: 8px 8px;
+        padding-inline: $space-2 $space-2;
         border-block-end: 1px solid var(--border-soft);
     }
 
@@ -268,8 +268,8 @@
     // panel-scoped actions (prototype cp-filters).
     &__filters {
         flex: 0 0 auto;
-        gap: 2px;
-        padding: 6px 8px;
+        gap: $space-hair;
+        padding: $space-tight $space-2;
         border-block-end: 1px solid var(--border-soft);
     }
 
@@ -277,7 +277,7 @@
     &__action {
         min-height: 22px;
         border: 0;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: transparent;
         color: var(--text-ghost);
         font-size: $text-xs;
@@ -338,16 +338,16 @@
     align-items: center;
     flex: 1;
     min-width: 0;
-    gap: 2px;
+    gap: $space-hair;
 
     &__tab {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
+        gap: $space-2;
         height: 26px;
-        padding: 0 10px;
+        padding: 0 $space-3;
         border: 0;
-        border-radius: 6px;
+        border-radius: $radius-control;
         background: transparent;
         color: var(--text-faint);
         font-size: $text-sm;
@@ -361,8 +361,8 @@
     }
 
     &__badge {
-        padding: 1px 5px;
-        border-radius: 20px;
+        padding: 1px $space-tight;
+        border-radius: $radius-overlay;
         font-size: $text-xs;
         @include status-variant(var(--accent-bright), var(--accent-bg));
     }
@@ -376,7 +376,7 @@
         flex: 0 0 auto;
         place-items: center;
         border: 0;
-        border-radius: 6px;
+        border-radius: $radius-control;
         background: transparent;
         color: var(--text-faint);
         cursor: pointer;
@@ -416,7 +416,7 @@
         width: 100%;
         min-width: 0;
         gap: $space-3;
-        padding: 9px 13px;
+        padding: $space-2 $space-3;
         border: 0;
         background: transparent;
         color: var(--text);
@@ -503,7 +503,7 @@
     .operations-dock__header {
         grid-area: header;
         min-height: 38px;
-        padding: 0 8px;
+        padding: 0 $space-2;
         border-block-end: 1px solid var(--border-soft);
     }
     .operations-dock__tabs { grid-area: tabs; }
@@ -576,7 +576,7 @@
 
     .global-statusbar {
         justify-content: space-around;
-        padding-inline: max(4px, env(safe-area-inset-left)) max(4px, env(safe-area-inset-right));
+        padding-inline: max($space-1, env(safe-area-inset-left)) max($space-1, env(safe-area-inset-right));
 
         &__segment,
         .statusbar-select { justify-content: center; min-width: 32px; padding-inline: 7px; }

@@ -44,7 +44,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         justify-content: center;
         width: 32px;
         height: 32px;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         color: $text-secondary;
         background: $bg-card;
@@ -74,8 +74,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        padding: 3px 10px;
-        border-radius: 999px;
+        padding: $space-1 $space-3;
+        border-radius: $radius-full;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         text-transform: capitalize;
@@ -110,7 +110,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         align-items: center;
         gap: $space-2;
         padding: $space-2 $space-3;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-size: $text-xs;
     }
 
@@ -136,7 +136,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         flex-direction: column;
         min-width: 0;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         overflow: hidden;
     }
 
@@ -145,7 +145,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         display: flex;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         overflow: hidden;
 
         // Narrow viewports: segments would shrink past legibility, so the strip
@@ -158,7 +158,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__seg {
         flex: 1;
         min-width: 0;
-        padding: 12px 14px 13px;
+        padding: $space-3 $space-4 $space-3;
         background: none;
         border: none;
         // A 2px top edge carries the step's state colour — the strip reads as a
@@ -183,7 +183,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__seg-head {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         color: var(--text-ghost);
         font-size: $text-sm;
         font-weight: $font-weight-medium;
@@ -209,8 +209,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__seg-bar {
         display: block;
         height: 3px;
-        margin-top: 11px;
-        border-radius: 2px;
+        margin-top: $space-3;
+        border-radius: $radius-badge;
         background: var(--surface-3);
         overflow: hidden;
 
@@ -223,7 +223,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
 
     &__seg-dur {
         display: block;
-        margin-top: 6px;
+        margin-top: $space-tight;
         color: $text-tertiary;
         font-size: $text-xs;
     }
@@ -234,8 +234,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__runmeta {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px 20px;
-        padding: 0 3px;
+        gap: $space-tight $space-5;
+        padding: 0 $space-1;
         color: var(--text-ghost);
         font-size: $text-xs;
 
@@ -263,10 +263,10 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__toggle {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 4px 8px;
+        gap: $space-1;
+        padding: $space-1 $space-2;
         font-size: $text-xs;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         background: transparent;
         color: $text-secondary;
@@ -282,10 +282,10 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__level .ui-select-trigger {
         width: auto;
         height: auto;
-        gap: 4px;
-        padding: 4px 6px;
+        gap: $space-1;
+        padding: $space-1 $space-tight;
         font-size: $text-xs;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         background: $bg-card;
         color: $text-secondary;
@@ -299,9 +299,9 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__search {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 2px 8px;
-        border-radius: $radius-md;
+        gap: $space-1;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         color: $text-tertiary;
         flex: 1 1 160px;
@@ -345,7 +345,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         width: 16px;
         display: flex;
         flex-direction: column;
-        padding: 2px 3px;
+        padding: $space-hair $space-1;
         gap: 1px;
         background: rgba(0, 0, 0, 0.25);
         border-left: 1px solid $dc-surface-line;
@@ -356,7 +356,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__map-tick {
         flex: 1 1 0;
         min-height: 1px;
-        border-radius: 1px;
+        border-radius: $radius-badge;
         // Unclassified slices stay empty rather than drawing a bar for
         // "nothing happened here".
         background: transparent;
@@ -380,7 +380,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         right: 0;
         min-height: 8px;
         border: 1px solid rgba(255, 255, 255, 0.5);
-        border-radius: 2px;
+        border-radius: $radius-badge;
         background: rgba(255, 255, 255, 0.1);
         pointer-events: none;
     }
@@ -405,8 +405,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__line {
         display: flex;
         gap: $space-2;
-        padding: 0 4px;
-        border-radius: 3px;
+        padding: 0 $space-1;
+        border-radius: $radius-badge;
 
         &[data-step] { scroll-margin-top: $space-2; }
 
@@ -439,22 +439,22 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         transform: translateX(-50%);
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 4px 12px;
-        border-radius: 999px;
+        gap: $space-1;
+        padding: $space-1 $space-3;
+        border-radius: $radius-full;
         border: none;
         background: var(--accent-primary);
         color: #fff;
         font-size: $text-xs;
         cursor: pointer;
-        box-shadow: $shadow-lg;
+        box-shadow: $shadow-overlay;
     }
 
     // ---- error card ----
     &__error {
         border: 1px solid var(--red-bg);
         border-left: 3px solid $danger;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: var(--red-bg);
         padding: $space-3;
         display: flex;
@@ -471,7 +471,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     }
 
     &__error-msg {
-        margin: 2px 0 0;
+        margin: $space-hair 0 0;
         color: $text-secondary;
         font-size: $text-xs;
     }
@@ -482,7 +482,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         gap: $space-1;
         margin: 0;
         padding: $space-2;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: rgba($warning-raw, 0.12);
         color: $warning;
         font-size: $text-xs;
@@ -494,7 +494,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         overflow: auto;
         padding: $space-2;
         background: $dc-surface;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-family: $font-mono;
         font-size: $text-xs;
         line-height: 1.5;
@@ -514,7 +514,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__success {
         border: 1px solid var(--green-bg);
         border-left: 3px solid $success;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: var(--green-bg);
         padding: $space-3;
         display: flex;
@@ -540,14 +540,14 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         margin: 0;
         padding: 0;
         display: grid;
-        gap: 2px;
+        gap: $space-hair;
 
         li {
             display: flex;
             justify-content: space-between;
             font-size: $text-xs;
             color: $text-secondary;
-            padding: 2px 0;
+            padding: $space-hair 0;
             border-bottom: 1px solid $dc-surface-line;
 
             span:last-child { font-variant-numeric: tabular-nums; }
@@ -574,8 +574,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        padding: 6px 12px;
-        border-radius: $radius-md;
+        padding: $space-tight $space-3;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         background: $bg-card;
         color: $text-primary;
@@ -616,8 +616,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     // Error / warning counts in the toolbar. They read as a summary first and
     // filter second, so they stay visible even when a filter is off.
     &__chip {
-        padding: 3px 9px;
-        border-radius: 999px;
+        padding: $space-1 $space-2;
+        border-radius: $radius-full;
         border: 1px solid transparent;
         background: var(--surface-3);
         color: $text-secondary;
@@ -636,7 +636,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__nav {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
     }
 
     &__nav-count {
@@ -656,9 +656,9 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         z-index: 2;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         width: 100%;
-        padding: 5px $space-2;
+        padding: $space-tight $space-2;
         border: none;
         border-top: 1px solid $dc-surface-line;
         background: #131a24;
@@ -710,15 +710,15 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__error-toggle {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         margin-left: auto;
-        padding: 4px 8px;
+        padding: $space-1 $space-2;
         border: none;
         background: transparent;
         color: $text-secondary;
         font-size: $text-xs;
         cursor: pointer;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         &:hover { color: $text-primary; background: rgba(255, 255, 255, 0.06); }
     }

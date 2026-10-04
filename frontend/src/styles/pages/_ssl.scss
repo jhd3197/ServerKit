@@ -15,7 +15,7 @@
     width: 26px;
     height: 26px;
     flex-shrink: 0;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     @include status-variant($success, $success-bg);
 
     // Same four states the Status column reports, so the row does not say

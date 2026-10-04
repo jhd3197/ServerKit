@@ -22,8 +22,8 @@
 
     &__label {
         font-weight: $font-weight-semibold;
-        padding: 2px $spacing-sm;
-        border-radius: $radius-sm;
+        padding: $space-hair $spacing-sm;
+        border-radius: $radius-badge;
         background-color: rgba(0, 0, 0, 0.16);
     }
 

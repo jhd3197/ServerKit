@@ -5,7 +5,7 @@
 .uptime-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     padding: $space-6;
 
     &.loading,
@@ -66,7 +66,7 @@
 
         .status-dot {
             background: $success;
-            box-shadow: 0 0 8px $success;
+            box-shadow: none;
             animation: uptime-pulse-dot 2s ease-in-out infinite;
         }
     }
@@ -143,7 +143,7 @@
     padding: $space-5;
     background: linear-gradient(135deg, fade($accent-primary-raw, 5%), fade($success-raw, 5%));
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-6;
 }
 
@@ -198,7 +198,7 @@
     gap: $space-1;
     background: $bg-hover;
     padding: $space-1;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 }
 
 .period-btn {
@@ -208,7 +208,7 @@
     color: $text-tertiary;
     background: transparent;
     border: none;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -224,17 +224,17 @@
 
 .uptime-graph {
     display: flex;
-    gap: 2px;
+    gap: $space-hair;
     height: 32px;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     overflow: hidden;
-    padding: 4px;
+    padding: $space-1;
 }
 
 .graph-bar {
     flex: 1;
-    border-radius: 2px;
+    border-radius: $radius-badge;
     transition: transform $transition-fast, opacity $transition-fast;
     cursor: pointer;
     min-width: 4px;
@@ -285,7 +285,7 @@
 .legend-dot {
     width: 10px;
     height: 10px;
-    border-radius: 2px;
+    border-radius: $radius-badge;
 
     &.up {
         background: $success;
@@ -312,7 +312,7 @@
     align-items: center;
     padding: $space-3;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     .stat-period {
         font-size: $text-xs;
@@ -348,7 +348,7 @@
     padding: $space-4 $space-5;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 }
 
 .uptime-compact-status {
@@ -365,7 +365,7 @@
         font-size: $text-base;
         font-weight: $font-weight-semibold;
         padding: $space-1 $space-2;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         @include status-variant($success, $success-bg);
 
         &.fair {
@@ -381,7 +381,7 @@
 .uptime-compact-time {
     display: flex;
     align-items: baseline;
-    gap: 2px;
+    gap: $space-hair;
 
     .value {
         font-size: $text-lg;

@@ -11,7 +11,7 @@
 .preview-settings {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: $space-5;
 
     &__header {
@@ -30,7 +30,7 @@
         svg {
             color: $accent-primary;
             flex-shrink: 0;
-            margin-top: 2px;
+            margin-top: $space-hair;
         }
 
         h3 {
@@ -51,8 +51,8 @@
             font-family: $font-mono;
             font-size: $text-xs;
             background: $bg-tertiary;
-            padding: 1px 5px;
-            border-radius: $radius-sm;
+            padding: 1px $space-tight;
+            border-radius: $radius-badge;
             color: $text-primary;
         }
     }
@@ -120,7 +120,7 @@
     gap: $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: $space-4;
     flex-wrap: wrap;
 
@@ -167,8 +167,8 @@
     &__sha {
         color: $text-tertiary;
         background: $bg-tertiary;
-        padding: 1px 6px;
-        border-radius: $radius-sm;
+        padding: 1px $space-tight;
+        border-radius: $radius-badge;
     }
 
     &__url {

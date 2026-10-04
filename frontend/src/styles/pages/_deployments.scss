@@ -19,9 +19,9 @@
     .sk-cell-dim { white-space: nowrap; }
 
     &__kind {
-        padding: 1px 5px;
+        padding: 1px $space-tight;
         border: 1px solid var(--border);
-        border-radius: 4px;
+        border-radius: $radius-badge;
         color: var(--text-ghost);
         font-size: $text-xs;
     }
@@ -31,18 +31,18 @@
     &__pipe {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
     }
 
     &__ticks {
         display: flex;
-        gap: 3px;
+        gap: $space-1;
 
         i {
             display: block;
             width: 7px;
             height: 15px;
-            border-radius: 2px;
+            border-radius: $radius-badge;
             background: var(--surface-3);
 
             &.is-done { background: var(--green); }
@@ -91,7 +91,7 @@
         padding: $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         cursor: pointer;
         text-align: left;
 
@@ -108,7 +108,7 @@
 
     &__sim-scenario-text {
         display: grid;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 0;
 
         strong { color: $text-primary; font-size: $text-xs; font-weight: $font-weight-semibold; }

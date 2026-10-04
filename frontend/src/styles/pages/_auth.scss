@@ -13,7 +13,7 @@
     max-width: 400px;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
+    border-radius: $radius-overlay;
     padding: $space-10;
 }
 
@@ -119,7 +119,7 @@
     width: 100%;
     padding: $space-3 $space-4;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     background: $bg-card;
     color: $text-primary;
     font-size: $text-xs;
@@ -174,7 +174,7 @@
     margin-bottom: $space-6;
     padding: $space-4;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     background: $bg-hover;
     text-align: center;
 

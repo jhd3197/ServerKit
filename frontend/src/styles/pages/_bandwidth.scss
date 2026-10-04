@@ -21,7 +21,7 @@
 .bw-cell {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: $space-2;
 
     .bw-spark { flex-shrink: 0; }
 
@@ -41,7 +41,7 @@
 
     &-caption {
         display: block;
-        margin-top: 6px;
+        margin-top: $space-tight;
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -58,13 +58,13 @@
     &__grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 16px;
+        gap: $space-4;
     }
 
     &__stat {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: $space-1;
         min-width: 0;
     }
 
@@ -92,15 +92,15 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: $space-tight;
     }
 
     &__row {
         display: grid;
         grid-template-columns: 80px minmax(0, 1fr) minmax(0, 2fr) auto;
         align-items: center;
-        gap: 12px;
-        padding: 6px 0;
+        gap: $space-3;
+        padding: $space-tight 0;
         border-top: 1px solid var(--border-soft);
 
         &:first-child { border-top: 0; }
@@ -132,8 +132,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 10px;
+        gap: $space-3;
+        margin-bottom: $space-3;
         font-size: $text-sm;
         color: var(--text-dim);
     }
@@ -141,7 +141,7 @@
     &__dialog {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: $space-3;
     }
 
     &__failure-mode {
@@ -154,29 +154,29 @@
 // Database Explorer: Insights tab (plan 86 §A3).
 // Component: databases/InsightsPanel.
 .dbx-insights {
-    padding: 16px;
+    padding: $space-4;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: $space-3;
     overflow: auto;
 
     &__head {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        gap: 16px;
+        gap: $space-4;
     }
 
     &__gauges {
         display: flex;
         flex-wrap: wrap;
-        gap: 32px;
+        gap: $space-8;
     }
 
     &__gauge {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
     }
 
     &__label,
@@ -191,7 +191,7 @@
     }
 
     &__title {
-        margin: 8px 0 0;
+        margin: $space-2 0 0;
         font-size: $text-sm;
         color: var(--text);
     }
@@ -205,12 +205,12 @@
             text-align: start;
             font-weight: $font-weight-medium;
             color: var(--text-dim);
-            padding: 6px 8px;
+            padding: $space-tight $space-2;
             border-bottom: 1px solid var(--border-soft);
         }
 
         td {
-            padding: 6px 8px;
+            padding: $space-tight $space-2;
             border-bottom: 1px solid var(--border-soft);
             font-family: var(--mono);
             white-space: nowrap;
@@ -228,7 +228,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
+        gap: $space-2;
         margin: 0;
         font-size: $text-sm;
         color: var(--text-dim);
@@ -246,7 +246,7 @@
 .pooler {
     &__hint,
     &__tradeoff {
-        margin: 0 0 6px;
+        margin: 0 0 $space-tight;
         font-size: $text-sm;
         color: var(--text-dim);
     }
@@ -268,14 +268,14 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: $space-3;
     }
 
     &__item {
         display: flex;
         flex-direction: column;
-        gap: 4px;
-        padding-top: 10px;
+        gap: $space-1;
+        padding-top: $space-3;
         border-top: 1px solid var(--border-soft);
 
         &:first-child { border-top: 0; padding-top: 0; }
@@ -313,7 +313,7 @@
     &__slots {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: $space-3;
         margin: 0;
     }
 
@@ -321,7 +321,7 @@
         display: grid;
         grid-template-columns: 72px 1fr;
         align-items: center;
-        gap: 12px;
+        gap: $space-3;
 
         dt {
             font-size: $text-xs;
@@ -332,7 +332,7 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 10px;
+            gap: $space-3;
             margin: 0;
         }
     }
@@ -354,21 +354,21 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: 10px;
-        margin-top: 12px;
-        padding-top: 12px;
+        gap: $space-3;
+        margin-top: $space-3;
+        padding-top: $space-3;
         border-top: 1px solid var(--border-soft);
     }
 
     &__off {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: $space-tight;
     }
 
     &__reasons {
-        margin: 6px 0 0;
-        padding-inline-start: 18px;
+        margin: $space-tight 0 0;
+        padding-inline-start: $space-5;
         font-size: $text-sm;
         color: var(--text-dim);
 
@@ -382,13 +382,13 @@
 // Component: apps/SlotDeploysPanel.
 .slot-split {
     &__downtime {
-        margin: 0 0 12px;
+        margin: 0 0 $space-3;
         font-size: $text-sm;
         color: var(--amber);
     }
 
     &__label {
-        margin: 12px 0 6px;
+        margin: $space-3 0 $space-tight;
         font-size: $text-xs;
         color: var(--text-dim);
     }
@@ -396,12 +396,12 @@
     &__yaml {
         max-height: 240px;
         margin: 0;
-        padding: 10px 12px;
+        padding: $space-3 $space-3;
         overflow: auto;
         font-family: var(--mono);
         font-size: $text-xs;
         background: var(--bg-code);
         border: 1px solid var(--border-soft);
-        border-radius: 6px;
+        border-radius: $radius-control;
     }
 }

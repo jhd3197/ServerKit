@@ -64,7 +64,7 @@
 
     &__sub {
         display: block;
-        margin-top: 3px;
+        margin-top: $space-1;
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -74,7 +74,7 @@
 .bk-link {
     display: inline-flex;
     align-items: center;
-    gap: 3px;
+    gap: $space-1;
     padding: 0;
     border: 0;
     background: none;
@@ -89,7 +89,7 @@
 .bk-hint {
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: $space-2;
     margin: 0;
     font-size: $text-sm;
     color: var(--text-faint);
@@ -119,12 +119,12 @@
     grid-template-rows: repeat(7, auto);
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);
-    gap: 3px;
+    gap: $space-1;
 
     i {
         aspect-ratio: 1;
         min-width: 0;
-        border-radius: 2px;
+        border-radius: $radius-badge;
         background: var(--surface-3);
 
         &.l1 { background: rgba(61, 220, 151, 0.32); }
@@ -135,13 +135,13 @@
 
     &__scroll {
         min-width: 0;
-        padding-bottom: 4px;
+        padding-bottom: $space-1;
     }
 
     &__legend {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
@@ -149,7 +149,7 @@
         i {
             width: 10px;
             height: 10px;
-            border-radius: 2px;
+            border-radius: $radius-badge;
 
             &.l1 { background: rgba(61, 220, 151, 0.32); }
             &.l2 { background: rgba(61, 220, 151, 0.62); }
@@ -174,7 +174,7 @@
 
         strong {
             display: block;
-            margin-top: 3px;
+            margin-top: $space-1;
             font-size: $text-lg;
             font-weight: $font-weight-semibold;
             color: var(--text);
@@ -190,8 +190,8 @@
     &__item {
         display: flex;
         align-items: flex-start;
-        gap: 12px;
-        padding: 11px 0;
+        gap: $space-3;
+        padding: $space-3 0;
         border-top: 1px solid var(--border-soft);
 
         &:first-child { border-top: 0; padding-top: 0; }
@@ -201,7 +201,7 @@
     &__dot {
         width: 28px;
         height: 28px;
-        border-radius: 8px;
+        border-radius: $radius-card;
         display: grid;
         place-items: center;
         flex-shrink: 0;
@@ -224,7 +224,7 @@
     }
 
     &__time {
-        margin-top: 2px;
+        margin-top: $space-hair;
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -247,11 +247,11 @@
 // Retention chips (the mock's GFS daily/weekly/monthly row).
 .bk-ret {
     display: inline-flex;
-    gap: 4px;
+    gap: $space-1;
 
     span {
-        padding: 2px 7px;
-        border-radius: 5px;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
         background: var(--surface-3);
         color: var(--text-dim);
         font-size: $text-xs;
@@ -261,7 +261,7 @@
 .bk-lastrun {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: $space-tight;
     font-size: $text-xs;
     color: var(--text-faint);
     white-space: nowrap;
@@ -319,7 +319,7 @@
     &__ico {
         width: 38px;
         height: 38px;
-        border-radius: 10px;
+        border-radius: $radius-card;
         display: grid;
         place-items: center;
         flex-shrink: 0;
@@ -331,7 +331,7 @@
     &__name {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: var(--text);
@@ -339,7 +339,7 @@
     }
 
     &__type {
-        margin-top: 2px;
+        margin-top: $space-hair;
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -348,7 +348,7 @@
         display: flex;
         justify-content: space-between;
         gap: $space-3;
-        margin-top: 7px;
+        margin-top: $space-2;
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -360,7 +360,7 @@
             display: flex;
             justify-content: space-between;
             gap: $space-3;
-            padding: 7px 0;
+            padding: $space-2 0;
             border-top: 1px solid var(--border-soft);
         }
 
@@ -409,8 +409,8 @@
     &__row + &__row { margin-top: $space-3; }
 
     &__tag {
-        padding: 1px 6px;
-        border-radius: 4px;
+        padding: 1px $space-tight;
+        border-radius: $radius-badge;
         @include status-variant(var(--accent-bright), var(--accent-bg));
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
@@ -421,13 +421,13 @@
         align-items: baseline;
         justify-content: space-between;
         gap: $space-3;
-        margin-bottom: 7px;
+        margin-bottom: $space-2;
     }
 
     &__name {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         min-width: 0;
         font-size: $text-sm;
         font-weight: $font-weight-semibold;
@@ -453,14 +453,14 @@
 
     &__bar {
         height: 6px;
-        border-radius: 3px;
+        border-radius: $radius-badge;
         background: var(--surface-3);
         overflow: hidden;
 
         i {
             display: block;
             height: 100%;
-            border-radius: 3px;
+            border-radius: $radius-badge;
             transition: width 0.3s;
         }
 
@@ -472,7 +472,7 @@
 .bk-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
 }
 
@@ -484,7 +484,7 @@
     flex-wrap: nowrap;
     justify-content: flex-end;
     align-items: center;
-    gap: 2px;
+    gap: $space-hair;
     white-space: nowrap;
 
     // Icon-only affordances: quiet by default, and only the delete goes red —
@@ -496,7 +496,7 @@
         height: 30px;
         padding: 0;
         border: 0;
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: none;
         color: var(--text-faint);
         cursor: pointer;
@@ -595,7 +595,7 @@
     align-items: flex-start;
     gap: $space-2;
     padding: $space-3;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $warning-bg;
     border: 1px solid $warning-border;
     color: $warning;
@@ -615,7 +615,7 @@
         padding: $space-3;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__ico {
@@ -646,7 +646,7 @@
 .backup-history-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
 
     &__tools {
@@ -660,7 +660,7 @@
         align-items: center;
         gap: $space-1;
         padding: 1px $space-2;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: $bg-hover;
         border: 1px solid $border-subtle;
         color: $text-secondary;
@@ -683,7 +683,7 @@
 .backup-calendar {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
 
     &__head {
@@ -701,7 +701,7 @@
         height: 28px;
         background: transparent;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-secondary;
         cursor: pointer;
 
@@ -717,7 +717,7 @@
         margin-left: auto;
         background: transparent;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         padding: $space-1 $space-2;
         color: $text-secondary;
         font-size: $text-xs;
@@ -744,7 +744,7 @@
         min-height: 44px;
         padding: $space-1;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: $bg-body;
 
         &--empty {
@@ -784,7 +784,7 @@
         right: 2px;
         min-width: 16px;
         height: 16px;
-        padding: 0 4px;
+        padding: 0 $space-1;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -839,7 +839,7 @@
 
     &__error {
         padding: $space-3;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $danger-bg;
         border: 1px solid $danger-border;
         color: $danger;
@@ -875,7 +875,7 @@
     &__item {
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         overflow: hidden;
     }
 
@@ -1008,7 +1008,7 @@
 .schedule-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
     display: flex;
     flex-direction: column;
@@ -1090,7 +1090,7 @@
         gap: $space-2;
         padding: $space-2 $space-3;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         cursor: pointer;
 
         &:hover { border-color: $border-active; }
@@ -1104,7 +1104,7 @@
         overflow-y: auto;
         padding: $space-2;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-body;
     }
 
@@ -1113,7 +1113,7 @@
         align-items: flex-start;
         gap: $space-2;
         padding: $space-3;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $warning-bg;
         border: 1px solid $warning-border;
         color: $warning;
@@ -1128,7 +1128,7 @@
     gap: $space-3;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
 }
 

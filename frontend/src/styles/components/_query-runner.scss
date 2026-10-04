@@ -49,7 +49,7 @@
     .db-type-badge {
         font-size: $text-xs;
         padding: $space-1 $space-2;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         font-weight: $font-weight-medium;
 
         &.mysql {
@@ -98,7 +98,7 @@
         color: $text-secondary;
         font-size: $text-xl;
         cursor: pointer;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         transition: all $transition-fast;
 
         &:hover {
@@ -164,7 +164,7 @@
             border: none;
             color: $text-secondary;
             cursor: pointer;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             transition: all $transition-fast;
 
             &:hover {
@@ -187,7 +187,7 @@
     align-items: center;
     justify-content: space-between;
     padding: $space-2 $space-3;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -221,7 +221,7 @@
     align-items: center;
     justify-content: space-between;
     padding: $space-1 $space-3;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -266,7 +266,7 @@
         line-height: $line-height-relaxed;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-primary;
         resize: vertical;
         transition: border-color $transition-fast;
@@ -321,7 +321,7 @@
 
     svg {
         flex-shrink: 0;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 }
 
@@ -420,8 +420,8 @@
     max-height: calc(100% - 80px);
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-lg;
+    border-radius: $radius-card;
+    box-shadow: $shadow-overlay;
     display: flex;
     flex-direction: column;
     z-index: $z-modal;
@@ -452,7 +452,7 @@
 
 .history-item {
     padding: $space-3;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all $transition-fast;
 

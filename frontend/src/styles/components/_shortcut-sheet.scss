@@ -30,10 +30,10 @@
         }
 
         kbd {
-            padding: 3px $space-2;
+            padding: $space-1 $space-2;
             border: 1px solid $border-default;
             border-block-end-color: $border-active;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             background: $bg-elevated;
             color: $text-secondary;
             font-family: $font-mono;

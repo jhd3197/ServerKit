@@ -40,7 +40,7 @@
     &__table-wrap {
         overflow-x: auto;
         border: 1px solid $border-color;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__table {
@@ -80,7 +80,7 @@
 
     &__desc {
         display: block;
-        margin-top: 2px;
+        margin-top: $space-hair;
         color: $text-muted;
         font-size: $text-xs;
         max-width: 340px;
@@ -99,10 +99,10 @@
 
     &__input {
         width: 110px;
-        padding: 4px $space-2;
+        padding: $space-1 $space-2;
         background: $bg-input;
         border: 1px solid $border-color;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-primary;
         font-family: $font-mono;
         font-size: $text-sm;
@@ -115,7 +115,7 @@
 
     &__range {
         display: block;
-        margin-top: 2px;
+        margin-top: $space-hair;
         font-size: $text-xs;
         color: $text-muted;
     }

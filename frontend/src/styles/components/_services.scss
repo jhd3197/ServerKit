@@ -16,7 +16,7 @@
     padding: $space-2 $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     font-size: $text-sm;
 }
 
@@ -27,7 +27,7 @@
 
     &.running {
         background: $success;
-        box-shadow: 0 0 8px $success;
+        box-shadow: none;
     }
 
     &.stopped {

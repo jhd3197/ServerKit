@@ -26,8 +26,8 @@
         border: 1px solid $border-subtle;
         color: $text-secondary;
         font-size: $text-xs;
-        padding: 3px 10px;
-        border-radius: $radius-sm;
+        padding: $space-1 $space-3;
+        border-radius: $radius-badge;
         cursor: pointer;
 
         &:hover {
@@ -44,7 +44,7 @@
         margin-bottom: 0.5rem;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-size: $text-xs;
         color: $text-secondary;
     }
@@ -60,14 +60,14 @@
         width: 12px;
         height: 12px;
         border: 1px solid;
-        border-radius: 3px;
+        border-radius: $radius-badge;
     }
 
     &__canvas {
         flex: 1 1 auto;
         min-height: 480px;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: $bg-card;
         overflow: hidden;
         position: relative;
@@ -87,7 +87,7 @@
     }
 
     .react-flow__node .app-map__node-sub {
-        margin-top: 2px;
+        margin-top: $space-hair;
         font-size: $text-xs;
         opacity: 0.7;
     }
@@ -128,10 +128,10 @@
         li {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: $space-1;
             padding: 0.7rem 0.85rem;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             background: $bg-card;
             transition: border-color 0.15s ease, background-color 0.15s ease;
 
@@ -170,8 +170,8 @@
         font-size: $text-xs;
         color: $text-tertiary;
         background: $bg-elevated;
-        padding: 1px 6px;
-        border-radius: $radius-sm;
+        padding: 1px $space-tight;
+        border-radius: $radius-badge;
     }
 
     &__ext {

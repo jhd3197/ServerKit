@@ -54,7 +54,7 @@
         border: none;
         background: transparent;
         color: $text-secondary;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         cursor: pointer;
         @include transition(color);
         @include focus-ring();
@@ -117,7 +117,7 @@
     border: none;
     background: transparent;
     color: $text-primary;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     @include transition(background);
     @include focus-ring();
@@ -161,7 +161,7 @@
     height: $sidebar-header-height;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: $space-3;
     padding: 0 0.5rem;
     flex-shrink: 0;
 }
@@ -170,7 +170,7 @@
 .brand-logo {
     width: 34px;
     height: 34px;
-    border-radius: 9px;
+    border-radius: $radius-card;
     display: grid;
     place-items: center;
     flex-shrink: 0;
@@ -223,7 +223,7 @@
 .brand-custom-logo {
     width: 32px;
     height: 32px;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     overflow: hidden;
     display: grid;
     place-items: center;
@@ -270,7 +270,7 @@
     width: 27px;
     height: 27px;
     border: none;
-    border-radius: 8px;
+    border-radius: $radius-card;
     background: linear-gradient(160deg, var(--accent-bright), var(--accent));
     box-shadow: 0 2px 8px -1px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     color: #fff;
@@ -306,7 +306,7 @@
     padding: $space-1 $space-2;
     background-color: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-primary;
     font-size: $text-xs;
     cursor: pointer;
@@ -365,22 +365,22 @@
 .nav {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: $space-hair;
 }
 
 // Navigation Item
 .nav-item {
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: $space-3;
     padding: 0.5rem 0.625rem;
-    border-radius: 8px;
+    border-radius: $radius-card;
     color: var(--text-dim);
     text-decoration: none;
     font-size: $text-sm;
     font-weight: $font-weight-normal;
     transition: background-color 0.14s ease, color 0.14s ease;
-    margin-bottom: 2px;
+    margin-bottom: $space-hair;
     position: relative;
     white-space: nowrap;
     overflow: hidden;
@@ -417,9 +417,9 @@
             transform: translateY(-50%);
             width: 3px;
             height: 18px;
-            border-radius: 0 3px 3px 0;
+            border-radius: 0 $radius-badge $radius-badge 0;
             background: var(--accent);
-            box-shadow: 0 0 10px var(--accent-glow);
+            box-shadow: none;
         }
     }
 }
@@ -449,10 +449,10 @@
     background: transparent;
     color: $text-tertiary;
     cursor: pointer;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     flex-shrink: 0;
     transition: all 0.15s ease;
-    margin-right: 4px;
+    margin-right: $space-1;
     @include focus-ring();
 
     &:hover {
@@ -491,7 +491,7 @@
 // Sidebar Footer — compact rail like the prototype's sb-foot: the divider
 // hugs the user card instead of floating a full spacing unit above it.
 .sidebar-footer {
-    padding: 11px 0;
+    padding: $space-3 0;
     margin-top: auto;
     border-top: 1px solid $border-subtle;
     flex-shrink: 0;
@@ -525,23 +525,23 @@
 }
 
 .context-menu-section {
-    padding: 6px 8px;
+    padding: $space-tight $space-2;
 }
 
 .context-menu-label {
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
-    margin-bottom: 6px;
+    margin-bottom: $space-tight;
 }
 
 .theme-switcher {
     display: flex;
-    gap: 2px;
+    gap: $space-hair;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 3px;
+    border-radius: $radius-card;
+    padding: $space-1;
 }
 
 .theme-btn {
@@ -549,11 +549,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 0;
+    padding: $space-tight 0;
     border: none;
     background: transparent;
     color: var(--text-faint);
-    border-radius: 6px;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all 0.15s ease;
     @include focus-ring();
@@ -571,20 +571,20 @@
 .view-switcher {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: $space-1;
 }
 
 .view-btn {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 4px 8px;
+    gap: $space-1;
+    padding: $space-1 $space-2;
     border: 1px solid var(--border);
     background: var(--surface-2);
     color: var(--text-faint);
     font-size: $text-xs;
     font-weight: $font-weight-medium;
-    border-radius: 6px;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all 0.15s ease;
     @include focus-ring();
@@ -611,15 +611,15 @@
 .context-menu-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: $space-3;
     width: 100%;
-    padding: 8px 10px;
+    padding: $space-2 $space-3;
     border: none;
     background: transparent;
     color: $text-secondary;
     font-size: $text-sm;
     font-weight: $font-weight-medium;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all 0.15s ease;
     text-align: left;
@@ -650,7 +650,7 @@
 .user-mini {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: $space-3;
     width: auto;
     padding: 0.5rem;
     cursor: pointer;
@@ -659,7 +659,7 @@
     color: inherit;
     font: inherit;
     text-align: left;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     transition: all 0.2s ease;
     @include focus-ring();
 
@@ -673,7 +673,7 @@
     height: 32px;
     background: linear-gradient(150deg, var(--surface-3), var(--surface-2));
     border: 1px solid var(--border-strong);
-    border-radius: 9px;
+    border-radius: $radius-card;
     display: grid;
     place-items: center;
     font-size: $text-sm;
@@ -713,7 +713,7 @@
     color: var(--green);
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: $space-tight;
     margin-top: 1px;
 
     &::before {
@@ -873,7 +873,7 @@
                 width: auto;
                 height: 2px;
                 transform: none;
-                border-radius: 2px 2px 0 0;
+                border-radius: $radius-badge $radius-badge 0 0;
             }
         }
 

@@ -100,9 +100,9 @@
         code {
             font-family: $font-mono;
             font-size: $text-xs;
-            padding: 1px 5px;
+            padding: 1px $space-tight;
             background: $bg-secondary;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
         }
     }
 
@@ -140,7 +140,7 @@
         padding: $space-2 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-size: $text-xs;
         color: $text-primary;
         cursor: pointer;
@@ -166,11 +166,11 @@
     &__stat {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         padding: $space-3 $space-4;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__stat-val {
@@ -191,7 +191,7 @@
     &__table-wrap {
         overflow-x: auto;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         margin-bottom: $space-3;
     }
 
@@ -248,12 +248,12 @@
         display: flex;
         gap: $space-3;
         padding: $space-3 $space-4;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-size: $text-xs;
 
         svg {
             flex-shrink: 0;
-            margin-top: 2px;
+            margin-top: $space-hair;
         }
 
         p {
@@ -262,9 +262,9 @@
             code {
                 font-family: $font-mono;
                 font-size: $text-xs;
-                padding: 1px 5px;
+                padding: 1px $space-tight;
                 background: $bg-secondary;
-                border-radius: $radius-sm;
+                border-radius: $radius-badge;
             }
         }
 

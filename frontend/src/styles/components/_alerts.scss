@@ -7,14 +7,14 @@
     align-items: flex-start;
     gap: $space-2;
     padding: $space-3 $space-4;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     font-size: $text-xs;
     line-height: 1.5;
     margin-bottom: $space-4;
 
     > svg {
         flex-shrink: 0;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     &.alert-success,
@@ -73,12 +73,12 @@
     border: 1px solid $danger-border;
     color: $danger;
     padding: $space-3 $space-4;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-6;
 
     > svg {
         flex-shrink: 0;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     &__close {

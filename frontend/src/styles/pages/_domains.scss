@@ -26,7 +26,7 @@
 .dom-fav {
     width: 30px;
     height: 30px;
-    border-radius: 8px;
+    border-radius: $radius-card;
     display: grid;
     place-items: center;
     flex-shrink: 0;
@@ -35,8 +35,8 @@
 
 .dom-primary {
     margin-left: $space-2;
-    padding: 1px 6px;
-    border-radius: $radius-sm;
+    padding: 1px $space-tight;
+    border-radius: $radius-badge;
     @include status-variant(var(--accent-bright), var(--accent-bg));
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
@@ -52,8 +52,8 @@
 // "Managed" chip — a provider zone ServerKit has adopted for record/ops management.
 .dom-managed {
     margin-left: $space-2;
-    padding: 1px 6px;
-    border-radius: $radius-sm;
+    padding: 1px $space-tight;
+    border-radius: $radius-badge;
     @include status-variant($success, $success-bg);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
@@ -82,21 +82,21 @@
 .dom-meter {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: $space-tight;
     min-width: 0;
     font-size: $text-xs;
 
     &__bar {
         display: block;
         height: 4px;
-        border-radius: 3px;
+        border-radius: $radius-badge;
         background: var(--surface-3);
         overflow: hidden;
 
         i {
             display: block;
             height: 100%;
-            border-radius: 3px;
+            border-radius: $radius-badge;
             opacity: 0.85;
         }
     }
@@ -118,7 +118,7 @@
     margin-bottom: $space-3;
     padding: $space-2 $space-3;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: fade($warning-raw, 8%);
     font-size: $text-xs;
     color: $text-secondary;
@@ -165,7 +165,7 @@
         font-size: $text-xs;
         color: $text-tertiary;
         background: var(--surface-2);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         &--error { color: $danger; }
     }
@@ -176,7 +176,7 @@
         gap: $space-3;
         padding: $space-3;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: var(--surface-2);
     }
 
@@ -222,7 +222,7 @@
     &__ssl {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
         margin: 0;
         font-size: $text-xs;
         color: $success;
@@ -233,7 +233,7 @@
     &__proxy {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         font-size: $text-xs;
         color: $text-tertiary;
 
@@ -244,7 +244,7 @@
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
-        padding: 1px 6px;
+        padding: 1px $space-tight;
         border-radius: $radius-full;
         background: var(--surface-2);
 
@@ -267,15 +267,15 @@
         display: inline-flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 6px;
+        gap: $space-tight;
     }
 
     // "Dynamic" badge on a record that is a token-updatable DDNS host.
     &__dyn {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 1px 7px;
+        gap: $space-1;
+        padding: 1px $space-2;
         border-radius: $radius-full;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
@@ -293,7 +293,7 @@
         flex-direction: column;
         padding: $space-2 $space-3;
         background: var(--surface-2);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__prop-row {
@@ -325,7 +325,7 @@
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: $space-2;
-    padding-right: 32px;
+    padding-right: $space-8;
 }
 
 .dom-drawer {
@@ -411,7 +411,7 @@
     padding: $space-5;
     background: $success-bg;
     border: 1px solid $success-border;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-5;
     color: $success;
 
@@ -435,8 +435,8 @@
 .dns-rtype {
     display: inline-flex;
     align-items: center;
-    padding: 2px 7px;
-    border-radius: 5px;
+    padding: $space-hair $space-2;
+    border-radius: $radius-control;
     font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
@@ -499,7 +499,7 @@
         min-width: 0;
         background: var(--surface);
         border: 1px solid var(--border-soft);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         padding: $spacing-xs $spacing-sm;
         font-family: var(--mono);
         font-size: $text-xs;

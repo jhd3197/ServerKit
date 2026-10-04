@@ -123,7 +123,7 @@
         padding: $space-12 $space-8;
         background: $bg-card;
         border: 1px dashed $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         svg {
             color: $text-tertiary;
@@ -156,7 +156,7 @@
     padding: $space-4 $space-6;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 }
 
 .deploy-repo-info {
@@ -201,7 +201,7 @@
     margin-top: $space-3;
     padding: $space-3;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     overflow: hidden;
 
     code {
@@ -251,7 +251,7 @@
 .webhook-log-item {
     padding: $space-3;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     border: 1px solid $border-subtle;
 }
 
@@ -267,7 +267,7 @@
     padding: $space-1 $space-2;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     text-transform: capitalize;
 
     &.github {
@@ -304,7 +304,7 @@
     margin: 0;
     padding: $space-2;
     background: $bg-body;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-family: $font-mono;
     font-size: $text-xs;
     color: $text-secondary;
@@ -351,7 +351,7 @@
     margin: 0;
     padding: $space-3;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     font-family: $font-mono;
     font-size: $text-xs;
     color: $text-primary;

@@ -33,7 +33,7 @@
         padding: $space-2 $space-3;
         background: $danger-bg;
         border: 1px solid $danger-border;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $danger;
         font-size: $text-xs;
     }
@@ -49,7 +49,7 @@
         display: inline-block;
         padding: 1px $space-2;
         background: $bg-tertiary;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-secondary;
         font-size: $text-xs;
     }

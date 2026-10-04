@@ -81,7 +81,7 @@
 .fleet-queued-description { font-size: $text-base; }
 .fleet-session-list > * + * { margin-top: 0.5rem; }
 .fleet-session-list { overflow-y: auto; max-height: 12rem; }
-.fleet-session-row { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem; font-size: $text-base; border-radius: $radius-md; }
+.fleet-session-row { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem; font-size: $text-base; border-radius: $radius-control; }
 .fleet-session-offline { color: $text-tertiary; }
 .fleet-session-disconnect-reason { margin-inline-start: 0.5rem; color: $danger; }
 .fleet-command-retry { color: $warning; }

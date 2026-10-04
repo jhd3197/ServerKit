@@ -41,8 +41,8 @@
 // App type badge
 .app-type {
     background: $bg-hover;
-    padding: 5px $space-3;
-    border-radius: $radius-md;
+    padding: $space-tight $space-3;
+    border-radius: $radius-control;
     font-weight: $font-weight-semibold;
     font-size: $text-xs;
 }
@@ -53,8 +53,8 @@
     align-items: center;
     gap: $space-1;
     @include status-variant($success, $success-bg);
-    padding: 6px $space-3;
-    border-radius: $radius-md;
+    padding: $space-tight $space-3;
+    border-radius: $radius-control;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
 }
@@ -74,8 +74,8 @@
     align-items: center;
     gap: $space-1;
     background: $bg-hover;
-    padding: 5px $space-3;
-    border-radius: $radius-md;
+    padding: $space-tight $space-3;
+    border-radius: $radius-control;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
 
@@ -92,8 +92,8 @@
 .privilege-tag {
     background: $accent-glow;
     color: $accent-primary;
-    padding: $space-1 - 2 $space-2;
-    border-radius: $radius-sm;
+    padding: $space-hair $space-2;
+    border-radius: $radius-badge;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
 }
@@ -102,8 +102,8 @@
 .table-tag {
     background: $bg-hover;
     border: 1px solid $border-subtle;
-    padding: $space-2 - 2 $space-3;
-    border-radius: $radius-md;
+    padding: $space-tight $space-3;
+    border-radius: $radius-control;
     @include mono-text();
     color: $text-secondary;
 }
@@ -113,8 +113,8 @@
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    padding: 5px $space-3;
-    border-radius: $radius-md;
+    padding: $space-tight $space-3;
+    border-radius: $radius-control;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     border: 1px solid transparent;
@@ -150,8 +150,8 @@
     min-height: 1.5rem;
     line-height: 1;
     white-space: nowrap;
-    padding: 2px 8px;
-    border-radius: $radius-sm;
+    padding: $space-hair $space-2;
+    border-radius: $radius-badge;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
 }
@@ -190,9 +190,9 @@
     justify-content: center;
     gap: $space-1;
     min-height: 22px;
-    padding: 4px $space-2;
+    padding: $space-1 $space-2;
     border: 1px solid transparent;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     line-height: 1;
@@ -243,8 +243,8 @@
 
     &.status-badge-token {
         min-height: 24px;
-        padding: 4px 9px;
+        padding: $space-1 $space-2;
         border-radius: $radius-full;
-        gap: 6px;
+        gap: $space-tight;
     }
 }

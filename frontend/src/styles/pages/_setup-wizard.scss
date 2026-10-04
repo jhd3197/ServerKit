@@ -14,7 +14,7 @@
     max-width: 700px;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
+    border-radius: $radius-overlay;
     padding: $space-10;
 }
 
@@ -140,7 +140,7 @@
     padding: $space-5;
     background: $bg-elevated;
     border: 2px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     cursor: pointer;
     @include transition();
     position: relative;
@@ -158,7 +158,7 @@
         @include icon-box(40px);
         background: $bg-secondary;
         color: $text-secondary;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     .option-card-label {
@@ -213,7 +213,7 @@
     padding: $space-5;
     background: $bg-elevated;
     border: 2px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     @include transition();
 
     &.detected {
@@ -235,7 +235,7 @@
 
     .tier-card-badge {
         font-size: $text-xs;
-        padding: 2px 8px;
+        padding: $space-hair $space-2;
         background: $accent-primary;
         color: #fff;
         border-radius: $radius-full;
@@ -310,7 +310,7 @@
     margin-bottom: $space-5;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
 
     &__summary {
         font-size: $text-lg;
@@ -347,15 +347,15 @@
     padding: $space-4;
     background: $warning-bg;
     border: 1px solid $warning-border;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-6;
 
     code {
         font-family: $font-mono;
         font-size: $text-xs;
-        padding: 1px 5px;
+        padding: 1px $space-tight;
         background: $bg-tertiary;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 
     .tier-warning-icon {
@@ -381,7 +381,7 @@
     margin-bottom: $space-6;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
 
     &__icon {
         flex-shrink: 0;
@@ -409,7 +409,7 @@
     margin-bottom: $space-5;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
 
     @media (max-width: $breakpoint-md) {
         flex-direction: column;
@@ -420,7 +420,7 @@
         flex-shrink: 0;
         width: 160px;
         height: 160px;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         // QR codes render as dark-on-transparent; a white plate keeps them
         // scannable in dark mode.
         background: #fff;
@@ -477,7 +477,7 @@
 .summary-panel {
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     padding: $space-6;
     margin-bottom: $space-6;
 }
@@ -559,7 +559,7 @@
     text-align: left;
     padding: $space-3;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-card;
     cursor: pointer;
     transition: border-color 0.15s ease, background-color 0.15s ease;
@@ -620,7 +620,7 @@
     padding: $space-2 $space-4;
     background: $bg-secondary;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     font-size: $text-xs;
     color: $text-primary;
 }
@@ -647,7 +647,7 @@
     padding: $space-3 $space-4;
     background: $bg-secondary;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     cursor: pointer;
 
     &:hover {
@@ -655,7 +655,7 @@
     }
 
     &__check {
-        margin-top: 3px;
+        margin-top: $space-1;
         flex-shrink: 0;
         cursor: pointer;
     }
@@ -663,7 +663,7 @@
     &__body {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         flex: 1;
         min-width: 0;
     }
@@ -744,7 +744,7 @@
 .summary-rec-ico {
     display: inline;
     vertical-align: middle;
-    margin-right: 6px;
+    margin-right: $space-tight;
 }
 
 .btn-wizard-prev {
@@ -783,7 +783,7 @@
     gap: $space-4;
     padding: $space-4;
     background: fade($accent-primary-raw, 10%);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-bottom: $space-6;
 
     .wizard-info-icon {

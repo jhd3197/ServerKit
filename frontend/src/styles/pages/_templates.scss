@@ -46,11 +46,11 @@
     &__card {
         display: flex;
         align-items: center;
-        gap: 13px;
-        padding: 14px 16px;
+        gap: $space-3;
+        padding: $space-4 $space-4;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         text-align: left;
         cursor: pointer;
         transition: background $transition-fast, border-color $transition-fast;
@@ -69,7 +69,7 @@
         flex-shrink: 0;
         width: 36px;
         height: 36px;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: var(--surface-2);
         border: 1px solid $border-subtle;
         color: var(--accent-bright);
@@ -86,7 +86,7 @@
 
     &__sub {
         display: block;
-        margin-top: 2px;
+        margin-top: $space-hair;
         color: $text-tertiary;
         font-size: $text-xs;
     }
@@ -131,8 +131,8 @@
     text-transform: none;
     color: var(--text-faint);
     background: var(--surface-2);
-    padding: 2px $space-2;
-    border-radius: $radius-sm;
+    padding: $space-hair $space-2;
+    border-radius: $radius-badge;
 }
 
 .manifest-file-list {
@@ -145,11 +145,11 @@
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    padding: 2px 8px;
+    padding: $space-hair $space-2;
     font-family: var(--mono);
     font-size: $text-xs;
     @include status-variant(var(--green), var(--green-bg));
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
 }
 
 .env-preview-list {
@@ -159,12 +159,12 @@
 }
 
 .env-preview-chip {
-    padding: 2px 8px;
+    padding: $space-hair $space-2;
     font-family: var(--mono);
     font-size: $text-xs;
     color: var(--text-dim);
     background: var(--surface-2);
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
 
     &--secret {
         color: var(--amber);
@@ -186,7 +186,7 @@
     align-items: center;
     justify-content: center;
     background: var(--surface-2);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: hidden;
     color: var(--accent-bright);
 
@@ -221,7 +221,7 @@
     color: var(--accent-bright);
     padding: $space-1 $space-2;
     background: var(--accent-bg);
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
 }
 
 .template-categories {
@@ -234,11 +234,11 @@
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    padding: 2px 7px;
+    padding: $space-hair $space-2;
     font-size: $text-xs;
     color: var(--text-dim);
     background: var(--surface-2);
-    border-radius: 5px;
+    border-radius: $radius-control;
     text-transform: capitalize;
 }
 
@@ -251,7 +251,7 @@
     width: 520px;
     max-width: 100vw;
     max-height: none;
-    border-radius: $radius-2xl 0 0 $radius-2xl;
+    border-radius: $radius-overlay 0 0 $radius-overlay;
     border-left: 1px solid var(--border-soft);
     overflow: hidden;
     display: flex;
@@ -335,7 +335,7 @@
             border: none;
             color: $text-tertiary;
             cursor: pointer;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             display: flex;
             align-items: center;
             transition: all $transition-fast;
@@ -361,7 +361,7 @@
     gap: $space-2;
     padding: $space-2 $space-3;
     background: var(--surface-2);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     .requirement-label {
         font-size: $text-xs;
@@ -388,7 +388,7 @@
     gap: $space-1;
     padding: $space-3;
     background: var(--surface-2);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     border: 1px solid var(--border-soft);
 
     &.required {
@@ -412,17 +412,17 @@
 
 .required-badge {
     font-size: $text-xs;
-    padding: 2px $space-2;
+    padding: $space-hair $space-2;
     @include status-variant(var(--accent-bright), var(--accent-bg));
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-weight: $font-weight-semibold;
 }
 
 .auto-badge {
     font-size: $text-xs;
-    padding: 2px $space-2;
+    padding: $space-hair $space-2;
     @include status-variant(var(--green), var(--green-bg));
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-weight: $font-weight-semibold;
 }
 
@@ -450,7 +450,7 @@
     gap: $space-2;
     padding: $space-2 $space-3;
     background: var(--surface-2);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 }
 
 .port-number {
@@ -463,7 +463,7 @@
     font-size: $text-xs;
     padding: $space-1;
     background: var(--surface-3);
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-secondary;
 }
 
@@ -476,7 +476,7 @@
 .compose-preview {
     padding: $space-4;
     background: var(--bg-code);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     border: 1px solid var(--border-soft);
 
     code {
@@ -515,13 +515,13 @@
 .deployment-progress-track {
     height: 5px;
     background: var(--surface-3);
-    border-radius: 3px;
+    border-radius: $radius-badge;
     overflow: hidden;
 }
 
 .deployment-progress-fill {
     height: 100%;
-    border-radius: 3px;
+    border-radius: $radius-badge;
     background: var(--accent-primary);
     transition: width 180ms ease;
 }
@@ -534,12 +534,12 @@
 // the deploy.
 .tpl-capacity {
     display: flex;
-    gap: 8px;
+    gap: $space-2;
     align-items: flex-start;
-    margin-top: 8px;
-    padding: 10px 12px;
+    margin-top: $space-2;
+    padding: $space-3 $space-3;
     border: 1px solid var(--surface-3);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: var(--surface-2);
     transition: opacity 0.15s ease;
 
@@ -552,7 +552,7 @@
     &__text {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 0;
     }
 

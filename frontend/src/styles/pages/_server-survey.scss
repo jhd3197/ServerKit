@@ -62,7 +62,7 @@
     &__migrated {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         font-size: $text-xs;
         color: $success;
 
@@ -83,7 +83,7 @@
         padding: $space-2 $space-3;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         svg { color: $text-tertiary; flex-shrink: 0; }
     }
@@ -103,7 +103,7 @@
     &__table-wrap {
         overflow-x: auto;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__table {
@@ -157,7 +157,7 @@
         padding: $space-4;
         background: $bg-secondary;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__catalog-list {
@@ -180,10 +180,10 @@
         code {
             font-family: $font-mono;
             font-size: $text-xs;
-            padding: 1px 6px;
+            padding: 1px $space-tight;
             background: $bg-card;
             border: 1px solid $border-subtle;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             color: $text-tertiary;
         }
     }
@@ -195,7 +195,7 @@
         padding: $space-4;
         background: rgba($success-raw, 0.06);
         border: 1px solid rgba($success-raw, 0.3);
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         .survey-tab__section-title { color: $success; }
         .survey-tab__section-title svg { color: $success; }
@@ -225,7 +225,7 @@
         padding: $space-4;
         background: $warning-bg;
         border: 1px solid $warning-border;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         > svg { color: $warning; flex-shrink: 0; margin-top: 2px; }
 
@@ -251,7 +251,7 @@
         padding: $space-4;
         background: $warning-bg;
         border: 1px solid $warning-border;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         p { margin: $space-2 0; }
     }
@@ -274,8 +274,8 @@
         input { margin-top: 3px; flex-shrink: 0; }
 
         code {
-            padding: 1px 4px;
-            border-radius: $radius-sm;
+            padding: 1px $space-1;
+            border-radius: $radius-badge;
             background: rgba(0, 0, 0, 0.06);
         }
     }
@@ -291,7 +291,7 @@
     padding: $space-3 $space-4;
     background: $warning-bg;
     border: 1px solid $warning-border;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 
     &__text {
         font-size: $text-xs;
@@ -308,7 +308,7 @@
 .server-row__mode-chip {
     display: inline-block;
     margin-left: $space-2;
-    padding: 1px 8px;
+    padding: 1px $space-2;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     @include status-variant($warning, $warning-bg);

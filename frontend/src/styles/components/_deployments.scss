@@ -18,7 +18,7 @@
         text-align: center;
         background: $bg-card;
         border: 1px dashed $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         svg {
             color: $text-tertiary;
@@ -46,7 +46,7 @@
         &::before {
             content: '';
             position: absolute;
-            inset-inline-start: 7px;
+            inset-inline-start: $space-2;
             top: 0;
             bottom: 0;
             width: 2px;
@@ -80,7 +80,7 @@
     &__card {
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         padding: $space-4;
         display: flex;
         flex-direction: column;
@@ -120,10 +120,10 @@
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        padding: 2px $space-2;
+        padding: $space-hair $space-2;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-secondary;
         font-size: $text-sm;
     }
@@ -142,10 +142,10 @@
         }
 
         .deploy-timeline__item {
-            padding-inline-start: 44px;
+            padding-inline-start: $space-12;
 
             &::before {
-                inset-inline-start: 13px;
+                inset-inline-start: $space-3;
             }
         }
 
@@ -256,11 +256,11 @@
         padding: $space-3 $space-4;
         @include status-variant($info, $info-bg, $info-border);
         border: 1px solid $info-border;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         svg {
             flex-shrink: 0;
-            margin-block-start: 2px;
+            margin-block-start: $space-hair;
         }
 
         p {
@@ -284,11 +284,11 @@
             padding: $space-3 $space-4;
             background: $bg-elevated;
             border: 1px solid $border-subtle;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
 
             > svg {
                 flex-shrink: 0;
-                margin-block-start: 2px;
+                margin-block-start: $space-hair;
                 color: $text-tertiary;
             }
 
@@ -359,7 +359,7 @@
         padding: $space-3;
         background: $info-bg;
         border: 1px solid $info-border;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__summary-icon {
@@ -371,7 +371,7 @@
     &__summary-text {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
     }
 
     &__summary-label {
@@ -412,15 +412,15 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
     }
 
     &__line {
         display: flex;
         align-items: center;
         gap: $space-2;
-        padding: 2px $space-2;
-        border-radius: $radius-sm;
+        padding: $space-hair $space-2;
+        border-radius: $radius-badge;
         font-family: $font-mono;
         font-size: $text-sm;
         min-width: 0;
@@ -524,7 +524,7 @@
         padding: $space-4;
         background: $warning-bg;
         border: 1px solid $warning-border;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         > ul {
             margin: 0;
@@ -553,7 +553,7 @@
         padding: $space-4;
         background: $danger-bg;
         border: 1px solid $danger-border;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         color: $danger;
 
         > svg {
@@ -615,7 +615,7 @@
 
         &__value {
             width: 100%;
-            margin-inline-start: 20px;
+            margin-inline-start: $space-5;
             text-align: start;
         }
     }

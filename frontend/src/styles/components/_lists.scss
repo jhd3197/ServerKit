@@ -174,9 +174,9 @@
 .wp-update-badge {
     display: inline-flex;
     align-items: center;
-    padding: 2px $space-2;
+    padding: $space-hair $space-2;
     margin-left: $space-2;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $warning;
@@ -188,7 +188,7 @@
     @include flex-between();
     padding: $space-3 $space-4;
     margin-bottom: $space-3;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: fade($warning-raw, 8%);
     font-size: $text-xs;
 }
@@ -250,7 +250,7 @@
 .privileges-list {
     display: flex;
     flex-wrap: wrap;
-    gap: $space-2 - 2;
+    gap: $space-tight;
     margin-top: $space-2;
     padding-top: $space-2;
     border-top: 1px solid $border-subtle;

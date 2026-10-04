@@ -42,7 +42,7 @@
     flex: 1;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: $space-4;
     overflow-y: auto;
     font-family: $font-mono;
@@ -62,7 +62,7 @@
     code {
         background: $bg-hover;
         padding: $space-1 $space-2;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $accent-primary;
     }
 }
@@ -108,7 +108,7 @@
     gap: $space-2;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: $space-2 $space-3;
 
     &:focus-within {
@@ -150,7 +150,7 @@
     padding: $space-12 $space-6;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     max-width: 600px;
     margin: 0 auto;
 
@@ -161,7 +161,7 @@
         align-items: center;
         justify-content: center;
         background: fade($color-docker, 10%);
-        border-radius: $radius-xl;
+        border-radius: $radius-overlay;
         margin-bottom: $space-6;
 
         svg {
@@ -192,7 +192,7 @@
             padding: $space-3 $space-4;
             background: $bg-hover;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             font-family: $font-mono;
             font-size: $text-xs;
             color: $text-tertiary;
@@ -205,7 +205,7 @@
         width: 100%;
         padding: $space-5;
         background: $bg-hover;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         text-align: left;
         margin-bottom: $space-6;
 
@@ -264,13 +264,13 @@
     padding: $space-4;
     background: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     @include transition(all);
 
     &:hover {
         border-color: $border-hover;
         transform: translateY(-1px);
-        box-shadow: $shadow-md;
+        box-shadow: $shadow-raised;
     }
 
 }
@@ -278,8 +278,8 @@
 .dx-tab {
     background: transparent;
     border: none;
-    padding: 8px $space-4;
-    border-radius: $radius-md;
+    padding: $space-2 $space-4;
+    border-radius: $radius-control;
     color: $text-secondary;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
@@ -297,7 +297,7 @@
 .dx-panel {
     background: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: hidden;
     min-height: 400px;
 }
@@ -318,7 +318,7 @@
 
 .dx-status-pill {
     display: inline-flex;
-    padding: 1px 8px;
+    padding: 1px $space-2;
     border-radius: $radius-full;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
@@ -332,9 +332,9 @@
 .dx-port-pill {
     display: inline-flex;
     align-items: center;
-    padding: 1px 6px;
+    padding: 1px $space-tight;
     background: $bg-tertiary;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-family: $font-mono;
     font-size: $text-xs;
     color: $text-secondary;
@@ -345,9 +345,9 @@
 .dx-port-more {
     display: inline-flex;
     align-items: center;
-    padding: 1px 6px;
+    padding: 1px $space-tight;
     background: $bg-tertiary;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-size: $text-xs;
     color: $text-tertiary;
 }
@@ -362,7 +362,7 @@
 .dx-res-track {
     height: 4px;
     background: $border-default;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     overflow: hidden;
 }
 
@@ -450,7 +450,7 @@
     min-height: 0;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 }
 
 .dx-resource-list {
@@ -522,7 +522,7 @@
 .dx-name-stack {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: $space-1;
     min-width: 0;
 }
 
@@ -553,8 +553,8 @@
 .dx-code-pill {
     display: inline-flex;
     max-width: 100%;
-    padding: 2px $space-2;
-    border-radius: $radius-sm;
+    padding: $space-hair $space-2;
+    border-radius: $radius-badge;
     background: $bg-tertiary;
     color: $text-secondary;
     font-family: $font-mono;
@@ -565,7 +565,7 @@
 .dx-port-list {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: $space-1;
     flex-wrap: wrap;
     min-width: 0;
 
@@ -581,7 +581,7 @@
 .dx-mini-resources {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: $space-tight;
     min-width: 150px;
 
     &.is-muted {
@@ -613,14 +613,14 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 4px;
+    gap: $space-1;
 }
 
 .dx-row-action {
     width: 28px;
     height: 28px;
     border: 1px solid $border-default;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     background: transparent;
     color: $text-tertiary;
     display: inline-flex;
@@ -649,7 +649,7 @@
 .dx-action-btn {
     min-height: 30px;
     border: 1px solid $border-default;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     background: $bg-card;
     color: $text-secondary;
     display: inline-flex;
@@ -683,11 +683,11 @@
 .dx-row-protected {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: $space-1;
     height: 28px;
     padding: 0 $space-2;
     border: 1px dashed $border-default;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-tertiary;
     font-size: $text-xs;
     white-space: nowrap;
@@ -701,7 +701,7 @@
     gap: $space-2;
     padding: 0 $space-3;
     border: 1px dashed $border-default;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-tertiary;
     font-size: $text-xs;
     white-space: nowrap;
@@ -725,7 +725,7 @@
 .dx-inspector-icon {
     width: 38px;
     height: 38px;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: fade($info-raw, 12%);
     color: $info;
     display: flex;
@@ -781,7 +781,7 @@
 
     button {
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: transparent;
         color: $text-secondary;
         font-size: $text-xs;
@@ -821,7 +821,7 @@
     div {
         min-width: 0;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         padding: $space-3;
         background: $bg-card;
     }
@@ -830,7 +830,7 @@
         display: block;
         color: $text-tertiary;
         font-size: $text-xs;
-        margin-bottom: 4px;
+        margin-bottom: $space-1;
     }
 
     strong {
@@ -868,11 +868,11 @@
         min-width: 0;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-secondary;
         font-family: $font-mono;
         font-size: $text-xs;
-        padding: 3px $space-2;
+        padding: $space-1 $space-2;
         @include truncate();
     }
 }
@@ -886,7 +886,7 @@
         display: block;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-secondary;
         font-family: $font-mono;
         font-size: $text-xs;

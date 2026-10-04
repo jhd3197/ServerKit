@@ -97,7 +97,7 @@
 
     > .sk-topbar {
         flex-shrink: 0;
-        padding: 10px $space-4;
+        padding: $space-3 $space-4;
         margin: 0;
 
         // Match the 18px header icon the per-page top bars used to render.
@@ -201,7 +201,7 @@
         justify-content: center;
         width: 76px;
         height: 76px;
-        border-radius: 20px;
+        border-radius: $radius-overlay;
         color: #fff;
         background: linear-gradient(150deg, var(--accent-bright), var(--accent-hover));
         box-shadow: 0 14px 34px -10px var(--accent-shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.10);
@@ -228,7 +228,7 @@
         position: relative;
         width: 132px;
         height: 4px;
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: var(--surface-3);
         overflow: hidden;
     }

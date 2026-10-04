@@ -36,7 +36,7 @@
         margin-bottom: $space-5;
         background: $bg-elevated;
         border: 1px solid $border-default;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__how-label {
@@ -55,7 +55,7 @@
         color: $text-primary;
         padding: $space-2 $space-3;
         background: $bg-tertiary;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         overflow-x: auto;
         white-space: nowrap;
 

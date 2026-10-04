@@ -12,7 +12,7 @@
 .migration-status-panel {
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     padding: $space-4;
     margin-bottom: $space-4;
 }
@@ -39,8 +39,8 @@
 
     @at-root code#{&} {
         background: $bg-secondary;
-        padding: 2px 8px;
-        border-radius: $radius-md;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
         font-family: $font-family-mono;
     }
 }
@@ -57,8 +57,8 @@
         font-family: $font-family-mono;
         font-size: $text-xs;
         background: $bg-secondary;
-        padding: 1px 6px;
-        border-radius: $radius-sm;
+        padding: 1px $space-tight;
+        border-radius: $radius-badge;
         white-space: nowrap;
     }
 }
@@ -120,7 +120,7 @@
     padding: $space-2 $space-3;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     font-size: $text-xs;
 
     &:not(:last-child) {
@@ -163,7 +163,7 @@
         padding: $space-3 $space-4;
         background: $bg-elevated;
         border: 1px solid $border-default;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         font-size: $text-base;
         color: $text-primary;
         @include transition(border-color);
@@ -187,7 +187,7 @@
     padding: $space-3;
     background: $danger-bg;
     border: 1px solid $danger-border;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     color: $danger;
     font-size: $text-xs;
 }
@@ -204,7 +204,7 @@
     align-items: flex-start;
     gap: $space-3;
     padding: $space-4;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-6;
 
     &--success {
@@ -221,7 +221,7 @@
 
     svg {
         flex-shrink: 0;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     strong {
@@ -292,8 +292,8 @@
 
     code {
         background: $bg-secondary;
-        padding: 2px 8px;
-        border-radius: $radius-md;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
         font-family: $font-family-mono;
         font-size: $text-xs;
     }
@@ -306,13 +306,13 @@
     padding: $space-4;
     background: $danger-bg;
     border: 1px solid $danger-border;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-6;
 
     > svg {
         flex-shrink: 0;
         color: $danger;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     strong {

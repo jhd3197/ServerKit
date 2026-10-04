@@ -23,7 +23,7 @@
         letter-spacing: -0.02em;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: $space-3;
         color: $text-primary;
     }
 }
@@ -33,11 +33,11 @@
 .srv-switch {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 2px 4px;
+    gap: $space-3;
+    padding: $space-hair $space-1;
     border: none;
     background: transparent;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     cursor: pointer;
     color: $text-primary;
     @include focus-ring();
@@ -65,7 +65,7 @@
 // as `.ui-popover-content`.
 .env-menu {
     min-width: 280px;
-    padding: 7px;
+    padding: $space-2;
     background: var(--surface-2);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-lg);
@@ -75,19 +75,19 @@
     &__head {
         font-size: $text-xs;
         color: var(--text-ghost);
-        padding: 7px 10px 5px;
+        padding: $space-2 $space-3 $space-tight;
     }
 }
 
 .env-opt {
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: $space-3;
     width: 100%;
-    padding: 9px 10px;
+    padding: $space-2 $space-3;
     border: none;
     background: transparent;
-    border-radius: 9px;
+    border-radius: $radius-card;
     text-align: left;
     cursor: pointer;
     transition: background 0.1s ease;
@@ -105,7 +105,7 @@
 
         &--online {
             background: var(--green);
-            box-shadow: 0 0 6px var(--green);
+            box-shadow: none;
         }
 
         &--offline {
@@ -203,7 +203,7 @@
     grid-column: span 3;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     padding: $space-5;
     position: relative;
     overflow: hidden;
@@ -291,7 +291,7 @@
     grid-column: span 8;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     padding: $space-5;
     min-height: 450px;
     display: flex;
@@ -346,7 +346,7 @@
     grid-column: span 4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     padding: $space-5;
     display: flex;
     flex-direction: column;
@@ -394,7 +394,7 @@
     padding: $space-3;
     background: $bg-hover;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-primary;
     font-weight: $font-weight-semibold;
     font-size: $text-xs;
@@ -423,7 +423,7 @@
     grid-column: span 8;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     overflow: hidden;
 
     @media (max-width: $breakpoint-lg) {
@@ -438,7 +438,7 @@
     grid-column: span 4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     padding: $space-5;
     display: flex;
     flex-direction: column;
@@ -468,7 +468,7 @@
         font-size: $text-xs;
         color: $text-tertiary;
         text-decoration: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         transition: color $transition-fast;
         @include focus-ring();
 
@@ -505,7 +505,7 @@
 .app-name-link {
     color: $text-primary;
     text-decoration: none;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     @include focus-ring();
 
     &:hover {
@@ -593,7 +593,7 @@
 .refresh-select {
     background: $bg-hover;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-primary;
     font-size: $text-xs;
     padding: $space-1 $space-2;
@@ -616,7 +616,7 @@
     justify-content: center;
     background: $bg-hover;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-secondary;
     padding: $space-2;
     cursor: pointer;
@@ -645,8 +645,8 @@
 .skw-bar__ctl .skw-serverpick {
     height: 32px;
     width: auto;
-    padding: 0 10px;
-    border-radius: 8px;
+    padding: 0 $space-3;
+    border-radius: $radius-card;
     font-size: $text-xs;
 }
 

@@ -68,14 +68,14 @@ $lk-default:  #646b7a;
     }
 
     &__grp {
-        padding: 8px 14px 6px;
+        padding: $space-2 $space-4 $space-tight;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-ghost);
     }
 
     &__hint {
-        padding: 8px 14px;
+        padding: $space-2 $space-4;
         font-size: $text-sm;
         color: var(--text-faint);
     }
@@ -83,9 +83,9 @@ $lk-default:  #646b7a;
     &__row {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
         width: 100%;
-        padding: 8px 14px;
+        padding: $space-2 $space-4;
         background: transparent;
         border: none;
         text-align: left;
@@ -202,7 +202,7 @@ $lk-default:  #646b7a;
     justify-content: space-between;
     align-items: center;
     gap: $space-4;
-    padding: 9px $space-4;
+    padding: $space-2 $space-4;
     background: var(--surface);
     border-bottom: 1px solid var(--border-soft);
     flex-wrap: wrap;
@@ -228,10 +228,10 @@ $lk-default:  #646b7a;
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    padding: 3px $space-2;
+    padding: $space-1 $space-2;
     background: $warning-bg;
     border: 1px solid $warning-border;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $warning;
     font-size: $text-xs;
 
@@ -301,7 +301,7 @@ $lk-default:  #646b7a;
         cursor: pointer;
         font-size: $text-lg;
         line-height: 1;
-        padding: 0 4px;
+        padding: 0 $space-1;
         opacity: 0.7;
 
         &:hover { opacity: 1; }
@@ -363,8 +363,8 @@ $lk-default:  #646b7a;
         width: 100%;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 6px 8px 6px 28px;
+        border-radius: $radius-card;
+        padding: $space-tight $space-2 $space-tight $space-8;
         font-size: $text-sm;
         color: $text-primary;
         @include transition(all);
@@ -387,7 +387,7 @@ $lk-default:  #646b7a;
     scrollbar-width: thin;
 
     &::-webkit-scrollbar { width: 4px; }
-    &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: $radius-sm; }
+    &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: $radius-badge; }
 }
 
 .lv-empty-hint {
@@ -426,14 +426,14 @@ $lk-default:  #646b7a;
     display: flex;
     align-items: center;
     gap: $space-1;
-    padding: 9px 6px 4px;
+    padding: $space-2 $space-tight $space-1;
     background: transparent;
     border: none;
     color: var(--text-ghost);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     cursor: pointer;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
 
     &.is-static { cursor: default; }
     &__spacer { width: 12px; }
@@ -449,7 +449,7 @@ $lk-default:  #646b7a;
 .lv-group-count {
     background: transparent;
     color: var(--text-ghost);
-    padding: 0 2px;
+    padding: 0 $space-hair;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     line-height: 14px;
@@ -461,7 +461,7 @@ $lk-default:  #646b7a;
     display: flex;
     flex-direction: column;
     gap: 1px;
-    padding: 2px 0 $space-2;
+    padding: $space-hair 0 $space-2;
 }
 
 // ─── Target row (demo con-target look) ────────────────
@@ -473,11 +473,11 @@ $lk-default:  #646b7a;
         'dot name size'
         'dot name time';
     align-items: center;
-    gap: 2px $space-2;
-    padding: 6px 9px;
+    gap: $space-hair $space-2;
+    padding: $space-tight $space-2;
     background: transparent;
     border: none;
-    border-radius: 8px;
+    border-radius: $radius-card;
     color: var(--text-dim);
     font-size: $text-sm;
     text-align: left;
@@ -611,7 +611,7 @@ $lk-default:  #646b7a;
     align-items: center;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-card;
     min-width: 220px;
     @include transition(all);
 
@@ -632,7 +632,7 @@ $lk-default:  #646b7a;
     input {
         background: transparent;
         border: none;
-        padding: 6px $space-3 6px 30px;
+        padding: $space-tight $space-3 $space-tight $space-8;
         font-size: $text-sm;
         color: $text-primary;
         width: 100%;
@@ -646,10 +646,10 @@ $lk-default:  #646b7a;
         right: 6px;
         background: transparent;
         border: none;
-        padding: 4px;
+        padding: $space-1;
         color: var(--text-faint);
         cursor: pointer;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         display: flex;
         align-items: center;
 
@@ -660,8 +660,8 @@ $lk-default:  #646b7a;
 .lv-select {
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 6px $space-2;
+    border-radius: $radius-card;
+    padding: $space-tight $space-2;
     font-size: $text-sm;
     color: $text-primary;
     cursor: pointer;
@@ -684,8 +684,8 @@ $lk-default:  #646b7a;
 .lv-icon-btn {
     background: transparent;
     border: none;
-    padding: 6px;
-    border-radius: 8px;
+    padding: $space-tight;
+    border-radius: $radius-card;
     color: var(--text-dim);
     cursor: pointer;
     display: flex;
@@ -712,10 +712,10 @@ $lk-default:  #646b7a;
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    padding: 5px 11px;
+    padding: $space-tight $space-3;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-card;
     color: var(--text-dim);
     font-size: $text-sm;
     font-weight: $font-weight-medium;
@@ -762,7 +762,7 @@ $lk-default:  #646b7a;
     scrollbar-width: thin;
 
     &::-webkit-scrollbar { width: 8px; height: 8px; }
-    &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: $radius-sm; }
+    &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: $radius-badge; }
     &::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
 
     &.wrap {
@@ -790,9 +790,9 @@ $lk-default:  #646b7a;
     z-index: 4;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 3px 10px;
-    border-radius: 999px;
+    gap: $space-tight;
+    padding: $space-1 $space-3;
+    border-radius: $radius-full;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: #fff;
@@ -910,8 +910,8 @@ $lk-default:  #646b7a;
 .lv-match {
     background: $warning;
     color: $black;
-    padding: 0 2px;
-    border-radius: 2px;
+    padding: 0 $space-hair;
+    border-radius: $radius-badge;
     font-weight: $font-weight-semibold;
 }
 
@@ -941,7 +941,7 @@ $lk-default:  #646b7a;
     background: var(--bg-code);
     border: 1px solid var(--border-soft);
     padding: $space-3;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin: 0;
     overflow-x: auto;
     white-space: pre-wrap;
@@ -985,7 +985,7 @@ $lk-default:  #646b7a;
             min-height: 36px;
             padding: $space-2 $space-3;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             background: $bg-card;
             font-size: $text-xs;
         }
@@ -1015,7 +1015,7 @@ $lk-default:  #646b7a;
 
 .unit-chip {
     min-height: 24px;
-    padding: 4px $space-3;
+    padding: $space-1 $space-3;
     border: 1px solid $border-subtle;
     border-radius: $radius-full;
     background: $bg-card;
@@ -1043,7 +1043,7 @@ $lk-default:  #646b7a;
     padding: $space-2 $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     font-size: $text-xs;
     color: $text-secondary;
     margin-top: -$space-4;
@@ -1055,7 +1055,7 @@ $lk-default:  #646b7a;
 .journal-viewer {
     flex: 1;
     background: var(--bg-code);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: auto;
     padding: 1rem;
 
@@ -1094,7 +1094,7 @@ $lk-default:  #646b7a;
     select {
         padding: $space-1 $space-2;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: $bg-card;
         font-size: $text-xs;
     }
@@ -1104,7 +1104,7 @@ $lk-default:  #646b7a;
     overflow-x: auto;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 }
 
 .processes-table {
@@ -1165,7 +1165,7 @@ $lk-default:  #646b7a;
             left: 0;
             bottom: 0;
             height: 3px;
-            border-radius: 2px;
+            border-radius: $radius-badge;
             opacity: 0.4;
 
             &.cpu {
@@ -1198,7 +1198,7 @@ $lk-default:  #646b7a;
 .process-details-panel {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: hidden;
 
     .panel-header {
@@ -1261,7 +1261,7 @@ $lk-default:  #646b7a;
             display: block;
             padding: $space-2;
             background: $bg-hover;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             font-family: $font-mono;
             font-size: $text-xs;
             word-break: break-all;
@@ -1290,7 +1290,7 @@ $lk-default:  #646b7a;
 .service-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
     display: flex;
     flex-direction: column;
@@ -1378,7 +1378,7 @@ $lk-default:  #646b7a;
     max-height: 500px;
     overflow: auto;
     background: var(--bg-code);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: 1rem;
 
     pre {

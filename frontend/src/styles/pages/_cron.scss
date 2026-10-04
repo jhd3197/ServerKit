@@ -72,7 +72,7 @@
     .cron-ico {
         width: 30px;
         height: 30px;
-        border-radius: 8px;
+        border-radius: $radius-card;
         display: grid;
         place-items: center;
         flex-shrink: 0;
@@ -90,7 +90,7 @@
         }
 
         &__desc {
-            margin-top: 2px;
+            margin-top: $space-hair;
             font-size: $text-xs;
             font-weight: $font-weight-normal;
             color: var(--text-dim);
@@ -107,14 +107,14 @@
     .cron-sched {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        padding: 2px 8px;
+        gap: $space-tight;
+        padding: $space-hair $space-2;
         font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: 6px;
+        border-radius: $radius-control;
         white-space: nowrap;
 
         svg {
@@ -124,7 +124,7 @@
     }
 
     .cron-sched-readable {
-        margin-top: 3px;
+        margin-top: $space-1;
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -197,7 +197,7 @@
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: $space-2;
-    padding-right: 32px;    // clear the sheet's close button
+    padding-right: $space-8;    // clear the sheet's close button
 }
 
 .cron-drawer {
@@ -385,7 +385,7 @@
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
     }
 
     &__name {
@@ -435,9 +435,9 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 3px;
+        padding: $space-1;
         border: 1px solid var(--border-soft);
-        border-radius: var(--radius-sm, 6px);
+        border-radius: var(--radius-sm, $radius-control);
         background: transparent;
         color: var(--text-faint);
         cursor: pointer;
@@ -524,7 +524,7 @@
 
     &__input {
         width: 100%;
-        padding: 9px 11px;
+        padding: $space-2 $space-3;
         font-size: $text-sm;
         color: var(--text);
         background: var(--surface-2);
@@ -557,7 +557,7 @@
 
     &__entry {
         margin: 0;
-        padding: 10px 12px;
+        padding: $space-3 $space-3;
         overflow-x: auto;
         font-family: var(--mono);
         font-size: $text-xs;

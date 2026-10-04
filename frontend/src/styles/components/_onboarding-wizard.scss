@@ -12,7 +12,7 @@
 .onboarding-wizard {
     background: $bg-card;
     border: 1px solid $border-color;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-5;
 
     &__header {
@@ -101,7 +101,7 @@
         gap: $space-2;
         padding: $space-3 $space-4;
         margin-bottom: $space-4;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $danger-bg;
         border: 1px solid $danger-border;
         color: $danger;
@@ -190,7 +190,7 @@
     }
 
     &__step-desc {
-        margin: 2px 0 0;
+        margin: $space-hair 0 0;
         font-size: $text-xs;
         color: $text-secondary;
     }
@@ -201,7 +201,7 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
     }
 
     &__log {
@@ -225,7 +225,7 @@
     &__trail {
         margin-top: $space-4;
         border: 1px solid $border-color;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-elevated;
         overflow: hidden;
     }
@@ -283,7 +283,7 @@
     &__trail-row {
         display: flex;
         gap: $space-3;
-        padding: 2px $space-3;
+        padding: $space-hair $space-3;
         font-family: $font-mono;
         font-size: $text-xs;
         line-height: 1.6;

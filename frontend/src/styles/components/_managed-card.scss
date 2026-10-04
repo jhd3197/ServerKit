@@ -14,7 +14,7 @@
     margin: $spacing-xl auto;
     background: $bg-card;
     border: 1px solid $border-color;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
 
     &__icon {
         color: $primary-color;
@@ -56,7 +56,7 @@
     padding: $spacing-sm $spacing-md;
     background: rgba($warning-color, 0.12);
     border: 1px solid rgba($warning-color, 0.35);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-primary;
     font-size: $text-xs;
 }

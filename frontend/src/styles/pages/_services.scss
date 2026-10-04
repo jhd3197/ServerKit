@@ -9,11 +9,11 @@
     &__src-badge {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 3px 9px;
+        gap: $space-tight;
+        padding: $space-1 $space-2;
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
-        border-radius: 6px;
+        border-radius: $radius-control;
         font-size: $text-xs;
         color: var(--text-dim);
         max-width: 200px;
@@ -48,7 +48,7 @@
     &__project-name {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         max-width: 160px;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -62,9 +62,9 @@
     &__unassigned {
         display: inline-flex;
         align-items: center;
-        padding: 2px 8px;
+        padding: $space-hair $space-2;
         border: 1px dashed $border-subtle;
-        border-radius: 999px;
+        border-radius: $radius-full;
         font-size: $text-xs;
         color: $text-secondary;
     }
@@ -120,7 +120,7 @@
 
     &__domain {
         overflow: hidden;
-        margin-bottom: 14px;
+        margin-bottom: $space-4;
         color: $text-secondary;
         font-family: var(--mono);
         font-size: $text-xs;
@@ -131,8 +131,8 @@
     &__stats {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 2px;
-        padding-top: 13px;
+        gap: $space-hair;
+        padding-top: $space-3;
         border-top: 1px solid $border-subtle;
 
         .l {
@@ -144,7 +144,7 @@
         .v {
             display: block;
             overflow: hidden;
-            margin-top: 3px;
+            margin-top: $space-1;
             color: $text-primary;
             font-size: $text-sm;
             font-weight: $font-weight-semibold;
@@ -157,9 +157,9 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 2px;
-        margin-top: 14px;
-        padding-top: 13px;
+        gap: $space-hair;
+        margin-top: $space-4;
+        padding-top: $space-3;
         border-top: 1px solid $border-subtle;
     }
 }

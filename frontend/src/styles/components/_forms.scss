@@ -134,7 +134,7 @@ display: grid;
 
     > svg {
         flex-shrink: 0;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 }
 
@@ -143,7 +143,7 @@ display: grid;
     border: 1px solid $danger-border;
     color: $danger;
     padding: $space-3 $space-4;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-5;
     font-size: $text-sm;
 }
@@ -190,7 +190,7 @@ display: grid;
     padding: $space-4;
     background: $bg-body;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     color: $text-primary;
     font-family: $font-mono;
     font-size: $text-sm;
@@ -241,7 +241,7 @@ display: flex;
     margin-bottom: 0;
     background: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-5;
 
     // Forms already inside a card inherit its surface and spacing.
@@ -272,7 +272,7 @@ display: flex;
             padding: $space-3;
             background: $bg-hover;
             border: 1px solid $border-default;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             color: $text-primary;
             font-size: $text-xs;
             transition: border-color $transition-fast;

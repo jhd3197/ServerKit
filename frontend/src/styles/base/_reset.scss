@@ -44,8 +44,13 @@ a {
     text-decoration: none;
 }
 
-button {
-    font-family: inherit;
+// Buttons, inputs and selects inherit the page font. Without this, every
+// button without its own font-size rendered at the browser's 13.33px.
+button,
+input,
+select,
+textarea {
+    font: inherit;
 }
 
 img {
@@ -75,7 +80,7 @@ ul, ol {
 
 ::-webkit-scrollbar-thumb {
     background: $border-active;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
 
     &:hover {
         background: $text-tertiary;

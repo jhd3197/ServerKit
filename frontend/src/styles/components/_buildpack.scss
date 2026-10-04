@@ -11,7 +11,7 @@
     padding: $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 
     &--unknown {
         border-color: fade($warning-raw, 40%);
@@ -35,7 +35,7 @@
         width: 32px;
         height: 32px;
         flex-shrink: 0;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: fade($accent-primary-raw, 12%);
         color: $accent-primary;
     }
@@ -65,7 +65,7 @@
         padding: $space-1 $space-2;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: $bg-hover;
         color: $text-tertiary;
 
@@ -98,7 +98,7 @@
         gap: $space-1;
         padding: $space-3;
         background: $bg-body;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         span {
             display: inline-flex;
@@ -153,7 +153,7 @@
         display: flex;
         flex-direction: column;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         overflow: hidden;
     }
 

@@ -73,7 +73,7 @@
 @mixin card-base() {
     background-color: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     @include transition(border-color);
 
     &:hover {
@@ -98,7 +98,7 @@
     padding: $space-3 $space-4;
     background: $bg-body;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     color: $text-primary;
     font-size: $text-base;
     @include transition(border-color);
@@ -121,7 +121,7 @@
     align-items: center;
     gap: $space-2;
     padding: $space-2 $space-5;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     border: 1px solid transparent;
     font-size: $text-sm;
     font-weight: $font-weight-medium;
@@ -141,7 +141,7 @@
 @mixin icon-box($size: 40px) {
     width: $size;
     height: $size;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     @include flex-center();
     flex-shrink: 0;
 }
@@ -191,7 +191,7 @@
 
     &::-webkit-scrollbar-thumb {
         background: $border-active;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
 
         &:hover {
             background: $text-tertiary;
@@ -220,7 +220,7 @@
 @mixin code-block() {
     background: $bg-body;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
     @include mono-text();
     @include custom-scrollbar();

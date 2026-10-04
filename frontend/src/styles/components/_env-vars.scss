@@ -76,7 +76,7 @@
     @include card-base();
     background: var(--surface-2);
     border: 1px solid var(--border-soft);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: $space-3 $space-4;
     transition: border-color 0.15s, background 0.15s;
 
@@ -113,7 +113,7 @@
     align-items: center;
     gap: $space-1;
     padding: 1px $space-2;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-family: $font-mono;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
@@ -154,7 +154,7 @@
     font-size: $text-xs;
     background: $bg-body;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     padding: $space-4;
     resize: vertical;
     min-height: 200px;

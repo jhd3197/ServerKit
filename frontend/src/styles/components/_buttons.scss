@@ -27,11 +27,11 @@
     text-align: center;
     vertical-align: middle;
 
-    // Geometry — default (md) size
-    height: 40px;
-    min-width: 96px;
-    padding: 0 $space-5;
-    border-radius: $radius-lg;
+    // Geometry: default (md) size
+    height: $control-md;
+    min-width: 64px;
+    padding: 0 $space-3;
+    border-radius: $radius-control;
     border: 1px solid transparent;
 
     // Typography
@@ -61,8 +61,8 @@
     }
 
     &:focus-visible {
-        outline: 2px solid $accent-primary;
-        outline-offset: 2px;
+        outline: none;
+        box-shadow: $focus-ring;
     }
 }
 
@@ -70,20 +70,13 @@
 // Variants
 // --------------------------------------------
 
-// Prototype accent treatment: soft top-light gradient, accent glow, inner
-// highlight; hover lifts the whole gradient toward white instead of swapping
-// to a flat hover color. Built from theme tokens so runtime skins keep it.
+// Flat accent fill. No gradient, glow or inner highlight.
 .btn-primary {
-    background: linear-gradient(160deg, var(--accent-bright), var(--accent));
+    background: var(--accent);
     color: #fff;
-    box-shadow: 0 4px 14px -4px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
     &:hover:not(:disabled) {
-        background: linear-gradient(
-            160deg,
-            color-mix(in srgb, var(--accent-bright) 86%, white),
-            color-mix(in srgb, var(--accent) 86%, white)
-        );
+        background: color-mix(in srgb, var(--accent) 88%, white);
     }
 }
 
@@ -122,12 +115,11 @@
 // --------------------------------------------
 
 .btn-sm {
-    height: 32px;
-    min-width: 72px;
-    padding: 0 $space-3 + 2; // 14px
-    font-size: $text-sm; // 13px
-    border-radius: $radius-md;
-    gap: $space-1 + 2; // 6px
+    height: $control-sm;
+    min-width: 0;
+    padding: 0 $space-2;
+    font-size: $text-sm;
+    gap: $space-tight;
 
     svg {
         width: 14px;
@@ -136,10 +128,10 @@
 }
 
 .btn-lg {
-    height: 44px;
-    min-width: 128px;
-    padding: 0 $space-6 + 4; // 28px
-    font-size: $text-md; // 16px
+    height: $control-lg;
+    min-width: 96px;
+    padding: 0 $space-4;
+    font-size: $text-base;
 
     svg {
         width: 18px;
@@ -159,8 +151,8 @@ height: auto;
     text-decoration: none;
 
     // Named sizes retain their geometry while links keep zero padding.
-    &.btn-sm { height: 32px; min-width: 72px; }
-    &.btn-lg { height: 44px; min-width: 128px; }
+    &.btn-sm { height: $control-sm; min-width: 0; }
+    &.btn-lg { height: $control-lg; min-width: 0; }
 
     &:hover,
     &:hover:not(:disabled) { text-decoration: underline; }
@@ -172,33 +164,33 @@ height: auto;
 display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: $control-md;
+    height: $control-md;
     min-width: auto !important;
-    padding: $space-2 !important;
+    padding: 0 !important;
     background: transparent;
     border: none;
-    border-radius: $radius-sm;
+    border-radius: $radius-control;
     color: $text-tertiary;
     cursor: pointer;
     transition: all 0.2s;
 
     svg {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
         margin: 0 !important;
     }
 
     &.btn-sm {
-        width: 32px;
-        height: 32px;
+        width: $control-sm;
+        height: $control-sm;
 
-        svg { width: 16px; height: 16px; }
+        svg { width: 14px; height: 14px; }
     }
 
     &.btn-lg {
-        width: 44px;
-        height: 44px;
+        width: $control-lg;
+        height: $control-lg;
 
         svg { width: 20px; height: 20px; }
     }
@@ -253,7 +245,7 @@ display: flex;
 // Loading state styling lives in _spinner.scss alongside .spinner overrides.
 
 .btn-xs {
-    padding: 2px 6px;
+    padding: $space-hair $space-tight;
     font-size: $text-xs;
 
     svg {

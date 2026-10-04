@@ -25,7 +25,7 @@
         margin: $space-3 0 0;
         padding: $space-2 $space-3;
         border: 1px solid transparent;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         @include status-variant($text-primary, $warning-bg, $warning-border);
         font-size: $text-xs;
     }

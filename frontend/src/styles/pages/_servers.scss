@@ -34,7 +34,7 @@
     &__ico {
         width: 30px;
         height: 30px;
-        border-radius: 8px;
+        border-radius: $radius-card;
         display: grid;
         place-items: center;
         flex-shrink: 0;
@@ -97,7 +97,7 @@
         height: 44px;
         background: $bg-body;
         border: 1px solid $border-subtle;
-        border-radius: $radius-xl;
+        border-radius: $radius-overlay;
         padding: $space-3 $space-3 $space-3 $space-10;
         color: $text-primary;
         font-size: $text-xs;
@@ -164,9 +164,9 @@
     display: flex;
     background: $bg-body;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
-    padding: 3px;
-    gap: 2px;
+    border-radius: $radius-card;
+    padding: $space-1;
+    gap: $space-hair;
     flex-shrink: 0;
     margin: $space-4 $space-6 0;
 
@@ -175,7 +175,7 @@
         padding: $space-2 $space-3;
         background: transparent;
         border: none;
-        border-radius: calc(#{$radius-md} - 1px);
+        border-radius: calc(#{$radius-control} - 1px);
         color: $text-secondary;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
@@ -201,7 +201,7 @@
     padding: $space-3 $space-4;
     background: rgba($accent-primary-raw, 0.07);
     border: 1px solid rgba($accent-primary-raw, 0.22);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     p {
         margin: 0;
@@ -214,8 +214,8 @@
             font-size: $text-xs;
             color: $accent-primary;
             background: rgba($accent-primary-raw, 0.12);
-            padding: 1px 5px;
-            border-radius: $radius-sm;
+            padding: 1px $space-tight;
+            border-radius: $radius-badge;
         }
     }
 }
@@ -257,7 +257,7 @@
 
     .form-hint {
         display: block;
-        margin-top: 6px;
+        margin-top: $space-tight;
         color: $text-tertiary;
         font-size: $text-xs;
         line-height: 1.4;
@@ -297,7 +297,7 @@
     padding: $space-2 $space-3;
     background: transparent;
     border: 1px dashed $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-secondary;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
@@ -336,7 +336,7 @@
         padding: $space-4;
         background: $bg-body;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         animation: form-disclosure-in 0.18s ease;
     }
 }
@@ -354,7 +354,7 @@
     padding: $space-16 $space-6;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 
     .empty-icon {
         width: 64px;
@@ -428,7 +428,7 @@
 .info-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-5;
 
     h3 {
@@ -536,7 +536,7 @@
     &__name {
         color: var(--text);
         font-weight: $font-weight-medium;
-        margin-bottom: 2px;
+        margin-bottom: $space-hair;
     }
 
     &__command {
@@ -549,7 +549,7 @@
     &__description {
         color: var(--text-faint);
         font-size: $text-xs;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     &__custom-schedule {
@@ -597,7 +597,7 @@
         code {
             background: var(--surface-2);
             padding: 0 $space-1;
-            border-radius: 4px;
+            border-radius: $radius-badge;
             font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text);
@@ -612,7 +612,7 @@
 
 .docker-sub-tabs {
     display: flex;
-    gap: 2px;
+    gap: $space-hair;
     border-bottom: 1px solid var(--border-soft);
     padding: 0 $space-3;
 }
@@ -623,7 +623,7 @@
     color: var(--text-faint);
     font-size: $text-sm;
     font-weight: $font-weight-medium;
-    padding: 11px 14px;
+    padding: $space-3 $space-4;
     cursor: pointer;
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
@@ -654,7 +654,7 @@
     align-items: center;
     gap: $space-1;
     padding: $space-1 $space-2;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
 
@@ -750,7 +750,7 @@
 .metric-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-5;
 
     &.large {
@@ -896,7 +896,7 @@
     padding: $space-1 $space-4;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-5;
 }
 
@@ -920,7 +920,7 @@
     text-align: center;
     background: $bg-elevated;
     border: 1px dashed $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 }
 
 .ip-item {
@@ -930,7 +930,7 @@
     padding: $space-2 $space-3;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-bottom: $space-2;
 
     code {
@@ -942,9 +942,9 @@
 
     .badge-success {
         font-size: $text-xs;
-        padding: 2px $space-2;
+        padding: $space-hair $space-2;
         @include status-variant($success, $success-bg);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 }
 
@@ -956,7 +956,7 @@
         flex: 1;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         padding: $space-2 $space-3;
         color: $text-primary;
         font-size: $text-xs;
@@ -977,7 +977,7 @@
     padding: $space-3 $space-4;
     background: fade($warning-raw, 10%);
     border: 1px solid fade($warning-raw, 25%);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     font-size: $text-xs;
     color: $warning;
 }
@@ -1010,7 +1010,7 @@
     padding: $space-4;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 
     &.severity-critical { border-color: fade($danger-raw, 45%); }
     &.severity-high { border-color: fade($warning-raw, 45%); }
@@ -1041,8 +1041,8 @@
 .severity-badge {
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    padding: 2px $space-2;
-    border-radius: 5px;
+    padding: $space-hair $space-2;
+    border-radius: $radius-control;
 
     &.critical { @include status-variant(var(--red), var(--red-bg)); }
     &.high { @include status-variant(var(--amber), var(--amber-bg)); }
@@ -1068,7 +1068,7 @@
 .form-section {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-6;
     margin-bottom: $space-6;
 
@@ -1138,7 +1138,7 @@
         width: 36px;
         height: 36px;
         flex-shrink: 0;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: rgba($accent-primary-raw, 0.12);
         color: $accent-primary;
         border: 1px solid rgba($accent-primary-raw, 0.25);
@@ -1172,7 +1172,7 @@
 
     &.active {
         background: var(--green);
-        box-shadow: 0 0 6px var(--green);
+        box-shadow: none;
     }
 }
 
@@ -1185,7 +1185,7 @@
 .install-script-block {
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: hidden;
 }
 
@@ -1279,7 +1279,7 @@
     border: 1px solid $success-border;
     color: $success;
     padding: $space-5;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-6;
 
     svg {
@@ -1346,7 +1346,7 @@
     padding: $space-5;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 
     h4 {
         font-size: $text-xs;
@@ -1386,7 +1386,7 @@
         flex: 1;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         padding: $space-3;
         color: $text-primary;
         font-size: $text-xs;
@@ -1417,13 +1417,13 @@
     padding: $space-3;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     input {
         flex: 1;
         background: $bg-card;
         border: 1px solid $accent-primary;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         padding: $space-2;
         color: $text-primary;
         font-size: $text-xs;
@@ -1520,7 +1520,7 @@
         top: 0;
         z-index: 1;
         text-align: left;
-        padding: 11px $space-4;
+        padding: $space-3 $space-4;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
@@ -1601,7 +1601,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
     color: $text-secondary;
@@ -1644,14 +1644,14 @@
     color: $text-tertiary;
     font-size: $text-xs;
     line-height: 1.3;
-    margin-top: 2px;
+    margin-top: $space-hair;
 }
 
 .server-row__group {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 2px $space-2;
+    gap: $space-tight;
+    padding: $space-hair $space-2;
     border-radius: $radius-full;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
@@ -1679,7 +1679,7 @@
 .server-row__telemetry {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: $space-1;
     min-width: 180px;
 
     > span {
@@ -1707,14 +1707,14 @@
         position: relative;
         height: 5px;
         background: var(--surface-3);
-        border-radius: 3px;
+        border-radius: $radius-badge;
         overflow: hidden;
     }
 
     .bar-fill {
         position: absolute;
         inset: 0 auto 0 0;
-        border-radius: 3px;
+        border-radius: $radius-badge;
 
         &.cpu { background: var(--accent-bright); }
         &.memory { background: var(--cyan); }
@@ -1725,8 +1725,8 @@
 .status-pill {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 3px 10px 3px 8px;
+    gap: $space-tight;
+    padding: $space-1 $space-3 $space-1 $space-2;
     border-radius: $radius-full;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
@@ -1764,7 +1764,7 @@
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: $space-1;
 
     &__icon {
         display: inline-flex;
@@ -1773,7 +1773,7 @@
         width: 30px;
         height: 30px;
         border: 1px solid transparent;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: transparent;
         color: $text-secondary;
         cursor: pointer;
@@ -1791,14 +1791,14 @@
 .row-menu {
     z-index: 9999;
     min-width: 200px;
-    padding: 6px;
+    padding: $space-tight;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-lg;
+    border-radius: $radius-card;
+    box-shadow: $shadow-overlay;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: $space-hair;
 
     &__item {
         display: flex;
@@ -1806,7 +1806,7 @@
         gap: $space-2;
         padding: $space-2 $space-3;
         border: 0;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: transparent;
         color: $text-secondary;
         font-size: $text-xs;
@@ -1840,7 +1840,7 @@
     &__divider {
         height: 1px;
         background: $border-subtle;
-        margin: 4px 0;
+        margin: $space-1 0;
     }
 }
 
@@ -1858,7 +1858,7 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: $space-5;
-    padding: 22px;
+    padding: $space-6;
     margin-bottom: $space-5;
     background: var(--surface);
     border: 1px solid var(--border-soft);
@@ -1882,7 +1882,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 14px;
+        border-radius: $radius-overlay;
         background: var(--surface-2);
         border: 1px solid var(--border);
         color: var(--text-dim);
@@ -1915,7 +1915,7 @@
     &__title-row {
         display: flex;
         align-items: center;
-        gap: 11px;
+        gap: $space-3;
         flex-wrap: wrap;
 
         h1 {
@@ -1931,11 +1931,11 @@
     .copy-chip {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        padding: 2px $space-2;
+        gap: $space-2;
+        padding: $space-hair $space-2;
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
-        border-radius: 6px;
+        border-radius: $radius-control;
         color: var(--text-faint);
         font-size: $text-xs;
         cursor: pointer;
@@ -1976,9 +1976,9 @@
     &__meta {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
         flex-wrap: wrap;
-        margin-top: 8px;
+        margin-top: $space-2;
         font-size: $text-xs;
         color: var(--text-dim);
 
@@ -1990,7 +1990,7 @@
     &__meta-item {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: $space-tight;
         min-width: 0;
 
         svg {
@@ -2027,10 +2027,10 @@
 // Refine overview info cards (less marketing, more dashboard)
 .overview-tab .info-card {
     padding: $space-5;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    box-shadow: $shadow-sm;
+    box-shadow: none;
     transition: border-color $transition-fast;
 
     &:hover {
@@ -2083,8 +2083,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    padding: $space-4 17px;
+    gap: $space-2;
+    padding: $space-4 $space-4;
     background: var(--surface);
     border: 1px solid var(--border-soft);
     border-radius: var(--radius);
@@ -2097,7 +2097,7 @@
     &__head {
         display: flex;
         align-items: center;
-        gap: 7px;
+        gap: $space-2;
         color: var(--text-faint);
     }
 
@@ -2131,7 +2131,7 @@
     }
 
     &__meter {
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     // Tone variants (status tile + gauge thresholds)
@@ -2174,7 +2174,7 @@
 
     .info-item {
         gap: $space-3;
-        padding: 11px 0;
+        padding: $space-3 0;
         border-bottom: 1px solid var(--border-soft);
         min-height: 40px;
         font-size: $text-sm;
@@ -2229,7 +2229,7 @@
     margin-left: $space-2;
     min-width: 18px;
     height: 17px;
-    padding: 0 6px;
+    padding: 0 $space-tight;
     border-radius: $radius-full;
     @include status-variant(var(--amber), var(--amber-bg));
     font-size: $text-xs;
@@ -2257,8 +2257,8 @@
     padding: $space-4 $space-5;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-sm;
+    border-radius: $radius-card;
+    box-shadow: none;
 
     &__icon {
         display: inline-flex;
@@ -2266,7 +2266,7 @@
         justify-content: center;
         width: 32px;
         height: 32px;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-elevated;
         flex-shrink: 0;
     }
@@ -2314,7 +2314,7 @@
     padding: $space-12 $space-6;
     background: $bg-card;
     border: 1px dashed $border-subtle;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     text-align: center;
 
     svg { color: $text-tertiary; margin-bottom: $space-2; }
@@ -2395,7 +2395,7 @@
             padding: 0 $space-3;
             font-size: $text-xs;
             font-weight: $font-weight-medium;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
         }
     }
 }
@@ -2414,13 +2414,13 @@
     // Demo `.wp-tab` spec: 13px labels, faint → dim → active text + accent
     // underline. Tab ids/keys and deep-linking are untouched (JSX as-is).
     .tabs {
-        gap: 2px;
+        gap: $space-hair;
         margin-bottom: $space-5;
         border-bottom: 1px solid var(--border-soft);
     }
 
     .tab {
-        padding: 11px 14px;
+        padding: $space-3 $space-4;
         font-size: $text-sm;
         font-weight: $font-weight-medium;
         color: var(--text-faint);
@@ -2445,13 +2445,13 @@
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);
-            padding: 11px $space-4;
+            padding: $space-3 $space-4;
             border-bottom: 1px solid var(--border);
             white-space: nowrap;
         }
 
         td {
-            padding: 13px $space-4;
+            padding: $space-3 $space-4;
             font-size: $text-sm;
             color: var(--text-dim);
             border-bottom: 1px solid var(--border-soft);
@@ -2475,7 +2475,7 @@
             font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
-            margin-top: 2px;
+            margin-top: $space-hair;
         }
 
         .mono {
@@ -2489,7 +2489,7 @@
     // `> h3` on purpose: SystemStatusCard nests its own h3 (styled in
     // _server-packages.scss) and must not get a second eyebrow border.
     .overview-tab .info-card {
-        padding: 16px 17px;
+        padding: $space-4 $space-4;
         border-radius: var(--radius);
         background: var(--surface);
         border: 1px solid var(--border-soft);
@@ -2503,9 +2503,9 @@
         > h3 {
             display: flex;
             align-items: center;
-            gap: 7px;
+            gap: $space-2;
             margin: 0 0 $space-2;
-            padding-bottom: 10px;
+            padding-bottom: $space-3;
             border-bottom: 1px solid var(--border-soft);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
@@ -2554,7 +2554,7 @@
             background: var(--accent-bg);
             border-color: fade($accent-primary-raw, 22%);
             color: var(--accent-bright);
-            border-radius: 9px;
+            border-radius: $radius-card;
         }
     }
 
@@ -2607,7 +2607,7 @@
         box-shadow: none;
 
         &__icon {
-            border-radius: 8px;
+            border-radius: $radius-card;
         }
 
         &__title {
@@ -2650,13 +2650,13 @@
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);
-            padding: 11px $space-3;
+            padding: $space-3 $space-3;
             border-bottom: 1px solid var(--border);
             white-space: nowrap;
         }
 
         td {
-            padding: 11px $space-3;
+            padding: $space-3 $space-3;
             font-size: $text-sm;
             color: var(--text-dim);
             border-bottom: 1px solid var(--border-soft);

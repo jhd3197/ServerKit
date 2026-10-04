@@ -21,7 +21,7 @@
     padding: $space-3;
     background: $warning-bg;
     border: 1px solid $warning-border;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $warning;
     font-size: $text-xs;
 }
@@ -30,7 +30,7 @@
 .fleet-ico {
     display: inline-flex;
     padding: $space-2;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     @include status-variant(var(--accent-bright), var(--accent-bg));
 }
 
@@ -39,7 +39,7 @@
     padding: $space-3;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     text-align: center;
 
     &.is-green { background: $success-bg; border-color: $success-border; }
@@ -55,7 +55,7 @@
 // Capacity-forecast prediction tiles
 .fleet-predbox {
     padding: $space-4;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     border: 1px solid $border-default;
 
     &.is-red { background: $danger-bg; border-color: $danger-border; }
@@ -66,7 +66,7 @@
 .fleet-modal {
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     box-shadow: var(--shadow-lg);
 }
 
@@ -113,7 +113,7 @@
         padding: $space-2 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         cursor: pointer;
         text-align: left;
         transition: border-color 0.12s ease;

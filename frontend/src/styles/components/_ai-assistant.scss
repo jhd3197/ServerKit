@@ -153,7 +153,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     align-items: center;
     flex: 0 0 auto;
     min-height: 38px;
-    padding: 0 8px;
+    padding: 0 $space-2;
     border-bottom: 1px solid var(--sk-ai-border);
 }
 
@@ -172,8 +172,8 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    padding: 12px 14px;
+    gap: $space-2;
+    padding: $space-3 $space-4;
     border-bottom: 1px solid var(--sk-ai-border);
 }
 
@@ -188,7 +188,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     justify-content: center;
     width: 30px;
     height: 30px;
-    border-radius: 8px;
+    border-radius: $radius-card;
     border: 1px solid transparent;
     background: transparent;
     color: var(--sk-ai-fg-2);
@@ -203,16 +203,16 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     display: inline-flex;
     background: var(--sk-ai-bg-body);
     border: 1px solid var(--sk-ai-border);
-    border-radius: 999px;
-    padding: 2px;
+    border-radius: $radius-full;
+    padding: $space-hair;
 }
 .sk-ai-modes__item {
     border: none;
     background: transparent;
     color: var(--sk-ai-fg-2);
     font-size: $text-xs;
-    padding: 4px 10px;
-    border-radius: 999px;
+    padding: $space-1 $space-3;
+    border-radius: $radius-full;
     cursor: pointer;
     &.is-active { background: var(--sk-ai-accent); color: #fff; }
 }
@@ -221,10 +221,10 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 .sk-ai-context-chip {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin: 10px 14px 0;
-    padding: 4px 10px;
-    border-radius: 999px;
+    gap: $space-tight;
+    margin: $space-3 $space-4 0;
+    padding: $space-1 $space-3;
+    border-radius: $radius-full;
     font-size: $text-xs;
     cursor: pointer;
     border: 1px solid var(--sk-ai-border);
@@ -238,10 +238,10 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 .sk-ai-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 14px;
+    padding: $space-4;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: $space-3;
     position: relative;
 }
 
@@ -252,17 +252,17 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
-    gap: 6px;
+    gap: $space-tight;
 }
 .sk-ai-attachment {
     min-width: 0;
     max-width: 100%;
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 4px 6px;
+    gap: $space-tight;
+    padding: $space-1 $space-tight;
     border: 1px solid var(--sk-ai-border);
-    border-radius: 999px;
+    border-radius: $radius-full;
     background: var(--sk-ai-bg-body);
     color: var(--sk-ai-fg-2);
     font-size: $text-xs;
@@ -306,8 +306,8 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 .sk-ai-message--user .sk-ai-message__bubble {
     background: var(--sk-ai-accent);
     color: #fff;
-    padding: 8px 12px;
-    border-radius: 14px 14px 4px 14px;
+    padding: $space-2 $space-3;
+    border-radius: $radius-overlay $radius-overlay $radius-badge $radius-overlay;
     max-width: 85%;
     white-space: pre-wrap;
     word-break: break-word;
@@ -317,8 +317,8 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     color: #fca5a5;
     font-size: $text-sm;
     border: 1px solid fade($danger-raw, 40%);
-    border-radius: 8px;
-    padding: 8px 10px;
+    border-radius: $radius-card;
+    padding: $space-2 $space-3;
 }
 
 .sk-ai-markdown {
@@ -336,10 +336,10 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     font-family: var(--sk-ai-mono);
     font-size: $text-sm;
     border: 1px solid var(--sk-ai-border);
-    border-radius: 8px;
-    padding: 10px 12px;
+    border-radius: $radius-card;
+    padding: $space-3 $space-3;
     overflow-x: auto;
-    margin: 6px 0;
+    margin: $space-tight 0;
     position: relative;
     code { font-family: inherit; white-space: pre; }
 }
@@ -347,20 +347,20 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     display: block;
     font-size: $text-xs;
     color: var(--sk-ai-fg-3);
-    margin-bottom: 4px;
+    margin-bottom: $space-1;
 }
 .sk-ai-inline-code {
     font-family: var(--sk-ai-mono);
     font-size: 0.9em;
     background: var(--sk-ai-hover);
-    padding: 1px 5px;
-    border-radius: 4px;
+    padding: 1px $space-tight;
+    border-radius: $radius-badge;
 }
 
 // ---------------------------------------------------------------- Tool cards
 .sk-ai-tool-card {
     border: 1px solid var(--sk-ai-border);
-    border-radius: 10px;
+    border-radius: $radius-card;
     background: var(--sk-ai-bg-body);
     overflow: hidden;
     &--error { border-color: fade($danger-raw, 50%); }
@@ -369,8 +369,8 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     width: 100%;
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
+    gap: $space-2;
+    padding: $space-2 $space-3;
     background: transparent;
     border: none;
     color: var(--sk-ai-fg);
@@ -391,12 +391,12 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 // ---------------------------------------------------------------- Confirm card
 .sk-ai-confirm {
     border: 1px solid var(--sk-ai-accent);
-    border-radius: 10px;
+    border-radius: $radius-card;
     background: var(--sk-ai-glow);
-    padding: 12px;
+    padding: $space-3;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: $space-2;
 }
 .sk-ai-confirm__head { display: flex; align-items: center; gap: 6px; font-weight: $font-weight-semibold; font-size: $text-sm; }
 .sk-ai-confirm__summary { font-size: $text-sm; color: var(--sk-ai-fg); margin: 0; }
@@ -405,8 +405,8 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 
 // ---------------------------------------------------------------- Buttons
 .sk-ai-btn {
-    border-radius: 8px;
-    padding: 6px 14px;
+    border-radius: $radius-card;
+    padding: $space-tight $space-4;
     font-size: $text-sm;
     cursor: pointer;
     border: 1px solid var(--sk-ai-border);
@@ -420,8 +420,8 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 .sk-ai-composer {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 12px 14px;
+    gap: $space-2;
+    padding: $space-3 $space-4;
     border-top: 1px solid var(--sk-ai-border);
 }
 .sk-ai-composer__attachments { width: 100%; }
@@ -429,7 +429,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     width: 100%;
     display: flex;
     align-items: flex-end;
-    gap: 8px;
+    gap: $space-2;
 }
 .sk-ai-composer__attach.sk-resource-picker__trigger {
     min-width: 40px;
@@ -444,11 +444,11 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 .sk-ai-composer__input {
     flex: 1;
     resize: none;
-    border-radius: 10px;
+    border-radius: $radius-card;
     border: 1px solid var(--sk-ai-border);
     background: var(--sk-ai-bg-body);
     color: var(--sk-ai-fg);
-    padding: 10px 12px;
+    padding: $space-3 $space-3;
     font-family: var(--sk-ai-sans);
     font-size: $text-base;
     line-height: 1.4;
@@ -460,7 +460,7 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     flex: none;
     width: 40px;
     height: 40px;
-    border-radius: 10px;
+    border-radius: $radius-card;
     border: none;
     background: var(--sk-ai-accent);
     color: #fff;
@@ -498,8 +498,8 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     border: 1px solid var(--sk-ai-border);
     background: var(--sk-ai-bg-body);
     color: var(--sk-ai-fg);
-    border-radius: 10px;
-    padding: 8px 12px;
+    border-radius: $radius-card;
+    padding: $space-2 $space-3;
     font-size: $text-sm;
     cursor: pointer;
     text-align: left;
@@ -515,15 +515,15 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
     width: 240px;
     background: var(--sk-ai-elevated);
     border: 1px solid var(--sk-ai-border);
-    border-radius: 10px;
+    border-radius: $radius-card;
     box-shadow: var(--sk-ai-shadow);
-    padding: 6px;
+    padding: $space-tight;
     z-index: 3;
 }
 .sk-ai-convo__new {
     width: 100%; display: flex; align-items: center; gap: 6px;
-    padding: 8px; border: none; background: transparent; color: var(--sk-ai-fg);
-    border-radius: 8px; cursor: pointer; font-size: $text-sm;
+    padding: $space-2; border: none; background: transparent; color: var(--sk-ai-fg);
+    border-radius: $radius-card; cursor: pointer; font-size: $text-sm;
     &:hover { background: var(--sk-ai-hover); }
 }
 .sk-ai-convo__list { max-height: 280px; overflow-y: auto; margin-top: 4px; }
@@ -535,12 +535,12 @@ body:has(.ui-sheet-content[data-state='open']) .sk-ai-bubble {
 }
 .sk-ai-convo__title {
     flex: 1; text-align: left; border: none; background: transparent; color: var(--sk-ai-fg);
-    padding: 7px 8px; font-size: $text-sm; cursor: pointer;
+    padding: $space-2 $space-2; font-size: $text-sm; cursor: pointer;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .sk-ai-convo__del {
     border: none; background: transparent; color: var(--sk-ai-fg-3);
-    padding: 6px; cursor: pointer; border-radius: 6px;
+    padding: $space-tight; cursor: pointer; border-radius: 6px;
     &:hover { color: #f87171; }
 }
 

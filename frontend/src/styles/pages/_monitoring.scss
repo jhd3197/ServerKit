@@ -12,12 +12,12 @@
 .mon-scope {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: $space-2;
     height: 32px;
-    padding: 0 10px;
+    padding: 0 $space-3;
     max-width: 210px;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-card;
     background: var(--surface-2);
     color: var(--text-dim);
     font-size: $text-sm;
@@ -34,18 +34,18 @@
 
     &__sep {
         height: 1px;
-        margin: 5px 2px;
+        margin: $space-tight $space-hair;
         background: var(--border-soft);
     }
 
     &__item {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
         width: 100%;
-        padding: 7px 9px;
+        padding: $space-2 $space-2;
         border: 0;
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: none;
         color: var(--text-dim);
         text-align: left;

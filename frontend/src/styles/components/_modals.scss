@@ -15,7 +15,7 @@
 .modal {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
+    border-radius: $radius-overlay;
     width: 100%;
     max-width: 560px;
     max-height: 90vh;
@@ -93,7 +93,7 @@
 .app-type-card {
     background: $bg-body;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     padding: $space-6;
     text-align: center;
     cursor: pointer;
@@ -107,7 +107,7 @@
 
 .app-type-icon {
     @include icon-box(48px);
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     font-size: $text-lg;
     font-weight: $font-weight-semibold;
     color: white;

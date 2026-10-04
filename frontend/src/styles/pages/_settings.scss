@@ -45,7 +45,7 @@
         overflow-y: visible;
         background: $bg-card;
         padding: $space-2;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 }
 
@@ -58,7 +58,7 @@
     margin-bottom: $space-3;
     background: $bg-card;
     border: 1px solid $border-color;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     @media (max-width: $breakpoint-lg) {
         flex-basis: 100%;
@@ -71,7 +71,7 @@
     border: none;
     background: transparent;
     padding: $space-2 $space-3;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-secondary;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
@@ -98,7 +98,7 @@
     padding: $space-3 $space-4;
     background: transparent;
     border: none;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-secondary;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
@@ -212,7 +212,7 @@
 .settings-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-5;
 
     h3 {
@@ -242,7 +242,7 @@
     > svg {
         flex-shrink: 0;
         color: $text-tertiary;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     h3 {
@@ -287,7 +287,7 @@
         padding: $space-4;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     .source-connection-profile {
@@ -309,7 +309,7 @@
         }
 
         span {
-            margin-top: 2px;
+            margin-top: $space-hair;
             color: $text-tertiary;
             font-size: $text-xs;
         }
@@ -332,7 +332,7 @@
         }
 
         span {
-            margin-top: 3px;
+            margin-top: $space-1;
             color: $text-tertiary;
             font-size: $text-xs;
             line-height: 1.45;
@@ -355,7 +355,7 @@
         padding: $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-tertiary;
         font-size: $text-xs;
         overflow-wrap: anywhere;
@@ -411,7 +411,7 @@
     align-items: center;
     padding: $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-top: $space-3;
 
     .session-info {
@@ -458,7 +458,7 @@
     padding: $space-4;
     background: transparent;
     border: 2px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -481,7 +481,7 @@
 .theme-preview {
     width: 100%;
     height: 80px;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     display: flex;
     overflow: hidden;
 
@@ -500,7 +500,7 @@
 
     .preview-card {
         flex: 1;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 
     &.dark {
@@ -591,7 +591,7 @@
     align-items: center;
     padding: $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     gap: $space-4;
 
     .notification-info {
@@ -647,7 +647,7 @@
         bottom: 0;
         background: var(--surface-3);
         border: 1px solid var(--border);
-        border-radius: 24px;
+        border-radius: $radius-full;
         transition: all $transition-fast;
 
         &::before {
@@ -671,7 +671,7 @@
     height: 24px;
     background: var(--surface-3);
     border: 1px solid var(--border);
-    border-radius: 24px;
+    border-radius: $radius-full;
     cursor: pointer;
     transition: background $transition-fast;
     flex-shrink: 0;
@@ -813,7 +813,7 @@
     }
 
     input {
-        padding-left: 36px;
+        padding-left: $space-10;
     }
 }
 
@@ -849,7 +849,7 @@
 .timezone-message {
     margin-top: $space-2;
     padding: $space-2 $space-3;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     font-size: $text-xs;
 
     &.success {
@@ -867,7 +867,7 @@
 .about-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-8;
     text-align: center;
 
@@ -997,7 +997,7 @@
                 padding: $space-3;
                 background: $bg-elevated;
                 border: 1px solid $border-subtle;
-                border-radius: $radius-md;
+                border-radius: $radius-control;
                 font-size: $text-xs;
                 text-align: start;
                 white-space: pre-wrap;
@@ -1013,7 +1013,7 @@
     position: relative;
     background: linear-gradient(135deg, $accent-glow 0%, fade($accent-primary-raw, 8%) 100%);
     border: 1px solid fade($accent-primary-raw, 30%);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-6;
     display: flex;
     align-items: flex-start;
@@ -1028,7 +1028,7 @@
         color: $text-tertiary;
         cursor: pointer;
         padding: $space-1;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         transition: all $transition-fast;
 
         &:hover {
@@ -1042,7 +1042,7 @@
         width: 48px;
         height: 48px;
         background: linear-gradient(135deg, $warning 0%, darken($warning-raw, 10%) 100%);
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1126,7 +1126,7 @@
     gap: $space-3;
     padding: $space-3 $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-secondary;
     text-decoration: none;
     font-size: $text-xs;
@@ -1161,7 +1161,7 @@
     align-items: flex-start;
     padding: $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     gap: $space-4;
 
     &:not(:last-child) {
@@ -1203,7 +1203,7 @@
     padding: $space-2 $space-3;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-primary;
     font-size: $text-xs;
     cursor: pointer;
@@ -1248,7 +1248,7 @@
     gap: $space-1;
     padding: $space-3 $space-2;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-card;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -1304,7 +1304,7 @@
     padding: $space-2 $space-3;
     background: transparent;
     border: 2px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -1355,17 +1355,17 @@
     height: 32px;
     padding: 0;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: transparent;
     cursor: pointer;
 
     &::-webkit-color-swatch-wrapper {
-        padding: 2px;
+        padding: $space-hair;
     }
 
     &::-webkit-color-swatch {
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 }
 
@@ -1378,15 +1378,15 @@
 .accent-custom-reset {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: $space-1;
     margin-left: auto;
-    padding: 4px 10px;
+    padding: $space-1 $space-3;
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-dim);
     background: transparent;
     border: 1px solid var(--border);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -1436,7 +1436,7 @@
     text-align: left;
     background: var(--surface-2);
     border: 2px solid var(--border);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -1452,7 +1452,7 @@
     &__swatches {
         display: flex;
         height: 44px;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         overflow: hidden;
         border: 1px solid var(--border-soft);
     }
@@ -1477,9 +1477,9 @@
     &__base {
         font-size: $text-xs;
         color: var(--text-faint);
-        padding: 1px 6px;
+        padding: 1px $space-tight;
         border: 1px solid var(--border);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 
     &__desc {
@@ -1500,7 +1500,7 @@
     &__applied {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--accent-primary);
@@ -1509,7 +1509,7 @@
     &__default {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--amber);
@@ -1526,14 +1526,14 @@
     &__admin-btn {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 3px 8px;
+        gap: $space-1;
+        padding: $space-1 $space-2;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--text-dim);
         background: transparent;
         border: 1px solid var(--border);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         cursor: pointer;
         transition: all $transition-fast;
 
@@ -1569,7 +1569,7 @@
     gap: $space-3;
     max-height: 60vh;
     overflow-y: auto;
-    padding: 2px;
+    padding: $space-hair;
 }
 
 .theme-browse__card {
@@ -1579,12 +1579,12 @@
     padding: $space-3;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 
     .theme-browse__swatches {
         display: flex;
         height: 40px;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         overflow: hidden;
         border: 1px solid var(--border-soft);
 
@@ -1619,7 +1619,7 @@
     .theme-browse__installed {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--green);
@@ -1629,14 +1629,14 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
-        padding: 5px 10px;
+        gap: $space-tight;
+        padding: $space-tight $space-3;
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--text);
         background: var(--surface-3);
         border: 1px solid var(--border);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         cursor: pointer;
         transition: all $transition-fast;
 
@@ -1668,7 +1668,7 @@
     &__field {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: $space-1;
 
         // Direct child only: the Select and SegControl inside carry spans of their own.
         > span {
@@ -1678,12 +1678,12 @@
         }
 
         input {
-            padding: 6px 10px;
+            padding: $space-tight $space-3;
             font-size: $text-xs;
             color: var(--text);
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
         }
     }
 
@@ -1709,7 +1709,7 @@
             height: 28px;
             padding: 0;
             border: 1px solid var(--border);
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             background: transparent;
             cursor: pointer;
         }
@@ -1718,11 +1718,11 @@
     &__modes {
         display: inline-flex;
         border: 1px solid var(--border);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         overflow: hidden;
 
         button {
-            padding: 5px 12px;
+            padding: $space-tight $space-3;
             font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: var(--text-dim);
@@ -1741,7 +1741,7 @@
         display: flex;
         flex-direction: column;
         gap: $space-4;
-        padding-right: 2px;
+        padding-right: $space-hair;
     }
 
     &__group h4 {
@@ -1763,7 +1763,7 @@
     &__token {
         display: flex;
         flex-direction: column;
-        gap: 3px;
+        gap: $space-1;
 
         label {
             font-size: $text-xs;
@@ -1774,7 +1774,7 @@
     &__token-input {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
 
         input[type="color"] {
             width: 30px;
@@ -1782,7 +1782,7 @@
             flex-shrink: 0;
             padding: 0;
             border: 1px solid var(--border);
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             background: transparent;
             cursor: pointer;
         }
@@ -1790,13 +1790,13 @@
         input[type="text"] {
             flex: 1;
             min-width: 0;
-            padding: 5px 8px;
+            padding: $space-tight $space-2;
             font-family: $font-mono;
             font-size: $text-xs;
             color: var(--text);
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
         }
     }
 
@@ -1827,7 +1827,7 @@
     align-items: center;
     padding: $space-3 $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     transition: opacity $transition-fast;
 
     &--hidden {
@@ -1860,7 +1860,7 @@
     height: 28px;
     background: transparent;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-secondary;
     cursor: pointer;
     transition: all $transition-fast;
@@ -1900,7 +1900,7 @@
     padding: $space-4;
     background: transparent;
     border: 2px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     cursor: pointer;
     transition: all $transition-fast;
     text-align: center;
@@ -1958,7 +1958,7 @@
             padding: $space-3;
             background: $bg-hover;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             color: $text-primary;
             font-size: $text-xs;
             transition: border-color $transition-fast;
@@ -1973,7 +1973,7 @@
 
 .whitelabel-upload {
     border: 2px dashed $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-5;
     cursor: pointer;
     transition: all $transition-fast;
@@ -2017,7 +2017,7 @@
         width: 48px;
         height: 48px;
         object-fit: contain;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         background: $bg-hover;
         padding: $space-1;
@@ -2038,12 +2038,12 @@
     .whitelabel-preview__box {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: $space-3;
         height: 70px;
         padding: 0 $space-4;
         background: $bg-body;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 }
 
@@ -2051,7 +2051,7 @@
     margin-top: $space-4;
     background: linear-gradient(135deg, $accent-glow 0%, fade($accent-primary-raw, 8%) 100%);
     border: 1px solid fade($accent-primary-raw, 30%);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-5;
     display: flex;
     align-items: flex-start;
@@ -2062,7 +2062,7 @@
         width: 44px;
         height: 44px;
         background: linear-gradient(135deg, $warning 0%, darken($warning-raw, 10%) 100%);
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2127,7 +2127,7 @@
             padding: $space-3;
             background: $bg-hover;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             color: $text-primary;
             font-size: $text-xs;
 
@@ -2202,7 +2202,7 @@
                 padding: $space-3;
                 background: $bg-hover;
                 border: 1px solid $border-subtle;
-                border-radius: $radius-md;
+                border-radius: $radius-control;
                 color: $text-primary;
                 font-size: $text-xs;
                 font-family: $font-mono;
@@ -2241,7 +2241,7 @@
     justify-content: space-between;
     padding: $space-3;
     background: $bg-secondary;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     border: 1px solid $border-subtle;
 
     .linked-account__info {
@@ -2329,7 +2329,7 @@
     padding: $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     cursor: pointer;
     transition: all $transition-fast;
     text-align: left;
@@ -2355,7 +2355,7 @@
         align-items: center;
         justify-content: center;
         background: $bg-secondary;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-secondary;
 
         svg {
@@ -2406,7 +2406,7 @@
     margin-bottom: $space-4;
     background: fade($warning-raw, 10%);
     border: 1px solid fade($warning-raw, 20%);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     .migration-pending-icon { color: $warning; flex-shrink: 0; margin-top: 1px; }
     .migration-pending-body { flex: 1; min-width: 0; }
@@ -2459,9 +2459,9 @@
 .migration-uptodate code {
     font-family: $font-mono;
     font-size: $text-xs;
-    padding: 1px 5px;
+    padding: 1px $space-tight;
     background: $bg-tertiary;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-primary;
 }
 
@@ -2493,7 +2493,7 @@
     align-items: center;
     justify-content: space-between;
     padding: $space-3 $space-2;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -2603,7 +2603,7 @@
 }
 .sk-ai-candidates { display: grid; gap: $space-3; margin-block: $space-4;
     > button { justify-self: start; }
-    &__row { padding: $space-4; background: $bg-elevated; border: 1px solid $border-default; border-radius: $radius-md; min-width: 0;
+    &__row { padding: $space-4; background: $bg-elevated; border: 1px solid $border-default; border-radius: $radius-control; min-width: 0;
         > .form-field { margin-block: $space-4; }
         .settings-actions { justify-content: flex-end; }
     }
@@ -2611,7 +2611,7 @@
 .sk-ai-advanced { border-top: 1px solid $border-subtle; padding-block: $space-4;
     summary { cursor: pointer; font-weight: $font-weight-medium; margin-bottom: $space-3; }
 }
-.sk-ai-routing-result { background: $bg-body; border: 1px solid $border-default; border-radius: $radius-md; padding: $space-4; margin-block: $space-4; overflow-wrap: anywhere; }
+.sk-ai-routing-result { background: $bg-body; border: 1px solid $border-default; border-radius: $radius-control; padding: $space-4; margin-block: $space-4; overflow-wrap: anywhere; }
 .sk-ai-usage { min-width: 0;
     .stat-strip { margin-block: $space-4; }
     .stat-strip__item { background: $bg-body; }

@@ -11,9 +11,9 @@
     align-items: center;
     gap: $space-3;
     min-width: 0;
-    padding: 9px 8px 9px 13px;
+    padding: $space-2 $space-2 $space-2 $space-3;
     border: 1px solid var(--border-soft, #{$border-default});
-    border-radius: 10px;
+    border-radius: $radius-card;
     background: var(--surface, #{$bg-card});
 
     &__title {
@@ -40,7 +40,7 @@
         height: 4px;
         overflow: hidden;
         border: 0;
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: var(--surface-3);
         appearance: none;
 
@@ -69,7 +69,7 @@
         flex: 0 0 auto;
         place-items: center;
         border: 0;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: transparent;
         color: $text-tertiary;
         cursor: pointer;
@@ -116,7 +116,7 @@
     padding: $space-3 $space-4;
     margin-bottom: $space-4;
     border: 1px solid var(--warning-border, rgba(245, 179, 66, 0.35));
-    border-radius: var(--radius, #{$radius-lg});
+    border-radius: var(--radius, #{$radius-card});
     background: var(--warning-bg, rgba(245, 179, 66, 0.08));
 
     &__icon {
@@ -127,7 +127,7 @@
     &__body {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         flex: 1;
         min-width: 0;
     }

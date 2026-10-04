@@ -21,7 +21,7 @@
     padding: $space-3;
     background: $danger-bg;
     border: 1px solid $danger-border;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     &__body {
         display: flex;
@@ -51,7 +51,7 @@
     padding: $space-3;
     background: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     color: $text-primary;
     font-size: $text-xs;
@@ -70,7 +70,7 @@
 
 .notification-channel-card {
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     background: $bg-card;
     overflow: hidden;
     transition: border-color 0.2s;
@@ -101,7 +101,7 @@
     align-items: center;
     justify-content: center;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     flex-shrink: 0;
 
     svg {
@@ -181,7 +181,7 @@
 
 .notif-event-category {
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     overflow: hidden;
 
     &__header {
@@ -227,7 +227,7 @@
     &__meta {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 180px;
     }
 
@@ -249,7 +249,7 @@
     &__reset {
         background: transparent;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-secondary;
         padding: $space-1 $space-2;
         font-size: $text-xs;
@@ -266,7 +266,7 @@
     gap: $space-1;
     padding: $space-1 $space-2;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     background: $bg-card;
     color: $text-secondary;
     font-size: $text-xs;
@@ -354,12 +354,12 @@
 .notif-digest-option {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: $space-hair;
     flex: 1 1 140px;
     padding: $space-3 $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     text-align: left;
     color: $text-secondary;

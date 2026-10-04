@@ -16,12 +16,12 @@
     gap: $space-3;
     padding: $space-5 $space-6;
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
+    border-radius: $radius-overlay;
     background:
         linear-gradient(135deg, $accent-glow, transparent 55%),
         $bg-card;
     color: $text-secondary;
-    box-shadow: $shadow-lg;
+    box-shadow: $shadow-overlay;
 
     svg {
         color: $accent-primary;
@@ -55,9 +55,9 @@
 .queue-rail-section {
     padding: $space-4;
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
+    border-radius: $radius-overlay;
     background: $bg-card;
-    box-shadow: $shadow-sm;
+    box-shadow: none;
 }
 
 .queue-rail-section-header {
@@ -115,7 +115,7 @@
     width: 100%;
     padding: $space-2 $space-3;
     border: 1px solid transparent;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     background: transparent;
     color: $text-secondary;
     font-size: $text-xs;
@@ -138,7 +138,7 @@
 
     b {
         margin-left: auto;
-        padding: 2px $space-2;
+        padding: $space-hair $space-2;
         border-radius: $radius-full;
         background: $bg-secondary;
         color: $text-secondary;
@@ -261,9 +261,9 @@
     margin-bottom: $space-6;
     padding: $space-3;
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
+    border-radius: $radius-overlay;
     background: $bg-card;
-    box-shadow: $shadow-sm;
+    box-shadow: none;
 
     @media (max-width: $breakpoint-lg) {
         flex-direction: column;
@@ -310,9 +310,9 @@
 
 .queue-table-wrap {
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
+    border-radius: $radius-overlay;
     background: $bg-card;
-    box-shadow: $shadow-sm;
+    box-shadow: none;
     overflow: hidden;
 }
 
@@ -362,7 +362,7 @@
 .queue-row-name {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: $space-hair;
 }
 
 .queue-row-title {
@@ -441,7 +441,7 @@
     .queue-send-readonly {
         padding: $space-2 $space-3;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: $bg-secondary;
         color: $text-primary;
         font-family: $font-mono;
@@ -457,7 +457,7 @@
     pre {
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         padding: $space-3;
         overflow: auto;
         font-size: $text-xs;
@@ -468,7 +468,7 @@
 .queue-message-error {
     @include status-variant($danger, $danger-bg);
     border: 1px solid $danger-border;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-3;
 }
 
@@ -584,9 +584,9 @@
 
 .queue-detail-panel {
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
+    border-radius: $radius-overlay;
     background: $bg-card;
-    box-shadow: $shadow-sm;
+    box-shadow: none;
     padding: $space-4;
     position: sticky;
     top: $space-4;
@@ -612,7 +612,7 @@
     display: inline-flex;
     padding: $space-1;
     border: none;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     background: transparent;
     color: $text-tertiary;
     cursor: pointer;

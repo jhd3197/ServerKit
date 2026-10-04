@@ -17,7 +17,7 @@
     font-weight: $font-weight-semibold;
     text-align: center;
     border: 2px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-card;
     color: $text-primary;
     transition: all 0.2s;
@@ -58,7 +58,7 @@
 // 2FA Card in Settings
 .two-fa-card {
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-6;
     margin-bottom: $space-6;
 }
@@ -75,7 +75,7 @@
         align-items: center;
         justify-content: center;
         background: fade($accent-primary-raw, 15%);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $accent-primary;
         flex-shrink: 0;
     }
@@ -114,7 +114,7 @@
     .two-fa-backup-info {
         background: $bg-hover;
         padding: $space-2 $space-4;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         margin-bottom: $space-4;
         display: flex;
         flex-direction: column;
@@ -177,7 +177,7 @@
     justify-content: center;
     padding: $space-4;
     background: white;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-bottom: $space-4;
 }
 
@@ -189,7 +189,7 @@
 .qr-fallback {
     background: $bg-hover;
     padding: $space-4;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     text-align: center;
 }
 
@@ -213,8 +213,8 @@
 
     code {
         background: $bg-hover;
-        padding: 2px 6px;
-        border-radius: $radius-sm;
+        padding: $space-hair $space-tight;
+        border-radius: $radius-badge;
     }
 }
 
@@ -234,7 +234,7 @@
     padding: $space-4;
     background: fade($warning-raw, 10%);
     border: 1px solid fade($warning-raw, 30%);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-bottom: $space-6;
 
     svg {

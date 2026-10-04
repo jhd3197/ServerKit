@@ -5,7 +5,7 @@
     flex-shrink: 0;
     display: inline-flex;
     align-items: center;
-    padding: 2px $space-2;
+    padding: $space-hair $space-2;
     border: 1px solid $border-subtle;
     border-radius: $radius-full;
     font-size: $text-xs;
@@ -22,12 +22,12 @@
 
     &--live .conn-status__dot {
         background: $success;
-        box-shadow: 0 0 8px $success;
+        box-shadow: none;
     }
 
     &--down .conn-status__dot {
         background: $warning;
-        box-shadow: 0 0 8px $warning;
+        box-shadow: none;
     }
 
     &--ok {

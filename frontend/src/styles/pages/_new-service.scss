@@ -26,7 +26,7 @@
         padding: $space-2 $space-3;
         background: transparent;
         border: none;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-tertiary;
         font: inherit;
         cursor: default;
@@ -167,7 +167,7 @@
         width: 42px;
         height: 42px;
         flex-shrink: 0;
-        border-radius: 11px;
+        border-radius: $radius-card;
         background: var(--surface-2);
         color: var(--text-dim);
         transition: background $transition-fast, color $transition-fast;
@@ -181,7 +181,7 @@
 
     &__source-text {
         display: grid;
-        gap: 3px;
+        gap: $space-1;
 
         strong {
             font-size: $text-base;
@@ -220,7 +220,7 @@
         width: 36px;
         height: 36px;
         flex-shrink: 0;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: $bg-elevated;
         color: $accent-primary;
 
@@ -235,7 +235,7 @@
         padding: $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         img {
             width: 36px;
@@ -255,7 +255,7 @@
         }
 
         span {
-            margin-top: 2px;
+            margin-top: $space-hair;
             color: $text-tertiary;
             font-size: $text-xs;
         }
@@ -269,7 +269,7 @@
         padding: $space-2;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         > svg {
             margin-left: $space-2;
@@ -295,7 +295,7 @@
         padding: $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-primary;
         text-align: left;
         cursor: pointer;
@@ -326,7 +326,7 @@
         }
 
         small {
-            margin-top: 3px;
+            margin-top: $space-1;
             color: $text-tertiary;
             font-size: $text-xs;
             line-height: 1.35;
@@ -335,7 +335,7 @@
 
         em {
             flex-shrink: 0;
-            padding: 3px $space-2;
+            padding: $space-1 $space-2;
             border: 1px solid $border-subtle;
             border-radius: $radius-full;
             color: $text-tertiary;
@@ -351,7 +351,7 @@
         padding: $space-4;
         background: $bg-elevated;
         border: 1px dashed $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-tertiary;
         font-size: $text-xs;
     }
@@ -405,7 +405,7 @@
         padding: $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-primary;
         font: inherit;
         text-align: left;
@@ -429,7 +429,7 @@
 
     &__template-main {
         display: grid;
-        gap: 3px;
+        gap: $space-1;
         min-width: 0;
 
         strong,
@@ -474,7 +474,7 @@
         padding: $space-2;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         > svg {
             margin-left: $space-2;
@@ -503,7 +503,7 @@
         padding: $space-4 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-primary;
         font: inherit;
         text-align: center;
@@ -527,7 +527,7 @@
         place-items: center;
         width: 44px;
         height: 44px;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: var(--surface-2);
         color: var(--accent-bright);
         overflow: hidden;
@@ -536,7 +536,7 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 8px;
+            padding: $space-2;
         }
 
         svg { display: block; }
@@ -580,7 +580,7 @@
         padding: $space-4;
         background: $bg-elevated;
         border: 1px dashed $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         div {
             min-width: 0;
@@ -595,7 +595,7 @@
 
         span {
             display: block;
-            margin-top: 2px;
+            margin-top: $space-hair;
             color: $text-tertiary;
             font-size: $text-xs;
             line-height: 1.4;
@@ -605,7 +605,7 @@
     &__pane-link {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
         color: $text-tertiary;
         font-size: $text-xs;
         text-decoration: none;
@@ -629,7 +629,7 @@
             width: 100%;
             background: $bg-elevated;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             color: $text-primary;
             font-size: $text-xs;
 
@@ -659,7 +659,7 @@
         padding: $space-5;
         background: $bg-elevated;
         border: 2px dashed $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         color: $text-tertiary;
         text-align: center;
         cursor: pointer;
@@ -696,7 +696,7 @@
         padding: $space-4;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__manifest-head {
@@ -754,7 +754,7 @@
             padding: $space-2;
             background: $bg-card;
             border: 1px solid $border-subtle;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
         }
 
         span,
@@ -770,7 +770,7 @@
         }
 
         strong {
-            margin-top: 2px;
+            margin-top: $space-hair;
             color: $text-primary;
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
@@ -789,7 +789,7 @@
     &__env-preview span {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         min-height: 24px;
         padding: 0 $space-2;
         border: 1px solid $border-subtle;
@@ -837,7 +837,7 @@
         padding: $space-2 $space-3;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 
     &__manifest-service-name {
@@ -926,7 +926,7 @@
         padding: $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         label,
         span {
@@ -940,7 +940,7 @@
         }
 
         span {
-            margin-top: 3px;
+            margin-top: $space-1;
             color: $text-tertiary;
             font-size: $text-xs;
             line-height: 1.4;
@@ -955,7 +955,7 @@
         padding: 0 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-tertiary;
         font-size: $text-xs;
 
@@ -974,7 +974,7 @@
         padding: 0 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-secondary;
         cursor: pointer;
         transition: border-color $transition-fast, background $transition-fast;

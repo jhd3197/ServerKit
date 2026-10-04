@@ -28,14 +28,14 @@
 
     .status-page-item {
         width: 100%;
-        padding: 13px 14px;
+        padding: $space-3 $space-4;
         background: var(--surface);
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
         color: var(--text);
         cursor: pointer;
         display: grid;
-        gap: 6px;
+        gap: $space-tight;
         text-align: left;
         transition: border-color $transition-fast, background $transition-fast;
 
@@ -64,7 +64,7 @@
         }
 
         .sk-pill {
-            padding: 1px 7px;
+            padding: 1px $space-2;
             font-size: $text-xs;
         }
 
@@ -78,7 +78,7 @@
         &__meta {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: $space-tight;
             color: var(--text-faint);
             font-size: $text-xs;
 
@@ -140,20 +140,20 @@
 
     .status-overall-pill {
         font-size: $text-xs;
-        padding: 4px 11px;
+        padding: $space-1 $space-3;
     }
 
     // Component status dot strip (prototype .comp-dots)
     .comp-dots {
         display: flex;
-        gap: 3px;
+        gap: $space-1;
         flex-wrap: wrap;
         margin-top: $space-3;
 
         i {
             width: 8px;
             height: 8px;
-            border-radius: 2px;
+            border-radius: $radius-badge;
             background: var(--green);
 
             &.degraded { background: var(--amber); }
@@ -232,7 +232,7 @@
         grid-template-columns: minmax(220px, 1fr) minmax(260px, auto) auto;
         gap: $space-4;
         align-items: center;
-        padding: 12px 0;
+        padding: $space-3 0;
 
         &:last-child {
             padding-bottom: 0;
@@ -251,7 +251,7 @@
             > div {
                 min-width: 0;
                 display: grid;
-                gap: 3px;
+                gap: $space-1;
             }
 
             strong {
@@ -301,17 +301,17 @@
     .status-dot {
         width: 9px;
         height: 9px;
-        border-radius: 3px;
+        border-radius: $radius-badge;
         flex: 0 0 auto;
 
         &--success {
             background: var(--green);
-            box-shadow: 0 0 6px var(--green);
+            box-shadow: none;
         }
 
         &--warning {
             background: var(--amber);
-            box-shadow: 0 0 6px var(--amber);
+            box-shadow: none;
         }
 
         &--danger {
@@ -347,7 +347,7 @@
 
                 strong {
                     display: block;
-                    margin-bottom: 3px;
+                    margin-bottom: $space-1;
                     font-size: $text-sm;
                     font-weight: $font-weight-semibold;
                 }
@@ -412,7 +412,7 @@
 
         > div {
             display: grid;
-            gap: 2px;
+            gap: $space-hair;
         }
 
         span {
@@ -441,7 +441,7 @@
 
         > div {
             min-height: 72px;
-            padding: 14px 15px;
+            padding: $space-4 $space-4;
             border: 1px solid var(--border-soft);
             border-radius: var(--radius);
             background: var(--surface-2);
@@ -501,7 +501,7 @@
 
 .public-status-page {
     min-height: 100vh;
-    padding: clamp(24px, 4vw, 56px);
+    padding: clamp($space-6, 4vw, $space-16);
     background: $bg-body;
     color: $text-primary;
 
@@ -520,7 +520,7 @@
         gap: $space-5;
         padding: $space-6;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: $bg-card;
 
         h1 {
@@ -542,7 +542,7 @@
 
     .public-status-badge {
         min-height: 34px;
-        padding: 8px $space-3;
+        padding: $space-2 $space-3;
     }
 
     .public-status-summary {
@@ -554,7 +554,7 @@
         > div {
             padding: $space-4;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             background: $bg-card;
         }
 
@@ -612,7 +612,7 @@
     .public-status-shell {
         padding: $space-4;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-card;
     }
 
@@ -674,7 +674,7 @@
 
         span {
             display: block;
-            margin-top: 3px;
+            margin-top: $space-1;
             color: $text-tertiary;
             font-size: $text-xs;
         }

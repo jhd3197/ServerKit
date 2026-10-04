@@ -33,7 +33,7 @@
         flex-shrink: 0;
         width: 38px;
         height: 38px;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         @include status-variant(var(--accent-bright), var(--accent-bg));
     }
 
@@ -47,7 +47,7 @@
 
         span {
             display: block;
-            margin-top: 2px;
+            margin-top: $space-hair;
             color: $text-tertiary;
             font-size: $text-xs;
             line-height: 1.5;
@@ -95,7 +95,7 @@
         justify-content: center;
         width: 30px;
         height: 30px;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: var(--surface-2);
         color: var(--text-dim);
         transition: background $transition-fast, color $transition-fast;
@@ -120,10 +120,10 @@
     &__detected {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
         width: max-content;
         margin-top: $space-1;
-        padding: 3px $space-2;
+        padding: $space-1 $space-2;
         border: 1px solid var(--accent-dim);
         border-radius: $radius-full;
         @include status-variant(var(--accent-bright), var(--accent-bg));
@@ -157,7 +157,7 @@
         padding: $space-3;
         background: var(--surface);
         border: 1px solid var(--border-soft);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         strong,
         span {
@@ -171,7 +171,7 @@
         }
 
         span {
-            margin-top: 2px;
+            margin-top: $space-hair;
             color: $text-tertiary;
             font-size: $text-xs;
             line-height: 1.4;
@@ -189,7 +189,7 @@
         padding: 0 $space-3;
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-secondary;
         cursor: pointer;
         transition: border-color $transition-fast, background $transition-fast;
@@ -258,7 +258,7 @@
         flex-shrink: 0;
         width: 38px;
         height: 38px;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         @include status-variant(var(--green), var(--green-bg));
     }
 
@@ -292,13 +292,13 @@
         padding: $space-4;
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__meta-item {
         span {
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: $space-1;
             font-size: $text-xs;
             color: var(--text-faint);
         }
@@ -348,8 +348,8 @@
     &--hint {
         display: flex;
         align-items: center;
-        gap: 9px;
-        padding: 11px 13px;
+        gap: $space-2;
+        padding: $space-3 $space-3;
         font-size: $text-sm;
         color: var(--text-dim);
 
@@ -360,8 +360,8 @@
     &--connect {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 14px 15px;
+        gap: $space-3;
+        padding: $space-4 $space-4;
 
         > svg { color: var(--text); flex-shrink: 0; }
     }
@@ -381,7 +381,7 @@
     &-account {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
 
         img { width: 26px; height: 26px; border-radius: 50%; }
         .git-connect__gh-account-name {
@@ -397,11 +397,11 @@
     &-search {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 0 10px;
+        gap: $space-2;
+        padding: 0 $space-3;
         background: var(--surface);
         border: 1px solid var(--border-soft);
-        border-radius: 8px;
+        border-radius: $radius-card;
 
         svg { color: var(--text-faint); flex-shrink: 0; }
         .ui-input { border: none; background: none; padding-left: 0; height: 34px; }
@@ -410,7 +410,7 @@
     &-list {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: $space-1;
         max-height: 240px;
         overflow-y: auto;
     }
@@ -420,10 +420,10 @@
     &-repo {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 9px 11px;
+        gap: $space-3;
+        padding: $space-2 $space-3;
         border: 1px solid var(--border-soft);
-        border-radius: 8px;
+        border-radius: $radius-card;
         background: var(--surface);
         text-align: left;
         cursor: pointer;
@@ -456,17 +456,17 @@
     &-branch {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: $space-3;
         font-size: $text-sm;
 
         label { color: var(--text-dim); }
         select {
             flex: 1;
             height: 34px;
-            padding: 0 10px;
+            padding: 0 $space-3;
             background: var(--surface);
             border: 1px solid var(--border-soft);
-            border-radius: 8px;
+            border-radius: $radius-card;
             color: var(--text);
         }
     }
@@ -506,8 +506,8 @@
     &__chip {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        padding: 5px 10px;
+        gap: $space-tight;
+        padding: $space-tight $space-3;
         border: 1px solid var(--border);
         border-radius: $radius-full;
         background: var(--surface);
@@ -557,10 +557,10 @@
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        padding: 4px 8px 4px 10px;
+        padding: $space-1 $space-2 $space-1 $space-3;
         background: var(--bg-code);
         border: 1px solid var(--border-soft);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-size: $text-sm;
 
         code {
@@ -577,7 +577,7 @@
         height: 18px;
         padding: 0;
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: transparent;
         color: var(--text-faint);
         cursor: pointer;

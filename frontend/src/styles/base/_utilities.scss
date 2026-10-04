@@ -159,8 +159,8 @@
 // --------------------------------------------
 .border { border: 1px solid $border-default; }
 .border-b { border-bottom: 1px solid $border-subtle; }
-.rounded { border-radius: $radius-md; }
-.rounded-lg { border-radius: $radius-lg; }
+.rounded { border-radius: $radius-control; }
+.rounded-lg { border-radius: $radius-card; }
 
 // --------------------------------------------
 // MISC
@@ -305,8 +305,8 @@
 // ---- Borders & radius ----
 .border-t { border-top: 1px solid $border-subtle; }
 .border-border { border-color: $border-default; }
-.rounded-sm { border-radius: $radius-sm; }
-.rounded-md { border-radius: $radius-md; }
+.rounded-sm { border-radius: $radius-badge; }
+.rounded-md { border-radius: $radius-control; }
 .rounded-full { border-radius: $radius-full; }
 
 // ---- Flex / interaction / state ----
@@ -334,7 +334,7 @@
 .m-4 { margin: 1rem; }
 .mb-1\.5 { margin-bottom: 0.375rem; }
 .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
-.rounded-xl { border-radius: $radius-xl; }
+.rounded-xl { border-radius: $radius-overlay; }
 .overflow-x-auto { overflow-x: auto; }
 .whitespace-pre-wrap { white-space: pre-wrap; }
 .max-w-\[200px\] { max-width: 200px; }

@@ -18,8 +18,8 @@
     max-height: 460px;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
-    box-shadow: $shadow-lg;
+    border-radius: $radius-overlay;
+    box-shadow: $shadow-overlay;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -66,10 +66,10 @@
     &__kbd {
         font-size: $text-xs;
         font-family: $font-main;
-        padding: 2px 6px;
+        padding: $space-hair $space-tight;
         background: $bg-hover;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-tertiary;
         flex-shrink: 0;
     }
@@ -189,14 +189,14 @@
 
     kbd {
         min-width: 16px;
-        padding: 1px 5px;
+        padding: 1px $space-tight;
         text-align: center;
         font-size: $text-xs;
         font-family: $font-mono;
         color: $text-secondary;
         background: $bg-hover;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 }
 
@@ -221,8 +221,8 @@
     [cmdk-group-items] {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px;
-        padding: 2px 4px 8px;
+        gap: $space-tight;
+        padding: $space-hair $space-1 $space-2;
     }
 }
 
@@ -232,10 +232,10 @@
     flex: 0 0 118px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 9px;
-    padding: 11px 11px 10px;
+    gap: $space-2;
+    padding: $space-3 $space-3 $space-3;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: var(--surface);
     color: $text-secondary;
     font-size: $text-xs;
@@ -282,10 +282,10 @@
     height: 29px;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    margin: 0 4px 6px;
+    gap: $space-2;
+    margin: 0 $space-1 $space-tight;
     border: 1px dashed $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: transparent;
     color: $text-tertiary;
     font-size: $text-xs;
@@ -308,7 +308,7 @@
 .is-setting-focused {
     scroll-margin-top: $space-6;
     animation: setting-focus-flash 2s ease-out;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 }
 
 @keyframes setting-focus-flash {

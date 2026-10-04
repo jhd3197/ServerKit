@@ -14,7 +14,7 @@
         align-items: flex-start;
         gap: $space-1;
         min-width: 0;
-        padding: 4px 4px 4px $space-3;
+        padding: $space-1 $space-1 $space-1 $space-3;
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
         border-radius: var(--radius-sm);

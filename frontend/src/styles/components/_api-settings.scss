@@ -46,9 +46,9 @@
     code {
         font-family: $font-mono;
         font-size: $text-xs;
-        padding: 2px 6px;
+        padding: $space-hair $space-tight;
         background: $bg-elevated;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 
     &--compact {
@@ -113,7 +113,7 @@
 
 .api-settings__webhook-card {
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     overflow: hidden;
 }
 
@@ -204,7 +204,7 @@
 .api-settings__bar-chart {
     display: flex;
     align-items: flex-end;
-    gap: 2px;
+    gap: $space-hair;
     height: 120px;
     padding: $space-2 0;
 }
@@ -221,7 +221,7 @@
 
 .api-settings__bar {
     background: $accent-primary;
-    border-radius: $radius-sm $radius-sm 0 0;
+    border-radius: $radius-badge $radius-badge 0 0;
     min-height: 2px;
     transition: height 0.3s ease;
 
@@ -246,8 +246,8 @@
 .badge--method {
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    padding: 1px 6px;
-    border-radius: $radius-sm;
+    padding: 1px $space-tight;
+    border-radius: $radius-badge;
 }
 
 .badge--get {
@@ -289,8 +289,8 @@
     background: $bg-elevated;
     color: $text-secondary;
     font-size: $text-xs;
-    padding: 1px 6px;
-    border-radius: $radius-sm;
+    padding: 1px $space-tight;
+    border-radius: $radius-badge;
 }
 
 // ─── API Key Modal ─────────────────────────────────────
@@ -305,7 +305,7 @@
         padding: $space-3;
         background: $warning-bg;
         border: 1px solid $warning-border;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $warning;
         font-size: $text-xs;
         margin-bottom: $space-4;
@@ -324,7 +324,7 @@
         gap: $space-1;
         padding: $space-3;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: transparent;
         color: $text-secondary;
         cursor: pointer;
@@ -360,7 +360,7 @@
         overflow-y: auto;
         padding: $space-2;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     .api-key-modal__scope-item {
@@ -373,7 +373,7 @@
 
         &:hover {
             background: $bg-hover;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
         }
 
         input[type="checkbox"] {
@@ -391,7 +391,7 @@
         max-height: 300px;
         overflow-y: auto;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         padding: $space-2;
     }
 
@@ -430,7 +430,7 @@
 
         &:hover {
             background: $bg-hover;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
         }
 
         input[type="checkbox"] {

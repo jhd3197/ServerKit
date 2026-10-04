@@ -38,7 +38,7 @@
     gap: $space-1;
     background: $bg-hover;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     padding: $space-1 $space-2;
     font-size: $text-xs;
     color: $text-secondary;
@@ -54,7 +54,7 @@
         height: 16px;
         background: transparent;
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-tertiary;
         cursor: pointer;
         font-size: $text-md;
@@ -107,7 +107,7 @@
         padding: $space-2 $space-3;
         background: $bg-body;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-primary;
         font-size: $text-xs;
 
@@ -122,7 +122,7 @@
         color: $text-tertiary;
         background: $bg-card;
         border: 1px dashed $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-size: $text-xs;
     }
 
@@ -131,7 +131,7 @@
         border-left: 2px solid $warning-border;
         background: $warning-bg;
         padding: $space-2 $space-3;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 }
 
@@ -173,7 +173,7 @@
     display: inline-flex;
     align-items: center;
     padding: 1px $space-2;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     line-height: 1.5;
@@ -211,7 +211,7 @@
     align-items: center;
     margin-left: $space-2;
     padding: 1px $space-2;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-family: $font-main;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
@@ -318,7 +318,7 @@
         padding: $space-3;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__list {
@@ -339,7 +339,7 @@
         padding: $space-3;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         cursor: pointer;
         transition: border-color 0.15s;
 

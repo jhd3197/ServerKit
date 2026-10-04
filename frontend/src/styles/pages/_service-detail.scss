@@ -40,7 +40,7 @@
 
     // Identity row — flat (no card): just the tile + name on the page.
     .app-detail-header {
-        padding: 4px 0 0;
+        padding: $space-1 0 0;
         background: none;
         border: none;
         border-radius: 0;
@@ -52,7 +52,7 @@
     .svc-crumbs {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         white-space: nowrap;
 
         a {
@@ -67,9 +67,9 @@
     // The detail page carries several actions, so let the whole bar wrap
     // instead of squeezing the breadcrumb (matches .wp-detail-topbar).
     .svc-detail-topbar {
-        padding: 10px $space-4;
+        padding: $space-3 $space-4;
         flex-wrap: wrap;
-        row-gap: 8px;
+        row-gap: $space-2;
 
         .sk-topbar__spacer { display: none; }
         .sk-topbar__titles { flex-shrink: 0; }
@@ -78,20 +78,20 @@
             margin-left: auto;
             flex-wrap: wrap;
             justify-content: flex-end;
-            row-gap: 6px;
+            row-gap: $space-tight;
 
             .ui-button {
                 height: 32px;
-                padding: 0 10px;
+                padding: 0 $space-3;
                 font-size: $text-sm;
-                gap: 6px;
+                gap: $space-tight;
             }
         }
     }
 
     // Gradient initial avatar (ds ServiceTile — size via props)
     &__tile {
-        border-radius: 13px;
+        border-radius: $radius-overlay;
         box-shadow: var(--shadow-sm);
     }
 
@@ -99,8 +99,8 @@
     &__type-badge {
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        padding: 2px 7px;
-        border-radius: 5px;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
         border: 1px solid;
     }
 
@@ -137,7 +137,7 @@
             color: $text-secondary;
             font-size: $text-xs;
             cursor: pointer;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             text-decoration: none;
 
             &:hover {
@@ -176,7 +176,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: 6px $space-3;
+        padding: $space-tight $space-3;
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: $radius-full;
@@ -221,16 +221,16 @@
     &__auto-deploy-badge {
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        padding: 1px 6px;
+        padding: 1px $space-tight;
         @include status-variant(var(--green), var(--green-bg));
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 
     &__connect-repo {
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: 6px $space-3;
+        padding: $space-tight $space-3;
         background: none;
         border: 1px dashed var(--border-strong);
         border-radius: $radius-full;
@@ -250,7 +250,7 @@
         padding: $space-4;
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__versions-header {
@@ -272,10 +272,10 @@
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: 6px $space-3;
+        padding: $space-tight $space-3;
         background: var(--accent-bg-soft);
         border: 1px solid var(--accent-dim);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: var(--accent-bright);
         font-size: $text-xs;
         font-weight: $font-weight-medium;
@@ -306,7 +306,7 @@
             padding: $space-3;
             background: var(--surface-2);
             border: 1px solid var(--border);
-            border-radius: $radius-md;
+            border-radius: $radius-control;
 
             &.is-current {
                 border-color: rgba(61, 220, 151, 0.35);
@@ -329,7 +329,7 @@
     }
 
     &__version-current {
-        padding: 3px $space-2;
+        padding: $space-1 $space-2;
         background: rgba(61, 220, 151, 0.1);
         border: 1px solid rgba(61, 220, 151, 0.2);
         border-radius: $radius-full;
@@ -345,7 +345,7 @@
     .app-detail-tabs {
         flex-wrap: wrap;
         overflow-x: visible;
-        row-gap: 2px;
+        row-gap: $space-hair;
     }
 
     // Settings pinned to the far right of the strip (matches the mockup's gear).
@@ -391,7 +391,7 @@
 h3.svc-eyebrow {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: $space-tight;
     margin: 0;
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
@@ -529,7 +529,7 @@ h3.svc-eyebrow {
     &__nav {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         position: sticky;
         top: $space-4;
 
@@ -542,9 +542,9 @@ h3.svc-eyebrow {
             position: static;
             flex-direction: row;
             flex-wrap: nowrap;
-            gap: 6px;
+            gap: $space-tight;
             overflow-x: auto;
-            padding-bottom: 2px; // keep the active pill's ring/shadow unclipped
+            padding-bottom: $space-hair; // keep the active pill's ring/shadow unclipped
             scrollbar-width: none;
             &::-webkit-scrollbar { display: none; }
         }
@@ -561,8 +561,8 @@ h3.svc-eyebrow {
     }
 
     &__grouplabel {
-        padding: 0 12px;
-        margin-bottom: 6px;
+        padding: 0 $space-3;
+        margin-bottom: $space-tight;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
@@ -573,10 +573,10 @@ h3.svc-eyebrow {
         width: 100%; // fill the nav column — a flex <button> otherwise shrinks
                      // to its label, so each item's box was a different width
         align-items: center;
-        gap: 9px;
-        padding: 9px 12px;
+        gap: $space-2;
+        padding: $space-2 $space-3;
         border: none;
-        border-radius: 8px;
+        border-radius: $radius-card;
         background: none;
         color: var(--text-dim);
         font-size: $text-sm;
@@ -614,7 +614,7 @@ h3.svc-eyebrow {
     &__section-title {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
         margin: 0 0 $space-3;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
@@ -659,7 +659,7 @@ h3.svc-eyebrow {
     &__badge {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
         color: var(--text-dim);
         font-size: $text-sm;
         font-weight: $font-weight-medium;
@@ -671,7 +671,7 @@ h3.svc-eyebrow {
         display: inline-flex;
         align-items: center;
         min-height: 22px;
-        padding: 0 10px;
+        padding: 0 $space-3;
         border-radius: $radius-full;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
@@ -731,7 +731,7 @@ h3.svc-eyebrow {
         overflow: auto;
         background: var(--surface-sunken, var(--surface-hover));
         border: 1px solid var(--border-soft);
-        border-radius: 8px;
+        border-radius: $radius-card;
         font-family: var(--mono);
         font-size: $text-xs;
         line-height: 1.5;
@@ -742,7 +742,7 @@ h3.svc-eyebrow {
     &__issues {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: $space-tight;
         margin: $space-2 0 0;
         padding: 0;
         list-style: none;
@@ -763,7 +763,7 @@ h3.svc-eyebrow {
         display: inline-flex;
         align-items: center;
         min-height: 20px;
-        padding: 0 8px;
+        padding: 0 $space-2;
         border-radius: $radius-full;
         @include status-variant(var(--accent-bright), var(--accent-bg));
         font-size: $text-xs;
@@ -896,7 +896,7 @@ h3.svc-eyebrow {
     &__card-title {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
         margin: 0 0 $space-3;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
@@ -923,8 +923,8 @@ h3.svc-eyebrow {
     &__info-badge {
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        padding: 2px 7px;
-        border-radius: 5px;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
         border: 1px solid;
     }
 
@@ -985,7 +985,7 @@ h3.svc-eyebrow {
     &__metric-item {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
     }
 
     &__metric-item-label {
@@ -1016,7 +1016,7 @@ h3.svc-eyebrow {
         display: flex;
         align-items: center;
         gap: $space-3;
-        padding: 11px 0;
+        padding: $space-3 0;
 
         & + & {
             border-top: 1px solid var(--border-soft);
@@ -1058,13 +1058,13 @@ h3.svc-eyebrow {
         gap: $space-3;
         font-size: $text-xs;
         color: var(--text-faint);
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     &__deploy-sha {
         @include status-variant(var(--accent-bright), var(--accent-bg));
         padding: 0 $space-1;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 }
 
@@ -1123,7 +1123,7 @@ h3.svc-eyebrow {
         gap: $space-2;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         padding: 0 $space-2;
         flex: 1;
         max-width: 300px;
@@ -1202,7 +1202,7 @@ h3.svc-eyebrow {
         font-weight: $font-weight-semibold;
         padding: 1px $space-1;
         @include status-variant(var(--red), var(--red-bg));
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         animation: pulse-dot 1.5s ease-in-out infinite;
     }
 }
@@ -1212,7 +1212,7 @@ h3.svc-eyebrow {
 .svc-detail__portlink {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: $space-1;
     color: $text-tertiary;
     transition: color $transition-fast;
 

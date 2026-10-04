@@ -22,7 +22,7 @@
     }
 
     .sk-err__message {
-        margin-top: 2px;
+        margin-top: $space-hair;
         font-size: $text-sm;
         color: var(--text-dim);
         white-space: nowrap;
@@ -49,8 +49,8 @@
     // Occurrence badge — only rendered when the same fingerprint hit >1 time.
     .sk-err__count {
         display: inline-block;
-        padding: 1px 8px;
-        border-radius: 999px;
+        padding: 1px $space-2;
+        border-radius: $radius-full;
         border: 1px solid var(--border);
         background: var(--surface-2);
         font-size: $text-xs;
@@ -68,7 +68,7 @@
 .err-detail {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: $space-4;
 
     &__rows {
         margin: 0;
@@ -79,8 +79,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            padding: 9px 0;
+            gap: $space-4;
+            padding: $space-2 0;
             border-bottom: 1px solid var(--border-soft);
 
             &:last-child { border-bottom: none; }
@@ -114,8 +114,8 @@
     &__context {
         margin: 0;
         overflow: auto;
-        padding: 12px;
-        border-radius: 8px;
+        padding: $space-3;
+        border-radius: $radius-card;
         border: 1px solid var(--border-soft);
         background: var(--surface-2);
         font-family: var(--mono);
@@ -131,6 +131,6 @@
     &__actions {
         display: flex;
         justify-content: flex-end;
-        gap: 8px;
+        gap: $space-2;
     }
 }

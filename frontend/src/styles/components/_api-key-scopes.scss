@@ -16,7 +16,7 @@
     gap: $space-3;
     padding: $space-3;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-secondary;
 }
 
@@ -27,7 +27,7 @@
     color: $text-primary;
 
     svg {
-        margin-top: 2px;
+        margin-top: $space-hair;
         color: $color-primary;
         flex-shrink: 0;
     }
@@ -85,7 +85,7 @@
     align-items: flex-start;
     gap: $space-2;
     padding: $space-2;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     cursor: pointer;
 
     &:hover {
@@ -96,7 +96,7 @@
 .api-key-scopes__item-text {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: $space-hair;
     min-width: 0;
 }
 
