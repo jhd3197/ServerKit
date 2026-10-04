@@ -100,7 +100,6 @@ export default function ServerRestorePointsTab({ serverId }) {
             <header className="server-restore-points__header">
                 <div>
                     <h2>{t('app.serverRestorePoints.title', 'Restore points')}</h2>
-                    <p>{t('app.serverRestorePoints.description', 'Review checkpoints, deployments, and server audit activity in one timeline.')}</p>
                 </div>
                 <div className="server-restore-points__actions">
                     <Button

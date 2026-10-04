@@ -28,7 +28,6 @@
             "links": "روابط",
             "reloadPanel": "إعادة تحميل اللوحة",
             "reportABug": "الإبلاغ عن خطأ",
-            "serverManagementMadeSimple": "أصبحت إدارة الخادم بسيطة",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit هو برنامج مفتوح المصدر مرخص بموجب ترخيص MIT.",
             "starOnGithub": "نجمة على GitHub",
             "supportIssues": "الدعم والقضايا",
@@ -93,7 +92,6 @@
             "commandRetryTriggered": "تم تشغيل أمر إعادة المحاولة",
             "commandStats24h": "إحصائيات القيادة (24 ساعة)",
             "commandsQueuedForDelivery": "الأوامر في قائمة الانتظار للتسليم",
-            "commandsWaitingToBeDeliveredWhen": "الأوامر في انتظار تسليمها عند إعادة اتصال الوكلاء",
             "connected": "متصل",
             "connectedSince": "متصل منذ",
             "currentLatency": "الكمون الحالي",
@@ -294,7 +292,6 @@
             "couldNotImportThatThemeJson": "تعذر استيراد هذا theme.json",
             "createTheme": "إنشاء موضوع",
             "customColor": "لون مخصص",
-            "customizeTheLookAndFeelOf": "تخصيص شكل ومظهر لوحة القيادة الخاصة بك",
             "cyan": "سماوي",
             "dark": "مظلم",
             "dashboardWidgets": "الحاجيات لوحة القيادة",
@@ -3325,7 +3322,6 @@
             "botUsername": "اسم مستخدم البوت",
             "channelOptional": "القناة (اختيارية)",
             "chatId": "معرف الدردشة",
-            "configureHowYouReceiveAlertsAnd": "قم بتكوين كيفية تلقي التنبيهات والإشعارات",
             "createAWebhookInDiscordServer": "قم بإنشاء خطاف ويب في Discord: إعدادات الخادم → عمليات التكامل → Webhooks",
             "createAWebhookInYourPersonal": "قم بإنشاء خطاف ويب في خادمك الشخصي أو قناة DM",
             "createAnIncomingWebhookInSlack": "قم بإنشاء خطاف ويب وارد في Slack: التطبيقات → خطافات الويب الواردة",
@@ -3625,8 +3621,7 @@
             "emailAddress": "عنوان البريد الإلكتروني",
             "memberSince": "عضو منذ",
             "profileSettings": "إعدادات الملف الشخصي",
-            "role": "دور",
-            "updateYourPersonalInformation": "قم بتحديث معلوماتك الشخصية"
+            "role": "دور"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "أضف بيئة لبدء تنظيم تطبيقات هذا المشروع.",
@@ -4068,7 +4063,6 @@
             "autoDetect": "الكشف التلقائي",
             "build": "يبني",
             "buildMethod": "طريقة البناء",
-            "confirmTheDetectedSettingsThenCreate": "قم بتأكيد الإعدادات المكتشفة، ثم قم بإنشاء الخدمة.",
             "detectedManifestSettingsDockerfilePathBuild": "يتم تطبيق إعدادات البيان المكتشفة (مسار Dockerfile، أوامر الإنشاء/البدء) تلقائيًا عند وجودها. قم بتجاوز الحقول أعلاه إذا كان الاكتشاف خاطئًا.",
             "environment": "بيئة",
             "hostNginxDefault": "المضيف Nginx (افتراضي)",
@@ -4339,7 +4333,6 @@
             "enterVerificationCode": "أدخل رمز التحقق",
             "linkedAccounts": "حسابات متصلة",
             "manageYourActiveSessions": "إدارة جلساتك النشطة",
-            "manageYourPasswordAndSecurityPreferences": "إدارة كلمة المرور وتفضيلات الأمان الخاصة بك",
             "minimum8Characters": "الحد الأدنى 8 أحرف",
             "newPassword": "كلمة المرور الجديدة",
             "qrCodeUnavailableEnterThisSecret": "رمز الاستجابة السريعة غير متاح. أدخل هذا السر يدويًا:",
@@ -4500,7 +4493,6 @@
             "chooseApplication": "اختر تطبيقًا لإجراء الحفظ السريع.",
             "createEnvironmentQuicksave": "إنشاء حفظ سريع للبيئة",
             "createQuicksave": "إنشاء حفظ سريع",
-            "description": "راجع نقاط التفتيش وعمليات النشر ونشاط تدقيق الخادم في خط زمني واحد.",
             "formDescription": "اختر تطبيقًا واحدًا على هذا الخادم. سيتم التقاط متغيرات البيئة التي يديرها ServerKit فقط.",
             "label": "التسمية (اختياري)",
             "labelPlaceholder": "قبل تغيير البيئة",
@@ -5305,7 +5297,6 @@
             "howDoYouWantToDeploy": "كيف تريد النشر؟",
             "manualLocal": "يدوي / محلي",
             "otherGitRemote": "جهاز تحكم عن بعد Git آخر",
-            "pickASourceYouCanChange": "اختر مصدرًا. يمكنك تغييره في الخطوة التالية.",
             "serviceSource": "مصدر الخدمة",
             "uploadZip": "تحميل الرمز البريدي"
         },
@@ -5855,8 +5846,7 @@
             "useThisDomain": "استخدم هذا المجال",
             "used": "مستخدم",
             "utcOffset": "إزاحة التوقيت العالمي المنسق",
-            "version": "الإصدار {{brand}}",
-            "viewSystemDetailsAndServerInformation": "عرض تفاصيل النظام ومعلومات الخادم"
+            "version": "الإصدار {{brand}}"
         },
         "tableDataTab": {
             "column": "عمود",
@@ -6443,7 +6433,6 @@
             "myBrand": "علامتي التجارية",
             "pngJpgSvgMax200kb": "PNG، JPG، SVG - بحد أقصى 200 كيلو بايت",
             "preview": "معاينة",
-            "replaceTheDefaultServerkitBrandingWith": "استبدل العلامة التجارية الافتراضية ServerKit بعلامتك التجارية",
             "replaceTheSidebarLogoNameAnd": "استبدل شعار الشريط الجانبي والاسم ورابط النجمة GitHub",
             "replacesTheSidebarLogoNameAnd": "يستبدل شعار الشريط الجانبي والاسم والرابط النجمي GitHub",
             "starOnGithub": "نجمة على GitHub",

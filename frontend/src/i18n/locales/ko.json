@@ -28,7 +28,6 @@
             "links": "링크",
             "reloadPanel": "패널 새로고침",
             "reportABug": "버그 신고",
-            "serverManagementMadeSimple": "서버 관리가 간편해졌습니다.",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit은 MIT 라이선스에 따라 라이선스가 부여된 오픈 소스 소프트웨어입니다.",
             "starOnGithub": "GitHub의 스타",
             "supportIssues": "지원 및 문제",
@@ -93,7 +92,6 @@
             "commandRetryTriggered": "명령 재시도가 트리거됨",
             "commandStats24h": "명령 통계(24시간)",
             "commandsQueuedForDelivery": "배달 대기 중인 명령",
-            "commandsWaitingToBeDeliveredWhen": "에이전트가 다시 연결될 때 전달을 기다리는 명령",
             "connected": "연결됨",
             "connectedSince": "다음 이후부터 연결됨",
             "currentLatency": "현재 대기 시간",
@@ -294,7 +292,6 @@
             "couldNotImportThatThemeJson": "해당 theme.json을 가져올 수 없습니다.",
             "createTheme": "테마 만들기",
             "customColor": "맞춤 색상",
-            "customizeTheLookAndFeelOf": "대시보드의 모양과 느낌을 사용자 정의하세요",
             "cyan": "청록색",
             "dark": "어둠",
             "dashboardWidgets": "대시보드 위젯",
@@ -3325,7 +3322,6 @@
             "botUsername": "봇 사용자 이름",
             "channelOptional": "채널(선택사항)",
             "chatId": "채팅 ID",
-            "configureHowYouReceiveAlertsAnd": "경고 및 알림 수신 방법 구성",
             "createAWebhookInDiscordServer": "Discord에서 웹훅 생성: 서버 설정 → 통합 → 웹훅",
             "createAWebhookInYourPersonal": "개인 서버 또는 DM 채널에 웹훅 생성",
             "createAnIncomingWebhookInSlack": "Slack에서 수신 웹훅 생성: 앱 → 수신 웹훅",
@@ -3625,8 +3621,7 @@
             "emailAddress": "이메일 주소",
             "memberSince": "회원가입 이후",
             "profileSettings": "프로필 설정",
-            "role": "역할",
-            "updateYourPersonalInformation": "개인 정보 업데이트"
+            "role": "역할"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "이 프로젝트의 앱 정리를 시작하려면 환경을 추가하세요.",
@@ -4068,7 +4063,6 @@
             "autoDetect": "자동 감지",
             "build": "빌드",
             "buildMethod": "빌드 방법",
-            "confirmTheDetectedSettingsThenCreate": "감지된 설정을 확인한 후 서비스를 생성합니다.",
             "detectedManifestSettingsDockerfilePathBuild": "감지된 매니페스트 설정(Dockerfile 경로, 빌드/시작 명령)이 있으면 자동으로 적용됩니다. 감지가 잘못된 경우 위 필드를 재정의하세요.",
             "environment": "환경",
             "hostNginxDefault": "호스트 Nginx(기본값)",
@@ -4339,7 +4333,6 @@
             "enterVerificationCode": "인증코드를 입력하세요",
             "linkedAccounts": "연결된 계정",
             "manageYourActiveSessions": "활성 세션 관리",
-            "manageYourPasswordAndSecurityPreferences": "비밀번호 및 보안 기본 설정을 관리하세요",
             "minimum8Characters": "최소 8자",
             "newPassword": "새 비밀번호",
             "qrCodeUnavailableEnterThisSecret": "QR 코드를 사용할 수 없습니다. 이 비밀을 수동으로 입력하세요:",
@@ -4500,7 +4493,6 @@
             "chooseApplication": "빠른 저장을 만들 애플리케이션을 선택하세요.",
             "createEnvironmentQuicksave": "환경 빠른 저장 만들기",
             "createQuicksave": "빠른 저장 만들기",
-            "description": "체크포인트, 배포 및 서버 감사 활동을 하나의 타임라인에서 검토하세요.",
             "formDescription": "이 서버에서 애플리케이션 하나를 선택하세요. ServerKit이 관리하는 환경 변수만 캡처됩니다.",
             "label": "레이블(선택사항)",
             "labelPlaceholder": "환경 변경 전",
@@ -5305,7 +5297,6 @@
             "howDoYouWantToDeploy": "어떻게 배포하시겠습니까?",
             "manualLocal": "수동/로컬",
             "otherGitRemote": "기타 Git 원격",
-            "pickASourceYouCanChange": "소스를 선택하세요. 다음 단계에서 변경할 수 있습니다.",
             "serviceSource": "서비스 소스",
             "uploadZip": "우편번호 업로드"
         },
@@ -5855,8 +5846,7 @@
             "useThisDomain": "이 도메인을 사용하세요",
             "used": "중고",
             "utcOffset": "UTC 오프셋",
-            "version": "{{brand}} 버전",
-            "viewSystemDetailsAndServerInformation": "시스템 세부정보 및 서버 정보 보기"
+            "version": "{{brand}} 버전"
         },
         "tableDataTab": {
             "column": "칼럼",
@@ -6443,7 +6433,6 @@
             "myBrand": "내 브랜드",
             "pngJpgSvgMax200kb": "PNG, JPG, SVG — 최대 200KB",
             "preview": "미리보기",
-            "replaceTheDefaultServerkitBrandingWith": "기본 ServerKit 브랜드를 자신의 브랜드로 교체",
             "replaceTheSidebarLogoNameAnd": "사이드바 로고, 이름, GitHub 스타 링크 교체",
             "replacesTheSidebarLogoNameAnd": "사이드바 로고, 이름 및 GitHub 스타 링크를 대체합니다.",
             "starOnGithub": "GitHub의 스타",

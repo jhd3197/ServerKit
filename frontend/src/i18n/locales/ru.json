@@ -28,7 +28,6 @@
             "links": "Ссылки",
             "reloadPanel": "Перезагрузить панель",
             "reportABug": "Сообщить об ошибке",
-            "serverManagementMadeSimple": "Управление сервером стало проще",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit — это программное обеспечение с открытым исходным кодом, лицензированное по лицензии MIT.",
             "starOnGithub": "Звезда на GitHub",
             "supportIssues": "Поддержка и проблемы",
@@ -93,7 +92,6 @@
             "commandRetryTriggered": "Сработала повторная попытка команды",
             "commandStats24h": "Статистика команды (24 часа)",
             "commandsQueuedForDelivery": "команды поставлены в очередь для доставки",
-            "commandsWaitingToBeDeliveredWhen": "Команды, ожидающие доставки при повторном подключении агентов",
             "connected": "Подключено",
             "connectedSince": "Подключено с тех пор",
             "currentLatency": "Текущая задержка",
@@ -294,7 +292,6 @@
             "couldNotImportThatThemeJson": "Не удалось импортировать этот файл theme.json.",
             "createTheme": "Создать тему",
             "customColor": "Пользовательский цвет",
-            "customizeTheLookAndFeelOf": "Настройте внешний вид панели управления",
             "cyan": "Голубой",
             "dark": "Темный",
             "dashboardWidgets": "Виджеты информационной панели",
@@ -3325,7 +3322,6 @@
             "botUsername": "Имя пользователя бота",
             "channelOptional": "Канал (необязательно)",
             "chatId": "Идентификатор чата",
-            "configureHowYouReceiveAlertsAnd": "Настройте способ получения оповещений и уведомлений",
             "createAWebhookInDiscordServer": "Создайте вебхук в Discord: Настройки сервера → Интеграции → Вебхуки.",
             "createAWebhookInYourPersonal": "Создайте вебхук на своем личном сервере или в канале DM.",
             "createAnIncomingWebhookInSlack": "Создайте входящий вебхук в Slack: Приложения → Входящие вебхуки.",
@@ -3625,8 +3621,7 @@
             "emailAddress": "Адрес электронной почты",
             "memberSince": "Участник с",
             "profileSettings": "Настройки профиля",
-            "role": "Роль",
-            "updateYourPersonalInformation": "Обновите свою личную информацию"
+            "role": "Роль"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "Добавьте среду, чтобы начать систематизировать приложения этого проекта.",
@@ -4068,7 +4063,6 @@
             "autoDetect": "Автообнаружение",
             "build": "Сборка",
             "buildMethod": "Метод сборки",
-            "confirmTheDetectedSettingsThenCreate": "Подтвердите обнаруженные настройки, затем создайте службу.",
             "detectedManifestSettingsDockerfilePathBuild": "Обнаруженные параметры манифеста (путь к файлу Dockerfile, команды сборки/запуска) применяются автоматически, если они присутствуют. Переопределите поля выше, если обнаружение неверно.",
             "environment": "Среда",
             "hostNginxDefault": "Хост Nginx (по умолчанию)",
@@ -4339,7 +4333,6 @@
             "enterVerificationCode": "Введите код подтверждения",
             "linkedAccounts": "Связанные аккаунты",
             "manageYourActiveSessions": "Управляйте активными сеансами",
-            "manageYourPasswordAndSecurityPreferences": "Управляйте своим паролем и настройками безопасности",
             "minimum8Characters": "Минимум 8 символов",
             "newPassword": "Новый пароль",
             "qrCodeUnavailableEnterThisSecret": "QR-код недоступен. Введите этот секрет вручную:",
@@ -4500,7 +4493,6 @@
             "chooseApplication": "Выберите приложение для быстрого сохранения.",
             "createEnvironmentQuicksave": "Создать быстрое сохранение окружения",
             "createQuicksave": "Создать быстрое сохранение",
-            "description": "Просматривайте контрольные точки, развёртывания и события аудита сервера в одной хронологии.",
             "formDescription": "Выберите одно приложение на этом сервере. Будут сохранены только его переменные окружения, управляемые ServerKit.",
             "label": "Метка (необязательно)",
             "labelPlaceholder": "Перед изменением окружения",
@@ -5305,7 +5297,6 @@
             "howDoYouWantToDeploy": "Как вы хотите развернуть?",
             "manualLocal": "Ручной/локальный",
             "otherGitRemote": "Другое Git Remote",
-            "pickASourceYouCanChange": "Выберите источник. Вы можете изменить его на следующем шаге.",
             "serviceSource": "Источник службы",
             "uploadZip": "Загрузить ZIP-файл"
         },
@@ -5855,8 +5846,7 @@
             "useThisDomain": "Используйте этот домен",
             "used": "Использовано",
             "utcOffset": "Смещение UTC",
-            "version": "{{brand}} Версия",
-            "viewSystemDetailsAndServerInformation": "Просмотр сведений о системе и информации о сервере"
+            "version": "{{brand}} Версия"
         },
         "tableDataTab": {
             "column": "Столбец",
@@ -6443,7 +6433,6 @@
             "myBrand": "Мой бренд",
             "pngJpgSvgMax200kb": "PNG, JPG, SVG — максимум 200 КБ.",
             "preview": "Предпросмотр",
-            "replaceTheDefaultServerkitBrandingWith": "Замените фирменный стиль ServerKit по умолчанию на свой собственный.",
             "replaceTheSidebarLogoNameAnd": "Замените логотип, имя и звездочку на боковой панели GitHub.",
             "replacesTheSidebarLogoNameAnd": "Заменяет логотип, имя и звездочку на боковой панели GitHub.",
             "starOnGithub": "Звезда на GitHub",

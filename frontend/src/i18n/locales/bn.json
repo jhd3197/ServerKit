@@ -28,7 +28,6 @@
             "links": "লিঙ্ক",
             "reloadPanel": "প্যানেল পুনরায় লোড করুন",
             "reportABug": "একটি বাগ রিপোর্ট করুন",
-            "serverManagementMadeSimple": "সার্ভার ব্যবস্থাপনা সহজ করা",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit হল MIT লাইসেন্সের অধীনে লাইসেন্সকৃত ওপেন সোর্স সফ্টওয়্যার।",
             "starOnGithub": "GitHub-এ তারকা",
             "supportIssues": "সমর্থন এবং সমস্যা",
@@ -93,7 +92,6 @@
             "commandRetryTriggered": "কমান্ড পুনরায় চেষ্টা ট্রিগার",
             "commandStats24h": "কমান্ড পরিসংখ্যান (24 ঘন্টা)",
             "commandsQueuedForDelivery": "প্রসবের জন্য সারিবদ্ধ কমান্ড",
-            "commandsWaitingToBeDeliveredWhen": "এজেন্ট পুনঃসংযোগের সময় কমান্ড বিতরণের অপেক্ষায়",
             "connected": "সংযুক্ত",
             "connectedSince": "থেকে সংযুক্ত",
             "currentLatency": "বর্তমান লেটেন্সি",
@@ -294,7 +292,6 @@
             "couldNotImportThatThemeJson": "যে theme.json আমদানি করা যায়নি",
             "createTheme": "থিম তৈরি করুন",
             "customColor": "কাস্টম রঙ",
-            "customizeTheLookAndFeelOf": "আপনার ড্যাশবোর্ডের চেহারা এবং অনুভূতি কাস্টমাইজ করুন",
             "cyan": "সায়ান",
             "dark": "অন্ধকার",
             "dashboardWidgets": "ড্যাশবোর্ড উইজেট",
@@ -3325,7 +3322,6 @@
             "botUsername": "বট ব্যবহারকারীর নাম",
             "channelOptional": "চ্যানেল (ঐচ্ছিক)",
             "chatId": "চ্যাট আইডি",
-            "configureHowYouReceiveAlertsAnd": "আপনি কিভাবে সতর্কতা এবং বিজ্ঞপ্তি পাবেন তা কনফিগার করুন",
             "createAWebhookInDiscordServer": "ডিসকর্ডে একটি ওয়েবহুক তৈরি করুন: সার্ভার সেটিংস → ইন্টিগ্রেশন → ওয়েবহুক",
             "createAWebhookInYourPersonal": "আপনার ব্যক্তিগত সার্ভার বা DM চ্যানেলে একটি ওয়েবহুক তৈরি করুন",
             "createAnIncomingWebhookInSlack": "স্ল্যাকে একটি ইনকামিং ওয়েবহুক তৈরি করুন: অ্যাপস → ইনকামিং ওয়েবহুক",
@@ -3625,8 +3621,7 @@
             "emailAddress": "ইমেইল ঠিকানা",
             "memberSince": "থেকে সদস্য",
             "profileSettings": "প্রোফাইল সেটিংস",
-            "role": "ভূমিকা",
-            "updateYourPersonalInformation": "আপনার ব্যক্তিগত তথ্য আপডেট করুন"
+            "role": "ভূমিকা"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "এই প্রকল্পের অ্যাপ্লিকেশানগুলি সংগঠিত করা শুরু করার জন্য একটি পরিবেশ যুক্ত করুন৷",
@@ -4068,7 +4063,6 @@
             "autoDetect": "স্বয়ংক্রিয়ভাবে সনাক্ত করুন",
             "build": "নির্মাণ করুন",
             "buildMethod": "নির্মাণ পদ্ধতি",
-            "confirmTheDetectedSettingsThenCreate": "সনাক্ত করা সেটিংস নিশ্চিত করুন, তারপর পরিষেবা তৈরি করুন।",
             "detectedManifestSettingsDockerfilePathBuild": "সনাক্ত করা ম্যানিফেস্ট সেটিংস (Dockerfile পাথ, বিল্ড/স্টার্ট কমান্ড) উপস্থিত থাকলে স্বয়ংক্রিয়ভাবে প্রয়োগ করা হয়। সনাক্তকরণ ভুল হলে উপরের ক্ষেত্রগুলি ওভাররাইড করুন৷",
             "environment": "পরিবেশ",
             "hostNginxDefault": "হোস্ট Nginx (ডিফল্ট)",
@@ -4339,7 +4333,6 @@
             "enterVerificationCode": "যাচাইকরণ কোড লিখুন",
             "linkedAccounts": "লিঙ্ক করা অ্যাকাউন্ট",
             "manageYourActiveSessions": "আপনার সক্রিয় সেশন পরিচালনা করুন",
-            "manageYourPasswordAndSecurityPreferences": "আপনার পাসওয়ার্ড এবং নিরাপত্তা পছন্দগুলি পরিচালনা করুন",
             "minimum8Characters": "সর্বনিম্ন 8 অক্ষর",
             "newPassword": "নতুন পাসওয়ার্ড",
             "qrCodeUnavailableEnterThisSecret": "QR কোড অনুপলব্ধ৷ ম্যানুয়ালি এই গোপন লিখুন:",
@@ -4500,7 +4493,6 @@
             "chooseApplication": "কুইকসেভ করার জন্য একটি অ্যাপ্লিকেশন বেছে নিন।",
             "createEnvironmentQuicksave": "এনভায়রনমেন্ট কুইকসেভ তৈরি করুন",
             "createQuicksave": "কুইকসেভ তৈরি করুন",
-            "description": "একটি টাইমলাইনে চেকপয়েন্ট, ডিপ্লয়মেন্ট এবং সার্ভার অডিট কার্যকলাপ পর্যালোচনা করুন।",
             "formDescription": "এই সার্ভারে একটি অ্যাপ্লিকেশন বেছে নিন। শুধুমাত্র এর ServerKit-পরিচালিত এনভায়রনমেন্ট ভেরিয়েবল ধারণ করা হবে।",
             "label": "লেবেল (ঐচ্ছিক)",
             "labelPlaceholder": "এনভায়রনমেন্ট পরিবর্তনের আগে",
@@ -5305,7 +5297,6 @@
             "howDoYouWantToDeploy": "আপনি কিভাবে স্থাপন করতে চান?",
             "manualLocal": "ম্যানুয়াল / স্থানীয়",
             "otherGitRemote": "অন্যান্য Git রিমোট",
-            "pickASourceYouCanChange": "একটি উত্স চয়ন করুন. আপনি পরবর্তী ধাপে এটি পরিবর্তন করতে পারেন।",
             "serviceSource": "পরিষেবা উত্স",
             "uploadZip": "জিপ আপলোড করুন"
         },
@@ -5855,8 +5846,7 @@
             "useThisDomain": "এই ডোমেইন ব্যবহার করুন",
             "used": "ব্যবহৃত",
             "utcOffset": "UTC অফসেট",
-            "version": "{{brand}} সংস্করণ",
-            "viewSystemDetailsAndServerInformation": "সিস্টেমের বিবরণ এবং সার্ভারের তথ্য দেখুন"
+            "version": "{{brand}} সংস্করণ"
         },
         "tableDataTab": {
             "column": "কলাম",
@@ -6443,7 +6433,6 @@
             "myBrand": "আমার ব্র্যান্ড",
             "pngJpgSvgMax200kb": "PNG, JPG, SVG — সর্বোচ্চ 200KB",
             "preview": "পূর্বরূপ",
-            "replaceTheDefaultServerkitBrandingWith": "আপনার নিজের সাথে ডিফল্ট ServerKit ব্র্যান্ডিং প্রতিস্থাপন করুন",
             "replaceTheSidebarLogoNameAnd": "সাইডবার লোগো, নাম, এবং GitHub তারকা লিঙ্ক প্রতিস্থাপন করুন",
             "replacesTheSidebarLogoNameAnd": "সাইডবার লোগো, নাম, এবং GitHub তারকা লিঙ্ক প্রতিস্থাপন করে",
             "starOnGithub": "GitHub-এ তারকা",

@@ -661,7 +661,6 @@ const AgentFleet = () => {
                     <SharedCard variant="legacy" className="card">
                         <SharedCardHeader variant="legacy" className="card-header fleet-card-heading">
                             <h2>{t('app.agentFleet.queuedCommands', 'Queued Commands')}</h2>
-                            <p className="fleet-caption">{t('app.agentFleet.commandsWaitingToBeDeliveredWhen', 'Commands waiting to be delivered when agents reconnect')}</p>
                         </SharedCardHeader>
                         {queuedCommands.length > 0 ? (
                             <DataTable

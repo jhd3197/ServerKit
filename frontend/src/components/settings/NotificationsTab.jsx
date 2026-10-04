@@ -362,7 +362,6 @@ const NotificationsTab = () => {
         <div className="settings-section">
             <div className="section-header">
                 <h2>{t('app.notificationsTab.notificationSettings', 'Notification Settings')}</h2>
-                <p>{t('app.notificationsTab.configureHowYouReceiveAlertsAnd', 'Configure how you receive alerts and notifications')}</p>
             </div>
 
             {message && (

@@ -134,7 +134,6 @@ const AboutTab = () => {
         <div className="settings-section">
             <div className="section-header">
                 <h2>{t('app.aboutTab.aboutServerkit', 'About ServerKit')}</h2>
-                <p>{t('app.aboutTab.serverManagementMadeSimple', 'Server management made simple')}</p>
             </div>
 
             <div {...register('about-version', 'about-card')}>

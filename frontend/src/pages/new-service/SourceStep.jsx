@@ -27,7 +27,6 @@ const SourceStep = ({ form }) => {
         <div className="new-service-page__step">
             <div className="new-service-page__step-head">
                 <h2>{t('app.sourceStep.howDoYouWantToDeploy', 'How do you want to deploy?')}</h2>
-                <p>{t('app.sourceStep.pickASourceYouCanChange', 'Pick a source. You can change it on the next step.')}</p>
             </div>
             <div className="new-service-page__sources" data-walkthrough="service-sources" role="radiogroup" aria-label={t('app.sourceStep.serviceSource', 'Service source')}>
                 {SOURCES.map(({ mode, Icon, title, sub }) => (

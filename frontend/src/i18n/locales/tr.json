@@ -28,7 +28,6 @@
             "links": "Bağlantılar",
             "reloadPanel": "Paneli yeniden yükle",
             "reportABug": "Hata Bildir",
-            "serverManagementMadeSimple": "Sunucu yönetimi basitleştirildi",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit, MIT Lisansı altında lisanslanan açık kaynaklı bir yazılımdır.",
             "starOnGithub": "GitHub'de yıldız",
             "supportIssues": "Destek ve Sorunlar",
@@ -93,7 +92,6 @@
             "commandRetryTriggered": "Komutun yeniden denemesi tetiklendi",
             "commandStats24h": "Komut İstatistikleri (24s)",
             "commandsQueuedForDelivery": "teslim edilmek üzere sıraya alınan komutlar",
-            "commandsWaitingToBeDeliveredWhen": "Aracılar yeniden bağlandığında teslim edilmeyi bekleyen komutlar",
             "connected": "Bağlı",
             "connectedSince": "O zamandan bu yana bağlı",
             "currentLatency": "Mevcut Gecikme",
@@ -294,7 +292,6 @@
             "couldNotImportThatThemeJson": "Bu theme.json içe aktarılamadı",
             "createTheme": "Tema oluştur",
             "customColor": "Özel renk",
-            "customizeTheLookAndFeelOf": "Kontrol panelinizin görünümünü ve tarzını özelleştirin",
             "cyan": "Camgöbeği",
             "dark": "Karanlık",
             "dashboardWidgets": "Kontrol Paneli Widget'ları",
@@ -3325,7 +3322,6 @@
             "botUsername": "Bot Kullanıcı Adı",
             "channelOptional": "Kanal (isteğe bağlı)",
             "chatId": "Sohbet Kimliği",
-            "configureHowYouReceiveAlertsAnd": "Uyarıları ve bildirimleri nasıl alacağınızı yapılandırın",
             "createAWebhookInDiscordServer": "Discord'da bir web kancası oluşturun: Sunucu Ayarları → Entegrasyonlar → Web Kancaları",
             "createAWebhookInYourPersonal": "Kişisel sunucunuzda veya DM kanalınızda bir web kancası oluşturun",
             "createAnIncomingWebhookInSlack": "Slack'te gelen bir web kancası oluşturun: Uygulamalar → Gelen Web Kancaları",
@@ -3625,8 +3621,7 @@
             "emailAddress": "E-posta Adresi",
             "memberSince": "Üyelik Tarihi",
             "profileSettings": "Profil Ayarları",
-            "role": "Rol",
-            "updateYourPersonalInformation": "Kişisel bilgilerinizi güncelleyin"
+            "role": "Rol"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "Bu projenin uygulamalarını düzenlemeye başlamak için bir ortam ekleyin.",
@@ -4068,7 +4063,6 @@
             "autoDetect": "Otomatik algılama",
             "build": "İnşa etmek",
             "buildMethod": "Yapı yöntemi",
-            "confirmTheDetectedSettingsThenCreate": "Algılanan ayarları onaylayın ve ardından hizmeti oluşturun.",
             "detectedManifestSettingsDockerfilePathBuild": "Algılanan bildirim ayarları (Dockerfile yolu, oluştur/başlat komutları) mevcut olduğunda otomatik olarak uygulanır. Algılama yanlışsa yukarıdaki alanları geçersiz kılın.",
             "environment": "Çevre",
             "hostNginxDefault": "Ana Bilgisayar Nginx (varsayılan)",
@@ -4339,7 +4333,6 @@
             "enterVerificationCode": "Doğrulama Kodunu Girin",
             "linkedAccounts": "Bağlı Hesaplar",
             "manageYourActiveSessions": "Aktif oturumlarınızı yönetin",
-            "manageYourPasswordAndSecurityPreferences": "Parolanızı ve güvenlik tercihlerinizi yönetin",
             "minimum8Characters": "Minimum 8 karakter",
             "newPassword": "Yeni Şifre",
             "qrCodeUnavailableEnterThisSecret": "QR kodu kullanılamıyor. Bu sırrı manuel olarak girin:",
@@ -4500,7 +4493,6 @@
             "chooseApplication": "Hızlı kayıt için bir uygulama seçin.",
             "createEnvironmentQuicksave": "Ortam hızlı kaydı oluştur",
             "createQuicksave": "Hızlı kayıt oluştur",
-            "description": "Kontrol noktalarını, dağıtımları ve sunucu denetim etkinliğini tek bir zaman çizelgesinde inceleyin.",
             "formDescription": "Bu sunucuda bir uygulama seçin. Yalnızca ServerKit tarafından yönetilen ortam değişkenleri yakalanır.",
             "label": "Etiket (isteğe bağlı)",
             "labelPlaceholder": "Ortam değişikliğinden önce",
@@ -5305,7 +5297,6 @@
             "howDoYouWantToDeploy": "Nasıl konuşlandırmak istiyorsunuz?",
             "manualLocal": "Manuel / Yerel",
             "otherGitRemote": "Diğer Git Uzaktan Kumanda",
-            "pickASourceYouCanChange": "Bir kaynak seçin. Bir sonraki adımda bunu değiştirebilirsiniz.",
             "serviceSource": "Hizmet kaynağı",
             "uploadZip": "ZIP'i yükle"
         },
@@ -5855,8 +5846,7 @@
             "useThisDomain": "Bu alanı kullan",
             "used": "Kullanılmış",
             "utcOffset": "UTC Farkı",
-            "version": "{{brand}} Sürümü",
-            "viewSystemDetailsAndServerInformation": "Sistem ayrıntılarını ve sunucu bilgilerini görüntüleyin"
+            "version": "{{brand}} Sürümü"
         },
         "tableDataTab": {
             "column": "Kolon",
@@ -6443,7 +6433,6 @@
             "myBrand": "Benim Markam",
             "pngJpgSvgMax200kb": "PNG, JPG, SVG — maksimum 200KB",
             "preview": "Önizleme",
-            "replaceTheDefaultServerkitBrandingWith": "Varsayılan ServerKit markasını kendi markanızla değiştirin",
             "replaceTheSidebarLogoNameAnd": "Kenar çubuğu logosunu, adını ve GitHub yıldız bağlantısını değiştirin",
             "replacesTheSidebarLogoNameAnd": "Kenar çubuğu logosunun, adının ve GitHub yıldız bağlantısının yerini alır",
             "starOnGithub": "GitHub'de yıldız",

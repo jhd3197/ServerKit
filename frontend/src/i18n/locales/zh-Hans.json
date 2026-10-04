@@ -28,7 +28,6 @@
             "links": "链接",
             "reloadPanel": "重新加载面板",
             "reportABug": "报告错误",
-            "serverManagementMadeSimple": "服务器管理变得简单",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit 是根据 MIT 许可证授权的开源软件。",
             "starOnGithub": "在 GitHub 上加星标",
             "supportIssues": "支持与问题",
@@ -93,7 +92,6 @@
             "commandRetryTriggered": "已触发命令重试",
             "commandStats24h": "命令统计（24 小时）",
             "commandsQueuedForDelivery": "排队等待传送的命令",
-            "commandsWaitingToBeDeliveredWhen": "代理重新连接时等待传送的命令",
             "connected": "已连接",
             "connectedSince": "连接自",
             "currentLatency": "当前延迟",
@@ -294,7 +292,6 @@
             "couldNotImportThatThemeJson": "无法导入 theme.json",
             "createTheme": "创建主题",
             "customColor": "定制颜色",
-            "customizeTheLookAndFeelOf": "自定义仪表板的外观和风格",
             "cyan": "青色",
             "dark": "黑暗的",
             "dashboardWidgets": "仪表板小部件",
@@ -3325,7 +3322,6 @@
             "botUsername": "机器人用户名",
             "channelOptional": "频道（可选）",
             "chatId": "聊天ID",
-            "configureHowYouReceiveAlertsAnd": "配置您接收警报和通知的方式",
             "createAWebhookInDiscordServer": "在 Discord 中创建 Webhook：服务器设置 → 集成 → Webhooks",
             "createAWebhookInYourPersonal": "在您的个人服务器或 DM 通道中创建 Webhook",
             "createAnIncomingWebhookInSlack": "在 Slack 中创建传入 Webhook：应用程序 → 传入 Webhooks",
@@ -3625,8 +3621,7 @@
             "emailAddress": "电子邮件地址",
             "memberSince": "会员自",
             "profileSettings": "配置文件设置",
-            "role": "角色",
-            "updateYourPersonalInformation": "更新您的个人信息"
+            "role": "角色"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "添加一个环境来开始组织该项目的应用程序。",
@@ -4068,7 +4063,6 @@
             "autoDetect": "自动检测",
             "build": "建造",
             "buildMethod": "构建方法",
-            "confirmTheDetectedSettingsThenCreate": "确认检测到的设置，然后创建服务。",
             "detectedManifestSettingsDockerfilePathBuild": "检测到的清单设置（Dockerfile 路径、构建/启动命令）在存在时会自动应用。如果检测错误，则覆盖上述字段。",
             "environment": "环境",
             "hostNginxDefault": "主机 Nginx（默认）",
@@ -4339,7 +4333,6 @@
             "enterVerificationCode": "输入验证码",
             "linkedAccounts": "关联账户",
             "manageYourActiveSessions": "管理您的活动会话",
-            "manageYourPasswordAndSecurityPreferences": "管理您的密码和安全首选项",
             "minimum8Characters": "最少 8 个字符",
             "newPassword": "新密码",
             "qrCodeUnavailableEnterThisSecret": "二维码不可用。手动输入此秘密：",
@@ -4500,7 +4493,6 @@
             "chooseApplication": "选择一个应用进行快速保存。",
             "createEnvironmentQuicksave": "创建环境快速保存",
             "createQuicksave": "创建快速保存",
-            "description": "在一个时间线中查看检查点、部署和服务器审计活动。",
             "formDescription": "选择此服务器上的一个应用。只会捕获其由 ServerKit 管理的环境变量。",
             "label": "标签（可选）",
             "labelPlaceholder": "环境更改之前",
@@ -5305,7 +5297,6 @@
             "howDoYouWantToDeploy": "您想如何部署？",
             "manualLocal": "手动/本地",
             "otherGitRemote": "其他 Git 远程",
-            "pickASourceYouCanChange": "选择一个来源。您可以在下一步中更改它。",
             "serviceSource": "服务来源",
             "uploadZip": "上传ZIP"
         },
@@ -5855,8 +5846,7 @@
             "useThisDomain": "使用该域名",
             "used": "已使用",
             "utcOffset": "世界标准时间偏移",
-            "version": "{{brand}}版本",
-            "viewSystemDetailsAndServerInformation": "查看系统详细信息和服务器信息"
+            "version": "{{brand}}版本"
         },
         "tableDataTab": {
             "column": "柱子",
@@ -6443,7 +6433,6 @@
             "myBrand": "我的品牌",
             "pngJpgSvgMax200kb": "PNG、JPG、SVG — 最大 200KB",
             "preview": "预览",
-            "replaceTheDefaultServerkitBrandingWith": "将默认的 ServerKit 品牌替换为您自己的品牌",
             "replaceTheSidebarLogoNameAnd": "替换侧边栏徽标、名称和 GitHub 星形链接",
             "replacesTheSidebarLogoNameAnd": "替换侧边栏徽标、名称和 GitHub 星形链接",
             "starOnGithub": "在 GitHub 上加星标",

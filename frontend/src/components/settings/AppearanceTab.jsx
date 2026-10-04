@@ -57,7 +57,6 @@ const AppearanceTab = () => {
         <div className="settings-section">
             <div className="section-header">
                 <h2>{t('app.appearanceTab.appearance', 'Appearance')}</h2>
-                <p>{t('app.appearanceTab.customizeTheLookAndFeelOf', 'Customize the look and feel of your dashboard')}</p>
             </div>
 
             <LanguageSelector />

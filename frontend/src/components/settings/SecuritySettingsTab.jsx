@@ -294,7 +294,6 @@ Keep these codes in a safe place.`;
         <div className="settings-section">
             <div className="section-header">
                 <h2>{t('app.securitySettingsTab.securitySettings', 'Security Settings')}</h2>
-                <p>{t('app.securitySettingsTab.manageYourPasswordAndSecurityPreferences', 'Manage your password and security preferences')}</p>
             </div>
 
             {message && (

@@ -28,7 +28,6 @@
             "links": "Spinki do mankietów",
             "reloadPanel": "Przeładuj panel",
             "reportABug": "Zgłoś błąd",
-            "serverManagementMadeSimple": "Zarządzanie serwerem stało się proste",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit to oprogramowanie typu open source licencjonowane w ramach licencji MIT.",
             "starOnGithub": "Gwiazda na GitHub",
             "supportIssues": "Wsparcie i problemy",
@@ -93,7 +92,6 @@
             "commandRetryTriggered": "Uruchomiono ponowną próbę polecenia",
             "commandStats24h": "Statystyki poleceń (24h)",
             "commandsQueuedForDelivery": "polecenia oczekujące w kolejce do dostarczenia",
-            "commandsWaitingToBeDeliveredWhen": "Polecenia czekają na dostarczenie, gdy agenci ponownie się połączą",
             "connected": "Połączony",
             "connectedSince": "Połączony od",
             "currentLatency": "Aktualne opóźnienie",
@@ -294,7 +292,6 @@
             "couldNotImportThatThemeJson": "Nie można zaimportować tego pliku motywu.json",
             "createTheme": "Utwórz motyw",
             "customColor": "Kolor niestandardowy",
-            "customizeTheLookAndFeelOf": "Dostosuj wygląd i sposób działania swojego pulpitu nawigacyjnego",
             "cyan": "Cyjan",
             "dark": "Ciemny",
             "dashboardWidgets": "Widżety pulpitu nawigacyjnego",
@@ -3325,7 +3322,6 @@
             "botUsername": "Nazwa użytkownika bota",
             "channelOptional": "Kanał (opcjonalnie)",
             "chatId": "Identyfikator czatu",
-            "configureHowYouReceiveAlertsAnd": "Skonfiguruj sposób otrzymywania alertów i powiadomień",
             "createAWebhookInDiscordServer": "Utwórz webhooka w Discord: Ustawienia serwera → Integracje → Webhooki",
             "createAWebhookInYourPersonal": "Utwórz webhooka na swoim serwerze osobistym lub kanale DM",
             "createAnIncomingWebhookInSlack": "Utwórz przychodzącego webhooka w Slacku: Aplikacje → Przychodzące webhooki",
@@ -3625,8 +3621,7 @@
             "emailAddress": "Adres e-mail",
             "memberSince": "Członek od",
             "profileSettings": "Ustawienia profilu",
-            "role": "Rola",
-            "updateYourPersonalInformation": "Zaktualizuj swoje dane osobowe"
+            "role": "Rola"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "Dodaj środowisko, aby rozpocząć porządkowanie aplikacji tego projektu.",
@@ -4068,7 +4063,6 @@
             "autoDetect": "Automatyczne wykrywanie",
             "build": "Zbudować",
             "buildMethod": "Metoda budowania",
-            "confirmTheDetectedSettingsThenCreate": "Potwierdź wykryte ustawienia, a następnie utwórz usługę.",
             "detectedManifestSettingsDockerfilePathBuild": "Wykryte ustawienia manifestu (ścieżka Dockerfile, polecenia budowania/uruchamiania) są stosowane automatycznie, jeśli są obecne. Zastąp powyższe pola, jeśli wykrywanie jest nieprawidłowe.",
             "environment": "Środowisko",
             "hostNginxDefault": "Host Nginx (domyślny)",
@@ -4339,7 +4333,6 @@
             "enterVerificationCode": "Wprowadź kod weryfikacyjny",
             "linkedAccounts": "Połączone konta",
             "manageYourActiveSessions": "Zarządzaj aktywnymi sesjami",
-            "manageYourPasswordAndSecurityPreferences": "Zarządzaj swoim hasłem i preferencjami bezpieczeństwa",
             "minimum8Characters": "Minimum 8 znaków",
             "newPassword": "Nowe hasło",
             "qrCodeUnavailableEnterThisSecret": "Kod QR niedostępny. Wprowadź ten sekret ręcznie:",
@@ -4500,7 +4493,6 @@
             "chooseApplication": "Wybierz aplikację do szybkiego zapisu.",
             "createEnvironmentQuicksave": "Utwórz szybki zapis środowiska",
             "createQuicksave": "Utwórz szybki zapis",
-            "description": "Przeglądaj punkty kontrolne, wdrożenia i aktywność audytu serwera na jednej osi czasu.",
             "formDescription": "Wybierz jedną aplikację na tym serwerze. Przechwycone zostaną tylko jej zmienne środowiskowe zarządzane przez ServerKit.",
             "label": "Etykieta (opcjonalna)",
             "labelPlaceholder": "Przed zmianą środowiska",
@@ -5305,7 +5297,6 @@
             "howDoYouWantToDeploy": "Jak chcesz wdrożyć?",
             "manualLocal": "Ręczny / lokalny",
             "otherGitRemote": "Inny pilot Git",
-            "pickASourceYouCanChange": "Wybierz źródło. Możesz to zmienić w następnym kroku.",
             "serviceSource": "Źródło usługi",
             "uploadZip": "Prześlij ZIP"
         },
@@ -5855,8 +5846,7 @@
             "useThisDomain": "Użyj tej domeny",
             "used": "Używany",
             "utcOffset": "Przesunięcie czasu UTC",
-            "version": "Wersja {{brand}}",
-            "viewSystemDetailsAndServerInformation": "Wyświetl szczegóły systemu i informacje o serwerze"
+            "version": "Wersja {{brand}}"
         },
         "tableDataTab": {
             "column": "Kolumna",
@@ -6443,7 +6433,6 @@
             "myBrand": "Moja marka",
             "pngJpgSvgMax200kb": "PNG, JPG, SVG — maks. 200 KB",
             "preview": "Zapowiedź",
-            "replaceTheDefaultServerkitBrandingWith": "Zamień domyślne oznaczenie ServerKit na własne",
             "replaceTheSidebarLogoNameAnd": "Zastąp logo, nazwę i łącze gwiazdki GitHub na pasku bocznym",
             "replacesTheSidebarLogoNameAnd": "Zastępuje logo, nazwę i łącze w kształcie gwiazdki GitHub na pasku bocznym",
             "starOnGithub": "Gwiazda na GitHub",

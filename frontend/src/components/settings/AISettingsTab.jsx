@@ -110,7 +110,6 @@ const AISettingsTab = () => {
         <div className="settings-section">
             <div className="section-header">
                 <h2>{t('app.aISettingsTab.aiAssistant', 'AI Assistant')}</h2>
-                <p>{t('ai.settings.intro', 'Connect a provider, choose a model, and set the assistant’s limits.')}</p>
             </div>
             {message && <div className={`alert alert-${message.type === 'error' ? 'danger' : 'success'}`} role={message.type === 'error' ? 'alert' : 'status'}>{message.text}</div>}
             <SegControl className="sk-ai-settings-tabs" value={section} onChange={setSection} aria-label={t('ai.management.sections', 'AI settings sections')} options={[

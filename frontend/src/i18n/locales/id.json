@@ -28,7 +28,6 @@
             "links": "Tautan",
             "reloadPanel": "Muat ulang panel",
             "reportABug": "Laporkan Bug",
-            "serverManagementMadeSimple": "Manajemen server menjadi sederhana",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit adalah perangkat lunak sumber terbuka yang dilisensikan di bawah Lisensi MIT.",
             "starOnGithub": "Bintangi di GitHub",
             "supportIssues": "Dukungan & Masalah",
@@ -93,7 +92,6 @@
             "commandRetryTriggered": "Perintah coba lagi dipicu",
             "commandStats24h": "Statistik Perintah (24 jam)",
             "commandsQueuedForDelivery": "perintah dalam antrian untuk pengiriman",
-            "commandsWaitingToBeDeliveredWhen": "Perintah menunggu untuk dikirimkan ketika agen terhubung kembali",
             "connected": "Terhubung",
             "connectedSince": "Terhubung Sejak",
             "currentLatency": "Latensi Saat Ini",
@@ -294,7 +292,6 @@
             "couldNotImportThatThemeJson": "Tidak dapat mengimpor theme.json itu",
             "createTheme": "Buat tema",
             "customColor": "Warna khusus",
-            "customizeTheLookAndFeelOf": "Sesuaikan tampilan dan nuansa dasbor Anda",
             "cyan": "Sian",
             "dark": "Gelap",
             "dashboardWidgets": "Widget Dasbor",
@@ -3325,7 +3322,6 @@
             "botUsername": "Nama Pengguna Bot",
             "channelOptional": "Saluran (opsional)",
             "chatId": "ID Obrolan",
-            "configureHowYouReceiveAlertsAnd": "Konfigurasikan cara Anda menerima peringatan dan pemberitahuan",
             "createAWebhookInDiscordServer": "Buat webhook di Discord: Pengaturan Server → Integrasi → Webhook",
             "createAWebhookInYourPersonal": "Buat webhook di server pribadi atau saluran DM Anda",
             "createAnIncomingWebhookInSlack": "Buat webhook masuk di Slack: Aplikasi → Webhook masuk",
@@ -3625,8 +3621,7 @@
             "emailAddress": "Alamat Surel",
             "memberSince": "Anggota Sejak",
             "profileSettings": "Pengaturan Profil",
-            "role": "Peran",
-            "updateYourPersonalInformation": "Perbarui informasi pribadi Anda"
+            "role": "Peran"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "Tambahkan lingkungan untuk mulai mengatur aplikasi proyek ini.",
@@ -4068,7 +4063,6 @@
             "autoDetect": "Deteksi otomatis",
             "build": "Membangun",
             "buildMethod": "Metode membangun",
-            "confirmTheDetectedSettingsThenCreate": "Konfirmasikan pengaturan yang terdeteksi, lalu buat layanan.",
             "detectedManifestSettingsDockerfilePathBuild": "Pengaturan manifes yang terdeteksi (jalur Dockerfile, perintah build/start) diterapkan secara otomatis jika ada. Ganti kolom di atas jika pendeteksiannya salah.",
             "environment": "Lingkungan",
             "hostNginxDefault": "Tuan rumah Nginx (default)",
@@ -4339,7 +4333,6 @@
             "enterVerificationCode": "Masukkan Kode Verifikasi",
             "linkedAccounts": "Akun Tertaut",
             "manageYourActiveSessions": "Kelola sesi aktif Anda",
-            "manageYourPasswordAndSecurityPreferences": "Kelola kata sandi dan preferensi keamanan Anda",
             "minimum8Characters": "Minimal 8 karakter",
             "newPassword": "Kata Sandi Baru",
             "qrCodeUnavailableEnterThisSecret": "Kode QR tidak tersedia. Masukkan rahasia ini secara manual:",
@@ -4500,7 +4493,6 @@
             "chooseApplication": "Pilih aplikasi untuk disimpan cepat.",
             "createEnvironmentQuicksave": "Buat penyimpanan cepat lingkungan",
             "createQuicksave": "Buat penyimpanan cepat",
-            "description": "Tinjau checkpoint, penerapan, dan aktivitas audit server dalam satu lini masa.",
             "formDescription": "Pilih satu aplikasi di server ini. Hanya variabel lingkungan yang dikelola ServerKit yang akan direkam.",
             "label": "Label (opsional)",
             "labelPlaceholder": "Sebelum perubahan lingkungan",
@@ -5305,7 +5297,6 @@
             "howDoYouWantToDeploy": "Bagaimana Anda ingin menerapkannya?",
             "manualLocal": "Manual / Lokal",
             "otherGitRemote": "Remote Git lainnya",
-            "pickASourceYouCanChange": "Pilih sumber. Anda dapat mengubahnya pada langkah berikutnya.",
             "serviceSource": "Sumber layanan",
             "uploadZip": "Unggah ZIP"
         },
@@ -5855,8 +5846,7 @@
             "useThisDomain": "Gunakan domain ini",
             "used": "Digunakan",
             "utcOffset": "Perimbangan UTC",
-            "version": "Versi {{brand}}",
-            "viewSystemDetailsAndServerInformation": "Lihat detail sistem dan informasi server"
+            "version": "Versi {{brand}}"
         },
         "tableDataTab": {
             "column": "Kolom",
@@ -6443,7 +6433,6 @@
             "myBrand": "Merek Saya",
             "pngJpgSvgMax200kb": "PNG, JPG, SVG — maks 200KB",
             "preview": "Pratinjau",
-            "replaceTheDefaultServerkitBrandingWith": "Ganti merek default ServerKit dengan merek Anda sendiri",
             "replaceTheSidebarLogoNameAnd": "Ganti logo sidebar, nama, dan link bintang GitHub",
             "replacesTheSidebarLogoNameAnd": "Mengganti logo sidebar, nama, dan link bintang GitHub",
             "starOnGithub": "Bintangi di GitHub",

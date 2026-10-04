@@ -28,7 +28,6 @@
             "links": "ลิงค์",
             "reloadPanel": "โหลดแผงควบคุมใหม่",
             "reportABug": "รายงานข้อผิดพลาด",
-            "serverManagementMadeSimple": "การจัดการเซิร์ฟเวอร์ทำได้ง่าย",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit เป็นซอฟต์แวร์โอเพ่นซอร์สที่ได้รับอนุญาตภายใต้ใบอนุญาต MIT",
             "starOnGithub": "ติดดาวบน GitHub",
             "supportIssues": "การสนับสนุนและปัญหา",
@@ -93,7 +92,6 @@
             "commandRetryTriggered": "คำสั่งลองใหม่ถูกทริกเกอร์",
             "commandStats24h": "สถิติคำสั่ง (24 ชม.)",
             "commandsQueuedForDelivery": "คำสั่งเข้าคิวเพื่อส่งมอบ",
-            "commandsWaitingToBeDeliveredWhen": "คำสั่งที่รอส่งเมื่อเจ้าหน้าที่เชื่อมต่ออีกครั้ง",
             "connected": "เชื่อมต่อแล้ว",
             "connectedSince": "เชื่อมต่อตั้งแต่",
             "currentLatency": "เวลาแฝงปัจจุบัน",
@@ -294,7 +292,6 @@
             "couldNotImportThatThemeJson": "ไม่สามารถนำเข้า theme.json นั้นได้",
             "createTheme": "สร้างธีม",
             "customColor": "สีที่กำหนดเอง",
-            "customizeTheLookAndFeelOf": "ปรับแต่งรูปลักษณ์ของแดชบอร์ดของคุณ",
             "cyan": "สีฟ้า",
             "dark": "มืด",
             "dashboardWidgets": "วิดเจ็ตแดชบอร์ด",
@@ -3325,7 +3322,6 @@
             "botUsername": "ชื่อผู้ใช้บอท",
             "channelOptional": "ช่อง (ไม่จำเป็น)",
             "chatId": "รหัสแชท",
-            "configureHowYouReceiveAlertsAnd": "กำหนดค่าวิธีการรับการแจ้งเตือนและการแจ้งเตือน",
             "createAWebhookInDiscordServer": "สร้าง webhook ใน Discord: การตั้งค่าเซิร์ฟเวอร์ → บูรณาการ → Webhooks",
             "createAWebhookInYourPersonal": "สร้างเว็บฮุคในเซิร์ฟเวอร์ส่วนตัวหรือช่องทาง DM",
             "createAnIncomingWebhookInSlack": "สร้าง webhook ขาเข้าใน Slack: แอพ → Webhooks ขาเข้า",
@@ -3625,8 +3621,7 @@
             "emailAddress": "ที่อยู่อีเมล",
             "memberSince": "สมาชิกตั้งแต่",
             "profileSettings": "การตั้งค่าโปรไฟล์",
-            "role": "บทบาท",
-            "updateYourPersonalInformation": "อัปเดตข้อมูลส่วนบุคคลของคุณ"
+            "role": "บทบาท"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "เพิ่มสภาพแวดล้อมเพื่อเริ่มจัดระเบียบแอปของโปรเจ็กต์นี้",
@@ -4068,7 +4063,6 @@
             "autoDetect": "ตรวจจับอัตโนมัติ",
             "build": "สร้าง",
             "buildMethod": "วิธีการสร้าง",
-            "confirmTheDetectedSettingsThenCreate": "ยืนยันการตั้งค่าที่ตรวจพบ จากนั้นสร้างบริการ",
             "detectedManifestSettingsDockerfilePathBuild": "การตั้งค่ารายการที่ตรวจพบ (เส้นทาง Dockerfile, คำสั่ง build/start) จะถูกนำไปใช้โดยอัตโนมัติเมื่อมี แทนที่ฟิลด์ด้านบนหากการตรวจพบไม่ถูกต้อง",
             "environment": "สิ่งแวดล้อม",
             "hostNginxDefault": "โฮสต์ Nginx (ค่าเริ่มต้น)",
@@ -4339,7 +4333,6 @@
             "enterVerificationCode": "ป้อนรหัสยืนยัน",
             "linkedAccounts": "บัญชีที่เชื่อมโยง",
             "manageYourActiveSessions": "จัดการเซสชันที่ใช้งานอยู่ของคุณ",
-            "manageYourPasswordAndSecurityPreferences": "จัดการรหัสผ่านและการตั้งค่าความปลอดภัยของคุณ",
             "minimum8Characters": "ขั้นต่ำ 8 ตัวอักษร",
             "newPassword": "รหัสผ่านใหม่",
             "qrCodeUnavailableEnterThisSecret": "รหัส QR ไม่พร้อมใช้งาน ป้อนข้อมูลลับนี้ด้วยตนเอง:",
@@ -4500,7 +4493,6 @@
             "chooseApplication": "เลือกแอปพลิเคชันเพื่อบันทึกด่วน",
             "createEnvironmentQuicksave": "สร้างการบันทึกด่วนสภาพแวดล้อม",
             "createQuicksave": "สร้างการบันทึกด่วน",
-            "description": "ตรวจสอบจุดตรวจสอบ การปรับใช้ และกิจกรรมการตรวจสอบเซิร์ฟเวอร์ในไทม์ไลน์เดียว",
             "formDescription": "เลือกหนึ่งแอปพลิเคชันบนเซิร์ฟเวอร์นี้ ระบบจะบันทึกเฉพาะตัวแปรสภาพแวดล้อมที่ ServerKit จัดการเท่านั้น",
             "label": "ป้ายกำกับ (ไม่บังคับ)",
             "labelPlaceholder": "ก่อนเปลี่ยนแปลงสภาพแวดล้อม",
@@ -5305,7 +5297,6 @@
             "howDoYouWantToDeploy": "คุณต้องการปรับใช้อย่างไร?",
             "manualLocal": "คู่มือ / ท้องถิ่น",
             "otherGitRemote": "รีโมท Git อื่นๆ",
-            "pickASourceYouCanChange": "เลือกแหล่งที่มา คุณสามารถเปลี่ยนได้ในขั้นตอนถัดไป",
             "serviceSource": "แหล่งบริการ",
             "uploadZip": "อัปโหลด ZIP"
         },
@@ -5855,8 +5846,7 @@
             "useThisDomain": "ใช้โดเมนนี้",
             "used": "ใช้แล้ว",
             "utcOffset": "ออฟเซ็ต UTC",
-            "version": "เวอร์ชัน {{brand}}",
-            "viewSystemDetailsAndServerInformation": "ดูรายละเอียดระบบและข้อมูลเซิร์ฟเวอร์"
+            "version": "เวอร์ชัน {{brand}}"
         },
         "tableDataTab": {
             "column": "คอลัมน์",
@@ -6443,7 +6433,6 @@
             "myBrand": "แบรนด์ของฉัน",
             "pngJpgSvgMax200kb": "PNG, JPG, SVG — สูงสุด 200KB",
             "preview": "ดูตัวอย่าง",
-            "replaceTheDefaultServerkitBrandingWith": "แทนที่การสร้างแบรนด์ ServerKit เริ่มต้นด้วยการสร้างแบรนด์ของคุณเอง",
             "replaceTheSidebarLogoNameAnd": "แทนที่โลโก้แถบด้านข้าง ชื่อ และลิงก์รูปดาว GitHub",
             "replacesTheSidebarLogoNameAnd": "แทนที่โลโก้แถบด้านข้าง ชื่อ และลิงก์รูปดาว GitHub",
             "starOnGithub": "ติดดาวบน GitHub",

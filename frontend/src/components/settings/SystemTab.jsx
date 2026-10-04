@@ -146,7 +146,6 @@ const SystemTab = () => {
             <div className="settings-section">
                 <div className="section-header">
                     <h2>{t('app.systemTab.systemInformation', 'System Information')}</h2>
-                    <p>{t('app.systemTab.viewSystemDetailsAndServerInformation', 'View system details and server information')}</p>
                 </div>
                 <div className="alert alert-warning">
                     {t('app.systemTab.adminAccessRequiredToViewSystem', 'Admin access required to view system information.')}
@@ -163,7 +162,6 @@ const SystemTab = () => {
         <div className="settings-section">
             <div className="section-header">
                 <h2>{t('app.systemTab.systemInformation', 'System Information')}</h2>
-                <p>{t('app.systemTab.viewSystemDetailsAndServerInformation', 'View system details and server information')}</p>
             </div>
 
             <div className="system-info-grid">

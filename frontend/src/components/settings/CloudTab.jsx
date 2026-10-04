@@ -30,7 +30,6 @@ const CloudTab = () => {
         <div className="settings-section" data-testid="settings-cloud-tab">
             <div className="section-header">
                 <h2>{t('app.settings.cloud.title', 'ServerKit Cloud')}</h2>
-                <p>{t('app.settings.cloud.subtitle', 'What ServerKit Cloud does for this server, and what it has taken over')}</p>
             </div>
 
             <div className="settings-card">

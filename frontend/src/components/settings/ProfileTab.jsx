@@ -45,7 +45,6 @@ const ProfileTab = () => {
         <div className="settings-section">
             <div className="section-header">
                 <h2>{t('app.profileTab.profileSettings', 'Profile Settings')}</h2>
-                <p>{t('app.profileTab.updateYourPersonalInformation', 'Update your personal information')}</p>
             </div>
 
             {message && (

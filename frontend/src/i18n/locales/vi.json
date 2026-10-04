@@ -28,7 +28,6 @@
             "links": "Liên kết",
             "reloadPanel": "Tải lại bảng điều khiển",
             "reportABug": "Báo cáo lỗi",
-            "serverManagementMadeSimple": "Quản lý máy chủ trở nên đơn giản",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit là phần mềm nguồn mở được cấp phép theo Giấy phép MIT.",
             "starOnGithub": "Ngôi sao trên GitHub",
             "supportIssues": "Hỗ trợ & Vấn đề",
@@ -93,7 +92,6 @@
             "commandRetryTriggered": "Đã kích hoạt thử lại lệnh",
             "commandStats24h": "Thống kê lệnh (24h)",
             "commandsQueuedForDelivery": "các lệnh được xếp hàng đợi để phân phối",
-            "commandsWaitingToBeDeliveredWhen": "Các lệnh đang chờ được gửi khi các tổng đài viên kết nối lại",
             "connected": "Đã kết nối",
             "connectedSince": "Đã kết nối kể từ",
             "currentLatency": "Độ trễ hiện tại",
@@ -294,7 +292,6 @@
             "couldNotImportThatThemeJson": "Không thể nhập theme.json đó",
             "createTheme": "Tạo chủ đề",
             "customColor": "Màu tùy chỉnh",
-            "customizeTheLookAndFeelOf": "Tùy chỉnh giao diện trang tổng quan của bạn",
             "cyan": "lục lam",
             "dark": "Tối tăm",
             "dashboardWidgets": "Tiện ích bảng điều khiển",
@@ -3325,7 +3322,6 @@
             "botUsername": "Tên người dùng bot",
             "channelOptional": "Kênh (tùy chọn)",
             "chatId": "ID trò chuyện",
-            "configureHowYouReceiveAlertsAnd": "Định cấu hình cách bạn nhận thông báo và thông báo",
             "createAWebhookInDiscordServer": "Tạo webhook trong Discord: Cài đặt máy chủ → Tích hợp → Webhooks",
             "createAWebhookInYourPersonal": "Tạo webhook trong máy chủ cá nhân hoặc kênh DM của bạn",
             "createAnIncomingWebhookInSlack": "Tạo một webhook đến trong Slack: Ứng dụng → Webhooks đến",
@@ -3625,8 +3621,7 @@
             "emailAddress": "Địa chỉ email",
             "memberSince": "Thành viên kể từ",
             "profileSettings": "Cài đặt hồ sơ",
-            "role": "Vai trò",
-            "updateYourPersonalInformation": "Cập nhật thông tin cá nhân của bạn"
+            "role": "Vai trò"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "Thêm môi trường để bắt đầu tổ chức các ứng dụng của dự án này.",
@@ -4068,7 +4063,6 @@
             "autoDetect": "Tự động phát hiện",
             "build": "Xây dựng",
             "buildMethod": "Phương pháp xây dựng",
-            "confirmTheDetectedSettingsThenCreate": "Xác nhận cài đặt được phát hiện, sau đó tạo dịch vụ.",
             "detectedManifestSettingsDockerfilePathBuild": "Cài đặt tệp kê khai được phát hiện (đường dẫn Dockerfile, lệnh xây dựng/bắt đầu) được áp dụng tự động khi có. Ghi đè các trường ở trên nếu phát hiện sai.",
             "environment": "Môi trường",
             "hostNginxDefault": "Máy chủ Nginx (mặc định)",
@@ -4339,7 +4333,6 @@
             "enterVerificationCode": "Nhập mã xác minh",
             "linkedAccounts": "Tài khoản được liên kết",
             "manageYourActiveSessions": "Quản lý các phiên hoạt động của bạn",
-            "manageYourPasswordAndSecurityPreferences": "Quản lý mật khẩu và tùy chọn bảo mật của bạn",
             "minimum8Characters": "Tối thiểu 8 ký tự",
             "newPassword": "Mật khẩu mới",
             "qrCodeUnavailableEnterThisSecret": "Mã QR không có sẵn. Nhập bí mật này theo cách thủ công:",
@@ -4500,7 +4493,6 @@
             "chooseApplication": "Chọn một ứng dụng để lưu nhanh.",
             "createEnvironmentQuicksave": "Tạo bản lưu nhanh môi trường",
             "createQuicksave": "Tạo bản lưu nhanh",
-            "description": "Xem lại các điểm kiểm tra, lần triển khai và hoạt động kiểm tra máy chủ trong một dòng thời gian.",
             "formDescription": "Chọn một ứng dụng trên máy chủ này. Chỉ các biến môi trường do ServerKit quản lý của ứng dụng đó mới được ghi lại.",
             "label": "Nhãn (tùy chọn)",
             "labelPlaceholder": "Trước khi thay đổi môi trường",
@@ -5305,7 +5297,6 @@
             "howDoYouWantToDeploy": "Bạn muốn triển khai như thế nào?",
             "manualLocal": "Thủ công/Địa phương",
             "otherGitRemote": "Điều khiển từ xa Git khác",
-            "pickASourceYouCanChange": "Chọn một nguồn. Bạn có thể thay đổi nó ở bước tiếp theo.",
             "serviceSource": "Nguồn dịch vụ",
             "uploadZip": "Tải lên ZIP"
         },
@@ -5855,8 +5846,7 @@
             "useThisDomain": "Sử dụng tên miền này",
             "used": "Đã sử dụng",
             "utcOffset": "Bù UTC",
-            "version": "Phiên bản {{brand}}",
-            "viewSystemDetailsAndServerInformation": "Xem chi tiết hệ thống và thông tin máy chủ"
+            "version": "Phiên bản {{brand}}"
         },
         "tableDataTab": {
             "column": "Cột",
@@ -6443,7 +6433,6 @@
             "myBrand": "Thương hiệu của tôi",
             "pngJpgSvgMax200kb": "PNG, JPG, SVG - tối đa 200KB",
             "preview": "Xem trước",
-            "replaceTheDefaultServerkitBrandingWith": "Thay thế nhãn hiệu ServerKit mặc định bằng nhãn hiệu của riêng bạn",
             "replaceTheSidebarLogoNameAnd": "Thay thế logo, tên thanh bên và liên kết dấu sao GitHub",
             "replacesTheSidebarLogoNameAnd": "Thay thế logo, tên thanh bên và liên kết dấu sao GitHub",
             "starOnGithub": "Ngôi sao trên GitHub",

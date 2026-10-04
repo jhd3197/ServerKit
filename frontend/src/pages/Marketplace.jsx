@@ -571,7 +571,6 @@ const Marketplace = () => {
             ) : (
                 <section className="marketplace-section">
                     <SectionHeader
-                        kicker="Installed"
                         title={t('app.marketplace.installedExtensions', 'Installed extensions')}
                         meta={`${plugins.length} installed`}
                     />
@@ -706,12 +705,9 @@ const Marketplace = () => {
     );
 };
 
-const SectionHeader = ({ kicker, title, meta }) => (
+const SectionHeader = ({ title, meta }) => (
     <div className="marketplace-section__header">
-        <div>
-            <p className="marketplace-kicker">{kicker}</p>
-            <h2>{title}</h2>
-        </div>
+        <h2>{title}</h2>
         {meta && <Badge variant="outline">{meta}</Badge>}
     </div>
 );

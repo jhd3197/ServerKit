@@ -28,7 +28,6 @@
             "links": "Links",
             "reloadPanel": "Recharger le panneau",
             "reportABug": "Signaler un bug",
-            "serverManagementMadeSimple": "La gestion des serveurs simplifiée",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit est un logiciel open source sous licence MIT.",
             "starOnGithub": "Étoile sur GitHub",
             "supportIssues": "Assistance et problèmes",
@@ -93,7 +92,6 @@
             "commandRetryTriggered": "Nouvelle tentative de commande déclenchée",
             "commandStats24h": "Statistiques de commande (24h)",
             "commandsQueuedForDelivery": "commandes en file d'attente pour la livraison",
-            "commandsWaitingToBeDeliveredWhen": "Commandes en attente d'être livrées lorsque les agents se reconnectent",
             "connected": "Connecté",
             "connectedSince": "Connecté depuis",
             "currentLatency": "Latence actuelle",
@@ -294,7 +292,6 @@
             "couldNotImportThatThemeJson": "Impossible d'importer ce theme.json",
             "createTheme": "Créer un thème",
             "customColor": "Couleur personnalisée",
-            "customizeTheLookAndFeelOf": "Personnalisez l'apparence et la convivialité de votre tableau de bord",
             "cyan": "Cyan",
             "dark": "Sombre",
             "dashboardWidgets": "Widgets de tableau de bord",
@@ -3325,7 +3322,6 @@
             "botUsername": "Nom d'utilisateur du robot",
             "channelOptional": "Canal (facultatif)",
             "chatId": "Identifiant de discussion",
-            "configureHowYouReceiveAlertsAnd": "Configurez la façon dont vous recevez des alertes et des notifications",
             "createAWebhookInDiscordServer": "Créez un webhook dans Discord : Paramètres du serveur → Intégrations → Webhooks",
             "createAWebhookInYourPersonal": "Créez un webhook sur votre serveur personnel ou votre canal DM",
             "createAnIncomingWebhookInSlack": "Créer un webhook entrant dans Slack : Applications → Webhooks entrants",
@@ -3625,8 +3621,7 @@
             "emailAddress": "Adresse email",
             "memberSince": "Membre depuis",
             "profileSettings": "Paramètres du profil",
-            "role": "Rôle",
-            "updateYourPersonalInformation": "Mettez à jour vos informations personnelles"
+            "role": "Rôle"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "Ajoutez un environnement pour commencer à organiser les applications de ce projet.",
@@ -4068,7 +4063,6 @@
             "autoDetect": "Détection automatique",
             "build": "Construire",
             "buildMethod": "Méthode de construction",
-            "confirmTheDetectedSettingsThenCreate": "Confirmez les paramètres détectés, puis créez le service.",
             "detectedManifestSettingsDockerfilePathBuild": "Les paramètres du manifeste détectés (chemin Dockerfile, commandes de construction/démarrage) sont appliqués automatiquement lorsqu'ils sont présents. Remplacez les champs ci-dessus si la détection est erronée.",
             "environment": "Environnement",
             "hostNginxDefault": "Hôte Nginx (par défaut)",
@@ -4339,7 +4333,6 @@
             "enterVerificationCode": "Entrez le code de vérification",
             "linkedAccounts": "Comptes liés",
             "manageYourActiveSessions": "Gérez vos sessions actives",
-            "manageYourPasswordAndSecurityPreferences": "Gérez votre mot de passe et vos préférences de sécurité",
             "minimum8Characters": "Minimum 8 caractères",
             "newPassword": "Nouveau mot de passe",
             "qrCodeUnavailableEnterThisSecret": "Code QR indisponible. Saisissez ce secret manuellement :",
@@ -4500,7 +4493,6 @@
             "chooseApplication": "Choisissez une application à sauvegarder rapidement.",
             "createEnvironmentQuicksave": "Créer une sauvegarde rapide d'environnement",
             "createQuicksave": "Créer une sauvegarde rapide",
-            "description": "Consultez les points de contrôle, les déploiements et l'activité d'audit du serveur dans une seule chronologie.",
             "formDescription": "Choisissez une application sur ce serveur. Seules ses variables d'environnement gérées par ServerKit seront capturées.",
             "label": "Libellé (facultatif)",
             "labelPlaceholder": "Avant la modification d'environnement",
@@ -5305,7 +5297,6 @@
             "howDoYouWantToDeploy": "Comment souhaitez-vous déployer ?",
             "manualLocal": "Manuel / Local",
             "otherGitRemote": "Autre télécommande Git",
-            "pickASourceYouCanChange": "Choisissez une source. Vous pouvez le modifier à l'étape suivante.",
             "serviceSource": "Source du service",
             "uploadZip": "Télécharger le code postal"
         },
@@ -5855,8 +5846,7 @@
             "useThisDomain": "Utiliser ce domaine",
             "used": "Utilisé",
             "utcOffset": "Décalage UTC",
-            "version": "Version {{brand}}",
-            "viewSystemDetailsAndServerInformation": "Afficher les détails du système et les informations sur le serveur"
+            "version": "Version {{brand}}"
         },
         "tableDataTab": {
             "column": "Colonne",
@@ -6443,7 +6433,6 @@
             "myBrand": "Ma marque",
             "pngJpgSvgMax200kb": "PNG, JPG, SVG — maximum 200 Ko",
             "preview": "Aperçu",
-            "replaceTheDefaultServerkitBrandingWith": "Remplacez la marque ServerKit par défaut par la vôtre",
             "replaceTheSidebarLogoNameAnd": "Remplacez le logo de la barre latérale, le nom et le lien étoile GitHub",
             "replacesTheSidebarLogoNameAnd": "Remplace le logo de la barre latérale, le nom et le lien étoile GitHub",
             "starOnGithub": "Étoile sur GitHub",

@@ -24,7 +24,6 @@ const WhiteLabelTab = () => {
         <div className="settings-section">
             <div className="section-header">
                 <h2>{t('app.whiteLabelTab.whiteLabel', 'White Label')}</h2>
-                <p>{t('app.whiteLabelTab.replaceTheDefaultServerkitBrandingWith', 'Replace the default ServerKit branding with your own')}</p>
             </div>
 
             <div {...register('whitelabel-branding', 'settings-card')}>

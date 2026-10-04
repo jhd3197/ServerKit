@@ -187,7 +187,6 @@ export default function StorageTab() {
         <div className="settings-section storage-tab">
             <div className="section-header">
                 <h2>{t('app.storageTab.title', 'Storage')}</h2>
-                <p>{t('app.storageTab.subtitle', 'Where this server\'s disk goes, and how long ServerKit keeps its own history.')}</p>
             </div>
 
             <div {...register('storage-disk', 'settings-card')}>

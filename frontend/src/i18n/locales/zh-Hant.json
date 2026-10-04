@@ -124,7 +124,6 @@
             "disabledMessage": "助理已停用。已封鎖新訊息；保留對話記錄。",
             "enabledHint": "變更會立即套用至新訊息。請在下方設定預設連線。",
             "enabledMessage": "助理已啟用。新訊息可以使用預設連線。",
-            "intro": "連線提供者、選擇模型，並設定助理的限制額度。",
             "invalidBudget": "請輸入 0 或更高的成本上限。",
             "limits": "限制與防護",
             "limitsHint": "這些設定適用於助理對話。儲存變更後生效。",
@@ -211,7 +210,6 @@
             "links": "連結",
             "reloadPanel": "重新載入面板",
             "reportABug": "報告錯誤",
-            "serverManagementMadeSimple": "伺服器管理變簡單",
             "serverkitIsOpenSourceSoftwareLicensed": "ServerKit 是採用 MIT 授權條款的開放原始碼軟體。",
             "starOnGithub": "在 GitHub 上標記星號",
             "supportIssues": "支援與問題回報",
@@ -276,7 +274,6 @@
             "commandRetryTriggered": "已觸發命令重試",
             "commandStats24h": "命令統計（24 小時）",
             "commandsQueuedForDelivery": "排隊等待傳送的命令",
-            "commandsWaitingToBeDeliveredWhen": "代理程式重新連線時等待傳送的命令",
             "connected": "已連線",
             "connectedSince": "連線自",
             "currentLatency": "目前延遲",
@@ -477,7 +474,6 @@
             "couldNotImportThatThemeJson": "無法匯入 theme.json",
             "createTheme": "建立主題",
             "customColor": "客製化顏色",
-            "customizeTheLookAndFeelOf": "自訂儀表板的外觀和風格",
             "cyan": "青色",
             "dark": "深色",
             "dashboardWidgets": "儀表板小工具",
@@ -3517,7 +3513,6 @@
             "botUsername": "Bot 使用者名稱",
             "channelOptional": "頻道（選填）",
             "chatId": "聊天 ID",
-            "configureHowYouReceiveAlertsAnd": "設定您接收警報和通知的方式",
             "createAWebhookInDiscordServer": "在 Discord 中建立 Webhook：伺服器設定 → 整合 → Webhooks",
             "createAWebhookInYourPersonal": "在您的個人伺服器或 DM 頻道中建立 Webhook",
             "createAnIncomingWebhookInSlack": "在 Slack 中建立傳入 Webhook：應用程式 → 傳入 Webhooks",
@@ -3817,8 +3812,7 @@
             "emailAddress": "電子郵件",
             "memberSince": "會員自",
             "profileSettings": "個人資料設定",
-            "role": "角色",
-            "updateYourPersonalInformation": "更新您的個人資訊"
+            "role": "角色"
         },
         "projectDetail": {
             "addAnEnvironmentToStartOrganizing": "新增一個環境來開始組織該專案的應用程式。",
@@ -4260,7 +4254,6 @@
             "autoDetect": "自動偵測",
             "build": "建置",
             "buildMethod": "建置方式",
-            "confirmTheDetectedSettingsThenCreate": "確認偵測到的設定，然後建立服務。",
             "detectedManifestSettingsDockerfilePathBuild": "若偵測到資訊清單設定（Dockerfile 路徑、建置與啟動命令），系統會自動套用。若偵測結果有誤，請修改上方欄位。",
             "environment": "環境",
             "hostNginxDefault": "主機 Nginx（預設）",
@@ -4532,7 +4525,6 @@
             "enterVerificationCode": "輸入驗證碼",
             "linkedAccounts": "關聯帳戶",
             "manageYourActiveSessions": "管理使用中的工作階段",
-            "manageYourPasswordAndSecurityPreferences": "管理您的密碼和安全性偏好設定",
             "minimum8Characters": "最少 8 個字元",
             "newPassword": "新密碼",
             "qrCodeUnavailableEnterThisSecret": "無法顯示 QR 碼。請手動輸入此金鑰：",
@@ -4693,7 +4685,6 @@
             "chooseApplication": "選擇要快速儲存的應用程式。",
             "createEnvironmentQuicksave": "建立環境快速儲存",
             "createQuicksave": "建立快速儲存",
-            "description": "在同一條時間軸中檢視檢查點、部署及伺服器稽核活動。",
             "formDescription": "選擇此伺服器上的一個應用程式。僅會擷取其由 ServerKit 管理的環境變數。",
             "label": "標籤（選填）",
             "labelPlaceholder": "環境變更之前",
@@ -4996,7 +4987,6 @@
                 "profileIntro": "{{heldBy}} 於 {{since}} 接管了以下職責。所涵蓋的頁面會顯示受管資訊卡以取代原工具；所有路由與 API 均維持運作。",
                 "serverName": "Cloud 中的伺服器名稱",
                 "state": "狀態",
-                "subtitle": "說明 ServerKit Cloud 為此伺服器提供的功能與接管的項",
                 "title": "ServerKit Cloud"
             },
             "connections": "連線",
@@ -5525,7 +5515,6 @@
             "howDoYouWantToDeploy": "您想如何部署？",
             "manualLocal": "手動/本機",
             "otherGitRemote": "其他 Git 遠端儲存庫",
-            "pickASourceYouCanChange": "選擇一個來源。您可以在下一步中更改它。",
             "serviceSource": "服務來源",
             "uploadZip": "上傳 ZIP"
         },
@@ -6075,8 +6064,7 @@
             "useThisDomain": "使用該網域",
             "used": "已使用",
             "utcOffset": "UTC 時差",
-            "version": "{{brand}} 版本",
-            "viewSystemDetailsAndServerInformation": "檢視系統詳細資訊和伺服器資訊"
+            "version": "{{brand}} 版本"
         },
         "tableDataTab": {
             "column": "欄位",
@@ -6678,7 +6666,6 @@
             "myBrand": "我的品牌",
             "pngJpgSvgMax200kb": "PNG、JPG、SVG — 最大 200KB",
             "preview": "預覽",
-            "replaceTheDefaultServerkitBrandingWith": "以自己的品牌取代 ServerKit 的預設品牌識別",
             "replaceTheSidebarLogoNameAnd": "取代側邊欄 Logo、名稱與 GitHub 星號連結",
             "replacesTheSidebarLogoNameAnd": "取代側邊欄 Logo、名稱與 GitHub 星號連結",
             "starOnGithub": "在 GitHub 加星",
