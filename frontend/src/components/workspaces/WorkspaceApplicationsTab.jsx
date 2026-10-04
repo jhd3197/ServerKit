@@ -9,6 +9,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { Button } from '@/components/ui/button';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { useTranslation } from 'react-i18next';
 
 // What the Status cell shows when the row carries none. A real word, not '':
@@ -36,7 +37,9 @@ const BUILTIN_VIEWS = Object.fromEntries(Object.entries(CONFIG).map(([kind, conf
     },
 ]]));
 
-const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShare }) => {
+// `loadError` / `onRetry`: the page's apps request failed, so an empty list
+// means "unknown", not "nothing here".
+const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShare, loadError, onRetry }) => {
     const { t } = useTranslation();
     const config = CONFIG[kind];
     const labels = kind === 'sites' ? {
@@ -150,7 +153,15 @@ const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShar
                 {...chrome.tableProps}
                 onRowClick={(a) => navigate(`/services/${a.id}`)}
                 className="ws-detail__tablecard"
-                emptyState={(
+                emptyState={loadError ? (
+                    <ErrorState
+                        title={kind === 'sites'
+                            ? t('app.workspaceApplicationsTab.couldntLoadSites', "Couldn't load sites")
+                            : t('app.workspaceApplicationsTab.couldntLoadServices', "Couldn't load services")}
+                        error={loadError}
+                        onRetry={onRetry}
+                    />
+                ) : (
                     <EmptyState icon={config.icon} title={labels.empty} description={labels.moveBelow} />
                 )}
                 footer={(

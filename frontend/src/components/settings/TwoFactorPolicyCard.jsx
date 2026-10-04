@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
+import ErrorState from '../ErrorState';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
@@ -26,8 +27,11 @@ const TwoFactorPolicyCard = (props) => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState(null);
+    const [loadError, setLoadError] = useState(null);
 
-    useEffect(() => {
+    const loadPolicy = () => {
+        setLoading(true);
+        setLoadError(null);
         api.getSystemSettings()
             .then((data) => {
                 setPolicy(data.security_require_2fa || 'off');
@@ -35,8 +39,14 @@ const TwoFactorPolicyCard = (props) => {
                     setGraceDays(data.security_require_2fa_grace_days);
                 }
             })
-            .catch(() => { /* leave defaults */ })
+            // Never fall back to the 'off' default: saving it would silently
+            // lift a stricter policy the server actually holds.
+            .catch((err) => setLoadError(err))
             .finally(() => setLoading(false));
+    };
+
+    useEffect(() => {
+        loadPolicy();
     }, []);
 
     async function handleSave() {
@@ -57,6 +67,19 @@ const TwoFactorPolicyCard = (props) => {
     }
 
     if (loading) return null;
+
+    if (loadError) {
+        return (
+            <div className="settings-card" {...props}>
+                <h3>{t('app.twoFactorPolicyCard.twoFactorAuthenticationPolicy', 'Two-Factor Authentication Policy')}</h3>
+                <ErrorState
+                    title={t('app.twoFactorPolicyCard.couldntLoadPolicy', "Couldn't load the two-factor policy")}
+                    error={loadError}
+                    onRetry={loadPolicy}
+                />
+            </div>
+        );
+    }
 
     return (
         <div className="settings-card" {...props}>

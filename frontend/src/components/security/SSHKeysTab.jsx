@@ -4,6 +4,7 @@ import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
 import EmptyState from '@/components/EmptyState';
+import ErrorState from '@/components/ErrorState';
 import Modal from '../Modal';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -64,6 +65,7 @@ const SSHKeysTab = () => {
     const { t } = useTranslation();
     const [keys, setKeys] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [showAddModal, setShowAddModal] = useState(false);
     const [newKey, setNewKey] = useState('');
     const [actionLoading, setActionLoading] = useState(false);
@@ -83,8 +85,10 @@ const SSHKeysTab = () => {
         try {
             const data = await api.getSSHKeys();
             setKeys(data.keys || []);
+            setLoadError(null);
         } catch (error) {
             console.error('Failed to load SSH keys:', error);
+            setLoadError(error);
         } finally {
             setLoading(false);
         }
@@ -226,10 +230,20 @@ const SSHKeysTab = () => {
 
             <GridChips {...chrome.chipProps} />
 
+            {loadError && keys.length > 0 && !loading && (
+                <ErrorState compact error={loadError} onRetry={loadKeys} />
+            )}
+
             {loading ? (
                 <SharedCard variant="legacy" className="card">
                     <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
                 </SharedCard>
+            ) : loadError && keys.length === 0 ? (
+                <ErrorState
+                    title={t('app.sSHKeysTab.couldntLoadSshKeys', "Couldn't load SSH keys")}
+                    error={loadError}
+                    onRetry={loadKeys}
+                />
             ) : keys.length === 0 ? (
                 <SharedCard variant="legacy" className="card">
                     <EmptyState

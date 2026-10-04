@@ -2,6 +2,7 @@ import { useCallback, useState, useEffect  } from 'react';
 import api from '../../services/api';
 import ContributionGraph from './ContributionGraph';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { Search, Filter, X, User as UserIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DataTableFooter } from '@/components/ds';
@@ -16,6 +17,8 @@ const ActivityTab = () => {
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [feedLoading, setFeedLoading] = useState(false);
+    const [summaryError, setSummaryError] = useState(null);
+    const [logsError, setLogsError] = useState(null);
     const [users, setUsers] = useState([]);
     const [actions, setActions] = useState([]);
     const [pagination, setPagination] = useState({
@@ -46,8 +49,9 @@ const ActivityTab = () => {
                 total: data.pagination?.total || 0,
                 pages: data.pagination?.pages || 1
             }));
-        } catch {
-            // Silently handle
+            setLogsError(null);
+        } catch (err) {
+            setLogsError(err);
         } finally {
             setFeedLoading(false);
         }
@@ -61,8 +65,9 @@ const ActivityTab = () => {
         try {
             const data = await api.getActivitySummary();
             setSummary(data);
-        } catch {
-            // Silently handle
+            setSummaryError(null);
+        } catch (err) {
+            setSummaryError(err);
         } finally {
             setLoading(false);
         }
@@ -134,6 +139,14 @@ const ActivityTab = () => {
                     <p>{t('app.activityTab.monitorTeamActivityAuditActionsAnd', 'Monitor team activity, audit actions, and system events')}</p>
                 </div>
             </div>
+
+            {summaryError && !summary && (
+                <ErrorState
+                    title={t('app.activityTab.couldntLoadSummary', "Couldn't load activity summary")}
+                    error={summaryError}
+                    onRetry={loadSummary}
+                />
+            )}
 
             {summary && (
                 <>
@@ -250,9 +263,17 @@ const ActivityTab = () => {
                         <div className="spinner" />
                         {t('app.activityTab.loadingLogs', 'Loading logs…')}
                     </div>
+                ) : logsError && logs.length === 0 ? (
+                    <ErrorState
+                        title={t('app.activityTab.couldntLoadAuditLogs', "Couldn't load audit logs")}
+                        error={logsError}
+                        onRetry={loadLogs}
+                    />
                 ) : logs.length === 0 ? (
                     <EmptyState icon={Search} title={t('app.activityTab.noAuditLogsFound', 'No audit logs found')} />
                 ) : (
+                    <>
+                    {logsError && <ErrorState compact error={logsError} onRetry={loadLogs} />}
                     <div className="audit-log-list" role="list">
                         {logs.map(log => (
                             <div key={log.id} className={`log-row ${getActionClass(log.action)}`} role="listitem">
@@ -274,6 +295,7 @@ const ActivityTab = () => {
                             </div>
                         ))}
                     </div>
+                    </>
                 )}
 
                 {/* The audit feed is a flex-wrapped log-row layout, not a

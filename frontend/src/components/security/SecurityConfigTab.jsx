@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
+import ErrorState from '@/components/ErrorState';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
@@ -13,17 +14,21 @@ const SecurityConfigTab = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState(null);
+    const [loadError, setLoadError] = useState(null);
 
     useEffect(() => {
         loadConfig();
     }, []);
 
     async function loadConfig() {
+        setLoading(true);
         try {
             const data = await api.getSecurityConfig();
             setConfig(data);
+            setLoadError(null);
         } catch (err) {
             console.error('Failed to load security config:', err);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -54,6 +59,18 @@ const SecurityConfigTab = () => {
 
     if (loading) {
         return <div className="loading-sm">{t('app.securityConfigTab.loadingSettings', 'Loading settings…')}</div>;
+    }
+
+    // Never render the form on a failed load: saving it would write the
+    // empty defaults over the real configuration.
+    if (loadError && !config) {
+        return (
+            <ErrorState
+                title={t('app.securityConfigTab.couldntLoadSettings', "Couldn't load security settings")}
+                error={loadError}
+                onRetry={loadConfig}
+            />
+        );
     }
 
     return (

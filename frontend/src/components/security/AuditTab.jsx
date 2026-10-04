@@ -3,6 +3,7 @@ import { statusKind } from '@/components/ds/status';
 import { ClipboardCheck } from 'lucide-react';
 import api from '../../services/api';
 import EmptyState from '@/components/EmptyState';
+import ErrorState from '@/components/ErrorState';
 import { Button } from '@/components/ui/button';
 import { ScoreGauge } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +30,7 @@ const AuditTab = () => {
             const data = await api.generateSecurityAudit();
             setAudit(data.audit);
         } catch (err) {
-            setError(err.message);
+            setError(err);
         } finally {
             setLoading(false);
         }
@@ -45,9 +46,16 @@ const AuditTab = () => {
                     </Button>
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">
-                    {error && <div className="alert alert-danger">{error}</div>}
+                    {error && !loading && (
+                        <ErrorState
+                            title={t('app.auditTab.couldntRunAudit', "Couldn't run the security audit")}
+                            error={error}
+                            onRetry={runAudit}
+                            compact={!!audit}
+                        />
+                    )}
 
-                    {!audit && !loading && (
+                    {!audit && !loading && !error && (
                         <EmptyState
                             icon={ClipboardCheck}
                             title={t('app.auditTab.runASecurityAuditToCheck', 'Run a security audit to check your server\'s configuration.')}

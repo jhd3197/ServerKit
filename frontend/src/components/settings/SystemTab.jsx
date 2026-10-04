@@ -10,6 +10,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { formatBytes } from '@/utils/formatBytes';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { useTranslation } from 'react-i18next';
 
 function formatUptime(seconds) {
@@ -26,6 +27,11 @@ function formatUptime(seconds) {
     return parts.join(' ') || '< 1m';
 }
 
+// A missing reading is "—", never an invented 0%.
+function formatPercent(value) {
+    return typeof value === 'number' ? `${value.toFixed(1)}%` : '—';
+}
+
 const SystemTab = () => {
     const { t } = useTranslation();
     const register = useSettingFocus();
@@ -35,6 +41,9 @@ const SystemTab = () => {
     const [metrics, setMetrics] = useState(null);
     const [version, setVersion] = useState('');
     const [loading, setLoading] = useState(true);
+    const [metricsError, setMetricsError] = useState(null);
+    const [timezonesError, setTimezonesError] = useState(null);
+    const [domainError, setDomainError] = useState(null);
     const [timezones, setTimezones] = useState([]);
     const [selectedTimezone, setSelectedTimezone] = useState('');
     const [savingTimezone, setSavingTimezone] = useState(false);
@@ -62,11 +71,13 @@ const SystemTab = () => {
         try {
             const data = await api.getSystemMetrics();
             setMetrics(data);
+            setMetricsError(null);
             if (data?.time?.timezone_id) {
                 setSelectedTimezone(data.time.timezone_id);
             }
         } catch (err) {
             console.error('Failed to load metrics:', err);
+            setMetricsError(err);
         } finally {
             setLoading(false);
         }
@@ -76,8 +87,10 @@ const SystemTab = () => {
         try {
             const data = await api.getTimezones();
             setTimezones(data.timezones || []);
+            setTimezonesError(null);
         } catch (err) {
             console.error('Failed to load timezones:', err);
+            setTimezonesError(err);
         }
     }
 
@@ -92,8 +105,10 @@ const SystemTab = () => {
             setCanonicalDomain(detection.current_canonical_domain || '');
             setCanonicalHttps(detection.current_canonical_https_enabled || false);
             setEncryptionConfigured(health.encryption_configured !== false);
+            setDomainError(null);
         } catch (err) {
             console.error('Failed to load domain info:', err);
+            setDomainError(err);
         } finally {
             setDomainLoading(false);
         }
@@ -167,11 +182,21 @@ const SystemTab = () => {
                 <h2>{t('app.systemTab.systemInformation', 'System Information')}</h2>
             </div>
 
+            {metricsError && !metrics && (
+                <ErrorState
+                    title={t('app.systemTab.couldntLoadSystemInformation', "Couldn't load system information")}
+                    error={metricsError}
+                    onRetry={loadMetrics}
+                />
+            )}
+            {metricsError && metrics && <ErrorState compact error={metricsError} onRetry={loadMetrics} />}
+
+            {metrics && (
             <div className="system-info-grid">
                 <div {...register('system-cpu', 'settings-card')}>
                     <h3>CPU</h3>
                     <InfoList>
-                        <InfoItem label={t('app.systemTab.usage', 'Usage')} value={`${metrics?.cpu?.percent?.toFixed(1) || 0}%`} />
+                        <InfoItem label={t('app.systemTab.usage', 'Usage')} value={formatPercent(metrics?.cpu?.percent)} />
                         <InfoItem label={t('app.systemTab.cores', 'Cores')} value={metrics?.cpu?.count || '-'} />
                         <InfoItem
                             label={t('app.systemTab.loadAverage', 'Load Average')}
@@ -183,7 +208,7 @@ const SystemTab = () => {
                 <div {...register('system-memory', 'settings-card')}>
                     <h3>{t('common.labels.memory', 'Memory')}</h3>
                     <InfoList>
-                        <InfoItem label={t('app.systemTab.usage', 'Usage')} value={`${metrics?.memory?.percent?.toFixed(1) || 0}%`} />
+                        <InfoItem label={t('app.systemTab.usage', 'Usage')} value={formatPercent(metrics?.memory?.percent)} />
                         <InfoItem label={t('app.systemTab.used', 'Used')} value={formatBytes(metrics?.memory?.used)} />
                         <InfoItem label={t('app.systemTab.total', 'Total')} value={formatBytes(metrics?.memory?.total)} />
                     </InfoList>
@@ -192,7 +217,7 @@ const SystemTab = () => {
                 <div {...register('system-disk', 'settings-card')}>
                     <h3>{t('common.labels.disk', 'Disk')}</h3>
                     <InfoList>
-                        <InfoItem label={t('app.systemTab.usage', 'Usage')} value={`${metrics?.disk?.percent?.toFixed(1) || 0}%`} />
+                        <InfoItem label={t('app.systemTab.usage', 'Usage')} value={formatPercent(metrics?.disk?.percent)} />
                         <InfoItem label={t('app.systemTab.used', 'Used')} value={formatBytes(metrics?.disk?.used)} />
                         <InfoItem label={t('app.systemTab.total', 'Total')} value={formatBytes(metrics?.disk?.total)} />
                     </InfoList>
@@ -206,6 +231,7 @@ const SystemTab = () => {
                     </InfoList>
                 </div>
             </div>
+            )}
 
             {(metrics?.system || version) && (
                 <div className="settings-card">
@@ -234,6 +260,7 @@ const SystemTab = () => {
                         <InfoItem label={t('app.systemTab.currentTimezone', 'Current Timezone')} value={metrics.time.timezone_id || metrics.time.timezone_name} />
                     </InfoList>
                 )}
+                {timezonesError && <ErrorState compact error={timezonesError} onRetry={loadTimezones} />}
                 <div className="form-group">
                     <label>{t('app.systemTab.changeTimezone', 'Change Timezone')}</label>
                     <div className="timezone-selector">
@@ -280,6 +307,12 @@ const SystemTab = () => {
                 )}
                 {domainLoading ? (
                     <EmptyState loading title={t('app.systemTab.loadingDomainSettings', 'Loading domain settings…')} />
+                ) : domainError ? (
+                    <ErrorState
+                        title={t('app.systemTab.couldntLoadDomainSettings', "Couldn't load domain settings")}
+                        error={domainError}
+                        onRetry={loadDomainInfo}
+                    />
                 ) : (
                     <>
                         {detectedDomain?.detected_domain && (

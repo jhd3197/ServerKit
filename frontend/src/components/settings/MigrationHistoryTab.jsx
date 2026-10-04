@@ -10,6 +10,7 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import useSettingFocus from '../../hooks/useSettingFocus';
@@ -84,7 +85,7 @@ const MigrationHistoryTab = () => {
             setRevisions(hist.revisions || []);
             setStatus(stat);
         } catch (err) {
-            setError(err.message || 'Failed to load migration history');
+            setError(err);
         } finally {
             setLoading(false);
         }
@@ -231,7 +232,11 @@ const MigrationHistoryTab = () => {
     if (error) {
         return (
             <div className="settings-section">
-                <EmptyState icon={Database} title={error} />
+                <ErrorState
+                    title={t('app.migrationHistoryTab.couldntLoadMigrationHistory', "Couldn't load migration history")}
+                    error={error}
+                    onRetry={load}
+                />
             </div>
         );
     }

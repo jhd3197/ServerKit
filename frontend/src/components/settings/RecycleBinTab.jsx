@@ -5,6 +5,7 @@ import { useToast } from '@/contexts/useToast.js';
 import { useAuth } from '@/contexts/useAuth.js';
 import { Button } from '@/components/ui/button';
 import EmptyState from '@/components/EmptyState';
+import ErrorState from '@/components/ErrorState';
 import { Pill, DataTable, DataTableFooter } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
@@ -58,6 +59,8 @@ export default function RecycleBinTab() {
     const [items, setItems] = useState([]);
     const [retentionDays, setRetentionDays] = useState(30);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
+    const [loaded, setLoaded] = useState(false);
     const [busyId, setBusyId] = useState(null);
     const [purgeTarget, setPurgeTarget] = useState(null);
 
@@ -80,12 +83,14 @@ export default function RecycleBinTab() {
             const data = await api.getRecycleBin();
             setItems(data.items || []);
             setRetentionDays(data.retention_days ?? 30);
+            setLoaded(true);
+            setLoadError(null);
         } catch (err) {
-            toast.error(err.message || t('app.recycleBinTab.couldNotLoadTheRecycleBin', 'Could not load the recycle bin'));
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
-    }, [t, toast]);
+    }, []);
 
     useEffect(() => { load(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -230,6 +235,12 @@ export default function RecycleBinTab() {
         <div className="settings-section recyclebin">
             {loading ? (
                 <EmptyState loading loadingVariant="table" title={t('app.recycleBinTab.loadingDeletedRecords', 'Loading deleted records…')} />
+            ) : loadError && (!loaded || items.length === 0) ? (
+                <ErrorState
+                    title={t('app.recycleBinTab.couldntLoadRecycleBin', "Couldn't load the recycle bin")}
+                    error={loadError}
+                    onRetry={load}
+                />
             ) : items.length === 0 ? (
                 <EmptyState
                     icon={Trash2}
@@ -238,6 +249,7 @@ export default function RecycleBinTab() {
                 />
             ) : (
                 <>
+                    {loadError && <ErrorState compact error={loadError} onRetry={load} />}
                     <GridViewPicker
                         views={chrome.views}
                         label="items"

@@ -3,6 +3,7 @@ import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
 import EmptyState from '@/components/EmptyState';
+import ErrorState from '@/components/ErrorState';
 import Modal from '../Modal';
 import { InfoList, InfoItem } from '../InfoList';
 import PortField from '../PortField';
@@ -103,6 +104,17 @@ const FirewallTab = () => {
     const [actionLoading, setActionLoading] = useState(false);
     const [guard, setGuard] = useState(null);
     const [guardLoading, setGuardLoading] = useState(false);
+    // Per-request load failures, keyed by loader. A failed status read must not
+    // fall through to the "No firewall installed" call to action.
+    const [loadErrors, setLoadErrors] = useState({});
+    const recordLoad = useCallback((key, error) => {
+        setLoadErrors((prev) => {
+            if (!error && !prev[key]) return prev;
+            const next = { ...prev };
+            if (error) next[key] = error; else delete next[key];
+            return next;
+        });
+    }, []);
     const toast = useToast();
     const { confirm } = useConfirm();
     const { sorts, setSorts } = useTableSort({ storageKey: 'serverkit-table-firewall-rules-sort' });
@@ -126,37 +138,45 @@ const FirewallTab = () => {
         try {
             const data = await api.getFirewallStatus();
             setStatus(data);
+            recordLoad('status', null);
         } catch (error) {
             console.error('Failed to load status:', error);
+            recordLoad('status', error);
         }
-    }, []);
+    }, [recordLoad]);
 
     const loadRules = useCallback(async () => {
         try {
             const data = await api.getFirewallRules();
             setRules(data.rules || []);
+            recordLoad('rules', null);
         } catch (error) {
             console.error('Failed to load rules:', error);
+            recordLoad('rules', error);
         }
-    }, []);
+    }, [recordLoad]);
 
     const loadBlockedIPs = useCallback(async () => {
         try {
             const data = await api.getBlockedIPs();
             setBlockedIPs(data.blocked_ips || []);
+            recordLoad('blocked', null);
         } catch (error) {
             console.error('Failed to load blocked IPs:', error);
+            recordLoad('blocked', error);
         }
-    }, []);
+    }, [recordLoad]);
 
     const loadGuard = useCallback(async () => {
         try {
             const data = await api.getMetadataGuard();
             setGuard(data);
+            recordLoad('guard', null);
         } catch (error) {
             console.error('Failed to load metadata guard status:', error);
+            recordLoad('guard', error);
         }
-    }, []);
+    }, [recordLoad]);
 
     const loadData = useCallback(async () => {
         setLoading(true);
@@ -409,8 +429,21 @@ const FirewallTab = () => {
         return <div className="loading-sm">{t('app.firewallTab.loadingFirewallStatus', 'Loading firewall status…')}</div>;
     }
 
+    if (loadErrors.status && !status) {
+        return (
+            <ErrorState
+                title={t('app.firewallTab.couldntLoadStatus', "Couldn't load firewall status")}
+                error={loadErrors.status}
+                onRetry={loadData}
+            />
+        );
+    }
+
+    const partialError = loadErrors.status || loadErrors.rules || loadErrors.blocked || loadErrors.guard;
+
     return (
         <div className="firewall-tab">
+            {partialError && <ErrorState compact error={partialError} onRetry={loadData} />}
             {!status?.any_installed ? (
                 <EmptyState
                     icon={Shield}

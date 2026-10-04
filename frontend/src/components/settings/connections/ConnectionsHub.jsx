@@ -20,6 +20,7 @@ import {
     CONNECTION_CATEGORIES, CONNECTION_PROVIDERS, deriveScope, dedupeScopes,
 } from './providerCatalog';
 import ProviderCard from './ProviderCard';
+import ErrorState from '../../ErrorState';
 import ConnectProviderModal from './ConnectProviderModal';
 import { useTranslation } from 'react-i18next';
 
@@ -56,24 +57,38 @@ export default function ConnectionsHub() {
     const [containerRegistries, setContainerRegistries] = useState([]);
     const [allConnections, setAllConnections] = useState([]);
     const [loading, setLoading] = useState(true);
+    // Which status reads failed on the last load. A failed read must render as
+    // "couldn't load", never as "Not connected" with a Connect button.
+    const [failed, setFailed] = useState({});
+    const [firstError, setFirstError] = useState(null);
     const [modalProvider, setModalProvider] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
 
     const loadData = useCallback(async () => {
+        const failures = {};
+        let firstErr = null;
+        // Keep partial results, but remember which reads failed.
+        const soft = (key, promise, fallback) => promise.catch((err) => {
+            failures[key] = true;
+            if (!firstErr) firstErr = err;
+            return fallback;
+        });
         try {
             const [ghStatus, glStatus, bbStatus, dns, cloudP, storage, relay, regConns, regDomains, registries, allConns] = await Promise.all([
-                api.getGithubSourceStatus().catch(() => null),
-                api.getGitlabSourceStatus().catch(() => null),
-                api.getBitbucketSourceStatus().catch(() => null),
-                api.getEmailDNSProviders().then((d) => d.providers || []).catch(() => []),
-                api.getCloudProviders().then((d) => d.providers || []).catch(() => []),
-                api.getStorageConfig().catch(() => null),
-                api.getEmailRelay().catch(() => null),
-                api.getRegistrarConnections().then((d) => d.connections || []).catch(() => []),
-                api.getRegistrarDomains().then((d) => d.domains || []).catch(() => []),
-                api.getContainerRegistries().then((d) => d.registries || []).catch(() => []),
-                api.getAllConnections().then((d) => d.connections || []).catch(() => []),
+                soft('github', api.getGithubSourceStatus(), null),
+                soft('gitlab', api.getGitlabSourceStatus(), null),
+                soft('bitbucket', api.getBitbucketSourceStatus(), null),
+                soft('dns', api.getEmailDNSProviders().then((d) => d.providers || []), []),
+                soft('cloud', api.getCloudProviders().then((d) => d.providers || []), []),
+                soft('storage', api.getStorageConfig(), null),
+                soft('email', api.getEmailRelay(), null),
+                soft('registrar', api.getRegistrarConnections().then((d) => d.connections || []), []),
+                soft('registrarDomains', api.getRegistrarDomains().then((d) => d.domains || []), []),
+                soft('registry', api.getContainerRegistries().then((d) => d.registries || []), []),
+                soft('all', api.getAllConnections().then((d) => d.connections || []), []),
             ]);
+            setFailed(failures);
+            setFirstError(firstErr);
             setSourceStatus({ github: ghStatus, gitlab: glStatus, bitbucket: bbStatus });
             setDnsProviders(dns);
             setCloudProviders(cloudP);
@@ -398,6 +413,11 @@ export default function ConnectionsHub() {
 
         for (const provider of CONNECTION_PROVIDERS) {
             if (provider.comingSoon) { out[provider.id] = { connected: false }; continue; }
+            const failedKey = provider.kind === 'source' ? provider.provider : provider.kind;
+            if (failed[failedKey]) {
+                out[provider.id] = { connected: false, loadFailed: true, statusLabel: t('app.connectionsHub.couldntLoad', "Couldn't load"), statusTone: 'danger', scopes: [] };
+                continue;
+            }
             const manageHref = provider.manageHref;
 
             if (provider.kind === 'source') {
@@ -476,7 +496,7 @@ export default function ConnectionsHub() {
             }
         }
         return out;
-    }, [sourceStatus, cloudProviders, dnsProviders, registrarConnections, registrarDomains, containerRegistries, storageConfig, relayConfig]);
+    }, [sourceStatus, cloudProviders, dnsProviders, registrarConnections, registrarDomains, containerRegistries, storageConfig, relayConfig, failed, t]);
 
     function handleManage(provider) {
         setModalProvider(provider);
@@ -507,6 +527,13 @@ export default function ConnectionsHub() {
                         {unencryptedCount} {t('app.connectionsHub.connectedAccount', 'connected account')}{unencryptedCount === 1 ? '' : 's'} {unencryptedCount === 1 ? 'has' : 'have'} {t('app.connectionsHub.credentialsNotEncryptedAtRestRestart', 'credentials not encrypted at rest. Restart the panel to migrate them, or check that')} <code>SERVERKIT_ENCRYPTION_KEY</code> {t('app.connectionsHub.isSet', 'is set.')}
                     </span>
                 </div>
+            )}
+            {!loading && firstError && (
+                <ErrorState
+                    compact
+                    error={firstError}
+                    onRetry={loadData}
+                />
             )}
             {loading ? (
                 <div className="connections-hub__loading">{t('app.connectionsHub.loadingConnections', 'Loading connections…')}</div>

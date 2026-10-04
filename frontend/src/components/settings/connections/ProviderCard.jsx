@@ -14,6 +14,8 @@ export default function ProviderCard({ provider, summary, onManage }) {
     const comingSoon = provider.comingSoon;
     const connected = !comingSoon && summary?.connected;
 
+    // A failed status read is not "Not connected": no Connect call to action.
+    const loadFailed = !comingSoon && summary?.loadFailed;
     const statusLabel = comingSoon ? 'Soon' : (summary?.statusLabel || 'Not connected');
     const statusTone = comingSoon ? 'soon' : (summary?.statusTone || 'neutral');
 
@@ -50,7 +52,9 @@ export default function ProviderCard({ provider, summary, onManage }) {
                     </Link>
                 ) : <span />}
 
-                {comingSoon ? (
+                {loadFailed ? (
+                    <span />
+                ) : comingSoon ? (
                     <span className="conn-card__soon-tag">{t('app.providerCard.comingSoon', 'Coming soon')}</span>
                 ) : (
                     <Button variant={connected ? 'outline' : 'default'} size="sm" onClick={() => onManage(provider)}>

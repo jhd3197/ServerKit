@@ -5,6 +5,7 @@ import {
     RefreshCw, ExternalLink, Star, X, AlertTriangle
 } from 'lucide-react';
 import ServerKitLogo from '../ServerKitLogo';
+import ErrorState from '../ErrorState';
 import { Button } from '@/components/ui/button';
 import useSettingFocus from '../../hooks/useSettingFocus';
 import { useManagedProfile } from '../../contexts/useManagedProfile';
@@ -15,7 +16,9 @@ const STAR_PROMPT_KEY = 'serverkit-star-prompt-dismissed';
 
 const AboutTab = () => {
     const { t } = useTranslation();
-    const [version, setVersion] = useState('...');
+    // null until known: a failed read shows "—", never an invented number.
+    const [version, setVersion] = useState(null);
+    const [versionError, setVersionError] = useState(null);
     const [updateInfo, setUpdateInfo] = useState(null);
     const [checkingUpdate, setCheckingUpdate] = useState(false);
     const [showStarPrompt, setShowStarPrompt] = useState(() => {
@@ -38,15 +41,18 @@ const AboutTab = () => {
 
     useEffect(() => () => { cancelledRef.current = true; }, []);
 
+    const fetchVersion = async () => {
+        setVersionError(null);
+        try {
+            const data = await api.getVersion();
+            setVersion(data.version || null);
+        } catch (err) {
+            setVersion(null);
+            setVersionError(err);
+        }
+    };
+
     useEffect(() => {
-        const fetchVersion = async () => {
-            try {
-                const data = await api.getVersion();
-                setVersion(data.version || '1.0.0');
-            } catch {
-                setVersion('1.0.0');
-            }
-        };
         fetchVersion();
     }, []);
 
@@ -77,7 +83,14 @@ const AboutTab = () => {
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const runUpdate = async () => {
-        const startVersion = version;
+        let startVersion = version;
+        if (!startVersion) {
+            // Without a known starting version the poll below cannot tell the
+            // new backend from the old one, so read it once more first.
+            try {
+                startVersion = (await api.getVersion()).version || null;
+            } catch { /* fall back to the running/outcome signals */ }
+        }
         setUpdatePhase('starting');
         setUpdateError(null);
         setUpdateLogTail('');
@@ -97,7 +110,7 @@ const AboutTab = () => {
             try {
                 const st = await api.getPanelUpdateStatus();
                 if (st.log?.tail) setUpdateLogTail(st.log.tail);
-                if (st.version && st.version !== startVersion) {
+                if (st.version && startVersion && st.version !== startVersion) {
                     // The backend that answered is already the new version.
                     setUpdatedVersion(st.version);
                     setUpdatePhase('done');
@@ -141,7 +154,8 @@ const AboutTab = () => {
                     <ServerKitLogo width={64} height={64} />
                 </div>
                 <h3>{t('common.labels.serverKit', 'ServerKit')}</h3>
-                <p className="version">{t('common.labels.version', 'Version')} {version}</p>
+                <p className="version">{t('common.labels.version', 'Version')} {version || (versionError ? '—' : '…')}</p>
+                {versionError && <ErrorState compact error={versionError} onRetry={fetchVersion} />}
                 <p className="description">
                     {t('app.aboutTab.aModernLightweightServerManagementPanel', 'A modern, lightweight server management panel for managing web applications, databases, domains, and more. Built with Flask and React.')}
                 </p>

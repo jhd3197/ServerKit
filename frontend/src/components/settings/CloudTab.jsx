@@ -5,6 +5,8 @@ import api from '../../services/api';
 import { useManagedProfile } from '../../contexts/useManagedProfile';
 import useLabel from '../../i18n/labels';
 import { MANAGED_CAPABILITY_MAP } from '../sidebarItems';
+import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 
 // Settings › ServerKit Cloud (plan 25 M3): the one place the customer reads
 // what ServerKit Cloud holds for them — the connect state, and the managed
@@ -16,9 +18,22 @@ const CloudTab = () => {
     const label_ = useLabel();
     const { profile, lapsed } = useManagedProfile();
     const [connect, setConnect] = useState(null);
+    // Loading and failure are their own states: neither may read as "not
+    // connected", which is only true when the status call said so.
+    const [connectLoading, setConnectLoading] = useState(true);
+    const [connectError, setConnectError] = useState(null);
+
+    const loadConnect = () => {
+        setConnectLoading(true);
+        setConnectError(null);
+        api.getConnectStatus()
+            .then(setConnect)
+            .catch((err) => setConnectError(err))
+            .finally(() => setConnectLoading(false));
+    };
 
     useEffect(() => {
-        api.getConnectStatus().then(setConnect).catch(() => setConnect(null));
+        loadConnect();
     }, []);
 
     const held = profile?.held_capabilities || [];
@@ -36,7 +51,15 @@ const CloudTab = () => {
                 <h3>
                     <PlugZap size={16} /> {t('app.settings.cloud.connection', 'Connection')}
                 </h3>
-                {connect ? (
+                {connectLoading ? (
+                    <EmptyState loading loadingVariant="form" loadingRows={3} title={t('app.settings.cloud.loadingConnection', 'Loading connection status…')} />
+                ) : connectError ? (
+                    <ErrorState
+                        title={t('app.settings.cloud.couldntLoadConnection', "Couldn't load Cloud connection status")}
+                        error={connectError}
+                        onRetry={loadConnect}
+                    />
+                ) : connect ? (
                     <div className="managed-spec-list">
                         <div className="managed-spec-row">
                             <span className="managed-spec-key">{t('app.settings.cloud.state', 'State')}</span>

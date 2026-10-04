@@ -3,6 +3,7 @@ import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
 import Modal from '../Modal';
+import ErrorState from '@/components/ErrorState';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -131,6 +132,8 @@ const IPListsTab = () => {
     const { t } = useTranslation();
     const [lists, setLists] = useState({ allowlist: [], blocklist: [] });
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
+    const [loaded, setLoaded] = useState(false);
     const [showAddModal, setShowAddModal] = useState(null);
     const [newIP, setNewIP] = useState('');
     const [newComment, setNewComment] = useState('');
@@ -155,8 +158,11 @@ const IPListsTab = () => {
                 allowlist: data.allowlist || [],
                 blocklist: data.blocklist || []
             });
+            setLoaded(true);
+            setLoadError(null);
         } catch (error) {
             console.error('Failed to load IP lists:', error);
+            setLoadError(error);
         } finally {
             setLoading(false);
         }
@@ -304,8 +310,19 @@ const IPListsTab = () => {
         return <div className="loading-sm">{t('app.iPListsTab.loadingIpLists', 'Loading IP lists…')}</div>;
     }
 
+    if (loadError && !loaded) {
+        return (
+            <ErrorState
+                title={t('app.iPListsTab.couldntLoadIpLists', "Couldn't load IP lists")}
+                error={loadError}
+                onRetry={loadLists}
+            />
+        );
+    }
+
     return (
         <div className="ip-lists-tab">
+            {loadError && <ErrorState compact error={loadError} onRetry={loadLists} />}
             <div className="ip-lists-grid">
                 {renderList('allowlist', lists.allowlist, allowSorts, allowChrome)}
                 {renderList('blocklist', lists.blocklist, blockSorts, blockChrome)}

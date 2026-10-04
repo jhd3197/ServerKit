@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import ErrorState from '@/components/ErrorState';
 import { DataTable, DataTableFooter, ListToolbar } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
@@ -168,6 +169,8 @@ const IntegrityTab = () => {
     const [busy, setBusy] = useState(null); // `${scope}:${action}` while a call runs
     const [savingOptins, setSavingOptins] = useState(false);
     const [message, setMessage] = useState(null);
+    const [loadError, setLoadError] = useState(null);
+    const [appsError, setAppsError] = useState(null);
     const [expanded, setExpanded] = useState(null); // scope whose changes table is open
 
     // Lifted out of <DataTable storageKey> so the chrome can capture and
@@ -184,18 +187,25 @@ const IntegrityTab = () => {
         try {
             const data = await api.request('/security/fim');
             setStatus(data);
+            setLoadError(null);
         } catch (err) {
-            setMessage({ type: 'error', text: err.message });
+            setLoadError(err);
         }
+    }, []);
+
+    const loadApps = useCallback(() => {
+        api.getApps().then(
+            (data) => { setApps(data.apps || []); setAppsError(null); },
+            // The apps list is optional chrome; FIM still works without it, but
+            // a failed read must not claim there are no applications.
+            (err) => setAppsError(err),
+        );
     }, []);
 
     useEffect(() => {
         load();
-        api.getApps().then(
-            (data) => setApps(data.apps || []),
-            () => {} // apps list is optional chrome; FIM still works without it
-        );
-    }, [load]);
+        loadApps();
+    }, [load, loadApps]);
 
     async function runAction(scope, action) {
         setBusy(`${scope}:${action}`);
@@ -391,8 +401,21 @@ const IntegrityTab = () => {
     const managedScopes = scopes.filter((s) => !s.scope.startsWith('app:'));
     const appScopes = scopes.filter((s) => s.scope.startsWith('app:'));
 
+    if (!status) {
+        return loadError ? (
+            <ErrorState
+                title={t('app.integrityTab.couldntLoadIntegrity', "Couldn't load file integrity status")}
+                error={loadError}
+                onRetry={load}
+            />
+        ) : (
+            <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
+        );
+    }
+
     return (
         <div className="integrity-tab">
+            {loadError && <ErrorState compact error={loadError} onRetry={load} />}
             {message && (
                 <div className={`alert alert-${message.type === 'success' ? 'success' : 'danger'}`}>
                     {message.text}
@@ -414,7 +437,9 @@ const IntegrityTab = () => {
                     <p className="sec-hint sec-hint--lead">
                         {t('app.integrityTab.watchingADocrootHashesEveryFile', 'Watching a docroot hashes every file outside upload/cache directories, so it is opt-in per application.')}
                     </p>
-                    {apps.length === 0 ? (
+                    {appsError ? (
+                        <ErrorState compact error={appsError} onRetry={loadApps} />
+                    ) : apps.length === 0 ? (
                         <p className="sec-faint">{t('app.integrityTab.noApplicationsFound', 'No applications found.')}</p>
                     ) : (
                         <div className="sec-finding-list">

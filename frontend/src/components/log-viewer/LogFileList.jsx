@@ -3,6 +3,7 @@ import { Search, RefreshCw, ChevronDown, ChevronRight, FileText, AlertTriangle, 
 import { LOG_GROUPS, categoriseLog, logKindFromPath, formatBytes, formatRelativeTime } from './logHelpers';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import ErrorState from '@/components/ErrorState';
 
 const GROUP_ICONS = {
     web: Globe,
@@ -14,7 +15,9 @@ const GROUP_ICONS = {
     other: FileText,
 };
 
-export default function LogFileList({ files, selectedPath, onSelect, onRefresh, loading }) {
+// `error` (string or Error) is the failure of the file-list request itself;
+// with no files loaded it replaces the "No log files found" hint.
+export default function LogFileList({ files, selectedPath, onSelect, onRefresh, loading, error }) {
     const { t } = useTranslation();
     const [query, setQuery] = useState('');
     const [collapsed, setCollapsed] = useState(new Set());
@@ -71,7 +74,18 @@ export default function LogFileList({ files, selectedPath, onSelect, onRefresh, 
             </div>
 
             <div className="lv-sidebar-body">
-                {files.length === 0 ? (
+                {loading && files.length === 0 ? (
+                    <div className="lv-empty-hint" role="status" aria-busy="true">
+                        <p>{t('app.logFileList.loadingLogFiles', 'Loading log files…')}</p>
+                    </div>
+                ) : error && files.length === 0 ? (
+                    <ErrorState
+                        compact
+                        error={typeof error === 'string' ? undefined : error}
+                        message={typeof error === 'string' ? error : undefined}
+                        onRetry={onRefresh}
+                    />
+                ) : files.length === 0 ? (
                     <div className="lv-empty-hint">
                         <AlertTriangle size={20} />
                         <p>{t('app.logFileList.noLogFilesFound', 'No log files found.')}</p>

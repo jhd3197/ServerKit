@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
+import ErrorState from '@/components/ErrorState';
 import { Feed, FeedItem } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import { CardHeader as SharedCardHeader, CardContent as SharedCardContent, Card as SharedCard } from '@/components/ui/card';
@@ -10,6 +11,8 @@ const EventsTab = () => {
     const [events, setEvents] = useState([]);
     const [failedLogins, setFailedLogins] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [eventsError, setEventsError] = useState(null);
+    const [failedLoginsError, setFailedLoginsError] = useState(null);
 
     useEffect(() => {
         loadEvents();
@@ -20,8 +23,10 @@ const EventsTab = () => {
         try {
             const data = await api.getSecurityEvents(50);
             setEvents(data.events || []);
+            setEventsError(null);
         } catch (err) {
             console.error('Failed to load security events:', err);
+            setEventsError(err);
         } finally {
             setLoading(false);
         }
@@ -31,8 +36,10 @@ const EventsTab = () => {
         try {
             const data = await api.getFailedLogins(24);
             setFailedLogins(data);
+            setFailedLoginsError(null);
         } catch (err) {
             console.error('Failed to load failed logins:', err);
+            setFailedLoginsError(err);
         }
     }
 
@@ -54,6 +61,13 @@ const EventsTab = () => {
 
     return (
         <div className="events-tab">
+            {failedLoginsError && (
+                <ErrorState
+                    compact
+                    error={failedLoginsError}
+                    onRetry={loadFailedLogins}
+                />
+            )}
             {failedLogins && (
                 <div className={`card ${failedLogins.alert_triggered ? 'card-warning' : ''}`}>
                     <SharedCardHeader variant="legacy" className="card-header">
@@ -85,9 +99,17 @@ const EventsTab = () => {
                 <SharedCardContent variant="legacy" className="card-body">
                     {loading ? (
                         <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
+                    ) : eventsError && events.length === 0 ? (
+                        <ErrorState
+                            title={t('app.eventsTab.couldntLoadSecurityEvents', "Couldn't load security events")}
+                            error={eventsError}
+                            onRetry={loadEvents}
+                        />
                     ) : events.length === 0 ? (
                         <p className="text-muted">{t('app.eventsTab.noSecurityEventsRecorded', 'No security events recorded.')}</p>
                     ) : (
+                        <>
+                        {eventsError && <ErrorState compact error={eventsError} onRetry={loadEvents} />}
                         <Feed className="sec-feed">
                             {events.map((event, index) => (
                                 <FeedItem
@@ -100,6 +122,7 @@ const EventsTab = () => {
                                 </FeedItem>
                             ))}
                         </Feed>
+                        </>
                     )}
                 </SharedCardContent>
             </SharedCard>

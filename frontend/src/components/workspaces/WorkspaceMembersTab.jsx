@@ -7,6 +7,7 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { Button } from '@/components/ui/button';
+import ErrorState from '../ErrorState';
 import { useTranslation } from 'react-i18next';
 
 const NO_RULES = { match: 'all', rules: [] };
@@ -32,7 +33,9 @@ const WORKSPACE_MEMBER_VIEWS = [
     },
 ];
 
-const WorkspaceMembersTab = ({ members, allUsers, onAddMember, onRemoveMember }) => {
+// `loadError` / `onRetry`: the page's members request failed, so an empty
+// list means "unknown", not "no members".
+const WorkspaceMembersTab = ({ members, allUsers, onAddMember, onRemoveMember, loadError, onRetry }) => {
     const { t } = useTranslation();
     const { sorts, setSorts } = useTableSort({ storageKey: 'serverkit-table-ws-members-sort' });
     const {
@@ -141,6 +144,13 @@ const WorkspaceMembersTab = ({ members, allUsers, onAddMember, onRemoveMember })
                 onSortsChange={setSorts}
                 {...chrome.tableProps}
                 className="ws-detail__tablecard"
+                emptyState={loadError ? (
+                    <ErrorState
+                        title={t('app.workspaceMembersTab.couldntLoadMembers', "Couldn't load members")}
+                        error={loadError}
+                        onRetry={onRetry}
+                    />
+                ) : undefined}
                 emptyTitle="No members"
                 emptyMessage={t('app.workspaceMembersTab.thisWorkspaceHasNoMembersYet', 'This workspace has no members yet.')}
                 footer={(

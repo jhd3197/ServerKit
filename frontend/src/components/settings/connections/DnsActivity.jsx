@@ -3,6 +3,7 @@
 // what ServerKit pushed to their Cloudflare account — action, record, and the
 // result of each sync. Lazily loads when expanded.
 import { useCallback, useEffect, useState } from 'react';
+import ErrorState from '../../ErrorState';
 import { Activity } from 'lucide-react';
 import api from '../../../services/api';
 import { timeAgo } from '../../../utils/time';
@@ -29,7 +30,7 @@ export default function DnsActivity({ configId, limit = 25 }) {
             const data = await api.getDnsChanges({ configId, limit });
             setChanges(data.changes || []);
         } catch (err) {
-            setError(err.message || 'Failed to load DNS activity');
+            setError(err);
         } finally {
             setLoading(false);
         }
@@ -42,7 +43,7 @@ export default function DnsActivity({ configId, limit = 25 }) {
     }
 
     if (error) {
-        return <div className="dns-activity__status dns-activity__status--error">{error}</div>;
+        return <ErrorState compact error={error} onRetry={load} />;
     }
 
     if (changes.length === 0) {

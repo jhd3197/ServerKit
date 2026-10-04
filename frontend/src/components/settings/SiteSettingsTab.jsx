@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import DomainField from '../DomainField';
+import ErrorState from '../ErrorState';
 import { Pill } from '@/components/ds';
 import useSettingFocus from '../../hooks/useSettingFocus';
 import { useAuth } from '../../contexts/useAuth.js';
@@ -25,6 +26,8 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
     });
     const [basePort, setBasePort] = useState('0');
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
+    const [httpsError, setHttpsError] = useState(null);
     const [saving, setSaving] = useState(false);
     const [savingPort, setSavingPort] = useState(false);
     const [message, setMessage] = useState(null);
@@ -48,10 +51,14 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             setBaseDomain(h.base_domain || '');
             setServerIp(h.server_ip || '');
             if (h.providers?.length) setProviderId(current => current || String(h.providers[0].id));
-        } catch { /* non-admin or endpoint unavailable */ }
+            setHttpsError(null);
+        } catch (err) {
+            setHttpsError(err);
+        }
     }, []);
 
     const loadSettings = useCallback(async () => {
+        setLoading(true);
         try {
             const data = await api.getSystemSettings();
             setSettings({
@@ -62,9 +69,11 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             setPanelTitle(data.panel_title ?? 'ServerKit');
             setPublicTitle(data.public_title ?? 'Control Panel');
             setLoginLayout(data.login_layout ?? 'centered');
+            setLoadError(null);
             await loadHttps();
         } catch (err) {
             console.error('Failed to load settings:', err);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -295,6 +304,20 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
         return <div className="settings-section"><p>{t('common.loading', 'Loading…')}</p></div>;
     }
 
+    // The form is seeded with defaults, so rendering it after a failed load
+    // would invite saving those defaults over the real settings.
+    if (loadError) {
+        return (
+            <div className="settings-section">
+                <ErrorState
+                    title={t('app.siteSettingsTab.couldntLoadSiteSettings', "Couldn't load site settings")}
+                    error={loadError}
+                    onRetry={loadSettings}
+                />
+            </div>
+        );
+    }
+
     return (
         <div className="settings-section">
             <h2>{t('app.siteSettingsTab.siteSettings', 'Site Settings')}</h2>
@@ -424,6 +447,14 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                 <h3>{t('app.siteSettingsTab.managedSitesBaseDomains', 'Managed Sites — Base Domains')}</h3>
                 <p>{t('app.siteSettingsTab.publishManagedSitesAt', 'Publish managed sites at')} <code>&lt;name&gt;.&lt;base-domain&gt;</code>. Register one or more base domains; a new site can be created under any of them, defaulting to the one marked <strong>{t('common.labels.default', 'Default')}</strong>. Point a wildcard record <code>*.&lt;base&gt;</code> {t('app.siteSettingsTab.orPerSiteARecordsAt', '(or per-site A records) at this server.')}</p>
 
+                {httpsError ? (
+                    <ErrorState
+                        title={t('app.siteSettingsTab.couldntLoadBaseDomains', "Couldn't load base domains")}
+                        error={httpsError}
+                        onRetry={loadHttps}
+                    />
+                ) : (
+                <>
                 <div className="form-group">
                     <div className="settings-row">
                         <div className="settings-label">
@@ -556,6 +587,8 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                     </div>
                     <span className="form-help">{t('app.siteSettingsTab.registerAnotherDomainSitesCanBe', 'Register another domain sites can be published under. Set up its wildcard HTTPS from its row above.')}</span>
                 </div>
+                </>
+                )}
             </div>
 
             <div {...register('site-dev-mode', 'settings-card')}>

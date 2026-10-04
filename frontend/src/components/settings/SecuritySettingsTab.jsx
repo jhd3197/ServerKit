@@ -5,6 +5,7 @@ import useSettingFocus from '../../hooks/useSettingFocus';
 import TwoFactorPolicyCard from './TwoFactorPolicyCard';
 import SSOProviderIcon from '../SSOProviderIcon';
 import Modal from '../Modal';
+import ErrorState from '../ErrorState';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,6 +22,7 @@ const LinkedAccounts = ({ register }) => {
     const [unlinking, setUnlinking] = useState(null);
     const [linkingProvider, setLinkingProvider] = useState(null);
     const [error, setError] = useState('');
+    const [loadError, setLoadError] = useState(null);
 
     useEffect(() => {
         loadIdentities();
@@ -30,8 +32,11 @@ const LinkedAccounts = ({ register }) => {
         try {
             const data = await api.getSSOIdentities();
             setIdentities(data.identities || []);
-        } catch {
-            // SSO may not be configured; silently handle
+            setLoadError(null);
+        } catch (err) {
+            // Only surfaced when SSO providers exist (the card is hidden
+            // otherwise), so an unconfigured SSO stays quiet.
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -76,6 +81,7 @@ const LinkedAccounts = ({ register }) => {
             <p className="text-secondary">{t('app.securitySettingsTab.connectExternalIdentityProvidersToYour', 'Connect external identity providers to your account')}</p>
 
             {error && <div className="alert alert-danger">{error}</div>}
+            {loadError && <ErrorState compact error={loadError} onRetry={loadIdentities} />}
 
             {identities.length > 0 && (
                 <div className="linked-accounts-list">
@@ -143,17 +149,21 @@ const SecuritySettingsTab = () => {
     const [verificationCode, setVerificationCode] = useState('');
     const [backupCodes, setBackupCodes] = useState([]);
     const [twoFAError, setTwoFAError] = useState('');
+    const [twoFALoadError, setTwoFALoadError] = useState(null);
 
     useEffect(() => {
         load2FAStatus();
     }, []);
 
     async function load2FAStatus() {
+        setTwoFALoading(true);
         try {
             const status = await api.get2FAStatus();
             setTwoFAStatus(status);
+            setTwoFALoadError(null);
         } catch (err) {
             console.error('Failed to load 2FA status:', err);
+            setTwoFALoadError(err);
         } finally {
             setTwoFALoading(false);
         }
@@ -315,6 +325,12 @@ Keep these codes in a safe place.`;
 
                 {twoFALoading && !twoFAStatus ? (
                     <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
+                ) : twoFALoadError && !twoFAStatus ? (
+                    <ErrorState
+                        title={t('app.securitySettingsTab.couldntLoad2fa', "Couldn't load two-factor status")}
+                        error={twoFALoadError}
+                        onRetry={load2FAStatus}
+                    />
                 ) : twoFAStatus?.enabled ? (
                     <div className="two-fa-enabled">
                         <div className="two-fa-status">

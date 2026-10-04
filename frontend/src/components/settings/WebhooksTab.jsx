@@ -13,6 +13,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import { Plus, MoreVertical, RefreshCw, ArrowRightLeft } from 'lucide-react';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import CopyField from '@/components/CopyField';
 import { useTranslation } from 'react-i18next';
 
@@ -29,11 +30,12 @@ const formatDate = (d) => (d ? new Date(d).toLocaleString() : '—');
 export default function WebhooksTab() {
     const { t } = useTranslation();
     const toast = useToast();
-    const toastError = toast.error;
     const { confirm } = useConfirm();
 
     const [endpoints, setEndpoints] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
+    const [loaded, setLoaded] = useState(false);
 
     const [endpointForm, setEndpointForm] = useState({ open: false, name: '', forward_url: '', filter_paths: '', retry_count: 3 });
     const [selectedEndpoint, setSelectedEndpoint] = useState(null);
@@ -45,12 +47,14 @@ export default function WebhooksTab() {
         try {
             const e = await api.listWebhookEndpoints();
             setEndpoints(e.endpoints || []);
+            setLoaded(true);
+            setLoadError(null);
         } catch (err) {
-            toastError(t('app.webhooksTab.loadFailed', 'Load failed: {{message}}', { message: err.message }));
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
-    }, [t, toastError]);
+    }, []);
 
     useEffect(() => {
         loadAll();
@@ -139,6 +143,16 @@ export default function WebhooksTab() {
         return <EmptyState loading loadingVariant="table" title={t('app.webhooksTab.loadingWebhooks', 'Loading webhooks…')} />;
     }
 
+    if (loadError && !loaded) {
+        return (
+            <ErrorState
+                title={t('app.webhooksTab.couldntLoadWebhooks', "Couldn't load webhook endpoints")}
+                error={loadError}
+                onRetry={loadAll}
+            />
+        );
+    }
+
     return (
         <div className="settings-webhooks">
             {!selectedEndpoint ? (
@@ -155,6 +169,7 @@ export default function WebhooksTab() {
                         </div>
                     </CardHeader>
                     <CardContent>
+                        {loadError && <ErrorState compact error={loadError} onRetry={loadAll} />}
                         {endpoints.length === 0 ? (
                             <EmptyState title={t('app.webhooksTab.noWebhookEndpoints', 'No webhook endpoints')} description={t('app.webhooksTab.createAnEndpointToReceiveWebhooks', 'Create an endpoint to receive webhooks.')} />
                         ) : (
