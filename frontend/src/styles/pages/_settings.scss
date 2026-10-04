@@ -2615,7 +2615,7 @@
 .sk-ai-usage { min-width: 0;
     .stat-strip { margin-block: $space-4; }
     .stat-strip__item { background: $bg-body; }
-    .stat-strip__item > strong { font-family: $font-mono; font-size: $text-lg; }
+    .stat-strip__item > strong { font-size: $text-lg; }
     .card-header { flex-wrap: wrap; gap: $space-3; }
     h4 { margin-top: $space-5; }
 }

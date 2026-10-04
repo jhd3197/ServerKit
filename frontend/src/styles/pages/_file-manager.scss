@@ -115,7 +115,6 @@ $ft-default:  #646b7a;
         .upload-status {
             text-align: right;
             color: $text-tertiary;
-            font-family: $font-mono;
         }
 
         &.status-done {
@@ -363,7 +362,6 @@ $ft-default:  #646b7a;
         border-radius: 8px;
         background: var(--surface-2);
         color: var(--text-faint);
-        font-family: $font-mono;
         font-size: $text-xs;
         transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
 
@@ -804,7 +802,6 @@ $ft-default:  #646b7a;
         span:last-child {
             min-width: 20px;
             color: var(--text-ghost);
-            font-family: $font-mono;
             font-size: $text-xs;
             text-align: right;
         }
@@ -824,7 +821,6 @@ $ft-default:  #646b7a;
             align-items: center;
             gap: $space-1;
             color: var(--text-ghost);
-            font-family: $font-mono;
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
@@ -935,7 +931,6 @@ $ft-default:  #646b7a;
         display: flex;
         align-items: center;
         gap: $space-1;
-        font-family: $font-mono;
         font-size: $text-xs;
         color: var(--text-ghost);
 
@@ -1336,7 +1331,6 @@ $ft-default:  #646b7a;
 
             .col-size,
             .col-modified {
-                font-family: $font-mono;
                 font-size: $text-xs;
                 color: var(--text-dim);
             }
@@ -1419,7 +1413,6 @@ $ft-default:  #646b7a;
         border: none;
         border-top: 1px solid var(--border-soft);
         border-radius: 0;
-        font-family: $font-mono;
         font-size: $text-xs;
         color: var(--text-faint);
         flex-wrap: wrap;
@@ -1739,7 +1732,6 @@ $drawer-width: 520px;
         border-bottom: 1px solid var(--border-soft);
 
         .editor-status {
-            font-family: $font-mono;
             font-size: $text-xs;
             color: var(--text-ghost);
             font-weight: $font-weight-semibold;

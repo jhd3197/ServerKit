@@ -61,7 +61,7 @@ const ipListColumns = (listType, tone, onRemove) => [
             const t = new Date(item.added_at).getTime();
             return Number.isNaN(t) ? null : t;
         },
-        cellClassName: 'sk-cell-mono sec-faint',
+        cellClassName: 'sk-cell-dim sec-faint',
         render: (item) => new Date(item.added_at).toLocaleDateString(),
     },
     {

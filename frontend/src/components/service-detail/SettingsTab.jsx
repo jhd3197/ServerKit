@@ -46,7 +46,7 @@ import { useTranslation } from 'react-i18next';
 import { Card as SharedCard } from '@/components/ui/card';
 
 // Grouped left sub-nav for the service Settings tab — mirrors the WordPress
-// detail page's settings layout: an uppercase mono group label per section with
+// detail page's settings layout: a group label per section with
 // the existing setting panels on the right. Groups give it structure (and room
 // to grow) instead of one long flat stack.
 //

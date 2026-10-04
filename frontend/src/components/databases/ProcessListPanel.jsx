@@ -211,7 +211,7 @@ export default function ProcessListPanel({ conn, engine, active, isAdmin }) {
             unit: 's',
             value: (p) => (typeof p.time_s === 'number' ? p.time_s : null),
             sortValue: (p) => (typeof p.time_s === 'number' ? p.time_s : null),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (p) => formatTime(p.time_s),
         },
         {

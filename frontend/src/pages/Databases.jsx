@@ -976,7 +976,7 @@ export default function Databases() {
                     {activeStatus?.rowCount != null && (
                         <span className="dbx-status-item">{activeStatus.rowCount} row{activeStatus.rowCount === 1 ? '' : 's'}{activeStatus.truncated ? ` of ${activeStatus.totalRows}` : ''}</span>
                     )}
-                    {activeStatus?.execTime != null && <span className="dbx-status-item dbx-mono">{activeStatus.execTime}s</span>}
+                    {activeStatus?.execTime != null && <span className="dbx-status-item">{activeStatus.execTime}s</span>}
                     {activeStatus && <span className="dbx-status-item is-connected">{t('app.databases.connected', 'Connected')}</span>}
                 </div>
             </footer>

@@ -199,7 +199,6 @@ $skwe-pane-w: 340px;
 
     // Numeric fields (thresholds) read as values, not prose.
     &__field--mono {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-variant-numeric: tabular-nums;
     }

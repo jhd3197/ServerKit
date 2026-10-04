@@ -236,7 +236,7 @@ export default function Vaults() {
             type: 'number',
             sortable: true,
             width: 100,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             // `value` sorts and filters; `render` is what the cell shows —
             // DataTable falls back to row[key], and there is no `secrets` key.
             value: (v) => v.secret_count ?? 0,
@@ -297,7 +297,7 @@ export default function Vaults() {
             type: 'date',
             sortable: true,
             width: 130,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             value: (s) => s.updated_at || null,
             render: (s) => (s.updated_at
                 ? <span title={formatDate(s.updated_at)}>{formatRelativeTime(s.updated_at)}</span>

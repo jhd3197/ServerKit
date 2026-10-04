@@ -246,7 +246,7 @@ const ComposeTab = ({ onStatsChange }) => {
             render: (project) => {
                 const count = projectRunningCount(project);
                 if (!count) return <span className="dx-muted-line">-</span>;
-                return <span className="dx-muted-line mono">{count}</span>;
+                return <span className="dx-muted-line">{count}</span>;
             },
         },
         {

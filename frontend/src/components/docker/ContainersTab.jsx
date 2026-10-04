@@ -1343,7 +1343,7 @@ const ContainerLogsModal = ({ container, onClose }) => {
             open
             onOpenChange={(open) => { if (!open) onClose(); }}
             title={getContainerName(container)}
-            subtitle={`${getContainerImage(container)} · ${shortId(containerId)}`}
+            subtitle={<span className="mono">{`${getContainerImage(container)} · ${shortId(containerId)}`}</span>}
             icon={<Box size={18} />}
             width={520}
             flush

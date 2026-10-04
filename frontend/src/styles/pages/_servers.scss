@@ -55,7 +55,7 @@
 .servers-table__meter {
     width: 108px;
 
-    .sk-cell-mono { margin-bottom: 5px; }
+    .sk-cell-dim { margin-bottom: 5px; }
     .sk-gauge { width: 100%; }
 }
 
@@ -693,7 +693,6 @@
     padding: $space-5;
 
     h4 {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
@@ -729,7 +728,6 @@
         display: block;
         font-size: $text-md;
         font-weight: $font-weight-semibold;
-        font-family: var(--mono);
         letter-spacing: -0.02em;
         color: var(--text);
     }
@@ -795,7 +793,6 @@
     }
 
     .gauge-text {
-        font-family: $font-mono;
         font-size: $text-lg;
         font-weight: $font-weight-semibold;
         fill: $text-primary;
@@ -825,7 +822,6 @@
 
     span:last-child {
         color: $text-primary;
-        font-family: $font-mono;
     }
 }
 
@@ -853,7 +849,6 @@
     }
 
     .value {
-        font-family: $font-mono;
         font-size: $text-xs;
         color: $text-primary;
     }
@@ -1163,7 +1158,6 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    font-family: var(--mono);
     font-size: $text-xs;
     color: var(--text-dim);
     margin-bottom: $space-5;
@@ -1496,7 +1490,6 @@
         margin: $space-1 0 0;
         color: $text-tertiary;
         font-size: $text-xs;
-        font-family: $font-mono;
     }
 
     &__actions {
@@ -2061,7 +2054,6 @@
     &:last-child { border-bottom: 0; }
 
     .info-value {
-        font-family: $font-mono;
         font-size: $text-xs;
         color: $text-primary;
     }
@@ -2125,7 +2117,6 @@
     }
 
     &__value {
-        font-family: var(--mono);
         font-size: $text-lg;
         font-weight: $font-weight-semibold;
         letter-spacing: -0.02em;
@@ -2209,7 +2200,6 @@
 
     .info-value {
         min-width: 0;
-        font-family: var(--mono);
         font-size: $text-sm;
         font-weight: $font-weight-normal;
         color: var(--text);
@@ -2348,7 +2338,6 @@
         // Mono-uppercase eyebrow section label (redesign)
         h3 {
             margin: 0;
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);
@@ -2518,7 +2507,6 @@
             margin: 0 0 $space-2;
             padding-bottom: 10px;
             border-bottom: 1px solid var(--border-soft);
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);
@@ -2595,7 +2583,6 @@
     }
 
     .key-rotation-hint {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -2607,7 +2594,6 @@
     }
 
     .security-notice {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -2697,7 +2683,6 @@
         &__presets h3,
         &__results h3,
         &__installed h3 {
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);

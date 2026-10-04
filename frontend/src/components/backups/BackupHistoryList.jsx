@@ -155,7 +155,7 @@ export default function BackupHistoryList({
             headerKey: 'common.labels.size', header: 'Size',
             sortable: true,
             sortValue: (run) => run.size_total || 0,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (run) => humanSize(run.size_total),
         },
         {
@@ -163,7 +163,7 @@ export default function BackupHistoryList({
             headerKey: 'app.backupHistoryList.cost', header: 'Cost',
             sortable: true,
             sortValue: (run) => Number(run.cost_total || 0),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (run) => formatMoney(run.cost_total),
         },
         {

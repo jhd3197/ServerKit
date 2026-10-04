@@ -190,7 +190,7 @@ const EventsTab = ({ appId }) => {
             type: 'date',
             value: (event) => event.at || null,
             sortValue: (event) => event.ts,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (event) => (
                 <span title={event.at ? new Date(event.at).toLocaleString() : ''}>
                     {formatRelativeTime(event.at)}
@@ -267,7 +267,7 @@ const EventsTab = ({ appId }) => {
             type: 'text',
             value: (event) => event.actor,
             sortValue: (event) => event.actor,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (event) => event.actor,
         },
     ];

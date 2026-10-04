@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 // Right-side slide-over, built on the existing shadcn Sheet (Radix dialog) so
 // focus-trap / escape / overlay behavior is consistent. Renders the redesign's
-// drawer-head chrome (icon chip + title + mono subtitle). Use this as the one
+// drawer-head chrome (icon chip + title + subtitle). Use this as the one
 // shared drawer pattern instead of the per-feature drawers.
 //
 //   <Drawer open={open} onOpenChange={setOpen} title="wp-config.php"

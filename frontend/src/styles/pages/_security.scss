@@ -26,7 +26,6 @@
                 display: flex;
                 align-items: center;
                 gap: 6px;
-                font-family: var(--mono);
                 font-size: $text-xs;
                 font-weight: $font-weight-semibold;
                 color: var(--text-faint);
@@ -147,7 +146,6 @@
         }
 
         &--more {
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }
@@ -164,7 +162,6 @@
     .sk-dtable .sec-faint { color: var(--text-faint); }
 
     .sec-dash {
-        font-family: var(--mono);
         color: var(--text-ghost);
     }
 
@@ -314,7 +311,6 @@
         &__icon { grid-row: 1 / span 2; color: var(--text-faint); }
 
         &__val {
-            font-family: var(--mono);
             font-size: $text-lg;
             font-weight: $font-weight-semibold;
             line-height: 1.1;
@@ -368,7 +364,6 @@
     }
 
     .sec-posture__detail {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
@@ -653,7 +648,6 @@
         }
 
         .firewall-type {
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }
@@ -681,7 +675,6 @@
         border-radius: var(--radius);
 
         .stat-value {
-            font-family: var(--mono);
             font-size: $text-xl;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.02em;
@@ -825,7 +818,6 @@
             margin: 0 0 $space-2;
             padding-bottom: $space-2;
             border-bottom: 1px solid var(--border-soft);
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);
@@ -891,7 +883,6 @@
 
         h4 {
             margin: 0 0 $space-2;
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);

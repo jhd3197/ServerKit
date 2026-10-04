@@ -4,7 +4,6 @@
 
 .cron-page {
     .cron-servicenote {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--amber);
     }
@@ -14,7 +13,6 @@
         align-items: center;
         gap: $space-2;
         margin-top: $space-3;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
 
@@ -272,7 +270,6 @@
 
     .k {
         flex: 0 0 118px;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
@@ -307,7 +304,6 @@
     padding: $space-3 $space-4;
 
     .l {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
@@ -327,7 +323,6 @@
 
     .s {
         margin-top: $space-2;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -495,10 +490,10 @@
     &__when { white-space: nowrap; }
     &__dur,
     &__exit {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
+    &__exit { font-family: var(--mono); }
 }
 
 // ============================================

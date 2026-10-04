@@ -335,7 +335,7 @@ function FTPServer() {
             type: 'num',
             value: (user) => user.home_size ?? null,
             sortValue: (user) => user.home_size ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (user) => user.home_size_human,
         },
         {
@@ -607,15 +607,15 @@ function FTPServer() {
                                         <InfoList>
                                             <InfoItem label={t('common.labels.port', 'Port')} value={config.settings.listen_port || config.settings.port || 21} mono />
                                             <InfoItem label={t('app.fTPServer.anonymousAccess', 'Anonymous Access')}>
-                                                <span className={`info-value mono ${config.settings.anonymous_enable ? 'warning' : 'success'}`}>
+                                                <span className={`info-value ${config.settings.anonymous_enable ? 'warning' : 'success'}`}>
                                                     {config.settings.anonymous_enable ? 'Enabled' : 'Disabled'}
                                                 </span>
                                             </InfoItem>
-                                            <InfoItem label={t('app.fTPServer.localUsers', 'Local Users')} value={config.settings.local_enable ? 'Enabled' : 'Disabled'} mono />
-                                            <InfoItem label={t('app.fTPServer.writePermission', 'Write Permission')} value={config.settings.write_enable ? 'Enabled' : 'Disabled'} mono />
-                                            <InfoItem label={t('app.fTPServer.chrootUsers', 'Chroot Users')} value={config.settings.chroot_local_user ? 'Yes' : 'No'} mono />
+                                            <InfoItem label={t('app.fTPServer.localUsers', 'Local Users')} value={config.settings.local_enable ? 'Enabled' : 'Disabled'} />
+                                            <InfoItem label={t('app.fTPServer.writePermission', 'Write Permission')} value={config.settings.write_enable ? 'Enabled' : 'Disabled'} />
+                                            <InfoItem label={t('app.fTPServer.chrootUsers', 'Chroot Users')} value={config.settings.chroot_local_user ? 'Yes' : 'No'} />
                                             <InfoItem label={t('app.fTPServer.sslTls', 'SSL/TLS')}>
-                                                <span className={`info-value mono ${config.settings.ssl_enable ? 'success' : 'warning'}`}>
+                                                <span className={`info-value ${config.settings.ssl_enable ? 'success' : 'warning'}`}>
                                                     {config.settings.ssl_enable ? 'Enabled' : 'Disabled'}
                                                 </span>
                                             </InfoItem>
@@ -628,9 +628,9 @@ function FTPServer() {
                                 <div className="info-section">
                                     <h3>{t('app.fTPServer.connectionInformation', 'Connection Information')}</h3>
                                     <InfoList>
-                                        <InfoItem label={t('app.fTPServer.host', 'Host')} value={t('app.fTPServer.yourServerIpOrDomain', 'Your server IP or domain')} mono />
+                                        <InfoItem label={t('app.fTPServer.host', 'Host')} value={t('app.fTPServer.yourServerIpOrDomain', 'Your server IP or domain')} />
                                         <InfoItem label={t('common.labels.port', 'Port')} value="21" mono />
-                                        <InfoItem label={t('app.fTPServer.protocol', 'Protocol')} value={`FTP${config?.settings?.ssl_enable ? 'S' : ''}`} mono />
+                                        <InfoItem label={t('app.fTPServer.protocol', 'Protocol')} value={`FTP${config?.settings?.ssl_enable ? 'S' : ''}`} />
                                     </InfoList>
                                 </div>
                             </div>

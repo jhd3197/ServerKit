@@ -192,7 +192,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
             open={open}
             onOpenChange={(v) => !v && onClose()}
             title={t('app.cutoverDrawer.dnsCutover', 'DNS cutover')}
-            subtitle={domain}
+            subtitle={<span className="mono">{domain}</span>}
             icon={<ArrowRightLeft size={HEAD_ICON_SIZE} />}
             width={DRAWER_WIDTH}
         >

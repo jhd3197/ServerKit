@@ -172,7 +172,7 @@ const WorkspaceServersTab = ({ wsId, srvIn, srvOut, onMoveServer }) => {
                             <div key={s.id} className="ws-pick__item" onClick={() => onMoveServer(s.id, wsId)}>
                                 <ServiceTile name={s.name} size={28} className="ws-pick__tile" />
                                 <span className="ws-pick__name">{s.name}</span>
-                                {s.ip_address && <span className="sk-tag">{s.ip_address}</span>}
+                                {s.ip_address && <span className="sk-tag mono">{s.ip_address}</span>}
                                 <Plus size={16} className="ws-pick__plus" />
                             </div>
                         ))}

@@ -38,14 +38,12 @@
     padding: 1px 6px;
     border-radius: $radius-sm;
     @include status-variant(var(--accent-bright), var(--accent-bg));
-    font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
 }
 
 .dom-dash {
     color: var(--text-ghost);
-    font-family: var(--mono);
     font-size: $text-xs;
 }
 
@@ -73,7 +71,6 @@
     // The relative form ("in 4 months") under the absolute date: the date is
     // what you copy, the relative is what you judge.
     &__rel {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-ghost);
         margin-top: 1px;
@@ -87,7 +84,6 @@
     flex-direction: column;
     gap: 5px;
     min-width: 0;
-    font-family: var(--mono);
     font-size: $text-xs;
 
     &__bar {

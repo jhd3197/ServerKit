@@ -155,7 +155,7 @@ function Stepper({ label, value, onStep, suffix }) {
             >
                 <Minus size={13} aria-hidden="true" />
             </SharedButton>
-            <span className="skwe-stepper__val mono">{value}{suffix ? ` ${suffix}` : ''}</span>
+            <span className="skwe-stepper__val">{value}{suffix ? ` ${suffix}` : ''}</span>
             <SharedButton variant="unstyled"
                 type="button"
                 className="skwe-stepper__btn"
@@ -322,7 +322,7 @@ export function WidgetEditor({
                         {/* No pixel figure here: a widget wider than the stage
                             is capped by max-width, so quoting its board size
                             would describe something the operator isn't seeing. */}
-                        <div className="skwe-edit__caption mono">
+                        <div className="skwe-edit__caption">
                             {t('app.widgetEditor.livePreview2', 'live preview ·')} {widget.w}×{widget.h} {t('app.widgetEditor.of12Columns', 'of 12 columns')}
                         </div>
                     </section>
@@ -354,7 +354,7 @@ export function WidgetEditor({
                                     </Field>
                                 ) : (
                                     <Field label={t('app.widgetEditor.resource', 'Resource')} hint={t('app.widgetEditor.oneMachineIsConnectedSoThis', 'One machine is connected, so this widget reads it.')}>
-                                        <div className="skwe-edit__static mono">{resolvedResource(cfg.resource)}</div>
+                                        <div className="skwe-edit__static">{resolvedResource(cfg.resource)}</div>
                                     </Field>
                                 ))}
 
@@ -384,10 +384,10 @@ export function WidgetEditor({
                                         <div className="skwe-edit__pair">
                                             {[0, 1].map((index) => (
                                                 <div className="skwe-edit__pairitem" key={index}>
-                                                    <span className="skwe-edit__unit mono">{index ? 'red ≥' : 'amber ≥'}</span>
+                                                    <span className="skwe-edit__unit">{index ? 'red ≥' : 'amber ≥'}</span>
                                                     <input
                                                         type="number"
-                                                        className="skwe-edit__field skwe-edit__field--mono"
+                                                        className="skwe-edit__field"
                                                         aria-label={index ? t('app.widgetEditor.redThreshold', 'Red threshold') : t('app.widgetEditor.amberThreshold', 'Amber threshold')}
                                                         value={(cfg.thresholds || [])[index] ?? ''}
                                                         onChange={(event) => {
@@ -547,7 +547,7 @@ export function WidgetEditor({
                                             </Field>
                                         ) : (
                                             <Field label={t('common.labels.source', 'Source')} hint={t('app.widgetEditor.oneMachineIsConnectedSoThis2', 'One machine is connected, so this widget tails it.')}>
-                                                <div className="skwe-edit__static mono">{resolvedResource(cfg.source)}</div>
+                                                <div className="skwe-edit__static">{resolvedResource(cfg.source)}</div>
                                             </Field>
                                         )}
                                         <Field label={t('app.widgetEditor.level', 'Level')}>

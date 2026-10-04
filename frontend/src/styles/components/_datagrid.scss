@@ -308,7 +308,6 @@
         background: var(--accent-bg-soft);
         border-color: var(--accent-dim);
         color: var(--accent-bright);
-        font-family: var(--mono);
         font-size: $text-xs;
         padding: 6px 10px;
         cursor: pointer;
@@ -398,7 +397,6 @@
 
         &.is-num {
             text-align: right;
-            font-family: var(--mono);
             font-size: $text-xs;
         }
     }
@@ -562,7 +560,6 @@
     gap: 14px;
     padding: 12px 16px;
     border-top: 1px solid var(--border-soft);
-    font-family: var(--mono);
     font-size: $text-xs;
     color: var(--text-ghost);
     flex-wrap: wrap;
@@ -612,7 +609,6 @@
     }
 
     &__pos {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
         padding: 0 4px;
@@ -634,7 +630,6 @@
     gap: 1px;
 
     &__head {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-ghost);
         padding: 5px 8px 7px;
@@ -701,7 +696,6 @@
 
     &__rest {
         margin-left: auto;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-ghost);
     }
@@ -728,7 +722,6 @@
             outline: none;
             color: var(--text);
             font-size: $text-sm;
-            font-family: var(--mono);
         }
 
         input::placeholder { color: var(--text-ghost); font-family: var(--sans); }
@@ -843,7 +836,6 @@
             }
 
             .n {
-                font-family: var(--mono);
                 font-size: $text-xs;
                 color: var(--text-ghost);
                 background: var(--surface-2);
@@ -885,7 +877,6 @@
     }
 
     &__t {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
         flex: 1;
@@ -986,7 +977,6 @@
         background: var(--surface-2);
         color: var(--text);
         font-size: $text-sm;
-        font-family: var(--mono);
         outline: none;
 
         &:focus { border-color: var(--accent-dim); }
@@ -1007,7 +997,6 @@
     }
 
     &__join {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-ghost);
         padding: 1px 0 6px 2px;
@@ -1055,7 +1044,6 @@
     &__nm { flex: 1; min-width: 0; }
 
     &__lock {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-ghost);
     }

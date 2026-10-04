@@ -227,7 +227,7 @@ function WidgetChart({
                     ))}
                     <div className={`skw-chart__tip${flip ? ' skw-chart__tip--flip' : ''}`} style={{ left: `${hoverPct}%` }}>
                         {stampAt && (
-                            <div className="skw-chart__tip-when mono">
+                            <div className="skw-chart__tip-when">
                                 {new Date(stampAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </div>
                         )}
@@ -235,7 +235,7 @@ function WidgetChart({
                             <div className="skw-chart__tip-row" key={i}>
                                 <span className="skw-chart__tip-dot" style={{ background: point.color }} />
                                 <span className="skw-chart__tip-label">{point.label}</span>
-                                <span className="skw-chart__tip-value mono" style={{ color: point.color }}>
+                                <span className="skw-chart__tip-value" style={{ color: point.color }}>
                                     {formatValue(point.value, point.unit)}
                                 </span>
                             </div>
@@ -274,7 +274,7 @@ function WStat({ cfg, ctx }) {
     return (
         <div className="skw-stat">
             <div className="skw-stat__value" style={{ color }}>{formatValue(value, metric.unit)}</div>
-            <div className="skw-stat__meta mono">
+            <div className="skw-stat__meta">
                 {delta === null ? (
                     <span className="faint">{t('app.renderers.noTrendYet', 'no trend yet')}</span>
                 ) : (
@@ -419,7 +419,7 @@ function WGauge({ cfg, ctx }) {
                     {formatValue(value, metric.unit)}
                 </text>
             </svg>
-            <div className="skw-gauge__sub mono">
+            <div className="skw-gauge__sub">
                 {label}{metric.max ? ` · max ${metric.max}${metric.unit}` : ''}
             </div>
         </div>
@@ -463,7 +463,7 @@ function WTopN({ cfg, ctx }) {
                         value={(row.value / peak) * 100}
                         color={metric.color}
                     />
-                    <span className="skw-topn__value mono">{formatValue(row.value, metric.unit)}</span>
+                    <span className="skw-topn__value">{formatValue(row.value, metric.unit)}</span>
                 </div>
             ))}
         </div>
@@ -471,6 +471,10 @@ function WTopN({ cfg, ctx }) {
 }
 
 /* ------------------------------------------------------------------- table */
+
+// Image names and port maps are machine values; the other columns (type,
+// server, group, OS, trigger, time) are words or dates and read as text.
+const MACHINE_COLS = new Set(['image', 'ports']);
 
 const TABLE_DEFS = {
     services: {
@@ -525,7 +529,7 @@ function WTable({ cfg, ctx }) {
                                 const isName = key === 'name' || key === 'app_name';
                                 const text = key === 'created_at' ? formatRelativeTime(value) : value;
                                 return (
-                                    <td key={label} className={isName ? 'nm' : 'mono'}>
+                                    <td key={label} className={isName ? 'nm' : (MACHINE_COLS.has(key) ? 'mono' : undefined)}>
                                         {text === null || text === undefined || text === '' ? '—' : String(text)}
                                     </td>
                                 );
@@ -567,7 +571,7 @@ function WLogs({ cfg, ctx }) {
 
     return (
         <div className="skw-logs">
-            <div className="skw-logs__bar mono">
+            <div className="skw-logs__bar">
                 <span>{label || 'log'}</span>
                 <span className="faint">{lines.length} lines</span>
                 {counts.err ? <span className="lv-err">{counts.err} errors</span> : null}
@@ -617,7 +621,7 @@ function WDeploys({ cfg, ctx }) {
                 >
                     <div className="skw-dep__top">
                         <span className="skw-dep__name">{job.app_name || job.kind || 'deployment'}</span>
-                        <span className="skw-dep__state mono" style={{ color: statusColor(job.status) }}>
+                        <span className="skw-dep__state" style={{ color: statusColor(job.status) }}>
                             {job.status}
                         </span>
                     </div>
@@ -628,7 +632,7 @@ function WDeploys({ cfg, ctx }) {
                             ))}
                         </div>
                     )}
-                    <div className="skw-dep__meta mono">
+                    <div className="skw-dep__meta">
                         {job.trigger || 'manual'} · {job.target_server_name || 'local'} · {formatRelativeTime(job.created_at) || '—'}
                     </div>
                 </div>
@@ -661,7 +665,7 @@ function WAlerts({ cfg, ctx }) {
                         <span className="skw-alert__sev" style={{ background: color, boxShadow: `0 0 7px ${color}` }} />
                         <div className="skw-alert__body">
                             <div className="skw-alert__title">{alert.title}</div>
-                            <div className="skw-alert__meta mono">
+                            <div className="skw-alert__meta">
                                 {alert.target}{alert.time ? ` · ${formatRelativeTime(alert.time)}` : ''}
                             </div>
                         </div>
@@ -698,7 +702,7 @@ function WStatus({ cfg, ctx }) {
                     >
                         <span className="skw-status__dot" style={{ background: color, boxShadow: `0 0 8px ${color}` }} />
                         <div className="skw-status__name">{cell.name}</div>
-                        <div className="skw-status__meta mono">{cell.meta || cell.state}</div>
+                        <div className="skw-status__meta">{cell.meta || cell.state}</div>
                     </div>
                 );
             })}
@@ -738,7 +742,7 @@ function WFeed({ cfg, ctx }) {
                     <span className="skw-feed__dot" />
                     <div className="skw-feed__body">
                         <div className="skw-feed__text">{describeLog(entry)}</div>
-                        <div className="skw-feed__time mono">{formatRelativeTime(entry.created_at)}</div>
+                        <div className="skw-feed__time">{formatRelativeTime(entry.created_at)}</div>
                     </div>
                 </div>
             ))}
@@ -793,6 +797,9 @@ function WActions({ cfg, ctx }) {
 
 /* ------------------------------------------------------------------- specs */
 
+// Hostname, kernel and IP are machine values; the other spec rows are prose.
+const SPEC_MACHINE_ROWS = new Set(['Hostname', 'Kernel', 'IP address']);
+
 function WSpecs({ cfg, ctx }) {
     const { t } = useTranslation();
     const resource = resolveResource(cfg.resource, ctx);
@@ -807,7 +814,7 @@ function WSpecs({ cfg, ctx }) {
             {rows.map(([key, value]) => (
                 <div className="skw-kv__row" key={key}>
                     <span className="skw-kv__k">{key}</span>
-                    <span className="skw-kv__v">{value}</span>
+                    <span className={`skw-kv__v${SPEC_MACHINE_ROWS.has(key) ? ' mono' : ''}`}>{value}</span>
                 </div>
             ))}
         </div>
@@ -896,9 +903,9 @@ function WClock({ cfg }) {
 
     return (
         <div className="skw-clock">
-            <div className="skw-clock__time mono">{time}</div>
+            <div className="skw-clock__time">{time}</div>
             {cfg.showDate !== false && <div className="skw-clock__date">{date}</div>}
-            <div className="skw-clock__zone mono">{label.replace(/_/g, ' ')}</div>
+            <div className="skw-clock__zone">{label.replace(/_/g, ' ')}</div>
         </div>
     );
 }

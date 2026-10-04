@@ -127,7 +127,6 @@
 
 .detail-source-tag {
     margin-left: auto;
-    font-family: var(--mono);
     font-size: $text-xs;
     text-transform: none;
     color: var(--text-faint);
@@ -321,7 +320,6 @@
         align-items: center;
         gap: $space-2;
         margin: 0 0 $space-3 0;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
@@ -374,7 +372,6 @@
         font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
-        font-family: var(--mono);
     }
 }
 
@@ -463,7 +460,6 @@
 }
 
 .port-protocol {
-    font-family: var(--mono);
     font-size: $text-xs;
     padding: $space-1;
     background: var(--surface-3);
@@ -509,7 +505,6 @@
     margin-bottom: $space-3;
 
     span {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: $text-secondary;
         text-transform: capitalize;

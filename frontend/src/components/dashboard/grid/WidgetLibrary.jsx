@@ -308,7 +308,7 @@ export function WidgetLibrary({ types = [], onAdd, onClose }) {
                                 <div className="skw-lib__name">
                                     <span className="skw-lib__icon"><Icon size={13} aria-hidden="true" /></span>
                                     {type.name}
-                                    <span className="skw-lib__size mono">{type.w}×{type.h}</span>
+                                    <span className="skw-lib__size">{type.w}×{type.h}</span>
                                 </div>
                                 <div className="skw-lib__desc">{type.desc}</div>
                             </div>

@@ -275,7 +275,7 @@ const ImagesTab = ({ onStatsChange }) => {
             value: imageSizeMb,
             sortValue: imageSizeMb,
             render: (image) => (
-                <span className="dx-muted-line mono">{formatBytes(imageSizeBytes(image))}</span>
+                <span className="dx-muted-line">{formatBytes(imageSizeBytes(image))}</span>
             ),
         },
         {

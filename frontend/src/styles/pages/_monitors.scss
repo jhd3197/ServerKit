@@ -239,7 +239,6 @@
             justify-content: space-between;
             gap: 10px;
             margin-top: 10px;
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
 
@@ -370,7 +369,6 @@
             }
 
             span {
-                font-family: var(--mono);
                 font-size: $text-xs;
                 color: var(--text-faint);
             }
@@ -428,7 +426,6 @@
         span {
             display: block;
             margin-top: 3px;
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }
@@ -474,7 +471,6 @@
         span {
             display: block;
             margin-top: 2px;
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
             // "Configured but off" is longer than the tile is wide at three
@@ -486,7 +482,6 @@
     .form-help {
         display: block;
         margin-top: $space-1;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -520,7 +515,6 @@
 
         &__val {
             display: block;
-            font-family: var(--mono);
             font-size: $text-lg;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.02em;
@@ -550,7 +544,6 @@
         margin-top: $space-3;
 
         span {
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }
@@ -689,7 +682,6 @@
 
         h3 {
             margin: 0;
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }
@@ -729,7 +721,6 @@
 
         dd {
             margin: 0;
-            font-family: var(--mono);
             font-size: $text-sm;
             color: var(--text-dim);
             text-align: right;
@@ -791,7 +782,6 @@
     .mon-statstrip__value {
         display: block;
         margin-top: 3px;
-        font-family: var(--mono);
         font-size: $text-base;
         font-weight: $font-weight-semibold;
     }
@@ -802,7 +792,6 @@
         display: flex;
         justify-content: space-between;
         margin-top: 8px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -847,7 +836,6 @@
         padding: 2px 8px;
         border-radius: 999px;
         border: 1px solid var(--border);
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
     }
@@ -859,7 +847,6 @@
     }
 
     .mon-response__ms {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
         // "128 ms" must not break across two lines in a narrow column.
@@ -870,7 +857,6 @@
 
     .mon-uptime,
     .mon-muted {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
     }
@@ -1000,7 +986,6 @@
 
     .mon-monitor-row__ms,
     .mon-feed-row__ms {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
     }
@@ -1144,7 +1129,6 @@
         display: flex;
         align-items: center;
         gap: 9px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -1182,7 +1166,6 @@
         &__body > span {
             display: block;
             margin-top: 2px;
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }

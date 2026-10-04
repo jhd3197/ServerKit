@@ -66,7 +66,7 @@ export default function SchedulesTable({
             headerKey: 'app.schedulesTable.frequency', header: 'Frequency',
             sortable: true,
             sortValue: (s) => frequencyLabel(s),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (schedule) => frequencyLabel(schedule),
         },
         {
@@ -84,7 +84,7 @@ export default function SchedulesTable({
             headerKey: 'app.schedulesTable.destination', header: 'Destination',
             sortable: true,
             sortValue: (s) => (s.upload_remote ? remoteLabel : 'Local disk'),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (schedule) => (schedule.upload_remote ? remoteLabel : 'Local disk'),
         },
         {
@@ -111,7 +111,7 @@ export default function SchedulesTable({
                 const next = nextFire(s);
                 return next ? next.getTime() : null;
             },
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (schedule) => {
                 const next = nextFire(schedule);
                 if (schedule.schedule_error) return <span title={schedule.schedule_error}>{t('app.schedulesTable.invalidSchedule', 'Invalid schedule')}</span>;

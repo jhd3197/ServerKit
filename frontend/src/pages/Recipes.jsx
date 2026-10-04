@@ -198,7 +198,7 @@ export default function Recipes() {
                                     <span className="recipe-card__ico"><RecipeIcon icon={recipe.icon} /></span>
                                     <div className="recipe-card__id">
                                         <div className="recipe-card__name">{recipe.name}</div>
-                                        <div className="recipe-card__meta mono">
+                                        <div className="recipe-card__meta">
                                             v{recipe.version}{recipe.category ? ` · ${recipe.category}` : ''}
                                             {recipe.minutes ? ` · ~${recipe.minutes} min` : ''}
                                         </div>
@@ -210,7 +210,7 @@ export default function Recipes() {
                                     )}
                                 </div>
                                 <p className="recipe-card__desc">{recipe.description}</p>
-                                <div className="recipe-card__reqs mono">
+                                <div className="recipe-card__reqs">
                                     {(recipe.requirements?.cpuCores)
                                         && <span>{recipe.requirements.cpuCores} vCPU</span>}
                                     {(recipe.requirements?.memoryMB)
@@ -227,7 +227,7 @@ export default function Recipes() {
                                         </span>}
                                 </div>
                                 <div className="recipe-card__foot">
-                                    <span className="recipe-card__steps mono">
+                                    <span className="recipe-card__steps">
                                         {t('app.recipes.stepsLine', '{{steps}} steps · {{handoffs}} secret ask{{plural}}', {
                                             steps: recipe.steps ?? '?',
                                             handoffs: handoffCount || 0,
@@ -270,7 +270,7 @@ export default function Recipes() {
                                     >
                                         <span className="recipe-install__radio" aria-hidden="true" />
                                         <span className="recipe-install__srvname">{server.name}</span>
-                                        <span className="recipe-install__srvspec mono">
+                                        <span className="recipe-install__srvspec">
                                             {server.cpu_cores ? `${server.cpu_cores} vCPU · ` : ''}
                                             {formatBytes(server.total_memory, { decimals: 0 })}
                                         </span>
@@ -298,8 +298,8 @@ export default function Recipes() {
                                             <div key={row.key} className={`recipe-preflight${row.ok ? ' is-ok' : ' is-bad'}`}>
                                                 {row.ok ? <Check size={13} /> : <X size={13} />}
                                                 <span className="recipe-preflight__k">{label}</span>
-                                                <span className="recipe-preflight__need mono">{row.need}</span>
-                                                <span className="recipe-preflight__have mono">{row.have}</span>
+                                                <span className="recipe-preflight__need">{row.need}</span>
+                                                <span className="recipe-preflight__have">{row.have}</span>
                                             </div>
                                         );
                                     })}
@@ -370,7 +370,7 @@ export default function Recipes() {
             </Drawer>
 
             {source === 'bundled' && !!recipes.length && (
-                <p className="recipes-page__source mono">
+                <p className="recipes-page__source">
                     {t('app.recipes.bundledSource', 'Showing the bundled catalog — the live registry is unreachable right now.')}
                 </p>
             )}

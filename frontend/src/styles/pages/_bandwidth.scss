@@ -26,7 +26,6 @@
     .bw-spark { flex-shrink: 0; }
 
     &__month {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
         white-space: nowrap;
@@ -36,7 +35,6 @@
 // Service detail Overview: full-width bandwidth card additions.
 .overview-tab__bandwidth {
     &-month {
-        font-family: var(--mono);
         font-size: $text-sm;
         color: var(--text-dim);
     }
@@ -76,7 +74,6 @@
     }
 
     &__value {
-        font-family: var(--mono);
         font-size: $text-lg;
         color: var(--text);
     }
@@ -189,7 +186,6 @@
     }
 
     &__value {
-        font-family: var(--mono);
         font-size: $text-lg;
         color: var(--text);
     }
@@ -287,7 +283,6 @@
 
     &__signal {
         margin: 0;
-        font-family: var(--mono);
         font-size: $text-sm;
         color: var(--text);
     }

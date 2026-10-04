@@ -78,7 +78,6 @@
         }
 
         .ts-mode__eta {
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }
@@ -193,7 +192,6 @@
         .ts-result__spacer { flex: 1; }
 
         .ts-result__duration {
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }

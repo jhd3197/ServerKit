@@ -185,9 +185,9 @@ const Workspaces = () => {
         },
         { key: 'slug', headerKey: 'app.workspaces.slug', header: 'Slug', sortable: true, cellClassName: 'sk-cell-mono', render: (ws) => `/${ws.slug}` },
         // Numeric sorts: unlimited (0/unset) sorts last.
-        { key: 'members', headerKey: 'app.workspaces.members', header: 'Members', sortable: true, sortValue: (ws) => ws.member_count ?? null, cellClassName: 'sk-cell-mono', render: (ws) => ws.member_count ?? 0 },
-        { key: 'servers', headerKey: 'common.labels.servers', header: 'Servers', sortable: true, sortValue: (ws) => (ws.max_servers > 0 ? ws.max_servers : null), cellClassName: 'sk-cell-mono', render: (ws) => (ws.max_servers > 0 ? ws.max_servers : '—') },
-        { key: 'users', headerKey: 'app.workspaces.users', header: 'Users', sortable: true, sortValue: (ws) => (ws.max_users > 0 ? ws.max_users : null), cellClassName: 'sk-cell-mono', render: (ws) => (ws.max_users > 0 ? ws.max_users : '—') },
+        { key: 'members', headerKey: 'app.workspaces.members', header: 'Members', sortable: true, sortValue: (ws) => ws.member_count ?? null, cellClassName: 'sk-cell-dim', render: (ws) => ws.member_count ?? 0 },
+        { key: 'servers', headerKey: 'common.labels.servers', header: 'Servers', sortable: true, sortValue: (ws) => (ws.max_servers > 0 ? ws.max_servers : null), cellClassName: 'sk-cell-dim', render: (ws) => (ws.max_servers > 0 ? ws.max_servers : '—') },
+        { key: 'users', headerKey: 'app.workspaces.users', header: 'Users', sortable: true, sortValue: (ws) => (ws.max_users > 0 ? ws.max_users : null), cellClassName: 'sk-cell-dim', render: (ws) => (ws.max_users > 0 ? ws.max_users : '—') },
         {
             key: 'status',
             headerKey: 'common.labels.status', header: 'Status',

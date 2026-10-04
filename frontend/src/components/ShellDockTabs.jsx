@@ -48,7 +48,7 @@ export default function ShellDockTabs({ controls = null, expandable = true }) {
                     onClick={() => openTab(tab.id)}
                 >
                     {tab.label}
-                    {tab.badge ? <span className="shell-dock-tabs__badge mono">{tab.badge}</span> : null}
+                    {tab.badge ? <span className="shell-dock-tabs__badge">{tab.badge}</span> : null}
                 </SharedButton>
             ))}
             <span className="shell-dock-tabs__spacer" />

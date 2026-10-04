@@ -166,7 +166,7 @@ export default function RecycleBinTab() {
                 const left = retentionDays - days;
                 return (
                     <div>
-                        <div className="sk-cell-mono">{when.toLocaleDateString()}</div>
+                        <div className="sk-cell-dim">{when.toLocaleDateString()}</div>
                         <div className={`sk-cell-sub ${left <= 3 ? 'is-urgent' : ''}`}>
                             {left > 0 ? `purges in ${left}d` : 'past retention'}
                         </div>

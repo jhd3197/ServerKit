@@ -75,7 +75,7 @@
     }
 
     &__full-width-button { width: 100%; margin-bottom: $space-4; }
-    &__progress-value { font-family: $font-mono; font-size: $text-base; }
+    &__progress-value { font-size: $text-base; }
     &__progress-labels { display: flex; justify-content: space-between; margin-bottom: $space-1; }
     &__modal-field { margin-top: $space-4; }
     &__drawer-fields {

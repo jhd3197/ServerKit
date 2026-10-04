@@ -190,7 +190,6 @@
         }
 
         .sk-spec-card__value {
-            font-family: var(--mono);
             font-size: $text-lg;
             letter-spacing: -0.01em;
         }
@@ -222,7 +221,6 @@
 
         h3 {
             margin: 0 0 $space-2;
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);
@@ -263,7 +261,6 @@
             }
 
             span {
-                font-family: var(--mono);
                 font-size: $text-xs;
                 color: var(--text-faint);
                 @include truncate();
@@ -278,7 +275,6 @@
             gap: $space-3;
 
             > span {
-                font-family: var(--mono);
                 font-size: $text-xs;
                 color: var(--text-faint);
                 white-space: nowrap;
@@ -358,7 +354,6 @@
 
                 span {
                     color: var(--text-faint);
-                    font-family: var(--mono);
                     font-size: $text-xs;
                 }
             }
@@ -422,13 +417,11 @@
 
         span {
             color: var(--text-faint);
-            font-family: var(--mono);
             font-size: $text-xs;
         }
 
         strong {
             color: var(--text-dim);
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
@@ -457,7 +450,6 @@
         > div > span:first-child {
             display: block;
             color: var(--text-faint);
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
@@ -465,7 +457,6 @@
         > div > strong {
             display: block;
             margin-top: $space-2;
-            font-family: var(--mono);
             font-size: $text-sm;
             overflow-wrap: anywhere;
         }
@@ -493,7 +484,6 @@
     }
 
     .form-help {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }

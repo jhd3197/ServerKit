@@ -342,7 +342,7 @@ const Services = () => {
             sortable: true,
             // Numeric timestamp sort; never-deployed services sort last.
             sortValue: (app) => (app.last_deploy_at ? new Date(app.last_deploy_at).getTime() : null),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (app) => (
                 app.last_deploy_at ? formatRelativeTime(app.last_deploy_at) : <span className="wp-list__dash">—</span>
             ),

@@ -122,7 +122,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
             headerKey: 'common.labels.current', header: 'Current',
             sortable: true,
             sortValue: (a) => a.current_value ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (a) => `${a.current_value}%`,
         },
         {
@@ -130,7 +130,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
             headerKey: 'app.fleetCapacityPanel.baselineMean', header: 'Baseline (mean)',
             sortable: true,
             sortValue: (a) => a.mean ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (a) => `${a.mean}%`,
         },
         {
@@ -138,7 +138,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
             headerKey: 'app.fleetCapacityPanel.stdDev', header: 'Std dev',
             sortable: true,
             sortValue: (a) => a.stddev ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (a) => a.stddev,
         },
         {
@@ -146,7 +146,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
             headerKey: 'app.fleetCapacityPanel.zScore', header: 'Z-score',
             sortable: true,
             sortValue: (a) => a.z_score ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (a) => a.z_score,
         },
         {

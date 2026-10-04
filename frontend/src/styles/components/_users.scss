@@ -286,7 +286,6 @@
 .settings-nav-divider {
     padding: $space-3 $space-3 $space-1;
     margin-top: $space-3;
-    font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
@@ -501,7 +500,6 @@
     }
 
     &__value {
-        font-family: $font-mono;
         font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;

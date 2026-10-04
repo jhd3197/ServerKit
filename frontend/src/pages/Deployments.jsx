@@ -266,7 +266,7 @@ const Deployments = () => {
             value: (job) => job.target_server_name || 'Local server',
             sortValue: (job) => job.target_server_name || 'Local server',
             groupValue: (job) => job.target_server_name || 'Local server',
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (job) => job.target_server_name || 'Local server',
         },
         {
@@ -277,7 +277,7 @@ const Deployments = () => {
             unit: 's',
             value: (job) => job.duration ?? null,
             sortValue: (job) => job.duration ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (job) => formatDuration(job.duration),
         },
         {
@@ -292,7 +292,7 @@ const Deployments = () => {
                 return Number.isNaN(time) ? null : time;
             },
             groupValue: (job) => activityGroup(job),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (job) => (job.status === 'pending'
                 ? 'queued'
                 : relativeTime(job.started_at || job.created_at)),

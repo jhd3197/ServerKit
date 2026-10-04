@@ -116,7 +116,6 @@
     display: grid;
     place-items: center;
     flex-shrink: 0;
-    font-family: var(--mono);
     font-size: $text-base;
     font-weight: $font-weight-semibold;
 }
@@ -159,7 +158,6 @@
 }
 
 .apps-none {
-    font-family: var(--mono);
     font-size: $text-xs;
     color: var(--text-ghost);
 }
@@ -189,7 +187,6 @@
 
     &__val {
         width: 36px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
         text-align: right;
@@ -748,7 +745,6 @@
             align-items: center;
             gap: 6px;
             margin: 0;
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);
@@ -815,7 +811,6 @@
     }
 
     .info-value {
-        font-family: var(--mono);
         font-size: $text-sm;
         color: var(--text);
         overflow-wrap: anywhere;
@@ -888,7 +883,6 @@
     }
 
     .deployment-date {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -961,7 +955,6 @@
     }
 
     .resource-bar-value {
-        font-family: var(--mono);
         font-size: $text-sm;
         font-weight: $font-weight-semibold;
         color: var(--text);
@@ -1155,7 +1148,6 @@
             align-items: center;
             gap: 6px;
             margin: 0;
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);
@@ -1609,7 +1601,6 @@
     }
 
     &__ratio {
-        font-family: var(--mono);
         color: var(--text);
     }
 }

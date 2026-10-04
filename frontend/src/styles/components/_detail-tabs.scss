@@ -187,14 +187,12 @@
 
         h4 {
             margin: 0;
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);
         }
 
         span {
-            font-family: var(--mono);
             font-size: $text-xl;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.02em;
@@ -204,7 +202,6 @@
 
     &__info {
         margin-top: $space-2;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
     }

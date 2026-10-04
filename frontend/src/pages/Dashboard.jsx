@@ -463,10 +463,10 @@ const Dashboard = () => {
                         <span className="conn-status__dot" aria-hidden="true"></span>
                         {isConnected ? 'Live' : 'Reconnecting'}
                     </span>
-                    <span className="skw-tv__meta mono">
+                    <span className="skw-tv__meta">
                         {selectedServer.name} · {range} {t('app.dashboard.refresh', '· refresh')} {refreshInterval ? `${refreshInterval}s` : 'off'}
                     </span>
-                    <span className="skw-tv__clock mono">{displayTime}</span>
+                    <span className="skw-tv__clock">{displayTime}</span>
                     <Button variant="unstyled" type="button" className="btn btn-outline btn-sm" onClick={() => setTvMode(false)}>
                         <X size={14} /> {t('app.dashboard.exit', 'Exit')}
                     </Button>
@@ -521,7 +521,7 @@ const Dashboard = () => {
                             ) : (
                                 <span>{board.name}</span>
                             )}
-                            <span className="skw-tab__count mono">
+                            <span className="skw-tab__count">
                                 {board.id === activeBoardId && edit ? widgets.length : (board.widgets || []).length}
                             </span>
                             {edit && boards.length > 1 && board.id === activeBoardId && (
@@ -553,7 +553,7 @@ const Dashboard = () => {
                         single host this is a plain readout. */}
                     {servers.length < 2 ? (
                         <span className="skw-varpick skw-varpick--static">
-                            <span className="skw-varpick__k mono">server</span>
+                            <span className="skw-varpick__k">server</span>
                             <span className="skw-varpick__v">{hostname}</span>
                         </span>
                     ) : (
@@ -642,7 +642,7 @@ const Dashboard = () => {
             {boardsError && <div className="skw-hint skw-hint--error">{boardsError}</div>}
 
             {edit && (
-                <div className="skw-hint mono">
+                <div className="skw-hint">
                     <Grid2x2 size={13} aria-hidden="true" /> {t('app.dashboard.dragHeadersToMoveDragThe', 'Drag headers to move · drag the corner to resize · click a widget to configure it')}{selectedId ? ' · Delete removes it' : ''}
                 </div>
             )}

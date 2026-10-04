@@ -16,14 +16,13 @@
     // Target / Took / Started are short and fixed, but they sit beside a Deploy
     // cell that takes every spare pixel — left to wrap, "Local server" alone
     // doubles the height of every row.
-    .sk-cell-mono { white-space: nowrap; }
+    .sk-cell-dim { white-space: nowrap; }
 
     &__kind {
         padding: 1px 5px;
         border: 1px solid var(--border);
         border-radius: 4px;
         color: var(--text-ghost);
-        font-family: var(--mono);
         font-size: $text-xs;
     }
 

@@ -359,7 +359,7 @@ const FirewallTab = () => {
             type: 'enum',
             value: ruleProtocol,
             sortValue: ruleProtocol,
-            cellClassName: 'sk-cell-mono sec-proto',
+            cellClassName: 'sk-cell-dim sec-proto',
             render: (rule) => ruleProtocol(rule) || '-',
         },
         {
@@ -488,14 +488,14 @@ const FirewallTab = () => {
                             </SharedCardHeader>
                             <SharedCardContent variant="legacy" className="card-body">
                                 <InfoList>
-                                    <InfoItem label={t('common.labels.type', 'Type')} value={activeFirewall?.toUpperCase()} mono />
+                                    <InfoItem label={t('common.labels.type', 'Type')} value={activeFirewall?.toUpperCase()} />
                                     <InfoItem label={t('common.labels.status', 'Status')}>
                                         <Pill kind={isActive ? 'green' : 'red'}>
                                             {isActive ? 'Active' : 'Inactive'}
                                         </Pill>
                                     </InfoItem>
                                     {activeFirewall === 'firewalld' && status?.firewalld?.default_zone && (
-                                        <InfoItem label={t('app.firewallTab.defaultZone', 'Default zone')} value={status.firewalld.default_zone} mono />
+                                        <InfoItem label={t('app.firewallTab.defaultZone', 'Default zone')} value={status.firewalld.default_zone} />
                                     )}
                                 </InfoList>
                             </SharedCardContent>
@@ -643,7 +643,7 @@ const FirewallTab = () => {
                                 />
                             </InfoItem>
                             {guard.supported && guard.backend && (
-                                <InfoItem label={t('app.firewallTab.backend', 'Backend')} value={guard.backend} mono />
+                                <InfoItem label={t('app.firewallTab.backend', 'Backend')} value={guard.backend} />
                             )}
                         </InfoList>
                         <p className="sec-hint">

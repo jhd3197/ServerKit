@@ -779,7 +779,6 @@ $dbx-sqlite: #3d8fd1;
             color: $text-tertiary;
             background: $bg-elevated;
             border-right: 1px solid $border-default;
-            font-family: $font-mono;
             font-size: $text-xs;
             user-select: none;
         }
@@ -1053,7 +1052,6 @@ $dbx-sqlite: #3d8fd1;
             gap: 6px;
             max-width: 46ch;
             margin: $space-5 0 0;
-            font-family: $font-mono;
             font-size: $text-xs;
             color: $text-tertiary;
             svg { flex-shrink: 0; }
@@ -1537,7 +1535,7 @@ $dbx-sqlite: #3d8fd1;
         font-weight: $font-weight-medium;
         @include dbx-trunc;
     }
-    &__sub { color: $text-tertiary; font-family: $font-mono; font-size: $text-xs; }
+    &__sub { color: $text-tertiary; font-size: $text-xs; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1736,7 +1734,6 @@ $dbx-sqlite: #3d8fd1;
     &__head {
         padding: 0 2px 6px;
         color: $text-tertiary;
-        font-family: $font-mono;
         font-size: $text-xs;
     }
 
@@ -1839,7 +1836,6 @@ $dbx-sqlite: #3d8fd1;
         flex-shrink: 0;
         padding: 2px 8px;
         border-radius: $radius-sm;
-        font-family: $font-mono;
         font-size: $text-xs;
         background: $bg-tertiary;
         color: $text-tertiary;

@@ -94,7 +94,7 @@ export default function FleetThresholdsPanel({ refreshKey = 0 }) {
             headerKey: 'common.labels.warning', header: 'Warning',
             sortable: true,
             sortValue: (t) => t.warning_threshold ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (t) => `${t.warning_threshold}%`,
         },
         {
@@ -102,7 +102,7 @@ export default function FleetThresholdsPanel({ refreshKey = 0 }) {
             headerKey: 'app.fleetThresholdsPanel.critical', header: 'Critical',
             sortable: true,
             sortValue: (t) => t.critical_threshold ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (t) => `${t.critical_threshold}%`,
         },
         {
@@ -110,7 +110,7 @@ export default function FleetThresholdsPanel({ refreshKey = 0 }) {
             headerKey: 'app.fleetThresholdsPanel.sustained', header: 'Sustained',
             sortable: true,
             sortValue: (t) => t.duration_seconds ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (t) => `${t.duration_seconds}s`,
         },
         {

@@ -156,7 +156,6 @@
     .counter-value {
         font-size: $text-2xl;
         font-weight: $font-weight-semibold;
-        font-family: $font-mono;
         color: $text-primary;
         line-height: 1;
     }
@@ -171,7 +170,6 @@
 .counter-separator {
     font-size: $text-2xl;
     font-weight: $font-weight-semibold;
-    font-family: $font-mono;
     color: $text-tertiary;
     margin: 0 $space-1;
     margin-bottom: $space-4;
@@ -325,7 +323,6 @@
     .stat-value {
         font-size: $text-md;
         font-weight: $font-weight-semibold;
-        font-family: $font-mono;
         color: $text-primary;
 
         &.excellent,

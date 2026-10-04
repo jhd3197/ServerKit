@@ -16,6 +16,11 @@ const STYLES = new URL('../src/styles', import.meta.url).pathname.replace(/^\/([
 const SIZE_OK = /^(\$text-(xs|sm|base|md|lg|xl|2xl)|inherit|0|[\d.]+em)(\s*!important)?$/;
 const WEIGHT_OK = /^(\$font-weight-(normal|medium|semibold)|inherit)(\s*!important)?$/;
 
+// Monospace is for machine values (hosts, IPs, ports, versions, paths, IDs,
+// code, logs). This ceiling only goes down: a new mono rule needs one removed
+// elsewhere, so labels and dates don't drift back to the "terminal" look.
+const MONO_CEILING = 279;
+
 // Public status page hero scales with the viewport on purpose.
 const CLAMP_ALLOWED = new Set(['pages/_status-pages.scss']);
 
@@ -29,6 +34,7 @@ function* walk(dir) {
 }
 
 const problems = [];
+let monoRules = 0;
 for (const file of walk(STYLES)) {
     const rel = relative(STYLES, file).split(sep).join('/');
     readFileSync(file, 'utf8').split(/\r?\n/).forEach((line, i) => {
@@ -42,6 +48,7 @@ for (const file of walk(STYLES)) {
         if (weight && !WEIGHT_OK.test(weight[1].trim())) {
             problems.push(`  - ${rel}:${i + 1}: font-weight: ${weight[1].trim()} — use $font-weight-normal|medium|semibold`);
         }
+        if (/font-family:\s*(\$font-mono|var\(--mono)/.test(code)) monoRules += 1;
         if (/\$font-size-|\$font-weight-bold/.test(code)) {
             problems.push(`  - ${rel}:${i + 1}: legacy typography variable — use $text-* / $font-weight-*`);
         }
@@ -53,4 +60,4 @@ if (problems.length) {
     console.error(problems.join('\n'));
     process.exit(1);
 }
-console.log('✓ type scale: every font-size and font-weight in core SCSS is a token.');
+console.log(`✓ type scale: every font-size and font-weight in core SCSS is a token; ${monoRules} monospace rules (ceiling ${MONO_CEILING}).`);

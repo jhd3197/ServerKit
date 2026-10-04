@@ -477,7 +477,7 @@ const ServerTemplates = () => {
                 const time = Date.parse(tmpl.updated_at);
                 return Number.isNaN(time) ? null : time;
             },
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (tmpl) => formatUpdated(tmpl.updated_at),
         },
         {

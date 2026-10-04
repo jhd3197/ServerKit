@@ -168,7 +168,6 @@
 
         span {
             display: block;
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }
@@ -176,7 +175,6 @@
         strong {
             display: block;
             margin-top: 3px;
-            font-family: var(--mono);
             font-size: $text-lg;
             font-weight: $font-weight-semibold;
             color: var(--text);
@@ -256,7 +254,6 @@
         border-radius: 5px;
         background: var(--surface-3);
         color: var(--text-dim);
-        font-family: var(--mono);
         font-size: $text-xs;
     }
 }
@@ -265,7 +262,6 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-family: var(--mono);
     font-size: $text-xs;
     color: var(--text-faint);
     white-space: nowrap;
@@ -344,7 +340,6 @@
 
     &__type {
         margin-top: 2px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -354,7 +349,6 @@
         justify-content: space-between;
         gap: $space-3;
         margin-top: 7px;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -378,7 +372,6 @@
         dd {
             margin: 0;
             min-width: 0;
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-dim);
             @include truncate();
@@ -419,7 +412,6 @@
         padding: 1px 6px;
         border-radius: 4px;
         @include status-variant(var(--accent-bright), var(--accent-bg));
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
@@ -453,7 +445,6 @@
 
     &__size {
         flex-shrink: 0;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-dim);
 
@@ -547,6 +538,7 @@
     }
 
     .sk-cell-mono,
+    .sk-cell-dim,
     .bk-when { white-space: nowrap; }
 
     td:last-child { width: 1%; }
@@ -835,7 +827,6 @@
 
     &__cost {
         color: $text-secondary;
-        font-family: $font-mono;
     }
 
     &__joblink {

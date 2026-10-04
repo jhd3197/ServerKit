@@ -86,7 +86,7 @@ const LATEST_COLUMNS = [
         headerKey: 'common.labels.size', header: 'Size',
         sortable: true,
         sortValue: (e) => e.size || 0,
-        cellClassName: 'sk-cell-mono',
+        cellClassName: 'sk-cell-dim',
         render: (e) => formatBytes(e.size, { defaultValue: '—' }),
     },
     {

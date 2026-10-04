@@ -25,7 +25,6 @@
     &__results h3,
     &__installed h3 {
         margin: 0 0 0.5rem;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
@@ -144,7 +143,6 @@
 
         h3 {
             margin: 0;
-            font-family: var(--mono);
             font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text-faint);

@@ -299,7 +299,6 @@
         span {
             display: block;
             margin-bottom: 3px;
-            font-family: var(--mono);
             font-size: $text-xs;
             color: var(--text-faint);
         }
@@ -449,7 +448,6 @@
     }
 
     &-repo-vis {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
         flex-shrink: 0;

@@ -68,7 +68,7 @@
     &__heading h2,
     &__detail-head h3 { margin: 0; color: var(--text); }
     &__heading h2 { font-size: $text-base; }
-    &__heading > div > span { color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; }
+    &__heading > div > span { color: var(--text-faint); font-size: $text-xs; }
     &__header-actions { gap: $space-1; }
 
     &__icon {
@@ -93,7 +93,7 @@
             gap: 6px;
             color: var(--text-dim);
 
-            span { color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; }
+            span { color: var(--text-faint); font-size: $text-xs; }
             &.is-active { background: var(--surface-hover); color: var(--text); }
         }
     }
@@ -141,7 +141,7 @@
         strong,
         small { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         strong { color: var(--text); font-size: $text-xs; }
-        small { color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; }
+        small { color: var(--text-faint); font-size: $text-xs; }
     }
 
     &__row-unread {
@@ -184,7 +184,7 @@
     &__detail-head h3 { overflow: hidden; font-size: $text-lg; text-overflow: ellipsis; white-space: nowrap; }
     &__eyebrow { color: var(--text-faint); font-size: $text-xs; }
 
-    &__meta { gap: $space-3; color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; }
+    &__meta { gap: $space-3; color: var(--text-faint); font-size: $text-xs; }
     &__meta span { display: inline-flex; align-items: center; gap: 5px; }
 
     &__progress { display: grid; gap: $space-2; }
@@ -270,7 +270,6 @@
 
         span:not(.operations-dock__handoff-icon) {
             color: var(--amber);
-            font-family: var(--mono);
             font-size: $text-xs;
         }
 

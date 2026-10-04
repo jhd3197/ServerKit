@@ -1180,8 +1180,8 @@ $skw-z-tv: 200;
 
         &:first-child { border-top: none; }
     }
-    &__k { color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; }
-    &__v { color: var(--text); font-family: var(--mono); font-size: $text-xs; text-align: right; overflow-wrap: anywhere; }
+    &__k { color: var(--text-faint); font-size: $text-xs; }
+    &__v { color: var(--text); font-size: $text-xs; text-align: right; overflow-wrap: anywhere; }
 
     // …and a density override when the renderer reuses the shared
     // .sk-info-row primitive instead, which is spaced for a drawer.
@@ -1379,7 +1379,6 @@ $skw-z-tv: 200;
         border-radius: 4px;
         background: var(--surface-3);
         color: var(--text-ghost);
-        font-family: var(--mono);
         font-size: $text-xs;
     }
 
@@ -1474,7 +1473,6 @@ $skw-z-tv: 200;
     // Wall-display bar: board name, live dot, what the board is scoped to, and
     // the time. Larger than the normal chrome because this is read at distance.
     &__name {
-        font-family: var(--mono);
         font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: var(--text);

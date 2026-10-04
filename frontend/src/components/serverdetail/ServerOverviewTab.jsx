@@ -140,15 +140,15 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                     <h3><ChipIcon /> {t('app.serverOverviewTab.systemInformation', 'System Information')}</h3>
                     <InfoList className="server-info-list">
                         <InfoItem label={<><OsIcon /> {t('app.serverOverviewTab.operatingSystem', 'Operating System')}</>} value={osLabel} />
-                        <InfoItem label={<><ArchIcon /> {t('app.serverOverviewTab.architecture', 'Architecture')}</>} value={systemInfo?.architecture || server.architecture || 'N/A'} mono />
+                        <InfoItem label={<><ArchIcon /> {t('app.serverOverviewTab.architecture', 'Architecture')}</>} value={systemInfo?.architecture || server.architecture || 'N/A'} />
                         <InfoItem
                             label={<><CpuIcon /> CPU</>}
                             value={
                                 (cpuModel || 'N/A') + (cpuCores ? ` (${cpuCores} cores)` : '')
                             }
                         />
-                        <InfoItem label={<><MemoryIcon /> {t('app.serverOverviewTab.totalMemory', 'Total Memory')}</>} value={formatBytes(totalMemory, { defaultValue: 'N/A' })} mono />
-                        <InfoItem label={<><DiskIcon /> {t('app.serverOverviewTab.totalDisk', 'Total Disk')}</>} value={formatBytes(totalDisk, { defaultValue: 'N/A' })} mono />
+                        <InfoItem label={<><MemoryIcon /> {t('app.serverOverviewTab.totalMemory', 'Total Memory')}</>} value={formatBytes(totalMemory, { defaultValue: 'N/A' })} />
+                        <InfoItem label={<><DiskIcon /> {t('app.serverOverviewTab.totalDisk', 'Total Disk')}</>} value={formatBytes(totalDisk, { defaultValue: 'N/A' })} />
                     </InfoList>
                 </div>
 
@@ -158,7 +158,7 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                         <InfoItem label={<><TagIcon /> {t('app.serverOverviewTab.agentVersion', 'Agent Version')}</>} value={server.agent_version || 'Not installed'} mono />
                         <InfoItem label={<><HashIcon /> {t('app.serverOverviewTab.agentId', 'Agent ID')}</>} value={server.agent_id || 'N/A'} mono />
                         <InfoItem label={<><DockerMiniIcon /> {t('app.serverOverviewTab.dockerVersion', 'Docker Version')}</>} value={server.docker_version || systemInfo?.docker_version || 'N/A'} mono />
-                        <InfoItem label={<><ClockIcon /> {t('common.labels.uptime', 'Uptime')}</>} value={formatUptime(metrics?.uptime)} mono />
+                        <InfoItem label={<><ClockIcon /> {t('common.labels.uptime', 'Uptime')}</>} value={formatUptime(metrics?.uptime)} />
                     </InfoList>
                 </div>
 

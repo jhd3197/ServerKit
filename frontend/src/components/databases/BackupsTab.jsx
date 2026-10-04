@@ -141,7 +141,7 @@ export default function BackupsTab() {
             type: 'num',
             value: (b) => (typeof b.size === 'number' ? b.size : null),
             sortValue: (b) => (typeof b.size === 'number' ? b.size : null),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (b) => formatBytes(b.size, { decimals: 2, defaultValue: '0 B' }),
         },
         {
@@ -156,7 +156,7 @@ export default function BackupsTab() {
                 const parsed = Date.parse(b.created_at || '');
                 return Number.isNaN(parsed) ? null : parsed;
             },
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (b) => {
                 const parsed = Date.parse(b.created_at || '');
                 return Number.isNaN(parsed) ? '—' : new Date(parsed).toLocaleString();

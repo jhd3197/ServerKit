@@ -915,7 +915,6 @@ h3.svc-eyebrow {
     }
 
     &__see-all {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
     }
@@ -966,14 +965,12 @@ h3.svc-eyebrow {
     }
 
     &__metric-value {
-        font-family: var(--mono);
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__metric-detail {
         display: block;
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-faint);
         margin-top: $space-1;
@@ -997,7 +994,6 @@ h3.svc-eyebrow {
     }
 
     &__metric-item-value {
-        font-family: var(--mono);
         font-size: $text-sm;
         font-weight: $font-weight-medium;
         color: $text-primary;

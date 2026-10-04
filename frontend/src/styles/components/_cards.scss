@@ -59,7 +59,7 @@
 .metric-value {
     font-weight: $font-weight-semibold;
     color: $text-primary;
-    @include mono-text();
+    font-size: $text-xs;
 }
 
 // ============================================

@@ -69,7 +69,6 @@ $lk-default:  #646b7a;
 
     &__grp {
         padding: 8px 14px 6px;
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-ghost);
@@ -270,7 +269,6 @@ $lk-default:  #646b7a;
 }
 
 .lv-stat-value {
-    font-family: var(--mono);
     font-size: $text-xs;
     color: var(--text-dim);
 }
@@ -528,7 +526,6 @@ $lk-default:  #646b7a;
 
 .lv-file-size {
     grid-area: size;
-    font-family: var(--mono);
     font-size: $text-xs;
     color: var(--text-ghost);
 }
@@ -1183,7 +1180,6 @@ $lk-default:  #646b7a;
         span {
             position: relative;
             font-size: $text-xs;
-            font-family: $font-mono;
         }
     }
 

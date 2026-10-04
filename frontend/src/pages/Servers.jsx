@@ -148,7 +148,7 @@ const meterColumn = (key, header, metricKey) => ({
         const value = clamp(server.metrics?.[metricKey]);
         return (
             <>
-                <div className="sk-cell-mono">{value.toFixed(0)}%</div>
+                <div className="sk-cell-dim">{value.toFixed(0)}%</div>
                 <Gauge value={value} />
             </>
         );
@@ -189,8 +189,11 @@ const SERVER_COLUMNS = [
     {
         key: 'agent',
         headerKey: 'app.servers.agent', header: 'Agent',
-        cellClassName: 'sk-cell-mono servers-row__agent',
-        render: (server) => server.agent_version || 'not installed',
+        cellClassName: 'sk-cell-dim servers-row__agent',
+        // The version is a machine value; the "not installed" fallback is words.
+        render: (server) => (server.agent_version
+            ? <span className="mono">{server.agent_version}</span>
+            : 'not installed'),
     },
     {
         key: 'group',
@@ -232,7 +235,7 @@ const SERVER_COLUMNS = [
         headerKey: 'app.servers.lastSeen', header: 'Last seen',
         sortable: true,
         sortValue: (server) => (server.last_seen ? new Date(server.last_seen).getTime() : null),
-        cellClassName: 'sk-cell-mono servers-row__seen',
+        cellClassName: 'sk-cell-dim servers-row__seen',
         render: (server) => formatLastSeen(server.last_seen),
     },
     {

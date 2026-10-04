@@ -408,7 +408,7 @@ export default function Incidents() {
             type: 'date',
             value: (item) => item.when || null,
             sortValue: (item) => (item.when ? new Date(item.when).getTime() : null),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (item) => formatWhen(item.when),
         },
         {

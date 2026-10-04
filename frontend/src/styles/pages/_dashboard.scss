@@ -25,7 +25,6 @@
         align-items: center;
         gap: 10px;
         color: $text-primary;
-        font-family: $font-mono;
     }
 }
 
@@ -47,7 +46,6 @@
         font-size: $text-xl;
         font-weight: $font-weight-semibold;
         letter-spacing: -0.02em;
-        font-family: $font-mono;
         color: $text-primary;
     }
 
@@ -75,7 +73,6 @@
     color: var(--text);
 
     &__head {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-ghost);
         padding: 7px 10px 5px;
@@ -157,7 +154,6 @@
     margin-top: $space-2;
     font-size: $text-xs;
     color: $text-tertiary;
-    font-family: $font-mono;
 
     .detail-separator {
         color: $border-default;
@@ -267,7 +263,6 @@
 }
 
 .tile-val {
-    font-family: $font-mono;
     font-size: $text-2xl;
     font-weight: $font-weight-semibold;
     color: $text-primary;
@@ -386,7 +381,6 @@
 }
 
 .spec-data {
-    font-family: $font-mono;
     color: $text-primary;
     text-align: right;
     max-width: 60%;
@@ -601,7 +595,6 @@
     border: 1px solid $border-subtle;
     border-radius: $radius-sm;
     color: $text-primary;
-    font-family: $font-mono;
     font-size: $text-xs;
     padding: $space-1 $space-2;
     cursor: pointer;

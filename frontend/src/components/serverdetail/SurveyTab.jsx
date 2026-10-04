@@ -278,7 +278,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
                         empty="No database engines detected."
                         render={(d) => (
                             <>
-                                <span className="survey-tab__mono">{d.engine}</span>
+                                <span>{d.engine}</span>
                                 {d.port ? <span className="survey-tab__muted"> :{d.port}</span> : null}
                                 {' '}<Pill kind={d.active ? 'green' : 'gray'}>{d.active ? 'active' : 'inactive'}</Pill>
                             </>
@@ -367,7 +367,7 @@ function DiffSummary({ diff }) {
         <ul className="survey-tab__diff">
             {chips.map((c) => (
                 <li key={c.label}>
-                    <span className="survey-tab__mono">{c.label}</span>
+                    <span>{c.label}</span>
                     <Pill kind="gray">{c.text}</Pill>
                 </li>
             ))}

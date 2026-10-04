@@ -548,7 +548,7 @@ const Backups = () => {
             type: 'num',
             value: (b) => b.size || 0,
             sortValue: (b) => b.size || 0,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (backup) => formatBytes(backup.size, { defaultValue: '0 B' }),
         },
         {
@@ -586,7 +586,7 @@ const Backups = () => {
             type: 'num',
             value: monthlyCost,
             sortValue: monthlyCost,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (backup) => formatMoney(monthlyCost(backup)),
         },
         {

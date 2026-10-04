@@ -283,7 +283,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             header: 'TTL',
             sortable: true,
             className: 'ddp__c-ttl',
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             sortValue: (r) => (r.ttl ?? null),
             render: (r) => (r.ttl === 1 ? 'Auto' : r.ttl),
         },

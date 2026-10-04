@@ -75,7 +75,6 @@
         display: block;
         font-size: $text-lg;
         font-weight: $font-weight-semibold;
-        font-family: $font-mono;
         color: $text-primary;
     }
 }
@@ -159,7 +158,6 @@
     }
 
     .tooltip-value {
-        font-family: $font-mono;
         font-weight: $font-weight-semibold;
         min-width: 48px;
         text-align: right;
@@ -313,7 +311,6 @@
         }
 
         span {
-            font-family: $font-mono;
             font-weight: $font-weight-medium;
         }
     }

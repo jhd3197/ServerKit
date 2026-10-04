@@ -35,7 +35,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 }
 
 // ------------------------------------------------------------
-// State chip — mono uppercase micro-label on a semantic wash
+// State chip — small semibold label on a semantic wash
 // (alert/incident states, severities, kind/type tags). One source of
 // truth for the shape: page-local chip classes (.mon-state, .sec-state,
 // .inc-state/.inc-impact, .git-chip, .bk-type) keep their names and
@@ -48,7 +48,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     align-items: center;
     padding: 3px 9px;
     border-radius: 6px;
-    font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     white-space: nowrap;
@@ -75,7 +74,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     align-items: center;
     padding: 2px 7px;
     border-radius: 5px;
-    font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-semibold;
     border: 1px solid var(--border-strong);
@@ -116,7 +114,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         &:hover { color: var(--text-dim); }
         &.is-on { background: var(--surface-3); color: var(--text); box-shadow: var(--shadow-sm); }
 
-        .sk-seg__count { font-family: var(--mono); font-size: $text-xs; opacity: 0.7; }
+        .sk-seg__count { font-size: $text-xs; opacity: 0.7; }
     }
 }
 
@@ -162,7 +160,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     // icon simply leaves the first track at zero width.
     &__body { grid-area: body; min-width: 0; }
     &__val {
-        font-family: var(--mono); font-size: $text-xl; font-weight: $font-weight-semibold;
+ font-size: $text-xl; font-weight: $font-weight-semibold;
         letter-spacing: -0.02em; line-height: 1.1;
         // Explicit theme colour — don't inherit, or a host with a stray text
         // colour (e.g. a non-tabgroup page shell) renders the value near-black.
@@ -191,7 +189,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__trend {
         grid-area: trend;
         align-self: start;
-        font-family: var(--mono); font-size: $text-xs;
+ font-size: $text-xs;
         display: flex; align-items: center; gap: 4px;
         &--up { color: var(--green); }
         &--down { color: var(--red); }
@@ -275,7 +273,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
     &__stripitem { display: flex; flex-direction: column; gap: 2px; }
     &__stripval {
-        font-family: var(--mono);
         font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: var(--text);
@@ -308,7 +305,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     border-radius: 10px;
     display: grid;
     place-items: center;
-    font-family: var(--mono);
     font-weight: $font-weight-semibold;
     color: #fff;
     flex-shrink: 0;
@@ -331,7 +327,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
     &__svg { transform: rotate(-90deg); }
     &__center { position: absolute; text-align: center; }
-    &__num { font-family: var(--mono); font-weight: $font-weight-semibold; line-height: 1; }
+    &__num { font-weight: $font-weight-semibold; line-height: 1; }
     &__label { font-size: $text-xs; color: var(--text-faint); margin-top: 3px; }
 }
 
@@ -349,7 +345,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
     &__body { flex: 1; min-width: 0; }
     &__txt  { font-size: $text-sm; line-height: 1.45; b { font-weight: $font-weight-semibold; color: var(--text); } }
-    &__time { font-family: var(--mono); font-size: $text-xs; color: var(--text-faint); margin-top: 2px; }
+    &__time { font-size: $text-xs; color: var(--text-faint); margin-top: 2px; }
 }
 
 // ------------------------------------------------------------
@@ -414,8 +410,11 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     tbody tr.is-selected { background: var(--accent-bg-soft); &:hover { background: var(--accent-bg); } }
 
     .sk-cell-name { font-weight: $font-weight-semibold; display: flex; align-items: center; gap: 11px; }
+    // sk-cell-mono is for machine values only (hosts, IPs, ports, versions,
+    // paths, IDs, hashes). Dates, counts, types and other words use sk-cell-dim.
     .sk-cell-mono { font-family: var(--mono); font-size: $text-xs; color: var(--text-dim); }
-    .sk-cell-sub  { font-family: var(--mono); font-size: $text-xs; color: var(--text-faint); margin-top: 3px; }
+    .sk-cell-dim  { font-size: $text-sm; color: var(--text-dim); }
+    .sk-cell-sub  { font-size: $text-xs; color: var(--text-faint); margin-top: 3px; }
 
     // Sortable column headers (used by the DataTable component).
     .is-sortable { cursor: pointer; user-select: none; }
@@ -553,7 +552,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
 
     &__section {
-        font-family: var(--mono);
         font-size: $text-xs;
         color: var(--text-ghost);
         padding: 8px 6px 3px;
@@ -604,7 +602,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
 
     &__priority {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--accent-bright);
@@ -679,7 +676,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
 
     &__priority {
-        font-family: var(--mono);
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         opacity: 0.8;
@@ -1126,7 +1122,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__ico { color: var(--accent-bright); display: inline-flex; flex-shrink: 0; }
     &__titles { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
     &__title { margin: 0; font-size: $text-md; font-weight: $font-weight-semibold; letter-spacing: -0.01em; color: var(--text); }
-    &__meta { font-family: var(--mono); font-size: $text-xs; color: var(--text-faint); }
+    &__meta { font-size: $text-xs; color: var(--text-faint); }
     &__spacer { flex: 1; }
     &__actions {
         display: inline-flex;
@@ -1279,7 +1275,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
     &__label { font-size: $text-xs; color: var(--text-faint); }
     &__value { font-size: $text-base; font-weight: $font-weight-semibold; color: var(--text); margin-top: 8px; }
-    &__sub { font-family: var(--mono); font-size: $text-xs; color: var(--text-faint); margin-top: 6px; }
+    &__sub { font-size: $text-xs; color: var(--text-faint); margin-top: 6px; }
 }
 
 // Key/value info row (drawer nameservers, details).
@@ -1292,7 +1288,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     border-top: 1px solid var(--border-soft);
     font-size: $text-sm;
     &:first-child { border-top: none; }
-    .k { color: var(--text-faint); font-family: var(--mono); font-size: $text-xs; }
+    .k { color: var(--text-faint); font-size: $text-xs; }
     .v { font-family: var(--mono); color: var(--text); text-align: right; font-size: $text-sm; overflow-wrap: anywhere; }
 }
 
@@ -1322,7 +1318,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
     &__ico { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; flex-shrink: 0; background: var(--surface-2); color: var(--text-dim); }
     &__title { font-weight: $font-weight-semibold; font-size: $text-base; }
-    &__sub { font-family: var(--mono); font-size: $text-xs; color: var(--text-faint); margin-top: 1px; }
+    &__sub { font-size: $text-xs; color: var(--text-faint); margin-top: 1px; }
     // Padded by default, to the header's own 18px side inset, so a drawer body
     // never renders flush against the panel edge just because its author forgot
     // to pad it. Bodies that own their internal regions (a form with a pinned
@@ -1570,7 +1566,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
     &__facts {
         min-width: 0;
-        font-family: var(--mono); font-size: $text-xs; color: var(--text-faint);
+ font-size: $text-xs; color: var(--text-faint);
         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
     &__action { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }

@@ -349,9 +349,8 @@
     }
 }
 
-// Navigation Category Labels — mono, uppercase, ghost (redesign)
+// Navigation category labels — quiet ghost text
 .nav-category {
-    font-family: var(--mono);
     font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
@@ -710,7 +709,6 @@
 }
 
 .user-status {
-    font-family: var(--mono);
     font-size: $text-xs;
     color: var(--green);
     display: flex;
