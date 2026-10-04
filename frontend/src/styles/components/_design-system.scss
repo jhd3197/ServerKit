@@ -387,9 +387,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         &.is-filtered .sk-colmenu-btn { opacity: 1; color: var(--accent-bright); }
     }
 
-    // Top-lit header, matching the DataGrid surface, so the two table
+    // Same flat header fill as the DataGrid, so the two table
     // implementations read as one component.
-    thead { background: linear-gradient(180deg, var(--surface-2), var(--surface)); }
+    thead { background: var(--surface-2); }
 
     &__filter-mark { color: var(--accent-bright); flex-shrink: 0; }
 

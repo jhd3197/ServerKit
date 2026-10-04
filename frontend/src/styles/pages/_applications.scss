@@ -383,27 +383,15 @@
     gap: $space-2;
 }
 
-// Header — gradient surface card + radial accent wash
 .app-detail-header {
     position: relative;
     display: flex;
     align-items: center;
     gap: $space-4;
     padding: 20px 22px;
-    background: linear-gradient(120deg, var(--surface) 0%, var(--surface-2) 100%);
+    background: var(--surface);
     border: 1px solid var(--border-soft);
     border-radius: var(--radius-lg);
-
-    // No overflow:hidden (header menus must escape), so the wash carries
-    // its own radius instead.
-    &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: var(--radius-lg);
-        background: radial-gradient(420px 200px at 0% 0%, var(--accent-bg-soft), transparent 70%);
-        pointer-events: none;
-    }
 }
 
 .app-detail-icon {

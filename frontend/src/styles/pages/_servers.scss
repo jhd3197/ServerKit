@@ -59,187 +59,6 @@
     .sk-gauge { width: 100%; }
 }
 
-.servers-hero {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
-    gap: $space-6;
-    align-items: stretch;
-    margin-bottom: $space-6;
-    padding: $space-8;
-    overflow: hidden;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
-    background:
-        linear-gradient(135deg, $accent-glow, transparent 38%),
-        linear-gradient(180deg, $bg-card, $bg-elevated);
-    box-shadow: $shadow-lg;
-
-    &::after {
-        content: '';
-        position: absolute;
-        inset: auto -8% -48% 32%;
-        height: 170px;
-        background: linear-gradient(90deg, transparent, $accent-glow, transparent);
-        transform: rotate(-7deg);
-        pointer-events: none;
-    }
-
-    h1 {
-        margin: $space-1 0 $space-2;
-        color: $text-primary;
-        font-size: clamp(32px, 5vw, 64px);
-        line-height: 0.95;
-        letter-spacing: -0.07em;
-    }
-
-    .page-description {
-        max-width: 620px;
-        margin: 0;
-        color: $text-secondary;
-        font-size: $font-size-md;
-        line-height: $line-height-relaxed;
-    }
-
-    @media (max-width: $breakpoint-lg) {
-        grid-template-columns: 1fr;
-    }
-
-    @media (max-width: $breakpoint-sm) {
-        padding: $space-5;
-    }
-}
-
-.servers-hero__copy,
-.servers-hero__status {
-    position: relative;
-    z-index: 1;
-}
-
-.servers-hero__copy {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 190px;
-}
-
-.servers-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    width: fit-content;
-    gap: $space-2;
-    color: $accent-primary;
-    font-family: $font-mono;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-bold;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-
-    &::before {
-        content: '';
-        width: 8px;
-        height: 8px;
-        border-radius: $radius-full;
-        background: currentColor;
-        box-shadow: 0 0 18px currentColor;
-    }
-}
-
-.servers-hero__status {
-    display: flex;
-    flex-direction: column;
-    gap: $space-4;
-    justify-content: space-between;
-}
-
-.servers-hero__actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: $space-2;
-    flex-wrap: wrap;
-
-    @media (max-width: $breakpoint-sm) {
-        justify-content: stretch;
-
-        .btn {
-            flex: 1;
-            justify-content: center;
-        }
-    }
-}
-
-.servers-health-panel {
-    padding: $space-5;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
-    background:
-        linear-gradient(180deg, $accent-glow, transparent),
-        $bg-card;
-    box-shadow: $shadow-sm;
-}
-
-.servers-health-panel__top,
-.servers-health-panel__meta {
-    display: flex;
-    justify-content: space-between;
-    gap: $space-3;
-}
-
-.servers-health-panel__top {
-    align-items: flex-start;
-    margin-bottom: $space-4;
-
-    span {
-        color: $text-tertiary;
-        font-size: $font-size-sm;
-    }
-
-    strong {
-        color: $text-primary;
-        font-family: $font-mono;
-        font-size: $font-size-3xl;
-        line-height: 1;
-    }
-}
-
-.servers-health-panel__meta {
-    margin-top: $space-3;
-    color: $text-tertiary;
-    font-size: $font-size-xs;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    flex-wrap: wrap;
-}
-
-.servers-health-bar {
-    display: flex;
-    width: 100%;
-    height: 12px;
-    overflow: hidden;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-full;
-    background: $bg-secondary;
-}
-
-.servers-health-bar__segment {
-    min-width: 0;
-    height: 100%;
-    transition: width $transition-slow;
-
-    &--online {
-        background: linear-gradient(90deg, $success, #84cc16);
-        box-shadow: 0 0 22px fade($success-raw, 35%);
-    }
-
-    &--connecting {
-        background: linear-gradient(90deg, $warning, #f97316);
-    }
-}
-
-.servers-health-bar__track {
-    flex: 1;
-}
-
 .servers-page {
     .stat-icon {
         &.all {
@@ -294,160 +113,6 @@
     }
 }
 
-.servers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: $space-4;
-}
-
-.server-card {
-    position: relative;
-    display: flex;
-    min-height: 100%;
-    flex-direction: column;
-    background:
-        linear-gradient(180deg, $accent-glow, transparent 34%),
-        $bg-card;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
-    overflow: hidden;
-    transition: transform $transition-base, border-color $transition-base, box-shadow $transition-base;
-
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0 0 auto;
-        height: 4px;
-        background: $text-tertiary;
-        opacity: 0.65;
-    }
-
-    &:hover {
-        transform: translateY(-3px);
-        border-color: $border-active;
-        box-shadow: $shadow-lg;
-    }
-
-    &.online {
-        &::before {
-            background: linear-gradient(90deg, $success, #84cc16);
-        }
-
-        &:hover {
-            border-color: $success;
-            box-shadow: 0 0 0 1px $success-border;
-        }
-    }
-
-    &.offline {
-        &::before {
-            background: linear-gradient(90deg, $danger, #f97316);
-        }
-    }
-
-    &.connecting::before {
-        background: linear-gradient(90deg, $warning, #f97316);
-    }
-}
-
-.server-card-header {
-    display: flex;
-    align-items: center;
-    gap: $space-3;
-    padding: $space-5 $space-4 $space-4;
-    border-bottom: 1px solid $border-subtle;
-}
-
-.server-avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border: 1px solid $border-subtle;
-    border-radius: 14px;
-    background:
-        linear-gradient(135deg, $accent-glow, transparent),
-        $bg-body;
-    color: $text-primary;
-    font-family: $font-mono;
-    font-size: $font-size-base;
-    font-weight: $font-weight-bold;
-}
-
-.server-status-indicator {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    background: currentColor;
-    box-shadow: 0 0 12px currentColor;
-}
-
-.server-info {
-    flex: 1;
-    min-width: 0;
-
-    .server-name {
-        font-size: $font-size-base;
-        font-weight: $font-weight-semibold;
-        color: $text-primary;
-        margin: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .server-hostname {
-        font-size: $font-size-xs;
-        color: $text-tertiary;
-        font-family: $font-mono;
-    }
-}
-
-.server-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    padding: $space-1 $space-2;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-full;
-    background: $bg-body;
-    color: $text-tertiary;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-bold;
-    text-transform: capitalize;
-
-    &.online {
-        @include status-variant($success, $success-bg);
-        border-color: $success-border;
-    }
-
-    &.offline {
-        @include status-variant($danger, $danger-bg);
-        border-color: $danger-border;
-    }
-
-    &.connecting {
-        @include status-variant($warning, $warning-bg);
-        border-color: $warning-border;
-    }
-}
-
-.server-card-body {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    padding: $space-4;
-}
-
-.server-meta {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: $space-3;
-    margin-bottom: $space-4;
-}
-
 .meta-item {
     display: flex;
     flex-direction: column;
@@ -467,117 +132,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-    }
-}
-
-.server-metrics-mini {
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    margin: auto 0 $space-4;
-    padding: $space-3;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
-    background: $bg-body;
-}
-
-.metric-bar {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-
-    .metric-label {
-        font-size: $font-size-xs;
-        color: $text-tertiary;
-        width: 32px;
-    }
-
-    .bar-track {
-        flex: 1;
-        height: 7px;
-        background: $bg-secondary;
-        border-radius: $radius-full;
-        overflow: hidden;
-    }
-
-    .bar-fill {
-        height: 100%;
-        border-radius: $radius-full;
-        transition: width $transition-base;
-
-        &.cpu {
-            background: $accent-primary;
-        }
-
-        &.memory {
-            background: $success;
-        }
-
-        &.disk {
-            background: $warning;
-        }
-    }
-
-    .metric-value {
-        font-size: $font-size-xs;
-        font-family: $font-mono;
-        color: $text-tertiary;
-        width: 32px;
-        text-align: right;
-    }
-}
-
-.server-telemetry-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: $space-2;
-    margin: auto 0 $space-4;
-    padding: $space-3;
-    border: 1px dashed $border-active;
-    border-radius: $radius-xl;
-    background: $bg-body;
-    color: $text-tertiary;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-semibold;
-
-    svg {
-        width: 14px;
-        height: 14px;
-    }
-}
-
-.server-group-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-1;
-    background: $bg-hover;
-    color: $text-secondary;
-    font-size: $font-size-xs;
-    padding: $space-1 $space-2;
-    border-radius: $radius-sm;
-    width: fit-content;
-}
-
-.server-card-footer {
-    display: flex;
-    gap: $space-2;
-    padding: $space-3 $space-4;
-    background: $bg-hover;
-    border-top: 1px solid $border-subtle;
-
-    .btn {
-        flex: 1;
-        justify-content: center;
-    }
-
-    .btn-sm {
-        padding: $space-2 $space-3;
-        font-size: $font-size-xs;
-    }
-
-    .server-ping-button {
-        flex: 0 0 48px;
     }
 }
 
@@ -823,50 +377,6 @@
     p {
         color: $text-secondary;
         margin: 0 0 $space-6;
-    }
-}
-
-.servers-empty-state {
-    position: relative;
-    overflow: hidden;
-    max-width: 760px;
-    margin: 0 auto;
-    background:
-        radial-gradient(circle at 50% -20%, $accent-glow, transparent 38%),
-        $bg-card;
-
-    .servers-eyebrow {
-        margin: 0 auto $space-3;
-    }
-}
-
-.servers-empty-state__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 92px;
-    height: 92px;
-    margin-bottom: $space-4;
-    border: 1px solid $border-subtle;
-    border-radius: 28px;
-    background: $bg-body;
-
-    .empty-icon {
-        margin: 0;
-        color: $accent-primary;
-    }
-}
-
-@keyframes servers-pulse {
-    0%,
-    100% {
-        opacity: 0.55;
-        transform: scale(0.96);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1);
     }
 }
 
@@ -2487,9 +1997,8 @@
 // SERVER DETAIL — REDESIGNED HEADER
 // ============================================
 
-// Demo `.detail-header` look: flat surface gradient, soft border, radial
-// accent wash top-left, mono dotsep meta. All existing regions kept
-// (avatar, title row + copy-chip, meta, description, actions).
+// Detail header: flat surface, soft border, mono dotsep meta. All existing
+// regions kept (avatar, title row + copy-chip, meta, description, actions).
 .server-detail-header {
     position: relative;
     display: flex;
@@ -2498,19 +2007,11 @@
     gap: $space-5;
     padding: 22px;
     margin-bottom: $space-5;
-    background: linear-gradient(120deg, var(--surface) 0%, var(--surface-2) 100%);
+    background: var(--surface);
     border: 1px solid var(--border-soft);
     border-radius: var(--radius-lg);
     overflow: hidden;
     flex-wrap: wrap;
-
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(420px 200px at 0% 0%, fade($accent-primary-raw, 8%), transparent 70%);
-        pointer-events: none;
-    }
 
     &__main {
         position: relative;
@@ -2529,7 +2030,7 @@
         align-items: center;
         justify-content: center;
         border-radius: 14px;
-        background: linear-gradient(150deg, var(--surface-3), var(--surface-2));
+        background: var(--surface-2);
         border: 1px solid var(--border);
         color: var(--text-dim);
         font-family: var(--mono);

@@ -346,8 +346,7 @@
         top: 0;
         z-index: 6;
         border-bottom: 1px solid var(--border-soft);
-        // Top-lit, not a flat fill — the header reads as a lid on the surface.
-        background: linear-gradient(180deg, var(--surface-2), var(--surface));
+        background: var(--surface-2);
         border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     }
 
