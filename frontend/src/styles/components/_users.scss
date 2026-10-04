@@ -437,25 +437,6 @@
     }
 }
 
-.invite-link-display {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    padding: $space-3;
-    background: $bg-hover;
-    border: 1px solid $border-default;
-    border-radius: $radius-md;
-    margin-top: $space-2;
-
-    code {
-        flex: 1;
-        font-family: $font-mono;
-        font-size: $font-size-sm;
-        word-break: break-all;
-        color: $text-primary;
-    }
-}
-
 .invitation-status {
     display: inline-flex;
     align-items: center;
@@ -810,12 +791,14 @@
         flex-direction: column;
         gap: $space-1;
 
-        span {
+        // The caption only: a bare `span` also matched the Select's value.
+        > span {
             font-size: $font-size-xs;
             color: $text-secondary;
         }
 
-        select,
+        > .ui-select-trigger { min-width: 160px; }
+
         input {
             min-width: 160px;
             padding: $space-2 $space-3;
@@ -854,19 +837,6 @@
             margin: 0 0 $space-2;
             font-size: $font-size-sm;
             font-weight: 600;
-        }
-
-        &-row {
-            display: flex;
-            align-items: center;
-            gap: $space-3;
-
-            code {
-                flex: 1;
-                overflow-x: auto;
-                white-space: nowrap;
-                font-size: $font-size-xs;
-            }
         }
     }
 

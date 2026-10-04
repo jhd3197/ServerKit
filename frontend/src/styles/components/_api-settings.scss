@@ -314,23 +314,6 @@
         margin-bottom: $space-4;
     }
 
-    .api-key-modal__key-display {
-        display: flex;
-        align-items: center;
-        gap: $space-2;
-        padding: $space-3;
-        background: $bg-elevated;
-        border-radius: $radius-md;
-        overflow-x: auto;
-
-        code {
-            flex: 1;
-            font-family: $font-mono;
-            font-size: $font-size-sm;
-            word-break: break-all;
-        }
-    }
-
     .api-key-modal__tiers {
         display: grid;
         grid-template-columns: repeat(3, 1fr);

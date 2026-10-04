@@ -260,14 +260,12 @@
         }
     }
 
+    // Shared Select trigger, kept at the search box's 36px and sized to content
+    // so it sits in the toolbar instead of claiming a form-field row.
     .lines-select {
+        width: auto;
         height: 36px;
         min-width: 120px;
-        padding: 0 $space-3;
-        border: 1px solid $border-subtle;
-        border-radius: $radius-md;
-        background: $bg-body;
-        color: $text-primary;
         font-size: $font-size-sm;
     }
 }

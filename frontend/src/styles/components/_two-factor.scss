@@ -191,16 +191,6 @@
     padding: $space-4;
     border-radius: $radius-md;
     text-align: center;
-
-    .secret-key {
-        display: block;
-        font-size: $font-size-lg;
-        padding: $space-2;
-        margin-top: $space-2;
-        background: $bg-body;
-        border-radius: $radius-sm;
-        word-break: break-all;
-    }
 }
 
 .manual-entry {
@@ -264,24 +254,6 @@
     color: $danger;
     font-size: $font-size-sm;
     margin-top: $space-1;
-}
-
-// Backup Codes Grid
-.backup-codes-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: $space-2;
-    margin-bottom: $space-6;
-}
-
-.backup-code {
-    display: block;
-    padding: $space-2 $space-4;
-    background: $bg-hover;
-    border-radius: $radius-sm;
-    text-align: center;
-    font-size: $font-size-md;
-    font-family: $font-mono;
 }
 
 .backup-codes-actions {

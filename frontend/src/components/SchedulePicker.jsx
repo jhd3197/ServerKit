@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Check, AlertTriangle } from 'lucide-react';
 import { SegControl } from '@/components/ds';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
 
@@ -292,40 +293,52 @@ export default function SchedulePicker({ value = '', onChange, compact = false, 
                     {builder.frequency !== 'hourly' && (
                         <div className="schedule-picker__row">
                             <label htmlFor="sp-hour">{t('app.schedulePicker.atHour', 'At hour')}</label>
-                            <select
-                                id="sp-hour"
-                                value={builder.hour}
-                                onChange={(e) => patchBuilder({ hour: Number(e.target.value) })}
+                            <Select
+                                value={String(builder.hour)}
+                                onValueChange={(v) => patchBuilder({ hour: Number(v) })}
                             >
-                                {Array.from({ length: 24 }).map((_, h) => (
-                                    <option key={h} value={h}>{pad2(h)}</option>
-                                ))}
-                            </select>
+                                <SelectTrigger id="sp-hour" size="sm">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Array.from({ length: 24 }).map((_, h) => (
+                                        <SelectItem key={h} value={String(h)}>{pad2(h)}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                             <label htmlFor="sp-minute">minute</label>
-                            <select
-                                id="sp-minute"
-                                value={builder.minute}
-                                onChange={(e) => patchBuilder({ minute: Number(e.target.value) })}
+                            <Select
+                                value={String(builder.minute)}
+                                onValueChange={(v) => patchBuilder({ minute: Number(v) })}
                             >
-                                {Array.from({ length: 60 }).map((_, m) => (
-                                    <option key={m} value={m}>{pad2(m)}</option>
-                                ))}
-                            </select>
+                                <SelectTrigger id="sp-minute" size="sm">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Array.from({ length: 60 }).map((_, m) => (
+                                        <SelectItem key={m} value={String(m)}>{pad2(m)}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                     )}
 
                     {builder.frequency === 'hourly' && (
                         <div className="schedule-picker__row">
                             <label htmlFor="sp-minute-h">{t('app.schedulePicker.atMinute', 'At minute')}</label>
-                            <select
-                                id="sp-minute-h"
-                                value={builder.minute}
-                                onChange={(e) => patchBuilder({ minute: Number(e.target.value) })}
+                            <Select
+                                value={String(builder.minute)}
+                                onValueChange={(v) => patchBuilder({ minute: Number(v) })}
                             >
-                                {Array.from({ length: 60 }).map((_, m) => (
-                                    <option key={m} value={m}>{pad2(m)}</option>
-                                ))}
-                            </select>
+                                <SelectTrigger id="sp-minute-h" size="sm">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Array.from({ length: 60 }).map((_, m) => (
+                                        <SelectItem key={m} value={String(m)}>{pad2(m)}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                     )}
 

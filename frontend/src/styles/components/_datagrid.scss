@@ -597,36 +597,18 @@
         color: var(--text-ghost);
     }
 
-    &__sel {
-        position: relative;
-        display: flex;
-        align-items: center;
+    // The shared compact Select trigger, sized down to the pager's mono scale.
+    &__sel.ui-select-trigger {
+        height: 24px;
         margin-right: 6px;
-
-        select {
-            appearance: none;
-            padding: 4px 20px 4px 8px;
-            border-radius: 7px;
-            border: 1px solid var(--border);
-            background: var(--surface-2);
-            color: var(--text-dim);
-            font-family: var(--mono);
-            font-size: 11px;
-            outline: none;
-            cursor: pointer;
-
-            &:hover { border-color: var(--border-strong); color: var(--text); }
-        }
-
-        svg {
-            position: absolute;
-            right: 5px;
-            pointer-events: none;
-            color: var(--text-ghost);
-        }
+        border-radius: 7px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-dim);
     }
 
-    button {
+    // Page arrows only: the rows-per-page trigger is a <button> too.
+    > button:not(.ui-select-trigger) {
         width: 26px;
         height: 24px;
         display: grid;
@@ -758,8 +740,7 @@
 
         svg { color: var(--text-ghost); flex-shrink: 0; }
 
-        input,
-        select {
+        input {
             width: 100%;
             min-width: 0;
             background: none;
@@ -770,9 +751,16 @@
             font-family: var(--mono);
         }
 
-        select { color: var(--text-dim); font-family: var(--sans); cursor: pointer; }
-
         input::placeholder { color: var(--text-ghost); font-family: var(--sans); }
+    }
+
+    // Filter operator: the shared compact Select, stretched to the menu width.
+    // Block-level flex fills the row both in the menu's flex column and in
+    // the plain-block `__scroll` list.
+    &__op.ui-select-trigger {
+        display: flex;
+        margin: 2px 4px 6px;
+        font-size: 12.5px;
     }
 
     &__quick {
@@ -1002,34 +990,12 @@
 
     &__value { grid-column: 1 / -1; }
 
-    &__sel {
-        position: relative;
-
-        select {
-            appearance: none;
-            width: 100%;
-            padding: 8px 22px 8px 10px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: var(--surface-2);
-            color: var(--text);
-            font-size: 12.5px;
-            font-family: inherit;
-            outline: none;
-            cursor: pointer;
-            text-overflow: ellipsis;
-
-            &:focus { border-color: var(--accent-dim); }
-        }
-
-        svg {
-            position: absolute;
-            right: 7px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: var(--text-ghost);
-        }
+    // Field / operator / on-off pickers: the shared compact Select, filling
+    // its grid cell instead of sizing to content.
+    &__sel.ui-select-trigger {
+        width: 100%;
+        min-width: 0;
+        font-size: 12.5px;
     }
 
     input[type='text'],

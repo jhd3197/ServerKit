@@ -11,6 +11,7 @@ import {
     optionsFor, ruleId, valueCounts,
 } from './fields';
 import { Button as SharedButton } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // The per-column header menu — one popover that owns everything you can do to
 // a column, so a toolbar stops being a parking lot of Sort/Columns/Group
@@ -159,17 +160,23 @@ export function ColumnMenu({
                         {isEnumish ? (
                             <div className="sk-gridmenu__scroll">
                                 {type === 'enum' && (
-                                    <div className="sk-gridmenu__mini">
-                                        <select
-                                            value={rule?.op || 'any'}
-                                            onChange={(e) => rule && writeRule({ ...rule, op: e.target.value })}
+                                    <Select
+                                        value={rule?.op || 'any'}
+                                        onValueChange={(op) => rule && writeRule({ ...rule, op })}
+                                    >
+                                        <SelectTrigger
+                                            size="sm"
+                                            className="sk-gridmenu__op"
                                             aria-label={t('app.columnMenu.filterOperator', '{{label}} filter operator', { label: label })}
                                         >
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
                                             {OPS.enum.map(([op, text]) => (
-                                                <option key={op} value={op}>{text}</option>
+                                                <SelectItem key={op} value={op}>{text}</SelectItem>
                                             ))}
-                                        </select>
-                                    </div>
+                                        </SelectContent>
+                                    </Select>
                                 )}
                                 {options.map((option) => {
                                     const on = type === 'bool'
@@ -193,17 +200,23 @@ export function ColumnMenu({
                             </div>
                         ) : (
                             <>
-                                <div className="sk-gridmenu__mini">
-                                    <select
-                                        value={rule?.op || OPS[type][0][0]}
-                                        onChange={(e) => writeValue(draft, e.target.value)}
+                                <Select
+                                    value={rule?.op || OPS[type][0][0]}
+                                    onValueChange={(op) => writeValue(draft, op)}
+                                >
+                                    <SelectTrigger
+                                        size="sm"
+                                        className="sk-gridmenu__op"
                                         aria-label={t('app.columnMenu.filterOperator', '{{label}} filter operator', { label: label })}
                                     >
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
                                         {OPS[type].map(([op, text]) => (
-                                            <option key={op} value={op}>{text}</option>
+                                            <SelectItem key={op} value={op}>{text}</SelectItem>
                                         ))}
-                                    </select>
-                                </div>
+                                    </SelectContent>
+                                </Select>
                                 <div className="sk-gridmenu__mini sk-gridmenu__mini--input">
                                     {type === 'num' ? <Filter size={13} /> : <Search size={13} />}
                                     <input

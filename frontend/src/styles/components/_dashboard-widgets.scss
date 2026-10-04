@@ -243,63 +243,6 @@ $skw-z-tv: 200;
     }
 }
 
-// Refresh-interval select. Sizing only — the select chrome comes from the
-// shared form styles.
-.skw-refresh {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-
-    select {
-        // `appearance: none` matters: without it the browser paints its own
-        // control, which on a dark panel arrives as a light box with a
-        // system chevron and ignores every rule below.
-        appearance: none;
-        height: 32px;
-        padding: 0 26px 0 10px;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        background: var(--surface-2);
-        color: var(--text-dim);
-        font-family: var(--mono);
-        font-size: 11.5px;
-        cursor: pointer;
-        outline: none;
-        transition: 0.13s;
-
-        &:hover {
-            color: var(--text);
-            border-color: var(--border-strong);
-            background: var(--surface-3);
-        }
-
-        &:focus-visible {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-bg);
-        }
-
-        // Native popups are drawn by the OS; name the colours or a dark theme
-        // gets white-on-white options.
-        option {
-            background: var(--surface-2);
-            color: var(--text);
-        }
-    }
-
-    // Our own chevron, since the native one is gone.
-    &::after {
-        content: '';
-        position: absolute;
-        right: 10px;
-        width: 6px;
-        height: 6px;
-        border-right: 1.5px solid var(--text-faint);
-        border-bottom: 1.5px solid var(--text-faint);
-        transform: translateY(-2px) rotate(45deg);
-        pointer-events: none;
-    }
-}
-
 // Square icon button used across the bar and the widget head.
 .skw-iconbtn {
     width: 32px;

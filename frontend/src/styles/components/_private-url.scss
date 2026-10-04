@@ -95,22 +95,6 @@
         margin-bottom: $space-3;
     }
 
-    .url-label {
-        color: $text-secondary;
-        font-size: $font-size-sm;
-    }
-
-    .url-value {
-        background: $bg-secondary;
-        padding: $space-2 $space-3;
-        border-radius: $radius-sm;
-        font-family: $font-mono;
-        font-size: $font-size-sm;
-        color: $text-primary;
-        word-break: break-all;
-        user-select: all;
-    }
-
     .url-actions {
         display: flex;
         gap: $space-2;

@@ -374,17 +374,24 @@ const EnvironmentVariables = ({ appId }) => {
                         }}
                     />
                     {composeServices.length > 0 && (
-                        <select
-                            className="env-target-select__control"
-                            value={editTargetService}
-                            onChange={(e) => setEditTargetService(e.target.value)}
-                            title={t('app.environmentVariables.injectThisVariableIntoASingle', 'Inject this variable into a single compose service')}
+                        <Select
+                            value={editTargetService || EVERY_SERVICE}
+                            onValueChange={(v) => setEditTargetService(v === EVERY_SERVICE ? '' : v)}
                         >
-                            <option value="">{t('app.environmentVariables.allServices', 'All services')}</option>
-                            {composeServices.map((svc) => (
-                                <option key={svc} value={svc}>{svc}</option>
-                            ))}
-                        </select>
+                            <SelectTrigger
+                                size="sm"
+                                title={t('app.environmentVariables.injectThisVariableIntoASingle', 'Inject this variable into a single compose service')}
+                                aria-label={t('app.environmentVariables.appliesTo', 'Applies to')}
+                            >
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={EVERY_SERVICE}>{t('app.environmentVariables.allServices', 'All services')}</SelectItem>
+                                {composeServices.map((svc) => (
+                                    <SelectItem key={svc} value={svc}>{svc}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     )}
                     <Button size="sm" onClick={() => handleUpdate(ev.key)}>{t('common.actions.save', 'Save')}</Button>
                     <Button variant="outline" size="sm" onClick={cancelEditing}>{t('common.actions.cancel', 'Cancel')}</Button>

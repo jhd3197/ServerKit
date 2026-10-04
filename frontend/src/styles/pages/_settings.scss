@@ -800,18 +800,6 @@
     margin-left: $space-1;
 }
 
-// One-time login link form (Settings -> Users). The field's caption rule in
-// _users.scss targets every descendant span, which includes the Select's
-// value; give the trigger back its own type and the old select's width.
-.login-links__field .ui-select-trigger {
-    min-width: 160px;
-
-    span {
-        font-size: inherit;
-        color: inherit;
-    }
-}
-
 // IconReferenceTab: leading magnifier inside the search field
 .search-input-wrapper {
     position: relative;
@@ -2604,9 +2592,7 @@
     }
     &__name { flex: 1; overflow-wrap: anywhere; font-family: $font-mono; }
     &__name small { display: block; margin-top: $space-1; color: $text-secondary; font-size: $font-size-xs; }
-    &__filters { padding: $space-3; display: flex; align-items: center; gap: $space-3;
-        select { @include input-base; min-width: 0; }
-    }
+    &__filters { padding: $space-3; display: flex; align-items: center; gap: $space-3; }
     @media (max-width: $breakpoint-sm) {
         flex-direction: column;
         align-items: stretch;

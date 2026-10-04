@@ -366,7 +366,7 @@ const Monitoring = () => {
                     </form>
 
                     {servers.length > 0 && (
-                        <FleetThresholdsPanel servers={servers} refreshKey={refreshKey} />
+                        <FleetThresholdsPanel refreshKey={refreshKey} />
                     )}
 
                     <div className="monitoring-delivery-layout">

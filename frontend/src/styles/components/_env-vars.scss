@@ -38,26 +38,6 @@
     text-transform: uppercase;
 }
 
-// "Applies to" compose-service select — used in the Add modal and the inline
-// edit row. Full-width inside a modal .form-group; intrinsic in the edit row.
-.env-target-select__control {
-    padding: $space-2 $space-3;
-    background: $bg-body;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
-    color: $text-primary;
-    font-size: $font-size-sm;
-    flex-shrink: 0;
-
-    &:hover {
-        border-color: $border-active;
-    }
-}
-
-.form-group .env-target-select__control {
-    width: 100%;
-}
-
 // Small "(optional)" tag + reassurance hint inside the Add Variable modal
 .env-optional {
     color: $text-tertiary;

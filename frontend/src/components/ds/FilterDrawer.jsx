@@ -15,9 +15,10 @@ import { useTranslation } from 'react-i18next';
 //
 //   <= 4 mutually-exclusive options, one dimension  ->  <SegControl/>, inline
 //   more options, or more than one dimension        ->  this drawer
-//   an unbounded list (servers, groups, versions)   ->  a plain <select>
+//   an unbounded list (servers, groups, versions)   ->  the shared Select
+//                                                       (@/components/ui/select)
 //
-// A raw <select> is never right for a fixed set of states, and a segmented
+// A dropdown is never right for a fixed set of states, and a segmented
 // control is never right for two dimensions at once.
 //
 //   groups = [

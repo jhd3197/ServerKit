@@ -6,6 +6,9 @@ import { Drawer, SegControl } from '@/components/ds';
 import { Switch } from '@/components/ui/switch';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import {
+    Select as UiSelect, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select';
+import {
     AGGREGATIONS, LINE_STYLES, SERIES_COLORS, getMetric,
     metricsForResource, metricsForSource,
 } from '../widgets/metrics';
@@ -115,18 +118,27 @@ function Group({ title, children }) {
     );
 }
 
+// Radix reserves '' for "no selection", so an empty option value rides this
+// sentinel inside the control and is handed back as '' (what the native
+// <select> used to emit). Values are strings either way, as before.
+const EMPTY_OPTION = '__none';
+const toItemValue = (value) => (value === '' || value == null ? EMPTY_OPTION : String(value));
+
 function Select({ value, onChange, options, label }) {
     return (
-        <select
-            className="skwe-edit__select"
-            value={value ?? ''}
-            aria-label={label}
-            onChange={(event) => onChange(event.target.value)}
+        <UiSelect
+            value={toItemValue(value)}
+            onValueChange={(next) => onChange(next === EMPTY_OPTION ? '' : next)}
         >
-            {options.map(([optionValue, optionLabel]) => (
-                <option key={optionValue} value={optionValue}>{optionLabel}</option>
-            ))}
-        </select>
+            <SelectTrigger size="sm" className="skwe-edit__select" aria-label={label}>
+                <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+                {options.map(([optionValue, optionLabel]) => (
+                    <SelectItem key={optionValue} value={toItemValue(optionValue)}>{optionLabel}</SelectItem>
+                ))}
+            </SelectContent>
+        </UiSelect>
     );
 }
 

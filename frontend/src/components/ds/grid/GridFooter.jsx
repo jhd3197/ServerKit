@@ -1,7 +1,8 @@
-import { ChevronDown, ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { byKey, columnLabel } from './fields';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 // Footer: what you are looking at on the left, how to page through it on the
 // right. The sort/group summary is here rather than in a toolbar chip because
@@ -33,17 +34,23 @@ export function GridFooter({
             <span className="sk-gridfoot__sp" />
             <div className="sk-gridpager">
                 <span className="sk-gridpager__label">{t('app.gridFooter.rows', 'Rows')}</span>
-                <div className="sk-gridpager__sel">
-                    <select
-                        value={perPage}
-                        onChange={(e) => onPerPage(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+                {/* Radix values are strings: 'all' stays 'all', page sizes go back to numbers. */}
+                <Select
+                    value={String(perPage)}
+                    onValueChange={(v) => onPerPage(v === 'all' ? 'all' : Number(v))}
+                >
+                    <SelectTrigger
+                        size="sm"
+                        className="sk-gridpager__sel"
                         aria-label={t('app.gridFooter.rowsPerPage', 'Rows per page')}
                     >
-                        {[10, 25, 50, 100].map((n) => <option key={n} value={n}>{n}</option>)}
-                        <option value="all">{t('common.labels.all', 'All')}</option>
-                    </select>
-                    <ChevronDown size={12} />
-                </div>
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {[10, 25, 50, 100].map((n) => <SelectItem key={n} value={String(n)}>{n}</SelectItem>)}
+                        <SelectItem value="all">{t('common.labels.all', 'All')}</SelectItem>
+                    </SelectContent>
+                </Select>
                 <SharedButton variant="unstyled" type="button" disabled={page <= 1} onClick={() => onPage(1)} aria-label={t('app.gridFooter.firstPage', 'First page')}>
                     <ChevronsLeft size={13} />
                 </SharedButton>

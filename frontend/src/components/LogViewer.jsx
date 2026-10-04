@@ -2,6 +2,7 @@ import { Search, RefreshCw, FileText } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
 
 export function LogViewer({
@@ -76,15 +77,22 @@ export function LogViewer({
                             />
                         </div>
                         {onLineCountChange && (
-                            <select
-                                value={lineCount}
-                                onChange={(e) => onLineCountChange(parseInt(e.target.value, 10))}
-                                className="form-select lines-select"
+                            <Select
+                                value={String(lineCount)}
+                                onValueChange={(v) => onLineCountChange(parseInt(v, 10))}
                             >
-                                {lineCountOptions.map(n => (
-                                    <option key={n} value={n}>{n} lines</option>
-                                ))}
-                            </select>
+                                <SelectTrigger
+                                    className="lines-select"
+                                    aria-label={t('app.logViewer.linesToShow', 'Lines to show')}
+                                >
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {lineCountOptions.map(n => (
+                                        <SelectItem key={n} value={String(n)}>{n} lines</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         )}
                     </div>
                     <div className="toolbar-right">

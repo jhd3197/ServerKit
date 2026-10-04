@@ -165,7 +165,6 @@ $skwe-pane-w: 340px;
     // input kept its user-agent default and rendered as a white box on the dark
     // panel. Adding a wrapper here is fine; leaving the control unnamed is not.
     &__field,
-    &__select,
     &__textarea {
         width: 100%;
         padding: 7px 9px;
@@ -187,16 +186,19 @@ $skwe-pane-w: 340px;
         }
     }
 
-    &__select {
-        padding-right: 24px;
-        cursor: pointer;
+    // The shared compact Select trigger, filling its column and wearing the
+    // inspector's field skin so it lines up with the inputs around it.
+    &__select.ui-select-trigger {
+        width: 100%;
+        min-width: 0;
+        border-color: var(--border);
+        border-radius: 7px;
+        background: var(--surface-2);
+        color: var(--text);
+        font-size: 12.5px;
 
-        // Most engines inherit the control's colours into the popup list, but
-        // not all of them — name it so the options are never white-on-white.
-        option {
-            background: var(--surface-2);
-            color: var(--text);
-        }
+        &:focus,
+        &:focus-visible { border-color: var(--accent); }
     }
 
     // Numeric fields (thresholds) read as values, not prose.
@@ -279,8 +281,8 @@ $skwe-pane-w: 340px;
         // select takes the rest of the row.
         &--solo { grid-template-columns: 18px 1fr 26px; }
 
-        .skwe-edit__select {
-            padding: 6px 22px 6px 8px;
+        .skwe-edit__select.ui-select-trigger {
+            padding-inline: 8px;
             font-size: 11.5px;
         }
     }
