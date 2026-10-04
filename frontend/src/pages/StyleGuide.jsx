@@ -196,7 +196,7 @@ export default function StyleGuide() {
                             </p>
                             <p className="styleguide__code-sample">
                                 <span className="styleguide__description styleguide__description--muted">$font-mono:</span><br />
-                                {'const server = createApp(); // IBM Plex Mono'}
+                                <code>{'const server = createApp(); // IBM Plex Mono'}</code>
                             </p>
                         </SharedCard>
 

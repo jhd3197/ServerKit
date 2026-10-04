@@ -26,6 +26,7 @@
 
     &__font-sample { font-family: $font-main; margin-bottom: $space-4; }
     &__code-sample { font-family: $font-mono; font-size: $text-base; }
+    &__code-sample code { font: inherit; }
     &__weight-sample { margin-bottom: $space-2; }
 
     &__token-row {
