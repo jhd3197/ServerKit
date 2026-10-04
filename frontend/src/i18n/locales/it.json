@@ -2889,7 +2889,6 @@
             "extensionUpdatedToV": "Estensione \"{{displayname}}\" aggiornata a v{{version}}.",
             "failedToLoadExtensions": "Impossibile caricare le estensioni",
             "failedToSaveConfiguration": "Impossibile salvare la configurazione",
-            "featured": "In primo piano",
             "filterExtensions": "Filtra le estensioni",
             "frontend": "Fine frontale",
             "install": "Installare",

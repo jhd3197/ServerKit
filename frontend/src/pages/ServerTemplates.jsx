@@ -1,4 +1,3 @@
-import { Card as SharedCard } from '@/components/ui/card';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
@@ -16,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { DataTable, Pill } from '@/components/ds';
+import { DataTable, Pill, CatalogCard, CatalogGrid } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
@@ -40,6 +39,12 @@ const CATEGORY_LABELS = {
 };
 
 const categoryLabel = (tmpl) => CATEGORY_LABELS[tmpl.category] || tmpl.category || 'General';
+
+// Library card facts: a zero count is left out rather than printed.
+const countLabel = (n, one, many) => {
+    if (!n) return null;
+    return n === 1 ? one : many(n);
+};
 
 // Auto-remediation is three states, not two booleans, and the difference is
 // the whole risk story: Manual never touches a server, "on approval" waits for
@@ -369,8 +374,8 @@ const ServerTemplates = () => {
             value: categoryLabel,
             groupValue: categoryLabel,
             sortValue: categoryLabel,
-            // Badge, not Pill: the library cards label this exact field with a
-            // Badge, and the same datum should not change shape between tabs.
+            // Badge, not Pill: a category is a neutral label, not a status, so
+            // it gets no tone.
             render: (tmpl) => <Badge variant="outline">{categoryLabel(tmpl)}</Badge>,
         },
         {
@@ -588,27 +593,33 @@ const ServerTemplates = () => {
                 </TabsContent>
 
                 <TabsContent value="library">
-                    <div className="templates-grid">
+                    <CatalogGrid className="server-templates-library">
                         {Object.entries(library).map(([key, tmpl]) => (
-                            <SharedCard variant="legacy" key={key} className="template-card card">
-                                <div className="template-card__header">
-                                    <h3>{tmpl.name}</h3>
-                                    <Badge variant="outline">{CATEGORY_LABELS[tmpl.category] || tmpl.category}</Badge>
-                                </div>
-                                <p className="template-card__desc">{tmpl.description}</p>
-                                <div className="template-card__spec">
-                                    {tmpl.packages?.length > 0 && <span>{tmpl.packages.length} packages</span>}
-                                    {tmpl.services?.length > 0 && <span>{tmpl.services.length} services</span>}
-                                    {tmpl.firewall_rules?.length > 0 && <span>{tmpl.firewall_rules.length} {t('app.serverTemplates.firewallRules', 'firewall rules')}</span>}
-                                </div>
-                                <div className="template-card__actions">
-                                    <Button size="sm" onClick={() => handleCreateFromLibrary(key)}>
+                            <CatalogCard
+                                key={key}
+                                icon={<LayoutTemplate size={18} />}
+                                title={tmpl.name}
+                                tag={categoryLabel(tmpl)}
+                                description={tmpl.description}
+                                facts={[
+                                    countLabel(tmpl.packages?.length,
+                                        t('app.serverTemplates.onePackage', '1 package'),
+                                        (n) => t('app.serverTemplates.nPackages', '{{n}} packages', { n })),
+                                    countLabel(tmpl.services?.length,
+                                        t('app.serverTemplates.oneService', '1 service'),
+                                        (n) => t('app.serverTemplates.nServices', '{{n}} services', { n })),
+                                    countLabel(tmpl.firewall_rules?.length,
+                                        t('app.serverTemplates.oneFirewallRule', '1 firewall rule'),
+                                        (n) => `${n} ${t('app.serverTemplates.firewallRules', 'firewall rules')}`),
+                                ].filter(Boolean).join(' · ')}
+                                action={(
+                                    <Button variant="outline" size="sm" onClick={() => handleCreateFromLibrary(key)}>
                                         {t('app.serverTemplates.useTemplate', 'Use Template')}
                                     </Button>
-                                </div>
-                            </SharedCard>
+                                )}
+                            />
                         ))}
-                    </div>
+                    </CatalogGrid>
                 </TabsContent>
             </Tabs>
 

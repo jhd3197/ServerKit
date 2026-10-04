@@ -1455,13 +1455,6 @@ $dbx-sqlite: #3d8fd1;
     height: 24px;
     flex-shrink: 0;
     color: $text-secondary;
-
-    &--lg {
-        width: 38px;
-        height: 38px;
-        background: $bg-tertiary;
-        border-radius: $radius-md;
-    }
 }
 
 .dbx-eng-img { object-fit: contain; border-radius: 3px; }
@@ -1476,23 +1469,6 @@ $dbx-sqlite: #3d8fd1;
 }
 
 .dbx-eng-sub {
-    color: $text-tertiary;
-    font-family: $font-mono;
-    font-size: 11px;
-    @include dbx-trunc;
-}
-
-.dbx-eng-family {
-    flex-shrink: 0;
-    color: $text-tertiary;
-    font-family: $font-mono;
-    font-size: 10px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-}
-
-.dbx-eng-facts {
-    min-width: 0;
     color: $text-tertiary;
     font-family: $font-mono;
     font-size: 11px;
@@ -1531,72 +1507,6 @@ $dbx-sqlite: #3d8fd1;
     padding: 11px 13px;
     border-top: 1px solid $border-subtle;
     &:first-child { border-top: none; }
-}
-
-.dbx-engine-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
-    gap: $space-3;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.dbx-engine-card {
-    display: flex;
-
-    // The whole card is the hit target — a card you can only activate by its
-    // small "Install" label is a card that reads as clickable and isn't.
-    &__hit {
-        display: flex;
-        flex-direction: column;
-        gap: 9px;
-        width: 100%;
-        min-height: 168px;
-        padding: $space-3;
-        background: $bg-elevated;
-        border: 1px solid $border-default;
-        border-radius: $radius-md;
-        text-align: left;
-        cursor: pointer;
-        transition: border-color $transition-fast, background $transition-fast, transform $transition-fast;
-
-        &:hover {
-            border-color: $accent-primary;
-            background: $bg-hover;
-            transform: translateY(-1px);
-        }
-        &:focus-visible { outline: 2px solid $accent-primary; outline-offset: 2px; }
-    }
-
-    &__top { display: flex; align-items: flex-start; gap: $space-2; }
-
-    &__desc {
-        flex: 1;
-        color: $text-tertiary;
-        font-size: $font-size-xs;
-        line-height: 1.5;
-    }
-
-    &__foot {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $space-2;
-    }
-
-    &__cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        flex-shrink: 0;
-        padding: 3px 10px;
-        background: $accent-primary;
-        border-radius: $radius-sm;
-        color: #fff;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-semibold;
-    }
 }
 
 // ─── Engine picker (create-database modal) ────────────────
@@ -1647,7 +1557,6 @@ $dbx-sqlite: #3d8fd1;
 
 @media (prefers-reduced-motion: reduce) {
     .dbx-spin { animation: none; }
-    .dbx-engine-card__hit:hover { transform: none; }
 }
 
 // ============================================

@@ -2889,7 +2889,6 @@
             "extensionUpdatedToV": "Ekstensi \"{{displayname}}\" diperbarui menjadi v{{version}}.",
             "failedToLoadExtensions": "Gagal memuat ekstensi",
             "failedToSaveConfiguration": "Gagal menyimpan konfigurasi",
-            "featured": "Unggulan",
             "filterExtensions": "Filter ekstensi",
             "frontend": "Bagian depan",
             "install": "Memasang",

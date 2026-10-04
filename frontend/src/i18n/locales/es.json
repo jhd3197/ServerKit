@@ -2890,7 +2890,6 @@
             "extensionUpdatedToV": "Extensión \"{{displayname}}\" actualizada a v{{version}}.",
             "failedToLoadExtensions": "No se pudieron cargar las extensiones",
             "failedToSaveConfiguration": "No se pudo guardar la configuración",
-            "featured": "Destacadas",
             "filterExtensions": "Filtrar extensiones",
             "frontend": "Frontend",
             "install": "Instalar",

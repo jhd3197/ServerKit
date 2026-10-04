@@ -2889,7 +2889,6 @@
             "extensionUpdatedToV": "확장 프로그램 \"{{displayname}}\"이(가) v{{version}}으로 업데이트되었습니다.",
             "failedToLoadExtensions": "확장 프로그램을 로드하지 못했습니다.",
             "failedToSaveConfiguration": "구성을 저장하지 못했습니다.",
-            "featured": "추천",
             "filterExtensions": "확장 프로그램 필터링",
             "frontend": "프런트엔드",
             "install": "설치",

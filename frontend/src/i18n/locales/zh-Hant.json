@@ -3080,7 +3080,6 @@
             "extensionUpdatedToV": "擴充“{{displayname}}”更新為 v{{version}}。",
             "failedToLoadExtensions": "無法載入擴充功能",
             "failedToSaveConfiguration": "儲存設定失敗",
-            "featured": "精選",
             "filterExtensions": "篩選擴充功能",
             "frontend": "前端",
             "install": "安裝",

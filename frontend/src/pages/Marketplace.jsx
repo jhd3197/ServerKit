@@ -17,7 +17,6 @@ import {
     ShieldCheck,
     ShieldQuestion,
     Sparkles,
-    Star,
     UploadCloud,
 } from 'lucide-react';
 import api from '../services/api';
@@ -30,6 +29,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
     SearchField, FilterDrawer, FilterButton, countActiveFilters,
+    CatalogCard, CatalogGrid,
 } from '@/components/ds';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import ManualInstallModal from '../components/marketplace/ManualInstallModal';
@@ -544,7 +544,7 @@ const Marketplace = () => {
 
                     <section className="marketplace-section">
                         {catalogEntries.length > 0 ? (
-                            <div className="extensions-grid">
+                            <CatalogGrid>
                                 {catalogEntries.map((entry) => (
                                     <CatalogExtensionCard
                                         key={entry.key}
@@ -552,10 +552,9 @@ const Marketplace = () => {
                                         installing={installing}
                                         onInstall={() => installEntry(entry)}
                                         onOpenDetail={setDetailEntry}
-                                        statusVariant={pluginStatusVariant}
                                     />
                                 ))}
-                            </div>
+                            </CatalogGrid>
                         ) : (
                             <EmptyState
                                 icon={Package}
@@ -719,8 +718,8 @@ const SectionHeader = ({ title, meta }) => (
 // glyph fallbacks keep the deterministic gradient so they stay legible. The
 // tile is chosen from what actually renders, so a registry logo that fails to
 // load falls back to the gradient instead of a white glyph on white. `base` is
-// the cover class ('extension-card__cover' or 'extension-detail__cover'); both
-// the card and the detail modal share this component.
+// the cover class ('sk-catalog-card__art' for the compact catalog-card icon,
+// 'extension-detail__cover' for the modal banner); both share this component.
 const ExtensionCover = ({ base, entry, category, brandSize = 34, children }) => {
     const [logoFailed, setLogoFailed] = useState(false);
     const rasterIcon = resolveExtensionIcon(entry.installKey, category);
@@ -779,77 +778,69 @@ const ExtensionGlyph = ({ entry, category, brandSize }) => {
     return <Icon aria-hidden="true" className="extension-card__glyph" />;
 };
 
-const CatalogExtensionCard = ({ entry, installing, onInstall, onOpenDetail, statusVariant }) => {
+// Trust as a plain-text fact on the card: only the two states that carry
+// information (a hash-bound review, or a registry entry nobody reviewed).
+// Built-in entries never carry a trust field, so they show nothing.
+const TrustFact = ({ entry }) => {
+    const { t } = useTranslation();
+    if (entry.trust === 'reviewed') {
+        const review = entry.review || {};
+        const title = review.reviewer && review.date
+            ? `Reviewed by ${review.reviewer} on ${review.date}`
+            : 'Reviewed by the ServerKit maintainers';
+        return <span title={title}>{t('app.marketplace.reviewed', 'Reviewed')}</span>;
+    }
+    if (entry.trust === 'unreviewed' && entry.source === 'registry') {
+        return <span>{t('app.marketplace.unreviewed', 'Unreviewed')}</span>;
+    }
+    return null;
+};
+
+const CatalogExtensionCard = ({ entry, installing, onInstall, onOpenDetail }) => {
     const { t } = useTranslation();
     const category = entry.category || 'utility';
     const isLocal = entry.source === 'local';
     const installedLabel = entry.status && entry.status !== 'active'
         ? titleCase(entry.status)
-        : 'Installed';
-
-    const openDetail = () => onOpenDetail(entry);
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            openDetail();
-        }
-    };
+        : t('app.marketplace.installed', 'Installed');
+    const hasTrustFact = entry.trust === 'reviewed'
+        || (entry.trust === 'unreviewed' && entry.source === 'registry');
 
     return (
-        <article
-            className={`extension-card extension-card--${entry.source} extension-card--${category} extension-card--clickable card${entry.featured ? ' extension-card--featured' : ''}`}
-            role="button"
-            tabIndex={0}
-            onClick={openDetail}
-            onKeyDown={handleKeyDown}
-        >
-            <ExtensionCover base="extension-card__cover" entry={entry} category={category} brandSize={34}>
-                {entry.featured && (
-                    <span className="extension-featured-badge">
-                        <Star aria-hidden="true" /> {t('app.marketplace.featured', 'Featured')}
-                    </span>
-                )}
-            </ExtensionCover>
-            <div className="extension-card__badges">
-                <Badge variant={sourceBadgeVariant(entry.source)}>{entry.sourceLabel}</Badge>
-                <Badge variant="outline">{titleCase(category)}</Badge>
-            </div>
-            <div className="extension-card__body">
-                <h3>{entry.displayName}</h3>
-                <p className="extension-card__desc">{entry.description}</p>
-            </div>
-            <div className="extension-card__footer">
-                <div className="extension-card__info">
-                    <span>v{entry.version}</span>
-                    {entry.firstParty ? (
-                        <Badge variant="secondary" className="extension-firstparty">{t('app.marketplace.byServerkit2', 'by ServerKit')}</Badge>
-                    ) : (
-                        entry.author && <span>by {entry.author}</span>
-                    )}
-                    <TrustBadge entry={entry} />
-                </div>
-                <div className="extension-card__actions">
-                    {entry.installed ? (
-                        <Badge variant={isLocal ? statusVariant(entry.status) : 'success'}>
-                            <CheckCircle2 aria-hidden="true" />
-                            {installedLabel}
-                        </Badge>
-                    ) : (
-                        <Button
-                            size="sm"
-                            disabled={installing}
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                onInstall(entry.installKey);
-                            }}
-                        >
-                            <DownloadCloud aria-hidden="true" />
-                            {installing ? 'Installing...' : 'Install'}
-                        </Button>
-                    )}
-                </div>
-            </div>
-        </article>
+        <CatalogCard
+            icon={<ExtensionCover base="sk-catalog-card__art" entry={entry} category={category} brandSize={20} />}
+            title={entry.displayName}
+            sub={t('app.marketplace.versionByAuthor', 'v{{version}} · by {{author}}', {
+                version: entry.version,
+                author: entry.author || 'ServerKit',
+            })}
+            tag={titleCase(category)}
+            featured={entry.featured}
+            description={entry.description}
+            facts={(isLocal || hasTrustFact) && (
+                <>
+                    {isLocal && t('app.marketplace.builtIn', 'Built-in')}
+                    {isLocal && hasTrustFact && ' · '}
+                    <TrustFact entry={entry} />
+                </>
+            )}
+            onClick={() => onOpenDetail(entry)}
+            action={entry.installed ? (
+                <span className="marketplace-installed-label">{installedLabel}</span>
+            ) : (
+                <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={installing}
+                    onClick={() => onInstall(entry.installKey)}
+                >
+                    <DownloadCloud aria-hidden="true" />
+                    {installing
+                        ? t('app.marketplace.installing', 'Installing...')
+                        : t('app.marketplace.install', 'Install')}
+                </Button>
+            )}
+        />
     );
 };
 

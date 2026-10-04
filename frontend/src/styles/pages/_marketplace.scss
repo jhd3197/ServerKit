@@ -84,160 +84,31 @@
         }
     }
 
-    .extensions-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: $space-3;
-    }
-
-    .extension-card {
-        display: flex;
-        flex-direction: column;
-        gap: $space-3;
-        padding: $space-4;
-        background: $bg-card;
-        transition:
-            transform $transition-base,
-            border-color $transition-base,
-            box-shadow $transition-base;
-
-        &:hover {
-            transform: translateY(-2px);
-            border-color: $border-active;
-            box-shadow: var(--shadow-lg);
-        }
-    }
-
-    .extension-card--clickable {
-        cursor: pointer;
-
-        &:focus-visible {
-            outline: 2px solid $accent-primary;
-            outline-offset: 2px;
-        }
-    }
-
-    // Cover banner. Gradient variant (per-slug hue set inline via
-    // extensionCoverStyle) holds the brand mark / manifest icon / category glyph.
-    .extension-card__cover {
-        position: relative;
+    // ExtensionCover in compact form: the CatalogCard's 36px icon slot. It
+    // keeps the cover's fallback chain (light tile for image art, per-slug
+    // gradient for the white brand mark / glyph), just at icon size.
+    .sk-catalog-card__art {
         display: grid;
         place-items: center;
-        height: 140px;
-        border-radius: $radius-md;
-        overflow: hidden;
+        width: 100%;
+        height: 100%;
 
-        // Illustrated-icon variant: a clean light tile that lets the colourful
-        // 3D art sit centred with breathing room (drawn for a light backdrop).
         &--icon {
             background: #fff;
         }
-    }
 
-    // Featured ribbon (top-left of the cover). Driven by manifest `featured`;
-    // the feature_score only orders cards, it is not shown.
-    .extension-featured-badge {
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        z-index: 2;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 3px 9px 3px 7px;
-        border-radius: $radius-full;
-        background: linear-gradient(135deg, #f7b733, #fc9d3c);
-        color: #1c1200;
-        font-size: 11px;
-        font-weight: 700;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+        .extension-card__brand,
+        .extension-card__glyph {
+            color: rgba(255, 255, 255, 0.92);
+        }
 
-        svg {
-            width: 12px;
-            height: 12px;
-            fill: currentColor;
+        .extension-card__glyph {
+            width: 20px;
+            height: 20px;
         }
     }
 
-    .extension-card--featured {
-        border-color: rgba(247, 183, 51, 0.5);
-        box-shadow: 0 0 0 1px rgba(247, 183, 51, 0.22);
-    }
-
-    .extension-card__brand,
-    .extension-card__glyph {
-        color: rgba(255, 255, 255, 0.92);
-    }
-
-    .extension-card__glyph {
-        width: 34px;
-        height: 34px;
-    }
-
-    // Registry logos and bundled illustrated icons share one size (never
-    // stretched or zoomed) so every card reads consistently with room around
-    // the art; registry logos are normalized to the same fill at the source.
-    .extension-card__icon {
-        width: 92px;
-        height: 92px;
-        max-width: 66%;
-        object-fit: contain;
-    }
-
-    .extension-card__footer,
-    .extension-card__info,
-    .extension-card__actions {
-        display: flex;
-        align-items: center;
-    }
-
-    .extension-card__footer {
-        justify-content: space-between;
-        gap: $space-3;
-    }
-
-    .extension-card__badges {
-        display: flex;
-        align-items: center;
-        gap: $space-2;
-        flex-wrap: wrap;
-        min-width: 0;
-    }
-
-    .extension-card__body {
-        min-width: 0;
-
-        h3 {
-            margin: 0 0 $space-2;
-            color: $text-primary;
-            font-size: $font-size-md;
-            line-height: $line-height-tight;
-            letter-spacing: 0;
-        }
-    }
-
-    .extension-card__desc {
-        display: -webkit-box;
-        min-height: 40px;
-        margin: 0;
-        overflow: hidden;
-        color: $text-secondary;
-        font-size: $font-size-base;
-        line-height: $line-height-normal;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-    }
-
-    .extension-card__footer {
-        margin-top: auto;
-        padding-top: $space-3;
-        border-top: 1px solid $border-subtle;
-    }
-
-    .extension-card__info {
-        flex-wrap: wrap;
-        gap: $space-2;
-        min-width: 0;
+    .marketplace-installed-label {
         color: $text-tertiary;
         font-size: $font-size-sm;
     }
@@ -360,10 +231,6 @@
             }
         }
 
-        .extensions-grid {
-            grid-template-columns: 1fr;
-        }
-
         .installed-item {
             align-items: flex-start;
             flex-direction: column;
@@ -383,23 +250,13 @@
             align-items: flex-start;
             flex-direction: column;
         }
-
-        .extension-card__footer {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-
-        .extension-card__actions,
-        .extension-card__actions .btn {
-            width: 100%;
-        }
     }
 }
 
-// First-party "by ServerKit" badge. Rendered both inside .marketplace-page
-// (cards) and inside the detail Modal (a Radix portal outside the page tree),
-// so it lives at the root. Matches the `secondary` variant selector specificity
-// and wins on source order to apply the accent tint.
+// First-party "by ServerKit" badge, rendered in the detail Modal (a Radix
+// portal outside the page tree), so it lives at the root. Matches the
+// `secondary` variant selector specificity and wins on source order to apply
+// the accent tint.
 [data-slot='badge'].extension-firstparty {
     gap: 4px;
     border-color: var(--accent-dim);

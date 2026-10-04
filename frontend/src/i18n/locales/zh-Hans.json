@@ -2889,7 +2889,6 @@
             "extensionUpdatedToV": "扩展程序“{{displayname}}”已更新至 v{{version}}。",
             "failedToLoadExtensions": "无法加载扩展",
             "failedToSaveConfiguration": "保存配置失败",
-            "featured": "精选",
             "filterExtensions": "过滤器扩展",
             "frontend": "前端",
             "install": "安装",

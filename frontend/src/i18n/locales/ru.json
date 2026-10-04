@@ -2889,7 +2889,6 @@
             "extensionUpdatedToV": "Расширение \"{{displayname}}\" обновлено до версии v{{version}}.",
             "failedToLoadExtensions": "Не удалось загрузить расширения.",
             "failedToSaveConfiguration": "Не удалось сохранить конфигурацию.",
-            "featured": "Рекомендуемые",
             "filterExtensions": "Фильтровать расширения",
             "frontend": "Внешний интерфейс",
             "install": "Установить",

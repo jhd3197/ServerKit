@@ -2889,7 +2889,6 @@
             "extensionUpdatedToV": "Tiện ích mở rộng \"{{displayname}}\" đã được cập nhật thành v{{version}}.",
             "failedToLoadExtensions": "Không tải được tiện ích mở rộng",
             "failedToSaveConfiguration": "Không lưu được cấu hình",
-            "featured": "Nổi bật",
             "filterExtensions": "Lọc tiện ích mở rộng",
             "frontend": "Giao diện người dùng",
             "install": "Cài đặt",

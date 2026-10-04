@@ -4,7 +4,7 @@ import {
     Layers, Check, Download, Loader2, PackageX, ShieldAlert, RefreshCw, ChevronRight,
 } from 'lucide-react';
 import api from '../../services/api';
-import { Drawer, SearchField } from '@/components/ds';
+import { Drawer, SearchField, CatalogCard, CatalogGrid } from '@/components/ds';
 import EmptyState from '../EmptyState';
 import { useToast } from '../../contexts/useToast.js';
 import EngineGlyph from './EngineGlyph';
@@ -80,35 +80,26 @@ function EngineCard({ entry, onPick }) {
     ].filter(Boolean).join(' · ');
 
     return (
-        <li className="dbx-engine-card">
-            <SharedButton variant="unstyled"
-                type="button"
-                className="dbx-engine-card__hit"
-                onClick={() => onPick(entry)}
-                aria-label={t('app.engineCatalogDrawer.install', 'Install {{name}}', { name: entry.name })}
-            >
-                <span className="dbx-engine-card__top">
-                    <span className="dbx-eng-glyph dbx-eng-glyph--lg">
-                        <EngineGlyph entry={entry} size={20} />
-                    </span>
-                    <span className="dbx-eng-rowtext">
-                        <span className="dbx-eng-name">{entry.name}</span>
-                        <span className="dbx-eng-sub">
-                            {[entry.version ? `v${entry.version}` : null, entry.id].filter(Boolean).join(' · ')}
-                        </span>
-                    </span>
-                    {meta.family && <span className="dbx-eng-family">{meta.family}</span>}
-                </span>
-                <span className="dbx-engine-card__desc">{entry.description}</span>
-                <span className="dbx-engine-card__foot">
-                    <span className="dbx-eng-facts">{facts || ' '}</span>
-                    <span className="dbx-engine-card__cta">
-                        <Download size={12} aria-hidden="true" />
-                        {entry.installed_count > 0 ? 'Add another' : 'Install'}
-                    </span>
-                </span>
-            </SharedButton>
-        </li>
+        <CatalogCard
+            icon={<EngineGlyph entry={entry} size={20} />}
+            title={entry.name}
+            sub={[entry.version ? `v${entry.version}` : null, entry.id].filter(Boolean).join(' · ')}
+            tag={meta.family}
+            description={entry.description}
+            facts={facts}
+            onClick={() => onPick(entry)}
+            action={(
+                <SharedButton
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onPick(entry)}
+                    aria-label={t('app.engineCatalogDrawer.install', 'Install {{name}}', { name: entry.name })}
+                >
+                    <Download size={12} aria-hidden="true" />
+                    {entry.installed_count > 0 ? 'Add another' : 'Install'}
+                </SharedButton>
+            )}
+        />
     );
 }
 
@@ -255,11 +246,11 @@ export default function EngineCatalogDrawer({
                                             : t('app.engineCatalogDrawer.tryADifferentSearchTermOr', 'Try a different search term or clear the family filter.')}
                                     />
                                 ) : (
-                                    <ul className="dbx-engine-grid">
+                                    <CatalogGrid>
                                         {results.map((entry) => (
                                             <EngineCard key={entry.id} entry={entry} onPick={onPick} />
                                         ))}
-                                    </ul>
+                                    </CatalogGrid>
                                 )}
                             </section>
                         </>
