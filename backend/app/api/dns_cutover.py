@@ -13,6 +13,7 @@ from flask_jwt_extended import jwt_required
 
 from app.services.dns_cutover_service import DnsCutoverService, DnsCutoverError
 from app.middleware.rbac import require_admin_user
+from app.exceptions import not_found
 
 dns_cutover_bp = Blueprint('dns_cutover', __name__)
 
@@ -62,7 +63,7 @@ def list_snapshots():
 def get_snapshot(snapshot_id):
     snapshot = DnsCutoverService.get_snapshot(snapshot_id)
     if not snapshot:
-        return jsonify({'error': 'Snapshot not found'}), 404
+        raise not_found('snapshot')
     return jsonify(snapshot.to_dict())
 
 
@@ -77,7 +78,7 @@ def cutover():
                                  'snapshot so it can be reverted'}), 400
     snapshot = DnsCutoverService.get_snapshot(snapshot_id)
     if not snapshot:
-        return jsonify({'error': 'Snapshot not found'}), 404
+        raise not_found('snapshot')
     try:
         result = DnsCutoverService.cutover(
             snapshot, target=data.get('target'),
@@ -109,7 +110,7 @@ def revert(snapshot_id):
     require_admin_user()
     snapshot = DnsCutoverService.get_snapshot(snapshot_id)
     if not snapshot:
-        return jsonify({'error': 'Snapshot not found'}), 404
+        raise not_found('snapshot')
     try:
         result = DnsCutoverService.revert(snapshot)
         return jsonify(result)

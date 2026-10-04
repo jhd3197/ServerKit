@@ -47,7 +47,7 @@ class ContainerSleepService:
     @classmethod
     def _stop(cls, app):
         if app.server_id:
-            return {'success': False, 'error': 'Sleep is not yet supported for apps on remote servers'}
+            return {'success': False, 'error': 'Sleep is not yet available for services on remote servers'}
         from app.services.slot_deploy_service import SlotDeployService
         if SlotDeployService.is_compose_slot_app(app):
             return SlotDeployService.live_action(app, 'stop')
@@ -60,7 +60,7 @@ class ContainerSleepService:
     @classmethod
     def _start(cls, app):
         if app.server_id:
-            return {'success': False, 'error': 'Wake is not yet supported for apps on remote servers'}
+            return {'success': False, 'error': 'Wake is not yet available for services on remote servers'}
         from app.services.slot_deploy_service import SlotDeployService
         if SlotDeployService.is_compose_slot_app(app):
             return SlotDeployService.live_action(app, 'start')
@@ -75,7 +75,7 @@ class ContainerSleepService:
         # query_active: this stops containers — never touch a tombstoned app.
         app = Application.query_active().filter_by(id=application_id).first()
         if not app:
-            return {'success': False, 'error': 'Application not found'}
+            return {'success': False, 'error': 'Service not found'}
         result = cls._stop(app)
         if not result.get('success'):
             return result
@@ -92,7 +92,7 @@ class ContainerSleepService:
         # the delete tore down.
         app = Application.query_active().filter_by(id=application_id).first()
         if not app:
-            return {'success': False, 'error': 'Application not found'}
+            return {'success': False, 'error': 'Service not found'}
         result = cls._start(app)
         if not result.get('success'):
             return result

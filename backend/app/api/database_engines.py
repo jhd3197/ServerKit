@@ -30,6 +30,7 @@ from app.services import database_engine_extension_service as extensions
 from app.services import database_engine_service as engines
 from app.services.deployment_job_service import DeploymentJobService
 from app.services.template_service import TemplateService
+from app.exceptions import not_found, permission_denied
 
 logger = logging.getLogger(__name__)
 
@@ -139,9 +140,9 @@ def _require_app_access(app_id):
         return {'error': 'Unauthorized'}, 401
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return {'error': 'Application not found'}, 404
+        raise not_found('service')
     if not ResourceGrantService.can_access_app(user, app):
-        return {'error': 'Access denied'}, 403
+        raise permission_denied()
     return None
 
 

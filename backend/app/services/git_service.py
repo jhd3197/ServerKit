@@ -448,7 +448,7 @@ class GitService:
         """Handle incoming webhook."""
         app_config = cls.get_app_config(app_id)
         if not app_config:
-            return {'success': False, 'error': 'App not configured'}
+            return {'success': False, 'error': 'This service has no Git deployment set up'}
 
         if not app_config.get('auto_deploy', True):
             return {'success': False, 'error': 'Auto-deploy disabled'}

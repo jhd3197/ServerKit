@@ -245,7 +245,7 @@ class EnvironmentHealthService:
 
         app = site.application
         if not app or not app.root_path:
-            return {'success': False, 'error': 'No application root path'}
+            return {'success': False, 'error': 'This service has no root path'}
 
         env_dir = app.root_path
         usage = {

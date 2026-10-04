@@ -93,7 +93,7 @@ class DbInsightsService:
         engine = 'postgresql' if engine in db_exec.POSTGRES_ALIASES else engine
         engine = 'mysql' if engine in db_exec.MYSQL_ALIASES else engine
         if engine not in SUPPORTED_ENGINES:
-            return {'error': 'unsupported engine'}
+            return {'error': 'unsupported engine', 'code': 'unsupported_engine'}
         if not target.get('container'):
             # Dockerised engines only (the host executors don't return
             # parse-friendly output).

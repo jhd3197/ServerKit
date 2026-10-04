@@ -14,7 +14,9 @@ def test_config_checkpoints_resolves_same_handler(app, client, auth_headers):
     ckpts = client.get('/api/v1/apps/999999/config-checkpoints', headers=auth_headers)
     assert snaps.status_code == 404
     assert ckpts.status_code == 404
-    assert ckpts.get_json() == snaps.get_json()
+    # Same body apart from the per-request id the typed error carries.
+    strip = lambda body: {k: v for k, v in body.items() if k != 'request_id'}  # noqa: E731
+    assert strip(ckpts.get_json()) == strip(snaps.get_json())
 
 
 def test_both_route_spaces_registered(route_rules):

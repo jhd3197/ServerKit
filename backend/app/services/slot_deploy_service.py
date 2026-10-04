@@ -296,7 +296,7 @@ class SlotDeployService:
             return {'success': True, 'slots': cls.status(app)}
         if deploy_settings.get(app, 'compose_data_split'):
             return {'success': False,
-                    'error': 'This app\'s stateful services live in a shared data project now; '
+                    'error': 'This service\'s stateful containers live in a shared data project now; '
                              'it keeps deploying through slots.'}
         # Opting out keeps the slots until the next deploy, which goes back to
         # the in-place path and folds them away (release_slots).
@@ -315,7 +315,7 @@ class SlotDeployService:
         """
         from app.services.deployment_service import DeploymentService
         if not app.slot_deploys_enabled or app.active_slot not in SLOTS:
-            return {'success': False, 'error': 'Slot deploys are not on for this app.'}
+            return {'success': False, 'error': 'Slot deploys are not on for this service.'}
         standby = AppSlot.query.filter_by(application_id=app.id,
                                           slot=other(app.active_slot)).first()
         if (standby is None or standby.state not in ('standby', 'stopped')

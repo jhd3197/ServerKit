@@ -16,6 +16,7 @@ from app.models import Application
 from app.models.deployment import Deployment
 from app.models.webhook import GitDeployment
 from app.middleware.rbac import get_current_user
+from app.exceptions import not_found, permission_denied
 
 deployments_bp = Blueprint('deployments', __name__)
 
@@ -25,9 +26,9 @@ def _access(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return None, (jsonify({'error': 'Application not found'}), 404)
+        raise not_found('service')
     if not ResourceGrantService.can_access_app(user, app):
-        return None, (jsonify({'error': 'Access denied'}), 403)
+        raise permission_denied()
     return app, None
 
 
@@ -70,7 +71,7 @@ def get_deployment(deployment_id):
     """A versioned build Deployment by id (the release ledger detail)."""
     d = Deployment.query.get(deployment_id)
     if not d:
-        return jsonify({'error': 'Deployment not found'}), 404
+        raise not_found('deployment')
     _, err = _access(d.app_id)
     if err:
         return err

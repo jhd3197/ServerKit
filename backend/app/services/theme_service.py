@@ -124,6 +124,11 @@ def import_theme(raw, source='import'):
     return row.to_dict(), None
 
 
+# delete_theme()'s error for an unknown slug; the route compares against this
+# constant (`err is THEME_NOT_FOUND`), never against the wording.
+THEME_NOT_FOUND = 'Theme not found'
+
+
 def delete_theme(slug):
     """Uninstall an installed theme. Bundled seeds cannot be deleted. If the
     deleted theme was the panel default, revert the default to the stock look.
@@ -137,7 +142,7 @@ def delete_theme(slug):
         # return 400 (can't) vs 404 (nonexistent).
         if slug in _bundled_map():
             return False, 'Bundled themes cannot be removed'
-        return False, 'Theme not found'
+        return False, THEME_NOT_FOUND
     db.session.delete(row)
     if get_default_slug() == slug:
         set_default_slug(DEFAULT_THEME_SLUG)

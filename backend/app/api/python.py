@@ -7,6 +7,7 @@ from app.middleware.rbac import admin_required
 from app.models import User, Application
 from app.services.python_service import PythonService
 from app import db
+from app.exceptions import not_found, permission_denied
 
 python_bp = Blueprint('python', __name__)
 
@@ -21,13 +22,13 @@ def get_app_or_404(app_id, current_user_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return None, ({'error': 'Application not found'}, 404)
+        raise not_found('service')
 
     if not ResourceGrantService.can_access_app(user, app):
-        return None, ({'error': 'Access denied'}, 403)
+        raise permission_denied()
 
     if app.app_type not in ['flask', 'django']:
-        return None, ({'error': 'Application is not a Python app'}, 400)
+        return None, ({'error': 'This service is not a Python service'}, 400)
 
     return app, None
 
@@ -101,7 +102,7 @@ def create_flask_app():
     return jsonify({
         'success': True,
         'app_id': app.id,
-        'message': 'Flask application created successfully'
+        'message': 'Flask service created'
     }), 201
 
 
@@ -161,7 +162,7 @@ def create_django_app():
         'success': True,
         'app_id': app.id,
         'project_name': result.get('project_name'),
-        'message': 'Django application created successfully'
+        'message': 'Django service created'
     }), 201
 
 
@@ -395,7 +396,7 @@ def collect_static(app_id):
         return jsonify(error[0]), error[1]
 
     if app.app_type != 'django':
-        return jsonify({'error': 'Only supported for Django apps'}), 400
+        return jsonify({'error': 'This only works for Django services'}), 400
 
     result = PythonService.collect_static(app.root_path, app.app_type)
     return jsonify(result), 200 if result['success'] else 400

@@ -18,6 +18,7 @@ from app.models.application import Application
 from app.models.deployment_snapshot import DeploymentSnapshot
 from app.services.configuration_service import ConfigurationService
 from app.services.resource_grant_service import ResourceGrantService
+from app.exceptions import not_found, permission_denied
 
 snapshots_bp = Blueprint('snapshots', __name__)
 
@@ -28,12 +29,12 @@ def _get_app_or_404(app_id, write=False):
     the needed tier gets a 403 (the resource itself exists)."""
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return None, (jsonify({'error': 'Application not found'}), 404)
+        raise not_found('service')
     user = get_current_user()
     ok = (ResourceGrantService.can_edit_app(user, app) if write
           else ResourceGrantService.can_access_app(user, app))
     if not ok:
-        return None, (jsonify({'error': 'Access denied'}), 403)
+        raise permission_denied()
     return app, None
 
 
@@ -43,7 +44,7 @@ def _get_snapshot_or_404(app_id, snap_id):
         id=snap_id, application_id=app_id
     ).first()
     if not snap:
-        return None, (jsonify({'error': 'Snapshot not found'}), 404)
+        raise not_found('config_checkpoint')
     return snap, None
 
 

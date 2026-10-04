@@ -112,7 +112,7 @@ def create_job():
 
     application_id = _validate_application_id(data.get('application_id'))
     if application_id is _INVALID_APP:
-        return jsonify({'success': False, 'error': 'Application not found'}), 400
+        return jsonify({'success': False, 'error': 'Service not found'}), 400
 
     result = CronService.add_job(
         schedule=schedule,
@@ -138,7 +138,7 @@ def update_job(job_id):
     if set_application:
         application_id = _validate_application_id(data.get('application_id'))
         if application_id is _INVALID_APP:
-            return jsonify({'success': False, 'error': 'Application not found'}), 400
+            return jsonify({'success': False, 'error': 'Service not found'}), 400
 
     result = CronService.update_job(
         job_id=job_id,

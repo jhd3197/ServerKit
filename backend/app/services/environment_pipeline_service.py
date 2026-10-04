@@ -107,7 +107,7 @@ class EnvironmentPipelineService:
 
         prod_app = prod_site.application
         if not prod_app:
-            return {'success': False, 'error': 'Production application not found'}
+            return {'success': False, 'error': 'Production service not found'}
 
         # Check for existing environment of same type (except multidev)
         if env_type != 'multidev':

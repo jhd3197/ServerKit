@@ -10,6 +10,7 @@ from app.middleware.rbac import admin_required, app_access_tier, developer_requi
 from app.models import User, Application
 from app.services.git_service import GitService
 from app.services.resource_grant_service import ResourceGrantService
+from app.exceptions import not_found, permission_denied
 
 deploy_bp = Blueprint('deploy', __name__)
 
@@ -23,10 +24,10 @@ def get_deploy_config(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     config = GitService.get_app_config(app_id)
     if not config:
@@ -44,7 +45,7 @@ def configure_deployment(app_id):
     """Configure Git deployment for an app."""
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     data = request.get_json()
     if not data:
@@ -83,10 +84,10 @@ def trigger_deploy(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     data = request.get_json() or {}
     result = GitService.deploy(app_id, force=data.get('force', False))
@@ -103,10 +104,10 @@ def pull_changes(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     data = request.get_json() or {}
     result = GitService.pull_changes(app.root_path, data.get('branch'))
@@ -123,10 +124,10 @@ def get_git_status(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     status = GitService.get_git_status(app.root_path)
     return jsonify(status), 200
@@ -141,10 +142,10 @@ def get_commit_info(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     commit_info = GitService.get_commit_info(app.root_path)
     if commit_info:
@@ -165,11 +166,11 @@ def get_deployment_history():
     if app_id:
         app = Application.query_active().filter_by(id=app_id).first()
         if not app:
-            return jsonify({'error': 'Application not found'}), 404
+            raise not_found('service')
         if not user or app_access_tier(user, app) is None:
-            return jsonify({'error': 'Access denied'}), 403
+            raise permission_denied()
     elif not user or not user.is_admin:
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     history = GitService.get_deployment_history(app_id, limit)
     return jsonify({'deployments': history}), 200
@@ -195,7 +196,7 @@ def clone_repository():
     base_dir = os.path.abspath(paths.APPS_DIR)
     app_path = os.path.abspath(data['app_path'])
     if app_path == base_dir or not app_path.startswith(base_dir + os.sep):
-        return jsonify({'error': 'app_path must be inside the managed apps directory'}), 400
+        return jsonify({'error': 'app_path must be inside the managed services directory'}), 400
 
     result = GitService.clone_repository(
         app_path=app_path,
@@ -215,10 +216,10 @@ def get_branches(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     result = GitService.get_remote_branches(app.root_path)
     return jsonify(result), 200 if result.get('success') else 400
@@ -249,11 +250,11 @@ def get_webhook_logs():
     if app_id:
         app = Application.query_active().filter_by(id=app_id).first()
         if not app:
-            return jsonify({'error': 'Application not found'}), 404
+            raise not_found('service')
         if not user or app_access_tier(user, app) is None:
-            return jsonify({'error': 'Access denied'}), 403
+            raise permission_denied()
     elif not user or not user.is_admin:
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     logs = GitService.get_webhook_logs(app_id, limit)
     return jsonify({'logs': logs}), 200

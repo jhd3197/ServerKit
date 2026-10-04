@@ -13,6 +13,7 @@ from app.models.application import Application
 from app.services.waf_service import WafService
 from app.services.resource_grant_service import ResourceGrantService
 from app.middleware.rbac import get_current_user, require_admin_user
+from app.exceptions import not_found
 
 waf_bp = Blueprint('waf', __name__)
 
@@ -23,9 +24,9 @@ def _get_application_or_404(app_id):
     app (sealed-from-open, no existence leak)."""
     application = Application.query_active().filter_by(id=app_id).first()
     if not application:
-        return None, (jsonify({'error': 'Application not found'}), 404)
+        raise not_found('service')
     if not ResourceGrantService.can_access_app(get_current_user(), application):
-        return None, (jsonify({'error': 'Application not found'}), 404)
+        raise not_found('service')
     return application, None
 
 

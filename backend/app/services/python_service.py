@@ -251,7 +251,7 @@ SECRET_KEY={secrets.token_hex(32)}
             return {
                 'success': True,
                 'app_path': app_path,
-                'message': 'Flask application created successfully'
+                'message': 'Flask service created'
             }
         except Exception as e:
             return {'success': False, 'error': str(e)}
@@ -336,7 +336,7 @@ application = get_wsgi_application()
                 'success': True,
                 'app_path': app_path,
                 'project_name': project_name,
-                'message': 'Django application created successfully'
+                'message': 'Django service created'
             }
         except Exception as e:
             return {'success': False, 'error': str(e)}
@@ -557,7 +557,7 @@ application = get_wsgi_application()
         elif app_type == 'flask':
             # Flask-Migrate
             return PythonService.run_command(app_path, 'flask db upgrade')
-        return {'success': False, 'error': 'Unknown app type'}
+        return {'success': False, 'error': 'Unknown service type'}
 
     @staticmethod
     def collect_static(app_path, app_type='django'):

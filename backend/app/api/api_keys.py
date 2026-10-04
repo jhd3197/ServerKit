@@ -7,6 +7,7 @@ from app.middleware.api_scope_middleware import SCOPES, require_scope
 from app.services.api_key_service import ApiKeyService
 from app.services.audit_service import AuditService
 from app.models.audit_log import AuditLog
+from app.exceptions import not_found
 
 api_keys_bp = Blueprint('api_keys', __name__)
 
@@ -80,7 +81,7 @@ def get_key(key_id):
     """Get API key details."""
     user = get_current_user()
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     api_key = ApiKeyService.get_key(key_id, user.id)
     if not api_key:
@@ -119,7 +120,7 @@ def revoke_key(key_id):
     """Revoke an API key."""
     user = get_current_user()
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     api_key = ApiKeyService.revoke_key(key_id, user.id)
     if not api_key:
@@ -142,7 +143,7 @@ def rotate_key(key_id):
     """Rotate an API key (revoke + recreate with same config)."""
     user = get_current_user()
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     new_key, raw_key = ApiKeyService.rotate_key(key_id, user.id)
     if not new_key:

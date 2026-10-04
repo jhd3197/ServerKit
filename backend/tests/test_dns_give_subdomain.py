@@ -180,7 +180,7 @@ def test_give_subdomain_rejects_label_taken_by_other_app(app, monkeypatch):
 
     a = _mk_app(name='Mine', port=8800)
     res = SiteDomainService.give_subdomain(a, label='shared')
-    assert res['success'] is False and 'another app' in res['error']
+    assert res['success'] is False and 'another service' in res['error']
 
 
 # ── endpoints ────────────────────────────────────────────────────────────────

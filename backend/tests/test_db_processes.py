@@ -103,7 +103,7 @@ class TestListProcessesErrors:
     @pytest.mark.parametrize('engine', ['sqlite', 'mongodb', 'redis', None, ''])
     def test_unsupported_engine(self, engine):
         result = DbProcessService.list_processes({'engine': engine})
-        assert result == {'error': 'unsupported engine'}
+        assert result == {'error': 'unsupported engine', 'code': 'unsupported_engine'}
 
     def test_exec_failure_surfaces_error(self, monkeypatch):
         _stub_exec(monkeypatch, success=False, error='docker: command not found')
@@ -148,7 +148,7 @@ class TestKillProcess:
     def test_unsupported_engine(self, monkeypatch):
         calls = _stub_exec(monkeypatch)
         result = DbProcessService.kill_process({'engine': 'sqlite'}, 1)
-        assert result == {'error': 'unsupported engine'}
+        assert result == {'error': 'unsupported engine', 'code': 'unsupported_engine'}
         assert calls == []
 
     def test_exec_failure(self, monkeypatch):
@@ -297,7 +297,7 @@ class TestProcessAPI:
     def test_list_unsupported_engine_is_400(self, client, auth_headers, monkeypatch):
         monkeypatch.setattr(
             DbProcessService, 'list_processes',
-            staticmethod(lambda target: {'error': 'unsupported engine'}))
+            staticmethod(lambda target: {'error': 'unsupported engine', 'code': 'unsupported_engine'}))
         resp = client.get('/api/v1/databases/docker/c1/processes?type=redis', headers=auth_headers)
         assert resp.status_code == 400
         assert resp.get_json() == {'error': 'unsupported engine'}

@@ -680,7 +680,7 @@ location /p/ {{
             )
         elif app_type in ['flask', 'django', 'python']:
             if not port:
-                return {'success': False, 'error': 'Port is required for Python apps'}
+                return {'success': False, 'error': 'Python services need a port'}
             config = cls.PYTHON_SITE_TEMPLATE.format(
                 name=name,
                 domains=domains_str,
@@ -689,7 +689,7 @@ location /p/ {{
             )
         elif app_type == 'docker':
             if not port:
-                return {'success': False, 'error': 'Port is required for Docker apps'}
+                return {'success': False, 'error': 'Docker services need a port'}
             config = cls.DOCKER_SITE_TEMPLATE.format(
                 name=name,
                 domains=domains_str,
@@ -697,7 +697,7 @@ location /p/ {{
             )
         elif app_type == 'remote':
             if not upstream:
-                return {'success': False, 'error': 'upstream (host:port) is required for remote apps'}
+                return {'success': False, 'error': 'Services on remote servers need an upstream (host:port)'}
             config = cls.REMOTE_UPSTREAM_TEMPLATE.format(
                 name=name,
                 domains=domains_str,
@@ -710,7 +710,7 @@ location /p/ {{
                 root_path=root_path
             )
         else:
-            return {'success': False, 'error': f'Unknown app type: {app_type}'}
+            return {'success': False, 'error': f'Unknown service type: {app_type}'}
 
         if immutable_assets:
             config = cls._with_immutable_assets(config, app_type)

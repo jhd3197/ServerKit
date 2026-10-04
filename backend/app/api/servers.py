@@ -26,7 +26,7 @@ from app.services.discovery_service import discovery_service
 from app.services import connection_string as connection_string_codec
 from app.middleware.rbac import admin_required, auth_required, developer_required, get_current_user
 from app.middleware.api_scope_middleware import require_scope
-from app.exceptions import ValidationError
+from app.exceptions import ValidationError, agent_offline, field_required, not_found
 
 
 # Default token lifetime when the caller doesn't specify one. 7 days is
@@ -186,7 +186,7 @@ def create_group():
     data = request.get_json()
 
     if not data.get('name'):
-        return jsonify({'error': 'Name is required'}), 400
+        raise field_required('Name')
 
     group = ServerGroup(
         name=data['name'],
@@ -437,7 +437,7 @@ def set_server_workspace(server_id):
     user = get_current_user()
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     target = (request.get_json() or {}).get('workspace_id')
     if target in (None, '', 'default'):
@@ -470,7 +470,7 @@ def get_server(server_id):
     """Get a server by ID"""
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     result = server.to_dict(include_metrics=True)
     # Surface the live transport so the UI can disable / banner features
@@ -565,7 +565,7 @@ def update_server(server_id):
     """Update a server"""
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     data = request.get_json()
 
@@ -598,7 +598,7 @@ def delete_server(server_id):
     """Delete a server"""
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     # Disconnect agent if connected
     if agent_registry.is_agent_connected(server_id):
@@ -621,7 +621,7 @@ def start_server_onboarding(server_id):
 
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     try:
         status = ServerOnboardingService.start(server_id)
@@ -638,7 +638,7 @@ def retry_server_onboarding(server_id):
 
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     try:
         status = ServerOnboardingService.retry(server_id)
@@ -655,7 +655,7 @@ def get_server_onboarding_status(server_id):
 
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     try:
         status = ServerOnboardingService.get_status(server_id)
@@ -679,7 +679,7 @@ def regenerate_token(server_id):
     """
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     data = request.get_json(silent=True) or {}
     expires_at = _resolve_token_expiry(data.get('expires_in'))
@@ -800,7 +800,7 @@ def get_server_status(server_id):
     """Get current server status and live metrics"""
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     is_connected = agent_registry.is_agent_connected(server_id)
 
@@ -827,13 +827,10 @@ def ping_server(server_id):
     """Force a ping/health check on a server"""
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     if not agent_registry.is_agent_connected(server_id):
-        return jsonify({
-            'success': False,
-            'error': 'Agent not connected'
-        })
+        raise agent_offline()
 
     # Send system:metrics command to get fresh data
     result = dispatch_agent_command(
@@ -853,7 +850,7 @@ def get_server_metrics(server_id):
     """Get historical metrics for a server"""
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     # Query parameters
     from_time = request.args.get('from')
@@ -984,7 +981,7 @@ def get_command_history(server_id):
     """Get command history for a server"""
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     limit = request.args.get('limit', 50, type=int)
 
@@ -1018,7 +1015,7 @@ def get_allowed_ips(server_id):
     """Get allowed IPs for a server"""
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     return jsonify({
         'allowed_ips': server.allowed_ips or [],
@@ -1041,7 +1038,7 @@ def update_allowed_ips(server_id):
     """
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     data = request.get_json()
     allowed_ips = data.get('allowed_ips', [])
@@ -1071,7 +1068,7 @@ def get_connection_info(server_id):
     """Get connection info for a server (current IP, connected status, etc.)"""
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     is_connected = agent_registry.is_agent_connected(server_id)
     agent = agent_registry.get_agent(server_id) if is_connected else None
@@ -1102,13 +1099,10 @@ def rotate_api_key(server_id):
     """
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     if not agent_registry.is_agent_connected(server_id):
-        return jsonify({
-            'error': 'Agent must be connected to rotate API key',
-            'code': 'AGENT_OFFLINE'
-        }), 400
+        raise agent_offline()
 
     # Check if there's already a pending rotation
     if server.api_key_rotation_id and server.api_key_rotation_expires:
@@ -1176,7 +1170,7 @@ def get_server_security_alerts(server_id):
     """Get security alerts for a specific server"""
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     status = request.args.get('status')
     severity = request.args.get('severity')
@@ -1556,7 +1550,7 @@ def remote_compose_ps(server_id):
     data = request.get_json()
 
     if not data or not data.get('project_path'):
-        return jsonify({'error': 'project_path is required'}), 400
+        raise field_required('project_path')
 
     result = RemoteDockerService.compose_ps(
         server_id,
@@ -1578,7 +1572,7 @@ def remote_compose_up(server_id):
     data = request.get_json()
 
     if not data or not data.get('project_path'):
-        return jsonify({'error': 'project_path is required'}), 400
+        raise field_required('project_path')
 
     result = RemoteDockerService.compose_up(
         server_id,
@@ -1602,7 +1596,7 @@ def remote_compose_down(server_id):
     data = request.get_json()
 
     if not data or not data.get('project_path'):
-        return jsonify({'error': 'project_path is required'}), 400
+        raise field_required('project_path')
 
     result = RemoteDockerService.compose_down(
         server_id,
@@ -1626,7 +1620,7 @@ def remote_compose_logs(server_id):
     data = request.get_json()
 
     if not data or not data.get('project_path'):
-        return jsonify({'error': 'project_path is required'}), 400
+        raise field_required('project_path')
 
     result = RemoteDockerService.compose_logs(
         server_id,
@@ -1650,7 +1644,7 @@ def remote_compose_restart(server_id):
     data = request.get_json()
 
     if not data or not data.get('project_path'):
-        return jsonify({'error': 'project_path is required'}), 400
+        raise field_required('project_path')
 
     result = RemoteDockerService.compose_restart(
         server_id,
@@ -1673,7 +1667,7 @@ def remote_compose_pull(server_id):
     data = request.get_json()
 
     if not data or not data.get('project_path'):
-        return jsonify({'error': 'project_path is required'}), 400
+        raise field_required('project_path')
 
     result = RemoteDockerService.compose_pull(
         server_id,
@@ -1781,7 +1775,7 @@ def terminal_input(session_id):
     data = request.get_json()
 
     if not data or not data.get('data'):
-        return jsonify({'error': 'data is required'}), 400
+        raise field_required('data')
 
     result = TerminalService.send_input(
         session_id=session_id,
@@ -1996,7 +1990,7 @@ def get_install_instructions(server_id):
     """
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     # Check if server has a valid registration token
     if not server.registration_token_hash:
@@ -2328,13 +2322,10 @@ def trigger_agent_update(server_id):
     """
     server = Server.query.get(server_id)
     if not server:
-        return jsonify({'error': 'Server not found'}), 404
+        raise not_found('server')
 
     if not agent_registry.is_agent_connected(server_id):
-        return jsonify({
-            'success': False,
-            'error': 'Agent not connected'
-        }), 503
+        raise agent_offline()
 
     # Get latest version info
     release = _get_latest_agent_release()
@@ -2382,7 +2373,7 @@ def add_agent_version():
     data = request.get_json()
     
     if not data.get('version'):
-        return jsonify({'error': 'Version is required'}), 400
+        raise field_required('Version')
         
     version = AgentVersion(
         version=data['version'],
@@ -2435,7 +2426,7 @@ def start_staged_rollout():
     user_id = get_jwt_identity()
 
     if not version_id:
-        return jsonify({'error': 'version_id is required'}), 400
+        raise field_required('version_id')
 
     result = fleet_service.staged_rollout(
         group_id, version_id, batch_size, delay_minutes,
@@ -2595,9 +2586,9 @@ def remote_cron_add(server_id):
     schedule = (data.get('schedule') or '').strip()
     command = (data.get('command') or '').strip()
     if not schedule:
-        return jsonify({'error': 'schedule is required'}), 400
+        raise field_required('schedule')
     if not command:
-        return jsonify({'error': 'command is required'}), 400
+        raise field_required('command')
 
     result = RemoteCronService.add_job(
         server_id, schedule, command,
@@ -2675,7 +2666,7 @@ def remote_cloudflared_create(server_id):
     data = request.get_json(silent=True) or {}
     name = (data.get('name') or '').strip()
     if not name:
-        return jsonify({'error': 'name is required'}), 400
+        raise field_required('name')
 
     result = RemoteCloudflaredService.create_tunnel(server_id, name, user_id=user_id)
     return _agent_result(result, ok_status=201)
@@ -2688,7 +2679,7 @@ def remote_cloudflared_route(server_id, tunnel_ref):
     data = request.get_json(silent=True) or {}
     hostname = (data.get('hostname') or '').strip()
     if not hostname:
-        return jsonify({'error': 'hostname is required'}), 400
+        raise field_required('hostname')
 
     result = RemoteCloudflaredService.route_tunnel(
         server_id, tunnel_ref, hostname, user_id=user_id,
@@ -2748,7 +2739,7 @@ def remote_packages_search(server_id):
     user_id = get_jwt_identity()
     query = (request.args.get('q') or '').strip()
     if not query:
-        return jsonify({'error': 'q is required'}), 400
+        raise field_required('q')
     try:
         limit = int(request.args.get('limit', 100))
     except (TypeError, ValueError):
@@ -2785,7 +2776,7 @@ def remote_packages_install(server_id):
     if isinstance(names, str):
         names = [names]
     if not names:
-        return jsonify({'error': 'names is required'}), 400
+        raise field_required('names')
     result = RemotePackagesService.install_async(server_id, names, user_id=user_id)
     return _agent_result(result)
 
@@ -2797,7 +2788,7 @@ def remote_packages_remove(server_id):
     data = request.get_json(silent=True) or {}
     name = (data.get('name') or '').strip()
     if not name:
-        return jsonify({'error': 'name is required'}), 400
+        raise field_required('name')
     result = RemotePackagesService.remove(server_id, name, user_id=user_id)
     return _agent_result(result)
 
@@ -2932,7 +2923,7 @@ def remote_runtimes_python_install(server_id):
     data = request.get_json(silent=True) or {}
     version = (data.get('version') or '').strip()
     if not version:
-        return jsonify({'error': 'version is required'}), 400
+        raise field_required('version')
     result = RemoteRuntimesService.python_install(server_id, version, user_id=user_id)
     return _agent_result(result)
 
@@ -2944,7 +2935,7 @@ def remote_runtimes_python_uninstall(server_id):
     data = request.get_json(silent=True) or {}
     version = (data.get('version') or '').strip()
     if not version:
-        return jsonify({'error': 'version is required'}), 400
+        raise field_required('version')
     result = RemoteRuntimesService.python_uninstall(server_id, version, user_id=user_id)
     return _agent_result(result)
 
@@ -2956,7 +2947,7 @@ def remote_runtimes_python_set_global(server_id):
     data = request.get_json(silent=True) or {}
     version = (data.get('version') or '').strip()
     if not version:
-        return jsonify({'error': 'version is required'}), 400
+        raise field_required('version')
     result = RemoteRuntimesService.python_set_global(server_id, version, user_id=user_id)
     return _agent_result(result)
 
@@ -3000,7 +2991,7 @@ def remote_file_browse(server_id):
     user_id = get_jwt_identity()
     path = request.args.get('path')
     if not path:
-        return jsonify({'error': 'path is required'}), 400
+        raise field_required('path')
     result = RemoteFileService.list_directory(server_id, path, user_id=user_id)
     return _agent_result(result)
 
@@ -3011,7 +3002,7 @@ def remote_file_read(server_id):
     user_id = get_jwt_identity()
     path = request.args.get('path')
     if not path:
-        return jsonify({'error': 'path is required'}), 400
+        raise field_required('path')
     result = RemoteFileService.read_file(server_id, path, user_id=user_id)
     return _agent_result(result)
 
@@ -3024,8 +3015,8 @@ def remote_file_write(server_id):
     path = (data.get('path') or '').strip()
     content = data.get('content')
     if not path:
-        return jsonify({'error': 'path is required'}), 400
+        raise field_required('path')
     if content is None:
-        return jsonify({'error': 'content is required'}), 400
+        raise field_required('content')
     result = RemoteFileService.write_file(server_id, path, content, user_id=user_id)
     return _agent_result(result)

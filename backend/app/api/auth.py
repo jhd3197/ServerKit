@@ -19,7 +19,9 @@ from app.services import login_link_service
 from app.services import auth_throttle_service
 from app.utils.client_ip import get_client_ip
 from app.utils.i18n import normalize_language
-from app.exceptions import AuthenticationError, ConflictError, PermissionDeniedError, ValidationError
+from app.exceptions import (
+    AuthenticationError, ConflictError, PermissionDeniedError, ValidationError, not_found,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -349,7 +351,7 @@ def create_login_link():
     target_id = data.get('user_id') or current.id
     target = User.query.get(target_id)
     if not target:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     bound_ip = (data.get('bound_ip') or '').strip() or None
     if bound_ip and len(bound_ip) > 64:
@@ -565,7 +567,7 @@ def get_current_user():
     user = User.query.get(current_user_id)
 
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     return jsonify({'user': user.to_dict()}), 200
 
@@ -595,7 +597,7 @@ def update_current_user():
     user = User.query.get(current_user_id)
 
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     data = request.get_json() or {}
 
@@ -677,7 +679,7 @@ def passkey_register_options():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
     options = PasskeyService.begin_registration(user)
     return jsonify(options), 200
 
@@ -690,7 +692,7 @@ def passkey_register():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
     data = request.get_json() or {}
     credential = data.get('credential')
     device_name = data.get('device_name', 'Passkey')

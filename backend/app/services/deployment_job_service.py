@@ -75,7 +75,7 @@ class DeploymentJobService:
             if not cls._is_abandoned_install_dir(app_path):
                 return {
                     'success': False,
-                    'error': (f'App directory already exists: {app_path}. '
+                    'error': (f'A service directory already exists at {app_path}. '
                               'Remove it, or install under a different name.'),
                 }
             # An install that failed part-way leaves its directory behind, and
@@ -247,7 +247,7 @@ class DeploymentJobService:
         """
         job = DeploymentJob.query.get(job_id)
         if not job:
-            return {'success': False, 'error': 'Deployment job not found'}
+            return {'success': False, 'error': 'Deployment job not found', 'code': 'not_found'}
         if job.status != 'failed':
             return {'success': False,
                     'error': 'Only failed deployments can be retried'}

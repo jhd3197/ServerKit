@@ -124,13 +124,13 @@ def test_launch_reuses_running_adminer(app, managed, sql_log, monkeypatch):
 def test_launch_without_docker_is_clean_error(app, managed, monkeypatch):
     monkeypatch.setattr(DbAdminSsoService, '_docker_available',
                         classmethod(lambda cls: False))
-    assert DbAdminSsoService.launch(managed) == {'error': 'Docker required'}
+    assert DbAdminSsoService.launch(managed) == {'error': 'Docker required', 'code': 'docker_required'}
     assert ManagedDatabaseUser.query.count() == 0       # nothing minted
 
 
 def test_launch_unsupported_engine(app, docker_stub):
     mongo = ManagedDatabaseService.record_provisioned('mongodb', 'logs')
-    assert DbAdminSsoService.launch(mongo) == {'error': 'unsupported engine'}
+    assert DbAdminSsoService.launch(mongo) == {'error': 'unsupported engine', 'code': 'unsupported_engine'}
 
 
 def test_launch_adminer_failure_revokes_credential(app, managed, sql_log, monkeypatch):

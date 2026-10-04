@@ -9,6 +9,7 @@ from app.models import Application, User
 from app.services.private_url_service import PrivateURLService
 from app.services.nginx_service import NginxService
 from app.services.resource_grant_service import ResourceGrantService
+from app.exceptions import not_found, permission_denied
 
 private_urls_bp = Blueprint('private_urls', __name__)
 
@@ -31,10 +32,10 @@ def enable_private_url(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     # Check if already enabled
     if app.private_url_enabled:
@@ -93,10 +94,10 @@ def get_private_url(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     return jsonify({
         'private_url_enabled': app.private_url_enabled,
@@ -123,13 +124,13 @@ def update_private_url(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     if not app.private_url_enabled:
-        return jsonify({'error': 'Private URL is not enabled for this app'}), 400
+        return jsonify({'error': 'Private URL is not enabled for this service'}), 400
 
     data = request.get_json()
     if not data or 'slug' not in data:
@@ -175,13 +176,13 @@ def disable_private_url(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     if not app.private_url_enabled:
-        return jsonify({'error': 'Private URL is not enabled for this app'}), 400
+        return jsonify({'error': 'Private URL is not enabled for this service'}), 400
 
     old_slug = app.private_slug
     app.private_slug = None
@@ -212,13 +213,13 @@ def regenerate_private_url(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     if not app.private_url_enabled:
-        return jsonify({'error': 'Private URL is not enabled for this app'}), 400
+        return jsonify({'error': 'Private URL is not enabled for this service'}), 400
 
     old_slug = app.private_slug
     new_slug = PrivateURLService.generate_unique_slug()

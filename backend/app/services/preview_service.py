@@ -408,7 +408,7 @@ class PreviewService:
             # containers) — never for a deleted app.
             app = Application.query_active().filter_by(id=application_id).first()
             if not app:
-                return {'error': 'application not found'}
+                return {'error': 'Service not found'}
 
             open_prs = cls._fetch_open_prs(app)
             active = ApplicationPreview.query.filter(
@@ -482,7 +482,7 @@ class PreviewService:
         app = Application.query_active().filter_by(
             id=payload.get('application_id')).first()
         if not app:
-            return {'error': 'application not found'}
+            return {'error': 'Service not found'}
         return cls.create_preview(app, payload.get('pr') or payload)
 
     @classmethod

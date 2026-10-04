@@ -641,7 +641,7 @@ def handle_subscribe_container_logs(data):
     data = data if isinstance(data, dict) else {}
     app_id = data.get('app_id')
     if not user or not _app_visible(user, app_id):
-        emit('error', {'message': 'Application access denied'})
+        emit('error', {'message': "You don't have access to this service"})
         return
     tail = data.get('tail', 100)
     since = data.get('since')
@@ -658,7 +658,7 @@ def handle_subscribe_container_logs(data):
     try:
         app = Application.query_active().filter_by(id=app_id).first()
         if not app:
-            emit('container_log_error', {'message': 'Application not found', 'app_id': app_id})
+            emit('container_log_error', {'message': 'Service not found', 'app_id': app_id})
             return
     except Exception as e:
         emit('container_log_error', {'message': f'Database error: {str(e)}', 'app_id': app_id})
@@ -683,7 +683,7 @@ def handle_subscribe_container_logs(data):
 
     if not container_id:
         emit('container_log_error', {
-            'message': 'No container found for this application',
+            'message': 'No container found for this service',
             'app_id': app_id,
             'hint': 'The application may not have been started yet'
         })

@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, request
 from app.middleware.rbac import admin_required, auth_required, get_current_user
 from app.services.api_analytics_service import ApiAnalyticsService
 from app.services.api_key_service import ApiKeyService
+from app.exceptions import permission_denied
 
 api_analytics_bp = Blueprint('api_analytics', __name__)
 
@@ -54,6 +55,6 @@ def key_usage(key_id):
         return jsonify({'error': 'API key not found'}), 404
 
     if not user.is_admin and api_key.user_id != user.id:
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     return jsonify(ApiAnalyticsService.get_key_usage(key_id, period))

@@ -15,6 +15,7 @@ from app.services.db_process_service import DbProcessService
 from app.services.managed_database_service import ManagedDatabaseService
 from app.middleware.rbac import admin_required, get_current_user, require_admin_user
 from app.services.resource_grant_service import ResourceGrantService
+from app.exceptions import field_required, not_found, permission_denied
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +73,7 @@ def create_mysql_database():
     data = request.get_json()
 
     if not data or 'name' not in data:
-        return jsonify({'error': 'name is required'}), 400
+        raise field_required('name')
 
     result = DatabaseService.mysql_create_database(
         data['name'],
@@ -143,7 +144,7 @@ def restore_mysql_database(name):
     data = request.get_json()
 
     if not data or 'backup_path' not in data:
-        return jsonify({'error': 'backup_path is required'}), 400
+        raise field_required('backup_path')
 
     result = DatabaseService.mysql_restore(
         name,
@@ -174,7 +175,7 @@ def create_mysql_user():
     data = request.get_json()
 
     if not data or 'username' not in data:
-        return jsonify({'error': 'username is required'}), 400
+        raise field_required('username')
 
     password = data.get('password') or DatabaseService.generate_password()
 
@@ -231,7 +232,7 @@ def grant_mysql_privileges(username):
     data = request.get_json()
 
     if not data or 'database' not in data:
-        return jsonify({'error': 'database is required'}), 400
+        raise field_required('database')
 
     result = DatabaseService.mysql_grant_privileges(
         username,
@@ -250,7 +251,7 @@ def revoke_mysql_privileges(username):
     data = request.get_json()
 
     if not data or 'database' not in data:
-        return jsonify({'error': 'database is required'}), 400
+        raise field_required('database')
 
     result = DatabaseService.mysql_revoke_privileges(
         username,
@@ -279,7 +280,7 @@ def create_pg_database():
     data = request.get_json()
 
     if not data or 'name' not in data:
-        return jsonify({'error': 'name is required'}), 400
+        raise field_required('name')
 
     result = DatabaseService.pg_create_database(
         data['name'],
@@ -332,7 +333,7 @@ def restore_pg_database(name):
     data = request.get_json()
 
     if not data or 'backup_path' not in data:
-        return jsonify({'error': 'backup_path is required'}), 400
+        raise field_required('backup_path')
 
     result = DatabaseService.pg_restore(name, data['backup_path'])
     return jsonify(result), 200 if result['success'] else 400
@@ -355,7 +356,7 @@ def create_pg_user():
     data = request.get_json()
 
     if not data or 'username' not in data:
-        return jsonify({'error': 'username is required'}), 400
+        raise field_required('username')
 
     password = data.get('password') or DatabaseService.generate_password()
 
@@ -390,7 +391,7 @@ def grant_pg_privileges(username):
     data = request.get_json()
 
     if not data or 'database' not in data:
-        return jsonify({'error': 'database is required'}), 400
+        raise field_required('database')
 
     result = DatabaseService.pg_grant_privileges(
         username,
@@ -407,7 +408,7 @@ def revoke_pg_privileges(username):
     data = request.get_json()
 
     if not data or 'database' not in data:
-        return jsonify({'error': 'database is required'}), 400
+        raise field_required('database')
 
     result = DatabaseService.pg_revoke_privileges(
         username,
@@ -452,7 +453,7 @@ def execute_mysql_query(name):
     data = request.get_json()
 
     if not data or 'query' not in data:
-        return jsonify({'error': 'query is required'}), 400
+        raise field_required('query')
 
     query = data['query']
     readonly = data.get('readonly', True)
@@ -488,7 +489,7 @@ def execute_pg_query(name):
     data = request.get_json()
 
     if not data or 'query' not in data:
-        return jsonify({'error': 'query is required'}), 400
+        raise field_required('query')
 
     query = data['query']
     readonly = data.get('readonly', True)
@@ -669,13 +670,13 @@ def get_app_databases(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     if app.app_type != 'docker' or not app.root_path:
-        return jsonify({'error': 'Application is not a Docker app'}), 400
+        return jsonify({'error': 'This service is not a Docker service'}), 400
 
     db_info = DatabaseService.get_app_database_info(app.name, app.root_path)
 
@@ -725,7 +726,7 @@ def execute_docker_query(container, database):
     data = request.get_json()
 
     if not data or 'query' not in data:
-        return jsonify({'error': 'query is required'}), 400
+        raise field_required('query')
 
     query = data['query']
     readonly = data.get('readonly', True)
@@ -777,7 +778,7 @@ def create_managed_database():
     engine = (data.get('engine') or '').strip().lower()
     name = data.get('name')
     if not name:
-        return jsonify({'error': 'name is required'}), 400
+        raise field_required('name')
     if engine not in ('mysql', 'postgresql'):
         return jsonify({'error': 'engine must be mysql or postgresql'}), 400
 
@@ -841,7 +842,7 @@ def get_managed_database(managed_id):
     """Detail + a best-effort live-sync state (does the DB still exist?)."""
     managed = ManagedDatabaseService.get(managed_id)
     if not managed:
-        return jsonify({'error': 'Managed database not found'}), 404
+        raise not_found('database')
     data = managed.to_dict()
     data['sync'] = ManagedDatabaseService.sync_state(managed)
     return jsonify({'database': data}), 200
@@ -853,7 +854,7 @@ def delete_managed_database(managed_id):
     """Untrack a managed database (optional ``?drop=true`` to also DROP it)."""
     managed = ManagedDatabaseService.get(managed_id)
     if not managed:
-        return jsonify({'error': 'Managed database not found'}), 404
+        raise not_found('database')
     drop = str(request.args.get('drop', '')).lower() in ('1', 'true', 'yes')
     from flask_jwt_extended import get_jwt_identity
     ManagedDatabaseService.delete(managed, drop=drop, user_id=get_jwt_identity())
@@ -868,7 +869,7 @@ def reveal_managed_connection_uri(managed_id):
     from app.services.audit_service import AuditService
     managed = ManagedDatabaseService.get(managed_id)
     if not managed:
-        return jsonify({'error': 'Managed database not found'}), 404
+        raise not_found('database')
     uri = ManagedDatabaseService.build_connection_uri(managed, reveal=True)
     AuditService.log(
         action=getattr(AuditLog, 'ACTION_SECRET_REVEALED', 'secret.revealed'),
@@ -885,7 +886,7 @@ def protect_managed_database(managed_id):
     """Create/refresh a BackupPolicy for a managed database (real FK target)."""
     managed = ManagedDatabaseService.get(managed_id)
     if not managed:
-        return jsonify({'error': 'Managed database not found'}), 404
+        raise not_found('database')
     data = request.get_json() or {}
     policy = ManagedDatabaseService.protect(managed, fields=data.get('policy'))
     return jsonify({'policy': policy.to_dict()}), 201
@@ -897,7 +898,9 @@ def protect_managed_database(managed_id):
 # shapes (host engine vs docker container).
 
 def _process_error_response(result):
-    code = 400 if result['error'] == 'unsupported engine' else 502
+    # The services tag the one client-caused failure with a code; the status
+    # never depends on the wording of the error.
+    code = 400 if result.get('code') == 'unsupported_engine' else 502
     return jsonify({'error': result['error']}), code
 
 

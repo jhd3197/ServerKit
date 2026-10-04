@@ -10,6 +10,7 @@ from app.models import Domain, Application, User
 from app.services.nginx_service import NginxService
 from app.services.ssl_service import SSLService, get_acme_contact, remember_acme_contact
 from app.services.resource_grant_service import ResourceGrantService
+from app.exceptions import already_exists, not_found, permission_denied
 
 domains_bp = Blueprint('domains', __name__)
 
@@ -126,16 +127,16 @@ def get_domain(domain_id):
     domain = Domain.query_active().filter_by(id=domain_id).first()
 
     if not domain:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
 
     # A soft-deleted app keeps its Domain rows (only the vhost is torn down), so
     # every route here has to resolve the parent live or a deleted app's domains
     # stay reachable — and operable, up to a real ACME order in enable_ssl.
     app = Application.query_active().filter_by(id=domain.application_id).first()
     if not app:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
     if not ResourceGrantService.can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     return jsonify({'domain': domain.to_dict()}), 200
 
@@ -166,23 +167,23 @@ def create_domain():
 
     # Check if domain already exists
     if Domain.query_active().filter_by(name=name).first():
-        return jsonify({'error': 'Domain already exists'}), 409
+        raise already_exists('domain')
 
     # Check if application exists and user has access
     app = Application.query_active().filter_by(id=application_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     # For Docker apps, validate port configuration
     port_warning = None
     if app.app_type == 'docker':
         if not app.port:
             return jsonify({
-                'error': 'Docker app must have a port configured before adding domains',
-                'hint': 'Update the application with a valid port number first'
+                'error': 'Set a port on this service before adding domains',
+                'hint': 'Open the service settings and set its port, then add the domain'
             }), 400
 
         # Check if port is accessible (warning only, don't block)
@@ -281,9 +282,9 @@ def give_subdomain():
     app = (Application.query_active().filter_by(id=data.get('application_id')).first()
            if data.get('application_id') else None)
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     from app.services.site_domain_service import SiteDomainService
     result = SiteDomainService.give_subdomain(app, label=data.get('label'), base=data.get('base'))
@@ -298,13 +299,13 @@ def update_domain(domain_id):
     domain = Domain.query_active().filter_by(id=domain_id).first()
 
     if not domain:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
 
     app = Application.query_active().filter_by(id=domain.application_id).first()
     if not app:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     data = request.get_json()
 
@@ -334,13 +335,13 @@ def delete_domain(domain_id):
     domain = Domain.query_active().filter_by(id=domain_id).first()
 
     if not domain:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
 
     app = Application.query_active().filter_by(id=domain.application_id).first()
     if not app:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     application_id = domain.application_id
     # Soft delete: the vhost teardown below still happens, but the record keeps
@@ -377,13 +378,13 @@ def enable_ssl(domain_id):
     domain = Domain.query_active().filter_by(id=domain_id).first()
 
     if not domain:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
 
     app = Application.query_active().filter_by(id=domain.application_id).first()
     if not app:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     data = request.get_json() or {}
     # An address on the request wins; otherwise the panel-wide ACME contact,
@@ -439,13 +440,13 @@ def disable_ssl(domain_id):
     domain = Domain.query_active().filter_by(id=domain_id).first()
 
     if not domain:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
 
     app = Application.query_active().filter_by(id=domain.application_id).first()
     if not app:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     domain.ssl_enabled = False
     db.session.commit()
@@ -464,13 +465,13 @@ def renew_ssl(domain_id):
     domain = Domain.query_active().filter_by(id=domain_id).first()
 
     if not domain:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
 
     app = Application.query_active().filter_by(id=domain.application_id).first()
     if not app:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
     if not ResourceGrantService.can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     if not domain.ssl_enabled:
         return jsonify({'error': 'SSL is not enabled for this domain'}), 400
@@ -505,7 +506,7 @@ def verify_domain(domain_id):
 
     domain = Domain.query_active().filter_by(id=domain_id).first()
     if not domain:
-        return jsonify({'error': 'Domain not found'}), 404
+        raise not_found('domain')
 
     try:
         ips = _resolve_host_ips(domain.name)
@@ -576,13 +577,13 @@ def regenerate_nginx_config(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if app.app_type != 'docker':
-        return jsonify({'error': 'This endpoint is only for Docker apps'}), 400
+        return jsonify({'error': 'This only works for Docker services'}), 400
 
     if not app.port:
-        return jsonify({'error': 'Application does not have a port configured'}), 400
+        return jsonify({'error': 'This service has no port. Set one in the service settings.'}), 400
 
     # Get all domains for this app
     # query_active: a tombstone here would be written back into server_name,
@@ -590,7 +591,7 @@ def regenerate_nginx_config(app_id):
     domains = [d.name for d in Domain.query_active().filter_by(application_id=app_id).all()]
 
     if not domains:
-        return jsonify({'error': 'No domains configured for this application'}), 400
+        return jsonify({'error': 'This service has no domains. Add one first.'}), 400
 
     # Create nginx site config
     result = NginxService.create_site(
@@ -637,7 +638,7 @@ def diagnose_app_routing(app_id):
 
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     diagnosis = {
         'app': {
@@ -731,10 +732,10 @@ def test_app_routing(app_id):
     """
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not app.port:
-        return jsonify({'error': 'Application has no port configured'}), 400
+        return jsonify({'error': 'This service has no port. Set one in the service settings.'}), 400
 
     # Get primary domain or first domain
     domain = Domain.query_active().filter_by(application_id=app_id, is_primary=True).first()

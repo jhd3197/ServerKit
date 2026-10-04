@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.user import User
 from app import db
+from app.exceptions import not_found
 
 mobile_bp = Blueprint('mobile', __name__)
 
@@ -20,7 +21,7 @@ def register_push():
 
     user = User.query.get(user_id)
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     # Store push subscription in user metadata
     import json

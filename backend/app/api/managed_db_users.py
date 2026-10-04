@@ -13,6 +13,7 @@ from flask import Blueprint, request, jsonify
 from app.middleware.rbac import admin_required, developer_required
 from app.services.managed_database_service import ManagedDatabaseService
 from app.services.managed_db_user_service import ManagedDbUserService
+from app.exceptions import not_found
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +23,7 @@ managed_db_users_bp = Blueprint('managed_db_users', __name__)
 def _get_managed_or_404(managed_id):
     managed = ManagedDatabaseService.get(managed_id)
     if not managed:
-        return None, (jsonify({'error': 'Managed database not found'}), 404)
+        raise not_found('database')
     return managed, None
 
 
@@ -68,7 +69,7 @@ def delete_managed_db_user(managed_id, user_id):
     row = ManagedDatabaseUser.query.filter_by(
         id=user_id, managed_database_id=managed.id).first()
     if not row:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
     result = ManagedDbUserService.delete_user(managed, row)
     if 'error' in result:
         return jsonify({'error': result['error']}), 400
@@ -91,7 +92,7 @@ def launch_managed_db_sso(managed_id):
     descriptor = DbAdminSsoService.launch(
         managed, requested_by=getattr(user, 'id', None))
     if 'error' in descriptor:
-        status = 400 if descriptor['error'] != 'Docker required' else 503
+        status = 503 if descriptor.get('code') == 'docker_required' else 400
         return jsonify({'error': descriptor['error']}), status
 
     # Build the browser-reachable URL from the panel host the client used.

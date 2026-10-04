@@ -1931,7 +1931,7 @@ class TemplateService:
         # Create app directory
         app_path = os.path.join(cls.INSTALLED_DIR, app_name)
         if os.path.exists(app_path):
-            return {'success': False, 'error': f"App directory already exists: {app_path}"}
+            return {'success': False, 'error': f"A service directory already exists at {app_path}. Choose another name."}
 
         try:
             os.makedirs(app_path, exist_ok=True)
@@ -2234,7 +2234,7 @@ class TemplateService:
         installed = config.get('installed', {}).get(str(app_id))
 
         if not installed:
-            return {'success': False, 'error': 'App not installed from template'}
+            return {'success': False, 'error': 'This service was not installed from a template'}
 
         template_id = installed['template_id']
         installed_version = installed['template_version']
@@ -2316,11 +2316,11 @@ class TemplateService:
         installed = config.get('installed', {}).get(str(app_id))
 
         if not installed:
-            return {'success': False, 'error': 'App not installed from template'}
+            return {'success': False, 'error': 'This service was not installed from a template'}
 
         app = Application.query_active().filter_by(id=app_id).first()
         if not app:
-            return {'success': False, 'error': 'Application not found'}
+            return {'success': False, 'error': 'Service not found'}
 
         template_id = installed['template_id']
         app_path = app.root_path
@@ -2509,15 +2509,15 @@ class TemplateService:
         target_app = Application.query_active().filter_by(id=target_app_id).first()
 
         if not source_app or not target_app:
-            return {'success': False, 'error': 'App not found'}
+            return {'success': False, 'error': 'Service not found'}
 
         if not source_app.root_path or not target_app.root_path:
-            return {'success': False, 'error': 'Apps must have root_path set'}
+            return {'success': False, 'error': 'Both services need a root path'}
 
         # Read source app's .env file
         source_env_path = os.path.join(source_app.root_path, '.env')
         if not os.path.exists(source_env_path):
-            return {'success': False, 'error': 'Source app .env file not found'}
+            return {'success': False, 'error': 'The source service has no .env file'}
 
         try:
             env_vars = {}
@@ -2540,7 +2540,7 @@ class TemplateService:
                     db_config[key] = env_vars[key]
 
             if not db_config:
-                return {'success': False, 'error': 'No database credentials found in source app'}
+                return {'success': False, 'error': 'No database credentials found in the source service'}
 
             # Set target table prefix (default different from source)
             source_prefix = env_vars.get('TABLE_PREFIX', env_vars.get('WORDPRESS_TABLE_PREFIX', 'wp_'))

@@ -44,6 +44,8 @@ from app.services.upload_service import (
 )
 from app import paths
 from app.middleware.rbac import get_current_user, require_admin_user
+from app.error_reporting import unexpected_response
+from app.exceptions import field_required, not_found, permission_denied
 
 apps_bp = Blueprint('apps', __name__)
 
@@ -134,10 +136,10 @@ def link_apps(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     data = request.get_json()
     if not data:
@@ -147,7 +149,7 @@ def link_apps(app_id):
     as_environment = data.get('as_environment', 'development')
 
     if not target_app_id:
-        return jsonify({'error': 'target_app_id is required'}), 400
+        raise field_required('target_app_id')
 
     valid_environments = ['production', 'development', 'staging']
     if as_environment not in valid_environments:
@@ -155,16 +157,16 @@ def link_apps(app_id):
 
     target_app = Application.query_active().filter_by(id=target_app_id).first()
     if not target_app:
-        return jsonify({'error': 'Target application not found'}), 404
+        return jsonify({'error': 'Target service not found'}), 404
 
     if not _can_edit_app(user, target_app):
-        return jsonify({'error': 'Access denied to target application'}), 403
+        return jsonify({'error': "You don't have access to the target service"}), 403
 
     if app.app_type != target_app.app_type:
-        return jsonify({'error': 'Apps must be of the same type to link'}), 400
+        return jsonify({'error': 'Only services of the same type can be linked'}), 400
 
     if app_id == target_app_id:
-        return jsonify({'error': 'Cannot link an app to itself'}), 400
+        return jsonify({'error': "A service can't be linked to itself"}), 400
 
     # Set environment types based on as_environment
     if as_environment == 'development':
@@ -214,7 +216,7 @@ def link_apps(app_id):
     db.session.commit()
 
     response = {
-        'message': 'Apps linked successfully',
+        'message': 'Services linked',
         'app': app.to_dict(include_linked=True),
         'target_app': target_app.to_dict(include_linked=True)
     }
@@ -233,10 +235,10 @@ def get_linked_apps(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     linked_apps = []
 
@@ -280,13 +282,13 @@ def unlink_apps(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     if not app.linked_app_id:
-        return jsonify({'error': 'App is not linked to any other app'}), 400
+        return jsonify({'error': 'This service is not linked to another service'}), 400
 
     # Deliberately NOT query_active: this is the reciprocal half of a link the
     # caller is severing, not "an app to operate on". If the partner is already
@@ -307,7 +309,7 @@ def unlink_apps(app_id):
     db.session.commit()
 
     return jsonify({
-        'message': 'Apps unlinked successfully',
+        'message': 'Services unlinked',
         'app': app.to_dict()
     }), 200
 
@@ -321,10 +323,10 @@ def update_environment(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     data = request.get_json()
     if not data:
@@ -430,10 +432,10 @@ def set_app_workspace(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     # Use user.id (int) for comparisons — get_jwt_identity() is the stringified token id.
     if not user.is_admin and app.user_id != user.id:
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     target = (request.get_json() or {}).get('workspace_id')
     if target in (None, '', 'default'):
@@ -535,7 +537,7 @@ def move_apps_to_project():
     db.session.commit()
 
     return jsonify({
-        'message': f'Updated {len(updated)} application(s)',
+        'message': f'Updated {len(updated)} service(s)',
         'apps': [a.to_dict() for a in updated],
         'skipped': skipped,
     }), 200
@@ -616,10 +618,10 @@ def get_app(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     # Single app requests include linked app info by default
     return jsonify({'app': _attach_deploy_config(app.to_dict(include_linked=True))}), 200
@@ -636,9 +638,9 @@ def get_compose_services(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not _can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     from app.services.compose_env_service import ComposeEnvService
     return jsonify({'services': ComposeEnvService.list_services(app)}), 200
@@ -654,9 +656,9 @@ def list_app_grants(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not user.is_admin and app.user_id != user.id:
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
     grants = ResourceGrantService.list_for_resource('application', app.id)
     return jsonify({'grants': [g.to_dict() for g in grants]}), 200
 
@@ -669,16 +671,16 @@ def grant_app_access(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not user.is_admin and app.user_id != user.id:
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
     data = request.get_json() or {}
     grantee_id = data.get('user_id')
     if not grantee_id:
-        return jsonify({'error': 'user_id is required'}), 400
+        raise field_required('user_id')
     grantee = User.query.get(grantee_id)
     if not grantee:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
     if grantee.id == app.user_id:
         return jsonify({'error': 'The owner already has access'}), 400
     role = data.get('role') or 'editor'
@@ -697,9 +699,9 @@ def revoke_app_access(app_id, grant_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not user.is_admin and app.user_id != user.id:
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
     ok = ResourceGrantService.revoke(grant_id, resource_type='application', resource_id=app.id)
     return jsonify({'success': ok}), (200 if ok else 404)
 
@@ -747,7 +749,7 @@ def create_app_from_repository():
         deploy_repo_url = repo_url
 
     if not clone_repo_url:
-        return jsonify({'error': 'repo_url is required'}), 400
+        raise field_required('repo_url')
 
     valid_app_types = ['auto', 'docker', 'flask', 'django', 'php', 'static']
     if app_type not in valid_app_types:
@@ -778,7 +780,7 @@ def create_app_from_repository():
         return jsonify({'error': str(exc)}), 400
 
     if os.path.exists(app_path):
-        return jsonify({'error': f'App directory already exists: {app_path}'}), 400
+        return jsonify({'error': f'A service directory already exists at {app_path}. Choose another name.'}), 400
 
     clone_result = GitService.clone_repository(app_path, clone_repo_url, branch or None)
     if not clone_result.get('success'):
@@ -896,9 +898,16 @@ def create_app_from_repository():
             'detection': detection,
             'manifest': manifest,
         }), 201
-    except Exception as exc:
+    except RuntimeError as exc:
+        # configure_deployment/configure_build failures carry the service's
+        # own message, written for the caller.
         repository_application_service.abort_repository_creation(app)
         return jsonify({'error': str(exc)}), 400
+    except Exception as exc:
+        # Anything else is a crash: log it with the request id and keep its
+        # text (paths, SQL, connection strings) out of the response.
+        repository_application_service.abort_repository_creation(app)
+        return unexpected_response(exc)
 
 
 @apps_bp.route('', methods=['POST'])
@@ -960,7 +969,7 @@ def create_app():
     db.session.commit()
 
     return jsonify({
-        'message': 'Application created successfully',
+        'message': 'Service created',
         'app': app.to_dict()
     }), 201
 
@@ -987,7 +996,7 @@ def create_manual_app():
         return jsonify({'error': f'Invalid app_type. Must be one of: {", ".join(valid_types)}'}), 400
 
     if not root_path:
-        return jsonify({'error': 'root_path is required'}), 400
+        raise field_required('root_path')
 
     root_path = os.path.abspath(root_path)
     if not os.path.isdir(root_path):
@@ -1195,7 +1204,12 @@ def upload_app_archive():
             os.remove(zippath)
         except Exception:
             pass
-        return jsonify({'error': str(exc)}), 400
+        if isinstance(exc, ValueError):
+            # upload_service's validation errors are written for the caller.
+            return jsonify({'error': str(exc)}), 400
+        # Anything else is a crash: logged with the request id, its text
+        # (paths, SQL) kept out of the response.
+        return unexpected_response(exc)
 
 
 @apps_bp.route('/<int:app_id>/versions', methods=['GET'])
@@ -1207,10 +1221,10 @@ def get_app_versions(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     if app.source != 'upload':
         return jsonify({'versions': [], 'current': None}), 200
@@ -1220,8 +1234,10 @@ def get_app_versions(app_id):
         versions = list_versions(app_dir)
         current = get_current_version(app_dir)
         return jsonify({'versions': versions, 'current': current}), 200
-    except Exception as e:
+    except ValueError as e:
         return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return unexpected_response(e)
 
 
 @apps_bp.route('/<int:app_id>/rollback', methods=['POST'])
@@ -1233,18 +1249,18 @@ def rollback_app_version(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     if app.source != 'upload':
-        return jsonify({'error': 'Rollback is only supported for upload-based apps'}), 400
+        return jsonify({'error': 'Rollback is only available for services deployed by upload'}), 400
 
     data = request.get_json() or {}
     target = data.get('version')
     if target is None:
-        return jsonify({'error': 'version is required'}), 400
+        raise field_required('version')
 
     try:
         target = int(target)
@@ -1271,8 +1287,11 @@ def rollback_app_version(app_id):
             'message': f'Rolled back to version {target}',
             'app': _attach_deploy_config(app.to_dict(include_linked=True))
         }), 200
-    except Exception as e:
+    except ValueError as e:
+        # An unknown version is the caller's to fix.
         return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return unexpected_response(e)
 
 
 @apps_bp.route('/<int:app_id>', methods=['PUT'])
@@ -1283,10 +1302,10 @@ def update_app(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     data = request.get_json()
 
@@ -1334,7 +1353,7 @@ def update_app(app_id):
     db.session.commit()
 
     return jsonify({
-        'message': 'Application updated successfully',
+        'message': 'Service updated',
         'app': app.to_dict()
     }), 200
 
@@ -1364,10 +1383,10 @@ def delete_app(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not user.is_admin and app.user_id != user.id:
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     purge_now = str(request.args.get('purge', '')).lower() in ('1', 'true', 'yes')
 
@@ -1381,14 +1400,14 @@ def delete_app(app_id):
         app._purge_remove_data = _remove_data_flag(app)
         ok, warning = recycle_bin_service.purge('application', app.id)
         return jsonify({
-            'message': 'Application deleted permanently',
+            'message': 'Service deleted permanently',
             'purged': ok,
             'cleanup': cleanup_results,
             'warning': warning,
         }), 200
 
     return jsonify({
-        'message': 'Application moved to the recycle bin',
+        'message': 'Service moved to the recycle bin',
         'recycle_bin': True,
         'cleanup': cleanup_results,
     }), 200
@@ -1402,10 +1421,10 @@ def start_app(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     try:
         application_lifecycle_service.start_application(app, user_id=current_user_id)
@@ -1413,7 +1432,7 @@ def start_app(app_id):
         return jsonify({'error': str(exc)}), 400
 
     return jsonify({
-        'message': 'Application started',
+        'message': 'Service started',
         'app': app.to_dict()
     }), 200
 
@@ -1427,9 +1446,9 @@ def apply_image_update(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     # A slot app never recreates its live stack in place: the newest images
     # go through a slot deploy (pulled in its preflight, gated, switched).
@@ -1447,7 +1466,7 @@ def apply_image_update(app_id):
     # Auto-apply is only safe for compose-managed apps; recreating a standalone
     # container would need its full run spec, which we don't store.
     if app.app_type != 'docker' or not app.root_path or not app.compose_file:
-        return jsonify({'error': 'Automatic update is only supported for docker-compose apps. '
+        return jsonify({'error': 'Automatic update is only available for Docker Compose services. '
                                  'Pull and recreate this container manually.'}), 400
 
     # Pull the newest images for the project, then recreate changed containers.
@@ -1492,9 +1511,9 @@ def get_sleep_policy(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not _can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
     return jsonify(ContainerSleepService.get_or_create_policy(app_id).to_dict())
 
 
@@ -1504,9 +1523,9 @@ def update_sleep_policy(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
     data = request.get_json() or {}
     policy = ContainerSleepService.set_policy(
         app_id, enabled=data.get('enabled'), idle_timeout_minutes=data.get('idle_timeout_minutes'))
@@ -1519,13 +1538,13 @@ def sleep_app(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
     result = ContainerSleepService.sleep_app(app_id)
     if not result.get('success'):
         return jsonify({'error': result['error']}), 400
-    return jsonify({'message': 'Application asleep', 'policy': result['policy'], 'app': app.to_dict()})
+    return jsonify({'message': 'Service asleep', 'policy': result['policy'], 'app': app.to_dict()})
 
 
 @apps_bp.route('/<int:app_id>/wake', methods=['POST'])
@@ -1534,13 +1553,13 @@ def wake_app(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
     result = ContainerSleepService.wake_app(app_id)
     if not result.get('success'):
         return jsonify({'error': result['error']}), 400
-    return jsonify({'message': 'Application awake', 'policy': result['policy'], 'app': app.to_dict()})
+    return jsonify({'message': 'Service awake', 'policy': result['policy'], 'app': app.to_dict()})
 
 
 @apps_bp.route('/sweep-idle', methods=['POST'])
@@ -1592,9 +1611,9 @@ def get_app_resources(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not _can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     usage = None
     if app.status == 'running' and not app.server_id:
@@ -1625,9 +1644,9 @@ def update_app_resources(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     data = request.get_json() or {}
     try:
@@ -1682,9 +1701,9 @@ def set_micro_cache(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     data = request.get_json() or {}
     if 'enabled' not in data:
@@ -1740,9 +1759,9 @@ def purge_micro_cache(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     hosts = [d.name for d in app.live_domains if d.name]
     if not hosts:
@@ -1765,10 +1784,10 @@ def stop_app(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     try:
         application_lifecycle_service.stop_application(app, user_id=current_user_id)
@@ -1776,7 +1795,7 @@ def stop_app(app_id):
         return jsonify({'error': str(exc)}), 400
 
     return jsonify({
-        'message': 'Application stopped',
+        'message': 'Service stopped',
         'app': app.to_dict()
     }), 200
 
@@ -1789,10 +1808,10 @@ def restart_app(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_edit_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     try:
         application_lifecycle_service.restart_application(app, user_id=current_user_id)
@@ -1800,7 +1819,7 @@ def restart_app(app_id):
         return jsonify({'error': str(exc)}), 400
 
     return jsonify({
-        'message': 'Application restarted',
+        'message': 'Service restarted',
         'app': app.to_dict()
     }), 200
 
@@ -1819,9 +1838,9 @@ def get_app_related(app_id):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if not _can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     related = {'domains': [], 'databases': [], 'backup': None, 'deployments': {'count': 0}}
 
@@ -1873,10 +1892,10 @@ def get_app_logs(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     lines = request.args.get('lines', 100, type=int)
     log_type = request.args.get('type', 'all')
@@ -1942,10 +1961,10 @@ def get_container_logs(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     # Parse query parameters
     tail = request.args.get('tail', 100, type=int)
@@ -1982,8 +2001,8 @@ def get_container_logs(app_id):
 
     if not container_id:
         return jsonify({
-            'error': 'No container found for this application',
-            'hint': 'The application may not have been started yet'
+            'error': 'No container found for this service',
+            'hint': 'Start the service, then try again'
         }), 404
 
     # Check container state
@@ -2047,10 +2066,10 @@ def get_app_containers(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     containers = DockerService.get_all_app_containers(app)
 
@@ -2070,10 +2089,10 @@ def get_app_status(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not _can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     # Manual / local apps: ask the real runtime
     if app.source == 'manual':
@@ -2162,10 +2181,10 @@ def _load_app_for_backup(app_id, edit=False):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return None, (jsonify({'error': 'Application not found'}), 404)
+        raise not_found('service')
     allowed = _can_edit_app(user, app) if edit else _can_access_app(user, app)
     if not allowed:
-        return None, (jsonify({'error': 'Access denied'}), 403)
+        raise permission_denied()
     return app, None
 
 
@@ -2310,7 +2329,7 @@ def list_app_db_snapshots(app_id):
     from app.models.wordpress_site import DatabaseSnapshot
     site = _wp_site_for_app(app)
     if not site:
-        return jsonify({'error': 'This application is not a WordPress site'}), 400
+        return jsonify({'error': 'This service is not a WordPress site'}), 400
     snaps = (DatabaseSnapshot.query.filter_by(site_id=site.id)
              .order_by(DatabaseSnapshot.created_at.desc()).all())
     return jsonify({'snapshots': [s.to_dict() for s in snaps], 'total': len(snaps)}), 200
@@ -2327,7 +2346,7 @@ def create_app_db_snapshot(app_id):
     from app.services.db_sync_service import DatabaseSyncService
     site = _wp_site_for_app(app)
     if not site:
-        return jsonify({'error': 'This application is not a WordPress site'}), 400
+        return jsonify({'error': 'This service is not a WordPress site'}), 400
     # Resolve the extension only once we know this IS a WordPress site — with
     # serverkit-wordpress uninstalled a non-WP app must get the 400, not an
     # import error (plan 52 Phase 5 graceful absence). A WP SITE with the
@@ -2377,10 +2396,10 @@ def delete_app_db_snapshot(app_id, snapshot_id):
     from app.services.db_sync_service import DatabaseSyncService
     site = _wp_site_for_app(app)
     if not site:
-        return jsonify({'error': 'This application is not a WordPress site'}), 400
+        return jsonify({'error': 'This service is not a WordPress site'}), 400
     snapshot = DatabaseSnapshot.query.filter_by(id=snapshot_id, site_id=site.id).first()
     if not snapshot:
-        return jsonify({'error': 'Snapshot not found'}), 404
+        raise not_found('snapshot')
     DatabaseSyncService.delete_snapshot(snapshot.file_path)
     db.session.delete(snapshot)
     db.session.commit()

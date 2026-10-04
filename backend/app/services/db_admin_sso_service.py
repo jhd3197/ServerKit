@@ -132,9 +132,9 @@ class DbAdminSsoService:
 
         driver = _ADMINER_DRIVERS.get(managed.engine)
         if not driver:
-            return {'error': 'unsupported engine'}
+            return {'error': 'unsupported engine', 'code': 'unsupported_engine'}
         if not cls._docker_available():
-            return {'error': 'Docker required'}
+            return {'error': 'Docker required', 'code': 'docker_required'}
 
         expires_at = datetime.utcnow() + timedelta(minutes=SHADOW_TTL_MINUTES)
         username = f'sk_sso_{secrets.token_hex(3)}'

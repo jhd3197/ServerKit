@@ -274,7 +274,9 @@ def test_api_404_on_unknown_database(app, client, auth_headers):
     _register_bp(app)
     resp = client.get('/api/v1/managed-databases/99999/users', headers=auth_headers)
     assert resp.status_code == 404
-    assert resp.get_json() == {'error': 'Managed database not found'}
+    body = resp.get_json()
+    assert body['error'] == 'Database not found'
+    assert body['code'] == 'not_found.database'
 
 
 def test_api_bad_grants_is_400(app, client, auth_headers, managed, sql_log):
