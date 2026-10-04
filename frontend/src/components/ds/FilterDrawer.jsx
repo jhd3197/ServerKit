@@ -101,7 +101,7 @@ export function FilterDrawer({
             open={open}
             onOpenChange={onOpenChange}
             title={title}
-            subtitle={active ? `${active} active` : t('app.filterDrawer.noFilters', 'no filters')}
+            subtitle={active ? t('app.filterDrawer.activeCount', '{{count}} active', { count: active }) : t('app.filterDrawer.noFilters', 'no filters')}
             icon={<SlidersHorizontal size={16} />}
             width={width}
         >
@@ -137,8 +137,8 @@ export function FilterDrawer({
                     </Button>
                     <Button size="sm" onClick={() => onOpenChange(false)}>
                         {resultCount == null
-                            ? 'Done'
-                            : `Show ${resultCount} ${resultNoun}${resultCount === 1 ? '' : 's'}`}
+                            ? t('common.actions.done', 'Done')
+                            : t('app.filterDrawer.showResults', { count: resultCount, noun: resultNoun, defaultValue_one: 'Show {{count}} {{noun}}', defaultValue_other: 'Show {{count}} {{noun}}s' })}
                     </Button>
                 </div>
             </div>

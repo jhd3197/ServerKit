@@ -128,7 +128,7 @@ export function ColumnMenu({
                             onClick={() => { onSort(column.key, 'asc'); onOpenChange(false); }}
                         >
                             <ArrowUp size={13} />
-                            {ordered ? 'Sort low to high' : 'Sort A to Z'}
+                            {ordered ? t('app.columnMenu.sortLowToHigh', 'Sort low to high') : t('app.columnMenu.sortAToZ', 'Sort A to Z')}
                         </SharedButton>
                         <SharedButton variant="unstyled"
                             type="button"
@@ -136,7 +136,7 @@ export function ColumnMenu({
                             onClick={() => { onSort(column.key, 'desc'); onOpenChange(false); }}
                         >
                             <ArrowDown size={13} />
-                            {ordered ? 'Sort high to low' : 'Sort Z to A'}
+                            {ordered ? t('app.columnMenu.sortHighToLow', 'Sort high to low') : t('app.columnMenu.sortZToA', 'Sort Z to A')}
                         </SharedButton>
                     </>
                 )}
@@ -148,14 +148,14 @@ export function ColumnMenu({
                         onClick={() => { onToggleGroup(column.key); onOpenChange(false); }}
                     >
                         <Rows3 size={13} />
-                        {grouped ? 'Remove grouping' : 'Group by this field'}
+                        {grouped ? t('app.columnMenu.removeGrouping', 'Remove grouping') : t('app.columnMenu.groupByThisField', 'Group by this field')}
                     </SharedButton>
                 )}
 
                 {filterable && (
                     <>
                         {(canSort || canGroup) && <div className="sk-gridmenu__sep" />}
-                        <div className="sk-gridmenu__head">{`Filter by ${label}`}</div>
+                        <div className="sk-gridmenu__head">{t('app.columnMenu.filterBy', 'Filter by {{label}}', { label })}</div>
 
                         {isEnumish ? (
                             <div className="sk-gridmenu__scroll">

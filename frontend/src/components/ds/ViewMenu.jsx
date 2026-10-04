@@ -110,7 +110,7 @@ export function ViewMenu({ views, className }) {
                     className={cn('sk-filter-btn', activeView && 'sk-filter-btn--active', className)}
                 >
                     <LayoutList aria-hidden="true" />
-                    {activeView ? activeView.name : 'Views'}
+                    {activeView ? activeView.name : t('app.viewMenu.views', 'Views')}
                     {isDirty && <span className="sk-viewmenu__dot" title={t('app.viewMenu.modifiedNotSavedToThisView', 'Modified (not saved to this view)')} />}
                 </Button>
             </PopoverTrigger>

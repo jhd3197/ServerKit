@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import api from '../services/api';
+import { t } from '../i18n/t';
 import usePageContext from '../hooks/ai/usePageContext';
 import {
     addAttachment as appendAttachment,
@@ -308,7 +309,7 @@ export function AIProvider({ children }) {
             case 'tool_result': dispatch({ type: 'TOOL_RESULT', id: data.id, output: data.output, isError: !!data.is_error }); break;
             case 'pending_action': dispatch({ type: 'SET_PENDING_CONFIRM', payload: data }); break;
             case 'attachment_warning': dispatch({ type: 'ATTACHMENT_WARNING', warning: data }); break;
-            case 'error': dispatch({ type: 'SET_ERROR', message: data.message || 'The assistant hit an error.' }); break;
+            case 'error': dispatch({ type: 'SET_ERROR', message: data.message || t('app.aiContext.assistantError', 'The assistant hit an error.') }); break;
             case 'run_start': dispatch({ type: 'RUN_START', selection: data }); break;
             case 'done': dispatch({ type: 'TURN_DONE', conversationId: data.conversation_id, usage: data.usage }); break;
             default: break;
@@ -357,7 +358,7 @@ export function AIProvider({ children }) {
             await api.aiStreamChat(payload, { signal: controller.signal, onEvent: handleEvent });
         } catch (e) {
             if (e.name !== 'AbortError') {
-                dispatch({ type: 'SET_ERROR', message: e.message || 'AI request failed' });
+                dispatch({ type: 'SET_ERROR', message: e.message || t('app.aiContext.requestFailed', "Couldn't reach the assistant.") });
             } else {
                 dispatch({ type: 'SET_STREAMING', value: false });
             }
@@ -391,7 +392,7 @@ export function AIProvider({ children }) {
             });
             // The worker resumes on the SAME open stream — no new request needed.
         } catch (e) {
-            dispatch({ type: 'SET_ERROR', message: e.message || 'Could not submit your decision' });
+            dispatch({ type: 'SET_ERROR', message: e.message || t('app.aiContext.decisionFailed', "Couldn't submit your decision.") });
         }
     }, [state.pendingConfirm]);
 

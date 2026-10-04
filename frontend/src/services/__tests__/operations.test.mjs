@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import i18next from 'i18next';
 
 import {
     boundOperationHistory,
@@ -9,6 +10,9 @@ import {
     operationKey,
     reconcileOperationStatus,
 } from '../operations.js';
+
+// Uninitialised i18next returns undefined; the app initialises it in i18n/index.js.
+await i18next.init({ lng: 'en', resources: {} });
 
 test('normalizes deployment progress, resource, and detail route', () => {
     const operation = normalizeDeploymentOperation({
@@ -58,7 +62,7 @@ test('normalizes proof job kinds and keeps deploy queue mirrors out', () => {
     assert.deepEqual(
         Object.fromEntries(operations.map((operation) => [operation.id, operation.title])),
         {
-            'dep-1': 'Application deployment',
+            'dep-1': 'Service deployment',
             backup: 'Backup policy run',
             doctor: 'Doctor repair',
             security: 'Security scan',

@@ -77,7 +77,9 @@ const DEPLOY_STATUS = {
 
 export function getServiceType(appType) {
     return SERVICE_TYPES[appType] || {
-        label: appType?.charAt(0).toUpperCase() + appType?.slice(1) || 'Unknown',
+        ...(appType
+            ? { label: appType.charAt(0).toUpperCase() + appType.slice(1) }
+            : { labelKey: 'app.serviceTypes.unknown', label: 'Unknown' }),
         color: '#646b7a',
         bgColor: 'rgba(100, 107, 122, 0.1)',
         borderColor: 'rgba(100, 107, 122, 0.2)',

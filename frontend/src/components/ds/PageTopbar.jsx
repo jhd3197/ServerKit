@@ -87,7 +87,7 @@ function TopbarTabs({ tabs, label }) {
         // The nav is the flex-fill measurement region (kept right-aligned so a
         // changing page title never shoves the tabs sideways); the inner bar is
         // the visible segmented control that actually holds the tabs.
-        <nav ref={containerRef} className="sk-topbar__tabs" aria-label={`${label} sections`}>
+        <nav ref={containerRef} className="sk-topbar__tabs" aria-label={t('app.pageTopbar.sections', '{{label}} sections', { label })}>
             <div className="sk-topbar__tabs-inner">
                 {safeTabs.map((tab, i) => {
                     const isHidden = hiddenSet.has(i);

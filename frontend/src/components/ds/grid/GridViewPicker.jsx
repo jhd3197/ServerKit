@@ -65,7 +65,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                         onOpenChange={(o) => setMenuFor(o ? key : null)}
                     >
                         <PopoverTrigger asChild>
-                            <SharedButton variant="unstyled" type="button" className="sk-viewpick__cog" aria-label={`${view.name} options`}>
+                            <SharedButton variant="unstyled" type="button" className="sk-viewpick__cog" aria-label={t('app.gridViewPicker.viewOptions', '{{name}} options', { name: view.name })}>
                                 <MoreVertical size={14} />
                             </SharedButton>
                         </PopoverTrigger>
@@ -75,7 +75,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                                 className="sk-gridmenu__opt"
                                 onClick={() => { views.toggleDefault(view); setMenuFor(null); }}
                             >
-                                <Star size={13} />{view.is_default ? 'Unset as default' : 'Make default'}
+                                <Star size={13} />{view.is_default ? t('app.gridViewPicker.unsetAsDefault', 'Unset as default') : t('app.gridViewPicker.makeDefault', 'Make default')}
                             </SharedButton>
                             <SharedButton variant="unstyled"
                                 type="button"
@@ -171,7 +171,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                             else setOpen(true);
                         }}
                     >
-                        {active && !active.builtin ? 'Save' : 'Save as…'}
+                        {active && !active.builtin ? t('common.actions.save', 'Save') : t('app.gridViewPicker.saveAs', 'Save as…')}
                     </SharedButton>
                 </div>
             )}

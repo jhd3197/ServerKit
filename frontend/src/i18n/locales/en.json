@@ -355,6 +355,11 @@
         "ai": {
             "assistant": "Assistant"
         },
+        "aiContext": {
+            "assistantError": "The assistant hit an error.",
+            "decisionFailed": "Couldn't submit your decision.",
+            "requestFailed": "Couldn't reach the assistant."
+        },
         "alertsTab": {
             "acknowledged": "Acknowledged",
             "allClear": "All clear",
@@ -957,11 +962,18 @@
             "clearFilter": "Clear filter",
             "columnOptions": "{{label}} column options",
             "enterValue": "Enter value",
+            "filterBy": "Filter by {{label}}",
             "filterOperator": "{{label}} filter operator",
             "filterValue": "{{label}} filter value",
+            "groupByThisField": "Group by this field",
             "hideThisField": "Hide this field",
             "moveLeft": "Move left",
-            "moveRight": "Move right"
+            "moveRight": "Move right",
+            "removeGrouping": "Remove grouping",
+            "sortAToZ": "Sort A to Z",
+            "sortHighToLow": "Sort high to low",
+            "sortLowToHigh": "Sort low to high",
+            "sortZToA": "Sort Z to A"
         },
         "columnsMenu": {
             "columns": "Columns",
@@ -2575,6 +2587,7 @@
         },
         "extensionBoundary": {
             "extensionCrashed": "Extension crashed",
+            "failedToLoad": "Couldn't load the extension.",
             "itsOtherPagesAndTheRest": "Its other pages and the rest of the panel are unaffected. Try reinstalling or updating it from the Marketplace.",
             "theExtensionCouldNotBeLoaded": "The extension <0>{{slug}}</0> could not be loaded"
         },
@@ -2834,8 +2847,11 @@
             "files": "Files"
         },
         "filterDrawer": {
+            "activeCount": "{{count}} active",
             "clearAll": "Clear all",
-            "noFilters": "no filters"
+            "noFilters": "no filters",
+            "showResults_one": "Show {{count}} {{noun}}",
+            "showResults_other": "Show {{count}} {{noun}}s"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 or 10.0.0.0/24",
@@ -3040,10 +3056,13 @@
             "sortedBy": "sorted by"
         },
         "gridToolsMenu": {
+            "copyFailed": "Couldn't copy the link. Check clipboard permissions.",
+            "copyLinkToThisView": "Copy link to this view",
             "downloadCsv": "Download CSV",
             "export": "Export…",
             "export2": "Export",
             "includeHiddenFields": "Include hidden fields",
+            "linkCopied": "Link copied",
             "moreTableOptions": "More table options",
             "refreshData": "Refresh data",
             "resetViewChanges": "Reset view changes",
@@ -3056,14 +3075,19 @@
             "deleteView": "Delete view",
             "duplicateView": "Duplicate view",
             "eGCloudflareProd": "e.g. Cloudflare prod",
+            "makeDefault": "Make default",
             "myViews": "My views",
             "noPersonalViewsYetTuneThe": "No personal views yet. Tune the grid, then save it here.",
             "reset": "Reset",
+            "saveAs": "Save as…",
             "saveCurrentView": "Save current view…",
             "startFromCurrentFiltersColumns": "Start from current filters and columns",
-            "unsaved": "Unsaved"
+            "unsaved": "Unsaved",
+            "unsetAsDefault": "Unset as default",
+            "viewOptions": "{{name}} options"
         },
         "groupMenu": {
+            "group": "Group",
             "groupBy": "Group by",
             "noGrouping": "No grouping"
         },
@@ -3432,6 +3456,10 @@
             "lines": "Lines",
             "notice": "Notice",
             "priority": "Priority"
+        },
+        "kpiBand": {
+            "fewerStats": "Fewer stats",
+            "moreStats": "More stats ({{count}})"
         },
         "linkAppModal": {
             "appFirstOrEnsureExistingApps": "service first, or ensure existing services are not already linked.",
@@ -4259,6 +4287,12 @@
             "stepOf": "Step {{step}} of {{total}}",
             "validate": "Validate"
         },
+        "operations": {
+            "deployTarget": "Deploy {{target}}",
+            "serverFallback": "Server {{id}}",
+            "serviceDeployment": "Service deployment",
+            "serviceFallback": "Service {{id}}"
+        },
         "operationsDock": {
             "actionFailed": "Couldn't run that action on the operation.",
             "active": "Active",
@@ -4373,6 +4407,9 @@
         },
         "pageLoader": {
             "loading": "Loading"
+        },
+        "pageTopbar": {
+            "sections": "{{label}} sections"
         },
         "palettePages": {
             "alertRules": "Alert rules",
@@ -5823,6 +5860,7 @@
             "rolledBack": "Rolled back",
             "static": "Static",
             "stopped": "Stopped",
+            "unknown": "Unknown",
             "wordpress": "WordPress"
         },
         "services": {
@@ -7617,6 +7655,7 @@
             "viewDeleted": "View \"{{name}}\" deleted",
             "viewSaved": "View \"{{trimmed}}\" saved",
             "viewUpdated": "View \"{{name}}\" updated",
+            "views": "Views",
             "withChanges": "\" with changes"
         },
         "volumesPanel": {
@@ -8279,6 +8318,7 @@
         }
     },
     "gui": {
+        "cpuPercent": "{{value}}% CPU",
         "fps": "{{rate}} fps",
         "frameAlt": "Remote desktop frame",
         "launcher": {
@@ -8287,6 +8327,7 @@
             "title": "Desktop view"
         },
         "loadingSynthetic": "Loading synthetic desktop…",
+        "memPercent": "{{value}}% memory",
         "mode": {
             "auto": "Auto",
             "noDisplay": "no display",
