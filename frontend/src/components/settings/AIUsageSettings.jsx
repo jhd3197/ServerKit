@@ -5,11 +5,15 @@ import useFormat from '../../hooks/useFormat';
 import { FormField } from '../FormField';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '../ui/select';
 import { DataTable } from '../ds/DataTable';
 import { DataTableFooter } from '../ds/DataTableFooter';
 import EmptyState from '../EmptyState';
 import { CardHeader } from '../ui/card';
 import { Drawer } from '../ds/Drawer';
+
+// Radix Select cannot hold an empty value; this stands in for "no filter".
+const ALL = '__all';
 
 export default function AIUsageSettings({ connections }) {
     const { t } = useTranslation();
@@ -40,15 +44,37 @@ export default function AIUsageSettings({ connections }) {
             <Button variant="outline" disabled={busy} onClick={() => setRevision((value) => value + 1)}>{t('common.actions.refresh', 'Refresh')}</Button>
         </CardHeader>
         <div className="ai-connections__fields">
-            <FormField htmlFor="ai-usage-days" label={t('ai.usage.period', 'Period')}><select id="ai-usage-days" value={filters.days} onChange={(e) => setFilters({ ...filters, days: e.target.value })}>
-                <option value="1">{t('ai.usage.day', 'Last 24 hours')}</option><option value="7">{t('ai.usage.week', 'Last 7 days')}</option><option value="30">{t('ai.usage.month', 'Last 30 days')}</option><option value="90">{t('ai.usage.quarter', 'Last 90 days')}</option>
-            </select></FormField>
-            <FormField htmlFor="ai-usage-role" label={groups.profile}><select id="ai-usage-role" value={filters.profile} onChange={(e) => setFilters({ ...filters, profile: e.target.value })}>
-                <option value="">{t('ai.usage.allRoles', 'All task roles')}</option><option value="utility">{t('ai.management.utility', 'Utility')}</option><option value="standard">{t('ai.management.standard', 'Standard')}</option><option value="advanced">{t('ai.management.advanced', 'Advanced')}</option>
-            </select></FormField>
-            <FormField htmlFor="ai-usage-connection" label={groups.connection_id}><select id="ai-usage-connection" value={filters.connection_id} onChange={(e) => setFilters({ ...filters, connection_id: e.target.value })}>
-                <option value="">{t('ai.usage.allConnections', 'All connections')}</option>{connections.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-            </select></FormField>
+            <FormField htmlFor="ai-usage-days" label={t('ai.usage.period', 'Period')}>
+                <Select value={filters.days} onValueChange={(days) => setFilters({ ...filters, days })}>
+                    <SelectTrigger id="ai-usage-days"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="1">{t('ai.usage.day', 'Last 24 hours')}</SelectItem>
+                        <SelectItem value="7">{t('ai.usage.week', 'Last 7 days')}</SelectItem>
+                        <SelectItem value="30">{t('ai.usage.month', 'Last 30 days')}</SelectItem>
+                        <SelectItem value="90">{t('ai.usage.quarter', 'Last 90 days')}</SelectItem>
+                    </SelectContent>
+                </Select>
+            </FormField>
+            <FormField htmlFor="ai-usage-role" label={groups.profile}>
+                <Select value={filters.profile || ALL} onValueChange={(value) => setFilters({ ...filters, profile: value === ALL ? '' : value })}>
+                    <SelectTrigger id="ai-usage-role"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value={ALL}>{t('ai.usage.allRoles', 'All task roles')}</SelectItem>
+                        <SelectItem value="utility">{t('ai.management.utility', 'Utility')}</SelectItem>
+                        <SelectItem value="standard">{t('ai.management.standard', 'Standard')}</SelectItem>
+                        <SelectItem value="advanced">{t('ai.management.advanced', 'Advanced')}</SelectItem>
+                    </SelectContent>
+                </Select>
+            </FormField>
+            <FormField htmlFor="ai-usage-connection" label={groups.connection_id}>
+                <Select value={filters.connection_id ? String(filters.connection_id) : ALL} onValueChange={(value) => setFilters({ ...filters, connection_id: value === ALL ? '' : value })}>
+                    <SelectTrigger id="ai-usage-connection"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value={ALL}>{t('ai.usage.allConnections', 'All connections')}</SelectItem>
+                        {connections.map((item) => <SelectItem key={item.id} value={String(item.id)}>{item.name}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+            </FormField>
             {['user_id', 'workspace_id'].map((key) => <FormField key={key} htmlFor={`ai-usage-${key}`} label={groups[key]} hint={t('ai.usage.idFilter', 'Optional numeric ID')}><Input id={`ai-usage-${key}`} type="number" min="1" value={filters[key]} onChange={(e) => setFilters({ ...filters, [key]: e.target.value })} /></FormField>)}
         </div>
         <div className="settings-actions settings-actions--footer"><Button variant="outline" disabled={busy} onClick={() => { setOffset(0); setApplied({ ...filters }); }}>{t('ai.usage.apply', 'Apply filters')}</Button></div>
@@ -64,7 +90,14 @@ export default function AIUsageSettings({ connections }) {
             <p className="settings-hint">{t('ai.usage.unknowns', '{{count}} runs have unknown or partial pricing. Known cost is not a complete billing total.', { count: data.totals.unknown_cost_runs })}</p>
             <p className="settings-hint">{t('ai.usage.latency', 'Average run duration: {{seconds}} seconds', { seconds: formatNumber(data.totals.average_duration_ms / 1000, { maximumFractionDigits: 1 }) })}</p>
             {(data.allowances || []).map((item) => <p key={item.scope}>{t('ai.usage.allowance', '{{scope}} monthly allowance: {{remaining}} remaining of {{limit}}', { scope: item.scope, remaining: money(item.remaining), limit: money(item.limit) })}</p>)}
-            <FormField htmlFor="ai-usage-group" label={t('ai.usage.breakdown', 'Cost breakdown')}><select id="ai-usage-group" value={group} onChange={(e) => setGroup(e.target.value)}>{Object.entries(groups).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></FormField>
+            <FormField htmlFor="ai-usage-group" label={t('ai.usage.breakdown', 'Cost breakdown')}>
+                <Select value={group} onValueChange={setGroup}>
+                    <SelectTrigger id="ai-usage-group"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        {Object.entries(groups).map(([key, label]) => <SelectItem key={key} value={key}>{label}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+            </FormField>
             <DataTable data={data.groups[group] || []} keyField="label" columns={[
                 { key: 'label', header: groups[group], render: (item) => group === 'connection_id' ? connectionName(item.label) : item.label },
                 { key: 'runs', header: t('ai.usage.runs', 'Runs') },

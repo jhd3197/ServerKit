@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import PortField from '@/components/PortField';
 import { ProviderBrandIcon } from '../../icons/ProviderBrands';
 import { deriveScope, REGISTRY_PROVIDERS } from './providerCatalog';
 import DnsActivity from './DnsActivity';
@@ -835,7 +836,7 @@ function EmailBody({ isAdmin, relayConfig, onSave, onTest, onDisable }) {
                 </div>
                 <div className="form-group">
                     <Label htmlFor="relay-port">{t('common.labels.port', 'Port')}</Label>
-                    <Input id="relay-port" type="number" value={form.port} onChange={(e) => setForm((f) => ({ ...f, port: e.target.value }))} placeholder="587" />
+                    <PortField id="relay-port" host={false} allowPrivileged value={form.port} onChange={(port) => setForm((f) => ({ ...f, port }))} placeholder="587" />
                 </div>
                 <div className="form-group">
                     <Label htmlFor="relay-user">{t('common.labels.username', 'Username')}</Label>

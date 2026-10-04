@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Copy, Check, AlertTriangle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import Modal from '../Modal';
 import ApiKeyScopesModal from '../api/ApiKeyScopesModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '../CopyField';
 import { useTranslation } from 'react-i18next';
 
 const TIER_OPTIONS = [
@@ -21,7 +21,6 @@ const ApiKeyModal = ({ onClose, onSubmit, createdKey }) => {
     const [tier, setTier] = useState('standard');
     const [expiresAt, setExpiresAt] = useState('');
     const [saving, setSaving] = useState(false);
-    const [copied, setCopied] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,13 +38,6 @@ const ApiKeyModal = ({ onClose, onSubmit, createdKey }) => {
         }
     };
 
-    const copyKey = async () => {
-        if (createdKey && await copyToClipboard(createdKey)) {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        }
-    };
-
     // Show created key view
     if (createdKey) {
         return (
@@ -54,13 +46,7 @@ const ApiKeyModal = ({ onClose, onSubmit, createdKey }) => {
                             <AlertTriangle size={16} />
                             <span>{t('app.apiKeyModal.copyThisKeyNowItWill', 'Copy this key now. It will not be shown again.')}</span>
                         </div>
-                        <div className="api-key-modal__key-display">
-                            <code>{createdKey}</code>
-                            <Button variant="outline" size="sm" onClick={copyKey}>
-                                {copied ? <Check size={14} /> : <Copy size={14} />}
-                                {copied ? 'Copied' : 'Copy'}
-                            </Button>
-                        </div>
+                        <CopyField value={createdKey} label={t('app.apiKeyModal.apiKey', 'API key')} secret />
                     <div className="modal-footer">
                         <Button variant="default" onClick={onClose}>{t('common.actions.done', 'Done')}</Button>
                     </div>

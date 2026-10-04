@@ -438,17 +438,6 @@
         margin-bottom: $space-2;
     }
 
-    &__secret {
-        display: inline-block;
-        font-family: $font-mono;
-        font-size: $font-size-sm;
-        letter-spacing: 1px;
-        word-break: break-all;
-        padding: $space-2 $space-3;
-        background: $bg-tertiary;
-        border-radius: $radius-md;
-    }
-
     &__verify {
         margin-bottom: $space-5;
     }
@@ -463,22 +452,8 @@
 }
 
 .security-codes {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: $space-2;
-    padding: $space-4;
-    margin-bottom: $space-4;
-    background: $bg-elevated;
-    border: 1px solid $border-default;
-    border-radius: $radius-xl;
-
-    &__item {
-        font-family: $font-mono;
-        font-size: $font-size-sm;
-        text-align: center;
-        padding: $space-2;
-        background: $bg-tertiary;
-        border-radius: $radius-md;
+    &__list {
+        margin-bottom: $space-4;
     }
 
     &__actions {

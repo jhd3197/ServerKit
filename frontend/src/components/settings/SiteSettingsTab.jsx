@@ -4,6 +4,8 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import DomainField from '../DomainField';
 import { Pill } from '@/components/ds';
 import useSettingFocus from '../../hooks/useSettingFocus';
 import { useAuth } from '../../contexts/useAuth.js';
@@ -35,6 +37,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
     // Base-domain registry: add a new base + track which row an action is running on.
     const [newDomain, setNewDomain] = useState('');
     const [newDnsMode, setNewDnsMode] = useState('wildcard');
+    const [newDomainKey, setNewDomainKey] = useState(0);
     const [addingDomain, setAddingDomain] = useState(false);
     const [rowBusy, setRowBusy] = useState('');   // domain currently being mutated
 
@@ -91,6 +94,8 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             const res = await api.addSiteBaseDomain(domain, { dnsMode: newDnsMode });
             if (res.success) {
                 setNewDomain('');
+                // DomainField keeps its own draft; remount it to clear the input.
+                setNewDomainKey((k) => k + 1);
                 setMessage({ type: 'success', text: `Added base domain ${domain}` });
                 await loadHttps();
             } else {
@@ -345,16 +350,16 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                             <Label htmlFor="login-layout">{t('app.siteSettingsTab.loginLayout', 'Login layout')}</Label>
                         </div>
                         <div className="settings-control">
-                            <select
-                                id="login-layout"
-                                className="settings-select"
-                                value={loginLayout}
-                                onChange={(e) => setLoginLayout(e.target.value)}
-                            >
-                                <option value="centered">{t('app.siteSettingsTab.centeredCard', 'Centered card')}</option>
-                                <option value="split">{t('app.siteSettingsTab.splitHero', 'Split hero')}</option>
-                                <option value="minimal">{t('app.siteSettingsTab.minimal', 'Minimal')}</option>
-                            </select>
+                            <Select value={loginLayout} onValueChange={setLoginLayout}>
+                                <SelectTrigger id="login-layout" className="settings-select">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="centered">{t('app.siteSettingsTab.centeredCard', 'Centered card')}</SelectItem>
+                                    <SelectItem value="split">{t('app.siteSettingsTab.splitHero', 'Split hero')}</SelectItem>
+                                    <SelectItem value="minimal">{t('app.siteSettingsTab.minimal', 'Minimal')}</SelectItem>
+                                </SelectContent>
+                            </Select>
                             <Button onClick={handleSaveBrand} disabled={savingBrand}>
                                 {savingBrand ? 'Saving…' : 'Save'}
                             </Button>
@@ -443,13 +448,18 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                 {https.providers?.length > 0 ? (
                     <div className="form-group">
                         <div className="settings-row">
-                            <div className="settings-label"><Label>{t('app.siteSettingsTab.dnsProviderForHttps', 'DNS provider for HTTPS')}</Label></div>
+                            <div className="settings-label"><Label htmlFor="sites-https-provider">{t('app.siteSettingsTab.dnsProviderForHttps', 'DNS provider for HTTPS')}</Label></div>
                             <div className="settings-control">
-                                <select className="settings-select" value={providerId} onChange={(e) => setProviderId(e.target.value)}>
-                                    {https.providers.map((p) => (
-                                        <option key={p.id} value={p.id}>{p.name} ({p.provider})</option>
-                                    ))}
-                                </select>
+                                <Select value={providerId ? String(providerId) : undefined} onValueChange={setProviderId}>
+                                    <SelectTrigger id="sites-https-provider" className="settings-select">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {https.providers.map((p) => (
+                                            <SelectItem key={p.id} value={String(p.id)}>{p.name} ({p.provider})</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
                         <span className="form-help">{t('app.siteSettingsTab.usedToIssueEachBaseS', 'Used to issue each base\'s wildcard certificate (DNS-01). Each base can use a different connected provider.')}</span>
@@ -483,12 +493,17 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                 )}
                             </div>
                             <div className="settings-control">
-                                <select className="settings-select" value={b.dns_mode || 'wildcard'}
-                                    onChange={(e) => handleRowDnsMode(b, e.target.value)}
+                                <Select value={b.dns_mode || 'wildcard'}
+                                    onValueChange={(mode) => handleRowDnsMode(b, mode)}
                                     disabled={rowBusy === b.domain || savingDnsMode}>
-                                    <option value="wildcard">{t('app.siteSettingsTab.wildcardDns', 'Wildcard DNS')}</option>
-                                    <option value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-site DNS')}</option>
-                                </select>
+                                    <SelectTrigger className="settings-select" aria-label={t('app.siteSettingsTab.dnsModeFor', 'DNS mode for {{domain}}', { domain: b.domain })}>
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="wildcard">{t('app.siteSettingsTab.wildcardDns', 'Wildcard DNS')}</SelectItem>
+                                        <SelectItem value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-site DNS')}</SelectItem>
+                                    </SelectContent>
+                                </Select>
                                 <Button variant="outline" onClick={() => handleSetupHttpsFor(b)}
                                     disabled={rowBusy === b.domain || !https.providers?.length}>
                                     {rowBusy === b.domain ? 'Working…' : (b.https_enabled ? 'Renew HTTPS' : 'Set up HTTPS')}
@@ -518,12 +533,22 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                     <div className="settings-row">
                         <div className="settings-label"><Label htmlFor="new-base-domain">{t('app.siteSettingsTab.addBaseDomain', 'Add base domain')}</Label></div>
                         <div className="settings-control">
-                            <Input id="new-base-domain" type="text" placeholder="toto.com"
-                                value={newDomain} onChange={(e) => setNewDomain(e.target.value)} />
-                            <select className="settings-select" value={newDnsMode} onChange={(e) => setNewDnsMode(e.target.value)}>
-                                <option value="wildcard">{t('app.siteSettingsTab.wildcardDns', 'Wildcard DNS')}</option>
-                                <option value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-site DNS')}</option>
-                            </select>
+                            <DomainField
+                                key={newDomainKey}
+                                id="new-base-domain"
+                                modes={['custom']}
+                                exclude={displayBases.map((b) => b.domain)}
+                                onChange={setNewDomain}
+                            />
+                            <Select value={newDnsMode} onValueChange={setNewDnsMode}>
+                                <SelectTrigger className="settings-select" aria-label={t('app.siteSettingsTab.newBaseDnsMode', 'DNS mode for the new base domain')}>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="wildcard">{t('app.siteSettingsTab.wildcardDns', 'Wildcard DNS')}</SelectItem>
+                                    <SelectItem value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-site DNS')}</SelectItem>
+                                </SelectContent>
+                            </Select>
                             <Button onClick={handleAddDomain} disabled={addingDomain || !newDomain.trim()}>
                                 {addingDomain ? 'Adding…' : 'Add'}
                             </Button>

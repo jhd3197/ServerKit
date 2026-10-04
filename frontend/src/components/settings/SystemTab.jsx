@@ -4,8 +4,8 @@ import { useTheme } from '../../contexts/useTheme.js';
 import api from '../../services/api';
 import useSettingFocus from '../../hooks/useSettingFocus';
 import { InfoList, InfoItem } from '../InfoList';
+import DomainField from '../DomainField';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { formatBytes } from '@/utils/formatBytes';
@@ -43,6 +43,7 @@ const SystemTab = () => {
     const [domainLoading, setDomainLoading] = useState(false);
     const [detectedDomain, setDetectedDomain] = useState(null);
     const [canonicalDomain, setCanonicalDomain] = useState('');
+    const [domainFieldKey, setDomainFieldKey] = useState(0);
     const [canonicalHttps, setCanonicalHttps] = useState(false);
     const [encryptionConfigured, setEncryptionConfigured] = useState(true);
     const [savingDomain, setSavingDomain] = useState(false);
@@ -119,6 +120,8 @@ const SystemTab = () => {
     async function handleUseDetectedDomain() {
         if (!detectedDomain?.detected_domain) return;
         setCanonicalDomain(detectedDomain.detected_domain);
+        // DomainField seeds from its value once; remount it to show the new one.
+        setDomainFieldKey((k) => k + 1);
         setCanonicalHttps(detectedDomain.is_https);
     }
 
@@ -310,11 +313,12 @@ const SystemTab = () => {
                         )}
                         <div className="form-group">
                             <label htmlFor="canonical-domain">{t('app.systemTab.canonicalDomain', 'Canonical Domain')}</label>
-                            <Input
+                            <DomainField
+                                key={domainFieldKey}
                                 id="canonical-domain"
+                                modes={['custom']}
                                 value={canonicalDomain}
-                                onChange={(e) => setCanonicalDomain(e.target.value)}
-                                placeholder={t('app.systemTab.eGServerkitExampleCom', 'e.g. serverkit.example.com')}
+                                onChange={setCanonicalDomain}
                                 disabled={savingDomain}
                             />
                             <span className="form-help">

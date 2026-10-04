@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { ShieldCheck, Copy, Download, AlertTriangle, Check, Loader } from 'lucide-react';
+import { ShieldCheck, Download, AlertTriangle, Check, Loader } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import api from '../../services/api';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '../CopyField';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
 
@@ -74,11 +74,6 @@ const SetupStepSecurity = ({ onComplete }) => {
         } finally {
             setBusy(false);
         }
-    }
-
-    function copyCodes() {
-        copyToClipboard(backupCodes.join('\n'));
-        setSavedCodes(true);
     }
 
     function downloadCodes() {
@@ -201,7 +196,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                         <div className="security-enroll__manual-label">
                             {t('app.setupStepSecurity.canTScanEnterThisKey', 'Can\'t scan? Enter this key instead:')}
                         </div>
-                        <code className="security-enroll__secret">{setupData?.secret}</code>
+                        <CopyField value={setupData?.secret} secret />
                     </div>
                 </div>
 
@@ -254,19 +249,14 @@ const SetupStepSecurity = ({ onComplete }) => {
                 {t('app.setupStepSecurity.theseAreShownOnceAndNever', 'These are shown once and never again. Each works a single time if you lose your authenticator — keep them somewhere that does not depend on this server being reachable.')}
             </p>
 
-            <div className="security-codes">
-                {backupCodes.map((backupCode) => (
-                    <code key={backupCode} className="security-codes__item">
-                        {backupCode}
-                    </code>
-                ))}
-            </div>
+            <CopyField
+                className="security-codes__list"
+                value={backupCodes.join('\n')}
+                multiline
+                onCopy={() => setSavedCodes(true)}
+            />
 
             <div className="security-codes__actions">
-                <Button variant="outline" onClick={copyCodes}>
-                    <Copy size={15} />
-                    {t('common.actions.copy', 'Copy')}
-                </Button>
                 <Button variant="outline" onClick={downloadCodes}>
                     <Download size={15} />
                     {t('common.actions.download', 'Download')}

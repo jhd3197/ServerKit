@@ -4,6 +4,8 @@ import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
 import EmptyState from '@/components/EmptyState';
 import Modal from '../Modal';
+import { InfoList, InfoItem } from '../InfoList';
+import PortField from '../PortField';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -485,24 +487,17 @@ const FirewallTab = () => {
                                 <Button variant="outline" size="sm" onClick={loadData}>{t('common.actions.refresh', 'Refresh')}</Button>
                             </SharedCardHeader>
                             <SharedCardContent variant="legacy" className="card-body">
-                                <div className="sec-rows">
-                                    <div className="sk-info-row">
-                                        <span className="k">{t('common.labels.type', 'Type')}</span>
-                                        <span className="v">{activeFirewall?.toUpperCase()}</span>
-                                    </div>
-                                    <div className="sk-info-row">
-                                        <span className="k">{t('common.labels.status', 'Status')}</span>
+                                <InfoList>
+                                    <InfoItem label={t('common.labels.type', 'Type')} value={activeFirewall?.toUpperCase()} mono />
+                                    <InfoItem label={t('common.labels.status', 'Status')}>
                                         <Pill kind={isActive ? 'green' : 'red'}>
                                             {isActive ? 'Active' : 'Inactive'}
                                         </Pill>
-                                    </div>
+                                    </InfoItem>
                                     {activeFirewall === 'firewalld' && status?.firewalld?.default_zone && (
-                                        <div className="sk-info-row">
-                                            <span className="k">{t('app.firewallTab.defaultZone', 'Default zone')}</span>
-                                            <span className="v">{status.firewalld.default_zone}</span>
-                                        </div>
+                                        <InfoItem label={t('app.firewallTab.defaultZone', 'Default zone')} value={status.firewalld.default_zone} mono />
                                     )}
-                                </div>
+                                </InfoList>
                             </SharedCardContent>
                         </SharedCard>
                     )}
@@ -638,23 +633,19 @@ const FirewallTab = () => {
                         )}
                     </SharedCardHeader>
                     <SharedCardContent variant="legacy" className="card-body">
-                        <div className="sec-rows">
-                            <div className="sk-info-row">
-                                <span className="k">{t('app.firewallTab.blockContainerAccessTo169254', 'Block container access to 169.254.169.254')}</span>
+                        <InfoList>
+                            <InfoItem label={t('app.firewallTab.blockContainerAccessTo169254', 'Block container access to 169.254.169.254')}>
                                 <Switch
                                     checked={!!guard.enabled_setting}
                                     onCheckedChange={handleGuardToggle}
                                     disabled={guardLoading || !guard.supported}
                                     aria-label={t('app.firewallTab.toggleCloudMetadataGuard', 'Toggle cloud metadata guard')}
                                 />
-                            </div>
+                            </InfoItem>
                             {guard.supported && guard.backend && (
-                                <div className="sk-info-row">
-                                    <span className="k">{t('app.firewallTab.backend', 'Backend')}</span>
-                                    <span className="v">{guard.backend}</span>
-                                </div>
+                                <InfoItem label={t('app.firewallTab.backend', 'Backend')} value={guard.backend} mono />
                             )}
-                        </div>
+                        </InfoList>
                         <p className="sec-hint">
                             {t('app.firewallTab.stopsAppContainersFromReachingThe', 'Stops app containers from reaching the cloud metadata endpoint, preventing SSRF attacks from stealing instance credentials.')}
                         </p>
@@ -688,14 +679,13 @@ const FirewallTab = () => {
             <Modal open={showPortModal} onClose={() => setShowPortModal(false)} title={t('app.firewallTab.allowPort', 'Allow Port')}>
                 <div className="form-row">
                     <div className="form-group">
-                        <Label>{t('app.firewallTab.portNumber', 'Port Number')}</Label>
-                        <Input
-                            type="number"
+                        <Label htmlFor="firewall-allow-port">{t('app.firewallTab.portNumber', 'Port Number')}</Label>
+                        <PortField
+                            id="firewall-allow-port"
+                            host={false}
+                            allowPrivileged
                             value={newPort.port}
-                            onChange={(e) => setNewPort({ ...newPort, port: e.target.value })}
-                            placeholder="8080"
-                            min="1"
-                            max="65535"
+                            onChange={(port) => setNewPort({ ...newPort, port })}
                         />
                     </div>
                     <div className="form-group">

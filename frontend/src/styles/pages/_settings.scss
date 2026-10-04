@@ -800,6 +800,18 @@
     margin-left: $space-1;
 }
 
+// One-time login link form (Settings -> Users). The field's caption rule in
+// _users.scss targets every descendant span, which includes the Select's
+// value; give the trigger back its own type and the old select's width.
+.login-links__field .ui-select-trigger {
+    min-width: 160px;
+
+    span {
+        font-size: inherit;
+        color: inherit;
+    }
+}
+
 // IconReferenceTab: leading magnifier inside the search field
 .search-input-wrapper {
     position: relative;
@@ -1672,13 +1684,14 @@
         flex-direction: column;
         gap: 4px;
 
-        span {
+        // Direct child only: the Select and SegControl inside carry spans of their own.
+        > span {
             font-size: $font-size-xs;
             font-weight: $font-weight-medium;
             color: var(--text-dim);
         }
 
-        input, select {
+        input {
             padding: 6px 10px;
             font-size: $font-size-sm;
             color: var(--text);
@@ -2560,7 +2573,6 @@
 .settings-webhook-actions { text-align: right; }
 .settings-webhook-action-icon { margin-inline-end: 0.5rem; }
 .settings-webhook-event-id { @include truncate(); font-size: 0.75rem; max-width: 200px; }
-.settings-webhook-secret { display: flex; gap: 0.5rem; }
 
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
 .settings-webhook-row { cursor: pointer; }

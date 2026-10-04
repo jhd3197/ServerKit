@@ -11,7 +11,7 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import EmptyState from '../EmptyState';
-import { copyToClipboard } from '@/utils/clipboard';
+import { CopyButton } from '../CopyButton';
 import { useTranslation } from 'react-i18next';
 import useFocusParam from '@/hooks/useFocusParam';
 import useFormat from '@/hooks/useFormat';
@@ -72,7 +72,6 @@ const InvitationsTab = () => {
     const [invitations, setInvitations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showInviteModal, setShowInviteModal] = useState(false);
-    const [copied, setCopied] = useState(null);
     const [error, setError] = useState('');
     const [pendingId, setPendingId] = useState(null);
     const actionInFlight = useRef(false);
@@ -137,11 +136,8 @@ const InvitationsTab = () => {
         }
     }
 
-    async function copyLink(token) {
-        const url = `${window.location.origin}/register?invite=${token}`;
-        if (!await copyToClipboard(url)) return;
-        setCopied(token);
-        setTimeout(() => setCopied(null), 2000);
+    function inviteUrl(token) {
+        return `${window.location.origin}/register?invite=${token}`;
     }
 
     function formatDate(dateString) {
@@ -241,14 +237,15 @@ const InvitationsTab = () => {
             render: (inv) => (
                 inv.status === 'pending' && !inv.is_expired && (
                     <>
-                        <Button
+                        <CopyButton
+                            value={inviteUrl(inv.token)}
                             variant="ghost"
                             size="sm"
-                            onClick={() => copyLink(inv.token)}
-                            title={t('app.invitationsTab.copyInviteLink', 'Copy invite link')}
+                            label={t('app.invitationsTab.copyInviteLink', 'Copy invite link')}
+                            copiedLabel={t('app.copyField.copied', 'Copied')}
                         >
-                            {copied === inv.token ? 'Copied!' : 'Copy Link'}
-                        </Button>
+                            {t('app.invitationsTab.copyLink', 'Copy Link')}
+                        </CopyButton>
                         {inv.email && (
                             <Button
                                 variant="ghost"

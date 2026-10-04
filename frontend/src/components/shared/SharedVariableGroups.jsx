@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import Modal from '@/components/Modal';
 import ResourceListPage from '../layouts/ResourceListPage';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
@@ -502,15 +503,19 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                             )}
 
                             <form className="shared-groups__attach" onSubmit={handleAttach}>
-                                <select
-                                    value={attachType}
-                                    onChange={(e) => setAttachType(e.target.value)}
-                                    className="shared-groups__attach-type"
-                                >
-                                    {RESOURCE_TYPES.map((t) => (
-                                        <option key={t} value={t}>{t}</option>
-                                    ))}
-                                </select>
+                                <Select value={attachType} onValueChange={setAttachType}>
+                                    <SelectTrigger
+                                        className="shared-groups__attach-type"
+                                        aria-label={t('app.sharedVariableGroups.resourceType', 'Resource type')}
+                                    >
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {RESOURCE_TYPES.map((type) => (
+                                            <SelectItem key={type} value={type}>{type}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                                 <Input
                                     type="text"
                                     value={attachId}

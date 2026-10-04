@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '../CopyField';
 import { useTranslation } from 'react-i18next';
 
 const InviteModal = ({ onClose, onCreated }) => {
@@ -20,7 +20,6 @@ const InviteModal = ({ onClose, onCreated }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [result, setResult] = useState(null);
-    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         api.getPermissionTemplates().then(data => {
@@ -66,14 +65,10 @@ const InviteModal = ({ onClose, onCreated }) => {
         }
     }
 
-    async function copyLink() {
-        if (result?.invite_url && await copyToClipboard(result.invite_url)) {
-            setCopied(true);
-            window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
-                detail: { type: 'invitation-link-copied' },
-            }));
-            setTimeout(() => setCopied(false), 2000);
-        }
+    function signalLinkCopied() {
+        window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
+            detail: { type: 'invitation-link-copied' },
+        }));
     }
 
     // Show result screen after creation
@@ -81,11 +76,8 @@ const InviteModal = ({ onClose, onCreated }) => {
         return (
             <Modal open={true} onClose={onClose} title={t('app.inviteModal.invitationCreated', 'Invitation Created')} size="md">
                         <p>{t('app.inviteModal.shareThisInvitationLink', 'Share this invitation link:')}</p>
-                        <div className="invite-link-display" data-walkthrough="invite-result">
-                            <code>{result.invite_url}</code>
-                            <Button variant="ghost" size="sm" onClick={copyLink}>
-                                {copied ? 'Copied!' : 'Copy'}
-                            </Button>
+                        <div data-walkthrough="invite-result">
+                            <CopyField value={result.invite_url} onCopy={signalLinkCopied} />
                         </div>
                         {result.email_sent && (
                             <p className="text-success invite-result-note">

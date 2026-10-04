@@ -4,6 +4,8 @@ import {
     Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { SegControl } from '@/components/ds';
 import { useTheme } from '../../contexts/useTheme.js';
 import { useAuth } from '../../contexts/useAuth.js';
 import { useToast } from '../../contexts/useToast.js';
@@ -146,22 +148,29 @@ const ThemeStudioModal = ({ open, onOpenChange }) => {
                             onChange={(e) => { setSlug(slugify(e.target.value)); setSlugTouched(true); }}
                         />
                     </label>
-                    <label className="theme-studio__field">
-                        <span>{t('app.themeStudioModal.base', 'Base')}</span>
-                        <select value={base} onChange={(e) => setBase(e.target.value)}>
-                            <option value="dark">dark</option>
-                            <option value="light">light</option>
-                        </select>
-                    </label>
-                    <label className="theme-studio__field">
-                        <span>{t('app.themeStudioModal.startFrom', 'Start from')}</span>
-                        <select defaultValue="" onChange={(e) => { startFrom(e.target.value); e.target.value = ''; }}>
-                            <option value="" disabled>{t('app.themeStudioModal.choose', 'Choose…')}</option>
-                            {availableThemes.map((t) => (
-                                <option key={t.slug} value={t.slug}>{t.name || t.slug}</option>
-                            ))}
-                        </select>
-                    </label>
+                    <div className="theme-studio__field">
+                        <span id="theme-studio-base">{t('app.themeStudioModal.base', 'Base')}</span>
+                        <SegControl
+                            aria-labelledby="theme-studio-base"
+                            value={base}
+                            onChange={setBase}
+                            options={['dark', 'light']}
+                        />
+                    </div>
+                    <div className="theme-studio__field">
+                        <span id="theme-studio-start">{t('app.themeStudioModal.startFrom', 'Start from')}</span>
+                        {/* An action, not a setting: the value resets so the same theme can be picked again. */}
+                        <Select value="" onValueChange={startFrom}>
+                            <SelectTrigger aria-labelledby="theme-studio-start">
+                                <SelectValue placeholder={t('app.themeStudioModal.choose', 'Choose…')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {availableThemes.map((theme) => (
+                                    <SelectItem key={theme.slug} value={theme.slug}>{theme.name || theme.slug}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </div>
 
                 <div className="theme-studio__modebar">

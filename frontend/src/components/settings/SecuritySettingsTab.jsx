@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '../CopyField';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
 
@@ -286,10 +286,6 @@ Keep these codes in a safe place.`;
         downloadBlob(content, 'serverkit-backup-codes.txt');
     }
 
-    function copyBackupCodes() {
-        copyToClipboard(backupCodes.join('\n'));
-    }
-
     return (
         <div className="settings-section">
             <div className="section-header">
@@ -456,13 +452,13 @@ Keep these codes in a safe place.`;
                                         ) : (
                                             <div className="qr-fallback">
                                                 <p>{t('app.securitySettingsTab.qrCodeUnavailableEnterThisSecret', 'QR code unavailable. Enter this secret manually:')}</p>
-                                                <code className="secret-key">{setupData.secret}</code>
+                                                <CopyField value={setupData.secret} secret />
                                             </div>
                                         )}
                                         <details className="manual-entry">
                                             <summary>{t('app.securitySettingsTab.canTScanEnterManually', 'Can\'t scan? Enter manually')}</summary>
                                             <p>{t('app.securitySettingsTab.account', 'Account:')} {user?.email ?? ''}</p>
-                                            <p>{t('app.securitySettingsTab.secret', 'Secret:')} <code>{setupData.secret}</code></p>
+                                            <CopyField label={t('app.securitySettingsTab.secretLabel', 'Secret')} value={setupData.secret} secret />
                                         </details>
                                     </div>
                                 </div>
@@ -549,24 +545,13 @@ Keep these codes in a safe place.`;
                                         </svg>
                                         <p>{t('app.securitySettingsTab.saveTheseBackupCodesInA', 'Save these backup codes in a secure location. They will not be shown again. Each code can only be used once.')}</p>
                                     </div>
-                                    <div className="backup-codes-grid">
-                                        {backupCodes.map((code, index) => (
-                                            <code key={index} className="backup-code">{code}</code>
-                                        ))}
-                                    </div>
+                                    <CopyField value={backupCodes.join('\n')} multiline />
                                     <div className="backup-codes-actions">
                                         <Button variant="outline" onClick={downloadBackupCodes}>
                                             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" strokeWidth="2">
                                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
                                             </svg>
                                             {t('common.actions.download', 'Download')}
-                                        </Button>
-                                        <Button variant="outline" onClick={copyBackupCodes}>
-                                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" strokeWidth="2">
-                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                                            </svg>
-                                            {t('common.actions.copy', 'Copy')}
                                         </Button>
                                     </div>
                                 </>

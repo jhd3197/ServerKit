@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { SegControl } from '../ds/SegControl';
 import EmptyState from '../EmptyState';
+import PortField from '../PortField';
 import useSettingFocus from '../../hooks/useSettingFocus';
 import { useTranslation } from 'react-i18next';
 
@@ -538,11 +539,13 @@ const NotificationsTab = () => {
                                                 />
                                             </div>
                                             <div className="form-group">
-                                                <Label>{t('app.notificationsTab.smtpPort', 'SMTP Port')}</Label>
-                                                <Input
-                                                    type="number"
-                                                    value={config.email.smtp_port || 587}
-                                                    onChange={(e) => updateChannelConfig('email', 'smtp_port', parseInt(e.target.value))}
+                                                <Label htmlFor="notify-smtp-port">{t('app.notificationsTab.smtpPort', 'SMTP Port')}</Label>
+                                                <PortField
+                                                    id="notify-smtp-port"
+                                                    host={false}
+                                                    allowPrivileged
+                                                    value={config.email.smtp_port || ''}
+                                                    onChange={(port) => updateChannelConfig('email', 'smtp_port', port === '' ? null : port)}
                                                     placeholder="587"
                                                 />
                                             </div>

@@ -11,9 +11,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
-import { Plus, MoreVertical, Copy, RefreshCw, ArrowRightLeft } from 'lucide-react';
+import { Plus, MoreVertical, RefreshCw, ArrowRightLeft } from 'lucide-react';
 import EmptyState from '../EmptyState';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '@/components/CopyField';
 import { useTranslation } from 'react-i18next';
 
 const formatDate = (d) => (d ? new Date(d).toLocaleString() : '—');
@@ -282,13 +282,7 @@ export default function WebhooksTab() {
                 <div className="settings-webhook-secret-field">
                         <Label>{t('app.webhooksTab.endpoint', 'Endpoint')}</Label>
                         <Input readOnly value={regeneratedSecret?.name || ''} />
-                        <Label>{t('app.webhooksTab.secret', 'Secret')}</Label>
-                        <div className="settings-webhook-secret">
-                            <Input readOnly type="text" value={regeneratedSecret?.secret || ''} />
-                            <Button variant="outline" onClick={() => { copyToClipboard(regeneratedSecret?.secret || ''); toast.success(t('app.webhooksTab.copied', 'Copied')) }}>
-                                <Copy size={14} />
-                            </Button>
-                        </div>
+                        <CopyField label={t('app.webhooksTab.secret', 'Secret')} value={regeneratedSecret?.secret || ''} secret />
                     </div>
             </Modal>
         </div>
