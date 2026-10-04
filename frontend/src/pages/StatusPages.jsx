@@ -9,15 +9,17 @@ import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Pill } from '@/components/ds';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '../components/CopyField';
 import { useTranslation } from 'react-i18next';
 import {
     Activity,
     CheckCircle2,
-    Copy,
     ExternalLink,
     Globe2,
     Link2,
@@ -296,12 +298,6 @@ const StatusPages = () => {
         }
     };
 
-    const handleCopyUrl = async () => {
-        if (!selectedUrl) return;
-        if (await copyToClipboard(selectedUrl)) toast.success(t('app.statusPages.statusPageUrlCopied', 'Status page URL copied'));
-        else toast.error(t('app.statusPages.couldNotCopyUrl', 'Could not copy URL'));
-    };
-
     const handleConfirmDelete = async () => {
         if (!deleteConfirm) return;
         try {
@@ -401,13 +397,8 @@ const StatusPages = () => {
                                 )}
                             </div>
                             <div className="status-url-card">
-                                <span>{t('app.statusPages.publicUrl', 'Public URL')}</span>
-                                <code>{selectedUrl}</code>
+                                <CopyField label={t('app.statusPages.publicUrl', 'Public URL')} value={selectedUrl} />
                                 <div>
-                                    <Button size="sm" variant="outline" onClick={handleCopyUrl}>
-                                        <Copy size={14} />
-                                        {t('common.actions.copy', 'Copy')}
-                                    </Button>
                                     <Button size="sm" asChild>
                                         <a href={selectedUrl} target="_blank" rel="noreferrer">
                                             <ExternalLink size={14} />
@@ -721,17 +712,19 @@ const StatusPages = () => {
                         <Input value={compForm.group} onChange={(e) => setCompForm({ ...compForm, group: e.target.value })} />
                     </div>
                     <div className="form-group">
-                        <label>{t('app.statusPages.checkType', 'Check Type')}</label>
-                        <select
-                            className="form-select"
+                        <label htmlFor="status-comp-check-type">{t('app.statusPages.checkType', 'Check Type')}</label>
+                        <Select
                             value={compForm.check_type}
-                            onChange={(e) => setCompForm({ ...compForm, check_type: e.target.value })}
+                            onValueChange={(v) => setCompForm({ ...compForm, check_type: v })}
                         >
-                            <option value="http">HTTP</option>
-                            <option value="tcp">TCP</option>
-                            <option value="dns">DNS</option>
-                            <option value="ping">{t('app.statusPages.ping', 'Ping')}</option>
-                        </select>
+                            <SelectTrigger id="status-comp-check-type"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="http">HTTP</SelectItem>
+                                <SelectItem value="tcp">TCP</SelectItem>
+                                <SelectItem value="dns">DNS</SelectItem>
+                                <SelectItem value="ping">{t('app.statusPages.ping', 'Ping')}</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="form-group">
                         <label>{t('common.labels.target', 'Target')}</label>
@@ -783,28 +776,32 @@ const StatusPages = () => {
                 </div>
                 <div className="status-modal-grid">
                     <div className="form-group">
-                        <label>{t('common.labels.status', 'Status')}</label>
-                        <select
-                            className="form-select"
+                        <label htmlFor="status-incident-status">{t('common.labels.status', 'Status')}</label>
+                        <Select
                             value={incidentForm.status}
-                            onChange={(e) => setIncidentForm({ ...incidentForm, status: e.target.value })}
+                            onValueChange={(v) => setIncidentForm({ ...incidentForm, status: v })}
                         >
-                            {INCIDENT_STATUS.filter((status) => status.value !== 'resolved').map((status) => (
-                                <option key={status.value} value={status.value}>{status.label}</option>
-                            ))}
-                        </select>
+                            <SelectTrigger id="status-incident-status"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {INCIDENT_STATUS.filter((status) => status.value !== 'resolved').map((status) => (
+                                    <SelectItem key={status.value} value={status.value}>{status.label}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="form-group">
-                        <label>{t('app.statusPages.impact', 'Impact')}</label>
-                        <select
-                            className="form-select"
+                        <label htmlFor="status-incident-impact">{t('app.statusPages.impact', 'Impact')}</label>
+                        <Select
                             value={incidentForm.impact}
-                            onChange={(e) => setIncidentForm({ ...incidentForm, impact: e.target.value })}
+                            onValueChange={(v) => setIncidentForm({ ...incidentForm, impact: v })}
                         >
-                            {IMPACT_OPTIONS.map((impact) => (
-                                <option key={impact.value} value={impact.value}>{impact.label}</option>
-                            ))}
-                        </select>
+                            <SelectTrigger id="status-incident-impact"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {IMPACT_OPTIONS.map((impact) => (
+                                    <SelectItem key={impact.value} value={impact.value}>{impact.label}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
                 <div className="form-group">

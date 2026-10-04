@@ -5,7 +5,7 @@ import api from '../services/api';
 import Modal from '../components/Modal';
 import EmptyState from '../components/EmptyState';
 import { Button } from '@/components/ui/button';
-import { DataTable, DataTableFooter, Pill, SearchField, statusKind } from '@/components/ds';
+import { DataTable, DataTableFooter, Pill, SearchField, SegControl, statusKind } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
@@ -417,13 +417,18 @@ const Deployments = () => {
                 <p className="deployments-page__sim-intro">
                     {t('app.deployments.streamsScriptedOutputThroughTheReal', 'Streams scripted output through the real deploy pipeline — no containers, files, or servers are touched. Development only.')}
                 </p>
-                <label className="deployments-page__sim-speed">
-                    {t('app.deployments.speed', 'Speed')}
-                    <select value={simSpeed} onChange={(e) => setSimSpeed(e.target.value)}>
-                        <option value="fast">{t('app.deployments.fast', 'Fast')}</option>
-                        <option value="realtime">{t('app.deployments.realtime', 'Realtime')}</option>
-                    </select>
-                </label>
+                <div className="deployments-page__sim-speed">
+                    <span>{t('app.deployments.speed', 'Speed')}</span>
+                    <SegControl
+                        options={[
+                            { value: 'fast', label: t('app.deployments.fast', 'Fast') },
+                            { value: 'realtime', label: t('app.deployments.realtime', 'Realtime') },
+                        ]}
+                        value={simSpeed}
+                        onChange={setSimSpeed}
+                        aria-label={t('app.deployments.speed', 'Speed')}
+                    />
+                </div>
                 <div className="deployments-page__sim-list">
                     {(simInfo?.scenarios || []).map((s) => (
                         <Button variant="unstyled"

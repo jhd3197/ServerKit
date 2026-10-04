@@ -22,6 +22,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
+import {
     DataTable, DataTableFooter, MetricCard, Pill, SearchField, SortChipBar,
     statusKind, statusLabel,
 } from '@/components/ds';
@@ -34,6 +37,9 @@ import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { formatCompact, formatFull } from '../utils/formatNumber';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+
+// Radix Select items cannot use '' — stands in for "no group filter".
+const ALL_GROUPS = '__all';
 
 const STATUS_ORDER = ['pending', 'in_flight', 'completed', 'failed', 'dead_letter'];
 
@@ -576,14 +582,18 @@ const QueueOperations = () => {
                         rows are shown. */}
                     <div className="queue-command-bar">
                         <div className="queue-toolbar">
-                            <select
-                                className="queue-select"
-                                value={selectedGroup}
-                                onChange={(e) => setSelectedGroup(e.target.value)}
+                            <Select
+                                value={selectedGroup || ALL_GROUPS}
+                                onValueChange={(v) => setSelectedGroup(v === ALL_GROUPS ? '' : v)}
                             >
-                                <option value="">{t('app.queueOperations.allGroups', 'All groups')}</option>
-                                {groups.map(g => <option key={g.id} value={g.slug}>{g.name}</option>)}
-                            </select>
+                                <SelectTrigger className="queue-select" aria-label={t('app.queueOperations.group', 'Group')}>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value={ALL_GROUPS}>{t('app.queueOperations.allGroups', 'All groups')}</SelectItem>
+                                    {groups.map(g => <SelectItem key={g.id} value={g.slug}>{g.name}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                         </div>
                         {hasActiveFilters && (
                             <Button variant="unstyled"
@@ -671,16 +681,18 @@ const QueueOperations = () => {
                         <form onSubmit={handleCreateQueue}>
                                 <div className="form-group">
                                     <Label htmlFor="queue-group">{t('app.queueOperations.group', 'Group')}</Label>
-                                    <select
-                                        id="queue-group"
-                                        className="queue-select queue-select--full"
+                                    <Select
                                         value={queueForm.groupSlug || selectedGroup || ''}
-                                        onChange={(e) => setQueueForm({ ...queueForm, groupSlug: e.target.value })}
+                                        onValueChange={(v) => setQueueForm({ ...queueForm, groupSlug: v })}
                                         required
                                     >
-                                        <option value="">{t('app.queueOperations.selectGroup', 'Select group')}</option>
-                                        {groups.map(g => <option key={g.id} value={g.slug}>{g.name}</option>)}
-                                    </select>
+                                        <SelectTrigger id="queue-group">
+                                            <SelectValue placeholder={t('app.queueOperations.selectGroup', 'Select group')} />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {groups.map(g => <SelectItem key={g.id} value={g.slug}>{g.name}</SelectItem>)}
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                                 <div className="form-group">
                                     <Label htmlFor="queue-name">{t('common.labels.name', 'Name')}</Label>

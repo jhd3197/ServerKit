@@ -37,12 +37,10 @@
             }
         }
 
-        .config-grid,
-        .info-grid {
-            display: grid;
+        .info-list {
+            gap: 0;
         }
 
-        .config-item,
         .info-item {
             display: flex;
             justify-content: space-between;
@@ -55,12 +53,11 @@
             &:first-child { padding-top: 0; }
             &:last-child { border-bottom: none; padding-bottom: 0; }
 
-            .config-label,
             .info-label {
                 color: var(--text-dim);
             }
 
-            .config-value {
+            .info-value {
                 font-family: var(--mono);
                 font-size: 12.5px;
                 font-weight: $font-weight-medium;
@@ -68,16 +65,6 @@
 
                 &.success { color: var(--green); }
                 &.warning { color: var(--amber); }
-            }
-
-            code {
-                font-family: var(--mono);
-                font-size: 12px;
-                color: var(--text);
-                background: var(--surface-2);
-                border: 1px solid var(--border-soft);
-                padding: 2px 7px;
-                border-radius: $radius-md;
             }
         }
     }

@@ -19,6 +19,9 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
+import {
     DataTable, DataTableFooter, MetricCard, KpiBand, Pill, SortChipBar,
     statusKind, statusLabel,
 } from '@/components/ds';
@@ -400,14 +403,15 @@ const QueueDetail = () => {
                         filter, not table chrome — changing it refetches. */}
                     <div className="queue-messages-toolbar">
                         <div className="queue-messages-selects">
-                            <select
-                                className="queue-select"
-                                value={statusFilter}
-                                onChange={(e) => setStatusFilter(e.target.value)}
-                            >
-                                <option value="all">{t('app.queueDetail.allStatuses', 'All statuses')}</option>
-                                {STATUS_ORDER.map(s => <option key={s} value={s}>{statusLabel(s)}</option>)}
-                            </select>
+                            <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                <SelectTrigger className="queue-select" aria-label={t('app.queueDetail.allStatuses', 'All statuses')}>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">{t('app.queueDetail.allStatuses', 'All statuses')}</SelectItem>
+                                    {STATUS_ORDER.map(s => <SelectItem key={s} value={s}>{statusLabel(s)}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
 

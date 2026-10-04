@@ -79,17 +79,6 @@
         color: $text-tertiary;
         font-size: $font-size-xs;
         font-weight: $font-weight-semibold;
-
-        select {
-            min-height: 30px;
-            padding: $space-1 $space-2;
-            background: $bg-elevated;
-            border: 1px solid $border-subtle;
-            border-radius: $radius-md;
-            color: $text-primary;
-            font-size: $font-size-sm;
-            cursor: pointer;
-        }
     }
 
     &__sim-list {

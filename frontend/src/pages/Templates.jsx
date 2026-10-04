@@ -13,11 +13,16 @@ import { useToast } from '../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
+import {
     SearchField, FilterDrawer, FilterButton, countActiveFilters, Drawer,
     DataTableFooter, CatalogCard, CatalogGrid,
 } from '@/components/ds';
 import { useTableChrome, GridViewPicker, GridToolsMenu } from '@/components/ds/grid';
-import ServerPicker from '@/components/templates/ServerPicker';
+import ServerPicker from '@/components/ServerPicker';
+import PortField from '@/components/PortField';
+import { LOCAL_SERVER_ID } from '@/utils/serverTarget';
 import { useTopbarChrome } from '@/hooks/useTopbarActions';
 import { applyTableSorts, useTableSort } from '@/hooks/useTableSort';
 import EmptyState from '../components/EmptyState';
@@ -677,8 +682,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
     );
     const [branch, setBranch] = useState(template.repo?.branch || 'main');
     const [variables, setVariables] = useState({});
-    const [servers, setServers] = useState([{ id: 'local', name: 'Local server', is_local: true }]);
-    const [selectedServerId, setSelectedServerId] = useState('local');
+    const [selectedServerId, setSelectedServerId] = useState(LOCAL_SERVER_ID);
     const [capacity, setCapacity] = useState(null);
     const [capacityLoading, setCapacityLoading] = useState(false);
     const [installing, setInstalling] = useState(false);
@@ -700,7 +704,6 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
     }, [template]);
 
     useEffect(() => {
-        loadServers();
         api.getSiteBaseDomains()
             .then((data) => {
                 const bases = data?.base_domains || [];
@@ -710,20 +713,6 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
             })
             .catch(() => setBaseDomain(null));
     }, []);
-
-    async function loadServers() {
-        try {
-            const data = await api.getAvailableServers();
-            const list = Array.isArray(data) ? data : [];
-            if (list.length > 0) {
-                setServers(list);
-                setSelectedServerId(list[0].id);
-            }
-        } catch {
-            setServers([{ id: 'local', name: 'Local server', is_local: true }]);
-            setSelectedServerId('local');
-        }
-    }
 
     // Ask whether this template fits the chosen server, and re-ask whenever
     // they switch — the whole point is to answer before the deploy, not after.
@@ -742,8 +731,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
     // container on a remote server — and the repo pipeline has no auto-publish
     // step at all. Showing it and then landing on host:port is worse than not
     // offering it (the operator had to redo the domain in service settings).
-    const selectedServer = servers.find((s) => s.id === selectedServerId);
-    const isLocalTarget = selectedServerId === 'local' || !!selectedServer?.is_local;
+    const isLocalTarget = selectedServerId === LOCAL_SERVER_ID;
     const domainPreview = baseDomain && appName && isLocalTarget && !isRepo
         ? `${appName}.${baseDomain}` : null;
 
@@ -917,9 +905,10 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                     <div className="sk-formdrawer__field">
                         <span className="sk-formdrawer__label">{t('app.templates.deployToServer', 'Deploy to server')}</span>
                         <ServerPicker
-                            servers={servers}
                             value={selectedServerId}
-                            onChange={setSelectedServerId}
+                            onChange={(id) => setSelectedServerId(id)}
+                            capability="docker"
+                            label={t('app.serverPicker.deployToServer', 'Deploy to server')}
                         />
                         {/* Sits under the picker because the answer depends on
                             which server is chosen — switching re-asks. */}
@@ -936,16 +925,30 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                                         {variable.required && ' *'}
                                     </label>
                                     {variable.options ? (
-                                        <select
+                                        <Select
                                             value={variables[variable.name] || ''}
-                                            onChange={(e) => setVariables({...variables, [variable.name]: e.target.value})}
+                                            onValueChange={(v) => setVariables({...variables, [variable.name]: v})}
                                             required={variable.required}
                                         >
-                                            <option value="">{t('app.templates.select', 'Select…')}</option>
-                                            {variable.options.map(opt => (
-                                                <option key={opt} value={opt}>{opt}</option>
-                                            ))}
-                                        </select>
+                                            <SelectTrigger aria-label={variable.name}>
+                                                <SelectValue placeholder={t('app.templates.select', 'Select…')} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {variable.options.filter(opt => opt !== '').map(opt => (
+                                                    <SelectItem key={opt} value={String(opt)}>{opt}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    ) : variable.type === 'port' ? (
+                                        // Host ports are only checked against this panel's
+                                        // host; on a remote server just the range applies.
+                                        <PortField
+                                            value={variables[variable.name] || ''}
+                                            onChange={(port) => setVariables({...variables, [variable.name]: port === '' ? '' : String(port)})}
+                                            host={isLocalTarget}
+                                            placeholder={variable.default || ''}
+                                            required={variable.required}
+                                        />
                                     ) : variable.type === 'password' ? (
                                         <Input
                                             type="password"
@@ -956,7 +959,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                                         />
                                     ) : (
                                         <Input
-                                            type={variable.type === 'port' ? 'number' : 'text'}
+                                            type="text"
                                             value={variables[variable.name] || ''}
                                             onChange={(e) => setVariables({...variables, [variable.name]: e.target.value})}
                                             placeholder={variable.default || ''}

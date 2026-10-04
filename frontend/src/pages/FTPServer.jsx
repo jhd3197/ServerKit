@@ -20,6 +20,8 @@ import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { InfoList, InfoItem } from '../components/InfoList';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useTranslation } from 'react-i18next';
@@ -602,42 +604,22 @@ function FTPServer() {
                                 <div className="config-section">
                                     <h3>{t('app.fTPServer.serverConfiguration', 'Server Configuration')}</h3>
                                     {config?.settings ? (
-                                        <div className="config-grid">
-                                            <div className="config-item">
-                                                <span className="config-label">{t('common.labels.port', 'Port')}</span>
-                                                <span className="config-value">{config.settings.listen_port || config.settings.port || 21}</span>
-                                            </div>
-                                            <div className="config-item">
-                                                <span className="config-label">{t('app.fTPServer.anonymousAccess', 'Anonymous Access')}</span>
-                                                <span className={`config-value ${config.settings.anonymous_enable ? 'warning' : 'success'}`}>
+                                        <InfoList>
+                                            <InfoItem label={t('common.labels.port', 'Port')} value={config.settings.listen_port || config.settings.port || 21} mono />
+                                            <InfoItem label={t('app.fTPServer.anonymousAccess', 'Anonymous Access')}>
+                                                <span className={`info-value mono ${config.settings.anonymous_enable ? 'warning' : 'success'}`}>
                                                     {config.settings.anonymous_enable ? 'Enabled' : 'Disabled'}
                                                 </span>
-                                            </div>
-                                            <div className="config-item">
-                                                <span className="config-label">{t('app.fTPServer.localUsers', 'Local Users')}</span>
-                                                <span className="config-value">
-                                                    {config.settings.local_enable ? 'Enabled' : 'Disabled'}
-                                                </span>
-                                            </div>
-                                            <div className="config-item">
-                                                <span className="config-label">{t('app.fTPServer.writePermission', 'Write Permission')}</span>
-                                                <span className="config-value">
-                                                    {config.settings.write_enable ? 'Enabled' : 'Disabled'}
-                                                </span>
-                                            </div>
-                                            <div className="config-item">
-                                                <span className="config-label">{t('app.fTPServer.chrootUsers', 'Chroot Users')}</span>
-                                                <span className="config-value">
-                                                    {config.settings.chroot_local_user ? 'Yes' : 'No'}
-                                                </span>
-                                            </div>
-                                            <div className="config-item">
-                                                <span className="config-label">{t('app.fTPServer.sslTls', 'SSL/TLS')}</span>
-                                                <span className={`config-value ${config.settings.ssl_enable ? 'success' : 'warning'}`}>
+                                            </InfoItem>
+                                            <InfoItem label={t('app.fTPServer.localUsers', 'Local Users')} value={config.settings.local_enable ? 'Enabled' : 'Disabled'} mono />
+                                            <InfoItem label={t('app.fTPServer.writePermission', 'Write Permission')} value={config.settings.write_enable ? 'Enabled' : 'Disabled'} mono />
+                                            <InfoItem label={t('app.fTPServer.chrootUsers', 'Chroot Users')} value={config.settings.chroot_local_user ? 'Yes' : 'No'} mono />
+                                            <InfoItem label={t('app.fTPServer.sslTls', 'SSL/TLS')}>
+                                                <span className={`info-value mono ${config.settings.ssl_enable ? 'success' : 'warning'}`}>
                                                     {config.settings.ssl_enable ? 'Enabled' : 'Disabled'}
                                                 </span>
-                                            </div>
-                                        </div>
+                                            </InfoItem>
+                                        </InfoList>
                                     ) : (
                                         <p className="text-muted">{t('app.fTPServer.configurationNotAvailable', 'Configuration not available')}</p>
                                     )}
@@ -645,20 +627,11 @@ function FTPServer() {
 
                                 <div className="info-section">
                                     <h3>{t('app.fTPServer.connectionInformation', 'Connection Information')}</h3>
-                                    <div className="info-grid">
-                                        <div className="info-item">
-                                            <span className="info-label">{t('app.fTPServer.host', 'Host')}</span>
-                                            <code>{t('app.fTPServer.yourServerIpOrDomain', 'Your server IP or domain')}</code>
-                                        </div>
-                                        <div className="info-item">
-                                            <span className="info-label">{t('common.labels.port', 'Port')}</span>
-                                            <code>21</code>
-                                        </div>
-                                        <div className="info-item">
-                                            <span className="info-label">{t('app.fTPServer.protocol', 'Protocol')}</span>
-                                            <code>FTP{config?.settings?.ssl_enable ? 'S' : ''}</code>
-                                        </div>
-                                    </div>
+                                    <InfoList>
+                                        <InfoItem label={t('app.fTPServer.host', 'Host')} value={t('app.fTPServer.yourServerIpOrDomain', 'Your server IP or domain')} mono />
+                                        <InfoItem label={t('common.labels.port', 'Port')} value="21" mono />
+                                        <InfoItem label={t('app.fTPServer.protocol', 'Protocol')} value={`FTP${config?.settings?.ssl_enable ? 'S' : ''}`} mono />
+                                    </InfoList>
                                 </div>
                             </div>
                         </TabsContent>
@@ -795,14 +768,14 @@ function FTPServer() {
             {/* Install Modal */}
             <Modal open={showInstallModal} onClose={() => setShowInstallModal(false)} title={t('app.fTPServer.installFtpServer', 'Install FTP Server')}>
                             <div className="form-group">
-                                <Label>{t('app.fTPServer.selectFtpServer', 'Select FTP Server')}</Label>
-                                <select
-                                    value={selectedService}
-                                    onChange={(e) => setSelectedService(e.target.value)}
-                                >
-                                    <option value="vsftpd">{t('app.fTPServer.vsftpdRecommended', 'vsftpd (Recommended)')}</option>
-                                    <option value="proftpd">{t('app.fTPServer.proftpd', 'ProFTPD')}</option>
-                                </select>
+                                <Label htmlFor="ftp-install-service">{t('app.fTPServer.selectFtpServer', 'Select FTP Server')}</Label>
+                                <Select value={selectedService} onValueChange={setSelectedService}>
+                                    <SelectTrigger id="ftp-install-service"><SelectValue /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="vsftpd">{t('app.fTPServer.vsftpdRecommended', 'vsftpd (Recommended)')}</SelectItem>
+                                        <SelectItem value="proftpd">{t('app.fTPServer.proftpd', 'ProFTPD')}</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="install-info">
                                 {selectedService === 'vsftpd' ? (

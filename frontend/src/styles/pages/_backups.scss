@@ -608,14 +608,6 @@
 .bk-remote-on { color: $success; }
 .bk-remote-off { color: $text-tertiary; }
 
-.bk-restore-details {
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    font-size: $font-size-sm;
-    color: $text-secondary;
-}
-
 .bk-restore-warn {
     display: flex;
     align-items: flex-start;

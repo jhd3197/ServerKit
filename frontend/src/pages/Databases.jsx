@@ -35,7 +35,7 @@ import {
     engineBrandKey, engineInstanceKey, engineTreeStatus, engineUnit, singular,
 } from '../components/databases/engineHelpers';
 import { listTables, connKey, connLabel, quoteIdent, ENGINE_META } from '../components/databases/dbAdapter';
-import { copyToClipboard } from '@/utils/clipboard';
+import { useClipboard } from '@/hooks/useClipboard';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton, Button } from '@/components/ui/button';
@@ -94,6 +94,10 @@ export default function Databases() {
     const { t } = useTranslation();
     const toast = useToast();
     const { confirm } = useConfirm();
+    const { copy } = useClipboard({
+        successMessage: t('app.databases.copiedName', 'Copied name'),
+        errorMessage: t('app.databases.couldNotCopy', 'Could not copy'),
+    });
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -578,9 +582,7 @@ export default function Databases() {
     }
 
     function copyName(node) {
-        copyToClipboard(node.label).then((ok) => (ok
-            ? toast.success(t('app.databases.copiedName', 'Copied name'))
-            : toast.error(t('app.databases.couldNotCopy', 'Could not copy'))));
+        copy(node.label);
     }
 
     function ctxActions(node) {

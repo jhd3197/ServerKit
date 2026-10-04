@@ -279,48 +279,8 @@
         }
 
         .command-content {
-            position: relative;
             padding: $space-4;
             background: $bg-body;
-
-            pre {
-                margin: 0;
-                padding: 0;
-                background: transparent;
-                overflow-x: auto;
-
-                code {
-                    font-family: $font-mono;
-                    font-size: $font-size-sm;
-                    color: $text-primary;
-                    white-space: pre-wrap;
-                    word-break: break-all;
-                }
-            }
-
-            .copy-btn {
-                position: absolute;
-                top: $space-3;
-                right: $space-3;
-                background: $bg-secondary;
-                border: 1px solid $border-default;
-                border-radius: $radius-md;
-                padding: $space-2;
-                cursor: pointer;
-                color: $text-secondary;
-                transition: all 0.2s;
-
-                &:hover {
-                    background: $bg-hover;
-                    color: $text-primary;
-                    border-color: $accent-primary;
-                }
-
-                svg {
-                    width: 16px;
-                    height: 16px;
-                }
-            }
         }
 
         .command-note {
@@ -389,22 +349,6 @@
                 }
             }
 
-            pre {
-                background: $bg-body;
-                padding: $space-3;
-                border-radius: $radius-md;
-                margin: $space-2 0;
-                overflow-x: auto;
-
-                code {
-                    font-family: $font-mono;
-                    font-size: $font-size-sm;
-                    color: $text-primary;
-                    background: transparent;
-                    padding: 0;
-                }
-            }
-
             .step-note {
                 color: $text-tertiary;
                 font-size: $font-size-xs;
@@ -416,20 +360,6 @@
     // Verification
     .verification-command {
         margin-top: $space-4;
-
-        pre {
-            background: $bg-card;
-            border: 1px solid $border-default;
-            padding: $space-4;
-            border-radius: $radius-lg;
-            margin: 0;
-
-            code {
-                font-family: $font-mono;
-                font-size: $font-size-sm;
-                color: $text-primary;
-            }
-        }
     }
 }
 

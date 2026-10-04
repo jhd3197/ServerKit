@@ -10,6 +10,7 @@ import EmptyState from '../components/EmptyState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Cloud, Server } from 'lucide-react';
@@ -204,7 +205,15 @@ const CloudProvision = () => {
                     </>
                 )}
             >
-                <div className="form-group"><label>{t('app.cloudProvision.provider', 'Provider')}</label><select className="form-select" value={providerForm.provider_type} onChange={e => setProviderForm({...providerForm, provider_type: e.target.value})}>{Object.entries(providerTypes).map(([k,v]) => <option key={k} value={k}>{v}</option>)}</select></div>
+                <div className="form-group">
+                    <label htmlFor="cloud-provider-type">{t('app.cloudProvision.provider', 'Provider')}</label>
+                    <Select value={providerForm.provider_type} onValueChange={provider_type => setProviderForm({...providerForm, provider_type})}>
+                        <SelectTrigger id="cloud-provider-type"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {Object.entries(providerTypes).map(([k,v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
                 <div className="form-group"><label>{t('common.labels.name', 'Name')}</label><Input value={providerForm.name} onChange={e => setProviderForm({...providerForm, name: e.target.value})} /></div>
                 <div className="form-group"><label>{t('app.cloudProvision.apiKey', 'API Key')}</label><Input type="password" value={providerForm.api_key} onChange={e => setProviderForm({...providerForm, api_key: e.target.value})} /></div>
             </Modal>
@@ -220,13 +229,48 @@ const CloudProvision = () => {
                     </>
                 )}
             >
-                <div className="form-group"><label>{t('app.cloudProvision.provider', 'Provider')}</label><select className="form-select" value={serverForm.provider_id} onChange={e => { setServerForm({...serverForm, provider_id: parseInt(e.target.value)}); const p = providers.find(x => x.id === parseInt(e.target.value)); if (p) loadProviderOptions(p.provider_type); }}><option value="">{t('app.cloudProvision.selectProvider', 'Select provider')}</option>{providers.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></div>
+                <div className="form-group">
+                    <label htmlFor="cloud-server-provider">{t('app.cloudProvision.provider', 'Provider')}</label>
+                    <Select
+                        value={serverForm.provider_id ? String(serverForm.provider_id) : ''}
+                        onValueChange={v => { setServerForm({...serverForm, provider_id: parseInt(v)}); const p = providers.find(x => x.id === parseInt(v)); if (p) loadProviderOptions(p.provider_type); }}
+                    >
+                        <SelectTrigger id="cloud-server-provider"><SelectValue placeholder={t('app.cloudProvision.selectProvider', 'Select provider')} /></SelectTrigger>
+                        <SelectContent>
+                            {providers.map(p => <SelectItem key={p.id} value={String(p.id)}>{p.name}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
+                </div>
                 <div className="form-group"><label>{t('app.cloudProvision.serverName', 'Server Name')}</label><Input value={serverForm.name} onChange={e => setServerForm({...serverForm, name: e.target.value})} /></div>
                 {providerOptions && (
                     <>
-                        <div className="form-group"><label>{t('app.cloudProvision.region', 'Region')}</label><select className="form-select" value={serverForm.region} onChange={e => setServerForm({...serverForm, region: e.target.value})}><option value="">{t('app.cloudProvision.selectRegion', 'Select region')}</option>{(providerOptions.regions || []).map(r => <option key={r} value={r}>{r}</option>)}</select></div>
-                        <div className="form-group"><label>{t('common.labels.size', 'Size')}</label><select className="form-select" value={serverForm.size} onChange={e => setServerForm({...serverForm, size: e.target.value})}><option value="">{t('app.cloudProvision.selectSize', 'Select size')}</option>{(providerOptions.sizes || []).map(s => <option key={s} value={s}>{s}</option>)}</select></div>
-                        <div className="form-group"><label>{t('app.cloudProvision.image', 'Image')}</label><select className="form-select" value={serverForm.image} onChange={e => setServerForm({...serverForm, image: e.target.value})}><option value="">{t('app.cloudProvision.selectImage', 'Select image')}</option>{(providerOptions.images || []).map(i => <option key={i} value={i}>{i}</option>)}</select></div>
+                        <div className="form-group">
+                            <label htmlFor="cloud-server-region">{t('app.cloudProvision.region', 'Region')}</label>
+                            <Select value={serverForm.region} onValueChange={region => setServerForm({...serverForm, region})}>
+                                <SelectTrigger id="cloud-server-region"><SelectValue placeholder={t('app.cloudProvision.selectRegion', 'Select region')} /></SelectTrigger>
+                                <SelectContent>
+                                    {(providerOptions.regions || []).filter(Boolean).map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="cloud-server-size">{t('common.labels.size', 'Size')}</label>
+                            <Select value={serverForm.size} onValueChange={size => setServerForm({...serverForm, size})}>
+                                <SelectTrigger id="cloud-server-size"><SelectValue placeholder={t('app.cloudProvision.selectSize', 'Select size')} /></SelectTrigger>
+                                <SelectContent>
+                                    {(providerOptions.sizes || []).filter(Boolean).map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="cloud-server-image">{t('app.cloudProvision.image', 'Image')}</label>
+                            <Select value={serverForm.image} onValueChange={image => setServerForm({...serverForm, image})}>
+                                <SelectTrigger id="cloud-server-image"><SelectValue placeholder={t('app.cloudProvision.selectImage', 'Select image')} /></SelectTrigger>
+                                <SelectContent>
+                                    {(providerOptions.images || []).filter(Boolean).map(i => <SelectItem key={i} value={i}>{i}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </>
                 )}
                 <div className="form-group"><label className="checkbox-label"><input type="checkbox" checked={serverForm.install_agent} onChange={e => setServerForm({...serverForm, install_agent: e.target.checked})} /> {t('app.cloudProvision.autoInstallServerkitAgent', 'Auto-install ServerKit agent')}</label></div>

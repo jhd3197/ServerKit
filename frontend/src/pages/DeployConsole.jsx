@@ -10,7 +10,7 @@ import LogPane from '../components/deploy-console/LogPane';
 import ErrorCard from '../components/deploy-console/ErrorCard';
 import SuccessBanner from '../components/deploy-console/SuccessBanner';
 import { sourceRef } from '../utils/deployActivity';
-import { copyToClipboard } from '@/utils/clipboard';
+import { useClipboard } from '@/hooks/useClipboard';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
 
@@ -65,6 +65,7 @@ export default function DeployConsole() {
     const { jobId } = useParams();
     const navigate = useNavigate();
     const { job, lines, isLive, transport, error, loading } = useDeployJobStream(jobId, { includePlan: true });
+    const { copy } = useClipboard({ successMessage: t('app.deployConsole.logsCopied', 'Logs copied') });
 
     const [follow, setFollow] = useState(true);
     const [wrap, setWrap] = useState(true);
@@ -193,8 +194,8 @@ export default function DeployConsole() {
 
     const copyLogs = useCallback(() => {
         const text = lines.map((l) => l.message).join('\n');
-        copyToClipboard(text);
-    }, [lines]);
+        copy(text);
+    }, [lines, copy]);
 
     const downloadLogs = useCallback(() => {
         const text = lines.map((l) => {

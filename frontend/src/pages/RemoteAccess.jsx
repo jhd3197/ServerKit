@@ -9,7 +9,9 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
-import ResourcePicker from '../components/ResourcePicker';
+import ServerPicker from '../components/ServerPicker';
+import DomainField from '../components/DomainField';
+import PortField from '../components/PortField';
 import { Pill } from '@/components/ds';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { Button } from '@/components/ui/button';
@@ -17,7 +19,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useTranslation } from 'react-i18next';
-import { useWorkspace } from '../contexts/useWorkspace.js';
 
 // Tunnel / service status → status-pill tone.
 const pillKind = (status) => statusKind(status);
@@ -33,20 +34,8 @@ const EMPTY_FORM = {
     ssl: true,
 };
 
-const serverResource = (server, id) => ({
-    type: 'server',
-    id: String(server?.id ?? id),
-    label: server?.name || server?.hostname || String(id),
-    sublabel: server?.ip_address || server?.hostname || '',
-    path: `/servers/${server?.id ?? id}`,
-    scope: { workspaceId: server?.workspace_id ?? null },
-    status: server?.status || null,
-    capabilities: [],
-});
-
 const RemoteAccess = ({ serverId }) => {
     const { t } = useTranslation();
-    const { activeWorkspaceId, isAllWorkspaces } = useWorkspace();
     const toast = useToast();
     const [tunnels, setTunnels] = useState([]);
     const [services, setServices] = useState({}); // tunnelId -> [service]
@@ -63,17 +52,6 @@ const RemoteAccess = ({ serverId }) => {
     const currentServer = useMemo(
         () => servers.find((s) => s.id === serverId),
         [servers, serverId]
-    );
-    const resourceScope = useMemo(() => ({
-        workspaceId: isAllWorkspaces ? null : activeWorkspaceId,
-    }), [activeWorkspaceId, isAllWorkspaces]);
-    const privateServer = useMemo(
-        () => servers.find((server) => String(server.id) === String(form.privateServerId)),
-        [form.privateServerId, servers],
-    );
-    const edgeServer = useMemo(
-        () => servers.find((server) => String(server.id) === String(form.edgeServerId)),
-        [form.edgeServerId, servers],
     );
 
     // When scoped to a server, only show tunnels that involve it.
@@ -402,48 +380,31 @@ const RemoteAccess = ({ serverId }) => {
                                         disabled
                                     />
                                 ) : (
-                                    <ResourcePicker
-                                        value={form.privateServerId
-                                            ? serverResource(privateServer, form.privateServerId)
-                                            : null}
-                                        onChange={(resource) => setField('privateServerId', resource.id)}
-                                        types={['server']}
-                                        scope={resourceScope}
-                                        capabilities={['wireguard']}
-                                        filterOption={(resource) => (
-                                            resource.status === 'online'
-                                            && resource.id !== String(form.edgeServerId)
-                                        )}
-                                        icon={HardDrive}
-                                        showCapabilities
+                                    // Tunnel endpoints are agent servers; the panel host
+                                    // has no server row, so "Local" is not offered.
+                                    <ServerPicker
+                                        value={form.privateServerId}
+                                        onChange={(id) => setField('privateServerId', id)}
+                                        capability="wireguard"
+                                        includeLocal={false}
                                         label={t('app.remoteAccess.privateHostWhereTheServiceRuns', 'Private host (where the service runs)')}
-                                        placeholder={t('app.remoteAccess.selectAServer', 'Select a server')}
-                                        searchPlaceholder={t('app.serverPicker.findAServer', 'Find a server…')}
-                                        className="sk-resource-picker__trigger--full"
                                     />
                                 )}
                             </div>
                             <div className="ra-service-field">
                                 <Label>{t('app.remoteAccess.edgeServerPublicIpFrontsThe', 'Edge server (public IP — fronts the tunnel)')}</Label>
-                                <ResourcePicker
-                                    value={form.edgeServerId
-                                        ? serverResource(edgeServer, form.edgeServerId)
-                                        : null}
-                                    onChange={(resource) => setField('edgeServerId', resource.id)}
-                                    types={['server']}
-                                    scope={resourceScope}
-                                    capabilities={['wireguard']}
-                                    filterOption={(resource) => (
-                                        resource.status === 'online'
-                                        && resource.id !== String(form.privateServerId)
-                                    )}
-                                    icon={Cloud}
-                                    showCapabilities
+                                <ServerPicker
+                                    value={form.edgeServerId}
+                                    onChange={(id) => setField('edgeServerId', id)}
+                                    capability="wireguard"
+                                    includeLocal={false}
                                     label={t('app.remoteAccess.edgeServerPublicIpFrontsThe', 'Edge server (public IP — fronts the tunnel)')}
-                                    placeholder={t('app.remoteAccess.selectAServer', 'Select a server')}
-                                    searchPlaceholder={t('app.serverPicker.findAServer', 'Find a server…')}
-                                    className="sk-resource-picker__trigger--full"
                                 />
+                                {form.edgeServerId && form.edgeServerId === form.privateServerId && (
+                                    <p className="ra-service-hint">
+                                        {t('app.remoteAccess.pickTwoDifferentServers', 'Pick two different servers: the edge fronts the private host.')}
+                                    </p>
+                                )}
                                 <p className="ra-service-hint">
                                     {t('app.remoteAccess.aTunnelBetweenTheseTwoIs', 'A tunnel between these two is created (or reused) automatically.')}
                                 </p>
@@ -453,20 +414,23 @@ const RemoteAccess = ({ serverId }) => {
 
                     <div className="ra-service-routing">
                         <div className="ra-service-field ra-service-field--host">
-                            <Label>{t('app.remoteAccess.publicHostname', 'Public hostname')}</Label>
-                            <Input
-                                placeholder="jellyfin.example.com"
+                            <Label htmlFor="ra-hostname">{t('app.remoteAccess.publicHostname', 'Public hostname')}</Label>
+                            <DomainField
+                                id="ra-hostname"
+                                modes={['custom']}
                                 value={form.hostname}
-                                onChange={(e) => setField('hostname', e.target.value)}
+                                onChange={(fqdn) => setField('hostname', fqdn)}
                             />
                         </div>
                         <div className="ra-service-field">
-                            <Label>{t('app.remoteAccess.servicePort', 'Service port')}</Label>
-                            <Input
-                                type="number"
+                            <Label htmlFor="ra-port">{t('app.remoteAccess.servicePort', 'Service port')}</Label>
+                            {/* The port lives on the private host, not this panel. */}
+                            <PortField
+                                id="ra-port"
+                                host={false}
                                 placeholder="8096"
                                 value={form.port}
-                                onChange={(e) => setField('port', e.target.value)}
+                                onChange={(port) => setField('port', port)}
                             />
                         </div>
                     </div>

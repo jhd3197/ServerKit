@@ -3,7 +3,8 @@ import useTabParam from '../hooks/useTabParam';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
-import TargetPicker from '../components/TargetPicker';
+import ServerPicker from '../components/ServerPicker';
+import { serverTarget, targetServerId } from '../utils/serverTarget';
 import RemoteTerminal from '../components/RemoteTerminal';
 import LogFileList from '../components/log-viewer/LogFileList';
 import LogToolbar from '../components/log-viewer/LogToolbar';
@@ -31,6 +32,9 @@ import {
     ScrollText, Cpu, Settings,
 } from 'lucide-react';
 import { Button as SharedButton } from '@/components/ui/button';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 
 // 'logs' stays first so the default landing keeps working on installs with no
 // paired agents (the interactive shell needs a connected agent).
@@ -332,10 +336,10 @@ const LogFilesTab = () => {
             <div className="lv-header">
                 <div className="lv-header-target">
                     <span className="lv-header-label">{t('common.labels.source', 'Source')}</span>
-                    <TargetPicker
-                        feature="logs"
-                        value={target}
-                        onChange={setTarget}
+                    <ServerPicker
+                        capability="logs"
+                        value={targetServerId(target)}
+                        onChange={(id, server) => setTarget(serverTarget(id, server))}
                     />
                     {isRemote && (
                         <span className="lv-header-hint">
@@ -608,7 +612,11 @@ const JournalTab = () => {
             <div className="lv-header">
                 <div className="lv-header-target">
                     <span className="lv-header-label">{t('common.labels.source', 'Source')}</span>
-                    <TargetPicker feature="logs" value={target} onChange={setTarget} />
+                    <ServerPicker
+                        capability="logs"
+                        value={targetServerId(target)}
+                        onChange={(id, server) => setTarget(serverTarget(id, server))}
+                    />
                     {isRemote && (
                         <span className="lv-header-hint">
                             <AlertCircle size={12} />
@@ -888,7 +896,11 @@ const ProcessesTab = () => {
             <div className="lv-header">
                 <div className="lv-header-target">
                     <span className="lv-header-label">{t('common.labels.source', 'Source')}</span>
-                    <TargetPicker feature="processes" value={target} onChange={setTarget} />
+                    <ServerPicker
+                        capability="processes"
+                        value={targetServerId(target)}
+                        onChange={(id, server) => setTarget(serverTarget(id, server))}
+                    />
                     {isRemote && (
                         <span className="lv-header-hint">
                             <AlertCircle size={12} />
@@ -936,16 +948,20 @@ const ProcessesTab = () => {
                     onSortsChange={setSorts}
                     actions={(
                         <>
-                            <select
-                                className="lv-select"
-                                value={limit}
-                                onChange={(e) => setLimit(parseInt(e.target.value, 10))}
-                                title={t('app.terminal.processesToFetch', 'Processes to fetch')}
-                            >
-                                {PROCESS_LIMITS.map((n) => (
-                                    <option key={n} value={n}>{t('app.terminal.top', 'Top')} {n}</option>
-                                ))}
-                            </select>
+                            <Select value={String(limit)} onValueChange={(v) => setLimit(parseInt(v, 10))}>
+                                <SelectTrigger
+                                    className="lv-select"
+                                    title={t('app.terminal.processesToFetch', 'Processes to fetch')}
+                                    aria-label={t('app.terminal.processesToFetch', 'Processes to fetch')}
+                                >
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {PROCESS_LIMITS.map((n) => (
+                                        <SelectItem key={n} value={String(n)}>{t('app.terminal.top', 'Top')} {n}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                             <SharedButton variant="unstyled" type="button"
                                 className={`lv-chip ${autoRefresh ? 'active' : ''}`}
                                 onClick={() => setAutoRefresh(!autoRefresh)}
@@ -1042,7 +1058,11 @@ const ServicesTab = () => {
             <div className="lv-header">
                 <div className="lv-header-target">
                     <span className="lv-header-label">{t('common.labels.source', 'Source')}</span>
-                    <TargetPicker feature="services" value={target} onChange={setTarget} />
+                    <ServerPicker
+                        capability="services"
+                        value={targetServerId(target)}
+                        onChange={(id, server) => setTarget(serverTarget(id, server))}
+                    />
                 </div>
             </div>
             <SystemdServicesTab

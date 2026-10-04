@@ -544,11 +544,6 @@
 
 // Responsive
 
-.sk-srvpick__resource-picker {
-    width: 100%;
-    max-width: none;
-}
-
 // Capacity note in the deploy drawer — does this template fit the server the
 // operator just picked. Toned by verdict, but deliberately quiet: it sits under
 // the server picker as a sentence, not an alert box, because it never blocks

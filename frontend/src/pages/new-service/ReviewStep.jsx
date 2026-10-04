@@ -6,8 +6,12 @@ import {
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import BuildpackPreview from '@/components/buildpack/BuildpackPreview';
 import ResourcePicker from '@/components/ResourcePicker';
+import PortField from '@/components/PortField';
 import { useWorkspace } from '@/contexts/useWorkspace.js';
 import { useTranslation } from 'react-i18next';
 import {
@@ -222,42 +226,48 @@ const ReviewStep = ({ form }) => {
                 )}
                 <div className="new-service-page__field">
                     <Label htmlFor="review-type">{t('app.reviewStep.serviceType', 'Service type')}</Label>
-                    <select id="review-type" value={appType} onChange={(e) => setAppType(e.target.value)}>
-                        {sourceMode === 'upload' && <option value="auto">{t('app.reviewStep.autoDetect', 'Auto-detect')}</option>}
-                        {APP_TYPE_OPTIONS.filter(o => o.value !== 'auto').map(option => (
-                            <option key={option.value} value={option.value}>{option.label}</option>
-                        ))}
-                    </select>
+                    <Select value={appType} onValueChange={setAppType}>
+                        <SelectTrigger id="review-type"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {sourceMode === 'upload' && <SelectItem value="auto">{t('app.reviewStep.autoDetect', 'Auto-detect')}</SelectItem>}
+                            {APP_TYPE_OPTIONS.filter(o => o.value !== 'auto').map(option => (
+                                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
                 {showBuild && (
                     <div className="new-service-page__field">
                         <Label htmlFor="review-build">{t('app.reviewStep.buildMethod', 'Build method')}</Label>
-                        <select id="review-build" value={buildMethod} onChange={(e) => setBuildMethod(e.target.value)}>
-                            {BUILD_METHOD_OPTIONS.map(option => (
-                                <option key={option.value} value={option.value}>{option.label}</option>
-                            ))}
-                        </select>
+                        <Select value={buildMethod} onValueChange={setBuildMethod}>
+                            <SelectTrigger id="review-build"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {BUILD_METHOD_OPTIONS.map(option => (
+                                    <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 )}
                 <div className="new-service-page__field">
                     <Label htmlFor="review-port">{t('app.reviewStep.runtimePort', 'Runtime port')}</Label>
-                    <Input
+                    <PortField
                         id="review-port"
-                        type="number"
                         value={port}
-                        onChange={(e) => setPort(e.target.value)}
+                        onChange={setPort}
                         placeholder="3000"
-                        min="1"
-                        max="65535"
                     />
                 </div>
                 <div className="new-service-page__field">
                     <Label htmlFor="review-ingress">{t('app.reviewStep.ingress', 'Ingress')}</Label>
                     {ingressProxyEligible ? (
-                        <select id="review-ingress" value={ingressPlane} onChange={(e) => setIngressPlane(e.target.value)}>
-                            <option value="nginx">{t('app.reviewStep.hostNginxDefault', 'Host Nginx (default)')}</option>
-                            <option value="proxy_stack">{t('app.reviewStep.proxyStackTraefikCaddy', 'Proxy stack (Traefik / Caddy)')}</option>
-                        </select>
+                        <Select value={ingressPlane} onValueChange={setIngressPlane}>
+                            <SelectTrigger id="review-ingress"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="nginx">{t('app.reviewStep.hostNginxDefault', 'Host Nginx (default)')}</SelectItem>
+                                <SelectItem value="proxy_stack">{t('app.reviewStep.proxyStackTraefikCaddy', 'Proxy stack (Traefik / Caddy)')}</SelectItem>
+                            </SelectContent>
+                        </Select>
                     ) : (
                         <div className="new-service-page__note">
                             <Network size={16} />

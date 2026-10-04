@@ -22,6 +22,7 @@ import { useToast } from '../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MetricCard, KpiBand, Pill, Gauge, DataTable, DataTableFooter, statusKind } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
@@ -572,29 +573,30 @@ const AgentFleet = () => {
                                 </p>
                                 <div className="fleet-rollout-fields">
                                     <div className="form-group">
-                                        <label>{t('app.agentFleet.targetVersion', 'Target Version')}</label>
-                                        <select
-                                            className="form-select fleet-rollout-select"
-                                            value={selectedVersion}
-                                            onChange={e => setSelectedVersion(e.target.value)}
-                                        >
-                                            <option value="">{t('app.agentFleet.selectVersion', 'Select version…')}</option>
-                                            {versions.map(v => (
-                                                <option key={v.id} value={v.id}>v{v.version} ({v.channel})</option>
-                                            ))}
-                                        </select>
+                                        <label htmlFor="fleet-rollout-version">{t('app.agentFleet.targetVersion', 'Target Version')}</label>
+                                        <Select value={selectedVersion} onValueChange={setSelectedVersion}>
+                                            <SelectTrigger id="fleet-rollout-version" className="fleet-rollout-select">
+                                                <SelectValue placeholder={t('app.agentFleet.selectVersion', 'Select version…')} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {versions.map(v => (
+                                                    <SelectItem key={v.id} value={String(v.id)}>v{v.version} ({v.channel})</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                     <div className="form-group">
-                                        <label>{t('app.agentFleet.rolloutStrategy', 'Rollout Strategy')}</label>
-                                        <select
-                                            className="form-select fleet-rollout-select"
-                                            value={rolloutStrategy}
-                                            onChange={e => setRolloutStrategy(e.target.value)}
-                                        >
-                                            <option value="all">{t('app.agentFleet.allAtOnce', 'All At Once')}</option>
-                                            <option value="staged">{t('app.agentFleet.stagedBatchByBatch', 'Staged (Batch by Batch)')}</option>
-                                            <option value="canary">{t('app.agentFleet.canary1ServerFirst', 'Canary (1 server first)')}</option>
-                                        </select>
+                                        <label htmlFor="fleet-rollout-strategy">{t('app.agentFleet.rolloutStrategy', 'Rollout Strategy')}</label>
+                                        <Select value={rolloutStrategy} onValueChange={setRolloutStrategy}>
+                                            <SelectTrigger id="fleet-rollout-strategy" className="fleet-rollout-select">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="all">{t('app.agentFleet.allAtOnce', 'All At Once')}</SelectItem>
+                                                <SelectItem value="staged">{t('app.agentFleet.stagedBatchByBatch', 'Staged (Batch by Batch)')}</SelectItem>
+                                                <SelectItem value="canary">{t('app.agentFleet.canary1ServerFirst', 'Canary (1 server first)')}</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                     {rolloutStrategy === 'staged' && (
                                         <>

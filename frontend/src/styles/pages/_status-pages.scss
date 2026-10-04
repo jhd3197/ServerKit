@@ -172,25 +172,7 @@
         border-radius: var(--radius);
         background: var(--surface-2);
 
-        > span {
-            color: var(--text-faint);
-            font-family: var(--mono);
-            font-size: 10.5px;
-            font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        code {
-            min-width: 0;
-            overflow-wrap: anywhere;
-            color: var(--text);
-            font-family: var(--mono);
-            font-size: 12.5px;
-            line-height: 1.5;
-        }
-
-        > div {
+        > div:not(.sk-copy-field) {
             display: flex;
             flex-wrap: wrap;
             gap: $space-2;

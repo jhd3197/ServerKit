@@ -657,3 +657,19 @@
         padding-left: 0;
     }
 }
+
+// Bar controls built on the shared pickers: sized to the bar's 32px row and
+// the compact mono look of the other bar controls.
+.skw-bar__ctl .skw-refresh-trigger,
+.skw-bar__ctl .skw-serverpick {
+    height: 32px;
+    width: auto;
+    padding: 0 10px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.skw-bar__ctl .skw-refresh-trigger {
+    min-width: 0;
+    font-family: var(--mono);
+}

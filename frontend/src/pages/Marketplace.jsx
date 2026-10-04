@@ -28,6 +28,9 @@ import EmptyState from '../components/EmptyState';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
+import {
     SearchField, FilterDrawer, FilterButton, countActiveFilters,
     CatalogCard, CatalogGrid,
 } from '@/components/ds';
@@ -1109,15 +1112,24 @@ const PluginConfigDialog = ({ plugin, onClose }) => {
                                         onChange={(e) => setField(key, e.target.checked)}
                                     />
                                 ) : Array.isArray(s.enum) ? (
-                                    <select
-                                        className="ui-input"
-                                        value={value}
-                                        onChange={(e) => setField(key, e.target.value)}
+                                    // Radix items need non-empty string values; the
+                                    // original (possibly numeric) enum entry is restored on change.
+                                    <Select
+                                        value={value === '' ? '' : String(value)}
+                                        onValueChange={(v) => setField(
+                                            key,
+                                            s.enum.find((opt) => String(opt) === v) ?? v,
+                                        )}
                                     >
-                                        {s.enum.map((opt) => (
-                                            <option key={opt} value={opt}>{opt}</option>
-                                        ))}
-                                    </select>
+                                        <SelectTrigger aria-label={s.title || key}>
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {s.enum.filter((opt) => String(opt) !== '').map((opt) => (
+                                                <SelectItem key={String(opt)} value={String(opt)}>{String(opt)}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                 ) : (
                                     <input
                                         className="ui-input"

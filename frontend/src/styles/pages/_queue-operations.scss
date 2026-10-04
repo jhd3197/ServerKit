@@ -410,24 +410,10 @@
     gap: $space-1;
 }
 
+// Toolbar filter triggers size to their content instead of the field default.
 .queue-select {
-    background: $bg-body;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
-    padding: $space-2 $space-3;
-    color: $text-primary;
-    font-size: $font-size-sm;
+    width: auto;
     min-width: 160px;
-    height: 44px;
-
-    &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-
-    &--full {
-        width: 100%;
-    }
 }
 
 .queue-messages-toolbar {

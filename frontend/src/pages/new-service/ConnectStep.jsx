@@ -6,6 +6,9 @@ import { SiGithub } from 'react-icons/si';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import { SOURCE_NEEDS } from './useNewServiceForm';
 import { useTranslation } from 'react-i18next';
 
@@ -152,11 +155,14 @@ const ConnectStep = ({ form }) => {
                     </div>
                     <div className="new-service-page__field">
                         <Label htmlFor="managed-by">{t('app.connectStep.managedBy', 'Managed by')}</Label>
-                        <select id="managed-by" value={managedBy} onChange={(e) => setManagedBy(e.target.value)}>
-                            <option value="auto">{t('app.connectStep.autoDetect', 'Auto-detect')}</option>
-                            <option value="docker_compose">{t('app.connectStep.dockerCompose', 'Docker Compose')}</option>
-                            <option value="systemd">systemd</option>
-                        </select>
+                        <Select value={managedBy} onValueChange={setManagedBy}>
+                            <SelectTrigger id="managed-by"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="auto">{t('app.connectStep.autoDetect', 'Auto-detect')}</SelectItem>
+                                <SelectItem value="docker_compose">{t('app.connectStep.dockerCompose', 'Docker Compose')}</SelectItem>
+                                <SelectItem value="systemd">systemd</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
             )}
@@ -218,16 +224,14 @@ const ConnectStep = ({ form }) => {
                     <div className="new-service-page__field">
                         <Label htmlFor="branch-inline">{t('common.labels.branch', 'Branch')}</Label>
                         {sourceMode === 'github' && branches.length > 0 ? (
-                            <select
-                                id="branch-inline"
-                                value={branch}
-                                onChange={(e) => setBranch(e.target.value)}
-                                disabled={branchesLoading}
-                            >
-                                {branches.map(option => (
-                                    <option key={option.name} value={option.name}>{option.name}</option>
-                                ))}
-                            </select>
+                            <Select value={branch} onValueChange={setBranch} disabled={branchesLoading}>
+                                <SelectTrigger id="branch-inline"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                    {branches.map(option => (
+                                        <SelectItem key={option.name} value={option.name}>{option.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         ) : (
                             <Input
                                 id="branch-inline"

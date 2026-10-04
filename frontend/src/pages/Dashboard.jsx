@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-    Check, ChevronDown, Grid2x2, History, Keyboard, Maximize2, Plus,
+    Grid2x2, History, Keyboard, Maximize2, Plus,
     RefreshCw, SlidersHorizontal, X,
 } from 'lucide-react';
 import api from '../services/api';
@@ -8,7 +8,8 @@ import { useAuth } from '../contexts/useAuth.js';
 import { useToast } from '../contexts/useToast.js';
 import { useMetrics } from '../hooks/useMetrics';
 import useDashboardBoards from '../hooks/useDashboardBoards';
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import ServerPicker from '../components/ServerPicker';
 import { SegControl } from '@/components/ds';
 import { Button } from '@/components/ui/button';
 import ChangeBar from '../components/ds/ChangeBar';
@@ -80,7 +81,6 @@ const Dashboard = () => {
     const [systemInfo, setSystemInfo] = useState(null);
     const [servers, setServers] = useState([]);
     const [selectedServer, setSelectedServer] = useState({ id: 'local', name: 'Local (this server)' });
-    const [serverMenuOpen, setServerMenuOpen] = useState(false);
     const [remoteMetrics, setRemoteMetrics] = useState(null);
     const [remoteSystemInfo, setRemoteSystemInfo] = useState(null);
     const isRemote = selectedServer.id !== 'local';
@@ -408,8 +408,10 @@ const Dashboard = () => {
         await removeBoard(boardId);
     }, [leaveEditor, removeBoard]);
 
-    const handleServerChange = (serverId) => {
-        const server = servers.find((s) => s.id === serverId) || { id: 'local', name: 'Local (this server)' };
+    const handleServerChange = (serverId, row) => {
+        const server = row
+            || servers.find((s) => String(s.id) === String(serverId))
+            || { id: 'local', name: 'Local (this server)' };
         setSelectedServer(server);
         lastServerUptime.current = null;
         lastServerTime.current = null;
@@ -555,49 +557,12 @@ const Dashboard = () => {
                             <span className="skw-varpick__v">{hostname}</span>
                         </span>
                     ) : (
-                        <Popover open={serverMenuOpen} onOpenChange={setServerMenuOpen}>
-                            <PopoverTrigger asChild>
-                                <Button variant="unstyled"
-                                    type="button"
-                                    className={`skw-varpick${serverMenuOpen ? ' is-open' : ''}`}
-                                    aria-label={t('app.dashboard.switchServer', 'Switch server')}
-                                >
-                                    <span className="skw-varpick__k mono">server</span>
-                                    <span className="skw-varpick__v">{selectedServer.name || hostname}</span>
-                                    <ChevronDown size={13} aria-hidden="true" />
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent align="start" sideOffset={7} className="env-menu">
-                                <div className="env-menu__head">{t('app.dashboard.dashboardVariableServer', 'Dashboard variable · $server')}</div>
-                                {servers.map((server) => {
-                                    const online = server.status === 'online';
-                                    return (
-                                        <Button variant="unstyled"
-                                            type="button"
-                                            key={server.id}
-                                            className="env-opt"
-                                            onClick={() => { handleServerChange(server.id); setServerMenuOpen(false); }}
-                                        >
-                                            <span
-                                                className={`env-opt__dot env-opt__dot--${online ? 'online' : 'offline'}`}
-                                                aria-hidden="true"
-                                            ></span>
-                                            <span className="env-opt__body">
-                                                <span className="env-opt__name">{server.name}</span>
-                                                <span className="env-opt__meta">
-                                                    {server.group_name || (server.is_local ? 'local' : server.id)}
-                                                    {' · '}
-                                                    {online ? 'online' : 'offline'}
-                                                </span>
-                                            </span>
-                                            {server.id === selectedServer.id && (
-                                                <span className="env-opt__check" aria-hidden="true"><Check size={15} /></span>
-                                            )}
-                                        </Button>
-                                    );
-                                })}
-                            </PopoverContent>
-                        </Popover>
+                        <ServerPicker
+                            value={selectedServer.id}
+                            onChange={handleServerChange}
+                            label={t('app.dashboard.switchServer', 'Switch server')}
+                            className="skw-serverpick"
+                        />
                     )}
                     <SegControl
                         options={RANGES.map(([value, label]) => ({ value, label }))}
@@ -605,18 +570,23 @@ const Dashboard = () => {
                         onChange={setRange}
                         aria-label={t('app.dashboard.timeRange', 'Time range')}
                     />
-                    <div className="skw-refresh">
-                        <select
-                            value={refreshInterval}
-                            onChange={(e) => handleRefreshIntervalChange(parseInt(e.target.value, 10))}
+                    <Select
+                        value={String(refreshInterval)}
+                        onValueChange={(value) => handleRefreshIntervalChange(parseInt(value, 10))}
+                    >
+                        <SelectTrigger
+                            className="skw-refresh-trigger"
                             title={t('app.dashboard.autoRefreshInterval', 'Auto-refresh interval')}
                             aria-label={t('app.dashboard.autoRefreshInterval', 'Auto-refresh interval')}
                         >
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
                             {REFRESH_OPTIONS.map((opt) => (
-                                <option key={opt.value} value={opt.value}>↻ {opt.label}</option>
+                                <SelectItem key={opt.value} value={String(opt.value)}>↻ {opt.label}</SelectItem>
                             ))}
-                        </select>
-                    </div>
+                        </SelectContent>
+                    </Select>
                     <Button variant="unstyled"
                         type="button"
                         className="skw-iconbtn"

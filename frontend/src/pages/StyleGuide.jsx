@@ -9,7 +9,13 @@ import {
     Inbox, Table, AlertCircle, FileText, Monitor, Key, FolderOpen,
     GitBranch, WifiOff, Clock
 } from 'lucide-react';
-import { PageTopbar, SearchField } from '@/components/ds';
+import { PageTopbar, SearchField, CatalogCard, CatalogGrid } from '@/components/ds';
+import CopyField from '../components/CopyField';
+import PortField from '../components/PortField';
+import EnvEditor from '../components/EnvEditor';
+import ServerPicker from '../components/ServerPicker';
+import DomainField from '../components/DomainField';
+import { LOCAL_SERVER_ID } from '../utils/serverTarget';
 import Modal from '../components/Modal';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import StatusBadge from '../components/StatusBadge';
@@ -27,7 +33,11 @@ import { ServiceCard, ServicesGrid } from '../components/ServiceCard';
 import { JournalControls } from '../components/JournalControls';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useTranslation } from 'react-i18next';
@@ -42,6 +52,7 @@ const SECTIONS = [
     { id: 'spacing', labelKey: 'app.styleGuide.spacingRadius', label: 'Spacing & Radius', icon: Box },
     { id: 'buttons', labelKey: 'app.styleGuide.buttons', label: 'Buttons', icon: Square },
     { id: 'forms', labelKey: 'app.styleGuide.forms', label: 'Forms', icon: ToggleLeft },
+    { id: 'fields', labelKey: 'app.styleGuide.sharedFields', label: 'Shared Fields', icon: Key },
     { id: 'tables', labelKey: 'app.styleGuide.tables', label: 'Tables', icon: Table },
     { id: 'cards', labelKey: 'app.styleGuide.cardsStats', label: 'Cards & Stats', icon: Layout },
     { id: 'badges', labelKey: 'app.styleGuide.badgesStatus', label: 'Badges & Status', icon: Shield },
@@ -86,6 +97,10 @@ export default function StyleGuide() {
     const [halfOverflowTab, setHalfOverflowTab] = useState('overview');
     const [inputValue, setInputValue] = useState('');
     const [selectValue, setSelectValue] = useState('');
+    const [portValue, setPortValue] = useState(8080);
+    const [envRows, setEnvRows] = useState([{ key: 'NODE_ENV', value: 'production' }, { key: 'API_TOKEN', value: 'demo-token' }]);
+    const [serverValue, setServerValue] = useState(LOCAL_SERVER_ID);
+    const [domainValue, setDomainValue] = useState('');
     const [checkValue, setCheckValue] = useState(false);
     const sections = SECTIONS;
 
@@ -354,12 +369,16 @@ export default function StyleGuide() {
                         <SectionTitle title={t('app.styleGuide.selectTextarea', 'Select & Textarea')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="form-group">
-                                <label>{t('app.styleGuide.selectDropdown', 'Select Dropdown')}</label>
-                                <select className="form-select" value={selectValue} onChange={e => setSelectValue(e.target.value)}>
-                                    <option value="">{t('app.styleGuide.chooseAnOption', 'Choose an option…')}</option>
-                                    <option value="1">{t('app.styleGuide.option1', 'Option 1')}</option>
-                                    <option value="2">{t('app.styleGuide.option2', 'Option 2')}</option>
-                                </select>
+                                <Label htmlFor="sg-select">{t('app.styleGuide.selectDropdown', 'Select Dropdown')}</Label>
+                                <Select value={selectValue} onValueChange={setSelectValue}>
+                                    <SelectTrigger id="sg-select">
+                                        <SelectValue placeholder={t('app.styleGuide.chooseAnOption', 'Choose an option…')} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="1">{t('app.styleGuide.option1', 'Option 1')}</SelectItem>
+                                        <SelectItem value="2">{t('app.styleGuide.option2', 'Option 2')}</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="form-group">
                                 <label>{t('app.styleGuide.textarea', 'Textarea')}</label>
@@ -400,6 +419,75 @@ export default function StyleGuide() {
                                 <span>{t('app.styleGuide.enableFeature', 'Enable feature')}</span>
                             </label>
                         </SharedCard>
+                    </div>
+                )}
+
+                {/* ── SHARED FIELDS ── */}
+                {activeSection === 'fields' && (
+                    <div className="styleguide__section">
+                        <SectionTitle title={t('app.styleGuide.copyField', 'Copy Field (CopyField)')} />
+                        <SharedCard variant="legacy" className="card styleguide__demo-card">
+                            <div className="form-group">
+                                <CopyField label={t('app.styleGuide.connectionString', 'Connection string')} value="postgresql://app@db.internal:5432/app" />
+                            </div>
+                            <div className="form-group">
+                                <CopyField label={t('app.styleGuide.password', 'Password')} value="s3cr3t-demo-value" secret />
+                            </div>
+                            <div className="form-group">
+                                <CopyField value={'curl -fsSL https://example.com/install.sh -o install.sh && \\\n  sudo bash install.sh'} multiline />
+                            </div>
+                        </SharedCard>
+
+                        <SectionTitle title={t('app.styleGuide.portField', 'Port Field (PortField)')} />
+                        <SharedCard variant="legacy" className="card styleguide__demo-card">
+                            <div className="form-group">
+                                <Label htmlFor="sg-port">{t('app.styleGuide.containerPort', 'Container port')}</Label>
+                                <PortField id="sg-port" host={false} value={portValue} onChange={setPortValue} />
+                                <span className="hint">{t('app.styleGuide.portFieldHint', 'host={false}: range checks only. Host ports (the default) are also checked for collisions.')}</span>
+                            </div>
+                        </SharedCard>
+
+                        <SectionTitle title={t('app.styleGuide.envEditor', 'Environment Editor (EnvEditor)')} />
+                        <SharedCard variant="legacy" className="card styleguide__demo-card">
+                            <EnvEditor value={envRows} onChange={setEnvRows} />
+                        </SharedCard>
+
+                        <SectionTitle title={t('app.styleGuide.serverPicker', 'Server Picker (ServerPicker)')} />
+                        <SharedCard variant="legacy" className="card styleguide__demo-card">
+                            <div className="form-group">
+                                <ServerPicker value={serverValue} onChange={(id) => setServerValue(id)} capability="docker" />
+                            </div>
+                        </SharedCard>
+
+                        <SectionTitle title={t('app.styleGuide.domainField', 'Domain Field (DomainField)')} />
+                        <SharedCard variant="legacy" className="card styleguide__demo-card">
+                            <div className="form-group">
+                                <Label htmlFor="sg-domain">{t('common.labels.domain', 'Domain')}</Label>
+                                <DomainField id="sg-domain" value={domainValue} onChange={(fqdn) => setDomainValue(fqdn)} defaultLabel="my-app" />
+                            </div>
+                        </SharedCard>
+
+                        <SectionTitle title={t('app.styleGuide.catalogCard', 'Catalog Card (CatalogCard)')} />
+                        <CatalogGrid>
+                            <CatalogCard
+                                icon={<Database size={18} />}
+                                title={t('app.styleGuide.postgresql', 'PostgreSQL')}
+                                sub="v16 · by ServerKit"
+                                tag={t('app.styleGuide.database', 'Database')}
+                                description={t('app.styleGuide.catalogCardDemo', 'Something you browse to install or deploy. Things you operate are table rows.')}
+                                facts=":5432 · 256 MB RAM"
+                                action={<Button size="sm">{t('app.styleGuide.deploy', 'Deploy')}</Button>}
+                            />
+                            <CatalogCard
+                                icon={<Globe size={18} />}
+                                title={t('app.styleGuide.staticSite', 'Static site')}
+                                sub="by ServerKit"
+                                featured
+                                description={t('app.styleGuide.catalogCardDemo2', 'One tag, one action; counts and versions stay plain text.')}
+                                facts=":80"
+                                action={<Button size="sm" variant="outline">{t('app.styleGuide.deploy', 'Deploy')}</Button>}
+                            />
+                        </CatalogGrid>
                     </div>
                 )}
 

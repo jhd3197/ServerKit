@@ -13,6 +13,9 @@ import { Pill, ServiceTile } from '@/components/ds';
 import PageLayout from '../layouts/PageLayout';
 import { Button } from '@/components/ui/button';
 import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
+import {
     LayoutGrid, ChevronLeft, Server, Box, Globe,
     Users, Settings2,
 } from 'lucide-react';
@@ -356,11 +359,14 @@ const WorkspaceDetail = () => {
                         <hr />
                         <h4>{t('app.workspaceDetail.grantAccess', 'Grant Access')}</h4>
                         <div className="form-group">
-                            <label>{t('app.workspaceDetail.roleForNewGrants', 'Role for new grants')}</label>
-                            <select value={grantRole} onChange={e => setGrantRole(e.target.value)}>
-                                <option value="editor">{t('app.workspaceDetail.editorViewOperate', 'Editor · view + operate')}</option>
-                                <option value="viewer">{t('app.workspaceDetail.viewerReadOnly', 'Viewer · read-only')}</option>
-                            </select>
+                            <label htmlFor="ws-grant-role">{t('app.workspaceDetail.roleForNewGrants', 'Role for new grants')}</label>
+                            <Select value={grantRole} onValueChange={setGrantRole}>
+                                <SelectTrigger id="ws-grant-role"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="editor">{t('app.workspaceDetail.editorViewOperate', 'Editor · view + operate')}</SelectItem>
+                                    <SelectItem value="viewer">{t('app.workspaceDetail.viewerReadOnly', 'Viewer · read-only')}</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div className="ws-pick">
                             {allUsers.filter(u => u.id !== sharingApp.user_id && !grants.find(g => g.user_id === u.id)).map(u => (

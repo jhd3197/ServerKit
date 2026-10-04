@@ -909,37 +909,16 @@
     }
 }
 
-// Security section styles
+// Security section styles: the connection facts, as an InfoList in a box.
 .security-info-bar {
     display: flex;
-    gap: $space-6;
-    padding: $space-4;
+    flex-direction: column;
+    gap: 0;
+    padding: $space-1 $space-4;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
     border-radius: $radius-lg;
     margin-bottom: $space-5;
-}
-
-.security-info-item {
-    .security-info-label {
-        display: block;
-        font-size: $font-size-xs;
-        color: $text-tertiary;
-        margin-bottom: $space-1;
-    }
-
-    .security-info-value {
-        font-size: $font-size-sm;
-        color: $text-primary;
-
-        code {
-            font-family: $font-mono;
-            background: $bg-body;
-            padding: 2px $space-2;
-            border-radius: $radius-sm;
-            font-size: $font-size-xs;
-        }
-    }
 }
 
 .subsection {
@@ -1360,109 +1339,16 @@
     margin-top: $space-3;
 }
 
-.install-tab {
-    background: var(--surface);
-    border: 1px solid var(--border-soft);
-    border-radius: var(--radius);
-    overflow: hidden;
-}
-
-.install-tab-header {
-    display: flex;
-    align-items: center;
-    gap: $space-3;
-    padding: $space-3 $space-4;
-    background: var(--surface-2);
-    border-bottom: 1px solid var(--border-soft);
-
-    > svg {
-        color: var(--text-faint);
-        flex-shrink: 0;
-    }
-}
-
-.install-tab-title {
-    flex: 1;
-    min-width: 0;
-
-    > span:first-child {
-        display: block;
-        font-family: var(--mono);
-        font-size: 10.5px;
-        font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--text-dim);
-    }
-}
-
-.install-tab-description {
-    display: block;
-    font-size: 11px;
-    color: var(--text-faint);
-    font-weight: $font-weight-normal;
-    margin-top: 2px;
-}
-
-.install-script {
-    padding: $space-4 $space-5;
-    margin: 0;
-    font-family: var(--mono);
-    font-size: 11.5px;
-    line-height: 1.6;
-    color: var(--text-dim);
-    background: var(--bg-code);
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-break: break-all;
-}
-
-// Hero block on the "connection string ready" screen and the regenerate
-// drawer. Keeps the one pasteable blob visually heavier than the install
-// scripts (which are now an "I haven't installed the agent yet" fallback).
-.connection-string-field {
+// The connection string on the "ready" screen: the one pasteable blob.
+.server-connection-string {
     margin-top: $space-5;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
-    overflow: hidden;
 }
 
-.connection-string-field__header {
-    display: flex;
-    align-items: center;
-    gap: $space-3;
-    padding: $space-3 $space-4;
-    background: var(--surface-2);
-    border-bottom: 1px solid var(--border-soft);
-
-    > svg {
-        color: var(--accent-bright);
-        flex-shrink: 0;
-    }
-
-    > span {
-        flex: 1;
-        font-family: var(--mono);
-        font-size: 10.5px;
-        font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--text-dim);
-    }
-}
-
-.connection-string-field__value {
-    padding: $space-4 $space-5;
-    margin: 0;
-    font-family: var(--mono);
-    font-size: 12.5px;
-    line-height: $line-height-relaxed;
-    color: var(--text);
-    background: var(--bg-code);
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-break: break-all;
+// "Set group…" in the floating bulk bar sizes to its text, not the field width.
+.servers-bulk-group {
+    width: auto;
+    min-width: 140px;
+    height: 30px;
 }
 
 .install-fallback {
@@ -2317,12 +2203,10 @@
     }
 }
 
-.info-rows {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
+// Server overview spec rows (InfoList): icon + faint key, mono value
+// right-aligned, soft separators.
+.server-info-list {
+    gap: 0;
 
     &--columns {
         display: grid;
@@ -2333,42 +2217,40 @@
             grid-template-columns: 1fr;
         }
     }
-}
 
-// Demo `.info-row` key/value spec: faint mono key, mono value right-aligned,
-// soft separators. (Only ServerDetail renders this class.)
-.info-row {
-    display: grid;
-    grid-template-columns: 18px minmax(0, 1fr) auto;
-    align-items: center;
-    gap: $space-3;
-    padding: 11px 0;
-    border-bottom: 1px solid var(--border-soft);
-    min-height: 40px;
-    font-size: 13px;
+    .info-item {
+        gap: $space-3;
+        padding: 11px 0;
+        border-bottom: 1px solid var(--border-soft);
+        min-height: 40px;
+        font-size: 13px;
 
-    &:last-child { border-bottom: 0; }
+        &:last-child { border-bottom: 0; }
+    }
 
-    &__icon {
+    .info-label {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        color: var(--text-ghost);
-
-        svg { width: 14px; height: 14px; }
-    }
-
-    &__label {
+        gap: $space-3;
+        min-width: 0;
         font-size: 12.5px;
         color: var(--text-faint);
+
+        svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            color: var(--text-ghost);
+        }
     }
 
-    &__value {
+    .info-value {
+        min-width: 0;
         font-family: var(--mono);
         font-size: 12.5px;
+        font-weight: $font-weight-normal;
         color: var(--text);
         text-align: right;
-        max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -2737,24 +2619,6 @@
         background: var(--surface-2);
         border-color: var(--border-soft);
         border-radius: var(--radius);
-    }
-
-    .security-info-item {
-        .security-info-label {
-            font-family: var(--mono);
-            font-size: 10.5px;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--text-faint);
-            margin-bottom: 5px;
-        }
-
-        .security-info-value code {
-            font-family: var(--mono);
-            font-size: 12px;
-            background: var(--surface-3);
-            color: var(--text);
-        }
     }
 
     .ip-item {

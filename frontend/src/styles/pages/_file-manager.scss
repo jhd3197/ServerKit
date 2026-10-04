@@ -351,10 +351,13 @@ $ft-default:  #646b7a;
         &.small { padding: 4px; }
     }
 
+    // Compact Radix Select trigger: icon · value · chevron.
     .file-toolbar-select {
         position: relative;
         display: inline-flex;
         align-items: center;
+        justify-content: flex-start;
+        width: auto;
         height: 32px;
         min-width: 0;
         gap: 5px;
@@ -363,29 +366,30 @@ $ft-default:  #646b7a;
         border-radius: 8px;
         background: var(--surface-2);
         color: var(--text-faint);
+        font-family: $font-mono;
+        font-size: 10.5px;
         transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
 
         &:hover,
-        &:focus-within {
+        &:focus-visible {
             border-color: var(--border-strong);
             background: var(--surface-3);
             color: var(--text-dim);
         }
 
-        select {
+        > span {
             width: 78px;
             min-width: 0;
-            border: 0;
-            outline: 0;
-            background: transparent;
-            color: inherit;
-            font-family: $font-mono;
-            font-size: 10.5px;
-            cursor: pointer;
-            appearance: none;
+            text-align: start;
         }
 
-        > svg:last-child { opacity: 0.58; pointer-events: none; }
+        > svg { flex-shrink: 0; }
+
+        .ui-select-icon {
+            width: 12px;
+            height: 12px;
+            opacity: 0.58;
+        }
     }
 
     // ─── View toggles ───────────────────────────────────
@@ -575,8 +579,7 @@ $ft-default:  #646b7a;
         padding: 0 2px $space-3;
         border-bottom: 1px solid var(--border-soft);
 
-        .target-picker,
-        .target-picker__resource { width: 100%; max-width: none; }
+        .file-manager-source__picker { width: 100%; max-width: none; }
 
         &__meta {
             display: flex;
@@ -1868,7 +1871,7 @@ $drawer-width: 520px;
             .file-toolbar-select {
                 flex: 1;
 
-                select { width: 100%; }
+                > span { width: 100%; }
             }
 
             .file-mount-chip { display: none; }

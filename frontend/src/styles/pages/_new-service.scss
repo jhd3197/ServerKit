@@ -624,8 +624,7 @@
             font-weight: $font-weight-medium;
         }
 
-        input,
-        select {
+        input {
             min-height: 40px;
             width: 100%;
             background: $bg-elevated;
@@ -639,11 +638,6 @@
                 border-color: $accent-primary;
                 box-shadow: 0 0 0 3px $accent-glow;
             }
-        }
-
-        select {
-            padding: 0 $space-3;
-            cursor: pointer;
         }
     }
 

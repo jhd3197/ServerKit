@@ -23,9 +23,11 @@ import FileCard from '../components/file-manager/FileCard';
 import FileRow from '../components/file-manager/FileRow';
 import PreviewDrawer from '../components/file-manager/PreviewDrawer';
 import ContextMenu from '../components/file-manager/ContextMenu';
-import TargetPicker from '../components/TargetPicker';
+import ServerPicker from '../components/ServerPicker';
+import { serverTarget, targetServerId } from '../utils/serverTarget';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { TREE_ROOTS, getFileType, formatBytes } from '../components/file-manager/fileTypes';
-import { copyToClipboard } from '@/utils/clipboard';
+import { useClipboard } from '@/hooks/useClipboard';
 import { useTranslation } from 'react-i18next';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 
@@ -139,11 +141,19 @@ function FileManager() {
     const [target, setTarget] = useState({ kind: 'local' });
     const isRemote = target.kind === 'agent';
     const isS3 = target.kind === 's3';
+    const { copy: copyText } = useClipboard({
+        successMessage: t('app.fileManager.pathCopied', 'Path copied'),
+        errorMessage: t('app.fileManager.couldNotCopyPath', 'Could not copy path'),
+    });
     const previousTargetRef = useRef({ kind: 'local', server_id: null });
 
     // The "S3 bucket" target is offered only when an S3-compatible backup
     // destination is configured (Connections → Storage, or the Backups page).
     const [s3Available, setS3Available] = useState(false);
+    const s3Options = useMemo(
+        () => (s3Available ? [{ value: 's3', label: t('app.fileManager.s3Bucket', 'S3 bucket') }] : []),
+        [s3Available, t],
+    );
     useEffect(() => {
         let cancelled = false;
         api.getStorageConfig()
@@ -879,10 +889,7 @@ function FileManager() {
         setContextMenu({ x: e.clientX, y: e.clientY, entry });
     };
 
-    const copyPathToClipboard = async (path) => {
-        if (await copyToClipboard(path)) toast.success(t('app.fileManager.pathCopied', 'Path copied'));
-        else toast.error(t('app.fileManager.couldNotCopyPath', 'Could not copy path'));
-    };
+    const copyPathToClipboard = (path) => copyText(path);
 
     const downloadSelected = () => {
         selectedEntries.filter((e) => !e.is_dir).forEach((e) => fileApi.download(e));
@@ -1028,39 +1035,43 @@ function FileManager() {
                     )}
                 </div>
                 <div className="toolbar-right">
-                    <label className="file-toolbar-select" title={t('app.fileManager.types', 'Types')}>
-                        <File size={13} />
-                        <select
-                            value={activeFilter}
-                            onChange={(event) => setActiveFilter(event.target.value)}
+                    <Select value={activeFilter} onValueChange={setActiveFilter}>
+                        <SelectTrigger
+                            className="file-toolbar-select"
+                            title={t('app.fileManager.types', 'Types')}
                             aria-label={t('app.fileManager.types', 'Types')}
                         >
+                            <File size={13} aria-hidden="true" />
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
                             {FILTER_OPTIONS.map((option) => (
-                                <option key={option.id} value={option.id}>
+                                <SelectItem key={option.id} value={option.id}>
                                     {filterLabels[option.id]} ({filterCounts[option.id] ?? 0})
-                                </option>
+                                </SelectItem>
                             ))}
-                        </select>
-                        <ChevronDown size={12} />
-                    </label>
-                    <label className="file-toolbar-select" title={t('app.fileManager.sort', 'Sort')}>
-                        <ArrowUpDown size={13} />
-                        <select
-                            value={sortValue}
-                            onChange={(event) => handleSortChange(event.target.value)}
+                        </SelectContent>
+                    </Select>
+                    <Select value={sortValue} onValueChange={handleSortChange}>
+                        <SelectTrigger
+                            className="file-toolbar-select"
+                            title={t('app.fileManager.sort', 'Sort')}
                             aria-label={t('app.fileManager.sort', 'Sort')}
                         >
-                            <option value="name-asc">{t('app.fileManager.nameAZ', 'Name A-Z')}</option>
-                            <option value="name-desc">{t('app.fileManager.nameZA', 'Name Z-A')}</option>
-                            <option value="modified-desc">{t('app.fileManager.newest', 'Newest')}</option>
-                            <option value="modified-asc">{t('app.fileManager.oldest', 'Oldest')}</option>
-                            <option value="size-desc">{t('app.fileManager.largest', 'Largest')}</option>
-                            <option value="size-asc">{t('app.fileManager.smallest', 'Smallest')}</option>
-                            <option value="type-asc">{t('common.labels.type', 'Type')}</option>
-                            <option value="type-desc">{t('app.fileManager.typeZA', 'Type Z-A')}</option>
-                        </select>
-                        <ChevronDown size={12} />
-                    </label>
+                            <ArrowUpDown size={13} aria-hidden="true" />
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="name-asc">{t('app.fileManager.nameAZ', 'Name A-Z')}</SelectItem>
+                            <SelectItem value="name-desc">{t('app.fileManager.nameZA', 'Name Z-A')}</SelectItem>
+                            <SelectItem value="modified-desc">{t('app.fileManager.newest', 'Newest')}</SelectItem>
+                            <SelectItem value="modified-asc">{t('app.fileManager.oldest', 'Oldest')}</SelectItem>
+                            <SelectItem value="size-desc">{t('app.fileManager.largest', 'Largest')}</SelectItem>
+                            <SelectItem value="size-asc">{t('app.fileManager.smallest', 'Smallest')}</SelectItem>
+                            <SelectItem value="type-asc">{t('common.labels.type', 'Type')}</SelectItem>
+                            <SelectItem value="type-desc">{t('app.fileManager.typeZA', 'Type Z-A')}</SelectItem>
+                        </SelectContent>
+                    </Select>
                     <div className="search-field">
                         <Search size={14} className="search-field-icon" />
                         <input
@@ -1155,11 +1166,12 @@ function FileManager() {
                             >
                                 <X size={14} />
                             </Button>
-                            <TargetPicker
-                                feature="files"
-                                value={target}
-                                onChange={setTarget}
-                                extraOptions={s3Available ? [{ value: 's3', labelKey: 'app.fileManager.s3Bucket', label: 'S3 bucket' }] : []}
+                            <ServerPicker
+                                capability="files"
+                                value={targetServerId(target)}
+                                onChange={(id, server) => setTarget(serverTarget(id, server || (id === 's3' ? null : {})))}
+                                extraOptions={s3Options}
+                                className="file-manager-source__picker"
                             />
                             <div className="file-manager-source__meta">
                                 <span className={`file-manager-source__dot${isS3 ? ' is-cloud' : ''}`} aria-hidden="true" />

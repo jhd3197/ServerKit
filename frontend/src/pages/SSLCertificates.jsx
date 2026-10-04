@@ -15,8 +15,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
+import {
     DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import DomainField from '../components/DomainField';
 import { formatExpiry } from '../utils/expiry';
 import { useTranslation } from 'react-i18next';
 
@@ -547,14 +551,26 @@ const SSLCertificates = () => {
                                 <p className="hint">{t('app.sSLCertificates.issues', 'Issues')} <code>domain</code> + <code>*.domain</code> {t('app.sSLCertificates.viaYourDnsProvider', 'via your DNS provider.')}</p>
                             </div>
                             <div className="form-group">
-                                <Label>{wildcard ? 'Base Domain' : 'Domains'}</Label>
-                                <Input
-                                    type="text"
-                                    placeholder={wildcard ? 'example.com' : t('app.sSLCertificates.exampleComWwwExampleCom', 'example.com, www.example.com')}
-                                    value={domains}
-                                    onChange={e => setDomains(e.target.value)}
-                                    required
-                                />
+                                <Label htmlFor="ssl-domains">{wildcard ? 'Base Domain' : 'Domains'}</Label>
+                                {/* A wildcard cert covers one base domain; HTTP-01
+                                    takes a comma-separated list, so it keeps a plain input. */}
+                                {wildcard ? (
+                                    <DomainField
+                                        id="ssl-domains"
+                                        modes={['custom']}
+                                        value={domains}
+                                        onChange={(fqdn) => setDomains(fqdn)}
+                                    />
+                                ) : (
+                                    <Input
+                                        id="ssl-domains"
+                                        type="text"
+                                        placeholder={t('app.sSLCertificates.exampleComWwwExampleCom', 'example.com, www.example.com')}
+                                        value={domains}
+                                        onChange={e => setDomains(e.target.value)}
+                                        required
+                                    />
+                                )}
                                 <p className="hint">{wildcard ? 'A single base domain for the wildcard cert' : 'Comma-separated list of domains'}</p>
                             </div>
                             {!wildcard && (
@@ -597,15 +613,14 @@ const SSLCertificates = () => {
                             {wildcard && (
                                 <>
                                     <div className="form-group">
-                                        <Label>{t('app.sSLCertificates.dnsProvider', 'DNS Provider')}</Label>
-                                        <select
-                                            className="ui-select"
-                                            value={dnsProvider}
-                                            onChange={e => setDnsProvider(e.target.value)}
-                                        >
-                                            <option value="cloudflare">{t('app.sSLCertificates.cloudflare', 'Cloudflare')}</option>
-                                            <option value="route53">{t('app.sSLCertificates.awsRoute53', 'AWS Route 53')}</option>
-                                        </select>
+                                        <Label htmlFor="ssl-dns-provider">{t('app.sSLCertificates.dnsProvider', 'DNS Provider')}</Label>
+                                        <Select value={dnsProvider} onValueChange={setDnsProvider}>
+                                            <SelectTrigger id="ssl-dns-provider"><SelectValue /></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="cloudflare">{t('app.sSLCertificates.cloudflare', 'Cloudflare')}</SelectItem>
+                                                <SelectItem value="route53">{t('app.sSLCertificates.awsRoute53', 'AWS Route 53')}</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                     {dnsProvider === 'cloudflare' ? (
                                         <div className="form-group">
@@ -652,7 +667,7 @@ const SSLCertificates = () => {
                                 </Button>
                                 <Button
                                     type="submit"
-                                    disabled={actionLoading}
+                                    disabled={actionLoading || (wildcard && !domains)}
                                 >
                                     {actionLoading ? 'Obtaining...' : 'Obtain Certificate'}
                                 </Button>
@@ -671,13 +686,12 @@ const SSLCertificates = () => {
                         </div>
                     </div>
                     <div className="form-group">
-                        <Label>{t('common.labels.domain', 'Domain')}</Label>
-                        <Input
-                            type="text"
-                            placeholder="example.com"
+                        <Label htmlFor="ssl-upload-domain">{t('common.labels.domain', 'Domain')}</Label>
+                        <DomainField
+                            id="ssl-upload-domain"
+                            modes={['custom']}
                             value={uploadDomain}
-                            onChange={e => setUploadDomain(e.target.value)}
-                            required
+                            onChange={(fqdn) => setUploadDomain(fqdn)}
                         />
                     </div>
                     <div className="form-group">
@@ -716,7 +730,7 @@ const SSLCertificates = () => {
                         <Button type="button" variant="outline" onClick={() => setShowUploadModal(false)}>
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
-                        <Button type="submit" disabled={actionLoading}>
+                        <Button type="submit" disabled={actionLoading || !uploadDomain}>
                             {actionLoading ? 'Uploading...' : 'Upload Certificate'}
                         </Button>
                     </div>

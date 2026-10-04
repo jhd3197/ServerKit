@@ -14,6 +14,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { DataTable, Pill, CatalogCard, CatalogGrid } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
@@ -644,10 +647,13 @@ const ServerTemplates = () => {
                     <Textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={2} />
                 </div>
                 <div className="form-group">
-                    <label>{t('app.serverTemplates.category', 'Category')}</label>
-                    <select className="form-select" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
-                        {Object.entries(CATEGORY_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                    </select>
+                    <label htmlFor="server-template-category">{t('app.serverTemplates.category', 'Category')}</label>
+                    <Select value={form.category} onValueChange={v => setForm({...form, category: v})}>
+                        <SelectTrigger id="server-template-category"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {Object.entries(CATEGORY_LABELS).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div className="form-group">
                     <label>{t('app.serverTemplates.packagesOnePerLine', 'Packages (one per line)')}</label>

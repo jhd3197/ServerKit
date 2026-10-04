@@ -8,13 +8,16 @@ import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
+import {
     DataTable, DataTableFooter, Drawer, Gauge, Pill, SearchField, statusKind,
 } from '@/components/ds';
 import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useConfirm } from '@/hooks/useConfirm';
-import { useClipboard } from '@/hooks/useClipboard';
+import CopyField from '../components/CopyField';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
@@ -23,6 +26,9 @@ import useFocusParam from '@/hooks/useFocusParam';
 import LinkPanelForm from '../components/servers/LinkPanelForm';
 import { useTranslation } from 'react-i18next';
 import { t } from '../i18n/t';
+
+// Radix Select items cannot use '' — stands in for "no group".
+const NO_GROUP = '__none';
 
 // Status -> Pill tone. `connecting` and `pending` both mean "not reporting
 // yet" but for different reasons (handshake in flight vs agent never
@@ -455,13 +461,11 @@ const Servers = () => {
                 <div className="sk-bulkbar" role="status">
                     <span className="sk-bulkbar__count">{selectedIds.size} selected</span>
                     <div className="sk-bulkbar__actions">
-                        <select
-                            className="sk-listhead__select"
-                            defaultValue=""
+                        {/* An action, not a setting: the trigger always reads "Set group…". */}
+                        <Select
+                            value=""
                             disabled={bulkBusy}
-                            aria-label={t('app.servers.setGroupForSelectedServers', 'Set group for selected servers')}
-                            onChange={async (e) => {
-                                const groupId = e.target.value;
+                            onValueChange={async (groupId) => {
                                 if (!groupId) return;
                                 setBulkBusy(true);
                                 try {
@@ -478,14 +482,20 @@ const Servers = () => {
                                     toast.error(err.message || t('app.servers.couldNotSetTheGroup', 'Could not set the group'));
                                 } finally {
                                     setBulkBusy(false);
-                                    e.target.value = '';
                                 }
                             }}
                         >
-                            <option value="" disabled>{t('app.servers.setGroup', 'Set group…')}</option>
-                            {groups.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
-                            <option value="none">{t('app.servers.ungrouped', 'Ungrouped')}</option>
-                        </select>
+                            <SelectTrigger
+                                className="servers-bulk-group"
+                                aria-label={t('app.servers.setGroupForSelectedServers', 'Set group for selected servers')}
+                            >
+                                <SelectValue placeholder={t('app.servers.setGroup', 'Set group…')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {groups.map((g) => <SelectItem key={g.id} value={String(g.id)}>{g.name}</SelectItem>)}
+                                <SelectItem value="none">{t('app.servers.ungrouped', 'Ungrouped')}</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <Button variant="unstyled"
                         type="button"
@@ -685,13 +695,19 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
                         <span className="form-hint">{t('app.servers.leaveBlankToUseTheAgent', 'Leave blank to use the agent\'s hostname.')}</span>
                     </div>
                     <div className="form-group">
-                        <label>{t('app.servers.group', 'Group')}</label>
-                        <select value={groupId} onChange={(e) => setGroupId(e.target.value)}>
-                            <option value="">{t('app.servers.noGroup', 'No Group')}</option>
-                            {groups.map(g => (
-                                <option key={g.id} value={g.id}>{g.name}</option>
-                            ))}
-                        </select>
+                        <label htmlFor="pair-group">{t('app.servers.group', 'Group')}</label>
+                        <Select
+                            value={groupId === '' ? NO_GROUP : String(groupId)}
+                            onValueChange={(v) => setGroupId(v === NO_GROUP ? '' : v)}
+                        >
+                            <SelectTrigger id="pair-group"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={NO_GROUP}>{t('app.servers.noGroup', 'No Group')}</SelectItem>
+                                {groups.map(g => (
+                                    <SelectItem key={g.id} value={String(g.id)}>{g.name}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
 
@@ -733,7 +749,6 @@ const AddServerModal = ({ groups, onClose, onCreated }) => {
     const [registrationData, setRegistrationData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const { copy } = useClipboard();
 
     async function handleCreateServer(e) {
         e.preventDefault();
@@ -848,24 +863,33 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>{t('app.servers.group', 'Group')}</label>
-                                    <select value={groupId} onChange={(e) => setGroupId(e.target.value)}>
-                                        <option value="">{t('app.servers.noGroup', 'No Group')}</option>
-                                        {groups.map(group => (
-                                            <option key={group.id} value={group.id}>{group.name}</option>
-                                        ))}
-                                    </select>
+                                    <label htmlFor="add-server-group">{t('app.servers.group', 'Group')}</label>
+                                    <Select
+                                        value={groupId === '' ? NO_GROUP : String(groupId)}
+                                        onValueChange={(v) => setGroupId(v === NO_GROUP ? '' : v)}
+                                    >
+                                        <SelectTrigger id="add-server-group"><SelectValue /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value={NO_GROUP}>{t('app.servers.noGroup', 'No Group')}</SelectItem>
+                                            {groups.map(group => (
+                                                <SelectItem key={group.id} value={String(group.id)}>{group.name}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                                 <div className="form-group">
-                                    <label>{t('app.servers.tokenExpires', 'Token expires')}</label>
-                                    <select
-                                        value={expiresIn}
-                                        onChange={(e) => setExpiresIn(Number(e.target.value))}
+                                    <label htmlFor="add-server-expiry">{t('app.servers.tokenExpires', 'Token expires')}</label>
+                                    <Select
+                                        value={String(expiresIn)}
+                                        onValueChange={(v) => setExpiresIn(Number(v))}
                                     >
-                                        {EXPIRY_OPTIONS.map(opt => (
-                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                        ))}
-                                    </select>
+                                        <SelectTrigger id="add-server-expiry"><SelectValue /></SelectTrigger>
+                                        <SelectContent>
+                                            {EXPIRY_OPTIONS.map(opt => (
+                                                <SelectItem key={opt.value} value={String(opt.value)}>{opt.label}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                     <span className="form-hint">{t('app.servers.singleUseBurnedTheMomentAn', 'Single-use. Burned the moment an agent registers with it.')}</span>
                                 </div>
                             </div>
@@ -891,32 +915,31 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                                 </div>
                             </div>
 
-                            <ConnectionStringField
-                                value={connectionString}
-                                onCopy={() => {
-                                    copy(connectionString);
-                                    window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
-                                        detail: { type: 'server-connection-string-copied' },
-                                    }));
-                                }}
-                            />
+                            <div className="server-connection-string" data-walkthrough="server-connection-string">
+                                <CopyField
+                                    label={t('app.servers.connectionString', 'Connection string')}
+                                    value={connectionString}
+                                    multiline
+                                    onCopy={() => {
+                                        window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
+                                            detail: { type: 'server-connection-string-copied' },
+                                        }));
+                                    }}
+                                />
+                            </div>
 
                             <details className="install-fallback">
                                 <summary>{t('app.servers.needToInstallTheAgentFirst', 'Need to install the agent first? Use the one-liner installer.')}</summary>
                                 <div className="install-tabs install-tabs--after-summary">
-                                    <InstallTab
-                                        title={t('app.servers.linux', 'Linux')}
-                                        description={t('app.servers.curlTarSudoAndSystemd', 'curl, tar, sudo, and systemd')}
-                                        icon={<TerminalIcon />}
-                                        script={linuxInstallScript}
-                                        onCopy={() => copy(linuxInstallScript)}
+                                    <CopyField
+                                        label={`${t('app.servers.linux', 'Linux')} · ${t('app.servers.curlTarSudoAndSystemd', 'curl, tar, sudo, and systemd')}`}
+                                        value={linuxInstallScript}
+                                        multiline
                                     />
-                                    <InstallTab
-                                        title={t('app.servers.windowsPowershell', 'Windows (PowerShell)')}
-                                        description={t('app.servers.runAsAdministrator', 'Run as Administrator')}
-                                        icon={<WindowsIcon />}
-                                        script={windowsInstallScript}
-                                        onCopy={() => copy(windowsInstallScript)}
+                                    <CopyField
+                                        label={`${t('app.servers.windowsPowershell', 'Windows (PowerShell)')} · ${t('app.servers.runAsAdministrator', 'Run as Administrator')}`}
+                                        value={windowsInstallScript}
+                                        multiline
                                     />
                                 </div>
                             </details>
@@ -942,41 +965,6 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                     </div>
                 )}
         </Drawer>
-    );
-};
-
-const ConnectionStringField = ({ value, onCopy }) => {
-    const { t } = useTranslation();
-    return (
-        <div className="connection-string-field" data-walkthrough="server-connection-string">
-            <div className="connection-string-field__header">
-                <KeyIcon />
-                <span>{t('app.servers.connectionString', 'Connection string')}</span>
-                <Button variant="outline" size="sm" onClick={onCopy}>
-                    <CopyIcon /> {t('common.actions.copy', 'Copy')}
-                </Button>
-            </div>
-            <pre className="connection-string-field__value">{value}</pre>
-        </div>
-    );
-};
-
-const InstallTab = ({ title, description, icon, script, onCopy }) => {
-    const { t } = useTranslation();
-    return (
-        <div className="install-tab">
-            <div className="install-tab-header">
-                {icon}
-                <div className="install-tab-title">
-                    <span>{title}</span>
-                    {description && <span className="install-tab-description">{description}</span>}
-                </div>
-                <Button variant="outline" size="sm" onClick={onCopy}>
-                    <CopyIcon /> {t('common.actions.copy', 'Copy')}
-                </Button>
-            </div>
-            <pre className="install-script">{script}</pre>
-        </div>
     );
 };
 
@@ -1129,26 +1117,6 @@ const CheckCircleIcon = () => (
     </svg>
 );
 
-const TerminalIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <polyline points="4 17 10 11 4 5"/>
-        <line x1="12" y1="19" x2="20" y2="19"/>
-    </svg>
-);
-
-const WindowsIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
-    </svg>
-);
-
-const CopyIcon = () => (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-    </svg>
-);
-
 const EditIcon = () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -1160,12 +1128,6 @@ const TrashIcon = () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <polyline points="3 6 5 6 21 6"/>
         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-    </svg>
-);
-
-const KeyIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
     </svg>
 );
 

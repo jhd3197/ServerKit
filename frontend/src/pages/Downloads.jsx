@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { Button } from '@/components/ui/button';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '../components/CopyField';
 import { scrollBehavior } from '@/utils/reducedMotion';
 import { useTranslation } from 'react-i18next';
 
@@ -42,19 +42,6 @@ const DownloadIcon = () => (
     </svg>
 );
 
-const CopyIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-    </svg>
-);
-
-const CheckIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="20,6 9,17 4,12" />
-    </svg>
-);
-
 const RefreshIcon = () => (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <polyline points="23,4 23,10 17,10" />
@@ -68,7 +55,6 @@ function Downloads() {
     const [versionInfo, setVersionInfo] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [copiedCommand, setCopiedCommand] = useState(null);
 
     useEffect(() => {
         fetchVersionInfo();
@@ -85,12 +71,6 @@ function Downloads() {
         } finally {
             setLoading(false);
         }
-    };
-
-    const copyCommand = async (text, commandId) => {
-        if (!await copyToClipboard(text)) return;
-        setCopiedCommand(commandId);
-        setTimeout(() => setCopiedCommand(null), 2000);
     };
 
     const getBaseUrl = () => {
@@ -250,16 +230,7 @@ function Downloads() {
                                     <h3>{t('app.downloads.linuxBash', 'Linux (Bash)')}</h3>
                                 </div>
                                 <div className="command-content">
-                                    <pre>
-                                        <code>{platforms[0].command}</code>
-                                    </pre>
-                                    <Button variant="unstyled" type="button"
-                                        className="copy-btn"
-                                        onClick={() => copyCommand(platforms[0].command, 'linux')}
-                                        title={t('app.downloads.copyToClipboard', 'Copy to clipboard')}
-                                    >
-                                        {copiedCommand === 'linux' ? <CheckIcon /> : <CopyIcon />}
-                                    </Button>
+                                    <CopyField value={platforms[0].command} multiline />
                                 </div>
                             </div>
 
@@ -269,16 +240,7 @@ function Downloads() {
                                     <h3>{t('app.downloads.windowsPowershell', 'Windows (PowerShell)')}</h3>
                                 </div>
                                 <div className="command-content">
-                                    <pre>
-                                        <code>{platforms[2].command}</code>
-                                    </pre>
-                                    <Button variant="unstyled" type="button"
-                                        className="copy-btn"
-                                        onClick={() => copyCommand(platforms[2].command, 'windows')}
-                                        title={t('app.downloads.copyToClipboard', 'Copy to clipboard')}
-                                    >
-                                        {copiedCommand === 'windows' ? <CheckIcon /> : <CopyIcon />}
-                                    </Button>
+                                    <CopyField value={platforms[2].command} multiline />
                                 </div>
                                 <p className="command-note">{t('app.downloads.runPowershellAsAdministrator', 'Run PowerShell as Administrator')}</p>
                             </div>
@@ -312,7 +274,7 @@ function Downloads() {
                                 <div className="step-content">
                                     <h4>{t('app.downloads.registerTheAgent', 'Register the Agent')}</h4>
                                     <p>{t('app.downloads.runTheRegistrationCommandWithYour', 'Run the registration command with your token:')}</p>
-                                    <pre><code>{`serverkit-agent register --token "YOUR_TOKEN" --server "${getBaseUrl()}"`}</code></pre>
+                                    <CopyField value={`serverkit-agent register --token "YOUR_TOKEN" --server "${getBaseUrl()}"`} multiline />
                                 </div>
                             </div>
                             <div className="step">
@@ -320,7 +282,7 @@ function Downloads() {
                                 <div className="step-content">
                                     <h4>{t('app.downloads.startTheAgent', 'Start the Agent')}</h4>
                                     <p>{t('app.downloads.startTheAgentService', 'Start the agent service:')}</p>
-                                    <pre><code>{t('app.downloads.serverkitAgentStart', 'serverkit-agent start')}</code></pre>
+                                    <CopyField value={t('app.downloads.serverkitAgentStart', 'serverkit-agent start')} />
                                     <p className="step-note">{t('app.downloads.orUseSystemdWindowsServiceFor', 'Or use systemd/Windows Service for automatic startup')}</p>
                                 </div>
                             </div>
@@ -345,7 +307,7 @@ function Downloads() {
                             </Button>
                         )}
                         <div className="verification-command">
-                            <pre><code>{t('app.downloads.sha256sumCChecksumsTxt', 'sha256sum -c checksums.txt')}</code></pre>
+                            <CopyField value={t('app.downloads.sha256sumCChecksumsTxt', 'sha256sum -c checksums.txt')} />
                         </div>
                     </section>
                 </>

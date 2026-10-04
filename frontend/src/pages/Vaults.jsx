@@ -8,13 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Modal from '@/components/Modal';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useToast } from '../contexts/useToast.js';
-import { ArrowLeft, Plus, MoreVertical, Copy, Eye, EyeOff, KeyRound, Trash2 } from 'lucide-react';
+import { ArrowLeft, Plus, MoreVertical, Eye, EyeOff, KeyRound, Trash2 } from 'lucide-react';
 import ResourceListPage from '../components/layouts/ResourceListPage';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { SearchField, ServiceTile } from '@/components/ds';
 import { formatRelativeTime } from '@/utils/time';
 import { useConfirm } from '@/hooks/useConfirm';
-import { useClipboard } from '@/hooks/useClipboard';
+import { CopyButton } from '../components/CopyButton';
 import { useWorkspace } from '../contexts/useWorkspace.js';
 import { useTranslation } from 'react-i18next';
 
@@ -47,7 +47,6 @@ export default function Vaults() {
     const toast = useToast();
     const toastError = toast.error;
     const { confirm } = useConfirm();
-    const { copy } = useClipboard({ successMessage: 'Copied' });
     const { activeWorkspaceId: workspaceScopeId, isAllWorkspaces } = useWorkspace();
 
     const [vaults, setVaults] = useState([]);
@@ -318,9 +317,11 @@ export default function Vaults() {
                         <Button variant="ghost" size="icon" onClick={() => (revealed ? setRevealSecretId(null) : revealSecret(s))} title={revealed ? t('app.vaults.hide', 'Hide') : t('app.vaults.reveal', 'Reveal')}>
                             {revealed ? <EyeOff size={14} /> : <Eye size={14} />}
                         </Button>
-                        <Button variant="ghost" size="icon" title={t('common.actions.copy', 'Copy')} onClick={() => copy(revealed ? revealedValue : s.value)}>
-                            <Copy size={14} />
-                        </Button>
+                        <CopyButton
+                            value={revealed ? revealedValue : s.value}
+                            label={t('common.actions.copy', 'Copy')}
+                            copiedLabel={t('app.copyField.copied', 'Copied')}
+                        />
                         <Button variant="ghost" size="icon" className="text-destructive" title={t('common.actions.delete', 'Delete')} onClick={() => deleteSecret(s.id)}>
                             <Trash2 size={14} />
                         </Button>

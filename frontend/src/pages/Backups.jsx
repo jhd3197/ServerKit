@@ -12,6 +12,8 @@ import { FormField, FormRow } from '../components/FormField';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { InfoList, InfoItem } from '../components/InfoList';
 import {
     Pill, SearchField, SegControl, DataTable, DataTableFooter,
 } from '@/components/ds';
@@ -1152,31 +1154,38 @@ const Backups = () => {
             <Modal open={showBackupModal} onClose={() => setShowBackupModal(false)} title={t('app.backups.createBackup', 'Create Backup')}>
                         <form onSubmit={handleCreateBackup} data-walkthrough="backup-create-form">
                                 <div className="form-group">
-                                    <label>{t('app.backups.backupType', 'Backup Type')}</label>
-                                    <select
+                                    <label htmlFor="backup-type">{t('app.backups.backupType', 'Backup Type')}</label>
+                                    <Select
                                         value={backupForm.type}
-                                        onChange={(e) => setBackupForm({...backupForm, type: e.target.value})}
+                                        onValueChange={(type) => setBackupForm({...backupForm, type})}
                                     >
-                                        <option value="application">{t('app.backups.application', 'Application')}</option>
-                                        <option value="database">{t('app.backups.databaseOnly', 'Database Only')}</option>
-                                        <option value="files">{t('app.backups.filesDirectories', 'Files / Directories')}</option>
-                                    </select>
+                                        <SelectTrigger id="backup-type"><SelectValue /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="application">{t('app.backups.application', 'Application')}</SelectItem>
+                                            <SelectItem value="database">{t('app.backups.databaseOnly', 'Database Only')}</SelectItem>
+                                            <SelectItem value="files">{t('app.backups.filesDirectories', 'Files / Directories')}</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
 
                                 {backupForm.type === 'application' && (
                                     <>
                                         <div className="form-group">
-                                            <label>{t('app.backups.application', 'Application')}</label>
-                                            <select
+                                            <label htmlFor="backup-application">{t('app.backups.application', 'Application')}</label>
+                                            <Select
                                                 value={backupForm.applicationId}
-                                                onChange={(e) => setBackupForm({...backupForm, applicationId: e.target.value})}
+                                                onValueChange={(applicationId) => setBackupForm({...backupForm, applicationId})}
                                                 required
                                             >
-                                                <option value="">{t('app.backups.selectApplication', 'Select Application')}</option>
-                                                {apps.map(app => (
-                                                    <option key={app.id} value={app.id}>{app.name}</option>
-                                                ))}
-                                            </select>
+                                                <SelectTrigger id="backup-application">
+                                                    <SelectValue placeholder={t('app.backups.selectApplication', 'Select Application')} />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {apps.map(app => (
+                                                        <SelectItem key={app.id} value={String(app.id)}>{app.name}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
                                         </div>
 
                                         <div className="form-group">
@@ -1220,14 +1229,17 @@ const Backups = () => {
                                 {(backupForm.type === 'database' || backupForm.includeDb) && (
                                     <>
                                         <div className="form-group">
-                                            <label>{t('app.backups.databaseType', 'Database Type')}</label>
-                                            <select
+                                            <label htmlFor="backup-db-type">{t('app.backups.databaseType', 'Database Type')}</label>
+                                            <Select
                                                 value={backupForm.dbType}
-                                                onChange={(e) => setBackupForm({...backupForm, dbType: e.target.value})}
+                                                onValueChange={(dbType) => setBackupForm({...backupForm, dbType})}
                                             >
-                                                <option value="mysql">{t('app.backups.mysql', 'MySQL')}</option>
-                                                <option value="postgresql">{t('app.backups.postgresql', 'PostgreSQL')}</option>
-                                            </select>
+                                                <SelectTrigger id="backup-db-type"><SelectValue /></SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="mysql">{t('app.backups.mysql', 'MySQL')}</SelectItem>
+                                                    <SelectItem value="postgresql">{t('app.backups.postgresql', 'PostgreSQL')}</SelectItem>
+                                                </SelectContent>
+                                            </Select>
                                         </div>
 
                                         <div className="form-group">
@@ -1295,24 +1307,12 @@ const Backups = () => {
                                 <AlertTriangle size={18} />
                                 <span><b>{t('app.backups.warning', 'Warning:')}</b> {t('app.backups.restoringThisBackupWillOverwriteExisting', 'restoring this backup will overwrite existing data. This action cannot be undone.')}</span>
                             </div>
-                            <div className="bk-restore-details">
-                                <div className="sk-info-row">
-                                    <span className="k">{t('app.backups.backupName', 'Backup Name')}</span>
-                                    <span className="v">{selectedBackup.name || selectedBackup.app_name}</span>
-                                </div>
-                                <div className="sk-info-row">
-                                    <span className="k">{t('common.labels.type', 'Type')}</span>
-                                    <span className="v">{selectedBackup.type}</span>
-                                </div>
-                                <div className="sk-info-row">
-                                    <span className="k">{t('common.labels.created', 'Created')}</span>
-                                    <span className="v">{formatTimestamp(selectedBackup.timestamp)}</span>
-                                </div>
-                                <div className="sk-info-row">
-                                    <span className="k">{t('common.labels.size', 'Size')}</span>
-                                    <span className="v">{formatBytes(selectedBackup.size, { defaultValue: '0 B' })}</span>
-                                </div>
-                            </div>
+                            <InfoList>
+                                <InfoItem label={t('app.backups.backupName', 'Backup Name')} value={selectedBackup.name || selectedBackup.app_name} />
+                                <InfoItem label={t('common.labels.type', 'Type')} value={selectedBackup.type} />
+                                <InfoItem label={t('common.labels.created', 'Created')} value={formatTimestamp(selectedBackup.timestamp)} />
+                                <InfoItem label={t('common.labels.size', 'Size')} value={formatBytes(selectedBackup.size, { defaultValue: '0 B' })} />
+                            </InfoList>
                         </>)}
                         <div className="modal-actions">
                             <Button variant="outline" onClick={() => setShowRestoreModal(false)}>

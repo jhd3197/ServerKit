@@ -4,9 +4,7 @@ import api from '../services/api';
 import EmptyState from '../components/EmptyState';
 import { Button } from '@/components/ui/button';
 import { MetricCard, KpiBand } from '@/components/ds';
-import {
-    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
-} from '@/components/ui/select';
+import ServerPicker from '../components/ServerPicker';
 import PageLayout from '@/layouts/PageLayout';
 import { Box, Layers, HardDrive, Network as NetworkIcon, Package } from 'lucide-react';
 import {
@@ -241,23 +239,16 @@ const Docker = () => {
             actions={(
                 <>
                     {hasMultipleTargets && (
-                        <Select
+                        <ServerPicker
                             value={String(selectedServer.id)}
-                            onValueChange={(id) => setSelectedServer(
-                                availableServers.find(server => String(server.id) === id) || LOCAL_DOCKER_TARGET
+                            capability="docker"
+                            label={t('app.docker.targets', 'Targets')}
+                            onChange={(id, server) => setSelectedServer(
+                                server
+                                || availableServers.find(row => String(row.id) === String(id))
+                                || LOCAL_DOCKER_TARGET
                             )}
-                        >
-                            <SelectTrigger className="dx-target-select" aria-label={t('app.docker.targets', 'Targets')}>
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {availableServers.map(server => (
-                                    <SelectItem key={server.id} value={String(server.id)}>
-                                        {server.name || server.hostname || server.id}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                        />
                     )}
                     <PruneButton onPruned={loadStats} />
                     {activeTab === 'containers' && <RunContainerButton />}

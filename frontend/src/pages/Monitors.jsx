@@ -28,6 +28,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -550,14 +553,17 @@ export default function Monitors() {
 
                     <div className="form-group">
                         <Label htmlFor="mon-type">{t('app.monitors.checkType', 'Check type')}</Label>
-                        <select
-                            id="mon-type" className="mon-select" value={form.check_type}
-                            onChange={(e) => setForm({ ...form, check_type: e.target.value })}
+                        <Select
+                            value={form.check_type}
+                            onValueChange={(v) => setForm({ ...form, check_type: v })}
                         >
-                            {CHECK_TYPES.map((t) => (
-                                <option key={t.value} value={t.value}>{t.label} — {t.hint}</option>
-                            ))}
-                        </select>
+                            <SelectTrigger id="mon-type"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {CHECK_TYPES.map((t) => (
+                                    <SelectItem key={t.value} value={t.value}>{t.label} — {t.hint}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div className="form-group">
@@ -613,14 +619,17 @@ export default function Monitors() {
                             <div className="mon-form__row">
                                 <div className="form-group">
                                     <Label htmlFor="mon-method">{t('app.monitors.method', 'Method')}</Label>
-                                    <select
-                                        id="mon-method" className="mon-select" value={form.check_method}
-                                        onChange={(e) => setForm({ ...form, check_method: e.target.value })}
+                                    <Select
+                                        value={form.check_method}
+                                        onValueChange={(v) => setForm({ ...form, check_method: v })}
                                     >
-                                        {['GET', 'HEAD', 'POST', 'PUT', 'OPTIONS'].map((m) => (
-                                            <option key={m} value={m}>{m}</option>
-                                        ))}
-                                    </select>
+                                        <SelectTrigger id="mon-method"><SelectValue /></SelectTrigger>
+                                        <SelectContent>
+                                            {['GET', 'HEAD', 'POST', 'PUT', 'OPTIONS'].map((m) => (
+                                                <SelectItem key={m} value={m}>{m}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                                 <div className="form-group">
                                     <Label htmlFor="mon-expected">{t('app.monitors.expectedStatus', 'Expected status')}</Label>
