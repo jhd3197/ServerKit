@@ -2,7 +2,7 @@
   "name": "serverkit-ftp",
   "display_name": "FTP Server",
   "version": "1.0.0",
-  "description": "FTP server management (vsftpd/proftpd) with install, users, config and logs, as a tab in the Files group.",
+  "description": "FTP server management (vsftpd/proftpd) with install, users, settings and logs, as a tab in the Files group.",
   "author": "ServerKit",
   "license": "MIT",
   "category": "utility",
@@ -16,7 +16,7 @@
       {
         "group": "files",
         "to": "/ftp",
-        "label": "FTP Server",
+        "label": "FTP server",
         "icon": "<rect x=\"16\" y=\"16\" width=\"6\" height=\"6\" rx=\"1\"/><rect x=\"2\" y=\"16\" width=\"6\" height=\"6\" rx=\"1\"/><rect x=\"9\" y=\"2\" width=\"6\" height=\"6\" rx=\"1\"/><path d=\"M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3\"/><path d=\"M12 12V8\"/>"
       }
     ],
@@ -25,11 +25,11 @@
       { "path": "ftp/:tab", "component": "FtpServerPage", "group": "files" }
     ],
     "page_titles": {
-      "/ftp": "FTP Server"
+      "/ftp": "FTP server"
     },
     "command_palette": [
       {
-        "label": "FTP Server",
+        "label": "FTP server",
         "path": "/ftp",
         "category": "Pages",
         "keywords": "sftp upload vsftpd proftpd transfer"

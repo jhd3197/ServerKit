@@ -2,7 +2,7 @@
   "name": "serverkit-cloud-provision",
   "display_name": "Cloud Provisioning",
   "version": "1.0.0",
-  "description": "Provision new servers from connected cloud providers, as the Cloud Servers tab in the Servers group.",
+  "description": "Provision new servers from connected cloud providers, as the Cloud servers tab in the Servers group.",
   "author": "ServerKit",
   "license": "MIT",
   "category": "deployment",
@@ -18,7 +18,7 @@
       {
         "group": "servers",
         "to": "/cloud",
-        "label": "Cloud Servers",
+        "label": "Cloud servers",
         "order": 4,
         "icon": "<path d=\"M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z\"/>"
       }
@@ -31,11 +31,11 @@
       }
     ],
     "page_titles": {
-      "/cloud": "Cloud Provisioning"
+      "/cloud": "Cloud provisioning"
     },
     "command_palette": [
       {
-        "label": "Cloud Provision",
+        "label": "Cloud provisioning",
         "path": "/cloud",
         "category": "Pages",
         "keywords": "vps deploy provision digitalocean hetzner"
