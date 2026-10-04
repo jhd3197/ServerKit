@@ -139,9 +139,21 @@ const ServiceDetail = () => {
         setActionLoading(action);
         try {
             await performAction(action);
-            toast.success(t('app.serviceDetail.serviceEdSuccessfully', 'Service {{action}}ed successfully', { action: action }));
+            // One string per action: interpolating the verb produced
+            // "stoped" and could not be translated.
+            const done = {
+                start: t('app.serviceDetail.serviceStarted', 'Service started'),
+                stop: t('app.serviceDetail.serviceStopped', 'Service stopped'),
+                restart: t('app.serviceDetail.serviceRestarted', 'Service restarted'),
+            };
+            toast.success(done[action] || t('app.serviceDetail.serviceUpdated', 'Service updated'));
         } catch (err) {
-            toast.error(err?.data?.error || err?.message || t('app.serviceDetail.failedToService', 'Failed to {{action}} service', { action: action }));
+            const failed = {
+                start: t('app.serviceDetail.couldntStartService', "Couldn't start the service."),
+                stop: t('app.serviceDetail.couldntStopService', "Couldn't stop the service."),
+                restart: t('app.serviceDetail.couldntRestartService', "Couldn't restart the service."),
+            };
+            toast.error(err?.data?.error || err?.message || failed[action] || t('app.serviceDetail.couldntUpdateService', "Couldn't update the service."));
         } finally {
             setActionLoading(null);
             setShowDeployMenu(false);

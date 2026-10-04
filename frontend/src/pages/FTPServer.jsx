@@ -166,10 +166,20 @@ function FTPServer() {
         setActionLoading(true);
         try {
             await api.controlFTPService(action, status.active_server);
-            toast.success(t('app.fTPServer.ftpServerEdSuccessfully', 'FTP server {{action}}ed successfully', { action: action }));
+            const done = {
+                start: t('app.fTPServer.ftpServerStarted', 'FTP server started'),
+                stop: t('app.fTPServer.ftpServerStopped', 'FTP server stopped'),
+                restart: t('app.fTPServer.ftpServerRestarted', 'FTP server restarted'),
+            };
+            toast.success(done[action] || t('app.fTPServer.ftpServerUpdated', 'FTP server updated'));
             await loadStatus();
         } catch (error) {
-            toast.error(t('app.fTPServer.failedToFtpServer', 'Failed to {{action}} FTP server: {{message}}', { action: action, message: error.message }));
+            const failed = {
+                start: t('app.fTPServer.couldntStartFtp', "Couldn't start the FTP server. {{message}}", { message: error.message }),
+                stop: t('app.fTPServer.couldntStopFtp', "Couldn't stop the FTP server. {{message}}", { message: error.message }),
+                restart: t('app.fTPServer.couldntRestartFtp', "Couldn't restart the FTP server. {{message}}", { message: error.message }),
+            };
+            toast.error(failed[action] || error.message);
         } finally {
             setActionLoading(false);
         }

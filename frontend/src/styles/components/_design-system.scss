@@ -1536,7 +1536,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         display: inline-flex; align-items: center; justify-content: center;
         flex-shrink: 0;
         width: 36px; height: 36px;
-        border-radius: var(--radius-md);
+        border-radius: var(--radius-sm);
         background: var(--surface-2);
         color: var(--text-dim);
         overflow: hidden;
