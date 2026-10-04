@@ -8283,6 +8283,9 @@
         }
     },
     "errors": {
+        "agent": {
+            "offline": "The server's agent is offline. Start the agent on that server, then try again."
+        },
         "auth": {
             "accountDeactivated": "Account is deactivated",
             "emailRegistered": "Email already registered",
@@ -8296,6 +8299,27 @@
             "passwordTooShort": "Password must be at least 8 characters",
             "registrationDisabled": "Registration is disabled",
             "usernameTaken": "Username already taken"
+        },
+        "conflict": {
+            "domainExists": "Domain already exists"
+        },
+        "notFound": {
+            "backup": "Backup not found",
+            "configCheckpoint": "Config checkpoint not found",
+            "database": "Database not found",
+            "deployment": "Deployment not found",
+            "domain": "Domain not found",
+            "server": "Server not found",
+            "service": "Service not found",
+            "snapshot": "Snapshot not found",
+            "template": "Template not found",
+            "user": "User not found"
+        },
+        "permission": {
+            "denied": "You don't have permission to do this. Ask an admin for access."
+        },
+        "validation": {
+            "required": "{{field}} is required"
         }
     },
     "git": {

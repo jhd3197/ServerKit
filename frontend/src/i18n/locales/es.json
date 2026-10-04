@@ -6881,6 +6881,9 @@
         }
     },
     "errors": {
+        "agent": {
+            "offline": "El agente del servidor está desconectado. Inícialo en ese servidor y vuelve a intentarlo."
+        },
         "auth": {
             "accountDeactivated": "La cuenta está desactivada",
             "emailRegistered": "Ese correo ya está registrado",
@@ -6894,6 +6897,27 @@
             "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
             "registrationDisabled": "El registro está desactivado",
             "usernameTaken": "Ese nombre de usuario ya está en uso"
+        },
+        "conflict": {
+            "domainExists": "El dominio ya existe"
+        },
+        "notFound": {
+            "backup": "No se encontró la copia de seguridad",
+            "configCheckpoint": "No se encontró el punto de control de configuración",
+            "database": "No se encontró la base de datos",
+            "deployment": "No se encontró el despliegue",
+            "domain": "No se encontró el dominio",
+            "server": "No se encontró el servidor",
+            "service": "No se encontró el servicio",
+            "snapshot": "No se encontró la instantánea",
+            "template": "No se encontró la plantilla",
+            "user": "No se encontró el usuario"
+        },
+        "permission": {
+            "denied": "No tienes permiso para hacer esto. Pide acceso a un administrador."
+        },
+        "validation": {
+            "required": "{{field}} es obligatorio"
         }
     },
     "git": {
