@@ -38,7 +38,7 @@
 // GET /api/v1/plugins/contributions. The backend mirror lives in
 // backend/app/utils/sdk.py — keep the two in lock-step (asserted by
 // backend/tests/test_sdk_contract.py).
-export const SDK_VERSION = '1.5.0';
+export const SDK_VERSION = '1.6.0';
 
 export { api, default as defaultApi } from '../../services/api';
 
@@ -60,8 +60,28 @@ export {
     DataTable,
     ResourceCard,
     ResourceList,
+    CatalogCard,
+    CatalogGrid,
     Drawer,
 } from '../../components/ds';
+
+// One field per job (SDK 1.6). An extension asking for a server, a domain, a
+// host port, env rows or a value to copy uses these, so it looks and checks
+// exactly like core: ServerPicker (value 'local' | server id), DomainField
+// (subdomain of a managed base or own domain) + attachDomain, PortField
+// (live free/taken check on host ports), EnvEditor ([{key, value}] rows),
+// CopyField (secrets masked), InfoList/InfoItem (label/value rows).
+export { default as ServerPicker } from '../../components/ServerPicker';
+export { serverTarget, targetServerId, LOCAL_SERVER_ID } from '../../utils/serverTarget';
+export { default as DomainField } from '../../components/DomainField';
+export { attachDomain } from '../../services/attachDomain';
+export { normalizeDomain, isValidDomain } from '../../utils/domains';
+export { default as PortField } from '../../components/PortField';
+export { default as EnvEditor } from '../../components/EnvEditor';
+export { parseDotenv, envToObject, envFromObject } from '../../utils/dotenv';
+export { default as CopyField } from '../../components/CopyField';
+export { CopyButton } from '../../components/CopyButton';
+export { InfoList, InfoItem } from '../../components/InfoList';
 
 // Scheduling — extensions schedule things (cert windows, report runs, cleanup
 // jobs) with the same friendly cron picker as core (Presets/Builder/Advanced +
