@@ -140,8 +140,8 @@ const DatabaseMigration = () => {
             <div className="wizard-card">
                 <div className="wizard-header">
                     <ServerKitLogo className="wizard-logo" />
-                    <h1>{t('app.databaseMigration.databaseUpdateRequired', 'Database Update Required')}</h1>
-                    <p>{t('app.databaseMigration.serverkitNeedsToUpdateTheDatabase', 'ServerKit needs to update the database before continuing')}</p>
+                    <h1>{t('app.databaseMigration.databaseUpdateRequired', 'Database update required')}</h1>
+                    <p>{t('app.databaseMigration.serverkitNeedsToUpdateTheDatabase', 'ServerKit needs to update the database before continuing.')}</p>
                 </div>
 
                 {renderProgressBar()}
@@ -149,7 +149,7 @@ const DatabaseMigration = () => {
                 {/* Step 1: Overview */}
                 {currentStep === 1 && (
                     <div className="wizard-step">
-                        <div className="wizard-step-title">{t('app.databaseMigration.updateOverview', 'Update Overview')}</div>
+                        <div className="wizard-step-title">{t('app.databaseMigration.updateOverview', 'Update overview')}</div>
                         <div className="wizard-step-description">
                             {t('app.databaseMigration.aNewVersionOfServerkitRequires', 'A new version of ServerKit requires database changes. The panel is paused until these are applied.')}
                         </div>
@@ -177,7 +177,7 @@ const DatabaseMigration = () => {
                             <div className="wizard-info-banner wizard-info-banner--warn">
                                 <AlertTriangle size={20} className="wizard-info-icon" />
                                 <p>
-                                    {t('app.databaseMigration.thisDatabaseIsStampedAt', 'This database is stamped at')} <code>{status.current_revision}</code>{t('app.databaseMigration.whichDoesNotExistInThis', ', which does not exist in this build — usually a branch that added a migration and was then reverted. The schema cannot be upgraded until it is stamped back to a known revision:')}
+                                    {t('app.databaseMigration.thisDatabaseIsStampedAt', 'This database is stamped at')} <code>{status.current_revision}</code>{t('app.databaseMigration.whichDoesNotExistInThis', ', which does not exist in this build (usually a branch that added a migration and was then reverted). The schema cannot be upgraded until it is stamped back to a known revision:')}
                                     {' '}<code>{t('app.databaseMigration.flaskDbStamp', 'flask db stamp')} {status.head_revision || 'head'}</code>
                                 </p>
                             </div>
@@ -224,7 +224,7 @@ const DatabaseMigration = () => {
 
                         {!isAuthenticated && (
                             <div className="migration-login-section">
-                                <div className="wizard-step-title">{t('app.databaseMigration.adminLoginRequired', 'Admin Login Required')}</div>
+                                <div className="wizard-step-title">{t('app.databaseMigration.adminLoginRequired', 'Admin login required')}</div>
                                 <p className="wizard-step-description">
                                     {t('app.databaseMigration.signInWithAnAdminAccount', 'Sign in with an admin account to apply the update.')}
                                 </p>
@@ -278,7 +278,7 @@ const DatabaseMigration = () => {
                 {/* Step 2: Backup */}
                 {currentStep === 2 && (
                     <div className="wizard-step">
-                        <div className="wizard-step-title">{t('app.databaseMigration.createBackup', 'Create Backup')}</div>
+                        <div className="wizard-step-title">{t('app.databaseMigration.createBackup', 'Create backup')}</div>
                         <div className="wizard-step-description">
                             {t('app.databaseMigration.weRecommendBackingUpYourDatabase', 'We recommend backing up your database before applying updates.')}
                         </div>
@@ -298,9 +298,9 @@ const DatabaseMigration = () => {
                                     disabled={backupLoading}
                                 >
                                     {backupLoading ? (
-                                        <><Loader size={16} className="spin" /> {t('app.databaseMigration.creatingBackup', 'Creating Backup…')}</>
+                                        <><Loader size={16} className="spin" /> {t('app.databaseMigration.creatingBackup', 'Creating backup…')}</>
                                     ) : (
-                                        <><Download size={16} /> {t('app.databaseMigration.createBackup', 'Create Backup')}</>
+                                        <><Download size={16} /> {t('app.databaseMigration.createBackup', 'Create backup')}</>
                                     )}
                                 </Button>
                             </div>
@@ -310,7 +310,7 @@ const DatabaseMigration = () => {
                             <div className="backup-status backup-status--success">
                                 <CheckCircle size={20} />
                                 <div>
-                                    <strong>{t('app.databaseMigration.backupCreatedSuccessfully', 'Backup created successfully')}</strong>
+                                    <strong>{t('app.databaseMigration.backupCreatedSuccessfully', 'Backup created')}</strong>
                                     <code>{backupResult.path}</code>
                                 </div>
                             </div>
@@ -354,7 +354,7 @@ const DatabaseMigration = () => {
                 {/* Step 3: Apply */}
                 {currentStep === 3 && (
                     <div className="wizard-step">
-                        <div className="wizard-step-title">{t('app.databaseMigration.applyUpdates', 'Apply Updates')}</div>
+                        <div className="wizard-step-title">{t('app.databaseMigration.applyUpdates', 'Apply updates')}</div>
                         <div className="wizard-step-description">
                             {applyLoading
                                 ? 'Applying database updates. Please do not close this page...'
@@ -365,7 +365,7 @@ const DatabaseMigration = () => {
                         {!applyLoading && !applyError && (
                             <div className="migration-apply-actions">
                                 <Button className="btn-wizard-next" onClick={handleApply}>
-                                    <Database size={16} /> {t('app.databaseMigration.applyUpdates', 'Apply Updates')}
+                                    <Database size={16} /> {t('app.databaseMigration.applyUpdates', 'Apply updates')}
                                 </Button>
                             </div>
                         )}
@@ -406,7 +406,7 @@ const DatabaseMigration = () => {
                     <div className="wizard-step">
                         <div className="migration-success">
                             <CheckCircle size={48} />
-                            <h2>{t('app.databaseMigration.databaseUpdatedSuccessfully', 'Database Updated Successfully')}</h2>
+                            <h2>{t('app.databaseMigration.databaseUpdatedSuccessfully', 'Database updated')}</h2>
                             <p>
                                 {t('app.databaseMigration.allMigrationsHaveBeenApplied', 'All migrations have been applied.')}
                                 {migrationStatus?.current_revision && (

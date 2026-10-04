@@ -62,7 +62,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
             setStatus(data.slots);
             toast.success(next
                 ? t('app.slotDeploysPanel.enabled', 'Slot deploys on. The running container is now slot A; the next deploy boots slot B.')
-                : (data.note || t('app.slotDeploysPanel.disabled', 'Slot deploys off.')));
+                : (data.note || t('app.slotDeploysPanel.disabled', 'Slot deploys off')));
             onChanged?.();
         } catch (err) {
             toast.error(err.message || t('app.slotDeploysPanel.toggleFailed', 'Could not change slot deploys'));
@@ -84,7 +84,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                     stop_old_before_release: stopOld,
                 },
             });
-            toast.success(t('app.slotDeploysPanel.saved', 'Rollout settings saved.'));
+            toast.success(t('app.slotDeploysPanel.saved', 'Rollout settings saved'));
             onChanged?.();
         } catch (err) {
             toast.error(err.message || t('app.slotDeploysPanel.saveFailed', 'Failed to save rollout settings'));

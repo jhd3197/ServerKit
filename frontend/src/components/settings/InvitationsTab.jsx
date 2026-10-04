@@ -244,7 +244,7 @@ const InvitationsTab = () => {
                             label={t('app.invitationsTab.copyInviteLink', 'Copy invite link')}
                             copiedLabel={t('app.copyField.copied', 'Copied')}
                         >
-                            {t('app.invitationsTab.copyLink', 'Copy Link')}
+                            {t('app.invitationsTab.copyLink', 'Copy link')}
                         </CopyButton>
                         {inv.email && (
                             <Button
@@ -313,7 +313,7 @@ const InvitationsTab = () => {
                                 <line x1="20" y1="8" x2="20" y2="14"/>
                                 <line x1="23" y1="11" x2="17" y2="11"/>
                             </svg>
-                            {t('app.invitationsTab.inviteUser', 'Invite User')}
+                            {t('app.invitationsTab.inviteUser', 'Invite user')}
                         </Button>
                         <GridFilterButton
                             count={chrome.filterCount}

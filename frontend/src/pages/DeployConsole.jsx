@@ -267,7 +267,7 @@ export default function DeployConsole() {
                 <h1 className="deploy-console__title">{humanizeTitle(job)}</h1>
                 <div className="deploy-console__meta">
                     {job?.kind === 'demo_deploy' && (
-                        <span className="deploy-console__pill deploy-console__pill--demo" title={t('app.deployConsole.scriptedTestDeploymentNoRealResources', 'Scripted test deployment — no real resources were touched')}>
+                        <span className="deploy-console__pill deploy-console__pill--demo" title={t('app.deployConsole.scriptedTestDeploymentNoRealResources', 'Scripted test deployment: no real resources were touched')}>
                             {t('app.deployConsole.simulated', 'Simulated')}
                         </span>
                     )}
@@ -286,7 +286,7 @@ export default function DeployConsole() {
 
             {degraded && (
                 <div className="deploy-console__degraded">
-                    <WifiOff size={14} /> {t('app.deployConsole.liveUpdatesUnavailableRefreshingEvery2s', 'Live updates unavailable — refreshing every 2s.')}
+                    <WifiOff size={14} /> {t('app.deployConsole.liveUpdatesUnavailableRefreshingEvery2s', 'Live updates unavailable. Refreshing every 2s.')}
                 </div>
             )}
 

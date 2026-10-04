@@ -158,7 +158,7 @@ function RecipeHandoffCard({ operation, onSubmitted, t }) {
                 <Button type="submit" size="sm" disabled={!value.trim() || submitting}>
                     {submitting
                         ? t('app.operationsDock.resumingRecipe', 'Resuming…')
-                        : t('app.operationsDock.continueRecipe', 'Continue Recipe')}
+                        : t('app.operationsDock.continueRecipe', 'Continue recipe')}
                 </Button>
             </div>
         </form>
@@ -250,14 +250,14 @@ export default function OperationsDock({ hideLauncher = false, statusbarMode = f
 
     useShortcut({
         id: 'operations-dock-toggle',
-        label: t('app.operationsDock.shortcutLabel', 'Toggle Operations dock'),
+        label: t('app.operationsDock.shortcutLabel', 'Toggle operations dock'),
         group: 'shell',
         keys: [{ key: 'o', ctrlOrMeta: true, shift: true }],
         handler: toggle,
     });
     useShortcut({
         id: 'operations-dock-close',
-        label: t('app.operationsDock.collapse', 'Collapse Operations dock'),
+        label: t('app.operationsDock.collapse', 'Collapse operations dock'),
         group: 'overlays',
         keys: [{ key: 'Escape' }],
         enabled: !collapsed,
@@ -334,7 +334,7 @@ export default function OperationsDock({ hideLauncher = false, statusbarMode = f
                     onClick={toggle}
                     aria-expanded="false"
                     aria-keyshortcuts="Control+Shift+O Meta+Shift+O"
-                    title={t('app.operationsDock.open', 'Open Operations dock')}
+                    title={t('app.operationsDock.open', 'Open operations dock')}
                 >
                     <Activity size={17} className={activeOperations.length ? 'is-active' : ''} />
                     <span>{t('app.operationsDock.title', 'Operations')}</span>
@@ -374,7 +374,7 @@ export default function OperationsDock({ hideLauncher = false, statusbarMode = f
                                     />
                                     <IconButton
                                         icon={<X size={16} />}
-                                        label={t('app.operationsDock.collapse', 'Collapse Operations dock')}
+                                        label={t('app.operationsDock.collapse', 'Collapse operations dock')}
                                         onClick={() => setCollapsed(true)}
                                     />
                                 </div>
@@ -511,7 +511,7 @@ export default function OperationsDock({ hideLauncher = false, statusbarMode = f
                                     <Button asChild variant="ghost" size="sm">
                                         <Link to={selectedOperation.detailPath}>
                                             {selectedOperation.runKind === 'deploy'
-                                                ? t('app.deployPill.openTheDeployConsole', 'Open the Deploy Console')
+                                                ? t('app.deployPill.openTheDeployConsole', 'Open the deploy console')
                                                 : t('app.operationsDock.openDetails', 'Open details')}<ArrowUpRight size={13} />
                                         </Link>
                                     </Button>

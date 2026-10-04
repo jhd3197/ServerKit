@@ -170,7 +170,7 @@ const ManagedOutlet = ({ pathname, isFullPageRoute }) => {
         <>
             {lapsed && (
                 <div className="managed-lapsed-banner" data-testid="managed-profile-lapsed">
-                    {t('managed.lapsed', 'The managed profile from ServerKit Cloud lapsed — the full panel is back. It returns if Cloud reconnects and re-sends it.')}
+                    {t('managed.lapsed', 'The managed profile from ServerKit Cloud lapsed, so the full panel is back. It returns if Cloud reconnects and re-sends it.')}
                 </div>
             )}
             <ErrorBoundary resetKey={pathname}>

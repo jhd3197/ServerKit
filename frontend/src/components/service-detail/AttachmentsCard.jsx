@@ -143,7 +143,7 @@ export default function AttachmentsCard({ app }) {
         setBusy(true);
         try {
             await api.deployApp(app.id);
-            toast.success(t('app.attachments.redeploying', 'Redeploy started.'));
+            toast.success(t('app.attachments.redeploying', 'Redeploy started'));
             setNeedsRedeploy(false);
         } catch (err) {
             toast.error(err.message);

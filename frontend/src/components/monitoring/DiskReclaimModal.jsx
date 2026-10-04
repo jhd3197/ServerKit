@@ -58,7 +58,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
             );
             openRun('job', res.job_id);
             toast.success(
-                t('app.diskReclaim.reclaimStartedFollowProgressIn', 'Reclaim started — follow progress in Operations'),
+                t('app.diskReclaim.reclaimStartedFollowProgressIn', 'Reclaim started. Follow progress in Operations.'),
                 {
                     duration: 10000,
                     action: {
@@ -94,7 +94,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
             )}
         >
             <p className="sk-modal__subtitle">
-                {t('app.diskReclaim.onlyReviewedSafeCandidatesAreOffered', 'Only reviewed-safe cleanup is offered — upgrade snapshots beyond the newest one, abandoned update staging, oversized logs, package caches, old journal entries and Docker build cache. Nothing here touches your apps or databases.')}
+                {t('app.diskReclaim.onlyReviewedSafeCandidatesAreOffered', 'Only reviewed-safe cleanup is offered: upgrade snapshots beyond the newest one, abandoned update staging, oversized logs, package caches, old journal entries and Docker build cache. Nothing here touches your apps or databases.')}
             </p>
 
             {loading ? (
@@ -108,7 +108,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
                 </div>
             ) : candidates.length === 0 ? (
                 <p className="disk-reclaim__state">
-                    {t('app.diskReclaim.nothingToReclaimRightNowTheCurated', 'Nothing to reclaim right now — the curated candidates are all clear.')}
+                    {t('app.diskReclaim.nothingToReclaimRightNowTheCurated', 'Nothing to reclaim right now. The curated candidates are all clear.')}
                 </p>
             ) : (
                 <>

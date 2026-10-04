@@ -456,11 +456,11 @@ export function useNewServiceForm() {
                 if (result.deploy_job_id) {
                     // A deploy job was queued — take the user straight to the
                     // full-page Deploy Console to watch the build/startup live.
-                    toast.success(t('app.useNewServiceForm.repositoryServiceCreatedDeploying', 'Repository service created — deploying…'));
+                    toast.success(t('app.useNewServiceForm.repositoryServiceCreatedDeploying', 'Repository service created. Deploying…'));
                     navigate(`/deployments/${result.deploy_job_id}`);
                 } else {
                     toast.success(t('app.useNewServiceForm.repositoryServiceCreated', 'Repository service created'));
-                    toast.warning(t('app.useNewServiceForm.serviceCreatedWithoutAutoDeploy', 'Service was created without auto-deploy — start it manually from the service page.'));
+                    toast.warning(t('app.useNewServiceForm.serviceCreatedWithoutAutoDeploy', 'Service was created without auto-deploy. Start it manually from the service page.'));
                     navigate(`/services/${result.app.id}`);
                 }
             }

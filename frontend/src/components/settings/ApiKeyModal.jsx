@@ -41,7 +41,7 @@ const ApiKeyModal = ({ onClose, onSubmit, createdKey }) => {
     // Show created key view
     if (createdKey) {
         return (
-            <Modal open={true} onClose={onClose} title={t('app.apiKeyModal.apiKeyCreated', 'API Key Created')} className="api-key-modal">
+            <Modal open={true} onClose={onClose} title={t('app.apiKeyModal.apiKeyCreated', 'API key created')} className="api-key-modal">
                         <div className="api-key-modal__warning">
                             <AlertTriangle size={16} />
                             <span>{t('app.apiKeyModal.copyThisKeyNowItWill', 'Copy this key now. It will not be shown again.')}</span>
@@ -55,7 +55,7 @@ const ApiKeyModal = ({ onClose, onSubmit, createdKey }) => {
     }
 
     return (
-        <Modal open={true} onClose={onClose} title={t('app.apiKeyModal.createApiKey', 'Create API Key')} className="api-key-modal">
+        <Modal open={true} onClose={onClose} title={t('app.apiKeyModal.createApiKey', 'Create API key')} className="api-key-modal">
                 <form onSubmit={handleSubmit}>
                     <div className="modal-body">
                         <div className="form-group">

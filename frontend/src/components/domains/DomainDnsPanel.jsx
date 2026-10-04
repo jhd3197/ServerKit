@@ -168,7 +168,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             toast.success(t('app.domainDnsPanel.dynamicDnsEnabled', 'Dynamic DNS enabled'));
             await loadHosts();
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.failedToEnableDynamicDns', 'Failed to enable Dynamic DNS'));
+            toast.error(e.message || t('app.domainDnsPanel.failedToEnableDynamicDns', 'Failed to enable dynamic DNS'));
         } finally {
             setBusyKey(null);
         }
@@ -187,9 +187,9 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
 
     async function handleStopDynamic(host) {
         if (!await confirm({
-            title: t('app.domainDnsPanel.disableDynamicDns', 'Disable Dynamic DNS'),
-            message: t('app.domainDnsPanel.disableDynamicDnsForItsUpdate', 'Disable Dynamic DNS for {{hostname}}? Its update token will stop working.', { hostname: host.hostname }),
-            confirmText: t('app.domainDnsPanel.disableDynamicDns', 'Disable Dynamic DNS'),
+            title: t('app.domainDnsPanel.disableDynamicDns', 'Disable dynamic DNS'),
+            message: t('app.domainDnsPanel.disableDynamicDnsForItsUpdate', 'Disable dynamic DNS for {{hostname}}? Its update token will stop working.', { hostname: host.hostname }),
+            confirmText: t('app.domainDnsPanel.disableDynamicDns', 'Disable dynamic DNS'),
         })) return;
         try {
             await api.deleteDdnsHost(host.id);
@@ -197,7 +197,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             toast.success(t('app.domainDnsPanel.dynamicDnsDisabled', 'Dynamic DNS disabled'));
             await loadHosts();
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.failedToDisableDynamicDns', 'Failed to disable Dynamic DNS'));
+            toast.error(e.message || t('app.domainDnsPanel.failedToDisableDynamicDns', 'Failed to disable dynamic DNS'));
         }
     }
 
@@ -327,7 +327,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
                                 <Button variant="ghost" size="sm" className="ddp__iconbtn" title={t('app.domainDnsPanel.regenerateToken', 'Regenerate token')} onClick={() => handleRegenerate(host)}>
                                     <RefreshCw size={13} />
                                 </Button>
-                                <Button variant="ghost" size="sm" className="ddp__stopbtn" title={t('app.domainDnsPanel.disableDynamicDns', 'Disable Dynamic DNS')} onClick={() => handleStopDynamic(host)}>
+                                <Button variant="ghost" size="sm" className="ddp__stopbtn" title={t('app.domainDnsPanel.disableDynamicDns', 'Disable dynamic DNS')} onClick={() => handleStopDynamic(host)}>
                                     {t('common.actions.stop', 'Stop')}
                                 </Button>
                             </>
@@ -373,13 +373,13 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
 
             {canLive && (
                 <p className="ddp__hint">
-                    {t('app.domainDnsPanel.liveFromCloudflareRecordsServerkitManages', 'Live from Cloudflare — records ServerKit manages are tagged; the rest are your own and shown read-only.')}
+                    {t('app.domainDnsPanel.liveFromCloudflareRecordsServerkitManages', 'Live from Cloudflare. Records ServerKit manages are tagged; the rest are your own and shown read-only.')}
                 </p>
             )}
 
             {state === 'ready' && hasProxiedSSL && (
                 <p className="ddp__ssl">
-                    <ShieldCheck size={13} /> {t('app.domainDnsPanel.httpsIsServedByCloudflareOn', 'HTTPS is served by Cloudflare on proxied records — no separate certificate needed.')}
+                    <ShieldCheck size={13} /> {t('app.domainDnsPanel.httpsIsServedByCloudflareOn', 'HTTPS is served by Cloudflare on proxied records, so no separate certificate is needed.')}
                 </p>
             )}
 

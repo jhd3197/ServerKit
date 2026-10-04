@@ -55,7 +55,7 @@ export default function SuccessBanner({ job, appUrl, engineTarget = null, armAut
             <div className="deploy-console__success-head">
                 <CheckCircle2 size={20} />
                 <div>
-                    <strong>{t('app.successBanner.deployedSuccessfully', 'Deployed successfully')}</strong>
+                    <strong>{t('app.successBanner.deployedSuccessfully', 'Deployed')}</strong>
                     <span className="deploy-console__success-dur">
                         {t('app.successBanner.completedIn', 'Completed in')} {fmtSeconds(job?.duration)}
                     </span>
@@ -97,7 +97,7 @@ export default function SuccessBanner({ job, appUrl, engineTarget = null, armAut
                     <Link
                         className="deploy-console__btn deploy-console__btn--primary"
                         to={returnTo}
-                        title={t('app.successBanner.openInTheDatabaseExplorer', 'Open {{returnLabel}} in the Database Explorer', { returnLabel: returnLabel })}
+                        title={t('app.successBanner.openInTheDatabaseExplorer', 'Open {{returnLabel}} in the database explorer', { returnLabel: returnLabel })}
                     >
                         <Database size={14} /> {t('common.actions.open', 'Open')} {returnLabel} {t('app.successBanner.inDatabases', 'in Databases')}
                     </Link>

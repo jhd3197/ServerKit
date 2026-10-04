@@ -70,8 +70,8 @@ const STATUS_CONFIG = {
 const DEPLOY_STATUS = {
     success: { labelKey: 'app.serviceTypes.live', label: 'Live', color: '#3ddc97' },
     failed: { labelKey: 'common.state.failed', label: 'Failed', color: '#fb6f6f' },
-    in_progress: { labelKey: 'app.serviceTypes.inProgress', label: 'In Progress', color: '#f5b945' },
-    rolled_back: { labelKey: 'app.serviceTypes.rolledBack', label: 'Rolled Back', color: '#646b7a' },
+    in_progress: { labelKey: 'app.serviceTypes.inProgress', label: 'In progress', color: '#f5b945' },
+    rolled_back: { labelKey: 'app.serviceTypes.rolledBack', label: 'Rolled back', color: '#646b7a' },
     pending: { labelKey: 'app.serviceTypes.pending', label: 'Pending', color: '#49c7f0' },
 };
 

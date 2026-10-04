@@ -171,7 +171,7 @@ const MetricsGraph = ({ compact = false, timezone, serverId }) => {
                 <div className="metrics-graph-header">
                     <div className="graph-title">
                         <TrendingUp size={16} />
-                        <span>{t('app.metricsGraph.systemMetrics', 'System Metrics')}</span>
+                        <span>{t('app.metricsGraph.systemMetrics', 'System metrics')}</span>
                     </div>
                     <div className="period-selector">
                         {periods.map(p => (
@@ -230,7 +230,7 @@ const MetricsGraph = ({ compact = false, timezone, serverId }) => {
         <div className="metrics-graph-card">
             <div className="metrics-graph-header">
                 <div className="graph-title">
-                    <span>{t('app.metricsGraph.realTimePerformance', 'Real-time Performance')}</span>
+                    <span>{t('app.metricsGraph.realTimePerformance', 'Real-time performance')}</span>
                 </div>
                 <div className="metrics-filter-legend">
                     <SharedButton variant="unstyled" type="button"

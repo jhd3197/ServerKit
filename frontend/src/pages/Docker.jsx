@@ -183,7 +183,7 @@ const Docker = () => {
                             <path d="M21 12c0 4-3 7-8 7s-8-3-8-7" strokeDasharray="2 2"/>
                         </svg>
                     </div>
-                    <h2>{t('app.docker.dockerNotAvailable', 'Docker Not Available')}</h2>
+                    <h2>{t('app.docker.dockerNotAvailable', 'Docker not available')}</h2>
                     <p className="docker-unavailable-message">
                         {t('app.docker.dockerIsNotInstalledOrNot', 'Docker is not installed or not running on this system.')}
                     </p>
@@ -203,7 +203,7 @@ const Docker = () => {
                             <path d="M23 4v6h-6M1 20v-6h6"/>
                             <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
                         </svg>
-                        {t('app.docker.retryConnection', 'Retry Connection')}
+                        {t('app.docker.retryConnection', 'Retry connection')}
                     </Button>
                 </div>
             </PageLayout>

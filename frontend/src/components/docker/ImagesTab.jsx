@@ -28,7 +28,7 @@ export const PullImageButton = () => {
     return (
         <>
             <Button onClick={() => setShowModal(true)}>
-                <span>+</span> {t('app.imagesTab.pullImage', 'Pull Image')}
+                <span>+</span> {t('app.imagesTab.pullImage', 'Pull image')}
             </Button>
             {showModal && <PullImageModal onClose={() => setShowModal(false)} onPulled={() => window.location.reload()} />}
         </>
@@ -198,7 +198,7 @@ const ImagesTab = ({ onStatsChange }) => {
     }
 
     async function handleRemove(image) {
-        const confirmed = await confirmImage({ titleKey: 'app.imagesTab.removeImage', title: 'Remove Image', messageKey: 'app.imagesTab.removeThisImage', message: 'Remove this image?' });
+        const confirmed = await confirmImage({ titleKey: 'app.imagesTab.removeImage', title: 'Remove image', messageKey: 'app.imagesTab.removeThisImage', message: 'Remove this image?' });
         if (!confirmed) return;
 
         try {
@@ -208,7 +208,7 @@ const ImagesTab = ({ onStatsChange }) => {
             } else {
                 await api.removeImage(id, true);
             }
-            toast.success(t('app.imagesTab.imageRemovedSuccessfully', 'Image removed successfully'));
+            toast.success(t('app.imagesTab.imageRemovedSuccessfully', 'Image removed'));
             loadImages();
             onStatsChange?.();
         } catch (err) {
@@ -455,12 +455,12 @@ const PullImageModal = ({ onClose, onPulled }) => {
     }
 
     return (
-        <Modal open onClose={onClose} title={t('app.imagesTab.pullImage', 'Pull Image')} size="md">
+        <Modal open onClose={onClose} title={t('app.imagesTab.pullImage', 'Pull image')} size="md">
             {error && <div className="error-message">{error}</div>}
 
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label>{t('app.imagesTab.imageName', 'Image Name *')}</label>
+                    <label>{t('app.imagesTab.imageName', 'Image name *')}</label>
                     <Input
                         type="text"
                         value={image}

@@ -139,7 +139,7 @@ export default function AIConnectionsSettings({ connections, providers, defaultI
                             hint={field.type === 'url' ? t('ai.connections.endpointHelp', 'Use an address reachable from the ServerKit backend. In Docker, localhost refers to the panel container. Changing this URL requires re-entering credentials.') : undefined}>
                             <Input id={`ai-config-${field.name}`} type={field.secret ? 'password' : field.type}
                                 autoComplete="off" disabled={busy} value={draft.config[field.name] ?? ''}
-                                placeholder={field.secret && draft.secrets_set.includes(field.name) ? t('ai.connections.secretConfigured', 'Configured — leave blank to keep') : field.default || ''}
+                                placeholder={field.secret && draft.secrets_set.includes(field.name) ? t('ai.connections.secretConfigured', 'Configured (leave blank to keep)') : field.default || ''}
                                 onChange={(event) => setField(field, event.target.value)} />
                             {field.secret && draft.secrets_set.includes(field.name) && (
                                 <Button variant="ghost" size="sm" type="button" disabled={busy} onClick={() => setField(field, '', true)}>

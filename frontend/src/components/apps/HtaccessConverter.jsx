@@ -32,7 +32,7 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
             const res = await api.convertHtaccess(source);
             setResult(res);
             if (!res.nginx && !(res.unsupported || []).length) {
-                toast.info(t('app.htaccessConverter.nothingToConvertNoDirectivesFound', 'Nothing to convert — no directives found.'));
+                toast.info(t('app.htaccessConverter.nothingToConvertNoDirectivesFound', 'Nothing to convert. No directives found.'));
             }
         } catch (err) {
             toast.error(err.message || t('app.htaccessConverter.conversionFailed', 'Conversion failed'));
@@ -44,7 +44,7 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
     const handleInsert = () => {
         if (!result?.nginx) return;
         onInsert?.(result.nginx);
-        toast.success(t('app.htaccessConverter.convertedRulesInsertedReviewBeforeSaving', 'Converted rules inserted — review before saving.'));
+        toast.success(t('app.htaccessConverter.convertedRulesInsertedReviewBeforeSaving', 'Converted rules inserted. Review before saving.'));
         handleClose();
     };
 

@@ -194,7 +194,7 @@ export default function ConnectionsHub() {
 
     const onRemoveDns = useCallback(async (record) => {
         const confirmed = await confirm({
-            title: t('app.connectionsHub.removeConnection', 'Remove Connection'),
+            title: t('app.connectionsHub.removeConnection', 'Remove connection'),
             message: t('app.connectionsHub.removeTheConnection', 'Remove the connection "{{name}}"?', { name: record.name }),
             confirmText: t('common.actions.remove', 'Remove'),
             variant: 'danger',
@@ -238,7 +238,7 @@ export default function ConnectionsHub() {
 
     const onRemoveCloud = useCallback(async (id) => {
         const confirmed = await confirm({
-            title: t('app.connectionsHub.disconnectCloudAccount', 'Disconnect Cloud Account'),
+            title: t('app.connectionsHub.disconnectCloudAccount', 'Disconnect cloud account'),
             message: t('app.connectionsHub.disconnectThisCloudAccountExistingServers', 'Disconnect this cloud account? Existing servers are not affected.'),
             confirmText: t('app.connectionsHub.disconnect', 'Disconnect'),
             variant: 'danger',
@@ -333,7 +333,7 @@ export default function ConnectionsHub() {
 
     const onRemoveRegistrar = useCallback(async (id) => {
         const confirmed = await confirm({
-            title: t('app.connectionsHub.disconnectRegistrar', 'Disconnect Registrar'),
+            title: t('app.connectionsHub.disconnectRegistrar', 'Disconnect registrar'),
             message: t('app.connectionsHub.disconnectThisRegistrar', 'Disconnect this registrar?'),
             confirmText: t('app.connectionsHub.disconnect', 'Disconnect'),
             variant: 'danger',
@@ -377,7 +377,7 @@ export default function ConnectionsHub() {
 
     const onRemoveRegistry = useCallback(async (id) => {
         const confirmed = await confirm({
-            title: t('app.connectionsHub.removeContainerRegistry', 'Remove Container Registry'),
+            title: t('app.connectionsHub.removeContainerRegistry', 'Remove container registry'),
             message: t('app.connectionsHub.removeThisContainerRegistryAppsThat', 'Remove this container registry? Apps that pull from it will lose access.'),
             confirmText: t('common.actions.remove', 'Remove'),
             variant: 'danger',

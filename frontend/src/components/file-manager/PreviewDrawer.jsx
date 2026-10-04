@@ -184,7 +184,7 @@ export default function PreviewDrawer({
                             <EyeOff size={48} strokeWidth={1.5} />
                             <p>{t('app.previewDrawer.previewNotAvailableForThisFile', 'Preview not available for this file type')}</p>
                             <Button onClick={() => onDownload(file)}>
-                                <Download size={16} /> {t('app.previewDrawer.downloadFile', 'Download File')}
+                                <Download size={16} /> {t('app.previewDrawer.downloadFile', 'Download file')}
                             </Button>
                         </div>
                     )}

@@ -153,7 +153,7 @@ const ServiceDetail = () => {
                 stop: t('app.serviceDetail.couldntStopService', "Couldn't stop the service."),
                 restart: t('app.serviceDetail.couldntRestartService', "Couldn't restart the service."),
             };
-            toast.error(err?.data?.error || err?.message || failed[action] || t('app.serviceDetail.couldntUpdateService', "Couldn't update the service."));
+            toast.error(err?.data?.error || err?.message || failed[action] || t('app.serviceDetail.couldntUpdateService', "Couldn't update the service"));
         } finally {
             setActionLoading(null);
             setShowDeployMenu(false);
@@ -232,9 +232,9 @@ const ServiceDetail = () => {
     }
 
     async function handleDelete() {
-        const firstConfirm = await confirm({ title: t('app.serviceDetail.deleteService', 'Delete Service'), message: t('app.serviceDetail.deleteThisActionCannotBeUndone', 'Delete {{name}}? This action cannot be undone.', { name: service.name }) });
+        const firstConfirm = await confirm({ title: t('app.serviceDetail.deleteService', 'Delete service'), message: t('app.serviceDetail.deleteThisActionCannotBeUndone', 'Delete {{name}}? This action cannot be undone.', { name: service.name }) });
         if (!firstConfirm) return;
-        const secondConfirm = await confirm({ title: t('app.serviceDetail.confirmDeletion', 'Confirm Deletion'), message: t('app.serviceDetail.areYouSureThisWillPermanently', 'Are you sure? This will permanently remove the service and all its data.') });
+        const secondConfirm = await confirm({ title: t('app.serviceDetail.confirmDeletion', 'Confirm deletion'), message: t('app.serviceDetail.areYouSureThisWillPermanently', 'Delete this service? This permanently removes it and all its data.') });
         if (!secondConfirm) return;
 
         setActionLoading('delete');
@@ -261,7 +261,7 @@ const ServiceDetail = () => {
                 icon={Layers}
                 title={t('app.serviceDetail.serviceNotFound', 'Service not found')}
                 description={error || t('app.serviceDetail.theServiceYouAreLookingFor', 'The service you are looking for does not exist.')}
-                action={<Button onClick={() => navigate('/services')}>{t('app.serviceDetail.backToServices', 'Back to Services')}</Button>}
+                action={<Button onClick={() => navigate('/services')}>{t('app.serviceDetail.backToServices', 'Back to services')}</Button>}
             />
         );
     }
@@ -312,7 +312,7 @@ const ServiceDetail = () => {
                                         <polyline points="23 4 23 10 17 10"/>
                                         <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
                                     </svg>
-                                    {t('app.serviceDetail.manualDeployRestart', 'Manual Deploy (Restart)')}
+                                    {t('app.serviceDetail.manualDeployRestart', 'Manual deploy (restart)')}
                                 </Button>
                                 {isGitBased && deployConfig && (
                                     <Button variant="unstyled" type="button" onClick={handleDeployLatest} disabled={actionLoading === 'deploy-latest'}>
@@ -370,7 +370,7 @@ const ServiceDetail = () => {
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                             <rect x="6" y="6" width="12" height="12"/>
                                         </svg>
-                                        {t('app.serviceDetail.suspendService', 'Suspend Service')}
+                                        {t('app.serviceDetail.suspendService', 'Suspend service')}
                                     </Button>
                                 )}
                                 {openUrl && (
@@ -385,7 +385,7 @@ const ServiceDetail = () => {
                                             <polyline points="15 3 21 3 21 9"/>
                                             <line x1="10" y1="14" x2="21" y2="3"/>
                                         </svg>
-                                        {t('app.serviceDetail.openInBrowser', 'Open in Browser')}
+                                        {t('app.serviceDetail.openInBrowser', 'Open in browser')}
                                     </a>
                                 )}
                                 <div className="svc-detail__dropdown-divider" />
@@ -398,7 +398,7 @@ const ServiceDetail = () => {
                                         <polyline points="3 6 5 6 21 6"/>
                                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                     </svg>
-                                    {t('app.serviceDetail.deleteService', 'Delete Service')}
+                                    {t('app.serviceDetail.deleteService', 'Delete service')}
                                 </Button>
                             </div>
                         )}

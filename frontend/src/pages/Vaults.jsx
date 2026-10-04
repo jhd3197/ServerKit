@@ -393,7 +393,7 @@ export default function Vaults() {
         <>
             {vaultTable}
 
-            <Modal open={vaultForm.open} onClose={() => setVaultForm({ ...vaultForm, open: false })} title={t('app.vaults.newVault2', 'New Vault')}>
+            <Modal open={vaultForm.open} onClose={() => setVaultForm({ ...vaultForm, open: false })} title={t('app.vaults.newVault2', 'New vault')}>
                 <p className="sk-modal__subtitle">{t('app.vaults.createAnEncryptedVaultToGroup', 'Create an encrypted vault to group secrets.')}</p>
                 <form onSubmit={createVault} className="space-y-4">
                         <div>
@@ -424,12 +424,12 @@ export default function Vaults() {
                             </div>
                         )}
                         <div className="modal-actions">
-                            <Button type="submit">{t('app.vaults.createVault', 'Create Vault')}</Button>
+                            <Button type="submit">{t('app.vaults.createVault', 'Create vault')}</Button>
                         </div>
                     </form>
             </Modal>
 
-            <Modal open={secretForm.open} onClose={() => setSecretForm({ ...secretForm, open: false })} title={t('app.vaults.addSecret3', 'Add Secret')}>
+            <Modal open={secretForm.open} onClose={() => setSecretForm({ ...secretForm, open: false })} title={t('app.vaults.addSecret3', 'Add secret')}>
                 <p className="sk-modal__subtitle">{t('app.vaults.addAnEncryptedSecretTo', 'Add an encrypted secret to')} {selectedVault?.name}.</p>
                 <form onSubmit={createSecret} className="space-y-4">
                         <div>
@@ -445,7 +445,7 @@ export default function Vaults() {
                             <Textarea id="secretDesc" value={secretForm.description} onChange={(e) => setSecretForm({ ...secretForm, description: e.target.value })} />
                         </div>
                         <div className="modal-actions">
-                            <Button type="submit">{t('app.vaults.saveSecret', 'Save Secret')}</Button>
+                            <Button type="submit">{t('app.vaults.saveSecret', 'Save secret')}</Button>
                         </div>
                     </form>
             </Modal>

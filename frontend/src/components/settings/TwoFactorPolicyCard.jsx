@@ -71,7 +71,7 @@ const TwoFactorPolicyCard = (props) => {
     if (loadError) {
         return (
             <div className="settings-card" {...props}>
-                <h3>{t('app.twoFactorPolicyCard.twoFactorAuthenticationPolicy', 'Two-Factor Authentication Policy')}</h3>
+                <h3>{t('app.twoFactorPolicyCard.twoFactorAuthenticationPolicy', 'Two-factor authentication policy')}</h3>
                 <ErrorState
                     title={t('app.twoFactorPolicyCard.couldntLoadPolicy', "Couldn't load the two-factor policy")}
                     error={loadError}
@@ -83,7 +83,7 @@ const TwoFactorPolicyCard = (props) => {
 
     return (
         <div className="settings-card" {...props}>
-            <h3>{t('app.twoFactorPolicyCard.twoFactorAuthenticationPolicy', 'Two-Factor Authentication Policy')}</h3>
+            <h3>{t('app.twoFactorPolicyCard.twoFactorAuthenticationPolicy', 'Two-factor authentication policy')}</h3>
             <p className="form-help form-help--flush">
                 {t('app.twoFactorPolicyCard.requireAccountsToProtectThemselvesWith', 'Require accounts to protect themselves with a passkey or authenticator app. Passwords keep working until the grace window ends; after that, sign-in only lets the user reach the enrolment screen until they add a second factor. Single sign-on users are always exempt.')}
             </p>

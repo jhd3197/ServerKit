@@ -160,9 +160,9 @@ const UsersTab = () => {
         setPendingUserId(user.id);
         try {
             if (!await confirm({
-                title: t('app.usersTab.deleteUser2', 'Delete User'),
+                title: t('app.usersTab.deleteUser2', 'Delete user'),
                 message: t('app.usersTab.confirmDeleteUser', 'Delete {{username}}? This action cannot be undone.', { username: user.username }),
-                confirmText: t('app.usersTab.deleteUser2', 'Delete User'),
+                confirmText: t('app.usersTab.deleteUser2', 'Delete user'),
                 variant: 'danger',
             })) return;
             await api.deleteUser(user.id);
@@ -304,7 +304,7 @@ const UsersTab = () => {
             // last sign in" is the access-review question, and without an
             // accessor the column had nothing behind it to sort or filter on.
             key: 'lastLogin',
-            headerKey: 'app.usersTab.lastLogin', header: 'Last Login',
+            headerKey: 'app.usersTab.lastLogin', header: 'Last login',
             sortable: true,
             type: 'date',
             value: (user) => user.last_login_at || null,
@@ -439,7 +439,7 @@ const UsersTab = () => {
                                 <line x1="12" y1="5" x2="12" y2="19"/>
                                 <line x1="5" y1="12" x2="19" y2="12"/>
                             </svg>
-                            {t('app.usersTab.addUser', 'Add User')}
+                            {t('app.usersTab.addUser', 'Add user')}
                         </Button>
                         <GridFilterButton
                             count={chrome.filterCount}

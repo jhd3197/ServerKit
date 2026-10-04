@@ -221,7 +221,7 @@ const ApiKeysSection = () => {
         },
         {
             key: 'lastUsed',
-            headerKey: 'app.apiSettingsTab.lastUsed', header: 'Last Used',
+            headerKey: 'app.apiSettingsTab.lastUsed', header: 'Last used',
             sortable: true,
             type: 'date',
             value: (key) => key.last_used_at || null,
@@ -306,7 +306,7 @@ const ApiKeysSection = () => {
                 actions={(
                     <>
                         <Button variant="default" size="sm" onClick={() => setShowModal(true)}>
-                            <Plus size={14} /> {t('app.apiSettingsTab.createKey', 'Create Key')}
+                            <Plus size={14} /> {t('app.apiSettingsTab.createKey', 'Create key')}
                         </Button>
                         <GridFilterButton
                             count={chrome.filterCount}
@@ -324,7 +324,7 @@ const ApiKeysSection = () => {
                 <EmptyState
                     icon={Key}
                     title={t('app.apiSettingsTab.noApiKeysYet', 'No API keys yet.')}
-                    description={t('app.apiSettingsTab.createOneToGetStarted', 'Create one to get started.')}
+                    description={t('app.apiSettingsTab.createOneToGetStarted', 'Create a key to access the API.')}
                 />
             ) : (
                 <div className="api-settings__table-wrap">
@@ -405,7 +405,7 @@ const RateLimitsSection = () => {
                 <div className="settings-card__header-left">
                     <Activity size={20} />
                     <div>
-                        <h3>{t('app.apiSettingsTab.rateLimits', 'Rate Limits')}</h3>
+                        <h3>{t('app.apiSettingsTab.rateLimits', 'Rate limits')}</h3>
                         <p>{t('app.apiSettingsTab.configureRequestRateLimitsByTier', 'Configure request rate limits by tier')}</p>
                     </div>
                 </div>
@@ -560,12 +560,12 @@ const WebhookSection = () => {
                 <div className="settings-card__header-left">
                     <Zap size={20} />
                     <div>
-                        <h3>{t('app.apiSettingsTab.webhookSubscriptions', 'Webhook Subscriptions')}</h3>
+                        <h3>{t('app.apiSettingsTab.webhookSubscriptions', 'Webhook subscriptions')}</h3>
                         <p>{t('app.apiSettingsTab.receiveHttpNotificationsWhenEventsOccur', 'Receive HTTP notifications when events occur')}</p>
                     </div>
                 </div>
                 <Button variant="default" size="sm" onClick={() => setShowModal(true)}>
-                    <Plus size={14} /> {t('app.apiSettingsTab.addWebhook', 'Add Webhook')}
+                    <Plus size={14} /> {t('app.apiSettingsTab.addWebhook', 'Add webhook')}
                 </Button>
             </div>
 
@@ -624,7 +624,7 @@ const WebhookSection = () => {
                                     </div>
                                     {deliveries[sub.id] && (
                                         <div className="api-settings__deliveries">
-                                            <h4>{t('app.apiSettingsTab.recentDeliveries', 'Recent Deliveries')}</h4>
+                                            <h4>{t('app.apiSettingsTab.recentDeliveries', 'Recent deliveries')}</h4>
                                             {deliveries[sub.id].length === 0 ? (
                                                 <p className="api-settings__muted">{t('app.apiSettingsTab.noDeliveriesYet', 'No deliveries yet')}</p>
                                             ) : (
@@ -691,7 +691,7 @@ const ENDPOINT_COLUMNS = [
     },
     {
         key: 'avgTime',
-        headerKey: 'app.apiSettingsTab.avgTime', header: 'Avg Time',
+        headerKey: 'app.apiSettingsTab.avgTime', header: 'Avg time',
         sortable: true,
         sortValue: (ep) => ep.avg_response_time_ms ?? null,
         render: (ep) => `${ep.avg_response_time_ms}ms`,
@@ -737,7 +737,7 @@ const AnalyticsSection = () => {
                 <div className="settings-card__header-left">
                     <BarChart3 size={20} />
                     <div>
-                        <h3>{t('app.apiSettingsTab.apiUsageAnalytics', 'API Usage Analytics')}</h3>
+                        <h3>{t('app.apiSettingsTab.apiUsageAnalytics', 'API usage analytics')}</h3>
                         <p>{t('app.apiSettingsTab.monitorApiTrafficResponseTimesAnd', 'Monitor API traffic, response times, and errors')}</p>
                     </div>
                 </div>
@@ -763,15 +763,15 @@ const AnalyticsSection = () => {
                         <div className="stat-strip">
                             <div className="stat-strip__item">
                                 <span className="stat-strip__value">{overview.total_requests.toLocaleString()}</span>
-                                <span className="stat-strip__label">{t('app.apiSettingsTab.totalRequests', 'Total Requests')}</span>
+                                <span className="stat-strip__label">{t('app.apiSettingsTab.totalRequests', 'Total requests')}</span>
                             </div>
                             <div className="stat-strip__item">
                                 <span className="stat-strip__value">{overview.avg_response_time_ms}ms</span>
-                                <span className="stat-strip__label">{t('app.apiSettingsTab.avgResponseTime', 'Avg Response Time')}</span>
+                                <span className="stat-strip__label">{t('app.apiSettingsTab.avgResponseTime', 'Avg response time')}</span>
                             </div>
                             <div className="stat-strip__item">
                                 <span className="stat-strip__value">{overview.error_rate}%</span>
-                                <span className="stat-strip__label">{t('app.apiSettingsTab.errorRate', 'Error Rate')}</span>
+                                <span className="stat-strip__label">{t('app.apiSettingsTab.errorRate', 'Error rate')}</span>
                             </div>
                             <div className="stat-strip__item">
                                 <span className="stat-strip__value">{overview.success_count.toLocaleString()}</span>
@@ -782,7 +782,7 @@ const AnalyticsSection = () => {
 
                     {timeseries.length > 0 && (
                         <div className="api-settings__chart">
-                            <h4>{t('app.apiSettingsTab.requestVolume', 'Request Volume')}</h4>
+                            <h4>{t('app.apiSettingsTab.requestVolume', 'Request volume')}</h4>
                             <div className="api-settings__bar-chart">
                                 {timeseries.map((d, i) => (
                                     <div key={i} className="api-settings__bar-col" title={t('app.apiSettingsTab.requests2', '{{period}}: {{count}} requests', { period: d.period, count: d.count })}>
@@ -804,7 +804,7 @@ const AnalyticsSection = () => {
 
                     {endpoints.length > 0 && (
                         <div className="api-settings__top-endpoints">
-                            <h4>{t('app.apiSettingsTab.topEndpoints', 'Top Endpoints')}</h4>
+                            <h4>{t('app.apiSettingsTab.topEndpoints', 'Top endpoints')}</h4>
                             <DataTable
                                 columns={ENDPOINT_COLUMNS}
                                 data={endpoints.slice(0, 10)}

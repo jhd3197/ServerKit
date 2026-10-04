@@ -26,7 +26,7 @@ function DatabaseSelect({ id, databases, value, onChange }) {
         <Select value={value === '' ? NONE : value} onValueChange={(next) => onChange(next === NONE ? '' : next)}>
             <SelectTrigger id={id}><SelectValue /></SelectTrigger>
             <SelectContent>
-                <SelectItem value={NONE}>{t('app.modals.none', '— None —')}</SelectItem>
+                <SelectItem value={NONE}>{t('app.modals.none', 'None')}</SelectItem>
                 {databases.map((db) => <SelectItem key={db.name} value={db.name}>{db.name}</SelectItem>)}
             </SelectContent>
         </Select>
@@ -38,7 +38,7 @@ function CredentialsResult({ title, rows, onDone }) {
     return (
         <Modal open onClose={onDone} title={title}>
             <div className="credentials-box dbx-credentials">
-                <p>{t('app.modals.saveTheseCredentialsThePasswordWon', 'Save these credentials — the password won\'t be shown again.')}</p>
+                <p>{t('app.modals.saveTheseCredentialsThePasswordWon', "Save these credentials. The password won't be shown again.")}</p>
                 {rows.map(([label, value, secret]) => (
                     <CopyField key={label} label={label} value={value} secret={Boolean(secret)} />
                 ))}
@@ -240,7 +240,7 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                     >
                         <SelectTrigger id="dbx-attach-app"><SelectValue /></SelectTrigger>
                         <SelectContent>
-                            <SelectItem value={NONE}>{t('app.modals.none', '— None —')}</SelectItem>
+                            <SelectItem value={NONE}>{t('app.modals.none', 'None')}</SelectItem>
                             {apps.map((app) => <SelectItem key={app.id} value={String(app.id)}>{app.name}</SelectItem>)}
                         </SelectContent>
                     </Select>

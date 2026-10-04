@@ -80,7 +80,7 @@ export default function JobProgressModal({
                 <div className="flex items-center gap-3 w-full">
                     <div className="flex-1">
                         {!done && <span className="text-muted-foreground text-sm">{t('app.jobProgressModal.streamingProgress', 'Streaming progress…')}</span>}
-                        {success && <span className="text-success text-sm">{t('app.jobProgressModal.completedSuccessfully', 'Completed successfully')}</span>}
+                        {success && <span className="text-success text-sm">{t('app.jobProgressModal.completedSuccessfully', 'Completed')}</span>}
                         {failure && (
                             <span className="text-destructive text-sm">
                                 {t('common.state.failed', 'Failed')}{done.exitCode !== null ? ` (exit ${done.exitCode})` : ''}

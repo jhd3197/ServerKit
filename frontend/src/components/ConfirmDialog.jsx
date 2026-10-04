@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { AlertTriangle, Info, AlertCircle } from 'lucide-react';
 import {
   AlertDialog,
@@ -22,14 +22,15 @@ export function ConfirmDialog({
   title,
   message,
   details,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  confirmText,
+  cancelText,
   variant = 'danger',
   requireConfirmation,
   confirmationPlaceholder,
   onConfirm,
   onCancel,
 }) {
+  const { t } = useTranslation();
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => { if (isOpen) setInputValue(''); }, [isOpen]);
@@ -75,13 +76,13 @@ export function ConfirmDialog({
           )}
         </AlertDialogHeader>
         <AlertDialogFooter className="sk-confirm__footer">
-          <AlertDialogCancel onClick={onCancel}>{cancelText}</AlertDialogCancel>
+          <AlertDialogCancel onClick={onCancel}>{cancelText ?? t('common.actions.cancel', 'Cancel')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
             disabled={isConfirmDisabled}
             variant={variant === 'danger' ? 'destructive' : 'primary'}
           >
-            {confirmText}
+            {confirmText ?? t('common.actions.confirm', 'Confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

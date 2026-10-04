@@ -146,7 +146,7 @@ const ComposeTab = ({ onStatsChange }) => {
                 }
                 toast.success(t('app.composeTab.projectStarted', 'Project started'));
             } else if (action === 'down') {
-                const downConfirmed = await confirmCompose({ titleKey: 'app.composeTab.stopComposeProject', title: 'Stop Compose Project', messageKey: 'app.composeTab.stopThisComposeProjectContainersWill', message: 'Stop this compose project? Containers will be removed.' });
+                const downConfirmed = await confirmCompose({ titleKey: 'app.composeTab.stopComposeProject', title: 'Stop Compose project', messageKey: 'app.composeTab.stopThisComposeProjectContainersWill', message: 'Stop this compose project? Containers will be removed.' });
                 if (!downConfirmed) {
                     setActionLoading(prev => ({ ...prev, [name]: false }));
                     return;
@@ -251,7 +251,7 @@ const ComposeTab = ({ onStatsChange }) => {
         },
         {
             key: 'config',
-            headerKey: 'app.composeTab.configFile', header: 'Config File',
+            headerKey: 'app.composeTab.configFile', header: 'Config file',
             sortable: true,
             type: 'text',
             value: projectConfig,
@@ -502,7 +502,7 @@ const ComposeLogsModal = ({ project, onClose }) => {
                     >
                         <SelectTrigger id="compose-log-service" className="docker-compose-log-select"><SelectValue /></SelectTrigger>
                         <SelectContent>
-                            <SelectItem value={ALL_SERVICES}>{t('app.composeTab.allServices', 'All Services')}</SelectItem>
+                            <SelectItem value={ALL_SERVICES}>{t('app.composeTab.allServices', 'All services')}</SelectItem>
                             {services.map(service => (
                                 <SelectItem key={service} value={service}>{service}</SelectItem>
                             ))}

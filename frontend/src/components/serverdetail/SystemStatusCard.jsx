@@ -49,9 +49,9 @@ export default function SystemStatusCard({ server, onRefresh }) {
         <div className="info-card system-status-card">
             <div className="system-status-card__header">
                 <div className="system-status-card__title">
-                    <h3>{t('app.systemStatusCard.systemStatus', 'System Status')}</h3>
+                    <h3>{t('app.systemStatusCard.systemStatus', 'System status')}</h3>
                     {stale && (
-                        <Badge variant="outline" title={t('app.systemStatusCard.agentOfflineShowingLastCachedSnapshot', 'Agent offline — showing last cached snapshot')}>
+                        <Badge variant="outline" title={t('app.systemStatusCard.agentOfflineShowingLastCachedSnapshot', 'Agent offline. Showing the last cached snapshot')}>
                             {t('app.systemStatusCard.stale', 'Stale')}
                         </Badge>
                     )}

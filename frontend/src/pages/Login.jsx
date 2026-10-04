@@ -240,10 +240,10 @@ const Login = () => {
                         <div className="brand-logo">
                             <ServerKitLogo width={40} height={40} />
                         </div>
-                        <h1>{t('auth.twoFactor.title', 'Two-Factor Authentication')}</h1>
+                        <h1>{t('auth.twoFactor.title', 'Two-factor authentication')}</h1>
                         <p>{useBackupCode
-                            ? t('auth.twoFactor.backupHint', 'Enter a backup code')
-                            : t('auth.twoFactor.codeHint', 'Enter the 6-digit code from your authenticator app')}</p>
+                            ? t('auth.twoFactor.backupHint', 'Enter a backup code.')
+                            : t('auth.twoFactor.codeHint', 'Enter the 6-digit code from your authenticator app.')}</p>
                     </div>
 
                     {error && <div className="error-message">{error}</div>}
@@ -269,7 +269,7 @@ const Login = () => {
                             </div>
                         ) : (
                             <div className="form-group">
-                                <Label htmlFor="backupCode">{t('auth.twoFactor.backupCode', 'Backup Code')}</Label>
+                                <Label htmlFor="backupCode">{t('auth.twoFactor.backupCode', 'Backup code')}</Label>
                                 <Input
                                     type="text"
                                     id="backupCode"
@@ -336,7 +336,7 @@ const Login = () => {
 
                 {demoInfo && (
                     <div className="demo-hint">
-                        <div className="demo-hint__title">{t('auth.demoMode', 'Demo mode — sign in read-only')}</div>
+                        <div className="demo-hint__title">{t('auth.demoMode', 'Demo mode: sign in read-only')}</div>
                         <div className="demo-hint__creds">
                             <code>{demoInfo.username}</code> / <code>{demoInfo.password}</code>
                         </div>
@@ -371,7 +371,7 @@ const Login = () => {
                 {passwordLoginEnabled && (
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <Label htmlFor="email">{t('auth.usernameOrEmail', 'Username or Email')}</Label>
+                            <Label htmlFor="email">{t('auth.usernameOrEmail', 'Username or email')}</Label>
                             <Input
                                 type="text"
                                 id="email"

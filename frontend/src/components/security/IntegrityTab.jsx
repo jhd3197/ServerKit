@@ -423,7 +423,7 @@ const IntegrityTab = () => {
             )}
 
             <p className="sec-hint sec-hint--lead">
-                {t('app.integrityTab.baselineAndDiffMonitoringOverThe', 'Baseline-and-diff monitoring over the paths ServerKit manages. Baseline a scope, then check it (or let the scheduled sweep do it) — any added, removed or modified files are flagged and admins are notified. Accepting changes re-baselines the scope.')}
+                {t('app.integrityTab.baselineAndDiffMonitoringOverThe', 'Baseline-and-diff monitoring over the paths ServerKit manages. Baseline a scope, then check it (or let the scheduled sweep do it). Any added, removed or modified files are flagged and admins are notified. Accepting changes re-baselines the scope.')}
             </p>
 
             {managedScopes.map(renderScopeCard)}

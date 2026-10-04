@@ -32,7 +32,7 @@ export function LogViewer({
         <div className="logs-layout">
             <div className="logs-sidebar">
                 <div className="sidebar-header">
-                    <h3>{t('app.logViewer.logFiles', 'Log Files')}</h3>
+                    <h3>{t('app.logViewer.logFiles', 'Log files')}</h3>
                     {onRefreshFiles && (
                         <Button variant="outline" size="sm" onClick={onRefreshFiles}>
                             <RefreshCw size={14} />

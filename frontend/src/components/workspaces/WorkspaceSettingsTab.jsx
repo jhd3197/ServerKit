@@ -21,7 +21,7 @@ const SETTINGS_GROUPS = [
     {
         labelKey: 'common.labels.permissions', label: 'Permissions',
         items: [
-            { id: 'navigation', labelKey: 'app.workspaceSettingsTab.navigationPermissions', label: 'Navigation Permissions', icon: PanelLeft },
+            { id: 'navigation', labelKey: 'app.workspaceSettingsTab.navigationPermissions', label: 'Navigation permissions', icon: PanelLeft },
         ],
     },
     {
@@ -45,7 +45,7 @@ const GeneralSection = ({ form, setForm }) => {
                     <Input
                         value={form.name}
                         onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                        placeholder={t('app.workspaceSettingsTab.myTeam', 'My Team')}
+                        placeholder={t('app.workspaceSettingsTab.myTeam', 'My team')}
                     />
                 </div>
                 <div className="form-group">
@@ -58,7 +58,7 @@ const GeneralSection = ({ form, setForm }) => {
                 </div>
                 <div className="form-row">
                     <div className="form-group">
-                        <label>{t('app.workspaceSettingsTab.maxServers0Unlimited', 'Max Servers (0 = unlimited)')}</label>
+                        <label>{t('app.workspaceSettingsTab.maxServers0Unlimited', 'Max servers (0 = unlimited)')}</label>
                         <Input
                             type="number"
                             value={form.max_servers}
@@ -66,7 +66,7 @@ const GeneralSection = ({ form, setForm }) => {
                         />
                     </div>
                     <div className="form-group">
-                        <label>{t('app.workspaceSettingsTab.maxUsers0Unlimited', 'Max Users (0 = unlimited)')}</label>
+                        <label>{t('app.workspaceSettingsTab.maxUsers0Unlimited', 'Max users (0 = unlimited)')}</label>
                         <Input
                             type="number"
                             value={form.max_users}
@@ -75,7 +75,7 @@ const GeneralSection = ({ form, setForm }) => {
                     </div>
                 </div>
                 <div className="form-group">
-                    <label>{t('app.workspaceSettingsTab.brandColor', 'Brand Color')}</label>
+                    <label>{t('app.workspaceSettingsTab.brandColor', 'Brand color')}</label>
                     <input
                         type="color"
                         className="workspace-color-input"
@@ -129,7 +129,7 @@ const NavigationPermissionsSection = ({ form, setForm }) => {
     const roles = ['owner', 'admin', 'member', 'viewer'];
     return (
         <div className="ws-settings__section">
-            <h3 className="ws-settings__section-title">{t('app.workspaceSettingsTab.navigationPermissions', 'Navigation Permissions')}</h3>
+            <h3 className="ws-settings__section-title">{t('app.workspaceSettingsTab.navigationPermissions', 'Navigation permissions')}</h3>
             <SharedCard variant="legacy" className="card settings-section">
                 <p className="form-hint">{t('app.workspaceSettingsTab.limitWhichSidebarItemsEachWorkspace', 'Limit which sidebar items each workspace role can see. Empty = no restrictions.')}</p>
                 {roles.map((role) => (

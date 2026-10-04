@@ -32,7 +32,7 @@ export const CreateNetworkButton = () => {
                 disabled={isRemote}
                 title={isRemote ? t('app.networksTab.creatingNetworksIsOnlyAvailableOn', 'Creating networks is only available on the local Docker target right now') : t('app.networksTab.createNetwork', 'Create network')}
             >
-                <span>+</span> {t('app.networksTab.createNetwork2', 'Create Network')}
+                <span>+</span> {t('app.networksTab.createNetwork2', 'Create network')}
             </Button>
             {showModal && <CreateNetworkModal onClose={() => setShowModal(false)} onCreated={() => window.location.reload()} />}
         </>
@@ -136,7 +136,7 @@ const NetworksTab = ({ onStatsChange }) => {
     }
 
     async function handleRemove(network) {
-        const confirmed = await confirmNetwork({ titleKey: 'app.networksTab.removeNetwork', title: 'Remove Network', messageKey: 'app.networksTab.removeThisNetwork', message: 'Remove this network?' });
+        const confirmed = await confirmNetwork({ titleKey: 'app.networksTab.removeNetwork', title: 'Remove network', messageKey: 'app.networksTab.removeThisNetwork', message: 'Remove this network?' });
         if (!confirmed) return;
 
         try {
@@ -145,7 +145,7 @@ const NetworksTab = ({ onStatsChange }) => {
             } else {
                 await api.removeNetwork(networkId(network));
             }
-            toast.success(t('app.networksTab.networkRemovedSuccessfully', 'Network removed successfully'));
+            toast.success(t('app.networksTab.networkRemovedSuccessfully', 'Network removed'));
             loadNetworks();
             onStatsChange?.();
         } catch (err) {
@@ -237,7 +237,7 @@ const NetworksTab = ({ onStatsChange }) => {
             render: (network) => (
                 <div className="dx-row-actions">
                     {networkKind(network) === 'Built-in' ? (
-                        <span className="dx-row-protected" title={t('app.networksTab.shipsWithTheDockerDaemonIt', 'Ships with the Docker daemon — it cannot be removed')}>
+                        <span className="dx-row-protected" title={t('app.networksTab.shipsWithTheDockerDaemonIt', 'Ships with the Docker daemon, so it cannot be removed')}>
                             <Lock size={11} /> {t('common.labels.system', 'System')}
                         </span>
                     ) : (
@@ -374,12 +374,12 @@ const CreateNetworkModal = ({ onClose, onCreated }) => {
     }
 
     return (
-        <Modal open onClose={onClose} title={t('app.networksTab.createNetwork2', 'Create Network')} size="md">
+        <Modal open onClose={onClose} title={t('app.networksTab.createNetwork2', 'Create network')} size="md">
             {error && <div className="error-message">{error}</div>}
 
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label>{t('app.networksTab.networkName', 'Network Name *')}</label>
+                    <label>{t('app.networksTab.networkName', 'Network name *')}</label>
                     <Input
                         type="text"
                         value={name}

@@ -55,8 +55,8 @@ const CloudProvision = () => {
     useTopbarActions(() =>
         user?.is_admin ? (
             <>
-                <Button size="sm" variant="outline" onClick={() => setShowCreateProvider(true)}>{t('app.cloudProvision.addProvider', 'Add Provider')}</Button>
-                <Button size="sm" onClick={() => setShowCreateServer(true)}>{t('app.cloudProvision.newServer', 'New Server')}</Button>
+                <Button size="sm" variant="outline" onClick={() => setShowCreateProvider(true)}>{t('app.cloudProvision.addProvider', 'Add provider')}</Button>
+                <Button size="sm" onClick={() => setShowCreateServer(true)}>{t('app.cloudProvision.newServer', 'New server')}</Button>
             </>
         ) : null,
         [user?.is_admin]
@@ -135,7 +135,7 @@ const CloudProvision = () => {
                                     ${srv.monthly_cost}/mo
                                 </div>
                                 <div className="cloud-server-card__actions">
-                                    {srv.agent_installed && <Badge variant="success">{t('app.cloudProvision.agentInstalled', 'Agent Installed')}</Badge>}
+                                    {srv.agent_installed && <Badge variant="success">{t('app.cloudProvision.agentInstalled', 'Agent installed')}</Badge>}
                                     {user?.is_admin && srv.status === 'active' && (
                                         <Button size="sm" variant="destructive" onClick={() => setDeleteConfirm(srv)}>{t('app.cloudProvision.destroy', 'Destroy')}</Button>
                                     )}
@@ -148,7 +148,7 @@ const CloudProvision = () => {
                                 icon={Server}
                                 title={t('app.cloudProvision.noCloudServersYet', 'No cloud servers yet')}
                                 description={user?.is_admin ? t('app.cloudProvision.addAProviderThenCreateA', 'Add a provider, then create a server.') : t('app.cloudProvision.noServersHaveBeenProvisioned', 'No servers have been provisioned.')}
-                                action={user?.is_admin && <Button onClick={() => setShowCreateServer(true)}>{t('app.cloudProvision.newServer', 'New Server')}</Button>}
+                                action={user?.is_admin && <Button onClick={() => setShowCreateServer(true)}>{t('app.cloudProvision.newServer', 'New server')}</Button>}
                             />
                         )}
                     </div>
@@ -169,7 +169,7 @@ const CloudProvision = () => {
                                 icon={Cloud}
                                 title={t('app.cloudProvision.noProvidersConfigured', 'No providers configured')}
                                 description={user?.is_admin ? t('app.cloudProvision.addACloudProviderToProvision', 'Add a cloud provider to provision servers.') : t('app.cloudProvision.noProvidersHaveBeenAdded', 'No providers have been added.')}
-                                action={user?.is_admin && <Button variant="outline" onClick={() => setShowCreateProvider(true)}>{t('app.cloudProvision.addProvider', 'Add Provider')}</Button>}
+                                action={user?.is_admin && <Button variant="outline" onClick={() => setShowCreateProvider(true)}>{t('app.cloudProvision.addProvider', 'Add provider')}</Button>}
                             />
                         )}
                     </div>
@@ -178,7 +178,7 @@ const CloudProvision = () => {
                 <TabsContent value="costs">
                     {costs && (
                         <SharedCard variant="legacy" className="costs-panel card">
-                            <h3>{t('app.cloudProvision.monthlyCostSummary', 'Monthly Cost Summary')}</h3>
+                            <h3>{t('app.cloudProvision.monthlyCostSummary', 'Monthly cost summary')}</h3>
                             <div className="cost-total">${costs.total_monthly}/mo across {costs.server_count} servers</div>
                             <div className="cost-breakdown">
                                 {Object.entries(costs.by_provider || {}).map(([name, data]) => (
@@ -197,7 +197,7 @@ const CloudProvision = () => {
             <Modal
                 open={showCreateProvider}
                 onClose={() => setShowCreateProvider(false)}
-                title={t('app.cloudProvision.addCloudProvider', 'Add Cloud Provider')}
+                title={t('app.cloudProvision.addCloudProvider', 'Add cloud provider')}
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateProvider(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
@@ -215,13 +215,13 @@ const CloudProvision = () => {
                     </Select>
                 </div>
                 <div className="form-group"><label>{t('common.labels.name', 'Name')}</label><Input value={providerForm.name} onChange={e => setProviderForm({...providerForm, name: e.target.value})} /></div>
-                <div className="form-group"><label>{t('app.cloudProvision.apiKey', 'API Key')}</label><Input type="password" value={providerForm.api_key} onChange={e => setProviderForm({...providerForm, api_key: e.target.value})} /></div>
+                <div className="form-group"><label>{t('app.cloudProvision.apiKey', 'API key')}</label><Input type="password" value={providerForm.api_key} onChange={e => setProviderForm({...providerForm, api_key: e.target.value})} /></div>
             </Modal>
 
             <Modal
                 open={showCreateServer}
                 onClose={() => setShowCreateServer(false)}
-                title={t('app.cloudProvision.newCloudServer', 'New Cloud Server')}
+                title={t('app.cloudProvision.newCloudServer', 'New cloud server')}
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateServer(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
@@ -241,7 +241,7 @@ const CloudProvision = () => {
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="form-group"><label>{t('app.cloudProvision.serverName', 'Server Name')}</label><Input value={serverForm.name} onChange={e => setServerForm({...serverForm, name: e.target.value})} /></div>
+                <div className="form-group"><label>{t('app.cloudProvision.serverName', 'Server name')}</label><Input value={serverForm.name} onChange={e => setServerForm({...serverForm, name: e.target.value})} /></div>
                 {providerOptions && (
                     <>
                         <div className="form-group">
@@ -277,7 +277,7 @@ const CloudProvision = () => {
             </Modal>
 
             {deleteConfirm && (
-                <ConfirmDialog title={t('app.cloudProvision.destroyServer', 'Destroy Server')} message={t('app.cloudProvision.destroyThisActionIsIrreversible', 'Destroy "{{name}}"? This action is irreversible.', { name: deleteConfirm.name })} onConfirm={() => handleDestroy(deleteConfirm.id)} onCancel={() => setDeleteConfirm(null)} variant="danger" />
+                <ConfirmDialog title={t('app.cloudProvision.destroyServer', 'Destroy server')} message={t('app.cloudProvision.destroyThisActionIsIrreversible', 'Destroy "{{name}}"? This action is irreversible.', { name: deleteConfirm.name })} onConfirm={() => handleDestroy(deleteConfirm.id)} onCancel={() => setDeleteConfirm(null)} variant="danger" />
             )}
         </div>
     );

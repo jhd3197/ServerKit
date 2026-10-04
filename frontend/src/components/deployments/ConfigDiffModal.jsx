@@ -227,7 +227,7 @@ const ConfigDiffModal = ({
                 : await api.restoreSnapshot(appId, snapId);
             if (res.success) {
                 toast.success(isRestorePoint
-                    ? t('app.configDiffModal.restorePointRestored', 'Restore point applied successfully.')
+                    ? t('app.configDiffModal.restorePointRestored', 'Restore point applied')
                     : t('app.configDiffModal.configurationRestoredRedeployTriggered', 'Configuration restored. Redeploy triggered.'));
                 onRestored?.(res);
             } else {

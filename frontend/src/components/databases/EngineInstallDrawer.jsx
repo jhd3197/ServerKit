@@ -274,7 +274,7 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                             </InfoItem>
                         </InfoList>
                         <p className="dbx-field-hint">
-                            {t('app.engineInstallDrawer.copyThePasswordNowItIs', 'Copy the password now — it is stored in ServerKit\'s secret store and is not shown again.')}
+                            {t('app.engineInstallDrawer.copyThePasswordNowItIs', "Copy the password now. It is stored in ServerKit's secret store and is not shown again.")}
                         </p>
                         {result.warning && (
                             <p className="dbx-warn-line">
@@ -384,7 +384,7 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                                 </InfoList>
                                 {parts.passwordVar && (
                                     <p className="dbx-field-hint">
-                                        {t('app.engineInstallDrawer.shownOnceStoredInServerkitS', 'Shown once. Stored in ServerKit\'s secret store — never in a log or a second API response.')}
+                                        {t('app.engineInstallDrawer.shownOnceStoredInServerkitS', "Shown once. Stored in ServerKit's secret store, never in a log or a second API response.")}
                                     </p>
                                 )}
                             </div>
@@ -447,7 +447,7 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                             {expose && (
                                 <p className="dbx-warn-line">
                                     <ShieldAlert size={14} aria-hidden="true" />
-                                    {t('app.engineInstallDrawer.publicDatabasePortsAreACommon', 'Public database ports are a common breach vector — prefer the private network or an SSH tunnel, and make sure the firewall only admits the hosts that need it.')}
+                                    {t('app.engineInstallDrawer.publicDatabasePortsAreACommon', 'Public database ports are a common breach vector. Prefer the private network or an SSH tunnel, and make sure the firewall only admits the hosts that need it.')}
                                 </p>
                             )}
                         </div>

@@ -92,7 +92,7 @@ const DeployTab = ({ appId, embedded = false }) => {
     }
 
     async function handleRemoveDeployment() {
-        const confirmed = await confirmDeploy({ titleKey: 'app.deployTab.removeDeployment', title: 'Remove Deployment', messageKey: 'app.deployTab.removeDeploymentConfigurationThisWillNot', message: 'Remove deployment configuration? This will not delete the repository files.', variant: 'warning' });
+        const confirmed = await confirmDeploy({ titleKey: 'app.deployTab.removeDeployment', title: 'Remove deployment', messageKey: 'app.deployTab.removeDeploymentConfigurationThisWillNot', message: 'Remove deployment configuration? This will not delete the repository files.', variant: 'warning' });
         if (!confirmed) return;
         try {
             await api.removeDeployment(appId);
@@ -109,7 +109,7 @@ const DeployTab = ({ appId, embedded = false }) => {
         try {
             const result = await api.triggerAppDeploy(appId, force);
             if (result.success) {
-                toast.success(t('app.deployTab.deploymentCompletedSuccessfully', 'Deployment completed successfully!'));
+                toast.success(t('app.deployTab.deploymentCompletedSuccessfully', 'Deployment completed'));
             } else {
                 setError(result.error || 'Deployment failed');
             }
@@ -127,7 +127,7 @@ const DeployTab = ({ appId, embedded = false }) => {
         try {
             const result = await api.pullChanges(appId);
             if (result.success) {
-                toast.success(t('app.deployTab.changesPulledSuccessfully', 'Changes pulled successfully!'));
+                toast.success(t('app.deployTab.changesPulledSuccessfully', 'Changes pulled'));
             } else {
                 setError(result.error || 'Pull failed');
             }
@@ -159,9 +159,9 @@ const DeployTab = ({ appId, embedded = false }) => {
                 <div className="deploy-setup">
                     <EmptyState
                         icon={GitMerge}
-                        title={t('app.deployTab.gitDeploymentNotConfigured', 'Git Deployment Not Configured')}
+                        title={t('app.deployTab.gitDeploymentNotConfigured', 'Git deployment not configured')}
                         description={t('app.deployTab.connectAGitRepositoryToEnable', 'Connect a Git repository to enable automatic deployments via webhooks or manual triggers.')}
-                        action={<Button onClick={() => setShowConfigModal(true)}>{t('app.deployTab.configureDeployment', 'Configure Deployment')}</Button>}
+                        action={<Button onClick={() => setShowConfigModal(true)}>{t('app.deployTab.configureDeployment', 'Configure deployment')}</Button>}
                     />
                 </div>
                 )
@@ -178,7 +178,7 @@ const DeployTab = ({ appId, embedded = false }) => {
                                 {embedded ? (
                                     <div>
                                         <span className="repo-url">{t('app.deployTab.manualDeploy', 'Manual deploy')}</span>
-                                        <span className="repo-branch">{t('app.deployTab.pullLatestRedeploy', 'Pull latest & redeploy')} {config.branch}</span>
+                                        <span className="repo-branch">{t('app.deployTab.pullLatestRedeploy', 'Pull latest and redeploy')} {config.branch}</span>
                                     </div>
                                 ) : (
                                     <div>
@@ -194,7 +194,7 @@ const DeployTab = ({ appId, embedded = false }) => {
                                     onClick={handlePull}
                                     disabled={deploying}
                                 >
-                                    {t('app.deployTab.pullOnly', 'Pull Only')}
+                                    {t('app.deployTab.pullOnly', 'Pull only')}
                                 </Button>
                                 <Button
                                     onClick={() => handleDeploy(false)}
@@ -218,7 +218,7 @@ const DeployTab = ({ appId, embedded = false }) => {
                                 <InfoList>
                                     <InfoItem label={t('app.deployTab.repository', 'Repository')} value={config.repo_url} mono />
                                     <InfoItem label={t('common.labels.branch', 'Branch')} value={config.branch} />
-                                    <InfoItem label={t('app.deployTab.autoDeploy', 'Auto Deploy')} value={config.auto_deploy ? 'Enabled' : 'Disabled'} />
+                                    <InfoItem label={t('app.deployTab.autoDeploy', 'Auto deploy')} value={config.auto_deploy ? 'Enabled' : 'Disabled'} />
                                 </InfoList>
                             )}
                             <SharedCardFooter variant="legacy" className="card-actions">
@@ -235,7 +235,7 @@ const DeployTab = ({ appId, embedded = false }) => {
 
                         {history.length > 0 && (
                             <SharedCard variant="legacy" className="card">
-                                <h3>{t('app.deployTab.deploymentHistory', 'Deployment History')}</h3>
+                                <h3>{t('app.deployTab.deploymentHistory', 'Deployment history')}</h3>
                                 <div className="deployments-list">
                                     {history.slice(0, 5).map((dep, idx) => (
                                         <div key={idx} className="deployment-item">
@@ -253,14 +253,14 @@ const DeployTab = ({ appId, embedded = false }) => {
             {/* Config snapshot timeline + diff — additive, independent of git
                 config so it shows the deploy history & config changes for any app. */}
             <SharedCard variant="legacy" className="card deploy-timeline-card">
-                <h3>{t('app.deployTab.configCheckpoints', 'Config Checkpoints')}</h3>
+                <h3>{t('app.deployTab.configCheckpoints', 'Config checkpoints')}</h3>
                 <p className="deploy-timeline-card__hint">
                     {t('app.deployTab.anImmutableConfigCheckpointEnvKeys', 'An immutable config checkpoint (env keys, domains, image, build method, volumes) is captured before each deployment. Secret values are masked. Open a checkpoint to diff it against the previous one or restore it.')}
                 </p>
                 <DeploymentTimeline appId={appId} />
             </SharedCard>
 
-            <Modal open={showConfigModal} onClose={() => setShowConfigModal(false)} title={embedded ? t('app.deployTab.editDeployScripts', 'Edit Deploy Scripts') : t('app.deployTab.configureDeployment', 'Configure Deployment')}>
+            <Modal open={showConfigModal} onClose={() => setShowConfigModal(false)} title={embedded ? t('app.deployTab.editDeployScripts', 'Edit deploy scripts') : t('app.deployTab.configureDeployment', 'Configure deployment')}>
                         <form onSubmit={handleConfigureDeployment}>
                             {/* In embedded mode repo/branch/auto-deploy are owned by the
                                 RepoConnectForm above; only the deploy scripts are edited
@@ -300,7 +300,7 @@ const DeployTab = ({ appId, embedded = false }) => {
                             </>
                             )}
                             <div className="form-group">
-                                <label>{t('app.deployTab.preDeployScript', 'Pre-deploy Script')}</label>
+                                <label>{t('app.deployTab.preDeployScript', 'Pre-deploy script')}</label>
                                 <Textarea
                                     value={configForm.preDeployScript}
                                     onChange={e => setConfigForm({...configForm, preDeployScript: e.target.value})}
@@ -309,7 +309,7 @@ const DeployTab = ({ appId, embedded = false }) => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label>{t('app.deployTab.postDeployScript', 'Post-deploy Script')}</label>
+                                <label>{t('app.deployTab.postDeployScript', 'Post-deploy script')}</label>
                                 <Textarea
                                     value={configForm.postDeployScript}
                                     onChange={e => setConfigForm({...configForm, postDeployScript: e.target.value})}
@@ -322,7 +322,7 @@ const DeployTab = ({ appId, embedded = false }) => {
                                     {t('common.actions.cancel', 'Cancel')}
                                 </Button>
                                 <Button type="submit">
-                                    {t('app.deployTab.saveConfiguration', 'Save Configuration')}
+                                    {t('app.deployTab.saveConfiguration', 'Save configuration')}
                                 </Button>
                             </div>
                         </form>

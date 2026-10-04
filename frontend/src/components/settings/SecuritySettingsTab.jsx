@@ -77,7 +77,7 @@ const LinkedAccounts = ({ register }) => {
 
     return (
         <div {...register('security-linked-accounts', 'settings-card')}>
-            <h3>{t('app.securitySettingsTab.linkedAccounts', 'Linked Accounts')}</h3>
+            <h3>{t('app.securitySettingsTab.linkedAccounts', 'Linked accounts')}</h3>
             <p className="text-secondary">{t('app.securitySettingsTab.connectExternalIdentityProvidersToYour', 'Connect external identity providers to your account')}</p>
 
             {error && <div className="alert alert-danger">{error}</div>}
@@ -299,7 +299,7 @@ Keep these codes in a safe place.`;
     return (
         <div className="settings-section">
             <div className="section-header">
-                <h2>{t('app.securitySettingsTab.securitySettings', 'Security Settings')}</h2>
+                <h2>{t('app.securitySettingsTab.securitySettings', 'Security settings')}</h2>
             </div>
 
             {message && (
@@ -318,8 +318,8 @@ Keep these codes in a safe place.`;
                         </svg>
                     </div>
                     <div>
-                        <h3>{t('app.securitySettingsTab.twoFactorAuthentication2fa', 'Two-Factor Authentication (2FA)')}</h3>
-                        <p>{t('app.securitySettingsTab.addAnExtraLayerOfSecurity', 'Add an extra layer of security to your account')}</p>
+                        <h3>{t('app.securitySettingsTab.twoFactorAuthentication2fa', 'Two-factor authentication (2FA)')}</h3>
+                        <p>{t('app.securitySettingsTab.addAnExtraLayerOfSecurity', 'Add an extra layer of security to your account.')}</p>
                     </div>
                 </div>
 
@@ -354,7 +354,7 @@ Keep these codes in a safe place.`;
                                     setShowBackupCodesModal(true);
                                 }}
                             >
-                                {t('app.securitySettingsTab.regenerateBackupCodes', 'Regenerate Backup Codes')}
+                                {t('app.securitySettingsTab.regenerateBackupCodes', 'Regenerate backup codes')}
                             </Button>
                             <Button
                                 variant="destructive"
@@ -378,17 +378,17 @@ Keep these codes in a safe place.`;
                             onClick={handleInitiate2FA}
                             disabled={twoFALoading}
                         >
-                            {t('app.securitySettingsTab.enableTwoFactorAuthentication', 'Enable Two-Factor Authentication')}
+                            {t('app.securitySettingsTab.enableTwoFactorAuthentication', 'Enable two-factor authentication')}
                         </Button>
                     </div>
                 )}
             </div>
 
             <form onSubmit={handleSubmit} {...register('security-password', 'settings-form')}>
-                <h3>{t('app.securitySettingsTab.changePassword', 'Change Password')}</h3>
+                <h3>{t('app.securitySettingsTab.changePassword', 'Change password')}</h3>
 
                 <div className="form-group">
-                    <Label>{t('app.securitySettingsTab.currentPassword', 'Current Password')}</Label>
+                    <Label>{t('app.securitySettingsTab.currentPassword', 'Current password')}</Label>
                     <Input
                         type="password"
                         value={formData.currentPassword}
@@ -398,7 +398,7 @@ Keep these codes in a safe place.`;
                 </div>
 
                 <div className="form-group">
-                    <Label>{t('app.securitySettingsTab.newPassword', 'New Password')}</Label>
+                    <Label>{t('app.securitySettingsTab.newPassword', 'New password')}</Label>
                     <Input
                         type="password"
                         value={formData.newPassword}
@@ -410,7 +410,7 @@ Keep these codes in a safe place.`;
                 </div>
 
                 <div className="form-group">
-                    <Label>{t('app.securitySettingsTab.confirmNewPassword', 'Confirm New Password')}</Label>
+                    <Label>{t('app.securitySettingsTab.confirmNewPassword', 'Confirm new password')}</Label>
                     <Input
                         type="password"
                         value={formData.confirmPassword}
@@ -438,8 +438,8 @@ Keep these codes in a safe place.`;
                             <line x1="12" y1="17" x2="12" y2="21"/>
                         </svg>
                         <div>
-                            <span className="session-device">{t('app.securitySettingsTab.currentSession', 'Current Session')}</span>
-                            <span className="session-details">{t('app.securitySettingsTab.thisDeviceActiveNow', 'This device - Active now')}</span>
+                            <span className="session-device">{t('app.securitySettingsTab.currentSession', 'Current session')}</span>
+                            <span className="session-details">{t('app.securitySettingsTab.thisDeviceActiveNow', 'This device - active now')}</span>
                         </div>
                     </div>
                     <Badge variant="success">{t('common.labels.current', 'Current')}</Badge>
@@ -454,16 +454,16 @@ Keep these codes in a safe place.`;
 
             {/* 2FA Setup Modal */}
             {showSetupModal && setupData && (
-                <Modal open={true} onClose={() => setShowSetupModal(false)} title={t('app.securitySettingsTab.setUpTwoFactorAuthentication', 'Set Up Two-Factor Authentication')} size="md">
+                <Modal open={true} onClose={() => setShowSetupModal(false)} title={t('app.securitySettingsTab.setUpTwoFactorAuthentication', 'Set up two-factor authentication')} size="md">
                             <div className="setup-steps" data-walkthrough="two-factor-verify">
                                 <div className="setup-step">
                                     <span className="step-number">1</span>
                                     <div className="step-content">
-                                        <h4>{t('app.securitySettingsTab.scanTheQrCode', 'Scan the QR Code')}</h4>
+                                        <h4>{t('app.securitySettingsTab.scanTheQrCode', 'Scan the QR code')}</h4>
                                         <p>{t('app.securitySettingsTab.useYourAuthenticatorAppGoogleAuthenticator', 'Use your authenticator app (Google Authenticator, Authy, 1Password, etc.) to scan this QR code.')}</p>
                                         {setupData.qr_code ? (
                                             <div className="qr-code-container">
-                                                <img src={setupData.qr_code} alt={t('app.securitySettingsTab.2faQrCode', '2FA QR Code')} className="qr-code" />
+                                                <img src={setupData.qr_code} alt={t('app.securitySettingsTab.2faQrCode', '2FA QR code')} className="qr-code" />
                                             </div>
                                         ) : (
                                             <div className="qr-fallback">
@@ -482,7 +482,7 @@ Keep these codes in a safe place.`;
                                 <div className="setup-step">
                                     <span className="step-number">2</span>
                                     <div className="step-content">
-                                        <h4>{t('app.securitySettingsTab.enterVerificationCode', 'Enter Verification Code')}</h4>
+                                        <h4>{t('app.securitySettingsTab.enterVerificationCode', 'Enter verification code')}</h4>
                                         <p>{t('app.securitySettingsTab.enterThe6DigitCodeFrom', 'Enter the 6-digit code from your authenticator app to verify setup.')}</p>
                                         <Input
                                             type="text"
@@ -513,7 +513,7 @@ Keep these codes in a safe place.`;
 
             {/* Disable 2FA Modal */}
             {showDisableModal && (
-                <Modal open={true} onClose={() => setShowDisableModal(false)} title={t('app.securitySettingsTab.disableTwoFactorAuthentication', 'Disable Two-Factor Authentication')}>
+                <Modal open={true} onClose={() => setShowDisableModal(false)} title={t('app.securitySettingsTab.disableTwoFactorAuthentication', 'Disable two-factor authentication')}>
                             <div className="warning-box">
                                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" strokeWidth="2">
                                     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
@@ -550,7 +550,7 @@ Keep these codes in a safe place.`;
 
             {/* Backup Codes Modal */}
             {showBackupCodesModal && (
-                <Modal open={true} onClose={() => setShowBackupCodesModal(false)} title={backupCodes.length > 0 ? t('app.securitySettingsTab.yourBackupCodes', 'Your Backup Codes') : t('app.securitySettingsTab.regenerateBackupCodes', 'Regenerate Backup Codes')} size="md">
+                <Modal open={true} onClose={() => setShowBackupCodesModal(false)} title={backupCodes.length > 0 ? t('app.securitySettingsTab.yourBackupCodes', 'Your backup codes') : t('app.securitySettingsTab.regenerateBackupCodes', 'Regenerate backup codes')} size="md">
                             {backupCodes.length > 0 ? (
                                 <>
                                     <div className="warning-box">
@@ -575,7 +575,7 @@ Keep these codes in a safe place.`;
                                 <>
                                     <p>{t('app.securitySettingsTab.enterACodeFromYourAuthenticator', 'Enter a code from your authenticator app to generate new backup codes. This will invalidate all existing backup codes.')}</p>
                                     <div className="form-group">
-                                        <Label>{t('app.securitySettingsTab.verificationCode', 'Verification Code')}</Label>
+                                        <Label>{t('app.securitySettingsTab.verificationCode', 'Verification code')}</Label>
                                         <Input
                                             type="text"
                                             value={verificationCode}

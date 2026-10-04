@@ -145,7 +145,7 @@ const CronTab = ({ serverId, serverStatus }) => {
 
     async function handleRemove(job) {
         const ok = await confirmCron({
-            titleKey: 'app.cronTab.removeCronJob', title: 'Remove Cron Job',
+            titleKey: 'app.cronTab.removeCronJob', title: 'Remove cron job',
             message: `Remove this entry from the host crontab?\n\n${job.schedule} ${job.command}`,
             variant: 'danger',
         });
@@ -295,7 +295,7 @@ const CronTab = ({ serverId, serverStatus }) => {
         return (
             <div className="offline-notice">
                 <OfflineIcon />
-                <h4>{t('app.cronTab.serverOffline', 'Server Offline')}</h4>
+                <h4>{t('app.cronTab.serverOffline', 'Server offline')}</h4>
                 <p>{t('app.cronTab.cronManagementRequiresTheServerTo', 'Cron management requires the server to be online.')}</p>
             </div>
         );
@@ -322,7 +322,7 @@ const CronTab = ({ serverId, serverStatus }) => {
                 <div className="cron-tab__actions">
                     <Button variant="outline" onClick={loadJobs}>{t('common.actions.refresh', 'Refresh')}</Button>
                     <Button onClick={() => setShowAddModal(true)} disabled={status?.available === false}>
-                        {t('app.cronTab.addJob', 'Add Job')}
+                        {t('app.cronTab.addJob', 'Add job')}
                     </Button>
                 </div>
             </div>
@@ -335,7 +335,7 @@ const CronTab = ({ serverId, serverStatus }) => {
                 <EmptyState
                     icon={Clock3}
                     title={t('app.cronTab.noCronJobs', 'No cron jobs')}
-                    description={t('app.cronTab.noScheduledJobsOnThisServer', 'No scheduled jobs on this server. Use Add Job to schedule one.')}
+                    description={t('app.cronTab.noScheduledJobsOnThisServer', 'No scheduled jobs on this server. Use Add job to schedule one.')}
                 />
             ) : (
                 <>
@@ -389,7 +389,7 @@ const CronTab = ({ serverId, serverStatus }) => {
             <Modal
                 open={showAddModal}
                 onClose={() => { if (!submitting) setShowAddModal(false); }}
-                title={t('app.cronTab.addCronJob', 'Add Cron Job')}
+                title={t('app.cronTab.addCronJob', 'Add cron job')}
             >
                 <p className="sk-modal__subtitle">
                     {t('app.cronTab.scheduleACommandOnTheHost', 'Schedule a command on the host crontab. Runs as the agent user.')}

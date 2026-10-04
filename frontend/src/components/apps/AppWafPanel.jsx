@@ -126,7 +126,7 @@ const AppWafPanel = ({ app, onChanged }) => {
             if (result?.success === false) {
                 toast.error(result.message || result.error || t('app.appWafPanel.failedToInstallModsecurity', 'Failed to install ModSecurity'));
             } else {
-                toast.success(result?.message || t('app.appWafPanel.modsecurityInstalled', 'ModSecurity installed.'));
+                toast.success(result?.message || t('app.appWafPanel.modsecurityInstalled', 'ModSecurity installed'));
             }
             await loadStatus();
         } catch (err) {
@@ -181,7 +181,7 @@ const AppWafPanel = ({ app, onChanged }) => {
                     : payload.disabled_rule_ids;
                 setPolicy(merged);
             }
-            toast.success(t('app.appWafPanel.wafPolicySaved', 'WAF policy saved.'));
+            toast.success(t('app.appWafPanel.wafPolicySaved', 'WAF policy saved'));
             onChanged?.();
         } catch (err) {
             toast.error(err.message || t('app.appWafPanel.failedToSaveWafPolicy', 'Failed to save WAF policy'));
@@ -235,7 +235,7 @@ const AppWafPanel = ({ app, onChanged }) => {
             <div className="app-panel waf-panel__section">
                 <div className="app-panel-header">
                     <ShieldCheck />
-                    <span>{t('app.appWafPanel.firewallPolicy', 'Firewall Policy')}</span>
+                    <span>{t('app.appWafPanel.firewallPolicy', 'Firewall policy')}</span>
                     <span className="app-panel-header-actions">
                         {!loading && (
                             <Pill kind={MODE_PILL[policy.mode] || 'gray'}>

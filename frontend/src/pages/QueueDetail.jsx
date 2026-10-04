@@ -216,7 +216,7 @@ const QueueDetail = () => {
 
     const handleDelete = async (msg) => {
         const confirmed = await confirm({
-            title: t('app.queueDetail.deleteMessage', 'Delete Message'),
+            title: t('app.queueDetail.deleteMessage', 'Delete message'),
             message: t('app.queueDetail.permanentlyDeleteThisMessage', 'Permanently delete this message?'),
             variant: 'danger',
         });
@@ -337,7 +337,7 @@ const QueueDetail = () => {
         <div className="queue-page queue-detail">
             <div className="queue-detail-header">
                 <Button variant="unstyled" type="button" className="queue-back" onClick={() => navigate('/queue')}>
-                    <ArrowLeft size={16} /> {t('app.queueDetail.queueBus', 'Queue Bus')}
+                    <ArrowLeft size={16} /> {t('app.queueDetail.queueBus', 'Queue bus')}
                 </Button>
                 <div className="queue-detail-headline">
                     <div className="queue-workbar-title">
@@ -353,7 +353,7 @@ const QueueDetail = () => {
                         )}
                         {!viewOnly && (
                             <Button variant="outline" onClick={() => setShowSend(true)}>
-                                <Send size={16} /> {t('app.queueDetail.sendMessage', 'Send Message')}
+                                <Send size={16} /> {t('app.queueDetail.sendMessage', 'Send message')}
                             </Button>
                         )}
                         <Button variant="outline" onClick={() => { loadMeta(); loadMessages(statusFilter); }}>
@@ -425,7 +425,7 @@ const QueueDetail = () => {
                             title={t('app.queueDetail.noMessages', 'No messages')}
                             description={viewOnly
                                 ? t('app.queueDetail.thisSystemQueueHasNoMessages', 'This system queue has no messages in this view.')
-                                : t('app.queueDetail.thisQueueIsEmptySendA', 'This queue is empty. Send a message to get started.')}
+                                : t('app.queueDetail.thisQueueIsEmptySendA', 'This queue is empty. Messages you send appear here.')}
                         />
                     ) : (
                         <DataTable
@@ -486,7 +486,7 @@ const QueueDetail = () => {
                 )}
             </div>
 
-            <Modal open={showSend && !viewOnly} onClose={() => setShowSend(false)} title={t('app.queueDetail.sendMessage', 'Send Message')}>
+            <Modal open={showSend && !viewOnly} onClose={() => setShowSend(false)} title={t('app.queueDetail.sendMessage', 'Send message')}>
                         <form onSubmit={handleSend}>
                                 <div className="form-group">
                                     <Label htmlFor="payload">{t('app.queueDetail.payloadJson', 'Payload (JSON)')}</Label>

@@ -23,7 +23,7 @@ const ServerKitLogo = ({ width = 64, height = 64, className = '' }) => {
             height={height}
             className={className}
             role="img"
-            aria-label={t('app.serverKitLogo.serverkitLogo', 'ServerKit Logo')}
+            aria-label={t('app.serverKitLogo.serverkitLogo', 'ServerKit logo')}
             fill="none"
         >
             <defs>

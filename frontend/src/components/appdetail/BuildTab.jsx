@@ -116,7 +116,7 @@ const BuildTab = ({ appId, app }) => {
         try {
             const result = await api.triggerBuild(appId, noCache);
             if (result.success) {
-                toast.success(t('app.buildTab.buildCompletedSuccessfully', 'Build completed successfully'));
+                toast.success(t('app.buildTab.buildCompletedSuccessfully', 'Build completed'));
             } else {
                 setError(result.error || 'Build failed');
             }
@@ -196,10 +196,10 @@ const BuildTab = ({ appId, app }) => {
 
             {detection && (
                 <SharedCard variant="legacy" className="card">
-                    <h3>{t('app.buildTab.autoDetectionResults', 'Auto-Detection Results')}</h3>
+                    <h3>{t('app.buildTab.autoDetectionResults', 'Auto-detection results')}</h3>
                     <div className="detection-results">
                         <div className="detection-item">
-                            <span className="detection-label">{t('app.buildTab.detectedMethod', 'Detected Method:')}</span>
+                            <span className="detection-label">{t('app.buildTab.detectedMethod', 'Detected method:')}</span>
                             <span className="detection-value">{detection.detected_method || 'None'}</span>
                         </div>
                         {detection.dockerfile_exists && (
@@ -220,7 +220,7 @@ const BuildTab = ({ appId, app }) => {
 
             {app?.buildpack_plan && (
                 <SharedCard variant="legacy" className="card">
-                    <h3>{t('app.buildTab.buildPack', 'Build Pack')}</h3>
+                    <h3>{t('app.buildTab.buildPack', 'Build pack')}</h3>
                     <BuildpackPreview
                         plan={app.buildpack_plan}
                         dockerfile={bpDockerfile}
@@ -231,7 +231,7 @@ const BuildTab = ({ appId, app }) => {
 
             <SharedCard variant="legacy" className="card">
                 <SharedCardHeader variant="legacy-row" className="card-header-row">
-                    <h3>{t('app.buildTab.buildConfiguration', 'Build Configuration')}</h3>
+                    <h3>{t('app.buildTab.buildConfiguration', 'Build configuration')}</h3>
                     <Button variant="outline" size="sm" onClick={() => setShowConfigModal(true)}>
                         {t('app.buildTab.configure', 'Configure')}
                     </Button>
@@ -263,7 +263,7 @@ const BuildTab = ({ appId, app }) => {
 
             {deployments.length > 0 && (
                 <SharedCard variant="legacy" className="card">
-                    <h3>{t('app.buildTab.deploymentHistory', 'Deployment History')}</h3>
+                    <h3>{t('app.buildTab.deploymentHistory', 'Deployment history')}</h3>
                     <div className="deployments-list">
                         {deployments.map(dep => (
                             <div key={dep.version} className={`deployment-item ${dep.status === 'live' ? 'current' : ''}`}>
@@ -291,10 +291,10 @@ const BuildTab = ({ appId, app }) => {
                 </SharedCard>
             )}
 
-            <Modal open={showConfigModal} onClose={() => setShowConfigModal(false)} title={t('app.buildTab.buildConfiguration', 'Build Configuration')}>
+            <Modal open={showConfigModal} onClose={() => setShowConfigModal(false)} title={t('app.buildTab.buildConfiguration', 'Build configuration')}>
                         <form onSubmit={handleConfigureBuild}>
                             <div className="form-group">
-                                <label htmlFor="build-config-method">{t('app.buildTab.buildMethod', 'Build Method')}</label>
+                                <label htmlFor="build-config-method">{t('app.buildTab.buildMethod', 'Build method')}</label>
                                 <Select
                                     value={configForm.buildMethod}
                                     onValueChange={value => setConfigForm({...configForm, buildMethod: value})}
@@ -310,7 +310,7 @@ const BuildTab = ({ appId, app }) => {
                             </div>
                             {configForm.buildMethod === 'dockerfile' && (
                                 <div className="form-group">
-                                    <label>{t('app.buildTab.dockerfilePath', 'Dockerfile Path')}</label>
+                                    <label>{t('app.buildTab.dockerfilePath', 'Dockerfile path')}</label>
                                     <Input
                                         type="text"
                                         value={configForm.dockerfilePath}
@@ -321,7 +321,7 @@ const BuildTab = ({ appId, app }) => {
                             {configForm.buildMethod === 'custom' && (
                                 <>
                                     <div className="form-group">
-                                        <label>{t('app.buildTab.buildCommand', 'Build Command')}</label>
+                                        <label>{t('app.buildTab.buildCommand', 'Build command')}</label>
                                         <Input
                                             type="text"
                                             value={configForm.customBuildCmd}
@@ -330,7 +330,7 @@ const BuildTab = ({ appId, app }) => {
                                         />
                                     </div>
                                     <div className="form-group">
-                                        <label>{t('app.buildTab.startCommand', 'Start Command')}</label>
+                                        <label>{t('app.buildTab.startCommand', 'Start command')}</label>
                                         <Input
                                             type="text"
                                             value={configForm.customStartCmd}
@@ -353,7 +353,7 @@ const BuildTab = ({ appId, app }) => {
                                     {t('common.actions.cancel', 'Cancel')}
                                 </Button>
                                 <Button type="submit">
-                                    {t('app.buildTab.saveConfiguration', 'Save Configuration')}
+                                    {t('app.buildTab.saveConfiguration', 'Save configuration')}
                                 </Button>
                             </div>
                         </form>

@@ -432,7 +432,7 @@ const Deployments = () => {
                 size="md"
             >
                 <p className="deployments-page__sim-intro">
-                    {t('app.deployments.streamsScriptedOutputThroughTheReal', 'Streams scripted output through the real deploy pipeline — no containers, files, or servers are touched. Development only.')}
+                    {t('app.deployments.streamsScriptedOutputThroughTheReal', 'Streams scripted output through the real deploy pipeline. No containers, files, or servers are touched. Development only.')}
                 </p>
                 <div className="deployments-page__sim-speed">
                     <span>{t('app.deployments.speed', 'Speed')}</span>

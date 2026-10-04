@@ -126,7 +126,7 @@ const AboutTab = () => {
                     notRunningPolls += 1;
                     if (st.log?.outcome === 'rolled_back') {
                         setUpdatePhase('failed');
-                        setUpdateError(t('app.aboutTab.updateRolledBack', 'The update failed and was rolled back — the previous version is still running.'));
+                        setUpdateError(t('app.aboutTab.updateRolledBack', 'The update failed and was rolled back. The previous version is still running.'));
                         return;
                     }
                     if (notRunningPolls >= 5) {
@@ -173,7 +173,7 @@ const AboutTab = () => {
                             {checkingUpdate ? (
                                 <><RefreshCw size={14} className="spinning" /> {t('common.checking', 'Checking…')}</>
                             ) : (
-                                <><Download size={14} /> {t('app.aboutTab.checkForUpdates', 'Check for Updates')}</>
+                                <><Download size={14} /> {t('app.aboutTab.checkForUpdates', 'Check for updates')}</>
                             )}
                         </Button>
                     ) : updateInfo.error ? (
@@ -193,7 +193,7 @@ const AboutTab = () => {
                                         rel="noopener noreferrer"
                                         className={updateStatus?.capability?.supported ? 'btn btn-secondary btn-sm' : 'btn btn-accent btn-sm'}
                                     >
-                                        {t('app.aboutTab.viewRelease', 'View Release')} <ExternalLink size={12} />
+                                        {t('app.aboutTab.viewRelease', 'View release')} <ExternalLink size={12} />
                                     </a>
                                     {updateStatus?.capability?.supported && updatePhase === null && (
                                         <Button
@@ -201,7 +201,7 @@ const AboutTab = () => {
                                             onClick={() => setUpdatePhase('confirm')}
                                             disabled={updateStatus?.running}
                                         >
-                                            <Download size={12} /> {t('app.aboutTab.updateNow', 'Update Now')}
+                                            <Download size={12} /> {t('app.aboutTab.updateNow', 'Update now')}
                                         </Button>
                                     )}
                                 </div>
@@ -210,7 +210,7 @@ const AboutTab = () => {
                                         <AlertTriangle size={14} />
                                         <span>{t('app.aboutTab.updateConfirm', 'This updates ServerKit and briefly restarts the panel. Hosted apps stay online. If the new version fails to start, it rolls back automatically.')}</span>
                                         <Button size="sm" onClick={runUpdate}>
-                                            {t('app.aboutTab.updateNow', 'Update Now')}
+                                            {t('app.aboutTab.updateNow', 'Update now')}
                                         </Button>
                                         <Button variant="outline" size="sm" onClick={() => setUpdatePhase(null)}>
                                             {t('common.actions.cancel', 'Cancel')}
@@ -228,7 +228,7 @@ const AboutTab = () => {
                                         <CheckCircle size={16} />
                                         <span>{t('app.aboutTab.updateComplete', 'Updated to')} <strong>v{updatedVersion}</strong></span>
                                         <Button size="sm" onClick={() => window.location.reload()}>
-                                            <RefreshCw size={12} /> {t('app.aboutTab.reloadPanel', 'Reload Panel')}
+                                            <RefreshCw size={12} /> {t('app.aboutTab.reloadPanel', 'Reload panel')}
                                         </Button>
                                     </div>
                                 ) : updatePhase === 'failed' ? (
@@ -259,7 +259,7 @@ const AboutTab = () => {
                     ) : (
                         <div className="update-status current">
                             <CheckCircle size={16} />
-                            <span>{t('app.aboutTab.youReUpToDate', 'You\'re up to date!')}</span>
+                            <span>{t('app.aboutTab.youReUpToDate', "You're up to date")}</span>
                         </div>
                     )}
                 </div>
@@ -275,7 +275,7 @@ const AboutTab = () => {
                     </div>
                     <div className="star-content">
                         <h4>{t('app.aboutTab.enjoyingServerkit', 'Enjoying ServerKit?')}</h4>
-                        <p>{t('app.aboutTab.ifYouFindServerkitUsefulConsider', 'If you find ServerKit useful, consider starring the repository on GitHub. It helps others discover the project!')}</p>
+                        <p>{t('app.aboutTab.ifYouFindServerkitUsefulConsider', 'If you find ServerKit useful, consider starring the repository on GitHub. It helps others discover the project.')}</p>
                         <a
                             href="https://github.com/jhd3197/ServerKit"
                             target="_blank"
@@ -294,31 +294,31 @@ const AboutTab = () => {
                 <ul className="feature-list">
                     <li>
                         <Check size={16} />
-                        {t('app.aboutTab.applicationManagementPhpPythonNodeJs', 'Application Management (PHP, Python, Node.js, Docker)')}
+                        {t('app.aboutTab.applicationManagementPhpPythonNodeJs', 'Application management (PHP, Python, Node.js, Docker)')}
                     </li>
                     <li>
                         <Check size={16} />
-                        {t('app.aboutTab.domainSslCertificateManagement', 'Domain & SSL Certificate Management')}
+                        {t('app.aboutTab.domainSslCertificateManagement', 'Domain and SSL certificate management')}
                     </li>
                     <li>
                         <Check size={16} />
-                        {t('app.aboutTab.databaseManagementMysqlPostgresql', 'Database Management (MySQL, PostgreSQL)')}
+                        {t('app.aboutTab.databaseManagementMysqlPostgresql', 'Database management (MySQL, PostgreSQL)')}
                     </li>
                     <li>
                         <Check size={16} />
-                        {t('app.aboutTab.dockerContainerManagement', 'Docker Container Management')}
+                        {t('app.aboutTab.dockerContainerManagement', 'Docker container management')}
                     </li>
                     <li>
                         <Check size={16} />
-                        {t('app.aboutTab.systemMonitoringAlerts', 'System Monitoring & Alerts')}
+                        {t('app.aboutTab.systemMonitoringAlerts', 'System monitoring and alerts')}
                     </li>
                     <li>
                         <Check size={16} />
-                        {t('app.aboutTab.automatedBackups', 'Automated Backups')}
+                        {t('app.aboutTab.automatedBackups', 'Automated backups')}
                     </li>
                     <li>
                         <Check size={16} />
-                        {t('app.aboutTab.gitDeploymentWithWebhooks', 'Git Deployment with Webhooks')}
+                        {t('app.aboutTab.gitDeploymentWithWebhooks', 'Git deployment with webhooks')}
                     </li>
                 </ul>
             </div>
@@ -328,7 +328,7 @@ const AboutTab = () => {
                 <div className="link-list">
                     <a href="https://github.com/jhd3197/ServerKit" target="_blank" rel="noopener noreferrer" className="link-item">
                         <Github size={18} />
-                        {t('app.aboutTab.githubRepository', 'GitHub Repository')}
+                        {t('app.aboutTab.githubRepository', 'GitHub repository')}
                     </a>
                     <a href="https://github.com/jhd3197/ServerKit#readme" target="_blank" rel="noopener noreferrer" className="link-item">
                         <FileText size={18} />
@@ -336,7 +336,7 @@ const AboutTab = () => {
                     </a>
                     <a href="https://github.com/jhd3197/ServerKit/issues" target="_blank" rel="noopener noreferrer" className="link-item">
                         <HelpCircle size={18} />
-                        {t('app.aboutTab.supportIssues', 'Support & Issues')}
+                        {t('app.aboutTab.supportIssues', 'Support and issues')}
                     </a>
                     <a href="https://github.com/jhd3197/ServerKit/discussions" target="_blank" rel="noopener noreferrer" className="link-item">
                         <MessageSquare size={18} />
@@ -344,7 +344,7 @@ const AboutTab = () => {
                     </a>
                     <a href="https://github.com/jhd3197/ServerKit/issues/new" target="_blank" rel="noopener noreferrer" className="link-item">
                         <Bug size={18} />
-                        {t('app.aboutTab.reportABug', 'Report a Bug')}
+                        {t('app.aboutTab.reportABug', 'Report a bug')}
                     </a>
                 </div>
             </div>

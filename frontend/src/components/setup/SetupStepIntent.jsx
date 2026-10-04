@@ -7,25 +7,25 @@ import { Button as SharedButton } from '@/components/ui/button';
 const USE_CASE_OPTIONS = [
     {
         id: 'wordpress',
-        labelKey: 'app.setupStepIntent.wordpressSites', label: 'WordPress Sites',
-        descriptionKey: 'app.setupStepIntent.blogsStoresContentSitesWithManaged', description: 'Blogs, stores, content sites with managed MySQL & PHP',
+        labelKey: 'app.setupStepIntent.wordpressSites', label: 'WordPress sites',
+        descriptionKey: 'app.setupStepIntent.blogsStoresContentSitesWithManaged', description: 'Blogs, stores, content sites with managed MySQL and PHP',
         icon: Globe,
     },
     {
         id: 'web-apps',
-        labelKey: 'app.setupStepIntent.webApplications', label: 'Web Applications',
+        labelKey: 'app.setupStepIntent.webApplications', label: 'Web applications',
         descriptionKey: 'app.setupStepIntent.nodeJsPythonPhpOrDocker', description: 'Node.js, Python, PHP, or Docker-based apps',
         icon: Code,
     },
     {
         id: 'self-hosted',
-        labelKey: 'app.setupStepIntent.selfHostedServices', label: 'Self-Hosted Services',
+        labelKey: 'app.setupStepIntent.selfHostedServices', label: 'Self-hosted services',
         descriptionKey: 'app.setupStepIntent.nextcloudVaultwardenWikiJsMediaServers', description: 'Nextcloud, Vaultwarden, Wiki.js, media servers',
         icon: Server,
     },
     {
         id: 'devops',
-        labelKey: 'app.setupStepIntent.devopsMonitoring', label: 'DevOps & Monitoring',
+        labelKey: 'app.setupStepIntent.devopsMonitoring', label: 'DevOps and monitoring',
         descriptionKey: 'app.setupStepIntent.ciCdGrafanaPrometheusLogAggregation', description: 'CI/CD, Grafana, Prometheus, log aggregation',
         icon: GitBranch,
     },

@@ -130,9 +130,9 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
             setCutoverResult(res.cutover || null);
             setStage('verify');
             if (res.cutover?.success) {
-                toast.success(t('app.cutoverDrawer.cutoverAppliedNowPointsAt', 'Cutover applied — {{domain}} now points at {{value}}', { domain: domain, value: target.trim() }));
+                toast.success(t('app.cutoverDrawer.cutoverAppliedNowPointsAt', 'Cutover applied. {{domain}} now points at {{value}}', { domain: domain, value: target.trim() }));
             } else {
-                toast.error(t('app.cutoverDrawer.cutoverFinishedWithErrorsReviewThe', 'Cutover finished with errors — review the results and consider reverting.'));
+                toast.error(t('app.cutoverDrawer.cutoverFinishedWithErrorsReviewThe', 'Cutover finished with errors. Review the results and consider reverting.'));
             }
         } catch (err) {
             const message = friendlyError(err);
@@ -170,9 +170,9 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
             setSnapshot(res.snapshot || snapshot);
             setRevertResult(res.revert || null);
             if (res.revert?.success) {
-                toast.success(t('app.cutoverDrawer.revertedRestoredSPreCutoverRecords', 'Reverted — restored {{domain}}\'s pre-cutover records', { domain: domain }));
+                toast.success(t('app.cutoverDrawer.revertedRestoredSPreCutoverRecords', "Reverted: restored {{domain}}'s pre-cutover records", { domain: domain }));
             } else {
-                toast.error(t('app.cutoverDrawer.revertFinishedWithErrorsCheckThe', 'Revert finished with errors — check the results.'));
+                toast.error(t('app.cutoverDrawer.revertFinishedWithErrorsCheckThe', 'Revert finished with errors. Check the results.'));
             }
         } catch (err) {
             const message = friendlyError(err);
@@ -248,7 +248,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                             />
                             {noZone && (
                                 <span className="cutover__hint cutover__hint--warn">
-                                    {t('app.cutoverDrawer.thisDomainHasNoConnectedProvider', 'This domain has no connected provider zone — cutover needs one to read and write records.')}
+                                    {t('app.cutoverDrawer.thisDomainHasNoConnectedProvider', 'This domain has no connected provider zone. Cutover needs one to read and write records.')}
                                 </span>
                             )}
                         </div>
@@ -273,7 +273,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                         <div className="cutover__actions">
                             <span />
                             <Button onClick={captureAndReview} disabled={busy || !canCapture}>
-                                {busy ? <><Spinner size="sm" /> {t('app.cutoverDrawer.capturing', 'Capturing…')}</> : <><Camera size={14} /> {t('app.cutoverDrawer.snapshotPreview', 'Snapshot & preview')} <ArrowRight size={14} /></>}
+                                {busy ? <><Spinner size="sm" /> {t('app.cutoverDrawer.capturing', 'Capturing…')}</> : <><Camera size={14} /> {t('app.cutoverDrawer.snapshotPreview', 'Snapshot and preview')} <ArrowRight size={14} /></>}
                             </Button>
                         </div>
                     </div>
@@ -353,7 +353,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                                     : <AlertTriangle size={16} aria-hidden="true" />}
                                 <p>
                                     {cutoverResult.success
-                                        ? <>{t('app.cutoverDrawer.cutoverApplied', 'Cutover applied —')} <strong>{domain}</strong> {t('app.cutoverDrawer.nowPointsAt', 'now points at')} <code>{target.trim()}</code>.</>
+                                        ? <>{t('app.cutoverDrawer.cutoverApplied', 'Cutover applied:')} <strong>{domain}</strong> {t('app.cutoverDrawer.nowPointsAt', 'now points at')} <code>{target.trim()}</code>.</>
                                         : <>{t('app.cutoverDrawer.cutoverFinishedWithErrorsReviewBelow', 'Cutover finished with errors. Review below and revert if needed.')}</>}
                                 </p>
                             </div>
@@ -420,7 +420,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                                 </div>
                             ) : (
                                 <p className="cutover__muted">
-                                    {t('app.cutoverDrawer.oneClickRestoresTheSnapshotCaptured', 'One click restores the snapshot captured before this cutover — including deleting any records the cutover created.')}
+                                    {t('app.cutoverDrawer.oneClickRestoresTheSnapshotCaptured', 'One click restores the snapshot captured before this cutover, including deleting any records the cutover created.')}
                                 </p>
                             )}
                             <Button variant="outline" size="sm" onClick={revert} disabled={busy || !!revertResult}>

@@ -152,7 +152,7 @@ const SSOConfigTab = () => {
     return (
         <div className="sso-config">
             <div className="settings-section">
-                <h2><Shield size={20} /> {t('app.sSOConfigTab.ssoOauthConfiguration', 'SSO / OAuth Configuration')}</h2>
+                <h2><Shield size={20} /> {t('app.sSOConfigTab.ssoOauthConfiguration', 'SSO / OAuth configuration')}</h2>
                 <p className="text-secondary">
                     {t('app.sSOConfigTab.configureExternalIdentityProvidersForSingle', 'Configure external identity providers for single sign-on.')}
                 </p>
@@ -171,7 +171,7 @@ const SSOConfigTab = () => {
                     <div className="settings-card__header-left">
                         <Globe size={20} />
                         <div>
-                            <h3>{t('app.sSOConfigTab.generalSettings', 'General Settings')}</h3>
+                            <h3>{t('app.sSOConfigTab.generalSettings', 'General settings')}</h3>
                         </div>
                     </div>
                 </div>

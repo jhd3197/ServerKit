@@ -43,16 +43,16 @@ const AgentRegistrationSection = ({ server, onRegenerateToken }) => {
             <div className="form-section__header">
                 <span className="form-section__icon"><KeyIcon /></span>
                 <div>
-                    <h3>{t('app.serverSettingsTab.connectionString', 'Connection String')}</h3>
+                    <h3>{t('app.serverSettingsTab.connectionString', 'Connection string')}</h3>
                     <p className="section-description">
-                        {t('app.serverSettingsTab.generateAFreshConnectionStringTo', 'Generate a fresh connection string to pair (or re-pair) this server. Useful after reinstalling the agent — old credentials are gone, but a new string brings the agent right back to this row.')}
+                        {t('app.serverSettingsTab.generateAFreshConnectionStringTo', 'Generate a fresh connection string to pair (or re-pair) this server. Useful after reinstalling the agent: old credentials are gone, but a new string brings the agent right back to this row.')}
                         {isOnline && ' This server is currently online; regenerating only affects re-pairing.'}
                         {isExpired && ' The previous token has expired.'}
                     </p>
                 </div>
             </div>
             <Button onClick={onRegenerateToken}>
-                <KeyIcon /> {t('app.serverSettingsTab.generateConnectionString', 'Generate Connection String')}
+                <KeyIcon /> {t('app.serverSettingsTab.generateConnectionString', 'Generate connection string')}
             </Button>
         </div>
     );
@@ -129,7 +129,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
     }
 
     async function handleRotateKey() {
-        const confirmed = await confirmSettings({ titleKey: 'app.serverSettingsTab.rotateCredentials', title: 'Rotate Credentials', messageKey: 'app.serverSettingsTab.rotateApiCredentialsTheAgentMust', message: 'Rotate API credentials? The agent must be online to receive new credentials.', variant: 'warning' });
+        const confirmed = await confirmSettings({ titleKey: 'app.serverSettingsTab.rotateCredentials', title: 'Rotate credentials', messageKey: 'app.serverSettingsTab.rotateApiCredentialsTheAgentMust', message: 'Rotate API credentials? The agent must be online to receive new credentials.', variant: 'warning' });
         if (!confirmed) return;
         setRotatingKey(true);
         try {
@@ -152,7 +152,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
 
         try {
             await api.updateServer(server.id, formData);
-            toast.success(t('app.serverSettingsTab.serverUpdatedSuccessfully', 'Server updated successfully'));
+            toast.success(t('app.serverSettingsTab.serverUpdatedSuccessfully', 'Server updated'));
             onUpdate();
         } catch (err) {
             toast.error(err.message || t('app.serverSettingsTab.failedToUpdateServer', 'Failed to update server'));
@@ -174,12 +174,12 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                         <div className="form-section__header">
                             <span className="form-section__icon"><ServerIcon /></span>
                             <div>
-                                <h3>{t('app.serverSettingsTab.basicInformation', 'Basic Information')}</h3>
+                                <h3>{t('app.serverSettingsTab.basicInformation', 'Basic information')}</h3>
                                 <p className="section-description">{t('app.serverSettingsTab.identityAndGroupingForThisServer', 'Identity and grouping for this server.')}</p>
                             </div>
                         </div>
                         <div className="form-group">
-                            <label>{t('app.serverSettingsTab.serverName', 'Server Name')}</label>
+                            <label>{t('app.serverSettingsTab.serverName', 'Server name')}</label>
                             <Input
                                 type="text"
                                 name="name"
@@ -210,7 +210,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                                 />
                             </div>
                             <div className="form-group">
-                                <label>{t('common.labels.ipAddress', 'IP Address')}</label>
+                                <label>{t('common.labels.ipAddress', 'IP address')}</label>
                                 <Input
                                     type="text"
                                     name="ip_address"
@@ -229,7 +229,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                             >
                                 <SelectTrigger id="server-settings-group"><SelectValue /></SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value={NO_GROUP}>{t('app.serverSettingsTab.noGroup', 'No Group')}</SelectItem>
+                                    <SelectItem value={NO_GROUP}>{t('app.serverSettingsTab.noGroup', 'No group')}</SelectItem>
                                     {groups.map(group => (
                                         <SelectItem key={group.id} value={String(group.id)}>{group.name}</SelectItem>
                                     ))}
@@ -254,7 +254,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                     <div className="form-section__header">
                         <span className="form-section__icon"><NetworkIcon /></span>
                         <div>
-                            <h3>{t('app.serverSettingsTab.connectionIpAllowlist', 'Connection & IP Allowlist')}</h3>
+                            <h3>{t('app.serverSettingsTab.connectionIpAllowlist', 'Connection and IP allowlist')}</h3>
                             <p className="section-description">
                                 {t('app.serverSettingsTab.restrictWhichIpsCanConnectSupports', 'Restrict which IPs can connect. Supports single IPs, CIDR notation, and wildcards.')}
                             </p>
@@ -270,7 +270,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                             />
                             {connectionInfo.connected_since && (
                                 <InfoItem
-                                    label={t('app.serverSettingsTab.connectedSince', 'Connected Since')}
+                                    label={t('app.serverSettingsTab.connectedSince', 'Connected since')}
                                     value={new Date(connectionInfo.connected_since).toLocaleString()}
                                 />
                             )}
@@ -303,7 +303,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                         <div className="ip-add-form">
                             <Input
                                 type="text"
-                                placeholder={t('app.serverSettingsTab.ipAddressOrCidrEG', 'IP address or CIDR (e.g., 192.168.1.0/24)')}
+                                placeholder={t('app.serverSettingsTab.ipAddressOrCidrEG', 'IP address or CIDR (e.g. 192.168.1.0/24)')}
                                 value={newIP}
                                 onChange={(e) => setNewIP(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddIP())}
@@ -327,7 +327,7 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                     <div className="form-section__header">
                         <span className="form-section__icon"><KeyIcon /></span>
                         <div>
-                            <h3>{t('app.serverSettingsTab.apiKeyRotation', 'API Key Rotation')}</h3>
+                            <h3>{t('app.serverSettingsTab.apiKeyRotation', 'API key rotation')}</h3>
                             <p className="section-description">
                                 {t('app.serverSettingsTab.rotateTheApiCredentialsUsedBy', 'Rotate the API credentials used by the agent. The agent must be online to receive new credentials.')}
                             </p>
@@ -368,11 +368,11 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
             </div>
 
             <DangerZone
-                title={t('app.serverSettingsTab.dangerZone', 'Danger Zone')}
+                title={t('app.serverSettingsTab.dangerZone', 'Remove server')}
                 description={t('app.serverSettingsTab.removingThisServerWillDisconnectThe', 'Removing this server will disconnect the agent and delete all associated data.')}
                 action={
                     <Button variant="destructive" onClick={onDelete}>
-                        <TrashIcon /> {t('app.serverSettingsTab.removeServer', 'Remove Server')}
+                        <TrashIcon /> {t('app.serverSettingsTab.removeServer', 'Remove server')}
                     </Button>
                 }
             />
@@ -421,7 +421,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${result.regi
         <Modal
             open
             onClose={onClose}
-            title={t('app.serverSettingsTab.connectionString', 'Connection String')}
+            title={t('app.serverSettingsTab.connectionString', 'Connection string')}
             size="lg"
             footer={!result ? (
                 <>
@@ -441,7 +441,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${result.regi
         >
             {!result && (
                 <p className="sk-modal__subtitle">
-                    {t('app.serverSettingsTab.generateASinglePasteableStringThe', 'Generate a single pasteable string the agent can consume. The token inside is single-use — burned the moment any agent registers with it.')}
+                    {t('app.serverSettingsTab.generateASinglePasteableStringThe', 'Generate a single pasteable string the agent can consume. The token inside is single-use and burns the moment any agent registers with it.')}
                 </p>
             )}
 
@@ -466,7 +466,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${result.regi
                         <div className="token-status">
                             <span className="token-status-dot active" />
                             <span>
-                                {t('app.serverSettingsTab.activeExpires', 'Active — expires')} {new Date(result.registration_expires).toLocaleString()}
+                                {t('app.serverSettingsTab.activeExpires', 'Active, expires')} {new Date(result.registration_expires).toLocaleString()}
                             </span>
                         </div>
 
@@ -487,7 +487,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${result.regi
                                     multiline
                                 />
                                 <CopyField
-                                    label={`${t('app.serverSettingsTab.windowsPowershell', 'Windows (PowerShell)')} · ${t('app.serverSettingsTab.runAsAdministrator', 'Run as Administrator')}`}
+                                    label={`${t('app.serverSettingsTab.windowsPowershell', 'Windows (PowerShell)')} · ${t('app.serverSettingsTab.runAsAdministrator', 'Run as administrator')}`}
                                     value={windowsScript}
                                     multiline
                                 />

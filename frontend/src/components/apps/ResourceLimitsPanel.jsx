@@ -77,8 +77,8 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
             });
             setRestartRequired(!data.applied && data.note === 'restart required');
             toast.success(data.applied
-                ? t('app.resourceLimitsPanel.resourceLimitsSavedAndApplied', 'Resource limits saved and applied.')
-                : t('app.resourceLimitsPanel.resourceLimitsSaved', 'Resource limits saved.'));
+                ? t('app.resourceLimitsPanel.resourceLimitsSavedAndApplied', 'Resource limits saved and applied')
+                : t('app.resourceLimitsPanel.resourceLimitsSaved', 'Resource limits saved'));
             onChanged?.();
         } catch (err) {
             toast.error(err.message || t('app.resourceLimitsPanel.failedToSaveResourceLimits', 'Failed to save resource limits'));
@@ -99,7 +99,7 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
         <div className="app-panel">
             <div className="app-panel-header">
                 <Gauge />
-                <span>{t('app.resourceLimitsPanel.resourceLimits', 'Resource Limits')}</span>
+                <span>{t('app.resourceLimitsPanel.resourceLimits', 'Resource limits')}</span>
             </div>
             <div className="app-panel-body">
                 <p className="app-panel-hint">
@@ -174,7 +174,7 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
 
                 {restartRequired && (
                     <p className="app-panel-hint">
-                        {t('app.resourceLimitsPanel.limitsSavedRestartOrRedeployThe', 'Limits saved — restart or redeploy the service for them to take effect.')}
+                        {t('app.resourceLimitsPanel.limitsSavedRestartOrRedeployThe', 'Limits saved. Restart or redeploy the service for them to take effect.')}
                     </p>
                 )}
 

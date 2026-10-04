@@ -173,7 +173,7 @@ export const SIDEBAR_ITEMS = [
     {
         id: 'cron',
         labelKey: 'nav.cron',
-        label: 'Cron Jobs',
+        label: 'Cron jobs',
         route: '/cron',
         category: 'operations',
         icon: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'
@@ -191,7 +191,7 @@ export const SIDEBAR_ITEMS = [
     {
         id: 'queue',
         labelKey: 'nav.queue',
-        label: 'Queue Bus',
+        label: 'Queue bus',
         route: '/queue',
         category: 'operations',
         icon: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>'
@@ -199,7 +199,7 @@ export const SIDEBAR_ITEMS = [
     {
         id: 'terminal',
         labelKey: 'nav.terminal',
-        label: 'Terminal / Logs',
+        label: 'Terminal / logs',
         route: '/terminal',
         category: 'system',
         icon: '<path d="M4 17l6-6-6-6M12 19h8"/>'
@@ -248,7 +248,7 @@ export const SIDEBAR_PRESETS = {
         labelKey: 'nav.preset.recommended.label',
         label: 'Recommended',
         descriptionKey: 'nav.preset.recommended.description',
-        description: 'Everyday essentials — advanced tools hidden',
+        description: 'Everyday essentials, with advanced tools hidden',
         hiddenItems: [...ADVANCED_ITEM_IDS]
     },
     full: {
@@ -260,14 +260,14 @@ export const SIDEBAR_PRESETS = {
     },
     web: {
         labelKey: 'nav.preset.web.label',
-        label: 'Web Hosting',
+        label: 'Web hosting',
         descriptionKey: 'nav.preset.web.description',
         description: 'Domains, SSL, databases, and web essentials',
         hiddenItems: ['docker', 'git', 'workflow', 'email', ...ADVANCED_ITEM_IDS]
     },
     email: {
         labelKey: 'nav.preset.email.label',
-        label: 'Email Admin',
+        label: 'Email admin',
         descriptionKey: 'nav.preset.email.description',
         description: 'Email server, security, DNS, and monitoring',
         hiddenItems: ['services', 'workflow', 'databases', 'docker', 'git', 'cron', ...ADVANCED_ITEM_IDS]
@@ -283,7 +283,7 @@ export const SIDEBAR_PRESETS = {
         labelKey: 'nav.preset.minimal.label',
         label: 'Minimal',
         descriptionKey: 'nav.preset.minimal.description',
-        description: 'Core only — no databases, containers, or scheduling',
+        description: 'Core only, without databases, containers, or scheduling',
         hiddenItems: ['workflow', 'databases', 'docker', 'git', 'email', 'cron', ...ADVANCED_ITEM_IDS]
     }
     // Note: no 'wordpress' literal — its nav item is contributed by the

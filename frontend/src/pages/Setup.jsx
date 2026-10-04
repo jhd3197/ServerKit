@@ -132,7 +132,7 @@ const Setup = () => {
                 <div className="wizard-header">
                     <ServerKitLogo className="wizard-logo" width={48} height={48} />
                     <h1>{t('setup.welcome', 'Welcome to {{panel}}', { panel: publicTitle })}</h1>
-                    <p>{t('setup.subtitle', 'Let’s get your server ready')}</p>
+                    <p>{t('setup.subtitle', 'Set up your server')}</p>
                 </div>
 
                 {renderProgressBar()}

@@ -146,7 +146,7 @@ function Downloads() {
             {error && (
                 <div className="alert alert-error">
                     <p>{error}</p>
-                    <Button variant="unstyled" type="button" onClick={fetchVersionInfo}>{t('app.downloads.tryAgain', 'Try Again')}</Button>
+                    <Button variant="unstyled" type="button" onClick={fetchVersionInfo}>{t('app.downloads.tryAgain', 'Try again')}</Button>
                 </div>
             )}
 
@@ -154,7 +154,7 @@ function Downloads() {
                 <>
                     <div className="version-banner">
                         <div className="version-info">
-                            <span className="version-label">{t('app.downloads.latestVersion', 'Latest Version')}</span>
+                            <span className="version-label">{t('app.downloads.latestVersion', 'Latest version')}</span>
                             <span className="version-number">v{versionInfo.version}</span>
                             <span className="version-date">{t('app.downloads.released', 'Released')} {new Date(versionInfo.published_at).toLocaleDateString()}</span>
                         </div>
@@ -166,7 +166,7 @@ function Downloads() {
                                     rel="noopener noreferrer"
                                     className="btn btn-banner-outline"
                                 >
-                                    {t('app.downloads.releaseNotes', 'Release Notes')}
+                                    {t('app.downloads.releaseNotes', 'Release notes')}
                                 </a>
                             )}
                             <a href="#downloads" className="btn btn-banner-primary" onClick={(e) => {
@@ -174,13 +174,13 @@ function Downloads() {
                                 document.querySelector('.download-cards')?.scrollIntoView({ behavior: scrollBehavior() });
                             }}>
                                 <DownloadIcon />
-                                {t('app.downloads.downloadNow', 'Download Now')}
+                                {t('app.downloads.downloadNow', 'Download now')}
                             </a>
                         </div>
                     </div>
 
                     <section className="downloads-section">
-                        <h2>{t('app.downloads.directDownloads', 'Direct Downloads')}</h2>
+                        <h2>{t('app.downloads.directDownloads', 'Direct downloads')}</h2>
                         <p className="section-description">
                             {t('app.downloads.downloadTheAgentBinaryForYour', 'Download the agent binary for your platform. After downloading, follow the installation instructions below.')}
                         </p>
@@ -218,7 +218,7 @@ function Downloads() {
                     </section>
 
                     <section className="downloads-section">
-                        <h2>{t('app.downloads.quickInstallCommands', 'Quick Install Commands')}</h2>
+                        <h2>{t('app.downloads.quickInstallCommands', 'Quick install commands')}</h2>
                         <p className="section-description">
                             {t('app.downloads.useTheseOneLinerCommandsTo', 'Use these one-liner commands to download and install the agent. Replace')} <code>YOUR_TOKEN</code> {t('app.downloads.withTheServerRegistrationToken', 'with the server registration token.')}
                         </p>
@@ -242,25 +242,25 @@ function Downloads() {
                                 <div className="command-content">
                                     <CopyField value={platforms[2].command} multiline />
                                 </div>
-                                <p className="command-note">{t('app.downloads.runPowershellAsAdministrator', 'Run PowerShell as Administrator')}</p>
+                                <p className="command-note">{t('app.downloads.runPowershellAsAdministrator', 'Run PowerShell as administrator')}</p>
                             </div>
                         </div>
                     </section>
 
                     <section className="downloads-section">
-                        <h2>{t('app.downloads.manualInstallation', 'Manual Installation')}</h2>
+                        <h2>{t('app.downloads.manualInstallation', 'Manual installation')}</h2>
                         <div className="manual-steps">
                             <div className="step">
                                 <div className="step-number">1</div>
                                 <div className="step-content">
-                                    <h4>{t('app.downloads.downloadTheAgent', 'Download the Agent')}</h4>
+                                    <h4>{t('app.downloads.downloadTheAgent', 'Download the agent')}</h4>
                                     <p>{t('app.downloads.downloadTheAppropriateBinaryForYour', 'Download the appropriate binary for your platform from the downloads above.')}</p>
                                 </div>
                             </div>
                             <div className="step">
                                 <div className="step-number">2</div>
                                 <div className="step-content">
-                                    <h4>{t('app.downloads.extractAndInstall', 'Extract and Install')}</h4>
+                                    <h4>{t('app.downloads.extractAndInstall', 'Extract and install')}</h4>
                                     <p>
                                         <strong>{t('app.downloads.linux', 'Linux:')}</strong> {t('app.downloads.extractWith', 'Extract with')} <code>{t('app.downloads.tarXzfServerkitAgentTarGz', 'tar -xzf serverkit-agent-*.tar.gz')}</code> {t('app.downloads.andMoveTo', 'and move to')} <code>/usr/local/bin/</code>
                                     </p>
@@ -272,7 +272,7 @@ function Downloads() {
                             <div className="step">
                                 <div className="step-number">3</div>
                                 <div className="step-content">
-                                    <h4>{t('app.downloads.registerTheAgent', 'Register the Agent')}</h4>
+                                    <h4>{t('app.downloads.registerTheAgent', 'Register the agent')}</h4>
                                     <p>{t('app.downloads.runTheRegistrationCommandWithYour', 'Run the registration command with your token:')}</p>
                                     <CopyField value={`serverkit-agent register --token "YOUR_TOKEN" --server "${getBaseUrl()}"`} multiline />
                                 </div>
@@ -280,7 +280,7 @@ function Downloads() {
                             <div className="step">
                                 <div className="step-number">4</div>
                                 <div className="step-content">
-                                    <h4>{t('app.downloads.startTheAgent', 'Start the Agent')}</h4>
+                                    <h4>{t('app.downloads.startTheAgent', 'Start the agent')}</h4>
                                     <p>{t('app.downloads.startTheAgentService', 'Start the agent service:')}</p>
                                     <CopyField value={t('app.downloads.serverkitAgentStart', 'serverkit-agent start')} />
                                     <p className="step-note">{t('app.downloads.orUseSystemdWindowsServiceFor', 'Or use systemd/Windows Service for automatic startup')}</p>
@@ -302,7 +302,7 @@ function Downloads() {
                                     rel="noopener noreferrer"
                                 >
                                     <DownloadIcon />
-                                    {t('app.downloads.downloadChecksums', 'Download Checksums')}
+                                    {t('app.downloads.downloadChecksums', 'Download checksums')}
                                 </a>
                             </Button>
                         )}

@@ -440,7 +440,7 @@ function WTopN({ cfg, ctx }) {
     if (loading && !servers.length) return <Loading />;
     if (error) return <Failed error={error} subject="fleet metrics" />;
     if (!key) {
-        return <Empty>{metric.label} {t('app.renderers.cannotBeRankedAcrossServersPick', 'cannot be ranked across servers — pick CPU, memory or disk.')}</Empty>;
+        return <Empty>{metric.label} {t('app.renderers.cannotBeRankedAcrossServersPick', 'cannot be ranked across servers. Pick CPU, memory or disk.')}</Empty>;
     }
 
     const rows = servers
@@ -558,11 +558,11 @@ function WLogs({ cfg, ctx }) {
     }, [shown.length]);
 
     if (unconfigured) {
-        return <Empty>{t('app.renderers.pickALogFileOrContainer', 'Pick a log file or container in this widget’s settings.')}</Empty>;
+        return <Empty>{t('app.renderers.pickALogFileOrContainer', "Pick a log file or container in this widget's settings.")}</Empty>;
     }
     if (loading && !lines.length) return <Loading />;
     if (error?.elevated) {
-        return <Empty>{label || 'This log'} {t('app.renderers.needsElevatedAccessChooseAnotherSource', 'needs elevated access — choose another source in settings.')}</Empty>;
+        return <Empty>{label || 'This log'} {t('app.renderers.needsElevatedAccessChooseAnotherSource', 'needs elevated access. Choose another source in settings.')}</Empty>;
     }
     if (error) return <Failed error={error} subject="logs" />;
     if (!lines.length) return <Empty>{t('app.renderers.noLogLinesAvailable', 'No log lines available.')}</Empty>;
@@ -850,7 +850,7 @@ function renderInline(text, keyPrefix) {
 function WNote({ cfg }) {
     const { t } = useTranslation();
     const text = typeof cfg.text === 'string' ? cfg.text : '';
-    if (!text.trim()) return <Empty>{t('app.renderers.emptyNoteAddTextInThe', 'Empty note — add text in the widget settings.')}</Empty>;
+    if (!text.trim()) return <Empty>{t('app.renderers.emptyNoteAddTextInThe', 'Empty note. Add text in the widget settings.')}</Empty>;
 
     return (
         <div className="skw-note">
@@ -974,7 +974,7 @@ export function WidgetBody({ widget, ctx }) {
     const Renderer = Core || contributed;
 
     if (!Renderer) {
-        return <div className="skw-empty">{t('app.renderers.unknownWidgetType', 'Unknown widget type “')}{String(type ?? '')}”.</div>;
+        return <div className="skw-empty">{t('app.renderers.unknownWidgetType', 'Unknown widget type "')}{String(type ?? '')}{'".'}</div>;
     }
 
     return (

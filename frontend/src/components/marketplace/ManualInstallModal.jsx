@@ -126,7 +126,7 @@ const PreviewConsent = ({ preview, installing, onInstall, onCancel }) => {
             {sigStatus === 'invalid' && (
                 <p className="plugin-install-consent__sig-note plugin-install-consent__sig-note--danger">
                     {preview.signature?.error || 'The signature does not match this archive.'}
-                    {' '}{t('app.manualInstallModal.theDownloadMayHaveBeenTampered', 'The download may have been tampered with — do not install it.')}
+                    {' '}{t('app.manualInstallModal.theDownloadMayHaveBeenTampered', 'The download may have been tampered with. Do not install it.')}
                 </p>
             )}
             {sigStatus === 'untrusted_key' && (
@@ -136,7 +136,7 @@ const PreviewConsent = ({ preview, installing, onInstall, onCancel }) => {
             )}
             {sigStatus === 'unsigned' && (
                 <p className="plugin-install-consent__sig-note">
-                    {t('app.manualInstallModal.thisReleaseCarriesNoPublisherSignature', 'This release carries no publisher signature. It will run with full panel privileges — install only if you trust the source.')}
+                    {t('app.manualInstallModal.thisReleaseCarriesNoPublisherSignature', 'This release carries no publisher signature. It will run with full panel privileges, so install it only if you trust the source.')}
                 </p>
             )}
 

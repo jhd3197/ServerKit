@@ -180,7 +180,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
         <div className="monitoring-stack">
             <section className="monitoring-panel">
                 <div className="monitoring-panel__header">
-                    <h3>{t('app.fleetCapacityPanel.serverComparison', 'Server Comparison')}</h3>
+                    <h3>{t('app.fleetCapacityPanel.serverComparison', 'Server comparison')}</h3>
                     <div>
                         <Button variant="outline" size="sm" onClick={exportCsv} disabled={selectedServers.length === 0}>
                             <Download size={14} /> {t('app.fleetCapacityPanel.exportCsv', 'Export CSV')}
@@ -276,7 +276,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
 
             <section className="monitoring-panel">
                 <div className="monitoring-panel__header">
-                    <h3>{t('app.fleetCapacityPanel.anomalyDetection', 'Anomaly Detection')}</h3>
+                    <h3>{t('app.fleetCapacityPanel.anomalyDetection', 'Anomaly detection')}</h3>
                 </div>
                 {anomalies.length > 0 ? (
                     <DataTable
@@ -302,7 +302,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
 
             <section className="monitoring-panel">
                 <div className="monitoring-panel__header">
-                    <h3>{t('app.fleetCapacityPanel.capacityForecast', 'Capacity Forecast')}</h3>
+                    <h3>{t('app.fleetCapacityPanel.capacityForecast', 'Capacity forecast')}</h3>
                     <Button size="sm" onClick={loadForecast} disabled={!forecastServer}>
                         <TrendingUp size={14} /> {t('app.fleetCapacityPanel.forecast', 'Forecast')}
                     </Button>

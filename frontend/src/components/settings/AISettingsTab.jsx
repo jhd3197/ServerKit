@@ -109,7 +109,7 @@ const AISettingsTab = () => {
     return (
         <div className="settings-section">
             <div className="section-header">
-                <h2>{t('app.aISettingsTab.aiAssistant', 'AI Assistant')}</h2>
+                <h2>{t('app.aISettingsTab.aiAssistant', 'AI assistant')}</h2>
             </div>
             {message && <div className={`alert alert-${message.type === 'error' ? 'danger' : 'success'}`} role={message.type === 'error' ? 'alert' : 'status'}>{message.text}</div>}
             <SegControl className="sk-ai-settings-tabs" value={section} onChange={setSection} aria-label={t('ai.management.sections', 'AI settings sections')} options={[
@@ -155,7 +155,7 @@ const AISettingsTab = () => {
 
                 <div {...register('ai-pii-redaction', 'form-group')}>
                     <div className="settings-row">
-                        <div className="settings-label"><Label htmlFor="ai-pii">{t('app.aISettingsTab.redactPiiFromMessagesToolOutput', 'Redact PII from messages & tool output')}</Label></div>
+                        <div className="settings-label"><Label htmlFor="ai-pii">{t('app.aISettingsTab.redactPiiFromMessagesToolOutput', 'Redact PII from messages and tool output')}</Label></div>
                         <Switch id="ai-pii" disabled={loadError || saving}
                             checked={settings.pii_redaction}
                             onCheckedChange={(v) => setSettings((s) => ({ ...s, pii_redaction: v }))}

@@ -105,7 +105,7 @@ export default function RecycleBinTab() {
             // domain that came back without its certificate), or it just worked.
             if (res?.warning) toast.error(res.warning);
             else if (res?.item?.notice) toast.warning(res.item.notice);
-            else toast.success(t('app.recycleBinTab.restored', 'Restored {{noun}} “{{label}}”', { noun: row.noun, label: row.label }));
+            else toast.success(t('app.recycleBinTab.restored', 'Restored {{noun}} "{{label}}"', { noun: row.noun, label: row.label }));
             await load();
         } catch (err) {
             toast.error(err.message || t('app.recycleBinTab.restoreFailed', 'Restore failed'));
@@ -118,7 +118,7 @@ export default function RecycleBinTab() {
         setBusyId(rowKey(row));
         try {
             await api.purgeRecord(row.kind, row.id);
-            toast.success(t('app.recycleBinTab.permanentlyDeleted', 'Permanently deleted “{{label}}”', { label: row.label }));
+            toast.success(t('app.recycleBinTab.permanentlyDeleted', 'Permanently deleted "{{label}}"', { label: row.label }));
             await load();
         } catch (err) {
             toast.error(err.message || t('app.recycleBinTab.deleteFailed', 'Delete failed'));
@@ -292,7 +292,7 @@ export default function RecycleBinTab() {
             <ConfirmDialog
                 isOpen={!!purgeTarget}
                 variant="danger"
-                title={t('app.recycleBinTab.permanentlyDelete', 'Permanently delete “{{value}}”?', { value: purgeTarget?.label ?? '' })}
+                title={t('app.recycleBinTab.permanentlyDelete', 'Permanently delete "{{value}}"?', { value: purgeTarget?.label ?? '' })}
                 message={t('app.recycleBinTab.thisCannotBeUndoneTheRecord', 'This cannot be undone. The record is removed from the database for good.')}
                 details={purgeTarget ? `${purgeTarget.noun} · deleted ${purgeTarget.deleted_at?.slice(0, 10) || ''}` : ''}
                 confirmText={t('app.recycleBinTab.deletePermanently', 'Delete permanently')}

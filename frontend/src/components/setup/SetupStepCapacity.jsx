@@ -103,7 +103,7 @@ const SetupStepCapacity = ({ useCases, onComplete }) => {
         <div className="wizard-step">
             <h2 className="wizard-step-title">{t('app.setupStepCapacity.whatThisServerCanHold', 'What this server can hold')}</h2>
             <p className="wizard-step-description">
-                {t('app.setupStepCapacity.weMeasuredYourHardwareNothingHere', 'We measured your hardware. Nothing here is a locked plan — anything skipped can be installed later from Settings.')}
+                {t('app.setupStepCapacity.weMeasuredYourHardwareNothingHere', 'We measured your hardware. Nothing here is a locked plan; anything skipped can be installed later from Settings.')}
             </p>
 
             <div className="capacity-headline">
@@ -181,7 +181,7 @@ const SetupStepCapacity = ({ useCases, onComplete }) => {
                 <div className="tier-warning">
                     <AlertTriangle size={20} className="tier-warning-icon" />
                     <div className="tier-warning-text">
-                        {t('app.setupStepCapacity.dockerIsNotInstalledOrNot', 'Docker is not installed or not responding, so app hosting stays off until it is. We\'ll remember this choice — install Docker and restart ServerKit, or re-run the installer with')}{' '}
+                        {t('app.setupStepCapacity.dockerIsNotInstalledOrNot', "Docker is not installed or not responding, so app hosting stays off until it is. We'll remember this choice. Install Docker and restart ServerKit, or re-run the installer with")}{' '}
                         <code>{t('app.setupStepCapacity.serverkitProfile', 'SERVERKIT_PROFILE=')}{activeProfile}</code>.
                     </div>
                 </div>
@@ -192,7 +192,7 @@ const SetupStepCapacity = ({ useCases, onComplete }) => {
                     <AlertTriangle size={20} className="tier-warning-icon" />
                     <div className="tier-warning-text">
                         {t('app.setupStepCapacity.youPickedWordpressButThereIs', 'You picked WordPress, but there is only')}{' '}
-                        {headroom.ram_for_apps_mb} {t('app.setupStepCapacity.mbFreeAndASiteNeeds', 'MB free and a site needs about 512 MB. You can still create one — expect it to be slow, or add RAM or swap first.')}
+                        {headroom.ram_for_apps_mb} {t('app.setupStepCapacity.mbFreeAndASiteNeeds', 'MB free and a site needs about 512 MB. You can still create one, but expect it to be slow, or add RAM or swap first.')}
                     </div>
                 </div>
             )}

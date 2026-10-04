@@ -138,7 +138,7 @@ function AlertsPanel({ onClose }) {
                 {loading && items.length === 0 ? (
                     <div className="shell-panel__empty">{t('common.state.loading', 'Loading')}</div>
                 ) : visibleItems.length === 0 ? (
-                    <div className="shell-panel__empty">{t('notifications.empty', 'You’re all caught up.')}</div>
+                    <div className="shell-panel__empty">{t('notifications.empty', "You're all caught up.")}</div>
                 ) : visibleItems.map((item) => (
                     <div
                         key={item.delivery_id || item.notice_id}
@@ -387,7 +387,7 @@ export default function GlobalStatusBar({ onOpenPalette }) {
                         type="button"
                         className="global-statusbar__segment global-statusbar__setup"
                         onClick={() => navigate('/monitoring/doctor')}
-                        title={t('app.setupHealthWidget.setupHealth', 'Setup Health')}
+                        title={t('app.setupHealthWidget.setupHealth', 'Setup health')}
                     >
                         <ShieldAlert size={13} />
                         <span className="global-statusbar__muted">

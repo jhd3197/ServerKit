@@ -125,7 +125,7 @@ const OverviewTab = ({ app, deployConfig }) => {
                     tone="accent"
                     icon={<Rocket size={16} />}
                     value={deployments.length}
-                    label={t('app.overviewTab.totalDeploys', 'Total Deploys')}
+                    label={t('app.overviewTab.totalDeploys', 'Total deploys')}
                 />
                 <MetricCard
                     tone="green"
@@ -144,7 +144,7 @@ const OverviewTab = ({ app, deployConfig }) => {
             <div className="overview-tab__grid">
                 {/* Service Info Card */}
                 <div className="overview-tab__card">
-                    <h3 className="overview-tab__card-title">{t('app.overviewTab.serviceInfo', 'Service Info')}</h3>
+                    <h3 className="overview-tab__card-title">{t('app.overviewTab.serviceInfo', 'Service info')}</h3>
                     <InfoList className="overview-tab__info-list">
                         <InfoItem label={t('common.labels.type', 'Type')}>
                             <span className="info-value">
@@ -223,7 +223,7 @@ const OverviewTab = ({ app, deployConfig }) => {
 
                 {/* Resource Usage Card */}
                 <div className="overview-tab__card">
-                    <h3 className="overview-tab__card-title">{t('app.overviewTab.resourceUsage', 'Resource Usage')}</h3>
+                    <h3 className="overview-tab__card-title">{t('app.overviewTab.resourceUsage', 'Resource usage')}</h3>
                     {metricsLoading ? (
                         <div className="overview-tab__loading">{t('app.overviewTab.loadingMetrics', 'Loading metrics…')}</div>
                     ) : isDocker && metrics ? (
@@ -344,7 +344,7 @@ const OverviewTab = ({ app, deployConfig }) => {
             {/* Recent Deployments */}
             <div className="overview-tab__card overview-tab__card--full">
                 <div className="overview-tab__card-header-row">
-                    <h3 className="overview-tab__card-title">{t('app.overviewTab.recentDeployments', 'Recent Deployments')}</h3>
+                    <h3 className="overview-tab__card-title">{t('app.overviewTab.recentDeployments', 'Recent deployments')}</h3>
                     {deployments.length > 3 && (
                         <span className="overview-tab__see-all">
                             {deployments.length} total
@@ -406,7 +406,7 @@ const RelatedResourcesCard = ({ app, related }) => {
 
     return (
         <div className="overview-tab__card">
-            <h3 className="overview-tab__card-title">{t('app.overviewTab.relatedResources', 'Related Resources')}</h3>
+            <h3 className="overview-tab__card-title">{t('app.overviewTab.relatedResources', 'Related resources')}</h3>
             {!related ? (
                 <div className="overview-tab__loading">{t('common.loading', 'Loading…')}</div>
             ) : !hasAny ? (

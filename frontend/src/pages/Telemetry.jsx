@@ -201,7 +201,7 @@ export default function Telemetry() {
 
     const cleanupOldEvents = async () => {
         const confirmed = await confirm({
-            title: t('app.telemetry.cleanUpOldEvents', 'Clean Up Old Events'),
+            title: t('app.telemetry.cleanUpOldEvents', 'Clean up old events'),
             message: t('app.telemetry.deleteTelemetryEventsOlderThan90', 'Delete telemetry events older than 90 days? This cannot be undone.'),
             confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',

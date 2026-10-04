@@ -135,8 +135,8 @@ const ActivityTab = () => {
         <div className="activity-tab">
             <div className="tab-header">
                 <div className="tab-header-content">
-                    <h3>{t('app.activityTab.activityDashboard', 'Activity Dashboard')}</h3>
-                    <p>{t('app.activityTab.monitorTeamActivityAuditActionsAnd', 'Monitor team activity, audit actions, and system events')}</p>
+                    <h3>{t('app.activityTab.activityDashboard', 'Activity dashboard')}</h3>
+                    <p>{t('app.activityTab.monitorTeamActivityAuditActionsAnd', 'Monitor team activity, audit actions, and system events.')}</p>
                 </div>
             </div>
 
@@ -168,12 +168,12 @@ const ActivityTab = () => {
                     <div className="graphs-section">
                         <ContributionGraph
                             data={summary.daily_counts}
-                            title={t('app.activityTab.overallSystemActivity', 'Overall System Activity')}
+                            title={t('app.activityTab.overallSystemActivity', 'Overall system activity')}
                         />
                         {summary.top_user_daily && summary.top_user_daily.length > 0 && summary.top_users?.length > 1 && (
                             <ContributionGraph
                                 data={summary.top_user_daily}
-                                title={t('app.activityTab.mostActiveUserActivity', 'Most Active User Activity')}
+                                title={t('app.activityTab.mostActiveUserActivity', 'Most active user activity')}
                                 username={summary.top_users[0]?.username}
                             />
                         )}
@@ -181,7 +181,7 @@ const ActivityTab = () => {
 
                     {summary.top_users && summary.top_users.length > 0 && (
                         <div className="most-active-users">
-                            <h4>{t('app.activityTab.mostActiveUsersThisWeek', 'Most Active Users (This Week)')}</h4>
+                            <h4>{t('app.activityTab.mostActiveUsersThisWeek', 'Most active users (this week)')}</h4>
                             <div className="active-users-list">
                                 {summary.top_users.map((u, i) => (
                                     <div key={u.user_id} className="active-user-item">
@@ -206,21 +206,21 @@ const ActivityTab = () => {
 
             <div {...register('activity-audit-log', 'activity-feed-section')}>
                 <div className="section-header">
-                    <h4>{t('app.activityTab.auditLog', 'Audit Log')}</h4>
+                    <h4>{t('app.activityTab.auditLog', 'Audit log')}</h4>
                 </div>
 
                 <div className="filters-bar">
                     <div className="filter-group">
-                        <label><Filter size={12} /> {t('app.activityTab.actionType', 'Action Type')}</label>
+                        <label><Filter size={12} /> {t('app.activityTab.actionType', 'Action type')}</label>
                         <Select
                             value={filters.action || '__all__'}
                             onValueChange={(val) => handleFilterChange('action', val === '__all__' ? '' : val)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder={t('app.activityTab.allActions', 'All Actions')} />
+                                <SelectValue placeholder={t('app.activityTab.allActions', 'All actions')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="__all__">{t('app.activityTab.allActions', 'All Actions')}</SelectItem>
+                                <SelectItem value="__all__">{t('app.activityTab.allActions', 'All actions')}</SelectItem>
                                 {actions.map(action => (
                                     <SelectItem key={action} value={action}>{formatActionName(action)}</SelectItem>
                                 ))}
@@ -234,10 +234,10 @@ const ActivityTab = () => {
                             onValueChange={(val) => handleFilterChange('user_id', val === '__all__' ? '' : val)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder={t('app.activityTab.allUsers', 'All Users')} />
+                                <SelectValue placeholder={t('app.activityTab.allUsers', 'All users')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="__all__">{t('app.activityTab.allUsers', 'All Users')}</SelectItem>
+                                <SelectItem value="__all__">{t('app.activityTab.allUsers', 'All users')}</SelectItem>
                                 {users.map(u => (
                                     <SelectItem key={u.id} value={String(u.id)}>{u.username}</SelectItem>
                                 ))}

@@ -76,7 +76,7 @@ const WebhookSubscriptionModal = ({ subscription, onClose, onSubmit }) => {
     }, {});
 
     return (
-        <Modal open={true} onClose={onClose} title={subscription ? t('app.webhookSubscriptionModal.editSubscription', 'Edit Subscription') : t('app.webhookSubscriptionModal.createWebhookSubscription', 'Create Webhook Subscription')} className="webhook-modal">
+        <Modal open={true} onClose={onClose} title={subscription ? t('app.webhookSubscriptionModal.editSubscription', 'Edit subscription') : t('app.webhookSubscriptionModal.createWebhookSubscription', 'Create webhook subscription')} className="webhook-modal">
                 <form onSubmit={handleSubmit}>
                     <div className="modal-body">
                         <div className="form-group">
@@ -136,7 +136,7 @@ const WebhookSubscriptionModal = ({ subscription, onClose, onSubmit }) => {
 
                         <div className="form-row">
                             <div className="form-group">
-                                <Label>{t('app.webhookSubscriptionModal.retryCount', 'Retry Count')}</Label>
+                                <Label>{t('app.webhookSubscriptionModal.retryCount', 'Retry count')}</Label>
                                 <Input
                                     type="number"
                                     value={retryCount}

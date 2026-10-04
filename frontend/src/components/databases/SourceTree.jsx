@@ -135,7 +135,7 @@ function TreeRow({ node, depth, expanded, childrenCache, loading, activeKey, sel
                         type="button"
                         className="dbx-tree-install-btn"
                         onClick={(e) => { e.stopPropagation(); handlers.onInstall(node); }}
-                        aria-label={t('app.sourceTree.isNotInstalledInstallIt', '{{label}} is not installed — install it', { label: node.label })}
+                        aria-label={t('app.sourceTree.isNotInstalledInstallIt', '{{label}} is not installed. Install it', { label: node.label })}
                         title={t('app.sourceTree.install', 'Install {{label}}', { label: node.label })}
                     >
                         <Download size={11} aria-hidden="true" /> {t('app.sourceTree.install2', 'Install')}
@@ -199,7 +199,7 @@ function TreeRow({ node, depth, expanded, childrenCache, loading, activeKey, sel
                                     className="dbx-tree-leaf-link"
                                     onClick={() => handlers.onInstall(node)}
                                 >
-                                    {t('app.sourceTree.notInstalledInstall', 'Not installed — install')} {node.label}
+                                    {t('app.sourceTree.notInstalledInstall', 'Not installed. Install')} {node.label}
                                 </SharedButton>
                             ) : emptyLabel(node)}
                         </li>

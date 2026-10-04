@@ -238,7 +238,7 @@ export default function DeliveryLog() {
 
     if (!isAdmin) {
         return (
-            <PageLayout icon={<Send size={18} />} title={t('app.deliveryLog.notificationDeliveryLog', 'Notification Delivery Log')}>
+            <PageLayout icon={<Send size={18} />} title={t('app.deliveryLog.notificationDeliveryLog', 'Notification delivery log')}>
                 <div className="sk-dlog"><EmptyState title={t('app.deliveryLog.adminsOnly', 'Admins only.')} /></div>
             </PageLayout>
         );
@@ -249,7 +249,7 @@ export default function DeliveryLog() {
     return (
         <PageLayout
             icon={<Send size={18} />}
-            title={t('app.deliveryLog.notificationDeliveryLog', 'Notification Delivery Log')}
+            title={t('app.deliveryLog.notificationDeliveryLog', 'Notification delivery log')}
             meta="Outbound deliveries across all channels"
             actions={(
                 // Labelled "Server filters" to keep it apart from the toolbar's

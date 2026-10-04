@@ -158,12 +158,12 @@ const ServerDetail = () => {
     });
 
     async function handleDeleteServer() {
-        const confirmed = await confirm({ title: t('app.serverDetail.removeServer', 'Remove Server'), message: t('app.serverDetail.areYouSureYouWantTo', 'Are you sure you want to remove this server? This action cannot be undone.') });
+        const confirmed = await confirm({ title: t('app.serverDetail.removeServer', 'Remove server'), message: t('app.serverDetail.areYouSureYouWantTo', "Remove this server? This can't be undone.") });
         if (!confirmed) return;
 
         try {
             await api.deleteServer(id);
-            toast.success(t('app.serverDetail.serverRemovedSuccessfully', 'Server removed successfully'));
+            toast.success(t('app.serverDetail.serverRemovedSuccessfully', 'Server removed'));
             navigate('/servers');
         } catch (err) {
             toast.error(err.message || t('app.serverDetail.failedToRemoveServer', 'Failed to remove server'));
@@ -213,9 +213,9 @@ const ServerDetail = () => {
     if (error) {
         return (
             <div className="error-page">
-                <h2>{t('app.serverDetail.errorLoadingServer', 'Error Loading Server')}</h2>
+                <h2>{t('app.serverDetail.errorLoadingServer', 'Error loading server')}</h2>
                 <p>{error}</p>
-                <Button asChild><Link to="/servers">{t('app.serverDetail.backToServers', 'Back to Servers')}</Link></Button>
+                <Button asChild><Link to="/servers">{t('app.serverDetail.backToServers', 'Back to servers')}</Link></Button>
             </div>
         );
     }
@@ -223,9 +223,9 @@ const ServerDetail = () => {
     if (!server) {
         return (
             <div className="error-page">
-                <h2>{t('app.serverDetail.serverNotFound', 'Server Not Found')}</h2>
+                <h2>{t('app.serverDetail.serverNotFound', 'Server not found')}</h2>
                 <p>{t('app.serverDetail.theRequestedServerCouldNotBe', 'The requested server could not be found.')}</p>
-                <Button asChild><Link to="/servers">{t('app.serverDetail.backToServers', 'Back to Servers')}</Link></Button>
+                <Button asChild><Link to="/servers">{t('app.serverDetail.backToServers', 'Back to servers')}</Link></Button>
             </div>
         );
     }
@@ -254,7 +254,7 @@ const ServerDetail = () => {
     // the host can't do" behaviour.
     const tabs = [
         { id: 'overview', label: t('common.labels.overview', 'Overview') },
-        ...(isDeveloper ? [{ id: 'restore-points', label: t('app.serverDetail.restorePoints', 'Restore Points') }] : []),
+        ...(isDeveloper ? [{ id: 'restore-points', label: t('app.serverDetail.restorePoints', 'Restore points') }] : []),
         { id: 'docker', label: t('common.labels.docker', 'Docker') },
         { id: 'proxy', label: t('app.serverDetail.proxy', 'Proxy') },
         ...(server.capabilities?.cron ? [{ id: 'cron', label: t('app.serverDetail.cron', 'Cron') }] : []),
@@ -266,7 +266,7 @@ const ServerDetail = () => {
         ...(totalAlertCount > 0
             ? [{ id: 'alerts', label: t('app.serverDetail.alerts', 'Alerts'), badge: totalAlertCount }]
             : [{ id: 'alerts', label: t('app.serverDetail.alerts', 'Alerts') }]),
-        ...(server.capabilities?.wireguard ? [{ id: 'remote-access', label: t('app.serverDetail.remoteAccess', 'Remote Access') }] : []),
+        ...(server.capabilities?.wireguard ? [{ id: 'remote-access', label: t('app.serverDetail.remoteAccess', 'Remote access') }] : []),
         { id: 'settings', label: t('common.labels.settings', 'Settings') }
     ];
 

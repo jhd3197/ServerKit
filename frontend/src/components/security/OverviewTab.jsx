@@ -195,7 +195,7 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                     <p className="sec-hint sec-posture__foot">
                         {!hasSecurityExtensions && (
                             <>
-                                {t('app.overviewTab.moreSecurityTools', 'More security tools — malware scanning, brute-force protection, vulnerability scans, auto-updates — are available as extensions in the')}
+                                {t('app.overviewTab.moreSecurityTools', 'More security tools (malware scanning, brute-force protection, vulnerability scans, auto-updates) are available as extensions in the')}
                                 {' '}
                                 <Link to="/marketplace">{t('app.overviewTab.marketplaceLink', 'Marketplace')}</Link>
                                 {'. '}

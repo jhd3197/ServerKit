@@ -395,7 +395,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
 
             {devMode && (
                 <>
-                    <div className="nav-category nav-category--dev">{t('nav.devTools', 'Dev Tools')}</div>
+                    <div className="nav-category nav-category--dev">{t('nav.devTools', 'Dev tools')}</div>
                     <nav className="nav">
                         {import.meta.env.DEV && (
                             <>
@@ -408,7 +408,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                                         <line x1="8" y1="2" x2="8" y2="18"/>
                                         <line x1="16" y1="6" x2="16" y2="22"/>
                                     </svg>
-                                    {t('nav.appMap', 'App Map')}
+                                    {t('nav.appMap', 'App map')}
                                 </NavLink>
                                 <NavLink
                                     to="/documentation"
@@ -427,7 +427,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                                     <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                         <circle cx="13.5" cy="6.5" r="2.5"/><path d="M17 2H7a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5z"/><path d="M9.5 14.5l-3 3"/><path d="M14.5 9.5l3-3"/>
                                     </svg>
-                                    {t('nav.styleGuide', 'Style Guide')}
+                                    {t('nav.styleGuide', 'Style guide')}
                                 </NavLink>
                             </>
                         )}
@@ -442,7 +442,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                             <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>
                             </svg>
-                            {t('nav.testSandbox', 'Test Sandbox')}
+                            {t('nav.testSandbox', 'Test sandbox')}
                         </NavLink>
                     </nav>
                 </>
@@ -522,7 +522,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                             </div>
                         </div>
                         <div className="context-menu-section">
-                            <div className="context-menu-label" id="sidebar-view-label">{t('nav.sidebarView', 'Sidebar View')}</div>
+                            <div className="context-menu-label" id="sidebar-view-label">{t('nav.sidebarView', 'Sidebar view')}</div>
                             <div className="view-switcher" role="group" aria-labelledby="sidebar-view-label">
                                 {Object.entries(SIDEBAR_PRESETS).map(([key, preset]) => (
                                     <SharedButton variant="unstyled"
@@ -555,7 +555,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                             onClick={() => { navigate('/settings/sidebar'); setMenuOpen(false); }}
                         >
                             <PanelLeft size={15} aria-hidden="true" />
-                            {t('nav.customizeSidebar', 'Customize Sidebar')}
+                            {t('nav.customizeSidebar', 'Customize sidebar')}
                             <ChevronRight size={14} className="context-menu-arrow" aria-hidden="true" />
                         </SharedButton>
                         <SharedButton variant="unstyled"
@@ -564,7 +564,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                             onClick={() => { navigate('/settings'); setMenuOpen(false); }}
                         >
                             <Settings size={15} aria-hidden="true" />
-                            {t('nav.allSettings', 'All Settings')}
+                            {t('nav.allSettings', 'All settings')}
                             <ChevronRight size={14} className="context-menu-arrow" aria-hidden="true" />
                         </SharedButton>
                         <div className="context-menu-divider" />

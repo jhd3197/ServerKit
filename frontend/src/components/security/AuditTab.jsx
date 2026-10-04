@@ -40,7 +40,7 @@ const AuditTab = () => {
         <div className="audit-tab">
             <SharedCard variant="legacy" className="card">
                 <SharedCardHeader variant="legacy" className="card-header">
-                    <h3>{t('app.auditTab.securityAudit', 'Security Audit')}</h3>
+                    <h3>{t('app.auditTab.securityAudit', 'Security audit')}</h3>
                     <Button variant="default" onClick={runAudit} disabled={loading}>
                         {loading ? 'Running Audit...' : 'Run Audit'}
                     </Button>

@@ -225,7 +225,7 @@ export default function LogPane({
                 <div
                     className="deploy-console__map"
                     onMouseDown={onMapDown}
-                    title={t('app.logPane.logSeverityClickOrDragTo', 'Log severity — click or drag to jump')}
+                    title={t('app.logPane.logSeverityClickOrDragTo', 'Log severity: click or drag to jump')}
                 >
                     {buckets.map((level, i) => (
                         <i

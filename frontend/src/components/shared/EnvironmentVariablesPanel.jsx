@@ -125,7 +125,7 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
     return (
         <div className="shared-vars-panel">
             <div className="shared-vars-panel__header">
-                <h3>{t('app.environmentVariablesPanel.sharedVariables', 'Shared Variables')}</h3>
+                <h3>{t('app.environmentVariablesPanel.sharedVariables', 'Shared variables')}</h3>
                 <span className="shared-vars-panel__count">
                     {variables.length} {t('app.environmentVariablesPanel.resolved', 'resolved ·')} {groups.length} group{groups.length !== 1 ? 's' : ''}
                 </span>
@@ -200,7 +200,7 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
                                                 className="conflict-badge"
                                                 title={t('app.environmentVariablesPanel.thisKeyIsAlsoSetOn', 'This key is also set on the app\'s Environment tab. The local value is what the container uses; the shared value is overridden.')}
                                             >
-                                                {t('app.environmentVariablesPanel.setLocallyLocalValueApplies', 'Set locally — local value applies')}
+                                                {t('app.environmentVariablesPanel.setLocallyLocalValueApplies', 'Set locally (local value applies)')}
                                             </span>
                                         )}
                                     </td>

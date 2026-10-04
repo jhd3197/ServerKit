@@ -12,7 +12,7 @@ import { FolderKanban, Braces, KeyRound, LayoutGrid } from 'lucide-react';
 // retired "Secrets & Webhooks" page — now lives at Settings → Admin → Webhooks.
 export const ORG_TABS = [
     { to: '/projects', labelKey: 'app.organizationTabs.projects', label: 'Projects', end: true, icon: <FolderKanban size={15} /> },
-    { to: '/shared-variables', labelKey: 'app.organizationTabs.sharedVariables', label: 'Shared Variables', icon: <Braces size={15} /> },
+    { to: '/shared-variables', labelKey: 'app.organizationTabs.sharedVariables', label: 'Shared variables', icon: <Braces size={15} /> },
     { to: '/vaults', labelKey: 'app.organizationTabs.vaults', label: 'Vaults', icon: <KeyRound size={15} /> },
     { to: '/workspaces', labelKey: 'app.organizationTabs.workspaces', label: 'Workspaces', icon: <LayoutGrid size={15} /> },
 ];

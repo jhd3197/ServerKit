@@ -110,7 +110,7 @@ export default function Coexistence() {
             }
         >
             <p className="coexistence__intro app-panel-hint">
-                {t('app.coexistence.serverkitHasThreeExplicitAdoptionModes', 'ServerKit has three explicit adoption modes. Pick the one that matches where the box is today — you can move between them as you migrate. The hard rule: keep exactly one owner of nginx / Apache / PHP-FPM / TLS per box. Two panels writing the same web-server config is never supported; Observe mode exists so you can adopt a box for visibility without stepping on the panel that currently owns its config.')}
+                {t('app.coexistence.serverkitHasThreeExplicitAdoptionModes', 'ServerKit has three explicit adoption modes. Pick the one that matches where the box is today; you can move between them as you migrate. The hard rule: keep exactly one owner of nginx / Apache / PHP-FPM / TLS per box. Two panels writing the same web-server config is never supported; Observe mode exists so you can adopt a box for visibility without stepping on the panel that currently owns its config.')}
             </p>
 
             <div className="overview-grid coexistence__modes">
@@ -156,7 +156,7 @@ export default function Coexistence() {
                         <EmptyState
                             icon={Eye}
                             title={t('app.coexistence.noObservedServers', 'No observed servers')}
-                            description={t('app.coexistence.pairAnAgentAndSwitchA', 'Pair an agent and switch a server to Observed to survey a box another panel still runs — read-only and safe.')}
+                            description={t('app.coexistence.pairAnAgentAndSwitchA', "Pair an agent and switch a server to Observed to survey a box another panel still runs. It's read-only and safe.")}
                         />
                     ) : (
                         <ul className="coexistence__servers">
@@ -204,7 +204,7 @@ export default function Coexistence() {
                     </div>
                     <div className="app-panel-body">
                         <p className="app-panel-hint">
-                            {t('app.coexistence.whenASiteIsReadyTo', 'When a site is ready to move onto ServerKit, the import wizard pulls its files, databases, and crontabs, then hands off to the reversible DNS cutover — snapshot, switch, verify, revert.')}
+                            {t('app.coexistence.whenASiteIsReadyTo', 'When a site is ready to move onto ServerKit, the import wizard pulls its files, databases, and crontabs, then hands off to the reversible DNS cutover: snapshot, switch, verify, revert.')}
                         </p>
                         <div className="coexistence__cta">
                             <Link to="/imports">

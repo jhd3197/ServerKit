@@ -91,7 +91,7 @@ const ReviewStep = ({ form }) => {
     return (
         <div className="new-service-page__step new-service-page__review" data-walkthrough="service-review">
             <div className="new-service-page__step-head">
-                <h2>{t('app.reviewStep.reviewDeploy', 'Review & deploy')}</h2>
+                <h2>{t('app.reviewStep.reviewDeploy', 'Review and deploy')}</h2>
             </div>
 
             {/* Manifest detection — only when there's something to show. */}

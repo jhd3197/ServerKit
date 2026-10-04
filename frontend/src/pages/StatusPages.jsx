@@ -339,7 +339,7 @@ const StatusPages = () => {
                 {isAdmin && (
                     <Button size="sm" onClick={() => setShowCreatePage(true)}>
                         <Plus size={16} />
-                        {t('app.statusPages.createPage', 'Create Page')}
+                        {t('app.statusPages.createPage', 'Create page')}
                     </Button>
                 )}
             </>
@@ -490,7 +490,7 @@ const StatusPages = () => {
                                                                     size="sm"
                                                                     variant="ghost"
                                                                     onClick={() => handleDetachMonitor(component)}
-                                                                    title={t('app.statusPages.removeFromThisPageTheMonitor', 'Remove from this page — the monitor keeps running')}
+                                                                    title={t('app.statusPages.removeFromThisPageTheMonitor', 'Remove from this page (the monitor keeps running)')}
                                                                 >
                                                                     <Unlink size={14} />
                                                                 </Button>
@@ -520,7 +520,7 @@ const StatusPages = () => {
                                     {isAdmin && (
                                         <Button size="sm" onClick={() => setShowCreateIncident(true)}>
                                             <Plus size={14} />
-                                            {t('app.statusPages.createIncident', 'Create Incident')}
+                                            {t('app.statusPages.createIncident', 'Create incident')}
                                         </Button>
                                     )}
                                 </div>
@@ -601,7 +601,7 @@ const StatusPages = () => {
                                     {isAdmin && (
                                         <Button variant="destructive" onClick={() => setDeleteConfirm({ type: 'page', item: selectedPage })}>
                                             <Trash2 size={16} />
-                                            {t('app.statusPages.deletePage', 'Delete Page')}
+                                            {t('app.statusPages.deletePage', 'Delete page')}
                                         </Button>
                                     )}
                                 </div>
@@ -618,7 +618,7 @@ const StatusPages = () => {
             <Modal
                 open={showCreatePage}
                 onClose={() => setShowCreatePage(false)}
-                title={t('app.statusPages.createStatusPage', 'Create Status Page')}
+                title={t('app.statusPages.createStatusPage', 'Create status page')}
                 size="lg"
                 className="status-modal"
                 footer={(
@@ -662,7 +662,7 @@ const StatusPages = () => {
                 footer={<Button variant="outline" onClick={() => setShowAttach(false)}>{t('common.actions.close', 'Close')}</Button>}
             >
                 <p className="form-help">
-                    {t('app.statusPages.theseMonitorsAreAlreadyRunningAnd', 'These monitors are already running and are not on any status page yet. Adding one publishes it here — it keeps the history it has already collected.')}
+                    {t('app.statusPages.theseMonitorsAreAlreadyRunningAnd', 'These monitors are already running and are not on any status page yet. Adding one publishes it here, and it keeps the history it has already collected.')}
                 </p>
                 <div className="status-attach-list">
                     {unattached.map((monitor) => (
@@ -690,14 +690,14 @@ const StatusPages = () => {
             <Modal
                 open={showCreateComponent}
                 onClose={() => setShowCreateComponent(false)}
-                title={t('app.statusPages.addComponent', 'Add Component')}
+                title={t('app.statusPages.addComponent', 'Add component')}
                 size="lg"
                 className="status-modal"
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateComponent(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button onClick={handleCreateComponent} disabled={!compForm.name.trim() || !compForm.check_target.trim()}>
-                            {t('app.statusPages.addComponent', 'Add Component')}
+                            {t('app.statusPages.addComponent', 'Add component')}
                         </Button>
                     </>
                 )}
@@ -712,7 +712,7 @@ const StatusPages = () => {
                         <Input value={compForm.group} onChange={(e) => setCompForm({ ...compForm, group: e.target.value })} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="status-comp-check-type">{t('app.statusPages.checkType', 'Check Type')}</label>
+                        <label htmlFor="status-comp-check-type">{t('app.statusPages.checkType', 'Check type')}</label>
                         <Select
                             value={compForm.check_type}
                             onValueChange={(v) => setCompForm({ ...compForm, check_type: v })}
@@ -758,14 +758,14 @@ const StatusPages = () => {
             <Modal
                 open={showCreateIncident}
                 onClose={() => setShowCreateIncident(false)}
-                title={t('app.statusPages.createIncident', 'Create Incident')}
+                title={t('app.statusPages.createIncident', 'Create incident')}
                 size="lg"
                 className="status-modal"
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateIncident(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button onClick={handleCreateIncident} disabled={!incidentForm.title.trim()}>
-                            {t('app.statusPages.createIncident', 'Create Incident')}
+                            {t('app.statusPages.createIncident', 'Create incident')}
                         </Button>
                     </>
                 )}

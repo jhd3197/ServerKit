@@ -619,7 +619,7 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
                 group_id: groupId || undefined,
                 trust_fingerprint: true
             });
-            toast.success(t('app.servers.agentPairedSuccessfully', 'Agent paired successfully'));
+            toast.success(t('app.servers.agentPairedSuccessfully', 'Agent paired'));
             window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
                 detail: { type: 'server-paired' },
             }));
@@ -648,7 +648,7 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
             <div className="server-setup-form__body">
                 <div className="pair-instructions">
                     <p>
-                        {t('app.servers.onTheTargetMachineStartThe', 'On the target machine, start the agent. It will display a 6-character pair code and a passphrase — enter both below.')}
+                        {t('app.servers.onTheTargetMachineStartThe', 'On the target machine, start the agent. It will display a 6-character pair code and a passphrase. Enter both below.')}
                     </p>
                 </div>
 
@@ -724,7 +724,7 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
                         >
                             <SelectTrigger id="pair-group"><SelectValue /></SelectTrigger>
                             <SelectContent>
-                                <SelectItem value={NO_GROUP}>{t('app.servers.noGroup', 'No Group')}</SelectItem>
+                                <SelectItem value={NO_GROUP}>{t('app.servers.noGroup', 'No group')}</SelectItem>
                                 {groups.map(g => (
                                     <SelectItem key={g.id} value={String(g.id)}>{g.name}</SelectItem>
                                 ))}
@@ -880,7 +880,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                             {error && <div className="error-message">{error}</div>}
 
                             <p className="section-description">
-                                {t('app.servers.generateASingleConnectionStringPaste', 'Generate a single connection string. Paste it into the agent\'s pairing wizard, or use it with the one-liner installer. The agent\'s hostname becomes the server name on first connect — you can rename it later from the server\'s Settings tab.')}
+                                {t('app.servers.generateASingleConnectionStringPaste', "Generate a single connection string. Paste it into the agent's pairing wizard, or use it with the one-liner installer. The agent's hostname becomes the server name on first connect; you can rename it later from the server's Settings tab.")}
                             </p>
 
                             <div className="form-row">
@@ -892,7 +892,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                                     >
                                         <SelectTrigger id="add-server-group"><SelectValue /></SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value={NO_GROUP}>{t('app.servers.noGroup', 'No Group')}</SelectItem>
+                                            <SelectItem value={NO_GROUP}>{t('app.servers.noGroup', 'No group')}</SelectItem>
                                             {groups.map(group => (
                                                 <SelectItem key={group.id} value={String(group.id)}>{group.name}</SelectItem>
                                             ))}
@@ -959,7 +959,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                                         multiline
                                     />
                                     <CopyField
-                                        label={`${t('app.servers.windowsPowershell', 'Windows (PowerShell)')} · ${t('app.servers.runAsAdministrator', 'Run as Administrator')}`}
+                                        label={`${t('app.servers.windowsPowershell', 'Windows (PowerShell)')} · ${t('app.servers.runAsAdministrator', 'Run as administrator')}`}
                                         value={windowsInstallScript}
                                         multiline
                                     />
@@ -1050,7 +1050,7 @@ const ManageGroupsModal = ({ groups, onClose, onUpdated }) => {
     }
 
     return (
-        <Modal open onClose={onClose} title={t('app.servers.manageServerGroups', 'Manage Server Groups')}>
+        <Modal open onClose={onClose} title={t('app.servers.manageServerGroups', 'Manage server groups')}>
                 <form onSubmit={handleCreateGroup} className="group-form">
                     <Input
                         type="text"

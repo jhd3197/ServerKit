@@ -420,7 +420,7 @@ export function WidgetEditor({
                                             <div className="skwe-edit__series">
                                                 {(cfg.series || []).length === 0 && (
                                                     <div className="skwe-edit__empty">
-                                                        {t('app.widgetEditor.noSeriesYetTheChartDraws', 'No series yet — the chart draws nothing until you add one.')}
+                                                        {t('app.widgetEditor.noSeriesYetTheChartDraws', 'No series yet. The chart draws nothing until you add one.')}
                                                     </div>
                                                 )}
                                                 {(cfg.series || []).map((series, index) => (
@@ -619,7 +619,7 @@ export function WidgetEditor({
                         )}
 
                         <Group title={t('app.widgetEditor.layout', 'Layout')}>
-                            <Field label={t('common.labels.size', 'Size')} hint={t('app.widgetEditor.cellsOnThe12ColumnBoard', 'Cells on the 12-column board — the preview follows.')}>
+                            <Field label={t('common.labels.size', 'Size')} hint={t('app.widgetEditor.cellsOnThe12ColumnBoard', 'Cells on the 12-column board. The preview follows.')}>
                                 <div className="skwe-edit__pair">
                                     <Stepper
                                         label="width"

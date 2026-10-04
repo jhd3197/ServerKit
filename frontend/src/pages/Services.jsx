@@ -193,7 +193,7 @@ const Services = () => {
             <Button size="sm" asChild>
                 <Link to="/services/new">
                     <Plus size={16} />
-                    {t('app.services.newService', 'New Service')}
+                    {t('app.services.newService', 'New service')}
                 </Link>
             </Button>
             <SearchField
@@ -312,7 +312,7 @@ const Services = () => {
                     return <span className="wp-list__dash">—</span>;
                 }
                 return (
-                    <span className="bw-cell" title={t('app.services.transferLast30Days', 'Transfer — last 30 days')}>
+                    <span className="bw-cell" title={t('app.services.transferLast30Days', 'Transfer (last 30 days)')}>
                         <BandwidthSparkline data={bw.series30} width={72} height={20} />
                         <span className="bw-cell__month">{formatBytes(bw.month_bytes)}/mo</span>
                     </span>
@@ -339,7 +339,7 @@ const Services = () => {
         },
         {
             key: 'last_deploy',
-            headerKey: 'app.services.lastDeploy', header: 'Last Deploy',
+            headerKey: 'app.services.lastDeploy', header: 'Last deploy',
             sortable: true,
             // Numeric timestamp sort; never-deployed services sort last.
             sortValue: (app) => (app.last_deploy_at ? new Date(app.last_deploy_at).getTime() : null),
@@ -408,9 +408,9 @@ const Services = () => {
                         <FolderKanban size={14} />
                         {t('app.services.moveToProject', 'Move to project')}
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('restart')} disabled={bulkLoading}>{t('app.services.restartAll', 'Restart All')}</Button>
-                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('stop')} disabled={bulkLoading}>{t('app.services.stopAll', 'Stop All')}</Button>
-                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('start')} disabled={bulkLoading}>{t('app.services.startAll', 'Start All')}</Button>
+                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('restart')} disabled={bulkLoading}>{t('app.services.restartAll', 'Restart all')}</Button>
+                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('stop')} disabled={bulkLoading}>{t('app.services.stopAll', 'Stop all')}</Button>
+                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('start')} disabled={bulkLoading}>{t('app.services.startAll', 'Start all')}</Button>
                 </>
             }
             emptyIcon={Layers}
@@ -418,7 +418,7 @@ const Services = () => {
             emptyDescription="Connect a repository or install a template to get started"
             emptyAction={
                 <Button asChild>
-                    <Link to="/services/new">{t('app.services.createService', 'Create Service')}</Link>
+                    <Link to="/services/new">{t('app.services.createService', 'Create service')}</Link>
                 </Button>
             }
             filteredEmptyIcon={Layers}

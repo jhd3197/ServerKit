@@ -15,10 +15,10 @@ const ONBOARDING_POLL_MS = 3000;
 // `status.states`, but we keep a labeled copy so the wizard renders before the
 // first poll resolves.
 const STEPS = [
-    { id: 'validating', labelKey: 'app.onboardingWizard.validate', label: 'Validate', descriptionKey: 'app.onboardingWizard.checkServerDetailsCompatibility', description: 'Check server details & compatibility' },
+    { id: 'validating', labelKey: 'app.onboardingWizard.validate', label: 'Validate', descriptionKey: 'app.onboardingWizard.checkServerDetailsCompatibility', description: 'Check server details and compatibility' },
     { id: 'installing_prerequisites', labelKey: 'app.onboardingWizard.prerequisites', label: 'Prerequisites', descriptionKey: 'app.onboardingWizard.installBasePackages', description: 'Install base packages' },
     { id: 'installing_docker', labelKey: 'common.labels.docker', label: 'Docker', descriptionKey: 'app.onboardingWizard.ensureDockerIsAvailable', description: 'Ensure Docker is available' },
-    { id: 'pairing_agent', labelKey: 'app.onboardingWizard.pairAgent', label: 'Pair Agent', descriptionKey: 'app.onboardingWizard.connectTheManagementAgent', description: 'Connect the management agent' },
+    { id: 'pairing_agent', labelKey: 'app.onboardingWizard.pairAgent', label: 'Pair agent', descriptionKey: 'app.onboardingWizard.connectTheManagementAgent', description: 'Connect the management agent' },
     { id: 'ready', labelKey: 'app.onboardingWizard.ready', label: 'Ready', descriptionKey: 'app.onboardingWizard.serverIsProvisioned', description: 'Server is provisioned' },
 ];
 
@@ -234,7 +234,7 @@ const OnboardingWizard = ({ serverId, initialState, onStateChange }) => {
         <div className="onboarding-wizard">
             <div className="onboarding-wizard__header">
                 <div className="onboarding-wizard__title">
-                    <h3>{t('app.onboardingWizard.serverOnboarding', 'Server Onboarding')}</h3>
+                    <h3>{t('app.onboardingWizard.serverOnboarding', 'Server onboarding')}</h3>
                     <Pill kind={headerPillKind}>{headerLabel}</Pill>
                     {elapsed != null && (
                         <span className="onboarding-wizard__elapsed">

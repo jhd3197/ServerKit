@@ -310,7 +310,7 @@ export default function CreateTableModal({ preset, engines = [], isAdmin = false
                                     )}
                                     {targets.some((row) => !row.dialect) && (
                                         <SelectGroup>
-                                            <SelectLabel>{t('app.createTableModal.generateOnlyNoClientBridge', 'Generate only — no client bridge')}</SelectLabel>
+                                            <SelectLabel>{t('app.createTableModal.generateOnlyNoClientBridge', 'Generate only (no client bridge)')}</SelectLabel>
                                             {targets.filter((row) => !row.dialect).map((row) => (
                                                 <SelectItem key={row.key} value={row.key}>{row.label} · {row.sub}</SelectItem>
                                             ))}

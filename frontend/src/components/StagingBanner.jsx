@@ -34,7 +34,7 @@ const StagingBanner = () => {
         <div className="staging-banner" role="status">
             <span className="staging-banner__label">{t('app.stagingBanner.staging', 'Staging')}</span>
             <span className="staging-banner__text">
-                {t('app.stagingBanner.stagingInstanceNotTheLivePanel', 'Staging instance — not the live panel')}
+                {t('app.stagingBanner.stagingInstanceNotTheLivePanel', 'Staging instance, not the live panel')}
             </span>
         </div>
     );

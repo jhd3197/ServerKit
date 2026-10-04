@@ -103,7 +103,7 @@ export function GridFilterDrawer({
         <Drawer
             open={open}
             onOpenChange={onOpenChange}
-            title={t('app.gridFilterDrawer.filtersFields', 'Filters & fields')}
+            title={t('app.gridFilterDrawer.filtersFields', 'Filters and fields')}
             subtitle={t('app.gridFilterDrawer.conditionFieldsShown', '{{length}} condition{{value}} · {{length2}} fields shown', { length: rules.length, value: rules.length === 1 ? '' : 's', length2: cfg.cols.length })}
             icon={<Filter size={18} />}
             iconColor="var(--accent-bright)"
@@ -154,7 +154,7 @@ export function GridFilterDrawer({
 
                         {rules.length === 0 && (
                             <div className="sk-gridsec__none">
-                                {t('app.gridFilterDrawer.noConditionsThisViewShowsEvery', 'No conditions — this view shows every')} {noun.replace(/s$/, '')}.
+                                {t('app.gridFilterDrawer.noConditionsThisViewShowsEvery', 'No conditions. This view shows every')} {noun.replace(/s$/, '')}.
                             </div>
                         )}
 

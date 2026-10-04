@@ -101,7 +101,7 @@ const ThemeStudioModal = ({ open, onOpenChange }) => {
 
     const saveToPanel = async () => {
         if (workingTheme.slug === DEFAULT_THEME_SLUG) {
-            toast.error(t('app.themeStudioModal.defaultIsReservedChooseAnotherSlug', '\'default\' is reserved — choose another slug'));
+            toast.error(t('app.themeStudioModal.defaultIsReservedChooseAnotherSlug', "'default' is reserved. Choose another slug"));
             return;
         }
         setSaving(true);
@@ -130,7 +130,7 @@ const ThemeStudioModal = ({ open, onOpenChange }) => {
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="theme-studio">
                 <DialogHeader>
-                    <DialogTitle>{t('app.themeStudioModal.themeStudio', 'Theme Studio')}</DialogTitle>
+                    <DialogTitle>{t('app.themeStudioModal.themeStudio', 'Theme studio')}</DialogTitle>
                     <DialogDescription>
                         {t('app.themeStudioModal.editColorsOverTheLivePanel', 'Edit colors over the live panel. Export a shareable theme.json, save it here, or submit it to the registry.')}
                     </DialogDescription>

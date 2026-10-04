@@ -142,7 +142,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                             {t('app.setupStepSecurity.twoFactorAuthentication', 'Two-factor authentication')}
                         </div>
                         <p className="security-offer__desc">
-                            {t('app.setupStepSecurity.takesAboutThirtySecondsWithAny', 'Takes about thirty seconds with any authenticator app — 1Password, Aegis, Google Authenticator. You\'ll get backup codes in case you lose the device.')}
+                            {t('app.setupStepSecurity.takesAboutThirtySecondsWithAny', "Takes about thirty seconds with any authenticator app, such as 1Password, Aegis or Google Authenticator. You'll get backup codes in case you lose the device.")}
                         </p>
                     </div>
                 </div>
@@ -246,7 +246,7 @@ const SetupStepSecurity = ({ onComplete }) => {
         <div className="wizard-step">
             <h2 className="wizard-step-title">{t('app.setupStepSecurity.saveYourBackupCodes', 'Save your backup codes')}</h2>
             <p className="wizard-step-description">
-                {t('app.setupStepSecurity.theseAreShownOnceAndNever', 'These are shown once and never again. Each works a single time if you lose your authenticator — keep them somewhere that does not depend on this server being reachable.')}
+                {t('app.setupStepSecurity.theseAreShownOnceAndNever', 'These are shown once and never again. Each works a single time if you lose your authenticator. Keep them somewhere that does not depend on this server being reachable.')}
             </p>
 
             <CopyField

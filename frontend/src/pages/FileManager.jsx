@@ -636,7 +636,7 @@ function FileManager() {
             ? `Delete "${items[0].name}"?${items[0].is_dir ? ' All contents inside will be removed.' : ''}`
             : `Delete ${items.length} items? This cannot be undone.`;
         setConfirmDialog({
-            titleKey: 'app.fileManager.deleteConfirmation', title: 'Delete Confirmation',
+            titleKey: 'app.fileManager.deleteConfirmation', title: 'Delete confirmation',
             message,
             confirmTextKey: 'common.actions.delete', confirmText: 'Delete',
             variant: 'danger',
@@ -959,7 +959,7 @@ function FileManager() {
 
             {isRemote && (
                 <div className="file-manager-target-banner">
-                    {t('app.fileManager.browsingOn', 'Browsing on')} <strong>{target.name}</strong> {t('app.fileManager.readWriteOnlyMkdirDeleteRename', '— read/write only. Mkdir/delete/rename/upload aren\'t yet supported on remote agents.')}
+                    {t('app.fileManager.browsingOn', 'Browsing on')} <strong>{target.name}</strong> {t('app.fileManager.readWriteOnlyMkdirDeleteRename', "(read/write only). Mkdir/delete/rename/upload aren't yet supported on remote agents.")}
                 </div>
             )}
 
@@ -1199,7 +1199,7 @@ function FileManager() {
                         {!isRemote && !isS3 && (
                             <div className="sidebar-section sidebar-section--volumes">
                                 <div className="sidebar-section-header sidebar-section-header--split">
-                                    <span className="sidebar-section-title" title={t('app.fileManager.diskUsage', 'Disk Usage')}>
+                                    <span className="sidebar-section-title" title={t('app.fileManager.diskUsage', 'Disk usage')}>
                                         <HardDrive size={13} />
                                         <span>{t('app.fileManager.volumes', 'Volumes')}</span>
                                     </span>
@@ -1466,9 +1466,9 @@ function FileManager() {
             />
 
             {/* Modals */}
-            <Modal open={showNewFileModal} onClose={() => setShowNewFileModal(false)} title={t('app.fileManager.createNewFile', 'Create New File')}>
+            <Modal open={showNewFileModal} onClose={() => setShowNewFileModal(false)} title={t('app.fileManager.createNewFile', 'Create new file')}>
                             <div className="form-group">
-                                <Label>{t('app.fileManager.fileName', 'File Name')}</Label>
+                                <Label>{t('app.fileManager.fileName', 'File name')}</Label>
                                 <Input
                                     type="text"
                                     value={newFileName}
@@ -1481,13 +1481,13 @@ function FileManager() {
                             <p className="text-muted">{t('app.fileManager.willBeCreatedIn', 'Will be created in:')} <code>{currentPath}</code></p>
                         <div className="modal-actions">
                             <Button variant="outline" onClick={() => setShowNewFileModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button onClick={handleCreateFile}>{t('app.fileManager.createFile', 'Create File')}</Button>
+                            <Button onClick={handleCreateFile}>{t('app.fileManager.createFile', 'Create file')}</Button>
                         </div>
             </Modal>
 
-            <Modal open={showNewFolderModal} onClose={() => setShowNewFolderModal(false)} title={t('app.fileManager.createNewFolder', 'Create New Folder')}>
+            <Modal open={showNewFolderModal} onClose={() => setShowNewFolderModal(false)} title={t('app.fileManager.createNewFolder', 'Create new folder')}>
                             <div className="form-group">
-                                <Label>{t('app.fileManager.folderName', 'Folder Name')}</Label>
+                                <Label>{t('app.fileManager.folderName', 'Folder name')}</Label>
                                 <Input
                                     type="text"
                                     value={newFolderName}
@@ -1500,13 +1500,13 @@ function FileManager() {
                             <p className="text-muted">{t('app.fileManager.willBeCreatedIn', 'Will be created in:')} <code>{currentPath}</code></p>
                         <div className="modal-actions">
                             <Button variant="outline" onClick={() => setShowNewFolderModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button onClick={handleCreateFolder}>{t('app.fileManager.createFolder', 'Create Folder')}</Button>
+                            <Button onClick={handleCreateFolder}>{t('app.fileManager.createFolder', 'Create folder')}</Button>
                         </div>
             </Modal>
 
             <Modal open={showRenameModal} onClose={() => setShowRenameModal(false)} title={t('app.fileManager.rename2', 'Rename {{value}}', { value: renameTarget?.is_dir ? 'Folder' : 'File' })}>
                             <div className="form-group">
-                                <Label>{t('app.fileManager.newName', 'New Name')}</Label>
+                                <Label>{t('app.fileManager.newName', 'New name')}</Label>
                                 <Input
                                     type="text"
                                     value={newName}
@@ -1521,9 +1521,9 @@ function FileManager() {
                         </div>
             </Modal>
 
-            <Modal open={showPermissionsModal} onClose={() => setShowPermissionsModal(false)} title={t('app.fileManager.changePermissions', 'Change Permissions')}>
+            <Modal open={showPermissionsModal} onClose={() => setShowPermissionsModal(false)} title={t('app.fileManager.changePermissions', 'Change permissions')}>
                             <div className="form-group">
-                                <Label>{t('app.fileManager.permissionsOctal', 'Permissions (Octal)')}</Label>
+                                <Label>{t('app.fileManager.permissionsOctal', 'Permissions (octal)')}</Label>
                                 <Input
                                     type="text"
                                     value={newPermissions}

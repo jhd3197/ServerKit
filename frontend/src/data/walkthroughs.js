@@ -19,7 +19,7 @@ export const WALKTHROUGHS = Object.freeze([
                 titleKey: 'app.walkthroughs.openServiceWizard',
                 title: 'Open the service wizard',
                 descriptionKey: 'app.walkthroughs.openServiceWizardDescription',
-                description: 'Start from ServerKit’s dedicated three-step service flow.',
+                description: "Start from ServerKit's dedicated three-step service flow.",
                 path: '/services/new',
                 route: '/services/new',
                 target: '[data-walkthrough="new-service"]',
@@ -104,7 +104,7 @@ export const WALKTHROUGHS = Object.freeze([
                 titleKey: 'app.walkthroughs.verifyAndSaveCodes',
                 title: 'Verify and save recovery codes',
                 descriptionKey: 'app.walkthroughs.verifyAndSaveCodesDescription',
-                description: 'The guide verifies the live account status—it never stores your code or secret.',
+                description: 'The guide verifies the live account status. It never stores your code or secret.',
                 path: '/settings/security?focus=setting:security-2fa',
                 signal: 'two-factor-enabled',
                 check: 'two-factor-enabled',
@@ -133,9 +133,9 @@ export const WALKTHROUGHS = Object.freeze([
             {
                 id: 'open-domain-settings',
                 titleKey: 'app.walkthroughs.openDomainSettings',
-                title: 'Open a service’s domain settings',
+                title: "Open a service's domain settings",
                 descriptionKey: 'app.walkthroughs.openDomainSettingsDescription',
-                description: 'Choose the service you want to publish, then open Settings → Domain & SSL.',
+                description: 'Choose the service you want to publish, then open Settings → Domain and SSL.',
                 path: '/services',
                 signal: 'service-domain-settings-opened',
                 target: '[data-walkthrough="service-domain-panel"]',
@@ -168,7 +168,7 @@ export const WALKTHROUGHS = Object.freeze([
                 titleKey: 'app.walkthroughs.enableHttps',
                 title: 'Enable HTTPS',
                 descriptionKey: 'app.walkthroughs.enableHttpsDescription',
-                description: 'Request a Let’s Encrypt certificate. The guide completes after ServerKit verifies it.',
+                description: "Request a Let's Encrypt certificate. The guide completes after ServerKit verifies it.",
                 signal: 'service-ssl-enabled',
                 target: '[data-walkthrough="service-enable-ssl"]',
                 actionKey: 'app.walkthroughs.enableHttpsAction',
@@ -433,7 +433,7 @@ export function localizeWalkthroughs(t) {
             steps: [
                 {
                     title: t('app.walkthroughs.openServiceWizard', 'Open the service wizard'),
-                    description: t('app.walkthroughs.openServiceWizardDescription', 'Start from ServerKit’s dedicated three-step service flow.'),
+                    description: t('app.walkthroughs.openServiceWizardDescription', "Start from ServerKit's dedicated three-step service flow."),
                     action: t('app.walkthroughs.openWizard', 'Open wizard'),
                 },
                 {
@@ -470,7 +470,7 @@ export function localizeWalkthroughs(t) {
                 },
                 {
                     title: t('app.walkthroughs.verifyAndSaveCodes', 'Verify and save recovery codes'),
-                    description: t('app.walkthroughs.verifyAndSaveCodesDescription', 'The guide verifies the live account status—it never stores your code or secret.'),
+                    description: t('app.walkthroughs.verifyAndSaveCodesDescription', 'The guide verifies the live account status. It never stores your code or secret.'),
                     action: t('app.walkthroughs.checkStatus', 'Check status'),
                 },
             ],
@@ -480,10 +480,10 @@ export function localizeWalkthroughs(t) {
             description: t('app.walkthroughs.publishServiceDescription', 'Attach a public domain, confirm DNS, and enable HTTPS.'),
             duration: t('app.walkthroughs.sixMinutes', 'About 6 minutes'),
             steps: [
-                { title: t('app.walkthroughs.openDomainSettings', 'Open a service’s domain settings'), description: t('app.walkthroughs.openDomainSettingsDescription', 'Choose the service you want to publish, then open Settings → Domain & SSL.'), action: t('app.walkthroughs.chooseService', 'Choose a service') },
+                { title: t('app.walkthroughs.openDomainSettings', "Open a service's domain settings"), description: t('app.walkthroughs.openDomainSettingsDescription', 'Choose the service you want to publish, then open Settings → Domain and SSL.'), action: t('app.walkthroughs.chooseService', 'Choose a service') },
                 { title: t('app.walkthroughs.attachPublicDomain', 'Attach a public domain'), description: t('app.walkthroughs.attachPublicDomainDescription', 'Enter a domain you control and attach it to the service.'), action: t('app.walkthroughs.attachDomain', 'Attach domain') },
                 { title: t('app.walkthroughs.confirmDns', 'Confirm the DNS record'), description: t('app.walkthroughs.confirmDnsDescription', 'Point the domain at this server and wait until public DNS resolves to the correct address.'), action: t('app.walkthroughs.reviewDns', 'Review DNS') },
-                { title: t('app.walkthroughs.enableHttps', 'Enable HTTPS'), description: t('app.walkthroughs.enableHttpsDescription', 'Request a Let’s Encrypt certificate. The guide completes after ServerKit verifies it.'), action: t('app.walkthroughs.enableHttpsAction', 'Enable HTTPS') },
+                { title: t('app.walkthroughs.enableHttps', 'Enable HTTPS'), description: t('app.walkthroughs.enableHttpsDescription', "Request a Let's Encrypt certificate. The guide completes after ServerKit verifies it."), action: t('app.walkthroughs.enableHttpsAction', 'Enable HTTPS') },
             ],
         },
         'monitor-service': {

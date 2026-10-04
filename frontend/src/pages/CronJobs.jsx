@@ -212,8 +212,8 @@ const CronJobs = () => {
 
     const handleDeleteJob = async (job) => {
         const confirmed = await confirm({
-            title: t('app.cronJobs.deleteCronJob', 'Delete Cron Job'),
-            message: t('app.cronJobs.areYouSureYouWantTo', 'Are you sure you want to delete this cron job?'),
+            title: t('app.cronJobs.deleteCronJob', 'Delete cron job'),
+            message: t('app.cronJobs.areYouSureYouWantTo', "Delete this cron job? This can't be undone."),
         });
         if (!confirmed) return;
         try {
@@ -418,7 +418,7 @@ const CronJobs = () => {
         <PageLayout
             className="cron-page"
             icon={<Clock size={18} />}
-            title={t('app.cronJobs.cronJobs', 'Cron Jobs')}
+            title={t('app.cronJobs.cronJobs', 'Cron jobs')}
             actions={(
                 <>
                     <Button variant="outline" size="sm" onClick={loadData}>
@@ -512,7 +512,7 @@ const CronJobs = () => {
                     )}
 
                     <div className="cron-tznote">
-                        <Clock size={13} /> {t('app.cronJobs.timesShownInYourLocalTimezone', 'Times shown in your local timezone ·')} {VIEWER_TZ}
+                        <Clock size={13} /> {t('app.cronJobs.timesShownInYourLocalTimezone', 'Times shown in your local time zone ·')} {VIEWER_TZ}
                     </div>
                 </div>
             )}
@@ -537,11 +537,11 @@ const CronJobs = () => {
             />
 
             {/* Run Output Modal */}
-            <Modal open={!!runOutput} onClose={() => setRunOutput(null)} title={runOutput ? t('app.cronJobs.runOutput', 'Run Output: {{jobName}}', { jobName: runOutput.jobName }) : ''}>
+            <Modal open={!!runOutput} onClose={() => setRunOutput(null)} title={runOutput ? t('app.cronJobs.runOutput', 'Run output: {{jobName}}', { jobName: runOutput.jobName }) : ''}>
                 {runOutput && (
                     <div className="run-output">
                         <div className="run-output-exit">
-                            <span className="run-output-label">{t('app.cronJobs.exitCode', 'Exit Code')}</span>
+                            <span className="run-output-label">{t('app.cronJobs.exitCode', 'Exit code')}</span>
                             <Pill kind={runOutput.exitCode === 0 ? 'green' : 'red'}>
                                 {runOutput.exitCode}
                             </Pill>

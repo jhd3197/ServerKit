@@ -48,7 +48,7 @@ const ThemeBrowseModal = ({ open, onOpenChange }) => {
             setThemes((prev) => prev.map((themeEntry) => (
                 themeEntry.slug === slug ? { ...themeEntry, installed: true } : themeEntry
             )));
-            toast.success(t('app.themeBrowseModal.themeInstalledFindItInThe', 'Theme installed — find it in the gallery'));
+            toast.success(t('app.themeBrowseModal.themeInstalledFindItInThe', 'Theme installed. Find it in the gallery.'));
         } catch (e) {
             toast.error(e?.message || t('app.themeBrowseModal.couldNotInstallThatTheme', 'Could not install that theme'));
         } finally {

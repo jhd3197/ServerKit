@@ -71,7 +71,7 @@ function AnalysisReport({ analysis }) {
                 <div className="import-wizard__callout import-wizard__callout--danger">
                     <AlertTriangle size={16} aria-hidden="true" />
                     <div>
-                        <strong>{t('app.importWizard.notSupportedTheseItemsWillBe', 'Not supported — these items will be skipped:')}</strong>
+                        <strong>{t('app.importWizard.notSupportedTheseItemsWillBe', 'Not supported. These items will be skipped:')}</strong>
                         <ul>{unsupported.map((u, i) => <li key={i}>{u}</li>)}</ul>
                     </div>
                 </div>
@@ -487,7 +487,7 @@ function ImportWizard() {
                                     placeholder="https://old-server.example.com/backup-user.tar.gz"
                                     disabled={busy}
                                 />
-                                <span className="import-wizard__muted">{t('app.importWizard.thePanelDownloadsTheArchiveServer', 'The panel downloads the archive server-side — handy when the backup is too large to route through your browser.')}</span>
+                                <span className="import-wizard__muted">{t('app.importWizard.thePanelDownloadsTheArchiveServer', 'The panel downloads the archive server-side, which helps when the backup is too large to route through your browser.')}</span>
                             </div>
                         )}
 
@@ -558,7 +558,7 @@ function ImportWizard() {
                         <ul className="import-wizard__plan">
                             <li>
                                 <Globe size={15} aria-hidden="true" />
-                                <span><strong>{domainCount}</strong> {t('app.importWizard.appContainer', 'app container')}{domainCount === 1 ? '' : 's'} {t('app.importWizard.onePerDomainDocrootCopiedIn', '— one per domain, docroot copied in and served behind Nginx')}</span>
+                                <span><strong>{domainCount}</strong> {t('app.importWizard.appContainer', 'app container')}{domainCount === 1 ? '' : 's'} {t('app.importWizard.onePerDomainDocrootCopiedIn', '(one per domain, docroot copied in and served behind Nginx)')}</span>
                             </li>
                             <li className={skipDb ? 'is-skipped' : ''}>
                                 <Database size={15} aria-hidden="true" />
@@ -573,7 +573,7 @@ function ImportWizard() {
                             <div className="import-wizard__callout import-wizard__callout--warning">
                                 <AlertTriangle size={16} aria-hidden="true" />
                                 <div>
-                                    <p>{analysis.mail_accounts_count} {t('app.importWizard.mailAccount', 'mail account')}{analysis.mail_accounts_count === 1 ? '' : 's'} {t('app.importWizard.foundInTheBackupWillNot', 'found in the backup will not be imported — mail is handled by the mail extension.')}</p>
+                                    <p>{analysis.mail_accounts_count} {t('app.importWizard.mailAccount', 'mail account')}{analysis.mail_accounts_count === 1 ? '' : 's'} {t('app.importWizard.foundInTheBackupWillNot', 'found in the backup will not be imported. Mail is handled by the mail extension.')}</p>
                                 </div>
                             </div>
                         )}
@@ -650,7 +650,7 @@ function ImportWizard() {
                             )}
                             {imp.status === 'completed' && (
                                 <Button asChild>
-                                    <Link to="/services">{t('app.importWizard.goToServices', 'Go to Services')}</Link>
+                                    <Link to="/services">{t('app.importWizard.goToServices', 'Go to services')}</Link>
                                 </Button>
                             )}
                         </div>

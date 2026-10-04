@@ -19,7 +19,7 @@ const ROUTES = [
     { re: /^\/backups(\/|$)/, labelKey: 'common.labels.backups', label: 'Backups', entity: 'backups' },
     { re: /^\/dns(\/|$)/, label: 'DNS', entity: 'dns' },
     { re: /^\/domains(\/|$)/, labelKey: 'common.labels.domains', label: 'Domains', entity: 'domains' },
-    { re: /^\/files(\/|$)/, labelKey: 'app.pageContextMap.fileManager', label: 'File Manager', entity: 'files' },
+    { re: /^\/files(\/|$)/, labelKey: 'app.pageContextMap.fileManager', label: 'File manager', entity: 'files' },
     { re: /^\/extensions/, labelKey: 'common.labels.extensions', label: 'Extensions', entity: 'marketplace' },
     { re: /^\/$/, labelKey: 'app.pageContextMap.dashboard', label: 'Dashboard', entity: 'dashboard' },
 ];

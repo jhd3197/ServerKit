@@ -39,7 +39,7 @@ const LinkedAppsSection = ({
             <div className="linked-apps-header">
                 <h3>
                     <GitBranch size={18} />
-                    {t('app.linkedAppsSection.environmentLinking', 'Environment Linking')}
+                    {t('app.linkedAppsSection.environmentLinking', 'Environment linking')}
                 </h3>
                 {!app.has_linked_app && (
                     <SharedButton variant="outline" type="button"
@@ -48,7 +48,7 @@ const LinkedAppsSection = ({
                         disabled={loading}
                     >
                         <Link2 size={14} />
-                        {t('app.linkedAppsSection.linkApp', 'Link App')}
+                        {t('app.linkedAppsSection.linkApp', 'Link app')}
                     </SharedButton>
                 )}
             </div>
@@ -119,7 +119,7 @@ const LinkedAppsSection = ({
                             disabled={loading}
                         >
                             <Link2 size={14} />
-                            {t('app.linkedAppsSection.linkApp', 'Link App')}
+                            {t('app.linkedAppsSection.linkApp', 'Link app')}
                         </SharedButton>
                     </div>
                 ) : (
@@ -135,7 +135,7 @@ const LinkedAppsSection = ({
                     <div className="shared-config-info">
                         <div className="shared-config-badge">
                             <Server size={12} />
-                            {t('app.linkedAppsSection.sharedDatabase', 'Shared Database')}
+                            {t('app.linkedAppsSection.sharedDatabase', 'Shared database')}
                         </div>
                         {app.shared_config.shared_db && (
                             <div className="shared-config-details">

@@ -399,7 +399,7 @@ const WorkspaceDetail = () => {
                             ))}
                         </div>
                         <hr />
-                        <h4>{t('app.workspaceDetail.grantAccess', 'Grant Access')}</h4>
+                        <h4>{t('app.workspaceDetail.grantAccess', 'Grant access')}</h4>
                         <div className="form-group">
                             <label htmlFor="ws-grant-role">{t('app.workspaceDetail.roleForNewGrants', 'Role for new grants')}</label>
                             <Select value={grantRole} onValueChange={setGrantRole}>
@@ -425,7 +425,7 @@ const WorkspaceDetail = () => {
 
             {deleteConfirm && (
                 <ConfirmDialog
-                    title={t('app.workspaceDetail.deleteWorkspace', 'Delete Workspace')}
+                    title={t('app.workspaceDetail.deleteWorkspace', 'Delete workspace')}
                     message={t('app.workspaceDetail.deleteAllDataWillBeLost', 'Delete "{{name}}"? All data will be lost.', { name: ws.name })}
                     onConfirm={handleDelete}
                     onCancel={() => setDeleteConfirm(false)}

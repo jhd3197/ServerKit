@@ -335,7 +335,7 @@ const ServerTemplates = () => {
     // Publish the admin "Create Template" action to the shared tab-group top bar.
     useTopbarActions(() =>
         user?.is_admin ? (
-            <Button size="sm" onClick={() => setShowCreateModal(true)}>{t('app.serverTemplates.createTemplate', 'Create Template')}</Button>
+            <Button size="sm" onClick={() => setShowCreateModal(true)}>{t('app.serverTemplates.createTemplate', 'Create template')}</Button>
         ) : null,
         [user?.is_admin]
     );
@@ -651,7 +651,7 @@ const ServerTemplates = () => {
                                 ].filter(Boolean).join(' · ')}
                                 action={(
                                     <Button variant="outline" size="sm" onClick={() => handleCreateFromLibrary(key)}>
-                                        {t('app.serverTemplates.useTemplate', 'Use Template')}
+                                        {t('app.serverTemplates.useTemplate', 'Use template')}
                                     </Button>
                                 )}
                             />
@@ -665,7 +665,7 @@ const ServerTemplates = () => {
             <Modal
                 open={showCreateModal}
                 onClose={() => setShowCreateModal(false)}
-                title={t('app.serverTemplates.createTemplate', 'Create Template')}
+                title={t('app.serverTemplates.createTemplate', 'Create template')}
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
@@ -725,7 +725,7 @@ const ServerTemplates = () => {
 
             {deleteConfirm && (
                 <ConfirmDialog
-                    title={t('app.serverTemplates.deleteTemplate', 'Delete Template')}
+                    title={t('app.serverTemplates.deleteTemplate', 'Delete template')}
                     message={t('app.serverTemplates.deleteThisCannotBeUndone', 'Delete "{{name}}"? This cannot be undone.', { name: deleteConfirm.name })}
                     onConfirm={() => handleDelete(deleteConfirm.id)}
                     onCancel={() => setDeleteConfirm(null)}

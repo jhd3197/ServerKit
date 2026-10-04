@@ -152,7 +152,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
 
     return (
         <div className="wizard-step">
-            <h2 className="wizard-step-title">{t('app.setupStepSummary.youReAllSet', 'You\'re all set')}</h2>
+            <h2 className="wizard-step-title">{t('app.setupStepSummary.youReAllSet', 'Setup complete')}</h2>
             <p className="wizard-step-description">
                 {t('app.setupStepSummary.hereSASummaryOfYour', 'Here\'s a summary of your setup. You can change these later in Settings.')}
             </p>
@@ -171,7 +171,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                 </div>
 
                 <div className="summary-section">
-                    <div className="summary-section-title">{t('app.setupStepSummary.useCases', 'Use Cases')}</div>
+                    <div className="summary-section-title">{t('app.setupStepSummary.useCases', 'Use cases')}</div>
                     {useCases && useCases.length > 0 ? (
                         <div className="summary-tags">
                             {useCases.map((uc) => (
@@ -219,11 +219,11 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                         installable extension differ from "minimal"; each card
                         names exactly what it would install. */}
                     <p className="recommendation-hint">
-                        {t('app.setupStepSummary.howMuchSecurityTooling', 'How much security tooling should we install? Everything here is an extension — add or remove any of it later from the Marketplace.')}
+                        {t('app.setupStepSummary.howMuchSecurityTooling', 'How much security tooling should we install? Everything here is an extension. Add or remove any of it later from the Marketplace.')}
                     </p>
                     <div className="summary-preset-list">
                         {[
-                            { key: 'minimal', label: t('app.setupStepSummary.postureMinimal', 'Minimal'), desc: t('app.setupStepSummary.postureMinimalDesc', 'The lean default: firewall, SSH keys, IP lists, integrity and audit — nothing extra installed.') },
+                            { key: 'minimal', label: t('app.setupStepSummary.postureMinimal', 'Minimal'), desc: t('app.setupStepSummary.postureMinimalDesc', 'The lean default: firewall, SSH keys, IP lists, integrity and audit, with nothing extra installed.') },
                             { key: 'recommended', label: t('app.setupStepSummary.postureRecommended', 'Recommended'), desc: t('app.setupStepSummary.postureRecommendedDesc', 'Adds brute-force protection and automatic security updates.') },
                             { key: 'hardened', label: t('app.setupStepSummary.postureHardened', 'Hardened'), desc: t('app.setupStepSummary.postureHardenedDesc', 'Adds malware scanning, host audits, container image scanning and crowd-sourced IP blocking.') },
                         ].map((level) => {
@@ -247,7 +247,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                                             <> {'— '}{exts.map((e) => e.display_name).join(', ')}</>
                                         )}
                                         {level.key !== 'minimal' && exts.length === 0 && (
-                                            <> {t('app.setupStepSummary.postureNotYetAvailable', '— not yet available from the extension registry; pick it later from the Marketplace.')}</>
+                                            <> {t('app.setupStepSummary.postureNotYetAvailable', '(not yet available from the extension registry; pick it later from the Marketplace)')}</>
                                         )}
                                     </span>
                                 </SharedButton>
@@ -279,7 +279,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                     {presetOpen && (
                         <div className="summary-preset-picker">
                             <p className="recommendation-hint">
-                                {t('app.setupStepSummary.hiddenPagesStayReachableByUrl', 'Hidden pages stay reachable by URL and from search — this only trims the sidebar. Change it any time in Settings.')}
+                                {t('app.setupStepSummary.hiddenPagesStayReachableByUrl', 'Hidden pages stay reachable by URL and from search; this only trims the sidebar. Change it any time in Settings.')}
                             </p>
                             <div className="summary-preset-list">
                                 {Object.entries(SIDEBAR_PRESETS).map(([key, profile]) => (
@@ -319,7 +319,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                         ) : (
                             <>
                                 <p className="recommendation-hint">
-                                    {t('app.setupStepSummary.weLlInstallWhatYouCheck', 'We\'ll install what you check. Uncheck anything you don\'t need — you can add it later from Extensions.')}
+                                    {t('app.setupStepSummary.weLlInstallWhatYouCheck', "We'll install what you check. Uncheck anything you don't need; you can add it later from Extensions.")}
                                 </p>
                                 <div className="recommendation-list">
                                     {recommendations.map((rec) => (

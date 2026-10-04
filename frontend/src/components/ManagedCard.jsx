@@ -36,8 +36,8 @@ export default function ManagedCard({ capability, profile, compact = false }) {
             </h3>
             <p className="managed-card__body">
                 {since
-                    ? t('managed.card.bodySince', 'ServerKit Cloud took this over on {{date}} as part of your Managed service. The page is hidden, not removed — its API still answers and everything returns the moment the Managed scope ends.', { date: since })
-                    : t('managed.card.body', 'ServerKit Cloud takes care of this as part of your Managed service. The page is hidden, not removed — its API still answers and everything returns the moment the Managed scope ends.')}
+                    ? t('managed.card.bodySince', 'ServerKit Cloud took this over on {{date}} as part of your Managed service. The page is hidden, not removed. Its API still answers and everything returns the moment the Managed scope ends.', { date: since })
+                    : t('managed.card.body', 'ServerKit Cloud takes care of this as part of your Managed service. The page is hidden, not removed. Its API still answers and everything returns the moment the Managed scope ends.')}
                 {capability === 'updates' && (
                     <> {t('managed.card.updatesNote', 'The panel still updates itself; only the update screens are hidden.')}</>
                 )}

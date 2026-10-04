@@ -31,7 +31,7 @@ const RequiresDocker = ({ children, what = 'This page' }) => {
             <h2 className="requires-docker__title">{t('app.requiresDocker.dockerIsnTAvailable', 'Docker isn\'t available')}</h2>
 
             <p className="requires-docker__text">
-                {what} {t('app.requiresDocker.needsDockerToRunContainersAnd', 'needs Docker to run containers, and this server was installed with the')} <strong>{profileLabel}</strong> {t('app.requiresDocker.profileWhichLeavesItOutNothing', 'profile, which leaves it out. Nothing is locked — adding Docker turns this page on.')}
+                {what} {t('app.requiresDocker.needsDockerToRunContainersAnd', 'needs Docker to run containers, and this server was installed with the')} <strong>{profileLabel}</strong> {t('app.requiresDocker.profileWhichLeavesItOutNothing', 'profile, which leaves it out. Nothing is locked; adding Docker turns this page on.')}
             </p>
 
             <div className="requires-docker__how">
@@ -48,7 +48,7 @@ const RequiresDocker = ({ children, what = 'This page' }) => {
             </div>
 
             <p className="requires-docker__footnote">
-                {t('app.requiresDocker.serverkitReChecksForDockerAutomatically', 'ServerKit re-checks for Docker automatically. Monitoring, domains, certificates, cron and DNS keep working without it — see')}{' '}
+                {t('app.requiresDocker.serverkitReChecksForDockerAutomatically', 'ServerKit re-checks for Docker automatically. Monitoring, domains, certificates, cron and DNS keep working without it. See')}{' '}
                 <Link to="/settings/system">{t('app.requiresDocker.settingsSystem', 'Settings → System')}</Link> {t('app.requiresDocker.forThisInstallSProfile', 'for this install\'s profile.')}
             </p>
         </div>

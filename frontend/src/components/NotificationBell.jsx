@@ -93,7 +93,7 @@ export default function NotificationBell() {
 
                     <div className="sk-notif__list">
                         {items.length === 0 ? (
-                            <div className="sk-notif__empty">{t('notifications.empty', 'You’re all caught up.')}</div>
+                            <div className="sk-notif__empty">{t('notifications.empty', "You're all caught up.")}</div>
                         ) : (
                             items.map((item) => (
                                 item.kind === 'notice' ? (

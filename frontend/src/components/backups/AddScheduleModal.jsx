@@ -20,16 +20,16 @@ export default function AddScheduleModal({ open, onClose, onCreate, onCreated, r
         ? t('app.backups.schedulePaths', 'Paths (comma-separated)')
         : form.values.backupType === 'database'
             ? t('app.backups.scheduleDatabase', 'Database (format: mysql:dbname or postgresql:dbname)')
-            : t('app.backups.applicationName', 'Application Name');
+            : t('app.backups.applicationName', 'Application name');
 
     return (
-        <Modal open={open} onClose={() => { if (!form.isSubmitting) onClose(); }} title={t('app.backups.addBackupSchedule', 'Add Backup Schedule')}>
+        <Modal open={open} onClose={() => { if (!form.isSubmitting) onClose(); }} title={t('app.backups.addBackupSchedule', 'Add backup schedule')}>
             <form onSubmit={form.handleSubmit} data-walkthrough="backup-schedule-form">
                 {form.submitError && <p className="error-message" role="alert">{form.submitError}</p>}
-                <FormField htmlFor="backup-schedule-name" label={t('app.backups.scheduleName', 'Schedule Name')} error={form.getFieldError('name')} required>
-                    <Input id="backup-schedule-name" type="text" {...form.getFieldProps('name')} placeholder={t('app.backups.dailyAppBackup', 'Daily App Backup')} required />
+                <FormField htmlFor="backup-schedule-name" label={t('app.backups.scheduleName', 'Schedule name')} error={form.getFieldError('name')} required>
+                    <Input id="backup-schedule-name" type="text" {...form.getFieldProps('name')} placeholder={t('app.backups.dailyAppBackup', 'Daily app backup')} required />
                 </FormField>
-                <FormField htmlFor="backup-schedule-type" label={t('app.backups.backupType', 'Backup Type')} error={form.getFieldError('backupType')}>
+                <FormField htmlFor="backup-schedule-type" label={t('app.backups.backupType', 'Backup type')} error={form.getFieldError('backupType')}>
                     <Select
                         name="backupType"
                         value={form.values.backupType}
@@ -41,7 +41,7 @@ export default function AddScheduleModal({ open, onClose, onCreate, onCreated, r
                         <SelectContent>
                             <SelectItem value="application">{t('app.backups.application', 'Application')}</SelectItem>
                             <SelectItem value="database">{t('app.backups.database', 'Database')}</SelectItem>
-                            <SelectItem value="files">{t('app.backups.filesDirectories', 'Files / Directories')}</SelectItem>
+                            <SelectItem value="files">{t('app.backups.filesDirectories', 'Files / directories')}</SelectItem>
                         </SelectContent>
                     </Select>
                 </FormField>
@@ -61,7 +61,7 @@ export default function AddScheduleModal({ open, onClose, onCreate, onCreated, r
                 )}
                 <div className="modal-actions">
                     <Button type="button" variant="outline" onClick={onClose} disabled={form.isSubmitting}>{t('common.actions.cancel', 'Cancel')}</Button>
-                    <Button type="submit" disabled={form.isSubmitting} data-walkthrough="backup-schedule-submit">{t('app.backups.addSchedule', 'Add Schedule')}</Button>
+                    <Button type="submit" disabled={form.isSubmitting} data-walkthrough="backup-schedule-submit">{t('app.backups.addSchedule', 'Add schedule')}</Button>
                 </div>
             </form>
         </Modal>

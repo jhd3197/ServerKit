@@ -17,7 +17,7 @@ test('recipe start awaits the shared mutation contract before returning its job'
     assert.deepEqual(messages, []);
     resolve({ job_id: 'job-123' });
     assert.equal(await pending, 'job-123');
-    assert.deepEqual(messages, ['Recipe started on Local.']);
+    assert.deepEqual(messages, ['Recipe started on Local']);
 });
 
 test('failed recipe starts return no navigation target and report one error', async () => {

@@ -80,7 +80,7 @@ export default function SlotsCard({ app }) {
         setRestoring(true);
         try {
             await api.restoreAppSlotDatabase(app.id, offer.deployment_id);
-            toast.success(t('app.slots.restoredDb', 'Database restored to before v{{version}}.', { version: offer.version }));
+            toast.success(t('app.slots.restoredDb', 'Database restored to before v{{version}}', { version: offer.version }));
             load();
         } catch (err) {
             toast.error(err.message || t('app.slots.restoreDbFailed', 'Restoring the database failed'));

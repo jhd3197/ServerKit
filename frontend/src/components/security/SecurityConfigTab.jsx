@@ -83,7 +83,7 @@ const SecurityConfigTab = () => {
 
             <SharedCard variant="legacy" className="card">
                 <SharedCardHeader variant="legacy" className="card-header">
-                    <h3>{t('app.securityConfigTab.clamavSettings', 'ClamAV Settings')}</h3>
+                    <h3>{t('app.securityConfigTab.clamavSettings', 'ClamAV settings')}</h3>
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">
                     <div className="form-group">
@@ -109,7 +109,7 @@ const SecurityConfigTab = () => {
                     </div>
 
                     <div className="form-group">
-                        <Label>{t('app.securityConfigTab.quarantinePath', 'Quarantine Path')}</Label>
+                        <Label>{t('app.securityConfigTab.quarantinePath', 'Quarantine path')}</Label>
                         <Input
                             type="text"
                             value={config?.clamav?.quarantine_path || '/var/quarantine'}
@@ -121,7 +121,7 @@ const SecurityConfigTab = () => {
 
             <SharedCard variant="legacy" className="card">
                 <SharedCardHeader variant="legacy" className="card-header">
-                    <h3>{t('app.securityConfigTab.fileIntegritySettings', 'File Integrity Settings')}</h3>
+                    <h3>{t('app.securityConfigTab.fileIntegritySettings', 'File integrity settings')}</h3>
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">
                     <div className="form-group">
@@ -150,7 +150,7 @@ const SecurityConfigTab = () => {
 
             <SharedCard variant="legacy" className="card">
                 <SharedCardHeader variant="legacy" className="card-header">
-                    <h3>{t('app.securityConfigTab.notificationSettings', 'Notification Settings')}</h3>
+                    <h3>{t('app.securityConfigTab.notificationSettings', 'Notification settings')}</h3>
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">
                     <div className="form-group">

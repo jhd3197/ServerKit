@@ -146,7 +146,7 @@ export default function Recipes() {
         <div className="recipes-page">
             <div className="recipes-page__head">
                 <p className="recipes-page__lede">
-                    {t('app.recipes.lede', 'Ready-to-go installers that run as real operations — probe, derive, apply, verify. Secrets are asked for mid-run and kept in the vault.')}
+                    {t('app.recipes.lede', 'Ready-to-go installers that run as real operations: probe, derive, apply, verify. Secrets are asked for mid-run and kept in the vault.')}
                 </p>
                 <label className="recipes-page__search">
                     <Search size={14} />
@@ -346,7 +346,7 @@ export default function Recipes() {
                                 </SharedCard>
                             ) : (
                                 <p className="recipe-install__unattended">
-                                    {t('app.recipes.noHandoffs', 'Nothing — this recipe runs unattended.')}
+                                    {t('app.recipes.noHandoffs', 'Nothing. This recipe runs unattended.')}
                                 </p>
                             )}
                         </FormField>
@@ -371,7 +371,7 @@ export default function Recipes() {
 
             {source === 'bundled' && !!recipes.length && (
                 <p className="recipes-page__source">
-                    {t('app.recipes.bundledSource', 'Showing the bundled catalog — the live registry is unreachable right now.')}
+                    {t('app.recipes.bundledSource', 'Showing the bundled catalog. The live registry is unreachable right now.')}
                 </p>
             )}
         </div>

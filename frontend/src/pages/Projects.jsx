@@ -79,7 +79,7 @@ const Projects = () => {
     useTopbarActions(() => (
         <>
             <Button size="sm" onClick={() => setShowCreate(true)}>
-                <Plus size={16} /> {t('app.projects.newProject', 'New Project')}
+                <Plus size={16} /> {t('app.projects.newProject', 'New project')}
             </Button>
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.projects.searchProjects', 'Search projects…')} />
         </>
@@ -220,7 +220,7 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
     }
 
     return (
-        <Modal open={open} onClose={() => { reset(); onOpenChange(false); }} title={t('app.projects.newProject', 'New Project')}>
+        <Modal open={open} onClose={() => { reset(); onOpenChange(false); }} title={t('app.projects.newProject', 'New project')}>
             <form onSubmit={handleSubmit}>
                 <p className="sk-modal__subtitle">
                     {t('app.projects.aProjectGroupsYourApplicationsIt', 'A project groups your applications. It starts with a default "production" environment you can rename or expand.')}
@@ -233,7 +233,7 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
                                 id="project-name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder={t('app.projects.myProject', 'My Project')}
+                                placeholder={t('app.projects.myProject', 'My project')}
                                 autoFocus
                                 required
                             />

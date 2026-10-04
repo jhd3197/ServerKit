@@ -135,7 +135,7 @@ export default function ConsoleTab({ conn, tabId, active, isAdmin, initialQuery 
                         className={`dbx-toggle ${readonly ? '' : 'is-write'}`}
                         onClick={() => setReadonly((r) => !r)}
                         aria-pressed={!readonly}
-                        title={readonly ? t('app.consoleTab.readOnlyOnlySelectShowDescribe', 'Read-only: only SELECT / SHOW / DESCRIBE') : t('app.consoleTab.writesEnabledBeCareful', 'Writes enabled — be careful')}
+                        title={readonly ? t('app.consoleTab.readOnlyOnlySelectShowDescribe', 'Read-only: only SELECT / SHOW / DESCRIBE') : t('app.consoleTab.writesEnabledBeCareful', 'Writes enabled: be careful')}
                     >
                         {readonly ? <Lock size={13} aria-hidden="true" /> : <Unlock size={13} aria-hidden="true" />}
                         {readonly ? 'Read-only' : 'Writes on'}
@@ -167,7 +167,7 @@ export default function ConsoleTab({ conn, tabId, active, isAdmin, initialQuery 
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder={t('app.consoleTab.selectFromQuerying', 'SELECT * FROM … — querying {{value}}', { value: conn.name || conn.path || conn.container })}
+                        placeholder={t('app.consoleTab.selectFromQuerying', 'SELECT * FROM … (querying {{value}})', { value: conn.name || conn.path || conn.container })}
                         ariaLabel="SQL editor"
                     />
                     {readonly && (

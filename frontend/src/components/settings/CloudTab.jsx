@@ -89,20 +89,20 @@ const CloudTab = () => {
                 </h3>
                 {!profile && (
                     <p className="description">
-                        {t('app.settings.cloud.noProfile', 'No managed profile. ServerKit Cloud has not taken over any part of this panel — everything you see is yours to run.')}
+                        {t('app.settings.cloud.noProfile', 'No managed profile. ServerKit Cloud has not taken over any part of this panel; everything you see is yours to run.')}
                     </p>
                 )}
                 {profile && (
                     <>
                         {lapsed && (
                             <div className="alert alert-warning" role="status">
-                                {t('app.settings.cloud.lapsed', 'The profile below lapsed — Cloud has been unreachable past its expiry, so the full panel is back. It returns if Cloud reconnects and re-sends it.')}
+                                {t('app.settings.cloud.lapsed', 'The profile below lapsed: Cloud has been unreachable past its expiry, so the full panel is back. It returns if Cloud reconnects and re-sends it.')}
                             </div>
                         )}
                         {profile.override && (
                             <div className="alert alert-info" role="status" data-testid="managed-profile-override">
                                 {profile.override.reason
-                                    ? t('app.settings.cloud.overrideReason', 'Lifted for a support session until {{until}} — {{reason}}. The profile returns on its own afterwards.', { until: fmt(profile.override.until), reason: profile.override.reason })
+                                    ? t('app.settings.cloud.overrideReason', 'Lifted for a support session until {{until}} ({{reason}}). The profile returns on its own afterwards.', { until: fmt(profile.override.until), reason: profile.override.reason })
                                     : t('app.settings.cloud.override', 'Lifted for a support session until {{until}}. The profile returns on its own afterwards.', { until: fmt(profile.override.until) })}
                             </div>
                         )}
@@ -143,7 +143,7 @@ const CloudTab = () => {
                             </p>
                         )}
                         <p className="description">
-                            {t('app.settings.cloud.cannotTurnOff', 'Nothing here turns the profile off — that is done in ServerKit Cloud, or it lifts on its own if Cloud stays unreachable past the expiry.')}
+                            {t('app.settings.cloud.cannotTurnOff', 'Nothing here turns the profile off. That is done in ServerKit Cloud, or it lifts on its own if Cloud stays unreachable past the expiry.')}
                         </p>
                     </>
                 )}

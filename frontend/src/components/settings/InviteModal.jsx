@@ -74,7 +74,7 @@ const InviteModal = ({ onClose, onCreated }) => {
     // Show result screen after creation
     if (result) {
         return (
-            <Modal open={true} onClose={onClose} title={t('app.inviteModal.invitationCreated', 'Invitation Created')} size="md">
+            <Modal open={true} onClose={onClose} title={t('app.inviteModal.invitationCreated', 'Invitation created')} size="md">
                         <p>{t('app.inviteModal.shareThisInvitationLink', 'Share this invitation link:')}</p>
                         <div data-walkthrough="invite-result">
                             <CopyField value={result.invite_url} onCopy={signalLinkCopied} />
@@ -97,7 +97,7 @@ const InviteModal = ({ onClose, onCreated }) => {
     }
 
     return (
-        <Modal open={true} onClose={onClose} title={t('app.inviteModal.inviteUser', 'Invite User')} size="md">
+        <Modal open={true} onClose={onClose} title={t('app.inviteModal.inviteUser', 'Invite user')} size="md">
                 <form onSubmit={handleSubmit} data-walkthrough="invite-form">
                     <div className="modal-body">
                         {error && <div className="error-message">{error}</div>}

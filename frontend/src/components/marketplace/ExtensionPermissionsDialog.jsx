@@ -50,7 +50,7 @@ const PermissionRow = ({ row }) => {
                     </Pill>
                 </div>
                 <p className="extension-permissions__note">
-                    {t('app.extensionPermissionsDialog.thePanelExposesNoGatedHelper', 'The panel exposes no gated helper for this capability — an extension that wants it imports the host module directly, and nothing in the panel sees the call. Whether this extension has used it cannot be answered here.')}
+                    {t('app.extensionPermissionsDialog.thePanelExposesNoGatedHelper', 'The panel exposes no gated helper for this capability. An extension that wants it imports the host module directly, and nothing in the panel sees the call. Whether this extension has used it cannot be answered here.')}
                 </p>
                 {row.uses > 0 && (
                     <p className="extension-permissions__note">
@@ -114,7 +114,7 @@ const BlockedRow = ({ row }) => {
                 </Pill>
             </div>
             <p className="extension-permissions__note">
-                {t('app.extensionPermissionsDialog.thisExtensionAskedForACapability', 'This extension asked for a capability its manifest does not declare, so the panel refused the call — it did not run. Refused')} {plural(refused, 'time')}
+                {t('app.extensionPermissionsDialog.thisExtensionAskedForACapability', 'This extension asked for a capability its manifest does not declare, so the panel refused the call and it did not run. Refused')} {plural(refused, 'time')}
                 {row.last_used_at && <>{t('app.extensionPermissionsDialog.mostRecently', ', most recently')} <ObservedAt iso={row.last_used_at} /></>}
                 .
             </p>
@@ -216,7 +216,7 @@ const RequirementsSection = ({ requirements }) => {
             <p className="extension-permissions__note">
                 {pipEnabled
                     ? <>{t('app.extensionPermissionsDialog.dependencyInstallationIsEnabledOnThis', 'Dependency installation is enabled on this panel now (')}<code>{envVar}</code>{t('app.extensionPermissionsDialog.butThisFilePredatesThatThe', '), but this file predates that: the panel only installs requirements while installing or updating an extension. Reinstall or update this extension to apply it.')}</>
-                    : <>{t('app.extensionPermissionsDialog.installingTheseRunsPipWithThe', 'Installing these runs pip with the backend\'s privileges — a setup.py hook is arbitrary code — so it is opt-in and off by default. Set')} <code>{envVar}=1</code> {t('app.extensionPermissionsDialog.onTheBackendThenReinstallOr', 'on the backend, then reinstall or update this extension.')}</>}
+                    : <>{t('app.extensionPermissionsDialog.installingTheseRunsPipWithThe', "Installing these runs pip with the backend's privileges (a setup.py hook is arbitrary code), so it is opt-in and off by default. Set")} <code>{envVar}=1</code> {t('app.extensionPermissionsDialog.onTheBackendThenReinstallOr', 'on the backend, then reinstall or update this extension.')}</>}
             </p>
             {requirements.path && (
                 <p className="extension-permissions__note">
@@ -271,7 +271,7 @@ const ExtensionPermissionsDialog = ({ plugin, onClose }) => {
         <Modal
             open
             onClose={onClose}
-            title={t('app.extensionPermissionsDialog.permissionsDependencies', '{{displayname}} — permissions & dependencies', { displayname: plugin.display_name })}
+            title={t('app.extensionPermissionsDialog.permissionsDependencies', '{{displayname}}: permissions and dependencies', { displayname: plugin.display_name })}
             size="md"
             footer={<Button variant="ghost" onClick={onClose}>{t('common.actions.close', 'Close')}</Button>}
         >

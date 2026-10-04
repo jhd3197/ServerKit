@@ -179,7 +179,7 @@ const RemoteAccess = ({ serverId }) => {
 
     const exposeButton = (
         <Button size="sm" onClick={() => openWizard(null)} disabled={loading}>
-            <Plus size={15} /> {t('app.remoteAccess.exposeALocalService', 'Expose a Local Service')}
+            <Plus size={15} /> {t('app.remoteAccess.exposeALocalService', 'Expose a local service')}
         </Button>
     );
 
@@ -215,7 +215,7 @@ const RemoteAccess = ({ serverId }) => {
                     title={serverId ? t('app.remoteAccess.noTunnelsForThisServer', 'No tunnels for this server') : t('app.remoteAccess.noTunnelsYet', 'No tunnels yet')}
                     description={serverId
                         ? t('app.remoteAccess.pickAPublicIpEdgeServer', 'Pick a public-IP edge server and ServerKit will pair it with {{value}} over WireGuard.', { value: currentServer?.name || 'this host' })
-                        : t('app.remoteAccess.pickAPublicIpEdgeServer2', 'Pick a public-IP edge server and a private host, and ServerKit will pair them over WireGuard and publish your service — no router changes needed.')}
+                        : t('app.remoteAccess.pickAPublicIpEdgeServer2', 'Pick a public-IP edge server and a private host, and ServerKit will pair them over WireGuard and publish your service. No router changes are needed.')}
                     action={exposeButton}
                 />
             ) : (
@@ -287,7 +287,7 @@ const RemoteAccess = ({ serverId }) => {
                                     <div className="ra-tunnel__warn">
                                         <AlertTriangle size={14} />
                                         <span>
-                                            {t('app.remoteAccess.noHandshakeYetIfThisPersists', 'No handshake yet — if this persists, the private host\'s outbound UDP to the edge may be blocked (a relay is needed).')}
+                                            {t('app.remoteAccess.noHandshakeYetIfThisPersists', "No handshake yet. If this persists, the private host's outbound UDP to the edge may be blocked (a relay is needed).")}
                                         </span>
                                     </div>
                                 )}
@@ -356,7 +356,7 @@ const RemoteAccess = ({ serverId }) => {
             <Modal
                 open={wizardOpen}
                 onClose={closeWizard}
-                title={t('app.remoteAccess.exposeALocalService', 'Expose a Local Service')}
+                title={t('app.remoteAccess.exposeALocalService', 'Expose a local service')}
                 size="lg"
                 footer={
                     <>
@@ -392,13 +392,13 @@ const RemoteAccess = ({ serverId }) => {
                                 )}
                             </div>
                             <div className="ra-service-field">
-                                <Label>{t('app.remoteAccess.edgeServerPublicIpFrontsThe', 'Edge server (public IP — fronts the tunnel)')}</Label>
+                                <Label>{t('app.remoteAccess.edgeServerPublicIpFrontsThe', 'Edge server (public IP, fronts the tunnel)')}</Label>
                                 <ServerPicker
                                     value={form.edgeServerId}
                                     onChange={(id) => setField('edgeServerId', id)}
                                     capability="wireguard"
                                     includeLocal={false}
-                                    label={t('app.remoteAccess.edgeServerPublicIpFrontsThe', 'Edge server (public IP — fronts the tunnel)')}
+                                    label={t('app.remoteAccess.edgeServerPublicIpFrontsThe', 'Edge server (public IP, fronts the tunnel)')}
                                 />
                                 {form.edgeServerId && form.edgeServerId === form.privateServerId && (
                                     <p className="ra-service-hint">

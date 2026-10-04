@@ -71,7 +71,7 @@ const EventsTab = () => {
             {failedLogins && (
                 <div className={`card ${failedLogins.alert_triggered ? 'card-warning' : ''}`}>
                     <SharedCardHeader variant="legacy" className="card-header">
-                        <h3>{t('app.eventsTab.failedLoginAttempts24h', 'Failed Login Attempts (24h)')}</h3>
+                        <h3>{t('app.eventsTab.failedLoginAttempts24h', 'Failed login attempts (24h)')}</h3>
                         <Button variant="outline" size="sm" onClick={loadFailedLogins}>{t('common.actions.refresh', 'Refresh')}</Button>
                     </SharedCardHeader>
                     <SharedCardContent variant="legacy" className="card-body">
@@ -93,7 +93,7 @@ const EventsTab = () => {
 
             <SharedCard variant="legacy" className="card">
                 <SharedCardHeader variant="legacy" className="card-header">
-                    <h3>{t('app.eventsTab.securityEvents', 'Security Events')}</h3>
+                    <h3>{t('app.eventsTab.securityEvents', 'Security events')}</h3>
                     <Button variant="outline" size="sm" onClick={loadEvents}>{t('common.actions.refresh', 'Refresh')}</Button>
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">

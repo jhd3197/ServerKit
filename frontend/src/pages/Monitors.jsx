@@ -513,7 +513,7 @@ export default function Monitors() {
                     title={hasFilters ? t('app.monitors.noMonitorsMatch', 'No monitors match') : t('app.monitors.nothingIsBeingWatchedYet', 'Nothing is being watched yet')}
                     description={hasFilters
                         ? t('app.monitors.tryADifferentSearchOrClear', 'Try a different search or clear the filters.')
-                        : t('app.monitors.addAMonitorToWatchA', 'Add a monitor to watch a website, an API endpoint, a database port or a WordPress site — and get an incident when it stops answering.')}
+                        : t('app.monitors.addAMonitorToWatchA', 'Add a monitor to watch a website, an API endpoint, a database port or a WordPress site, and get an incident when it stops answering.')}
                     action={hasFilters
                         ? <Button variant="outline" onClick={() => { setQ(''); setFilters({ status: '', type: '' }); }}>{t('common.actions.clearFilters', 'Clear filters')}</Button>
                         : <Button onClick={openCreate}><Plus size={16} /> {t('app.monitors.addMonitor', 'Add monitor')}</Button>}
@@ -553,7 +553,7 @@ export default function Monitors() {
                 open={formOpen}
                 onOpenChange={setFormOpen}
                 title={t('app.monitors.addMonitor', 'Add monitor')}
-                subtitle={t('app.monitors.probeAUrlHostOrPort', 'Probe a URL, host or port on a schedule')}
+                subtitle={t('app.monitors.probeAUrlHostOrPort', 'Probe a URL, host or port on a schedule.')}
                 icon={<Radar size={18} />}
             >
                 <form className="mon-form" onSubmit={onSave} data-walkthrough="monitor-form">

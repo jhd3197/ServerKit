@@ -14,9 +14,9 @@ import {
 export const SECURITY_TABS = [
     { to: '/security', labelKey: 'common.labels.overview', label: 'Overview', end: true, icon: <LayoutDashboard size={15} /> },
     { to: '/security/firewall', labelKey: 'app.securityTabs.firewall', label: 'Firewall', icon: <Shield size={15} /> },
-    { to: '/security/ssh-keys', labelKey: 'app.securityTabs.sshKeys', label: 'SSH Keys', icon: <Key size={15} /> },
-    { to: '/security/ip-lists', labelKey: 'app.securityTabs.ipLists', label: 'IP Lists', icon: <Network size={15} /> },
-    { to: '/security/integrity', labelKey: 'app.securityTabs.fileIntegrity', label: 'File Integrity', icon: <FileCheck size={15} /> },
+    { to: '/security/ssh-keys', labelKey: 'app.securityTabs.sshKeys', label: 'SSH keys', icon: <Key size={15} /> },
+    { to: '/security/ip-lists', labelKey: 'app.securityTabs.ipLists', label: 'IP lists', icon: <Network size={15} /> },
+    { to: '/security/integrity', labelKey: 'app.securityTabs.fileIntegrity', label: 'File integrity', icon: <FileCheck size={15} /> },
     { to: '/security/audit', labelKey: 'app.securityTabs.audit', label: 'Audit', icon: <ScrollText size={15} /> },
     { to: '/security/events', labelKey: 'app.securityTabs.events', label: 'Events', icon: <Bell size={15} /> },
     { to: '/security/settings', labelKey: 'common.labels.settings', label: 'Settings', icon: <Settings size={15} /> },

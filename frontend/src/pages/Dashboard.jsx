@@ -307,7 +307,7 @@ const Dashboard = () => {
                 description: t('app.dashboard.widget', '{{length}} widget{{value}} · {{value2}}', { length: savedWidgets.length, value: savedWidgets.length === 1 ? '' : 's', value2: activeBoard?.name }),
             });
         } catch {
-            toast.error(t('app.dashboard.couldNotSave', 'Could not save'), { description: t('app.dashboard.yourLayoutIsStillHereTry', 'Your layout is still here — try again.') });
+            toast.error(t('app.dashboard.couldNotSave', 'Could not save'), { description: t('app.dashboard.yourLayoutIsStillHereTry', 'Your layout is still here. Try again.') });
         }
     }, [activeBoard?.name, saveActive, saveEditing, t, toast]);
 
@@ -649,9 +649,9 @@ const Dashboard = () => {
 
             {widgets.length === 0 ? (
                 <div className="skw-empty-board">
-                    <div className="skw-empty-board__title">{t('app.dashboard.build', 'Build “')}{activeBoard?.name || 'this dashboard'}”</div>
+                    <div className="skw-empty-board__title">{t('app.dashboard.build', 'Build "')}{activeBoard?.name || 'this dashboard'}{'"'}</div>
                     <div className="skw-empty-board__desc">
-                        {t('app.dashboard.thisBoardHasNoWidgetsYet', 'This board has no widgets yet. Add one to get started, or restore the layout it shipped with.')}
+                        {t('app.dashboard.thisBoardHasNoWidgetsYet', 'This board has no widgets yet. Add one, or restore the layout it shipped with.')}
                     </div>
                     <div className="skw-empty-board__acts">
                         <Button variant="unstyled"

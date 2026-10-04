@@ -543,7 +543,7 @@ const Templates = () => {
                     <span className="tpl-quickstart__ico"><Download size={18} /></span>
                     <span className="tpl-quickstart__body">
                         <span className="tpl-quickstart__title">{t('app.templates.importAZip', 'Import a ZIP')}</span>
-                        <span className="tpl-quickstart__sub">{t('app.templates.dropInAProjectArchiveTo', 'Drop in a project archive to build & run')}</span>
+                        <span className="tpl-quickstart__sub">{t('app.templates.dropInAProjectArchiveTo', 'Drop in a project archive to build and run')}</span>
                     </span>
                     <ChevronRight size={16} className="tpl-quickstart__arrow" />
                 </Button>
@@ -578,7 +578,7 @@ const Templates = () => {
                     description={hasActiveFilters ? t('app.templates.tryAdjustingYourFilters', 'Try adjusting your filters') : t('app.templates.noTemplatesAreAvailableYet', 'No templates are available yet')}
                     action={hasActiveFilters && (
                         <Button variant="outline" size="sm" onClick={clearAllFilters}>
-                            {t('app.templates.clearFilters', 'Clear Filters')}
+                            {t('app.templates.clearFilters', 'Clear filters')}
                         </Button>
                     )}
                 />
@@ -631,7 +631,7 @@ const Templates = () => {
                     onSuccess={(appId) => {
                         setShowInstallModal(false);
                         setSelectedTemplate(null);
-                        toast.success(t('app.templates.applicationInstalledSuccessfully', 'Application installed successfully!'));
+                        toast.success(t('app.templates.applicationInstalledSuccessfully', 'Application installed'));
                         navigate(`/services/${appId}/logs`);
                     }}
                 />

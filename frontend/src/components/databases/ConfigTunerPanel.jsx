@@ -74,7 +74,7 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
         if (!selectedKeys.length) return;
         const ok = await confirm({
             title: t('app.configTunerPanel.applySetting', 'Apply {{length}} setting{{value}}?', { length: selectedKeys.length, value: selectedKeys.length === 1 ? '' : 's' }),
-            message: t('app.configTunerPanel.applyingRestartsTheDatabaseEngineConnected', 'Applying restarts the database engine — connected apps will see a short ')
+            message: t('app.configTunerPanel.applyingRestartsTheDatabaseEngineConnected', 'Applying restarts the database engine, so connected apps will see a short ')
                 + t('app.configTunerPanel.interruptionThePreviousConfigurationIsBacked', 'interruption. The previous configuration is backed up and can be rolled back.'),
             confirmText: t('app.configTunerPanel.applyAndRestart', 'Apply and restart'),
             danger: true,

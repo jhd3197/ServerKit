@@ -116,7 +116,7 @@ const VolumesPanel = ({ app, onChanged }) => {
     async function detach(volume, wipe) {
         try {
             await api.detachAppVolume(app.id, volume.id, { wipe });
-            toast.success(wipe ? t('app.volumesPanel.volumeDetachedAndDataWiped', 'Volume detached and data wiped.') : t('app.volumesPanel.volumeDetachedDataPreserved', 'Volume detached (data preserved).'));
+            toast.success(wipe ? t('app.volumesPanel.volumeDetachedAndDataWiped', 'Volume detached and data wiped') : t('app.volumesPanel.volumeDetachedDataPreserved', 'Volume detached (data preserved)'));
             await load();
             onChanged?.();
         } catch (err) {
@@ -131,11 +131,11 @@ const VolumesPanel = ({ app, onChanged }) => {
             <div className="app-panel">
                 <div className="app-panel-header">
                     <HardDrive />
-                    <span>{t('app.volumesPanel.managedVolumes', 'Managed Volumes')}</span>
+                    <span>{t('app.volumesPanel.managedVolumes', 'Managed volumes')}</span>
                 </div>
                 <div className="app-panel-body">
                     <p className="app-panel-hint">
-                        {t('app.volumesPanel.firstClassPersistentStorageThatSurvives', 'First-class persistent storage that survives redeploys. Each volume is a named Docker volume mounted into the container at the path you choose — safer than a relative bind mount. Changes apply on the next deploy.')}
+                        {t('app.volumesPanel.firstClassPersistentStorageThatSurvives', 'First-class persistent storage that survives redeploys. Each volume is a named Docker volume mounted into the container at the path you choose, which is safer than a relative bind mount. Changes apply on the next deploy.')}
                     </p>
 
                     {loading ? (
@@ -145,7 +145,7 @@ const VolumesPanel = ({ app, onChanged }) => {
                     ) : (
                         <div className="app-volumes__table">
                             <div className="app-volumes__row app-volumes__row--head">
-                                <div className="app-volumes__cell">{t('app.volumesPanel.nameMountPath', 'Name & mount path')}</div>
+                                <div className="app-volumes__cell">{t('app.volumesPanel.nameMountPath', 'Name and mount path')}</div>
                                 <div className="app-volumes__cell">{t('common.labels.size', 'Size')}</div>
                                 <div className="app-volumes__cell">{t('common.labels.status', 'Status')}</div>
                                 <div className="app-volumes__cell" />

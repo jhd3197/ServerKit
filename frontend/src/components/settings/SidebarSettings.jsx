@@ -103,7 +103,7 @@ const SidebarSettings = () => {
     return (
         <div className="sidebar-settings">
             <div {...register('sidebar-view-profiles', 'settings-section')}>
-                <h3>{t('app.sidebarSettings.viewProfiles', 'View Profiles')}</h3>
+                <h3>{t('app.sidebarSettings.viewProfiles', 'View profiles')}</h3>
                 <p className="settings-section-desc">
                     {t('app.sidebarSettings.chooseAPresetOrBuildA', 'Choose a preset or build a custom view. Only visible items appear in your sidebar.')}
                 </p>
@@ -153,7 +153,7 @@ const SidebarSettings = () => {
 
             <div {...register('sidebar-items', 'settings-section')}>
                 <div className="settings-section-header">
-                    <h3>{t('app.sidebarSettings.sidebarItems', 'Sidebar Items')}</h3>
+                    <h3>{t('app.sidebarSettings.sidebarItems', 'Sidebar items')}</h3>
                     <span className="sidebar-item-count">{visibleCount} of {SIDEBAR_ITEMS.length} visible</span>
                 </div>
                 <p className="settings-section-desc">
@@ -207,7 +207,7 @@ const SidebarSettings = () => {
                     disabled={preset === 'recommended' && hiddenItems.length === 0}
                 >
                     <RotateCcw size={14} />
-                    {t('app.sidebarSettings.resetToDefault', 'Reset to Default')}
+                    {t('app.sidebarSettings.resetToDefault', 'Reset to default')}
                 </Button>
                 <Button
                     variant="default"

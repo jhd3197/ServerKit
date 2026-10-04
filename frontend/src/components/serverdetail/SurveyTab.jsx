@@ -151,7 +151,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             <EmptyState
                 icon={FileSearch}
                 title={t('app.surveyTab.surveyNotAvailable', 'Survey not available')}
-                description={t('app.surveyTab.thisAgentDoesnTSupportThe', 'This agent doesn\'t support the read-only survey yet. Upgrade the agent to enable Observe mode — it maps what\'s running on the box without changing anything.')}
+                description={t('app.surveyTab.thisAgentDoesnTSupportThe', "This agent doesn't support the read-only survey yet. Upgrade the agent to enable Observe mode. It maps what's running on the box without changing anything.")}
             />
         );
     }
@@ -179,7 +179,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
                     {takenAt ? (
                         <span className="survey-tab__muted">{t('app.surveyTab.lastFlight', 'Last flight')} {new Date(takenAt).toLocaleString()}</span>
                     ) : (
-                        <span className="survey-tab__muted">{t('app.surveyTab.noFlightsYetRunOneTo', 'No flights yet — run one to map this server.')}</span>
+                        <span className="survey-tab__muted">{t('app.surveyTab.noFlightsYetRunOneTo', 'No flights yet. Run one to map this server.')}</span>
                     )}
                     {map?.foreign_panel_detected && (
                         <Pill kind="amber">
@@ -190,7 +190,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             </ListToolbar>
 
             {serverStatus !== 'online' && !snapshots.length && (
-                <p className="survey-tab__muted">{t('app.surveyTab.theAgentIsOfflineReconnectIt', 'The agent is offline — reconnect it to fly a survey.')}</p>
+                <p className="survey-tab__muted">{t('app.surveyTab.theAgentIsOfflineReconnectIt', 'The agent is offline. Reconnect it to fly a survey.')}</p>
             )}
 
             {map?.foreign_panel_detected && mode === 'managed' && (
@@ -199,7 +199,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
                     <div className="survey-tab__suggest-body">
                         <strong>{t('app.surveyTab.thisBoxLooksLikeItS', 'This box looks like it\'s run by another control panel.')}</strong>
                         <p>
-                            {t('app.surveyTab.twoPanelsWritingWebServerConfig', 'Two panels writing web-server config will fight over ownership. Switch this server to')} <em>{t('app.surveyTab.observed', 'Observed')}</em> {t('app.surveyTab.toKeepReadOnlySurveyMetrics', 'to keep read-only survey, metrics and backups while ServerKit stops making config changes — then migrate sites over when you\'re ready.')}
+                            {t('app.surveyTab.twoPanelsWritingWebServerConfig', 'Two panels writing web-server config will fight over ownership. Switch this server to')} <em>{t('app.surveyTab.observed', 'Observed')}</em> {t('app.surveyTab.toKeepReadOnlySurveyMetrics', "to keep read-only survey, metrics and backups while ServerKit stops making config changes, then migrate sites over when you're ready.")}
                         </p>
                     </div>
                     <Button size="sm" variant="outline" onClick={switchToObserved} disabled={switching}>
@@ -233,7 +233,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
                         />
                         <span>
                             {t('app.surveyTab.allow', 'Allow')} <code>agent:update</code> {t('app.surveyTab.whileObserving', 'while observing')}
-                            <span className="survey-tab__muted"> {t('app.surveyTab.keepTheAgentBinaryCurrentWithout', '— keep the agent binary current without leaving Observed mode')}</span>
+                            <span className="survey-tab__muted"> {t('app.surveyTab.keepTheAgentBinaryCurrentWithout', '(keeps the agent binary current without leaving Observed mode)')}</span>
                         </span>
                     </label>
                 </div>
@@ -242,7 +242,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             {showCatalog && catalog && (
                 <section className="survey-tab__catalog">
                     <p className="survey-tab__muted">
-                        {t('app.surveyTab.aSurveyIsStrictlyReadOnly', 'A survey is strictly read-only. Catalog v')}{catalog.version} {t('app.surveyTab.hereIsExactlyWhatTheAgent', '— here is exactly what the agent looks at:')}
+                        {t('app.surveyTab.aSurveyIsStrictlyReadOnly', 'A survey is strictly read-only. Catalog v')}{catalog.version} {t('app.surveyTab.hereIsExactlyWhatTheAgent', 'lists exactly what the agent looks at:')}
                     </p>
                     <ul className="survey-tab__catalog-list">
                         {catalog.probes.map((p) => (
@@ -291,7 +291,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
                         render={(c) => (
                             <>
                                 <span className="survey-tab__mono">{c.domain}</span>
-                                {c.expires_at ? <span className="survey-tab__muted"> {t('app.surveyTab.expires', '— expires')} {new Date(c.expires_at).toLocaleDateString()}</span> : null}
+                                {c.expires_at ? <span className="survey-tab__muted"> {t('app.surveyTab.expires', 'expires')} {new Date(c.expires_at).toLocaleDateString()}</span> : null}
                             </>
                         )}
                     />

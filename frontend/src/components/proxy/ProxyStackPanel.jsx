@@ -187,7 +187,7 @@ const ProxyStackPanel = ({ serverId }) => {
             <header className="proxy-panel__header">
                 <div className="proxy-panel__title">
                     <Network size={18} />
-                    <h3>{t('app.proxyStackPanel.reverseProxy', 'Reverse Proxy')}</h3>
+                    <h3>{t('app.proxyStackPanel.reverseProxy', 'Reverse proxy')}</h3>
                 </div>
                 <div className="proxy-panel__status">
                     <span className="proxy-panel__status-label">{t('common.labels.status', 'Status')}</span>
@@ -246,7 +246,7 @@ const ProxyStackPanel = ({ serverId }) => {
                     </Button>
                     {!isNginx && (
                         <Button variant="outline" onClick={handleDeploy} disabled={busy}>
-                            {t('app.proxyStackPanel.deployRestart', 'Deploy / Restart')}
+                            {t('app.proxyStackPanel.deployRestart', 'Deploy / restart')}
                         </Button>
                     )}
                     {!savedIsNginx && (

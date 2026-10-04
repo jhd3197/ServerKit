@@ -9,7 +9,7 @@ const QUICK_PATHS = [
     { labelKey: 'app.pathSelector.themes', label: 'Themes', value: 'wp-content/themes' },
     { labelKey: 'app.pathSelector.plugins', label: 'Plugins', value: 'wp-content/plugins' },
     { labelKey: 'app.pathSelector.uploads', label: 'Uploads', value: 'wp-content/uploads' },
-    { labelKey: 'app.pathSelector.muPlugins', label: 'MU Plugins', value: 'wp-content/mu-plugins' },
+    { labelKey: 'app.pathSelector.muPlugins', label: 'MU plugins', value: 'wp-content/mu-plugins' },
 ];
 
 function normalizePath(value) {

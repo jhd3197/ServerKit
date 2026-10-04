@@ -57,7 +57,7 @@ export default function DbUsersPanel({ databaseId }) {
 
     async function removeUser(user) {
         const ok = await confirm({
-            title: t('app.dbUsersPanel.dropUser', 'Drop user “{{username}}”?', { username: user.username }),
+            title: t('app.dbUsersPanel.dropUser', 'Drop user "{{username}}"?', { username: user.username }),
             message: t('app.dbUsersPanel.thisDropsTheUserOnThe', 'This drops the user on the database server and stops tracking it.'),
             confirmText: t('app.dbUsersPanel.dropUser2', 'Drop user'),
             danger: true,
@@ -79,7 +79,7 @@ export default function DbUsersPanel({ databaseId }) {
                 <div className="managed-db__secret">
                     <span className="managed-db__meta">
                         {t('app.dbUsersPanel.passwordFor', 'Password for')} <strong>{oneTimeSecret.username}</strong>{' '}
-                        {t('app.dbUsersPanel.shownOnceSaveItNow', '— shown once, save it now.')}
+                        {t('app.dbUsersPanel.shownOnceSaveItNow', '(shown once). Save it now.')}
                     </span>
                     <CopyField
                         value={oneTimeSecret.password}

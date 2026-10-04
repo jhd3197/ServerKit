@@ -341,7 +341,7 @@ const TestSandbox = () => {
 
     if (loading) {
         return (
-            <PageLayout className="test-sandbox-page" icon={<FlaskConical size={18} />} title={t('app.testSandbox.testSandbox', 'Test Sandbox')}>
+            <PageLayout className="test-sandbox-page" icon={<FlaskConical size={18} />} title={t('app.testSandbox.testSandbox', 'Test sandbox')}>
                 <EmptyState loading loadingVariant="table" size="lg" title={t('app.testSandbox.loadingTestSandbox', 'Loading test sandbox…')} />
             </PageLayout>
         );
@@ -351,7 +351,7 @@ const TestSandbox = () => {
         <PageLayout
             className="test-sandbox-page"
             icon={<FlaskConical size={18} />}
-            title={t('app.testSandbox.testSandbox', 'Test Sandbox')}
+            title={t('app.testSandbox.testSandbox', 'Test sandbox')}
             actions={(
                 <Button
                     variant="outline"
@@ -373,7 +373,7 @@ const TestSandbox = () => {
             {!dockerAvailable && (
                 <div className="alert alert-warning">
                     <AlertTriangle size={16} />
-                    {t('app.testSandbox.dockerIsNotAvailableOnThis', 'Docker is not available on this host — test runs cannot start until the Docker daemon is reachable.')}
+                    {t('app.testSandbox.dockerIsNotAvailableOnThis', 'Docker is not available on this host. Test runs cannot start until the Docker daemon is reachable.')}
                 </div>
             )}
 

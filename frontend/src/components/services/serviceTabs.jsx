@@ -6,8 +6,8 @@ import { Box, Plus, LayoutTemplate, Activity, ChefHat } from 'lucide-react';
 // sidebar sub-menu (see docs/REDESIGN_MAP.md §6 decision 3).
 export const SERVICE_TABS = [
     { to: '/services', labelKey: 'common.labels.services', label: 'Services', end: true, icon: <Box size={15} /> },
-    { to: '/services/new', labelKey: 'app.serviceTabs.newService', label: 'New Service', icon: <Plus size={15} /> },
+    { to: '/services/new', labelKey: 'app.serviceTabs.newService', label: 'New service', icon: <Plus size={15} /> },
     { to: '/templates', labelKey: 'app.serviceTabs.templates', label: 'Templates', icon: <LayoutTemplate size={15} /> },
     { to: '/recipes', labelKey: 'app.serviceTabs.recipes', label: 'Recipes', icon: <ChefHat size={15} /> },
-    { to: '/deployments', labelKey: 'app.serviceTabs.deployActivity', label: 'Deploy Activity', icon: <Activity size={15} /> },
+    { to: '/deployments', labelKey: 'app.serviceTabs.deployActivity', label: 'Deploy activity', icon: <Activity size={15} /> },
 ];

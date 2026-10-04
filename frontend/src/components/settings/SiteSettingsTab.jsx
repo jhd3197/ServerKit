@@ -320,7 +320,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
 
     return (
         <div className="settings-section">
-            <h2>{t('app.siteSettingsTab.siteSettings', 'Site Settings')}</h2>
+            <h2>{t('app.siteSettingsTab.siteSettings', 'Site settings')}</h2>
             <p className="section-description">{t('app.siteSettingsTab.configureGlobalSiteSettings', 'Configure global site settings')}</p>
 
             {message && (
@@ -328,7 +328,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             )}
 
             <div {...register('site-appearance', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.panelAppearance', 'Panel Appearance')}</h3>
+                <h3>{t('app.siteSettingsTab.panelAppearance', 'Panel appearance')}</h3>
                 <p>{t('app.siteSettingsTab.namesShownInTheBrowserTab', 'Names shown in the browser tab and on the sign-in page, plus the sign-in page layout.')}</p>
 
                 <div className="form-group">
@@ -342,7 +342,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                 type="text"
                                 value={publicTitle}
                                 onChange={(e) => setPublicTitle(e.target.value)}
-                                placeholder={t('app.siteSettingsTab.controlPanel', 'Control Panel')}
+                                placeholder={t('app.siteSettingsTab.controlPanel', 'Control panel')}
                             />
                         </div>
                     </div>
@@ -393,7 +393,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             </div>
 
             <div {...register('site-registration', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.userRegistration', 'User Registration')}</h3>
+                <h3>{t('app.siteSettingsTab.userRegistration', 'User registration')}</h3>
                 <p>{t('app.siteSettingsTab.allowNewUsersToCreateAccounts', 'Allow new users to create accounts on the login page.')}</p>
 
                 <div className="form-group">
@@ -414,7 +414,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             </div>
 
             <div {...register('site-app-ports', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.managedAppPorts', 'Managed App Ports')}</h3>
+                <h3>{t('app.siteSettingsTab.managedAppPorts', 'Managed app ports')}</h3>
                 <p>{t('app.siteSettingsTab.controlTheHostPortAssignedTo', 'Control the host port assigned to new WordPress sites and other managed apps.')}</p>
 
                 <div className="form-group">
@@ -444,7 +444,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             </div>
 
             <div {...register('site-base-domains', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.managedSitesBaseDomains', 'Managed Sites — Base Domains')}</h3>
+                <h3>{t('app.siteSettingsTab.managedSitesBaseDomains', 'Managed sites: base domains')}</h3>
                 <p>{t('app.siteSettingsTab.publishManagedSitesAt', 'Publish managed sites at')} <code>&lt;name&gt;.&lt;base-domain&gt;</code>. Register one or more base domains; a new site can be created under any of them, defaulting to the one marked <strong>{t('common.labels.default', 'Default')}</strong>. Point a wildcard record <code>*.&lt;base&gt;</code> {t('app.siteSettingsTab.orPerSiteARecordsAt', '(or per-site A records) at this server.')}</p>
 
                 {httpsError ? (
@@ -473,7 +473,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                             </Button>
                         </div>
                     </div>
-                    <span className="form-help">{t('app.siteSettingsTab.sharedByEveryBaseDomainUsed', 'Shared by every base domain — used to auto-create their DNS A records.')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.sharedByEveryBaseDomainUsed', 'Shared by every base domain. Used to auto-create their DNS A records.')}</span>
                 </div>
 
                 {https.providers?.length > 0 ? (
@@ -496,11 +496,11 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                         <span className="form-help">{t('app.siteSettingsTab.usedToIssueEachBaseS', 'Used to issue each base\'s wildcard certificate (DNS-01). Each base can use a different connected provider.')}</span>
                     </div>
                 ) : (
-                    <span className="form-help">{t('app.siteSettingsTab.connectADnsProviderUnderEmail', 'Connect a DNS provider under Email → DNS Providers to enable per-domain wildcard HTTPS.')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.connectADnsProviderUnderEmail', 'Connect a DNS provider under Email → DNS providers to enable per-domain wildcard HTTPS.')}</span>
                 )}
 
                 {displayBases.length === 0 ? (
-                    <p className="form-help">{t('app.siteSettingsTab.noBaseDomainYetAddOne', 'No base domain yet — add one below to start publishing sites at real subdomains.')}</p>
+                    <p className="form-help">{t('app.siteSettingsTab.noBaseDomainYetAddOne', 'No base domain yet. Add one below to start publishing sites at real subdomains.')}</p>
                 ) : displayBases.map((b) => (
                     <div key={b.domain} className="form-group">
                         <div className="settings-row">
@@ -592,7 +592,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             </div>
 
             <div {...register('site-dev-mode', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.developerMode', 'Developer Mode')}</h3>
+                <h3>{t('app.siteSettingsTab.developerMode', 'Developer mode')}</h3>
                 <p>{t('app.siteSettingsTab.enableDeveloperToolsAndDiagnostics', 'Enable developer tools and diagnostics.')}</p>
 
                 <div className="form-group">

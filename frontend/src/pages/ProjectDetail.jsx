@@ -121,7 +121,7 @@ const ProjectDetail = () => {
                     description={error || t('app.projectDetail.thisProjectCouldNotBeLoaded', 'This project could not be loaded.')}
                     action={
                         <Button variant="outline" asChild>
-                            <Link to="/projects"><ArrowLeft size={16} /> {t('app.projectDetail.backToProjects', 'Back to Projects')}</Link>
+                            <Link to="/projects"><ArrowLeft size={16} /> {t('app.projectDetail.backToProjects', 'Back to projects')}</Link>
                         </Button>
                     }
                 />
@@ -146,7 +146,7 @@ const ProjectDetail = () => {
                         <Link to="/projects"><ArrowLeft size={16} /> {t('app.projectDetail.projects', 'Projects')}</Link>
                     </Button>
                     <Button onClick={() => setShowCreateEnv(true)}>
-                        <Plus size={16} /> {t('app.projectDetail.newEnvironment', 'New Environment')}
+                        <Plus size={16} /> {t('app.projectDetail.newEnvironment', 'New environment')}
                     </Button>
                 </>
             }
@@ -336,10 +336,10 @@ const CreateEnvironmentDialog = ({ projectId, open, onOpenChange, onCreated }) =
     }
 
     return (
-        <Modal open={open} onClose={() => { setName(''); onOpenChange(false); }} title={t('app.projectDetail.newEnvironment', 'New Environment')}>
+        <Modal open={open} onClose={() => { setName(''); onOpenChange(false); }} title={t('app.projectDetail.newEnvironment', 'New environment')}>
             <form onSubmit={handleSubmit}>
                 <p className="sk-modal__subtitle">
-                    {t('app.projectDetail.commonNamesAreProductionStagingAnd', 'Common names are production, staging, and development — but any name works.')}
+                    {t('app.projectDetail.commonNamesAreProductionStagingAnd', 'Common names are production, staging, and development, but any name works.')}
                 </p>
 
                 <div className="projects-form">

@@ -531,7 +531,7 @@ const EnvironmentVariables = ({ appId }) => {
                         <div className="env-empty-actions">
                             <Button onClick={openAddModal}>
                                 <Plus size={15} />
-                                {t('app.environmentVariables.addVariable', 'Add Variable')}
+                                {t('app.environmentVariables.addVariable', 'Add variable')}
                             </Button>
                             <Button variant="outline" onClick={() => setShowImportModal(true)}>
                                 <Upload size={14} />
@@ -573,7 +573,7 @@ const EnvironmentVariables = ({ appId }) => {
                     <ListToolbar>
                         <Button size="sm" onClick={openAddModal}>
                             <Plus size={15} />
-                            {t('app.environmentVariables.addVariable', 'Add Variable')}
+                            {t('app.environmentVariables.addVariable', 'Add variable')}
                         </Button>
                         <Button
                             variant="outline"
@@ -598,7 +598,7 @@ const EnvironmentVariables = ({ appId }) => {
                         </Button>
                         <Button variant="outline" size="sm" className="env-clear-btn" onClick={handleClearAll}>
                             <Trash2 size={14} />
-                            {t('app.environmentVariables.clearAll', 'Clear All')}
+                            {t('app.environmentVariables.clearAll', 'Clear all')}
                         </Button>
                     </ListToolbar>
 
@@ -631,7 +631,7 @@ const EnvironmentVariables = ({ appId }) => {
             <GridFilterDrawer {...chrome.drawerProps} />
 
             {/* Add Variable Modal */}
-            <Modal open={showAddModal} onClose={() => setShowAddModal(false)} title={t('app.environmentVariables.addEnvironmentVariable', 'Add Environment Variable')}>
+            <Modal open={showAddModal} onClose={() => setShowAddModal(false)} title={t('app.environmentVariables.addEnvironmentVariable', 'Add environment variable')}>
                 <form onSubmit={handleAdd}>
                     <div className="form-group">
                         <Label>{t('common.labels.key', 'Key')}</Label>
@@ -695,7 +695,7 @@ const EnvironmentVariables = ({ appId }) => {
             </Modal>
 
             {/* Import Modal */}
-            <Modal open={showImportModal} onClose={() => setShowImportModal(false)} title={t('app.environmentVariables.importEnvironmentVariables', 'Import Environment Variables')}>
+            <Modal open={showImportModal} onClose={() => setShowImportModal(false)} title={t('app.environmentVariables.importEnvironmentVariables', 'Import environment variables')}>
                 <p className="hint">{t('app.environmentVariables.pasteYourEnvFileContentBelow', 'Paste your .env file content below or upload a file.')}</p>
 
                 <div className="import-file-upload">
@@ -707,7 +707,7 @@ const EnvironmentVariables = ({ appId }) => {
                         className="hidden"
                     />
                     <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
-                        {t('app.environmentVariables.chooseFile', 'Choose File')}
+                        {t('app.environmentVariables.chooseFile', 'Choose file')}
                     </Button>
                 </div>
 
@@ -737,7 +737,7 @@ const EnvironmentVariables = ({ appId }) => {
             </Modal>
 
             {/* History Modal */}
-            <Modal open={showHistoryModal} onClose={() => setShowHistoryModal(false)} title={t('app.environmentVariables.changeHistory', 'Change History')} size="lg">
+            <Modal open={showHistoryModal} onClose={() => setShowHistoryModal(false)} title={t('app.environmentVariables.changeHistory', 'Change history')} size="lg">
                 {history.length === 0 ? (
                     <p className="hint">{t('app.environmentVariables.noChangesRecordedYet', 'No changes recorded yet.')}</p>
                 ) : (

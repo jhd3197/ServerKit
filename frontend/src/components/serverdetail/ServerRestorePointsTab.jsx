@@ -73,10 +73,10 @@ export default function ServerRestorePointsTab({ serverId }) {
             });
             setShowQuicksave(false);
             setTimelineRefreshKey((value) => value + 1);
-            toast.success(t('app.serverRestorePoints.quicksaveCreated', 'Environment quicksave created.'));
+            toast.success(t('app.serverRestorePoints.quicksaveCreated', 'Environment quicksave created'));
         } catch (err) {
             setSaveError(err.message);
-            toast.error(err.message || t('app.serverRestorePoints.quicksaveFailed', 'Failed to create quicksave.'));
+            toast.error(err.message || t('app.serverRestorePoints.quicksaveFailed', 'Failed to create quicksave'));
         } finally {
             setSaving(false);
         }

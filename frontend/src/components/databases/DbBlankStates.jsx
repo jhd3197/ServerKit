@@ -117,7 +117,7 @@ export function EngineReadyPanel({ instance, label, onNewDatabase, onOpenConsole
                 ) : (
                     <>
                         {t('app.dbBlankStates.createA', 'Create a')} {unitOne} from {meta.client ? <code>{meta.client}</code> : 'its client'}
-                        {' '}{t('app.dbBlankStates.serverkitListsItHereAsSoon', '— ServerKit lists it here as soon as it exists.')}
+                        {' '}{t('app.dbBlankStates.serverkitListsItHereAsSoon', '(ServerKit lists it here as soon as it exists).')}
                     </>
                 )}
             </p>
@@ -151,7 +151,7 @@ export function EngineReadyPanel({ instance, label, onNewDatabase, onOpenConsole
             )}
             {meta.protocol === 'none' && (
                 <p className="dbx-blank__note">
-                    {t('app.dbBlankStates.thisEngineHasNoBrowsableProtocol', 'This engine has no browsable protocol — ServerKit runs it, but table browsing comes from its own client.')}
+                    {t('app.dbBlankStates.thisEngineHasNoBrowsableProtocol', 'This engine has no browsable protocol. ServerKit runs it, but table browsing comes from its own client.')}
                 </p>
             )}
         </div>

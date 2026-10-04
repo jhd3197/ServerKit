@@ -62,9 +62,9 @@ const ImageUpdateSection = ({ app, onChanged }) => {
             const data = await api.checkImageUpdate(app.id);
             setInfo(data);
             if (data.update_available) {
-                toast.info(t('app.containerOpsPanel.anImageUpdateIsAvailable', 'An image update is available.'));
+                toast.info(t('app.containerOpsPanel.anImageUpdateIsAvailable', 'An image update is available'));
             } else {
-                toast.success(t('app.containerOpsPanel.imageIsUpToDate', 'Image is up to date.'));
+                toast.success(t('app.containerOpsPanel.imageIsUpToDate', 'Image is up to date'));
             }
             onChanged?.();
         } catch (err) {
@@ -85,7 +85,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
         setApplying(true);
         try {
             const data = await api.applyImageUpdate(app.id);
-            toast.success(data.message || t('app.containerOpsPanel.imageUpdated', 'Image updated.'));
+            toast.success(data.message || t('app.containerOpsPanel.imageUpdated', 'Image updated'));
             onChanged?.();
             // Refresh the local check after applying
             try {
@@ -107,7 +107,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
         <div className="app-panel container-ops__section">
             <div className="app-panel-header">
                 <RefreshCw />
-                <span>{t('app.containerOpsPanel.imageUpdate', 'Image Update')}</span>
+                <span>{t('app.containerOpsPanel.imageUpdate', 'Image update')}</span>
                 <span className="app-panel-header-actions">
                     {status && (
                         <Pill kind={statusKind(status)}>
@@ -183,7 +183,7 @@ const RegistrySection = ({ app, onChanged }) => {
         setSaving(true);
         try {
             await api.updateApp(app.id, { registry_id: next });
-            toast.success(next ? t('app.containerOpsPanel.registryAttached', 'Registry attached.') : t('app.containerOpsPanel.registryDetachedPullsAreAnonymous', 'Registry detached — pulls are anonymous.'));
+            toast.success(next ? t('app.containerOpsPanel.registryAttached', 'Registry attached') : t('app.containerOpsPanel.registryDetachedPullsAreAnonymous', 'Registry detached. Pulls are anonymous.'));
             onChanged?.();
         } catch (err) {
             toast.error(err.message || t('app.containerOpsPanel.failedToUpdateRegistry', 'Failed to update registry'));
@@ -197,7 +197,7 @@ const RegistrySection = ({ app, onChanged }) => {
         <div className="app-panel container-ops__section">
             <div className="app-panel-header">
                 <Boxes />
-                <span>{t('app.containerOpsPanel.privateRegistry', 'Private Registry')}</span>
+                <span>{t('app.containerOpsPanel.privateRegistry', 'Private registry')}</span>
             </div>
             <div className="app-panel-body">
                 <p className="app-panel-hint">
@@ -268,7 +268,7 @@ const AutoSleepSection = ({ app, onChanged }) => {
         try {
             const data = await api.updateSleepPolicy(app.id, next);
             setPolicy((prev) => ({ ...prev, ...(data || next) }));
-            toast.success(t('app.containerOpsPanel.autoSleepPolicySaved', 'Auto-sleep policy saved.'));
+            toast.success(t('app.containerOpsPanel.autoSleepPolicySaved', 'Auto-sleep policy saved'));
             onChanged?.();
         } catch (err) {
             toast.error(err.message || t('app.containerOpsPanel.failedToSavePolicy', 'Failed to save policy'));
@@ -296,10 +296,10 @@ const AutoSleepSection = ({ app, onChanged }) => {
         try {
             if (policy?.asleep) {
                 await api.wakeApp(app.id);
-                toast.success(t('app.containerOpsPanel.appWoken', 'App woken.'));
+                toast.success(t('app.containerOpsPanel.appWoken', 'App woken'));
             } else {
                 await api.sleepApp(app.id);
-                toast.success(t('app.containerOpsPanel.appPutToSleep', 'App put to sleep.'));
+                toast.success(t('app.containerOpsPanel.appPutToSleep', 'App put to sleep'));
             }
             await load();
             onChanged?.();
@@ -316,7 +316,7 @@ const AutoSleepSection = ({ app, onChanged }) => {
         <div className="app-panel container-ops__section">
             <div className="app-panel-header">
                 <Moon />
-                <span>{t('app.containerOpsPanel.autoSleep', 'Auto-Sleep')}</span>
+                <span>{t('app.containerOpsPanel.autoSleep', 'Auto-sleep')}</span>
                 <span className="app-panel-header-actions">
                     {!loading && (
                         <Pill kind={asleep ? 'gray' : 'green'}>{asleep ? 'Asleep' : 'Awake'}</Pill>

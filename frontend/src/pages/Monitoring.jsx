@@ -241,7 +241,7 @@ const Monitoring = () => {
                     return;
                 }
             }
-            toast.warning(t('app.monitoring.speedTestIsStillRunningRefresh', 'Speed test is still running — refresh in a moment'));
+            toast.warning(t('app.monitoring.speedTestIsStillRunningRefresh', 'Speed test is still running. Refresh in a moment.'));
         } catch (err) {
             toast.error(err.message || t('app.monitoring.failedToStartSpeedTest', 'Failed to start speed test'));
         } finally {
@@ -270,8 +270,8 @@ const Monitoring = () => {
                     onClick={handleToggleMonitoring}
                 >
                     {status?.enabled
-                        ? <><Activity size={16} />{t('app.monitoring.stopMonitoring', 'Stop Monitoring')}</>
-                        : <><PlayCircle size={16} />{t('app.monitoring.startMonitoring', 'Start Monitoring')}</>}
+                        ? <><Activity size={16} />{t('app.monitoring.stopMonitoring', 'Stop monitoring')}</>
+                        : <><PlayCircle size={16} />{t('app.monitoring.startMonitoring', 'Start monitoring')}</>}
                 </Button>
                 <ServerScopePicker
                     scope={scope}

@@ -11,7 +11,7 @@ export const GIT_PROVIDERS = [
     { key: 'gitlab', labelKey: 'app.gitProviders.gitlab', label: 'GitLab', Icon: SiGitlab, hintKey: 'app.gitProviders.cloudOrSelfManaged', hint: 'Cloud or self-managed', match: /gitlab\./i, oauth: true, placeholder: 'https://gitlab.com/group/project.git' },
     { key: 'bitbucket', labelKey: 'app.gitProviders.bitbucket', label: 'Bitbucket', Icon: SiBitbucket, hintKey: 'app.gitProviders.oneClickOrUrl', hint: 'One-click or URL', match: /bitbucket\.org/i, oauth: true, placeholder: 'https://bitbucket.org/user/repo.git' },
     { key: 'gitea', labelKey: 'app.gitProviders.gitea', label: 'Gitea', Icon: SiGitea, hintKey: 'app.gitProviders.selfHosted', hint: 'Self-hosted', match: /gitea/i, local: true, placeholder: 'https://gitea.example.com/user/repo.git' },
-    { key: 'other', labelKey: 'app.gitProviders.sshOther', label: 'SSH / Other', Icon: GitBranch, hintKey: 'app.gitProviders.anyGitRemote', hint: 'Any Git remote', match: null, placeholder: 'git@host:user/repo.git' },
+    { key: 'other', labelKey: 'app.gitProviders.sshOther', label: 'SSH / other', Icon: GitBranch, hintKey: 'app.gitProviders.anyGitRemote', hint: 'Any Git remote', match: null, placeholder: 'git@host:user/repo.git' },
 ];
 
 const OTHER_PROVIDER = GIT_PROVIDERS[GIT_PROVIDERS.length - 1];

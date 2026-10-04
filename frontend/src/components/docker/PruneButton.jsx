@@ -18,7 +18,7 @@ const PruneButton = ({ onPruned }) => {
             toast.error(t('app.pruneButton.pruneIsOnlyAvailableOnThe', 'Prune is only available on the local Docker target right now'));
             return;
         }
-        const confirmed = await confirm({ title: t('app.pruneButton.dockerCleanup', 'Docker Cleanup'), message: t('app.pruneButton.removeUnusedDockerResourcesThisWill', 'Remove unused Docker resources? This will remove stopped containers, unused images, and unused networks.') });
+        const confirmed = await confirm({ title: t('app.pruneButton.dockerCleanup', 'Docker cleanup'), message: t('app.pruneButton.removeUnusedDockerResourcesThisWill', 'Remove unused Docker resources? This will remove stopped containers, unused images, and unused networks.') });
         if (!confirmed) return;
 
         setLoading(true);

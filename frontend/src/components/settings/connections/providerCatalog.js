@@ -13,11 +13,11 @@ export const CONNECTION_CATEGORIES = [
     { key: 'source', labelKey: 'app.providerCatalog.sourceCode', label: 'Source code', blurb: 'Create services straight from a repository instead of pasting clone URLs.' },
     { key: 'infra', labelKey: 'app.providerCatalog.infrastructure', label: 'Infrastructure', blurb: 'Cloud accounts ServerKit can provision and manage servers in.' },
     { key: 'registry', labelKey: 'app.providerCatalog.containerRegistries', label: 'Container registries', blurb: 'Store a login once so ServerKit can pull private images (GHCR, Docker Hub, GitLab, ECR).' },
-    { key: 'dns', labelKey: 'app.providerCatalog.dnsDomains', label: 'DNS & domains', blurb: 'Let ServerKit manage DNS records and issue wildcard certificates automatically.' },
-    { key: 'registrar', labelKey: 'app.providerCatalog.registrarsOwnership', label: 'Registrars & ownership', blurb: 'Track the domains you own and when their registration expires.' },
-    { key: 'email', labelKey: 'app.providerCatalog.emailDelivery', label: 'Email & delivery', blurb: 'Outbound relays and deliverability for the mail server.' },
-    { key: 'chat', labelKey: 'app.providerCatalog.chatWebhooks', label: 'Chat & webhooks', blurb: 'Send notifications to a shared chat room or webhook, filtered by category.' },
-    { key: 'storage', labelKey: 'app.providerCatalog.storageBackups', label: 'Storage & backups', blurb: 'Off-site destinations for backups and large assets.' },
+    { key: 'dns', labelKey: 'app.providerCatalog.dnsDomains', label: 'DNS and domains', blurb: 'Let ServerKit manage DNS records and issue wildcard certificates automatically.' },
+    { key: 'registrar', labelKey: 'app.providerCatalog.registrarsOwnership', label: 'Registrars and ownership', blurb: 'Track the domains you own and when their registration expires.' },
+    { key: 'email', labelKey: 'app.providerCatalog.emailDelivery', label: 'Email and delivery', blurb: 'Outbound relays and deliverability for the mail server.' },
+    { key: 'chat', labelKey: 'app.providerCatalog.chatWebhooks', label: 'Chat and webhooks', blurb: 'Send notifications to a shared chat room or webhook, filtered by category.' },
+    { key: 'storage', labelKey: 'app.providerCatalog.storageBackups', label: 'Storage and backups', blurb: 'Off-site destinations for backups and large assets.' },
 ];
 
 export const CONNECTION_PROVIDERS = [

@@ -110,7 +110,7 @@ export function ViewMenu({ views, className }) {
                 >
                     <LayoutList aria-hidden="true" />
                     {activeView ? activeView.name : 'Views'}
-                    {isDirty && <span className="sk-viewmenu__dot" title={t('app.viewMenu.modifiedNotSavedToThisView', 'Modified — not saved to this view')} />}
+                    {isDirty && <span className="sk-viewmenu__dot" title={t('app.viewMenu.modifiedNotSavedToThisView', 'Modified (not saved to this view)')} />}
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="sk-tablemenu sk-viewmenu">
@@ -123,7 +123,7 @@ export function ViewMenu({ views, className }) {
                 <div className="sk-tablemenu__title">{t('app.viewMenu.savedViews', 'Saved views')}</div>
                 {userViews.length === 0 ? (
                     <div className="sk-tablemenu__empty">
-                        {t('app.viewMenu.noSavedViewsYetTuneThe', 'No saved views yet — tune the table, then save it below.')}
+                        {t('app.viewMenu.noSavedViewsYetTuneThe', 'No saved views yet. Tune the table, then save it below.')}
                     </div>
                 ) : (
                     <div className="sk-tablemenu__list">{userViews.map(row)}</div>
@@ -132,7 +132,7 @@ export function ViewMenu({ views, className }) {
                     <div className="sk-viewmenu__update">
                         {!activeView.builtin && (
                             <Button variant="ghost" size="sm" onClick={handleUpdate}>
-                                {t('app.viewMenu.update', 'Update “')}{activeView.name}{t('app.viewMenu.withChanges', '” with changes')}
+                                {t('app.viewMenu.update', 'Update "')}{activeView.name}{t('app.viewMenu.withChanges', '" with changes')}
                             </Button>
                         )}
                         <Button variant="ghost" size="sm" onClick={resetView}>

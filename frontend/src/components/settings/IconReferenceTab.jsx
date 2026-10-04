@@ -85,7 +85,7 @@ const IconReferenceTab = () => {
 
     return (
         <div className="settings-section">
-            <h2>{t('app.iconReferenceTab.iconReference', 'Icon Reference')}</h2>
+            <h2>{t('app.iconReferenceTab.iconReference', 'Icon reference')}</h2>
             <p className="section-description">
                 {t('app.iconReferenceTab.lucideReactIconsAvailableInThe', 'Lucide React icons available in the project (')}{totalIcons} {t('app.iconReferenceTab.iconsClickAnIconNameTo', 'icons). Click an icon name to copy it.')}
             </p>

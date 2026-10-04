@@ -116,7 +116,7 @@ export default function EmailProviders() {
                 <>
                     {providers.length === 0 ? (
                         <div className="sk-eprov__empty">
-                            {t('app.emailProviders.noProviderConfiguredEmailsFallBack', 'No provider configured — emails fall back to the SMTP channel settings.')}
+                            {t('app.emailProviders.noProviderConfiguredEmailsFallBack', 'No provider configured. Emails fall back to the SMTP channel settings.')}
                         </div>
                     ) : (
                         <ul className="sk-eprov__list">

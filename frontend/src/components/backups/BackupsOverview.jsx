@@ -357,7 +357,7 @@ export default function BackupsOverview({
                         </Button>
                     </div>
                     {events.length === 0 ? (
-                        <p className="bk-hint">{t('app.backupsOverview.nothingHasRunYetTheFirst', 'Nothing has run yet — the first backup will show up here.')}</p>
+                        <p className="bk-hint">{t('app.backupsOverview.nothingHasRunYetTheFirst', 'Nothing has run yet. The first backup will show up here.')}</p>
                     ) : (
                         <div className="bk-feed">
                             {events.slice(0, 5).map((e) => (

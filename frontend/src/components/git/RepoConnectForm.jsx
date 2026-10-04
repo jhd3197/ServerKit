@@ -40,7 +40,7 @@ const RepoConnectForm = ({
     onDisconnect,
     intro = {
         titleKey: 'app.repoConnectForm.connectAGitRepository', title: 'Connect a Git repository',
-        subtitleKey: 'app.repoConnectForm.trackThisServiceInVersionControl', subtitle: 'Track this service in version control — push to deploy.',
+        subtitleKey: 'app.repoConnectForm.trackThisServiceInVersionControl', subtitle: 'Track this service in version control. Push to deploy.',
     },
     showPaths = false,
     defaultPaths = [],
@@ -160,12 +160,12 @@ const RepoConnectForm = ({
                         <strong>{gitStatus.branch}</strong>
                     </div>
                     <div className="git-connect-status__meta-item">
-                        <span>{t('app.repoConnectForm.autoDeploy', 'Auto Deploy')}</span>
+                        <span>{t('app.repoConnectForm.autoDeploy', 'Auto deploy')}</span>
                         <strong>{gitStatus.auto_deploy ? 'Enabled' : 'Disabled'}</strong>
                     </div>
                     {gitStatus.last_deploy_commit && (
                         <div className="git-connect-status__meta-item">
-                            <span>{t('app.repoConnectForm.lastDeploy', 'Last Deploy')}</span>
+                            <span>{t('app.repoConnectForm.lastDeploy', 'Last deploy')}</span>
                             <strong className="mono">{gitStatus.last_deploy_commit.substring(0, 7)}</strong>
                         </div>
                     )}

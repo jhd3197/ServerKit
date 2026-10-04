@@ -377,7 +377,7 @@ export default function MonitorDetail() {
     const onDelete = async () => {
         const ok = await confirm({
             title: t('app.monitorDetail.deleteThisMonitor', 'Delete this monitor?'),
-            message: t('app.monitorDetail.andItsCheckHistoryWillBe', '“{{name}}” and its check history will be removed. Any open incident is resolved first.', { name: monitor.name }),
+            message: t('app.monitorDetail.andItsCheckHistoryWillBe', '"{{name}}" and its check history will be removed. Any open incident is resolved first.', { name: monitor.name }),
             confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',
         });
@@ -491,7 +491,7 @@ export default function MonitorDetail() {
                     </div>
                     {series.length === 0 ? (
                         <p className="mon-panel-hint">
-                            {t('app.monitorDetail.noTimedSamplesYetTheFirst', 'No timed samples yet — the first check lands within')} {monitor.check_interval}s.
+                            {t('app.monitorDetail.noTimedSamplesYetTheFirst', 'No timed samples yet. The first check lands within')} {monitor.check_interval}s.
                         </p>
                     ) : (
                         <>
@@ -520,7 +520,7 @@ export default function MonitorDetail() {
                     <div className="mon-panel">
                         <div className="mon-panel__header">
                             <div>
-                                <h3>{t('app.monitorDetail.uptimeLast90Days', 'Uptime — last 90 days')}</h3>
+                                <h3>{t('app.monitorDetail.uptimeLast90Days', 'Uptime (last 90 days)')}</h3>
                                 <span className="mon-panel-sub">{t('app.monitorDetail.clickADayForItsDetail', 'Click a day for its detail')}</span>
                             </div>
                             <div className="mon-uptime-summary">

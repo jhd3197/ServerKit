@@ -128,7 +128,7 @@ const LinkPanelForm = ({ onClose }) => {
         <form className="server-setup-form" onSubmit={handleLink}>
             <div className="server-setup-form__body">
                 <p className="section-description">
-                    {t('app.linkPanelForm.linkThisPanelToAMaster', 'Link this panel to a master ServerKit so it can manage this server — no separate agent install needed. Generate a registration token on the master: Servers → Add Server / regenerate token.')}
+                    {t('app.linkPanelForm.linkThisPanelToAMaster', 'Link this panel to a master ServerKit so it can manage this server. No separate agent install is needed. Generate a registration token on the master: Servers → Add server / regenerate token.')}
                 </p>
 
                 {linkError && <div className="error-message">{linkError}</div>}

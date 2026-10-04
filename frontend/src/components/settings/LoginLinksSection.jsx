@@ -86,7 +86,7 @@ const LoginLinksSection = ({ users, currentUserId }) => {
         <div className="login-links">
             <div className="tab-header">
                 <div className="tab-header-content">
-                    <h3>{t('app.loginLinksSection.oneTimeLoginLinks', 'One-Time Login Links')}</h3>
+                    <h3>{t('app.loginLinksSection.oneTimeLoginLinks', 'One-time login links')}</h3>
                     <p>
                         {t('app.loginLinksSection.mintASingleUseSignIn', 'Mint a single-use sign-in URL for a user. The link is shown once, expires automatically, and can be bound to one IP.')}
                     </p>
@@ -148,20 +148,20 @@ const LoginLinksSection = ({ users, currentUserId }) => {
                 )}
 
                 <Button type="submit" variant="secondary" disabled={minting || !userId}>
-                    {minting ? 'Generating…' : 'Generate Link'}
+                    {minting ? t('app.loginLinksSection.generating', 'Generating…') : t('app.loginLinksSection.generateLink', 'Generate link')}
                 </Button>
             </form>
 
             {bindIp && (
                 <p className="login-links__note">
-                    {t('app.loginLinksSection.theLinkWillOnlyWorkFrom', 'The link will only work from the IP entered above — use the recipient\'s public IP, not your own.')}
+                    {t('app.loginLinksSection.theLinkWillOnlyWorkFrom', "The link will only work from the IP entered above. Use the recipient's public IP, not your own.")}
                 </p>
             )}
 
             {minted && (
                 <div className="login-links__reveal">
                     <p className="login-links__reveal-title">
-                        {t('app.loginLinksSection.copyThisUrlNowItWill', 'Copy this URL now — it will not be shown again.')}
+                        {t('app.loginLinksSection.copyThisUrlNowItWill', 'Copy this URL now. It will not be shown again.')}
                     </p>
                     <CopyField value={minted.url} />
                 </div>

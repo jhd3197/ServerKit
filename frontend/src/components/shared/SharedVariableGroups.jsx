@@ -526,7 +526,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                                     type="text"
                                     value={attachId}
                                     onChange={(e) => setAttachId(e.target.value)}
-                                    placeholder={t('app.sharedVariableGroups.resourceId', 'resource id')}
+                                    placeholder={t('app.sharedVariableGroups.resourceId', 'resource ID')}
                                     className="shared-groups__attach-id"
                                 />
                                 <Button type="submit" size="sm" disabled={!attachId.trim()}>

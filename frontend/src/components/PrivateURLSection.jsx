@@ -207,7 +207,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
                             onClick={handleDisable}
                             disabled={loading}
                         >
-                            {t('app.privateURLSection.disablePrivateUrl3', 'Disable Private URL')}
+                            {t('app.privateURLSection.disablePrivateUrl3', 'Disable private URL')}
                         </SharedButton>
                     </div>
                 </div>

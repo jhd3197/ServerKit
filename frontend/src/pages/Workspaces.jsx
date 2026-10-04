@@ -119,7 +119,7 @@ const Workspaces = () => {
             {isAdmin && (
                 <Button size="sm" onClick={() => setShowCreateModal(true)}>
                     <Plus size={16} />
-                    {t('app.workspaces.newWorkspace', 'New Workspace')}
+                    {t('app.workspaces.newWorkspace', 'New workspace')}
                 </Button>
             )}
             <SearchField
@@ -256,7 +256,7 @@ const Workspaces = () => {
                 : 'Workspaces isolate servers by team or project. Ask an admin to create one.'}
             emptyAction={isAdmin ? (
                 <Button onClick={() => setShowCreateModal(true)}>
-                    {t('app.workspaces.newWorkspace', 'New Workspace')}
+                    {t('app.workspaces.newWorkspace', 'New workspace')}
                 </Button>
             ) : null}
             filteredEmptyIcon={LayoutGrid}
@@ -267,7 +267,7 @@ const Workspaces = () => {
             <Modal
                 open={showCreateModal}
                 onClose={() => setShowCreateModal(false)}
-                title={t('app.workspaces.createWorkspace', 'Create Workspace')}
+                title={t('app.workspaces.createWorkspace', 'Create workspace')}
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
@@ -282,7 +282,7 @@ const Workspaces = () => {
             >
                 <div className="form-group">
                     <label>{t('common.labels.name', 'Name')}</label>
-                    <Input value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder={t('app.workspaces.myTeam', 'My Team')} />
+                    <Input value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder={t('app.workspaces.myTeam', 'My team')} />
                 </div>
                 <div className="form-group">
                     <label>{t('common.labels.description', 'Description')}</label>
@@ -290,16 +290,16 @@ const Workspaces = () => {
                 </div>
                 <div className="form-row">
                     <div className="form-group">
-                        <label>{t('app.workspaces.maxServers0Unlimited', 'Max Servers (0 = unlimited)')}</label>
+                        <label>{t('app.workspaces.maxServers0Unlimited', 'Max servers (0 = unlimited)')}</label>
                         <Input type="number" value={form.max_servers} onChange={e => setForm({...form, max_servers: parseInt(e.target.value) || 0})} />
                     </div>
                     <div className="form-group">
-                        <label>{t('app.workspaces.maxUsers0Unlimited', 'Max Users (0 = unlimited)')}</label>
+                        <label>{t('app.workspaces.maxUsers0Unlimited', 'Max users (0 = unlimited)')}</label>
                         <Input type="number" value={form.max_users} onChange={e => setForm({...form, max_users: parseInt(e.target.value) || 0})} />
                     </div>
                 </div>
                 <div className="form-group">
-                    <label>{t('app.workspaces.brandColor', 'Brand Color')}</label>
+                    <label>{t('app.workspaces.brandColor', 'Brand color')}</label>
                     <input
                         type="color"
                         className="workspace-color-input"

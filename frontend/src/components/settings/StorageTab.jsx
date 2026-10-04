@@ -246,7 +246,7 @@ export default function StorageTab() {
                 <h3>{t('app.storageTab.breakdown', 'What is using the disk')}</h3>
                 <p>{t('app.storageTab.breakdownHint', 'Measured now. Reclaimable is what Docker reports it could free without touching running apps.')}</p>
                 {items.length === 0 ? (
-                    <p className="storage-tab__muted">{t('app.storageTab.noItems', 'Nothing to report — Docker is not answering and no panel data was found.')}</p>
+                    <p className="storage-tab__muted">{t('app.storageTab.noItems', 'Nothing to report. Docker is not answering and no panel data was found.')}</p>
                 ) : (
                     <ul className="storage-breakdown">
                         {items.map((item) => (

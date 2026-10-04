@@ -45,9 +45,9 @@ const VALID_TABS = ['logs', 'journal', 'processes', 'services', 'shell'];
 // paired agent — so it's listed first, keeping the highlighted tab and the
 // landing view in sync. The interactive Terminal sits next.
 const TERMINAL_TABS = [
-    { to: '/terminal', labelKey: 'app.terminal.logFiles', label: 'Log Files', end: true, icon: <FileText size={15} /> },
+    { to: '/terminal', labelKey: 'app.terminal.logFiles', label: 'Log files', end: true, icon: <FileText size={15} /> },
     { to: '/terminal/shell', labelKey: 'app.terminal.terminal', label: 'Terminal', icon: <TerminalIcon size={15} /> },
-    { to: '/terminal/journal', labelKey: 'app.terminal.systemJournal', label: 'System Journal', icon: <ScrollText size={15} /> },
+    { to: '/terminal/journal', labelKey: 'app.terminal.systemJournal', label: 'System journal', icon: <ScrollText size={15} /> },
     { to: '/terminal/processes', labelKey: 'app.terminal.processes', label: 'Processes', icon: <Cpu size={15} /> },
     { to: '/terminal/services', labelKey: 'common.labels.services', label: 'Services', icon: <Settings size={15} /> },
 ];
@@ -605,12 +605,12 @@ const JournalTab = () => {
             <div className="lv-page">
                 <div className="lv-empty-hint is-tall">
                     <AlertCircle size={48} />
-                    <h3 className="lv-empty-hint__title">{t('app.terminal.systemLogsUnavailable', 'System Logs Unavailable')}</h3>
+                    <h3 className="lv-empty-hint__title">{t('app.terminal.systemLogsUnavailable', 'System logs unavailable')}</h3>
                     <p>
                         {t('app.terminal.noSystemLogSourceWasFound', 'No system log source was found. Neither')} <code>journalctl</code>,
                         <code> /var/log/syslog</code>{t('app.terminal.norTheWindowsEventLogAre', ', nor the Windows Event Log are available.')}
                     </p>
-                    <p>{t('app.terminal.useThe', 'Use the')} <strong>{t('app.terminal.logFiles', 'Log Files')}</strong> {t('app.terminal.tabToBrowseAvailableLogFiles', 'tab to browse available log files instead.')}</p>
+                    <p>{t('app.terminal.useThe', 'Use the')} <strong>{t('app.terminal.logFiles', 'Log files')}</strong> {t('app.terminal.tabToBrowseAvailableLogFiles', 'tab to browse available log files instead.')}</p>
                 </div>
             </div>
         );

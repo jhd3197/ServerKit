@@ -33,8 +33,8 @@ export default function PoolerCard({ app }) {
                 toast.warning(t('app.pooler.savedNotApplied', 'Saved, but the pooler could not be started. Check the containers.'));
             } else {
                 toast.success(next
-                    ? t('app.pooler.on', 'Pooler running at {{host}}:5432.', { host: data.host })
-                    : t('app.pooler.off', 'Pooler removed.'));
+                    ? t('app.pooler.on', 'Pooler running at {{host}}:5432', { host: data.host })
+                    : t('app.pooler.off', 'Pooler removed'));
             }
         } catch (err) {
             toast.error(err.message);

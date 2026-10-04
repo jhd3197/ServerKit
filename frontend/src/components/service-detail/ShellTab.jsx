@@ -85,7 +85,7 @@ const ShellTab = ({ appId, appName }) => {
         <div className="shell-tab">
             <div className="shell-tab__container">
                 <div className="shell-tab__header">
-                    <span className="shell-tab__title">{t('app.shellTab.containerShell', 'Container Shell')}</span>
+                    <span className="shell-tab__title">{t('app.shellTab.containerShell', 'Container shell')}</span>
                     {containers.length > 1 && (
                         <Select
                             value={selectedContainer || ''}

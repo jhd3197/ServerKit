@@ -109,7 +109,7 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                 <div className="info-card offline-card">
                     <div className="offline-message">
                         <OfflineIcon />
-                        <h4>{t('app.serverOverviewTab.serverOffline', 'Server Offline')}</h4>
+                        <h4>{t('app.serverOverviewTab.serverOffline', 'Server offline')}</h4>
                         <p>
                             {server.status === 'pending'
                                 ? 'Waiting for agent installation...'
@@ -121,25 +121,25 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
 
             <div className="overview-grid">
                 <div className="info-card">
-                    <h3><ServerIcon /> {t('app.serverOverviewTab.serverInformation', 'Server Information')}</h3>
+                    <h3><ServerIcon /> {t('app.serverOverviewTab.serverInformation', 'Server information')}</h3>
                     <InfoList className="server-info-list">
                         <InfoItem label={<><PulseIcon /> {t('common.labels.status', 'Status')}</>}>
                             <Pill kind={serverStatusKind(server.status)}>{server.status}</Pill>
                         </InfoItem>
                         <InfoItem label={<><HostIcon /> {t('app.serverOverviewTab.hostname', 'Hostname')}</>} value={server.hostname || 'N/A'} mono />
-                        <InfoItem label={<><NetworkIcon /> {t('common.labels.ipAddress', 'IP Address')}</>} value={server.ip_address || 'N/A'} mono />
+                        <InfoItem label={<><NetworkIcon /> {t('common.labels.ipAddress', 'IP address')}</>} value={server.ip_address || 'N/A'} mono />
                         <InfoItem label={<><FolderTinyIcon /> {t('app.serverOverviewTab.group', 'Group')}</>} value={server.group_name || 'Ungrouped'} />
                         <InfoItem
-                            label={<><ClockIcon /> {t('app.serverOverviewTab.lastSeen', 'Last Seen')}</>}
+                            label={<><ClockIcon /> {t('app.serverOverviewTab.lastSeen', 'Last seen')}</>}
                             value={server.last_seen ? new Date(server.last_seen).toLocaleString() : 'Never'}
                         />
                     </InfoList>
                 </div>
 
                 <div className="info-card">
-                    <h3><ChipIcon /> {t('app.serverOverviewTab.systemInformation', 'System Information')}</h3>
+                    <h3><ChipIcon /> {t('app.serverOverviewTab.systemInformation', 'System information')}</h3>
                     <InfoList className="server-info-list">
-                        <InfoItem label={<><OsIcon /> {t('app.serverOverviewTab.operatingSystem', 'Operating System')}</>} value={osLabel} />
+                        <InfoItem label={<><OsIcon /> {t('app.serverOverviewTab.operatingSystem', 'Operating system')}</>} value={osLabel} />
                         <InfoItem label={<><ArchIcon /> {t('app.serverOverviewTab.architecture', 'Architecture')}</>} value={systemInfo?.architecture || server.architecture || 'N/A'} />
                         <InfoItem
                             label={<><CpuIcon /> CPU</>}
@@ -147,17 +147,17 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                                 (cpuModel || 'N/A') + (cpuCores ? ` (${cpuCores} cores)` : '')
                             }
                         />
-                        <InfoItem label={<><MemoryIcon /> {t('app.serverOverviewTab.totalMemory', 'Total Memory')}</>} value={formatBytes(totalMemory, { defaultValue: 'N/A' })} />
-                        <InfoItem label={<><DiskIcon /> {t('app.serverOverviewTab.totalDisk', 'Total Disk')}</>} value={formatBytes(totalDisk, { defaultValue: 'N/A' })} />
+                        <InfoItem label={<><MemoryIcon /> {t('app.serverOverviewTab.totalMemory', 'Total memory')}</>} value={formatBytes(totalMemory, { defaultValue: 'N/A' })} />
+                        <InfoItem label={<><DiskIcon /> {t('app.serverOverviewTab.totalDisk', 'Total disk')}</>} value={formatBytes(totalDisk, { defaultValue: 'N/A' })} />
                     </InfoList>
                 </div>
 
                 <div className="info-card overview-grid__full">
-                    <h3><AgentIcon /> {t('app.serverOverviewTab.agentInformation', 'Agent Information')}</h3>
+                    <h3><AgentIcon /> {t('app.serverOverviewTab.agentInformation', 'Agent information')}</h3>
                     <InfoList className="server-info-list server-info-list--columns">
-                        <InfoItem label={<><TagIcon /> {t('app.serverOverviewTab.agentVersion', 'Agent Version')}</>} value={server.agent_version || 'Not installed'} mono />
+                        <InfoItem label={<><TagIcon /> {t('app.serverOverviewTab.agentVersion', 'Agent version')}</>} value={server.agent_version || 'Not installed'} mono />
                         <InfoItem label={<><HashIcon /> {t('app.serverOverviewTab.agentId', 'Agent ID')}</>} value={server.agent_id || 'N/A'} mono />
-                        <InfoItem label={<><DockerMiniIcon /> {t('app.serverOverviewTab.dockerVersion', 'Docker Version')}</>} value={server.docker_version || systemInfo?.docker_version || 'N/A'} mono />
+                        <InfoItem label={<><DockerMiniIcon /> {t('app.serverOverviewTab.dockerVersion', 'Docker version')}</>} value={server.docker_version || systemInfo?.docker_version || 'N/A'} mono />
                         <InfoItem label={<><ClockIcon /> {t('common.labels.uptime', 'Uptime')}</>} value={formatUptime(metrics?.uptime)} />
                     </InfoList>
                 </div>

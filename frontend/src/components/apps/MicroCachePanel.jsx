@@ -65,8 +65,8 @@ const MicroCachePanel = ({ app, onChanged }) => {
             const data = await save(next, ttlValid ? ttlNumber : undefined);
             if (!data.note) {
                 toast.success(next
-                    ? t('app.microCachePanel.microCacheEnabledTheSiteConfig', 'Micro-cache enabled — the site config was updated.')
-                    : t('app.microCachePanel.microCacheDisabledTheSiteConfig', 'Micro-cache disabled — the site config was updated.'));
+                    ? t('app.microCachePanel.microCacheEnabledTheSiteConfig', 'Micro-cache enabled. The site config was updated.')
+                    : t('app.microCachePanel.microCacheDisabledTheSiteConfig', 'Micro-cache disabled. The site config was updated.'));
             }
         } catch (err) {
             setEnabled(!next);
@@ -77,7 +77,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
     async function handleSaveTtl() {
         try {
             await save(enabled, ttlNumber);
-            toast.success(t('app.microCachePanel.cacheLifetimeSaved', 'Cache lifetime saved.'));
+            toast.success(t('app.microCachePanel.cacheLifetimeSaved', 'Cache lifetime saved'));
         } catch (err) {
             toast.error(err.message || t('app.microCachePanel.failedToUpdateMicroCache', 'Failed to update micro-cache'));
         }
@@ -88,7 +88,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
         try {
             const data = await api.setImmutableAssets(app.id, next);
             if (data.warning) toast.warning(data.warning);
-            else toast.success(t('app.microCachePanel.assetCachingSaved', 'Asset caching saved.'));
+            else toast.success(t('app.microCachePanel.assetCachingSaved', 'Asset caching saved'));
             onChanged?.();
         } catch (err) {
             setImmutable(!next);

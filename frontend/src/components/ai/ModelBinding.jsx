@@ -33,7 +33,7 @@ export default function ModelBinding({ id, value, onChange, connections, disable
             }}>
                 <SelectTrigger id={`${id}-connection`}><SelectValue /></SelectTrigger>
                 <SelectContent>
-                    <SelectItem value={NO_CONNECTION}>{allowInherit ? (inheritLabel || t('ai.management.inherit', 'Use Standard / panel default')) : t('ai.management.chooseConnection', 'Choose a connection')}</SelectItem>
+                    <SelectItem value={NO_CONNECTION}>{allowInherit ? (inheritLabel || t('ai.management.inherit', 'Use standard / panel default')) : t('ai.management.chooseConnection', 'Choose a connection')}</SelectItem>
                     {connections.map((item) => <SelectItem key={item.id} value={String(item.id)}>{item.name}</SelectItem>)}
                 </SelectContent>
             </Select>

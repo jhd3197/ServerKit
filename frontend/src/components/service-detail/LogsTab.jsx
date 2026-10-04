@@ -103,7 +103,7 @@ const LogsTab = ({ app }) => {
             next.delete('deploy_job');
             setSearchParams(next, { replace: true });
         }
-        toast.success(t('app.logsTab.deploymentFinishedSuccessfully', 'Deployment finished successfully'));
+        toast.success(t('app.logsTab.deploymentFinishedSuccessfully', 'Deployment finished'));
         loadLogs();
     }
 
@@ -253,7 +253,7 @@ const LogsTab = ({ app }) => {
                             logPath: app.log_path,
                             appType: app.app_type,
                         })}
-                        title={t('app.logsTab.pinToDrawer', 'Open in Operations dock')}
+                        title={t('app.logsTab.pinToDrawer', 'Open in operations dock')}
                     >
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <line x1="12" y1="17" x2="12" y2="22"/>

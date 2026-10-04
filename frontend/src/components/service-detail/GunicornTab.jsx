@@ -47,7 +47,7 @@ const GunicornTab = ({ appId }) => {
     return (
         <div>
             <div className="section-header">
-                <h3 className="svc-eyebrow">{t('app.gunicornTab.gunicornConfiguration', 'Gunicorn Configuration')}</h3>
+                <h3 className="svc-eyebrow">{t('app.gunicornTab.gunicornConfiguration', 'Gunicorn configuration')}</h3>
                 <Button onClick={handleSave} disabled={saving}>
                     {saving ? 'Saving...' : 'Save'}
                 </Button>

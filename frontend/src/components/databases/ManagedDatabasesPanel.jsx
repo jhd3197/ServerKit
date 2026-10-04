@@ -68,7 +68,7 @@ export default function ManagedDatabasesPanel() {
 
     async function untrack(row, drop) {
         const ok = await confirm({
-            title: drop ? t('app.managedDatabasesPanel.drop', 'Drop “{{name}}”?', { name: row.name }) : t('app.managedDatabasesPanel.untrack', 'Untrack “{{name}}”?', { name: row.name }),
+            title: drop ? t('app.managedDatabasesPanel.drop', 'Drop "{{name}}"?', { name: row.name }) : t('app.managedDatabasesPanel.untrack', 'Untrack "{{name}}"?', { name: row.name }),
             message: drop
                 ? t('app.managedDatabasesPanel.thisDropsTheDatabaseOnThe', 'This DROPs the database on the server and removes tracking. This cannot be undone.')
                 : t('app.managedDatabasesPanel.thisStopsTrackingTheDatabaseThe', 'This stops tracking the database. The database itself is left untouched.'),

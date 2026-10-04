@@ -176,7 +176,7 @@ export default function MonitorsSummary({ refreshKey = 0 }) {
                     </div>
                     {feed.length === 0 ? (
                         <p className="mon-panel-hint">
-                            {t('app.monitorsSummary.noChecksRecordedYetTheScheduler', 'No checks recorded yet — the scheduler polls on each monitor\'s interval.')}
+                            {t('app.monitorsSummary.noChecksRecordedYetTheScheduler', "No checks recorded yet. The scheduler polls on each monitor's interval.")}
                         </p>
                     ) : (
                         <div className="mon-feed">

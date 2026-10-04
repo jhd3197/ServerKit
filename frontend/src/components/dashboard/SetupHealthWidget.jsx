@@ -36,7 +36,7 @@ const SetupHealthWidget = () => {
         return (
             <div className="setup-health-widget setup-health-widget--loading" role="status">
                 <ShieldCheck size={16} />
-                <span>{t('app.setupHealthWidget.setupHealth', 'Setup Health')}</span>
+                <span>{t('app.setupHealthWidget.setupHealth', 'Setup health')}</span>
                 <span className="setup-health-widget__muted">
                     {loading
                         ? t('common.checking', 'Checking…')
@@ -64,7 +64,7 @@ const SetupHealthWidget = () => {
             >
                 <ShieldCheck size={16} />
                 <span className="setup-health-widget__cleanlabel">
-                    {t('app.setupHealthWidget.allSet', 'All set —')} {summary.score}{t('app.setupHealthWidget.setupHealth2', '% setup health')}
+                    {t('app.setupHealthWidget.allSet', 'Setup complete:')} {summary.score}{t('app.setupHealthWidget.setupHealth2', '% setup health')}
                 </span>
                 <ChevronRight size={14} />
             </Button>
@@ -74,7 +74,7 @@ const SetupHealthWidget = () => {
     return (
         <div className="setup-health-widget">
             <ShieldAlert size={16} className="setup-health-widget__icon" />
-            <span className="setup-health-widget__title">{t('app.setupHealthWidget.setupHealth', 'Setup Health')}</span>
+            <span className="setup-health-widget__title">{t('app.setupHealthWidget.setupHealth', 'Setup health')}</span>
             <span className="setup-health-widget__score">{summary.score}%</span>
             <progress max="100" value={summary.score} aria-label={t('app.setupHealthWidget.progress', 'Setup health progress')} />
             <span className="setup-health-widget__summary">
@@ -105,7 +105,7 @@ const SetupHealthWidget = () => {
                 className="setup-health-widget__dismiss"
                 onClick={dismiss}
                 aria-label={t('common.actions.dismiss', 'Dismiss')}
-                title={t('app.setupHealthWidget.dismissHint', 'Dismiss — setup health stays in the status bar')}
+                title={t('app.setupHealthWidget.dismissHint', 'Dismiss (setup health stays in the status bar)')}
             >
                 <X size={14} />
             </Button>

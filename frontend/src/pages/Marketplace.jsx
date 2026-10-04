@@ -420,7 +420,7 @@ const Marketplace = () => {
         try {
             const result = await api.updatePlugin(
                 pluginId, acknowledgeRisk ? { acknowledge_risk: true } : undefined);
-            toast.success(t('app.marketplace.extensionUpdatedToV', 'Extension "{{displayname}}" updated to v{{version}}.', { displayname: result.display_name, version: result.version }));
+            toast.success(t('app.marketplace.extensionUpdatedToV', 'Extension "{{displayname}}" updated to v{{version}}', { displayname: result.display_name, version: result.version }));
             await loadExtensions();
         } catch (err) {
             // 409 consent gate (audit M2) — same acknowledge flow as installs.
@@ -873,7 +873,7 @@ const CatalogExtensionCard = ({ entry, installing, onInstall, onOpenDetail }) =>
                 >
                     <DownloadCloud aria-hidden="true" />
                     {installing
-                        ? t('app.marketplace.installing', 'Installing...')
+                        ? t('app.marketplace.installing', 'Installing…')
                         : t('app.marketplace.install', 'Install')}
                 </Button>
             )}

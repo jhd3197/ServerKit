@@ -101,7 +101,7 @@ try {
 
         await page.getByRole('button', { name: 'Delete user', exact: true }).click();
         await page.getByRole('alertdialog').waitFor();
-        await page.getByRole('alertdialog').getByRole('button', { name: 'Delete User', exact: true }).click();
+        await page.getByRole('alertdialog').getByRole('button', { name: 'Delete user', exact: true }).click();
         await withinDeadline(deleteStarted);
         await page.waitForFunction(() => document.querySelector('.users-table button[aria-busy="true"]'));
         assert.equal(await page.locator('.users-table').first().locator('tbody button:not(:disabled)').count(), 0);

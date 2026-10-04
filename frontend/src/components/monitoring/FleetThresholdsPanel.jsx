@@ -216,7 +216,7 @@ export default function FleetThresholdsPanel({ refreshKey = 0 }) {
                 />
             ) : (
                 <p className="mon-panel-hint">
-                    {t('app.fleetThresholdsPanel.noPerServerRulesYetPaired', 'No per-server rules yet — paired servers fall back to their agent defaults.')}
+                    {t('app.fleetThresholdsPanel.noPerServerRulesYetPaired', 'No per-server rules yet. Paired servers fall back to their agent defaults.')}
                 </p>
             )}
         </section>

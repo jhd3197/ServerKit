@@ -89,7 +89,7 @@ const Settings = () => {
                             className="settings-nav-groups"
                             aria-label={t('app.settings.settingsSection', 'Settings section')}
                             options={[
-                                { value: 'account', labelKey: 'app.settings.myAccount', label: 'My Account' },
+                                { value: 'account', labelKey: 'app.settings.myAccount', label: 'My account' },
                                 { value: 'admin', labelKey: 'app.settings.admin', label: 'Admin' },
                             ]}
                             value={activeGroup}
@@ -167,18 +167,18 @@ const Settings = () => {
                         onClick={() => setActiveTab('whitelabel')}
                     >
                         <Layers size={18} />
-                        {t('app.settings.whiteLabel', 'White Label')}
+                        {t('app.settings.whiteLabel', 'White label')}
                     </Button>
                             {import.meta.env.DEV && !devMode && !isAdmin && (
                                 <>
-                                    <div className="settings-nav-divider">{t('app.settings.localDev', 'Local Dev')}</div>
+                                    <div className="settings-nav-divider">{t('app.settings.localDev', 'Local dev')}</div>
                                     <Button variant="unstyled"
                                         type="button"
                                         className="settings-nav-item"
                                         onClick={() => navigate('/style-guide')}
                                     >
                                         <PaintBucket size={18} />
-                                        {t('app.settings.styleGuide', 'Style Guide')}
+                                        {t('app.settings.styleGuide', 'Style guide')}
                                     </Button>
                                 </>
                             )}
@@ -236,7 +236,7 @@ const Settings = () => {
                                     <circle cx="12" cy="12" r="3"/>
                                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                                 </svg>
-                                {t('app.settings.siteSettings', 'Site Settings')}
+                                {t('app.settings.siteSettings', 'Site settings')}
                             </Button>
                             <Button variant="unstyled"
                                 type="button"
@@ -288,7 +288,7 @@ const Settings = () => {
                                 onClick={() => setActiveTab('ai')}
                             >
                                 <Sparkles size={18} />
-                                {t('app.settings.aiAssistant', 'AI Assistant')}
+                                {t('app.settings.aiAssistant', 'AI assistant')}
                             </Button>
                             <Button variant="unstyled"
                                 type="button"
@@ -316,11 +316,11 @@ const Settings = () => {
                                     <line x1="8" y1="21" x2="16" y2="21"/>
                                     <line x1="12" y1="17" x2="12" y2="21"/>
                                 </svg>
-                                {t('app.settings.systemInfo', 'System Info')}
+                                {t('app.settings.systemInfo', 'System info')}
                             </Button>
                             {(devMode || import.meta.env.DEV) && (
                                 <>
-                                    <div className="settings-nav-divider">{devMode ? 'Developer' : 'Local Dev'}</div>
+                                    <div className="settings-nav-divider">{devMode ? t('app.settings.developer', 'Developer') : t('app.settings.localDev', 'Local dev')}</div>
                                     {devMode && (
                                         <Button variant="unstyled"
                                             type="button"
@@ -328,7 +328,7 @@ const Settings = () => {
                                             onClick={() => setActiveTab('developer')}
                                         >
                                             <Code size={18} />
-                                            {t('app.settings.iconReference', 'Icon Reference')}
+                                            {t('app.settings.iconReference', 'Icon reference')}
                                         </Button>
                                     )}
                                     <Button variant="unstyled"
@@ -337,7 +337,7 @@ const Settings = () => {
                                         onClick={() => navigate('/style-guide')}
                                     >
                                         <PaintBucket size={18} />
-                                        {t('app.settings.styleGuide', 'Style Guide')}
+                                        {t('app.settings.styleGuide', 'Style guide')}
                                     </Button>
                                 </>
                             )}

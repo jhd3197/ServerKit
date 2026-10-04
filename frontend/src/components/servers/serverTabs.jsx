@@ -13,7 +13,7 @@ import { Server, Users, FileCog, Network } from 'lucide-react';
 // server's detail page under its "Remote Access" tab (core, unaffected).
 export const SERVER_TABS = [
     { to: '/servers', labelKey: 'common.labels.servers', label: 'Servers', end: true, icon: <Server size={15} /> },
-    { to: '/fleet', labelKey: 'app.serverTabs.agentFleet', label: 'Agent Fleet', icon: <Users size={15} /> },
-    { to: '/fleet-proxy', labelKey: 'app.serverTabs.fleetProxy', label: 'Fleet Proxy', icon: <Network size={15} /> },
-    { to: '/server-templates', labelKey: 'app.serverTabs.configTemplates', label: 'Config Templates', icon: <FileCog size={15} /> },
+    { to: '/fleet', labelKey: 'app.serverTabs.agentFleet', label: 'Agent fleet', icon: <Users size={15} /> },
+    { to: '/fleet-proxy', labelKey: 'app.serverTabs.fleetProxy', label: 'Fleet proxy', icon: <Network size={15} /> },
+    { to: '/server-templates', labelKey: 'app.serverTabs.configTemplates', label: 'Config templates', icon: <FileCog size={15} /> },
 ];

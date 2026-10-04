@@ -163,7 +163,7 @@ const SSLCertificates = () => {
                 result = await api.obtainCertificate(data);
             }
             if (result.success) {
-                toast.success(wildcard ? t('app.sSLCertificates.wildcardCertificateIssued', 'Wildcard certificate issued') : t('app.sSLCertificates.certificateObtainedSuccessfully', 'Certificate obtained successfully'));
+                toast.success(wildcard ? t('app.sSLCertificates.wildcardCertificateIssued', 'Wildcard certificate issued') : t('app.sSLCertificates.certificateObtainedSuccessfully', 'Certificate obtained'));
                 setShowObtainModal(false);
                 setDomains('');
                 setEmail('');
@@ -242,7 +242,7 @@ const SSLCertificates = () => {
     }
 
     async function handleRevokeCertificate(domain) {
-        const confirmed = await confirm({ title: t('app.sSLCertificates.revokeCertificate', 'Revoke Certificate'), message: t('app.sSLCertificates.revokeAndDeleteTheCertificateFor', 'Revoke and delete the certificate for {{domain}}? This cannot be undone.', { domain: domain }) });
+        const confirmed = await confirm({ title: t('app.sSLCertificates.revokeCertificate', 'Revoke certificate'), message: t('app.sSLCertificates.revokeAndDeleteTheCertificateFor', 'Revoke and delete the certificate for {{domain}}? This cannot be undone.', { domain: domain }) });
         if (!confirmed) return;
 
         try {
@@ -280,10 +280,10 @@ const SSLCertificates = () => {
     async function handleInstallCertbot() {
         try {
             setActionLoading(true);
-            toast.info(t('app.sSLCertificates.installingCertbotThisMayTakeA', 'Installing Certbot... This may take a moment.'));
+            toast.info(t('app.sSLCertificates.installingCertbotThisMayTakeA', 'Installing Certbot… This may take a moment.'));
             const result = await api.installCertbot();
             if (result.success) {
-                toast.success(t('app.sSLCertificates.certbotInstalledSuccessfully', 'Certbot installed successfully'));
+                toast.success(t('app.sSLCertificates.certbotInstalledSuccessfully', 'Certbot installed'));
                 loadData();
             } else {
                 toast.error(result.error || t('app.sSLCertificates.failedToInstallCertbot', 'Failed to install Certbot'));
@@ -418,8 +418,8 @@ const SSLCertificates = () => {
             width: 145,
             enumOrder: ['certbot', 'manual'],
             render: (c) => (c.renewal === 'certbot'
-                ? <Pill kind="green" title={t('app.sSLCertificates.reissuedByCertbotSetTheTimer', 'Reissued by certbot — set the timer up with Auto-Renew')}>certbot</Pill>
-                : <Pill kind="gray" title={t('app.sSLCertificates.uploadedByHandReUploadIt', 'Uploaded by hand — re-upload it before it expires')}>manual</Pill>),
+                ? <Pill kind="green" title={t('app.sSLCertificates.reissuedByCertbotSetTheTimer', 'Reissued by certbot. Set up the timer with Auto-renew')}>certbot</Pill>
+                : <Pill kind="gray" title={t('app.sSLCertificates.uploadedByHandReUploadIt', 'Uploaded by hand. Re-upload it before it expires')}>manual</Pill>),
         },
         {
             key: '__actions',
@@ -445,7 +445,7 @@ const SSLCertificates = () => {
                                 className="text-destructive"
                                 onClick={() => handleRevokeCertificate(c.name)}
                             >
-                                {t('app.sSLCertificates.revokeDelete', 'Revoke & delete')}
+                                {t('app.sSLCertificates.revokeDelete', 'Revoke and delete')}
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -475,12 +475,12 @@ const SSLCertificates = () => {
                 title={t('app.sSLCertificates.configureAutomaticRenewalViaSystemdOr', 'Configure automatic renewal via systemd or cron')}
             >
                 <Settings size={15} />
-                {t('app.sSLCertificates.autoRenew2', 'Auto-Renew')}
+                {t('app.sSLCertificates.autoRenew2', 'Auto-renew')}
             </Button>
             {certificates.length > 0 && (
                 <Button variant="outline" size="sm" onClick={handleRenewAll} disabled={actionLoading}>
                     <RefreshCw size={15} />
-                    {t('app.sSLCertificates.renewAll', 'Renew All')}
+                    {t('app.sSLCertificates.renewAll', 'Renew all')}
                 </Button>
             )}
             <Button variant="outline" size="sm" onClick={loadData}>
@@ -493,7 +493,7 @@ const SSLCertificates = () => {
             </Button>
             <Button size="sm" onClick={() => setShowObtainModal(true)} disabled={!certbotInstalled}>
                 <Plus size={15} />
-                {t('app.sSLCertificates.newCertificate', 'New Certificate')}
+                {t('app.sSLCertificates.newCertificate', 'New certificate')}
             </Button>
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.sSLCertificates.searchCertificates', 'Search certificates…')} />
         </>
@@ -525,12 +525,12 @@ const SSLCertificates = () => {
                 emptyAction={certbotInstalled ? (
                     <Button onClick={() => setShowObtainModal(true)}>
                         <Plus size={16} />
-                        {t('app.sSLCertificates.newCertificate', 'New Certificate')}
+                        {t('app.sSLCertificates.newCertificate', 'New certificate')}
                     </Button>
                 ) : (
                     <Button onClick={handleInstallCertbot} disabled={actionLoading}>
                         <Download size={16} />
-                        {t('app.sSLCertificates.installCertbotFirst', 'Install Certbot First')}
+                        {t('app.sSLCertificates.installCertbotFirst', 'Install Certbot first')}
                     </Button>
                 )}
                 filteredEmptyIcon={Lock}
@@ -539,7 +539,7 @@ const SSLCertificates = () => {
             />
 
             {/* Obtain Certificate Modal */}
-            <Modal open={showObtainModal} onClose={() => setShowObtainModal(false)} title={t('app.sSLCertificates.obtainSslCertificate', 'Obtain SSL Certificate')}>
+            <Modal open={showObtainModal} onClose={() => setShowObtainModal(false)} title={t('app.sSLCertificates.obtainSslCertificate', 'Obtain SSL certificate')}>
                         <form onSubmit={handleObtainCertificate}>
                             <div className="ssl-info-box">
                                 <ShieldCheck size={32} />
@@ -584,7 +584,7 @@ const SSLCertificates = () => {
                             {!wildcard && (
                                 <>
                                     <div className="form-group">
-                                        <Label>{t('app.sSLCertificates.emailAddress', 'Email Address')}</Label>
+                                        <Label>{t('app.sSLCertificates.emailAddress', 'Email address')}</Label>
                                         <Input
                                             type="email"
                                             placeholder="admin@example.com"
@@ -605,7 +605,7 @@ const SSLCertificates = () => {
                                     </div>
                                     {!useNginx && (
                                         <div className="form-group">
-                                            <Label>{t('app.sSLCertificates.webrootPath', 'Webroot Path')}</Label>
+                                            <Label>{t('app.sSLCertificates.webrootPath', 'Webroot path')}</Label>
                                             <Input
                                                 type="text"
                                                 placeholder="/var/www/html"
@@ -621,7 +621,7 @@ const SSLCertificates = () => {
                             {wildcard && (
                                 <>
                                     <div className="form-group">
-                                        <Label htmlFor="ssl-dns-provider">{t('app.sSLCertificates.dnsProvider', 'DNS Provider')}</Label>
+                                        <Label htmlFor="ssl-dns-provider">{t('app.sSLCertificates.dnsProvider', 'DNS provider')}</Label>
                                         <Select value={dnsProvider} onValueChange={setDnsProvider}>
                                             <SelectTrigger id="ssl-dns-provider"><SelectValue /></SelectTrigger>
                                             <SelectContent>
@@ -632,7 +632,7 @@ const SSLCertificates = () => {
                                     </div>
                                     {dnsProvider === 'cloudflare' ? (
                                         <div className="form-group">
-                                            <Label>{t('app.sSLCertificates.cloudflareApiToken', 'Cloudflare API Token')}</Label>
+                                            <Label>{t('app.sSLCertificates.cloudflareApiToken', 'Cloudflare API token')}</Label>
                                             <Input
                                                 type="password"
                                                 placeholder={t('app.sSLCertificates.apiTokenWithDnsEditRights', 'API token with DNS edit rights')}
@@ -644,7 +644,7 @@ const SSLCertificates = () => {
                                     ) : (
                                         <>
                                             <div className="form-group">
-                                                <Label>{t('app.sSLCertificates.awsAccessKeyId', 'AWS Access Key ID')}</Label>
+                                                <Label>{t('app.sSLCertificates.awsAccessKeyId', 'AWS access key ID')}</Label>
                                                 <Input
                                                     type="text"
                                                     value={awsAccessKey}
@@ -653,7 +653,7 @@ const SSLCertificates = () => {
                                                 />
                                             </div>
                                             <div className="form-group">
-                                                <Label>{t('app.sSLCertificates.awsSecretAccessKey', 'AWS Secret Access Key')}</Label>
+                                                <Label>{t('app.sSLCertificates.awsSecretAccessKey', 'AWS secret access key')}</Label>
                                                 <Input
                                                     type="password"
                                                     value={awsSecretKey}
@@ -684,7 +684,7 @@ const SSLCertificates = () => {
             </Modal>
 
             {/* Upload Custom Certificate Modal */}
-            <Modal open={showUploadModal} onClose={() => setShowUploadModal(false)} title={t('app.sSLCertificates.uploadCustomCertificate', 'Upload Custom Certificate')}>
+            <Modal open={showUploadModal} onClose={() => setShowUploadModal(false)} title={t('app.sSLCertificates.uploadCustomCertificate', 'Upload custom certificate')}>
                 <form onSubmit={handleUploadCertificate}>
                     <div className="ssl-info-box">
                         <Upload size={32} />
@@ -714,7 +714,7 @@ const SSLCertificates = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <Label>{t('app.sSLCertificates.privateKeyPem', 'Private Key (PEM)')}</Label>
+                        <Label>{t('app.sSLCertificates.privateKeyPem', 'Private key (PEM)')}</Label>
                         <textarea
                             className="ui-textarea ssl-pem-input"
                             rows={5}

@@ -189,7 +189,7 @@ function FTPServer() {
         setActionLoading(true);
         try {
             await api.installFTPServer(selectedService);
-            toast.success(t('app.fTPServer.installedSuccessfully', '{{selectedService}} installed successfully', { selectedService: selectedService }));
+            toast.success(t('app.fTPServer.installedSuccessfully', '{{selectedService}} installed', { selectedService: selectedService }));
             setShowInstallModal(false);
             await loadData();
         } catch (error) {
@@ -221,14 +221,14 @@ function FTPServer() {
 
     const handleDeleteUser = async (username) => {
         setConfirmDialog({
-            titleKey: 'app.fTPServer.deleteFtpUser', title: 'Delete FTP User',
+            titleKey: 'app.fTPServer.deleteFtpUser', title: 'Delete FTP user',
             message: `Are you sure you want to delete user "${username}"?`,
             confirmTextKey: 'common.actions.delete', confirmText: 'Delete',
             variant: 'danger',
             onConfirm: async () => {
                 try {
                     await api.deleteFTPUser(username, false);
-                    toast.success(t('app.fTPServer.userDeletedSuccessfully', 'User deleted successfully'));
+                    toast.success(t('app.fTPServer.userDeletedSuccessfully', 'User deleted'));
                     await loadUsers();
                 } catch (error) {
                     toast.error(t('app.fTPServer.failedToDeleteUser', 'Failed to delete user: {{message}}', { message: error.message }));
@@ -242,7 +242,7 @@ function FTPServer() {
     const handleToggleUser = async (username, currentStatus) => {
         try {
             await api.toggleFTPUser(username, !currentStatus);
-            toast.success(t('app.fTPServer.userSuccessfully', 'User {{value}} successfully', { value: currentStatus ? 'disabled' : 'enabled' }));
+            toast.success(t('app.fTPServer.userSuccessfully', 'User {{value}}', { value: currentStatus ? 'disabled' : 'enabled' }));
             await loadUsers();
         } catch (error) {
             toast.error(t('app.fTPServer.failedToToggleUser', 'Failed to toggle user: {{message}}', { message: error.message }));
@@ -321,7 +321,7 @@ function FTPServer() {
         },
         {
             key: 'home',
-            headerKey: 'app.fTPServer.homeDirectory', header: 'Home Directory',
+            headerKey: 'app.fTPServer.homeDirectory', header: 'Home directory',
             sortable: true,
             type: 'text',
             value: (user) => user.home || '',
@@ -379,7 +379,7 @@ function FTPServer() {
                         variant="outline"
                         size="sm"
                         onClick={() => openPasswordModal(user.username)}
-                        title={t('app.fTPServer.changePassword', 'Change Password')}
+                        title={t('app.fTPServer.changePassword', 'Change password')}
                     >
                         <KeyRound size={14} />
                     </Button>
@@ -407,7 +407,7 @@ function FTPServer() {
     const connectionColumns = [
         {
             key: 'local',
-            headerKey: 'app.fTPServer.localAddress', header: 'Local Address',
+            headerKey: 'app.fTPServer.localAddress', header: 'Local address',
             sortable: true,
             hideable: false,
             // addr:port pairs are near-unique per row — you type a fragment.
@@ -419,7 +419,7 @@ function FTPServer() {
         },
         {
             key: 'remote',
-            headerKey: 'app.fTPServer.remoteAddress', header: 'Remote Address',
+            headerKey: 'app.fTPServer.remoteAddress', header: 'Remote address',
             sortable: true,
             type: 'text',
             value: (conn) => conn.remote || '',
@@ -498,7 +498,7 @@ function FTPServer() {
         <>
         {!isInstalled ? (
             <Button onClick={() => setShowInstallModal(true)}>
-                {t('app.fTPServer.installFtpServer', 'Install FTP Server')}
+                {t('app.fTPServer.installFtpServer', 'Install FTP server')}
             </Button>
         ) : (
             <>
@@ -507,7 +507,7 @@ function FTPServer() {
                     onClick={handleTestConnection}
                     disabled={actionLoading}
                 >
-                    {t('app.fTPServer.testConnection', 'Test Connection')}
+                    {t('app.fTPServer.testConnection', 'Test connection')}
                 </Button>
                 {isRunning ? (
                     <>
@@ -558,7 +558,7 @@ function FTPServer() {
                     icon={FolderUp}
                     title={t('app.fTPServer.noFtpServerInstalled', 'No FTP server installed')}
                     description={t('app.fTPServer.installAnFtpServerToEnable', 'Install an FTP server to enable file transfers on your server.')}
-                    action={<Button size="lg" onClick={() => setShowInstallModal(true)}>{t('app.fTPServer.installFtpServer', 'Install FTP Server')}</Button>}
+                    action={<Button size="lg" onClick={() => setShowInstallModal(true)}>{t('app.fTPServer.installFtpServer', 'Install FTP server')}</Button>}
                 />
             ) : (
                 <>
@@ -612,18 +612,18 @@ function FTPServer() {
                         <TabsContent value="overview">
                             <div className="overview-tab">
                                 <div className="config-section">
-                                    <h3>{t('app.fTPServer.serverConfiguration', 'Server Configuration')}</h3>
+                                    <h3>{t('app.fTPServer.serverConfiguration', 'Server configuration')}</h3>
                                     {config?.settings ? (
                                         <InfoList>
                                             <InfoItem label={t('common.labels.port', 'Port')} value={config.settings.listen_port || config.settings.port || 21} mono />
-                                            <InfoItem label={t('app.fTPServer.anonymousAccess', 'Anonymous Access')}>
+                                            <InfoItem label={t('app.fTPServer.anonymousAccess', 'Anonymous access')}>
                                                 <span className={`info-value ${config.settings.anonymous_enable ? 'warning' : 'success'}`}>
                                                     {config.settings.anonymous_enable ? 'Enabled' : 'Disabled'}
                                                 </span>
                                             </InfoItem>
-                                            <InfoItem label={t('app.fTPServer.localUsers', 'Local Users')} value={config.settings.local_enable ? 'Enabled' : 'Disabled'} />
-                                            <InfoItem label={t('app.fTPServer.writePermission', 'Write Permission')} value={config.settings.write_enable ? 'Enabled' : 'Disabled'} />
-                                            <InfoItem label={t('app.fTPServer.chrootUsers', 'Chroot Users')} value={config.settings.chroot_local_user ? 'Yes' : 'No'} />
+                                            <InfoItem label={t('app.fTPServer.localUsers', 'Local users')} value={config.settings.local_enable ? 'Enabled' : 'Disabled'} />
+                                            <InfoItem label={t('app.fTPServer.writePermission', 'Write permission')} value={config.settings.write_enable ? 'Enabled' : 'Disabled'} />
+                                            <InfoItem label={t('app.fTPServer.chrootUsers', 'Chroot users')} value={config.settings.chroot_local_user ? 'Yes' : 'No'} />
                                             <InfoItem label={t('app.fTPServer.sslTls', 'SSL/TLS')}>
                                                 <span className={`info-value ${config.settings.ssl_enable ? 'success' : 'warning'}`}>
                                                     {config.settings.ssl_enable ? 'Enabled' : 'Disabled'}
@@ -636,7 +636,7 @@ function FTPServer() {
                                 </div>
 
                                 <div className="info-section">
-                                    <h3>{t('app.fTPServer.connectionInformation', 'Connection Information')}</h3>
+                                    <h3>{t('app.fTPServer.connectionInformation', 'Connection information')}</h3>
                                     <InfoList>
                                         <InfoItem label={t('app.fTPServer.host', 'Host')} value={t('app.fTPServer.yourServerIpOrDomain', 'Your server IP or domain')} />
                                         <InfoItem label={t('common.labels.port', 'Port')} value="21" mono />
@@ -670,7 +670,7 @@ function FTPServer() {
                                 />
                                 <ListToolbar>
                                     <Button onClick={() => setShowUserModal(true)}>
-                                        {t('app.fTPServer.addUser', 'Add User')}
+                                        {t('app.fTPServer.addUser', 'Add user')}
                                     </Button>
                                 </ListToolbar>
 
@@ -688,7 +688,7 @@ function FTPServer() {
                                         <EmptyState
                                             icon={UserPlus}
                                             title={t('app.fTPServer.noFtpUsersConfigured', 'No FTP users configured')}
-                                            action={<Button onClick={() => setShowUserModal(true)}>{t('app.fTPServer.createFirstUser', 'Create First User')}</Button>}
+                                            action={<Button onClick={() => setShowUserModal(true)}>{t('app.fTPServer.createFirstUser', 'Create first user')}</Button>}
                                         />
                                     )}
                                     footer={(
@@ -776,13 +776,13 @@ function FTPServer() {
             )}
 
             {/* Install Modal */}
-            <Modal open={showInstallModal} onClose={() => setShowInstallModal(false)} title={t('app.fTPServer.installFtpServer', 'Install FTP Server')}>
+            <Modal open={showInstallModal} onClose={() => setShowInstallModal(false)} title={t('app.fTPServer.installFtpServer', 'Install FTP server')}>
                             <div className="form-group">
-                                <Label htmlFor="ftp-install-service">{t('app.fTPServer.selectFtpServer', 'Select FTP Server')}</Label>
+                                <Label htmlFor="ftp-install-service">{t('app.fTPServer.selectFtpServer', 'Select FTP server')}</Label>
                                 <Select value={selectedService} onValueChange={setSelectedService}>
                                     <SelectTrigger id="ftp-install-service"><SelectValue /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="vsftpd">{t('app.fTPServer.vsftpdRecommended', 'vsftpd (Recommended)')}</SelectItem>
+                                        <SelectItem value="vsftpd">{t('app.fTPServer.vsftpdRecommended', 'vsftpd (recommended)')}</SelectItem>
                                         <SelectItem value="proftpd">{t('app.fTPServer.proftpd', 'ProFTPD')}</SelectItem>
                                     </SelectContent>
                                 </Select>
@@ -812,7 +812,7 @@ function FTPServer() {
             </Modal>
 
             {/* Create User Modal */}
-            <Modal open={showUserModal} onClose={() => setShowUserModal(false)} title={t('app.fTPServer.createFtpUser', 'Create FTP User')}>
+            <Modal open={showUserModal} onClose={() => setShowUserModal(false)} title={t('app.fTPServer.createFtpUser', 'Create FTP user')}>
                             <div className="form-group">
                                 <Label>{t('app.fTPServer.username2', 'Username *')}</Label>
                                 <Input
@@ -832,7 +832,7 @@ function FTPServer() {
                                 />
                             </div>
                             <div className="form-group">
-                                <Label>{t('app.fTPServer.homeDirectoryOptional', 'Home Directory (optional)')}</Label>
+                                <Label>{t('app.fTPServer.homeDirectoryOptional', 'Home directory (optional)')}</Label>
                                 <Input
                                     type="text"
                                     value={newUser.homeDir}
@@ -854,10 +854,10 @@ function FTPServer() {
             </Modal>
 
             {/* Change Password Modal */}
-            <Modal open={showPasswordModal} onClose={() => setShowPasswordModal(false)} title={t('app.fTPServer.changePassword', 'Change Password')}>
+            <Modal open={showPasswordModal} onClose={() => setShowPasswordModal(false)} title={t('app.fTPServer.changePassword', 'Change password')}>
                             <p>{t('app.fTPServer.changingPasswordForUser', 'Changing password for user:')} <strong>{passwordTarget}</strong></p>
                             <div className="form-group">
-                                <Label>{t('app.fTPServer.newPasswordLeaveEmptyToAuto', 'New Password (leave empty to auto-generate)')}</Label>
+                                <Label>{t('app.fTPServer.newPasswordLeaveEmptyToAuto', 'New password (leave empty to auto-generate)')}</Label>
                                 <Input
                                     type="password"
                                     value={newPassword}

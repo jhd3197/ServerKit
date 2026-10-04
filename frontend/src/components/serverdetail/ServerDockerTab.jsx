@@ -167,7 +167,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
                 await api.restartRemoteContainer(serverId, containerId);
                 toast.success(t('app.serverDockerTab.containerRestarted', 'Container restarted'));
             } else if (action === 'remove') {
-                const removeConfirmed = await confirmDocker({ titleKey: 'app.serverDockerTab.removeContainer', title: 'Remove Container', messageKey: 'app.serverDockerTab.removeThisContainer', message: 'Remove this container?' });
+                const removeConfirmed = await confirmDocker({ titleKey: 'app.serverDockerTab.removeContainer', title: 'Remove container', messageKey: 'app.serverDockerTab.removeThisContainer', message: 'Remove this container?' });
                 if (!removeConfirmed) return;
                 await api.removeRemoteContainer(serverId, containerId, true);
                 toast.success(t('app.serverDockerTab.containerRemoved', 'Container removed'));
@@ -182,7 +182,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
         return (
             <div className="offline-notice">
                 <OfflineIcon />
-                <h4>{t('app.serverDockerTab.serverOffline', 'Server Offline')}</h4>
+                <h4>{t('app.serverDockerTab.serverOffline', 'Server offline')}</h4>
                 <p>{t('app.serverDockerTab.dockerManagementRequiresTheServerTo', 'Docker management requires the server to be online.')}</p>
             </div>
         );

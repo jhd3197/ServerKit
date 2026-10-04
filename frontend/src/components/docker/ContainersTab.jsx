@@ -65,7 +65,7 @@ export const RunContainerButton = () => {
                 disabled={isRemote}
                 title={isRemote ? t('app.containersTab.runningNewContainersIsOnlyAvailable', 'Running new containers is only available on the local Docker target right now') : t('app.containersTab.runContainer', 'Run container')}
             >
-                <span>+</span> {t('app.containersTab.runContainer2', 'Run Container')}
+                <span>+</span> {t('app.containersTab.runContainer2', 'Run container')}
             </Button>
             {showModal && <RunContainerModal onClose={() => setShowModal(false)} onCreated={() => window.location.reload()} />}
         </>
@@ -352,7 +352,7 @@ const ContainersTab = ({ onStatsChange }) => {
                 }
                 toast.success(t('app.containersTab.containerRestarted', 'Container restarted'));
             } else if (action === 'remove') {
-                const removeConfirmed = await confirmContainer({ titleKey: 'app.containersTab.removeContainer', title: 'Remove Container', messageKey: 'app.containersTab.removeThisContainer', message: 'Remove this container?' });
+                const removeConfirmed = await confirmContainer({ titleKey: 'app.containersTab.removeContainer', title: 'Remove container', messageKey: 'app.containersTab.removeThisContainer', message: 'Remove this container?' });
                 if (!removeConfirmed) return;
                 if (isRemote) {
                     await api.removeRemoteContainer(serverId, containerId, true);
@@ -684,7 +684,7 @@ const ContainersTab = ({ onStatsChange }) => {
                             </Button>
                         )}
                         {isProtected ? (
-                            <span className="dx-row-protected" title={t('app.containersTab.serverkitSystemContainerManagedByThe', 'ServerKit system container — managed by the panel, lifecycle controls are disabled')}>
+                            <span className="dx-row-protected" title={t('app.containersTab.serverkitSystemContainerManagedByThe', 'ServerKit system container: managed by the panel, so lifecycle controls are disabled')}>
                                 <Lock size={11} /> {t('common.labels.system', 'System')}
                             </span>
                         ) : isRunning ? (
@@ -997,7 +997,7 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
                     </Button>
                 )}
                 {isProtected ? (
-                    <span className="dx-action-protected" title={t('app.containersTab.serverkitSystemContainerManagedByThe', 'ServerKit system container — managed by the panel, lifecycle controls are disabled')}>
+                    <span className="dx-action-protected" title={t('app.containersTab.serverkitSystemContainerManagedByThe', 'ServerKit system container: managed by the panel, so lifecycle controls are disabled')}>
                         <Lock size={13} /> {t('app.containersTab.systemContainer', 'System container')}
                     </span>
                 ) : isRunning ? (
@@ -1184,7 +1184,7 @@ const RunContainerModal = ({ onClose, onCreated }) => {
     }
 
     return (
-        <Modal open onClose={onClose} title={t('app.containersTab.runContainer2', 'Run Container')} size="md">
+        <Modal open onClose={onClose} title={t('app.containersTab.runContainer2', 'Run container')} size="md">
             {error && <div className="error-message">{error}</div>}
 
             <form onSubmit={handleSubmit}>
@@ -1201,7 +1201,7 @@ const RunContainerModal = ({ onClose, onCreated }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>{t('app.containersTab.containerName', 'Container Name')}</label>
+                    <label>{t('app.containersTab.containerName', 'Container name')}</label>
                     <Input
                         type="text"
                         name="name"
@@ -1270,7 +1270,7 @@ const RunContainerModal = ({ onClose, onCreated }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>{t('app.containersTab.environmentVariables', 'Environment Variables')}</label>
+                    <label>{t('app.containersTab.environmentVariables', 'Environment variables')}</label>
                     <EnvEditor value={env} onChange={setEnv} />
                 </div>
 

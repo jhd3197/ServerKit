@@ -115,7 +115,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                     <div className="sk-gridmenu__head">{t('app.gridViewPicker.myViews', 'My views')}</div>
                     {mine.length ? mine.map(renderRow) : (
                         <div className="sk-gridmenu__note">
-                            {t('app.gridViewPicker.noPersonalViewsYetTuneThe', 'No personal views yet — tune the grid, then save it here.')}
+                            {t('app.gridViewPicker.noPersonalViewsYetTuneThe', 'No personal views yet. Tune the grid, then save it here.')}
                         </div>
                     )}
                     <div className="sk-gridmenu__sep" />
@@ -139,7 +139,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                                 onClick={() => setFromCurrent((v) => !v)}
                             >
                                 <span className="sk-gridmenu__box"><Check size={11} /></span>
-                                {t('app.gridViewPicker.startFromCurrentFiltersColumns', 'Start from current filters & columns')}
+                                {t('app.gridViewPicker.startFromCurrentFiltersColumns', 'Start from current filters and columns')}
                             </SharedButton>
                             <div className="sk-gridmenu__foot">
                                 <SharedButton variant="unstyled" type="button" onClick={() => setCreating(false)}>{t('common.actions.cancel', 'Cancel')}</SharedButton>

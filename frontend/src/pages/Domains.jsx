@@ -327,7 +327,7 @@ const Domains = () => {
                 // "verified" toast here is how that stayed invisible.
                 toast.warning(result.warning, { duration: 15000 });
             } else {
-                toast.success(t('app.domains.domainVerifiedIp', 'Domain verified! IP: {{ipaddress}}', { ipaddress: result.ip_address }));
+                toast.success(t('app.domains.domainVerifiedIp', 'Domain verified. IP: {{ipaddress}}', { ipaddress: result.ip_address }));
             }
         } catch (err) {
             setError(err.message);
@@ -602,7 +602,7 @@ const Domains = () => {
     const createView = (name, fromCurrent) => {
         if (!fromCurrent) grid.setCfg(grid.base);
         grid.views.saveView(name)
-            .then(() => toast.success(t('app.domains.viewSaved', 'View “{{name}}” saved', { name: name })))
+            .then(() => toast.success(t('app.domains.viewSaved', 'View "{{name}}" saved', { name: name })))
             .catch(() => toast.error(t('app.domains.couldNotSaveTheView', 'Could not save the view')));
     };
 
@@ -661,7 +661,7 @@ const Domains = () => {
                     icon={Globe}
                     title={t('app.domains.noDomainsYet', 'No domains yet')}
                     description={t('app.domains.attachADomainToAnApplication', 'Attach a domain to an application, or connect a DNS provider to see its zones here.')}
-                    action={<Button onClick={() => setShowAddModal(true)}><Plus size={16} /> {t('app.domains.addDomain2', 'Add Domain')}</Button>}
+                    action={<Button onClick={() => setShowAddModal(true)}><Plus size={16} /> {t('app.domains.addDomain2', 'Add domain')}</Button>}
                 />
             ) : (
                 <div className="domains-body">
@@ -732,7 +732,7 @@ const Domains = () => {
                         empty={(
                             <EmptyState
                                 icon={Globe}
-                                title={search ? t('app.domains.noDomainsMatch', 'No domains match “{{value}}”.', { value: search.trim() }) : t('app.domains.noDomainsMatchThisView', 'No domains match this view.')}
+                                title={search ? t('app.domains.noDomainsMatch', 'No domains match "{{value}}".', { value: search.trim() }) : t('app.domains.noDomainsMatchThisView', 'No domains match this view.')}
                                 action={(
                                     <Button variant="outline" onClick={() => { setSearch(''); grid.clearRules(); }}>
                                         {t('common.actions.clearFilters', 'Clear filters')}
@@ -890,7 +890,7 @@ const Domains = () => {
             </Drawer>
 
             {/* ── Add Domain Modal ───────────────────────────── */}
-            <Modal open={showAddModal} onClose={() => setShowAddModal(false)} title={t('app.domains.addDomain2', 'Add Domain')}>
+            <Modal open={showAddModal} onClose={() => setShowAddModal(false)} title={t('app.domains.addDomain2', 'Add domain')}>
                 <form onSubmit={handleAddDomain}>
                     <div className="form-group">
                         <Label>{t('app.domains.application', 'Application')}</Label>
@@ -929,7 +929,7 @@ const Domains = () => {
             </Modal>
 
             {/* ── Enable SSL Modal ───────────────────────────── */}
-            <Modal open={showSslModal && Boolean(selectedDomain)} onClose={() => setShowSslModal(false)} title={t('app.domains.enableSslCertificate', 'Enable SSL Certificate')}>
+            <Modal open={showSslModal && Boolean(selectedDomain)} onClose={() => setShowSslModal(false)} title={t('app.domains.enableSslCertificate', 'Enable SSL certificate')}>
                 {selectedDomain && (
                     <form onSubmit={handleEnableSsl}>
                         <div className="ssl-info-box">
@@ -940,7 +940,7 @@ const Domains = () => {
                             </div>
                         </div>
                         <div className="form-group">
-                            <Label>{t('app.domains.emailAddress', 'Email Address')}</Label>
+                            <Label>{t('app.domains.emailAddress', 'Email address')}</Label>
                             <Input
                                 type="email"
                                 placeholder={acmeContact || 'admin@example.com'}

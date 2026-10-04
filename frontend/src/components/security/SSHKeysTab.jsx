@@ -99,7 +99,7 @@ const SSHKeysTab = () => {
         setActionLoading(true);
         try {
             await api.addSSHKey(newKey);
-            toast.success(t('app.sSHKeysTab.sshKeyAddedSuccessfully', 'SSH key added successfully'));
+            toast.success(t('app.sSHKeysTab.sshKeyAddedSuccessfully', 'SSH key added'));
             setShowAddModal(false);
             setNewKey('');
             await loadKeys();
@@ -112,8 +112,8 @@ const SSHKeysTab = () => {
 
     const handleRemoveKey = async (keyId, comment) => {
         const confirmed = await confirm({
-            title: t('app.sSHKeysTab.removeSshKey', 'Remove SSH Key'),
-            message: t('app.sSHKeysTab.areYouSureYouWantTo', 'Are you sure you want to remove the SSH key{{value}}? This may lock you out if it\'s your only key.', { value: comment ? ` "${comment}"` : '' }),
+            title: t('app.sSHKeysTab.removeSshKey', 'Remove SSH key'),
+            message: t('app.sSHKeysTab.areYouSureYouWantTo', "Remove the SSH key{{value}}? This may lock you out if it's your only key.", { value: comment ? ` "${comment}"` : '' }),
             confirmText: t('common.actions.remove', 'Remove'),
             variant: 'danger',
         });
@@ -224,7 +224,7 @@ const SSHKeysTab = () => {
             />
             <ListToolbar>
                 <Button variant="default" size="sm" onClick={() => setShowAddModal(true)}>
-                    {t('app.sSHKeysTab.addKey', 'Add Key')}
+                    {t('app.sSHKeysTab.addKey', 'Add key')}
                 </Button>
             </ListToolbar>
 
@@ -251,7 +251,7 @@ const SSHKeysTab = () => {
                         title={t('app.sSHKeysTab.noSshKeysConfiguredForRoot', 'No SSH keys configured for root user.')}
                         action={(
                             <Button variant="default" onClick={() => setShowAddModal(true)}>
-                                {t('app.sSHKeysTab.addSshKey', 'Add SSH Key')}
+                                {t('app.sSHKeysTab.addSshKey', 'Add SSH key')}
                             </Button>
                         )}
                     />
@@ -278,9 +278,9 @@ const SSHKeysTab = () => {
 
             <GridFilterDrawer {...chrome.drawerProps} />
 
-            <Modal open={showAddModal} onClose={() => setShowAddModal(false)} title={t('app.sSHKeysTab.addSshPublicKey', 'Add SSH Public Key')} size="lg">
+            <Modal open={showAddModal} onClose={() => setShowAddModal(false)} title={t('app.sSHKeysTab.addSshPublicKey', 'Add SSH public key')} size="lg">
                 <div className="form-group">
-                    <Label>{t('app.sSHKeysTab.publicKey', 'Public Key')}</Label>
+                    <Label>{t('app.sSHKeysTab.publicKey', 'Public key')}</Label>
                     <Textarea
                         value={newKey}
                         onChange={(e) => setNewKey(e.target.value)}

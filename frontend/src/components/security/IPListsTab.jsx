@@ -188,7 +188,7 @@ const IPListsTab = () => {
     const handleRemove = async (item, listType) => {
         const confirmed = await confirm({
             title: t('app.iPListsTab.removeFrom', 'Remove from {{listType}}', { listType: listType }),
-            message: t('app.iPListsTab.areYouSureYouWantTo', 'Are you sure you want to remove {{ip}} from the {{listType}}?', { ip: item.ip, listType: listType }),
+            message: t('app.iPListsTab.areYouSureYouWantTo', 'Remove {{ip}} from the {{listType}}? The list stops applying to it.', { ip: item.ip, listType: listType }),
             confirmText: t('common.actions.remove', 'Remove'),
             variant: 'warning',
         });
@@ -330,7 +330,7 @@ const IPListsTab = () => {
 
             <Modal open={!!showAddModal} onClose={() => setShowAddModal(null)} title={t('app.iPListsTab.addTo2', 'Add to {{value}}', { value: showAddModal || '' })}>
                 <div className="form-group">
-                    <Label>{t('app.iPListsTab.ipAddressOrCidr', 'IP Address or CIDR')}</Label>
+                    <Label>{t('app.iPListsTab.ipAddressOrCidr', 'IP address or CIDR')}</Label>
                     <Input
                         type="text"
                         value={newIP}

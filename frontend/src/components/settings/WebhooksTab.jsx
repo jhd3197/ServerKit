@@ -81,7 +81,7 @@ export default function WebhooksTab() {
 
     async function deleteEndpoint(id) {
         const confirmed = await confirm({
-            title: t('app.webhooksTab.deleteWebhookEndpoint', 'Delete Webhook Endpoint'),
+            title: t('app.webhooksTab.deleteWebhookEndpoint', 'Delete webhook endpoint'),
             message: t('app.webhooksTab.deleteThisWebhookEndpointInboundDeliveries', 'Delete this webhook endpoint? Inbound deliveries to its URL will stop being accepted.'),
         });
         if (!confirmed) return;
@@ -160,11 +160,11 @@ export default function WebhooksTab() {
                     <CardHeader>
                         <div className="secrets__header">
                             <div>
-                                <CardTitle>{t('app.webhooksTab.webhookEndpoints', 'Webhook Endpoints')}</CardTitle>
+                                <CardTitle>{t('app.webhooksTab.webhookEndpoints', 'Webhook endpoints')}</CardTitle>
                                 <CardDescription>{t('app.webhooksTab.receiveVerifyAndForwardInboundWebhooks', 'Receive, verify, and forward inbound webhooks.')}</CardDescription>
                             </div>
                             <Button onClick={() => setEndpointForm({ open: true, name: '', forward_url: '', filter_paths: '', retry_count: 3 })}>
-                                <Plus size={14} /> {t('app.webhooksTab.newEndpoint', 'New Endpoint')}
+                                <Plus size={14} /> {t('app.webhooksTab.newEndpoint', 'New endpoint')}
                             </Button>
                         </div>
                     </CardHeader>
@@ -260,7 +260,7 @@ export default function WebhooksTab() {
                 </Card>
             )}
 
-            <Modal open={endpointForm.open} onClose={() => setEndpointForm({ ...endpointForm, open: false })} title={t('app.webhooksTab.newWebhookEndpoint', 'New Webhook Endpoint')}>
+            <Modal open={endpointForm.open} onClose={() => setEndpointForm({ ...endpointForm, open: false })} title={t('app.webhooksTab.newWebhookEndpoint', 'New webhook endpoint')}>
                 <p className="sk-modal__subtitle">{t('app.webhooksTab.createASlugSecretAndOptional', 'Create a slug, secret, and optional forward URL.')}</p>
                 <form onSubmit={createEndpoint} className="settings-webhook-form">
                         <div>
@@ -280,7 +280,7 @@ export default function WebhooksTab() {
                             <Input id="epRetry" type="number" min={0} max={10} value={endpointForm.retry_count} onChange={(e) => setEndpointForm({ ...endpointForm, retry_count: e.target.value })} />
                         </div>
                         <div className="modal-actions">
-                            <Button type="submit">{t('app.webhooksTab.createEndpoint', 'Create Endpoint')}</Button>
+                            <Button type="submit">{t('app.webhooksTab.createEndpoint', 'Create endpoint')}</Button>
                         </div>
                     </form>
             </Modal>
@@ -288,7 +288,7 @@ export default function WebhooksTab() {
             <Modal
                 open={!!regeneratedSecret}
                 onClose={() => setRegeneratedSecret(null)}
-                title={t('app.webhooksTab.webhookSecret', 'Webhook Secret')}
+                title={t('app.webhooksTab.webhookSecret', 'Webhook secret')}
                 footer={(
                     <Button onClick={() => setRegeneratedSecret(null)}>{t('common.actions.done', 'Done')}</Button>
                 )}

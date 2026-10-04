@@ -171,7 +171,7 @@ function SourceBody({ provider, status, config, isAdmin, onConnect, onDisconnect
                 <div className="conn-oneclick">
                     <div className="conn-oneclick__head"><Zap size={15} /> {t('app.connectProviderModal.oneClickSetup', 'One-click setup')}</div>
                     <p className="conn-oneclick__blurb">
-                        {t('app.connectProviderModal.createADedicatedGithubAppFor', 'Create a dedicated GitHub App for this server. You confirm once on GitHub — no OAuth secrets to copy — and its credentials are stored locally on your server.')}
+                        {t('app.connectProviderModal.createADedicatedGithubAppFor', 'Create a dedicated GitHub App for this server. You confirm once on GitHub (no OAuth secrets to copy), and its credentials are stored locally on your server.')}
                     </p>
                     {appSlug && (
                         <div className="conn-oneclick__done">
@@ -213,7 +213,7 @@ function SourceBody({ provider, status, config, isAdmin, onConnect, onDisconnect
                                     <Input id="src-client-id" value={cfg.client_id} onChange={(e) => setCfg((c) => ({ ...c, client_id: e.target.value }))} placeholder={t('app.connectProviderModal.oauthClientId', '{{name}} OAuth client ID', { name: provider.name })} autoComplete="off" />
                                 </div>
                                 <div className="form-group">
-                                    <Label htmlFor="src-client-secret">{t('app.connectProviderModal.clientSecret', 'Client Secret')}</Label>
+                                    <Label htmlFor="src-client-secret">{t('app.connectProviderModal.clientSecret', 'Client secret')}</Label>
                                     <Input id="src-client-secret" type="password" value={cfg.client_secret} onChange={(e) => setCfg((c) => ({ ...c, client_secret: e.target.value }))} placeholder={t('app.connectProviderModal.oauthClientSecret', '{{name}} OAuth client secret', { name: provider.name })} autoComplete="off" />
                                 </div>
                             </div>
@@ -605,7 +605,7 @@ function RegistrarBody({ provider, isAdmin, connections, onAdd, onRemove, onTest
                         </div>
                         <div className="form-group">
                             <Label htmlFor="reg-key">{t('app.connectProviderModal.apiKey', 'API key')}</Label>
-                            <Input id="reg-key" value={form.api_key} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={isNamecheap ? t('app.connectProviderModal.namecheapApiKey', 'Namecheap API key') : t('app.connectProviderModal.godaddyApiKeyProduction', 'GoDaddy API key (Production)')} autoComplete="off" />
+                            <Input id="reg-key" value={form.api_key} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={isNamecheap ? t('app.connectProviderModal.namecheapApiKey', 'Namecheap API key') : t('app.connectProviderModal.godaddyApiKeyProduction', 'GoDaddy API key (production)')} autoComplete="off" />
                         </div>
                         {isNamecheap ? (
                             <>

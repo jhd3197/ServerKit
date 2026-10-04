@@ -11,16 +11,16 @@ const CommandsTab = ({ appId, appType }) => {
     const [running, setRunning] = useState(false);
 
     const quickCommands = appType === 'django' ? [
-        { labelKey: 'app.commandsTab.runMigrations', label: 'Run Migrations', cmd: 'python manage.py migrate' },
-        { labelKey: 'app.commandsTab.collectStatic', label: 'Collect Static', cmd: 'python manage.py collectstatic --noinput' },
-        { labelKey: 'app.commandsTab.createSuperuser', label: 'Create Superuser', cmd: 'python manage.py createsuperuser' },
+        { labelKey: 'app.commandsTab.runMigrations', label: 'Run migrations', cmd: 'python manage.py migrate' },
+        { labelKey: 'app.commandsTab.collectStatic', label: 'Collect static', cmd: 'python manage.py collectstatic --noinput' },
+        { labelKey: 'app.commandsTab.createSuperuser', label: 'Create superuser', cmd: 'python manage.py createsuperuser' },
         { labelKey: 'app.commandsTab.shell', label: 'Shell', cmd: 'python manage.py shell' },
         { labelKey: 'app.commandsTab.check', label: 'Check', cmd: 'python manage.py check' },
     ] : [
-        { labelKey: 'app.commandsTab.flaskRoutes', label: 'Flask Routes', cmd: 'flask routes' },
-        { labelKey: 'app.commandsTab.flaskShell', label: 'Flask Shell', cmd: 'flask shell' },
-        { labelKey: 'app.commandsTab.dbUpgrade', label: 'DB Upgrade', cmd: 'flask db upgrade' },
-        { labelKey: 'app.commandsTab.dbMigrate', label: 'DB Migrate', cmd: 'flask db migrate' },
+        { labelKey: 'app.commandsTab.flaskRoutes', label: 'Flask routes', cmd: 'flask routes' },
+        { labelKey: 'app.commandsTab.flaskShell', label: 'Flask shell', cmd: 'flask shell' },
+        { labelKey: 'app.commandsTab.dbUpgrade', label: 'DB upgrade', cmd: 'flask db upgrade' },
+        { labelKey: 'app.commandsTab.dbMigrate', label: 'DB migrate', cmd: 'flask db migrate' },
     ];
 
     async function handleRun(cmd) {
@@ -42,7 +42,7 @@ const CommandsTab = ({ appId, appType }) => {
 
     return (
         <div>
-            <h3 className="svc-eyebrow">{t('app.commandsTab.runCommands', 'Run Commands')}</h3>
+            <h3 className="svc-eyebrow">{t('app.commandsTab.runCommands', 'Run commands')}</h3>
             <p className="hint">{t('app.commandsTab.commandsRunInTheAppS', 'Commands run in the app\'s virtual environment context.')}</p>
 
             <div className="quick-commands">

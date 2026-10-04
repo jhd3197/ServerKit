@@ -218,7 +218,7 @@ export default function EngineCatalogDrawer({
                         <EmptyState
                             icon={PackageX}
                             title={t('app.engineCatalogDrawer.engineCatalogUnavailable', 'Engine catalog unavailable')}
-                            description={t('app.engineCatalogDrawer.thisPanelCouldnTReachThe', 'This panel couldn\'t reach the engine catalog. Databases that already exist keep working — try again once the backend is up to date.')}
+                            description={t('app.engineCatalogDrawer.thisPanelCouldnTReachThe', "This panel couldn't reach the engine catalog. Databases that already exist keep working. Try again once the backend is up to date.")}
                         />
                     ) : loading ? (
                         <EmptyState loading loadingVariant="cards" loadingRows={6} title={t('app.engineCatalogDrawer.loadingEngines', 'Loading engines')} />

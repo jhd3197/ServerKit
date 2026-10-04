@@ -145,8 +145,8 @@ const AppearanceTab = () => {
             </div>
 
             <div {...register('appearance-accent-color', 'settings-card')}>
-                <h3>{t('app.appearanceTab.accentColor', 'Accent Color')}</h3>
-                <p>{t('app.appearanceTab.chooseThePrimaryAccentColorUsed', 'Choose the primary accent color used across the interface')}</p>
+                <h3>{t('app.appearanceTab.accentColor', 'Accent color')}</h3>
+                <p>{t('app.appearanceTab.chooseThePrimaryAccentColorUsed', 'Choose the primary accent color used across the interface.')}</p>
                 <div className="accent-presets">
                     {ACCENT_PRESETS.map(({ label, color }) => (
                         <Button variant="unstyled" type="button"
@@ -184,9 +184,9 @@ const AppearanceTab = () => {
             </div>
 
             <div {...register('appearance-widgets', 'settings-card')}>
-                <h3>{t('app.appearanceTab.dashboardWidgets', 'Dashboard Widgets')}</h3>
+                <h3>{t('app.appearanceTab.dashboardWidgets', 'Dashboard widgets')}</h3>
                 <p>
-                    {t('app.appearanceTab.widgetsAreArrangedOnTheDashboard', 'Widgets are arranged on the dashboard itself now — add, move, resize and configure them in place, across as many boards as you need.')}
+                    {t('app.appearanceTab.widgetsAreArrangedOnTheDashboard', 'Widgets are arranged on the dashboard itself now. Add, move, resize and configure them in place, across as many boards as you need.')}
                 </p>
                 <Button variant="outline" size="sm" asChild>
                     <Link to="/">

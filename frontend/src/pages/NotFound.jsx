@@ -48,7 +48,7 @@ export default function NotFound() {
                         </Button>
                         <Button variant="outline" onClick={() => navigate('/extensions')}>
                             <Blocks size={16} />
-                            {t('app.notFound.browseExtensions', 'Browse Extensions')}
+                            {t('app.notFound.browseExtensions', 'Browse extensions')}
                         </Button>
                     </div>
                 )}

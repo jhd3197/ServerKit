@@ -11,8 +11,8 @@ import { Button as SharedButton } from '@/components/ui/button';
 // also what their cards and Deploy buttons open — one surface, not two.
 const SOURCES = [
     { mode: 'github', Icon: SiGithub, titleKey: 'app.sourceStep.github', title: 'GitHub', sub: 'Connect with OAuth and choose a repository' },
-    { mode: 'manual', Icon: GitBranch, titleKey: 'app.sourceStep.otherGitRemote', title: 'Other Git Remote', sub: 'GitLab, Bitbucket, Gitea, or SSH' },
-    { mode: 'local', Icon: FolderOpen, titleKey: 'app.sourceStep.manualLocal', title: 'Manual / Local', sub: 'Register an app already on the server' },
+    { mode: 'manual', Icon: GitBranch, titleKey: 'app.sourceStep.otherGitRemote', title: 'Other Git remote', sub: 'GitLab, Bitbucket, Gitea, or SSH' },
+    { mode: 'local', Icon: FolderOpen, titleKey: 'app.sourceStep.manualLocal', title: 'Manual / local', sub: 'Register an app already on the server' },
     { mode: 'upload', Icon: FileArchive, titleKey: 'app.sourceStep.uploadZip', title: 'Upload ZIP', sub: 'Deploy or update from a zip archive' },
 ];
 

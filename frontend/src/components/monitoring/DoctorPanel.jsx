@@ -148,7 +148,7 @@ const DoctorPanel = () => {
         try {
             setSweeping(true);
             const res = await api.runFleetSweep();
-            toast.info(t('app.doctorPanel.fleetSweepQueuedProbingEveryConnected', 'Fleet sweep queued — probing every connected agent'));
+            toast.info(t('app.doctorPanel.fleetSweepQueuedProbingEveryConnected', 'Fleet sweep queued. Probing every connected agent.'));
             pollSweep(res.job_id);
         } catch (err) {
             setSweeping(false);
@@ -166,7 +166,7 @@ const DoctorPanel = () => {
                 openRun('job', res.job_id);
                 toast.success(t(
                     'app.doctorPanel.repairQueuedInOperations',
-                    'Repair queued — follow progress in Operations',
+                    'Repair queued. Follow progress in Operations.',
                 ));
                 return;
             }
@@ -178,10 +178,10 @@ const DoctorPanel = () => {
             // has not happened yet.
             const queued = results.filter((r) => r.success && r.job_id);
             if (failed.length > 0) {
-                toast.error(t('app.doctorPanel.repairFailed', '{{length}} repair{{value}} failed — {{value2}}', { length: failed.length, value: failed.length !== 1 ? 's' : '', value2: failed[0].error || 'see report' }));
+                toast.error(t('app.doctorPanel.repairFailed', '{{length}} repair{{value}} failed: {{value2}}', { length: failed.length, value: failed.length !== 1 ? 's' : '', value2: failed[0].error || 'see report' }));
             } else if (queued.length > 0) {
                 toast.success(
-                    t('app.doctorPanel.startedBackgroundJobTheRepairFinishes', 'Started {{length}} background job{{value}} — the repair finishes there', { length: queued.length, value: queued.length !== 1 ? 's' : '' }),
+                    t('app.doctorPanel.startedBackgroundJobTheRepairFinishes', 'Started {{length}} background job{{value}}. The repair finishes there.', { length: queued.length, value: queued.length !== 1 ? 's' : '' }),
                     {
                         duration: 10000,
                         action: { label: t('app.doctorPanel.viewJobs', 'View jobs'), onClick: () => navigate('/monitoring/jobs') },
@@ -218,7 +218,7 @@ const DoctorPanel = () => {
         <div className="doctor-panel">
             <section className="monitoring-panel">
                 <div className="monitoring-panel__header">
-                    <h3>{t('app.doctorPanel.serverDoctor', 'Server Doctor')}</h3>
+                    <h3>{t('app.doctorPanel.serverDoctor', 'Server doctor')}</h3>
                     <div className="doctor-panel__actions">
                         {repairable.length > 0 && (
                             <Button
@@ -244,7 +244,7 @@ const DoctorPanel = () => {
                 </div>
 
                 <p className="doctor-panel__blurb">
-                    {t('app.doctorPanel.oneSweepAcrossManagedConfigurationDrift', 'One sweep across managed configuration drift, core services, certificates, disk headroom and the database. Nothing is repaired automatically — every fix is a button you press.')}
+                    {t('app.doctorPanel.oneSweepAcrossManagedConfigurationDrift', 'One sweep across managed configuration drift, core services, certificates, disk headroom and the database. Nothing is repaired automatically; every fix is a button you press.')}
                     {report?.ran_at && <span className="doctor-panel__ranat"> {t('app.doctorPanel.lastRun', 'Last run')} {formatRanAt(report.ran_at)}.</span>}
                 </p>
 
@@ -289,7 +289,7 @@ const DoctorPanel = () => {
 
             <section className="monitoring-panel">
                 <div className="monitoring-panel__header">
-                    <h3>{t('app.doctorPanel.fleetDoctor', 'Fleet Doctor')}</h3>
+                    <h3>{t('app.doctorPanel.fleetDoctor', 'Fleet doctor')}</h3>
                     <div className="doctor-panel__actions">
                         <Button size="sm" onClick={runSweep} disabled={sweeping || repairing}>
                             <Stethoscope size={14} />

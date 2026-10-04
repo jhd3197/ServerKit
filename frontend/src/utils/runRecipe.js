@@ -3,7 +3,7 @@
 export async function runRecipe({ startRun, toast, t }, body, { serverName }) {
     try {
         const result = await startRun.mutate(body);
-        toast.success(t('app.recipes.started', 'Recipe started on {{server}}.', {
+        toast.success(t('app.recipes.started', 'Recipe started on {{server}}', {
             server: serverName,
         }));
         return result.job_id;

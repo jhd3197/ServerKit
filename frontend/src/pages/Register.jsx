@@ -180,7 +180,7 @@ const Register = () => {
                     </div>
 
                     <div className="form-group">
-                        <Label htmlFor="confirmPassword">{t('auth.confirmPassword', 'Confirm Password')}</Label>
+                        <Label htmlFor="confirmPassword">{t('auth.confirmPassword', 'Confirm password')}</Label>
                         <Input
                             type="password"
                             id="confirmPassword"
@@ -192,7 +192,7 @@ const Register = () => {
                     </div>
 
                     <Button type="submit" className="btn-full" disabled={loading}>
-                        {loading ? t('auth.creatingAccount', 'Creating account…') : t('auth.createAccount', 'Create Account')}
+                        {loading ? t('auth.creatingAccount', 'Creating account…') : t('auth.createAccount', 'Create account')}
                     </Button>
                 </form>
 
