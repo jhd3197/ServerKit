@@ -4241,6 +4241,7 @@
             "pauseNonCriticalNotificationsDuringThese": "এই ঘন্টার মধ্যে অ-গুরুত্বপূর্ণ বিজ্ঞপ্তিগুলি থামান",
             "personalDiscordWebhook": "ব্যক্তিগত Discord ওয়েবহুক",
             "personalTelegram": "ব্যক্তিগত Telegram",
+            "preferencesSaved": "বিজ্ঞপ্তির পছন্দ সংরক্ষিত হয়েছে",
             "quietHours": "শান্ত ঘন্টা",
             "receivesJsonPayloadWithAlertData": "সতর্কতা ডেটা সহ JSON পেলোড গ্রহণ করে",
             "recipientEmailsCommaSeparated": "প্রাপকের ইমেল (কমা দ্বারা পৃথক করা)",

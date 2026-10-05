@@ -4241,6 +4241,7 @@
             "pauseNonCriticalNotificationsDuringThese": "在這些時間內暫停非關鍵通知",
             "personalDiscordWebhook": "個人 Discord Webhook",
             "personalTelegram": "個人 Telegram",
+            "preferencesSaved": "通知偏好已儲存",
             "quietHours": "安靜時間",
             "receivesJsonPayloadWithAlertData": "接收帶有警報資料的 JSON 有效負載",
             "recipientEmailsCommaSeparated": "收件者電子郵件（以逗號分隔）",

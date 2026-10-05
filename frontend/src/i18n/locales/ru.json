@@ -4241,6 +4241,7 @@
             "pauseNonCriticalNotificationsDuringThese": "Приостановить некритические уведомления в эти часы",
             "personalDiscordWebhook": "Личный вебхук Discord",
             "personalTelegram": "Личный Telegram",
+            "preferencesSaved": "Настройки уведомлений сохранены",
             "quietHours": "Тихие часы",
             "receivesJsonPayloadWithAlertData": "Получает полезную нагрузку JSON с данными оповещения.",
             "recipientEmailsCommaSeparated": "Адреса электронной почты получателей (через запятую)",

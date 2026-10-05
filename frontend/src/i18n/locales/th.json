@@ -4241,6 +4241,7 @@
             "pauseNonCriticalNotificationsDuringThese": "หยุดการแจ้งเตือนที่ไม่สำคัญชั่วคราวในช่วงเวลาเหล่านี้",
             "personalDiscordWebhook": "เว็บฮุค Discord ส่วนตัว",
             "personalTelegram": "Telegram ส่วนตัว",
+            "preferencesSaved": "บันทึกการตั้งค่าการแจ้งเตือนแล้ว",
             "quietHours": "ชั่วโมงที่เงียบสงบ",
             "receivesJsonPayloadWithAlertData": "รับเพย์โหลด JSON พร้อมข้อมูลการแจ้งเตือน",
             "recipientEmailsCommaSeparated": "อีเมลผู้รับ (คั่นด้วยเครื่องหมายจุลภาค)",

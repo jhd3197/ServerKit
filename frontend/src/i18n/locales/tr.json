@@ -4241,6 +4241,7 @@
             "pauseNonCriticalNotificationsDuringThese": "Bu saatlerde kritik olmayan bildirimleri duraklatın",
             "personalDiscordWebhook": "Kişisel Discord Web Kancası",
             "personalTelegram": "Kişisel Telegram",
+            "preferencesSaved": "Bildirim tercihleri kaydedildi",
             "quietHours": "Sessiz Saatler",
             "receivesJsonPayloadWithAlertData": "Uyarı verileriyle birlikte JSON yükünü alır",
             "recipientEmailsCommaSeparated": "Alıcı E-postaları (virgülle ayrılmış)",

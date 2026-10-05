@@ -4241,6 +4241,7 @@
             "pauseNonCriticalNotificationsDuringThese": "Tạm dừng các thông báo không quan trọng trong những giờ này",
             "personalDiscordWebhook": "Webhook Discord cá nhân",
             "personalTelegram": "Telegram cá nhân",
+            "preferencesSaved": "Đã lưu tùy chọn thông báo",
             "quietHours": "Giờ yên tĩnh",
             "receivesJsonPayloadWithAlertData": "Nhận tải trọng JSON cùng với dữ liệu cảnh báo",
             "recipientEmailsCommaSeparated": "Email người nhận (được phân tách bằng dấu phẩy)",

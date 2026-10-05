@@ -4241,6 +4241,7 @@
             "pauseNonCriticalNotificationsDuringThese": "在这些时间内暂停非关键通知",
             "personalDiscordWebhook": "个人 Discord Webhook",
             "personalTelegram": "个人 Telegram",
+            "preferencesSaved": "通知偏好已保存",
             "quietHours": "安静时间",
             "receivesJsonPayloadWithAlertData": "接收带有警报数据的 JSON 有效负载",
             "recipientEmailsCommaSeparated": "收件人电子邮件（以逗号分隔）",

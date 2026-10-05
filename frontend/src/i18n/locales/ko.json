@@ -4241,6 +4241,7 @@
             "pauseNonCriticalNotificationsDuringThese": "이 시간 동안에는 중요하지 않은 알림을 일시중지하세요.",
             "personalDiscordWebhook": "개인 Discord 웹훅",
             "personalTelegram": "개인 Telegram",
+            "preferencesSaved": "알림 환경설정을 저장했습니다",
             "quietHours": "조용한 시간",
             "receivesJsonPayloadWithAlertData": "경고 데이터가 포함된 JSON 페이로드 수신",
             "recipientEmailsCommaSeparated": "수신자 이메일(쉼표로 구분)",

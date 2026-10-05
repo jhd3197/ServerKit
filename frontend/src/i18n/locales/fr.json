@@ -4241,6 +4241,7 @@
             "pauseNonCriticalNotificationsDuringThese": "Suspendre les notifications non critiques pendant ces heures",
             "personalDiscordWebhook": "Webhook Discord personnel",
             "personalTelegram": "Telegram personnel",
+            "preferencesSaved": "Préférences de notification enregistrées",
             "quietHours": "Heures calmes",
             "receivesJsonPayloadWithAlertData": "Reçoit la charge utile JSON avec des données d'alerte",
             "recipientEmailsCommaSeparated": "E-mails des destinataires (séparés par des virgules)",

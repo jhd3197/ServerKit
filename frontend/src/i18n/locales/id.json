@@ -4241,6 +4241,7 @@
             "pauseNonCriticalNotificationsDuringThese": "Jeda notifikasi yang tidak penting selama jam-jam ini",
             "personalDiscordWebhook": "Webhook Discord Pribadi",
             "personalTelegram": "Telegram Pribadi",
+            "preferencesSaved": "Preferensi notifikasi disimpan",
             "quietHours": "Jam Tenang",
             "receivesJsonPayloadWithAlertData": "Menerima muatan JSON dengan data peringatan",
             "recipientEmailsCommaSeparated": "Email Penerima (dipisahkan koma)",

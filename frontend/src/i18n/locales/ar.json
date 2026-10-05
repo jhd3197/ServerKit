@@ -4241,6 +4241,7 @@
             "pauseNonCriticalNotificationsDuringThese": "قم بإيقاف الإشعارات غير الهامة مؤقتًا خلال هذه الساعات",
             "personalDiscordWebhook": "Webhook شخصي لـ Discord",
             "personalTelegram": "Telegram الشخصي",
+            "preferencesSaved": "تم حفظ تفضيلات الإشعارات",
             "quietHours": "ساعات هادئة",
             "receivesJsonPayloadWithAlertData": "يتلقى حمولة JSON مع بيانات التنبيه",
             "recipientEmailsCommaSeparated": "رسائل البريد الإلكتروني للمستلمين (مفصولة بفواصل)",

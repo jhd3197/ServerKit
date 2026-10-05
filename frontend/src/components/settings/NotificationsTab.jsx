@@ -70,7 +70,7 @@ const NotificationsTab = () => {
         setMessage(null);
         try {
             await api.updateUserNotificationPreferences({ ...userPrefs, channels: (userPrefs.channels || []).filter((channel) => channel !== 'slack') });
-            setMessage({ type: 'success', text: 'Your notification preferences have been saved' });
+            setMessage({ type: 'success', text: t('app.notificationsTab.preferencesSaved', 'Notification preferences saved') });
         } catch (err) {
             setMessage({ type: 'error', text: err.message });
         } finally {
