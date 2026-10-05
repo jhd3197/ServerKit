@@ -1648,7 +1648,7 @@
         },
         "cutoverDrawer": {
             "answer": "回答",
-            "applyCutover": "應用割接",
+            "applyCutover": "套用切換",
             "applyDnsCutover": "套用 DNS 切換？",
             "applying": "正在套用…",
             "atTheBoxWhereTheImported": "在匯入網站目前所在的主機上。系統會先為現有 DNS 記錄建立快照，因此之後仍可回復切換。",
@@ -1660,7 +1660,7 @@
             "cutoverFinishedWithErrorsReviewThe": "切換完成後出現錯誤 — 檢視結果並考慮還原。",
             "deletedCreatedRecords_one": "已刪除切換時建立的 1 筆記錄。",
             "deletedCreatedRecords_other": "已刪除切換時建立的 {{count}} 筆記錄。",
-            "dnsCutover": "DNS 割接",
+            "dnsCutover": "DNS 切換",
             "matchesNewTarget": "符合新目標",
             "new": "新的",
             "newAddressTarget": "新地址（目標）",
@@ -2153,7 +2153,7 @@
             "viewJobs": "檢視作業"
         },
         "documentation": {
-            "agentFleetPlan": "代理程式機隊計畫",
+            "agentFleetPlan": "代理程式機群計畫",
             "agentsMd": "AGENTS.md",
             "apiReference": "API 參考",
             "architecture": "架構",
@@ -2345,7 +2345,7 @@
             "serverkitAgentStart": "serverkit-agent start",
             "sha256sumCChecksumsTxt": "sha256sum -c checksums.txt",
             "startTheAgent": "啟動代理程式",
-            "startTheAgentService": "啟動代理服務：",
+            "startTheAgentService": "啟動代理程式服務：",
             "tarXzfServerkitAgentTarGz": "tar -xzf serverkit-agent-*.tar.gz",
             "tryAgain": "再試一次",
             "useTheseOneLinerCommandsTo": "使用這些一行命令下載並安裝代理程式。代替",
@@ -4142,7 +4142,7 @@
             "liveChecks": "即時檢查",
             "manage": "管理",
             "monitors": "監測器",
-            "monitorsDown": "失效的監測器",
+            "monitorsDown": "停機的監測器",
             "mostRecentResults": "最新結果",
             "noChecksRecordedYetTheScheduler": "尚未記錄任何檢查結果；排程器會依各監測器的間隔進行檢查。",
             "nothingIsBeingWatchedYet": "目前還沒有任何內容被關注"
@@ -4570,9 +4570,9 @@
             "cpu": "CPU 使用率（%）",
             "filterPidNameCommand": "篩選 PID、名稱、指令…",
             "forceKill": "強制終止",
-            "forceKill2": "強制殺死{{name}}",
+            "forceKill2": "強制終止 {{name}}",
             "kill": "終止",
-            "kill2": "殺死{{name}}",
+            "kill2": "終止 {{name}}",
             "processDetails": "處理程序詳細資料",
             "threads": "執行緒數"
         },
@@ -6188,7 +6188,7 @@
             "confirmDeletion": "確認刪除",
             "connectAGitRepository": "連線 Git 儲存庫",
             "containerOps": "容器操作",
-            "dangerZone": "危險區",
+            "dangerZone": "刪除服務",
             "data": "資料",
             "deleteApplication": "刪除應用程式",
             "deleteItStopsServingAndMoves": "刪除{{name}}？它會停止服務並移至資源回收筒，您可以在其中還原 30 天。",
@@ -7341,7 +7341,7 @@
             "wonTFit": "不適合"
         },
         "terminal": {
-            "agentServers": "代理伺服器",
+            "agentServers": "代理程式伺服器",
             "alert": "警報",
             "allServices": "所有服務",
             "apache": "Apache",
