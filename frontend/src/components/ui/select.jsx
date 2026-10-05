@@ -76,6 +76,9 @@ const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => 
   <SelectPrimitive.Item
     ref={ref}
     className={cn('ui-select-item', className)}
+    // Radix keeps the value off the DOM; expose it so tests and tools can
+    // pick an option by value, as selectOption() did on a native <select>.
+    data-value={props.value}
     {...props}
   >
     <span className="ui-select-item-indicator">

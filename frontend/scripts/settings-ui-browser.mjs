@@ -4,6 +4,13 @@ import { mkdir } from 'node:fs/promises';
 import { createServer } from 'vite';
 import { chromium } from 'playwright';
 
+// The shared dropdown is Radix, not a native <select>: open the trigger, then
+// click the option carrying that value (SelectItem exposes it as data-value).
+async function pickOption(page, trigger, value) {
+    await trigger.click();
+    await page.locator(`[role="option"][data-value="${value}"]`).click();
+}
+
 const server = await createServer({ server: { host: '127.0.0.1', port: 0, open: false } });
 let browser;
 try {
@@ -89,7 +96,7 @@ try {
         await page.locator('#ai-max-cost').fill('1.25');
         await page.getByRole('button', { name: 'Discover models', exact: true }).click();
         await page.getByRole('button', { name: 'Browse models (3)', exact: true }).click();
-        await page.getByLabel('Capability', { exact: true }).selectOption('reasoning');
+        await pickOption(page, page.getByLabel('Capability', { exact: true }), 'reasoning');
         await page.getByText('1 USD input / 3 USD output per 1M tokens', { exact: false }).waitFor();
         assert.equal(await page.getByRole('option').filter({ hasText: 'team/default' }).count(), 0);
         await page.getByPlaceholder('Search models…').fill('reasoning');
@@ -114,11 +121,11 @@ try {
         await page.screenshot({ path: `test-results/settings-ai-${theme}.png`, fullPage: true });
 
         await page.getByRole('tab', { name: 'Task models and behavior' }).click();
-        await page.locator('#ai-profile-utility-connection').selectOption('connection-1');
+        await pickOption(page, page.locator('#ai-profile-utility-connection'), 'connection-1');
         await page.locator('#ai-profile-utility-model').fill('team/cheap');
         await page.getByRole('button', { name: 'Add model candidate' }).first().click();
         await page.locator('#ai-pool-0-model').fill('team/cheap');
-        await page.locator('#ai-tier-0').selectOption('budget');
+        await pickOption(page, page.locator('#ai-tier-0'), 'budget');
         await page.locator('#ai-routing_enabled').click();
         await page.locator('#ai-routing-sample').fill('Summarize server health');
         await page.getByRole('button', { name: 'Preview routing' }).click();
@@ -141,8 +148,8 @@ try {
         await page.keyboard.press('Escape');
         enabled = true;
         await visit('chat');
-        await page.locator('#ai-chat-workflow').selectOption('summarize');
-        await page.locator('#ai-chat-profile').selectOption('utility');
+        await pickOption(page, page.locator('#ai-chat-workflow'), 'summarize');
+        await pickOption(page, page.locator('#ai-chat-profile'), 'utility');
         await page.getByRole('textbox', { name: 'Message the assistant' }).fill('Summarize server health');
         await page.getByRole('textbox', { name: 'Message the assistant' }).press('Enter');
         await page.locator('.sk-ai-message__usage summary').click();
@@ -154,22 +161,22 @@ try {
         await page.screenshot({ path: `test-results/ai-chat-usage-${theme}.png`, fullPage: true });
 
         await visit('notifications');
-        await page.getByRole('heading', { name: 'Notification Channels' }).waitFor();
+        await page.getByRole('heading', { name: 'Notification channels' }).waitFor();
         assert.equal(await page.getByRole('switch', { name: 'Slack', exact: true }).count(), 0);
         assert.equal(await page.getByRole('checkbox').count(), 0);
         await Promise.all([
-            page.getByRole('button', { name: 'Send Test Notification' }).waitFor({ state: 'visible' }),
-            page.getByRole('button', { name: 'Save Preferences' }).waitFor({ state: 'visible' }),
+            page.getByRole('button', { name: 'Send test notification' }).waitFor({ state: 'visible' }),
+            page.getByRole('button', { name: 'Save preferences' }).waitFor({ state: 'visible' }),
         ]);
-        const testButton = await page.getByRole('button', { name: 'Send Test Notification' }).boundingBox();
-        const saveButton = await page.getByRole('button', { name: 'Save Preferences' }).boundingBox();
+        const testButton = await page.getByRole('button', { name: 'Send test notification' }).boundingBox();
+        const saveButton = await page.getByRole('button', { name: 'Save preferences' }).boundingBox();
         const footer = await page.locator('.settings-actions--footer').boundingBox();
         assert(saveButton.x - testButton.x - testButton.width >= 12, 'Footer buttons must have a visible gap');
         assert(Math.abs(saveButton.y - testButton.y) < 1, 'Desktop footer actions must align');
         assert(Math.abs(saveButton.x + saveButton.width - footer.x - footer.width) < 2, 'Save belongs at the right edge');
         await page.getByRole('switch', { name: 'Info', exact: true }).click();
         await page.getByRole('button', { name: /Save Preferences/i }).click();
-        await page.getByText('Your notification preferences have been saved').waitFor();
+        await page.getByText('Notification preferences saved').waitFor();
         assert(savedPreferences.severities.includes('info'));
         assert(!savedPreferences.channels.includes('slack'), 'Personal preferences must not retain the nonfunctional Slack channel');
         await page.screenshot({ path: `test-results/settings-notifications-${theme}.png`, fullPage: true });
@@ -187,11 +194,11 @@ try {
         assert.notEqual(await page.locator('.settings-form').evaluate((node) => getComputedStyle(node).backgroundColor), 'rgba(0, 0, 0, 0)');
         await page.screenshot({ path: `test-results/settings-profile-${theme}.png`, fullPage: true });
         await visit('api');
-        await page.getByRole('button', { name: 'Create Key' }).waitFor();
+        await page.getByRole('button', { name: 'New key' }).waitFor();
         await page.getByText('No API keys yet.').waitFor();
         for (const border of await page.locator('.settings-card > .empty-state').evaluateAll((nodes) => nodes.map((node) => getComputedStyle(node).borderTopWidth))) assert.equal(border, '0px');
-        const create = await page.getByRole('button', { name: 'Create Key' }).boundingBox();
-        const webhook = await page.getByRole('button', { name: 'Add Webhook' }).boundingBox();
+        const create = await page.getByRole('button', { name: 'New key' }).boundingBox();
+        const webhook = await page.getByRole('button', { name: 'Add webhook' }).boundingBox();
         assert(create.x > 800 && webhook.x > 800, 'Create actions should share the right side of section headers');
         await page.screenshot({ path: `test-results/settings-api-${theme}.png`, fullPage: true });
 
@@ -218,10 +225,10 @@ try {
                 await page.screenshot({ path: `test-results/settings-ai-mobile-${theme}.png`, fullPage: true });
             }
             if (pane === 'notifications') {
-                await page.getByRole('button', { name: 'Save Preferences' }).waitFor();
-                await page.getByRole('button', { name: 'Send Test Notification' }).waitFor();
-                const testAction = await page.getByRole('button', { name: 'Send Test Notification' }).boundingBox();
-                const saveAction = await page.getByRole('button', { name: 'Save Preferences' }).boundingBox();
+                await page.getByRole('button', { name: 'Save preferences' }).waitFor();
+                await page.getByRole('button', { name: 'Send test notification' }).waitFor();
+                const testAction = await page.getByRole('button', { name: 'Send test notification' }).boundingBox();
+                const saveAction = await page.getByRole('button', { name: 'Save preferences' }).boundingBox();
                 assert(testAction && saveAction, 'Both mobile footer buttons must be visible');
                 assert(saveAction.y - testAction.y - testAction.height >= 12, 'Mobile footer buttons should stack with a gap');
             }
