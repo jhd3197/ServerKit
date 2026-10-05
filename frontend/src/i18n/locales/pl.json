@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "Token został zregenerowany"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} jest już przypisana do usługi.",
             "alreadyInServerkit": "Już jest w ServerKit.",
             "baseDomain": "Domena bazowa",
             "domainKind": "Rodzaj domeny",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "Wyjdź z pełnego ekranu",
             "fullscreen": "Pełny ekran",
             "jumpToEnd": "Skocz do końca",
+            "lineCount_one": "{{value}} wiersz",
+            "lineCount_other": "Wiersze: {{value}}",
             "linesToFetch": "Linie do pobrania",
             "live": "Na żywo",
             "searchInLog": "Wyszukaj w dzienniku…",

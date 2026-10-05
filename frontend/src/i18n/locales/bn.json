@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "টোকেন পুনরায় তৈরি করা হয়েছে"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} ইতিমধ্যে একটি পরিষেবার সাথে যুক্ত।",
             "alreadyInServerkit": "ইতিমধ্যে ServerKit-এ আছে।",
             "baseDomain": "বেস ডোমেন",
             "domainKind": "ডোমেনের ধরন",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "ফুলস্ক্রিন থেকে প্রস্থান করুন",
             "fullscreen": "ফুলস্ক্রিন",
             "jumpToEnd": "শেষ পর্যন্ত ঝাঁপ দাও",
+            "lineCount_one": "{{value}} লাইন",
+            "lineCount_other": "{{value}} লাইন",
             "linesToFetch": "আনার জন্য লাইন",
             "live": "লাইভ",
             "searchInLog": "লগ ইন অনুসন্ধান করুন...",

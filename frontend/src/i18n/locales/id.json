@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "Token dibuat ulang"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} sudah terhubung ke sebuah layanan.",
             "alreadyInServerkit": "Sudah ada di ServerKit.",
             "baseDomain": "Domain dasar",
             "domainKind": "Jenis domain",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "Keluar dari layar penuh",
             "fullscreen": "Layar penuh",
             "jumpToEnd": "Lompat ke akhir",
+            "lineCount_one": "{{value}} baris",
+            "lineCount_other": "{{value}} baris",
             "linesToFetch": "Garis untuk diambil",
             "live": "Langsung",
             "searchInLog": "Cari di log…",

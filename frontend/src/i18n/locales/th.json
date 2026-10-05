@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "โทเค็นถูกสร้างขึ้นใหม่"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} เชื่อมกับบริการอยู่แล้ว",
             "alreadyInServerkit": "มีอยู่ใน ServerKit แล้ว",
             "baseDomain": "โดเมนหลัก",
             "domainKind": "ประเภทโดเมน",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "ออกจากโหมดเต็มหน้าจอ",
             "fullscreen": "เต็มจอ",
             "jumpToEnd": "ข้ามไปสิ้นสุด",
+            "lineCount_one": "{{value}} บรรทัด",
+            "lineCount_other": "{{value}} บรรทัด",
             "linesToFetch": "เส้นที่จะดึงข้อมูล",
             "live": "สด",
             "searchInLog": "ค้นหาในบันทึก...",

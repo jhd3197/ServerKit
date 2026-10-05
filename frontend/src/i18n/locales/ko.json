@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "토큰이 재생성되었습니다."
         },
         "domainField": {
+            "alreadyAttached": "{{name}}은(는) 이미 서비스에 연결되어 있습니다.",
             "alreadyInServerkit": "이미 ServerKit에 있습니다.",
             "baseDomain": "기본 도메인",
             "domainKind": "도메인 종류",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "전체 화면 종료",
             "fullscreen": "전체 화면",
             "jumpToEnd": "끝까지 이동",
+            "lineCount_one": "{{value}}줄",
+            "lineCount_other": "{{value}}줄",
             "linesToFetch": "가져올 줄",
             "live": "라이브",
             "searchInLog": "로그에서 검색…",

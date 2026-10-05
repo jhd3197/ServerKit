@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "權杖重新產生"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} 已連結到某個服務。",
             "alreadyInServerkit": "已存在於 ServerKit 中。",
             "baseDomain": "基礎網域",
             "domainKind": "網域類型",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "退出全螢幕",
             "fullscreen": "全螢幕",
             "jumpToEnd": "跳到結尾",
+            "lineCount_one": "{{value}} 行",
+            "lineCount_other": "{{value}} 行",
             "linesToFetch": "要取得的行",
             "live": "即時",
             "searchInLog": "在記錄中搜尋…",

@@ -1,5 +1,6 @@
 import { Search, RefreshCw, Download, Trash2, Maximize2, Minimize2, X, ArrowDownToLine, Hash, WrapText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { formatNumber } from '../../utils/intl';
 import { Button as SharedButton } from '@/components/ui/button';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 
@@ -42,7 +43,9 @@ export default function LogToolbar({
                     </SelectTrigger>
                     <SelectContent>
                         {lineCountOptions.map((n) => (
-                            <SelectItem key={n} value={String(n)}>{n.toLocaleString()} lines</SelectItem>
+                            <SelectItem key={n} value={String(n)}>
+                                {t('app.logToolbar.lineCount', { count: n, value: formatNumber(n), defaultValue_one: '{{value}} line', defaultValue_other: '{{value}} lines' })}
+                            </SelectItem>
                         ))}
                     </SelectContent>
                 </Select>

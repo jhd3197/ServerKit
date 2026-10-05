@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "تم إعادة إنشاء الرمز المميز"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} مرتبط بالفعل بخدمة.",
             "alreadyInServerkit": "موجود بالفعل في ServerKit.",
             "baseDomain": "المجال الأساسي",
             "domainKind": "نوع المجال",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "الخروج من وضع ملء الشاشة",
             "fullscreen": "ملء الشاشة",
             "jumpToEnd": "القفز إلى النهاية",
+            "lineCount_one": "{{value}} سطر",
+            "lineCount_other": "{{value}} سطر",
             "linesToFetch": "خطوط لجلب",
             "live": "مباشر",
             "searchInLog": "البحث في السجل…",

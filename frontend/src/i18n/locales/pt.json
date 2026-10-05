@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "Token regenerado"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} já está vinculado a um serviço.",
             "alreadyInServerkit": "Já está no ServerKit.",
             "baseDomain": "Domínio base",
             "domainKind": "Tipo de domínio",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "Sair da tela cheia",
             "fullscreen": "Tela cheia",
             "jumpToEnd": "Ir para o fim",
+            "lineCount_one": "{{value}} linha",
+            "lineCount_other": "{{value}} linhas",
             "linesToFetch": "Linhas para buscar",
             "live": "Ao vivo",
             "searchInLog": "Pesquisar no registro…",

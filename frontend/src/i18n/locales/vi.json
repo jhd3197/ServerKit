@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "Mã thông báo đã được tạo lại"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} đã được gắn với một dịch vụ.",
             "alreadyInServerkit": "Đã có trong ServerKit.",
             "baseDomain": "Tên miền gốc",
             "domainKind": "Loại tên miền",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "Thoát toàn màn hình",
             "fullscreen": "Toàn màn hình",
             "jumpToEnd": "Chuyển đến cuối",
+            "lineCount_one": "{{value}} dòng",
+            "lineCount_other": "{{value}} dòng",
             "linesToFetch": "Dòng để tìm nạp",
             "live": "Trực tiếp",
             "searchInLog": "Tìm kiếm trong nhật ký…",

@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "Токен перегенерирован"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} уже привязан к сервису.",
             "alreadyInServerkit": "Уже есть в ServerKit.",
             "baseDomain": "Базовый домен",
             "domainKind": "Тип домена",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "Выйти из полноэкранного режима",
             "fullscreen": "Полноэкранный",
             "jumpToEnd": "Перейти в конец",
+            "lineCount_one": "{{value}} строка",
+            "lineCount_other": "Строк: {{value}}",
             "linesToFetch": "Строки для извлечения",
             "live": "В реальном времени",
             "searchInLog": "Искать в журнале…",

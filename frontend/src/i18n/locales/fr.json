@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "Jeton régénéré"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} est déjà rattaché à un service.",
             "alreadyInServerkit": "Déjà dans ServerKit.",
             "baseDomain": "Domaine de base",
             "domainKind": "Type de domaine",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "Quitter le plein écran",
             "fullscreen": "Plein écran",
             "jumpToEnd": "Aller à la fin",
+            "lineCount_one": "{{value}} ligne",
+            "lineCount_other": "{{value}} lignes",
             "linesToFetch": "Lignes à récupérer",
             "live": "En direct",
             "searchInLog": "Rechercher dans le journal…",

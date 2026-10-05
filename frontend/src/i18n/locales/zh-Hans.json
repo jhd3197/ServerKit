@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "令牌重新生成"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} 已关联到某个服务。",
             "alreadyInServerkit": "已在 ServerKit 中。",
             "baseDomain": "基础域名",
             "domainKind": "域名类型",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "退出全屏",
             "fullscreen": "全屏",
             "jumpToEnd": "跳转到结尾",
+            "lineCount_one": "{{value}} 行",
+            "lineCount_other": "{{value}} 行",
             "linesToFetch": "要获取的行",
             "live": "实时",
             "searchInLog": "在日志中搜索...",

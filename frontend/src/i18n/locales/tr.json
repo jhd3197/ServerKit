@@ -2232,6 +2232,7 @@
             "tokenRegenerated": "Jeton yeniden oluşturuldu"
         },
         "domainField": {
+            "alreadyAttached": "{{name}} zaten bir hizmete bağlı.",
             "alreadyInServerkit": "Zaten ServerKit'te.",
             "baseDomain": "Temel alan adı",
             "domainKind": "Alan adı türü",
@@ -3550,6 +3551,8 @@
             "exitFullscreen": "Tam ekrandan çık",
             "fullscreen": "Tam ekran",
             "jumpToEnd": "Sona atla",
+            "lineCount_one": "{{value}} satır",
+            "lineCount_other": "{{value}} satır",
             "linesToFetch": "Alınacak satırlar",
             "live": "Canlı",
             "searchInLog": "Günlükte ara…",
