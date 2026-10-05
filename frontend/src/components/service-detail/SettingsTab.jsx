@@ -621,6 +621,7 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
                         <DomainField
                             defaultLabel={app.name}
                             exclude={domains.map((d) => d.name)}
+                            rejectExisting
                             onChange={(name, info) => setNewDomain({ name, info })}
                             disabled={attaching}
                         />
@@ -690,6 +691,7 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
                             <DomainField
                                 defaultLabel={app.name}
                                 exclude={domains.map((d) => d.name)}
+                                rejectExisting
                                 onChange={(name, info) => setNewDomain({ name, info })}
                                 disabled={attaching}
                                 autoFocus

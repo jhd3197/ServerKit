@@ -909,6 +909,7 @@ const Domains = () => {
                         {showAddModal && (
                             <DomainField
                                 exclude={domains.map((d) => d.name)}
+                                rejectExisting
                                 onChange={(name, info) => { setDomainName(name); setDomainInfo(info); }}
                                 disabled={actionLoading}
                             />

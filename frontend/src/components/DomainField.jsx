@@ -36,6 +36,10 @@ function loadBases() {
  *   - custom: any hostname the user controls, with the existing ServerKit
  *     domains offered as suggestions.
  *
+ * `rejectExisting` is for flows that create a new domain row (attaching to a
+ * service): a name ServerKit already has is refused there, so it is not
+ * suggested and typing it reads as an error instead of "Already in ServerKit".
+ *
  * `hint(name)` replaces the own-domain DNS line when the record is not an A
  * record at this server (a tunnel route, an edge proxy).
  *
@@ -49,6 +53,7 @@ export default function DomainField({
     modes = ['subdomain', 'custom'],
     defaultLabel = '',
     exclude = [],
+    rejectExisting = false,
     hint,
     disabled = false,
     autoFocus = false,
@@ -118,13 +123,15 @@ export default function DomainField({
         : normalizeDomain(custom);
     const valid = isValidDomain(fqdn);
     const existingRow = existing.find((d) => d.name === fqdn) || null;
+    const taken = rejectExisting && !!existingRow;
+    const usable = valid && !taken;
 
     const lastEmitted = useRef(null);
     useEffect(() => {
         if (!basesLoaded) return;
         const info = {
             mode: activeMode,
-            valid,
+            valid: usable,
             base: activeMode === 'subdomain' ? base : null,
             label: activeMode === 'subdomain' ? label : null,
             dnsMode: activeMode === 'subdomain' ? baseRow?.dns_mode || null : null,
@@ -133,17 +140,19 @@ export default function DomainField({
         const key = `${fqdn}|${info.mode}|${info.valid}|${info.base}`;
         if (lastEmitted.current === key) return;
         lastEmitted.current = key;
-        onChange?.(valid ? fqdn : '', info);
-    }, [basesLoaded, activeMode, fqdn, valid, base, label, baseRow, existingRow, onChange]);
+        onChange?.(usable ? fqdn : '', info);
+    }, [basesLoaded, activeMode, fqdn, usable, base, label, baseRow, existingRow, onChange]);
 
     const suggestions = useMemo(
-        () => existing.filter((d) => !exclude.includes(d.name)),
-        [existing, exclude],
+        () => (rejectExisting ? [] : existing.filter((d) => !exclude.includes(d.name))),
+        [existing, exclude, rejectExisting],
     );
 
     let status = null;
     if (fqdn && !valid) {
         status = { tone: 'error', text: t('app.domainField.notAHostname', '{{name}} is not a valid hostname.', { name: fqdn }) };
+    } else if (taken) {
+        status = { tone: 'error', immediate: true, text: t('app.domainField.alreadyAttached', '{{name}} is already attached to a service.', { name: fqdn }) };
     } else if (fqdn && activeMode === 'subdomain') {
         status = baseRow?.dns_mode === 'wildcard'
             ? { text: t('app.domainField.wildcardCovers', '{{name}} resolves right away; wildcard DNS on {{base}} already covers it.', { name: fqdn, base }) }
@@ -224,7 +233,7 @@ export default function DomainField({
                 </>
             )}
 
-            {status && (status.tone !== 'error' || touched) && (
+            {status && (status.tone !== 'error' || touched || status.immediate) && (
                 <p className={cn('sk-domain-field__status', status.tone === 'error' && 'is-error')}>
                     {status.text}
                     {!status.tone && fqdn && (activeMode === 'subdomain' ? baseRow?.https_enabled : existingRow?.ssl_enabled) && (
