@@ -26,7 +26,8 @@ release history; historical `agent-v*` tags are not panel releases.
   `servers:read` scope, in addition to the usual JWT, so external tools can
   poll the server list read-only without a short-lived token. JWT callers are
   unaffected; keys without the scope are refused. The Agent GUI extension's
-  read routes (`capabilities`, `frame`, `surface`) accept the same scope.
+  read routes (`capabilities`, `frame`, `surface`) take the same scope in
+  its next release; the copy bundled here is still JWT-only.
 
 ### Security
 
