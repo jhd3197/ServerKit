@@ -29,7 +29,15 @@ export default function EnvEditor({
 
     const emit = (next) => onChange?.(next);
     const update = (index, patch) => emit(rows.map((row, i) => (i === index ? { ...row, ...patch } : row)));
-    const remove = (index) => emit(rows.filter((_, i) => i !== index));
+    // Reveal state is keyed by row index, so any change to the row structure
+    // must move it with the rows: otherwise deleting a revealed row would show
+    // the next row's secret unmasked without the user asking.
+    const remove = (index) => {
+        setRevealed((prev) => new Set(
+            [...prev].filter((i) => i !== index).map((i) => (i > index ? i - 1 : i)),
+        ));
+        emit(rows.filter((_, i) => i !== index));
+    };
     const add = () => emit([...rows, { key: '', value: '' }]);
 
     const onPaste = (index, event) => {
@@ -38,6 +46,7 @@ export default function EnvEditor({
         const parsed = parseDotenv(text);
         if (!parsed.length) return;
         event.preventDefault();
+        setRevealed(new Set());
         const before = rows.slice(0, index).filter((r) => r.key || r.value);
         const after = rows.slice(index + 1).filter((r) => r.key || r.value);
         emit([...before, ...parsed, ...after]);
