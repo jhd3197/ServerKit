@@ -136,6 +136,12 @@ const WorkspaceMembersTab = ({ members, allUsers, onAddMember, onRemoveMember, l
 
             <GridChips {...chrome.chipProps} />
 
+            {/* The DataTable only shows emptyState with no rows; a failed refresh
+                over rows already loaded needs its own notice. */}
+            {loadError && members.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={onRetry} />
+            )}
+
             <DataTable
                 columns={chrome.columns}
                 data={members}
