@@ -1,5 +1,6 @@
 import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import { t } from '@/i18n/t';
 
 /**
@@ -22,6 +23,11 @@ import { t } from '@/i18n/t';
  *
  * One tag, one action. Version, author and counts go in `sub` / `facts` as
  * plain text rather than as more badges.
+ *
+ * With `onClick`, the title is the real button (keyboard and screen readers)
+ * and the rest of the card is a mouse-only shortcut to it. The card itself is
+ * never a button: it would contain the action button, and nested controls
+ * give assistive technology two conflicting targets.
  */
 export function CatalogCard({
     icon,
@@ -36,37 +42,39 @@ export function CatalogCard({
     className,
     as: Tag = 'li',
 }) {
-    const handleKeyDown = onClick
-        ? (event) => {
-            if (event.target !== event.currentTarget) return;
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                onClick(event);
-            }
-        }
-        : undefined;
+    const titleContent = (
+        <>
+            {title}
+            {featured && (
+                <Star
+                    size={12}
+                    className="sk-catalog-card__featured"
+                    aria-label={t('app.catalogCard.featured', 'Featured')}
+                />
+            )}
+        </>
+    );
 
     return (
         <Tag
             className={cn('sk-catalog-card', onClick && 'is-clickable', className)}
             onClick={onClick}
-            onKeyDown={handleKeyDown}
-            role={onClick ? 'button' : undefined}
-            tabIndex={onClick ? 0 : undefined}
         >
             <div className="sk-catalog-card__head">
                 {icon && <span className="sk-catalog-card__icon">{icon}</span>}
                 <span className="sk-catalog-card__id">
-                    <span className="sk-catalog-card__title">
-                        {title}
-                        {featured && (
-                            <Star
-                                size={12}
-                                className="sk-catalog-card__featured"
-                                aria-label={t('app.catalogCard.featured', 'Featured')}
-                            />
-                        )}
-                    </span>
+                    {onClick ? (
+                        <Button
+                            variant="unstyled"
+                            type="button"
+                            className="sk-catalog-card__title sk-catalog-card__open"
+                            onClick={(event) => { event.stopPropagation(); onClick(event); }}
+                        >
+                            {titleContent}
+                        </Button>
+                    ) : (
+                        <span className="sk-catalog-card__title">{titleContent}</span>
+                    )}
                     {sub && <span className="sk-catalog-card__sub">{sub}</span>}
                 </span>
                 {tag && <span className="sk-catalog-card__tag">{tag}</span>}

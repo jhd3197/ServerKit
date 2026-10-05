@@ -1550,7 +1550,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
     &.is-clickable { cursor: pointer; }
     &.is-clickable:hover { border-color: var(--border); background: var(--surface-2); }
-    &.is-clickable:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    &.is-clickable:focus-within { border-color: var(--border); }
 
     &__head { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
     &__icon {
@@ -1569,6 +1569,17 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         display: inline-flex; align-items: center; gap: 6px;
         font-weight: $font-weight-semibold; font-size: $text-sm; color: var(--text);
         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    &__open {
+        max-width: 100%;
+        padding: 0;
+        border: 0;
+        background: none;
+        font-family: inherit;
+        text-align: start;
+        cursor: pointer;
+
+        &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     }
     &__featured { flex-shrink: 0; color: var(--text-faint); fill: currentColor; }
     &__sub {
