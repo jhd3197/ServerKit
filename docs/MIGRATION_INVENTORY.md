@@ -25,6 +25,6 @@ debt. Regenerate with `python scripts/generate-migration-inventory.py`.
 | unencoded ?k=${v} query interpolations in services/api | C4: buildQuery/encoding template | 0 | 0 | INVARIANT at 0 |
 | raw setInterval pollers | E2: usePolling/refetchInterval | 7 | 7 | DELIBERATE RESIDUE: clock ticks, socket-fallback hooks, and sibling-repo extension timers - each listed per file |
 | direct navigator.clipboard call sites | F3: copyToClipboard | 0 | 0 | INVARIANT at 0 |
-| hex colour literals outside token files | G: var(--token) | 140 | 140 | migrate when touched |
+| hex colour literals outside token files | G: var(--token) | 139 | 139 | migrate when touched |
 | SCSS class names defined in multiple files | single-owner partials | 0 | 0 | needs eyes on pages (no byte-identical proof available) |
 
