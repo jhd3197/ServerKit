@@ -149,7 +149,6 @@ const WorkspaceMembersTab = ({ members, allUsers, onAddMember, onRemoveMember, l
                 sorts={sorts}
                 onSortsChange={setSorts}
                 {...chrome.tableProps}
-                className="ws-detail__tablecard"
                 emptyState={loadError ? (
                     <ErrorState
                         title={t('app.workspaceMembersTab.couldntLoadMembers', "Couldn't load members.")}

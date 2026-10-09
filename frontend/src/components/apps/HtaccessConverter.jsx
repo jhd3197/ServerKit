@@ -4,6 +4,7 @@ import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { CopyButton } from '@/components/CopyButton';
+import { DataTable } from '../ds';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +19,27 @@ import { toastError } from '@/utils/errorMessage';
 //
 // `onInsert(nginxText)` is optional; without it the modal still offers
 // copy-to-clipboard. `trigger` overrides the default launcher button.
+// Directives the converter could not translate. A short read-only report:
+// no sorting, no column menu.
+const UNSUPPORTED_COLUMNS = [
+    {
+        key: 'line',
+        headerKey: 'app.htaccessConverter.line', header: 'Line',
+        cellClassName: 'sk-cell-dim htaccess-converter__line',
+        render: (item) => item.line,
+    },
+    {
+        key: 'directive',
+        headerKey: 'app.htaccessConverter.directive', header: 'Directive',
+        render: (item) => <code className="sk-cell-mono htaccess-converter__directive">{item.directive}</code>,
+    },
+    {
+        key: 'reason',
+        headerKey: 'app.htaccessConverter.reason', header: 'Reason',
+        render: (item) => item.reason,
+    },
+];
+
 export default function HtaccessConverter({ onInsert, trigger = null }) {
     const { t } = useTranslation();
     const toast = useToast();
@@ -145,26 +167,15 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
                                         <AlertTriangle size={15} />
                                         <span>{t('app.htaccessConverter.notTranslated', 'Not translated (')}{unsupported.length})</span>
                                     </div>
-                                    <div className="htaccess-converter__table-wrap">
-                                        <table className="htaccess-converter__table">
-                                            <thead>
-                                                <tr>
-                                                    <th>{t('app.htaccessConverter.line', 'Line')}</th>
-                                                    <th>{t('app.htaccessConverter.directive', 'Directive')}</th>
-                                                    <th>{t('app.htaccessConverter.reason', 'Reason')}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {unsupported.map((item) => (
-                                                    <tr key={`${item.line}-${item.directive}`}>
-                                                        <td>{item.line}</td>
-                                                        <td><code>{item.directive}</code></td>
-                                                        <td>{item.reason}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <DataTable
+                                        columns={UNSUPPORTED_COLUMNS}
+                                        data={unsupported}
+                                        keyField={(item) => `${item.line}-${item.directive}`}
+                                        sortable={false}
+                                        columnMenu={false}
+                                        // The warn pane is the frame; the table runs flush in it.
+                                        className="sk-dtable-wrap--flush sk-dtable-wrap--sticky htaccess-converter__table-wrap"
+                                    />
                                 </div>
                             )}
                         </div>

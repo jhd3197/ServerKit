@@ -415,8 +415,6 @@
 .dns-activity {
     border-top: 1px solid $border-subtle;
     background: $bg-card;
-    max-height: 320px;
-    overflow-y: auto;
 
     &__status {
         padding: $space-3 $space-4;
@@ -436,28 +434,9 @@
         color: $text-tertiary;
     }
 
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: $text-xs;
-
-        th {
-            position: sticky;
-            top: 0;
-            text-align: left;
-            padding: $space-2 $space-3;
-            background: $bg-elevated;
-            color: $text-tertiary;
-            font-weight: $font-weight-semibold;
-            white-space: nowrap;
-        }
-
-        td {
-            padding: $space-2 $space-3;
-            border-top: 1px solid $border-subtle;
-            vertical-align: top;
-            color: $text-secondary;
-        }
+    // The change log DataTable: capped, sticky header, scrolls in place.
+    &__table-wrap {
+        --dtable-max-height: 320px;
     }
 
     &__time {

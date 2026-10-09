@@ -319,6 +319,7 @@ const CronJobs = () => {
         },
         {
             key: 'schedule',
+            width: '200px',
             headerKey: 'common.labels.schedule', header: 'Schedule',
             sortable: true,
             sortValue: (job) => describeSchedule(job),
@@ -335,6 +336,7 @@ const CronJobs = () => {
         },
         {
             key: 'last_run',
+            width: '120px',
             headerKey: 'app.cronJobs.lastRun', header: 'Last run',
             sortable: true,
             sortValue: (job) => timeValue(job.last_run),
@@ -343,6 +345,7 @@ const CronJobs = () => {
         },
         {
             key: 'next_run',
+            width: '120px',
             headerKey: 'app.cronJobs.nextRun', header: 'Next run',
             cellClassName: 'cron-cell-mono',
             render: (job) => (
@@ -351,6 +354,7 @@ const CronJobs = () => {
         },
         {
             key: 'status',
+            width: '120px',
             headerKey: 'common.labels.status', header: 'Status',
             sortable: true,
             type: 'enum',
@@ -366,6 +370,7 @@ const CronJobs = () => {
         },
         {
             key: 'enabled',
+            width: '56px',
             header: 'On',
             hideable: false,
             render: (job) => (
@@ -384,6 +389,7 @@ const CronJobs = () => {
         },
         {
             key: 'run',
+            width: '1%',
             header: '',
             hideable: false,
             cellClassName: 'cron-cell-actions',
@@ -494,26 +500,24 @@ const CronJobs = () => {
                             {q ? t('app.cronJobs.noJobsMatchSearch', 'No jobs match “{{search}}”.', { search: search.trim() }) : t('app.cronJobs.noJobsMatchFilter', 'No jobs match this filter.')}
                         </div>
                     ) : (
-                        <div className="cron-card">
-                            <DataTable
-                                tableClassName="sk-dtable cron-table"
-                                data={shown}
-                                keyField="id"
-                                columns={chrome.columns}
-                                sorts={sorts}
-                                onSortsChange={setSorts}
-                                {...chrome.tableProps}
-                                onRowClick={setDrawerJob}
-                                rowClassName={(job) => (job.enabled ? undefined : 'is-disabled')}
-                                footer={(
-                                    <DataTableFooter
-                                        shown={chrome.shownCount}
-                                        total={jobs.length}
-                                        noun="job"
-                                    />
-                                )}
-                            />
-                        </div>
+                        <DataTable
+                            className="cron-table"
+                            data={shown}
+                            keyField="id"
+                            columns={chrome.columns}
+                            sorts={sorts}
+                            onSortsChange={setSorts}
+                            {...chrome.tableProps}
+                            onRowClick={setDrawerJob}
+                            rowClassName={(job) => (job.enabled ? undefined : 'is-disabled')}
+                            footer={(
+                                <DataTableFooter
+                                    shown={chrome.shownCount}
+                                    total={jobs.length}
+                                    noun="job"
+                                />
+                            )}
+                        />
                     )}
 
                     <div className="cron-tznote">
@@ -731,7 +735,6 @@ function CronDrawer({ job, isAdmin, running, onClose, onRefresh, onRun, onEdit, 
 
                             <div className="cron-drawer__table">
                                 <DataTable
-                                    tableClassName="sk-dtable"
                                     storageKey="serverkit-table-cron-runs"
                                     data={runs}
                                     keyField="id"

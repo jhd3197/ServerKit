@@ -270,4 +270,12 @@ background: transparent;
         background-color: $bg-hover;
         color: $text-primary;
     }
+
+    // Destructive row action: quiet like its neighbours, red only on hover.
+    // A solid red button in every row shouts the one action nobody wants by
+    // accident. A class, not a variant, so an older panel degrades to ghost.
+    &.is-danger:hover:not(:disabled) {
+        background-color: var(--red-bg);
+        color: var(--red);
+    }
 }

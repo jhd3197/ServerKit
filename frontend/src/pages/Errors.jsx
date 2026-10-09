@@ -320,7 +320,6 @@ export default function Errors() {
             />
 
             <DataTable
-                tableClassName="sk-dtable errors-table"
                 storageKey="serverkit-table-errors"
                 data={entries}
                 keyField="id"

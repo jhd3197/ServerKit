@@ -592,6 +592,7 @@ const Backups = () => {
         },
         {
             key: 'actions',
+            width: '1%',
             header: '',
             sortable: false,
             hideable: false,
@@ -779,24 +780,22 @@ const Backups = () => {
                             title={t('app.backups.noSnapshotsMatch', 'No backups match "{{value}}".', { value: search.trim() })}
                         />
                     ) : (
-                        <div className="bk-card">
-                            <DataTable
-                                {...chrome.tableProps}
-                                columns={chrome.columns}
-                                data={searchedBackups}
-                                keyField="path"
-                                sorts={sorts}
-                                onSortsChange={setSorts}
-                                tableClassName="bk-table"
-                                footer={(
-                                    <DataTableFooter
-                                        shown={chrome.shownCount}
-                                        total={backups.length}
-                                        noun="snapshot"
-                                    />
-                                )}
-                            />
-                        </div>
+                        <DataTable
+                            {...chrome.tableProps}
+                            columns={chrome.columns}
+                            data={searchedBackups}
+                            keyField="path"
+                            sorts={sorts}
+                            onSortsChange={setSorts}
+                            className="bk-table"
+                            footer={(
+                                <DataTableFooter
+                                    shown={chrome.shownCount}
+                                    total={backups.length}
+                                    noun="snapshot"
+                                />
+                            )}
+                        />
                     )}
 
                     <GridFilterDrawer {...chrome.drawerProps} />

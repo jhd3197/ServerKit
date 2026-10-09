@@ -32,8 +32,6 @@
         }
     }
 
-    .telemetry-table { margin-top: 16px; }
-
     .telemetry-cell__message {
         font-size: $text-sm;
         font-weight: $font-weight-medium;
@@ -73,10 +71,10 @@
 
     // Severity accent down the left edge of a row — the one visual the DataTable
     // does not provide and the whole point of skimming an event log.
-    tr.is-critical,
-    tr.is-error { box-shadow: inset 3px 0 0 var(--red); } // geometry: draws the severity rule
-    tr.is-warning { box-shadow: inset 3px 0 0 var(--amber); } // geometry: draws the severity rule
-    tr.is-debug { opacity: 0.72; }
+    .sk-dtable .is-critical,
+    .sk-dtable .is-error { box-shadow: inset 3px 0 0 var(--red); } // geometry: draws the severity rule
+    .sk-dtable .is-warning { box-shadow: inset 3px 0 0 var(--amber); } // geometry: draws the severity rule
+    .sk-dtable .is-debug { opacity: 0.72; }
 
     .telemetry-loading {
         display: flex;

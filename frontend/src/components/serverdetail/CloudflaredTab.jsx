@@ -283,7 +283,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             // UUID: pasting one out of a cloudflared log should find its row.
             type: 'text',
             value: (t) => t.id || '',
-            cellClassName: 'mono',
+            cellClassName: 'sk-cell-mono',
             render: (t) => `${(t.id || '').substring(0, 8)}…`,
         },
         {
@@ -330,7 +330,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                 const time = Date.parse(t.created_at);
                 return Number.isNaN(time) ? null : time;
             },
-            cellClassName: 'mono',
+            cellClassName: 'sk-cell-dim',
             render: (t) => (t.created_at ? new Date(t.created_at).toLocaleString() : '—'),
         },
         {
@@ -483,7 +483,8 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                             sorts={sorts}
                             onSortsChange={setSorts}
                             {...chrome.tableProps}
-                            tableClassName="data-table"
+                            // .cloudflared-tab is the frame; the table runs flush in it.
+                            className="sk-dtable-wrap--flush"
                             emptyTitle="No tunnels match this view."
                             emptyMessage=""
                             footer={(

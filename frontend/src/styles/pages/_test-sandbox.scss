@@ -235,13 +235,6 @@
         color: var(--text-faint);
     }
 
-    .ts-history-card {
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-        overflow: hidden;
-    }
-
     .ts-summary {
         display: flex;
         align-items: center;
@@ -252,7 +245,9 @@
         .ts-summary__fail { color: var(--red); }
     }
 
-    .ts-detail-row > td {
+    // The expanded run's full-width detail cell (out-ranks .sk-dtable's cell
+    // padding on purpose: it holds a panel, not a value).
+    .sk-dtable .ts-detail-cell {
         padding: $space-3 $space-4;
         background: var(--surface-2);
     }

@@ -401,6 +401,7 @@ const QueueOperations = () => {
             header: '',
             sortable: false,
             hideable: false,
+            width: '1%',
             className: 'col-actions',
             cellClassName: 'col-actions',
             render: (queue) => (
@@ -645,8 +646,7 @@ const QueueOperations = () => {
                             onSortsChange={setSorts}
                             {...chrome.tableProps}
                             onRowClick={(queue) => openQueue(queue)}
-                            className="queue-table-wrap"
-                            tableClassName="queue-table"
+                            className="queue-table"
                             footer={(
                                 <DataTableFooter
                                     shown={filteredQueues.length}

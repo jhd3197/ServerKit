@@ -333,17 +333,15 @@ const InvitationsTab = () => {
             ) : invitations.length === 0 && !error ? (
                 <EmptyState title={t('app.invitationsTab.noInvitationsYet', 'No invitations yet')} />
             ) : (
-                <div className="users-table-container">
-                    <DataTable
-                        columns={chrome.columns}
-                        data={invitations}
-                        keyField="id"
-                        sorts={sorts}
-                        onSortsChange={setSorts}
-                        {...chrome.tableProps}
-                        tableClassName="users-table"
-                    />
-                </div>
+                <DataTable
+                    columns={chrome.columns}
+                    data={invitations}
+                    keyField="id"
+                    sorts={sorts}
+                    onSortsChange={setSorts}
+                    {...chrome.tableProps}
+                    className="users-table-container users-table"
+                />
             )}
 
             {showInviteModal && (

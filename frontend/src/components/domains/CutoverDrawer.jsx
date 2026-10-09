@@ -3,7 +3,7 @@ import {
     ArrowRightLeft, ArrowLeft, ArrowRight, Camera, CheckCircle2, RotateCcw,
     AlertTriangle, Globe, RadioTower,
 } from 'lucide-react';
-import { Drawer, Pill } from '@/components/ds';
+import { DataTable, Drawer, Pill } from '@/components/ds';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -27,6 +27,60 @@ import { useTranslation } from 'react-i18next';
 
 const HEAD_ICON_SIZE = 18;
 const DRAWER_WIDTH = 720;
+
+// Read-only step reports (the planned record changes, then per-resolver
+// propagation): no sorting, no column menu.
+const PLAN_COLUMNS = [
+    {
+        key: 'record_type',
+        headerKey: 'common.labels.type', header: 'Type',
+        cellClassName: 'sk-cell-dim',
+        render: (op) => op.record_type,
+    },
+    {
+        key: 'name',
+        headerKey: 'common.labels.name', header: 'Name',
+        cellClassName: 'sk-cell-mono',
+        render: (op) => op.name,
+    },
+    {
+        key: 'action',
+        headerKey: 'common.labels.action', header: 'Action',
+        render: (op) => <Pill kind={op.action === 'create' ? 'cyan' : 'amber'}>{op.action}</Pill>,
+    },
+    {
+        key: 'old_content',
+        headerKey: 'common.labels.current', header: 'Current',
+        cellClassName: 'sk-cell-mono',
+        render: (op) => op.old_content || '—',
+    },
+    {
+        key: 'new_content',
+        headerKey: 'app.cutoverDrawer.new', header: 'New',
+        cellClassName: 'sk-cell-mono',
+        render: (op) => op.new_content,
+    },
+];
+
+const RESOLVER_COLUMNS = [
+    {
+        key: 'nameserver',
+        headerKey: 'app.cutoverDrawer.resolver', header: 'Resolver',
+        cellClassName: 'sk-cell-mono',
+        render: (r) => r.nameserver,
+    },
+    {
+        key: 'result',
+        headerKey: 'app.cutoverDrawer.answer', header: 'Answer',
+        cellClassName: 'sk-cell-mono',
+        render: (r) => (r.result || []).join(', ') || '—',
+    },
+    {
+        key: 'status',
+        headerKey: 'common.labels.status', header: 'Status',
+        render: (r) => <Pill kind={r.propagated ? 'green' : 'gray'}>{r.propagated ? 'live' : 'stale'}</Pill>,
+    },
+];
 
 // Record types a cutover can repoint. A/AAAA/CNAME cover the "point at the new
 // box" case; the operator keeps everything else untouched.
@@ -307,26 +361,14 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                         <section className="cutover__section">
                             <h3><Globe size={15} aria-hidden="true" /> {t('app.cutoverDrawer.plannedChanges', 'Planned changes')}</h3>
                             {plan?.ops?.length ? (
-                                <div className="cutover__table-wrap">
-                                    <table className="cutover__table">
-                                        <thead>
-                                            <tr><th>{t('common.labels.type', 'Type')}</th><th>{t('common.labels.name', 'Name')}</th><th>{t('common.labels.action', 'Action')}</th><th>{t('common.labels.current', 'Current')}</th><th>{t('app.cutoverDrawer.new', 'New')}</th></tr>
-                                        </thead>
-                                        <tbody>
-                                            {plan.ops.map((op, i) => (
-                                                <tr key={`${op.record_type}-${op.name}-${i}`}>
-                                                    <td>{op.record_type}</td>
-                                                    <td>{op.name}</td>
-                                                    <td>
-                                                        <Pill kind={op.action === 'create' ? 'cyan' : 'amber'}>{op.action}</Pill>
-                                                    </td>
-                                                    <td><code>{op.old_content || '—'}</code></td>
-                                                    <td><code>{op.new_content}</code></td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <DataTable
+                                    columns={PLAN_COLUMNS}
+                                    data={plan.ops.map((op, i) => ({ ...op, __idx: i }))}
+                                    keyField={(op) => `${op.record_type}-${op.name}-${op.__idx}`}
+                                    sortable={false}
+                                    columnMenu={false}
+                                    className="cutover__table-wrap"
+                                />
                             ) : (
                                 <p className="cutover__muted">{t('app.cutoverDrawer.noChangesToApplyForThe', 'No changes to apply for the selected record types.')}</p>
                             )}
@@ -379,26 +421,14 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                             )}
 
                             {verifyResult?.resolvers?.length > 0 && (
-                                <div className="cutover__table-wrap">
-                                    <table className="cutover__table">
-                                        <thead>
-                                            <tr><th>{t('app.cutoverDrawer.resolver', 'Resolver')}</th><th>{t('app.cutoverDrawer.answer', 'Answer')}</th><th>{t('common.labels.status', 'Status')}</th></tr>
-                                        </thead>
-                                        <tbody>
-                                            {verifyResult.resolvers.map((r, i) => (
-                                                <tr key={`${r.nameserver}-${i}`}>
-                                                    <td>{r.nameserver}</td>
-                                                    <td><code>{(r.result || []).join(', ') || '—'}</code></td>
-                                                    <td>
-                                                        <Pill kind={r.propagated ? 'green' : 'gray'}>
-                                                            {r.propagated ? 'live' : 'stale'}
-                                                        </Pill>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <DataTable
+                                    columns={RESOLVER_COLUMNS}
+                                    data={verifyResult.resolvers.map((r, i) => ({ ...r, __idx: i }))}
+                                    keyField={(r) => `${r.nameserver}-${r.__idx}`}
+                                    sortable={false}
+                                    columnMenu={false}
+                                    className="cutover__table-wrap"
+                                />
                             )}
 
                             <Button variant="outline" size="sm" onClick={checkPropagation} disabled={busy}>

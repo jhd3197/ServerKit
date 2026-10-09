@@ -531,27 +531,24 @@ export default function Incidents() {
                     description={t('app.incidents.noMonitorIsDownAndNo', 'No monitor is down and no host is over its limit.')}
                 />
             ) : (
-                <div className="mon-card">
-                    <DataTable
-                        {...chrome.tableProps}
-                        tableClassName="sk-dtable incidents-table"
-                        columns={chrome.columns}
-                        data={shown}
-                        keyField="key"
-                        sorts={sorts}
-                        onSortsChange={setSorts}
-                        onRowClick={setSelected}
-                        emptyTitle="No incidents match this view."
-                        emptyMessage=""
-                        footer={(
-                            <DataTableFooter
-                                shown={chrome.shownCount}
-                                total={items.length}
-                                noun="incident"
-                            />
-                        )}
-                    />
-                </div>
+                <DataTable
+                    {...chrome.tableProps}
+                    columns={chrome.columns}
+                    data={shown}
+                    keyField="key"
+                    sorts={sorts}
+                    onSortsChange={setSorts}
+                    onRowClick={setSelected}
+                    emptyTitle="No incidents match this view."
+                    emptyMessage=""
+                    footer={(
+                        <DataTableFooter
+                            shown={chrome.shownCount}
+                            total={items.length}
+                            noun="incident"
+                        />
+                    )}
+                />
             )}
 
             <Drawer

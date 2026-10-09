@@ -60,7 +60,7 @@
 
     // Config and audit rows carry everything they have in the row itself —
     // only a deploy opens a drawer, so only a deploy gets a pointer.
-    .sk-dtable tbody tr.is-static {
+    .sk-dtable .is-static {
         cursor: default;
     }
 

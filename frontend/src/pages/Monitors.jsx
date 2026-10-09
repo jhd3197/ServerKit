@@ -520,21 +520,18 @@ export default function Monitors() {
                         : <Button onClick={openCreate}><Plus size={16} /> {t('app.monitors.addMonitor', 'New monitor')}</Button>}
                 />
             ) : (
-                <div className="mon-card">
-                    <DataTable
-                        tableClassName="sk-dtable monitors-table"
-                        storageKey="serverkit-table-monitors"
-                        data={monitors}
-                        keyField="id"
-                        columns={chrome.columns}
-                        sorts={sorts}
-                        onSortsChange={setSorts}
-                        {...chrome.tableProps}
-                        onRowClick={(m) => navigate(`/monitoring/monitors/${m.id}`)}
-                        rowClassName={(m) => (m.is_paused ? 'is-disabled' : undefined)}
-                        footer={<DataTableFooter shown={monitors.length} total={monitors.length} noun="monitor" />}
-                    />
-                </div>
+                <DataTable
+                    storageKey="serverkit-table-monitors"
+                    data={monitors}
+                    keyField="id"
+                    columns={chrome.columns}
+                    sorts={sorts}
+                    onSortsChange={setSorts}
+                    {...chrome.tableProps}
+                    onRowClick={(m) => navigate(`/monitoring/monitors/${m.id}`)}
+                    rowClassName={(m) => (m.is_paused ? 'is-disabled' : undefined)}
+                    footer={<DataTableFooter shown={monitors.length} total={monitors.length} noun="monitor" />}
+                />
             )}
 
             {/* The SERVER-side pair: this one changes what /monitors is asked

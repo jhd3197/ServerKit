@@ -437,7 +437,6 @@ export default function BackupsOverview({
                             data={latest}
                             keyField="id"
                             storageKey="serverkit-table-backup-latest"
-                            tableClassName="bk-latest"
                             footer={(
                                 <DataTableFooter
                                     shown={latest.length}

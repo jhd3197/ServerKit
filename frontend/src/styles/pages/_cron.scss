@@ -20,13 +20,6 @@
     }
 
     // ── jobs table ──────────────────────────────────────────
-    .cron-card {
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-        overflow: hidden;
-    }
-
     .cron-empty {
         padding: $space-10;
         text-align: center;
@@ -37,17 +30,10 @@
         border-radius: var(--radius);
     }
 
+    // `.cron-table` is the DataTable wrap; column widths live on the column
+    // definitions in CronJobs.jsx.
     .cron-table {
-        // Job grows; everything after it is sized to its content.
-        th:nth-child(2) { width: 200px; }   // Schedule
-        th:nth-child(3) { width: 120px; }   // Last run
-        th:nth-child(4) { width: 120px; }   // Next run
-        th:nth-child(5) { width: 120px; }   // Status
-        th:nth-child(6) { width: 56px; }    // On
-        th:last-child { width: 1%; }
-        td:last-child { white-space: nowrap; }
-
-        tbody tr.is-disabled {
+        .is-disabled {
             opacity: 0.55;
 
             .cron-ico {
@@ -64,7 +50,7 @@
         white-space: nowrap;
     }
 
-    .cron-cell-actions { text-align: right; }
+    .cron-cell-actions { text-align: right; white-space: nowrap; }
 
     .cron-switch { display: inline-flex; }
 
@@ -130,8 +116,7 @@
     }
 
     @media (max-width: $breakpoint-md) {
-        .cron-card { overflow-x: auto; }
-        .cron-table { min-width: 860px; }
+        .cron-table .sk-dtable { min-width: 860px; }
     }
 }
 

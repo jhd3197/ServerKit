@@ -99,33 +99,6 @@
         color: $text-tertiary;
     }
 
-    // Sites table
-    &__table-wrap {
-        overflow-x: auto;
-        border: 1px solid $border-subtle;
-        border-radius: $radius-card;
-    }
-
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: $text-xs;
-
-        th, td {
-            padding: $space-2 $space-3;
-            text-align: left;
-            border-bottom: 1px solid $border-subtle;
-        }
-
-        th {
-            color: $text-tertiary;
-            font-weight: $font-weight-medium;
-            background: $bg-secondary;
-        }
-
-        tr:last-child td { border-bottom: none; }
-    }
-
     &__list {
         list-style: none;
         margin: 0;

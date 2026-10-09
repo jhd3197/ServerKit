@@ -143,6 +143,7 @@ const meterColumn = (key, header, metricKey) => ({
     header,
     sortable: true,
     sortValue: (server) => (isLive(server) ? clamp(server.metrics?.[metricKey]) : null),
+    width: '108px',
     className: 'servers-table__meter',
     cellClassName: 'servers-table__meter',
     render: (server) => {
@@ -465,8 +466,6 @@ const Servers = () => {
                     keyboardNav
                     onRowClick={(server) => navigate(`/servers/${server.id}`)}
                     rowClassName="servers-row"
-                    className="servers-card"
-                    tableClassName="servers-table"
                     footer={(
                         <DataTableFooter
                             shown={chrome.shownCount}

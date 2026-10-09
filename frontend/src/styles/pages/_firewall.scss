@@ -196,50 +196,6 @@
         }
     }
 
-    // Rules Tab
-    .rules-tab {
-        .rules-table {
-            background: $bg-card;
-            border-radius: $radius-card;
-            overflow: hidden;
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-
-                th,
-                td {
-                    padding: $space-3 $space-4;
-                    text-align: left;
-                }
-
-                th {
-                    background: $bg-hover;
-                    font-size: $text-xs;
-                    font-weight: $font-weight-semibold;
-                    color: $text-tertiary;
-                }
-
-                td {
-                    border-bottom: 1px solid $border-subtle;
-                    font-size: $text-xs;
-
-                    .rule-code {
-                        font-family: $font-mono;
-                        font-size: $text-xs;
-                        background: $bg-hover;
-                        padding: $space-1 $space-2;
-                        border-radius: $radius-badge;
-                    }
-                }
-
-                tr:last-child td {
-                    border-bottom: none;
-                }
-            }
-        }
-    }
-
     // Blocked IPs Tab
     .blocked-tab {
         .blocked-list {

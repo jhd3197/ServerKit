@@ -286,9 +286,9 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
         downloadBlob(logText, `${logsFor.unit}-${Date.now()}.log`);
     }
 
-    // Units table columns. Cell markup and classNames are identical to the
-    // hand-rolled table they replace so the .server-services__* SCSS keeps
-    // applying (.server-services__desc, .server-services__row-actions, .mono).
+    // Units table columns. The table's look is .sk-dtable's; the only page
+    // classes left are on cell content (.server-services__desc,
+    // .server-services__row-actions).
     //
     // The two hosts do not answer with the same fields: an agent unit carries a
     // description and no PID, the panel host's daemon probe carries a PID and no
@@ -308,7 +308,7 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
             type: 'text',
             value: (u) => u.unit || '',
             sortValue: (u) => u.unit || '',
-            cellClassName: 'mono',
+            cellClassName: 'sk-cell-mono',
             render: (u) => u.unit,
         },
         {
@@ -339,7 +339,7 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
             type: 'num',
             value: (u) => u.pid ?? null,
             sortValue: (u) => u.pid ?? null,
-            cellClassName: 'mono',
+            cellClassName: 'sk-cell-mono',
             render: (u) => u.pid ?? '—',
         }] : [{
             key: 'description',
@@ -468,7 +468,6 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
                     sorts={sorts}
                     onSortsChange={setSorts}
                     {...chrome.tableProps}
-                    tableClassName="server-services__table"
                     emptyTitle="No units match this view."
                     emptyMessage=""
                     footer={(

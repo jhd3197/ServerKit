@@ -627,31 +627,28 @@ export default function MonitorDetail() {
 
                     <GridChips {...chrome.chipProps} />
 
-                    <div className="mon-panel mon-panel--flush">
-                        <DataTable
-                            {...chrome.tableProps}
-                            tableClassName="sk-dtable monitor-checks-table"
-                            data={rows}
-                            keyField="id"
-                            sorts={sorts}
-                            onSortsChange={setSorts}
-                            rowClassName={(c) => (c.status === 'up' ? undefined : 'is-bad')}
-                            emptyState={(
-                                <EmptyState
-                                    icon={Activity}
-                                    title={t('app.monitorDetail.noChecksInThisWindowYet', 'No checks in this window yet.')}
-                                />
-                            )}
-                            columns={chrome.columns}
-                            footer={(
-                                <DataTableFooter
-                                    shown={chrome.shownCount}
-                                    total={rows.length}
-                                    noun="check"
-                                />
-                            )}
-                        />
-                    </div>
+                    <DataTable
+                        {...chrome.tableProps}
+                        data={rows}
+                        keyField="id"
+                        sorts={sorts}
+                        onSortsChange={setSorts}
+                        rowClassName={(c) => (c.status === 'up' ? undefined : 'is-bad')}
+                        emptyState={(
+                            <EmptyState
+                                icon={Activity}
+                                title={t('app.monitorDetail.noChecksInThisWindowYet', 'No checks in this window yet.')}
+                            />
+                        )}
+                        columns={chrome.columns}
+                        footer={(
+                            <DataTableFooter
+                                shown={chrome.shownCount}
+                                total={rows.length}
+                                noun="check"
+                            />
+                        )}
+                    />
 
                     <GridFilterDrawer {...chrome.drawerProps} />
                 </>

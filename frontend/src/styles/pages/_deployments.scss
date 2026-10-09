@@ -7,11 +7,8 @@
 // ============================================
 
 .deployments-page {
-    // A fixed reading column rather than full bleed: the rightmost columns
-    // (took / started) are narrow and fixed, so on a wide monitor a full-bleed
-    // row strands the name miles from its own timing.
-    max-width: 1180px;
-    margin: 0 auto;
+    // Full width like every list (plan 89); the Deploy cell takes the spare
+    // width, so a row's timing columns stay together at the right edge.
 
     // Target / Took / Started are short and fixed, but they sit beside a Deploy
     // cell that takes every spare pixel — left to wrap, "Local server" alone

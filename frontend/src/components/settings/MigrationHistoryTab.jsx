@@ -341,7 +341,6 @@ const MigrationHistoryTab = () => {
                             sorts={sorts}
                             onSortsChange={setSorts}
                             {...chrome.tableProps}
-                            tableClassName="data-table"
                         />
                     </div>
                 </>

@@ -14,48 +14,13 @@
 
 // ─── Tables ────────────────────────────────────────────
 
-.api-settings__table-wrap {
-    overflow-x: auto;
-}
-
-.api-settings__table {
-    width: 100%;
-    border-collapse: collapse;
+// The tables are .sk-dtable; only inline code in cells is styled here.
+.api-settings__table code {
+    font-family: $font-mono;
     font-size: $text-xs;
-
-    th, td {
-        padding: $space-2 $space-3;
-        text-align: left;
-        border-bottom: 1px solid $border-subtle;
-    }
-
-    th {
-        color: $text-secondary;
-        font-weight: $font-weight-medium;
-        font-size: $text-xs;
-    }
-
-    td {
-        color: $text-primary;
-    }
-
-    tbody tr:hover {
-        background: $bg-hover;
-    }
-
-    code {
-        font-family: $font-mono;
-        font-size: $text-xs;
-        padding: $space-hair $space-tight;
-        background: $bg-elevated;
-        border-radius: $radius-badge;
-    }
-
-    &--compact {
-        th, td {
-            padding: $space-1 $space-2;
-        }
-    }
+    padding: $space-hair $space-tight;
+    background: $bg-elevated;
+    border-radius: $radius-badge;
 }
 
 .api-settings__key-name {

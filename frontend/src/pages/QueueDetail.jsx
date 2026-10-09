@@ -290,6 +290,7 @@ const QueueDetail = () => {
             header: '',
             sortable: false,
             hideable: false,
+            width: '1%',
             className: 'col-actions',
             cellClassName: 'col-actions',
             render: (msg) => (
@@ -438,8 +439,7 @@ const QueueDetail = () => {
                             {...chrome.tableProps}
                             onRowClick={(msg) => setSelectedMessage(msg)}
                             rowClassName={(msg) => (selectedMessage?.id === msg.id ? 'is-selected' : '')}
-                            className="queue-table-wrap"
-                            tableClassName="queue-table"
+                            className="queue-table"
                             footer={(
                                 <DataTableFooter
                                     shown={messages.length}

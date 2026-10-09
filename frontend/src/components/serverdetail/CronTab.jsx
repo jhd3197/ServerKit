@@ -191,9 +191,8 @@ const CronTab = ({ serverId, serverStatus }) => {
         }
     }
 
-    // Jobs table columns. Cell markup and classNames are identical to the
-    // hand-rolled table they replace so the .cron-tab / .data-table SCSS
-    // keeps applying (.cron-tab__name, .cron-tab__command, .mono).
+    // Jobs table columns. The table's look is .sk-dtable's; only cell content
+    // carries page classes (.cron-tab__name, .cron-tab__command).
     //
     // Declared above the offline/loading guards: the chrome below is a hook, so
     // it cannot sit behind an early return.
@@ -210,7 +209,7 @@ const CronTab = ({ serverId, serverStatus }) => {
             sortValue: (job) => job.schedule || '',
             render: (job) => (
                 <>
-                    <span className="mono" title={job.schedule}>{job.schedule}</span>
+                    <span className="sk-cell-mono" title={job.schedule}>{job.schedule}</span>
                     {job.description && job.description !== job.schedule && (
                         <div className="cron-tab__description">{job.description}</div>
                     )}
@@ -371,7 +370,8 @@ const CronTab = ({ serverId, serverStatus }) => {
                         onSortsChange={setSorts}
                         {...chrome.tableProps}
                         rowClassName={(job) => (!job.enabled ? 'row-disabled' : '')}
-                        tableClassName="data-table"
+                        // .cron-tab is the frame; the table runs flush in it.
+                        className="sk-dtable-wrap--flush"
                         emptyTitle="No jobs match this view."
                         emptyMessage=""
                         footer={(

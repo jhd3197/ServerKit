@@ -222,27 +222,10 @@
     cursor: help;
 }
 
-// Shared variables table (used in the resolved panel and the group detail)
+// Shared variables table (used in the resolved panel and the group detail).
+// The table is .sk-dtable; only cell content is styled here.
 
 .shared-vars-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: $text-xs;
-
-    th,
-    td {
-        text-align: left;
-        padding: $space-2 $space-3;
-        border-bottom: 1px solid $border-subtle;
-        vertical-align: middle;
-    }
-
-    th {
-        color: $text-tertiary;
-        font-weight: $font-weight-semibold;
-        font-size: $text-xs;
-    }
-
     &__key {
         font-family: $font-mono;
         font-weight: $font-weight-semibold;
@@ -277,14 +260,14 @@
         color: $text-tertiary;
     }
 
-    tr.is-secret &__key {
+    .is-secret &__key {
         border-left: 2px solid $warning;
         padding-left: $space-2;
     }
 
     // Row whose shared value is overridden by a local env var — dim the value
     // since it is not the effective one for the container.
-    tr.has-conflict &__value {
+    .has-conflict &__value {
         color: $text-tertiary;
         text-decoration: line-through;
         text-decoration-color: $warning-border;

@@ -27,15 +27,14 @@
     // frame is dropped by the `:has()` rule at the bottom of this file.
     gap: 0;
 
-    // Centered max-width column below the full-bleed top bar.
+    // Full-width body below the full-bleed top bar.
     .app-detail-body {
         display: flex;
         flex-direction: column;
         gap: $space-5;
         width: 100%;
-        max-width: 1200px;
-        margin-inline: auto;
-        padding: $space-6 $space-6 $space-10;
+        // Same full width and gutter as every page body (page-shell-inner).
+        padding: $space-5 $space-5 $space-8;
     }
 
     // Identity row — flat (no card): just the tile + name on the page.

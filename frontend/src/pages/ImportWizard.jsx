@@ -10,7 +10,7 @@ import api from '../services/api';
 import HtaccessConverter from '../components/apps/HtaccessConverter';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
-import { Pill, statusKind } from '@/components/ds';
+import { DataTable, Pill, statusKind } from '@/components/ds';
 import PageLayout from '../layouts/PageLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -51,6 +51,54 @@ function StatusPill({ status }) {
 
 // Analysis report (step 3): domains/databases tables, db users, crontab,
 // warnings + unsupported callouts. Pure render off the contract's shape.
+// Analysis report tables: what the archive holds, read-only.
+const DOMAIN_COLUMNS = [
+    {
+        key: 'domain',
+        headerKey: 'common.labels.domain', header: 'Domain',
+        cellClassName: 'sk-cell-mono',
+        render: (d) => d.domain,
+    },
+    {
+        key: 'type',
+        headerKey: 'common.labels.type', header: 'Type',
+        cellClassName: 'sk-cell-dim',
+        render: (d) => d.type || '—',
+    },
+    {
+        key: 'docroot',
+        headerKey: 'app.importWizard.docroot', header: 'Docroot',
+        cellClassName: 'sk-cell-mono',
+        render: (d) => d.docroot || '—',
+    },
+];
+
+const DATABASE_COLUMNS = [
+    {
+        key: 'name',
+        headerKey: 'common.labels.name', header: 'Name',
+        render: (db) => db.name,
+    },
+    {
+        key: 'engine',
+        headerKey: 'app.importWizard.engine', header: 'Engine',
+        cellClassName: 'sk-cell-dim',
+        render: (db) => db.engine || '—',
+    },
+    {
+        key: 'size',
+        headerKey: 'common.labels.size', header: 'Size',
+        cellClassName: 'sk-cell-dim',
+        render: (db) => formatBytes(db.size),
+    },
+    {
+        key: 'dump_path',
+        headerKey: 'app.importWizard.dump', header: 'Dump',
+        cellClassName: 'sk-cell-mono',
+        render: (db) => db.dump_path || '—',
+    },
+];
+
 function AnalysisReport({ analysis }) {
     const { t } = useTranslation();
     const domains = analysis.domains || [];
@@ -92,22 +140,13 @@ function AnalysisReport({ analysis }) {
                 {domains.length === 0 ? (
                     <p className="import-wizard__muted">{t('app.importWizard.noDomainsFoundInTheArchive', 'No domains found in the archive.')}</p>
                 ) : (
-                    <div className="import-wizard__table-wrap">
-                        <table className="import-wizard__table">
-                            <thead>
-                                <tr><th>{t('common.labels.domain', 'Domain')}</th><th>{t('common.labels.type', 'Type')}</th><th>{t('app.importWizard.docroot', 'Docroot')}</th></tr>
-                            </thead>
-                            <tbody>
-                                {domains.map((d) => (
-                                    <tr key={d.domain}>
-                                        <td>{d.domain}</td>
-                                        <td>{d.type || '—'}</td>
-                                        <td><code>{d.docroot || '—'}</code></td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <DataTable
+                        columns={DOMAIN_COLUMNS}
+                        data={domains}
+                        keyField="domain"
+                        sortable={false}
+                        columnMenu={false}
+                    />
                 )}
             </section>
 
@@ -116,23 +155,13 @@ function AnalysisReport({ analysis }) {
                 {databases.length === 0 ? (
                     <p className="import-wizard__muted">{t('app.importWizard.noDatabaseDumpsFound', 'No database dumps found.')}</p>
                 ) : (
-                    <div className="import-wizard__table-wrap">
-                        <table className="import-wizard__table">
-                            <thead>
-                                <tr><th>{t('common.labels.name', 'Name')}</th><th>{t('app.importWizard.engine', 'Engine')}</th><th>{t('common.labels.size', 'Size')}</th><th>{t('app.importWizard.dump', 'Dump')}</th></tr>
-                            </thead>
-                            <tbody>
-                                {databases.map((db) => (
-                                    <tr key={db.name}>
-                                        <td>{db.name}</td>
-                                        <td>{db.engine || '—'}</td>
-                                        <td>{formatBytes(db.size)}</td>
-                                        <td><code>{db.dump_path || '—'}</code></td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <DataTable
+                        columns={DATABASE_COLUMNS}
+                        data={databases}
+                        keyField="name"
+                        sortable={false}
+                        columnMenu={false}
+                    />
                 )}
             </section>
 

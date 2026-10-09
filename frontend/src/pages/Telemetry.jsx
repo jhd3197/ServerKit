@@ -439,7 +439,6 @@ export default function Telemetry() {
             ) : (
                 <>
                     <DataTable
-                        tableClassName="sk-dtable telemetry-table"
                         data={events}
                         keyField="id"
                         columns={chrome.columns}

@@ -230,18 +230,13 @@
     }
 }
 
-.bk-latest {
-    td { border-bottom: 1px solid var(--border-soft); }
-    tr:last-child td { border-bottom: 0; }
-}
-
 // ---------- Schedules (mock `BkSchedules`) ----------
 // A disabled policy stays readable but visibly inert, so a paused row never
 // gets mistaken for a running one.
 .bk-table--schedules {
-    tr.is-off { opacity: 0.55; }
+    .is-off { opacity: 0.55; }
 
-    .bk-col-on { width: 1%; white-space: nowrap; }
+    .bk-col-on { white-space: nowrap; } // width: column definition
 }
 
 // Retention chips (the mock's GFS daily/weekly/monthly row).
@@ -472,13 +467,6 @@
     }
 }
 
-.bk-card {
-    background: $bg-card;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-card;
-    padding: $space-4;
-}
-
 // Row actions stay on one line at the right edge. They used to wrap, which
 // pushed a full-width destructive button onto its own row and made every table
 // row a different height.
@@ -513,25 +501,9 @@
 }
 
 // ---------- Backups / schedules table ----------
+// `.bk-table` is the DataTable wrap; only cell content is styled here, and the
+// actions column's width lives on its column definition.
 .bk-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: $text-base;
-
-    th,
-    td {
-        text-align: left;
-        padding: $space-3;
-        border-bottom: 1px solid $border-subtle;
-        vertical-align: middle;
-    }
-
-    th {
-        color: $text-tertiary;
-        font-weight: $font-weight-semibold;
-        font-size: $text-xs;
-    }
-
     // Snapshot names are long and machine-generated, so they get the room and
     // an ellipsis; everything numeric stays on one line rather than folding a
     // "464 MB" onto two and doubling the row height.
@@ -543,16 +515,6 @@
     .sk-cell-mono,
     .sk-cell-dim,
     .bk-when { white-space: nowrap; }
-
-    td:last-child { width: 1%; }
-
-    tbody tr:hover {
-        background: $bg-hover;
-    }
-
-    &--schedules {
-        td { vertical-align: top; }
-    }
 }
 
 .bk-ico {
@@ -607,20 +569,6 @@
 
 // ---------- Backup history list ----------
 .backup-history-list {
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-
-    &__row {
-        display: flex;
-        align-items: center;
-        gap: $space-3;
-        padding: $space-3;
-        background: $bg-card;
-        border: 1px solid $border-subtle;
-        border-radius: $radius-control;
-    }
-
     &__ico {
         display: inline-flex;
         align-items: center;
@@ -634,7 +582,6 @@
     }
 
     &__when {
-        margin-left: auto;
         color: $text-tertiary;
         font-size: $text-xs;
         white-space: nowrap;

@@ -76,7 +76,7 @@ const IMAGE_COLUMNS = [
     {
         key: 'id',
         headerKey: 'app.serverDockerTab.imageId', header: 'Image ID',
-        cellClassName: 'mono',
+        cellClassName: 'sk-cell-mono',
         render: (image) => image.id?.substring(0, 12),
     },
     {
@@ -327,7 +327,8 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
                             data={containers}
                             keyField="id"
                             storageKey="serverkit-table-sd-docker-containers"
-                            tableClassName="data-table"
+                            // .docker-tab is the frame; the table runs flush in it.
+                            className="data-table sk-dtable-wrap--flush"
                             footer={(
                                 <DataTableFooter
                                     shown={containers.length}
@@ -350,7 +351,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
                             data={images}
                             keyField="id"
                             storageKey="serverkit-table-sd-docker-images"
-                            tableClassName="data-table"
+                            className="sk-dtable-wrap--flush"
                             footer={(
                                 <DataTableFooter
                                     shown={images.length}

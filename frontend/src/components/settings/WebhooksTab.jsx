@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import Modal from '@/components/Modal';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { DataTable } from '@/components/ds';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
@@ -154,6 +154,91 @@ export default function WebhooksTab() {
         );
     }
 
+    // Both lists sit inside a card, so their tables run flush in it.
+    const endpointColumns = [
+        {
+            key: 'name',
+            headerKey: 'common.labels.name', header: 'Name',
+            cellClassName: 'settings-webhook-name',
+            render: (ep) => ep.name,
+        },
+        {
+            key: 'slug',
+            headerKey: 'app.webhooksTab.slug', header: 'Slug',
+            cellClassName: 'sk-cell-mono',
+            render: (ep) => ep.slug,
+        },
+        {
+            key: 'forward_url',
+            headerKey: 'app.webhooksTab.forwardUrl', header: 'Forward URL',
+            cellClassName: 'sk-cell-mono',
+            render: (ep) => ep.forward_url || '—',
+        },
+        {
+            key: 'status',
+            headerKey: 'common.labels.status', header: 'Status',
+            render: (ep) => (
+                <Badge variant={ep.is_active ? 'default' : 'secondary'}>
+                    {ep.is_active ? t('app.webhooksTab.active', 'Active') : t('app.webhooksTab.inactive', 'Inactive')}
+                </Badge>
+            ),
+        },
+        {
+            key: 'actions',
+            headerKey: 'common.labels.actions', header: 'Actions',
+            cellClassName: 'settings-webhook-actions',
+            render: (ep) => (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                        <Button variant="ghost" size="icon"><MoreVertical size={14} /></Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => openEndpoint(ep.id)}>{t('app.webhooksTab.viewDeliveries', 'View deliveries')}</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => regenerateSecret(ep.id)}><RefreshCw size={12} className="settings-webhook-action-icon" /> {t('app.webhooksTab.regenerateSecret', 'Regenerate secret')}</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => deleteEndpoint(ep.id)}>{t('common.actions.delete', 'Delete')}</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            ),
+        },
+    ];
+
+    const deliveryColumns = [
+        {
+            key: 'event_id',
+            headerKey: 'app.webhooksTab.eventId', header: 'Event ID',
+            cellClassName: 'sk-cell-mono settings-webhook-event-id',
+            render: (d) => d.event_id,
+        },
+        {
+            key: 'status',
+            headerKey: 'common.labels.status', header: 'Status',
+            render: (d) => <WebhookStatusBadge status={d.status} />,
+        },
+        {
+            key: 'signature_valid',
+            headerKey: 'app.webhooksTab.signature', header: 'Signature',
+            render: (d) => (d.signature_valid === true
+                ? t('app.webhooksTab.valid', 'Valid')
+                : d.signature_valid === false ? t('app.webhooksTab.invalid', 'Invalid') : '—'),
+        },
+        {
+            key: 'received_at',
+            headerKey: 'app.webhooksTab.received', header: 'Received',
+            cellClassName: 'sk-cell-dim',
+            render: (d) => formatDate(d.received_at),
+        },
+        {
+            key: 'actions',
+            headerKey: 'common.labels.actions', header: 'Actions',
+            cellClassName: 'settings-webhook-actions',
+            render: (d) => (
+                <Button variant="ghost" size="icon" onClick={() => replayDelivery(d.id)} title={t('app.webhooksTab.replay', 'Replay')}>
+                    <ArrowRightLeft size={14} />
+                </Button>
+            ),
+        },
+    ];
+
     return (
         <div className="settings-webhooks">
             {!selectedEndpoint ? (
@@ -174,39 +259,15 @@ export default function WebhooksTab() {
                         {endpoints.length === 0 ? (
                             <EmptyState title={t('app.webhooksTab.noWebhookEndpoints', 'No webhook endpoints')} description={t('app.webhooksTab.createAnEndpointToReceiveWebhooks', 'Create an endpoint to receive webhooks.')} />
                         ) : (
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>{t('common.labels.name', 'Name')}</TableHead>
-                                        <TableHead>{t('app.webhooksTab.slug', 'Slug')}</TableHead>
-                                        <TableHead>{t('app.webhooksTab.forwardUrl', 'Forward URL')}</TableHead>
-                                        <TableHead>{t('common.labels.status', 'Status')}</TableHead>
-                                        <TableHead>{t('common.labels.actions', 'Actions')}</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {endpoints.map(ep => (
-                                        <TableRow key={ep.id} className="settings-webhook-row" onClick={() => openEndpoint(ep.id)}>
-                                            <TableCell className="settings-webhook-name">{ep.name}</TableCell>
-                                            <TableCell>{ep.slug}</TableCell>
-                                            <TableCell>{ep.forward_url || '—'}</TableCell>
-                                            <TableCell><Badge variant={ep.is_active ? 'default' : 'secondary'}>{ep.is_active ? t('app.webhooksTab.active', 'Active') : t('app.webhooksTab.inactive', 'Inactive')}</Badge></TableCell>
-                                            <TableCell className="settings-webhook-actions">
-                                                <DropdownMenu>
-                                                    <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                                                        <Button variant="ghost" size="icon"><MoreVertical size={14} /></Button>
-                                                    </DropdownMenuTrigger>
-                                                    <DropdownMenuContent align="end">
-                                                        <DropdownMenuItem onClick={() => openEndpoint(ep.id)}>{t('app.webhooksTab.viewDeliveries', 'View deliveries')}</DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => regenerateSecret(ep.id)}><RefreshCw size={12} className="settings-webhook-action-icon" /> {t('app.webhooksTab.regenerateSecret', 'Regenerate secret')}</DropdownMenuItem>
-                                                        <DropdownMenuItem onClick={() => deleteEndpoint(ep.id)}>{t('common.actions.delete', 'Delete')}</DropdownMenuItem>
-                                                    </DropdownMenuContent>
-                                                </DropdownMenu>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                            <DataTable
+                                columns={endpointColumns}
+                                data={endpoints}
+                                keyField="id"
+                                sortable={false}
+                                columnMenu={false}
+                                onRowClick={(ep) => openEndpoint(ep.id)}
+                                className="sk-dtable-wrap--flush"
+                            />
                         )}
                     </CardContent>
                 </Card>
@@ -230,32 +291,14 @@ export default function WebhooksTab() {
                         {deliveries.length === 0 ? (
                             <EmptyState title={t('app.webhooksTab.noDeliveriesYet', 'No deliveries yet')} description={t('app.webhooksTab.sendATestPayloadToSee', 'Send a test payload to see it here.')} />
                         ) : (
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>{t('app.webhooksTab.eventId', 'Event ID')}</TableHead>
-                                        <TableHead>{t('common.labels.status', 'Status')}</TableHead>
-                                        <TableHead>{t('app.webhooksTab.signature', 'Signature')}</TableHead>
-                                        <TableHead>{t('app.webhooksTab.received', 'Received')}</TableHead>
-                                        <TableHead>{t('common.labels.actions', 'Actions')}</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {deliveries.map(d => (
-                                        <TableRow key={d.id}>
-                                            <TableCell className="settings-webhook-event-id">{d.event_id}</TableCell>
-                                            <TableCell><WebhookStatusBadge status={d.status} /></TableCell>
-                                            <TableCell>{d.signature_valid === true ? t('app.webhooksTab.valid', 'Valid') : d.signature_valid === false ? t('app.webhooksTab.invalid', 'Invalid') : '—'}</TableCell>
-                                            <TableCell>{formatDate(d.received_at)}</TableCell>
-                                            <TableCell className="settings-webhook-actions">
-                                                <Button variant="ghost" size="icon" onClick={() => replayDelivery(d.id)} title={t('app.webhooksTab.replay', 'Replay')}>
-                                                    <ArrowRightLeft size={14} />
-                                                </Button>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                            <DataTable
+                                columns={deliveryColumns}
+                                data={deliveries}
+                                keyField="id"
+                                sortable={false}
+                                columnMenu={false}
+                                className="sk-dtable-wrap--flush"
+                            />
                         )}
                     </CardContent>
                 </Card>

@@ -342,8 +342,9 @@
         top: 0;
         z-index: 6;
         min-height: $control-md; // table header spec: 32
-        border-bottom: 1px solid var(--border-soft);
-        background: var(--surface-2);
+        border-bottom: 1px solid var(--border);
+        // Unfilled like .sk-dtable; the surface only backs the sticky header.
+        background: var(--surface);
         border-radius: $radius-card $radius-card 0 0;
     }
 
@@ -359,13 +360,14 @@
 
         &:first-child { padding-inline-start: $space-4; }
         font-size: $text-xs;
-        color: var(--text-ghost);
+        font-weight: $font-weight-medium;
+        color: var(--text-faint);
         user-select: none;
         min-width: 0;
 
         &.is-sortable { cursor: pointer; }
         &.is-sortable:hover { color: var(--text-dim); }
-        &.is-sorted { color: var(--text); }
+        &.is-sorted { color: var(--accent-bright); }
         &.is-filtered { color: var(--accent-bright); }
         &.is-num { justify-content: flex-end; }
     }
@@ -389,8 +391,10 @@
     // Rows: min 40; two-line identity cells grow past it.
     &__row {
         min-height: $control-lg;
-        border-top: 1px solid var(--border-soft);
+        border-bottom: 1px solid var(--border-soft);
         transition: background 0.12s;
+
+        &:last-child { border-bottom: none; }
 
         &.is-clickable { cursor: pointer; }
         &:hover { background: var(--surface-2); }
@@ -405,7 +409,6 @@
         &:first-child { padding-inline-start: $space-4; }
         &:last-child { padding-inline-end: $space-4; }
         font-size: $text-sm;
-        color: var(--text-dim);
         overflow: hidden;
 
         &.is-num {
@@ -422,22 +425,15 @@
         min-width: 0;
     }
 
+    // A bare leading glyph, like the sidebar's: no tile, border or hover tint
+    // — a boxed icon repeated down every row is noise, not identity.
     &__avatar {
-        width: 30px;
-        height: 30px; // geometry: avatar box
-        border-radius: $radius-card;
         flex-shrink: 0;
         display: grid;
         place-items: center;
-        background: var(--surface-3);
-        border: 1px solid var(--border);
         color: var(--text-faint);
-        transition: 0.12s;
-    }
 
-    &__row:hover &__avatar {
-        border-color: var(--accent-dim);
-        @include status-variant(var(--accent-bright), var(--accent-bg));
+        svg { width: 16px; height: 16px; } // geometry: icon size
     }
 
     &__nameinner { min-width: 0; }

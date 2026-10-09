@@ -454,7 +454,7 @@ const UsersTab = () => {
 
             {error && <div className="error-message" role="alert">{error}</div>}
 
-            <div {...register('users-management', 'users-table-container')}>
+            <div {...register('users-management')}>
                 <DataTable
                     columns={chrome.columns}
                     data={users}
@@ -465,7 +465,7 @@ const UsersTab = () => {
                     groupBy={groupBy}
                     onGroupByChange={setGroupBy}
                     rowClassName={(user) => (!user.is_active ? 'inactive' : '')}
-                    tableClassName="users-table"
+                    className="users-table-container users-table"
                 />
             </div>
 

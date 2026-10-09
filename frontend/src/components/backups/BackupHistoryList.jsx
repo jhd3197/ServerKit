@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { t } from '../../i18n/t';
 
 // Card 3 of the backup "Protection" panel: a data-table of backup runs.
-// Pairs with the .sk-dtable styles plus a .backup-history-list-scoped layer.
+// The table is .sk-dtable; .backup-history-list__* styles cell content only.
 function storageIcon(run) {
     const label = storageLabel(run);
     if (label === 'both') {
@@ -225,8 +225,6 @@ export default function BackupHistoryList({
                 keyField="id"
                 storageKey="serverkit-table-backup-history"
                 onRowClick={onRowClick}
-                rowClassName="backup-history-list__row"
-                tableClassName="backup-history-list"
                 footer={(
                     <DataTableFooter
                         shown={runs.length}

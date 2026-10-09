@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ShieldCheck, ListChecks, X, RefreshCw } from 'lucide-react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
-import { Pill, SegControl } from '../ds';
+import { DataTable, Pill, SegControl } from '../ds';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -45,6 +45,47 @@ function severityKind(severity) {
     if (!severity) return 'gray';
     return SEVERITY_PILL[String(severity).toLowerCase()] || 'gray';
 }
+
+// Recent WAF events. Read-only log rows: no sorting, no column menu.
+const WAF_EVENT_COLUMNS = [
+    {
+        key: 'rule_id',
+        headerKey: 'app.appWafPanel.ruleId', header: 'Rule ID',
+        cellClassName: 'sk-cell-mono',
+        render: (ev) => ev.rule_id ?? '—',
+    },
+    {
+        key: 'severity',
+        headerKey: 'common.labels.severity', header: 'Severity',
+        render: (ev) => (ev.severity
+            ? <Pill kind={severityKind(ev.severity)}>{ev.severity}</Pill>
+            : '—'),
+    },
+    {
+        key: 'message',
+        headerKey: 'app.appWafPanel.message', header: 'Message',
+        cellClassName: 'waf-panel__msg',
+        render: (ev) => ev.message || '—',
+    },
+    {
+        key: 'uri',
+        header: 'URI',
+        cellClassName: 'sk-cell-mono waf-panel__uri',
+        render: (ev) => ev.uri || '—',
+    },
+    {
+        key: 'client',
+        headerKey: 'app.appWafPanel.client', header: 'Client',
+        cellClassName: 'sk-cell-mono',
+        render: (ev) => ev.client_ip || ev.client || '—',
+    },
+    {
+        key: 'time',
+        headerKey: 'common.labels.time', header: 'Time',
+        cellClassName: 'sk-cell-dim waf-panel__time',
+        render: (ev) => (ev.timestamp ? new Date(ev.timestamp).toLocaleString() : '—'),
+    },
+];
 
 const DEFAULT_POLICY = {
     mode: 'off',
@@ -355,46 +396,21 @@ const AppWafPanel = ({ app, onChanged }) => {
                         </Button>
                     </span>
                 </div>
-                <div className="app-panel-body">
-                    {events.length > 0 ? (
-                        <div className="waf-panel__table-wrap">
-                            <table className="waf-panel__table">
-                                <thead>
-                                    <tr>
-                                        <th>{t('app.appWafPanel.ruleId', 'Rule ID')}</th>
-                                        <th>{t('common.labels.severity', 'Severity')}</th>
-                                        <th>{t('app.appWafPanel.message', 'Message')}</th>
-                                        <th>URI</th>
-                                        <th>{t('app.appWafPanel.client', 'Client')}</th>
-                                        <th>{t('common.labels.time', 'Time')}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {events.map((ev, i) => (
-                                        <tr key={ev.id ?? `${ev.rule_id ?? 'rule'}-${i}`}>
-                                            <td className="mono">{ev.rule_id ?? '—'}</td>
-                                            <td>
-                                                {ev.severity ? (
-                                                    <Pill kind={severityKind(ev.severity)}>{ev.severity}</Pill>
-                                                ) : '—'}
-                                            </td>
-                                            <td className="waf-panel__msg">{ev.message || '—'}</td>
-                                            <td className="mono waf-panel__uri">{ev.uri || '—'}</td>
-                                            <td className="mono">{ev.client_ip || ev.client || '—'}</td>
-                                            <td className="waf-panel__time">
-                                                {ev.timestamp ? new Date(ev.timestamp).toLocaleString() : '—'}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    ) : (
+                {events.length > 0 ? (
+                    <DataTable
+                        columns={WAF_EVENT_COLUMNS}
+                        data={events.map((ev, i) => ({ ...ev, __idx: i }))}
+                        keyField={(ev) => ev.id ?? `${ev.rule_id ?? 'rule'}-${ev.__idx}`}
+                        sortable={false}
+                        columnMenu={false}
+                    />
+                ) : (
+                    <div className="app-panel-body">
                         <p className="app-panel-hint">
                             {eventsLoading ? t('app.appWafPanel.loadingEvents', 'Loading events…') : t('app.appWafPanel.noWafEventsRecorded', 'No WAF events recorded.')}
                         </p>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     );

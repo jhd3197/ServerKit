@@ -129,9 +129,7 @@
 
 // Admin delivery log (sk-dlog).
 .sk-dlog {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: $space-5 $space-6 $space-10;
+    // The page shell supplies width and gutter, as on every list page.
 
     &__filters {
         display: flex;
@@ -155,37 +153,6 @@
             font-size: $text-sm;
             text-transform: capitalize;
         }
-    }
-
-    &__table-wrap {
-        border: 1px solid $border-subtle;
-        border-radius: $radius-overlay;
-        overflow: hidden;
-        background: $bg-card;
-    }
-
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: $text-sm;
-
-        th {
-            text-align: left;
-            padding: $space-3 $space-4;
-            font-size: $text-xs;
-            font-weight: $font-weight-semibold;
-            color: $text-secondary;
-            border-bottom: 1px solid $border-subtle;
-        }
-
-        td {
-            padding: $space-3 $space-4;
-            border-bottom: 1px solid $border-subtle;
-            color: $text-primary;
-            vertical-align: top;
-        }
-
-        tr:last-child td { border-bottom: none; }
     }
 
     &__status {

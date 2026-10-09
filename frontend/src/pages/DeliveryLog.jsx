@@ -326,8 +326,6 @@ export default function DeliveryLog() {
                         sorts={sorts}
                         onSortsChange={setSorts}
                         {...chrome.tableProps}
-                        className="sk-dlog__table-wrap"
-                        tableClassName="sk-dlog__table"
                         footer={(
                             <DataTableFooter
                                 shown={deliveries.length}

@@ -193,8 +193,6 @@
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: $space-5;
-    max-width: 1800px;
-    margin: 0 auto;
     width: 100%;
 }
 
@@ -548,15 +546,6 @@
 
     .clock-widget {
         text-align: left;
-    }
-
-    .data-table {
-        th:nth-child(3),
-        th:nth-child(5),
-        td:nth-child(3),
-        td:nth-child(5) {
-            display: none;
-        }
     }
 }
 

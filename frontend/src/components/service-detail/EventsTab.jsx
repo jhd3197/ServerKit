@@ -364,7 +364,6 @@ const EventsTab = ({ appId }) => {
                 // made only deploy entries expandable.
                 onRowClick={(event) => { if (event.kind === 'deploy') setDeployDetail(event); }}
                 rowClassName={(event) => (event.kind === 'deploy' ? '' : 'is-static')}
-                tableClassName="data-table"
                 emptyTitle="No activity matches your search."
                 emptyMessage=""
                 footer={(

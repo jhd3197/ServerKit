@@ -65,14 +65,9 @@
         }
     }
 
-    // ─── Users + Connections (dense .sk-dtable on a card) ───
+    // ─── Users + Connections: cell content only (the frame is .sk-dtable-wrap) ───
     .users-table,
     .connections-table {
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-        overflow-x: auto;
-
         .sk-dtable {
             .user-name {
                 font-size: $text-sm;

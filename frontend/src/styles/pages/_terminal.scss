@@ -1103,56 +1103,9 @@ $lk-default:  #646b7a;
     }
 }
 
-.processes-table-wrapper {
-    overflow-x: auto;
-    background: $bg-card;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-card;
-}
-
+// `.processes-table` is the DataTable wrap; only cell content is styled here.
 .processes-table {
-    width: 100%;
-    min-width: 800px;
-    border-collapse: collapse;
-
-    th, td {
-        padding: $space-2 $space-3;
-        text-align: left;
-        vertical-align: middle;
-        font-size: $text-xs;
-    }
-
-    th {
-        position: sticky;
-        top: 0;
-        background: $bg-card;
-        z-index: 1;
-        font-weight: $font-weight-semibold;
-        color: $text-secondary;
-        font-size: $text-xs;
-        border-bottom: 1px solid $border-subtle;
-    }
-
-    // No nth-child column widths: columns can now be hidden and reordered from
-    // the header menu, so a width pinned to a POSITION lands on whatever column
-    // happens to sit there.
-
-    tr {
-        cursor: pointer;
-        transition: background 0.15s ease;
-
-        &:hover {
-            background: $bg-hover;
-        }
-
-        &.selected {
-            background: fade($info-raw, 10%);
-        }
-    }
-
-    tbody tr {
-        border-bottom: 1px solid $border-subtle;
-    }
+    .sk-dtable { min-width: 800px; } // scrolls inside the wrap on narrow screens
 
     .process-name {
         overflow: hidden;

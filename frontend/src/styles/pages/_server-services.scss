@@ -1,7 +1,5 @@
-// Services (systemd) tab on Server Detail.
-// Base styles on the redesign tokens (dense-table spec) so the component
-// looks right everywhere — _servers.scss layers server-detail-scoped
-// refinements on top.
+// Services (systemd) tab on Server Detail. The units list is a DataTable
+// (.sk-dtable owns its look); these rules style the toolbar and cell content.
 
 .server-services {
     display: flex;
@@ -13,45 +11,6 @@
     &__actions {
         display: flex;
         gap: 0.4rem;
-    }
-
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: $text-sm;
-
-        th, td {
-            padding: $space-3 $space-3;
-            text-align: left;
-            vertical-align: middle;
-        }
-
-        th {
-            font-size: $text-xs;
-            font-weight: $font-weight-semibold;
-            color: var(--text-faint);
-            border-bottom: 1px solid var(--border);
-            white-space: nowrap;
-        }
-
-        td {
-            color: var(--text-dim);
-            border-bottom: 1px solid var(--border-soft);
-        }
-
-        tbody tr {
-            transition: background 0.12s;
-
-            &:hover {
-                background: var(--surface-2);
-            }
-        }
-
-        .mono {
-            font-family: var(--mono);
-            font-size: $text-xs;
-            color: var(--text);
-        }
     }
 
     &__desc {

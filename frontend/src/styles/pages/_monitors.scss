@@ -668,9 +668,6 @@
         border: 1px solid var(--border-soft);
         border-radius: $radius-overlay;
         padding: $space-5;
-
-        &--flush { padding: 18px 0 0; }
-        &--flush .mon-panel__header { padding: 0 18px; }
     }
 
     .mon-panel__header {
@@ -806,18 +803,11 @@
         color: var(--text-faint);
     }
 
-    tr.is-bad .mon-checkdetail { color: var(--red); }
+    .sk-dtable .is-bad .mon-checkdetail { color: var(--red); }
 }
 
 // ── list ────────────────────────────────────────────────────
 .monitors-page {
-    .mon-card {
-        background: var(--bg-card, var(--surface-1));
-        border: 1px solid var(--border-soft);
-        border-radius: $radius-overlay;
-        overflow: hidden;
-    }
-
     .mon-namecell__name { font-weight: $font-weight-semibold; }
 
     .mon-namecell__target {
@@ -867,7 +857,7 @@
     .mon-actions-cell { text-align: right; }
     .mon-actions { display: inline-flex; gap: 2px; justify-content: flex-end; }
 
-    tr.is-disabled { opacity: 0.55; }
+    .sk-dtable .is-disabled { opacity: 0.55; }
 
     // Create-monitor drawer
     .mon-form {

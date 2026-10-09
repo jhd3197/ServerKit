@@ -1,9 +1,7 @@
 // Recipe catalog (serverkit-recipes registry) — cards grid + install drawer.
 
 .recipes-page {
-    max-width: 1320px;
-    margin: 0 auto;
-    padding: $space-6 $space-8 $space-16;
+    // Width and gutter come from the page shell, as on every page.
 
     &__head {
         display: flex;

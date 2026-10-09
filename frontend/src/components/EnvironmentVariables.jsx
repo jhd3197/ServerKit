@@ -612,7 +612,6 @@ const EnvironmentVariables = ({ appId }) => {
                         sorts={sorts}
                         onSortsChange={setSorts}
                         {...chrome.tableProps}
-                        tableClassName="data-table"
                         emptyTitle="No variables match your search."
                         emptyMessage=""
                         footer={(
@@ -750,7 +749,7 @@ const EnvironmentVariables = ({ appId }) => {
                                 sortable: true,
                                 hideable: false,
                                 sortValue: (h) => h.key || '',
-                                cellClassName: 'mono',
+                                cellClassName: 'sk-cell-mono',
                                 render: (h) => h.key,
                             },
                             {
@@ -775,7 +774,6 @@ const EnvironmentVariables = ({ appId }) => {
                         data={history.map((h, idx) => ({ ...h, __idx: idx }))}
                         keyField="__idx"
                         storageKey="serverkit-table-env-history"
-                        tableClassName="table"
                         footer={(
                             <DataTableFooter
                                 shown={history.length}

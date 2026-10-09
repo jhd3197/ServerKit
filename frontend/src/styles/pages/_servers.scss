@@ -12,24 +12,10 @@
 // _design-system.scss); what used to be a left rail of dials and navs is now
 // its filters plus table columns.
 
-.servers-card {
-    overflow-x: auto;
-    background: var(--surface);
-    border: 1px solid var(--border-soft);
-    border-radius: var(--radius);
-}
-
-// The whole row is the target, so it needs the affordance rather than a
-// per-row button column.
+// The whole row is the target (DataTable marks it .is-clickable); the chevron
+// brightens with the shared row hover.
 .servers-row {
-    cursor: pointer;
-    transition: background $transition-fast;
-
-    &:hover {
-        background: var(--surface-2);
-
-        .servers-row__chev { color: var(--text-dim); }
-    }
+    &:hover .servers-row__chev { color: var(--text-dim); }
 
     &__ico {
         width: 30px;
@@ -50,11 +36,9 @@
     &__chev { color: var(--text-ghost); transition: color $transition-fast; }
 }
 
-// Metric columns: a percentage over a thin bar, sized so three of them fit
-// without squeezing the name column.
+// Metric columns: a percentage over a thin bar. Width lives on the column
+// definition (meterColumn in Servers.jsx).
 .servers-table__meter {
-    width: 108px;
-
     .sk-cell-dim { margin-bottom: 5px; }
     .sk-gauge { width: 100%; }
 }
@@ -558,17 +542,8 @@
         font-family: $font-mono;
     }
 
-    .data-table {
-        // Pull the table out of card padding — header row already
-        // anchors the visual edge on its own.
-        td, th {
-            padding-left: $space-4;
-            padding-right: $space-4;
-        }
-
-        .row-disabled td {
-            opacity: 0.6;
-        }
+    .row-disabled {
+        opacity: 0.6;
     }
 
     .empty-list {
@@ -1508,58 +1483,7 @@
     }
 }
 
-.servers-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: $text-xs;
-
-    tbody td {
-        padding: $space-3 $space-4;
-        border-bottom: 1px solid $border-subtle;
-        vertical-align: middle;
-        color: $text-secondary;
-    }
-
-    tbody tr:last-child td {
-        border-bottom: 0;
-    }
-
-    .col-check {
-        width: 44px;
-        padding-right: 0;
-
-        input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            accent-color: $accent-primary;
-            cursor: pointer;
-        }
-    }
-
-    .col-actions {
-        width: 1%;
-        white-space: nowrap;
-        text-align: right;
-    }
-
-    .muted {
-        color: $text-tertiary;
-        font-size: $text-xs;
-    }
-}
-
 .server-row {
-    transition: background $transition-fast;
-
-    &:hover {
-        background: $bg-hover;
-    }
-
-    &.is-selected {
-        background: $accent-glow;
-    }
-
     &--offline .status-pill__dot { background: $danger; }
     &--online .status-pill__dot { background: $success; }
     &--connecting .status-pill__dot { background: $warning; }
@@ -2413,35 +2337,8 @@
     }
 
     // ---- Dense tables (docker containers/images, cron jobs, tunnels) ----
-    // .sk-dtable spec applied to the existing .data-table markup.
+    // The table itself is .sk-dtable; only the cell content is styled here.
     .data-table {
-        font-size: $text-sm;
-
-        th {
-            font-size: $text-xs;
-            font-weight: $font-weight-semibold;
-            color: var(--text-faint);
-            padding: $space-3 $space-4;
-            border-bottom: 1px solid var(--border);
-            white-space: nowrap;
-        }
-
-        td {
-            padding: $space-3 $space-4;
-            font-size: $text-sm;
-            color: var(--text-dim);
-            border-bottom: 1px solid var(--border-soft);
-            vertical-align: middle;
-        }
-
-        tbody tr {
-            transition: background 0.12s;
-
-            &:hover {
-                background: var(--surface-2);
-            }
-        }
-
         .container-name {
             color: var(--text);
             font-weight: $font-weight-semibold;
@@ -2614,42 +2511,6 @@
         &--danger {
             border-color: fade($danger-raw, 28%);
             .notification__icon { @include status-variant(var(--red), var(--red-bg)); }
-        }
-    }
-
-    // ---- Services (systemd) tab — dense-table skin over the component's
-    // base styles in _server-packages.scss / _server-services.scss ----
-    .server-services__table {
-        font-size: $text-sm;
-
-        th {
-            font-size: $text-xs;
-            font-weight: $font-weight-semibold;
-            color: var(--text-faint);
-            padding: $space-3 $space-3;
-            border-bottom: 1px solid var(--border);
-            white-space: nowrap;
-        }
-
-        td {
-            padding: $space-3 $space-3;
-            font-size: $text-sm;
-            color: var(--text-dim);
-            border-bottom: 1px solid var(--border-soft);
-        }
-
-        tbody tr {
-            transition: background 0.12s;
-
-            &:hover {
-                background: var(--surface-2);
-            }
-        }
-
-        .mono {
-            font-family: var(--mono);
-            font-size: $text-xs;
-            color: var(--text);
         }
     }
 

@@ -413,8 +413,7 @@ const ComposeTab = ({ onStatsChange }) => {
                         keyField={(project) => projectName(project)}
                         sorts={sorts}
                         onSortsChange={setSorts}
-                        className="dx-table-wrap"
-                        tableClassName="dx-manager-table dx-plain-table"
+                        className="dx-table-wrap sk-dtable-wrap--sticky"
                         footer={(
                             <DataTableFooter
                                 shown={chrome.shownCount}

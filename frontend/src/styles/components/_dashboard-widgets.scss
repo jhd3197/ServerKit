@@ -785,6 +785,12 @@ $skw-z-tv: 200;
 }
 
 // ---- table: apps / servers / containers / deploys -----------
+// The one list table that is not a DataTable (listed in check-tables.mjs
+// OWNERS): a widget can be three rows tall, so it keeps compact rows instead
+// of the 40px DataTable minimum, and its header sticks inside the widget body.
+// Everything else follows the .sk-dtable spec — 32px unfilled header (the
+// frame's own surface, so scrolled rows slide under it), faint labels,
+// horizontal separators only, $space-4 outer edges.
 .skw-table-wrap {
     flex: 1;
     overflow: auto;
@@ -796,18 +802,19 @@ $skw-z-tv: 200;
     border-collapse: collapse;
     font-size: $text-xs;
 
-    // Sticky head so a widget only 3 rows tall still shows its columns.
     th {
         position: sticky;
         top: 0;
         z-index: 1;
-        padding: $space-2 $space-3;
-        border-bottom: 1px solid var(--border-soft);
-        background: var(--surface-2);
-        color: var(--text-ghost);
+        height: $control-md;
+        padding: 0 $space-3;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text-faint);
         font-size: $text-xs;
-        font-weight: $font-weight-semibold;
+        font-weight: $font-weight-medium;
         text-align: left;
+        white-space: nowrap;
     }
 
     td {
@@ -823,11 +830,18 @@ $skw-z-tv: 200;
         &.mono { font-family: var(--mono); font-size: $text-xs; }
     }
 
+    th:first-child,
+    td:first-child { padding-inline-start: $space-4; }
+
+    th:last-child,
+    td:last-child { padding-inline-end: $space-4; }
+
     tbody tr {
         cursor: pointer;
-        transition: background 0.1s;
+        transition: background 0.12s;
 
         &:hover { background: var(--surface-2); }
+        &:last-child td { border-bottom: none; }
     }
 }
 

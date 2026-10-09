@@ -327,17 +327,15 @@ const ApiKeysSection = () => {
                     description={t('app.apiSettingsTab.createOneToGetStarted', 'Create a key to access the API.')}
                 />
             ) : (
-                <div className="api-settings__table-wrap">
-                    <DataTable
-                        columns={chrome.columns}
-                        data={keys}
-                        keyField="id"
-                        sorts={sorts}
-                        onSortsChange={setSorts}
-                        {...chrome.tableProps}
-                        tableClassName="api-settings__table"
-                    />
-                </div>
+                <DataTable
+                    columns={chrome.columns}
+                    data={keys}
+                    keyField="id"
+                    sorts={sorts}
+                    onSortsChange={setSorts}
+                    {...chrome.tableProps}
+                    className="api-settings__table"
+                />
             )}
 
             {(showModal || createdKey) && (
@@ -633,7 +631,7 @@ const WebhookSection = () => {
                                                     data={deliveries[sub.id].slice(0, 10)}
                                                     keyField="id"
                                                     storageKey="serverkit-table-settings-webhook-deliveries"
-                                                    tableClassName="api-settings__table api-settings__table--compact"
+                                                    className="api-settings__table"
                                                 />
                                             )}
                                         </div>
@@ -810,7 +808,7 @@ const AnalyticsSection = () => {
                                 data={endpoints.slice(0, 10)}
                                 keyField={(ep) => `${ep.method} ${ep.endpoint}`}
                                 storageKey="serverkit-table-settings-api-endpoints"
-                                tableClassName="api-settings__table api-settings__table--compact"
+                                className="api-settings__table"
                                 footer={(
                                     <DataTableFooter
                                         shown={Math.min(endpoints.length, 10)}

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
-import { Pill, statusKind } from '@/components/ds';
+import { DataTable, Pill, statusKind } from '@/components/ds';
 import PageLayout from '../layouts/PageLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -518,51 +518,55 @@ const TestSandbox = () => {
                         description={t('app.testSandbox.pickDistrosAboveAndStartYour', 'Pick distros above and start your first sandbox run.')}
                     />
                 ) : (
-                    <div className="ts-history-card">
-                        <table className="sk-dtable ts-table">
-                            <thead>
-                                <tr>
-                                    <th>{t('app.testSandbox.run2', 'Run')}</th>
-                                    <th>{t('app.testSandbox.mode', 'Mode')}</th>
-                                    <th>{t('app.testSandbox.distros', 'Distros')}</th>
-                                    <th>{t('app.testSandbox.result', 'Result')}</th>
-                                    <th>{t('app.testSandbox.started', 'Started')}</th>
-                                    <th>{t('common.labels.status', 'Status')}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {runs.map((run) => {
-                                    const { passed, failed, total } = summarizeRun(run);
-                                    const expanded = !!expandedRuns[run.id];
-                                    return (
-                                        <FragmentRow
-                                            key={run.id}
-                                            run={run}
-                                            expanded={expanded}
-                                            passed={passed}
-                                            failed={failed}
-                                            total={total}
-                                            onToggle={() => toggleHistoryRun(run)}
-                                            detail={expanded && (
-                                                <RunResults
-                                                    run={expandedRuns[run.id]}
-                                                    distroMeta={distroMeta}
-                                                    logs={logs}
-                                                    openLogs={openLogs}
-                                                    onToggleLog={toggleLog}
-                                                />
-                                            )}
+                    // Columns give the header; rows render through renderRow
+                    // because a run expands into a full-width detail row.
+                    <DataTable
+                        columns={HISTORY_COLUMNS}
+                        data={runs}
+                        keyField="id"
+                        sortable={false}
+                        columnMenu={false}
+                        renderRow={(run, { key }) => {
+                            const { passed, failed, total } = summarizeRun(run);
+                            const expanded = !!expandedRuns[run.id];
+                            return (
+                                <FragmentRow
+                                    key={key}
+                                    run={run}
+                                    expanded={expanded}
+                                    passed={passed}
+                                    failed={failed}
+                                    total={total}
+                                    onToggle={() => toggleHistoryRun(run)}
+                                    detail={expanded && (
+                                        <RunResults
+                                            run={expandedRuns[run.id]}
+                                            distroMeta={distroMeta}
+                                            logs={logs}
+                                            openLogs={openLogs}
+                                            onToggleLog={toggleLog}
                                         />
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
+                                    )}
+                                />
+                            );
+                        }}
+                    />
                 )}
             </section>
         </PageLayout>
     );
 };
+
+// Run history header. Body rows are FragmentRow (a run + its detail row), so
+// these columns only name the six cells FragmentRow renders, in order.
+const HISTORY_COLUMNS = [
+    { key: 'id', headerKey: 'app.testSandbox.run2', header: 'Run' },
+    { key: 'mode', headerKey: 'app.testSandbox.mode', header: 'Mode' },
+    { key: 'distros', headerKey: 'app.testSandbox.distros', header: 'Distros' },
+    { key: 'result', headerKey: 'app.testSandbox.result', header: 'Result' },
+    { key: 'created_at', headerKey: 'app.testSandbox.started', header: 'Started' },
+    { key: 'status', headerKey: 'common.labels.status', header: 'Status' },
+];
 
 // One history row (+ its expanded detail row) in the runs table.
 function FragmentRow({ run, expanded, passed, failed, total, onToggle, detail }) {
@@ -576,19 +580,19 @@ function FragmentRow({ run, expanded, passed, failed, total, onToggle, detail })
                     </div>
                 </td>
                 <td><Pill kind="gray" dot={false}>{run.mode}</Pill></td>
-                <td>{total}</td>
+                <td className="sk-cell-dim">{total}</td>
                 <td>
                     <span className="ts-summary">
                         <span className="ts-summary__pass">{passed} passed</span>
                         {failed > 0 && <span className="ts-summary__fail">{failed} failed</span>}
                     </span>
                 </td>
-                <td>{timeAgo(run.created_at)}</td>
+                <td className="sk-cell-dim">{timeAgo(run.created_at)}</td>
                 <td><Pill kind={statusKind(run.status)}>{run.status}</Pill></td>
             </tr>
             {expanded && (
                 <tr className="ts-detail-row">
-                    <td colSpan={6}>{detail}</td>
+                    <td className="ts-detail-cell" colSpan={HISTORY_COLUMNS.length}>{detail}</td>
                 </tr>
             )}
         </>

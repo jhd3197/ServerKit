@@ -402,8 +402,7 @@ function ServiceGrid({ services }) {
 }
 
 // Read-only web-server vhosts, with a "managed by" column that flags sites owned
-// by another control panel. Cell markup and classNames are identical to the
-// hand-rolled table this replaces so the .survey-tab__table SCSS keeps applying.
+// by another control panel.
 const SITE_COLUMNS = [
     {
         key: 'domain',
@@ -462,8 +461,6 @@ function SitesTable({ sites }) {
             data={list}
             keyField={(s) => s.domain || `${s.stack}|${s.doc_root}|${s.upstream}`}
             storageKey="serverkit-table-sd-survey-sites"
-            className="survey-tab__table-wrap"
-            tableClassName="survey-tab__table"
             footer={(
                 <DataTableFooter
                     shown={list.length}

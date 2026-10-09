@@ -275,9 +275,8 @@ export function ProcessTable({
             onSortsChange={setSorts}
             {...chrome.tableProps}
             onRowClick={(p) => onSelect?.(p)}
-            rowClassName={(p) => (selectedPid === p.pid ? 'selected' : '')}
-            className="processes-table-wrapper"
-            tableClassName="table processes-table"
+            rowClassName={(p) => (selectedPid === p.pid ? 'is-selected' : '')}
+            className="processes-table"
             emptyTitle="No processes match this view."
             emptyMessage=""
             footer={(

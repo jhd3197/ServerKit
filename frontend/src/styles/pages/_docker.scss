@@ -448,75 +448,20 @@
 .dx-resource-list,
 .dx-inspector {
     min-height: 0;
+}
+
+// The inspector is its own panel; the list carries no frame of its own,
+// the DataTable wrap (.sk-dtable-wrap) is the frame.
+.dx-inspector {
     background: $bg-elevated;
     border: 1px solid $border-default;
     border-radius: $radius-card;
 }
 
-.dx-resource-list {
-    overflow: hidden;
-}
-
+// The wrap fills the pane at most and scrolls inside it; the header pins
+// through the shared .sk-dtable-wrap--sticky modifier.
 .dx-table-wrap {
-    height: 100%;
-    overflow: auto;
-}
-
-.dx-manager-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    font-size: $text-xs;
-
-    th,
-    td {
-        padding: $space-3 $space-4;
-        border-bottom: 1px solid $border-subtle;
-        vertical-align: middle;
-    }
-
-    th {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-        background: $bg-card;
-        color: $text-tertiary;
-        text-align: left;
-        font-size: $text-xs;
-        font-weight: $font-weight-semibold;
-    }
-
-    th:nth-child(1) { width: 20%; }
-    th:nth-child(2) { width: 22%; }
-    th:nth-child(3) { width: 17%; }
-    th:nth-child(4) { width: 15%; }
-    th:nth-child(5) { width: 16%; }
-    th:nth-child(6) { width: 10%; }
-    th:nth-child(7) { width: 116px; }
-
-    // Those track widths are tuned for the Containers grid (checkbox + seven
-    // columns). The sibling resource tabs have four or five and no row click,
-    // so they drop the track list and let their own column descriptors decide.
-    // `table-layout: fixed` stays: without it a 64-character volume name or a
-    // long mountpoint widens the row and pushes the actions off the right edge.
-    &.dx-plain-table {
-        th:nth-child(n) { width: auto; }
-        tbody tr { cursor: default; }
-    }
-
-    tbody tr {
-        cursor: pointer;
-        @include transition(background);
-
-        &:hover,
-        &.is-selected {
-            background: $bg-hover;
-        }
-
-        &.is-selected {
-            box-shadow: inset 3px 0 0 $accent-primary; // geometry: draws the selected-row rule
-        }
-    }
+    --dtable-max-height: 100%;
 }
 
 .dx-name-stack {
@@ -923,8 +868,8 @@
         padding: $space-4;
     }
 
-    .dx-manager-table {
-        min-width: 960px;
+    .dx-table-wrap .sk-dtable {
+        min-width: 960px; // scrolls inside the wrap
     }
 
     .dx-detail-grid,
@@ -954,43 +899,6 @@
 .dx-manager-layout {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
-}
-
-.dx-resource-list {
-    background: $bg-card;
-    border-color: $border-default;
-}
-
-.dx-table-wrap {
-    background: $bg-card;
-}
-
-.dx-manager-table {
-    th {
-        background: $bg-elevated;
-    }
-
-    th,
-    td {
-        padding: $space-3;
-    }
-
-    // The header takes the shared 32px header height; cells keep their padding.
-    th {
-        padding-block: 0;
-    }
-
-    tbody tr {
-        background: $bg-card;
-
-        &:hover {
-            background: $bg-hover;
-        }
-
-        &.is-selected {
-            background: $accent-glow;
-        }
-    }
 }
 
 .dx-drawer-backdrop {

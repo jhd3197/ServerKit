@@ -125,6 +125,7 @@ export default function SchedulesTable({
             header: 'On',
             sortable: true,
             sortValue: (s) => (s.enabled ? 1 : 0),
+            width: '1%',
             className: 'bk-col-on',
             cellClassName: 'bk-col-on',
             render: (schedule) => (
@@ -139,6 +140,7 @@ export default function SchedulesTable({
         },
         {
             key: 'actions',
+            width: '1%',
             header: '',
             sortable: false,
             hideable: false,
@@ -171,23 +173,21 @@ export default function SchedulesTable({
 
     return (
         <>
-            <div className="bk-card">
-                <DataTable
-                    columns={columns}
-                    data={schedules}
-                    keyField="id"
-                    storageKey="serverkit-table-backup-schedules"
-                    rowClassName={(schedule) => (schedule.enabled ? undefined : 'is-off')}
-                    tableClassName="bk-table bk-table--schedules"
-                    footer={(
-                        <DataTableFooter
-                            shown={schedules.length}
-                            total={schedules.length}
-                            noun="schedule"
-                        />
-                    )}
-                />
-            </div>
+            <DataTable
+                columns={columns}
+                data={schedules}
+                keyField="id"
+                storageKey="serverkit-table-backup-schedules"
+                rowClassName={(schedule) => (schedule.enabled ? undefined : 'is-off')}
+                className="bk-table bk-table--schedules"
+                footer={(
+                    <DataTableFooter
+                        shown={schedules.length}
+                        total={schedules.length}
+                        noun="schedule"
+                    />
+                )}
+            />
             <p className="bk-hint bk-hint--foot">
                 <ShieldCheck size={13} />
                 {t('app.schedulesTable.snapshotsOlderThan', 'Backups older than')} {retentionDays} {t('app.schedulesTable.daysArePrunedAutomaticallyPerResource', 'days are pruned automatically. Per-resource policies (with their own retention) are set on each service or database.')}

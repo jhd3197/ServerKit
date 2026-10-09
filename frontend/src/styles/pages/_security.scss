@@ -32,8 +32,8 @@
             }
         }
 
-        // Flush variant: header padded, table bleeds to the card edges
-        // (16px horizontal padding aligns with .sk-dtable cell padding)
+        // Flush variant: the card drops its padding so the table bleeds to
+        // its edges; .sk-dtable-wrap already renders frameless inside .card.
         .card.sec-flush {
             padding: 0;
 

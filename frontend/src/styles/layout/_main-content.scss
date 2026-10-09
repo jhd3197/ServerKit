@@ -67,9 +67,8 @@
 
 // Shared Page Wrapper
 .page-container {
+    // Full width like every page body (Dashboard, Server detail).
     width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
     padding-bottom: $space-10;
 
     &--full-bleed {
@@ -117,11 +116,13 @@
 }
 
 // Centered body: the reading column every ordinary page sits in.
+// Full width on every page (lists, dashboards, detail pages alike) with one
+// gutter; a form that needs a reading width caps its own column (Settings).
 @mixin page-shell-inner {
     width: 100%;
-    max-width: 1400px;
-    margin-inline: auto;
-    padding: $space-6 $space-6 $space-10;
+    // One gutter on every side for every page body; page roots inside add no
+    // padding of their own, so content starts at the same spot everywhere.
+    padding: $space-5 $space-5 $space-8;
 
     @media (max-width: $breakpoint-md) { padding: $space-4 $space-4 $space-8; }
 }

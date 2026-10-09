@@ -348,69 +348,6 @@
     }
 }
 
-// Results table
-.results-table-container {
-    flex: 1;
-    overflow: auto;
-}
-
-.results-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: $text-xs;
-
-    th, td {
-        padding: $space-2 $space-3;
-        text-align: left;
-        border-bottom: 1px solid $border-subtle;
-        white-space: nowrap;
-        max-width: 300px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    th {
-        position: sticky;
-        top: 0;
-        background: $bg-card;
-        font-weight: $font-weight-medium;
-        color: $text-secondary;
-        cursor: pointer;
-        user-select: none;
-        transition: background $transition-fast;
-
-        &:hover {
-            background: $bg-hover;
-        }
-
-        &.sorted-asc,
-        &.sorted-desc {
-            color: $accent-primary;
-        }
-
-        .sort-indicator {
-            font-size: $text-xs;
-            margin-left: $space-1;
-        }
-    }
-
-    td {
-        font-family: $font-mono;
-        color: $text-primary;
-
-        &.null-value {
-            color: $text-tertiary;
-            font-style: italic;
-        }
-    }
-
-    tbody tr {
-        &:hover {
-            background: fade($bg-hover-raw, 50%);
-        }
-    }
-}
-
 // History panel
 .query-history-panel {
     position: absolute;

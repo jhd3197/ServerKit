@@ -189,44 +189,7 @@
     // Tables (ops diff + resolver rows)
     // --------------------------------------------
     &__table-wrap {
-        overflow-x: auto;
-        border: 1px solid $border-subtle;
-        border-radius: $radius-control;
         margin-bottom: $space-3;
-    }
-
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: $text-xs;
-
-        th,
-        td {
-            padding: $space-2 $space-3;
-            text-align: left;
-            border-bottom: 1px solid $border-subtle;
-            white-space: nowrap;
-        }
-
-        th {
-            color: $text-tertiary;
-            font-weight: $font-weight-medium;
-            background: $bg-elevated;
-        }
-
-        td {
-            color: $text-primary;
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        code {
-            font-family: $font-mono;
-            font-size: $text-xs;
-            color: $text-secondary;
-        }
     }
 
     &__verify-head {

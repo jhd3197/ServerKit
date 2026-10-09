@@ -92,7 +92,7 @@ const BUILTIN_VIEWS = [
                     { id: 'a2', field: 'status', op: 'any', value: ['unconfigured'] },
                 ],
             },
-            sub: ['registrar'],
+            sub: [],
             density: 'cozy',
             group: null,
         },
@@ -416,7 +416,7 @@ const Domains = () => {
             value: (d) => (d.application_id ? appName(d.application_id) : '—'),
             render: (d) => (d.application_id
                 ? <span className="sk-tag">{appName(d.application_id)}</span>
-                : <span className="dom-dash">unlinked</span>),
+                : <span className="dom-dash">—</span>),
         },
         {
             key: 'provider',
@@ -538,7 +538,9 @@ const Domains = () => {
         initial: {
             cols: ['name', 'site', 'ssl', 'expiry', 'autoRenew', 'status'],
             sort: { key: 'name', dir: 'asc' },
-            sub: ['registrar'],
+            // No default sub-line: an unknown registrar rendered "Registrar —"
+            // under every row. It stays one click away as a column.
+            sub: [],
         },
     });
     const { cfg } = grid;

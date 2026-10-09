@@ -329,8 +329,7 @@ const VolumesTab = ({ onStatsChange }) => {
                         onSortsChange={setSorts}
                         groupBy={groupBy}
                         onGroupByChange={setGroupBy}
-                        className="dx-table-wrap"
-                        tableClassName="dx-manager-table dx-plain-table"
+                        className="dx-table-wrap sk-dtable-wrap--sticky"
                         footer={(
                             <DataTableFooter
                                 shown={chrome.shownCount}

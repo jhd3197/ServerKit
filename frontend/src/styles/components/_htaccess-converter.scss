@@ -106,45 +106,16 @@
         line-height: 1.5;
     }
 
+    // The unsupported-directives DataTable: a capped, sticky-header scroller.
     &__table-wrap {
-        max-height: 220px;
-        overflow: auto;
+        --dtable-max-height: 220px;
     }
 
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: $text-xs;
+    &__line {
+        white-space: nowrap;
+    }
 
-        th,
-        td {
-            padding: $space-2 $space-3;
-            text-align: left;
-            vertical-align: top;
-            border-bottom: 1px solid $border-subtle;
-        }
-
-        th {
-            position: sticky;
-            top: 0;
-            background: $bg-secondary;
-            color: $text-tertiary;
-            font-weight: $font-weight-semibold;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        code {
-            font-family: $font-mono;
-            word-break: break-all;
-            color: $text-primary;
-        }
-
-        td:first-child {
-            white-space: nowrap;
-            color: $text-tertiary;
-        }
+    &__directive {
+        word-break: break-all;
     }
 }

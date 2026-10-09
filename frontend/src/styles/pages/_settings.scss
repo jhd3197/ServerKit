@@ -150,34 +150,13 @@
 // Settings Content Area
 .settings-content {
     min-width: 0;
+    // Forms keep a reading width; the page around them is full width like
+    // every other page, so the column sits beside the nav, not centered.
+    max-width: 1100px;
 
     // Status is carried by the tint and border; copy keeps readable contrast.
     .alert { color: $text-primary; }
     .settings-card > .form-group:last-child { margin-bottom: 0; }
-
-    // Settings panes used to drop their table straight onto the page
-    // background, so a tab read as unfinished next to /servers or /services —
-    // those sit their grid on a panel (`.wp-list__card`). Same panel, declared
-    // once here, so a pane gets it by rendering a table rather than by
-    // remembering to wrap one. No `overflow: hidden`: the wrap's own
-    // `overflow-x: auto` already clips to the radius, and hiding the y axis
-    // would cut the sticky-header variant's scroll.
-    .sk-dtable-wrap {
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-    }
-
-    // …except where the pane already put the table on a surface of its own.
-    // Two panels nested one pixel apart is the seam this rule exists to remove.
-    .settings-card,
-    .users-table-container {
-        .sk-dtable-wrap {
-            background: none;
-            border: 0;
-            border-radius: 0;
-        }
-    }
 }
 
 // Settings Section
@@ -2559,7 +2538,6 @@
 .settings-webhook-event-id { @include truncate(); font-size: $text-xs; max-width: 200px; }
 
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
-.settings-webhook-row { cursor: pointer; }
 .settings-webhook-name { font-weight: $font-weight-medium; }
 .settings-webhook-form > * + * { margin-top: 1rem; }
 .settings-webhook-secret-field > * + * { margin-top: 0.5rem; }

@@ -96,17 +96,6 @@
     }
 }
 
-.apps-table {
-    th:last-child,
-    td:last-child {
-        text-align: right;
-    }
-
-    .sk-cell-name > div {
-        min-width: 0;
-    }
-}
-
 // Tinted type glyph tile (brand colors arrive via inline style props,
 // same convention as the Services list type icon)
 .apps-type-ico {
@@ -1544,34 +1533,6 @@
         &:hover {
             color: var(--danger, #ef4444);
             background: var(--border-soft);
-        }
-    }
-
-    &__table-wrap {
-        overflow-x: auto;
-    }
-
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: $text-sm;
-
-        th,
-        td {
-            text-align: left;
-            padding: $space-3 $spacing-md;
-            border-bottom: 1px solid var(--border-soft);
-            vertical-align: top;
-        }
-
-        th {
-            font-size: $text-xs;
-            font-weight: $font-weight-semibold;
-            color: var(--text-faint);
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
         }
     }
 

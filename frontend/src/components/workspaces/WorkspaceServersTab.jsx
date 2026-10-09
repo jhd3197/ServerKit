@@ -149,7 +149,6 @@ const WorkspaceServersTab = ({ wsId, srvIn, srvOut, onMoveServer, loadError, onR
                 onSortsChange={setSorts}
                 {...chrome.tableProps}
                 onRowClick={(s) => navigate(`/servers/${s.id}`)}
-                className="ws-detail__tablecard"
                 emptyState={loadError ? (
                     <ErrorState
                         title={t('app.workspaceServersTab.couldntLoadServers', "Couldn't load servers.")}

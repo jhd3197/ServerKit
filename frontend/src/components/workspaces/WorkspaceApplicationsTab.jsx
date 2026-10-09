@@ -152,7 +152,6 @@ const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShar
                 onSortsChange={setSorts}
                 {...chrome.tableProps}
                 onRowClick={(a) => navigate(`/services/${a.id}`)}
-                className="ws-detail__tablecard"
                 emptyState={loadError ? (
                     <ErrorState
                         title={kind === 'sites'

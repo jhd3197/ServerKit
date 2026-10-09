@@ -60,37 +60,9 @@
     }
 }
 
+// `.data-table` is only ever a DataTable tableClassName now: the table is
+// .sk-dtable, so only the legacy cell-content helpers stay here.
 .data-table {
-width: 100%;
-    border-collapse: collapse;
-    font-size: $text-xs;
-
-    th {
-        text-align: left;
-        height: $control-md;
-        padding: 0 $space-3;
-        background: $bg-hover;
-        color: $text-tertiary;
-        font-weight: $font-weight-semibold;
-        font-size: $text-xs;
-        border-bottom: 1px solid $border-subtle;
-    }
-
-    td {
-        height: $control-lg;
-        padding: $space-2 $space-3;
-        border-bottom: 1px solid $border-subtle;
-        font-family: $font-mono;
-        font-size: $text-xs;
-        color: $text-secondary;
-    }
-
-    tr:hover { background: $bg-hover; }
-    tr:last-child td { border-bottom: none; }
-
-    th:first-child, td:first-child { padding-inline-start: $space-4; }
-    th:last-child, td:last-child { padding-inline-end: $space-4; }
-
     .container-name {
         display: block;
         color: $text-primary;

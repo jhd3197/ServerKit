@@ -150,18 +150,17 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
     &:hover { border-color: var(--border-strong); }
 
+    // A bare glyph. Tinted icon squares in a rainbow of tones read as
+    // decoration; only "act on this" tones keep a colour, on the glyph alone.
     &__icon {
         grid-area: icon;
-        width: 30px; height: 30px; border-radius: 8px;
         display: grid; place-items: center;
-        background: var(--surface-2); color: var(--text-dim);
+        color: var(--text-faint);
 
-        &--accent { @include status-variant(var(--accent-bright), var(--accent-bg)); }
-        &--green  { background: var(--green-bg);  color: var(--green); }
-        &--cyan   { background: var(--cyan-bg);   color: var(--cyan); }
-        &--amber  { background: var(--amber-bg);  color: var(--amber); }
-        &--red    { background: var(--red-bg);    color: var(--red); }
-        &--violet { @include status-variant(var(--violet), var(--violet-bg)); }
+        svg { width: 16px; height: 16px; } // geometry: icon size
+
+        &--amber  { color: var(--amber); }
+        &--red    { color: var(--red); }
     }
     // Grid areas need a single child to own the text column; a tile with no
     // icon simply leaves the first track at zero width.
@@ -309,13 +308,13 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 // ServiceTile — gradient initial avatar
 // ------------------------------------------------------------
 .sk-tile {
-    border-radius: $radius-card;
+    border-radius: $radius-control;
     display: grid;
     place-items: center;
-    font-weight: $font-weight-semibold;
-    color: #fff;
+    font-weight: $font-weight-medium;
+    background: var(--surface-3);
+    color: var(--text-dim);
     flex-shrink: 0;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 // ------------------------------------------------------------
@@ -369,7 +368,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         text-align: left;
         font-size: $text-xs;
         color: var(--text-faint);
-        font-weight: $font-weight-semibold;
+        font-weight: $font-weight-medium;
         height: $control-md; // table header spec: 32
         padding: 0 $space-3;
         white-space: nowrap; // a wrapped label would grow the 32px header
@@ -387,9 +386,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         &.is-filtered .sk-colmenu-btn { opacity: 1; color: var(--accent-bright); }
     }
 
-    // Same flat header fill as the DataGrid, so the two table
-    // implementations read as one component.
-    thead { background: var(--surface-2); }
 
     &__filter-mark { color: var(--accent-bright); flex-shrink: 0; }
 
@@ -501,7 +497,27 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
 }
 
-.sk-dtable-wrap { overflow-x: auto; }
+// THE table frame. Every list table in the panel (Databases studio aside)
+// sits in exactly this: one surface, one hairline, one radius, no padding.
+// Pages never wrap it in another card or re-skin the cells; size columns
+// through the column definition's `width`, not page CSS. Held by
+// scripts/check-tables.mjs.
+.sk-dtable-wrap {
+    overflow-x: auto;
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: $radius-card;
+}
+
+// A table that is one section of a titled card/panel runs flush inside it:
+// two frames a pixel apart is the seam this rule removes. A page-specific
+// panel that frames its own header + table opts in with --flush.
+:is(.card, .ui-card, .settings-card, .app-panel, .modal-body, .sk-drawer, .sk-sheet, .skw-card) .sk-dtable-wrap,
+.sk-dtable-wrap--flush {
+    background: none;
+    border: 0;
+    border-radius: 0;
+}
 // Opt-in sticky header for tall tables: cap the wrap and pin the thead.
 .sk-dtable-wrap--sticky {
     max-height: var(--dtable-max-height, 60vh);
@@ -867,10 +883,13 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 // ------------------------------------------------------------
 .sk-bulkbar {
     position: fixed;
-    bottom: 22px;
+    // Clear the fixed global statusbar (it is taller than the old 22px offset
+    // and painted over the pill), on the shell's layer so it stays above the
+    // bar but below modals.
+    bottom: calc(var(--sk-statusbar-height, 0px) + #{$space-3});
     left: 50%;
     transform: translateX(-50%);
-    z-index: 60;
+    z-index: $z-shell-statusbar;
     display: flex;
     align-items: center;
     gap: $space-3;
@@ -1016,7 +1035,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 .wp-list {
     display: flex;
     flex-direction: column;
-    padding: $space-4;
 
     > .empty-state--loading:has(.sk-page-wrap) {
         padding: 0;
@@ -1086,12 +1104,16 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         }
     }
 
-    &__card {
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: $radius-card;
-        overflow: hidden;
-    }
+    // The frame is the table wrap's own (.sk-dtable-wrap); this only holds
+    // the table and its footer together.
+    &__card { min-width: 0; }
+
+    // Cell helpers every list uses. These lived only in the WordPress
+    // extension's copy of this block, so core lists were styled by whichever
+    // extension happened to be installed.
+    &__dash { color: var(--text-ghost); }
+    &__links { display: inline-flex; align-items: center; gap: $space-hair; }
+    .sk-tag + .sk-tag { margin-inline-start: $space-1; }
 
     // Card layout for the same rows the table shows.
     &__cards {
@@ -1132,8 +1154,10 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     // the content scrolls in its own box below this bar, never under it, so
     // alpha + backdrop-blur would cost a compositing layer to composite against
     // a backdrop that never moves.
-    background: var(--bg-sidebar);
-    border-bottom: 1px solid var(--border-soft);
+    // Same surface and edge as the sidebar (--surface + --border), which
+    // separates from the canvas; --bg-sidebar sat ~2% off it and blended in.
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
 
     &__ico { color: var(--accent-bright); display: inline-flex; flex-shrink: 0; }
     &__titles { display: flex; align-items: baseline; gap: 10px; min-width: 0; }

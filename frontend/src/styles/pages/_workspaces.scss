@@ -311,13 +311,6 @@
 
     &__pane { margin-top: $space-4; }
 
-    &__tablecard {
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-        overflow: hidden;
-    }
-
     &__rowactions {
         display: flex;
         align-items: center;
@@ -381,16 +374,15 @@
         }
     }
 
-    // Centered max-width column below the full-bleed top bar, same as WordPress
+    // Full-width body below the full-bleed top bar, same as WordPress
     // and service detail pages.
     .app-detail-body {
         display: flex;
         flex-direction: column;
         gap: $space-5;
         width: 100%;
-        max-width: 1200px;
-        margin-inline: auto;
-        padding: $space-6 $space-6 $space-10;
+        // Same full width and gutter as every page body (page-shell-inner).
+        padding: $space-5 $space-5 $space-8;
     }
 
     // Identity row — flat on the page, no card background.

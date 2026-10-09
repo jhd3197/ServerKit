@@ -500,7 +500,7 @@ const ContainersTab = ({ onStatsChange }) => {
 
     // DataTable columns. Cell markup and classNames are identical to the
     // hand-rolled table they replace, so _docker.scss keeps applying
-    // (.dx-manager-table, .dx-name-stack, .dx-status-pill, .dx-row-actions...).
+    // (.dx-name-stack, .dx-status-pill, .dx-row-actions...).
     //
     // Two accessors per column on purpose: `value` is what the column menu, the
     // filter rules and the export read (ds/grid/fields.js), `sortValue` is what
@@ -846,8 +846,7 @@ const ContainersTab = ({ onStatsChange }) => {
                             rowClassName={(container) => (
                                 `${isContainerRunning(container) ? 'is-running' : 'is-stopped'} ${getContainerId(selectedContainer) === getContainerId(container) ? 'is-selected' : ''}`
                             )}
-                            className="dx-table-wrap"
-                            tableClassName="dx-manager-table"
+                            className="dx-table-wrap sk-dtable-wrap--sticky"
                             footer={(
                                 <DataTableFooter
                                     shown={chrome.shownCount}

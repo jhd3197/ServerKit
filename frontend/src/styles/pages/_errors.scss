@@ -8,8 +8,6 @@
 
 .errors-page {
 
-    .errors-table { margin-top: 16px; }
-
     .sk-err__cell {
         min-width: 0;
         max-width: 520px;
@@ -61,7 +59,7 @@
 
     // A resolved error is handled business; dim the whole row like the event
     // log dims debug rows, so the unresolved work stands out.
-    tr.is-resolved { opacity: 0.6; }
+    .sk-dtable .is-resolved { opacity: 0.6; }
 }
 
 // Error detail drawer body

@@ -72,48 +72,14 @@
     }
 }
 
-.users-table-container {
-    overflow-x: auto;
-    background: var(--surface);
-    border: 1px solid $border-default;
-    border-radius: $radius-control;
-}
-
 .users-action--warning { color: $warning; }
 .users-action--success { color: $success; }
 .users-action--danger { color: $danger; }
 
+// `.users-table` is the DataTable wrap; only row/cell content is styled here.
 .users-table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th, td {
-        padding: $space-4;
-        text-align: left;
-        border-bottom: 1px solid $border-default;
-    }
-
-    th {
-        background: $bg-hover;
-        font-weight: $font-weight-medium;
-        font-size: $text-xs;
-        color: $text-secondary;
-    }
-
-    tr:last-child td {
-        border-bottom: none;
-    }
-
-    tr:hover td {
-        background: $bg-card;
-    }
-
-    tr.inactive {
+    .inactive {
         opacity: 0.6;
-
-        td {
-            background: fade($warning-raw, 5%);
-        }
     }
 
     .user-info {
