@@ -124,10 +124,19 @@ export function sameViewState(a, b, { rename } = {}) {
     // never compare equal again, leaving "Unsaved" pinned on forever with
     // nothing the user can do to clear it. A key the live state no longer knows
     // about is not a difference the user made.
-    const liveKeys = new Set(Object.keys(left.page || {}));
-    right.page = Object.fromEntries(
-        Object.entries(right.page || {}).filter(([k]) => liveKeys.has(k)),
+    //
+    // The converse holds too: a key the saved view never set (a built-in view
+    // says nothing about page size) is not a difference either, or every
+    // built-in view reads "Unsaved" the moment it is picked. An empty search
+    // and no search are the same state.
+    const savedKeys = new Set(Object.keys(right.page || {}));
+    const shared = new Set(Object.keys(left.page || {}).filter((k) => savedKeys.has(k)));
+    const unset = (v) => v === undefined || v === null || v === '';
+    const clean = (bag) => Object.fromEntries(
+        Object.entries(bag || {}).filter(([k, v]) => shared.has(k) && !unset(v)),
     );
+    left.page = clean(left.page);
+    right.page = clean(right.page);
     return JSON.stringify(canon(left)) === JSON.stringify(canon(right));
 }
 
