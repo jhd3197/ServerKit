@@ -25,6 +25,14 @@ $dbx-sqlite: #3d8fd1;
     box-sizing: border-box;
     overflow: hidden;
 
+    // On PageLayout the console renders inside the shell's fill region, which
+    // is a plain block: make it the flex column `.dbx-body { flex: 1 }` needs,
+    // or the body collapses to its content and the status bar floats up.
+    .sk-pageshell__fill {
+        display: flex;
+        flex-direction: column;
+    }
+
     // ─── shared controls ─────────────────────────────────
     .dbx-icon-btn {
         display: inline-flex;

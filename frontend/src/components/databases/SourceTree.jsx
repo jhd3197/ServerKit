@@ -114,7 +114,10 @@ function TreeRow({ node, depth, expanded, childrenCache, loading, activeKey, sel
                     </span>
                 )}
 
-                {node.kind === 'engine' && node.status && node.status !== 'available' && (
+                {/* The Install button already says "not installed"; repeating it
+                    as a status squeezed the engine name to "MyS…". */}
+                {node.kind === 'engine' && node.status && node.status !== 'available'
+                    && !(node.status === 'missing' && canInstall) && (
                     <span className={`dbx-tree-status is-${node.status}`} title={STATUS_LABEL[node.status]}>
                         {node.status === 'installing'
                             ? <Loader2 size={11} className="dbx-spin" aria-hidden="true" />
