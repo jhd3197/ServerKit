@@ -3,9 +3,9 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/useAuth.js';
 import { useTheme } from '../contexts/useTheme.js';
 import { useLayout } from '../contexts/useLayout.js';
-import { Star, Settings, LogOut, Sun, Moon, Monitor, ChevronRight, ChevronUp, Layers, Palette, PanelLeft, PanelLeftClose, PanelTop, Check, X, Server } from 'lucide-react';
+import { Star, Settings, LogOut, Sun, Moon, Monitor, ChevronRight, ChevronUp, Layers, Palette, PanelLeft, PanelLeftClose, PanelTop, X, Server } from 'lucide-react';
 import { api } from '../services/api';
-import { SIDEBAR_CATEGORIES, SIDEBAR_CATEGORY_LABELS, SIDEBAR_PRESETS, getHiddenItemIds, getVisibleItems, applyWorkspaceNavPermissions } from './sidebarItems';
+import { SIDEBAR_CATEGORIES, SIDEBAR_CATEGORY_LABELS, getHiddenItemIds, getVisibleItems, applyWorkspaceNavPermissions } from './sidebarItems';
 import { useTranslation } from 'react-i18next';
 import useLabel from '../i18n/labels';
 import { useContributions } from '../plugins/contributions';
@@ -20,7 +20,7 @@ import { Button as SharedButton } from '@/components/ui/button';
 const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {} }) => {
     const { t } = useTranslation();
     const label = useLabel();
-    const { user, logout, updateUser, hasPermission } = useAuth();
+    const { user, logout, hasPermission } = useAuth();
     const { theme, setTheme, whiteLabel } = useTheme();
     const { layout, setLayout } = useLayout();
     const { activeWorkspace } = useWorkspace();
@@ -149,7 +149,6 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
     const { hiddenSidebarIds: managedHidden } = useManagedProfile();
 
     const conditions = { wpInstalled, gpuAvailable, wordpressEnabled, devMode };
-    const currentPreset = user?.sidebar_config?.preset || 'recommended';
     const [manualExpanded, setManualExpanded] = useState({});
     const [autoExpanded, setAutoExpanded] = useState(null);
     const location = useLocation();
@@ -157,14 +156,6 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
     const toggleExpand = (itemId) => {
         const currentlyExpanded = manualExpanded[itemId] ?? (autoExpanded === itemId);
         setManualExpanded(prev => ({ ...prev, [itemId]: !currentlyExpanded }));
-    };
-
-    const handlePresetSwitch = (presetKey) => {
-        if (presetKey === currentPreset) return;
-        const config = { preset: presetKey, hiddenItems: [] };
-        // Update locally first (instant), persist to backend in background
-        updateUser({ sidebar_config: config });
-        api.updateCurrentUser({ sidebar_config: config }).catch(() => {});
     };
 
     const visibleItems = useMemo(() => {
@@ -519,24 +510,6 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                                 >
                                     <PanelTop size={14} aria-hidden="true" />
                                 </SharedButton>
-                            </div>
-                        </div>
-                        <div className="context-menu-section">
-                            <div className="context-menu-label" id="sidebar-view-label">{t('nav.sidebarView', 'Sidebar view')}</div>
-                            <div className="view-switcher" role="group" aria-labelledby="sidebar-view-label">
-                                {Object.entries(SIDEBAR_PRESETS).map(([key, preset]) => (
-                                    <SharedButton variant="unstyled"
-                                        key={key}
-                                        type="button"
-                                        className={`view-btn ${currentPreset === key ? 'active' : ''}`}
-                                        onClick={() => handlePresetSwitch(key)}
-                                        aria-pressed={currentPreset === key}
-                                        title={label(preset, 'description')}
-                                    >
-                                        {label(preset)}
-                                        {currentPreset === key && <Check size={10} aria-hidden="true" />}
-                                    </SharedButton>
-                                ))}
                             </div>
                         </div>
                         <div className="context-menu-divider" />

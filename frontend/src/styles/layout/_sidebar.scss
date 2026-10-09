@@ -4,10 +4,11 @@
 
 .sidebar {
     width: $sidebar-width;
-    // Subtle top→bottom gradient (theme-aware: dark rail in dark mode, light in
-    // light mode). Redesign "infra console" look — see docs/REDESIGN_MAP.md §2.
-    background: var(--bg-sidebar);
-    border-right: 1px solid $border-subtle;
+    // One surface step above the canvas plus a hairline edge, so the rail
+    // separates from the page without becoming a boxed card. --bg-sidebar sat
+    // ~2% off the light canvas and its --border-subtle edge vanished on both.
+    background: var(--surface);
+    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -568,40 +569,6 @@
     }
 }
 
-.view-switcher {
-    display: flex;
-    flex-wrap: wrap;
-    gap: $space-1;
-}
-
-.view-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-1;
-    padding: $space-1 $space-2;
-    border: 1px solid var(--border);
-    background: var(--surface-2);
-    color: var(--text-faint);
-    font-size: $text-xs;
-    font-weight: $font-weight-medium;
-    border-radius: $radius-control;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    @include focus-ring();
-
-    &:hover {
-        border-color: var(--border-strong);
-        color: var(--text-primary);
-        background: var(--surface-3);
-    }
-
-    &.active {
-        border-color: var(--accent-dim);
-        color: var(--accent-bright);
-        background: var(--accent-bg);
-    }
-}
-
 .context-menu-divider {
     height: 1px;
     background: var(--border-soft);
@@ -821,8 +788,8 @@
             gap: $space-3;
             padding: 0 $space-4;
             border-right: none;
-            border-bottom: 1px solid $border-subtle;
-            background: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
         }
 
         .brand-section {
