@@ -12,8 +12,9 @@
     height: var(--sk-statusbar-height);
     gap: $space-hair;
     padding-inline: $space-tight;
-    border-block-start: 1px solid var(--border-soft);
-    background: var(--bg-sidebar);
+    // Same chrome surface and edge as the sidebar and top bar.
+    border-block-start: 1px solid var(--border);
+    background: var(--surface);
     color: var(--text-faint);
     font-family: $font-main;
     font-size: $text-xs;
