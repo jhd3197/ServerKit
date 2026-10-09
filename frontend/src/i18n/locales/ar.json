@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "تطبيق وإعادة التشغيل",
+            "applyConfirmMessage": "يؤدي التطبيق إلى إعادة تشغيل محرك قاعدة البيانات، لذا ستشهد الخدمات المتصلة انقطاعًا قصيرًا. يُحتفَظ بنسخة احتياطية من الإعداد السابق ويمكن التراجع إليه.",
             "applySelected": "تطبيق المحدد (",
             "applySettings_one": "تطبيق إعداد واحد؟",
             "applySettings_other": "تطبيق {{count}} إعداد؟",
-            "applyingRestartsTheDatabaseEngineConnected": "يؤدي التطبيق إلى إعادة تشغيل محرك قاعدة البيانات - ستظهر الخدمات المتصلة لفترة قصيرة",
             "containerMemoryLimit": "حد ذاكرة الحاوية",
             "dedicatedDbServer": "خادم قاعدة بيانات مخصص",
             "failedToApplySettings": "فشل في تطبيق الإعدادات",
             "hostTotal": "إجمالي المضيف",
-            "interruptionThePreviousConfigurationIsBacked": "انقطاع. تم عمل نسخة احتياطية من التكوين السابق ويمكن استرجاعه.",
-            "isRestarted": "يتم إعادة تشغيله.",
             "previousConfigurationRestored": "تمت استعادة التكوين السابق",
             "readingEngineConfiguration": "قراءة تكوين المحرك...",
             "rollBackAndRestart": "التراجع وإعادة التشغيل",
             "rollBackLastApply": "استرجاع آخر تطبيق",
             "rollBackToThePreviousConfiguration": "العودة إلى التكوين السابق؟",
+            "rollbackConfirmMessage": "تُستعاد آخر نسخة احتياطية من الإعداد ويُعاد تشغيل محرك قاعدة البيانات.",
             "rollbackFailed": "فشل التراجع",
             "select": "يختار",
             "select2": "حدد {{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "مقترح",
             "suggestionsBasedOnRam": "تستند الاقتراحات إلى {{ram}} MB من ذاكرة RAM ({{source}}). لا يُطبَّق أي شيء حتى تختار ذلك.",
             "targetValue": "القيمة المستهدفة",
-            "targetValueFor": "القيمة المستهدفة لـ {{key}}",
-            "theLastBackedUpConfigurationIs": "تتم استعادة آخر تكوين احتياطي ومحرك قاعدة البيانات"
+            "targetValueFor": "القيمة المستهدفة لـ {{key}}"
         },
         "confirmActionCard": {
             "approveRun": "الموافقة والتشغيل",
@@ -4184,13 +4182,11 @@
             "uploading": "جارٍ الرفع…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "ينتمي إلى ملحق غير مثبت. يفحص",
             "browseExtensions": "تصفح الامتدادات",
-            "extensionsToInstallIt": "ملحقات لتثبيته.",
+            "description": "تعذّر العثور على {{pathname}}. ربما نُقلت الصفحة، أو أنها تابعة لامتداد غير مثبّت. افتح الامتدادات لتثبيته.",
             "goToDashboard": "اذهب إلى لوحة القيادة",
             "loading": "تحميل",
-            "pageNotFound": "لم يتم العثور على الصفحة",
-            "weCouldnTFindItMay": "لم نتمكن من العثور على {{pathname}}. ربما تحركت، أو ذلك"
+            "pageNotFound": "لم يتم العثور على الصفحة"
         },
         "notifications": {
             "allCategories": "جميع الفئات",
@@ -8473,7 +8469,6 @@
         "security": "حماية",
         "servers": "الخوادم",
         "services": "خدمات",
-        "sidebarView": "عرض الشريط الجانبي",
         "starOnGithub": "أضف نجمة على GitHub",
         "starOnGithubLong": "أضف نجمة لـ ServerKit على GitHub",
         "styleGuide": "دليل الأسلوب",

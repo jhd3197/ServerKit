@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "Áp dụng và khởi động lại",
+            "applyConfirmMessage": "Áp dụng sẽ khởi động lại công cụ cơ sở dữ liệu, nên các dịch vụ đang kết nối sẽ bị gián đoạn trong giây lát. Cấu hình trước đó được sao lưu và có thể khôi phục.",
             "applySelected": "Áp dụng đã chọn (",
             "applySettings_one": "Áp dụng 1 cài đặt?",
             "applySettings_other": "Áp dụng {{count}} cài đặt?",
-            "applyingRestartsTheDatabaseEngineConnected": "Việc áp dụng sẽ khởi động lại công cụ cơ sở dữ liệu - các dịch vụ được kết nối sẽ thấy một thông báo ngắn",
             "containerMemoryLimit": "giới hạn bộ nhớ của vùng chứa",
             "dedicatedDbServer": "Máy chủ DB chuyên dụng",
             "failedToApplySettings": "Không thể áp dụng cài đặt",
             "hostTotal": "tổng của máy chủ",
-            "interruptionThePreviousConfigurationIsBacked": "gián đoạn. Cấu hình trước đó được sao lưu và có thể được khôi phục.",
-            "isRestarted": "được khởi động lại.",
             "previousConfigurationRestored": "Đã khôi phục cấu hình trước đó",
             "readingEngineConfiguration": "Đọc cấu hình động cơ…",
             "rollBackAndRestart": "Quay lại và khởi động lại",
             "rollBackLastApply": "Quay lại áp dụng lần cuối",
             "rollBackToThePreviousConfiguration": "Quay lại cấu hình trước đó?",
+            "rollbackConfirmMessage": "Cấu hình được sao lưu gần nhất sẽ được khôi phục và công cụ cơ sở dữ liệu sẽ khởi động lại.",
             "rollbackFailed": "Khôi phục không thành công",
             "select": "Lựa chọn",
             "select2": "Chọn {{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "được đề xuất",
             "suggestionsBasedOnRam": "Đề xuất dựa trên {{ram}} MB RAM ({{source}}). Không có gì được áp dụng cho đến khi bạn chọn.",
             "targetValue": "Giá trị mục tiêu",
-            "targetValueFor": "Giá trị mục tiêu cho {{key}}",
-            "theLastBackedUpConfigurationIs": "Cấu hình sao lưu cuối cùng được khôi phục và công cụ cơ sở dữ liệu"
+            "targetValueFor": "Giá trị mục tiêu cho {{key}}"
         },
         "confirmActionCard": {
             "approveRun": "Phê duyệt và chạy",
@@ -4184,13 +4182,11 @@
             "uploading": "Đang tải lên…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "thuộc về một tiện ích mở rộng chưa được cài đặt. Kiểm tra",
             "browseExtensions": "Duyệt qua tiện ích mở rộng",
-            "extensionsToInstallIt": "Phần mở rộng để cài đặt nó.",
+            "description": "Không tìm thấy {{pathname}}. Trang có thể đã được di chuyển hoặc thuộc về một tiện ích mở rộng chưa được cài đặt. Vào Tiện ích mở rộng để cài đặt.",
             "goToDashboard": "Đi tới trang tổng quan",
             "loading": "Đang tải",
-            "pageNotFound": "Không tìm thấy trang",
-            "weCouldnTFindItMay": "Chúng tôi không thể tìm thấy {{pathname}}. Nó có thể đã di chuyển, hoặc nó"
+            "pageNotFound": "Không tìm thấy trang"
         },
         "notifications": {
             "allCategories": "Tất cả danh mục",
@@ -8473,7 +8469,6 @@
         "security": "Bảo vệ",
         "servers": "Máy chủ",
         "services": "Dịch vụ",
-        "sidebarView": "Chế độ xem thanh bên",
         "starOnGithub": "Gắn sao trên GitHub",
         "starOnGithubLong": "Gắn sao ServerKit trên GitHub",
         "styleGuide": "Hướng dẫn phong cách",

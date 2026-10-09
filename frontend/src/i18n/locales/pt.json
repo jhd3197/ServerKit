@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "Aplicar e reiniciar",
+            "applyConfirmMessage": "Aplicar reinicia o mecanismo do banco de dados, então os serviços conectados terão uma breve interrupção. A configuração anterior é salva em backup e pode ser restaurada.",
             "applySelected": "Aplicar selecionado (",
             "applySettings_one": "Aplicar 1 configuração?",
             "applySettings_other": "Aplicar {{count}} configurações?",
-            "applyingRestartsTheDatabaseEngineConnected": "A aplicação reinicia o mecanismo de banco de dados – os serviços conectados verão um breve ",
             "containerMemoryLimit": "limite de memória do contêiner",
             "dedicatedDbServer": "Servidor de banco de dados dedicado",
             "failedToApplySettings": "Falha ao aplicar configurações",
             "hostTotal": "total do host",
-            "interruptionThePreviousConfigurationIsBacked": "interrupção. A configuração anterior é armazenada em backup e pode ser revertida.",
-            "isRestarted": "é reiniciado.",
             "previousConfigurationRestored": "Configuração anterior restaurada",
             "readingEngineConfiguration": "Lendo a configuração do mecanismo…",
             "rollBackAndRestart": "Reverter e reiniciar",
             "rollBackLastApply": "Reverter a última aplicação",
             "rollBackToThePreviousConfiguration": "Reverter para a configuração anterior?",
+            "rollbackConfirmMessage": "A última configuração salva em backup é restaurada e o mecanismo do banco de dados é reiniciado.",
             "rollbackFailed": "Falha na reversão",
             "select": "Selecione",
             "select2": "Selecione {{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "Sugerido",
             "suggestionsBasedOnRam": "As sugestões se baseiam em {{ram}} MB de RAM ({{source}}). Nada é aplicado até você escolher.",
             "targetValue": "Valor alvo",
-            "targetValueFor": "Valor alvo para {{key}}",
-            "theLastBackedUpConfigurationIs": "A última configuração de backup é restaurada e o mecanismo de banco de dados "
+            "targetValueFor": "Valor alvo para {{key}}"
         },
         "confirmActionCard": {
             "approveRun": "Aprovar e executar",
@@ -4184,13 +4182,11 @@
             "uploading": "Enviando…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "pertence a uma extensão que não está instalada. Verifique",
             "browseExtensions": "Navegar pelas extensões",
-            "extensionsToInstallIt": "Extensões para instalá-lo.",
+            "description": "Não encontramos {{pathname}}. A página pode ter sido movida ou pertencer a uma extensão que não está instalada. Acesse Extensões para instalá-la.",
             "goToDashboard": "Vá para o painel",
             "loading": "Carregando",
-            "pageNotFound": "Página não encontrada",
-            "weCouldnTFindItMay": "Não foi possível encontrar {{pathname}}. Pode ter se movido ou"
+            "pageNotFound": "Página não encontrada"
         },
         "notifications": {
             "allCategories": "Todas as categorias",
@@ -8473,7 +8469,6 @@
         "security": "Segurança",
         "servers": "Servidores",
         "services": "Serviços",
-        "sidebarView": "Visualização da barra lateral",
         "starOnGithub": "Dar estrela no GitHub",
         "starOnGithubLong": "Dar estrela ao ServerKit no GitHub",
         "styleGuide": "Guia de estilo",

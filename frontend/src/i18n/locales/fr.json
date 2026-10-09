@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "Appliquer et redémarrer",
+            "applyConfirmMessage": "L'application des réglages redémarre le moteur de base de données : les services connectés subiront une brève interruption. La configuration précédente est sauvegardée et peut être restaurée.",
             "applySelected": "Appliquer la sélection (",
             "applySettings_one": "Appliquer 1 paramètre ?",
             "applySettings_other": "Appliquer {{count}} paramètres ?",
-            "applyingRestartsTheDatabaseEngineConnected": "L'application redémarre le moteur de base de données : les services connectés verront un court message",
             "containerMemoryLimit": "limite mémoire du conteneur",
             "dedicatedDbServer": "Serveur de base de données dédié",
             "failedToApplySettings": "Échec de l'application des paramètres",
             "hostTotal": "total de l'hôte",
-            "interruptionThePreviousConfigurationIsBacked": "interruption. La configuration précédente est sauvegardée et peut être restaurée.",
-            "isRestarted": "est redémarré.",
             "previousConfigurationRestored": "Configuration précédente restaurée",
             "readingEngineConfiguration": "Lecture de la configuration du moteur…",
             "rollBackAndRestart": "Revenir en arrière et redémarrer",
             "rollBackLastApply": "Restaurer la dernière application",
             "rollBackToThePreviousConfiguration": "Revenir à la configuration précédente ?",
+            "rollbackConfirmMessage": "La dernière configuration sauvegardée est restaurée et le moteur de base de données redémarre.",
             "rollbackFailed": "Échec de la restauration",
             "select": "Sélectionner",
             "select2": "Sélectionnez {{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "Suggéré",
             "suggestionsBasedOnRam": "Les suggestions reposent sur {{ram}} Mo de RAM ({{source}}). Rien n'est appliqué tant que vous ne le décidez pas.",
             "targetValue": "Valeur cible",
-            "targetValueFor": "Valeur cible pour {{key}}",
-            "theLastBackedUpConfigurationIs": "La dernière configuration sauvegardée est restaurée et le moteur de base de données"
+            "targetValueFor": "Valeur cible pour {{key}}"
         },
         "confirmActionCard": {
             "approveRun": "Approuver et exécuter",
@@ -4184,13 +4182,11 @@
             "uploading": "Téléversement…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "appartient à une extension qui n'est pas installée. Vérifier",
             "browseExtensions": "Parcourir les extensions",
-            "extensionsToInstallIt": "Extensions pour l'installer.",
+            "description": "Impossible de trouver {{pathname}}. La page a peut-être été déplacée, ou elle appartient à une extension non installée. Rendez-vous dans Extensions pour l'installer.",
             "goToDashboard": "Aller au tableau de bord",
             "loading": "Chargement",
-            "pageNotFound": "Page introuvable",
-            "weCouldnTFindItMay": "Nous n'avons pas trouvé {{pathname}}. Il a peut-être bougé, ou"
+            "pageNotFound": "Page introuvable"
         },
         "notifications": {
             "allCategories": "Toutes les catégories",
@@ -8473,7 +8469,6 @@
         "security": "Sécurité",
         "servers": "Serveurs",
         "services": "Services",
-        "sidebarView": "Vue de la barre latérale",
         "starOnGithub": "Ajouter une étoile sur GitHub",
         "starOnGithubLong": "Ajouter une étoile à ServerKit sur GitHub",
         "styleGuide": "Guide de style",

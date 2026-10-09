@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "Apply and restart",
+            "applyConfirmMessage": "Applying restarts the database engine, so connected services will see a short interruption. The previous configuration is backed up and can be rolled back.",
             "applySelected": "Apply selected (",
             "applySettings_one": "Apply 1 setting?",
             "applySettings_other": "Apply {{count}} settings?",
-            "applyingRestartsTheDatabaseEngineConnected": "Applying restarts the database engine, so connected services will see a short ",
             "containerMemoryLimit": "container memory limit",
             "dedicatedDbServer": "Dedicated DB server",
             "failedToApplySettings": "Couldn't apply the settings.",
             "hostTotal": "host total",
-            "interruptionThePreviousConfigurationIsBacked": "interruption. The previous configuration is backed up and can be rolled back.",
-            "isRestarted": "is restarted.",
             "previousConfigurationRestored": "Previous configuration restored",
             "readingEngineConfiguration": "Reading engine configuration…",
             "rollBackAndRestart": "Roll back and restart",
             "rollBackLastApply": "Roll back last apply",
             "rollBackToThePreviousConfiguration": "Roll back to the previous configuration?",
+            "rollbackConfirmMessage": "The last backed-up configuration is restored and the database engine is restarted.",
             "rollbackFailed": "Couldn't roll back.",
             "select": "Select",
             "select2": "Select {{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "Suggested",
             "suggestionsBasedOnRam": "Suggestions are based on {{ram}} MB of RAM ({{source}}). Nothing is applied until you choose to.",
             "targetValue": "Target value",
-            "targetValueFor": "Target value for {{key}}",
-            "theLastBackedUpConfigurationIs": "The last backed-up configuration is restored and the database engine "
+            "targetValueFor": "Target value for {{key}}"
         },
         "confirmActionCard": {
             "approveRun": "Approve and run",
@@ -4184,13 +4182,11 @@
             "uploading": "Uploading…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "belongs to an extension that isn't installed. Check",
             "browseExtensions": "Browse extensions",
-            "extensionsToInstallIt": "Extensions to install it.",
+            "description": "We couldn't find {{pathname}}. It may have moved, or it belongs to an extension that isn't installed. Check Extensions to install it.",
             "goToDashboard": "Go to dashboard",
             "loading": "Loading",
-            "pageNotFound": "Page not found",
-            "weCouldnTFindItMay": "We couldn't find {{pathname}}. It may have moved, or it"
+            "pageNotFound": "Page not found"
         },
         "notifications": {
             "allCategories": "All categories",
@@ -8473,7 +8469,6 @@
         "security": "Security",
         "servers": "Servers",
         "services": "Services",
-        "sidebarView": "Sidebar view",
         "starOnGithub": "Star on GitHub",
         "starOnGithubLong": "Star ServerKit on GitHub",
         "styleGuide": "Style guide",

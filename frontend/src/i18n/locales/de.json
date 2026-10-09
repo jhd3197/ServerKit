@@ -283,7 +283,7 @@
             "connectedSince": "Verbunden seit",
             "couldntLoadFleetData": "Flottendaten konnten nicht geladen werden.",
             "currentLatency": "Aktuelle Latenz",
-            "dashboard": "Armaturenbrett",
+            "dashboard": "Dashboard",
             "delayMinutes": "Verzögerung (Minuten)",
             "disconnected": "Nicht verbunden",
             "discoveredAgents": "{{length}} Agenten entdeckt",
@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "Anwenden und neu starten",
+            "applyConfirmMessage": "Beim Anwenden wird die Datenbank-Engine neu gestartet, verbundene Dienste werden kurz unterbrochen. Die vorherige Konfiguration wird gesichert und kann wiederhergestellt werden.",
             "applySelected": "Ausgewählte anwenden (",
             "applySettings_one": "1 Einstellung anwenden?",
             "applySettings_other": "{{count}} Einstellungen anwenden?",
-            "applyingRestartsTheDatabaseEngineConnected": "Beim Anwenden wird die Datenbank-Engine neu gestartet. Bei verbundenen Diensten wird ein Kurzschluss angezeigt ",
             "containerMemoryLimit": "Container-Speicherlimit",
             "dedicatedDbServer": "Dedizierter DB-Server",
             "failedToApplySettings": "Die Einstellungen konnten nicht angewendet werden",
             "hostTotal": "Host gesamt",
-            "interruptionThePreviousConfigurationIsBacked": "Unterbrechung. Die vorherige Konfiguration wird gesichert und kann zurückgesetzt werden.",
-            "isRestarted": "wird neu gestartet.",
             "previousConfigurationRestored": "Vorherige Konfiguration wiederhergestellt",
             "readingEngineConfiguration": "Engine-Konfiguration wird gelesen…",
             "rollBackAndRestart": "Zurücksetzen und neu starten",
             "rollBackLastApply": "Letzte Anwendung zurücksetzen",
             "rollBackToThePreviousConfiguration": "Zur vorherigen Konfiguration zurückkehren?",
+            "rollbackConfirmMessage": "Die zuletzt gesicherte Konfiguration wird wiederhergestellt und die Datenbank-Engine neu gestartet.",
             "rollbackFailed": "Rollback fehlgeschlagen",
             "select": "Auswählen",
             "select2": "Wählen Sie {{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "Vorgeschlagen",
             "suggestionsBasedOnRam": "Die Vorschläge basieren auf {{ram}} MB RAM ({{source}}). Es wird nichts angewendet, bis Sie es auswählen.",
             "targetValue": "Zielwert",
-            "targetValueFor": "Zielwert für {{key}}",
-            "theLastBackedUpConfigurationIs": "Die zuletzt gesicherte Konfiguration wird wiederhergestellt und die Datenbank-Engine "
+            "targetValueFor": "Zielwert für {{key}}"
         },
         "confirmActionCard": {
             "approveRun": "Genehmigen und ausführen",
@@ -4184,13 +4182,11 @@
             "uploading": "Wird hochgeladen…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "gehört zu einer Erweiterung, die nicht installiert ist. Überprüfen",
             "browseExtensions": "Durchsuchen Sie Erweiterungen",
-            "extensionsToInstallIt": "Erweiterungen, um es zu installieren.",
+            "description": "{{pathname}} wurde nicht gefunden. Die Seite wurde möglicherweise verschoben oder gehört zu einer Erweiterung, die nicht installiert ist. Unter Erweiterungen können Sie sie installieren.",
             "goToDashboard": "Gehen Sie zum Dashboard",
             "loading": "Laden",
-            "pageNotFound": "Seite nicht gefunden",
-            "weCouldnTFindItMay": "Wir konnten {{pathname}} nicht finden. Es könnte sich bewegt haben, oder es"
+            "pageNotFound": "Seite nicht gefunden"
         },
         "notifications": {
             "allCategories": "Alle Kategorien",
@@ -4404,7 +4400,7 @@
         "pageContextMap": {
             "application": "Dienst",
             "applications": "Dienste",
-            "dashboard": "Armaturenbrett",
+            "dashboard": "Dashboard",
             "fileManager": "Dateimanager",
             "fleet": "Flotte",
             "wordpress": "WordPress",
@@ -5125,7 +5121,7 @@
             "agentFleet": "Agentenflotte",
             "appMap": "App-Karte",
             "cronJobs": "Cron-Jobs",
-            "dashboard": "Armaturenbrett",
+            "dashboard": "Dashboard",
             "databaseMigration": "Datenbankmigration",
             "deploymentActivity": "Bereitstellungsaktivität",
             "dnsZones": "DNS-Zonen",
@@ -8422,7 +8418,7 @@
         "collapseGroup": "{{group}} einklappen",
         "cron": "Cron-Jobs",
         "customizeSidebar": "Seitenleiste anpassen",
-        "dashboard": "Armaturenbrett",
+        "dashboard": "Dashboard",
         "databases": "Datenbanken",
         "devTools": "Entwicklungstools",
         "docker": "Docker",
@@ -8473,7 +8469,6 @@
         "security": "Sicherheit",
         "servers": "Server",
         "services": "Dienste",
-        "sidebarView": "Seitenleistenansicht",
         "starOnGithub": "Auf GitHub einen Stern geben",
         "starOnGithubLong": "ServerKit auf GitHub einen Stern geben",
         "styleGuide": "Styleguide",

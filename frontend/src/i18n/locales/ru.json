@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "Применить и перезапустить",
+            "applyConfirmMessage": "При применении движок базы данных перезапустится, поэтому подключённые сервисы ненадолго прервут работу. Предыдущая конфигурация сохраняется в резервной копии, и её можно восстановить.",
             "applySelected": "Применить выбранное (",
             "applySettings_one": "Применить 1 настройку?",
             "applySettings_other": "Применить настройки ({{count}})?",
-            "applyingRestartsTheDatabaseEngineConnected": "Применение перезапускает ядро базы данных — подключенные сервисы увидят короткое сообщение.",
             "containerMemoryLimit": "лимит памяти контейнера",
             "dedicatedDbServer": "Выделенный сервер БД",
             "failedToApplySettings": "Не удалось применить настройки.",
             "hostTotal": "всего на хосте",
-            "interruptionThePreviousConfigurationIsBacked": "прерывание. Предыдущая конфигурация зарезервирована, и ее можно откатить.",
-            "isRestarted": "перезапускается.",
             "previousConfigurationRestored": "Предыдущая конфигурация восстановлена",
             "readingEngineConfiguration": "Чтение конфигурации двигателя…",
             "rollBackAndRestart": "Откатиться и перезапустить",
             "rollBackLastApply": "Откатить последнее применение",
             "rollBackToThePreviousConfiguration": "Откатиться к предыдущей конфигурации?",
+            "rollbackConfirmMessage": "Восстанавливается последняя сохранённая конфигурация, и движок базы данных перезапускается.",
             "rollbackFailed": "Откат не удался",
             "select": "Выбрать",
             "select2": "Выберите {{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "Предложенный",
             "suggestionsBasedOnRam": "Рекомендации основаны на {{ram}} МБ ОЗУ ({{source}}). Ничего не применяется, пока вы не решите.",
             "targetValue": "Целевое значение",
-            "targetValueFor": "Целевое значение для {{key}}",
-            "theLastBackedUpConfigurationIs": "Последняя резервная копия конфигурации восстанавливается, и ядро базы данных"
+            "targetValueFor": "Целевое значение для {{key}}"
         },
         "confirmActionCard": {
             "approveRun": "Утвердить и запустить",
@@ -4184,13 +4182,11 @@
             "uploading": "Загрузка…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "принадлежит расширению, которое не установлено. Проверять",
             "browseExtensions": "Просмотр расширений",
-            "extensionsToInstallIt": "Расширения для его установки.",
+            "description": "Не удалось найти {{pathname}}. Возможно, страница перемещена или относится к неустановленному расширению. Установите его в разделе «Расширения».",
             "goToDashboard": "Перейти на панель управления",
             "loading": "Загрузка",
-            "pageNotFound": "Страница не найдена",
-            "weCouldnTFindItMay": "Нам не удалось найти {{pathname}}. Возможно, он сдвинулся или"
+            "pageNotFound": "Страница не найдена"
         },
         "notifications": {
             "allCategories": "Все категории",
@@ -8473,7 +8469,6 @@
         "security": "Безопасность",
         "servers": "Серверы",
         "services": "Сервисы",
-        "sidebarView": "Вид боковой панели",
         "starOnGithub": "Поставить звезду на GitHub",
         "starOnGithubLong": "Поставить звезду ServerKit на GitHub",
         "styleGuide": "Руководство по стилю",

@@ -35,11 +35,7 @@ export default function NotFound() {
             <EmptyState
                 icon={FileQuestion}
                 title={t('app.notFound.pageNotFound', 'Page not found')}
-                description={
-                    t('app.notFound.weCouldnTFindItMay', 'We couldn\'t find {{pathname}}. It may have moved, or it', { pathname: location.pathname })
-                    + t('app.notFound.belongsToAnExtensionThatIsn', 'belongs to an extension that isn\'t installed. Check', {  })
-                    + t('app.notFound.extensionsToInstallIt', 'Extensions to install it.', {  })
-                }
+                description={t('app.notFound.description', 'We couldn\'t find {{pathname}}. It may have moved, or it belongs to an extension that isn\'t installed. Check Extensions to install it.', { pathname: location.pathname })}
                 action={(
                     <div className="not-found__actions">
                         <Button onClick={() => navigate('/')}>

@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "สมัครและรีสตาร์ท",
+            "applyConfirmMessage": "การนำไปใช้จะรีสตาร์ทเอนจินฐานข้อมูล บริการที่เชื่อมต่ออยู่จะหยุดชะงักชั่วครู่ การกำหนดค่าก่อนหน้าจะถูกสำรองไว้และสามารถย้อนกลับได้",
             "applySelected": "ใช้ที่เลือก (",
             "applySettings_one": "นำการตั้งค่า 1 รายการไปใช้หรือไม่?",
             "applySettings_other": "นำการตั้งค่า {{count}} รายการไปใช้หรือไม่?",
-            "applyingRestartsTheDatabaseEngineConnected": "การใช้การรีสตาร์ทกลไกฐานข้อมูล - บริการที่เชื่อมต่อจะเห็นข้อความสั้น",
             "containerMemoryLimit": "ขีดจำกัดหน่วยความจำของคอนเทนเนอร์",
             "dedicatedDbServer": "เซิร์ฟเวอร์ฐานข้อมูลเฉพาะ",
             "failedToApplySettings": "ล้มเหลวในการใช้การตั้งค่า",
             "hostTotal": "ทั้งหมดของโฮสต์",
-            "interruptionThePreviousConfigurationIsBacked": "การหยุดชะงัก การกำหนดค่าก่อนหน้านี้ได้รับการสำรองข้อมูลไว้แล้วและสามารถย้อนกลับได้",
-            "isRestarted": "ถูกรีสตาร์ท",
             "previousConfigurationRestored": "คืนค่าการกำหนดค่าก่อนหน้าแล้ว",
             "readingEngineConfiguration": "กำลังอ่านการกำหนดค่ากลไก...",
             "rollBackAndRestart": "ย้อนกลับและรีสตาร์ท",
             "rollBackLastApply": "ย้อนกลับไปใช้ครั้งล่าสุด",
             "rollBackToThePreviousConfiguration": "ย้อนกลับไปใช้การกำหนดค่าก่อนหน้าหรือไม่",
+            "rollbackConfirmMessage": "การกำหนดค่าที่สำรองไว้ล่าสุดจะถูกกู้คืน และเอนจินฐานข้อมูลจะรีสตาร์ท",
             "rollbackFailed": "การย้อนกลับล้มเหลว",
             "select": "เลือก",
             "select2": "เลือก {{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "แนะนำ",
             "suggestionsBasedOnRam": "คำแนะนำอิงจาก RAM {{ram}} MB ({{source}}) จะไม่มีการเปลี่ยนแปลงใดจนกว่าคุณจะเลือกนำไปใช้",
             "targetValue": "ค่าเป้าหมาย",
-            "targetValueFor": "ค่าเป้าหมายสำหรับ {{key}}",
-            "theLastBackedUpConfigurationIs": "การกำหนดค่าที่สำรองข้อมูลไว้ครั้งล่าสุดจะถูกเรียกคืนและกลไกฐานข้อมูล"
+            "targetValueFor": "ค่าเป้าหมายสำหรับ {{key}}"
         },
         "confirmActionCard": {
             "approveRun": "อนุมัติและดำเนินการ",
@@ -4184,13 +4182,11 @@
             "uploading": "กำลังอัปโหลด…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "เป็นของส่วนขยายที่ไม่ได้ติดตั้ง ตรวจสอบ",
             "browseExtensions": "เรียกดูส่วนขยาย",
-            "extensionsToInstallIt": "ส่วนขยายที่จะติดตั้ง",
+            "description": "ไม่พบ {{pathname}} หน้านี้อาจถูกย้าย หรือเป็นของส่วนขยายที่ยังไม่ได้ติดตั้ง ไปที่ส่วนขยายเพื่อติดตั้ง",
             "goToDashboard": "ไปที่แดชบอร์ด",
             "loading": "กำลังโหลด",
-            "pageNotFound": "ไม่พบหน้า",
-            "weCouldnTFindItMay": "เราไม่พบ {{pathname}}. มันอาจจะย้ายหรือมัน"
+            "pageNotFound": "ไม่พบหน้า"
         },
         "notifications": {
             "allCategories": "ทุกหมวดหมู่",
@@ -8473,7 +8469,6 @@
         "security": "ความปลอดภัย",
         "servers": "เซิร์ฟเวอร์",
         "services": "บริการ",
-        "sidebarView": "มุมมองแถบด้านข้าง",
         "starOnGithub": "ติดดาวบน GitHub",
         "starOnGithubLong": "ติดดาว ServerKit บน GitHub",
         "styleGuide": "คู่มือสไตล์",

@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "套用並重新啟動",
+            "applyConfirmMessage": "套用後將重新啟動資料庫引擎，已連線的服務會短暫中斷。先前的設定已備份，可以復原。",
             "applySelected": "套用所選設定 (",
             "applySettings_one": "套用 1 項設定？",
             "applySettings_other": "套用 {{count}} 項設定？",
-            "applyingRestartsTheDatabaseEngineConnected": "套用後會重新啟動資料庫引擎，已連線的服務將短暫",
             "containerMemoryLimit": "容器記憶體上限",
             "dedicatedDbServer": "專用資料庫伺服器",
             "failedToApplySettings": "無法套用設定",
             "hostTotal": "主機總量",
-            "interruptionThePreviousConfigurationIsBacked": "中斷。先前的設定已備份，可隨時回復。",
-            "isRestarted": "重新啟動。",
             "previousConfigurationRestored": "還原之前的設定",
             "readingEngineConfiguration": "正在讀取引擎設定…",
             "rollBackAndRestart": "回復並重新啟動",
             "rollBackLastApply": "回復上次應用",
             "rollBackToThePreviousConfiguration": "回復到之前的設定？",
+            "rollbackConfirmMessage": "將還原最近一次備份的設定，並重新啟動資料庫引擎。",
             "rollbackFailed": "復原失敗",
             "select": "選擇",
             "select2": "選擇{{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "建議",
             "suggestionsBasedOnRam": "建議值以 {{ram}} MB 的 RAM 為依據（{{source}}）。在您選擇套用之前，不會變更任何設定。",
             "targetValue": "目標值",
-            "targetValueFor": "{{key}} 的目標值",
-            "theLastBackedUpConfigurationIs": "系統會還原最近備份的設定，資料庫引擎也會"
+            "targetValueFor": "{{key}} 的目標值"
         },
         "confirmActionCard": {
             "approveRun": "批准並執行",
@@ -4184,13 +4182,11 @@
             "uploading": "正在上傳…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "屬於未安裝的擴充功能。檢視",
             "browseExtensions": "瀏覽擴充",
-            "extensionsToInstallIt": "安裝它的擴充功能。",
+            "description": "找不到 {{pathname}}。此頁面可能已移動，或屬於尚未安裝的擴充。請前往「擴充」進行安裝。",
             "goToDashboard": "轉到儀表板",
             "loading": "載入中",
-            "pageNotFound": "找不到頁面",
-            "weCouldnTFindItMay": "我們找不到 {{pathname}}。它可能已經移動了，或者它"
+            "pageNotFound": "找不到頁面"
         },
         "notifications": {
             "allCategories": "所有類別",
@@ -8473,7 +8469,6 @@
         "security": "安全",
         "servers": "伺服器",
         "services": "服務",
-        "sidebarView": "側邊欄檢視",
         "starOnGithub": "在 GitHub 加星",
         "starOnGithubLong": "在 GitHub 為 ServerKit 加星",
         "styleGuide": "風格指南",

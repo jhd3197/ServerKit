@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "আবেদন করুন এবং পুনরায় চালু করুন",
+            "applyConfirmMessage": "প্রয়োগ করলে ডেটাবেস ইঞ্জিন রিস্টার্ট হবে, তাই সংযুক্ত পরিষেবাগুলোতে অল্প সময়ের বিঘ্ন ঘটবে। আগের কনফিগারেশনের ব্যাকআপ রাখা হয় এবং তা ফিরিয়ে আনা যায়।",
             "applySelected": "নির্বাচিত আবেদন করুন (",
             "applySettings_one": "1টি সেটিং প্রয়োগ করবেন?",
             "applySettings_other": "{{count}}টি সেটিং প্রয়োগ করবেন?",
-            "applyingRestartsTheDatabaseEngineConnected": "প্রয়োগ করা ডাটাবেস ইঞ্জিন পুনরায় চালু করে — সংযুক্ত পরিষেবাগুলি একটি সংক্ষিপ্ত দেখতে পাবে",
             "containerMemoryLimit": "কন্টেইনারের মেমরি সীমা",
             "dedicatedDbServer": "ডেডিকেটেড ডিবি সার্ভার",
             "failedToApplySettings": "সেটিংস প্রয়োগ করতে ব্যর্থ হয়েছে৷",
             "hostTotal": "হোস্টের মোট",
-            "interruptionThePreviousConfigurationIsBacked": "বাধা পূর্ববর্তী কনফিগারেশনটি ব্যাক আপ করা হয়েছে এবং এটি রোল ব্যাক করা যেতে পারে।",
-            "isRestarted": "পুনরায় চালু করা হয়।",
             "previousConfigurationRestored": "পূর্ববর্তী কনফিগারেশন পুনরুদ্ধার করা হয়েছে",
             "readingEngineConfiguration": "ইঞ্জিন কনফিগারেশন পড়া হচ্ছে...",
             "rollBackAndRestart": "রোল ব্যাক এবং রিস্টার্ট করুন",
             "rollBackLastApply": "রোল ব্যাক শেষ আবেদন",
             "rollBackToThePreviousConfiguration": "আগের কনফিগারেশনে ফিরে যাবেন?",
+            "rollbackConfirmMessage": "সর্বশেষ ব্যাকআপ করা কনফিগারেশন পুনরুদ্ধার করা হয় এবং ডেটাবেস ইঞ্জিন রিস্টার্ট হয়।",
             "rollbackFailed": "রোলব্যাক ব্যর্থ হয়েছে৷",
             "select": "নির্বাচন করুন",
             "select2": "{{key}} নির্বাচন করুন",
@@ -1116,8 +1115,7 @@
             "suggested": "প্রস্তাবিত",
             "suggestionsBasedOnRam": "পরামর্শগুলি {{ram}} MB RAM ({{source}})-এর উপর ভিত্তি করে। আপনি না চাওয়া পর্যন্ত কিছুই প্রয়োগ করা হবে না।",
             "targetValue": "লক্ষ্য মান",
-            "targetValueFor": "{{key}} এর লক্ষ্য মান",
-            "theLastBackedUpConfigurationIs": "শেষ ব্যাক-আপ কনফিগারেশন পুনরুদ্ধার করা হয় এবং ডাটাবেস ইঞ্জিন"
+            "targetValueFor": "{{key}} এর লক্ষ্য মান"
         },
         "confirmActionCard": {
             "approveRun": "অনুমোদন এবং চালান",
@@ -4184,13 +4182,11 @@
             "uploading": "আপলোড হচ্ছে…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "ইনস্টল করা নেই এমন একটি এক্সটেনশনের অন্তর্গত। চেক করুন",
             "browseExtensions": "এক্সটেনশন ব্রাউজ করুন",
-            "extensionsToInstallIt": "এটি ইনস্টল করার জন্য এক্সটেনশন।",
+            "description": "{{pathname}} খুঁজে পাওয়া যায়নি। এটি হয়তো সরানো হয়েছে, অথবা এটি এমন একটি এক্সটেনশনের অংশ যা ইনস্টল করা নেই। ইনস্টল করতে এক্সটেনশন দেখুন।",
             "goToDashboard": "ড্যাশবোর্ডে যান",
             "loading": "লোড হচ্ছে",
-            "pageNotFound": "পেজ পাওয়া যায়নি",
-            "weCouldnTFindItMay": "আমরা {{pathname}} খুঁজে পাইনি। এটা সরানো হতে পারে, বা এটা"
+            "pageNotFound": "পেজ পাওয়া যায়নি"
         },
         "notifications": {
             "allCategories": "সমস্ত বিভাগ",
@@ -8473,7 +8469,6 @@
         "security": "নিরাপত্তা",
         "servers": "সার্ভার",
         "services": "পরিষেবা",
-        "sidebarView": "সাইডবার ভিউ",
         "starOnGithub": "GitHub-এ স্টার দিন",
         "starOnGithubLong": "GitHub এ স্টার ServerKit",
         "styleGuide": "স্টাইল গাইড",

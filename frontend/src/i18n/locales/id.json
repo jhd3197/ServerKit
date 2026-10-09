@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "Terapkan dan mulai ulang",
+            "applyConfirmMessage": "Menerapkan akan memulai ulang mesin basis data, sehingga layanan yang terhubung akan mengalami gangguan singkat. Konfigurasi sebelumnya dicadangkan dan dapat dipulihkan.",
             "applySelected": "Terapkan yang dipilih (",
             "applySettings_one": "Terapkan 1 pengaturan?",
             "applySettings_other": "Terapkan {{count}} pengaturan?",
-            "applyingRestartsTheDatabaseEngineConnected": "Menerapkan restart mesin database — layanan yang terhubung akan melihat short",
             "containerMemoryLimit": "batas memori kontainer",
             "dedicatedDbServer": "Server DB khusus",
             "failedToApplySettings": "Gagal menerapkan pengaturan",
             "hostTotal": "total host",
-            "interruptionThePreviousConfigurationIsBacked": "gangguan. Konfigurasi sebelumnya telah dicadangkan dan dapat dibatalkan.",
-            "isRestarted": "dimulai ulang.",
             "previousConfigurationRestored": "Konfigurasi sebelumnya dipulihkan",
             "readingEngineConfiguration": "Membaca konfigurasi mesin…",
             "rollBackAndRestart": "Putar kembali dan mulai ulang",
             "rollBackLastApply": "Putar kembali penerapan terakhir",
             "rollBackToThePreviousConfiguration": "Kembalikan ke konfigurasi sebelumnya?",
+            "rollbackConfirmMessage": "Konfigurasi terakhir yang dicadangkan dipulihkan dan mesin basis data dimulai ulang.",
             "rollbackFailed": "Pengembalian gagal",
             "select": "Memilih",
             "select2": "Pilih {{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "Disarankan",
             "suggestionsBasedOnRam": "Saran didasarkan pada {{ram}} MB RAM ({{source}}). Tidak ada yang diterapkan sampai Anda memilih untuk menerapkannya.",
             "targetValue": "Nilai sasaran",
-            "targetValueFor": "Nilai target untuk {{key}}",
-            "theLastBackedUpConfigurationIs": "Konfigurasi cadangan terakhir dipulihkan dan mesin basis data"
+            "targetValueFor": "Nilai target untuk {{key}}"
         },
         "confirmActionCard": {
             "approveRun": "Setujui & jalankan",
@@ -4184,13 +4182,11 @@
             "uploading": "Mengunggah…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "milik ekstensi yang tidak dipasang. Memeriksa",
             "browseExtensions": "Telusuri Ekstensi",
-            "extensionsToInstallIt": "Ekstensi untuk menginstalnya.",
+            "description": "Kami tidak dapat menemukan {{pathname}}. Halaman ini mungkin sudah dipindahkan, atau milik ekstensi yang belum dipasang. Buka Ekstensi untuk memasangnya.",
             "goToDashboard": "Buka dasbor",
             "loading": "Memuat",
-            "pageNotFound": "Halaman tidak ditemukan",
-            "weCouldnTFindItMay": "Kami tidak dapat menemukan {{pathname}}. Mungkin sudah pindah, atau memang begitu"
+            "pageNotFound": "Halaman tidak ditemukan"
         },
         "notifications": {
             "allCategories": "Semua kategori",
@@ -8473,7 +8469,6 @@
         "security": "Keamanan",
         "servers": "Server",
         "services": "Layanan",
-        "sidebarView": "Tampilan Bilah Samping",
         "starOnGithub": "Bintangi di GitHub",
         "starOnGithubLong": "Bintangi ServerKit di GitHub",
         "styleGuide": "Panduan Gaya",

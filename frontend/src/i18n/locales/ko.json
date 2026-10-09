@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "적용하고 다시 시작하세요",
+            "applyConfirmMessage": "적용하면 데이터베이스 엔진이 다시 시작되므로 연결된 서비스가 잠시 중단됩니다. 이전 구성은 백업되며 롤백할 수 있습니다.",
             "applySelected": "선택 항목 적용(",
             "applySettings_one": "설정 1개를 적용하시겠습니까?",
             "applySettings_other": "설정 {{count}}개를 적용하시겠습니까?",
-            "applyingRestartsTheDatabaseEngineConnected": "적용하면 데이터베이스 엔진이 다시 시작됩니다. 연결된 서비스에는 짧은 메시지가 표시됩니다. ",
             "containerMemoryLimit": "컨테이너 메모리 제한",
             "dedicatedDbServer": "전용 DB 서버",
             "failedToApplySettings": "설정을 적용하지 못했습니다.",
             "hostTotal": "호스트 전체",
-            "interruptionThePreviousConfigurationIsBacked": "중단. 이전 구성이 백업되어 롤백이 가능합니다.",
-            "isRestarted": "다시 시작됩니다.",
             "previousConfigurationRestored": "이전 구성이 복원되었습니다.",
             "readingEngineConfiguration": "엔진 구성을 읽는 중…",
             "rollBackAndRestart": "롤백하고 다시 시작",
             "rollBackLastApply": "마지막 적용 롤백",
             "rollBackToThePreviousConfiguration": "이전 구성으로 롤백하시겠습니까?",
+            "rollbackConfirmMessage": "마지막으로 백업된 구성이 복원되고 데이터베이스 엔진이 다시 시작됩니다.",
             "rollbackFailed": "롤백 실패",
             "select": "선택",
             "select2": "{{key}}를 선택하세요",
@@ -1116,8 +1115,7 @@
             "suggested": "제안",
             "suggestionsBasedOnRam": "제안은 {{ram}} MB RAM({{source}})을 기준으로 합니다. 직접 선택하기 전까지는 아무것도 적용되지 않습니다.",
             "targetValue": "목표값",
-            "targetValueFor": "{{key}}의 목표 값",
-            "theLastBackedUpConfigurationIs": "마지막으로 백업된 구성이 복원되고 데이터베이스 엔진이 "
+            "targetValueFor": "{{key}}의 목표 값"
         },
         "confirmActionCard": {
             "approveRun": "승인 및 실행",
@@ -4184,13 +4182,11 @@
             "uploading": "업로드 중…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "설치되지 않은 확장 프로그램에 속합니다. 확인",
             "browseExtensions": "확장 프로그램 찾아보기",
-            "extensionsToInstallIt": "설치하기 위한 확장 프로그램입니다.",
+            "description": "{{pathname}}을(를) 찾을 수 없습니다. 이동되었거나 설치되지 않은 확장 프로그램에 속한 페이지일 수 있습니다. 확장 프로그램에서 설치하세요.",
             "goToDashboard": "대시보드로 이동",
             "loading": "로드 중",
-            "pageNotFound": "페이지를 찾을 수 없습니다",
-            "weCouldnTFindItMay": "{{pathname}}을(를) 찾을 수 없습니다. 움직였을 수도 있고, 아니면"
+            "pageNotFound": "페이지를 찾을 수 없습니다"
         },
         "notifications": {
             "allCategories": "모든 카테고리",
@@ -8473,7 +8469,6 @@
         "security": "보안",
         "servers": "서버",
         "services": "서비스",
-        "sidebarView": "사이드바 보기",
         "starOnGithub": "GitHub에서 스타 주기",
         "starOnGithubLong": "GitHub에서 ServerKit에 스타 주기",
         "styleGuide": "스타일 가이드",

@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "Zastosuj i uruchom ponownie",
+            "applyConfirmMessage": "Zastosowanie zmian uruchamia ponownie silnik bazy danych, więc połączone usługi zostaną na chwilę przerwane. Poprzednia konfiguracja jest zapisywana w kopii zapasowej i można ją przywrócić.",
             "applySelected": "Zastosuj wybrane (",
             "applySettings_one": "Zastosować 1 ustawienie?",
             "applySettings_other": "Zastosować ustawienia ({{count}})?",
-            "applyingRestartsTheDatabaseEngineConnected": "Zastosowanie powoduje ponowne uruchomienie silnika bazy danych — połączone usługi zobaczą krótki komunikat",
             "containerMemoryLimit": "limit pamięci kontenera",
             "dedicatedDbServer": "Dedykowany serwer DB",
             "failedToApplySettings": "Nie udało się zastosować ustawień",
             "hostTotal": "łącznie na hoście",
-            "interruptionThePreviousConfigurationIsBacked": "przerwanie. Kopia zapasowa poprzedniej konfiguracji zostanie utworzona i można ją przywrócić.",
-            "isRestarted": "zostaje uruchomiony ponownie.",
             "previousConfigurationRestored": "Przywrócono poprzednią konfigurację",
             "readingEngineConfiguration": "Odczytywanie konfiguracji silnika…",
             "rollBackAndRestart": "Cofnij się i uruchom ponownie",
             "rollBackLastApply": "Cofnij ostatnie zastosowanie",
             "rollBackToThePreviousConfiguration": "Przywrócić poprzednią konfigurację?",
+            "rollbackConfirmMessage": "Ostatnia zapisana konfiguracja zostaje przywrócona, a silnik bazy danych uruchomiony ponownie.",
             "rollbackFailed": "Wycofanie nie powiodło się",
             "select": "Wybierać",
             "select2": "Wybierz {{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "Sugerowane",
             "suggestionsBasedOnRam": "Sugestie opierają się na {{ram}} MB RAM ({{source}}). Nic nie zostanie zastosowane, dopóki tego nie wybierzesz.",
             "targetValue": "Wartość docelowa",
-            "targetValueFor": "Wartość docelowa dla {{key}}",
-            "theLastBackedUpConfigurationIs": "Przywrócona zostanie ostatnia konfiguracja z kopii zapasowej i silnik bazy danych"
+            "targetValueFor": "Wartość docelowa dla {{key}}"
         },
         "confirmActionCard": {
             "approveRun": "Zatwierdź i uruchom",
@@ -4184,13 +4182,11 @@
             "uploading": "Przesyłanie…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "należy do rozszerzenia, które nie jest zainstalowane. Sprawdzać",
             "browseExtensions": "Przeglądaj rozszerzenia",
-            "extensionsToInstallIt": "Rozszerzenia, aby go zainstalować.",
+            "description": "Nie znaleziono {{pathname}}. Strona mogła zostać przeniesiona lub należy do rozszerzenia, które nie jest zainstalowane. Przejdź do Rozszerzeń, aby je zainstalować.",
             "goToDashboard": "Przejdź do pulpitu nawigacyjnego",
             "loading": "Załadunek",
-            "pageNotFound": "Nie znaleziono strony",
-            "weCouldnTFindItMay": "Nie mogliśmy znaleźć {{pathname}}. Być może się poruszył, albo tak"
+            "pageNotFound": "Nie znaleziono strony"
         },
         "notifications": {
             "allCategories": "Wszystkie kategorie",
@@ -8473,7 +8469,6 @@
         "security": "Bezpieczeństwo",
         "servers": "Serwery",
         "services": "Usługi",
-        "sidebarView": "Widok paska bocznego",
         "starOnGithub": "Oznacz gwiazdką na GitHubie",
         "starOnGithubLong": "Oznacz ServerKit gwiazdką na GitHubie",
         "styleGuide": "Przewodnik po stylu",

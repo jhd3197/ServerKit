@@ -75,8 +75,7 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
         if (!selectedKeys.length) return;
         const ok = await confirm({
             title: t('app.configTunerPanel.applySettings', { count: selectedKeys.length, defaultValue_one: 'Apply 1 setting?', defaultValue_other: 'Apply {{count}} settings?' }),
-            message: t('app.configTunerPanel.applyingRestartsTheDatabaseEngineConnected', 'Applying restarts the database engine, so connected services will see a short ')
-                + t('app.configTunerPanel.interruptionThePreviousConfigurationIsBacked', 'interruption. The previous configuration is backed up and can be rolled back.'),
+            message: t('app.configTunerPanel.applyConfirmMessage', 'Applying restarts the database engine, so connected services will see a short interruption. The previous configuration is backed up and can be rolled back.'),
             confirmText: t('app.configTunerPanel.applyAndRestart', 'Apply and restart'),
             danger: true,
         });
@@ -101,8 +100,7 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
     async function rollback() {
         const ok = await confirm({
             title: t('app.configTunerPanel.rollBackToThePreviousConfiguration', 'Roll back to the previous configuration?'),
-            message: t('app.configTunerPanel.theLastBackedUpConfigurationIs', 'The last backed-up configuration is restored and the database engine ')
-                + t('app.configTunerPanel.isRestarted', 'is restarted.'),
+            message: t('app.configTunerPanel.rollbackConfirmMessage', 'The last backed-up configuration is restored and the database engine is restarted.'),
             confirmText: t('app.configTunerPanel.rollBackAndRestart', 'Roll back and restart'),
             danger: true,
         });

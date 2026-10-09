@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "应用并重启",
+            "applyConfirmMessage": "应用后将重启数据库引擎，已连接的服务会短暂中断。之前的配置已备份，可以回滚。",
             "applySelected": "应用选定的 (",
             "applySettings_one": "应用 1 项设置？",
             "applySettings_other": "应用 {{count}} 项设置？",
-            "applyingRestartsTheDatabaseEngineConnected": "应用重新启动数据库引擎 - 连接的服务将看到一个短暂的",
             "containerMemoryLimit": "容器内存限制",
             "dedicatedDbServer": "专用数据库服务器",
             "failedToApplySettings": "无法应用设置",
             "hostTotal": "主机总量",
-            "interruptionThePreviousConfigurationIsBacked": "中断。之前的配置已备份并且可以回滚。",
-            "isRestarted": "已重新启动。",
             "previousConfigurationRestored": "恢复之前的配置",
             "readingEngineConfiguration": "正在读取引擎配置...",
             "rollBackAndRestart": "回滚并重新启动",
             "rollBackLastApply": "回滚上次应用",
             "rollBackToThePreviousConfiguration": "回滚到之前的配置？",
+            "rollbackConfirmMessage": "将恢复最近一次备份的配置，并重启数据库引擎。",
             "rollbackFailed": "回滚失败",
             "select": "选择",
             "select2": "选择{{key}}",
@@ -1116,8 +1115,7 @@
             "suggested": "建议",
             "suggestionsBasedOnRam": "建议基于 {{ram}} MB 内存（{{source}}）。在您选择之前，不会应用任何内容。",
             "targetValue": "目标值",
-            "targetValueFor": "{{key}} 的目标值",
-            "theLastBackedUpConfigurationIs": "恢复最后备份的配置并恢复数据库引擎"
+            "targetValueFor": "{{key}} 的目标值"
         },
         "confirmActionCard": {
             "approveRun": "批准并运行",
@@ -4184,13 +4182,11 @@
             "uploading": "正在上传…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "属于未安装的扩展。查看",
             "browseExtensions": "浏览扩展",
-            "extensionsToInstallIt": "安装它的扩展。",
+            "description": "找不到 {{pathname}}。该页面可能已被移动，或属于尚未安装的扩展。请前往“扩展”进行安装。",
             "goToDashboard": "转到仪表板",
             "loading": "加载中",
-            "pageNotFound": "找不到页面",
-            "weCouldnTFindItMay": "我们找不到 {{pathname}}。它可能已经移动了，或者它"
+            "pageNotFound": "找不到页面"
         },
         "notifications": {
             "allCategories": "所有类别",
@@ -8473,7 +8469,6 @@
         "security": "安全",
         "servers": "服务器",
         "services": "服务",
-        "sidebarView": "侧边栏视图",
         "starOnGithub": "在 GitHub 上加星标",
         "starOnGithubLong": "在 GitHub 上为 ServerKit 加星标",
         "styleGuide": "样式指南",

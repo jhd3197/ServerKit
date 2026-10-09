@@ -1093,21 +1093,20 @@
         },
         "configTunerPanel": {
             "applyAndRestart": "Uygula ve yeniden başlat",
+            "applyConfirmMessage": "Uygulamak veritabanı motorunu yeniden başlatır, bu nedenle bağlı hizmetlerde kısa bir kesinti olur. Önceki yapılandırma yedeklenir ve geri alınabilir.",
             "applySelected": "Seçileni uygula (",
             "applySettings_one": "1 ayar uygulansın mı?",
             "applySettings_other": "{{count}} ayar uygulansın mı?",
-            "applyingRestartsTheDatabaseEngineConnected": "Uygulama veritabanı motorunu yeniden başlatır; bağlı hizmetler kısa bir süre görür",
             "containerMemoryLimit": "kapsayıcı bellek limiti",
             "dedicatedDbServer": "Özel DB sunucusu",
             "failedToApplySettings": "Ayarlar uygulanamadı",
             "hostTotal": "ana makine toplamı",
-            "interruptionThePreviousConfigurationIsBacked": "kesinti. Önceki yapılandırma yedeklenir ve geri alınabilir.",
-            "isRestarted": "yeniden başlatılır.",
             "previousConfigurationRestored": "Önceki yapılandırma geri yüklendi",
             "readingEngineConfiguration": "Motor konfigürasyonu okunuyor…",
             "rollBackAndRestart": "Geri alın ve yeniden başlatın",
             "rollBackLastApply": "Son uygulamayı geri al",
             "rollBackToThePreviousConfiguration": "Önceki yapılandırmaya geri dönülsün mü?",
+            "rollbackConfirmMessage": "Son yedeklenen yapılandırma geri yüklenir ve veritabanı motoru yeniden başlatılır.",
             "rollbackFailed": "Geri alma başarısız oldu",
             "select": "Seçme",
             "select2": "{{key}}'yi seçin",
@@ -1116,8 +1115,7 @@
             "suggested": "Önerilen",
             "suggestionsBasedOnRam": "Öneriler {{ram}} MB RAM'e dayanıyor ({{source}}). Siz seçene kadar hiçbir şey uygulanmaz.",
             "targetValue": "Hedef değer",
-            "targetValueFor": "{{key}} için hedef değer",
-            "theLastBackedUpConfigurationIs": "En son yedeklenen yapılandırma geri yüklenir ve veritabanı motoru"
+            "targetValueFor": "{{key}} için hedef değer"
         },
         "confirmActionCard": {
             "approveRun": "Onayla ve çalıştır",
@@ -4184,13 +4182,11 @@
             "uploading": "Yükleniyor…"
         },
         "notFound": {
-            "belongsToAnExtensionThatIsn": "yüklü olmayan bir uzantıya ait. Kontrol etmek",
             "browseExtensions": "Uzantılara Göz Atın",
-            "extensionsToInstallIt": "Yüklemek için uzantılar.",
+            "description": "{{pathname}} bulunamadı. Taşınmış olabilir ya da yüklü olmayan bir uzantıya ait olabilir. Yüklemek için Uzantılar'a gidin.",
             "goToDashboard": "Kontrol paneline git",
             "loading": "Yükleniyor",
-            "pageNotFound": "Sayfa bulunamadı",
-            "weCouldnTFindItMay": "{{pathname}}'yi bulamadık. Taşınmış olabilir veya"
+            "pageNotFound": "Sayfa bulunamadı"
         },
         "notifications": {
             "allCategories": "Tüm kategoriler",
@@ -8473,7 +8469,6 @@
         "security": "Güvenlik",
         "servers": "Sunucular",
         "services": "Hizmetler",
-        "sidebarView": "Kenar Çubuğu Görünümü",
         "starOnGithub": "GitHub'da yıldızla",
         "starOnGithubLong": "GitHub üzerinde ServerKit yıldızını işaretleyin",
         "styleGuide": "Stil Kılavuzu",
