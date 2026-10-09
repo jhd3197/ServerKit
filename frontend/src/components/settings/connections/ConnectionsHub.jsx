@@ -82,7 +82,12 @@ export default function ConnectionsHub() {
                 soft('dns', api.getEmailDNSProviders().then((d) => d.providers || []), []),
                 soft('cloud', api.getCloudProviders().then((d) => d.providers || []), []),
                 soft('storage', api.getStorageConfig(), null),
-                soft('email', api.getEmailRelay(), null),
+                // The relay endpoint belongs to the Email extension: a 404 means
+                // it isn't installed (no relay), not that the read failed.
+                soft('email', api.getEmailRelay().catch((err) => {
+                    if (err?.status === 404) return null;
+                    throw err;
+                }), null),
                 soft('registrar', api.getRegistrarConnections().then((d) => d.connections || []), []),
                 soft('registrarDomains', api.getRegistrarDomains().then((d) => d.domains || []), []),
                 soft('registry', api.getContainerRegistries().then((d) => d.registries || []), []),
