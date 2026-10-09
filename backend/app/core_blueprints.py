@@ -54,6 +54,7 @@ CORE_BLUEPRINTS: tuple[BlueprintSpec, ...] = (
     BlueprintSpec('app.api.app_volumes', 'app_volumes_bp', '/api/v1/apps'),
     BlueprintSpec('app.api.app_attachments', 'app_attachments_bp', '/api/v1/apps'),
     BlueprintSpec('app.api.app_slots', 'app_slots_bp', '/api/v1/apps'),
+    BlueprintSpec('app.api.ports', 'ports_bp', '/api/v1/ports'),
     BlueprintSpec(
         'app.api.app_volumes',
         'app_volumes_bp',

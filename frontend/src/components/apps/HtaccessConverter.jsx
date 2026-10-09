@@ -4,9 +4,11 @@ import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { CopyButton } from '@/components/CopyButton';
+import { DataTable } from '../ds';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Paste-in .htaccess -> nginx converter for the per-site custom nginx rules
 // editor. Pairs with the site-import feature: imported cPanel sites carry
@@ -17,6 +19,27 @@ import { useTranslation } from 'react-i18next';
 //
 // `onInsert(nginxText)` is optional; without it the modal still offers
 // copy-to-clipboard. `trigger` overrides the default launcher button.
+// Directives the converter could not translate. A short read-only report:
+// no sorting, no column menu.
+const UNSUPPORTED_COLUMNS = [
+    {
+        key: 'line',
+        headerKey: 'app.htaccessConverter.line', header: 'Line',
+        cellClassName: 'sk-cell-dim htaccess-converter__line',
+        render: (item) => item.line,
+    },
+    {
+        key: 'directive',
+        headerKey: 'app.htaccessConverter.directive', header: 'Directive',
+        render: (item) => <code className="sk-cell-mono htaccess-converter__directive">{item.directive}</code>,
+    },
+    {
+        key: 'reason',
+        headerKey: 'app.htaccessConverter.reason', header: 'Reason',
+        render: (item) => item.reason,
+    },
+];
+
 export default function HtaccessConverter({ onInsert, trigger = null }) {
     const { t } = useTranslation();
     const toast = useToast();
@@ -32,10 +55,10 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
             const res = await api.convertHtaccess(source);
             setResult(res);
             if (!res.nginx && !(res.unsupported || []).length) {
-                toast.info(t('app.htaccessConverter.nothingToConvertNoDirectivesFound', 'Nothing to convert — no directives found.'));
+                toast.info(t('app.htaccessConverter.nothingToConvertNoDirectivesFound', 'Nothing to convert. No directives found.'));
             }
         } catch (err) {
-            toast.error(err.message || t('app.htaccessConverter.conversionFailed', 'Conversion failed'));
+            toastError(toast, t('app.htaccessConverter.conversionFailed', "Couldn't convert the file."), err);
         } finally {
             setConverting(false);
         }
@@ -44,7 +67,7 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
     const handleInsert = () => {
         if (!result?.nginx) return;
         onInsert?.(result.nginx);
-        toast.success(t('app.htaccessConverter.convertedRulesInsertedReviewBeforeSaving', 'Converted rules inserted — review before saving.'));
+        toast.success(t('app.htaccessConverter.convertedRulesInsertedReviewBeforeSaving', 'Converted rules inserted. Review before saving.'));
         handleClose();
     };
 
@@ -107,7 +130,7 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
                             onClick={handleConvert}
                             disabled={!source.trim() || converting}
                         >
-                            {converting ? 'Converting…' : 'Convert'}
+                            {converting ? t('app.htaccessConverter.converting', 'Converting…') : t('app.htaccessConverter.convert', 'Convert')}
                         </Button>
                     </div>
 
@@ -144,26 +167,15 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
                                         <AlertTriangle size={15} />
                                         <span>{t('app.htaccessConverter.notTranslated', 'Not translated (')}{unsupported.length})</span>
                                     </div>
-                                    <div className="htaccess-converter__table-wrap">
-                                        <table className="htaccess-converter__table">
-                                            <thead>
-                                                <tr>
-                                                    <th>{t('app.htaccessConverter.line', 'Line')}</th>
-                                                    <th>{t('app.htaccessConverter.directive', 'Directive')}</th>
-                                                    <th>{t('app.htaccessConverter.reason', 'Reason')}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {unsupported.map((item) => (
-                                                    <tr key={`${item.line}-${item.directive}`}>
-                                                        <td>{item.line}</td>
-                                                        <td><code>{item.directive}</code></td>
-                                                        <td>{item.reason}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <DataTable
+                                        columns={UNSUPPORTED_COLUMNS}
+                                        data={unsupported}
+                                        keyField={(item) => `${item.line}-${item.directive}`}
+                                        sortable={false}
+                                        columnMenu={false}
+                                        // The warn pane is the frame; the table runs flush in it.
+                                        className="sk-dtable-wrap--flush sk-dtable-wrap--sticky htaccess-converter__table-wrap"
+                                    />
                                 </div>
                             )}
                         </div>

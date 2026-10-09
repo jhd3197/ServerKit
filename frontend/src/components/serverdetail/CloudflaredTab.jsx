@@ -15,13 +15,15 @@ import EmptyState from '../EmptyState';
 import { Cloud } from 'lucide-react';
 import Modal from '@/components/Modal';
 import { Label } from '@/components/ui/label';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '@/components/CopyField';
+import DomainField from '@/components/DomainField';
 import { rooms } from '@/constants/events';
 import { useTranslation } from 'react-i18next';
 import {
     OfflineIcon,
     TrashIcon,
 } from './serverDetailShared';
+import { toastError } from '@/utils/errorMessage';
 
 // CloudflaredTab — manage Cloudflare named tunnels via the agent.
 //
@@ -166,7 +168,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             setCreateName('');
             loadTunnels();
         } catch (err) {
-            toast.error(err.message || t('app.cloudflaredTab.failedToCreateTunnel', 'Failed to create tunnel'));
+            toastError(toast, t('app.cloudflaredTab.failedToCreateTunnel', "Couldn't create the tunnel."), err);
         } finally {
             setCreating(false);
         }
@@ -184,7 +186,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             setRouteHostname('');
             setRouteTunnel(null);
         } catch (err) {
-            toast.error(err.message || t('app.cloudflaredTab.failedToAddRoute', 'Failed to add route'));
+            toastError(toast, t('app.cloudflaredTab.failedToAddRoute', "Couldn't add the route."), err);
         } finally {
             setRouting(false);
         }
@@ -192,8 +194,8 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
 
     async function handleDelete(tunnel) {
         const ok = await confirmCf({
-            titleKey: 'app.cloudflaredTab.deleteTunnel', title: 'Delete Tunnel',
-            message: `Delete tunnel "${tunnel.name}"? Active connections will be force-closed.`,
+            titleKey: 'app.cloudflaredTab.deleteTunnel', title: 'Delete tunnel',
+            message: t('app.cloudflaredTab.deleteTunnelMessage', 'Delete tunnel "{{name}}"? Active connections will be force-closed.', { name: tunnel.name }),
             variant: 'danger',
         });
         if (!ok) return;
@@ -202,7 +204,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             toast.success(t('app.cloudflaredTab.tunnelDeleted', 'Tunnel deleted'));
             loadTunnels();
         } catch (err) {
-            toast.error(err.message || t('app.cloudflaredTab.failedToDeleteTunnel', 'Failed to delete tunnel'));
+            toastError(toast, t('app.cloudflaredTab.failedToDeleteTunnel', "Couldn't delete the tunnel."), err);
         }
     }
 
@@ -233,7 +235,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                 if (ev.phase === 'done') {
                     if (ev.error) {
                         setLogin((cur) => cur ? { ...cur, status: 'error', error: ev.error } : cur);
-                        toast.error(t('app.cloudflaredTab.loginFailed', 'Login failed: {{error}}', { error: ev.error }));
+                        toast.error(t('app.cloudflaredTab.loginFailed', "Couldn't sign in. {{error}}", { error: ev.error }));
                     } else {
                         setLogin((cur) => cur ? { ...cur, status: 'done', certPath: ev?.extra?.cert_path } : cur);
                         toast.success(t('app.cloudflaredTab.cloudflareLoginComplete', 'Cloudflare login complete'));
@@ -248,7 +250,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             };
             stopStream = joinServerStream(room, 'server_stream', onStream);
         } catch (err) {
-            toast.error(err.message || t('app.cloudflaredTab.failedToStartLogin', 'Failed to start login'));
+            toastError(toast, t('app.cloudflaredTab.failedToStartLogin', "Couldn't start the sign-in."), err);
             setLogin(null);
         }
     }
@@ -281,7 +283,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             // UUID: pasting one out of a cloudflared log should find its row.
             type: 'text',
             value: (t) => t.id || '',
-            cellClassName: 'mono',
+            cellClassName: 'sk-cell-mono',
             render: (t) => `${(t.id || '').substring(0, 8)}…`,
         },
         {
@@ -328,7 +330,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                 const time = Date.parse(t.created_at);
                 return Number.isNaN(time) ? null : time;
             },
-            cellClassName: 'mono',
+            cellClassName: 'sk-cell-dim',
             render: (t) => (t.created_at ? new Date(t.created_at).toLocaleString() : '—'),
         },
         {
@@ -379,7 +381,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
         return (
             <div className="offline-notice">
                 <OfflineIcon />
-                <h4>{t('app.cloudflaredTab.serverOffline', 'Server Offline')}</h4>
+                <h4>{t('app.cloudflaredTab.serverOffline', 'Server offline')}</h4>
                 <p>{t('app.cloudflaredTab.tunnelManagementRequiresTheServerTo', 'Tunnel management requires the server to be online.')}</p>
             </div>
         );
@@ -403,7 +405,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                     {notInstalled ? (
                         <Pill kind="amber">{t('app.cloudflaredTab.cloudflaredNotInstalled', 'cloudflared not installed')}</Pill>
                     ) : notAuthed ? (
-                        <Pill kind="amber">{t('app.cloudflaredTab.notAuthenticatedRunCloudflaredTunnelLogin', 'not authenticated — run cloudflared tunnel login')}</Pill>
+                        <Pill kind="amber">{t('app.cloudflaredTab.notAuthenticatedRunCloudflaredTunnelLogin', 'not authenticated: run cloudflared tunnel login')}</Pill>
                     ) : (
                         <Pill kind="green">{t('app.cloudflaredTab.cloudflaredReady', 'cloudflared ready')}{status?.version ? ` (${status.version})` : ''}</Pill>
                     )}
@@ -413,7 +415,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                 <div className="cron-tab__actions">
                     <Button variant="outline" onClick={loadTunnels} disabled={notInstalled}>{t('common.actions.refresh', 'Refresh')}</Button>
                     <Button onClick={() => setShowCreateModal(true)} disabled={notInstalled || notAuthed}>
-                        {t('app.cloudflaredTab.createTunnel', 'Create Tunnel')}
+                        {t('app.cloudflaredTab.createTunnel', 'Create tunnel')}
                     </Button>
                 </div>
             </div>
@@ -433,7 +435,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                         <div className="cloudflared-login-prompt">
                             <p>
                                 {t('app.cloudflaredTab.cloudflareNeedsYouToAuthoriseThis', 'Cloudflare needs you to authorise this agent once. Click')}{' '}
-                                <strong>{t('app.cloudflaredTab.login', 'Login')}</strong> {t('app.cloudflaredTab.belowWeLlStartTheOauth', 'below — we\'ll start the OAuth flow on the server and surface the URL for you to open in your browser. Once you authorise, the agent picks up the cert.pem automatically and the rest of this tab unlocks.')}
+                                <strong>{t('app.cloudflaredTab.login', 'Login')}</strong> {t('app.cloudflaredTab.belowWeLlStartTheOauth', "below. We'll start the OAuth flow on the server and surface the URL for you to open in your browser. Once you authorise, the agent picks up the cert.pem automatically and the rest of this tab unlocks.")}
                             </p>
                             <Button onClick={handleStartLogin}>{t('app.cloudflaredTab.loginToCloudflare', 'Login to Cloudflare')}</Button>
                         </div>
@@ -450,7 +452,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                     <EmptyState
                         icon={Cloud}
                         title={t('app.cloudflaredTab.noTunnels', 'No tunnels')}
-                        description={t('app.cloudflaredTab.noTunnelsOnThisServerUse', 'No tunnels on this server. Use Create Tunnel to make one.')}
+                        description={t('app.cloudflaredTab.noTunnelsOnThisServerUse', 'No tunnels on this server. Use Create tunnel to make one.')}
                     />
                 ) : (
                     <>
@@ -481,7 +483,8 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                             sorts={sorts}
                             onSortsChange={setSorts}
                             {...chrome.tableProps}
-                            tableClassName="data-table"
+                            // .cloudflared-tab is the frame; the table runs flush in it.
+                            className="sk-dtable-wrap--flush"
                             emptyTitle="No tunnels match this view."
                             emptyMessage=""
                             footer={(
@@ -504,14 +507,14 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
             <Modal
                 open={showCreateModal}
                 onClose={() => { if (!creating) setShowCreateModal(false); }}
-                title={t('app.cloudflaredTab.createTunnel', 'Create Tunnel')}
+                title={t('app.cloudflaredTab.createTunnel', 'Create tunnel')}
             >
                 <p className="sk-modal__subtitle">
                     {t('app.cloudflaredTab.provisionsANewCloudflareTunnelOn', 'Provisions a new Cloudflare Tunnel on this server.')}
                 </p>
                 <form onSubmit={handleCreate} className="sk-form-stack">
                         <div className="sk-form-field">
-                            <Label htmlFor="cf-name">{t('app.cloudflaredTab.tunnelName', 'Tunnel Name')}</Label>
+                            <Label htmlFor="cf-name">{t('app.cloudflaredTab.tunnelName', 'Tunnel name')}</Label>
                             <Input
                                 id="cf-name"
                                 value={createName}
@@ -524,7 +527,7 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                         </div>
                         <div className="modal-actions">
                             <Button type="button" variant="outline" onClick={() => setShowCreateModal(false)} disabled={creating}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={creating}>{creating ? 'Creating…' : 'Create'}</Button>
+                            <Button type="submit" disabled={creating}>{creating ? t('app.cloudflaredTab.creating', 'Creating…') : t('common.actions.create', 'Create')}</Button>
                         </div>
                     </form>
             </Modal>
@@ -540,18 +543,18 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                 <form onSubmit={handleRoute} className="sk-form-stack">
                         <div className="sk-form-field">
                             <Label htmlFor="cf-host">{t('app.cloudflaredTab.hostname', 'Hostname')}</Label>
-                            <Input
+                            <DomainField
                                 id="cf-host"
+                                modes={['custom']}
                                 value={routeHostname}
-                                onChange={(e) => setRouteHostname(e.target.value)}
-                                placeholder="app.example.com"
-                                required
+                                onChange={setRouteHostname}
+                                hint={(name) => t('app.cloudflaredTab.routeCreatesRecord', 'Adding the route creates the Cloudflare DNS record for {{name}}.', { name })}
                                 autoFocus
                             />
                         </div>
                         <div className="modal-actions">
                             <Button type="button" variant="outline" onClick={() => setShowRouteModal(false)} disabled={routing}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={routing}>{routing ? 'Adding…' : 'Add Route'}</Button>
+                            <Button type="submit" disabled={routing || !routeHostname}>{routing ? t('app.cloudflaredTab.adding', 'Adding…') : t('app.cloudflaredTab.addRouteButton', 'Add route')}</Button>
                         </div>
                     </form>
             </Modal>
@@ -581,6 +584,7 @@ const CloudflaredLoginCard = ({ login, onCancel }) => {
                 <p>
                     <strong>{t('app.cloudflaredTab.step12', 'Step 1 / 2:')}</strong> {t('app.cloudflaredTab.openTheFollowingUrlInYour', 'open the following URL in your browser, sign in to Cloudflare, and pick the zone you want to associate with this agent.')}
                 </p>
+                <CopyField value={login.authUrl} />
                 <div className="cloudflared-login-card__actions">
                     <a
                         href={login.authUrl}
@@ -590,13 +594,6 @@ const CloudflaredLoginCard = ({ login, onCancel }) => {
                     >
                         {t('app.cloudflaredTab.openCloudflareLogin', 'Open Cloudflare login')}
                     </a>
-                    <Button variant="unstyled"
-                        type="button"
-                        className="btn btn-outline"
-                        onClick={() => copyToClipboard(login.authUrl)}
-                    >
-                        {t('app.cloudflaredTab.copyUrl', 'Copy URL')}
-                    </Button>
                 </div>
                 <p className="cloudflared-login-card__hint">
                     <strong>{t('app.cloudflaredTab.step22', 'Step 2 / 2:')}</strong> {t('app.cloudflaredTab.waitingForTheAgentToReceive', 'waiting for the agent to receive cert.pem from Cloudflare. This page will refresh automatically once authorisation completes.')}
@@ -615,7 +612,7 @@ const CloudflaredLoginCard = ({ login, onCancel }) => {
     if (login.status === 'error') {
         return (
             <div className="cloudflared-login-card cloudflared-login-card--error">
-                <strong>{t('app.cloudflaredTab.loginFailed2', 'Login failed:')}</strong> {login.error || 'unknown error'}
+                <strong>{t('app.cloudflaredTab.loginFailed2', "Couldn't sign in.")}</strong> {login.error || t('app.cloudflaredTab.unknownError', 'Unknown error.')}
                 <Button variant="outline" size="sm" onClick={onCancel}>{t('common.actions.dismiss', 'Dismiss')}</Button>
             </div>
         );

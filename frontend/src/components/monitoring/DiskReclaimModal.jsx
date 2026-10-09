@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/contexts/useToast.js';
 import { useOperations } from '@/contexts/OperationsContext';
 import formatBytes from '@/utils/formatBytes';
+import { toastError } from '@/utils/errorMessage';
 
 /**
  * Curated "safe" disk reclaim. Shows what a fresh measurement says can be
@@ -29,7 +30,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
         setError(null);
         api.getDiskReclaimReport()
             .then(setReport)
-            .catch((err) => setError(err.message || t('app.diskReclaim.couldNotMeasure', 'Could not measure reclaimable space')))
+            .catch((err) => setError(err.message || t('app.diskReclaim.couldNotMeasure', "Couldn't measure reclaimable space.")))
             .finally(() => setLoading(false));
     }, [t]);
 
@@ -58,7 +59,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
             );
             openRun('job', res.job_id);
             toast.success(
-                t('app.diskReclaim.reclaimStartedFollowProgressIn', 'Reclaim started — follow progress in Operations'),
+                t('app.diskReclaim.reclaimStartedFollowProgressIn', 'Reclaim started. Follow progress in Operations.'),
                 {
                     duration: 10000,
                     action: {
@@ -69,7 +70,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
             );
             onClose();
         } catch (err) {
-            toast.error(err.message || t('app.diskReclaim.reclaimFailed', 'Reclaim failed'));
+            toastError(toast, t('app.diskReclaim.reclaimFailed', "Couldn't reclaim space."), err);
             setRunning(false);
         }
     };
@@ -94,7 +95,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
             )}
         >
             <p className="sk-modal__subtitle">
-                {t('app.diskReclaim.onlyReviewedSafeCandidatesAreOffered', 'Only reviewed-safe cleanup is offered — upgrade snapshots beyond the newest one, abandoned update staging, oversized logs, package caches, old journal entries and Docker build cache. Nothing here touches your apps or databases.')}
+                {t('app.diskReclaim.onlyReviewedSafeCandidatesAreOffered', 'Only reviewed-safe cleanup is offered: upgrade snapshots beyond the newest one, abandoned update staging, oversized logs, package caches, old journal entries and Docker build cache. Nothing here touches your services or databases.')}
             </p>
 
             {loading ? (
@@ -108,7 +109,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
                 </div>
             ) : candidates.length === 0 ? (
                 <p className="disk-reclaim__state">
-                    {t('app.diskReclaim.nothingToReclaimRightNowTheCurated', 'Nothing to reclaim right now — the curated candidates are all clear.')}
+                    {t('app.diskReclaim.nothingToReclaimRightNowTheCurated', 'Nothing to reclaim right now. The curated candidates are all clear.')}
                 </p>
             ) : (
                 <>

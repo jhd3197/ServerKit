@@ -21,16 +21,16 @@
     padding: $space-3;
     background: $warning-bg;
     border: 1px solid $warning-border;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $warning;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // Accent-washed icon chip (discovery cards)
 .fleet-ico {
     display: inline-flex;
     padding: $space-2;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     @include status-variant(var(--accent-bright), var(--accent-bg));
 }
 
@@ -39,7 +39,7 @@
     padding: $space-3;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     text-align: center;
 
     &.is-green { background: $success-bg; border-color: $success-border; }
@@ -55,7 +55,7 @@
 // Capacity-forecast prediction tiles
 .fleet-predbox {
     padding: $space-4;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     border: 1px solid $border-default;
 
     &.is-red { background: $danger-bg; border-color: $danger-border; }
@@ -66,8 +66,8 @@
 .fleet-modal {
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
-    box-shadow: var(--shadow-lg);
+    border-radius: $radius-overlay;
+    box-shadow: $shadow-overlay;
 }
 
 // The heatmap grid that used to live here is gone: colour-coded cells were a
@@ -95,7 +95,7 @@
 
     &__note {
         margin-left: auto;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -113,18 +113,18 @@
         padding: $space-2 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         cursor: pointer;
         text-align: left;
         transition: border-color 0.12s ease;
 
         &:hover { border-color: $border-default; }
 
-        &-name { font-weight: 600; }
+        &-name { font-weight: $font-weight-semibold; }
 
         &-counts {
             margin-left: auto;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
         }
     }

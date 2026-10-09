@@ -110,7 +110,7 @@ export const CORE_WIDGET_TYPES = [
         h: 4,
         min: [4, 3],
         defaultCfg: {
-            titleKey: 'app.registry.applications', title: 'Applications',
+            titleKey: 'app.registry.applications', title: 'Services',
             source: 'services',
             limit: 6,
         },
@@ -346,7 +346,7 @@ const METRIC_TITLES = {
 };
 
 const SOURCE_TITLES = {
-    apps: 'Applications',
+    apps: 'Services',
     services: 'Services',
     servers: 'Servers',
     containers: 'Containers',

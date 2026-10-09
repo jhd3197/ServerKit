@@ -3,7 +3,10 @@ import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
 import EmptyState from '@/components/EmptyState';
+import ErrorState from '@/components/ErrorState';
 import Modal from '../Modal';
+import { InfoList, InfoItem } from '../InfoList';
+import PortField from '../PortField';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,6 +22,7 @@ import { Ban, Shield } from 'lucide-react';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
+import { errorReason } from '@/utils/errorMessage';
 
 const RULE_TYPE_TONES = {
     port: 'accent',
@@ -101,6 +105,17 @@ const FirewallTab = () => {
     const [actionLoading, setActionLoading] = useState(false);
     const [guard, setGuard] = useState(null);
     const [guardLoading, setGuardLoading] = useState(false);
+    // Per-request load failures, keyed by loader. A failed status read must not
+    // fall through to the "No firewall installed" call to action.
+    const [loadErrors, setLoadErrors] = useState({});
+    const recordLoad = useCallback((key, error) => {
+        setLoadErrors((prev) => {
+            if (!error && !prev[key]) return prev;
+            const next = { ...prev };
+            if (error) next[key] = error; else delete next[key];
+            return next;
+        });
+    }, []);
     const toast = useToast();
     const { confirm } = useConfirm();
     const { sorts, setSorts } = useTableSort({ storageKey: 'serverkit-table-firewall-rules-sort' });
@@ -124,37 +139,45 @@ const FirewallTab = () => {
         try {
             const data = await api.getFirewallStatus();
             setStatus(data);
+            recordLoad('status', null);
         } catch (error) {
             console.error('Failed to load status:', error);
+            recordLoad('status', error);
         }
-    }, []);
+    }, [recordLoad]);
 
     const loadRules = useCallback(async () => {
         try {
             const data = await api.getFirewallRules();
             setRules(data.rules || []);
+            recordLoad('rules', null);
         } catch (error) {
             console.error('Failed to load rules:', error);
+            recordLoad('rules', error);
         }
-    }, []);
+    }, [recordLoad]);
 
     const loadBlockedIPs = useCallback(async () => {
         try {
             const data = await api.getBlockedIPs();
             setBlockedIPs(data.blocked_ips || []);
+            recordLoad('blocked', null);
         } catch (error) {
             console.error('Failed to load blocked IPs:', error);
+            recordLoad('blocked', error);
         }
-    }, []);
+    }, [recordLoad]);
 
     const loadGuard = useCallback(async () => {
         try {
             const data = await api.getMetadataGuard();
             setGuard(data);
+            recordLoad('guard', null);
         } catch (error) {
             console.error('Failed to load metadata guard status:', error);
+            recordLoad('guard', error);
         }
-    }, []);
+    }, [recordLoad]);
 
     const loadData = useCallback(async () => {
         setLoading(true);
@@ -177,9 +200,11 @@ const FirewallTab = () => {
         try {
             const data = await api.setMetadataGuard(enabled);
             setGuard(data);
-            toast.success(t('app.firewallTab.cloudMetadataGuard', 'Cloud metadata guard {{value}}', { value: enabled ? 'enabled' : 'disabled' }));
+            toast.success(enabled
+                ? t('app.firewallTab.metadataGuardOn', 'Cloud metadata guard turned on')
+                : t('app.firewallTab.metadataGuardOff', 'Cloud metadata guard turned off'));
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToUpdateMetadataGuard', 'Failed to update metadata guard: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToUpdateMetadataGuard', "Couldn't update the metadata guard. {{message}}", { message: errorReason(error) }));
             await loadGuard();
         } finally {
             setGuardLoading(false);
@@ -193,7 +218,7 @@ const FirewallTab = () => {
             toast.success(t('app.firewallTab.firewallEnabled', 'Firewall enabled'));
             await loadStatus();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToEnableFirewall', 'Failed to enable firewall: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToEnableFirewall', "Couldn't turn on the firewall. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -201,8 +226,8 @@ const FirewallTab = () => {
 
     const handleDisable = async () => {
         const confirmed = await confirm({
-            title: t('app.firewallTab.disableFirewall', 'Disable Firewall'),
-            message: t('app.firewallTab.areYouSureYouWantTo', 'Are you sure you want to disable the firewall? This will leave your server unprotected.'),
+            title: t('app.firewallTab.disableFirewall', 'Disable firewall'),
+            message: t('app.firewallTab.areYouSureYouWantTo', 'Disable the firewall? This leaves your server unprotected.'),
             confirmText: t('common.actions.disable', 'Disable'),
             variant: 'danger',
         });
@@ -213,7 +238,7 @@ const FirewallTab = () => {
             toast.success(t('app.firewallTab.firewallDisabled', 'Firewall disabled'));
             await loadStatus();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToDisableFirewall', 'Failed to disable firewall: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToDisableFirewall', "Couldn't turn off the firewall. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -230,7 +255,7 @@ const FirewallTab = () => {
             await loadBlockedIPs();
             await loadRules();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToBlockIp', 'Failed to block IP: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToBlockIp', "Couldn't block the IP. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -239,7 +264,7 @@ const FirewallTab = () => {
     const handleUnblockIP = async (ip) => {
         const confirmed = await confirm({
             title: t('app.firewallTab.unblockIp', 'Unblock IP'),
-            message: t('app.firewallTab.areYouSureYouWantTo3', 'Are you sure you want to unblock {{ip}}?', { ip: ip }),
+            message: t('app.firewallTab.areYouSureYouWantTo3', 'Unblock {{ip}}? It can reach this server again.', { ip: ip }),
             confirmText: t('app.firewallTab.unblock', 'Unblock'),
             variant: 'warning',
         });
@@ -250,7 +275,7 @@ const FirewallTab = () => {
             await loadBlockedIPs();
             await loadRules();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToUnblockIp', 'Failed to unblock IP: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToUnblockIp', "Couldn't unblock the IP. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -264,7 +289,7 @@ const FirewallTab = () => {
             setNewPort({ port: '', protocol: 'tcp' });
             await loadRules();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToAllowPort', 'Failed to allow port: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToAllowPort', "Couldn't allow the port. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -277,7 +302,7 @@ const FirewallTab = () => {
             toast.success(t('app.firewallTab.portAllowed', 'Port {{port}}/{{protocol}} allowed', { port: port, protocol: protocol }));
             await loadRules();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToAllowPort', 'Failed to allow port: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToAllowPort', "Couldn't allow the port. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -285,18 +310,18 @@ const FirewallTab = () => {
 
     const handleRemovePort = async (port, protocol) => {
         const confirmed = await confirm({
-            title: t('app.firewallTab.removePortRule', 'Remove Port Rule'),
-            message: t('app.firewallTab.areYouSureYouWantTo4', 'Are you sure you want to remove the rule for port {{port}}/{{protocol}}?', { port: port, protocol: protocol }),
-            confirmText: t('common.actions.remove', 'Remove'),
+            title: t('app.firewallTab.removePortRule', 'Delete port rule'),
+            message: t('app.firewallTab.areYouSureYouWantTo4', 'Delete the rule for port {{port}}/{{protocol}}? The firewall stops applying it.', { port: port, protocol: protocol }),
+            confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',
         });
         if (!confirmed) return;
         try {
             await api.denyPort(parseInt(port), protocol);
-            toast.success(t('app.firewallTab.portRuleRemoved', 'Port {{port}}/{{protocol}} rule removed', { port: port, protocol: protocol }));
+            toast.success(t('app.firewallTab.portRuleRemoved', 'Port {{port}}/{{protocol}} rule deleted', { port: port, protocol: protocol }));
             await loadRules();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToRemovePort', 'Failed to remove port: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToRemovePort', "Couldn't delete the port rule. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -304,11 +329,11 @@ const FirewallTab = () => {
         setActionLoading(true);
         try {
             await api.installFirewall(selectedFirewall);
-            toast.success(t('app.firewallTab.installedSuccessfully', '{{value}} installed successfully', { value: selectedFirewall.toUpperCase() }));
+            toast.success(t('app.firewallTab.installedSuccessfully', '{{value}} installed', { value: selectedFirewall.toUpperCase() }));
             setShowInstallModal(false);
             await loadData();
         } catch (error) {
-            toast.error(t('app.firewallTab.failedToInstallFirewall', 'Failed to install firewall: {{message}}', { message: error.message }));
+            toast.error(t('app.firewallTab.failedToInstallFirewall', "Couldn't install the firewall. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -357,7 +382,7 @@ const FirewallTab = () => {
             type: 'enum',
             value: ruleProtocol,
             sortValue: ruleProtocol,
-            cellClassName: 'sk-cell-mono sec-proto',
+            cellClassName: 'sk-cell-dim sec-proto',
             render: (rule) => ruleProtocol(rule) || '-',
         },
         {
@@ -368,7 +393,7 @@ const FirewallTab = () => {
             render: (rule) => (
                 rule.type === 'port' && (
                     <Button variant="destructive" size="sm" onClick={() => handleRemovePort(rule.port, rule.protocol)}>
-                        {t('common.actions.remove', 'Remove')}
+                        {t('common.actions.delete', 'Delete')}
                     </Button>
                 )
             ),
@@ -407,16 +432,29 @@ const FirewallTab = () => {
         return <div className="loading-sm">{t('app.firewallTab.loadingFirewallStatus', 'Loading firewall status…')}</div>;
     }
 
+    if (loadErrors.status && !status) {
+        return (
+            <ErrorState
+                title={t('app.firewallTab.couldntLoadStatus', "Couldn't load firewall status.")}
+                error={loadErrors.status}
+                onRetry={loadData}
+            />
+        );
+    }
+
+    const partialError = loadErrors.status || loadErrors.rules || loadErrors.blocked || loadErrors.guard;
+
     return (
         <div className="firewall-tab">
+            {partialError && <ErrorState compact error={partialError} onRetry={loadData} />}
             {!status?.any_installed ? (
                 <EmptyState
                     icon={Shield}
-                    title={t('app.firewallTab.noFirewallInstalled', 'No Firewall Installed')}
+                    title={t('app.firewallTab.noFirewallInstalled', 'No firewall installed')}
                     description={t('app.firewallTab.installAFirewallToProtectYour', 'Install a firewall to protect your server from unauthorized access.')}
                     action={(
                         <Button variant="default" onClick={() => setShowInstallModal(true)}>
-                            {t('app.firewallTab.installFirewall', 'Install Firewall')}
+                            {t('app.firewallTab.installFirewall', 'Install firewall')}
                         </Button>
                     )}
                 />
@@ -428,7 +466,7 @@ const FirewallTab = () => {
                                 <span className="sec-shield">
                                     <Shield size={17} />
                                 </span>
-                                <span className="status-indicator__label">{isActive == null ? 'Firewall Status Unknown' : isActive ? 'Firewall Active' : 'Firewall Inactive'}</span>
+                                <span className="status-indicator__label">{isActive == null ? t('app.firewallTab.statusUnknown', 'Firewall status unknown') : isActive ? t('app.firewallTab.firewallActive', 'Firewall active') : t('app.firewallTab.firewallInactive', 'Firewall inactive')}</span>
                                 <span className="firewall-type">{activeFirewall?.toUpperCase()}</span>
                             </div>
                             <div className="firewall-actions">
@@ -436,7 +474,7 @@ const FirewallTab = () => {
                                     {t('app.firewallTab.blockIp', 'Block IP')}
                                 </Button>
                                 <Button variant="outline" size="sm" onClick={() => setShowPortModal(true)}>
-                                    {t('app.firewallTab.allowPort', 'Allow Port')}
+                                    {t('app.firewallTab.allowPort', 'Allow port')}
                                 </Button>
                                 {isActive ? (
                                     <Button variant="destructive" size="sm" onClick={handleDisable} disabled={actionLoading}>
@@ -462,7 +500,7 @@ const FirewallTab = () => {
                         </div>
                         <div className="stat-mini">
                             <span className="stat-value">{rules.filter(r => r.type === 'port' || r.port).length}</span>
-                            <span className="stat-label">{t('app.firewallTab.portsOpen', 'Ports Open')}</span>
+                            <span className="stat-label">{t('app.firewallTab.portsOpen', 'Ports open')}</span>
                         </div>
                     </div>
 
@@ -474,35 +512,28 @@ const FirewallTab = () => {
                             { value: 'status', labelKey: 'common.labels.status', label: 'Status' },
                             { value: 'rules', labelKey: 'app.firewallTab.rules', label: 'Rules', count: rules.length },
                             { value: 'blocked', labelKey: 'app.firewallTab.blockedIps', label: 'Blocked IPs', count: blockedIPs.length },
-                            { value: 'quick', labelKey: 'app.firewallTab.quickPorts', label: 'Quick Ports' },
+                            { value: 'quick', labelKey: 'app.firewallTab.quickPorts', label: 'Quick ports' },
                         ]}
                     />
 
                     {activeSubTab === 'status' && (
                         <SharedCard variant="legacy" className="card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h3>{t('app.firewallTab.firewallInformation', 'Firewall Information')}</h3>
+                                <h3>{t('app.firewallTab.firewallInformation', 'Firewall information')}</h3>
                                 <Button variant="outline" size="sm" onClick={loadData}>{t('common.actions.refresh', 'Refresh')}</Button>
                             </SharedCardHeader>
                             <SharedCardContent variant="legacy" className="card-body">
-                                <div className="sec-rows">
-                                    <div className="sk-info-row">
-                                        <span className="k">{t('common.labels.type', 'Type')}</span>
-                                        <span className="v">{activeFirewall?.toUpperCase()}</span>
-                                    </div>
-                                    <div className="sk-info-row">
-                                        <span className="k">{t('common.labels.status', 'Status')}</span>
+                                <InfoList>
+                                    <InfoItem label={t('common.labels.type', 'Type')} value={activeFirewall?.toUpperCase()} />
+                                    <InfoItem label={t('common.labels.status', 'Status')}>
                                         <Pill kind={isActive ? 'green' : 'red'}>
-                                            {isActive ? 'Active' : 'Inactive'}
+                                            {isActive ? t('app.firewallTab.active', 'Active') : t('app.firewallTab.inactive', 'Inactive')}
                                         </Pill>
-                                    </div>
+                                    </InfoItem>
                                     {activeFirewall === 'firewalld' && status?.firewalld?.default_zone && (
-                                        <div className="sk-info-row">
-                                            <span className="k">{t('app.firewallTab.defaultZone', 'Default zone')}</span>
-                                            <span className="v">{status.firewalld.default_zone}</span>
-                                        </div>
+                                        <InfoItem label={t('app.firewallTab.defaultZone', 'Default zone')} value={status.firewalld.default_zone} />
                                     )}
-                                </div>
+                                </InfoList>
                             </SharedCardContent>
                         </SharedCard>
                     )}
@@ -530,7 +561,7 @@ const FirewallTab = () => {
                                 home: this tab is nested, so there is no top bar
                                 to hoist a create action into. */}
                             <ListToolbar>
-                                <Button variant="default" size="sm" onClick={() => setShowPortModal(true)}>{t('app.firewallTab.addRule', 'Add Rule')}</Button>
+                                <Button variant="default" size="sm" onClick={() => setShowPortModal(true)}>{t('app.firewallTab.addRule', 'Add rule')}</Button>
                             </ListToolbar>
 
                             <GridChips {...chrome.chipProps} />
@@ -564,7 +595,7 @@ const FirewallTab = () => {
                     {activeSubTab === 'blocked' && (
                         <SharedCard variant="legacy" className="card sec-flush">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h3>{t('app.firewallTab.blockedIpAddresses', 'Blocked IP Addresses')}</h3>
+                                <h3>{t('app.firewallTab.blockedIpAddresses', 'Blocked IP addresses')}</h3>
                                 <Button variant="default" size="sm" onClick={() => setShowBlockIPModal(true)}>{t('app.firewallTab.blockIp', 'Block IP')}</Button>
                             </SharedCardHeader>
                             {blockedIPs.length === 0 ? (
@@ -591,7 +622,7 @@ const FirewallTab = () => {
                     {activeSubTab === 'quick' && (
                         <SharedCard variant="legacy" className="card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h3>{t('app.firewallTab.quickPortAccess', 'Quick Port Access')}</h3>
+                                <h3>{t('app.firewallTab.quickPortAccess', 'Quick port access')}</h3>
                             </SharedCardHeader>
                             <SharedCardContent variant="legacy" className="card-body">
                                 <p className="sec-hint sec-hint--lead">{t('app.firewallTab.oneClickEnableDisableCommonService', 'One-click enable/disable common service ports')}</p>
@@ -628,35 +659,31 @@ const FirewallTab = () => {
             {guard && (
                 <SharedCard variant="legacy" className="card">
                     <SharedCardHeader variant="legacy" className="card-header">
-                        <h3>{t('app.firewallTab.cloudMetadataGuard2', 'Cloud Metadata Guard')}</h3>
+                        <h3>{t('app.firewallTab.cloudMetadataGuard2', 'Cloud metadata guard')}</h3>
                         {guard.supported ? (
                             <Pill kind={guard.active ? 'green' : 'gray'}>
-                                {guard.active ? 'Active' : 'Inactive'}
+                                {guard.active ? t('app.firewallTab.active', 'Active') : t('app.firewallTab.inactive', 'Inactive')}
                             </Pill>
                         ) : (
                             <Pill kind="gray">{t('app.firewallTab.unsupportedOnThisHost', 'Unsupported on this host')}</Pill>
                         )}
                     </SharedCardHeader>
                     <SharedCardContent variant="legacy" className="card-body">
-                        <div className="sec-rows">
-                            <div className="sk-info-row">
-                                <span className="k">{t('app.firewallTab.blockContainerAccessTo169254', 'Block container access to 169.254.169.254')}</span>
+                        <InfoList>
+                            <InfoItem label={t('app.firewallTab.blockContainerAccessTo169254', 'Block container access to 169.254.169.254')}>
                                 <Switch
                                     checked={!!guard.enabled_setting}
                                     onCheckedChange={handleGuardToggle}
                                     disabled={guardLoading || !guard.supported}
                                     aria-label={t('app.firewallTab.toggleCloudMetadataGuard', 'Toggle cloud metadata guard')}
                                 />
-                            </div>
+                            </InfoItem>
                             {guard.supported && guard.backend && (
-                                <div className="sk-info-row">
-                                    <span className="k">{t('app.firewallTab.backend', 'Backend')}</span>
-                                    <span className="v">{guard.backend}</span>
-                                </div>
+                                <InfoItem label={t('app.firewallTab.backend', 'Backend')} value={guard.backend} />
                             )}
-                        </div>
+                        </InfoList>
                         <p className="sec-hint">
-                            {t('app.firewallTab.stopsAppContainersFromReachingThe', 'Stops app containers from reaching the cloud metadata endpoint, preventing SSRF attacks from stealing instance credentials.')}
+                            {t('app.firewallTab.stopsAppContainersFromReachingThe', 'Stops service containers from reaching the cloud metadata endpoint, preventing SSRF attacks from stealing instance credentials.')}
                         </p>
                     </SharedCardContent>
                 </SharedCard>
@@ -665,9 +692,9 @@ const FirewallTab = () => {
             <GridFilterDrawer {...chrome.drawerProps} />
 
             {/* Block IP Modal */}
-            <Modal open={showBlockIPModal} onClose={() => setShowBlockIPModal(false)} title={t('app.firewallTab.blockIpAddress', 'Block IP Address')}>
+            <Modal open={showBlockIPModal} onClose={() => setShowBlockIPModal(false)} title={t('app.firewallTab.blockIpAddress', 'Block IP address')}>
                 <div className="form-group">
-                    <Label>{t('common.labels.ipAddress', 'IP Address')}</Label>
+                    <Label>{t('common.labels.ipAddress', 'IP address')}</Label>
                     <Input
                         type="text"
                         value={blockIP}
@@ -679,23 +706,22 @@ const FirewallTab = () => {
                 <div className="modal-footer">
                     <Button variant="outline" onClick={() => setShowBlockIPModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button variant="destructive" onClick={handleBlockIP} disabled={actionLoading || !blockIP.trim()}>
-                        {actionLoading ? 'Blocking...' : 'Block IP'}
+                        {actionLoading ? t('app.firewallTab.blocking', 'Blocking…') : t('app.firewallTab.blockIp', 'Block IP')}
                     </Button>
                 </div>
             </Modal>
 
             {/* Allow Port Modal */}
-            <Modal open={showPortModal} onClose={() => setShowPortModal(false)} title={t('app.firewallTab.allowPort', 'Allow Port')}>
+            <Modal open={showPortModal} onClose={() => setShowPortModal(false)} title={t('app.firewallTab.allowPort', 'Allow port')}>
                 <div className="form-row">
                     <div className="form-group">
-                        <Label>{t('app.firewallTab.portNumber', 'Port Number')}</Label>
-                        <Input
-                            type="number"
+                        <Label htmlFor="firewall-allow-port">{t('app.firewallTab.portNumber', 'Port number')}</Label>
+                        <PortField
+                            id="firewall-allow-port"
+                            host={false}
+                            allowPrivileged
                             value={newPort.port}
-                            onChange={(e) => setNewPort({ ...newPort, port: e.target.value })}
-                            placeholder="8080"
-                            min="1"
-                            max="65535"
+                            onChange={(port) => setNewPort({ ...newPort, port })}
                         />
                     </div>
                     <div className="form-group">
@@ -714,28 +740,28 @@ const FirewallTab = () => {
                 <div className="modal-footer">
                     <Button variant="outline" onClick={() => setShowPortModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button variant="default" onClick={handleAllowPort} disabled={actionLoading || !newPort.port}>
-                        {actionLoading ? 'Adding...' : 'Allow Port'}
+                        {actionLoading ? t('app.firewallTab.adding', 'Adding…') : t('app.firewallTab.allowPort', 'Allow port')}
                     </Button>
                 </div>
             </Modal>
 
             {/* Install Firewall Modal */}
-            <Modal open={showInstallModal} onClose={() => setShowInstallModal(false)} title={t('app.firewallTab.installFirewall', 'Install Firewall')}>
+            <Modal open={showInstallModal} onClose={() => setShowInstallModal(false)} title={t('app.firewallTab.installFirewall', 'Install firewall')}>
                 <div className="form-group">
-                    <Label>{t('app.firewallTab.selectFirewall', 'Select Firewall')}</Label>
+                    <Label>{t('app.firewallTab.selectFirewall', 'Select firewall')}</Label>
                     <Select value={selectedFirewall} onValueChange={setSelectedFirewall}>
                         <SelectTrigger>
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="ufw">{t('app.firewallTab.ufwRecommendedForUbuntu', 'UFW (Recommended for Ubuntu)')}</SelectItem>
+                            <SelectItem value="ufw">{t('app.firewallTab.ufwRecommendedForUbuntu', 'UFW (recommended for Ubuntu)')}</SelectItem>
                             <SelectItem value="firewalld">{t('app.firewallTab.firewalldCentosRhel', 'firewalld (CentOS/RHEL)')}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
                 <div className="install-info">
                     {selectedFirewall === 'ufw' ? (
-                        <p><strong>{t('app.firewallTab.ufwUncomplicatedFirewall', 'UFW (Uncomplicated Firewall)')}</strong> {t('app.firewallTab.isSimpleAndEasyToUse', 'is simple and easy to use for Ubuntu/Debian systems.')}</p>
+                        <p><strong>{t('app.firewallTab.ufwUncomplicatedFirewall', 'UFW (uncomplicated firewall)')}</strong> {t('app.firewallTab.isSimpleAndEasyToUse', 'is simple and easy to use for Ubuntu/Debian systems.')}</p>
                     ) : (
                         <p><strong>firewalld</strong> {t('app.firewallTab.isADynamicallyManagedFirewallWith', 'is a dynamically managed firewall with zone-based configuration for CentOS/RHEL.')}</p>
                     )}
@@ -743,7 +769,7 @@ const FirewallTab = () => {
                 <div className="modal-footer">
                     <Button variant="outline" onClick={() => setShowInstallModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button variant="default" onClick={handleInstall} disabled={actionLoading}>
-                        {actionLoading ? 'Installing...' : 'Install'}
+                        {actionLoading ? t('app.firewallTab.installing', 'Installing…') : t('app.firewallTab.install', 'Install')}
                     </Button>
                 </div>
             </Modal>

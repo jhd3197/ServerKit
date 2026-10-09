@@ -13,9 +13,9 @@
     display: grid;
     place-items: center;
     width: 26px;
-    height: 26px;
+    height: 26px; // geometry: icon tile
     flex-shrink: 0;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     @include status-variant($success, $success-bg);
 
     // Same four states the Status column reports, so the row does not say
@@ -27,7 +27,7 @@
 
 // Expiry, coloured by urgency (tones come from formatExpiry).
 .ssl-expiry {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
 
     &--green { color: $success; }

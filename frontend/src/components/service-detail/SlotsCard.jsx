@@ -7,6 +7,7 @@ import { Pill } from '@/components/ds';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
 import { formatRelativeShort } from '@/utils/intl';
+import { toastError } from '@/utils/errorMessage';
 
 // A/B slot deploys (plan 87 §F). Shows which slot serves, which one is the
 // standby and for how long it stays warm, with the instant switch back. When
@@ -59,7 +60,7 @@ export default function SlotsCard({ app }) {
             toast.success(t('app.slots.switchedBack', 'Traffic is back on the previous release.'));
             load();
         } catch (err) {
-            toast.error(err.message || t('app.slots.switchBackFailed', 'Switching back failed'));
+            toastError(toast, t('app.slots.switchBackFailed', "Couldn't switch back."), err);
         } finally {
             setSwitching(false);
         }
@@ -80,10 +81,10 @@ export default function SlotsCard({ app }) {
         setRestoring(true);
         try {
             await api.restoreAppSlotDatabase(app.id, offer.deployment_id);
-            toast.success(t('app.slots.restoredDb', 'Database restored to before v{{version}}.', { version: offer.version }));
+            toast.success(t('app.slots.restoredDb', 'Database restored to before v{{version}}', { version: offer.version }));
             load();
         } catch (err) {
-            toast.error(err.message || t('app.slots.restoreDbFailed', 'Restoring the database failed'));
+            toastError(toast, t('app.slots.restoreDbFailed', "Couldn't restore the database."), err);
         } finally {
             setRestoring(false);
         }
@@ -147,7 +148,7 @@ export default function SlotsCard({ app }) {
                     </p>
                     {state.eligibility.eligible ? (
                         <p className="slots-card__hint">
-                            {t('app.slots.eligible', 'This app qualifies.')}{' '}
+                            {t('app.slots.eligible', 'This service qualifies.')}{' '}
                             <Link to={`/services/${app.id}/settings/health`}>
                                 {t('app.slots.turnOn', 'Turn it on in Settings')}
                             </Link>

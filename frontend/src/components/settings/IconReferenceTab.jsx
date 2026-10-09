@@ -12,7 +12,7 @@ import {
     Minus, Unlock, ArrowDownLeft, ArrowUpRight
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { copyToClipboard } from '@/utils/clipboard';
+import { useClipboard } from '@/hooks/useClipboard';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
 
@@ -58,9 +58,11 @@ const IconReferenceTab = () => {
     const { t } = useTranslation();
     const [searchQuery, setSearchQuery] = useState('');
     const [copiedIcon, setCopiedIcon] = useState(null);
+    const { copy } = useClipboard();
 
     async function handleCopyImport(name) {
-        if (!await copyToClipboard(name)) return;
+        // The tile itself says "Copied!", so skip the success toast.
+        if (!await copy(name, null)) return;
         setCopiedIcon(name);
         setTimeout(() => setCopiedIcon(null), 1500);
     }
@@ -83,7 +85,7 @@ const IconReferenceTab = () => {
 
     return (
         <div className="settings-section">
-            <h2>{t('app.iconReferenceTab.iconReference', 'Icon Reference')}</h2>
+            <h2>{t('app.iconReferenceTab.iconReference', 'Icon reference')}</h2>
             <p className="section-description">
                 {t('app.iconReferenceTab.lucideReactIconsAvailableInThe', 'Lucide React icons available in the project (')}{totalIcons} {t('app.iconReferenceTab.iconsClickAnIconNameTo', 'icons). Click an icon name to copy it.')}
             </p>
@@ -115,7 +117,7 @@ const IconReferenceTab = () => {
                             >
                                 <IconComp size={20} />
                                 <span className="icon-reference-name">
-                                    {copiedIcon === name ? 'Copied!' : name}
+                                    {copiedIcon === name ? t('app.iconReferenceTab.copied', 'Copied') : name}
                                 </span>
                             </SharedButton>
                         ))}

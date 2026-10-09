@@ -74,7 +74,7 @@ function PublicStatusPage() {
                 <section className="public-status-shell public-status-shell--empty">
                     <XCircle size={32} />
                     <h1>{t('app.publicStatusPage.statusPageUnavailable', 'Status page unavailable')}</h1>
-                    <p>{error || 'Status page not found'}</p>
+                    <p>{error || t('app.publicStatusPage.statusPageNotFound', 'Status page not found')}</p>
                 </section>
             </main>
         );
@@ -119,7 +119,7 @@ function PublicStatusPage() {
             {activeIncidents.length > 0 && (
                 <section className="public-status-section">
                     <header>
-                        <h2>{t('app.publicStatusPage.activeIncidents2', 'Active Incidents')}</h2>
+                        <h2>{t('app.publicStatusPage.activeIncidents2', 'Active incidents')}</h2>
                     </header>
                     <div className="public-incident-list">
                         {activeIncidents.map((incident) => (
@@ -177,7 +177,7 @@ function PublicStatusPage() {
             {recentIncidents.length > 0 && (
                 <section className="public-status-section">
                     <header>
-                        <h2>{t('app.publicStatusPage.recentIncidents', 'Recent Incidents')}</h2>
+                        <h2>{t('app.publicStatusPage.recentIncidents', 'Recent incidents')}</h2>
                     </header>
                     <div className="public-incident-list">
                         {recentIncidents.map((incident) => (

@@ -4,18 +4,21 @@
 
 .card {
     @include card-base();
-    padding: $space-6;
+    // Card spec: $radius-card, 1px border, $space-4 padding, flat.
+    border-radius: $radius-card;
+    box-shadow: none;
+    padding: $space-4;
     position: relative;
     overflow: hidden;
 }
 
 .card-header {
     @include flex-between();
-    margin-bottom: $space-5;
+    margin-bottom: $space-4;
 }
 
 .card h3 {
-    font-size: $font-size-md;
+    font-size: $text-md;
     font-weight: $font-weight-semibold;
     color: $text-primary;
     margin-bottom: $space-1;
@@ -24,7 +27,7 @@
 .card-link {
     color: $text-secondary;
     text-decoration: none;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     @include transition(color);
 
     &:hover {
@@ -35,9 +38,9 @@
 // Application/Service icon
 .app-icon {
     @include icon-box(48px);
-    border-radius: $radius-xl - 2;
-    font-size: $font-size-lg;
-    font-weight: $font-weight-bold;
+    border-radius: $radius-card;
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
     color: white;
 }
 
@@ -47,7 +50,7 @@
     padding-top: $space-5;
     border-top: 1px solid $border-subtle;
     @include flex-between();
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
@@ -59,7 +62,7 @@
 .metric-value {
     font-weight: $font-weight-semibold;
     color: $text-primary;
-    @include mono-text();
+    font-size: $text-xs;
 }
 
 // ============================================
@@ -76,7 +79,7 @@
     gap: 1px;
     background: $border-subtle;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: hidden;
     margin-bottom: $space-6;
 }
@@ -84,17 +87,15 @@
 .stat-strip__item {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: $space-tight;
     min-width: 0;
     padding: $space-4 $space-5;
     background: $bg-card;
 }
 
 .stat-strip__label {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
     color: $text-secondary;
     white-space: nowrap;
     overflow: hidden;
@@ -105,7 +106,7 @@
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-lg;
+    font-size: $text-lg;
     font-weight: $font-weight-semibold;
     color: $text-primary;
     line-height: 1.2;
@@ -121,13 +122,13 @@
 }
 
 .stat-strip__suffix {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-tertiary;
 }
 
 .stat-strip__detail {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -160,7 +161,7 @@
 
     &.is-active {
         background: $bg-hover;
-        box-shadow: inset 3px 0 0 $accent-primary;
+        box-shadow: inset 3px 0 0 $accent-primary; // geometry: inset edge marker drawn as a border
     }
 
     &:focus-visible {
@@ -173,7 +174,7 @@
     .stat-strip {
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     }
-    .stat-strip__value { font-size: $font-size-md; }
+    .stat-strip__value { font-size: $text-md; }
 }
 
 // Legacy `.stats-grid` / `.stat-card` KPI tile system removed (Plan 20 #20) —
@@ -181,16 +182,16 @@
 // kept: it is a standalone icon chip still used by StyleGuide demos.
 .stat-icon {
     width: 48px;
-    height: 48px;
+    height: 48px; // geometry: icon tile
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     flex-shrink: 0;
 
     svg {
         width: 24px;
-        height: 24px;
+        height: 24px; // geometry: icon size
         stroke: currentColor;
         stroke-width: 2;
         fill: none;
@@ -239,14 +240,14 @@
 .progress-bar {
     height: 4px;
     background: $bg-hover;
-    border-radius: $radius-sm - 2;
+    border-radius: $radius-badge;
     overflow: hidden;
     margin-top: $space-1;
 }
 
 .progress-fill {
     height: 100%;
-    border-radius: $radius-sm - 2;
+    border-radius: $radius-badge;
     @include transition(width);
 }
 
@@ -269,7 +270,7 @@
     margin-bottom: $space-5;
 
     h3 {
-        font-size: $font-size-md;
+        font-size: $text-md;
         font-weight: $font-weight-semibold;
     }
 }
@@ -277,10 +278,10 @@
 // Danger zone card
 .danger-zone {
     @include flex-between();
-    padding: $space-6;
+    padding: $space-4;
     border: 1px solid fade($danger-raw, 30%);
     background: fade($danger-raw, 5%);
-    border-radius: $radius-xl;
+    border-radius: $radius-card;
 
     h3, h4 {
         color: $danger;

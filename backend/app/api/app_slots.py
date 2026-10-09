@@ -19,7 +19,7 @@
 """
 from flask import Blueprint, jsonify, request
 
-from app.exceptions import NotFoundError, ValidationError
+from app.exceptions import ValidationError, not_found
 from app.middleware.rbac import developer_required, get_current_user, viewer_required
 from app.services.resource_grant_service import ResourceGrantService
 from app.services.slot_deploy_service import SlotDeployService
@@ -33,7 +33,7 @@ def _app(app_id, write=False):
     allowed = (ResourceGrantService.can_edit_app if write
                else ResourceGrantService.can_access_app)
     if app is None or not allowed(user, app):
-        raise NotFoundError('Application not found')
+        raise not_found('service')
     return app, user
 
 
@@ -98,7 +98,7 @@ def compose_split_apply(app_id):
     app, _ = _app(app_id, write=True)
     data = request.get_json(silent=True) or {}
     if data.get('confirm') is not True:
-        raise ValidationError("Moving the stateful services stops the app once; send "
+        raise ValidationError("Moving the stateful services stops the service once; send "
                               "{'confirm': true} after reading the preview")
     result = SlotDeployService.compose_split_apply(app)
     if not result.get('success'):

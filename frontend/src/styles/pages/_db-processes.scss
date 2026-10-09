@@ -21,7 +21,7 @@
         flex-shrink: 0;
         white-space: nowrap;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         cursor: pointer;
         user-select: none;
 
@@ -33,9 +33,9 @@
         padding: $space-2 $space-3;
         background: $danger-bg;
         border: 1px solid $danger-border;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $danger;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .dbp-empty {
@@ -49,9 +49,9 @@
         display: inline-block;
         padding: 1px $space-2;
         background: $bg-tertiary;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-secondary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     // The cell used to inherit `white-space: nowrap` from the hand-rolled
@@ -63,7 +63,7 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         font-family: $font-family-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     .dbp-idle {

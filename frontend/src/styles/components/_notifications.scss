@@ -21,14 +21,14 @@
     padding: $space-3;
     background: $danger-bg;
     border: 1px solid $danger-border;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     &__body {
         display: flex;
         align-items: center;
         gap: $space-2;
         flex-wrap: wrap;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         min-width: 0;
     }
@@ -51,10 +51,10 @@
     padding: $space-3;
     background: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     color: $text-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     .form-group & { display: flex; margin-bottom: 0; color: $text-primary; }
     > span { flex: 1; order: -1; }
@@ -70,7 +70,7 @@
 
 .notification-channel-card {
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     background: $bg-card;
     overflow: hidden;
     transition: border-color 0.2s;
@@ -96,12 +96,12 @@
 
 .channel-icon {
     width: 48px;
-    height: 48px;
+    height: 48px; // geometry: icon tile
     display: flex;
     align-items: center;
     justify-content: center;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     flex-shrink: 0;
 
     svg {
@@ -119,13 +119,13 @@
 
     h3 {
         margin: 0 0 $space-1 0;
-        font-size: $font-size-md;
+        font-size: $text-md;
     }
 
     p {
         margin: 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -156,7 +156,7 @@
     align-items: center;
 
     span {
-        font-weight: 500;
+        font-weight: $font-weight-medium;
     }
 }
 
@@ -181,7 +181,7 @@
 
 .notif-event-category {
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     overflow: hidden;
 
     &__header {
@@ -205,7 +205,7 @@
         }
     }
 
-    &__name { font-weight: 600; }
+    &__name { font-weight: $font-weight-semibold; }
 
     &__body {
         display: flex;
@@ -227,15 +227,15 @@
     &__meta {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 180px;
     }
 
-    &__title { color: $text-primary; font-size: 0.9rem; }
+    &__title { color: $text-primary; font-size: $text-base; }
 
     &__key {
         color: $text-tertiary;
-        font-size: 0.75rem;
+        font-size: $text-xs;
         font-family: $font-mono;
     }
 
@@ -249,10 +249,10 @@
     &__reset {
         background: transparent;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-secondary;
         padding: $space-1 $space-2;
-        font-size: 0.75rem;
+        font-size: $text-xs;
         cursor: pointer;
 
         &:hover:not(:disabled) { background: $bg-hover; color: $text-primary; }
@@ -266,16 +266,16 @@
     gap: $space-1;
     padding: $space-1 $space-2;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     background: $bg-card;
     color: $text-secondary;
-    font-size: 0.75rem;
+    font-size: $text-xs;
     cursor: pointer;
     text-transform: capitalize;
 
     &__state {
-        font-size: 0.68rem;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         opacity: 0.85;
     }
 
@@ -320,7 +320,7 @@
 
     .notif-defaults-grid__chan {
         text-align: center;
-        font-size: 0.75rem;
+        font-size: $text-xs;
         color: $text-secondary;
         text-transform: capitalize;
     }
@@ -331,9 +331,9 @@
     }
 
     .notif-defaults-grid__cat {
-        font-size: 0.85rem;
+        font-size: $text-sm;
         color: $text-primary;
-        font-weight: 500;
+        font-weight: $font-weight-medium;
     }
 
     .notif-defaults-grid__cell {
@@ -354,12 +354,12 @@
 .notif-digest-option {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: $space-hair;
     flex: 1 1 140px;
     padding: $space-3 $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     text-align: left;
     color: $text-secondary;
@@ -372,8 +372,8 @@
         color: $accent-primary;
     }
 
-    &__label { font-weight: 600; font-size: 0.9rem; }
-    &__hint { font-size: 0.75rem; color: $text-tertiary; }
+    &__label { font-weight: $font-weight-semibold; font-size: $text-base; }
+    &__hint { font-size: $text-xs; color: $text-tertiary; }
 
     &.active &__hint { color: $accent-primary; opacity: 0.85; }
 }

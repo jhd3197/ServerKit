@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { t } from '../../i18n/t';
 
 // Card 3 of the backup "Protection" panel: a data-table of backup runs.
-// Pairs with the .sk-dtable styles plus a .backup-history-list-scoped layer.
+// The table is .sk-dtable; .backup-history-list__* styles cell content only.
 function storageIcon(run) {
     const label = storageLabel(run);
     if (label === 'both') {
@@ -137,7 +137,7 @@ export default function BackupHistoryList({
             render: (run) => (
                 <div className="sk-cell-name">
                     <span className="backup-history-list__ico"><Archive size={14} /></span>
-                    <span>{run.metadata?.backup_name || `Backup #${run.id}`}</span>
+                    <span>{run.metadata?.backup_name || t('app.backupHistoryList.backupNumber', 'Backup #{{id}}', { id: run.id })}</span>
                     <Pill kind={run.kind === 'full' ? 'violet' : 'gray'} dot={false}>{run.kind}</Pill>
                 </div>
             ),
@@ -155,7 +155,7 @@ export default function BackupHistoryList({
             headerKey: 'common.labels.size', header: 'Size',
             sortable: true,
             sortValue: (run) => run.size_total || 0,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (run) => humanSize(run.size_total),
         },
         {
@@ -163,7 +163,7 @@ export default function BackupHistoryList({
             headerKey: 'app.backupHistoryList.cost', header: 'Cost',
             sortable: true,
             sortValue: (run) => Number(run.cost_total || 0),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (run) => formatMoney(run.cost_total),
         },
         {
@@ -225,8 +225,6 @@ export default function BackupHistoryList({
                 keyField="id"
                 storageKey="serverkit-table-backup-history"
                 onRowClick={onRowClick}
-                rowClassName="backup-history-list__row"
-                tableClassName="backup-history-list"
                 footer={(
                     <DataTableFooter
                         shown={runs.length}

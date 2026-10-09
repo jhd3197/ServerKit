@@ -8,6 +8,7 @@ import { Pill, SegControl, serviceStatusKind } from '../ds';
 import EmptyState from '../EmptyState';
 import { AlertTriangle, CheckCircle2, Network } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Human label for an ingress plane, used in the mismatch banner copy.
 const PLANE_LABEL = {
@@ -107,7 +108,7 @@ const ProxyStackPanel = ({ serverId }) => {
             await load();
             await loadAudit();
         } catch (err) {
-            toast.error(err.message || t('app.proxyStackPanel.failedToSwitchProxy', 'Failed to switch proxy'));
+            toastError(toast, t('app.proxyStackPanel.failedToSwitchProxy', "Couldn't switch the proxy."), err);
         } finally {
             setBusy(false);
         }
@@ -120,7 +121,7 @@ const ProxyStackPanel = ({ serverId }) => {
             toast.success(t('app.proxyStackPanel.customSnippetSaved', 'Custom snippet saved'));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.proxyStackPanel.failedToSaveSnippet', 'Failed to save snippet'));
+            toastError(toast, t('app.proxyStackPanel.failedToSaveSnippet', "Couldn't save the snippet."), err);
         } finally {
             setBusy(false);
         }
@@ -133,12 +134,12 @@ const ProxyStackPanel = ({ serverId }) => {
             if (res.success) {
                 toast.success(res.reloaded ? t('app.proxyStackPanel.configRegeneratedAndReloaded', 'Config regenerated and reloaded') : t('app.proxyStackPanel.configRegenerated', 'Config regenerated'));
             } else {
-                toast.error(res.error || t('app.proxyStackPanel.regenerateFailed', 'Regenerate failed'));
+                toastError(toast, t('app.proxyStackPanel.regenerateFailed', "Couldn't regenerate the config."), res.error);
             }
             await load();
             await loadAudit();
         } catch (err) {
-            toast.error(err.message || t('app.proxyStackPanel.failedToRegenerateConfig', 'Failed to regenerate config'));
+            toastError(toast, t('app.proxyStackPanel.failedToRegenerateConfig', "Couldn't regenerate the config."), err);
         } finally {
             setBusy(false);
         }
@@ -153,14 +154,14 @@ const ProxyStackPanel = ({ serverId }) => {
             });
             const deploy = res.deploy;
             if (deploy && deploy.success === false) {
-                toast.error(deploy.error || t('app.proxyStackPanel.deployFailedBestEffort', 'Deploy failed (best-effort)'));
+                toastError(toast, t('app.proxyStackPanel.deployFailedBestEffort', "Couldn't deploy the stack (best effort)."), deploy.error);
             } else {
                 toast.success(t('app.proxyStackPanel.stackDeployed', 'Stack deployed'));
             }
             await load();
             await loadAudit();
         } catch (err) {
-            toast.error(err.message || t('app.proxyStackPanel.failedToDeployStack', 'Failed to deploy stack'));
+            toastError(toast, t('app.proxyStackPanel.failedToDeployStack', "Couldn't deploy the stack."), err);
         } finally {
             setBusy(false);
         }
@@ -187,12 +188,12 @@ const ProxyStackPanel = ({ serverId }) => {
             <header className="proxy-panel__header">
                 <div className="proxy-panel__title">
                     <Network size={18} />
-                    <h3>{t('app.proxyStackPanel.reverseProxy', 'Reverse Proxy')}</h3>
+                    <h3>{t('app.proxyStackPanel.reverseProxy', 'Reverse proxy')}</h3>
                 </div>
                 <div className="proxy-panel__status">
                     <span className="proxy-panel__status-label">{t('common.labels.status', 'Status')}</span>
                     <Pill kind={serviceStatusKind(stack?.status)}>
-                        {savedIsNginx ? 'host nginx' : (stack?.status || 'unknown')}
+                        {savedIsNginx ? t('app.proxyStackPanel.hostNginx', 'Host nginx') : (stack?.status || 'unknown')}
                     </Pill>
                 </div>
             </header>
@@ -206,12 +207,12 @@ const ProxyStackPanel = ({ serverId }) => {
                     <div className="proxy-panel__ingress-warning-head">
                         <AlertTriangle size={16} />
                         <strong>
-                            {audit.mismatch_count} app{audit.mismatch_count === 1 ? '' : 's'} {t('app.proxyStackPanel.onTheWrongIngressPlane', 'on the wrong ingress plane')}
+                            {t('app.proxyStackPanel.servicesOnWrongPlane', { count: audit.mismatch_count, defaultValue_one: '1 service on the wrong ingress plane', defaultValue_other: '{{count}} services on the wrong ingress plane' })}
                         </strong>
                     </div>
                     <p className="proxy-panel__ingress-warning-text">
-                        {t('app.proxyStackPanel.thisServerSActiveProxyIs', 'This server\'s active proxy is')} <strong>{audit.proxy_type}</strong>{t('app.proxyStackPanel.whichExpects', ', which expects')} <strong>{PLANE_LABEL[audit.expected_plane] || audit.expected_plane}</strong>.
-                        The apps below expect the other plane:
+                        {t('app.proxyStackPanel.thisServerSActiveProxyIs', 'This server\'s active proxy is')} <strong>{audit.proxy_type}</strong>{t('app.proxyStackPanel.whichExpects', ', which expects')} <strong>{PLANE_LABEL[audit.expected_plane] || audit.expected_plane}</strong>.{' '}
+                        {t('app.proxyStackPanel.servicesBelowExpectTheOtherPlane', 'The services below expect the other plane:')}
                     </p>
                     <ul className="proxy-panel__ingress-list">
                         {(audit.apps || []).filter(a => a.mismatch).map(a => (
@@ -229,7 +230,7 @@ const ProxyStackPanel = ({ serverId }) => {
             {audit && audit.mismatch_count === 0 && audit.app_count > 0 && (
                 <div className="proxy-panel__ingress-ok">
                     <CheckCircle2 size={14} />
-                    {t('common.labels.all', 'All')} {audit.app_count} app{audit.app_count === 1 ? '' : 's'} {t('app.proxyStackPanel.alignedWithThisServerSIngress', 'aligned with this server\'s ingress plane.')}
+                    {t('app.proxyStackPanel.allServicesAligned', { count: audit.app_count, defaultValue_one: "The 1 service is aligned with this server's ingress plane.", defaultValue_other: "All {{count}} services are aligned with this server's ingress plane." })}
                 </div>
             )}
 
@@ -242,11 +243,13 @@ const ProxyStackPanel = ({ serverId }) => {
                 />
                 <div className="proxy-panel__actions">
                     <Button onClick={handleSwitch} disabled={!isDirtyType || busy}>
-                        {isDirtyType ? `Switch to ${selectedType}` : 'No change'}
+                        {isDirtyType
+                            ? t('app.proxyStackPanel.switchTo', 'Switch to {{type}}', { type: selectedType })
+                            : t('app.proxyStackPanel.noChange', 'No change')}
                     </Button>
                     {!isNginx && (
                         <Button variant="outline" onClick={handleDeploy} disabled={busy}>
-                            {t('app.proxyStackPanel.deployRestart', 'Deploy / Restart')}
+                            {t('app.proxyStackPanel.deployRestart', 'Deploy / restart')}
                         </Button>
                     )}
                     {!savedIsNginx && (

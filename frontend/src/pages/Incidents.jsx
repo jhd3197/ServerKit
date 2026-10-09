@@ -16,6 +16,7 @@ import {
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { DataTable, DataTableFooter, Drawer, Pill, SearchField } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
@@ -29,6 +30,7 @@ import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
 import { METRIC_LABELS } from '../components/monitoring/fleetMetrics';
 import { impactTone, INCIDENT_STATES } from '../components/monitoring/monitorShared';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Built-in views. This page used to carry THREE old affordances at once — a KPI
 // band whose tiles set a filter, an Active/Resolved/All segment row, and the
@@ -135,6 +137,7 @@ export default function Incidents() {
     const [fleetAlerts, setFleetAlerts] = useState([]);
     const [monitors, setMonitors] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [selected, setSelected] = useState(null);
     const [note, setNote] = useState('');
     const [checking, setChecking] = useState(false);
@@ -147,23 +150,26 @@ export default function Incidents() {
     });
 
     const load = useCallback(async () => {
+        // A failed source keeps its last good rows (never blanks the page) and
+        // is recorded, so a failure can't read as "nothing is wrong".
+        const failures = [];
+        const settle = (promise) => promise.catch((err) => { failures.push(err); return null; });
         try {
             const [incidentsRes, statusRes, historyRes, monitorsRes, fleetRes] = await Promise.all([
-                api.getIncidents({ state: 'all', limit: 200 }).catch(() => null),
-                api.getMonitoringStatus().catch(() => null),
-                api.getAlertHistory(50).catch(() => null),
-                api.getMonitors().catch(() => null),
+                settle(api.getIncidents({ state: 'all', limit: 200 })),
+                settle(api.getMonitoringStatus()),
+                settle(api.getAlertHistory(50)),
+                settle(api.getMonitors()),
                 // Every status, deliberately: the Active/Acknowledged/Resolved
                 // split is a saved view now, not a server-side query.
-                api.getFleetAlerts({ limit: 200 }).catch(() => null),
+                settle(api.getFleetAlerts({ limit: 200 })),
             ]);
-            setIncidents(incidentsRes?.incidents || []);
-            setActiveAlerts(statusRes?.active_alerts || []);
-            setAlertHistory(historyRes?.alerts || []);
-            setMonitors(monitorsRes?.monitors || []);
-            setFleetAlerts(Array.isArray(fleetRes) ? fleetRes : []);
-        } catch {
-            // Keep the last good list rather than blanking the page.
+            if (incidentsRes) setIncidents(incidentsRes.incidents || []);
+            if (statusRes) setActiveAlerts(statusRes.active_alerts || []);
+            if (historyRes) setAlertHistory(historyRes.alerts || []);
+            if (monitorsRes) setMonitors(monitorsRes.monitors || []);
+            if (fleetRes) setFleetAlerts(Array.isArray(fleetRes) ? fleetRes : []);
+            setLoadError(failures[0] || null);
         } finally {
             setLoading(false);
         }
@@ -176,10 +182,10 @@ export default function Incidents() {
         try {
             const result = await api.checkAlerts();
             const count = result.alerts?.length || 0;
-            toast[count > 0 ? 'warning' : 'success'](`${count} host alert${count === 1 ? '' : 's'} firing`);
+            toast[count > 0 ? 'warning' : 'success'](t('app.incidents.hostAlertsFiring', { count, defaultValue_one: '1 host alert firing', defaultValue_other: '{{count}} host alerts firing' }));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.incidents.alertCheckFailed', 'Alert check failed'));
+            toastError(toast, t('app.incidents.alertCheckFailed', "Couldn't check alerts."), err);
         } finally {
             setChecking(false);
         }
@@ -188,7 +194,7 @@ export default function Incidents() {
     useTopbarActions(() => (
         <>
             <Button variant="outline" size="sm" onClick={onCheckAlerts} disabled={checking}>
-                <Siren size={14} /> {checking ? 'Checking…' : 'Check hosts'}
+                <Siren size={14} /> {checking ? t('common.checking', 'Checking…') : t('app.incidents.checkHosts', 'Check hosts')}
             </Button>
             <Button variant="outline" size="sm" onClick={load}>
                 <RefreshCw size={14} /> {t('common.actions.refresh', 'Refresh')}
@@ -319,8 +325,10 @@ export default function Incidents() {
                 ? api.acknowledgeFleetAlert(item.alertId)
                 : api.resolveFleetAlert(item.alertId));
             await load();
-        } catch {
-            toast.error(t('app.incidents.failedToAlert', 'Failed to {{value}} alert', { value: action === 'ack' ? 'acknowledge' : 'resolve' }));
+        } catch (err) {
+            toastError(toast, action === 'ack'
+                ? t('app.incidents.couldntAcknowledgeAlert', "Couldn't acknowledge the alert.")
+                : t('app.incidents.couldntResolveAlert', "Couldn't resolve the alert."), err);
         }
     }, [load, t, toast]);
 
@@ -336,7 +344,7 @@ export default function Incidents() {
             setSelected(null);
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.incidents.couldNotPostTheUpdate', 'Could not post the update'));
+            toastError(toast, t('app.incidents.couldNotPostTheUpdate', "Couldn't post the update."), err);
         }
     };
 
@@ -408,7 +416,7 @@ export default function Incidents() {
             type: 'date',
             value: (item) => item.when || null,
             sortValue: (item) => (item.when ? new Date(item.when).getTime() : null),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (item) => formatWhen(item.when),
         },
         {
@@ -506,34 +514,41 @@ export default function Incidents() {
 
             <GridChips {...chrome.chipProps} />
 
-            {items.length === 0 ? (
+            {loadError && items.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={load} />
+            )}
+
+            {loadError && items.length === 0 ? (
+                <ErrorState
+                    title={t('app.incidents.couldntLoadIncidents', "Couldn't load incidents.")}
+                    error={loadError}
+                    onRetry={load}
+                />
+            ) : items.length === 0 ? (
                 <EmptyState
                     icon={CheckCircle2}
                     title={t('app.incidents.nothingIsWrongRightNow', 'Nothing is wrong right now')}
                     description={t('app.incidents.noMonitorIsDownAndNo', 'No monitor is down and no host is over its limit.')}
                 />
             ) : (
-                <div className="mon-card">
-                    <DataTable
-                        {...chrome.tableProps}
-                        tableClassName="sk-dtable incidents-table"
-                        columns={chrome.columns}
-                        data={shown}
-                        keyField="key"
-                        sorts={sorts}
-                        onSortsChange={setSorts}
-                        onRowClick={setSelected}
-                        emptyTitle="No incidents match this view."
-                        emptyMessage=""
-                        footer={(
-                            <DataTableFooter
-                                shown={chrome.shownCount}
-                                total={items.length}
-                                noun="incident"
-                            />
-                        )}
-                    />
-                </div>
+                <DataTable
+                    {...chrome.tableProps}
+                    columns={chrome.columns}
+                    data={shown}
+                    keyField="key"
+                    sorts={sorts}
+                    onSortsChange={setSorts}
+                    onRowClick={setSelected}
+                    emptyTitle="No incidents match this view."
+                    emptyMessage=""
+                    footer={(
+                        <DataTableFooter
+                            shown={chrome.shownCount}
+                            total={items.length}
+                            noun="incident"
+                        />
+                    )}
+                />
             )}
 
             <Drawer

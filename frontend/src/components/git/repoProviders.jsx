@@ -139,7 +139,7 @@ export const giteaProvider = {
 
     account: (status, t) => ({
         name: t('git.picker.giteaAccount', 'Local Gitea'),
-        detail: t('git.picker.giteaDetail', 'Repositories on this ServerKit instance'),
+        detail: t('git.picker.giteaDetail', 'Repositories on the panel server'),
     }),
 
     unavailable: (status) => {

@@ -12,6 +12,7 @@ import {
     SecurityConfigTab,
 } from '../components/security';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { useTranslation } from 'react-i18next';
 
 // Core tabs only. The install-gated tools (fail2ban, malware scanner,
@@ -26,6 +27,7 @@ const Security = () => {
     const [activeTab, setActiveTab] = useTabParam('/security', VALID_TABS);
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
 
     useEffect(() => {
         loadStatus();
@@ -35,8 +37,9 @@ const Security = () => {
         try {
             const data = await api.getSecurityStatus();
             setStatus(data);
+            setLoadError(null);
         } catch (err) {
-            console.error('Failed to load security status:', err);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -59,7 +62,27 @@ const Security = () => {
     return (
         <div className="sk-tabgroup__inner security-page">
             <div className="tab-content">
-                {activeTab === 'overview' && <OverviewTab status={status} onRefresh={reload} onNavigateTab={setActiveTab} />}
+                {/* The status feed backs the posture shown across the section,
+                    so its failure is visible on every tab, not only Overview. */}
+                {activeTab !== 'overview' && loadError && (
+                    <ErrorState
+                        compact
+                        message={t('app.security.couldntLoadSecurityStatusReason', "Couldn't load security status. {{reason}}", { reason: loadError.message })}
+                        onRetry={reload}
+                    />
+                )}
+                {activeTab === 'overview' && (loadError && !status ? (
+                    <ErrorState
+                        title={t('app.security.couldntLoadSecurityStatus', "Couldn't load security status.")}
+                        error={loadError}
+                        onRetry={reload}
+                    />
+                ) : (
+                    <>
+                        {loadError && <ErrorState compact error={loadError} onRetry={reload} />}
+                        <OverviewTab status={status} onRefresh={reload} onNavigateTab={setActiveTab} />
+                    </>
+                ))}
                 {activeTab === 'firewall' && <FirewallTab />}
                 {activeTab === 'ssh-keys' && <SSHKeysTab />}
                 {activeTab === 'ip-lists' && <IPListsTab />}

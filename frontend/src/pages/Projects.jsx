@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Modal from '@/components/Modal';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Preset views. A project list is short, so these are about SHAPE rather than
 // status: which projects are actually carrying anything, and which are empty
@@ -52,11 +53,11 @@ const Projects = () => {
     const { t } = useTranslation();
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [showCreate, setShowCreate] = useState(false);
     const [search, setSearch] = useState('');
     // Quick-create deep link: /projects?focus=create:project opens the dialog.
     useFocusParam('create', () => setShowCreate(true));
-    const toast = useToast();
     const navigate = useNavigate();
 
     const loadProjects = useCallback(async () => {
@@ -64,13 +65,13 @@ const Projects = () => {
         try {
             const data = await api.getProjects();
             setProjects(Array.isArray(data?.projects) ? data.projects : []);
+            setLoadError(null);
         } catch (err) {
-            console.error('Failed to load projects:', err);
-            toast.error(t('app.projects.failedToLoadProjects', 'Failed to load projects'));
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
-    }, [t, toast]);
+    }, []);
 
     useEffect(() => {
         loadProjects();
@@ -79,7 +80,7 @@ const Projects = () => {
     useTopbarActions(() => (
         <>
             <Button size="sm" onClick={() => setShowCreate(true)}>
-                <Plus size={16} /> {t('app.projects.newProject', 'New Project')}
+                <Plus size={16} /> {t('app.projects.newProject', 'New project')}
             </Button>
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.projects.searchProjects', 'Search projects…')} />
         </>
@@ -128,7 +129,7 @@ const Projects = () => {
             type: 'number',
             sortable: true,
             width: 140,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             value: (p) => p.environment_count ?? 0,
             render: (p) => p.environment_count ?? 0,
         },
@@ -138,7 +139,7 @@ const Projects = () => {
             type: 'number',
             sortable: true,
             width: 120,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             value: (p) => p.app_count ?? 0,
             render: (p) => p.app_count ?? 0,
         },
@@ -154,6 +155,9 @@ const Projects = () => {
             noun="projects"
             builtinViews={PROJECT_VIEWS}
             totalCount={projects.length}
+            error={loadError}
+            errorTitle={t('app.projects.couldntLoadProjects', "Couldn't load projects.")}
+            onRetry={loadProjects}
             items={rows}
             columns={columns}
             keyField="id"
@@ -210,17 +214,17 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
             reset();
             onCreated();
         } catch (err) {
-            toast.error(err.message || t('app.projects.failedToCreateProject', 'Failed to create project'));
+            toastError(toast, t('app.projects.failedToCreateProject', "Couldn't create the project."), err);
         } finally {
             setSubmitting(false);
         }
     }
 
     return (
-        <Modal open={open} onClose={() => { reset(); onOpenChange(false); }} title={t('app.projects.newProject', 'New Project')}>
+        <Modal open={open} onClose={() => { reset(); onOpenChange(false); }} title={t('app.projects.newProject', 'New project')}>
             <form onSubmit={handleSubmit}>
                 <p className="sk-modal__subtitle">
-                    {t('app.projects.aProjectGroupsYourApplicationsIt', 'A project groups your applications. It starts with a default "production" environment you can rename or expand.')}
+                    {t('app.projects.aProjectGroupsYourApplicationsIt', 'A project groups your services. It starts with a default "production" environment you can rename or expand.')}
                 </p>
 
                 <div className="projects-form">
@@ -230,7 +234,7 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
                                 id="project-name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder={t('app.projects.myProject', 'My Project')}
+                                placeholder={t('app.projects.myProject', 'My project')}
                                 autoFocus
                                 required
                             />
@@ -252,7 +256,7 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
                         <Button type="submit" disabled={submitting || !name.trim()}>
-                            {submitting ? 'Creating…' : 'Create Project'}
+                            {submitting ? t('app.projects.creating', 'Creating…') : t('app.projects.createProjectAction', 'Create project')}
                         </Button>
                     </div>
                 </form>

@@ -56,7 +56,7 @@
 
         h3 {
             margin: 0;
-            font-size: 14px;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: var(--text);
         }
@@ -64,9 +64,8 @@
 
     &__sub {
         display: block;
-        margin-top: 3px;
-        font-family: var(--mono);
-        font-size: 11px;
+        margin-top: $space-1;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -75,12 +74,12 @@
 .bk-link {
     display: inline-flex;
     align-items: center;
-    gap: 3px;
+    gap: $space-1;
     padding: 0;
     border: 0;
     background: none;
     color: var(--text-faint);
-    font-size: 12px;
+    font-size: $text-xs;
     cursor: pointer;
     white-space: nowrap;
 
@@ -90,9 +89,9 @@
 .bk-hint {
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: $space-2;
     margin: 0;
-    font-size: 12.5px;
+    font-size: $text-sm;
     color: var(--text-faint);
 
     svg { flex-shrink: 0; }
@@ -120,12 +119,12 @@
     grid-template-rows: repeat(7, auto);
     grid-auto-flow: column;
     grid-auto-columns: minmax(0, 1fr);
-    gap: 3px;
+    gap: $space-1;
 
     i {
         aspect-ratio: 1;
         min-width: 0;
-        border-radius: 2px;
+        border-radius: $radius-badge;
         background: var(--surface-3);
 
         &.l1 { background: rgba(61, 220, 151, 0.32); }
@@ -136,22 +135,21 @@
 
     &__scroll {
         min-width: 0;
-        padding-bottom: 4px;
+        padding-bottom: $space-1;
     }
 
     &__legend {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        gap: $space-1;
+        font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
 
         i {
             width: 10px;
             height: 10px;
-            border-radius: 2px;
+            border-radius: $radius-badge;
 
             &.l1 { background: rgba(61, 220, 151, 0.32); }
             &.l2 { background: rgba(61, 220, 151, 0.62); }
@@ -170,19 +168,15 @@
 
         span {
             display: block;
-            font-family: var(--mono);
-            font-size: 10.5px;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
 
         strong {
             display: block;
-            margin-top: 3px;
-            font-family: var(--mono);
-            font-size: 18px;
-            font-weight: 600;
+            margin-top: $space-1;
+            font-size: $text-lg;
+            font-weight: $font-weight-semibold;
             color: var(--text);
         }
     }
@@ -196,8 +190,8 @@
     &__item {
         display: flex;
         align-items: flex-start;
-        gap: 12px;
-        padding: 11px 0;
+        gap: $space-3;
+        padding: $space-3 0;
         border-top: 1px solid var(--border-soft);
 
         &:first-child { border-top: 0; padding-top: 0; }
@@ -206,8 +200,8 @@
 
     &__dot {
         width: 28px;
-        height: 28px;
-        border-radius: 8px;
+        height: 28px; // geometry: icon tile
+        border-radius: $radius-card;
         display: grid;
         place-items: center;
         flex-shrink: 0;
@@ -222,56 +216,48 @@
     &__body { min-width: 0; flex: 1; }
 
     &__txt {
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-dim);
         line-height: 1.4;
 
-        b { color: var(--text); font-weight: 600; }
+        b { color: var(--text); font-weight: $font-weight-semibold; }
     }
 
     &__time {
-        margin-top: 2px;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        margin-top: $space-hair;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
-}
-
-.bk-latest {
-    td { border-bottom: 1px solid var(--border-soft); }
-    tr:last-child td { border-bottom: 0; }
 }
 
 // ---------- Schedules (mock `BkSchedules`) ----------
 // A disabled policy stays readable but visibly inert, so a paused row never
 // gets mistaken for a running one.
 .bk-table--schedules {
-    tr.is-off { opacity: 0.55; }
+    .is-off { opacity: 0.55; }
 
-    .bk-col-on { width: 1%; white-space: nowrap; }
+    .bk-col-on { white-space: nowrap; } // width: column definition
 }
 
 // Retention chips (the mock's GFS daily/weekly/monthly row).
 .bk-ret {
     display: inline-flex;
-    gap: 4px;
+    gap: $space-1;
 
     span {
-        padding: 2px 7px;
-        border-radius: 5px;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
         background: var(--surface-3);
         color: var(--text-dim);
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 }
 
 .bk-lastrun {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    font-family: var(--mono);
-    font-size: 11.5px;
+    gap: $space-tight;
+    font-size: $text-xs;
     color: var(--text-faint);
     white-space: nowrap;
 
@@ -293,8 +279,7 @@
 
 .bk-hint--foot {
     margin-top: $space-3;
-    font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
 }
 
 // ---------- Storage destinations (mock `BkStorage`) ----------
@@ -328,8 +313,8 @@
 
     &__ico {
         width: 38px;
-        height: 38px;
-        border-radius: 10px;
+        height: 38px; // geometry: icon tile
+        border-radius: $radius-card;
         display: grid;
         place-items: center;
         flex-shrink: 0;
@@ -341,17 +326,16 @@
     &__name {
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 14px;
-        font-weight: 600;
+        gap: $space-2;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
         color: var(--text);
         @include truncate();
     }
 
     &__type {
-        margin-top: 2px;
-        font-family: var(--mono);
-        font-size: 11px;
+        margin-top: $space-hair;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -359,9 +343,8 @@
         display: flex;
         justify-content: space-between;
         gap: $space-3;
-        margin-top: 7px;
-        font-family: var(--mono);
-        font-size: 11.5px;
+        margin-top: $space-2;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -372,20 +355,19 @@
             display: flex;
             justify-content: space-between;
             gap: $space-3;
-            padding: 7px 0;
+            padding: $space-2 0;
             border-top: 1px solid var(--border-soft);
         }
 
         dt {
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
 
         dd {
             margin: 0;
             min-width: 0;
-            font-family: var(--mono);
-            font-size: 11.5px;
+            font-size: $text-xs;
             color: var(--text-dim);
             @include truncate();
         }
@@ -413,7 +395,7 @@
 
         &:hover { color: var(--accent-bright); border-color: var(--accent-dim); }
 
-        span { font-size: 13px; font-weight: 500; }
+        span { font-size: $text-sm; font-weight: $font-weight-medium; }
     }
 }
 
@@ -422,13 +404,14 @@
     &__row + &__row { margin-top: $space-3; }
 
     &__tag {
-        padding: 1px 6px;
-        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
         @include status-variant(var(--accent-bright), var(--accent-bg));
-        font-family: var(--mono);
-        font-size: 9.5px;
-        font-weight: 600;
-        letter-spacing: 0.06em;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
     }
 
     &__top {
@@ -436,24 +419,23 @@
         align-items: baseline;
         justify-content: space-between;
         gap: $space-3;
-        margin-bottom: 7px;
+        margin-bottom: $space-2;
     }
 
     &__name {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         min-width: 0;
-        font-size: 13px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         color: var(--text);
 
         svg { flex-shrink: 0; color: var(--text-faint); }
 
         small {
-            font-family: var(--mono);
-            font-size: 10.5px;
-            font-weight: 400;
+            font-size: $text-xs;
+            font-weight: $font-weight-normal;
             color: var(--text-faint);
             @include truncate();
         }
@@ -461,8 +443,7 @@
 
     &__size {
         flex-shrink: 0;
-        font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
 
         em { font-style: normal; color: var(--text-faint); margin-left: 5px; }
@@ -470,27 +451,20 @@
 
     &__bar {
         height: 6px;
-        border-radius: 3px;
+        border-radius: $radius-badge;
         background: var(--surface-3);
         overflow: hidden;
 
         i {
             display: block;
             height: 100%;
-            border-radius: 3px;
+            border-radius: $radius-badge;
             transition: width 0.3s;
         }
 
         &--local i { background: var(--accent-bright); }
         &--remote i { background: var(--cyan); }
     }
-}
-
-.bk-card {
-    background: $bg-card;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
-    padding: $space-4;
 }
 
 // Row actions stay on one line at the right edge. They used to wrap, which
@@ -501,7 +475,7 @@
     flex-wrap: nowrap;
     justify-content: flex-end;
     align-items: center;
-    gap: 2px;
+    gap: $space-hair;
     white-space: nowrap;
 
     // Icon-only affordances: quiet by default, and only the delete goes red —
@@ -509,11 +483,11 @@
     .bk-iconbtn {
         display: grid;
         place-items: center;
-        width: 30px;
-        height: 30px;
+        width: $control-sm;
+        height: $control-sm;
         padding: 0;
         border: 0;
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: none;
         color: var(--text-faint);
         cursor: pointer;
@@ -527,27 +501,9 @@
 }
 
 // ---------- Backups / schedules table ----------
+// `.bk-table` is the DataTable wrap; only cell content is styled here, and the
+// actions column's width lives on its column definition.
 .bk-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: $font-size-base;
-
-    th,
-    td {
-        text-align: left;
-        padding: $space-3;
-        border-bottom: 1px solid $border-subtle;
-        vertical-align: middle;
-    }
-
-    th {
-        color: $text-tertiary;
-        font-weight: $font-weight-semibold;
-        font-size: $font-size-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-    }
-
     // Snapshot names are long and machine-generated, so they get the room and
     // an ellipsis; everything numeric stays on one line rather than folding a
     // "464 MB" onto two and doubling the row height.
@@ -557,17 +513,8 @@
     }
 
     .sk-cell-mono,
+    .sk-cell-dim,
     .bk-when { white-space: nowrap; }
-
-    td:last-child { width: 1%; }
-
-    tbody tr:hover {
-        background: $bg-hover;
-    }
-
-    &--schedules {
-        td { vertical-align: top; }
-    }
 }
 
 .bk-ico {
@@ -581,13 +528,13 @@
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
 .bk-when {
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     white-space: nowrap;
 }
 
@@ -596,54 +543,32 @@
     flex-wrap: wrap;
     gap: $space-2;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .bk-sched {
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
 .bk-remote-on { color: $success; }
 .bk-remote-off { color: $text-tertiary; }
 
-.bk-restore-details {
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    font-size: $font-size-sm;
-    color: $text-secondary;
-}
-
 .bk-restore-warn {
     display: flex;
     align-items: flex-start;
     gap: $space-2;
     padding: $space-3;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $warning-bg;
     border: 1px solid $warning-border;
     color: $warning;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // ---------- Backup history list ----------
 .backup-history-list {
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-
-    &__row {
-        display: flex;
-        align-items: center;
-        gap: $space-3;
-        padding: $space-3;
-        background: $bg-card;
-        border: 1px solid $border-subtle;
-        border-radius: $radius-md;
-    }
-
     &__ico {
         display: inline-flex;
         align-items: center;
@@ -653,13 +578,12 @@
 
     &__storage {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__when {
-        margin-left: auto;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         white-space: nowrap;
     }
 
@@ -672,7 +596,7 @@
 .backup-history-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
 
     &__tools {
@@ -686,11 +610,11 @@
         align-items: center;
         gap: $space-1;
         padding: 1px $space-2;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: $bg-hover;
         border: 1px solid $border-subtle;
         color: $text-secondary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &__toggle {
@@ -701,7 +625,7 @@
         border: none;
         color: $accent-primary;
         cursor: pointer;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -709,7 +633,7 @@
 .backup-calendar {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
 
     &__head {
@@ -723,11 +647,11 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
+        width: $control-sm;
+        height: $control-sm;
         background: transparent;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-control;
         color: $text-secondary;
         cursor: pointer;
 
@@ -743,10 +667,10 @@
         margin-left: auto;
         background: transparent;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         padding: $space-1 $space-2;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         cursor: pointer;
 
         &:hover { border-color: $border-active; color: $text-primary; }
@@ -761,18 +685,16 @@
     &__dow {
         text-align: center;
         color: $text-tertiary;
-        font-size: $font-size-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
+        font-size: $text-xs;
         padding: $space-1 0;
     }
 
     &__cell {
         position: relative;
-        min-height: 44px;
+        min-height: 44px; // geometry: calendar day cell
         padding: $space-1;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: $bg-body;
 
         &--empty {
@@ -802,7 +724,7 @@
     }
 
     &__daynum {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -812,14 +734,14 @@
         right: 2px;
         min-width: 16px;
         height: 16px;
-        padding: 0 4px;
+        padding: 0 $space-1;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         border-radius: $radius-full;
         background: $accent-primary;
         color: #fff;
-        font-size: 9px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 }
@@ -847,7 +769,7 @@
         display: flex;
         justify-content: space-between;
         gap: $space-3;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         padding: $space-2 0;
         border-bottom: 1px solid $border-subtle;
@@ -855,7 +777,6 @@
 
     &__cost {
         color: $text-secondary;
-        font-family: $font-mono;
     }
 
     &__joblink {
@@ -868,11 +789,11 @@
 
     &__error {
         padding: $space-3;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $danger-bg;
         border: 1px solid $danger-border;
         color: $danger;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__actions {
@@ -904,7 +825,7 @@
     &__item {
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         overflow: hidden;
     }
 
@@ -937,18 +858,18 @@
 
     &__when {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__meta {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &__sub {
         margin-left: auto;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__detail {
@@ -969,19 +890,19 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
     &__probe-empty {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-style: italic;
     }
 
     &__error {
         color: $danger;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -1008,7 +929,7 @@
     &__toggle-sub {
         display: block;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__status {
@@ -1037,7 +958,7 @@
 .schedule-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
     display: flex;
     flex-direction: column;
@@ -1050,7 +971,7 @@
 
         label {
             color: $text-tertiary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -1064,7 +985,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -1072,7 +993,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -1097,7 +1018,7 @@
 
     &__label {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 
@@ -1119,7 +1040,7 @@
         gap: $space-2;
         padding: $space-2 $space-3;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         cursor: pointer;
 
         &:hover { border-color: $border-active; }
@@ -1133,7 +1054,7 @@
         overflow-y: auto;
         padding: $space-2;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-body;
     }
 
@@ -1142,11 +1063,11 @@
         align-items: flex-start;
         gap: $space-2;
         padding: $space-3;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $warning-bg;
         border: 1px solid $warning-border;
         color: $warning;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -1157,7 +1078,7 @@
     gap: $space-3;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
 }
 

@@ -23,6 +23,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import Modal from '@/components/Modal';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const ProjectDetail = () => {
     const { t } = useTranslation();
@@ -84,7 +85,7 @@ const ProjectDetail = () => {
         try {
             await api.reorderEnvironments(Number(id), next.map(e => e.id));
         } catch (err) {
-            toast.error(err.message || t('app.projectDetail.failedToReorderEnvironments', 'Failed to reorder environments'));
+            toastError(toast, t('app.projectDetail.failedToReorderEnvironments', "Couldn't reorder environments."), err);
             loadProject();
         }
     }
@@ -97,7 +98,7 @@ const ProjectDetail = () => {
             setDeleteEnv(null);
             loadProject();
         } catch (err) {
-            toast.error(err.message || t('app.projectDetail.failedToDeleteEnvironment', 'Failed to delete environment'));
+            toastError(toast, t('app.projectDetail.failedToDeleteEnvironment', "Couldn't delete the environment."), err);
             setDeleteEnv(null);
         }
     }
@@ -121,7 +122,7 @@ const ProjectDetail = () => {
                     description={error || t('app.projectDetail.thisProjectCouldNotBeLoaded', 'This project could not be loaded.')}
                     action={
                         <Button variant="outline" asChild>
-                            <Link to="/projects"><ArrowLeft size={16} /> {t('app.projectDetail.backToProjects', 'Back to Projects')}</Link>
+                            <Link to="/projects"><ArrowLeft size={16} /> {t('app.projectDetail.backToProjects', 'Back to projects')}</Link>
                         </Button>
                     }
                 />
@@ -146,7 +147,7 @@ const ProjectDetail = () => {
                         <Link to="/projects"><ArrowLeft size={16} /> {t('app.projectDetail.projects', 'Projects')}</Link>
                     </Button>
                     <Button onClick={() => setShowCreateEnv(true)}>
-                        <Plus size={16} /> {t('app.projectDetail.newEnvironment', 'New Environment')}
+                        <Plus size={16} /> {t('app.projectDetail.newEnvironment', 'New environment')}
                     </Button>
                 </>
             }
@@ -231,14 +232,14 @@ const ProjectDetail = () => {
                         <>
                             <div className="project-env-panel__header">
                                 <h2>{activeEnv.name}</h2>
-                                <span>{envApps.length} app{envApps.length === 1 ? '' : 's'}</span>
+                                <span>{t('app.projectDetail.serviceCount', { count: envApps.length, defaultValue_one: '1 service', defaultValue_other: '{{count}} services' })}</span>
                             </div>
                             {envApps.length === 0 ? (
                                 <EmptyState
                                     icon={Boxes}
                                     size="sm"
-                                    title={t('app.projectDetail.noAppsInThisEnvironment', 'No apps in this environment')}
-                                    description={t('app.projectDetail.assignAppsToThisEnvironmentWhen', 'Assign apps to this environment when creating them, or move existing apps here.')}
+                                    title={t('app.projectDetail.noAppsInThisEnvironment', 'No services in this environment')}
+                                    description={t('app.projectDetail.assignAppsToThisEnvironmentWhen', 'Assign services to this environment when creating them, or move existing services here.')}
                                 />
                             ) : (
                                 <AppList apps={envApps} />
@@ -248,7 +249,7 @@ const ProjectDetail = () => {
                         <EmptyState
                             icon={FolderKanban}
                             title={t('app.projectDetail.noEnvironments', 'No environments')}
-                            description={t('app.projectDetail.addAnEnvironmentToStartOrganizing', 'Add an environment to start organizing this project\'s apps.')}
+                            description={t('app.projectDetail.addAnEnvironmentToStartOrganizing', "Add an environment to start organizing this project's services.")}
                         />
                     )}
                 </div>
@@ -277,7 +278,7 @@ const ProjectDetail = () => {
             <ConfirmDialog
                 isOpen={Boolean(deleteEnv)}
                 title={t('app.projectDetail.deleteEnvironment2', 'Delete environment "{{value}}"?', { value: deleteEnv?.name || '' })}
-                message={t('app.projectDetail.appsAssignedToThisEnvironmentWill', 'Apps assigned to this environment will stay in the project but lose their environment assignment. This cannot be undone.')}
+                message={t('app.projectDetail.appsAssignedToThisEnvironmentWill', 'Services assigned to this environment will stay in the project but lose their environment assignment. This cannot be undone.')}
                 confirmText={t('app.projectDetail.deleteEnvironment', 'Delete environment')}
                 variant="danger"
                 onConfirm={handleDeleteEnvironment}
@@ -329,17 +330,17 @@ const CreateEnvironmentDialog = ({ projectId, open, onOpenChange, onCreated }) =
             setName('');
             onCreated();
         } catch (err) {
-            toast.error(err.message || t('app.projectDetail.failedToCreateEnvironment', 'Failed to create environment'));
+            toastError(toast, t('app.projectDetail.failedToCreateEnvironment', "Couldn't create the environment."), err);
         } finally {
             setSubmitting(false);
         }
     }
 
     return (
-        <Modal open={open} onClose={() => { setName(''); onOpenChange(false); }} title={t('app.projectDetail.newEnvironment', 'New Environment')}>
+        <Modal open={open} onClose={() => { setName(''); onOpenChange(false); }} title={t('app.projectDetail.newEnvironment', 'New environment')}>
             <form onSubmit={handleSubmit}>
                 <p className="sk-modal__subtitle">
-                    {t('app.projectDetail.commonNamesAreProductionStagingAnd', 'Common names are production, staging, and development — but any name works.')}
+                    {t('app.projectDetail.commonNamesAreProductionStagingAnd', 'Common names are production, staging, and development, but any name works.')}
                 </p>
 
                 <div className="projects-form">
@@ -361,7 +362,7 @@ const CreateEnvironmentDialog = ({ projectId, open, onOpenChange, onCreated }) =
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
                         <Button type="submit" disabled={submitting || !name.trim()}>
-                            {submitting ? 'Creating…' : 'Create Environment'}
+                            {submitting ? t('app.projectDetail.creating', 'Creating…') : t('app.projectDetail.createEnvironmentAction', 'Create environment')}
                         </Button>
                     </div>
                 </form>

@@ -6,6 +6,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import { Button } from '@/components/ui/button';
 import { formatNumber, formatPercent } from '@/utils/intl';
+import { toastError } from '@/utils/errorMessage';
 
 const QUERY_PREVIEW_LEN = 160;
 
@@ -37,7 +38,7 @@ export default function InsightsPanel({ conn, engine, isAdmin }) {
             setData(await api.getDockerDbInsights(conn.container, type, conn.user, conn.password));
             setError('');
         } catch (err) {
-            setError(err.message || t('app.dbInsights.failedToLoad', 'Failed to load insights'));
+            setError(err.message || t('app.dbInsights.failedToLoad', "Couldn't load insights."));
         } finally {
             inFlight.current = false;
         }
@@ -57,7 +58,7 @@ export default function InsightsPanel({ conn, engine, isAdmin }) {
             toast.success(t('app.dbInsights.enabled', 'pg_stat_statements is on. Queries show up as they run.'));
             await load();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.dbInsights.couldntEnableStatements', "Couldn't turn on pg_stat_statements."), err);
         } finally {
             setEnabling(false);
         }

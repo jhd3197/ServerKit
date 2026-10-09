@@ -19,10 +19,10 @@
     align-items: flex-start;
     gap: $space-3;
     padding: $space-3 $space-4;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    box-shadow: $shadow-lg;
+    box-shadow: $shadow-overlay;
     pointer-events: auto;
     animation: toast-slide-in 0.3s ease-out;
 
@@ -40,7 +40,7 @@
 
     &-message {
         flex: 1;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.4;
         color: $text-primary;
     }
@@ -52,7 +52,7 @@
         padding: $space-1;
         cursor: pointer;
         color: $text-tertiary;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         @include transition(all);
 
         &:hover {

@@ -14,6 +14,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { toastError } from '@/utils/errorMessage';
 
 const REFRESH_MS = 5000;
 const QUERY_PREVIEW_LEN = 120;
@@ -124,11 +125,18 @@ export default function ProcessListPanel({ conn, engine, active, isAdmin }) {
     });
 
     async function killProcess(proc) {
-        const verb = engineKind === 'postgresql' ? 'Terminate' : 'Kill';
+        const terminate = engineKind === 'postgresql';
+        const owner = proc.user ? ` (${proc.user}${proc.db ? ` on ${proc.db}` : ''})` : '';
         const ok = await confirm({
-            title: `${verb} process ${proc.id}`,
-            message: t('app.processListPanel.processItsRunningQueryWillBe', '{{verb}} process {{id}}{{value}}{{value2}}{{value3}}? Its running query will be aborted.', { verb: verb, id: proc.id, value: proc.user ? ` (${proc.user}` : '', value2: proc.user && proc.db ? ` on ${proc.db}` : '', value3: proc.user ? ')' : '' }),
-            confirmText: `${verb} ${proc.id}`,
+            title: terminate
+                ? t('app.processListPanel.terminateTitle', 'Terminate process {{id}}', { id: proc.id })
+                : t('app.processListPanel.killTitle', 'Kill process {{id}}', { id: proc.id }),
+            message: terminate
+                ? t('app.processListPanel.terminateConfirm', 'Terminate process {{id}}{{owner}}? Its running query is aborted.', { id: proc.id, owner })
+                : t('app.processListPanel.killConfirm', 'Kill process {{id}}{{owner}}? Its running query is aborted.', { id: proc.id, owner }),
+            confirmText: terminate
+                ? t('app.processListPanel.terminateButton', 'Terminate {{id}}', { id: proc.id })
+                : t('app.processListPanel.killButton', 'Kill {{id}}', { id: proc.id }),
             variant: 'danger',
         });
         if (!ok) return;
@@ -139,10 +147,14 @@ export default function ProcessListPanel({ conn, engine, active, isAdmin }) {
             } else {
                 await api.killHostDbProcess(engineKind, proc.id);
             }
-            toast.success(t('app.processListPanel.process2', 'Process {{id}} {{value}}', { id: proc.id, value: engineKind === 'postgresql' ? 'terminated' : 'killed' }));
+            toast.success(terminate
+                ? t('app.processListPanel.processTerminated', 'Process {{id}} terminated', { id: proc.id })
+                : t('app.processListPanel.processKilled', 'Process {{id}} killed', { id: proc.id }));
             load(true);
         } catch (err) {
-            toast.error(err.message || t('app.processListPanel.failedToProcess', 'Failed to {{value}} process {{id}}', { value: verb.toLowerCase(), id: proc.id }));
+            toastError(toast, terminate
+                ? t('app.processListPanel.couldntTerminate', "Couldn't terminate process {{id}}.", { id: proc.id })
+                : t('app.processListPanel.couldntKill', "Couldn't kill process {{id}}.", { id: proc.id }), err);
         } finally {
             setKilling(null);
         }
@@ -188,7 +200,7 @@ export default function ProcessListPanel({ conn, engine, active, isAdmin }) {
         },
         {
             key: 'state',
-            header: isPg ? 'State' : 'Command',
+            header: isPg ? t('app.processListPanel.state', 'State') : t('app.processListPanel.command', 'Command'),
             sortable: true,
             // Declared: a server with two sessions fails the enum cardinality
             // test, and a pick-list is what makes this column useful at all.
@@ -211,7 +223,7 @@ export default function ProcessListPanel({ conn, engine, active, isAdmin }) {
             unit: 's',
             value: (p) => (typeof p.time_s === 'number' ? p.time_s : null),
             sortValue: (p) => (typeof p.time_s === 'number' ? p.time_s : null),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (p) => formatTime(p.time_s),
         },
         {

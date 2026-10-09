@@ -148,12 +148,18 @@ def _run_purge_hook(entry, row):
         return f'purged, but cleanup failed: {exc}'
 
 
+# purge()'s error for a missing row. Callers compare against this constant
+# (`err is PURGE_NOT_FOUND`), never against the wording, so rephrasing the
+# message can't turn the route's 404 into a 400.
+PURGE_NOT_FOUND = 'not found'
+
+
 def purge(kind, record_id):
     """Delete for real. The only irreversible action in this module."""
     entry = _entry(kind)
     row = entry['model'].query.filter_by(id=record_id).first()
     if row is None:
-        return False, 'not found'
+        return False, PURGE_NOT_FOUND
     if row.deleted_at is None:
         return False, 'record is not in the recycle bin'
     warning = _run_purge_hook(entry, row)

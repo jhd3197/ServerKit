@@ -15,6 +15,7 @@ import LogContent from '../log-viewer/LogContent';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Unit log tail cadence while auto-refresh is on.
 const LOG_TAIL_MS = 3000;
@@ -150,7 +151,7 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
                 setUnits(data?.units || []);
             }
         } catch (err) {
-            toast.error(err.message || t('app.servicesTab.failedToLoadServices', 'Failed to load services'));
+            toastError(toast, t('app.servicesTab.failedToLoadServices', "Couldn't load services."), err);
         } finally {
             setLoading(false);
         }
@@ -206,12 +207,20 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
         try {
             if (isLocal) await api.controlService(unit, action);
             else await api.controlRemoteService(serverId, unit, action);
-            toast.success(`${unit}: ${action} ok`);
+            toast.success(action === 'start'
+                ? t('app.servicesTab.unitStarted', '{{unit}} started', { unit })
+                : action === 'stop'
+                    ? t('app.servicesTab.unitStopped', '{{unit}} stopped', { unit })
+                    : t('app.servicesTab.unitRestarted', '{{unit}} restarted', { unit }));
             // Refresh state — only the affected row needs a reload but
             // re-fetching the list is simpler and keeps the filter consistent.
             loadUnits();
         } catch (err) {
-            toast.error(err.message || t('app.servicesTab.failedTo', 'Failed to {{action}} {{unit}}', { action: action, unit: unit }));
+            toastError(toast, action === 'start'
+                ? t('app.servicesTab.couldntStartUnit', "Couldn't start {{unit}}.", { unit })
+                : action === 'stop'
+                    ? t('app.servicesTab.couldntStopUnit', "Couldn't stop {{unit}}.", { unit })
+                    : t('app.servicesTab.couldntRestartUnit', "Couldn't restart {{unit}}.", { unit }), err);
         } finally {
             setBusyUnit(null);
         }
@@ -266,7 +275,7 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
             await api.reloadRemoteSystemdDaemon(serverId);
             toast.success(t('app.servicesTab.systemctlDaemonReloadCompleted', 'systemctl daemon-reload completed'));
         } catch (err) {
-            toast.error(err.message || t('app.servicesTab.daemonReloadFailed', 'daemon-reload failed'));
+            toastError(toast, t('app.servicesTab.daemonReloadFailed', "Couldn't run daemon-reload."), err);
         } finally {
             setBusyUnit(null);
         }
@@ -277,9 +286,9 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
         downloadBlob(logText, `${logsFor.unit}-${Date.now()}.log`);
     }
 
-    // Units table columns. Cell markup and classNames are identical to the
-    // hand-rolled table they replace so the .server-services__* SCSS keeps
-    // applying (.server-services__desc, .server-services__row-actions, .mono).
+    // Units table columns. The table's look is .sk-dtable's; the only page
+    // classes left are on cell content (.server-services__desc,
+    // .server-services__row-actions).
     //
     // The two hosts do not answer with the same fields: an agent unit carries a
     // description and no PID, the panel host's daemon probe carries a PID and no
@@ -299,7 +308,7 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
             type: 'text',
             value: (u) => u.unit || '',
             sortValue: (u) => u.unit || '',
-            cellClassName: 'mono',
+            cellClassName: 'sk-cell-mono',
             render: (u) => u.unit,
         },
         {
@@ -330,7 +339,7 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
             type: 'num',
             value: (u) => u.pid ?? null,
             sortValue: (u) => u.pid ?? null,
-            cellClassName: 'mono',
+            cellClassName: 'sk-cell-mono',
             render: (u) => u.pid ?? '—',
         }] : [{
             key: 'description',
@@ -459,7 +468,6 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
                     sorts={sorts}
                     onSortsChange={setSorts}
                     {...chrome.tableProps}
-                    tableClassName="server-services__table"
                     emptyTitle="No units match this view."
                     emptyMessage=""
                     footer={(

@@ -17,10 +17,13 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import PortField from '@/components/PortField';
+import EnvEditor from '@/components/EnvEditor';
+import { CopyButton } from '@/components/CopyButton';
+import { envToObject } from '@/utils/dotenv';
 import {
     Box, X, Trash2, Play, Square, RotateCw,
-    Terminal as TerminalLucide, FileText, Activity, Clock3, Copy,
+    Terminal as TerminalLucide, FileText, Activity, Clock3, Plus,
     Database, Gauge, Package, Server as ServerIcon, Lock,
 } from 'lucide-react';
 import {
@@ -40,10 +43,10 @@ import {
     getContainerProjectName,
 } from './dockerHelpers';
 import { ContainerResourceBars } from './dockerShared';
-import { copyToClipboard } from '@/utils/clipboard';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Container stats cadence.
 const STATS_REFRESH_MS = 10000;
@@ -61,9 +64,9 @@ export const RunContainerButton = () => {
             <Button
                 onClick={() => setShowModal(true)}
                 disabled={isRemote}
-                title={isRemote ? t('app.containersTab.runningNewContainersIsOnlyAvailable', 'Running new containers is only available on the local Docker target right now') : t('app.containersTab.runContainer', 'Run container')}
+                title={isRemote ? t('app.containersTab.runningNewContainersIsOnlyAvailable', 'Running new containers is only available on the panel server right now') : t('app.containersTab.runContainer', 'Run container')}
             >
-                <span>+</span> {t('app.containersTab.runContainer2', 'Run Container')}
+                <span>+</span> {t('app.containersTab.runContainer2', 'Run container')}
             </Button>
             {showModal && <RunContainerModal onClose={() => setShowModal(false)} onCreated={() => window.location.reload()} />}
         </>
@@ -350,20 +353,26 @@ const ContainersTab = ({ onStatsChange }) => {
                 }
                 toast.success(t('app.containersTab.containerRestarted', 'Container restarted'));
             } else if (action === 'remove') {
-                const removeConfirmed = await confirmContainer({ titleKey: 'app.containersTab.removeContainer', title: 'Remove Container', messageKey: 'app.containersTab.removeThisContainer', message: 'Remove this container?' });
+                const removeConfirmed = await confirmContainer({ titleKey: 'app.containersTab.removeContainer', title: 'Delete container', messageKey: 'app.containersTab.removeThisContainer', message: 'Delete this container?', confirmText: t('common.actions.delete', 'Delete') });
                 if (!removeConfirmed) return;
                 if (isRemote) {
                     await api.removeRemoteContainer(serverId, containerId, true);
                 } else {
                     await api.removeContainer(containerId, true);
                 }
-                toast.success(t('app.containersTab.containerRemoved', 'Container removed'));
+                toast.success(t('app.containersTab.containerRemoved', 'Container deleted'));
             }
             loadContainers();
             onStatsChange?.();
         } catch (err) {
             console.error(`Failed to ${action} container:`, err);
-            toast.error(err.message || t('app.containersTab.failedToContainer', 'Failed to {{action}} container', { action: action }));
+            const failed = {
+                start: t('app.containersTab.couldntStartContainer', "Couldn't start the container."),
+                stop: t('app.containersTab.couldntStopContainer', "Couldn't stop the container."),
+                restart: t('app.containersTab.couldntRestartContainer', "Couldn't restart the container."),
+                remove: t('app.containersTab.couldntDeleteContainer', "Couldn't delete the container."),
+            };
+            toastError(toast, failed[action] || t('app.containersTab.couldntUpdateContainer', "Couldn't update the container."), err);
         }
     }
 
@@ -419,16 +428,21 @@ const ContainersTab = ({ onStatsChange }) => {
         setBulkBusy(false);
 
         if (failed.length) {
-            toast.error(`${failed.length} failed: ${failed.slice(0, 3).join(', ')}${failed.length > 3 ? '…' : ''}`);
+            toast.error(t('app.containersTab.bulkFailed', {
+                count: failed.length,
+                names: `${failed.slice(0, 3).join(', ')}${failed.length > 3 ? '…' : ''}`,
+                defaultValue_one: "Couldn't change 1 container: {{names}}",
+                defaultValue_other: "Couldn't change {{count}} containers: {{names}}",
+            }));
         } else {
-            const verb = action === 'start'
-                ? t('app.containersTab.started', 'started')
+            const done = action === 'start'
+                ? t('app.containersTab.bulkStarted', { count: ok, defaultValue_one: '1 container started', defaultValue_other: '{{count}} containers started' })
                 : action === 'stop'
-                    ? t('app.containersTab.stopped', 'stopped')
-                    : t('app.containersTab.restarted', 'restarted');
+                    ? t('app.containersTab.bulkStopped', { count: ok, defaultValue_one: '1 container stopped', defaultValue_other: '{{count}} containers stopped' })
+                    : t('app.containersTab.bulkRestarted', { count: ok, defaultValue_one: '1 container restarted', defaultValue_other: '{{count}} containers restarted' });
             toast.success(skipped
-                ? t('app.containersTab.bulkActionDoneWithSkipped', '{{count}} containers {{verb}} · {{skipped}} system containers skipped', { count: ok, verb: verb, skipped: skipped })
-                : t('app.containersTab.bulkActionDone', '{{count}} containers {{verb}}', { count: ok, verb: verb }));
+                ? `${done} · ${t('app.containersTab.systemSkipped', { count: skipped, defaultValue_one: '1 system container skipped', defaultValue_other: '{{count}} system containers skipped' })}`
+                : done);
         }
         setPicked([]);
         loadContainers();
@@ -486,7 +500,7 @@ const ContainersTab = ({ onStatsChange }) => {
 
     // DataTable columns. Cell markup and classNames are identical to the
     // hand-rolled table they replace, so _docker.scss keeps applying
-    // (.dx-manager-table, .dx-name-stack, .dx-status-pill, .dx-row-actions...).
+    // (.dx-name-stack, .dx-status-pill, .dx-row-actions...).
     //
     // Two accessors per column on purpose: `value` is what the column menu, the
     // filter rules and the export read (ds/grid/fields.js), `sortValue` is what
@@ -682,7 +696,7 @@ const ContainersTab = ({ onStatsChange }) => {
                             </Button>
                         )}
                         {isProtected ? (
-                            <span className="dx-row-protected" title={t('app.containersTab.serverkitSystemContainerManagedByThe', 'ServerKit system container — managed by the panel, lifecycle controls are disabled')}>
+                            <span className="dx-row-protected" title={t('app.containersTab.serverkitSystemContainerManagedByThe', 'ServerKit system container: managed by the panel, so lifecycle controls are disabled')}>
                                 <Lock size={11} /> {t('common.labels.system', 'System')}
                             </span>
                         ) : isRunning ? (
@@ -699,7 +713,7 @@ const ContainersTab = ({ onStatsChange }) => {
                                 <Button variant="unstyled" type="button" className="dx-row-action is-success" onClick={() => handleAction(containerId, 'start')} title={t('common.actions.start', 'Start')}>
                                     <Play size={13} />
                                 </Button>
-                                <Button variant="unstyled" type="button" className="dx-row-action is-danger" onClick={() => handleAction(containerId, 'remove')} title={t('common.actions.remove', 'Remove')}>
+                                <Button variant="unstyled" type="button" className="dx-row-action is-danger" onClick={() => handleAction(containerId, 'remove')} title={t('common.actions.delete', 'Delete')}>
                                     <Trash2 size={13} />
                                 </Button>
                             </>
@@ -832,8 +846,7 @@ const ContainersTab = ({ onStatsChange }) => {
                             rowClassName={(container) => (
                                 `${isContainerRunning(container) ? 'is-running' : 'is-stopped'} ${getContainerId(selectedContainer) === getContainerId(container) ? 'is-selected' : ''}`
                             )}
-                            className="dx-table-wrap"
-                            tableClassName="dx-manager-table"
+                            className="dx-table-wrap sk-dtable-wrap--sticky"
                             footer={(
                                 <DataTableFooter
                                     shown={chrome.shownCount}
@@ -952,10 +965,6 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
     const health = details?.State?.Health?.Status || getContainerStatusLabel(container);
     const projectName = getContainerProjectName(container, details);
 
-    async function copyContainerId() {
-        if (await copyToClipboard(containerId)) toast.success(t('app.containersTab.containerIdCopied', 'Container ID copied'));
-        else toast.error(t('app.containersTab.couldNotCopyContainerId', 'Could not copy container ID'));
-    }
 
     return (
         <>
@@ -969,9 +978,14 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
                     <h3 title={getContainerName(container)}>{getContainerName(container)}</h3>
                     <span>{shortId(containerId)}</span>
                 </div>
-                <Button variant="unstyled" type="button" className="dx-row-action" onClick={copyContainerId} title={t('app.containersTab.copyContainerId', 'Copy container ID')}>
-                    <Copy size={13} />
-                </Button>
+                <CopyButton
+                    value={containerId}
+                    variant="unstyled"
+                    className="dx-row-action"
+                    label={t('app.containersTab.copyContainerId', 'Copy container ID')}
+                    copiedLabel={t('app.containersTab.containerIdCopied', 'Container ID copied')}
+                    onCopy={() => toast.success(t('app.containersTab.containerIdCopied', 'Container ID copied'))}
+                />
                 <Button variant="unstyled" type="button" className="dx-row-action" onClick={onClose} title={t('app.containersTab.closeDetails', 'Close details')}>
                     <X size={13} />
                 </Button>
@@ -994,7 +1008,7 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
                     </Button>
                 )}
                 {isProtected ? (
-                    <span className="dx-action-protected" title={t('app.containersTab.serverkitSystemContainerManagedByThe', 'ServerKit system container — managed by the panel, lifecycle controls are disabled')}>
+                    <span className="dx-action-protected" title={t('app.containersTab.serverkitSystemContainerManagedByThe', 'ServerKit system container: managed by the panel, so lifecycle controls are disabled')}>
                         <Lock size={13} /> {t('app.containersTab.systemContainer', 'System container')}
                     </span>
                 ) : isRunning ? (
@@ -1012,7 +1026,7 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
                             <Play size={13} /> {t('common.actions.start', 'Start')}
                         </Button>
                         <Button variant="unstyled" type="button" className="dx-action-btn is-danger" onClick={() => onAction(containerId, 'remove')}>
-                            <Trash2 size={13} /> {t('common.actions.remove', 'Remove')}
+                            <Trash2 size={13} /> {t('common.actions.delete', 'Delete')}
                         </Button>
                     </>
                 )}
@@ -1038,7 +1052,7 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
                         <ContainerResourceBars stats={stats} muted={!isRunning} />
                         <div className="dx-detail-grid">
                             <div><span>{t('app.containersTab.image', 'Image')}</span><strong title={getContainerImage(container)}>{getContainerImage(container)}</strong></div>
-                            <div><span>{t('common.labels.project', 'Project')}</span><strong>{projectName}</strong></div>
+                            <div><span>{t('app.containersTab.composeProject', 'Compose project')}</span><strong>{projectName}</strong></div>
                             <div><span>{t('common.actions.restart', 'Restart')}</span><strong>{restartPolicy}</strong></div>
                             <div><span>{t('common.labels.created', 'Created')}</span><strong>{container.created || container.CreatedAt || '-'}</strong></div>
                         </div>
@@ -1093,7 +1107,7 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
 
                 {activeSection === 'env' && (
                     <>
-                        <div className="dx-section-title"><Package size={13} /> {t('app.containersTab.environment', 'Environment')}</div>
+                        <div className="dx-section-title"><Package size={13} /> {t('app.containersTab.environment', 'Environment variables')}</div>
                         <div className="dx-inspector-list">
                             {envVars.length === 0 ? (
                                 <code className="is-empty">{t('app.containersTab.noEnvironmentVariables', 'No environment variables')}</code>
@@ -1123,21 +1137,38 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
     );
 };
 
+// Port rows → the `-p` specs docker run takes: "8080:80", or just "80" to let
+// Docker pick the host side. A host port alone publishes the same port inside.
+function portMappings(rows) {
+    return rows
+        .map(({ host, container }) => {
+            if (host !== '' && container !== '') return `${host}:${container}`;
+            if (container !== '') return String(container);
+            if (host !== '') return `${host}:${host}`;
+            return null;
+        })
+        .filter(Boolean);
+}
+
 const RunContainerModal = ({ onClose, onCreated }) => {
     const { t } = useTranslation();
     const [formData, setFormData] = useState({
         image: '',
         name: '',
-        ports: '',
         volumes: '',
-        env: '',
     });
+    // [{ host, container }] — each row becomes one `-p host:container`.
+    const [ports, setPorts] = useState([{ host: '', container: '' }]);
+    const [env, setEnv] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     function handleChange(e) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
+
+    const setPortRow = (index, patch) => setPorts(ports.map((row, i) => (i === index ? { ...row, ...patch } : row)));
+    const removePortRow = (index) => setPorts(ports.length > 1 ? ports.filter((_, i) => i !== index) : [{ host: '', container: '' }]);
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -1148,14 +1179,9 @@ const RunContainerModal = ({ onClose, onCreated }) => {
             const data = {
                 image: formData.image,
                 name: formData.name || undefined,
-                ports: formData.ports ? formData.ports.split(',').map(p => p.trim()) : [],
+                ports: portMappings(ports),
                 volumes: formData.volumes ? formData.volumes.split(',').map(v => v.trim()) : [],
-                env: formData.env ? Object.fromEntries(
-                    formData.env.split('\n').filter(l => l.includes('=')).map(l => {
-                        const [key, ...rest] = l.split('=');
-                        return [key.trim(), rest.join('=').trim()];
-                    })
-                ) : {},
+                env: envToObject(env),
             };
 
             await api.runContainer(data);
@@ -1169,7 +1195,7 @@ const RunContainerModal = ({ onClose, onCreated }) => {
     }
 
     return (
-        <Modal open onClose={onClose} title={t('app.containersTab.runContainer2', 'Run Container')} size="md">
+        <Modal open onClose={onClose} title={t('app.containersTab.runContainer2', 'Run container')} size="md">
             {error && <div className="error-message">{error}</div>}
 
             <form onSubmit={handleSubmit}>
@@ -1186,7 +1212,7 @@ const RunContainerModal = ({ onClose, onCreated }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>{t('app.containersTab.containerName', 'Container Name')}</label>
+                    <label>{t('app.containersTab.containerName', 'Container name')}</label>
                     <Input
                         type="text"
                         name="name"
@@ -1197,14 +1223,50 @@ const RunContainerModal = ({ onClose, onCreated }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>{t('app.containersTab.portsCommaSeparated', 'Ports (comma-separated)')}</label>
-                    <Input
-                        type="text"
-                        name="ports"
-                        value={formData.ports}
-                        onChange={handleChange}
-                        placeholder="8080:80, 443:443"
-                    />
+                    <label>{t('app.containersTab.ports', 'Ports')}</label>
+                    <div className="dx-run-ports">
+                        <div className="dx-run-ports__head">
+                            <span>{t('app.containersTab.hostPort', 'Host port')}</span>
+                            <span aria-hidden="true" />
+                            <span>{t('app.containersTab.containerPort', 'Container port')}</span>
+                            <span aria-hidden="true" />
+                        </div>
+                        {ports.map((row, index) => (
+                            // Rows have no identity beyond their position while being typed.
+                            <div className="dx-run-ports__row" key={index}>
+                                <PortField
+                                    value={row.host}
+                                    onChange={(host) => setPortRow(index, { host })}
+                                    placeholder="8080"
+                                />
+                                <span className="dx-run-ports__sep" aria-hidden="true">:</span>
+                                <PortField
+                                    host={false}
+                                    value={row.container}
+                                    onChange={(container) => setPortRow(index, { container })}
+                                    placeholder="80"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => removePortRow(index)}
+                                    aria-label={t('app.containersTab.removePortMapping', 'Remove port mapping')}
+                                >
+                                    <Trash2 size={14} />
+                                </Button>
+                            </div>
+                        ))}
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="dx-run-ports__add"
+                            onClick={() => setPorts([...ports, { host: '', container: '' }])}
+                        >
+                            <Plus size={14} /> {t('app.containersTab.addPort', 'Add port')}
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="form-group">
@@ -1219,14 +1281,8 @@ const RunContainerModal = ({ onClose, onCreated }) => {
                 </div>
 
                 <div className="form-group">
-                    <label>{t('app.containersTab.environmentVariablesOnePerLineKey', 'Environment Variables (one per line, KEY=value)')}</label>
-                    <Textarea
-                        name="env"
-                        value={formData.env}
-                        onChange={handleChange}
-                        placeholder={t('app.containersTab.nodeEnvProductionApiKeyXxx', 'NODE_ENV=production\nAPI_KEY=xxx')}
-                        rows={4}
-                    />
+                    <label>{t('app.containersTab.environmentVariables', 'Environment variables')}</label>
+                    <EnvEditor value={env} onChange={setEnv} />
                 </div>
 
                 <div className="modal-actions">
@@ -1234,7 +1290,7 @@ const RunContainerModal = ({ onClose, onCreated }) => {
                         {t('common.actions.cancel', 'Cancel')}
                     </Button>
                     <Button type="submit" disabled={loading}>
-                        {loading ? 'Running...' : 'Run Container'}
+                        {loading ? t('app.containersTab.running', 'Running…') : t('app.containersTab.runContainer', 'Run container')}
                     </Button>
                 </div>
             </form>
@@ -1298,7 +1354,7 @@ const ContainerLogsModal = ({ container, onClose }) => {
             open
             onOpenChange={(open) => { if (!open) onClose(); }}
             title={getContainerName(container)}
-            subtitle={`${getContainerImage(container)} · ${shortId(containerId)}`}
+            subtitle={<span className="mono">{`${getContainerImage(container)} · ${shortId(containerId)}`}</span>}
             icon={<Box size={18} />}
             width={520}
             flush

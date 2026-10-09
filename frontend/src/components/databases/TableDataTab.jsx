@@ -276,7 +276,7 @@ export default function TableDataTab({ conn, tabId, table, rowsEstimate, active,
                         </SharedButton>
                         <span className="dbx-pager-label">
                             {rowsEstimate === 0
-                                ? '0 rows'
+                                ? t('app.tableDataTab.zeroRows', '0 rows')
                                 : `${page * PAGE_SIZE + 1}–${page * PAGE_SIZE + (data?.row_count || 0)}`}
                             {rowsEstimate != null && rowsEstimate > 0 && <span className="dbx-pager-total"> {t('app.tableDataTab.of', 'of ≈')}{rowsEstimate.toLocaleString()}</span>}
                         </span>

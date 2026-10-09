@@ -49,7 +49,7 @@ $ft-default:  #646b7a;
     .upload-tray {
         background: var(--surface);
         border: 1px solid $border-default;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         overflow: hidden;
         margin: $space-2 $space-4 0;
         flex-shrink: 0;
@@ -62,7 +62,7 @@ $ft-default:  #646b7a;
         padding: $space-3 $space-4;
         background: var(--surface-2);
         border-bottom: 1px solid $border-default;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
 
@@ -70,8 +70,7 @@ $ft-default:  #646b7a;
 
         .upload-tray-percent {
             margin-left: auto;
-            font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-secondary;
         }
 
@@ -91,7 +90,7 @@ $ft-default:  #646b7a;
         gap: $space-3;
         align-items: center;
         padding: $space-2 $space-4;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
 
         .upload-name {
             color: $text-primary;
@@ -103,7 +102,7 @@ $ft-default:  #646b7a;
         .upload-bar {
             height: 4px;
             background: var(--surface-3);
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             overflow: hidden;
 
             .upload-bar-fill {
@@ -116,7 +115,6 @@ $ft-default:  #646b7a;
         .upload-status {
             text-align: right;
             color: $text-tertiary;
-            font-family: $font-mono;
         }
 
         &.status-done {
@@ -134,7 +132,7 @@ $ft-default:  #646b7a;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 9px $space-4;
+        padding: $space-2 $space-4;
         background: transparent;
         border: none;
         border-bottom: 1px solid var(--border-soft);
@@ -161,14 +159,14 @@ $ft-default:  #646b7a;
 
     .nav-buttons {
         display: flex;
-        gap: 2px;
+        gap: $space-hair;
 
         .nav-btn {
             background: transparent;
             border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
+            width: $control-sm;
+            height: $control-sm;
+            border-radius: $radius-control;
             color: var(--text-dim);
             cursor: pointer;
             display: flex;
@@ -192,7 +190,7 @@ $ft-default:  #646b7a;
         min-width: 0;
         overflow: hidden;
         font-family: $font-mono;
-        font-size: 12.5px;
+        font-size: $text-sm;
         gap: 1px;
 
         .crumb-segment {
@@ -207,15 +205,14 @@ $ft-default:  #646b7a;
         .crumb-separator {
             color: var(--text-ghost);
             margin: 0 1px;
-            font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             user-select: none;
         }
         .crumb {
             background: transparent;
             border: none;
-            padding: 4px 8px;
-            border-radius: $radius-sm;
+            padding: $space-1 $space-2;
+            border-radius: $radius-badge;
             color: var(--text-dim);
             cursor: pointer;
             font: inherit;
@@ -236,18 +233,18 @@ $ft-default:  #646b7a;
     }
 
     .file-mount-chip {
+        height: 20px; // geometry: badge height (20px badge spec)
         display: inline-flex;
         align-items: center;
         min-width: 0;
-        gap: 5px;
+        gap: $space-tight;
         margin-inline-start: $space-1;
-        padding: 4px 8px;
+        padding: 0 $space-tight;
         border: 1px solid var(--border-soft);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: var(--surface-2);
         color: var(--text-faint);
-        font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         white-space: nowrap;
 
         svg { color: var(--accent-bright); }
@@ -261,7 +258,7 @@ $ft-default:  #646b7a;
         align-items: center;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: $radius-card;
         width: clamp(160px, 18vw, 220px);
         @include transition(all);
 
@@ -280,8 +277,8 @@ $ft-default:  #646b7a;
         input {
             background: transparent;
             border: none;
-            padding: 6px $space-3 6px 32px;
-            font-size: $font-size-sm;
+            padding: $space-tight $space-3 $space-tight $space-8;
+            font-size: $text-xs;
             color: $text-primary;
             width: 100%;
 
@@ -294,10 +291,10 @@ $ft-default:  #646b7a;
             right: 6px;
             background: transparent;
             border: none;
-            padding: 4px;
+            padding: $space-1;
             color: $text-tertiary;
             cursor: pointer;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -311,12 +308,13 @@ $ft-default:  #646b7a;
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: 6px $space-3;
+        height: $control-md;
+        padding: 0 $space-3;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: $radius-control;
         color: var(--text-dim);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         cursor: pointer;
         white-space: nowrap;
@@ -335,8 +333,8 @@ $ft-default:  #646b7a;
     .toolbar-icon-btn {
         background: transparent;
         border: none;
-        padding: 7px;
-        border-radius: 8px;
+        padding: $space-2;
+        border-radius: $radius-card;
         color: var(--text-dim);
         cursor: pointer;
         display: flex;
@@ -351,58 +349,61 @@ $ft-default:  #646b7a;
         &.small { padding: 4px; }
     }
 
+    // Compact Radix Select trigger: icon · value · chevron.
     .file-toolbar-select {
         position: relative;
         display: inline-flex;
         align-items: center;
-        height: 32px;
+        justify-content: flex-start;
+        width: auto;
+        height: $control-md;
         min-width: 0;
-        gap: 5px;
-        padding-inline: 8px 5px;
+        gap: $space-tight;
+        padding-inline: $space-2 $space-tight;
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: $radius-card;
         background: var(--surface-2);
         color: var(--text-faint);
+        font-size: $text-xs;
         transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
 
         &:hover,
-        &:focus-within {
+        &:focus-visible {
             border-color: var(--border-strong);
             background: var(--surface-3);
             color: var(--text-dim);
         }
 
-        select {
+        > span {
             width: 78px;
             min-width: 0;
-            border: 0;
-            outline: 0;
-            background: transparent;
-            color: inherit;
-            font-family: $font-mono;
-            font-size: 10.5px;
-            cursor: pointer;
-            appearance: none;
+            text-align: start;
         }
 
-        > svg:last-child { opacity: 0.58; pointer-events: none; }
+        > svg { flex-shrink: 0; }
+
+        .ui-select-icon {
+            width: 12px;
+            height: 12px;
+            opacity: 0.58;
+        }
     }
 
     // ─── View toggles ───────────────────────────────────
     .view-toggle {
         display: flex;
-        gap: 2px;
-        padding: 2px;
+        gap: $space-hair;
+        padding: $space-hair;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: $radius-card;
 
         .view-toggle-btn {
             background: transparent;
             border: none;
             width: 30px;
-            height: 26px;
-            border-radius: 6px;
+            height: $control-sm;
+            border-radius: $radius-control;
             color: var(--text-faint);
             cursor: pointer;
             display: flex;
@@ -442,13 +443,13 @@ $ft-default:  #646b7a;
         align-items: center;
         gap: $space-2;
         color: var(--accent-bright);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
 
         svg {
             background: $accent-primary;
             color: white;
-            padding: 2px;
+            padding: $space-hair;
             border-radius: $radius-full;
             box-sizing: content-box;
         }
@@ -459,13 +460,13 @@ $ft-default:  #646b7a;
     .bulk-btn {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 6px $space-3;
+        gap: $space-tight;
+        padding: $space-tight $space-3;
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: $radius-card;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         cursor: pointer;
         @include transition(all);
@@ -554,7 +555,7 @@ $ft-default:  #646b7a;
         scrollbar-width: thin;
 
         &::-webkit-scrollbar { width: 4px; }
-        &::-webkit-scrollbar-thumb { background: $border-default; border-radius: $radius-sm; }
+        &::-webkit-scrollbar-thumb { background: $border-default; border-radius: $radius-badge; }
 
         @media (max-width: $breakpoint-lg) {
             position: fixed;
@@ -566,27 +567,25 @@ $ft-default:  #646b7a;
             background: $bg-body;
             padding: $space-4;
             z-index: $z-modal;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+            box-shadow: $shadow-overlay;
         }
     }
 
     .file-manager-source {
         position: relative;
-        padding: 0 2px $space-3;
+        padding: 0 $space-hair $space-3;
         border-bottom: 1px solid var(--border-soft);
 
-        .target-picker,
-        .target-picker__resource { width: 100%; max-width: none; }
+        .file-manager-source__picker { width: 100%; max-width: none; }
 
         &__meta {
             display: flex;
             align-items: center;
-            gap: 6px;
-            margin-block-start: 6px;
-            padding-inline: 9px;
+            gap: $space-tight;
+            margin-block-start: $space-tight;
+            padding-inline: $space-2;
             color: var(--text-ghost);
-            font-family: $font-mono;
-            font-size: 9.5px;
+            font-size: $text-xs;
         }
 
         &__dot {
@@ -595,22 +594,22 @@ $ft-default:  #646b7a;
             flex: 0 0 auto;
             border-radius: 50%;
             background: var(--green);
-            box-shadow: 0 0 5px var(--green);
+            box-shadow: none;
 
-            &.is-cloud { background: var(--cyan); box-shadow: 0 0 5px var(--cyan); }
+            &.is-cloud { background: var(--cyan); }
         }
 
         &__close {
             position: absolute;
-            inset-block-start: 5px;
-            inset-inline-end: 7px;
+            inset-block-start: $space-tight;
+            inset-inline-end: $space-2;
             z-index: 2;
             display: none;
             width: 25px;
-            height: 25px;
+            height: 25px; // geometry: close glyph pinned inside a source tab
             place-items: center;
             border: 0;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             background: var(--surface-3);
             color: var(--text-faint);
             cursor: pointer;
@@ -637,18 +636,15 @@ $ft-default:  #646b7a;
         display: flex;
         align-items: center;
         gap: $space-2;
-        padding: 10px $space-2 5px;
+        padding: $space-3 $space-2 $space-tight;
         background: transparent;
         border: none;
         width: 100%;
         text-align: left;
         cursor: pointer;
         color: var(--text-ghost);
-        font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
         @include transition(color);
 
         &:hover { background: transparent; color: var(--text-faint); }
@@ -671,7 +667,7 @@ $ft-default:  #646b7a;
             gap: $space-2;
             flex: 1;
             min-width: 0;
-            padding: 10px $space-2 5px;
+            padding: $space-3 $space-2 $space-tight;
             background: transparent;
             border: none;
             color: inherit;
@@ -695,7 +691,7 @@ $ft-default:  #646b7a;
             min-width: 0;
             flex: 1;
             gap: $space-2;
-            padding: 10px $space-2 5px;
+            padding: $space-3 $space-2 $space-tight;
 
             svg { width: 13px; height: 13px; }
         }
@@ -705,12 +701,12 @@ $ft-default:  #646b7a;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 26px;
-        height: 26px;
-        margin-right: 2px;
+        width: $control-sm;
+        height: $control-sm;
+        margin-right: $space-hair;
         background: transparent;
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: var(--text-faint);
         cursor: pointer;
         @include transition(all);
@@ -738,14 +734,14 @@ $ft-default:  #646b7a;
     .quick-access-item {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         width: 100%;
-        padding: 6px 10px;
+        padding: $space-tight $space-3;
         background: transparent;
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: var(--text-dim);
-        font-size: 12.5px;
+        font-size: $text-sm;
         text-align: left;
         cursor: pointer;
         @include transition(all);
@@ -780,13 +776,13 @@ $ft-default:  #646b7a;
         justify-content: space-between;
         gap: $space-2;
         width: 100%;
-        padding: 5px $space-2;
+        padding: $space-tight $space-2;
         background: transparent;
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: var(--text-dim);
         cursor: pointer;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         text-align: left;
         @include transition(all);
@@ -808,8 +804,7 @@ $ft-default:  #646b7a;
         span:last-child {
             min-width: 20px;
             color: var(--text-ghost);
-            font-family: $font-mono;
-            font-size: 10px;
+            font-size: $text-xs;
             text-align: right;
         }
 
@@ -828,22 +823,19 @@ $ft-default:  #646b7a;
             align-items: center;
             gap: $space-1;
             color: var(--text-ghost);
-            font-family: $font-mono;
-            font-size: 10px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
         }
 
         select {
             width: 100%;
-            min-height: 28px;
-            padding: 4px $space-2;
+            min-height: $control-sm;
+            padding: $space-1 $space-2;
             background: var(--surface-2);
             border: 1px solid var(--border);
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             color: $text-primary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             outline: none;
             cursor: pointer;
 
@@ -857,7 +849,7 @@ $ft-default:  #646b7a;
     .folder-tree {
         display: flex;
         flex-direction: column;
-        font-size: 13px;
+        font-size: $text-sm;
     }
 
     .tree-node {
@@ -868,9 +860,9 @@ $ft-default:  #646b7a;
     .tree-row {
         display: flex;
         align-items: center;
-        gap: 6px;
-        padding: 5px $space-2;
-        border-radius: $radius-sm;
+        gap: $space-tight;
+        padding: $space-tight $space-2;
+        border-radius: $radius-badge;
         cursor: pointer;
         color: var(--text-dim);
         @include transition(background);
@@ -898,7 +890,7 @@ $ft-default:  #646b7a;
         color: var(--text-faint);
         cursor: pointer;
         flex-shrink: 0;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
 
         &:hover { background: var(--surface-3); color: var(--text); }
     }
@@ -921,7 +913,7 @@ $ft-default:  #646b7a;
     .tree-name {
         flex: 1;
         @include truncate();
-        font-size: 13px;
+        font-size: $text-sm;
     }
 
     .tree-children {
@@ -930,8 +922,8 @@ $ft-default:  #646b7a;
     }
 
     .tree-empty {
-        padding: 4px $space-2;
-        font-size: $font-size-xs;
+        padding: $space-1 $space-2;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-style: italic;
     }
@@ -941,14 +933,13 @@ $ft-default:  #646b7a;
         display: flex;
         align-items: center;
         gap: $space-1;
-        font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         color: var(--text-ghost);
 
         &--footer {
             justify-content: flex-end;
-            padding: 5px $space-2 0;
-            font-size: 9px;
+            padding: $space-tight $space-2 0;
+            font-size: $text-xs;
         }
     }
 
@@ -956,9 +947,9 @@ $ft-default:  #646b7a;
 
     .disk-mount-item {
         width: 100%;
-        padding: 7px $space-2 8px;
+        padding: $space-2 $space-2 $space-2;
         border: 1px solid transparent;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: transparent;
         color: inherit;
         text-align: start;
@@ -973,18 +964,17 @@ $ft-default:  #646b7a;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 6px;
+        margin-bottom: $space-tight;
     }
 
     .disk-mount-point {
         font-family: $font-mono;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     .disk-percent {
-        font-family: $font-mono;
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         &.healthy { color: $success; }
         &.warning { color: $warning; }
@@ -994,7 +984,7 @@ $ft-default:  #646b7a;
     .disk-progress {
         height: 5px;
         background: var(--surface-3);
-        border-radius: 3px;
+        border-radius: $radius-badge;
         overflow: hidden;
         margin-bottom: 0;
 
@@ -1008,7 +998,7 @@ $ft-default:  #646b7a;
         display: flex;
         justify-content: space-between;
         font-family: $font-mono;
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -1037,7 +1027,7 @@ $ft-default:  #646b7a;
 
         svg { margin-bottom: $space-4; opacity: 0.6; }
         h3 {
-            font-size: $font-size-lg;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             color: $text-primary;
             margin: 0 0 $space-2;
@@ -1046,7 +1036,7 @@ $ft-default:  #646b7a;
             margin: 0;
             color: $text-secondary;
             max-width: 360px;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: 1.5;
         }
     }
@@ -1063,7 +1053,7 @@ $ft-default:  #646b7a;
         justify-content: center;
         pointer-events: none;
         border: 2px dashed $accent-primary;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         .drag-overlay-inner {
             text-align: center;
@@ -1071,19 +1061,19 @@ $ft-default:  #646b7a;
             svg { color: $accent-primary; margin-bottom: $space-3; }
             h3 {
                 margin: 0 0 $space-2;
-                font-size: $font-size-xl;
+                font-size: $text-lg;
                 font-weight: $font-weight-semibold;
                 color: $text-primary;
             }
             p {
                 margin: 0;
                 color: $text-secondary;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
 
                 code {
                     background: $bg-tertiary;
-                    padding: 2px $space-2;
-                    border-radius: $radius-sm;
+                    padding: $space-hair $space-2;
+                    border-radius: $radius-badge;
                     font-family: $font-mono;
                     color: $accent-primary;
                 }
@@ -1124,7 +1114,7 @@ $ft-default:  #646b7a;
         padding: $space-3 $space-2;
         background: transparent;
         border: 1px solid transparent;
-        border-radius: 11px;
+        border-radius: $radius-card;
         cursor: pointer;
         @include transition(all);
         user-select: none;
@@ -1167,7 +1157,7 @@ $ft-default:  #646b7a;
         align-items: center;
         justify-content: center;
         margin-bottom: $space-2;
-        border-radius: 9px;
+        border-radius: $radius-card;
         overflow: hidden;
         @include transition(all);
 
@@ -1192,23 +1182,24 @@ $ft-default:  #646b7a;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }
 
     .ext-badge {
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
         position: absolute;
         bottom: 4px;
         left: 4px;
-        padding: 1px 5px;
+        padding: 0 $space-tight;
         background: rgba(0, 0, 0, 0.6);
-        border-radius: $radius-sm;
-        font-family: $font-mono;
-        font-size: 9px;
-        font-weight: $font-weight-bold;
+        border-radius: $radius-badge;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         color: white;
-        letter-spacing: 0.04em;
         // demo keeps the extension visible on image thumbs at all times
         opacity: 1;
     }
@@ -1220,17 +1211,16 @@ $ft-default:  #646b7a;
     }
 
     .file-card-name {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-primary;
         font-weight: $font-weight-medium;
         @include truncate();
-        margin-bottom: 2px;
+        margin-bottom: $space-hair;
     }
 
     .file-card-meta {
-        font-size: 10px;
+        font-size: $text-xs;
         color: var(--text-ghost);
-        font-family: $font-mono;
     }
 
     .file-card-check {
@@ -1239,7 +1229,7 @@ $ft-default:  #646b7a;
         left: $space-2;
         background: transparent;
         border: none;
-        padding: 4px;
+        padding: $space-1;
         cursor: pointer;
         opacity: 0;
         @include transition(opacity);
@@ -1255,7 +1245,7 @@ $ft-default:  #646b7a;
         height: 16px;
         background: var(--surface);
         border: 1.5px solid var(--border-strong);
-        border-radius: 5px;
+        border-radius: $radius-control;
         color: white;
         @include transition(all);
 
@@ -1267,7 +1257,7 @@ $ft-default:  #646b7a;
     .checkbox-btn {
         background: transparent;
         border: none;
-        padding: 4px;
+        padding: $space-1;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -1279,18 +1269,15 @@ $ft-default:  #646b7a;
         .file-list-header {
             display: grid;
             grid-template-columns: 36px 1fr 110px 130px 120px 110px 140px;
-            padding: 8px $space-4;
+            padding: $space-2 $space-4;
             position: sticky;
             top: 0;
             z-index: 2;
             background: $bg-body;
-            font-family: $font-mono;
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            text-transform: uppercase;
             color: var(--text-faint);
             border-bottom: 1px solid var(--border-soft);
-            letter-spacing: 0.06em;
             align-items: center;
 
             .col-actions { text-align: right; }
@@ -1305,7 +1292,7 @@ $ft-default:  #646b7a;
         .file-item {
             display: grid;
             grid-template-columns: 36px 1fr 110px 130px 120px 110px 140px;
-            padding: 7px $space-4;
+            padding: $space-2 $space-4;
             border-bottom: 1px solid var(--border-soft);
             cursor: pointer;
             align-items: center;
@@ -1333,7 +1320,7 @@ $ft-default:  #646b7a;
             .col-name {
                 display: flex;
                 align-items: center;
-                gap: 11px;
+                gap: $space-3;
                 overflow: hidden;
                 min-width: 0;
 
@@ -1342,21 +1329,20 @@ $ft-default:  #646b7a;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     color: $text-primary;
-                    font-size: 13px;
+                    font-size: $text-sm;
                 }
-                .link-indicator { color: $text-tertiary; font-size: $font-size-xs; }
+                .link-indicator { color: $text-tertiary; font-size: $text-xs; }
             }
 
             .col-size,
             .col-modified {
-                font-family: $font-mono;
-                font-size: 12px;
+                font-size: $text-xs;
                 color: var(--text-dim);
             }
             .col-permissions,
             .col-owner {
                 font-family: $font-mono;
-                font-size: 11.5px;
+                font-size: $text-xs;
                 color: var(--text-faint);
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -1364,7 +1350,7 @@ $ft-default:  #646b7a;
             }
             .col-actions {
                 display: flex;
-                gap: 2px;
+                gap: $space-hair;
                 justify-content: flex-end;
             }
         }
@@ -1392,8 +1378,8 @@ $ft-default:  #646b7a;
     .row-action {
         background: transparent;
         border: none;
-        padding: 5px;
-        border-radius: $radius-sm;
+        padding: $space-tight;
+        border-radius: $radius-badge;
         color: var(--text-faint);
         cursor: pointer;
         display: flex;
@@ -1427,13 +1413,12 @@ $ft-default:  #646b7a;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 7px $space-4;
+        padding: $space-2 $space-4;
         background: transparent;
         border: none;
         border-top: 1px solid var(--border-soft);
         border-radius: 0;
-        font-family: $font-mono;
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
         flex-wrap: wrap;
         gap: $space-3;
@@ -1455,10 +1440,8 @@ $ft-default:  #646b7a;
 
         .status-label {
             color: var(--text-ghost);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
             font-weight: $font-weight-semibold;
-            font-size: 9px;
+            font-size: $text-xs;
         }
 
         .status-value {
@@ -1489,10 +1472,10 @@ $ft-default:  #646b7a;
         position: fixed;
         background: var(--surface-2);
         border: 1px solid var(--border-strong);
-        border-radius: 11px;
-        box-shadow: var(--shadow-lg);
+        border-radius: $radius-card;
+        box-shadow: $shadow-raised;
         min-width: 200px;
-        padding: 5px;
+        padding: $space-tight;
         z-index: $z-tooltip;
         animation: ctx-pop 0.12s ease-out;
 
@@ -1501,12 +1484,12 @@ $ft-default:  #646b7a;
             align-items: center;
             gap: $space-2;
             width: 100%;
-            padding: 7px $space-3;
+            padding: $space-2 $space-3;
             background: transparent;
             border: none;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             text-align: left;
             cursor: pointer;
             @include transition(background);
@@ -1521,7 +1504,7 @@ $ft-default:  #646b7a;
     .context-menu-divider {
         height: 1px;
         background: var(--border);
-        margin: 4px 0;
+        margin: $space-1 0;
     }
 
     @keyframes ctx-pop {
@@ -1534,15 +1517,15 @@ $ft-default:  #646b7a;
         margin-top: $space-4;
         padding: $space-3;
         background: $bg-tertiary;
-        border-radius: $radius-md;
-        font-size: $font-size-sm;
+        border-radius: $radius-control;
+        font-size: $text-xs;
 
         p { margin: 0 0 $space-2 0; font-weight: $font-weight-medium; }
         ul {
             margin: 0;
             padding-left: $space-5;
             li { margin-bottom: $space-1; }
-            code { background: $bg-body; padding: 2px $space-2; border-radius: $radius-sm; }
+            code { background: $bg-body; padding: 2px $space-2; border-radius: $radius-badge; }
         }
     }
 
@@ -1573,7 +1556,7 @@ $drawer-width: 520px;
     max-width: 100%;
     background: var(--surface);
     border-left: 1px solid var(--border-soft);
-    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.4);
+    box-shadow: $shadow-overlay;
     z-index: $z-modal;
     display: flex;
     flex-direction: column;
@@ -1600,8 +1583,8 @@ $drawer-width: 520px;
         min-width: 0;
 
         h3 {
-            margin: 0 0 2px;
-            font-size: $font-size-base;
+            margin: 0 0 $space-hair;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: $text-primary;
             overflow: hidden;
@@ -1611,7 +1594,7 @@ $drawer-width: 520px;
         .preview-drawer-path {
             margin: 0;
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -1622,8 +1605,8 @@ $drawer-width: 520px;
     .preview-drawer-close {
         background: transparent;
         border: none;
-        padding: 6px;
-        border-radius: $radius-sm;
+        padding: $space-tight;
+        border-radius: $radius-badge;
         color: $text-secondary;
         cursor: pointer;
         display: flex;
@@ -1645,27 +1628,24 @@ $drawer-width: 520px;
     .meta-item {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 0;
 
         &.meta-item-wide { grid-column: span 2; }
     }
 
     .meta-label {
-        font-family: $font-mono;
-        font-size: 9px;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-ghost);
     }
 
     .meta-value {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
         @include truncate();
 
-        &.mono { font-family: $font-mono; font-size: $font-size-xs; }
+        &.mono { font-family: $font-mono; font-size: $text-xs; }
     }
 }
 
@@ -1680,13 +1660,13 @@ $drawer-width: 520px;
 .drawer-action-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px $space-3;
+    gap: $space-tight;
+    padding: $space-tight $space-3;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-card;
     color: $text-primary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     cursor: pointer;
     @include transition(all);
@@ -1711,7 +1691,7 @@ $drawer-width: 520px;
 
     .meta-label {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
 
         &.is-spaced { margin-bottom: 6px; }
@@ -1736,8 +1716,8 @@ $drawer-width: 520px;
         img {
             max-width: 100%;
             max-height: 100%;
-            border-radius: $radius-md;
-            box-shadow: var(--shadow-lg);
+            border-radius: $radius-control;
+            box-shadow: none;
         }
     }
 
@@ -1757,11 +1737,8 @@ $drawer-width: 520px;
         border-bottom: 1px solid var(--border-soft);
 
         .editor-status {
-            font-family: $font-mono;
-            font-size: 10px;
+            font-size: $text-xs;
             color: var(--text-ghost);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
             font-weight: $font-weight-semibold;
         }
 
@@ -1772,7 +1749,7 @@ $drawer-width: 520px;
         flex: 1;
         padding: $space-4;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-relaxed;
         background: $bg-body;
         border: none;
@@ -1792,7 +1769,7 @@ $drawer-width: 520px;
         padding: $space-3 0;
         background: var(--bg-code);
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         line-height: 1.65;
 
         &__line {
@@ -1804,7 +1781,7 @@ $drawer-width: 520px;
         &__n {
             flex-shrink: 0;
             width: 44px;
-            padding-right: 12px;
+            padding-right: $space-3;
             text-align: right;
             color: var(--text-ghost);
             user-select: none;
@@ -1817,7 +1794,7 @@ $drawer-width: 520px;
             white-space: pre;
             color: var(--text-code, var(--text));
 
-            .tok-kw { color: var(--accent-bright); font-weight: 500; }
+            .tok-kw { color: var(--accent-bright); font-weight: $font-weight-medium; }
             .tok-str { color: var(--green); }
             .tok-num { color: var(--amber); }
             .tok-cmt { color: var(--text-ghost); }
@@ -1844,7 +1821,7 @@ $drawer-width: 520px;
 @media (max-width: $breakpoint-md) {
     .file-manager {
         .file-manager-source {
-            padding-inline-end: 38px;
+            padding-inline-end: $space-10;
 
             &__close { display: grid; }
         }
@@ -1868,7 +1845,7 @@ $drawer-width: 520px;
             .file-toolbar-select {
                 flex: 1;
 
-                select { width: 100%; }
+                > span { width: 100%; }
             }
 
             .file-mount-chip { display: none; }
@@ -1911,10 +1888,10 @@ $drawer-width: 520px;
 .file-manager-target-banner {
     margin: $space-2 $space-4 0;
     padding: $space-2 $space-3;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: var(--accent-bg-soft);
     color: var(--text-primary);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     border: 1px solid fade($accent-primary-raw, 25%);
     flex-shrink: 0;
 }

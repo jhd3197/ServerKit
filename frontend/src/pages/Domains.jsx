@@ -8,7 +8,10 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useAuth } from '../contexts/useAuth.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
+import DomainField from '@/components/DomainField';
+import { attachDomain } from '@/services/attachDomain';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -32,6 +35,7 @@ import PluginSlot from '../components/PluginSlot';
 import { formatExpiry } from '../utils/expiry';
 import { useTranslation } from 'react-i18next';
 import { t } from '../i18n/t';
+import { toastError } from '@/utils/errorMessage';
 
 const DAY = 86400000;
 const norm = (s) => (s || '').toLowerCase().replace(/\.$/, '');
@@ -58,7 +62,7 @@ const sslState = (d) => {
 const sslPill = (d) => {
     const state = sslState(d);
     const days = sslDays(d);
-    if (state === 'valid') return <Pill kind="green">{days != null ? `Valid · ${days}d` : 'Valid'}</Pill>;
+    if (state === 'valid') return <Pill kind="green">{days != null ? t('app.domains.sslValidDays', 'Valid · {{days}}d', { days }) : t('app.domains.sslValid', 'Valid')}</Pill>;
     if (state === 'expiring') return <Pill kind="amber">{t('app.domains.sslExpires', 'Expires {{days}}d', { days })}</Pill>;
     if (state === 'n/a') return <span className="dom-dash">—</span>;
     return <Pill kind="gray">{t('app.domains.noSsl', 'No SSL')}</Pill>;
@@ -88,7 +92,7 @@ const BUILTIN_VIEWS = [
                     { id: 'a2', field: 'status', op: 'any', value: ['unconfigured'] },
                 ],
             },
-            sub: ['registrar'],
+            sub: [],
             density: 'cozy',
             group: null,
         },
@@ -133,6 +137,7 @@ const Domains = () => {
     const [portfolioErrors, setPortfolioErrors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [loadError, setLoadError] = useState(null);
     const [search, setSearch] = useState('');
     const [drawerDomain, setDrawerDomain] = useState(null);
     const [regInfo, setRegInfo] = useState(null);            // lazy registration lookup for the open drawer
@@ -150,7 +155,10 @@ const Domains = () => {
     const [selectedDomain, setSelectedDomain] = useState(null);
 
     // Form states
+    // What DomainField last reported: the hostname ('' until valid) and
+    // whether it is a managed subdomain or the user's own domain.
     const [domainName, setDomainName] = useState('');
+    const [domainInfo, setDomainInfo] = useState(null);
     const [selectedAppId, setSelectedAppId] = useState('');
     const [isPrimary, setIsPrimary] = useState(false);
     const [sslEmail, setSslEmail] = useState('');
@@ -203,18 +211,28 @@ const Domains = () => {
                 promise,
                 new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), ms)),
             ]);
+            // Each source fails on its own: a dead DNS provider must not hide
+            // the app-linked domains. A failed source keeps its last good rows
+            // and is recorded, so it can never read as "no domains".
+            const failures = [];
+            const settle = (promise, ms) => timeout(promise, ms).catch((err) => {
+                failures.push(err);
+                return null;
+            });
             const [domainsData, appsData, portfolioData] = await Promise.all([
-                timeout(api.getDomains(), 10000).catch(() => ({ domains: [] })),
-                timeout(api.getApps(), 10000).catch(() => ({ apps: [] })),
-                timeout(api.getDnsPortfolio(), 15000).catch(() => ({ domains: [], errors: [] })),
+                settle(api.getDomains(), 10000),
+                settle(api.getApps(), 10000),
+                settle(api.getDnsPortfolio(), 15000),
             ]);
-            setDomains(domainsData.domains || []);
-            setApps(appsData.apps || []);
-            setPortfolio(portfolioData.domains || []);
-            setPortfolioErrors(portfolioData.errors || []);
+            if (domainsData) setDomains(domainsData.domains || []);
+            if (appsData) setApps(appsData.apps || []);
+            if (portfolioData) {
+                setPortfolio(portfolioData.domains || []);
+                setPortfolioErrors(portfolioData.errors || []);
+            }
+            setLoadError(failures[0] || null);
         } catch (err) {
-            setError('Failed to load data');
-            console.error(err);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -223,13 +241,10 @@ const Domains = () => {
     async function handleAddDomain(e) {
         e.preventDefault();
         if (!domainName || !selectedAppId) return;
+        const appId = parseInt(selectedAppId, 10);
         try {
             setActionLoading(true);
-            await api.createDomain({
-                name: domainName,
-                application_id: parseInt(selectedAppId, 10),
-                is_primary: isPrimary,
-            });
+            await attachDomain(appId, domainName, domainInfo, { isPrimary });
             setShowAddModal(false);
             setDomainName('');
             setSelectedAppId('');
@@ -306,14 +321,14 @@ const Domains = () => {
         try {
             const result = await api.verifyDomain(domain.id);
             if (!result.verified) {
-                toast.error(t('app.domains.domainVerificationFailed', 'Domain verification failed: {{error}}', { error: result.error }));
+                toast.error(t('app.domains.domainVerificationFailed', "Couldn't verify the domain. {{error}}", { error: result.error }));
             } else if (result.warning) {
                 // The name resolves, but something about it will break
                 // issuance later (a stray AAAA record, today). A green
                 // "verified" toast here is how that stayed invisible.
                 toast.warning(result.warning, { duration: 15000 });
             } else {
-                toast.success(t('app.domains.domainVerifiedIp', 'Domain verified! IP: {{ipaddress}}', { ipaddress: result.ip_address }));
+                toast.success(t('app.domains.domainVerifiedIp', 'Domain verified. IP: {{ipaddress}}', { ipaddress: result.ip_address }));
             }
         } catch (err) {
             setError(err.message);
@@ -395,13 +410,13 @@ const Domains = () => {
         },
         {
             key: 'site',
-            headerKey: 'app.domains.linkedSite', header: 'Linked site',
+            headerKey: 'app.domains.linkedSite', header: 'Linked service',
             type: 'enum',
             width: 'minmax(140px,1fr)',
             value: (d) => (d.application_id ? appName(d.application_id) : '—'),
             render: (d) => (d.application_id
                 ? <span className="sk-tag">{appName(d.application_id)}</span>
-                : <span className="dom-dash">unlinked</span>),
+                : <span className="dom-dash">—</span>),
         },
         {
             key: 'provider',
@@ -523,7 +538,9 @@ const Domains = () => {
         initial: {
             cols: ['name', 'site', 'ssl', 'expiry', 'autoRenew', 'status'],
             sort: { key: 'name', dir: 'asc' },
-            sub: ['registrar'],
+            // No default sub-line: an unknown registrar rendered "Registrar —"
+            // under every row. It stays one click away as a column.
+            sub: [],
         },
     });
     const { cfg } = grid;
@@ -588,8 +605,8 @@ const Domains = () => {
     const createView = (name, fromCurrent) => {
         if (!fromCurrent) grid.setCfg(grid.base);
         grid.views.saveView(name)
-            .then(() => toast.success(t('app.domains.viewSaved', 'View “{{name}}” saved', { name: name })))
-            .catch(() => toast.error(t('app.domains.couldNotSaveTheView', 'Could not save the view')));
+            .then(() => toast.success(t('app.domains.viewSaved', 'View "{{name}}" saved', { name: name })))
+            .catch((err) => toastError(toast, t('app.domains.couldNotSaveTheView', "Couldn't save the view."), err));
     };
 
     // ── top bar ──────────────────────────────────────────────
@@ -636,15 +653,23 @@ const Domains = () => {
 
             {loading ? (
                 <EmptyState loading loadingVariant="table" title={t('app.domains.loadingDomains', 'Loading domains…')} />
+            ) : loadError && rows.length === 0 ? (
+                <ErrorState
+                    title={t('app.domains.couldntLoadDomains', "Couldn't load domains.")}
+                    error={loadError}
+                    onRetry={loadData}
+                />
             ) : rows.length === 0 ? (
                 <EmptyState
                     icon={Globe}
                     title={t('app.domains.noDomainsYet', 'No domains yet')}
-                    description={t('app.domains.attachADomainToAnApplication', 'Attach a domain to an application, or connect a DNS provider to see its zones here.')}
-                    action={<Button onClick={() => setShowAddModal(true)}><Plus size={16} /> {t('app.domains.addDomain2', 'Add Domain')}</Button>}
+                    description={t('app.domains.attachADomainToAnApplication', 'Attach a domain to a service, or connect a DNS provider to see its zones here.')}
+                    action={<Button onClick={() => setShowAddModal(true)}><Plus size={16} /> {t('app.domains.addDomain2', 'Add domain')}</Button>}
                 />
             ) : (
                 <div className="domains-body">
+                    {loadError && <ErrorState compact error={loadError} onRetry={loadData} />}
+
                     <GridViewPicker
                         views={grid.views}
                         label="domains"
@@ -685,7 +710,7 @@ const Domains = () => {
                             <span>
                                 {portfolioErrors.length === 1
                                     ? `${portfolioErrors[0].config_name}: ${portfolioErrors[0].error}`
-                                    : `${portfolioErrors.length} DNS connections couldn't list their zones`}
+                                    : t('app.domains.zonesListFailed', { count: portfolioErrors.length, defaultValue_one: "{{count}} DNS connection couldn't list its zones", defaultValue_other: "{{count}} DNS connections couldn't list their zones" })}
                                 {' — '}{t('app.domains.aCloudflareTokenNeeds', 'a Cloudflare token needs')} <strong>{t('app.domains.zoneRead', 'Zone:Read')}</strong> {t('app.domains.onAllZonesToListThe', 'on all zones to list the whole account.')}
                             </span>
                         </div>
@@ -710,7 +735,7 @@ const Domains = () => {
                         empty={(
                             <EmptyState
                                 icon={Globe}
-                                title={search ? t('app.domains.noDomainsMatch', 'No domains match “{{value}}”.', { value: search.trim() }) : t('app.domains.noDomainsMatchThisView', 'No domains match this view.')}
+                                title={search ? t('app.domains.noDomainsMatch', 'No domains match "{{value}}".', { value: search.trim() }) : t('app.domains.noDomainsMatchThisView', 'No domains match this view.')}
                                 action={(
                                     <Button variant="outline" onClick={() => { setSearch(''); grid.clearRules(); }}>
                                         {t('common.actions.clearFilters', 'Clear filters')}
@@ -801,14 +826,14 @@ const Domains = () => {
                                         <div className="dom-specs__value">{sslPill(drawerDomain)}</div>
                                         <div className="sk-spec-card__sub">
                                             {drawerDomain.ssl_enabled
-                                                ? (drawerDomain.ssl_expires_at ? `Expires ${new Date(drawerDomain.ssl_expires_at).toLocaleDateString()}` : "Let's Encrypt")
-                                                : 'Not issued'}
+                                                ? (drawerDomain.ssl_expires_at ? t('app.domains.sslExpiresOn', 'Expires {{date}}', { date: new Date(drawerDomain.ssl_expires_at).toLocaleDateString() }) : t('app.domains.letsEncrypt', "Let's Encrypt"))
+                                                : t('app.domains.notIssued', 'Not issued')}
                                         </div>
                                     </div>
                                     <div className="sk-spec-card">
-                                        <div className="sk-spec-card__label">{t('app.domains.linkedSite', 'Linked site')}</div>
-                                        <div className="sk-spec-card__value">{drawerDomain.application_id ? appName(drawerDomain.application_id) : 'Unlinked'}</div>
-                                        <div className="sk-spec-card__sub">{drawerDomain.is_primary ? 'Primary domain' : 'Alias'}</div>
+                                        <div className="sk-spec-card__label">{t('app.domains.linkedSite', 'Linked service')}</div>
+                                        <div className="sk-spec-card__value">{drawerDomain.application_id ? appName(drawerDomain.application_id) : t('app.domains.unlinked', 'Unlinked')}</div>
+                                        <div className="sk-spec-card__sub">{drawerDomain.is_primary ? t('app.domains.primaryDomain', 'Primary domain') : t('app.domains.alias', 'Alias')}</div>
                                     </div>
                                     <div className="sk-spec-card">
                                         <div className="sk-spec-card__label">{t('common.labels.status', 'Status')}</div>
@@ -823,7 +848,7 @@ const Domains = () => {
                                     <div className="sk-spec-card">
                                         <div className="sk-spec-card__label">{t('app.domains.dnsProvider', 'DNS provider')}</div>
                                         <div className="sk-spec-card__value">{drawerDomain.config_name || drawerDomain.provider}</div>
-                                        <div className="sk-spec-card__sub">{drawerDomain.adopted ? 'Managed in ServerKit' : 'Read-only'}</div>
+                                        <div className="sk-spec-card__sub">{drawerDomain.adopted ? t('app.domains.managedInServerKit', 'Managed in ServerKit') : t('app.domains.readOnly', 'Read-only')}</div>
                                     </div>
                                     <div className="sk-spec-card">
                                         <div className="sk-spec-card__label">{t('app.domains.zoneStatus', 'Zone status')}</div>
@@ -835,12 +860,12 @@ const Domains = () => {
                                     <div className="sk-spec-card">
                                         <div className="sk-spec-card__label">{t('app.domains.registration', 'Registration')}</div>
                                         <div className="sk-spec-card__value">
-                                            {regInfo?.loading ? 'Looking up…' : (formatExpiry(regInfo?.expires_at)?.relative || '—')}
+                                            {regInfo?.loading ? t('app.domains.lookingUp', 'Looking up…') : (formatExpiry(regInfo?.expires_at)?.relative || '—')}
                                         </div>
                                         <div className="sk-spec-card__sub">
-                                            {regInfo?.loading ? 'WHOIS / RDAP lookup' : (() => {
+                                            {regInfo?.loading ? t('app.domains.whoisRdapLookup', 'WHOIS / RDAP lookup') : (() => {
                                                 const exp = formatExpiry(regInfo?.expires_at);
-                                                if (!exp) return regInfo?.error ? 'Lookup unavailable' : '—';
+                                                if (!exp) return regInfo?.error ? t('app.domains.lookupUnavailable', 'Lookup unavailable') : '—';
                                                 return [exp.absolute, regInfo?.registrar].filter(Boolean).join(' · ');
                                             })()}
                                         </div>
@@ -868,16 +893,12 @@ const Domains = () => {
             </Drawer>
 
             {/* ── Add Domain Modal ───────────────────────────── */}
-            <Modal open={showAddModal} onClose={() => setShowAddModal(false)} title={t('app.domains.addDomain2', 'Add Domain')}>
+            <Modal open={showAddModal} onClose={() => setShowAddModal(false)} title={t('app.domains.addDomain2', 'Add domain')}>
                 <form onSubmit={handleAddDomain}>
                     <div className="form-group">
-                        <Label>{t('app.domains.domainName', 'Domain Name')}</Label>
-                        <Input type="text" placeholder="example.com" value={domainName} onChange={e => setDomainName(e.target.value)} required />
-                    </div>
-                    <div className="form-group">
-                        <Label>{t('app.domains.application', 'Application')}</Label>
+                        <Label>{t('app.domains.application', 'Service')}</Label>
                         <Select value={selectedAppId} onValueChange={setSelectedAppId} required>
-                            <SelectTrigger><SelectValue placeholder={t('app.domains.selectAnApplication', 'Select an application')} /></SelectTrigger>
+                            <SelectTrigger><SelectValue placeholder={t('app.domains.selectAnApplication', 'Select a service')} /></SelectTrigger>
                             <SelectContent>
                                 {apps.map(app => (
                                     <SelectItem key={app.id} value={String(app.id)}>{app.name}</SelectItem>
@@ -886,20 +907,33 @@ const Domains = () => {
                         </Select>
                     </div>
                     <div className="form-group">
-                        <label className="checkbox-label">
-                            <Checkbox checked={isPrimary} onCheckedChange={setIsPrimary} />
-                            {t('app.domains.setAsPrimaryDomain', 'Set as primary domain')}
-                        </label>
+                        <Label>{t('common.labels.domain', 'Domain')}</Label>
+                        {showAddModal && (
+                            <DomainField
+                                exclude={domains.map((d) => d.name)}
+                                rejectExisting
+                                onChange={(name, info) => { setDomainName(name); setDomainInfo(info); }}
+                                disabled={actionLoading}
+                            />
+                        )}
                     </div>
+                    {domainInfo?.mode !== 'subdomain' && (
+                        <div className="form-group">
+                            <label className="checkbox-label">
+                                <Checkbox checked={isPrimary} onCheckedChange={setIsPrimary} />
+                                {t('app.domains.setAsPrimaryDomain', 'Set as primary domain')}
+                            </label>
+                        </div>
+                    )}
                     <div className="modal-actions">
                         <Button type="button" variant="outline" onClick={() => setShowAddModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button type="submit" disabled={actionLoading}>{actionLoading ? 'Adding...' : 'Add Domain'}</Button>
+                        <Button type="submit" disabled={actionLoading || !domainName || !selectedAppId}>{actionLoading ? t('app.domains.adding', 'Adding…') : t('app.domains.addDomain', 'Add domain')}</Button>
                     </div>
                 </form>
             </Modal>
 
             {/* ── Enable SSL Modal ───────────────────────────── */}
-            <Modal open={showSslModal && Boolean(selectedDomain)} onClose={() => setShowSslModal(false)} title={t('app.domains.enableSslCertificate', 'Enable SSL Certificate')}>
+            <Modal open={showSslModal && Boolean(selectedDomain)} onClose={() => setShowSslModal(false)} title={t('app.domains.enableSslCertificate', 'Enable SSL certificate')}>
                 {selectedDomain && (
                     <form onSubmit={handleEnableSsl}>
                         <div className="ssl-info-box">
@@ -910,7 +944,7 @@ const Domains = () => {
                             </div>
                         </div>
                         <div className="form-group">
-                            <Label>{t('app.domains.emailAddress', 'Email Address')}</Label>
+                            <Label>{t('app.domains.emailAddress', 'Email address')}</Label>
                             <Input
                                 type="email"
                                 placeholder={acmeContact || 'admin@example.com'}
@@ -920,13 +954,13 @@ const Domains = () => {
                             />
                             <p className="hint">
                                 {acmeContact
-                                    ? "Certificate expiry notices go here. Saved from the last certificate you issued — change it to use a different address."
-                                    : 'Required for certificate expiration notifications. It will be remembered for the next certificate.'}
+                                    ? t('app.domains.acmeContactSaved', 'Certificate expiry notices go here. Saved from the last certificate you issued; change it to use a different address.')
+                                    : t('app.domains.acmeContactRequired', 'Required for certificate expiry notices. It is remembered for the next certificate.')}
                             </p>
                         </div>
                         <div className="modal-actions">
                             <Button type="button" variant="outline" onClick={() => setShowSslModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={actionLoading}>{actionLoading ? 'Obtaining Certificate...' : 'Enable SSL'}</Button>
+                            <Button type="submit" disabled={actionLoading}>{actionLoading ? t('app.domains.obtainingCertificate', 'Obtaining certificate…') : t('app.domains.enableSsl', 'Enable SSL')}</Button>
                         </div>
                     </form>
                 )}

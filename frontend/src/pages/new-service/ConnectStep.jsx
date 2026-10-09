@@ -6,6 +6,9 @@ import { SiGithub } from 'react-icons/si';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import { SOURCE_NEEDS } from './useNewServiceForm';
 import { useTranslation } from 'react-i18next';
 
@@ -28,10 +31,10 @@ const ConnectStep = ({ form }) => {
         <div className="new-service-page__step">
             <div className="new-service-page__step-head">
                 <h2>
-                    {sourceMode === 'github' ? 'Pick a repository'
-                            : sourceMode === 'local' ? 'Point at the service'
-                                : sourceMode === 'upload' ? 'Upload the archive'
-                                    : 'Connect the remote'}
+                    {sourceMode === 'github' ? t('app.connectStep.pickARepository', 'Pick a repository')
+                            : sourceMode === 'local' ? t('app.connectStep.pointAtTheService', 'Point at the service')
+                                : sourceMode === 'upload' ? t('app.connectStep.uploadTheArchive', 'Upload the archive')
+                                    : t('app.connectStep.connectTheRemote', 'Connect the remote')}
                 </h2>
                 {SOURCE_NEEDS[sourceMode] && (
                     <p className="new-service-page__need">
@@ -81,9 +84,9 @@ const ConnectStep = ({ form }) => {
                                     >
                                         <span>
                                             <strong>{repo.full_name}</strong>
-                                            <small>{repo.description || repo.language || 'No description'}</small>
+                                            <small>{repo.description || repo.language || t('app.connectStep.noDescription', 'No description')}</small>
                                         </span>
-                                        <em>{repo.private ? 'Private' : 'Public'}</em>
+                                        <em>{repo.private ? t('app.connectStep.private', 'Private') : t('app.connectStep.public', 'Public')}</em>
                                     </Button>
                                 ))}
                             </div>
@@ -94,11 +97,11 @@ const ConnectStep = ({ form }) => {
                                 <SiGithub size={20} />
                             </span>
                             <div>
-                                <h3>{githubConfigured ? 'Connect GitHub' : 'GitHub connection is not configured'}</h3>
+                                <h3>{githubConfigured ? t('app.connectStep.connectGithub', 'Connect GitHub') : t('app.connectStep.githubNotConfigured', 'GitHub connection is not configured')}</h3>
                                 <p>
                                     {githubConfigured
-                                        ? 'Authorize ServerKit once, then choose a repository from your GitHub account.'
-                                        : 'Add the GitHub OAuth app credentials in Settings before connecting.'}
+                                        ? t('app.connectStep.authorizeOnceThenChoose', 'Authorize ServerKit once, then choose a repository from your GitHub account.')
+                                        : t('app.connectStep.addOauthCredentialsFirst', 'Add the GitHub OAuth app credentials in Settings before connecting.')}
                                 </p>
                             </div>
                             <div className="new-service-page__connect-actions">
@@ -152,11 +155,14 @@ const ConnectStep = ({ form }) => {
                     </div>
                     <div className="new-service-page__field">
                         <Label htmlFor="managed-by">{t('app.connectStep.managedBy', 'Managed by')}</Label>
-                        <select id="managed-by" value={managedBy} onChange={(e) => setManagedBy(e.target.value)}>
-                            <option value="auto">{t('app.connectStep.autoDetect', 'Auto-detect')}</option>
-                            <option value="docker_compose">{t('app.connectStep.dockerCompose', 'Docker Compose')}</option>
-                            <option value="systemd">systemd</option>
-                        </select>
+                        <Select value={managedBy} onValueChange={setManagedBy}>
+                            <SelectTrigger id="managed-by"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="auto">{t('app.connectStep.autoDetect', 'Auto-detect')}</SelectItem>
+                                <SelectItem value="docker_compose">{t('app.connectStep.dockerCompose', 'Docker Compose')}</SelectItem>
+                                <SelectItem value="systemd">systemd</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
             )}
@@ -175,7 +181,7 @@ const ConnectStep = ({ form }) => {
                         onClick={() => document.getElementById('upload-zip')?.click()}
                     >
                         <FileArchive size={32} />
-                        <span>{uploadFile ? uploadFile.name : 'Drag a zip here or click to browse'}</span>
+                        <span>{uploadFile ? uploadFile.name : t('app.connectStep.dragAZipHere', 'Drag a zip here or click to browse')}</span>
                         <input
                             id="upload-zip"
                             type="file"
@@ -218,16 +224,14 @@ const ConnectStep = ({ form }) => {
                     <div className="new-service-page__field">
                         <Label htmlFor="branch-inline">{t('common.labels.branch', 'Branch')}</Label>
                         {sourceMode === 'github' && branches.length > 0 ? (
-                            <select
-                                id="branch-inline"
-                                value={branch}
-                                onChange={(e) => setBranch(e.target.value)}
-                                disabled={branchesLoading}
-                            >
-                                {branches.map(option => (
-                                    <option key={option.name} value={option.name}>{option.name}</option>
-                                ))}
-                            </select>
+                            <Select value={branch} onValueChange={setBranch} disabled={branchesLoading}>
+                                <SelectTrigger id="branch-inline"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                    {branches.map(option => (
+                                        <SelectItem key={option.name} value={option.name}>{option.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         ) : (
                             <Input
                                 id="branch-inline"

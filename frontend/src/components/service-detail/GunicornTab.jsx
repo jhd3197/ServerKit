@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import EmptyState from '../EmptyState';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const GunicornTab = ({ appId }) => {
     const { t } = useTranslation();
@@ -32,9 +33,9 @@ const GunicornTab = ({ appId }) => {
         setSaving(true);
         try {
             await api.updateGunicornConfig(appId, config);
-            toast.success(t('app.gunicornTab.configurationSavedRestartTheAppTo', 'Configuration saved. Restart the app to apply changes.'));
-        } catch {
-            toast.error(t('app.gunicornTab.failedToSaveConfiguration', 'Failed to save configuration'));
+            toast.success(t('app.gunicornTab.configurationSavedRestartTheAppTo', 'Configuration saved. Restart the service to apply changes.'));
+        } catch (err) {
+            toastError(toast, t('app.gunicornTab.failedToSaveConfiguration', "Couldn't save the configuration."), err);
         } finally {
             setSaving(false);
         }
@@ -47,9 +48,9 @@ const GunicornTab = ({ appId }) => {
     return (
         <div>
             <div className="section-header">
-                <h3 className="svc-eyebrow">{t('app.gunicornTab.gunicornConfiguration', 'Gunicorn Configuration')}</h3>
+                <h3 className="svc-eyebrow">{t('app.gunicornTab.gunicornConfiguration', 'Gunicorn configuration')}</h3>
                 <Button onClick={handleSave} disabled={saving}>
-                    {saving ? 'Saving...' : 'Save'}
+                    {saving ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                 </Button>
             </div>
             <Textarea

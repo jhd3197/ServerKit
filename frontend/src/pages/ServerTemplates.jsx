@@ -1,4 +1,3 @@
-import { Card as SharedCard } from '@/components/ui/card';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
@@ -9,19 +8,24 @@ import { useAuth } from '../contexts/useAuth.js';
 import PageLoader from '../components/PageLoader';
 import ConfirmDialog from '../components/ConfirmDialog';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import { LayoutTemplate } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { DataTable, Pill } from '@/components/ds';
+import { DataTable, Pill, CatalogCard, CatalogGrid } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
 } from '@/components/ds/grid';
+import { toastError } from '@/utils/errorMessage';
 
 // Two surfaces, two treatments — on purpose.
 //
@@ -40,6 +44,12 @@ const CATEGORY_LABELS = {
 };
 
 const categoryLabel = (tmpl) => CATEGORY_LABELS[tmpl.category] || tmpl.category || 'General';
+
+// Library card facts: a zero count is left out rather than printed.
+const countLabel = (n, one, many) => {
+    if (!n) return null;
+    return n === 1 ? one : many(n);
+};
 
 // Auto-remediation is three states, not two booleans, and the difference is
 // the whole risk story: Manual never touches a server, "on approval" waits for
@@ -211,6 +221,9 @@ const ServerTemplates = () => {
     const [templates, setTemplates] = useState([]);
     const [library, setLibrary] = useState({});
     const [loading, setLoading] = useState(true);
+    // Per tab, so a failed library doesn't hide your own templates (or the
+    // other way round). Each keeps its last good data on a failed reload.
+    const [loadErrors, setLoadErrors] = useState({ templates: null, library: null });
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showAssignModal, setShowAssignModal] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -241,23 +254,28 @@ const ServerTemplates = () => {
 
     const loadData = useCallback(async () => {
         try {
-            const [tData, lData] = await Promise.all([
+            const [tRes, lRes] = await Promise.allSettled([
                 api.getServerTemplates(),
                 api.getServerTemplateLibrary(),
             ]);
-            const mine = tData.templates || [];
-            setTemplates(mine);
-            setLibrary(lData.templates || {});
+            const mine = tRes.status === 'fulfilled' ? (tRes.value?.templates || []) : null;
+            if (mine) setTemplates(mine);
+            if (lRes.status === 'fulfilled') setLibrary(lRes.value?.templates || {});
+            setLoadErrors({
+                templates: tRes.status === 'rejected' ? tRes.reason : null,
+                library: lRes.status === 'rejected' ? lRes.reason : null,
+            });
             // Pick the opening tab from the data, once. `?? ` so a reload
             // (after creating or deleting one) never yanks the tab out from
-            // under whoever is reading it.
-            setActiveTab(current => current ?? (mine.length > 0 ? 'templates' : 'library'));
-        } catch {
-            toast.error(t('app.serverTemplates.failedToLoadTemplates', 'Failed to load templates'));
+            // under whoever is reading it. A failed list opens on its own tab,
+            // so the error is what you see rather than an empty neighbour.
+            setActiveTab(current => current ?? (
+                !mine || mine.length > 0 ? 'templates' : 'library'
+            ));
         } finally {
             setLoading(false);
         }
-    }, [t, toast]);
+    }, []);
 
     useEffect(() => {
         loadData();
@@ -275,7 +293,7 @@ const ServerTemplates = () => {
             setShowCreateModal(false);
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.serverTemplates.couldntCreate', "Couldn't create the template."), err);
         }
     };
 
@@ -285,7 +303,7 @@ const ServerTemplates = () => {
             toast.success(t('app.serverTemplates.templateCreatedFromLibrary', 'Template created from library'));
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.serverTemplates.couldntCreateFromLibrary', "Couldn't add the template from the library."), err);
         }
     };
 
@@ -296,7 +314,7 @@ const ServerTemplates = () => {
             setDeleteConfirm(null);
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.serverTemplates.couldntDelete', "Couldn't delete the template."), err);
         }
     };
 
@@ -307,7 +325,7 @@ const ServerTemplates = () => {
             setShowAssignModal(false);
             loadData();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.serverTemplates.couldntAssign', "Couldn't assign the template."), err);
         }
     };
 
@@ -318,7 +336,7 @@ const ServerTemplates = () => {
     // Publish the admin "Create Template" action to the shared tab-group top bar.
     useTopbarActions(() =>
         user?.is_admin ? (
-            <Button size="sm" onClick={() => setShowCreateModal(true)}>{t('app.serverTemplates.createTemplate', 'Create Template')}</Button>
+            <Button size="sm" onClick={() => setShowCreateModal(true)}>{t('app.serverTemplates.createTemplate', 'Create template')}</Button>
         ) : null,
         [user?.is_admin]
     );
@@ -369,8 +387,8 @@ const ServerTemplates = () => {
             value: categoryLabel,
             groupValue: categoryLabel,
             sortValue: categoryLabel,
-            // Badge, not Pill: the library cards label this exact field with a
-            // Badge, and the same datum should not change shape between tabs.
+            // Badge, not Pill: a category is a neutral label, not a status, so
+            // it gets no tone.
             render: (tmpl) => <Badge variant="outline">{categoryLabel(tmpl)}</Badge>,
         },
         {
@@ -469,7 +487,7 @@ const ServerTemplates = () => {
                 const time = Date.parse(tmpl.updated_at);
                 return Number.isNaN(time) ? null : time;
             },
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (tmpl) => formatUpdated(tmpl.updated_at),
         },
         {
@@ -548,7 +566,16 @@ const ServerTemplates = () => {
                 </TabsList>
 
                 <TabsContent value="templates">
-                    {templates.length === 0 ? (
+                    {loadErrors.templates && templates.length > 0 && (
+                        <ErrorState compact error={loadErrors.templates} onRetry={loadData} />
+                    )}
+                    {loadErrors.templates && templates.length === 0 ? (
+                        <ErrorState
+                            title={t('app.serverTemplates.couldntLoadTemplates', "Couldn't load templates.")}
+                            error={loadErrors.templates}
+                            onRetry={loadData}
+                        />
+                    ) : templates.length === 0 ? (
                         <EmptyState
                             icon={LayoutTemplate}
                             title={t('app.serverTemplates.noTemplatesYet', 'No templates yet')}
@@ -588,27 +615,50 @@ const ServerTemplates = () => {
                 </TabsContent>
 
                 <TabsContent value="library">
-                    <div className="templates-grid">
+                    {loadErrors.library && Object.keys(library).length > 0 && (
+                        <ErrorState compact error={loadErrors.library} onRetry={loadData} />
+                    )}
+                    {loadErrors.library && Object.keys(library).length === 0 ? (
+                        <ErrorState
+                            title={t('app.serverTemplates.couldntLoadTheLibrary', "Couldn't load the template library.")}
+                            error={loadErrors.library}
+                            onRetry={loadData}
+                        />
+                    ) : Object.keys(library).length === 0 ? (
+                        <EmptyState
+                            icon={LayoutTemplate}
+                            title={t('app.serverTemplates.theLibraryIsEmpty', 'The library is empty')}
+                            description={t('app.serverTemplates.noReadyMadeTemplatesAreAvailable', 'No ready-made templates are available. You can still create one from scratch.')}
+                        />
+                    ) : (
+                    <CatalogGrid className="server-templates-library">
                         {Object.entries(library).map(([key, tmpl]) => (
-                            <SharedCard variant="legacy" key={key} className="template-card card">
-                                <div className="template-card__header">
-                                    <h3>{tmpl.name}</h3>
-                                    <Badge variant="outline">{CATEGORY_LABELS[tmpl.category] || tmpl.category}</Badge>
-                                </div>
-                                <p className="template-card__desc">{tmpl.description}</p>
-                                <div className="template-card__spec">
-                                    {tmpl.packages?.length > 0 && <span>{tmpl.packages.length} packages</span>}
-                                    {tmpl.services?.length > 0 && <span>{tmpl.services.length} services</span>}
-                                    {tmpl.firewall_rules?.length > 0 && <span>{tmpl.firewall_rules.length} {t('app.serverTemplates.firewallRules', 'firewall rules')}</span>}
-                                </div>
-                                <div className="template-card__actions">
-                                    <Button size="sm" onClick={() => handleCreateFromLibrary(key)}>
-                                        {t('app.serverTemplates.useTemplate', 'Use Template')}
+                            <CatalogCard
+                                key={key}
+                                icon={<LayoutTemplate size={18} />}
+                                title={tmpl.name}
+                                tag={categoryLabel(tmpl)}
+                                description={tmpl.description}
+                                facts={[
+                                    countLabel(tmpl.packages?.length,
+                                        t('app.serverTemplates.onePackage', '1 package'),
+                                        (n) => t('app.serverTemplates.nPackages', '{{n}} packages', { n })),
+                                    countLabel(tmpl.services?.length,
+                                        t('app.serverTemplates.oneService', '1 service'),
+                                        (n) => t('app.serverTemplates.nServices', '{{n}} services', { n })),
+                                    countLabel(tmpl.firewall_rules?.length,
+                                        t('app.serverTemplates.oneFirewallRule', '1 firewall rule'),
+                                        (n) => `${n} ${t('app.serverTemplates.firewallRules', 'firewall rules')}`),
+                                ].filter(Boolean).join(' · ')}
+                                action={(
+                                    <Button variant="outline" size="sm" onClick={() => handleCreateFromLibrary(key)}>
+                                        {t('app.serverTemplates.useTemplate', 'Use template')}
                                     </Button>
-                                </div>
-                            </SharedCard>
+                                )}
+                            />
                         ))}
-                    </div>
+                    </CatalogGrid>
+                    )}
                 </TabsContent>
             </Tabs>
 
@@ -616,7 +666,7 @@ const ServerTemplates = () => {
             <Modal
                 open={showCreateModal}
                 onClose={() => setShowCreateModal(false)}
-                title={t('app.serverTemplates.createTemplate', 'Create Template')}
+                title={t('app.serverTemplates.createTemplate', 'Create template')}
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
@@ -633,10 +683,13 @@ const ServerTemplates = () => {
                     <Textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={2} />
                 </div>
                 <div className="form-group">
-                    <label>{t('app.serverTemplates.category', 'Category')}</label>
-                    <select className="form-select" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
-                        {Object.entries(CATEGORY_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
-                    </select>
+                    <label htmlFor="server-template-category">{t('app.serverTemplates.category', 'Category')}</label>
+                    <Select value={form.category} onValueChange={v => setForm({...form, category: v})}>
+                        <SelectTrigger id="server-template-category"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {Object.entries(CATEGORY_LABELS).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div className="form-group">
                     <label>{t('app.serverTemplates.packagesOnePerLine', 'Packages (one per line)')}</label>
@@ -673,7 +726,7 @@ const ServerTemplates = () => {
 
             {deleteConfirm && (
                 <ConfirmDialog
-                    title={t('app.serverTemplates.deleteTemplate', 'Delete Template')}
+                    title={t('app.serverTemplates.deleteTemplate', 'Delete template')}
                     message={t('app.serverTemplates.deleteThisCannotBeUndone', 'Delete "{{name}}"? This cannot be undone.', { name: deleteConfirm.name })}
                     onConfirm={() => handleDelete(deleteConfirm.id)}
                     onCancel={() => setDeleteConfirm(null)}

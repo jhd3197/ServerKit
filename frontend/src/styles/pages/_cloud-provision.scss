@@ -24,13 +24,13 @@
         &__meta {
             display: flex;
             gap: $space-2;
-            font-size: 0.85rem;
+            font-size: $text-sm;
             color: $text-tertiary;
         }
 
         &__cost {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: $text-lg;
+            font-weight: $font-weight-semibold;
             color: $accent-primary;
         }
 
@@ -65,8 +65,8 @@
     }
 
     .cost-total {
-        font-size: 1.3rem;
-        font-weight: 600;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         margin: $space-4 0;
     }
 
@@ -86,6 +86,6 @@
 
     .text-mono {
         font-family: $font-mono;
-        font-size: 0.9rem;
+        font-size: $text-base;
     }
 }

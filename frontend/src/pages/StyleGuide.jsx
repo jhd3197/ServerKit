@@ -9,7 +9,13 @@ import {
     Inbox, Table, AlertCircle, FileText, Monitor, Key, FolderOpen,
     GitBranch, WifiOff, Clock
 } from 'lucide-react';
-import { PageTopbar, SearchField } from '@/components/ds';
+import { PageTopbar, SearchField, CatalogCard, CatalogGrid } from '@/components/ds';
+import CopyField from '../components/CopyField';
+import PortField from '../components/PortField';
+import EnvEditor from '../components/EnvEditor';
+import ServerPicker from '../components/ServerPicker';
+import DomainField from '../components/DomainField';
+import { LOCAL_SERVER_ID } from '../utils/serverTarget';
 import Modal from '../components/Modal';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import StatusBadge from '../components/StatusBadge';
@@ -27,7 +33,11 @@ import { ServiceCard, ServicesGrid } from '../components/ServiceCard';
 import { JournalControls } from '../components/JournalControls';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useTranslation } from 'react-i18next';
@@ -39,20 +49,21 @@ import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as Shar
 const SECTIONS = [
     { id: 'colors', labelKey: 'app.styleGuide.colors', label: 'Colors', icon: Palette },
     { id: 'typography', labelKey: 'app.styleGuide.typography', label: 'Typography', icon: Type },
-    { id: 'spacing', labelKey: 'app.styleGuide.spacingRadius', label: 'Spacing & Radius', icon: Box },
+    { id: 'spacing', labelKey: 'app.styleGuide.spacingRadius', label: 'Spacing and radius', icon: Box },
     { id: 'buttons', labelKey: 'app.styleGuide.buttons', label: 'Buttons', icon: Square },
     { id: 'forms', labelKey: 'app.styleGuide.forms', label: 'Forms', icon: ToggleLeft },
+    { id: 'fields', labelKey: 'app.styleGuide.sharedFields', label: 'Shared fields', icon: Key },
     { id: 'tables', labelKey: 'app.styleGuide.tables', label: 'Tables', icon: Table },
-    { id: 'cards', labelKey: 'app.styleGuide.cardsStats', label: 'Cards & Stats', icon: Layout },
-    { id: 'badges', labelKey: 'app.styleGuide.badgesStatus', label: 'Badges & Status', icon: Shield },
-    { id: 'alerts', labelKey: 'app.styleGuide.alertsErrors', label: 'Alerts & Errors', icon: AlertCircle },
-    { id: 'modals', labelKey: 'app.styleGuide.modalsDialogs', label: 'Modals & Dialogs', icon: Layers },
+    { id: 'cards', labelKey: 'app.styleGuide.cardsStats', label: 'Cards and stats', icon: Layout },
+    { id: 'badges', labelKey: 'app.styleGuide.badgesStatus', label: 'Badges and status', icon: Shield },
+    { id: 'alerts', labelKey: 'app.styleGuide.alertsErrors', label: 'Alerts and errors', icon: AlertCircle },
+    { id: 'modals', labelKey: 'app.styleGuide.modalsDialogs', label: 'Modals and dialogs', icon: Layers },
     { id: 'tabs', labelKey: 'app.styleGuide.tabs', label: 'Tabs', icon: ChevronRight },
-    { id: 'lists', labelKey: 'app.styleGuide.listsInfo', label: 'Lists & Info', icon: Database },
-    { id: 'feedback', labelKey: 'app.styleGuide.feedbackLoading', label: 'Feedback & Loading', icon: Activity },
+    { id: 'lists', labelKey: 'app.styleGuide.listsInfo', label: 'Lists and info', icon: Database },
+    { id: 'feedback', labelKey: 'app.styleGuide.feedbackLoading', label: 'Feedback and loading', icon: Activity },
     { id: 'empty', labelKey: 'app.styleGuide.states', label: 'States', icon: Inbox },
-    { id: 'pageheaders', labelKey: 'app.styleGuide.pageHeaders', label: 'Page Headers', icon: FileText },
-    { id: 'patterns', labelKey: 'app.styleGuide.pagePatterns', label: 'Page Patterns', icon: Monitor },
+    { id: 'pageheaders', labelKey: 'app.styleGuide.pageHeaders', label: 'Page headers', icon: FileText },
+    { id: 'patterns', labelKey: 'app.styleGuide.pagePatterns', label: 'Page patterns', icon: Monitor },
     { id: 'utilities', labelKey: 'app.styleGuide.utilities', label: 'Utilities', icon: Zap },
 ];
 
@@ -86,6 +97,10 @@ export default function StyleGuide() {
     const [halfOverflowTab, setHalfOverflowTab] = useState('overview');
     const [inputValue, setInputValue] = useState('');
     const [selectValue, setSelectValue] = useState('');
+    const [portValue, setPortValue] = useState(8080);
+    const [envRows, setEnvRows] = useState([{ key: 'NODE_ENV', value: 'production' }, { key: 'API_TOKEN', value: 'demo-token' }]);
+    const [serverValue, setServerValue] = useState(LOCAL_SERVER_ID);
+    const [domainValue, setDomainValue] = useState('');
     const [checkValue, setCheckValue] = useState(false);
     const sections = SECTIONS;
 
@@ -93,7 +108,7 @@ export default function StyleGuide() {
         <div className="styleguide">
             <PageTopbar
                 icon={<Palette size={18} />}
-                title={t('app.styleGuide.styleGuide', 'Style Guide')}
+                title={t('app.styleGuide.styleGuide', 'Style guide')}
                 meta="Design system reference — dev only"
             />
 
@@ -113,7 +128,7 @@ export default function StyleGuide() {
                 {/* ── COLORS ── */}
                 {activeSection === 'colors' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.backgroundColors', 'Background Colors')} />
+                        <SectionTitle title={t('app.styleGuide.backgroundColors', 'Background colors')} />
                         <div className="styleguide__swatch-grid">
                             <Swatch name="--bg-body" label={t('app.styleGuide.body', 'Body')} />
                             <Swatch name="--bg-sidebar" label={t('app.styleGuide.sidebar', 'Sidebar')} />
@@ -124,7 +139,7 @@ export default function StyleGuide() {
                             <Swatch name="--bg-tertiary" label={t('app.styleGuide.tertiary', 'Tertiary')} />
                         </div>
 
-                        <SectionTitle title={t('app.styleGuide.borderColors', 'Border Colors')} />
+                        <SectionTitle title={t('app.styleGuide.borderColors', 'Border colors')} />
                         <div className="styleguide__swatch-grid">
                             <Swatch name="--border-default" label={t('common.labels.default', 'Default')} />
                             <Swatch name="--border-subtle" label={t('app.styleGuide.subtle', 'Subtle')} />
@@ -132,21 +147,21 @@ export default function StyleGuide() {
                             <Swatch name="--border-hover" label={t('app.styleGuide.hover', 'Hover')} />
                         </div>
 
-                        <SectionTitle title={t('app.styleGuide.textColors', 'Text Colors')} />
+                        <SectionTitle title={t('app.styleGuide.textColors', 'Text colors')} />
                         <div className="styleguide__swatch-grid">
                             <Swatch name="--text-primary" label={t('app.styleGuide.primary', 'Primary')} text />
                             <Swatch name="--text-secondary" label={t('app.styleGuide.secondary', 'Secondary')} text />
                             <Swatch name="--text-tertiary" label={t('app.styleGuide.tertiary', 'Tertiary')} text />
                         </div>
 
-                        <SectionTitle title={t('app.styleGuide.accentColors', 'Accent Colors')} />
+                        <SectionTitle title={t('app.styleGuide.accentColors', 'Accent colors')} />
                         <div className="styleguide__swatch-grid">
                             <Swatch name="--accent-primary" label={t('app.styleGuide.primary', 'Primary')} />
                             <Swatch name="--accent-hover" label={t('app.styleGuide.hover', 'Hover')} />
                             <Swatch name="--accent-glow" label={t('app.styleGuide.glow', 'Glow')} />
                         </div>
 
-                        <SectionTitle title={t('app.styleGuide.semanticColors', 'Semantic Colors')} />
+                        <SectionTitle title={t('app.styleGuide.semanticColors', 'Semantic colors')} />
                         <div className="styleguide__swatch-grid">
                             <SwatchStatic color="#10b981" label={t('app.styleGuide.success', 'Success')} token="$success" />
                             <SwatchStatic color="rgba(16,185,129,0.1)" label={t('app.styleGuide.successBg', 'Success BG')} token="$success-bg" />
@@ -158,7 +173,7 @@ export default function StyleGuide() {
                             <SwatchStatic color="rgba(59,130,246,0.1)" label={t('app.styleGuide.infoBg', 'Info BG')} token="$info-bg" />
                         </div>
 
-                        <SectionTitle title={t('app.styleGuide.brandColors', 'Brand Colors')} />
+                        <SectionTitle title={t('app.styleGuide.brandColors', 'Brand colors')} />
                         <div className="styleguide__swatch-grid">
                             <SwatchStatic color="#f29111" label={t('app.styleGuide.mysql', 'MySQL')} token="$color-mysql" />
                             <SwatchStatic color="#336791" label={t('app.styleGuide.postgresql', 'PostgreSQL')} token="$color-postgresql" />
@@ -173,55 +188,55 @@ export default function StyleGuide() {
                 {/* ── TYPOGRAPHY ── */}
                 {activeSection === 'typography' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.fontFamilies', 'Font Families')} />
+                        <SectionTitle title={t('app.styleGuide.fontFamilies', 'Font families')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <p className="styleguide__font-sample">
                                 <span className="styleguide__description styleguide__description--muted">$font-main:</span><br />
-                                {t('app.styleGuide.theQuickBrownFoxJumpsOver', 'The quick brown fox jumps over the lazy dog — IBM Plex Sans')}
+                                {t('app.styleGuide.theQuickBrownFoxJumpsOver', 'The quick brown fox jumps over the lazy dog (IBM Plex Sans)')}
                             </p>
                             <p className="styleguide__code-sample">
                                 <span className="styleguide__description styleguide__description--muted">$font-mono:</span><br />
-                                {'const server = createApp(); // IBM Plex Mono'}
+                                <code>{'const server = createApp(); // IBM Plex Mono'}</code>
                             </p>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.fontSizes', 'Font Sizes')} />
+                        <SectionTitle title={t('app.styleGuide.fontSizes', 'Font sizes')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             {[
-                                ['$font-size-xs', '10px'], ['$font-size-sm', '12px'],
-                                ['$font-size-base', '14px'], ['$font-size-md', '16px'],
-                                ['$font-size-lg', '18px'], ['$font-size-xl', '20px'],
-                                ['$font-size-2xl', '24px'], ['$font-size-3xl', '30px'],
+                                ['$text-xs', '12px'], ['$text-sm', '13px'],
+                                ['$text-base', '14px'], ['$text-md', '16px'],
+                                ['$text-lg', '18px'], ['$text-xl', '24px'],
+                                ['$text-2xl', '32px'],
                             ].map(([token, size]) => (
                                 <div key={token} className="styleguide__token-row">
                                     <span className="styleguide__token-name styleguide__token-name--font">{token}</span>
-                                    <span style={{ fontSize: size }}>{size} {t('app.styleGuide.theQuickBrownFox', '— The quick brown fox')}</span>
+                                    <span style={{ fontSize: size }}>{size} {t('app.styleGuide.theQuickBrownFox', 'The quick brown fox')}</span>
                                 </div>
                             ))}
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.fontWeights', 'Font Weights')} />
+                        <SectionTitle title={t('app.styleGuide.fontWeights', 'Font weights')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
-                            {[['Normal (400)', 400], ['Medium (500)', 500], ['Semibold (600)', 600], ['Bold (700)', 700]].map(([label, weight]) => (
+                            {[['Normal (400)', 400], ['Medium (500)', 500], ['Semibold (600)', 600]].map(([label, weight]) => (
                                 <p key={weight} className="styleguide__weight-sample" style={{ fontWeight: weight }}>
-                                    {label} {t('app.styleGuide.theQuickBrownFoxJumpsOver2', '— The quick brown fox jumps over the lazy dog')}
+                                    {label} {t('app.styleGuide.theQuickBrownFoxJumpsOver2', 'The quick brown fox jumps over the lazy dog')}
                                 </p>
                             ))}
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.headingTags', 'Heading Tags')} />
+                        <SectionTitle title={t('app.styleGuide.headingTags', 'Heading tags')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
-                            <h1>{t('app.styleGuide.h1PageTitle', 'h1 — Page Title')}</h1>
-                            <h2>{t('app.styleGuide.h2SectionTitle', 'h2 — Section Title')}</h2>
-                            <h3>{t('app.styleGuide.h3CardTitle', 'h3 — Card Title')}</h3>
-                            <h4>{t('app.styleGuide.h4Subsection', 'h4 — Subsection')}</h4>
-                            <h5>{t('app.styleGuide.h5MinorHeading', 'h5 — Minor heading')}</h5>
-                            <p>{t('app.styleGuide.pBodyTextParagraphWithNormal', 'p — Body text paragraph with normal weight and base font size.')}</p>
-                            <p className="text-secondary">{t('app.styleGuide.pTextSecondarySecondaryParagraphText', 'p.text-secondary — Secondary paragraph text.')}</p>
-                            <p className="text-tertiary">{t('app.styleGuide.pTextTertiaryTertiaryMutedParagraph', 'p.text-tertiary — Tertiary/muted paragraph text.')}</p>
+                            <h1>{t('app.styleGuide.h1PageTitle', 'h1: Page title')}</h1>
+                            <h2>{t('app.styleGuide.h2SectionTitle', 'h2: Section title')}</h2>
+                            <h3>{t('app.styleGuide.h3CardTitle', 'h3: Card title')}</h3>
+                            <h4>{t('app.styleGuide.h4Subsection', 'h4: Subsection')}</h4>
+                            <h5>{t('app.styleGuide.h5MinorHeading', 'h5: Minor heading')}</h5>
+                            <p>{t('app.styleGuide.pBodyTextParagraphWithNormal', 'p: Body text paragraph with normal weight and base font size.')}</p>
+                            <p className="text-secondary">{t('app.styleGuide.pTextSecondarySecondaryParagraphText', 'p.text-secondary: Secondary paragraph text.')}</p>
+                            <p className="text-tertiary">{t('app.styleGuide.pTextTertiaryTertiaryMutedParagraph', 'p.text-tertiary: Tertiary/muted paragraph text.')}</p>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.textUtilityClasses', 'Text Utility Classes')} />
+                        <SectionTitle title={t('app.styleGuide.textUtilityClasses', 'Text utility classes')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <p className="text-primary">.text-primary</p>
                             <p className="text-secondary">.text-secondary</p>
@@ -237,7 +252,7 @@ export default function StyleGuide() {
                 {/* ── SPACING & RADIUS ── */}
                 {activeSection === 'spacing' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.spacingScale', 'Spacing Scale')} />
+                        <SectionTitle title={t('app.styleGuide.spacingScale', 'Spacing scale')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             {[
                                 ['$space-1', 4], ['$space-2', 8], ['$space-3', 12], ['$space-4', 16],
@@ -252,7 +267,7 @@ export default function StyleGuide() {
                             ))}
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.borderRadius', 'Border Radius')} />
+                        <SectionTitle title={t('app.styleGuide.borderRadius', 'Border radius')} />
                         <div className="styleguide__swatch-grid">
                             {[
                                 ['$radius-sm', '4px'], ['$radius-md', '6px'], ['$radius-lg', '8px'],
@@ -281,7 +296,7 @@ export default function StyleGuide() {
                 {/* ── BUTTONS ── */}
                 {activeSection === 'buttons' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.buttonVariants', 'Button Variants')} />
+                        <SectionTitle title={t('app.styleGuide.buttonVariants', 'Button variants')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="styleguide__actions styleguide__actions--section-end">
                                 <Button><Plus size={16} /> {t('app.styleGuide.primary', 'Primary')}</Button>
@@ -291,13 +306,13 @@ export default function StyleGuide() {
                                 <Button variant="secondary"><Settings size={16} /> {t('app.styleGuide.secondary', 'Secondary')}</Button>
                             </div>
                             <div className="styleguide__actions">
-                                <Button disabled>{t('app.styleGuide.disabledPrimary', 'Disabled Primary')}</Button>
-                                <Button variant="outline" disabled>{t('app.styleGuide.disabledOutline', 'Disabled Outline')}</Button>
-                                <Button variant="destructive" disabled>{t('app.styleGuide.disabledDestructive', 'Disabled Destructive')}</Button>
+                                <Button disabled>{t('app.styleGuide.disabledPrimary', 'Disabled primary')}</Button>
+                                <Button variant="outline" disabled>{t('app.styleGuide.disabledOutline', 'Disabled outline')}</Button>
+                                <Button variant="destructive" disabled>{t('app.styleGuide.disabledDestructive', 'Disabled destructive')}</Button>
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.buttonSizes', 'Button Sizes')} />
+                        <SectionTitle title={t('app.styleGuide.buttonSizes', 'Button sizes')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="styleguide__actions styleguide__actions--aligned">
                                 <Button size="sm">{t('app.styleGuide.small', 'Small')}</Button>
@@ -306,7 +321,7 @@ export default function StyleGuide() {
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.iconButtons', 'Icon Buttons')} />
+                        <SectionTitle title={t('app.styleGuide.iconButtons', 'Icon buttons')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="styleguide__actions">
                                 <Button size="icon"><Plus size={16} /></Button>
@@ -318,9 +333,9 @@ export default function StyleGuide() {
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.fullWidthLoading', 'Full Width & Loading')} />
+                        <SectionTitle title={t('app.styleGuide.fullWidthLoading', 'Full width and loading')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
-                            <Button className="styleguide__full-width-button">{t('app.styleGuide.fullWidthButton', 'Full Width Button')}</Button>
+                            <Button className="styleguide__full-width-button">{t('app.styleGuide.fullWidthButton', 'Full width button')}</Button>
                             <div className="styleguide__actions">
                                 <Button disabled>
                                     <Spinner size="sm" />
@@ -338,54 +353,58 @@ export default function StyleGuide() {
                 {/* ── FORMS ── */}
                 {activeSection === 'forms' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.textInputs', 'Text Inputs')} />
+                        <SectionTitle title={t('app.styleGuide.textInputs', 'Text inputs')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="form-group">
-                                <label>{t('app.styleGuide.defaultInput', 'Default Input')}</label>
+                                <label>{t('app.styleGuide.defaultInput', 'Default input')}</label>
                                 <Input type="text" placeholder={t('app.styleGuide.enterText', 'Enter text…')} value={inputValue} onChange={e => setInputValue(e.target.value)} />
-                                <span className="hint">{t('app.styleGuide.thisIsAHintTextBelow', 'This is a hint text below the input')}</span>
+                                <span className="hint">{t('app.styleGuide.thisIsAHintTextBelow', 'This is a hint text below the input.')}</span>
                             </div>
                             <div className="form-group">
-                                <label>{t('app.styleGuide.disabledInput', 'Disabled Input')}</label>
+                                <label>{t('app.styleGuide.disabledInput', 'Disabled input')}</label>
                                 <Input type="text" placeholder={t('app.styleGuide.disabled', 'Disabled…')} disabled />
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.selectTextarea', 'Select & Textarea')} />
+                        <SectionTitle title={t('app.styleGuide.selectTextarea', 'Select and textarea')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="form-group">
-                                <label>{t('app.styleGuide.selectDropdown', 'Select Dropdown')}</label>
-                                <select className="form-select" value={selectValue} onChange={e => setSelectValue(e.target.value)}>
-                                    <option value="">{t('app.styleGuide.chooseAnOption', 'Choose an option…')}</option>
-                                    <option value="1">{t('app.styleGuide.option1', 'Option 1')}</option>
-                                    <option value="2">{t('app.styleGuide.option2', 'Option 2')}</option>
-                                </select>
+                                <Label htmlFor="sg-select">{t('app.styleGuide.selectDropdown', 'Select dropdown')}</Label>
+                                <Select value={selectValue} onValueChange={setSelectValue}>
+                                    <SelectTrigger id="sg-select">
+                                        <SelectValue placeholder={t('app.styleGuide.chooseAnOption', 'Choose an option…')} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="1">{t('app.styleGuide.option1', 'Option 1')}</SelectItem>
+                                        <SelectItem value="2">{t('app.styleGuide.option2', 'Option 2')}</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="form-group">
                                 <label>{t('app.styleGuide.textarea', 'Textarea')}</label>
                                 <Textarea rows={3} placeholder={t('app.styleGuide.enterMultilineText', 'Enter multiline text…')} />
                             </div>
                             <div className="form-group">
-                                <label>{t('app.styleGuide.codeEditor', 'Code Editor')}</label>
+                                <label>{t('app.styleGuide.codeEditor', 'Code editor')}</label>
                                 <Textarea className="code-editor" rows={3} placeholder={t('app.styleGuide.serverListen80', 'server { listen 80; }')} />
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.formRow2Column', 'Form Row (2-column)')} />
+                        <SectionTitle title={t('app.styleGuide.formRow2Column', 'Form row (2-column)')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>{t('app.styleGuide.firstName', 'First Name')}</label>
+                                    <label>{t('app.styleGuide.firstName', 'First name')}</label>
                                     <Input type="text" placeholder={t('app.styleGuide.john', 'John')} />
                                 </div>
                                 <div className="form-group">
-                                    <label>{t('app.styleGuide.lastName', 'Last Name')}</label>
+                                    <label>{t('app.styleGuide.lastName', 'Last name')}</label>
                                     <Input type="text" placeholder={t('app.styleGuide.doe', 'Doe')} />
                                 </div>
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.inlineForm', 'Inline Form')} />
+                        <SectionTitle title={t('app.styleGuide.inlineForm', 'Inline form')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="install-form">
                                 <Input type="text" placeholder={t('app.styleGuide.searchPackages', 'Search packages…')} />
@@ -393,7 +412,7 @@ export default function StyleGuide() {
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.checkboxToggle', 'Checkbox Toggle')} />
+                        <SectionTitle title={t('app.styleGuide.checkboxToggle', 'Checkbox toggle')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <label className="filter-toggle">
                                 <input type="checkbox" checked={checkValue} onChange={e => setCheckValue(e.target.checked)} />
@@ -403,15 +422,84 @@ export default function StyleGuide() {
                     </div>
                 )}
 
+                {/* ── SHARED FIELDS ── */}
+                {activeSection === 'fields' && (
+                    <div className="styleguide__section">
+                        <SectionTitle title={t('app.styleGuide.copyField', 'Copy field (CopyField)')} />
+                        <SharedCard variant="legacy" className="card styleguide__demo-card">
+                            <div className="form-group">
+                                <CopyField label={t('app.styleGuide.connectionString', 'Connection string')} value="postgresql://app@db.internal:5432/app" />
+                            </div>
+                            <div className="form-group">
+                                <CopyField label={t('app.styleGuide.password', 'Password')} value="s3cr3t-demo-value" secret />
+                            </div>
+                            <div className="form-group">
+                                <CopyField value={'curl -fsSL https://example.com/install.sh -o install.sh && \\\n  sudo bash install.sh'} multiline />
+                            </div>
+                        </SharedCard>
+
+                        <SectionTitle title={t('app.styleGuide.portField', 'Port field (PortField)')} />
+                        <SharedCard variant="legacy" className="card styleguide__demo-card">
+                            <div className="form-group">
+                                <Label htmlFor="sg-port">{t('app.styleGuide.containerPort', 'Container port')}</Label>
+                                <PortField id="sg-port" host={false} value={portValue} onChange={setPortValue} />
+                                <span className="hint">{t('app.styleGuide.portFieldHint', 'host={false}: range checks only. Host ports (the default) are also checked for collisions.')}</span>
+                            </div>
+                        </SharedCard>
+
+                        <SectionTitle title={t('app.styleGuide.envEditor', 'Environment editor (EnvEditor)')} />
+                        <SharedCard variant="legacy" className="card styleguide__demo-card">
+                            <EnvEditor value={envRows} onChange={setEnvRows} />
+                        </SharedCard>
+
+                        <SectionTitle title={t('app.styleGuide.serverPicker', 'Server picker (ServerPicker)')} />
+                        <SharedCard variant="legacy" className="card styleguide__demo-card">
+                            <div className="form-group">
+                                <ServerPicker value={serverValue} onChange={(id) => setServerValue(id)} capability="docker" />
+                            </div>
+                        </SharedCard>
+
+                        <SectionTitle title={t('app.styleGuide.domainField', 'Domain field (DomainField)')} />
+                        <SharedCard variant="legacy" className="card styleguide__demo-card">
+                            <div className="form-group">
+                                <Label htmlFor="sg-domain">{t('common.labels.domain', 'Domain')}</Label>
+                                <DomainField id="sg-domain" value={domainValue} onChange={(fqdn) => setDomainValue(fqdn)} defaultLabel="my-app" />
+                            </div>
+                        </SharedCard>
+
+                        <SectionTitle title={t('app.styleGuide.catalogCard', 'Catalog card (CatalogCard)')} />
+                        <CatalogGrid>
+                            <CatalogCard
+                                icon={<Database size={18} />}
+                                title={t('app.styleGuide.postgresql', 'PostgreSQL')}
+                                sub="v16 · by ServerKit"
+                                tag={t('app.styleGuide.database', 'Database')}
+                                description={t('app.styleGuide.catalogCardDemo', 'Something you browse to install or deploy. Things you operate are table rows.')}
+                                facts=":5432 · 256 MB RAM"
+                                action={<Button size="sm">{t('app.styleGuide.deploy', 'Deploy')}</Button>}
+                            />
+                            <CatalogCard
+                                icon={<Globe size={18} />}
+                                title={t('app.styleGuide.staticSite', 'Static site')}
+                                sub="by ServerKit"
+                                featured
+                                description={t('app.styleGuide.catalogCardDemo2', 'One tag, one action; counts and versions stay plain text.')}
+                                facts=":80"
+                                action={<Button size="sm" variant="outline">{t('app.styleGuide.deploy', 'Deploy')}</Button>}
+                            />
+                        </CatalogGrid>
+                    </div>
+                )}
+
                 {/* ── TABLES ── */}
                 {activeSection === 'tables' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.standardTableTable', 'Standard Table (.table)')} />
+                        <SectionTitle title={t('app.styleGuide.standardTableTable', 'Standard table (.table)')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h3>{t('app.styleGuide.sshAuthorizedKeys', 'SSH Authorized Keys')}</h3>
+                                <h3>{t('app.styleGuide.sshAuthorizedKeys', 'SSH authorized keys')}</h3>
                                 <SharedCardFooter variant="legacy">
-                                    <Button size="sm">{t('app.styleGuide.addKey', 'Add Key')}</Button>
+                                    <Button size="sm">{t('app.styleGuide.addKey', 'Add key')}</Button>
                                     <Button size="sm" variant="outline">{t('common.actions.refresh', 'Refresh')}</Button>
                                 </SharedCardFooter>
                             </SharedCardHeader>
@@ -449,10 +537,10 @@ export default function StyleGuide() {
                             </SharedCardContent>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.tableWithBadges', 'Table with Badges')} />
+                        <SectionTitle title={t('app.styleGuide.tableWithBadges', 'Table with badges')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h3>{t('app.styleGuide.scanHistory', 'Scan History')}</h3>
+                                <h3>{t('app.styleGuide.scanHistory', 'Scan history')}</h3>
                                 <Button size="sm" variant="outline">{t('common.actions.refresh', 'Refresh')}</Button>
                             </SharedCardHeader>
                             <SharedCardContent variant="legacy" className="card-body">
@@ -489,10 +577,10 @@ export default function StyleGuide() {
                             </SharedCardContent>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.tableWithStatusBadges', 'Table with Status Badges')} />
+                        <SectionTitle title={t('app.styleGuide.tableWithStatusBadges', 'Table with status badges')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h3>{t('app.styleGuide.firewallRules', 'Firewall Rules')}</h3>
+                                <h3>{t('app.styleGuide.firewallRules', 'Firewall rules')}</h3>
                             </SharedCardHeader>
                             <SharedCardContent variant="legacy" className="card-body">
                                 <table className="table">
@@ -537,10 +625,10 @@ export default function StyleGuide() {
                 {/* ── CARDS & STATS ── */}
                 {activeSection === 'cards' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.basicCard', 'Basic Card')} />
+                        <SectionTitle title={t('app.styleGuide.basicCard', 'Basic card')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h3>{t('app.styleGuide.cardTitle', 'Card Title')}</h3>
+                                <h3>{t('app.styleGuide.cardTitle', 'Card title')}</h3>
                                 <SharedCardFooter variant="legacy">
                                     <Button size="sm" variant="outline">{t('common.actions.refresh', 'Refresh')}</Button>
                                     <Button size="sm">{t('common.labels.action', 'Action')}</Button>
@@ -551,15 +639,15 @@ export default function StyleGuide() {
                             </SharedCardContent>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.statsGridStatcardStatsgrid', 'Stats Grid (StatCard / StatsGrid)')} />
+                        <SectionTitle title={t('app.styleGuide.statsGridStatcardStatsgrid', 'Stats grid (StatCard / StatsGrid)')} />
                         <StatsGrid>
-                            <StatCard icon={Server} iconVariant="apps" label={t('app.styleGuide.applications', 'Applications')} value={12} />
+                            <StatCard icon={Server} iconVariant="apps" label={t('app.styleGuide.applications', 'Services')} value={12} />
                             <StatCard icon={Database} iconVariant="databases" label={t('common.labels.databases', 'Databases')} value={5} />
                             <StatCard icon={Cloud} iconVariant="backups" label={t('common.labels.backups', 'Backups')} value={24} />
-                            <StatCard icon={BarChart3} iconVariant="size" label={t('app.styleGuide.diskUsed', 'Disk Used')} value={48} suffix="GB" />
+                            <StatCard icon={BarChart3} iconVariant="size" label={t('app.styleGuide.diskUsed', 'Disk used')} value={48} suffix="GB" />
                         </StatsGrid>
 
-                        <SectionTitle title={t('app.styleGuide.metricRowMetricrowMetricitem', 'Metric Row (MetricRow / MetricItem)')} />
+                        <SectionTitle title={t('app.styleGuide.metricRowMetricrowMetricitem', 'Metric row (MetricRow / MetricItem)')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <MetricRow>
                                 <MetricItem label="CPU" value="23%" />
@@ -569,7 +657,7 @@ export default function StyleGuide() {
                             </MetricRow>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.progressBarProgressbar', 'Progress Bar (ProgressBar)')} />
+                        <SectionTitle title={t('app.styleGuide.progressBarProgressbar', 'Progress bar (ProgressBar)')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="styleguide__examples">
                                 {[
@@ -588,9 +676,9 @@ export default function StyleGuide() {
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.dangerZoneDangerzone', 'Danger Zone (DangerZone)')} />
+                        <SectionTitle title={t('app.styleGuide.dangerZoneDangerzone', 'Destructive action (DangerZone)')} />
                         <DangerZone
-                            title={t('app.styleGuide.deleteApplication', 'Delete Application')}
+                            title={t('app.styleGuide.deleteApplication', 'Delete service')}
                             description={t('app.styleGuide.onceDeletedThisCannotBeUndone', 'Once deleted, this cannot be undone. All data will be permanently removed.')}
                             action={<Button variant="destructive"><Trash2 size={16} /> {t('common.actions.delete', 'Delete')}</Button>}
                         />
@@ -600,7 +688,7 @@ export default function StyleGuide() {
                 {/* ── BADGES & STATUS ── */}
                 {activeSection === 'badges' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.statusBadgesComponent', 'Status Badges (Component)')} />
+                        <SectionTitle title={t('app.styleGuide.statusBadgesComponent', 'Status badges (component)')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="styleguide__actions styleguide__actions--spaced">
                                 <StatusBadge status="online" />
@@ -629,7 +717,7 @@ export default function StyleGuide() {
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.shadcnBadgeVariants', 'shadcn Badge Variants')} />
+                        <SectionTitle title={t('app.styleGuide.shadcnBadgeVariants', 'shadcn badge variants')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="styleguide__actions">
                                 <Badge>{t('common.labels.default', 'Default')}</Badge>
@@ -642,9 +730,9 @@ export default function StyleGuide() {
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.appTypeEnvDbBadges', 'App Type / Env / DB Badges')} />
+                        <SectionTitle title={t('app.styleGuide.appTypeEnvDbBadges', 'Service type / env / DB badges')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
-                            <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">{t('app.styleGuide.appTypes', 'App Types')}</p>
+                            <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">{t('app.styleGuide.appTypes', 'Service types')}</p>
                             <div className="styleguide__actions styleguide__actions--spaced">
                                 <span className="app-type">PHP</span>
                                 <span className="app-type">{t('app.styleGuide.python', 'Python')}</span>
@@ -658,14 +746,14 @@ export default function StyleGuide() {
                                 <span className="env-badge env-staging">{t('app.styleGuide.staging', 'Staging')}</span>
                                 <span className="env-badge env-development">{t('app.styleGuide.development', 'Development')}</span>
                             </div>
-                            <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">{t('app.styleGuide.databaseTypes', 'Database Types')}</p>
+                            <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">{t('app.styleGuide.databaseTypes', 'Database types')}</p>
                             <div className="styleguide__actions styleguide__actions--spaced">
                                 <span className="db-type-badge mysql">{t('app.styleGuide.mysql', 'MySQL')}</span>
                                 <span className="db-type-badge postgresql">{t('app.styleGuide.postgresql', 'PostgreSQL')}</span>
                             </div>
                             <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">SSL</p>
                             <div className="styleguide__actions">
-                                <span className="ssl-badge"><Lock size={12} /> {t('app.styleGuide.sslActive', 'SSL Active')}</span>
+                                <span className="ssl-badge"><Lock size={12} /> {t('app.styleGuide.sslActive', 'SSL active')}</span>
                             </div>
                         </SharedCard>
                     </div>
@@ -674,13 +762,13 @@ export default function StyleGuide() {
                 {/* ── ALERTS & ERRORS ── */}
                 {activeSection === 'alerts' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.alertBannersAlert', 'Alert Banners (.alert)')} />
+                        <SectionTitle title={t('app.styleGuide.alertBannersAlert', 'Alert banners (.alert)')} />
                         <div className="styleguide__examples styleguide__examples--compact">
                             <div className="alert alert-success">
-                                <CheckCircle size={16} /> {t('app.styleGuide.operationCompletedSuccessfully', 'Operation completed successfully.')}
+                                <CheckCircle size={16} /> {t('app.styleGuide.operationCompletedSuccessfully', 'Operation completed.')}
                             </div>
                             <div className="alert alert-danger">
-                                <AlertTriangle size={16} /> {t('app.styleGuide.failedToConnectToTheServer', 'Failed to connect to the server.')}
+                                <AlertTriangle size={16} /> {t('app.styleGuide.failedToConnectToTheServer', "Couldn't connect to the server.")}
                             </div>
                             <div className="alert alert-warning">
                                 <AlertCircle size={16} /> {t('app.styleGuide.sslCertificateExpiresIn7Days', 'SSL certificate expires in 7 days.')}
@@ -690,22 +778,22 @@ export default function StyleGuide() {
                             </div>
                         </div>
 
-                        <SectionTitle title={t('app.styleGuide.alertWithCloseButton', 'Alert with Close Button')} />
+                        <SectionTitle title={t('app.styleGuide.alertWithCloseButton', 'Alert with close button')} />
                         <div className="styleguide__examples styleguide__examples--compact">
                             <div className="alert alert-danger">
-                                {t('app.styleGuide.somethingWentWrongWhileSaving', 'Something went wrong while saving.')}
+                                {t('app.styleGuide.somethingWentWrongWhileSaving', "Couldn't save. Try again.")}
                                 <Button variant="unstyled" className="alert-close">&times;</Button>
                             </div>
                         </div>
 
-                        <SectionTitle title={t('app.styleGuide.errorMessageErrorMessage', 'Error Message (.error-message)')} />
+                        <SectionTitle title={t('app.styleGuide.errorMessageErrorMessage', 'Error message (.error-message)')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="error-message">
                                 <AlertTriangle size={16} /> {t('app.styleGuide.thisIsAnInlineErrorMessage', 'This is an inline error message.')}
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.errorBannerErrorBanner', 'Error Banner (.error-banner)')} />
+                        <SectionTitle title={t('app.styleGuide.errorBannerErrorBanner', 'Error banner (.error-banner)')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="error-banner">
                                 <AlertTriangle size={16} /> {t('app.styleGuide.thisIsAFullWidthError', 'This is a full-width error banner.')}
@@ -717,43 +805,43 @@ export default function StyleGuide() {
                 {/* ── MODALS ── */}
                 {activeSection === 'modals' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.modalDialog', 'Modal Dialog')} />
+                        <SectionTitle title={t('app.styleGuide.modalDialog', 'Modal dialog')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <Button onClick={() => setModalOpen(true)}>
-                                {t('app.styleGuide.openModal', 'Open Modal')}
+                                {t('app.styleGuide.openModal', 'Open modal')}
                             </Button>
                             <Modal
                                 open={modalOpen}
                                 onClose={() => setModalOpen(false)}
-                                title={t('app.styleGuide.exampleModal', 'Example Modal')}
+                                title={t('app.styleGuide.exampleModal', 'Example modal')}
                                 footer={<>
                                     <Button variant="outline" onClick={() => setModalOpen(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                                    <Button onClick={() => setModalOpen(false)}>{t('app.styleGuide.saveChanges', 'Save Changes')}</Button>
+                                    <Button onClick={() => setModalOpen(false)}>{t('app.styleGuide.saveChanges', 'Save changes')}</Button>
                                 </>}
                             >
                                 <p className="text-secondary">{t('app.styleGuide.modalBodyContentWithAForm', 'Modal body content with a form field.')}</p>
                                 <div className="form-group styleguide__modal-field">
-                                    <label>{t('app.styleGuide.exampleField', 'Example Field')}</label>
+                                    <label>{t('app.styleGuide.exampleField', 'Example field')}</label>
                                     <Input type="text" placeholder={t('app.styleGuide.typeSomething', 'Type something…')} />
                                 </div>
                             </Modal>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.sideDrawerSheet', 'Side Drawer (Sheet)')} />
-                        <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.rightLeftAnchoredPanelBuiltOn', 'Right/left-anchored panel built on Radix Dialog. Used for forms like “Add Server” or “Add Service” where a slide-in panel is preferred over a centered modal.')}</p>
+                        <SectionTitle title={t('app.styleGuide.sideDrawerSheet', 'Side drawer (Sheet)')} />
+                        <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.rightLeftAnchoredPanelBuiltOn', 'Right/left-anchored panel built on Radix Dialog. Used for forms like "Add server" or "Add service" where a slide-in panel is preferred over a centered modal.')}</p>
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="styleguide__actions">
                                 <Button onClick={() => { setSheetSide('right'); setSheetOpen(true); }}>
-                                    <Plus size={16} /> {t('app.styleGuide.openRightDrawer', 'Open Right Drawer')}
+                                    <Plus size={16} /> {t('app.styleGuide.openRightDrawer', 'Open right drawer')}
                                 </Button>
                                 <Button variant="outline" onClick={() => { setSheetSide('left'); setSheetOpen(true); }}>
-                                    <Plus size={16} /> {t('app.styleGuide.openLeftDrawer', 'Open Left Drawer')}
+                                    <Plus size={16} /> {t('app.styleGuide.openLeftDrawer', 'Open left drawer')}
                                 </Button>
                             </div>
                             <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
                                 <SheetContent side={sheetSide}>
                                     <SheetHeader>
-                                        <SheetTitle>{t('app.styleGuide.addService', 'Add Service')}</SheetTitle>
+                                        <SheetTitle>{t('app.styleGuide.addService', 'New service')}</SheetTitle>
                                         <SheetDescription>
                                             {t('app.styleGuide.configureANewServiceThisDrawer', 'Configure a new service. This drawer pattern is the panel-style alternative to a centered modal.')}
                                         </SheetDescription>
@@ -772,21 +860,21 @@ export default function StyleGuide() {
                                         <SheetClose asChild>
                                             <Button variant="outline">{t('common.actions.cancel', 'Cancel')}</Button>
                                         </SheetClose>
-                                        <Button onClick={() => setSheetOpen(false)}>{t('app.styleGuide.createService', 'Create Service')}</Button>
+                                        <Button onClick={() => setSheetOpen(false)}>{t('app.styleGuide.createService', 'Create service')}</Button>
                                     </SheetFooter>
                                 </SheetContent>
                             </Sheet>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.logsDrawerLogsdrawer', 'Logs Drawer (LogsDrawer)')} />
+                        <SectionTitle title={t('app.styleGuide.logsDrawerLogsdrawer', 'Logs drawer (LogsDrawer)')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.globalBottomPinnedDrawerForStreaming', 'Global bottom-pinned drawer for streaming logs. Opens via the LogsDrawer context.')}</p>
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <Button onClick={() => openDrawer({ name: 'sample-service', logPath: '/var/log/syslog', appType: 'logfile' })}>
-                                <FileText size={16} /> {t('app.styleGuide.openLogsDrawer', 'Open Logs Drawer')}
+                                <FileText size={16} /> {t('app.styleGuide.openLogsDrawer', 'Open logs drawer')}
                             </Button>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.confirmDialogs', 'Confirm Dialogs')} />
+                        <SectionTitle title={t('app.styleGuide.confirmDialogs', 'Confirm dialogs')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="styleguide__actions">
                                 <Button variant="destructive" onClick={() => { setConfirmVariant('danger'); setConfirmOpen(true); }}>{t('app.styleGuide.danger', 'Danger')}</Button>
@@ -796,7 +884,7 @@ export default function StyleGuide() {
                             <ConfirmDialog
                                 isOpen={confirmOpen}
                                 title={t('app.styleGuide.action3', '{{value}} Action', { value: confirmVariant.charAt(0).toUpperCase() + confirmVariant.slice(1) })}
-                                message={t('app.styleGuide.areYouSureYouWantTo', 'Are you sure you want to proceed? This action may have consequences.')}
+                                message={t('app.styleGuide.areYouSureYouWantTo', "Delete this item? This can't be undone.")}
                                 variant={confirmVariant}
                                 confirmText={t('app.styleGuide.proceed', 'Proceed')}
                                 onConfirm={() => setConfirmOpen(false)}
@@ -809,7 +897,7 @@ export default function StyleGuide() {
                 {/* ── TABS ── */}
                 {activeSection === 'tabs' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.tabsBasic', 'Tabs (Basic)')} />
+                        <SectionTitle title={t('app.styleGuide.tabsBasic', 'Tabs (basic)')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <Tabs defaultValue="tab1">
                                 <TabsList>
@@ -829,7 +917,7 @@ export default function StyleGuide() {
                             </Tabs>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.tabsControlled', 'Tabs (Controlled)')} />
+                        <SectionTitle title={t('app.styleGuide.tabsControlled', 'Tabs (controlled)')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.controlledValueOnvaluechangeUsageThisShould', 'Controlled value/onValueChange usage. This should match URL-backed pages behaviorally.')}</p>
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <Tabs value={controlledDemoTab} onValueChange={setControlledDemoTab}>
@@ -851,7 +939,7 @@ export default function StyleGuide() {
                             </Tabs>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.tabsOverflowMenu', 'Tabs (Overflow Menu)')} />
+                        <SectionTitle title={t('app.styleGuide.tabsOverflowMenu', 'Tabs (overflow menu)')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.manyTabsForceTheOverflowMenu', 'Many tabs force the overflow menu. Selecting an item from the ellipsis must activate the tab and close the popover.')}</p>
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <Tabs defaultValue="overview">
@@ -868,7 +956,7 @@ export default function StyleGuide() {
                             </Tabs>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.tabsHalfHalfLayout', 'Tabs (Half + Half Layout)')} />
+                        <SectionTitle title={t('app.styleGuide.tabsHalfHalfLayout', 'Tabs (half + half layout)')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.constrainedCardsCatchLayoutBugsThat', 'Constrained cards catch layout bugs that full-width tabs hide.')}</p>
                         <div className="styleguide__split-demo">
                             <SharedCard variant="legacy" className="card styleguide__demo-card">
@@ -907,11 +995,11 @@ export default function StyleGuide() {
                 {/* ── LISTS & INFO ── */}
                 {activeSection === 'lists' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.infoListInfolistInfoitem', 'Info List (InfoList / InfoItem)')} />
+                        <SectionTitle title={t('app.styleGuide.infoListInfolistInfoitem', 'Info list (InfoList / InfoItem)')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <InfoList>
                                 <InfoItem label={t('app.styleGuide.hostname', 'Hostname')} value="srv-01.example.com" mono />
-                                <InfoItem label={t('common.labels.ipAddress', 'IP Address')} value="192.168.1.100" mono />
+                                <InfoItem label={t('common.labels.ipAddress', 'IP address')} value="192.168.1.100" mono />
                                 <InfoItem label="OS" value="Ubuntu 22.04 LTS" />
                                 <InfoItem label={t('common.labels.uptime', 'Uptime')} value="42 days, 7 hours" />
                                 <InfoItem label={t('common.labels.status', 'Status')}>
@@ -920,7 +1008,7 @@ export default function StyleGuide() {
                             </InfoList>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.environmentVariables', 'Environment Variables')} />
+                        <SectionTitle title={t('app.styleGuide.environmentVariables', 'Environment variables')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="env-list">
                                 {[
@@ -936,7 +1024,7 @@ export default function StyleGuide() {
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.packageList', 'Package List')} />
+                        <SectionTitle title={t('app.styleGuide.packageList', 'Package list')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="packages-list">
                                 {[['nginx', '1.24.0'], ['postgresql-15', '15.4'], ['redis-server', '7.2.1']].map(([name, ver]) => (
@@ -965,7 +1053,7 @@ export default function StyleGuide() {
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.spinnerSizesStandalone', 'Spinner Sizes (standalone)')} />
+                        <SectionTitle title={t('app.styleGuide.spinnerSizesStandalone', 'Spinner sizes (standalone)')} />
                         <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">{t('app.styleGuide.useSpinnerDirectlyOnlyInsideButtons', 'Use Spinner directly only inside buttons or inline indicators.')}</p>
 
                         <SectionTitle title={t('app.styleGuide.loadingSkeletonArchetypes', 'Loading skeleton archetypes')} />
@@ -988,54 +1076,54 @@ export default function StyleGuide() {
                     <div className="styleguide__section">
                         <p className="styleguide__description">{t('app.styleGuide.oneComponentForEverythingEmptyLoading', 'One component for everything: empty, loading, not-installed, unavailable. Import EmptyState from components/EmptyState.')}</p>
 
-                        <SectionTitle title={t('app.styleGuide.defaultNoData', 'Default (No Data)')} />
+                        <SectionTitle title={t('app.styleGuide.defaultNoData', 'Default (no data)')} />
                         <EmptyState />
 
-                        <SectionTitle title={t('app.styleGuide.withIconTitleDescriptionAction', 'With Icon, Title, Description, Action')} />
+                        <SectionTitle title={t('app.styleGuide.withIconTitleDescriptionAction', 'With icon, title, description, action')} />
                         <EmptyState
                             icon={Server}
                             title={t('app.styleGuide.noServersConnected', 'No servers connected')}
                             description={t('app.styleGuide.connectYourFirstServerToStart', 'Connect your first server to start managing it from the dashboard.')}
-                            action={<Button><Plus size={16} /> {t('app.styleGuide.addServer', 'Add Server')}</Button>}
+                            action={<Button><Plus size={16} /> {t('app.styleGuide.addServer', 'Add server')}</Button>}
                         />
 
-                        <SectionTitle title={t('app.styleGuide.loadingState', 'Loading State')} />
+                        <SectionTitle title={t('app.styleGuide.loadingState', 'Loading state')} />
                         <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">{t('app.styleGuide.passLoadingTrueSameComponentSpinner', 'Pass loading=true. Same component, spinner instead of icon.')}</p>
                         <EmptyState loading title={t('app.styleGuide.loadingServices', 'Loading services…')} />
 
-                        <SectionTitle title={t('app.styleGuide.searchEmpty', 'Search Empty')} />
+                        <SectionTitle title={t('app.styleGuide.searchEmpty', 'Search empty')} />
                         <EmptyState
                             icon={Search}
                             title={t('app.styleGuide.noResultsFound', 'No results found')}
                             description={t('app.styleGuide.tryAdjustingYourSearchOrFilter', 'Try adjusting your search or filter criteria.')}
                         />
 
-                        <SectionTitle title={t('app.styleGuide.largeNotInstalledSizeLg', 'Large — Not Installed (size="lg")')} />
+                        <SectionTitle title={t('app.styleGuide.largeNotInstalledSizeLg', 'Large, not installed (size="lg")')} />
                         <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">{t('app.styleGuide.fullPageStateForGitDocker', 'Full-page state for Git, Docker, FTP when not installed.')}</p>
                         <EmptyState
                             size="lg"
                             icon={GitBranch}
-                            title={t('app.styleGuide.noGitServerInstalled', 'No Git Server Installed')}
+                            title={t('app.styleGuide.noGitServerInstalled', 'No Git server installed')}
                             description={t('app.styleGuide.installGiteaToHostAndManage', 'Install Gitea to host and manage your Git repositories locally.')}
-                            action={<Button size="lg"><Download size={16} /> {t('app.styleGuide.installGitServer', 'Install Git Server')}</Button>}
+                            action={<Button size="lg"><Download size={16} /> {t('app.styleGuide.installGitServer', 'Install Git server')}</Button>}
                         />
 
-                        <SectionTitle title={t('app.styleGuide.largeUnavailableSizeLg', 'Large — Unavailable (size="lg")')} />
+                        <SectionTitle title={t('app.styleGuide.largeUnavailableSizeLg', 'Large, unavailable (size="lg")')} />
                         <EmptyState
                             size="lg"
                             icon={WifiOff}
-                            title={t('app.styleGuide.dockerNotAvailable', 'Docker Not Available')}
+                            title={t('app.styleGuide.dockerNotAvailable', 'Docker not available')}
                             description={t('app.styleGuide.dockerIsNotInstalledOrNot', 'Docker is not installed or not running on this system.')}
-                            action={<Button><RefreshCw size={16} /> {t('app.styleGuide.retryConnection', 'Retry Connection')}</Button>}
+                            action={<Button><RefreshCw size={16} /> {t('app.styleGuide.retryConnection', 'Retry connection')}</Button>}
                         />
 
-                        <SectionTitle title={t('app.styleGuide.largeLoading', 'Large — Loading')} />
+                        <SectionTitle title={t('app.styleGuide.largeLoading', 'Large, loading')} />
                         <EmptyState size="lg" loading title={t('app.styleGuide.loadingServices', 'Loading services…')} />
 
                         <SectionTitle title={t('app.styleGuide.insideACardEGEmpty', 'Inside a Card (e.g. empty table)')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h3>{t('app.styleGuide.scanHistory', 'Scan History')}</h3>
+                                <h3>{t('app.styleGuide.scanHistory', 'Scan history')}</h3>
                                 <Button size="sm" variant="outline">{t('common.actions.refresh', 'Refresh')}</Button>
                             </SharedCardHeader>
                             <SharedCardContent variant="legacy" className="card-body">
@@ -1047,11 +1135,11 @@ export default function StyleGuide() {
                             </SharedCardContent>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.contextGrid', 'Context Grid')} />
+                        <SectionTitle title={t('app.styleGuide.contextGrid', 'Context grid')} />
                         <div className="styleguide__comparison-grid">
                             <EmptyState icon={Database} title={t('app.styleGuide.noDatabases', 'No databases')} description={t('app.styleGuide.createYourFirstDatabase', 'Create your first database.')} action={<Button size="sm"><Plus size={14} /> {t('common.actions.create', 'Create')}</Button>} />
-                            <EmptyState icon={Globe} title={t('app.styleGuide.noDomainsConfigured', 'No domains configured')} description={t('app.styleGuide.addADomainToGetStarted', 'Add a domain to get started.')} action={<Button size="sm"><Plus size={14} /> {t('app.styleGuide.addDomain', 'Add Domain')}</Button>} />
-                            <EmptyState icon={Key} title={t('app.styleGuide.noSshKeys', 'No SSH keys')} description={t('app.styleGuide.addAnSshKeyForSecure', 'Add an SSH key for secure access.')} action={<Button size="sm"><Plus size={14} /> {t('app.styleGuide.addKey', 'Add Key')}</Button>} />
+                            <EmptyState icon={Globe} title={t('app.styleGuide.noDomainsConfigured', 'No domains configured')} description={t('app.styleGuide.addADomainToGetStarted', 'Add a domain to route traffic to a service.')} action={<Button size="sm"><Plus size={14} /> {t('app.styleGuide.addDomain', 'Add domain')}</Button>} />
+                            <EmptyState icon={Key} title={t('app.styleGuide.noSshKeys', 'No SSH keys')} description={t('app.styleGuide.addAnSshKeyForSecure', 'Add an SSH key for secure access.')} action={<Button size="sm"><Plus size={14} /> {t('app.styleGuide.addKey', 'Add key')}</Button>} />
                             <EmptyState icon={Shield} title={t('app.styleGuide.noScanHistory', 'No scan history')} description={t('app.styleGuide.runAScanToCheckFor', 'Run a scan to check for threats.')} action={<Button size="sm"><Activity size={14} /> {t('app.styleGuide.scan', 'Scan')}</Button>} />
                         </div>
                     </div>
@@ -1060,16 +1148,16 @@ export default function StyleGuide() {
                 {/* ── PAGE HEADERS ── */}
                 {activeSection === 'pageheaders' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.tabGroupTheDefaultNoTitle', 'Tab group — the default (no title)')} />
+                        <SectionTitle title={t('app.styleGuide.tabGroupTheDefaultNoTitle', 'Tab group: the default (no title)')} />
                         <p className="styleguide__description styleguide__description--spaced">
-                            {t('app.styleGuide.howMostPagesGetTheirBar', 'How most pages get their bar: a parent')} <code>{t('app.styleGuide.tabgrouplayout', 'TabGroupLayout')}</code> {t('app.styleGuide.rendersOneTitleless', 'renders one titleless')} <code>{t('app.styleGuide.pagetopbar', 'PageTopbar')}</code> {t('app.styleGuide.forTheWholeGroupAndSwaps', 'for the whole group and swaps only the content below. Child pages render')} <strong>{t('app.styleGuide.noBarOfTheirOwn', 'no bar of their own')}</strong> {t('app.styleGuide.theyPublishActionsThrough', '— they publish actions through')} <code>useTopbarActions()</code>{t('app.styleGuide.searchRightMostTheTabStrip', ', search right-most. The tab strip is the heading, so there is no title to repeat.')}
+                            {t('app.styleGuide.howMostPagesGetTheirBar', 'How most pages get their bar: a parent')} <code>{t('app.styleGuide.tabgrouplayout', 'TabGroupLayout')}</code> {t('app.styleGuide.rendersOneTitleless', 'renders one titleless')} <code>{t('app.styleGuide.pagetopbar', 'PageTopbar')}</code> {t('app.styleGuide.forTheWholeGroupAndSwaps', 'for the whole group and swaps only the content below. Child pages render')} <strong>{t('app.styleGuide.noBarOfTheirOwn', 'no bar of their own')}</strong> {t('app.styleGuide.theyPublishActionsThrough', 'and publish actions through')} <code>useTopbarActions()</code>{t('app.styleGuide.searchRightMostTheTabStrip', ', search right-most. The tab strip is the heading, so there is no title to repeat.')}
                         </p>
                         <SharedCard variant="legacy" className="card styleguide__demo-card styleguide__demo-card--flush">
                             <PageTopbar
                                 navLabel="Domains"
                                 tabs={[
                                     { to: '#sg-domains', labelKey: 'common.labels.domains', label: 'Domains' },
-                                    { to: '#sg-ssl', labelKey: 'app.styleGuide.sslCertificates', label: 'SSL Certificates' },
+                                    { to: '#sg-ssl', labelKey: 'app.styleGuide.sslCertificates', label: 'SSL certificates' },
                                 ]}
                                 actions={(
                                     <>
@@ -1081,14 +1169,14 @@ export default function StyleGuide() {
                             />
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.standalonePageTitledBar', 'Standalone page — titled bar')} />
+                        <SectionTitle title={t('app.styleGuide.standalonePageTitledBar', 'Standalone page: titled bar')} />
                         <p className="styleguide__description styleguide__description--spaced">
                             {t('app.styleGuide.onlyForPagesWithNoTab', 'Only for pages with no tab group, and for entity pages where the title names')} <em>which</em> {t('app.styleGuide.recordYouAreOnServiceDetail', 'record you are on (Service Detail, Workspace…). Everything else should join a group.')}
                         </p>
                         <SharedCard variant="legacy" className="card styleguide__demo-card styleguide__demo-card--flush">
                             <PageTopbar
                                 icon={<Clock size={18} />}
-                                title={t('app.styleGuide.cronJobs', 'Cron Jobs')}
+                                title={t('app.styleGuide.cronJobs', 'Cron jobs')}
                                 actions={(
                                     <>
                                         <Button variant="outline" size="sm"><RefreshCw size={15} /> {t('common.actions.refresh', 'Refresh')}</Button>
@@ -1102,14 +1190,14 @@ export default function StyleGuide() {
                         <SectionTitle title={t('app.styleGuide.retiredPageHeader', 'Retired: .page-header')} />
                         <p className="styleguide__description styleguide__description--spaced">
                             {t('app.styleGuide.theOld', 'The old')} <code>{t('app.styleGuide.divClassnamePageHeader', '<div className="page-header">')}</code> +{' '}
-                            <code>&lt;h1&gt;</code> {t('app.styleGuide.blockHasBeenRemovedFromThe', 'block has been removed from the codebase and its styles deleted. Don\'t reintroduce it — use one of the two bars above. Bespoke workspace pages (Docker, Database Explorer) intentionally carry no page bar at all; that is not a licence to invent a third header.')}
+                            <code>&lt;h1&gt;</code> {t('app.styleGuide.blockHasBeenRemovedFromThe', "block has been removed from the codebase and its styles deleted. Don't reintroduce it; use one of the two bars above. Bespoke workspace pages (Docker, Database Explorer) intentionally carry no page bar at all; that is not a licence to invent a third header.")}
                         </p>
 
-                        <SectionTitle title={t('app.styleGuide.cardWithHeaderActions', 'Card with Header + Actions')} />
+                        <SectionTitle title={t('app.styleGuide.cardWithHeaderActions', 'Card with header + actions')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.forCardsInsidePagesThatNeed', 'For cards inside pages that need their own header row.')}</p>
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h3>{t('app.styleGuide.cardSectionTitle', 'Card Section Title')}</h3>
+                                <h3>{t('app.styleGuide.cardSectionTitle', 'Card section title')}</h3>
                                 <SharedCardFooter variant="legacy">
                                     <Button size="sm">{t('common.actions.add', 'Add')}</Button>
                                     <Button size="sm" variant="outline">{t('common.actions.refresh', 'Refresh')}</Button>
@@ -1125,13 +1213,13 @@ export default function StyleGuide() {
                 {/* ── PAGE PATTERNS ── */}
                 {activeSection === 'patterns' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.cardTablePattern', 'Card + Table Pattern')} />
+                        <SectionTitle title={t('app.styleGuide.cardTablePattern', 'Card + table pattern')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.standardLayoutForTabularDataInside', 'Standard layout for tabular data inside a card.')}</p>
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h3>{t('app.styleGuide.authorizedKeys', 'Authorized Keys')}</h3>
+                                <h3>{t('app.styleGuide.authorizedKeys', 'Authorized keys')}</h3>
                                 <SharedCardFooter variant="legacy">
-                                    <Button size="sm"><Plus size={14} /> {t('app.styleGuide.addKey', 'Add Key')}</Button>
+                                    <Button size="sm"><Plus size={14} /> {t('app.styleGuide.addKey', 'Add key')}</Button>
                                     <Button size="sm" variant="outline"><RefreshCw size={14} /></Button>
                                 </SharedCardFooter>
                             </SharedCardHeader>
@@ -1152,11 +1240,11 @@ export default function StyleGuide() {
                             </SharedCardContent>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.cardEmptyStatePattern', 'Card + Empty State Pattern')} />
+                        <SectionTitle title={t('app.styleGuide.cardEmptyStatePattern', 'Card + empty state pattern')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.whenTheCardTableHasNo', 'When the card table has no data.')}</p>
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h3>{t('app.styleGuide.scanHistory', 'Scan History')}</h3>
+                                <h3>{t('app.styleGuide.scanHistory', 'Scan history')}</h3>
                                 <Button size="sm" variant="outline">{t('common.actions.refresh', 'Refresh')}</Button>
                             </SharedCardHeader>
                             <SharedCardContent variant="legacy" className="card-body">
@@ -1168,13 +1256,13 @@ export default function StyleGuide() {
                             </SharedCardContent>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.cardGridScanOptions', 'Card Grid (Scan Options)')} />
+                        <SectionTitle title={t('app.styleGuide.cardGridScanOptions', 'Card grid (scan options)')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.actionCardsInAGridFor', 'Action cards in a grid for scan/setup type selections.')}</p>
                         <div className="styleguide__scan-grid">
                             {[
-                                { icon: Zap, titleKey: 'app.styleGuide.quickScan', title: 'Quick Scan', desc: 'Scan common web directories' },
-                                { icon: Globe, titleKey: 'app.styleGuide.fullScan', title: 'Full Scan', desc: 'Scan entire system (slow)' },
-                                { icon: FolderOpen, titleKey: 'app.styleGuide.customPath', title: 'Custom Path', desc: 'Scan a specific directory' },
+                                { icon: Zap, titleKey: 'app.styleGuide.quickScan', title: 'Quick scan', desc: 'Scan common web directories' },
+                                { icon: Globe, titleKey: 'app.styleGuide.fullScan', title: 'Full scan', desc: 'Scan entire system (slow)' },
+                                { icon: FolderOpen, titleKey: 'app.styleGuide.customPath', title: 'Custom path', desc: 'Scan a specific directory' },
                             ].map(item => (
                                 <SharedCard variant="legacy" key={item.title} className="card styleguide__demo-card styleguide__demo-card--interactive">
                                     <div className="styleguide__scan-icon">
@@ -1182,19 +1270,19 @@ export default function StyleGuide() {
                                     </div>
                                     <h4 className="styleguide__scan-title">{item.title}</h4>
                                     <p className="styleguide__description styleguide__description--muted styleguide__description--section-end">{item.desc}</p>
-                                    <Button size="sm">{t('app.styleGuide.startScan', 'Start Scan')}</Button>
+                                    <Button size="sm">{t('app.styleGuide.startScan', 'Start scan')}</Button>
                                 </SharedCard>
                             ))}
                         </div>
 
-                        <SectionTitle title={t('app.styleGuide.errorBannerAtPageLevel', 'Error Banner at Page Level')} />
+                        <SectionTitle title={t('app.styleGuide.errorBannerAtPageLevel', 'Error banner at page level')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.shownBelowPageHeaderWhenAn', 'Shown below page header when an API call fails.')}</p>
                         <div className="alert alert-danger">
-                            {t('app.styleGuide.failedToLoadServicesPleaseTry', 'Failed to load services. Please try again.')}
+                            {t('app.styleGuide.failedToLoadServicesPleaseTry', "Couldn't load services. Try again.")}
                             <Button variant="unstyled" className="alert-close">&times;</Button>
                         </div>
 
-                        <SectionTitle title={t('app.styleGuide.logViewerLogviewer', 'Log Viewer (LogViewer)')} />
+                        <SectionTitle title={t('app.styleGuide.logViewerLogviewer', 'Log viewer (LogViewer)')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.splitLayoutFileListSidebarLog', 'Split layout: file list sidebar + log content viewer with toolbar.')}</p>
                         <div className="styleguide__log-example">
                             <LogViewer
@@ -1218,7 +1306,7 @@ export default function StyleGuide() {
                             />
                         </div>
 
-                        <SectionTitle title={t('app.styleGuide.journalControlsJournalcontrols', 'Journal Controls (JournalControls)')} />
+                        <SectionTitle title={t('app.styleGuide.journalControlsJournalcontrols', 'Journal controls (JournalControls)')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.journalTabWithServiceUnitChips', 'Journal tab with service unit chips and priority filter.')}</p>
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <JournalControls
@@ -1233,13 +1321,13 @@ export default function StyleGuide() {
                             />
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.codeLogViewerBlock', 'Code/Log Viewer Block')} />
+                        <SectionTitle title={t('app.styleGuide.codeLogViewerBlock', 'Code/log viewer block')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.monospacePreformattedContentWithDarkBackground', 'Monospace preformatted content with dark background.')}</p>
                         <div className="journal-viewer styleguide__journal-example">
                             <pre>{`Mar 29 14:23:01 srv-01 nginx[1234]: worker process started\nMar 29 14:23:02 srv-01 systemd[1]: Started Nginx HTTP Server\nMar 29 14:23:05 srv-01 sshd[5678]: Accepted publickey for deploy\nMar 29 14:23:12 srv-01 cron[91011]: (root) CMD (/usr/local/bin/backup.sh)`}</pre>
                         </div>
 
-                        <SectionTitle title={t('app.styleGuide.processTableProcesstable', 'Process Table (ProcessTable)')} />
+                        <SectionTitle title={t('app.styleGuide.processTableProcesstable', 'Process table (ProcessTable)')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.tableWithInlineUsageBarsAnd', 'Table with inline usage bars and action buttons.')}</p>
                         <ProcessTable
                             processes={[
@@ -1251,7 +1339,7 @@ export default function StyleGuide() {
                             onForceKill={() => {}}
                         />
 
-                        <SectionTitle title={t('app.styleGuide.detailPanelProcessdetailspanel', 'Detail Panel (ProcessDetailsPanel)')} />
+                        <SectionTitle title={t('app.styleGuide.detailPanelProcessdetailspanel', 'Detail panel (ProcessDetailsPanel)')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.expandableDetailPanelBelowAList', 'Expandable detail panel below a list/table selection.')}</p>
                         <ProcessDetailsPanel
                             process={{
@@ -1268,7 +1356,7 @@ export default function StyleGuide() {
                             onClose={() => {}}
                         />
 
-                        <SectionTitle title={t('app.styleGuide.serviceCardsGridServicecardServicesgrid', 'Service Cards Grid (ServiceCard / ServicesGrid)')} />
+                        <SectionTitle title={t('app.styleGuide.serviceCardsGridServicecardServicesgrid', 'Service cards grid (ServiceCard / ServicesGrid)')} />
                         <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.gridOfServiceCardsWithStatus', 'Grid of service cards with status dot, metadata, and action buttons.')}</p>
                         <ServicesGrid>
                             {[
@@ -1311,7 +1399,7 @@ export default function StyleGuide() {
                 {/* ── UTILITIES ── */}
                 {activeSection === 'utilities' && (
                     <div className="styleguide__section">
-                        <SectionTitle title={t('app.styleGuide.flexUtilities', 'Flex Layouts')} />
+                        <SectionTitle title={t('app.styleGuide.flexUtilities', 'Flex layouts')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">.styleguide__flex-example</p>
                             <div className="styleguide__flex-example">
@@ -1331,7 +1419,7 @@ export default function StyleGuide() {
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.gridUtilities', 'Grid Layouts')} />
+                        <SectionTitle title={t('app.styleGuide.gridUtilities', 'Grid layouts')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <p className="styleguide__description styleguide__description--muted styleguide__description--spaced">.styleguide__layout-grid</p>
                             <div className="styleguide__layout-grid">
@@ -1341,7 +1429,7 @@ export default function StyleGuide() {
                             </div>
                         </SharedCard>
 
-                        <SectionTitle title={t('app.styleGuide.zIndexScale', 'Z-Index Scale')} />
+                        <SectionTitle title={t('app.styleGuide.zIndexScale', 'Z-index scale')} />
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             {[
                                 ['$z-dropdown', 10], ['$z-sticky', 20], ['$z-fixed', 30],

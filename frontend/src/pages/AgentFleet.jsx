@@ -22,15 +22,28 @@ import { useToast } from '../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MetricCard, KpiBand, Pill, Gauge, DataTable, DataTableFooter, statusKind } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
+import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
+
+const isNumber = (value) => typeof value === 'number' && Number.isFinite(value);
+
+// The backend sends None for rates it can't compute yet (no commands run).
+const formatPercent = (value, digits) => {
+    if (!isNumber(value)) return '—';
+    return `${digits == null ? value : value.toFixed(digits)}%`;
+};
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
+import { toastError } from '@/utils/errorMessage';
 
 const AgentFleet = () => {
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState('dashboard');
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [health, setHealth] = useState(null);
     const [versions, setVersions] = useState([]);
     const [discoveredAgents, setDiscoveredAgents] = useState([]);
@@ -44,11 +57,11 @@ const AgentFleet = () => {
     const [rolloutBatchSize, setRolloutBatchSize] = useState(5);
     const [rolloutDelay, setRolloutDelay] = useState(10);
     const toast = useToast();
-    const toastError = toast.error;
 
 
     const fetchData = useCallback(async () => {
         setLoading(true);
+        setLoadError(null);
         try {
             if (activeTab === 'dashboard') {
                 const data = await api.getFleetHealth();
@@ -77,12 +90,13 @@ const AgentFleet = () => {
                 setQueuedCommands(data);
             }
         } catch (error) {
-            console.error('Error fetching fleet data:', error);
-            toastError(t('app.agentFleet.failedToFetchFleetData', 'Failed to fetch fleet data'));
+            // Rendered in the tab's content area (with Retry), not as a toast
+            // that leaves the tab blank once it fades.
+            setLoadError(error);
         } finally {
             setLoading(false);
         }
-    }, [activeTab, t, toastError]);
+    }, [activeTab]);
 
     useEffect(() => {
         fetchData();
@@ -107,8 +121,8 @@ const AgentFleet = () => {
             const data = await api.getDiscoveredAgents();
             setDiscoveredAgents(data);
             toast.success(t('app.agentFleet.discoveredAgents', 'Discovered {{length}} agents', { length: data.length }));
-        } catch {
-            toast.error(t('app.agentFleet.discoveryScanFailed', 'Discovery scan failed'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.discoveryScanFailed', "Couldn't run the discovery scan."), err);
         } finally {
             setIsScanning(false);
         }
@@ -119,8 +133,8 @@ const AgentFleet = () => {
             await api.approveRegistration(serverId);
             toast.success(t('app.agentFleet.agentRegistrationApproved', 'Agent registration approved'));
             fetchData();
-        } catch {
-            toast.error(t('app.agentFleet.failedToApproveAgent', 'Failed to approve agent'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToApproveAgent', "Couldn't approve the agent."), err);
         }
     };
 
@@ -129,8 +143,8 @@ const AgentFleet = () => {
             await api.rejectRegistration(serverId);
             toast.success(t('app.agentFleet.agentRegistrationRejected', 'Agent registration rejected'));
             fetchData();
-        } catch {
-            toast.error(t('app.agentFleet.failedToRejectAgent', 'Failed to reject agent'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToRejectAgent', "Couldn't reject the agent."), err);
         }
     };
 
@@ -155,8 +169,8 @@ const AgentFleet = () => {
                 toast.success(t('app.agentFleet.stagedRolloutStarted', 'Staged rollout started'));
             }
             fetchData();
-        } catch {
-            toast.error(t('app.agentFleet.failedToTriggerUpgrade', 'Failed to trigger upgrade'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToTriggerUpgrade', "Couldn't start the upgrade."), err);
         }
     };
 
@@ -165,8 +179,8 @@ const AgentFleet = () => {
             await api.cancelRollout(rolloutId);
             toast.success(t('app.agentFleet.rolloutCancelled', 'Rollout cancelled'));
             fetchData();
-        } catch {
-            toast.error(t('app.agentFleet.failedToCancelRollout', 'Failed to cancel rollout'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToCancelRollout', "Couldn't cancel the rollout."), err);
         }
     };
 
@@ -175,8 +189,8 @@ const AgentFleet = () => {
             await api.retryCommand(commandId);
             toast.success(t('app.agentFleet.commandRetryTriggered', 'Command retry triggered'));
             fetchData();
-        } catch {
-            toast.error(t('app.agentFleet.failedToRetryCommand', 'Failed to retry command'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToRetryCommand', "Couldn't retry the command."), err);
         }
     };
 
@@ -184,8 +198,8 @@ const AgentFleet = () => {
         try {
             const data = await api.getServerDiagnostics(serverId);
             setDiagnostics(data);
-        } catch {
-            toast.error(t('app.agentFleet.failedToLoadDiagnostics', 'Failed to load diagnostics'));
+        } catch (err) {
+            toastError(toast, t('app.agentFleet.failedToLoadDiagnostics', "Couldn't load diagnostics."), err);
         }
     };
 
@@ -221,7 +235,7 @@ const AgentFleet = () => {
         },
         {
             key: 'compat',
-            headerKey: 'app.agentFleet.panelCompatibility', header: 'Panel Compatibility',
+            headerKey: 'app.agentFleet.panelCompatibility', header: 'Panel compatibility',
             render: (v) => `${v.min_panel_version || 'Any'} - ${v.max_panel_version || 'Latest'}`,
         },
         {
@@ -231,7 +245,7 @@ const AgentFleet = () => {
             sortValue: (v) => (v.is_active ? 'Active' : 'Inactive'),
             render: (v) => (
                 <Pill kind={v.is_active ? 'green' : 'gray'}>
-                    {v.is_active ? 'Active' : 'Inactive'}
+                    {v.is_active ? t('app.agentFleet.active', 'Active') : t('app.agentFleet.inactive', 'Inactive')}
                 </Pill>
             ),
         },
@@ -305,7 +319,7 @@ const AgentFleet = () => {
                             variant="ghost"
                             size="sm"
                             onClick={() => cancelRollout(r.id)}
-                            title={t('app.agentFleet.cancelRollout', 'Cancel Rollout')}
+                            title={t('app.agentFleet.cancelRollout', 'Cancel rollout')}
                         >
                             <XCircle size={14} /> {t('common.actions.cancel', 'Cancel')}
                         </Button>
@@ -378,7 +392,7 @@ const AgentFleet = () => {
     const approvalColumns = [
         {
             key: 'name',
-            headerKey: 'app.agentFleet.serverName', header: 'Server Name',
+            headerKey: 'app.agentFleet.serverName', header: 'Server name',
             sortable: true,
             hideable: false,
             sortValue: (server) => server.name || '',
@@ -387,7 +401,7 @@ const AgentFleet = () => {
         },
         {
             key: 'ip',
-            headerKey: 'common.labels.ipAddress', header: 'IP Address',
+            headerKey: 'common.labels.ipAddress', header: 'IP address',
             sortable: true,
             sortValue: (server) => server.ip_address || '',
             render: (server) => server.ip_address || 'N/A',
@@ -401,7 +415,7 @@ const AgentFleet = () => {
         },
         {
             key: 'agent',
-            headerKey: 'app.agentFleet.agentVersion', header: 'Agent Version',
+            headerKey: 'app.agentFleet.agentVersion', header: 'Agent version',
             sortable: true,
             sortValue: (server) => server.agent_version || '',
             render: (server) => `v${server.agent_version || 'Unknown'}`,
@@ -432,6 +446,17 @@ const AgentFleet = () => {
         },
     ];
 
+    // Whether the open tab has anything to show, so a failed (re)load keeps
+    // existing rows and only replaces the tab when there is nothing yet.
+    const tabHasData = {
+        dashboard: Boolean(health),
+        versions: versions.length > 0,
+        rollouts: rollouts.length > 0 || versions.length > 0,
+        discovery: discoveredAgents.length > 0,
+        approvals: pendingServers.length > 0,
+        queue: queuedCommands.length > 0,
+    }[activeTab] ?? false;
+
     return (
         <div className="sk-tabgroup__inner">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -440,7 +465,7 @@ const AgentFleet = () => {
                         { key: 'dashboard', icon: Activity, labelKey: 'app.agentFleet.dashboard', label: 'Dashboard' },
                         { key: 'versions', icon: Package, labelKey: 'app.agentFleet.versions', label: 'Versions' },
                         { key: 'rollouts', icon: Zap, labelKey: 'app.agentFleet.rollouts', label: 'Rollouts' },
-                        { key: 'queue', icon: Clock, labelKey: 'app.agentFleet.commandQueue', label: 'Command Queue' },
+                        { key: 'queue', icon: Clock, labelKey: 'app.agentFleet.commandQueue', label: 'Command queue' },
                         { key: 'discovery', icon: Search, labelKey: 'app.agentFleet.discovery', label: 'Discovery' },
                         { key: 'approvals', icon: Shield, labelKey: 'app.agentFleet.approvals', label: 'Approvals' },
                     ].map(tab => (
@@ -458,40 +483,51 @@ const AgentFleet = () => {
                 </TabsList>
             </Tabs>
 
+            {loadError && !tabHasData ? (
+                <ErrorState
+                    title={t('app.agentFleet.couldntLoadFleetData', "Couldn't load fleet data.")}
+                    error={loadError}
+                    onRetry={fetchData}
+                />
+            ) : loading && !tabHasData ? (
+                <EmptyState loading loadingVariant="panel" title={t('common.loading', 'Loading…')} />
+            ) : (
             <div className="tab-content fleet-tab-content">
+                {loadError && <ErrorState compact error={loadError} onRetry={fetchData} />}
+
                 {/* ==================== Dashboard ==================== */}
                 {activeTab === 'dashboard' && health && (
                     <div className="fleet-section-stack">
                         <KpiBand>
-                            <MetricCard icon={<Server size={16} />} tone="accent" label={t('app.agentFleet.totalAgents', 'Total Agents')} value={health.total_servers} />
+                            <MetricCard icon={<Server size={16} />} tone="accent" label={t('app.agentFleet.totalAgents', 'Total agents')} value={health.total_servers} />
                             <MetricCard icon={<CheckCircle size={16} />} tone="green" label={t('app.agentFleet.online', 'Online')} value={health.online_servers} />
                             <MetricCard icon={<AlertCircle size={16} />} tone="red" label={t('app.agentFleet.offline', 'Offline')} value={health.offline_servers} />
-                            <MetricCard icon={<Zap size={16} />} tone="cyan" label={t('app.agentFleet.successRate', 'Success Rate')} value={`${health.command_success_rate}%`} />
+                            <MetricCard icon={<Zap size={16} />} tone="cyan" label={t('app.agentFleet.successRate', 'Success rate')} value={formatPercent(health.command_success_rate)} />
                         </KpiBand>
 
                         <div className="fleet-health-grid">
                             <SharedCard variant="legacy" className="card">
                                 <SharedCardHeader variant="legacy" className="card-header">
-                                    <h2>{t('app.agentFleet.fleetHealthSummary', 'Fleet Health Summary')}</h2>
+                                    <h2>{t('app.agentFleet.fleetHealthSummary', 'Fleet health summary')}</h2>
                                 </SharedCardHeader>
                                 <SharedCardContent variant="legacy" className="card-body">
                                     <div className="fleet-metric-stack">
                                         <div className="fleet-summary-row">
-                                            <span className="fleet-metric-label">{t('app.agentFleet.overallUptime', 'Overall Uptime')}</span>
-                                            <span className="fleet-uptime-value">{health.uptime_percentage?.toFixed(2)}%</span>
+                                            <span className="fleet-metric-label">{t('app.agentFleet.overallUptime', 'Overall uptime')}</span>
+                                            <span className="fleet-uptime-value">{formatPercent(health.uptime_percentage, 2)}</span>
                                         </div>
                                         <Gauge value={health.uptime_percentage} color="var(--green)" />
 
                                         <div className="fleet-summary-row fleet-summary-row--latency">
-                                            <span className="fleet-metric-label">{t('app.agentFleet.avgHeartbeatLatency', 'Avg Heartbeat Latency')}</span>
-                                            <span className="fleet-value">{health.avg_heartbeat_latency} ms</span>
+                                            <span className="fleet-metric-label">{t('app.agentFleet.avgHeartbeatLatency', 'Avg heartbeat latency')}</span>
+                                            <span className="fleet-value">{isNumber(health.avg_heartbeat_latency) ? `${health.avg_heartbeat_latency} ms` : '—'}</span>
                                         </div>
-                                        <Gauge value={Math.min(100, health.avg_heartbeat_latency / 2)} color="var(--cyan)" />
+                                        <Gauge value={Math.min(100, (health.avg_heartbeat_latency || 0) / 2)} color="var(--cyan)" />
 
                                         {health.queued_commands > 0 && (
                                             <div className="fleet-warnrow fleet-warnrow--spaced">
                                                 <span className="fleet-inline-label">
-                                                    <Clock size={16} /> {t('app.agentFleet.queuedCommands', 'Queued Commands')}
+                                                    <Clock size={16} /> {t('app.agentFleet.queuedCommands', 'Queued commands')}
                                                 </span>
                                                 <span className="fleet-value">{health.queued_commands}</span>
                                             </div>
@@ -502,7 +538,7 @@ const AgentFleet = () => {
 
                             <SharedCard variant="legacy" className="card">
                                 <SharedCardHeader variant="legacy" className="card-header">
-                                    <h2>{t('app.agentFleet.versionDistribution', 'Version Distribution')}</h2>
+                                    <h2>{t('app.agentFleet.versionDistribution', 'Version distribution')}</h2>
                                 </SharedCardHeader>
                                 <SharedCardContent variant="legacy" className="card-body">
                                     <div className="fleet-metric-stack">
@@ -529,7 +565,7 @@ const AgentFleet = () => {
                 {activeTab === 'versions' && (
                     <SharedCard variant="legacy" className="card">
                         <SharedCardHeader variant="legacy" className="card-header">
-                            <h2>{t('app.agentFleet.agentVersions', 'Agent Versions')}</h2>
+                            <h2>{t('app.agentFleet.agentVersions', 'Agent versions')}</h2>
                         </SharedCardHeader>
                         <DataTable
                             columns={versionColumns}
@@ -552,7 +588,7 @@ const AgentFleet = () => {
                         />
                         {versions.length > 0 && versions[0].release_notes && (
                             <SharedCardContent variant="legacy" className="card-body fleet-release-notes">
-                                <h3 className="fleet-release-notes__title">{t('app.agentFleet.latestReleaseNotesV', 'Latest Release Notes (v')}{versions[0].version})</h3>
+                                <h3 className="fleet-release-notes__title">{t('app.agentFleet.latestReleaseNotesV', 'Latest release notes (v')}{versions[0].version})</h3>
                                 <p className="fleet-release-notes__text">{versions[0].release_notes}</p>
                             </SharedCardContent>
                         )}
@@ -564,7 +600,7 @@ const AgentFleet = () => {
                     <div className="fleet-section-stack">
                         <SharedCard variant="legacy" className="card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h2>{t('app.agentFleet.triggerFleetUpgrade', 'Trigger Fleet Upgrade')}</h2>
+                                <h2>{t('app.agentFleet.triggerFleetUpgrade', 'Trigger fleet upgrade')}</h2>
                             </SharedCardHeader>
                             <SharedCardContent variant="legacy" className="card-body">
                                 <p className="fleet-rollout-description">
@@ -572,34 +608,35 @@ const AgentFleet = () => {
                                 </p>
                                 <div className="fleet-rollout-fields">
                                     <div className="form-group">
-                                        <label>{t('app.agentFleet.targetVersion', 'Target Version')}</label>
-                                        <select
-                                            className="form-select fleet-rollout-select"
-                                            value={selectedVersion}
-                                            onChange={e => setSelectedVersion(e.target.value)}
-                                        >
-                                            <option value="">{t('app.agentFleet.selectVersion', 'Select version…')}</option>
-                                            {versions.map(v => (
-                                                <option key={v.id} value={v.id}>v{v.version} ({v.channel})</option>
-                                            ))}
-                                        </select>
+                                        <label htmlFor="fleet-rollout-version">{t('app.agentFleet.targetVersion', 'Target version')}</label>
+                                        <Select value={selectedVersion} onValueChange={setSelectedVersion}>
+                                            <SelectTrigger id="fleet-rollout-version" className="fleet-rollout-select">
+                                                <SelectValue placeholder={t('app.agentFleet.selectVersion', 'Select version…')} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {versions.map(v => (
+                                                    <SelectItem key={v.id} value={String(v.id)}>v{v.version} ({v.channel})</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                     <div className="form-group">
-                                        <label>{t('app.agentFleet.rolloutStrategy', 'Rollout Strategy')}</label>
-                                        <select
-                                            className="form-select fleet-rollout-select"
-                                            value={rolloutStrategy}
-                                            onChange={e => setRolloutStrategy(e.target.value)}
-                                        >
-                                            <option value="all">{t('app.agentFleet.allAtOnce', 'All At Once')}</option>
-                                            <option value="staged">{t('app.agentFleet.stagedBatchByBatch', 'Staged (Batch by Batch)')}</option>
-                                            <option value="canary">{t('app.agentFleet.canary1ServerFirst', 'Canary (1 server first)')}</option>
-                                        </select>
+                                        <label htmlFor="fleet-rollout-strategy">{t('app.agentFleet.rolloutStrategy', 'Rollout strategy')}</label>
+                                        <Select value={rolloutStrategy} onValueChange={setRolloutStrategy}>
+                                            <SelectTrigger id="fleet-rollout-strategy" className="fleet-rollout-select">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="all">{t('app.agentFleet.allAtOnce', 'All at once')}</SelectItem>
+                                                <SelectItem value="staged">{t('app.agentFleet.stagedBatchByBatch', 'Staged (batch by batch)')}</SelectItem>
+                                                <SelectItem value="canary">{t('app.agentFleet.canary1ServerFirst', 'Canary (1 server first)')}</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                     {rolloutStrategy === 'staged' && (
                                         <>
                                             <div className="form-group">
-                                                <label>{t('app.agentFleet.batchSize', 'Batch Size')}</label>
+                                                <label>{t('app.agentFleet.batchSize', 'Batch size')}</label>
                                                 <Input
                                                     type="number"
                                                     value={rolloutBatchSize}
@@ -621,7 +658,7 @@ const AgentFleet = () => {
                                 </div>
                                 <div className="fleet-rollout-actions">
                                     <Button onClick={triggerUpgrade} disabled={!selectedVersion}>
-                                        <Play size={18} /> {t('app.agentFleet.startRollout', 'Start Rollout')}
+                                        <Play size={18} /> {t('app.agentFleet.startRollout', 'Start rollout')}
                                     </Button>
                                 </div>
                             </SharedCardContent>
@@ -629,7 +666,7 @@ const AgentFleet = () => {
 
                         <SharedCard variant="legacy" className="card">
                             <SharedCardHeader variant="legacy" className="card-header">
-                                <h2>{t('app.agentFleet.rolloutHistory', 'Rollout History')}</h2>
+                                <h2>{t('app.agentFleet.rolloutHistory', 'Rollout history')}</h2>
                             </SharedCardHeader>
                             {rollouts.length > 0 ? (
                                 <DataTable
@@ -660,8 +697,7 @@ const AgentFleet = () => {
                 {activeTab === 'queue' && (
                     <SharedCard variant="legacy" className="card">
                         <SharedCardHeader variant="legacy" className="card-header fleet-card-heading">
-                            <h2>{t('app.agentFleet.queuedCommands', 'Queued Commands')}</h2>
-                            <p className="fleet-caption">{t('app.agentFleet.commandsWaitingToBeDeliveredWhen', 'Commands waiting to be delivered when agents reconnect')}</p>
+                            <h2>{t('app.agentFleet.queuedCommands', 'Queued commands')}</h2>
                         </SharedCardHeader>
                         {queuedCommands.length > 0 ? (
                             <DataTable
@@ -691,10 +727,10 @@ const AgentFleet = () => {
                 {activeTab === 'discovery' && (
                     <div className="fleet-section-stack">
                         <div className="fleet-summary-row">
-                            <h2>{t('app.agentFleet.networkDiscovery', 'Network Discovery')}</h2>
+                            <h2>{t('app.agentFleet.networkDiscovery', 'Network discovery')}</h2>
                             <Button onClick={startDiscovery} disabled={isScanning}>
                                 {isScanning ? <RefreshCw size={18} className="fleet-refresh-spinner" /> : <Search size={18} />}
-                                {isScanning ? 'Scanning...' : 'Start Scan'}
+                                {isScanning ? t('app.agentFleet.scanning', 'Scanning…') : t('app.agentFleet.startScan', 'Start scan')}
                             </Button>
                         </div>
 
@@ -720,7 +756,7 @@ const AgentFleet = () => {
                                                 <span>{agent.os} ({agent.arch})</span>
                                             </div>
                                             <div className="fleet-agent-fact">
-                                                <span className="fleet-note">{t('app.agentFleet.agentVersion2', 'Agent Version:')}</span>
+                                                <span className="fleet-note">{t('app.agentFleet.agentVersion2', 'Agent version:')}</span>
                                                 <span>v{agent.agent_version}</span>
                                             </div>
                                         </div>
@@ -736,10 +772,10 @@ const AgentFleet = () => {
                                                     loadDiagnostics(agent.server_id);
                                                 }}
                                             >
-                                                {t('app.agentFleet.viewDetails', 'View Details')}
+                                                {t('app.agentFleet.viewDetails', 'View details')}
                                             </Button>
                                         ) : (
-                                            <Button size="sm" className="fleet-agent-action">{t('app.agentFleet.addToFleet', 'Add to Fleet')}</Button>
+                                            <Button size="sm" className="fleet-agent-action">{t('app.agentFleet.addToFleet', 'Add to fleet')}</Button>
                                         )}
                                     </div>
                                 </SharedCard>
@@ -758,7 +794,7 @@ const AgentFleet = () => {
                 {activeTab === 'approvals' && (
                     <SharedCard variant="legacy" className="card">
                         <SharedCardHeader variant="legacy" className="card-header">
-                            <h2>{t('app.agentFleet.pendingRegistrations', 'Pending Registrations')}</h2>
+                            <h2>{t('app.agentFleet.pendingRegistrations', 'Pending registrations')}</h2>
                         </SharedCardHeader>
                         <DataTable
                             columns={approvalColumns}
@@ -788,7 +824,7 @@ const AgentFleet = () => {
                         <div className="fleet-modal fleet-diagnostics-dialog" onClick={e => e.stopPropagation()}>
                             <div className="fleet-diagnostics-heading">
                                 <h2 className="fleet-diagnostics-title">
-                                    {t('app.agentFleet.agentDiagnostics', 'Agent Diagnostics -')} {diagnostics.server_name}
+                                    {t('app.agentFleet.agentDiagnostics', 'Agent diagnostics -')} {diagnostics.server_name}
                                 </h2>
                                 <Button variant="ghost" size="sm" onClick={() => setDiagnostics(null)}>
                                     <XCircle size={18} />
@@ -807,41 +843,41 @@ const AgentFleet = () => {
                                         </p>
                                     </div>
                                     <div>
-                                        <label className="fleet-caption">{t('app.agentFleet.agentVersion', 'Agent Version')}</label>
-                                        <p className="fleet-value">v{diagnostics.agent_version || 'Unknown'}</p>
+                                        <label className="fleet-caption">{t('app.agentFleet.agentVersion', 'Agent version')}</label>
+                                        <p className="fleet-value">v{diagnostics.agent_version || t('app.agentFleet.unknown', 'Unknown')}</p>
                                     </div>
                                     <div>
-                                        <label className="fleet-caption">{t('app.agentFleet.currentLatency', 'Current Latency')}</label>
+                                        <label className="fleet-caption">{t('app.agentFleet.currentLatency', 'Current latency')}</label>
                                         <p className="fleet-value">
                                             {diagnostics.connection.current_latency_ms != null
                                                 ? `${diagnostics.connection.current_latency_ms.toFixed(1)} ms`
-                                                : 'N/A'}
+                                                : t('app.agentFleet.notAvailable', 'N/A')}
                                         </p>
                                     </div>
                                     <div>
-                                        <label className="fleet-caption">{t('app.agentFleet.avgLatency', 'Avg Latency')}</label>
+                                        <label className="fleet-caption">{t('app.agentFleet.avgLatency', 'Avg latency')}</label>
                                         <p className="fleet-value">
                                             {diagnostics.connection.avg_latency_ms != null
                                                 ? `${diagnostics.connection.avg_latency_ms.toFixed(1)} ms`
-                                                : 'N/A'}
+                                                : t('app.agentFleet.notAvailable', 'N/A')}
                                         </p>
                                     </div>
                                     <div>
-                                        <label className="fleet-caption">{t('common.labels.ipAddress', 'IP Address')}</label>
-                                        <p className="fleet-value">{diagnostics.connection.ip_address || 'N/A'}</p>
+                                        <label className="fleet-caption">{t('common.labels.ipAddress', 'IP address')}</label>
+                                        <p className="fleet-value">{diagnostics.connection.ip_address || t('app.agentFleet.notAvailable', 'N/A')}</p>
                                     </div>
                                     <div>
-                                        <label className="fleet-caption">{t('app.agentFleet.connectedSince', 'Connected Since')}</label>
+                                        <label className="fleet-caption">{t('app.agentFleet.connectedSince', 'Connected since')}</label>
                                         <p className="fleet-value">
                                             {diagnostics.connection.connected_since
                                                 ? new Date(diagnostics.connection.connected_since).toLocaleString()
-                                                : 'N/A'}
+                                                : t('app.agentFleet.notAvailable', 'N/A')}
                                         </p>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <h3 className="fleet-diagnostics-section-title">{t('app.agentFleet.commandStats24h', 'Command Stats (24h)')}</h3>
+                                    <h3 className="fleet-diagnostics-section-title">{t('app.agentFleet.commandStats24h', 'Command stats (24h)')}</h3>
                                     <div className="fleet-command-statistics">
                                         <div className="fleet-statbox">
                                             <div className="fleet-command-total">{diagnostics.commands_24h.total}</div>
@@ -872,7 +908,7 @@ const AgentFleet = () => {
                                 )}
 
                                 <div>
-                                    <h3 className="fleet-diagnostics-section-title">{t('app.agentFleet.recentSessions', 'Recent Sessions')}</h3>
+                                    <h3 className="fleet-diagnostics-section-title">{t('app.agentFleet.recentSessions', 'Recent sessions')}</h3>
                                     <div className="fleet-session-list">
                                         {diagnostics.recent_sessions.map(session => (
                                             <div key={session.id} className="fleet-statrow fleet-session-row">
@@ -899,6 +935,7 @@ const AgentFleet = () => {
                     </div>
                 )}
             </div>
+            )}
         </div>
     );
 };

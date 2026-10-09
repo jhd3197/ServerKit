@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
+import ErrorState from '../ErrorState';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
@@ -26,8 +27,11 @@ const TwoFactorPolicyCard = (props) => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState(null);
+    const [loadError, setLoadError] = useState(null);
 
-    useEffect(() => {
+    const loadPolicy = () => {
+        setLoading(true);
+        setLoadError(null);
         api.getSystemSettings()
             .then((data) => {
                 setPolicy(data.security_require_2fa || 'off');
@@ -35,8 +39,14 @@ const TwoFactorPolicyCard = (props) => {
                     setGraceDays(data.security_require_2fa_grace_days);
                 }
             })
-            .catch(() => { /* leave defaults */ })
+            // Never fall back to the 'off' default: saving it would silently
+            // lift a stricter policy the server actually holds.
+            .catch((err) => setLoadError(err))
             .finally(() => setLoading(false));
+    };
+
+    useEffect(() => {
+        loadPolicy();
     }, []);
 
     async function handleSave() {
@@ -58,9 +68,22 @@ const TwoFactorPolicyCard = (props) => {
 
     if (loading) return null;
 
+    if (loadError) {
+        return (
+            <div className="settings-card" {...props}>
+                <h3>{t('app.twoFactorPolicyCard.twoFactorAuthenticationPolicy', 'Two-factor authentication policy')}</h3>
+                <ErrorState
+                    title={t('app.twoFactorPolicyCard.couldntLoadPolicy', "Couldn't load the 2FA policy.")}
+                    error={loadError}
+                    onRetry={loadPolicy}
+                />
+            </div>
+        );
+    }
+
     return (
         <div className="settings-card" {...props}>
-            <h3>{t('app.twoFactorPolicyCard.twoFactorAuthenticationPolicy', 'Two-Factor Authentication Policy')}</h3>
+            <h3>{t('app.twoFactorPolicyCard.twoFactorAuthenticationPolicy', 'Two-factor authentication policy')}</h3>
             <p className="form-help form-help--flush">
                 {t('app.twoFactorPolicyCard.requireAccountsToProtectThemselvesWith', 'Require accounts to protect themselves with a passkey or authenticator app. Passwords keep working until the grace window ends; after that, sign-in only lets the user reach the enrolment screen until they add a second factor. Single sign-on users are always exempt.')}
             </p>
@@ -97,7 +120,7 @@ const TwoFactorPolicyCard = (props) => {
 
             <div className="form-actions">
                 <Button variant="default" onClick={handleSave} disabled={saving}>
-                    {saving ? 'Saving…' : 'Save policy'}
+                    {saving ? t('common.saving', 'Saving…') : t('app.twoFactorPolicyCard.savePolicy', 'Save policy')}
                 </Button>
                 {message && (
                     <span className={`timezone-message timezone-message--inline ${message.type}`}>

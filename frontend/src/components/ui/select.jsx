@@ -7,10 +7,12 @@ const Select = SelectPrimitive.Root;
 const SelectGroup = SelectPrimitive.Group;
 const SelectValue = SelectPrimitive.Value;
 
-const SelectTrigger = React.forwardRef(({ className, children, ...props }, ref) => (
+// size="sm" is the compact trigger for toolbars, table footers and inline
+// rows: content-width and 30px tall instead of a full-width 40px form field.
+const SelectTrigger = React.forwardRef(({ className, children, size, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
-    className={cn('ui-select-trigger', className)}
+    className={cn('ui-select-trigger', size === 'sm' && 'ui-select-trigger--sm', className)}
     {...props}
   >
     {children}
@@ -74,6 +76,9 @@ const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => 
   <SelectPrimitive.Item
     ref={ref}
     className={cn('ui-select-item', className)}
+    // Radix keeps the value off the DOM; expose it so tests and tools can
+    // pick an option by value, as selectOption() did on a native <select>.
+    data-value={props.value}
     {...props}
   >
     <span className="ui-select-item-indicator">

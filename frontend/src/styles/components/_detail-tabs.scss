@@ -7,8 +7,7 @@
         gap: $space-3;
 
         .count {
-            font-family: var(--mono);
-            font-size: 26px;
+            font-size: $text-xl;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.02em;
 
@@ -18,8 +17,7 @@
         }
 
         .label {
-            font-family: var(--mono);
-            font-size: 11.5px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -29,7 +27,7 @@
 
         summary {
             cursor: pointer;
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--accent-bright);
 
             &:hover {
@@ -46,7 +44,7 @@
             border: 1px solid var(--border-soft);
             border-radius: var(--radius-sm);
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             line-height: 1.6;
             color: var(--text-code);
         }
@@ -62,7 +60,7 @@
 
     // Config and audit rows carry everything they have in the row itself —
     // only a deploy opens a drawer, so only a deploy gets a pointer.
-    .sk-dtable tbody tr.is-static {
+    .sk-dtable .is-static {
         cursor: default;
     }
 
@@ -73,15 +71,15 @@
 
     &__event-sha {
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         @include status-variant(var(--accent-bright), var(--accent-bg));
         padding: 1px $space-2;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         flex-shrink: 0;
     }
 
     &__event-message {
-        font-size: $font-size-base - 1;
+        font-size: $text-sm;
         color: $text-primary;
         font-weight: $font-weight-medium;
         white-space: nowrap;
@@ -95,14 +93,14 @@
         padding: $space-3;
         background: var(--bg-code);
         border: 1px solid var(--border-soft);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         max-height: 60vh;
         overflow-y: auto;
 
         pre {
             margin: 0;
             font-family: var(--mono);
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: var(--text-code);
             white-space: pre-wrap;
             word-break: break-all;
@@ -117,7 +115,7 @@
 
     .form-group {
         margin: 0;
-        padding: 2px 0;
+        padding: $space-hair 0;
 
         & + .form-group {
             border-top: 1px solid var(--border-soft);
@@ -126,12 +124,9 @@
         // Eyebrow-style field labels (text inputs)
         > label {
             display: block;
-            margin: 10px 0 6px;
-            font-family: var(--mono);
-            font-size: 10px;
+            margin: $space-3 0 $space-tight;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
     }
@@ -141,11 +136,11 @@
         justify-content: space-between;
         align-items: center;
         gap: $space-4;
-        padding: 9px 0;
+        padding: $space-2 0;
 
         label {
             margin: 0;
-            font-size: 13.5px;
+            font-size: $text-sm;
             font-weight: $font-weight-medium;
             color: var(--text);
             cursor: pointer;
@@ -192,17 +187,13 @@
 
         h4 {
             margin: 0;
-            font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
 
         span {
-            font-family: var(--mono);
-            font-size: 22px;
+            font-size: $text-xl;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.02em;
             color: $text-primary;
@@ -211,8 +202,7 @@
 
     &__info {
         margin-top: $space-2;
-        font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 }

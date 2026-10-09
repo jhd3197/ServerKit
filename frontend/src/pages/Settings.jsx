@@ -26,11 +26,11 @@ import CloudTab from '../components/settings/CloudTab';
 import StorageTab from '../components/settings/StorageTab';
 import PluginSlot from '../components/PluginSlot';
 import { Activity, CloudCog, Code, Database, HardDrive, Layers, Link2, PaintBucket, Sparkles, Trash2, Webhook, Settings as SettingsIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { SegControl } from '@/components/ds';
 import PageLayout from '../layouts/PageLayout';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
 
 const VALID_TABS = ['profile', 'security', 'connections', 'cloud', 'appearance', 'sidebar', 'whitelabel', 'notifications', 'system', 'users', 'activity', 'site', 'sso', 'api', 'webhooks', 'ai', 'migrations', 'recyclebin', 'storage', 'developer', 'about'];
 
@@ -44,6 +44,9 @@ const Settings = () => {
     const [activeTab, setActiveTab] = useTabParam('/settings', VALID_TABS);
     const { isAdmin } = useAuth();
     const [devMode, setDevMode] = useState(false);
+    // Whether the dev-mode answer is in (success or failure), so a direct
+    // link to /settings/developer waits for it before deciding.
+    const [devModeKnown, setDevModeKnown] = useState(false);
     const navigate = useNavigate();
     const { tab: requestedTab } = useParams();
 
@@ -60,9 +63,18 @@ const Settings = () => {
         if (isAdmin) {
             api.getSystemSettings().then(data => {
                 setDevMode(data.dev_mode || false);
-            }).catch(() => {});
+            }).catch(() => {}).finally(() => setDevModeKnown(true));
         }
     }, [isAdmin]);
+
+    // A tab this user can't open rendered an empty content area on a direct
+    // link. Send it to Profile instead: admin tabs for non-admins, and the
+    // developer tab once dev mode is known to be off.
+    const tabUnavailable = (!isAdmin && ADMIN_TABS.includes(activeTab))
+        || (activeTab === 'developer' && isAdmin && devModeKnown && !devMode);
+    useEffect(() => {
+        if (tabUnavailable) navigate('/settings/profile', { replace: true });
+    }, [tabUnavailable, navigate]);
 
     return (
         <PageLayout
@@ -77,7 +89,7 @@ const Settings = () => {
                             className="settings-nav-groups"
                             aria-label={t('app.settings.settingsSection', 'Settings section')}
                             options={[
-                                { value: 'account', labelKey: 'app.settings.myAccount', label: 'My Account' },
+                                { value: 'account', labelKey: 'app.settings.myAccount', label: 'My account' },
                                 { value: 'admin', labelKey: 'app.settings.admin', label: 'Admin' },
                             ]}
                             value={activeGroup}
@@ -86,8 +98,8 @@ const Settings = () => {
                     )}
                     {activeGroup === 'account' && (
                         <>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'profile' ? 'active' : ''}`}
                         onClick={() => setActiveTab('profile')}
                     >
@@ -97,8 +109,8 @@ const Settings = () => {
                         </svg>
                         {t('app.settings.profile', 'Profile')}
                     </Button>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'security' ? 'active' : ''}`}
                         onClick={() => setActiveTab('security')}
                     >
@@ -108,8 +120,8 @@ const Settings = () => {
                         </svg>
                         {t('common.labels.security', 'Security')}
                     </Button>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'notifications' ? 'active' : ''}`}
                         onClick={() => setActiveTab('notifications')}
                     >
@@ -120,8 +132,8 @@ const Settings = () => {
                         {t('app.settings.notifications', 'Notifications')}
                     </Button>
                     <div className="settings-nav-divider">{t('app.settings.preferences', 'Preferences')}</div>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'appearance' ? 'active' : ''}`}
                         onClick={() => setActiveTab('appearance')}
                     >
@@ -138,8 +150,8 @@ const Settings = () => {
                         </svg>
                         {t('app.settings.appearance', 'Appearance')}
                     </Button>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'sidebar' ? 'active' : ''}`}
                         onClick={() => setActiveTab('sidebar')}
                     >
@@ -149,29 +161,29 @@ const Settings = () => {
                         </svg>
                         {t('app.settings.sidebar', 'Sidebar')}
                     </Button>
-                    <Button
-                        variant="ghost"
+                    <Button variant="unstyled"
+                        type="button"
                         className={`settings-nav-item ${activeTab === 'whitelabel' ? 'active' : ''}`}
                         onClick={() => setActiveTab('whitelabel')}
                     >
                         <Layers size={18} />
-                        {t('app.settings.whiteLabel', 'White Label')}
+                        {t('app.settings.whiteLabel', 'White label')}
                     </Button>
                             {import.meta.env.DEV && !devMode && !isAdmin && (
                                 <>
-                                    <div className="settings-nav-divider">{t('app.settings.localDev', 'Local Dev')}</div>
-                                    <Button
-                                        variant="ghost"
+                                    <div className="settings-nav-divider">{t('app.settings.localDev', 'Local dev')}</div>
+                                    <Button variant="unstyled"
+                                        type="button"
                                         className="settings-nav-item"
                                         onClick={() => navigate('/style-guide')}
                                     >
                                         <PaintBucket size={18} />
-                                        {t('app.settings.styleGuide', 'Style Guide')}
+                                        {t('app.settings.styleGuide', 'Style guide')}
                                     </Button>
                                 </>
                             )}
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'about' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('about')}
                             >
@@ -186,8 +198,8 @@ const Settings = () => {
                     )}
                     {activeGroup === 'admin' && isAdmin && (
                         <>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'users' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('users')}
                             >
@@ -199,24 +211,24 @@ const Settings = () => {
                                 </svg>
                                 {t('app.settings.users', 'Users')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'activity' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('activity')}
                             >
                                 <Activity size={18} />
                                 {t('app.settings.activity', 'Activity')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'recyclebin' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('recyclebin')}
                             >
                                 <Trash2 size={18} />
                                 {t('app.settings.recycleBin', 'Recycle bin')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'site' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('site')}
                             >
@@ -224,26 +236,26 @@ const Settings = () => {
                                     <circle cx="12" cy="12" r="3"/>
                                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
                                 </svg>
-                                {t('app.settings.siteSettings', 'Site Settings')}
+                                {t('app.settings.siteSettings', 'Site settings')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'connections' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('connections')}
                             >
                                 <Link2 size={18} />
                                 {t('app.settings.connections', 'Connections')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'cloud' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('cloud')}
                             >
                                 <CloudCog size={18} />
                                 {t('app.settings.serverkitCloud', 'ServerKit Cloud')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'sso' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('sso')}
                             >
@@ -254,48 +266,48 @@ const Settings = () => {
                                 </svg>
                                 SSO
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'api' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('api')}
                             >
                                 <Code size={18} />
                                 API
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'webhooks' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('webhooks')}
                             >
                                 <Webhook size={18} />
                                 {t('app.settings.webhooks', 'Webhooks')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'ai' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('ai')}
                             >
                                 <Sparkles size={18} />
-                                {t('app.settings.aiAssistant', 'AI Assistant')}
+                                {t('app.settings.aiAssistant', 'AI assistant')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'migrations' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('migrations')}
                             >
                                 <Database size={18} />
                                 {t('app.settings.migrations', 'Migrations')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'storage' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('storage')}
                             >
                                 <HardDrive size={18} />
                                 {t('app.settings.storage', 'Storage')}
                             </Button>
-                            <Button
-                                variant="ghost"
+                            <Button variant="unstyled"
+                                type="button"
                                 className={`settings-nav-item ${activeTab === 'system' ? 'active' : ''}`}
                                 onClick={() => setActiveTab('system')}
                             >
@@ -304,28 +316,28 @@ const Settings = () => {
                                     <line x1="8" y1="21" x2="16" y2="21"/>
                                     <line x1="12" y1="17" x2="12" y2="21"/>
                                 </svg>
-                                {t('app.settings.systemInfo', 'System Info')}
+                                {t('app.settings.systemInfo', 'System info')}
                             </Button>
                             {(devMode || import.meta.env.DEV) && (
                                 <>
-                                    <div className="settings-nav-divider">{devMode ? 'Developer' : 'Local Dev'}</div>
+                                    <div className="settings-nav-divider">{devMode ? t('app.settings.developer', 'Developer') : t('app.settings.localDev', 'Local dev')}</div>
                                     {devMode && (
-                                        <Button
-                                            variant="ghost"
+                                        <Button variant="unstyled"
+                                            type="button"
                                             className={`settings-nav-item ${activeTab === 'developer' ? 'active' : ''}`}
                                             onClick={() => setActiveTab('developer')}
                                         >
                                             <Code size={18} />
-                                            {t('app.settings.iconReference', 'Icon Reference')}
+                                            {t('app.settings.iconReference', 'Icon reference')}
                                         </Button>
                                     )}
-                                    <Button
-                                        variant="ghost"
+                                    <Button variant="unstyled"
+                                        type="button"
                                         className="settings-nav-item"
                                         onClick={() => navigate('/style-guide')}
                                     >
                                         <PaintBucket size={18} />
-                                        {t('app.settings.styleGuide', 'Style Guide')}
+                                        {t('app.settings.styleGuide', 'Style guide')}
                                     </Button>
                                 </>
                             )}

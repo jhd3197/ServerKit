@@ -64,7 +64,7 @@
             display: flex;
             align-items: center;
             gap: $space-2;
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-semibold;
             color: var(--text);
 
@@ -72,14 +72,13 @@
         }
 
         .ts-mode__desc {
-            font-size: 12px;
+            font-size: $text-xs;
             font-weight: $font-weight-normal;
             color: var(--text-dim);
         }
 
         .ts-mode__eta {
-            font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -118,7 +117,7 @@
         }
 
         .ts-distro__label {
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-medium;
             color: var(--text);
         }
@@ -130,8 +129,7 @@
         }
 
         .ts-distro__hint {
-            font-family: var(--mono);
-            font-size: 10px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -143,7 +141,7 @@
         gap: $space-3;
 
         .ts-launch__note {
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -186,7 +184,7 @@
         }
 
         .ts-result__name {
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-medium;
             color: var(--text);
         }
@@ -194,14 +192,13 @@
         .ts-result__spacer { flex: 1; }
 
         .ts-result__duration {
-            font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
 
         .ts-result__detail {
             padding: 0 $space-3 $space-2;
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text-dim);
         }
     }
@@ -218,7 +215,7 @@
         max-height: 360px;
         overflow: auto;
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         line-height: $line-height-normal;
         white-space: pre-wrap;
         word-break: break-word;
@@ -233,32 +230,24 @@
 
     .ts-section-title {
         margin: 0 0 $space-3;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
-    }
-
-    .ts-history-card {
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-        overflow: hidden;
     }
 
     .ts-summary {
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: 12px;
+        font-size: $text-xs;
 
         .ts-summary__pass { color: var(--green); }
         .ts-summary__fail { color: var(--red); }
     }
 
-    .ts-detail-row > td {
+    // The expanded run's full-width detail cell (out-ranks .sk-dtable's cell
+    // padding on purpose: it holds a panel, not a value).
+    .sk-dtable .ts-detail-cell {
         padding: $space-3 $space-4;
         background: var(--surface-2);
     }

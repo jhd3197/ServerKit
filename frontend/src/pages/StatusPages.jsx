@@ -9,15 +9,17 @@ import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Pill } from '@/components/ds';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '../components/CopyField';
 import { useTranslation } from 'react-i18next';
 import {
     Activity,
     CheckCircle2,
-    Copy,
     ExternalLink,
     Globe2,
     Link2,
@@ -27,6 +29,7 @@ import {
     Trash2,
     Unlink,
 } from 'lucide-react';
+import { toastError } from '@/utils/errorMessage';
 
 // pill → ds Pill kind · tone → .status-dot modifier · dot → .comp-dots square
 const STATUS_META = {
@@ -158,7 +161,7 @@ const StatusPages = () => {
             setIncidents(iData.incidents || []);
             setUnattached((mData?.monitors || []).filter((m) => m.page_id == null));
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToLoadPageDetails', 'Failed to load page details'));
+            toastError(toast, t('app.statusPages.failedToLoadPageDetails', "Couldn't load the page details."), err);
         }
     };
 
@@ -171,7 +174,7 @@ const StatusPages = () => {
             setShowAttach(false);
             await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.couldNotAddTheMonitor', 'Could not add the monitor'));
+            toastError(toast, t('app.statusPages.couldNotAddTheMonitor', "Couldn't add the monitor."), err);
         }
     };
 
@@ -183,7 +186,7 @@ const StatusPages = () => {
             toast.success(t('app.statusPages.removedFromThisPage', '{{name}} removed from this page', { name: component.name }));
             await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.couldNotRemoveTheMonitor', 'Could not remove the monitor'));
+            toastError(toast, t('app.statusPages.couldNotRemoveTheMonitor', "Couldn't remove the monitor."), err);
         }
     };
 
@@ -206,7 +209,7 @@ const StatusPages = () => {
                 setIncidents([]);
             }
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToLoadStatusPages', 'Failed to load status pages'));
+            toastError(toast, t('app.statusPages.failedToLoadStatusPages', "Couldn't load status pages."), err);
         } finally {
             setLoading(false);
         }
@@ -241,7 +244,7 @@ const StatusPages = () => {
             setPages((current) => [...current, page].sort((a, b) => a.name.localeCompare(b.name)));
             await loadPageDetails(page);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToCreateStatusPage', 'Failed to create status page'));
+            toastError(toast, t('app.statusPages.failedToCreateStatusPage', "Couldn't create the status page."), err);
         }
     };
 
@@ -255,7 +258,7 @@ const StatusPages = () => {
             await loadPageDetails(selectedPage);
             await loadPages();
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToAddComponent', 'Failed to add component'));
+            toastError(toast, t('app.statusPages.failedToAddComponent', "Couldn't add the component."), err);
         }
     };
 
@@ -265,7 +268,7 @@ const StatusPages = () => {
             toast.success(t('app.statusPages.check', 'Check {{status}}{{value}}', { status: result.status, value: result.response_time ? ` in ${result.response_time}ms` : '' }));
             if (selectedPage) await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.checkFailed', 'Check failed'));
+            toastError(toast, t('app.statusPages.checkFailed', "Couldn't run the check."), err);
         }
     };
 
@@ -278,7 +281,7 @@ const StatusPages = () => {
             setIncidentForm(defaultIncidentForm);
             await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToCreateIncident', 'Failed to create incident'));
+            toastError(toast, t('app.statusPages.failedToCreateIncident', "Couldn't create the incident."), err);
         }
     };
 
@@ -292,14 +295,8 @@ const StatusPages = () => {
             toast.success(t('app.statusPages.incidentSetTo', 'Incident set to {{statusLabel}}', { statusLabel: statusLabel }));
             if (selectedPage) await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.failedToUpdateIncident', 'Failed to update incident'));
+            toastError(toast, t('app.statusPages.failedToUpdateIncident', "Couldn't update the incident."), err);
         }
-    };
-
-    const handleCopyUrl = async () => {
-        if (!selectedUrl) return;
-        if (await copyToClipboard(selectedUrl)) toast.success(t('app.statusPages.statusPageUrlCopied', 'Status page URL copied'));
-        else toast.error(t('app.statusPages.couldNotCopyUrl', 'Could not copy URL'));
     };
 
     const handleConfirmDelete = async () => {
@@ -329,7 +326,7 @@ const StatusPages = () => {
             setDeleteConfirm(null);
             if (selectedPage) await loadPageDetails(selectedPage);
         } catch (err) {
-            toast.error(err.message || t('app.statusPages.deleteFailed', 'Delete failed'));
+            toastError(toast, t('app.statusPages.deleteFailed', "Couldn't delete the status page."), err);
         }
     };
 
@@ -343,7 +340,7 @@ const StatusPages = () => {
                 {isAdmin && (
                     <Button size="sm" onClick={() => setShowCreatePage(true)}>
                         <Plus size={16} />
-                        {t('app.statusPages.createPage', 'Create Page')}
+                        {t('app.statusPages.createPage', 'Create page')}
                     </Button>
                 )}
             </>
@@ -367,13 +364,13 @@ const StatusPages = () => {
                             <span className="status-page-item__top">
                                 <span className="status-page-item__name">{page.name}</span>
                                 <Pill kind={page.is_public ? 'green' : 'gray'} dot={false}>
-                                    {page.is_public ? 'Public' : 'Private'}
+                                    {page.is_public ? t('app.statusPages.public', 'Public') : t('app.statusPages.private', 'Private')}
                                 </Pill>
                             </span>
                             <span className="status-page-item__slug">/status/{page.slug}</span>
                             <span className="status-page-item__meta">
                                 <Globe2 size={13} />
-                                {page.component_count} component{page.component_count !== 1 ? 's' : ''}
+                                {t('app.statusPages.componentCount', { count: page.component_count, defaultValue_one: '1 component', defaultValue_other: '{{count}} components' })}
                             </span>
                         </Button>
                     ))}
@@ -401,13 +398,8 @@ const StatusPages = () => {
                                 )}
                             </div>
                             <div className="status-url-card">
-                                <span>{t('app.statusPages.publicUrl', 'Public URL')}</span>
-                                <code>{selectedUrl}</code>
+                                <CopyField label={t('app.statusPages.publicUrl', 'Public URL')} value={selectedUrl} />
                                 <div>
-                                    <Button size="sm" variant="outline" onClick={handleCopyUrl}>
-                                        <Copy size={14} />
-                                        {t('common.actions.copy', 'Copy')}
-                                    </Button>
                                     <Button size="sm" asChild>
                                         <a href={selectedUrl} target="_blank" rel="noreferrer">
                                             <ExternalLink size={14} />
@@ -480,13 +472,13 @@ const StatusPages = () => {
                                                             <span className={`status-dot status-dot--${meta.tone}`} />
                                                             <div>
                                                                 <strong>{component.name}</strong>
-                                                                <span>{component.check_type.toUpperCase()} · {component.check_target || 'No target'}</span>
+                                                                <span>{component.check_type.toUpperCase()} · {component.check_target || t('app.statusPages.noTarget', 'No target')}</span>
                                                             </div>
                                                         </div>
                                                         <div className="component-row__stats">
                                                             <Pill kind={meta.pill}>{meta.label}</Pill>
                                                             <span>{formatUptime(component.uptime_30d)} uptime</span>
-                                                            <span>{component.last_response_time ? `${component.last_response_time}ms` : 'No response'}</span>
+                                                            <span>{component.last_response_time ? `${component.last_response_time}ms` : t('app.statusPages.noResponse', 'No response')}</span>
                                                             <span>{formatDate(component.last_check_at)}</span>
                                                         </div>
                                                         {isAdmin && (
@@ -499,7 +491,7 @@ const StatusPages = () => {
                                                                     size="sm"
                                                                     variant="ghost"
                                                                     onClick={() => handleDetachMonitor(component)}
-                                                                    title={t('app.statusPages.removeFromThisPageTheMonitor', 'Remove from this page — the monitor keeps running')}
+                                                                    title={t('app.statusPages.removeFromThisPageTheMonitor', 'Remove from this page (the monitor keeps running)')}
                                                                 >
                                                                     <Unlink size={14} />
                                                                 </Button>
@@ -529,7 +521,7 @@ const StatusPages = () => {
                                     {isAdmin && (
                                         <Button size="sm" onClick={() => setShowCreateIncident(true)}>
                                             <Plus size={14} />
-                                            {t('app.statusPages.createIncident', 'Create Incident')}
+                                            {t('app.statusPages.createIncident', 'Create incident')}
                                         </Button>
                                     )}
                                 </div>
@@ -600,7 +592,7 @@ const StatusPages = () => {
                                     <div>
                                         <span>{t('app.statusPages.visibility', 'Visibility')}</span>
                                         <Pill kind={selectedPage.is_public ? 'green' : 'gray'}>
-                                            {selectedPage.is_public ? 'Public' : 'Private'}
+                                            {selectedPage.is_public ? t('app.statusPages.public', 'Public') : t('app.statusPages.private', 'Private')}
                                         </Pill>
                                     </div>
                                     <div>
@@ -610,7 +602,7 @@ const StatusPages = () => {
                                     {isAdmin && (
                                         <Button variant="destructive" onClick={() => setDeleteConfirm({ type: 'page', item: selectedPage })}>
                                             <Trash2 size={16} />
-                                            {t('app.statusPages.deletePage', 'Delete Page')}
+                                            {t('app.statusPages.deletePage', 'Delete page')}
                                         </Button>
                                     )}
                                 </div>
@@ -627,7 +619,7 @@ const StatusPages = () => {
             <Modal
                 open={showCreatePage}
                 onClose={() => setShowCreatePage(false)}
-                title={t('app.statusPages.createStatusPage', 'Create Status Page')}
+                title={t('app.statusPages.createStatusPage', 'Create status page')}
                 size="lg"
                 className="status-modal"
                 footer={(
@@ -671,7 +663,7 @@ const StatusPages = () => {
                 footer={<Button variant="outline" onClick={() => setShowAttach(false)}>{t('common.actions.close', 'Close')}</Button>}
             >
                 <p className="form-help">
-                    {t('app.statusPages.theseMonitorsAreAlreadyRunningAnd', 'These monitors are already running and are not on any status page yet. Adding one publishes it here — it keeps the history it has already collected.')}
+                    {t('app.statusPages.theseMonitorsAreAlreadyRunningAnd', 'These monitors are already running and are not on any status page yet. Adding one publishes it here, and it keeps the history it has already collected.')}
                 </p>
                 <div className="status-attach-list">
                     {unattached.map((monitor) => (
@@ -683,7 +675,7 @@ const StatusPages = () => {
                         >
                             <span className="status-attach-row__body">
                                 <strong>{monitor.name}</strong>
-                                <span>{monitor.check_type.toUpperCase()} · {monitor.check_target || 'bound site'}</span>
+                                <span>{monitor.check_type.toUpperCase()} · {monitor.check_target || t('app.statusPages.boundSite', 'bound site')}</span>
                             </span>
                             <Pill kind={(STATUS_META[monitor.status] || STATUS_META.operational).pill}>
                                 {(STATUS_META[monitor.status] || STATUS_META.operational).label}
@@ -699,14 +691,14 @@ const StatusPages = () => {
             <Modal
                 open={showCreateComponent}
                 onClose={() => setShowCreateComponent(false)}
-                title={t('app.statusPages.addComponent', 'Add Component')}
+                title={t('app.statusPages.addComponent', 'New component')}
                 size="lg"
                 className="status-modal"
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateComponent(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button onClick={handleCreateComponent} disabled={!compForm.name.trim() || !compForm.check_target.trim()}>
-                            {t('app.statusPages.addComponent', 'Add Component')}
+                            {t('app.statusPages.createComponent', 'Create component')}
                         </Button>
                     </>
                 )}
@@ -721,17 +713,19 @@ const StatusPages = () => {
                         <Input value={compForm.group} onChange={(e) => setCompForm({ ...compForm, group: e.target.value })} />
                     </div>
                     <div className="form-group">
-                        <label>{t('app.statusPages.checkType', 'Check Type')}</label>
-                        <select
-                            className="form-select"
+                        <label htmlFor="status-comp-check-type">{t('app.statusPages.checkType', 'Check type')}</label>
+                        <Select
                             value={compForm.check_type}
-                            onChange={(e) => setCompForm({ ...compForm, check_type: e.target.value })}
+                            onValueChange={(v) => setCompForm({ ...compForm, check_type: v })}
                         >
-                            <option value="http">HTTP</option>
-                            <option value="tcp">TCP</option>
-                            <option value="dns">DNS</option>
-                            <option value="ping">{t('app.statusPages.ping', 'Ping')}</option>
-                        </select>
+                            <SelectTrigger id="status-comp-check-type"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="http">HTTP</SelectItem>
+                                <SelectItem value="tcp">TCP</SelectItem>
+                                <SelectItem value="dns">DNS</SelectItem>
+                                <SelectItem value="ping">{t('app.statusPages.ping', 'Ping')}</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="form-group">
                         <label>{t('common.labels.target', 'Target')}</label>
@@ -765,14 +759,14 @@ const StatusPages = () => {
             <Modal
                 open={showCreateIncident}
                 onClose={() => setShowCreateIncident(false)}
-                title={t('app.statusPages.createIncident', 'Create Incident')}
+                title={t('app.statusPages.createIncident', 'Create incident')}
                 size="lg"
                 className="status-modal"
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateIncident(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button onClick={handleCreateIncident} disabled={!incidentForm.title.trim()}>
-                            {t('app.statusPages.createIncident', 'Create Incident')}
+                            {t('app.statusPages.createIncident', 'Create incident')}
                         </Button>
                     </>
                 )}
@@ -783,28 +777,32 @@ const StatusPages = () => {
                 </div>
                 <div className="status-modal-grid">
                     <div className="form-group">
-                        <label>{t('common.labels.status', 'Status')}</label>
-                        <select
-                            className="form-select"
+                        <label htmlFor="status-incident-status">{t('common.labels.status', 'Status')}</label>
+                        <Select
                             value={incidentForm.status}
-                            onChange={(e) => setIncidentForm({ ...incidentForm, status: e.target.value })}
+                            onValueChange={(v) => setIncidentForm({ ...incidentForm, status: v })}
                         >
-                            {INCIDENT_STATUS.filter((status) => status.value !== 'resolved').map((status) => (
-                                <option key={status.value} value={status.value}>{status.label}</option>
-                            ))}
-                        </select>
+                            <SelectTrigger id="status-incident-status"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {INCIDENT_STATUS.filter((status) => status.value !== 'resolved').map((status) => (
+                                    <SelectItem key={status.value} value={status.value}>{status.label}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="form-group">
-                        <label>{t('app.statusPages.impact', 'Impact')}</label>
-                        <select
-                            className="form-select"
+                        <label htmlFor="status-incident-impact">{t('app.statusPages.impact', 'Impact')}</label>
+                        <Select
                             value={incidentForm.impact}
-                            onChange={(e) => setIncidentForm({ ...incidentForm, impact: e.target.value })}
+                            onValueChange={(v) => setIncidentForm({ ...incidentForm, impact: v })}
                         >
-                            {IMPACT_OPTIONS.map((impact) => (
-                                <option key={impact.value} value={impact.value}>{impact.label}</option>
-                            ))}
-                        </select>
+                            <SelectTrigger id="status-incident-impact"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {IMPACT_OPTIONS.map((impact) => (
+                                    <SelectItem key={impact.value} value={impact.value}>{impact.label}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
                 <div className="form-group">

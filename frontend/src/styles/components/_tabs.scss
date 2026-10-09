@@ -30,9 +30,10 @@
     gap: $space-2;
     background: none;
     border: none;
-    padding: $space-3 $space-5;
+    height: $control-lg; // underline tabs: 40
+    padding: 0 $space-4;
     color: $text-secondary;
-    font-size: $font-size-base;
+    font-size: $text-base;
     font-weight: $font-weight-medium;
     cursor: pointer;
     border-bottom: 2px solid transparent;
@@ -58,7 +59,7 @@
     &:focus-visible {
         outline: 2px solid $accent-primary;
         outline-offset: 2px;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 }
 
@@ -80,7 +81,7 @@
 .tabs-overflow-list {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: $space-hair;
 }
 
 .tabs-overflow-item {
@@ -91,11 +92,11 @@
     background: none;
     border: none;
     color: $text-secondary;
-    font-size: $font-size-base;
+    font-size: $text-base;
     font-weight: $font-weight-medium;
     text-align: left;
     cursor: pointer;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     width: 100%;
     @include transition();
 
@@ -140,7 +141,7 @@ display: inline-flex;
     background: transparent;
     border: none;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     padding: $space-3 $space-4;
     cursor: pointer;

@@ -196,7 +196,7 @@ export default function LogPane({
                                             {section.errors > 0 && (
                                                 <b className="deploy-console__sec-err"> · {section.errors} error{section.errors === 1 ? '' : 's'}</b>
                                             )}
-                                            {section.warns > 0 && ` · ${section.warns} warning${section.warns === 1 ? '' : 's'}`}
+                                            {section.warns > 0 && ` · ${t('app.logPane.warningCount', { count: section.warns, defaultValue_one: '1 warning', defaultValue_other: '{{count}} warnings' })}`}
                                         </span>
                                     </SharedButton>
                                 )}
@@ -225,7 +225,7 @@ export default function LogPane({
                 <div
                     className="deploy-console__map"
                     onMouseDown={onMapDown}
-                    title={t('app.logPane.logSeverityClickOrDragTo', 'Log severity — click or drag to jump')}
+                    title={t('app.logPane.logSeverityClickOrDragTo', 'Log severity: click or drag to jump')}
                 >
                     {buckets.map((level, i) => (
                         <i

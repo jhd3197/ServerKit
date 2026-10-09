@@ -61,7 +61,9 @@ export function SortMenu({ columns = [], sorts = [], onChange, className }) {
                             type="button"
                             className="sk-tablemenu__dir"
                             onClick={() => flip(sort.key)}
-                            aria-label={t('app.sortMenu.sort2', 'Sort {{value}} {{value2}}', { value: labelFor(sort.key), value2: sort.direction === 'asc' ? 'descending' : 'ascending' })}
+                            aria-label={sort.direction === 'asc'
+                                ? t('app.sortMenu.sortDescending', 'Sort {{column}} descending', { column: labelFor(sort.key) })
+                                : t('app.sortMenu.sortAscending', 'Sort {{column}} ascending', { column: labelFor(sort.key) })}
                             title={sort.direction === 'asc' ? t('app.sortMenu.ascending', 'Ascending') : t('app.sortMenu.descending', 'Descending')}
                         >
                             {sort.direction === 'asc' ? <ArrowUp size={13} /> : <ArrowDown size={13} />}

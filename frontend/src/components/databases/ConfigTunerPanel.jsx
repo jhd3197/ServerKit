@@ -5,6 +5,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Curated config tuner: a small set of vetted engine settings with RAM-aware
 // suggested values. Shows current vs suggested; the operator picks which
@@ -73,9 +74,8 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
     async function applySelected() {
         if (!selectedKeys.length) return;
         const ok = await confirm({
-            title: t('app.configTunerPanel.applySetting', 'Apply {{length}} setting{{value}}?', { length: selectedKeys.length, value: selectedKeys.length === 1 ? '' : 's' }),
-            message: t('app.configTunerPanel.applyingRestartsTheDatabaseEngineConnected', 'Applying restarts the database engine — connected apps will see a short ')
-                + t('app.configTunerPanel.interruptionThePreviousConfigurationIsBacked', 'interruption. The previous configuration is backed up and can be rolled back.'),
+            title: t('app.configTunerPanel.applySettings', { count: selectedKeys.length, defaultValue_one: 'Apply 1 setting?', defaultValue_other: 'Apply {{count}} settings?' }),
+            message: t('app.configTunerPanel.applyConfirmMessage', 'Applying restarts the database engine, so connected services will see a short interruption. The previous configuration is backed up and can be rolled back.'),
             confirmText: t('app.configTunerPanel.applyAndRestart', 'Apply and restart'),
             danger: true,
         });
@@ -91,7 +91,7 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
             toast.success(t('app.configTunerPanel.settingsAppliedAndEngineRestarted', 'Settings applied and engine restarted'));
             await load(dedicated);
         } catch (err) {
-            toast.error(err.message || t('app.configTunerPanel.failedToApplySettings', 'Failed to apply settings'));
+            toastError(toast, t('app.configTunerPanel.failedToApplySettings', "Couldn't apply the settings."), err);
         } finally {
             setBusy(false);
         }
@@ -100,8 +100,7 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
     async function rollback() {
         const ok = await confirm({
             title: t('app.configTunerPanel.rollBackToThePreviousConfiguration', 'Roll back to the previous configuration?'),
-            message: t('app.configTunerPanel.theLastBackedUpConfigurationIs', 'The last backed-up configuration is restored and the database engine ')
-                + t('app.configTunerPanel.isRestarted', 'is restarted.'),
+            message: t('app.configTunerPanel.rollbackConfirmMessage', 'The last backed-up configuration is restored and the database engine is restarted.'),
             confirmText: t('app.configTunerPanel.rollBackAndRestart', 'Roll back and restart'),
             danger: true,
         });
@@ -112,7 +111,7 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
             toast.success(t('app.configTunerPanel.previousConfigurationRestored', 'Previous configuration restored'));
             await load(dedicated);
         } catch (err) {
-            toast.error(err.message || t('app.configTunerPanel.rollbackFailed', 'Rollback failed'));
+            toastError(toast, t('app.configTunerPanel.rollbackFailed', "Couldn't roll back."), err);
         } finally {
             setBusy(false);
         }
@@ -126,7 +125,12 @@ export default function ConfigTunerPanel({ target, engine, user, password }) {
         <div className="db-tuner">
             <div className="db-tuner__head">
                 <p className="db-tuner__hint">
-                    {t('app.configTunerPanel.suggestionsAreBasedOn', 'Suggestions are based on')} {data.ram_mb} {t('app.configTunerPanel.mbOfRam', 'MB of RAM (')}{data.ram_source === 'container_limit' ? 'container memory limit' : 'host total'}{t('app.configTunerPanel.nothingIsAppliedUntilYouChoose', '). Nothing is applied until you choose to.')}
+                    {t('app.configTunerPanel.suggestionsBasedOnRam', 'Suggestions are based on {{ram}} MB of RAM ({{source}}). Nothing is applied until you choose to.', {
+                        ram: data.ram_mb,
+                        source: data.ram_source === 'container_limit'
+                            ? t('app.configTunerPanel.containerMemoryLimit', 'container memory limit')
+                            : t('app.configTunerPanel.hostTotal', 'host total'),
+                    })}
                 </p>
                 <label className="db-tuner__dedicated">
                     <input

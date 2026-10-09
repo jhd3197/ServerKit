@@ -73,7 +73,7 @@ export function DataTableFooter({
                 )}
                 {onLoadMore && hasMore && (
                     <Button variant="outline" size="sm" onClick={onLoadMore} disabled={loading}>
-                        {loading ? 'Loading…' : 'Load more'}
+                        {loading ? t('common.loading', 'Loading…') : t('common.actions.loadMore', 'Load more')}
                     </Button>
                 )}
                 {paged && totalPages > 1 && (

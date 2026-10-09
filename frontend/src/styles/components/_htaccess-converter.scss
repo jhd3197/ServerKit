@@ -11,7 +11,7 @@
 
     &__hint {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: 1.5;
 
@@ -23,7 +23,7 @@
 
     &__input {
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         resize: vertical;
     }
 
@@ -47,7 +47,7 @@
     &__pane {
         background: $bg-secondary;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         overflow: hidden;
 
         &--warn {
@@ -62,8 +62,8 @@
         gap: $space-2;
         padding: $space-2 $space-3;
         border-bottom: 1px solid $border-subtle;
-        font-size: $font-size-sm;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         color: $text-secondary;
 
         svg {
@@ -82,7 +82,7 @@
         max-height: 260px;
         overflow: auto;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.55;
         color: $text-primary;
         white-space: pre;
@@ -91,7 +91,7 @@
     &__empty {
         margin: 0;
         padding: $space-3;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -101,50 +101,21 @@
         display: flex;
         flex-direction: column;
         gap: $space-1;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: 1.5;
     }
 
+    // The unsupported-directives DataTable: a capped, sticky-header scroller.
     &__table-wrap {
-        max-height: 220px;
-        overflow: auto;
+        --dtable-max-height: 220px;
     }
 
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: $font-size-sm;
+    &__line {
+        white-space: nowrap;
+    }
 
-        th,
-        td {
-            padding: $space-2 $space-3;
-            text-align: left;
-            vertical-align: top;
-            border-bottom: 1px solid $border-subtle;
-        }
-
-        th {
-            position: sticky;
-            top: 0;
-            background: $bg-secondary;
-            color: $text-tertiary;
-            font-weight: 600;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        code {
-            font-family: $font-mono;
-            word-break: break-all;
-            color: $text-primary;
-        }
-
-        td:first-child {
-            white-space: nowrap;
-            color: $text-tertiary;
-        }
+    &__directive {
+        word-break: break-all;
     }
 }

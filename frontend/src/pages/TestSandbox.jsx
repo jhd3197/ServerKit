@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
-import { Pill, statusKind } from '@/components/ds';
+import { DataTable, Pill, statusKind } from '@/components/ds';
 import PageLayout from '../layouts/PageLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -13,6 +13,7 @@ import {
     FlaskConical, Play, Square, ChevronDown, ChevronRight,
     Zap, Package, AlertTriangle, RefreshCw,
 } from 'lucide-react';
+import { toastError } from '@/utils/errorMessage';
 
 const POLL_MS = 2500;
 const HISTORY_LIMIT = 20;
@@ -105,7 +106,7 @@ function RunResults({ run, distroMeta, logs, openLogs, onToggleLog }) {
                                 ) : log?.loading && !log?.text ? (
                                     <pre className="ts-log ts-log--muted">{t('app.testSandbox.loadingLog', 'Loading log…')}</pre>
                                 ) : (
-                                    <pre className="ts-log">{log?.text || 'No log output yet.'}</pre>
+                                    <pre className="ts-log">{log?.text || t('app.testSandbox.noLogOutputYet', 'No log output yet.')}</pre>
                                 )}
                             </div>
                         )}
@@ -162,12 +163,12 @@ const TestSandbox = () => {
             setRuns(list);
             return list;
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.testSandbox.couldntLoadRuns', "Couldn't load runs."), err);
             return [];
         } finally {
             setRunsLoading(false);
         }
-    }, [toast]);
+    }, [t, toast]);
 
     useEffect(() => {
         (async () => {
@@ -199,11 +200,11 @@ const TestSandbox = () => {
                     `Run finished: ${passed}/${total} passed${failed ? ` (${failed} failed)` : ''}`
                 );
             } else if (res.run.status === 'error') {
-                toast.error(res.run.error || t('app.testSandbox.runFailed', 'Run failed'));
+                toastError(toast, t('app.testSandbox.runFailed', "Couldn't finish the run."), res.run.error);
             }
             loadRuns();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.testSandbox.couldntRefreshRun', "Couldn't refresh the run."), err);
         }
     }, POLL_MS, {
         enabled: activeRun?.status === 'running',
@@ -297,10 +298,10 @@ const TestSandbox = () => {
         try {
             const res = await api.startTestSandboxRun([...selected], mode);
             setActiveRun(res.run);
-            toast.success(t('app.testSandbox.startedRunAcrossDistroS', 'Started {{mode}} run across {{length}} distro(s)', { mode: mode, length: res.run.distros.length }));
+            toast.success(t('app.testSandbox.startedRunAcross', { count: res.run.distros.length, mode: mode, defaultValue_one: 'Started {{mode}} run on 1 distro', defaultValue_other: 'Started {{mode}} run across {{count}} distros' }));
             loadRuns();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.testSandbox.couldntStart', "Couldn't start the run."), err);
         } finally {
             setStarting(false);
         }
@@ -316,7 +317,7 @@ const TestSandbox = () => {
             setActiveRun(res.run);
             loadRuns();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.testSandbox.couldntCancel', "Couldn't cancel the run."), err);
         } finally {
             setCancelling(false);
         }
@@ -335,13 +336,13 @@ const TestSandbox = () => {
             const res = await api.getTestSandboxRun(run.id);
             setExpandedRuns((prev) => ({ ...prev, [run.id]: res.run }));
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.testSandbox.couldntLoadRun', "Couldn't load the run."), err);
         }
     };
 
     if (loading) {
         return (
-            <PageLayout className="test-sandbox-page" icon={<FlaskConical size={18} />} title={t('app.testSandbox.testSandbox', 'Test Sandbox')}>
+            <PageLayout className="test-sandbox-page" icon={<FlaskConical size={18} />} title={t('app.testSandbox.testSandbox', 'Test sandbox')}>
                 <EmptyState loading loadingVariant="table" size="lg" title={t('app.testSandbox.loadingTestSandbox', 'Loading test sandbox…')} />
             </PageLayout>
         );
@@ -351,7 +352,7 @@ const TestSandbox = () => {
         <PageLayout
             className="test-sandbox-page"
             icon={<FlaskConical size={18} />}
-            title={t('app.testSandbox.testSandbox', 'Test Sandbox')}
+            title={t('app.testSandbox.testSandbox', 'Test sandbox')}
             actions={(
                 <Button
                     variant="outline"
@@ -373,7 +374,7 @@ const TestSandbox = () => {
             {!dockerAvailable && (
                 <div className="alert alert-warning">
                     <AlertTriangle size={16} />
-                    {t('app.testSandbox.dockerIsNotAvailableOnThis', 'Docker is not available on this host — test runs cannot start until the Docker daemon is reachable.')}
+                    {t('app.testSandbox.dockerIsNotAvailableOnThis', 'Docker is not available on this host. Test runs cannot start until the Docker daemon is reachable.')}
                 </div>
             )}
 
@@ -440,7 +441,7 @@ const TestSandbox = () => {
                                         )}
                                         <span className="ts-distro__hint">
                                             {d.fidelity === 'proxy' && t('app.testSandbox.userlandProxy', 'userland proxy · ')}
-                                            {disabled ? 'quick only' : (d.full ? 'quick + full' : 'quick')}
+                                            {disabled ? t('app.testSandbox.quickOnly', 'quick only') : (d.full ? t('app.testSandbox.quickAndFull', 'quick + full') : t('app.testSandbox.quickLower', 'quick'))}
                                         </span>
                                     </span>
                                 </Button>
@@ -454,7 +455,15 @@ const TestSandbox = () => {
                             disabled={selected.size === 0 || isRunning || starting || !dockerAvailable}
                         >
                             <Play size={14} />
-                            {starting ? 'Starting…' : `Start ${mode} run${selected.size ? ` (${selected.size})` : ''}`}
+                            {starting
+                                ? t('app.testSandbox.starting', 'Starting…')
+                                : mode === 'full'
+                                    ? (selected.size
+                                        ? t('app.testSandbox.startFullRunCount', 'Start full run ({{count}})', { count: selected.size })
+                                        : t('app.testSandbox.startFullRun', 'Start full run'))
+                                    : (selected.size
+                                        ? t('app.testSandbox.startQuickRunCount', 'Start quick run ({{count}})', { count: selected.size })
+                                        : t('app.testSandbox.startQuickRun', 'Start quick run'))}
                         </Button>
                         {isRunning && (
                             <span className="ts-launch__note">{t('app.testSandbox.aRunIsAlreadyInProgress', 'A run is already in progress.')}</span>
@@ -478,7 +487,7 @@ const TestSandbox = () => {
                                 disabled={cancelling}
                             >
                                 <Square size={13} />
-                                {cancelling ? 'Cancelling…' : 'Cancel'}
+                                {cancelling ? t('app.testSandbox.cancelling', 'Cancelling…') : t('common.actions.cancel', 'Cancel')}
                             </Button>
                         )}
                     </CardHeader>
@@ -509,51 +518,55 @@ const TestSandbox = () => {
                         description={t('app.testSandbox.pickDistrosAboveAndStartYour', 'Pick distros above and start your first sandbox run.')}
                     />
                 ) : (
-                    <div className="ts-history-card">
-                        <table className="sk-dtable ts-table">
-                            <thead>
-                                <tr>
-                                    <th>{t('app.testSandbox.run2', 'Run')}</th>
-                                    <th>{t('app.testSandbox.mode', 'Mode')}</th>
-                                    <th>{t('app.testSandbox.distros', 'Distros')}</th>
-                                    <th>{t('app.testSandbox.result', 'Result')}</th>
-                                    <th>{t('app.testSandbox.started', 'Started')}</th>
-                                    <th>{t('common.labels.status', 'Status')}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {runs.map((run) => {
-                                    const { passed, failed, total } = summarizeRun(run);
-                                    const expanded = !!expandedRuns[run.id];
-                                    return (
-                                        <FragmentRow
-                                            key={run.id}
-                                            run={run}
-                                            expanded={expanded}
-                                            passed={passed}
-                                            failed={failed}
-                                            total={total}
-                                            onToggle={() => toggleHistoryRun(run)}
-                                            detail={expanded && (
-                                                <RunResults
-                                                    run={expandedRuns[run.id]}
-                                                    distroMeta={distroMeta}
-                                                    logs={logs}
-                                                    openLogs={openLogs}
-                                                    onToggleLog={toggleLog}
-                                                />
-                                            )}
+                    // Columns give the header; rows render through renderRow
+                    // because a run expands into a full-width detail row.
+                    <DataTable
+                        columns={HISTORY_COLUMNS}
+                        data={runs}
+                        keyField="id"
+                        sortable={false}
+                        columnMenu={false}
+                        renderRow={(run, { key }) => {
+                            const { passed, failed, total } = summarizeRun(run);
+                            const expanded = !!expandedRuns[run.id];
+                            return (
+                                <FragmentRow
+                                    key={key}
+                                    run={run}
+                                    expanded={expanded}
+                                    passed={passed}
+                                    failed={failed}
+                                    total={total}
+                                    onToggle={() => toggleHistoryRun(run)}
+                                    detail={expanded && (
+                                        <RunResults
+                                            run={expandedRuns[run.id]}
+                                            distroMeta={distroMeta}
+                                            logs={logs}
+                                            openLogs={openLogs}
+                                            onToggleLog={toggleLog}
                                         />
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
+                                    )}
+                                />
+                            );
+                        }}
+                    />
                 )}
             </section>
         </PageLayout>
     );
 };
+
+// Run history header. Body rows are FragmentRow (a run + its detail row), so
+// these columns only name the six cells FragmentRow renders, in order.
+const HISTORY_COLUMNS = [
+    { key: 'id', headerKey: 'app.testSandbox.run2', header: 'Run' },
+    { key: 'mode', headerKey: 'app.testSandbox.mode', header: 'Mode' },
+    { key: 'distros', headerKey: 'app.testSandbox.distros', header: 'Distros' },
+    { key: 'result', headerKey: 'app.testSandbox.result', header: 'Result' },
+    { key: 'created_at', headerKey: 'app.testSandbox.started', header: 'Started' },
+    { key: 'status', headerKey: 'common.labels.status', header: 'Status' },
+];
 
 // One history row (+ its expanded detail row) in the runs table.
 function FragmentRow({ run, expanded, passed, failed, total, onToggle, detail }) {
@@ -567,19 +580,19 @@ function FragmentRow({ run, expanded, passed, failed, total, onToggle, detail })
                     </div>
                 </td>
                 <td><Pill kind="gray" dot={false}>{run.mode}</Pill></td>
-                <td>{total}</td>
+                <td className="sk-cell-dim">{total}</td>
                 <td>
                     <span className="ts-summary">
                         <span className="ts-summary__pass">{passed} passed</span>
                         {failed > 0 && <span className="ts-summary__fail">{failed} failed</span>}
                     </span>
                 </td>
-                <td>{timeAgo(run.created_at)}</td>
+                <td className="sk-cell-dim">{timeAgo(run.created_at)}</td>
                 <td><Pill kind={statusKind(run.status)}>{run.status}</Pill></td>
             </tr>
             {expanded && (
                 <tr className="ts-detail-row">
-                    <td colSpan={6}>{detail}</td>
+                    <td className="ts-detail-cell" colSpan={HISTORY_COLUMNS.length}>{detail}</td>
                 </tr>
             )}
         </>

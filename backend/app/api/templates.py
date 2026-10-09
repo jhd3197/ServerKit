@@ -20,6 +20,7 @@ from app.services.repository_manifest_service import RepositoryManifestService
 from app.services.resource_grant_service import ResourceGrantService
 from app.utils.slug import app_name_clash_error, validate_app_name
 from app.error_reporting import unexpected_response
+from app.exceptions import not_found, permission_denied
 
 templates_bp = Blueprint('templates', __name__)
 
@@ -372,7 +373,7 @@ def template_capacity(template_id):
     """
     result = TemplateService.get_template(template_id)
     if not result.get('success'):
-        return jsonify({'error': 'Template not found'}), 404
+        raise not_found('template')
 
     from app.services.capacity_service import check_fit
     return jsonify(check_fit(result['template'], request.args.get('server_id'))), 200
@@ -515,10 +516,10 @@ def check_app_update(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     result = TemplateService.check_updates(app_id)
     return jsonify(result), 200 if result.get('success') else 400
@@ -532,7 +533,7 @@ def update_app(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     result = TemplateService.update_app(app_id, user_id=current_user_id)
     return jsonify(result), 200 if result.get('success') else 400
@@ -547,10 +548,10 @@ def get_app_template_info(app_id):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     if not ResourceGrantService.can_access_app(user, app):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     info = TemplateService.get_installed_info(app_id)
     if info:

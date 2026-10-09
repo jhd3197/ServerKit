@@ -4,6 +4,9 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import DomainField from '../DomainField';
+import ErrorState from '../ErrorState';
 import { Pill } from '@/components/ds';
 import useSettingFocus from '../../hooks/useSettingFocus';
 import { useAuth } from '../../contexts/useAuth.js';
@@ -23,6 +26,8 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
     });
     const [basePort, setBasePort] = useState('0');
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
+    const [httpsError, setHttpsError] = useState(null);
     const [saving, setSaving] = useState(false);
     const [savingPort, setSavingPort] = useState(false);
     const [message, setMessage] = useState(null);
@@ -35,6 +40,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
     // Base-domain registry: add a new base + track which row an action is running on.
     const [newDomain, setNewDomain] = useState('');
     const [newDnsMode, setNewDnsMode] = useState('wildcard');
+    const [newDomainKey, setNewDomainKey] = useState(0);
     const [addingDomain, setAddingDomain] = useState(false);
     const [rowBusy, setRowBusy] = useState('');   // domain currently being mutated
 
@@ -45,10 +51,14 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             setBaseDomain(h.base_domain || '');
             setServerIp(h.server_ip || '');
             if (h.providers?.length) setProviderId(current => current || String(h.providers[0].id));
-        } catch { /* non-admin or endpoint unavailable */ }
+            setHttpsError(null);
+        } catch (err) {
+            setHttpsError(err);
+        }
     }, []);
 
     const loadSettings = useCallback(async () => {
+        setLoading(true);
         try {
             const data = await api.getSystemSettings();
             setSettings({
@@ -59,9 +69,11 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             setPanelTitle(data.panel_title ?? 'ServerKit');
             setPublicTitle(data.public_title ?? 'Control Panel');
             setLoginLayout(data.login_layout ?? 'centered');
+            setLoadError(null);
             await loadHttps();
         } catch (err) {
             console.error('Failed to load settings:', err);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -91,6 +103,8 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             const res = await api.addSiteBaseDomain(domain, { dnsMode: newDnsMode });
             if (res.success) {
                 setNewDomain('');
+                // DomainField keeps its own draft; remount it to clear the input.
+                setNewDomainKey((k) => k + 1);
                 setMessage({ type: 'success', text: `Added base domain ${domain}` });
                 await loadHttps();
             } else {
@@ -241,8 +255,8 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             setMessage({
                 type: 'success',
                 text: value === 0
-                    ? 'Base port reset — new apps use each template\'s default'
-                    : `New apps will be assigned ports starting from ${value}`
+                    ? 'Base port reset — new services use each template\'s default'
+                    : `New services will be assigned ports starting from ${value}`
             });
         } catch (err) {
             setMessage({ type: 'error', text: err.message || 'Failed to update base port' });
@@ -290,9 +304,23 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
         return <div className="settings-section"><p>{t('common.loading', 'Loading…')}</p></div>;
     }
 
+    // The form is seeded with defaults, so rendering it after a failed load
+    // would invite saving those defaults over the real settings.
+    if (loadError) {
+        return (
+            <div className="settings-section">
+                <ErrorState
+                    title={t('app.siteSettingsTab.couldntLoadSiteSettings', "Couldn't load site settings.")}
+                    error={loadError}
+                    onRetry={loadSettings}
+                />
+            </div>
+        );
+    }
+
     return (
         <div className="settings-section">
-            <h2>{t('app.siteSettingsTab.siteSettings', 'Site Settings')}</h2>
+            <h2>{t('app.siteSettingsTab.siteSettings', 'Site settings')}</h2>
             <p className="section-description">{t('app.siteSettingsTab.configureGlobalSiteSettings', 'Configure global site settings')}</p>
 
             {message && (
@@ -300,7 +328,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             )}
 
             <div {...register('site-appearance', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.panelAppearance', 'Panel Appearance')}</h3>
+                <h3>{t('app.siteSettingsTab.panelAppearance', 'Panel appearance')}</h3>
                 <p>{t('app.siteSettingsTab.namesShownInTheBrowserTab', 'Names shown in the browser tab and on the sign-in page, plus the sign-in page layout.')}</p>
 
                 <div className="form-group">
@@ -314,11 +342,11 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                 type="text"
                                 value={publicTitle}
                                 onChange={(e) => setPublicTitle(e.target.value)}
-                                placeholder={t('app.siteSettingsTab.controlPanel', 'Control Panel')}
+                                placeholder={t('app.siteSettingsTab.controlPanel', 'Control panel')}
                             />
                         </div>
                     </div>
-                    <span className="form-help">{t('app.siteSettingsTab.shownOnThePublicSignIn', 'Shown on the public sign-in / register pages and the browser tab before login. Kept brand-neutral by default so the panel isn\'t trivially identifiable.')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.shownOnThePublicSignIn', "Shown on the public sign-in / register pages and the browser tab before sign-in. Kept brand-neutral by default so the panel isn't trivially identifiable.")}</span>
                 </div>
 
                 <div className="form-group">
@@ -336,37 +364,37 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                             />
                         </div>
                     </div>
-                    <span className="form-help">{t('app.siteSettingsTab.shownInTheBrowserTabOnce', 'Shown in the browser tab once signed in (the interior of the app).')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.shownInTheBrowserTabOnce', 'Shown in the browser tab once signed in (inside the panel).')}</span>
                 </div>
 
                 <div className="form-group">
                     <div className="settings-row">
                         <div className="settings-label">
-                            <Label htmlFor="login-layout">{t('app.siteSettingsTab.loginLayout', 'Login layout')}</Label>
+                            <Label htmlFor="login-layout">{t('app.siteSettingsTab.loginLayout', 'Sign-in layout')}</Label>
                         </div>
                         <div className="settings-control">
-                            <select
-                                id="login-layout"
-                                className="settings-select"
-                                value={loginLayout}
-                                onChange={(e) => setLoginLayout(e.target.value)}
-                            >
-                                <option value="centered">{t('app.siteSettingsTab.centeredCard', 'Centered card')}</option>
-                                <option value="split">{t('app.siteSettingsTab.splitHero', 'Split hero')}</option>
-                                <option value="minimal">{t('app.siteSettingsTab.minimal', 'Minimal')}</option>
-                            </select>
+                            <Select value={loginLayout} onValueChange={setLoginLayout}>
+                                <SelectTrigger id="login-layout" className="settings-select">
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="centered">{t('app.siteSettingsTab.centeredCard', 'Centered card')}</SelectItem>
+                                    <SelectItem value="split">{t('app.siteSettingsTab.splitHero', 'Split hero')}</SelectItem>
+                                    <SelectItem value="minimal">{t('app.siteSettingsTab.minimal', 'Minimal')}</SelectItem>
+                                </SelectContent>
+                            </Select>
                             <Button onClick={handleSaveBrand} disabled={savingBrand}>
-                                {savingBrand ? 'Saving…' : 'Save'}
+                                {savingBrand ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                             </Button>
                         </div>
                     </div>
-                    <span className="form-help">{t('app.siteSettingsTab.rearrangesTheSignInPageApplies', 'Rearranges the sign-in page. Applies on the next load of the login page.')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.rearrangesTheSignInPageApplies', 'Rearranges the sign-in page. Applies on the next load of the sign-in page.')}</span>
                 </div>
             </div>
 
             <div {...register('site-registration', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.userRegistration', 'User Registration')}</h3>
-                <p>{t('app.siteSettingsTab.allowNewUsersToCreateAccounts', 'Allow new users to create accounts on the login page.')}</p>
+                <h3>{t('app.siteSettingsTab.userRegistration', 'User registration')}</h3>
+                <p>{t('app.siteSettingsTab.allowNewUsersToCreateAccounts', 'Allow new users to create accounts on the sign-in page.')}</p>
 
                 <div className="form-group">
                     <div className="settings-row">
@@ -386,8 +414,8 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
             </div>
 
             <div {...register('site-app-ports', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.managedAppPorts', 'Managed App Ports')}</h3>
-                <p>{t('app.siteSettingsTab.controlTheHostPortAssignedTo', 'Control the host port assigned to new WordPress sites and other managed apps.')}</p>
+                <h3>{t('app.siteSettingsTab.managedAppPorts', 'Managed service ports')}</h3>
+                <p>{t('app.siteSettingsTab.controlTheHostPortAssignedTo', 'Control the host port assigned to new WordPress sites and other managed services.')}</p>
 
                 <div className="form-group">
                     <div className="settings-row">
@@ -405,20 +433,28 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                 disabled={savingPort}
                             />
                             <Button onClick={handleSaveBasePort} disabled={savingPort}>
-                                {savingPort ? 'Saving…' : 'Save'}
+                                {savingPort ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                             </Button>
                         </div>
                     </div>
                     <span className="form-help">
-                        {t('app.siteSettingsTab.newAppsGetTheFirstFree', 'New apps get the first free port at or above this number. Set to')} <strong>0</strong> {t('app.siteSettingsTab.toUseEachTemplateSOwn', 'to use each template\'s own default (WordPress starts at 8300). Ports already in use are always skipped, so collisions can\'t happen.')}
+                        {t('app.siteSettingsTab.newAppsGetTheFirstFree', 'New services get the first free port at or above this number. Set to')} <strong>0</strong> {t('app.siteSettingsTab.toUseEachTemplateSOwn', 'to use each template\'s own default (WordPress starts at 8300). Ports already in use are always skipped, so collisions can\'t happen.')}
                     </span>
                 </div>
             </div>
 
             <div {...register('site-base-domains', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.managedSitesBaseDomains', 'Managed Sites — Base Domains')}</h3>
-                <p>{t('app.siteSettingsTab.publishManagedSitesAt', 'Publish managed sites at')} <code>&lt;name&gt;.&lt;base-domain&gt;</code>. Register one or more base domains; a new site can be created under any of them, defaulting to the one marked <strong>{t('common.labels.default', 'Default')}</strong>. Point a wildcard record <code>*.&lt;base&gt;</code> {t('app.siteSettingsTab.orPerSiteARecordsAt', '(or per-site A records) at this server.')}</p>
+                <h3>{t('app.siteSettingsTab.managedSitesBaseDomains', 'Managed services: base domains')}</h3>
+                <p>{t('app.siteSettingsTab.publishManagedSitesAt', 'Publish managed services at')} <code>&lt;name&gt;.&lt;base-domain&gt;</code>. {t('app.siteSettingsTab.registerBaseDomains', 'Register one or more base domains; a new service can be created under any of them, defaulting to the one marked')} <strong>{t('common.labels.default', 'Default')}</strong>. {t('app.siteSettingsTab.pointAWildcardRecord', 'Point a wildcard record')} <code>*.&lt;base&gt;</code> {t('app.siteSettingsTab.orPerSiteARecordsAt', '(or per-service A records) at this server.')}</p>
 
+                {httpsError ? (
+                    <ErrorState
+                        title={t('app.siteSettingsTab.couldntLoadBaseDomains', "Couldn't load base domains.")}
+                        error={httpsError}
+                        onRetry={loadHttps}
+                    />
+                ) : (
+                <>
                 <div className="form-group">
                     <div className="settings-row">
                         <div className="settings-label">
@@ -433,33 +469,38 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                 onChange={(e) => setServerIp(e.target.value)}
                             />
                             <Button onClick={handleSaveServerIp} disabled={savingDomain}>
-                                {savingDomain ? 'Saving…' : 'Save'}
+                                {savingDomain ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                             </Button>
                         </div>
                     </div>
-                    <span className="form-help">{t('app.siteSettingsTab.sharedByEveryBaseDomainUsed', 'Shared by every base domain — used to auto-create their DNS A records.')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.sharedByEveryBaseDomainUsed', 'Shared by every base domain. Used to auto-create their DNS A records.')}</span>
                 </div>
 
                 {https.providers?.length > 0 ? (
                     <div className="form-group">
                         <div className="settings-row">
-                            <div className="settings-label"><Label>{t('app.siteSettingsTab.dnsProviderForHttps', 'DNS provider for HTTPS')}</Label></div>
+                            <div className="settings-label"><Label htmlFor="sites-https-provider">{t('app.siteSettingsTab.dnsProviderForHttps', 'DNS provider for HTTPS')}</Label></div>
                             <div className="settings-control">
-                                <select className="settings-select" value={providerId} onChange={(e) => setProviderId(e.target.value)}>
-                                    {https.providers.map((p) => (
-                                        <option key={p.id} value={p.id}>{p.name} ({p.provider})</option>
-                                    ))}
-                                </select>
+                                <Select value={providerId ? String(providerId) : undefined} onValueChange={setProviderId}>
+                                    <SelectTrigger id="sites-https-provider" className="settings-select">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {https.providers.map((p) => (
+                                            <SelectItem key={p.id} value={String(p.id)}>{p.name} ({p.provider})</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
                         <span className="form-help">{t('app.siteSettingsTab.usedToIssueEachBaseS', 'Used to issue each base\'s wildcard certificate (DNS-01). Each base can use a different connected provider.')}</span>
                     </div>
                 ) : (
-                    <span className="form-help">{t('app.siteSettingsTab.connectADnsProviderUnderEmail', 'Connect a DNS provider under Email → DNS Providers to enable per-domain wildcard HTTPS.')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.connectADnsProviderUnderEmail', 'Connect a DNS provider under Email → DNS providers to enable per-domain wildcard HTTPS.')}</span>
                 )}
 
                 {displayBases.length === 0 ? (
-                    <p className="form-help">{t('app.siteSettingsTab.noBaseDomainYetAddOne', 'No base domain yet — add one below to start publishing sites at real subdomains.')}</p>
+                    <p className="form-help">{t('app.siteSettingsTab.noBaseDomainYetAddOne', 'No base domain yet. Add one below to start publishing services at real subdomains.')}</p>
                 ) : displayBases.map((b) => (
                     <div key={b.domain} className="form-group">
                         <div className="settings-row">
@@ -469,7 +510,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                         <Input type="text" placeholder="apps.example.com" value={baseDomain}
                                             onChange={(e) => setBaseDomain(e.target.value)} />
                                         <Button onClick={handleSaveDomain} disabled={savingDomain}>
-                                            {savingDomain ? 'Saving…' : 'Save'}
+                                            {savingDomain ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                                         </Button>
                                     </div>
                                 ) : (
@@ -477,21 +518,26 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                         <code>{b.domain}</code>
                                         {b.is_default && <Pill kind="blue" dot={false}>{t('common.labels.default', 'Default')}</Pill>}
                                         <Pill kind={b.https_enabled ? 'green' : 'gray'} dot={false}>
-                                            {b.https_enabled ? 'HTTPS' : 'HTTP only'}
+                                            {b.https_enabled ? 'HTTPS' : t('app.siteSettingsTab.httpOnly', 'HTTP only')}
                                         </Pill>
                                     </span>
                                 )}
                             </div>
                             <div className="settings-control">
-                                <select className="settings-select" value={b.dns_mode || 'wildcard'}
-                                    onChange={(e) => handleRowDnsMode(b, e.target.value)}
+                                <Select value={b.dns_mode || 'wildcard'}
+                                    onValueChange={(mode) => handleRowDnsMode(b, mode)}
                                     disabled={rowBusy === b.domain || savingDnsMode}>
-                                    <option value="wildcard">{t('app.siteSettingsTab.wildcardDns', 'Wildcard DNS')}</option>
-                                    <option value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-site DNS')}</option>
-                                </select>
+                                    <SelectTrigger className="settings-select" aria-label={t('app.siteSettingsTab.dnsModeFor', 'DNS mode for {{domain}}', { domain: b.domain })}>
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="wildcard">{t('app.siteSettingsTab.wildcardDns', 'Wildcard DNS')}</SelectItem>
+                                        <SelectItem value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-service DNS')}</SelectItem>
+                                    </SelectContent>
+                                </Select>
                                 <Button variant="outline" onClick={() => handleSetupHttpsFor(b)}
                                     disabled={rowBusy === b.domain || !https.providers?.length}>
-                                    {rowBusy === b.domain ? 'Working…' : (b.https_enabled ? 'Renew HTTPS' : 'Set up HTTPS')}
+                                    {rowBusy === b.domain ? t('app.siteSettingsTab.working', 'Working…') : (b.https_enabled ? t('app.siteSettingsTab.renewHttps', 'Renew HTTPS') : t('app.siteSettingsTab.setUpHttps', 'Set up HTTPS'))}
                                 </Button>
                                 {hasRegistry && !b.is_default && (
                                     <Button variant="ghost" onClick={() => handleMakeDefault(b.domain)} disabled={rowBusy === b.domain}>
@@ -506,10 +552,10 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                             </div>
                         </div>
                         <span className="form-help">
-                            {t('app.siteSettingsTab.sitesPublishAt', 'Sites publish at')} <code>&lt;name&gt;.{b.domain || 'base-domain'}</code>.{' '}
+                            {t('app.siteSettingsTab.sitesPublishAt', 'Services publish at')} <code>&lt;name&gt;.{b.domain || 'base-domain'}</code>.{' '}
                             {(b.dns_mode || 'wildcard') === 'wildcard'
                                 ? <>{t('app.siteSettingsTab.point', 'Point')} <code>*.{b.domain || 'base-domain'}</code> {t('app.siteSettingsTab.atThisServer', 'at this server.')}</>
-                                : <>{t('app.siteSettingsTab.eachNewSiteGetsItsOwn', 'Each new site gets its own A record, auto-created via the provider.')}</>}
+                                : <>{t('app.siteSettingsTab.eachNewSiteGetsItsOwn', 'Each new service gets its own A record, auto-created via the provider.')}</>}
                         </span>
                     </div>
                 ))}
@@ -518,23 +564,35 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                     <div className="settings-row">
                         <div className="settings-label"><Label htmlFor="new-base-domain">{t('app.siteSettingsTab.addBaseDomain', 'Add base domain')}</Label></div>
                         <div className="settings-control">
-                            <Input id="new-base-domain" type="text" placeholder="toto.com"
-                                value={newDomain} onChange={(e) => setNewDomain(e.target.value)} />
-                            <select className="settings-select" value={newDnsMode} onChange={(e) => setNewDnsMode(e.target.value)}>
-                                <option value="wildcard">{t('app.siteSettingsTab.wildcardDns', 'Wildcard DNS')}</option>
-                                <option value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-site DNS')}</option>
-                            </select>
+                            <DomainField
+                                key={newDomainKey}
+                                id="new-base-domain"
+                                modes={['custom']}
+                                exclude={displayBases.map((b) => b.domain)}
+                                onChange={setNewDomain}
+                            />
+                            <Select value={newDnsMode} onValueChange={setNewDnsMode}>
+                                <SelectTrigger className="settings-select" aria-label={t('app.siteSettingsTab.newBaseDnsMode', 'DNS mode for the new base domain')}>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="wildcard">{t('app.siteSettingsTab.wildcardDns', 'Wildcard DNS')}</SelectItem>
+                                    <SelectItem value="per-site">{t('app.siteSettingsTab.perSiteDns', 'Per-service DNS')}</SelectItem>
+                                </SelectContent>
+                            </Select>
                             <Button onClick={handleAddDomain} disabled={addingDomain || !newDomain.trim()}>
-                                {addingDomain ? 'Adding…' : 'Add'}
+                                {addingDomain ? t('app.siteSettingsTab.adding', 'Adding…') : t('common.actions.add', 'Add')}
                             </Button>
                         </div>
                     </div>
-                    <span className="form-help">{t('app.siteSettingsTab.registerAnotherDomainSitesCanBe', 'Register another domain sites can be published under. Set up its wildcard HTTPS from its row above.')}</span>
+                    <span className="form-help">{t('app.siteSettingsTab.registerAnotherDomainSitesCanBe', 'Register another domain services can be published under. Set up its wildcard HTTPS from its row above.')}</span>
                 </div>
+                </>
+                )}
             </div>
 
             <div {...register('site-dev-mode', 'settings-card')}>
-                <h3>{t('app.siteSettingsTab.developerMode', 'Developer Mode')}</h3>
+                <h3>{t('app.siteSettingsTab.developerMode', 'Developer mode')}</h3>
                 <p>{t('app.siteSettingsTab.enableDeveloperToolsAndDiagnostics', 'Enable developer tools and diagnostics.')}</p>
 
                 <div className="form-group">

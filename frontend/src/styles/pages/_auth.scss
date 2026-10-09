@@ -8,12 +8,21 @@
     padding: $space-5;
 }
 
+// Sign-in screens are the one place controls default to the large size.
+.auth-container {
+    .btn:not(.btn-sm):not(.btn-link):not(.btn-icon),
+    .ui-input,
+    .ui-select-trigger {
+        height: $control-lg;
+    }
+}
+
 .auth-card {
     width: 100%;
     max-width: 400px;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
+    border-radius: $radius-overlay;
     padding: $space-10;
 }
 
@@ -23,7 +32,7 @@
 
     .brand-logo {
         width: 48px;
-        height: 48px;
+        height: 48px; // geometry: logo
         margin: 0 auto $space-4;
         // ServerKitLogo renders its own gradient tile, so suppress the global
         // .brand-logo tile (_sidebar.scss) here — otherwise the self-tiled logo
@@ -34,8 +43,8 @@
     }
 
     h1 {
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         margin-bottom: $space-2;
     }
 
@@ -88,8 +97,8 @@
     }
 
     .auth-split__name {
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
     }
 
     .auth-split__card {
@@ -117,12 +126,13 @@
     justify-content: center;
     gap: $space-3;
     width: 100%;
-    padding: $space-3 $space-4;
+    height: $control-lg;
+    padding: 0 $space-4;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-control;
     background: $bg-card;
     color: $text-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     cursor: pointer;
     transition: all $transition-fast;
@@ -148,7 +158,7 @@
     gap: $space-4;
     margin: $space-6 0;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     &::before,
     &::after {
@@ -174,18 +184,18 @@
     margin-bottom: $space-6;
     padding: $space-4;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     background: $bg-hover;
     text-align: center;
 
     &__title {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         margin-bottom: $space-2;
     }
 
     &__creds {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         margin-bottom: $space-3;
 
@@ -199,7 +209,7 @@
         border: none;
         padding: 0;
         color: $accent-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         cursor: pointer;
 

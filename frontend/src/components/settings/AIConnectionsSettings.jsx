@@ -94,7 +94,7 @@ export default function AIConnectionsSettings({ connections, providers, defaultI
         } finally { setBusy(false); setOperation(null); }
     };
     const remove = async () => {
-        if (!await confirm({ title: t('ai.connections.deleteTitle', 'Delete AI connection?'), message: t('ai.connections.deleteMessage', 'Remove {{name}}? Connections used by chats or selected as default cannot be deleted.', { name: draft.name }), confirmText: t('ai.connections.delete', 'Delete'), variant: 'danger' })) return;
+        if (!await confirm({ title: t('ai.connections.deleteTitle', 'Delete AI connection?'), message: t('ai.connections.deleteMessage', 'Delete {{name}}? Connections used by chats or selected as default cannot be deleted.', { name: draft.name }), confirmText: t('ai.connections.delete', 'Delete'), variant: 'danger' })) return;
         setBusy(true);
         try {
             await api.aiDeleteConnection(draft.id);
@@ -139,7 +139,7 @@ export default function AIConnectionsSettings({ connections, providers, defaultI
                             hint={field.type === 'url' ? t('ai.connections.endpointHelp', 'Use an address reachable from the ServerKit backend. In Docker, localhost refers to the panel container. Changing this URL requires re-entering credentials.') : undefined}>
                             <Input id={`ai-config-${field.name}`} type={field.secret ? 'password' : field.type}
                                 autoComplete="off" disabled={busy} value={draft.config[field.name] ?? ''}
-                                placeholder={field.secret && draft.secrets_set.includes(field.name) ? t('ai.connections.secretConfigured', 'Configured — leave blank to keep') : field.default || ''}
+                                placeholder={field.secret && draft.secrets_set.includes(field.name) ? t('ai.connections.secretConfigured', 'Configured (leave blank to keep)') : field.default || ''}
                                 onChange={(event) => setField(field, event.target.value)} />
                             {field.secret && draft.secrets_set.includes(field.name) && (
                                 <Button variant="ghost" size="sm" type="button" disabled={busy} onClick={() => setField(field, '', true)}>

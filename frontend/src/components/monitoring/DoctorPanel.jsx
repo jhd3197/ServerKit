@@ -11,6 +11,7 @@ import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
 import { useOperations } from '@/contexts/OperationsContext';
 import DiskReclaimModal from './DiskReclaimModal';
+import { toastError } from '@/utils/errorMessage';
 
 
 // The fleet sweep fans out across agents over the network, so it is a job
@@ -113,10 +114,12 @@ const DoctorPanel = () => {
             setReport(res.report);
             const bad = (res.report?.checks || []).filter((c) => c.status !== 'ok').length;
             toast[bad > 0 ? 'warning' : 'success'](
-                bad > 0 ? `Diagnosis finished — ${bad} finding${bad !== 1 ? 's' : ''}` : 'Diagnosis finished — all clear'
+                bad > 0
+                    ? t('app.doctorPanel.diagnosisFindings', { count: bad, defaultValue_one: 'Diagnosis finished: 1 finding', defaultValue_other: 'Diagnosis finished: {{count}} findings' })
+                    : t('app.doctorPanel.diagnosisClear', 'Diagnosis finished: all clear')
             );
         } catch (err) {
-            toast.error(err.message || t('app.doctorPanel.diagnosisFailed', 'Diagnosis failed'));
+            toastError(toast, t('app.doctorPanel.diagnosisFailed', "Couldn't run the diagnosis."), err);
         } finally {
             setRunning(false);
         }
@@ -137,7 +140,7 @@ const DoctorPanel = () => {
                 await loadFleet();
                 toast.success(t('app.doctorPanel.fleetSweepFinished', 'Fleet sweep finished'));
             } else {
-                toast.error(job.error_message || t('app.doctorPanel.fleetSweepDidNotFinish', 'Fleet sweep did not finish'));
+                toastError(toast, t('app.doctorPanel.fleetSweepDidNotFinish', 'Fleet sweep did not finish'), job.error_message);
             }
         } catch {
             // Transient poll failure — the next tick retries.
@@ -148,11 +151,11 @@ const DoctorPanel = () => {
         try {
             setSweeping(true);
             const res = await api.runFleetSweep();
-            toast.info(t('app.doctorPanel.fleetSweepQueuedProbingEveryConnected', 'Fleet sweep queued — probing every connected agent'));
+            toast.info(t('app.doctorPanel.fleetSweepQueuedProbingEveryConnected', 'Fleet sweep queued. Probing every connected agent.'));
             pollSweep(res.job_id);
         } catch (err) {
             setSweeping(false);
-            toast.error(err.message || t('app.doctorPanel.couldNotQueueTheFleetSweep', 'Could not queue the fleet sweep'));
+            toastError(toast, t('app.doctorPanel.couldNotQueueTheFleetSweep', "Couldn't queue the fleet sweep."), err);
         }
     };
 
@@ -166,7 +169,7 @@ const DoctorPanel = () => {
                 openRun('job', res.job_id);
                 toast.success(t(
                     'app.doctorPanel.repairQueuedInOperations',
-                    'Repair queued — follow progress in Operations',
+                    'Repair queued. Follow progress in Operations.',
                 ));
                 return;
             }
@@ -178,17 +181,18 @@ const DoctorPanel = () => {
             // has not happened yet.
             const queued = results.filter((r) => r.success && r.job_id);
             if (failed.length > 0) {
-                toast.error(t('app.doctorPanel.repairFailed', '{{length}} repair{{value}} failed — {{value2}}', { length: failed.length, value: failed.length !== 1 ? 's' : '', value2: failed[0].error || 'see report' }));
+                toastError(toast, t('app.doctorPanel.repairsFailed', { count: failed.length, defaultValue_one: "Couldn't finish 1 repair.", defaultValue_other: "Couldn't finish {{count}} repairs." }),
+                    failed[0].error || t('app.doctorPanel.seeReport', 'See the report for details.'));
             } else if (queued.length > 0) {
                 toast.success(
-                    t('app.doctorPanel.startedBackgroundJobTheRepairFinishes', 'Started {{length}} background job{{value}} — the repair finishes there', { length: queued.length, value: queued.length !== 1 ? 's' : '' }),
+                    t('app.doctorPanel.startedJobs', { count: queued.length, defaultValue_one: 'Started 1 background job. The repair finishes there.', defaultValue_other: 'Started {{count}} background jobs. The repair finishes there.' }),
                     {
                         duration: 10000,
                         action: { label: t('app.doctorPanel.viewJobs', 'View jobs'), onClick: () => navigate('/monitoring/jobs') },
                     },
                 );
             } else {
-                toast.success(t('app.doctorPanel.repairedItem', 'Repaired {{length}} item{{value}}', { length: items.length, value: items.length !== 1 ? 's' : '' }));
+                toast.success(t('app.doctorPanel.repairedItems', { count: items.length, defaultValue_one: 'Repaired 1 item', defaultValue_other: 'Repaired {{count}} items' }));
             }
             if (scope === 'fleet') {
                 // Rows only change when a sweep re-probes; re-read what we have.
@@ -199,7 +203,7 @@ const DoctorPanel = () => {
                 setReport(fresh.report);
             }
         } catch (err) {
-            toast.error(err.message || t('app.doctorPanel.repairFailed2', 'Repair failed'));
+            toastError(toast, t('app.doctorPanel.repairFailed2', "Couldn't repair it."), err);
         } finally {
             setRepairing(false);
             setConfirm(null);
@@ -218,7 +222,7 @@ const DoctorPanel = () => {
         <div className="doctor-panel">
             <section className="monitoring-panel">
                 <div className="monitoring-panel__header">
-                    <h3>{t('app.doctorPanel.serverDoctor', 'Server Doctor')}</h3>
+                    <h3>{t('app.doctorPanel.serverDoctor', 'Server doctor')}</h3>
                     <div className="doctor-panel__actions">
                         {repairable.length > 0 && (
                             <Button
@@ -227,7 +231,7 @@ const DoctorPanel = () => {
                                 disabled={repairing || running}
                                 onClick={() => setConfirm({
                                     items: repairable.map((c) => c.repair_ref),
-                                    title: `Repair all ${repairable.length} repairable items?`,
+                                    title: t('app.doctorPanel.repairAllItems', { count: repairable.length, defaultValue_one: 'Repair 1 repairable item?', defaultValue_other: 'Repair all {{count}} repairable items?' }),
                                     diff: null,
                                     scope: 'host',
                                 })}
@@ -238,13 +242,13 @@ const DoctorPanel = () => {
                         )}
                         <Button size="sm" onClick={runDiagnosis} disabled={running || repairing}>
                             <Stethoscope size={14} />
-                            {running ? 'Diagnosing...' : 'Run diagnosis'}
+                            {running ? t('app.doctorPanel.diagnosing', 'Diagnosing…') : t('app.doctorPanel.runDiagnosis', 'Run diagnosis')}
                         </Button>
                     </div>
                 </div>
 
                 <p className="doctor-panel__blurb">
-                    {t('app.doctorPanel.oneSweepAcrossManagedConfigurationDrift', 'One sweep across managed configuration drift, core services, certificates, disk headroom and the database. Nothing is repaired automatically — every fix is a button you press.')}
+                    {t('app.doctorPanel.oneSweepAcrossManagedConfigurationDrift', 'One sweep across managed configuration drift, core services, certificates, disk headroom and the database. Nothing is repaired automatically; every fix is a button you press.')}
                     {report?.ran_at && <span className="doctor-panel__ranat"> {t('app.doctorPanel.lastRun', 'Last run')} {formatRanAt(report.ran_at)}.</span>}
                 </p>
 
@@ -267,7 +271,7 @@ const DoctorPanel = () => {
                                 onToggleDiff={() => toggleDiff(check.key)}
                                 onRepair={() => setConfirm({
                                     items: [check.repair_ref],
-                                    title: `Repair "${check.title}"?`,
+                                    title: t('app.doctorPanel.repairCheck', 'Repair "{{title}}"?', { title: check.title }),
                                     diff: check.diff || null,
                                     scope: 'host',
                                 })}
@@ -289,11 +293,11 @@ const DoctorPanel = () => {
 
             <section className="monitoring-panel">
                 <div className="monitoring-panel__header">
-                    <h3>{t('app.doctorPanel.fleetDoctor', 'Fleet Doctor')}</h3>
+                    <h3>{t('app.doctorPanel.fleetDoctor', 'Fleet doctor')}</h3>
                     <div className="doctor-panel__actions">
                         <Button size="sm" onClick={runSweep} disabled={sweeping || repairing}>
                             <Stethoscope size={14} />
-                            {sweeping ? 'Sweeping...' : 'Run fleet sweep'}
+                            {sweeping ? t('app.doctorPanel.sweeping', 'Sweeping…') : t('app.doctorPanel.runFleetSweep', 'Run fleet sweep')}
                         </Button>
                     </div>
                 </div>
@@ -309,7 +313,7 @@ const DoctorPanel = () => {
                     <EmptyState
                         icon={Server}
                         title={t('app.doctorPanel.noServersInTheFleet', 'No servers in the fleet')}
-                        description={t('app.doctorPanel.pairAnAgentFromServersTo', 'Pair an agent from Servers to include that box in the fleet sweep.')}
+                        description={t('app.doctorPanel.pairAnAgentFromServersTo', 'Pair an agent from Servers to include that server in the fleet sweep.')}
                     />
                 ) : (
                     fleetServers.map((entry) => (
@@ -350,7 +354,7 @@ const DoctorPanel = () => {
                                                 onToggleDiff={() => toggleDiff(rowKey)}
                                                 onRepair={() => setConfirm({
                                                     items: [check.repair_ref],
-                                                    title: `Repair "${check.title}" on ${entry.name}?`,
+                                                    title: t('app.doctorPanel.repairCheckOnServer', 'Repair "{{title}}" on {{server}}?', { title: check.title, server: entry.name }),
                                                     diff: check.diff || null,
                                                     scope: 'fleet',
                                                 })}
@@ -374,8 +378,8 @@ const DoctorPanel = () => {
             >
                 <p className="sk-modal__subtitle">
                     {confirm?.scope === 'fleet'
-                        ? 'This restarts the service on the remote server through its agent. The action is allowlisted and written to the audit log.'
-                        : 'This rewrites the managed file(s) from ServerKit\'s configuration and reloads the affected service. Manual edits to those files will be lost.'}
+                        ? t('app.doctorPanel.fleetRepairNote', 'This restarts the service on the remote server through its agent. The action is allowlisted and written to the audit log.')
+                        : t('app.doctorPanel.localRepairNote', "This rewrites the managed files from ServerKit's configuration and reloads the affected service. Manual edits to those files will be lost.")}
                 </p>
                 {confirm?.diff && (
                     <pre className="doctor-diff doctor-diff--modal">{confirm.diff}</pre>
@@ -386,7 +390,7 @@ const DoctorPanel = () => {
                     </Button>
                     <Button onClick={() => doRepair(confirm)} disabled={repairing}>
                         <Wrench size={14} />
-                        {repairing ? 'Repairing...' : 'Repair'}
+                        {repairing ? t('app.doctorPanel.repairing', 'Repairing…') : t('app.doctorPanel.repair', 'Repair')}
                     </Button>
                 </div>
             </Modal>

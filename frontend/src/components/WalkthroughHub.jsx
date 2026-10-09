@@ -68,7 +68,7 @@ function RecipeLibrary({ walkthroughs, state, onStart, onStop, t }) {
                             <span className="shell-recipes__card-name">{walkthrough.title}</span>
                             <span className="shell-recipes__card-desc">{walkthrough.description}</span>
                         </Button>
-                        <span className="shell-recipes__card-meta mono">
+                        <span className="shell-recipes__card-meta">
                             <Clock3 size={11} aria-hidden="true" />
                             {t('app.walkthroughs.stepsMeta', '{{count}} steps · {{duration}}', {
                                 count: walkthrough.steps.length,
@@ -205,7 +205,7 @@ export default function WalkthroughHub() {
                         <div className="shell-recipes__railhead">
                             <div className="shell-recipes__railtitle">
                                 <strong>{activeWalkthrough.title}</strong>
-                                <span className="mono">
+                                <span>
                                     {t('app.walkthroughs.doneCount', '{{count}} of {{total}} done', {
                                         count: activeProgress?.count || 0,
                                         total: activeProgress?.total || steps.length,
@@ -230,7 +230,7 @@ export default function WalkthroughHub() {
                                         onClick={() => setViewStepId(step.id)}
                                     >
                                         <span className="shell-recipes__step-marker">
-                                            {done ? <Check size={12} /> : <span className="mono">{index + 1}</span>}
+                                            {done ? <Check size={12} /> : <span>{index + 1}</span>}
                                         </span>
                                         <span className="shell-recipes__step-title">{step.title}</span>
                                     </Button>
@@ -241,7 +241,7 @@ export default function WalkthroughHub() {
 
                     {viewStep && (
                         <div className="shell-recipes__detail">
-                            <div className="shell-recipes__eyebrow mono">
+                            <div className="shell-recipes__eyebrow">
                                 {t('app.walkthroughs.stepCount', 'Step {{current}} of {{total}}', {
                                     current: viewIndex + 1,
                                     total: steps.length,

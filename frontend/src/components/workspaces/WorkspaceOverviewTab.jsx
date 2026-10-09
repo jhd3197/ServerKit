@@ -1,6 +1,7 @@
 import { KpiBand, MetricCard } from '@/components/ds';
 import { Server, Boxes, Globe, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { InfoList, InfoItem } from '../InfoList';
 
 const WorkspaceOverviewTab = ({ ws, since, members, srvIn, services, sites }) => {
     const { t } = useTranslation();
@@ -8,10 +9,12 @@ const WorkspaceOverviewTab = ({ ws, since, members, srvIn, services, sites }) =>
         <div className="ws-detail__grid">
             <section className="ws-detail__card">
                 <h3>{t('common.labels.workspace', 'Workspace')}</h3>
-                <div className="sk-info-row"><span className="k">{t('app.workspaceOverviewTab.slug', 'Slug')}</span><span className="v">/{ws.slug}</span></div>
-                <div className="sk-info-row"><span className="k">{t('common.labels.created', 'Created')}</span><span className="v">{since || '—'}</span></div>
-                <div className="sk-info-row"><span className="k">{t('app.workspaceOverviewTab.maxServers', 'Max servers')}</span><span className="v">{ws.max_servers > 0 ? ws.max_servers : 'Unlimited'}</span></div>
-                <div className="sk-info-row"><span className="k">{t('app.workspaceOverviewTab.maxUsers', 'Max users')}</span><span className="v">{ws.max_users > 0 ? ws.max_users : 'Unlimited'}</span></div>
+                <InfoList>
+                    <InfoItem label={t('app.workspaceOverviewTab.slug', 'Slug')} value={`/${ws.slug}`} mono />
+                    <InfoItem label={t('common.labels.created', 'Created')} value={since || '—'} />
+                    <InfoItem label={t('app.workspaceOverviewTab.maxServers', 'Max servers')} value={ws.max_servers > 0 ? ws.max_servers : t('app.workspaceOverviewTab.unlimited', 'Unlimited')} />
+                    <InfoItem label={t('app.workspaceOverviewTab.maxUsers', 'Max users')} value={ws.max_users > 0 ? ws.max_users : t('app.workspaceOverviewTab.unlimited', 'Unlimited')} />
+                </InfoList>
             </section>
             <section className="ws-detail__card">
                 <h3>{t('app.workspaceOverviewTab.resources', 'Resources')}</h3>

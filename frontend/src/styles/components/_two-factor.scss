@@ -13,11 +13,11 @@
 .totp-input {
     width: 48px;
     height: 56px;
-    font-size: 24px;
-    font-weight: 600;
+    font-size: $text-xl;
+    font-weight: $font-weight-semibold;
     text-align: center;
     border: 2px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-card;
     color: $text-primary;
     transition: all 0.2s;
@@ -25,7 +25,7 @@
     &:focus {
         border-color: $accent-primary;
         outline: none;
-        box-shadow: 0 0 0 3px fade($accent-primary-raw, 20%);
+        box-shadow: $focus-ring;
     }
 
     &::placeholder {
@@ -47,7 +47,7 @@
     border: none;
     color: $accent-primary;
     cursor: pointer;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     padding: 0;
 
     &:hover {
@@ -58,7 +58,7 @@
 // 2FA Card in Settings
 .two-fa-card {
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-6;
     margin-bottom: $space-6;
 }
@@ -70,12 +70,12 @@
 
     .two-fa-icon {
         width: 48px;
-        height: 48px;
+        height: 48px; // geometry: icon tile
         display: flex;
         align-items: center;
         justify-content: center;
         background: fade($accent-primary-raw, 15%);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $accent-primary;
         flex-shrink: 0;
     }
@@ -87,7 +87,7 @@
     p {
         margin: 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -108,13 +108,13 @@
 
     .two-fa-info {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .two-fa-backup-info {
         background: $bg-hover;
         padding: $space-2 $space-4;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         margin-bottom: $space-4;
         display: flex;
         flex-direction: column;
@@ -122,7 +122,7 @@
 
         .warning-text {
             color: $warning;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -145,15 +145,15 @@
 
     .step-number {
         width: 28px;
-        height: 28px;
+        height: 28px; // geometry: step number disc, not a control
         display: flex;
         align-items: center;
         justify-content: center;
         background: $accent-primary;
         color: white;
         border-radius: 50%;
-        font-weight: 600;
-        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        font-size: $text-xs;
         flex-shrink: 0;
     }
 
@@ -167,7 +167,7 @@
         p {
             color: $text-secondary;
             margin: 0 0 $space-4 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 }
@@ -177,7 +177,7 @@
     justify-content: center;
     padding: $space-4;
     background: white;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-bottom: $space-4;
 }
 
@@ -189,23 +189,13 @@
 .qr-fallback {
     background: $bg-hover;
     padding: $space-4;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     text-align: center;
-
-    .secret-key {
-        display: block;
-        font-size: $font-size-lg;
-        padding: $space-2;
-        margin-top: $space-2;
-        background: $bg-body;
-        border-radius: $radius-sm;
-        word-break: break-all;
-    }
 }
 
 .manual-entry {
     margin-top: $space-4;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 
     summary {
@@ -223,16 +213,15 @@
 
     code {
         background: $bg-hover;
-        padding: 2px 6px;
-        border-radius: $radius-sm;
+        padding: $space-hair $space-tight;
+        border-radius: $radius-badge;
     }
 }
 
 .verification-input {
-    font-size: 24px;
-    font-weight: 600;
+    font-size: $text-xl;
+    font-weight: $font-weight-semibold;
     text-align: center;
-    letter-spacing: 0.5em;
     padding: $space-4;
     width: 100%;
     max-width: 200px;
@@ -245,7 +234,7 @@
     padding: $space-4;
     background: fade($warning-raw, 10%);
     border: 1px solid fade($warning-raw, 30%);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-bottom: $space-6;
 
     svg {
@@ -256,32 +245,14 @@
     p {
         margin: 0;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
 .error-text {
     color: $danger;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     margin-top: $space-1;
-}
-
-// Backup Codes Grid
-.backup-codes-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: $space-2;
-    margin-bottom: $space-6;
-}
-
-.backup-code {
-    display: block;
-    padding: $space-2 $space-4;
-    background: $bg-hover;
-    border-radius: $radius-sm;
-    text-align: center;
-    font-size: $font-size-md;
-    font-family: $font-mono;
 }
 
 .backup-codes-actions {

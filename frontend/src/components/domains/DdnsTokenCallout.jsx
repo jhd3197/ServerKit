@@ -16,7 +16,7 @@ export default function DdnsTokenCallout({ host, onDismiss }) {
             <div className="ddns-token-callout__head">
                 <AlertTriangle size={16} />
                 <span>
-                    {t('app.ddnsTokenCallout.tokenFor', 'Token for')} <strong>{host.hostname || host.record_name}</strong> {t('app.ddnsTokenCallout.shownOnceSaveItNow', '— shown once. Save it now.')}
+                    {t('app.ddnsTokenCallout.tokenFor', 'Token for')} <strong>{host.hostname || host.record_name}</strong> {t('app.ddnsTokenCallout.shownOnceSaveItNow', '(shown once). Save it now.')}
                 </span>
                 {onDismiss && (
                     <SharedButton variant="unstyled" type="button" className="ddns-token-callout__close" onClick={onDismiss} aria-label={t('common.actions.dismiss', 'Dismiss')}>

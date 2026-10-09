@@ -3,7 +3,7 @@ import {
     ArrowRightLeft, ArrowLeft, ArrowRight, Camera, CheckCircle2, RotateCcw,
     AlertTriangle, Globe, RadioTower,
 } from 'lucide-react';
-import { Drawer, Pill } from '@/components/ds';
+import { DataTable, Drawer, Pill } from '@/components/ds';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -27,6 +27,60 @@ import { useTranslation } from 'react-i18next';
 
 const HEAD_ICON_SIZE = 18;
 const DRAWER_WIDTH = 720;
+
+// Read-only step reports (the planned record changes, then per-resolver
+// propagation): no sorting, no column menu.
+const PLAN_COLUMNS = [
+    {
+        key: 'record_type',
+        headerKey: 'common.labels.type', header: 'Type',
+        cellClassName: 'sk-cell-dim',
+        render: (op) => op.record_type,
+    },
+    {
+        key: 'name',
+        headerKey: 'common.labels.name', header: 'Name',
+        cellClassName: 'sk-cell-mono',
+        render: (op) => op.name,
+    },
+    {
+        key: 'action',
+        headerKey: 'common.labels.action', header: 'Action',
+        render: (op) => <Pill kind={op.action === 'create' ? 'cyan' : 'amber'}>{op.action}</Pill>,
+    },
+    {
+        key: 'old_content',
+        headerKey: 'common.labels.current', header: 'Current',
+        cellClassName: 'sk-cell-mono',
+        render: (op) => op.old_content || '—',
+    },
+    {
+        key: 'new_content',
+        headerKey: 'app.cutoverDrawer.new', header: 'New',
+        cellClassName: 'sk-cell-mono',
+        render: (op) => op.new_content,
+    },
+];
+
+const RESOLVER_COLUMNS = [
+    {
+        key: 'nameserver',
+        headerKey: 'app.cutoverDrawer.resolver', header: 'Resolver',
+        cellClassName: 'sk-cell-mono',
+        render: (r) => r.nameserver,
+    },
+    {
+        key: 'result',
+        headerKey: 'app.cutoverDrawer.answer', header: 'Answer',
+        cellClassName: 'sk-cell-mono',
+        render: (r) => (r.result || []).join(', ') || '—',
+    },
+    {
+        key: 'status',
+        headerKey: 'common.labels.status', header: 'Status',
+        render: (r) => <Pill kind={r.propagated ? 'green' : 'gray'}>{r.propagated ? 'live' : 'stale'}</Pill>,
+    },
+];
 
 // Record types a cutover can repoint. A/AAAA/CNAME cover the "point at the new
 // box" case; the operator keeps everything else untouched.
@@ -130,9 +184,9 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
             setCutoverResult(res.cutover || null);
             setStage('verify');
             if (res.cutover?.success) {
-                toast.success(t('app.cutoverDrawer.cutoverAppliedNowPointsAt', 'Cutover applied — {{domain}} now points at {{value}}', { domain: domain, value: target.trim() }));
+                toast.success(t('app.cutoverDrawer.cutoverAppliedNowPointsAt', 'Cutover applied. {{domain}} now points at {{value}}', { domain: domain, value: target.trim() }));
             } else {
-                toast.error(t('app.cutoverDrawer.cutoverFinishedWithErrorsReviewThe', 'Cutover finished with errors — review the results and consider reverting.'));
+                toast.error(t('app.cutoverDrawer.cutoverFinishedWithErrorsReviewThe', 'Cutover finished with errors. Review the results and consider reverting.'));
             }
         } catch (err) {
             const message = friendlyError(err);
@@ -170,9 +224,9 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
             setSnapshot(res.snapshot || snapshot);
             setRevertResult(res.revert || null);
             if (res.revert?.success) {
-                toast.success(t('app.cutoverDrawer.revertedRestoredSPreCutoverRecords', 'Reverted — restored {{domain}}\'s pre-cutover records', { domain: domain }));
+                toast.success(t('app.cutoverDrawer.revertedRestoredSPreCutoverRecords', "Reverted: restored {{domain}}'s pre-cutover records", { domain: domain }));
             } else {
-                toast.error(t('app.cutoverDrawer.revertFinishedWithErrorsCheckThe', 'Revert finished with errors — check the results.'));
+                toast.error(t('app.cutoverDrawer.revertFinishedWithErrorsCheckThe', 'Revert finished with errors. Check the results.'));
             }
         } catch (err) {
             const message = friendlyError(err);
@@ -192,7 +246,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
             open={open}
             onOpenChange={(v) => !v && onClose()}
             title={t('app.cutoverDrawer.dnsCutover', 'DNS cutover')}
-            subtitle={domain}
+            subtitle={<span className="mono">{domain}</span>}
             icon={<ArrowRightLeft size={HEAD_ICON_SIZE} />}
             width={DRAWER_WIDTH}
         >
@@ -222,7 +276,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                 {stage === 'target' && (
                     <div className="cutover__stage">
                         <p className="cutover__lead">
-                            {t('app.cutoverDrawer.repoint', 'Repoint')} <strong>{domain}</strong> {t('app.cutoverDrawer.atTheBoxWhereTheImported', 'at the box where the imported site now lives. Its current records are snapshotted first, so the switch can always be reverted.')}
+                            {t('app.cutoverDrawer.repoint', 'Repoint')} <strong>{domain}</strong> {t('app.cutoverDrawer.atTheBoxWhereTheImported', 'at the server where the imported site now lives. Its current records are snapshotted first, so the switch can always be reverted.')}
                         </p>
 
                         <div className="cutover__field">
@@ -248,7 +302,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                             />
                             {noZone && (
                                 <span className="cutover__hint cutover__hint--warn">
-                                    {t('app.cutoverDrawer.thisDomainHasNoConnectedProvider', 'This domain has no connected provider zone — cutover needs one to read and write records.')}
+                                    {t('app.cutoverDrawer.thisDomainHasNoConnectedProvider', 'This domain has no connected provider zone. Cutover needs one to read and write records.')}
                                 </span>
                             )}
                         </div>
@@ -273,7 +327,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                         <div className="cutover__actions">
                             <span />
                             <Button onClick={captureAndReview} disabled={busy || !canCapture}>
-                                {busy ? <><Spinner size="sm" /> {t('app.cutoverDrawer.capturing', 'Capturing…')}</> : <><Camera size={14} /> {t('app.cutoverDrawer.snapshotPreview', 'Snapshot & preview')} <ArrowRight size={14} /></>}
+                                {busy ? <><Spinner size="sm" /> {t('app.cutoverDrawer.capturing', 'Capturing…')}</> : <><Camera size={14} /> {t('app.cutoverDrawer.snapshotPreview', 'Snapshot and preview')} <ArrowRight size={14} /></>}
                             </Button>
                         </div>
                     </div>
@@ -307,26 +361,14 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                         <section className="cutover__section">
                             <h3><Globe size={15} aria-hidden="true" /> {t('app.cutoverDrawer.plannedChanges', 'Planned changes')}</h3>
                             {plan?.ops?.length ? (
-                                <div className="cutover__table-wrap">
-                                    <table className="cutover__table">
-                                        <thead>
-                                            <tr><th>{t('common.labels.type', 'Type')}</th><th>{t('common.labels.name', 'Name')}</th><th>{t('common.labels.action', 'Action')}</th><th>{t('common.labels.current', 'Current')}</th><th>{t('app.cutoverDrawer.new', 'New')}</th></tr>
-                                        </thead>
-                                        <tbody>
-                                            {plan.ops.map((op, i) => (
-                                                <tr key={`${op.record_type}-${op.name}-${i}`}>
-                                                    <td>{op.record_type}</td>
-                                                    <td>{op.name}</td>
-                                                    <td>
-                                                        <Pill kind={op.action === 'create' ? 'cyan' : 'amber'}>{op.action}</Pill>
-                                                    </td>
-                                                    <td><code>{op.old_content || '—'}</code></td>
-                                                    <td><code>{op.new_content}</code></td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <DataTable
+                                    columns={PLAN_COLUMNS}
+                                    data={plan.ops.map((op, i) => ({ ...op, __idx: i }))}
+                                    keyField={(op) => `${op.record_type}-${op.name}-${op.__idx}`}
+                                    sortable={false}
+                                    columnMenu={false}
+                                    className="cutover__table-wrap"
+                                />
                             ) : (
                                 <p className="cutover__muted">{t('app.cutoverDrawer.noChangesToApplyForThe', 'No changes to apply for the selected record types.')}</p>
                             )}
@@ -353,7 +395,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                                     : <AlertTriangle size={16} aria-hidden="true" />}
                                 <p>
                                     {cutoverResult.success
-                                        ? <>{t('app.cutoverDrawer.cutoverApplied', 'Cutover applied —')} <strong>{domain}</strong> {t('app.cutoverDrawer.nowPointsAt', 'now points at')} <code>{target.trim()}</code>.</>
+                                        ? <>{t('app.cutoverDrawer.cutoverApplied', 'Cutover applied:')} <strong>{domain}</strong> {t('app.cutoverDrawer.nowPointsAt', 'now points at')} <code>{target.trim()}</code>.</>
                                         : <>{t('app.cutoverDrawer.cutoverFinishedWithErrorsReviewBelow', 'Cutover finished with errors. Review below and revert if needed.')}</>}
                                 </p>
                             </div>
@@ -369,36 +411,24 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                                 <div className="cutover__verify-head">
                                     {verifyResult.matches_expected != null && (
                                         <Pill kind={verifyResult.matches_expected ? 'green' : 'amber'}>
-                                            {verifyResult.matches_expected ? 'Matches new target' : 'Not fully propagated'}
+                                            {verifyResult.matches_expected ? t('app.cutoverDrawer.matchesNewTarget', 'Matches new target') : t('app.cutoverDrawer.notFullyPropagated', 'Not fully propagated')}
                                         </Pill>
                                     )}
                                     <Pill kind={verifyResult.propagated ? 'green' : 'gray'}>
-                                        {verifyResult.propagated ? 'Propagated' : 'Propagating'}
+                                        {verifyResult.propagated ? t('app.cutoverDrawer.propagated', 'Propagated') : t('app.cutoverDrawer.propagating', 'Propagating')}
                                     </Pill>
                                 </div>
                             )}
 
                             {verifyResult?.resolvers?.length > 0 && (
-                                <div className="cutover__table-wrap">
-                                    <table className="cutover__table">
-                                        <thead>
-                                            <tr><th>{t('app.cutoverDrawer.resolver', 'Resolver')}</th><th>{t('app.cutoverDrawer.answer', 'Answer')}</th><th>{t('common.labels.status', 'Status')}</th></tr>
-                                        </thead>
-                                        <tbody>
-                                            {verifyResult.resolvers.map((r, i) => (
-                                                <tr key={`${r.nameserver}-${i}`}>
-                                                    <td>{r.nameserver}</td>
-                                                    <td><code>{(r.result || []).join(', ') || '—'}</code></td>
-                                                    <td>
-                                                        <Pill kind={r.propagated ? 'green' : 'gray'}>
-                                                            {r.propagated ? 'live' : 'stale'}
-                                                        </Pill>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <DataTable
+                                    columns={RESOLVER_COLUMNS}
+                                    data={verifyResult.resolvers.map((r, i) => ({ ...r, __idx: i }))}
+                                    keyField={(r) => `${r.nameserver}-${r.__idx}`}
+                                    sortable={false}
+                                    columnMenu={false}
+                                    className="cutover__table-wrap"
+                                />
                             )}
 
                             <Button variant="outline" size="sm" onClick={checkPropagation} disabled={busy}>
@@ -414,13 +444,15 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                                         ? <CheckCircle2 size={16} aria-hidden="true" />
                                         : <AlertTriangle size={16} aria-hidden="true" />}
                                     <p>
-                                        {t('app.cutoverDrawer.restored', 'Restored')} {revertResult.results?.length ?? 0} record{(revertResult.results?.length ?? 0) === 1 ? '' : 's'}
-                                        {revertResult.deleted_count ? `, deleted ${revertResult.deleted_count} created record${revertResult.deleted_count === 1 ? '' : 's'}` : ''}.
+                                        {t('app.cutoverDrawer.restoredRecords', { count: revertResult.results?.length ?? 0, defaultValue_one: 'Restored 1 record.', defaultValue_other: 'Restored {{count}} records.' })}
+                                        {revertResult.deleted_count
+                                            ? ` ${t('app.cutoverDrawer.deletedCreatedRecords', { count: revertResult.deleted_count, defaultValue_one: 'Deleted 1 record the cutover created.', defaultValue_other: 'Deleted {{count}} records the cutover created.' })}`
+                                            : ''}
                                     </p>
                                 </div>
                             ) : (
                                 <p className="cutover__muted">
-                                    {t('app.cutoverDrawer.oneClickRestoresTheSnapshotCaptured', 'One click restores the snapshot captured before this cutover — including deleting any records the cutover created.')}
+                                    {t('app.cutoverDrawer.oneClickRestoresTheSnapshotCaptured', 'One click restores the snapshot captured before this cutover, including deleting any records the cutover created.')}
                                 </p>
                             )}
                             <Button variant="outline" size="sm" onClick={revert} disabled={busy || !!revertResult}>
@@ -438,7 +470,7 @@ const CutoverDrawer = ({ open, onClose, domain, providerZoneId, provider, initia
                 <ConfirmDialog
                     isOpen={confirmOpen}
                     title={t('app.cutoverDrawer.applyDnsCutover', 'Apply DNS cutover?')}
-                    message={t('app.cutoverDrawer.thisRepointsRecordSForAt', 'This repoints {{value}} record(s) for {{domain}} at {{value2}}. The snapshot lets you revert.', { value: recordTypes.join(', '), domain: domain, value2: target.trim() })}
+                    message={t('app.cutoverDrawer.repointsRecords', { count: recordTypes.length, types: recordTypes.join(', '), domain: domain, target: target.trim(), defaultValue_one: 'This repoints the {{types}} record for {{domain}} at {{target}}. The snapshot lets you revert.', defaultValue_other: 'This repoints the {{types}} records for {{domain}} at {{target}}. The snapshot lets you revert.' })}
                     confirmText={t('app.cutoverDrawer.applyCutover', 'Apply cutover')}
                     variant="danger"
                     onConfirm={applyCutover}

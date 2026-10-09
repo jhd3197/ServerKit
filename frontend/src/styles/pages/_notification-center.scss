@@ -3,25 +3,25 @@
 .sk-notif-page {
     max-width: 760px;
     margin: 0 auto;
-    padding: 20px 24px 40px;
+    padding: $space-5 $space-6 $space-10;
 
     &__filters {
         display: inline-flex;
-        gap: 4px;
-        margin-bottom: 16px;
+        gap: $space-1;
+        margin-bottom: $space-4;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: 9px;
-        padding: 3px;
+        border-radius: $radius-card;
+        padding: $space-1;
 
         button {
             border: none;
             background: none;
             cursor: pointer;
-            padding: 6px 14px;
-            border-radius: 7px;
-            font-size: 13px;
-            font-weight: 500;
+            padding: $space-tight $space-4;
+            border-radius: $radius-control;
+            font-size: $text-sm;
+            font-weight: $font-weight-medium;
             color: $text-secondary;
 
             &:hover { color: $text-primary; }
@@ -35,12 +35,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
-        padding: 60px 20px;
+        gap: $space-3;
+        padding: $space-16 $space-5;
         color: $text-secondary;
 
         svg { opacity: 0.5; }
-        p { margin: 0; font-size: 14px; }
+        p { margin: 0; font-size: $text-base; }
     }
 
     &__list {
@@ -48,7 +48,7 @@
         margin: 0;
         padding: 0;
         border: 1px solid $border-subtle;
-        border-radius: 12px;
+        border-radius: $radius-overlay;
         overflow: hidden;
         background: $bg-card;
     }
@@ -56,15 +56,15 @@
     &__more {
         display: flex;
         justify-content: center;
-        margin-top: 16px;
+        margin-top: $space-4;
     }
 }
 
 .sk-notif-row {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: $space-3;
+    padding: $space-4 $space-4;
     cursor: pointer;
     border-bottom: 1px solid $border-subtle;
 
@@ -76,7 +76,7 @@
         flex: 0 0 auto;
         width: 9px;
         height: 9px;
-        margin-top: 5px;
+        margin-top: $space-tight;
         border-radius: 50%;
     }
 
@@ -86,39 +86,39 @@
     }
 
     &__title {
-        font-size: 14px;
-        font-weight: 600;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__text {
-        margin-top: 2px;
-        font-size: 13px;
+        margin-top: $space-hair;
+        font-size: $text-sm;
         color: $text-secondary;
     }
 
     &__time {
         flex: 0 0 auto;
-        font-size: 12px;
+        font-size: $text-xs;
         color: $text-secondary;
         opacity: 0.8;
         white-space: nowrap;
     }
 
     &__action {
-        margin-top: 4px;
-        font-size: 12px;
-        font-weight: 500;
+        margin-top: $space-1;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         color: $accent-primary;
     }
 
     &__dismiss {
         flex: 0 0 auto;
         align-self: flex-start;
-        padding: 2px;
+        padding: $space-hair;
         border: none;
         background: none;
-        border-radius: 6px;
+        border-radius: $radius-control;
         cursor: pointer;
         color: $text-secondary;
         line-height: 0;
@@ -129,73 +129,38 @@
 
 // Admin delivery log (sk-dlog).
 .sk-dlog {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px 24px 40px;
+    // The page shell supplies width and gutter, as on every list page.
 
     &__filters {
         display: flex;
-        gap: 16px;
-        margin-bottom: 14px;
+        gap: $space-4;
+        margin-bottom: $space-4;
 
         label {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            font-size: 13px;
+            gap: $space-2;
+            font-size: $text-sm;
             color: $text-secondary;
         }
 
         select {
             background: $bg-card;
             border: 1px solid $border-default;
-            border-radius: 8px;
+            border-radius: $radius-card;
             color: $text-primary;
-            padding: 6px 10px;
-            font-size: 13px;
+            padding: $space-tight $space-3;
+            font-size: $text-sm;
             text-transform: capitalize;
         }
     }
 
-    &__table-wrap {
-        border: 1px solid $border-subtle;
-        border-radius: 12px;
-        overflow: hidden;
-        background: $bg-card;
-    }
-
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13px;
-
-        th {
-            text-align: left;
-            padding: 10px 14px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            color: $text-secondary;
-            border-bottom: 1px solid $border-subtle;
-        }
-
-        td {
-            padding: 11px 14px;
-            border-bottom: 1px solid $border-subtle;
-            color: $text-primary;
-            vertical-align: top;
-        }
-
-        tr:last-child td { border-bottom: none; }
-    }
-
     &__status {
         display: inline-block;
-        padding: 2px 9px;
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 600;
+        padding: $space-hair $space-2;
+        border-radius: $radius-full;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         text-transform: capitalize;
 
         &.is-sent { background: rgba(61, 220, 151, 0.15); color: #1f9d6b; }
@@ -206,7 +171,7 @@
 
     &__target {
         font-family: 'SFMono-Regular', ui-monospace, Consolas, monospace;
-        font-size: 12px;
+        font-size: $text-xs;
         color: $text-secondary;
         max-width: 220px;
         overflow: hidden;
@@ -214,11 +179,11 @@
         white-space: nowrap;
     }
 
-    &__title { font-weight: 600; }
+    &__title { font-weight: $font-weight-semibold; }
 
     &__error {
-        margin-top: 3px;
-        font-size: 12px;
+        margin-top: $space-1;
+        font-size: $text-xs;
         color: #d2544f;
         max-width: 320px;
         overflow: hidden;
@@ -236,37 +201,37 @@
 .sk-eprov {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: 12px;
-    padding: 16px 18px;
-    margin-bottom: 18px;
+    border-radius: $radius-overlay;
+    padding: $space-4 $space-5;
+    margin-bottom: $space-5;
 
     &__head {
         display: flex;
         align-items: baseline;
-        gap: 10px;
-        margin-bottom: 12px;
+        gap: $space-3;
+        margin-bottom: $space-3;
     }
 
     &__title {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        font-size: 14px;
-        font-weight: 600;
+        gap: $space-2;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
-    &__sub { font-size: 12px; color: $text-secondary; }
+    &__sub { font-size: $text-xs; color: $text-secondary; }
 
     &__empty {
-        font-size: 13px;
+        font-size: $text-sm;
         color: $text-secondary;
-        padding: 6px 0 12px;
+        padding: $space-tight 0 $space-3;
     }
 
     &__list {
         list-style: none;
-        margin: 0 0 12px;
+        margin: 0 0 $space-3;
         padding: 0;
     }
 
@@ -274,8 +239,8 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
-        padding: 10px 0;
+        gap: $space-3;
+        padding: $space-3 0;
         border-bottom: 1px solid $border-subtle;
 
         &:last-child { border-bottom: none; }
@@ -284,83 +249,81 @@
     &__meta {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 0;
     }
 
     &__name {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        font-size: 13px;
-        font-weight: 600;
+        gap: $space-2;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__badge {
-        font-size: 10px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.4px;
-        padding: 1px 7px;
-        border-radius: 999px;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
+        padding: 1px $space-2;
+        border-radius: $radius-full;
         @include status-variant($accent-primary, $accent-bg);
     }
 
-    &__type { font-size: 12px; color: $text-secondary; }
+    &__type { font-size: $text-xs; color: $text-secondary; }
 
     &__actions {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         flex: 0 0 auto;
     }
 
     &__add {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: $space-2;
     }
 
     &__form {
         border-top: 1px solid $border-subtle;
-        margin-top: 6px;
-        padding-top: 14px;
+        margin-top: $space-tight;
+        padding-top: $space-4;
     }
 
     &__form-title {
-        font-size: 13px;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
-        margin-bottom: 10px;
+        margin-bottom: $space-3;
     }
 
     &__grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: $space-3;
     }
 
     &__field {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: $space-tight;
     }
 
     &__check {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        font-size: 13px;
+        gap: $space-2;
+        font-size: $text-sm;
         color: $text-secondary;
-        padding-top: 6px;
+        padding-top: $space-tight;
     }
 
     &__form-actions {
         display: flex;
         justify-content: flex-end;
-        gap: 8px;
-        margin-top: 14px;
+        gap: $space-2;
+        margin-top: $space-4;
     }
 }
 
@@ -385,10 +348,11 @@
 }
 
 .sk-notif-chip {
-    padding: 3px 10px;
-    font-size: $font-size-xs;
+    height: $control-sm;
+    padding: 0 $space-3;
+    font-size: $text-xs;
     border: 1px solid $border-subtle;
-    border-radius: 999px;
+    border-radius: $radius-control;
     background: $bg-card;
     color: $text-secondary;
     cursor: pointer;
@@ -405,10 +369,10 @@
 .sk-notif-row.is-linked { cursor: pointer; }
 
 .sk-notif-row__action {
-    margin-top: 3px;
-    font-size: $font-size-xs;
+    margin-top: $space-1;
+    font-size: $text-xs;
     color: $accent-primary;
-    font-weight: 500;
+    font-weight: $font-weight-medium;
 }
 
 .sk-notif__cta { color: $accent-primary; }

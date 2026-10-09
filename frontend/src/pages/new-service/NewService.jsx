@@ -98,8 +98,8 @@ const NewService = () => {
                         <Button type="submit" data-walkthrough="service-submit" disabled={!canSubmit || submitting}>
                             <Rocket size={16} />
                             {submitting
-                                ? (form.sourceMode === 'local' ? 'Registering…' : form.sourceMode === 'upload' ? 'Uploading…' : 'Deploying…')
-                                : (form.sourceMode === 'local' ? 'Register service' : form.sourceMode === 'upload' ? 'Upload & deploy' : 'Deploy service')}
+                                ? (form.sourceMode === 'local' ? t('app.newService.registering', 'Registering…') : form.sourceMode === 'upload' ? t('app.newService.uploading', 'Uploading…') : t('app.newService.deploying', 'Deploying…'))
+                                : (form.sourceMode === 'local' ? t('app.newService.registerService', 'Register service') : form.sourceMode === 'upload' ? t('app.newService.uploadAndDeploy', 'Upload & deploy') : t('app.newService.deployService', 'Deploy service'))}
                         </Button>
                     )}
                 </div>

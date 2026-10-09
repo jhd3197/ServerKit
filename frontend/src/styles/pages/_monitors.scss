@@ -14,19 +14,16 @@
     .mon-section-head h3,
     .monitoring-panel__header h3 {
         margin: 0;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
     // Neutral icon tile (rule editors, channel tiles, host cards)
     .mon-ico {
         width: 30px;
-        height: 30px;
-        border-radius: 8px;
+        height: 30px; // geometry: icon tile
+        border-radius: $radius-card;
         display: grid;
         place-items: center;
         flex-shrink: 0;
@@ -35,8 +32,8 @@
 
         &--sm {
             width: 26px;
-            height: 26px;
-            border-radius: 7px;
+            height: 26px; // geometry: icon tile
+            border-radius: $radius-control;
         }
     }
 
@@ -68,8 +65,7 @@
         margin-bottom: -$space-2;   // the grid gap already spaces it off the grid
 
         &__meta {
-            font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -81,8 +77,7 @@
     .mon-panel-sub {
         display: block;
         max-width: 100%;
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
         @include truncate();
     }
@@ -95,7 +90,7 @@
             min-width: 0;
             flex-direction: column;
             align-items: flex-start;
-            gap: 3px;
+            gap: $space-1;
         }
     }
 
@@ -111,8 +106,7 @@
     .mon-legend {
         display: flex;
         gap: $space-3;
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
 
         span { display: inline-flex; align-items: center; gap: 5px; }
@@ -120,7 +114,7 @@
         i {
             width: 8px;
             height: 8px;
-            border-radius: 2px;
+            border-radius: $radius-badge;
 
             &.is-memory { background: var(--cyan); }
             &.is-disk { background: var(--green); }
@@ -168,14 +162,14 @@
     .mon-fleet-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 14px;
+        gap: $space-4;
     }
 
     .mon-host {
         display: block;
         width: 100%;
         min-width: 0;
-        padding: 14px 16px 12px;
+        padding: $space-4 $space-4 $space-3;
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
         background: var(--surface);
@@ -193,16 +187,16 @@
         &__head {
             display: flex;
             align-items: center;
-            gap: 9px;
-            margin-bottom: 10px;
+            gap: $space-2;
+            margin-bottom: $space-3;
 
             .sk-pill { margin-left: auto; flex-shrink: 0; }
         }
 
         &__ico {
             width: 28px;
-            height: 28px;
-            border-radius: 8px;
+            height: 28px; // geometry: icon tile
+            border-radius: $radius-card;
             display: grid;
             place-items: center;
             flex-shrink: 0;
@@ -213,16 +207,15 @@
         &__name {
             flex: 1;
             min-width: 0;
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-semibold;
             color: var(--text);
             @include truncate();
 
             small {
                 display: block;
-                font-family: var(--mono);
-                font-size: 10px;
-                font-weight: 400;
+                font-size: $text-xs;
+                font-weight: $font-weight-normal;
                 color: var(--text-faint);
                 @include truncate();
             }
@@ -230,13 +223,13 @@
 
         &__spark {
             display: block;
-            height: 38px;
+            height: 38px; // geometry: sparkline chart box
 
             svg { width: 100%; height: 100%; }
 
             &--empty {
                 border-bottom: 1px dashed var(--border-soft);
-                height: 37px;
+                height: 37px; // geometry: empty sparkline baseline (chart box)
             }
         }
 
@@ -244,14 +237,13 @@
         &__mini {
             display: flex;
             justify-content: space-between;
-            gap: 10px;
-            margin-top: 10px;
-            font-family: var(--mono);
-            font-size: 11px;
+            gap: $space-3;
+            margin-top: $space-3;
+            font-size: $text-xs;
             color: var(--text-faint);
 
             span { white-space: nowrap; }
-            b { color: var(--text-dim); font-weight: 600; }
+            b { color: var(--text-dim); font-weight: $font-weight-semibold; }
         }
     }
 
@@ -264,8 +256,8 @@
     .mon-alert-row {
         display: flex;
         align-items: center;
-        gap: 14px;
-        padding: 12px 0;
+        gap: $space-4;
+        padding: $space-3 0;
         border-top: 1px solid var(--border-soft);
 
         &:first-child {
@@ -281,15 +273,14 @@
         }
 
         &__title {
-            font-size: 13.5px;
-            font-weight: 550;
+            font-size: $text-sm;
+            font-weight: $font-weight-semibold;
             color: var(--text);
         }
 
         &__sub {
-            margin-top: 2px;
-            font-family: var(--mono);
-            font-size: 11.5px;
+            margin-top: $space-hair;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
 
@@ -297,13 +288,12 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 4px;
+            gap: $space-1;
             flex-shrink: 0;
         }
 
         &__time {
-            font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             color: var(--text-faint);
             white-space: nowrap;
         }
@@ -319,7 +309,7 @@
     .mon-sev {
         width: 9px;
         height: 9px;
-        border-radius: 3px;
+        border-radius: $radius-badge;
         flex-shrink: 0;
         background: var(--text-ghost);
 
@@ -357,7 +347,7 @@
         grid-template-columns: minmax(0, 1fr) 150px auto;
         gap: $space-4;
         align-items: center;
-        padding: 15px 16px;
+        padding: $space-4 $space-4;
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
         background: var(--surface-2);
@@ -373,14 +363,13 @@
             min-width: 0;
 
             h4 {
-                margin: 0 0 3px;
-                font-size: 13.5px;
+                margin: 0 0 $space-1;
+                font-size: $text-sm;
                 font-weight: $font-weight-semibold;
             }
 
             span {
-                font-family: var(--mono);
-                font-size: 11.5px;
+                font-size: $text-xs;
                 color: var(--text-faint);
             }
         }
@@ -403,11 +392,8 @@
     // Eyebrow-style field labels inside the editor + delivery forms
     .metric-rule-editor__threshold label,
     .monitoring-delivery-layout .form-group label {
-        font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -433,15 +419,14 @@
 
         strong {
             display: block;
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-semibold;
         }
 
         span {
             display: block;
-            margin-top: 3px;
-            font-family: var(--mono);
-            font-size: 11px;
+            margin-top: $space-1;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -457,7 +442,7 @@
         grid-template-columns: auto minmax(0, 1fr) auto;
         gap: $space-3;
         align-items: center;
-        padding: 13px 14px;
+        padding: $space-3 $space-4;
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
         background: var(--surface-2);
@@ -478,16 +463,15 @@
 
         strong {
             display: block;
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-semibold;
             @include truncate();
         }
 
         span {
             display: block;
-            margin-top: 2px;
-            font-family: var(--mono);
-            font-size: 10.5px;
+            margin-top: $space-hair;
+            font-size: $text-xs;
             color: var(--text-faint);
             // "Configured but off" is longer than the tile is wide at three
             // across; clip it rather than let it fold and grow the row.
@@ -498,8 +482,7 @@
     .form-help {
         display: block;
         margin-top: $space-1;
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -513,7 +496,7 @@
 
     .mon-speed {
         min-width: 0;
-        padding: 12px 14px;
+        padding: $space-3 $space-4;
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
         background: var(--surface-2);
@@ -522,7 +505,7 @@
         // three of them side by side don't read as three status badges.
         &__ico {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: $space-tight;
             background: none;
 
             &.is-cpu { color: var(--accent-bright); }
@@ -532,24 +515,23 @@
 
         &__val {
             display: block;
-            font-family: var(--mono);
-            font-size: 19px;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.02em;
             line-height: 1;
             color: var(--text);
 
             small {
-                margin-left: 3px;
-                font-size: 11px;
+                margin-left: $space-1;
+                font-size: $text-xs;
                 color: var(--text-faint);
             }
         }
 
         &__label {
             display: block;
-            margin-top: 5px;
-            font-size: 11.5px;
+            margin-top: $space-tight;
+            font-size: $text-xs;
             color: var(--text-dim);
         }
     }
@@ -562,8 +544,7 @@
         margin-top: $space-3;
 
         span {
-            font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -576,12 +557,9 @@
     // Small mono caption used for every field label in the fleet panels.
     .mon-field-label {
         display: block;
-        margin-bottom: 4px;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        margin-bottom: $space-1;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -591,7 +569,7 @@
         align-items: center;
         gap: $space-2;
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -667,10 +645,10 @@
 
     .mon-forecast strong {
         display: block;
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         color: var(--text);
 
-        em { font-style: normal; font-size: $font-size-sm; color: var(--text-faint); }
+        em { font-style: normal; font-size: $text-xs; color: var(--text-faint); }
     }
 }
 
@@ -682,32 +660,26 @@
     .mon-grid-2 {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 16px;
+        gap: $space-4;
     }
 
     .mon-panel {
         background: var(--bg-card, var(--surface-1));
         border: 1px solid var(--border-soft);
-        border-radius: 12px;
-        padding: 18px;
-
-        &--flush { padding: 18px 0 0; }
-        &--flush .mon-panel__header { padding: 0 18px; }
+        border-radius: $radius-overlay;
+        padding: $space-5;
     }
 
     .mon-panel__header {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 14px;
+        gap: $space-3;
+        margin-bottom: $space-4;
 
         h3 {
             margin: 0;
-            font-family: var(--mono);
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -715,8 +687,8 @@
     .mon-panel__actions { display: flex; align-items: center; gap: 8px; }
 
     .mon-panel__footer {
-        margin-top: 14px;
-        padding-top: 12px;
+        margin-top: $space-4;
+        padding-top: $space-3;
         border-top: 1px solid var(--border-soft);
     }
 
@@ -732,22 +704,21 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            padding: 9px 0;
+            gap: $space-4;
+            padding: $space-2 0;
             border-bottom: 1px solid var(--border-soft);
 
             &:last-child { border-bottom: none; }
         }
 
         dt {
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--text-faint);
         }
 
         dd {
             margin: 0;
-            font-family: var(--mono);
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--text-dim);
             text-align: right;
             word-break: break-word;
@@ -758,11 +729,11 @@
     .mon-code {
         display: inline-flex;
         align-items: center;
-        padding: 2px 7px;
-        border-radius: 5px;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
         font-family: var(--mono);
-        font-size: 11px;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
 
         &--ok { background: var(--green-bg, rgba(63, 185, 80, 0.14)); color: var(--green); }
         &--bad { background: var(--red-bg, rgba(248, 81, 73, 0.14)); color: var(--red); }
@@ -773,9 +744,9 @@
     .monitor-detail__crumb {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin-bottom: 14px;
-        font-size: 12.5px;
+        gap: $space-2;
+        margin-bottom: $space-4;
+        font-size: $text-sm;
         color: var(--text-faint);
 
         a { color: var(--accent-bright); text-decoration: none; }
@@ -785,36 +756,31 @@
     .monitor-detail__sections { margin: 18px 0 16px; }
 
     .mon-kpi-sub {
-        margin-top: 4px;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        margin-top: $space-1;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .mon-statstrip {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
-        gap: 12px;
-        margin-top: 14px;
-        padding-top: 14px;
+        gap: $space-3;
+        margin-top: $space-4;
+        padding-top: $space-4;
         border-top: 1px solid var(--border-soft);
     }
 
     .mon-statstrip__label {
         display: block;
-        font-family: var(--mono);
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .mon-statstrip__value {
         display: block;
-        margin-top: 3px;
-        font-family: var(--mono);
-        font-size: 15px;
-        font-weight: 600;
+        margin-top: $space-1;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
     }
 
     .mon-uptime-summary { display: flex; gap: 18px; text-align: right; }
@@ -822,9 +788,8 @@
     .mon-uptime-axis {
         display: flex;
         justify-content: space-between;
-        margin-top: 8px;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        margin-top: $space-2;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -834,23 +799,16 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
-    tr.is-bad .mon-checkdetail { color: var(--red); }
+    .sk-dtable .is-bad .mon-checkdetail { color: var(--red); }
 }
 
 // ── list ────────────────────────────────────────────────────
 .monitors-page {
-    .mon-card {
-        background: var(--bg-card, var(--surface-1));
-        border: 1px solid var(--border-soft);
-        border-radius: 12px;
-        overflow: hidden;
-    }
-
-    .mon-namecell__name { font-weight: 550; }
+    .mon-namecell__name { font-weight: $font-weight-semibold; }
 
     .mon-namecell__target {
         display: block;
@@ -859,31 +817,27 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .mon-type {
         display: inline-flex;
-        padding: 2px 8px;
-        border-radius: 999px;
+        padding: $space-hair $space-2;
+        border-radius: $radius-full;
         border: 1px solid var(--border);
-        font-family: var(--mono);
-        font-size: 10.5px;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     .mon-response {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
     }
 
     .mon-response__ms {
-        font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
         // "128 ms" must not break across two lines in a narrow column.
         white-space: nowrap;
@@ -893,8 +847,7 @@
 
     .mon-uptime,
     .mon-muted {
-        font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
@@ -904,51 +857,39 @@
     .mon-actions-cell { text-align: right; }
     .mon-actions { display: inline-flex; gap: 2px; justify-content: flex-end; }
 
-    tr.is-disabled { opacity: 0.55; }
+    .sk-dtable .is-disabled { opacity: 0.55; }
 
     // Create-monitor drawer
     .mon-form {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: $space-4;
     }
 
     .mon-form__row {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-        gap: 12px;
+        gap: $space-3;
     }
 
     .mon-form__actions {
         display: flex;
         justify-content: flex-end;
-        gap: 8px;
-        padding-top: 6px;
+        gap: $space-2;
+        padding-top: $space-tight;
         border-top: 1px solid var(--border-soft);
-    }
-
-    .mon-select {
-        width: 100%;
-        height: 36px;
-        padding: 0 10px;
-        border-radius: 8px;
-        border: 1px solid var(--border);
-        background: var(--surface-2);
-        color: var(--text);
-        font-family: inherit;
-        font-size: 13px;
     }
 
     .mon-switch-row {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
-        padding: 12px 0;
+        gap: $space-4;
+        padding: $space-3 0;
         border-top: 1px solid var(--border-soft);
 
-        strong { display: block; font-size: 13px; font-weight: 550; }
-        span { font-size: 12px; color: var(--text-faint); }
+        strong { display: block; font-size: $text-sm; font-weight: $font-weight-semibold; }
+        span { font-size: $text-xs; color: var(--text-faint); }
     }
 }
 
@@ -958,7 +899,7 @@
 .uptime-bars {
     display: flex;
     align-items: stretch;
-    gap: 2px;
+    gap: $space-hair;
     height: 52px;
     width: 100%;
 
@@ -967,7 +908,7 @@
         min-width: 3px;
         padding: 0;
         border: none;
-        border-radius: 2px;
+        border-radius: $radius-badge;
         background: var(--green);
         cursor: pointer;
         transition: opacity 0.12s, transform 0.12s;
@@ -987,8 +928,8 @@
     .mon-monitors-summary {
         display: flex;
         flex-direction: column;
-        gap: 16px;
-        margin-bottom: 22px;
+        gap: $space-4;
+        margin-bottom: $space-6;
     }
 
     .mon-nomonitors { margin-bottom: 22px; }
@@ -1000,8 +941,8 @@
     .mon-feed-row {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 10px 0;
+        gap: $space-3;
+        padding: $space-3 0;
         border-bottom: 1px solid var(--border-soft);
         color: inherit;
         text-decoration: none;
@@ -1016,8 +957,8 @@
     .mon-monitor-row__name,
     .mon-feed-row__name {
         display: block;
-        font-size: 13px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -1026,8 +967,7 @@
     .mon-monitor-row__sub,
     .mon-feed-row__sub {
         display: block;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         overflow: hidden;
         text-overflow: ellipsis;
@@ -1036,8 +976,7 @@
 
     .mon-monitor-row__ms,
     .mon-feed-row__ms {
-        font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 }
@@ -1047,16 +986,16 @@
     .incidents-list {
         background: var(--bg-card, var(--surface-1));
         border: 1px solid var(--border-soft);
-        border-radius: 12px;
+        border-radius: $radius-overlay;
         overflow: hidden;
     }
 
     .incident-row {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: $space-3;
         width: 100%;
-        padding: 14px 18px;
+        padding: $space-4 $space-5;
         border: none;
         border-top: 1px solid var(--border-soft);
         background: transparent;
@@ -1076,7 +1015,7 @@
         border-radius: 50%;
         background: var(--text-ghost);
 
-        &--red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+        &--red { background: var(--red); }
         &--amber { background: var(--amber); }
         &--cyan { background: var(--cyan); }
         &--green { background: var(--green); }
@@ -1087,17 +1026,16 @@
     .incident-row__title {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
         flex-wrap: wrap;
-        font-size: 13.5px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
     }
 
     .incident-row__sub {
         display: block;
-        margin-top: 3px;
-        font-family: var(--mono);
-        font-size: 11px;
+        margin-top: $space-1;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -1108,7 +1046,7 @@
     .incident-row__acts {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
     }
 }
 
@@ -1116,26 +1054,23 @@
 .incident-detail {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: $space-4;
 
     &__pills { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    &__body { margin: 0; font-size: 13px; color: var(--text-dim); }
+    &__body { margin: 0; font-size: $text-sm; color: var(--text-dim); }
 
     &__heading {
         margin: 0;
-        font-family: var(--mono);
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     &__link {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        font-size: 13px;
+        gap: $space-2;
+        font-size: $text-sm;
         color: var(--accent-bright);
         text-decoration: none;
 
@@ -1150,19 +1085,19 @@
 .incident-timeline {
     list-style: none;
     margin: 0;
-    padding: 0 0 0 6px;
+    padding: 0 0 0 $space-tight;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: $space-4;
 
     &__item {
         display: flex;
-        gap: 12px;
+        gap: $space-3;
         position: relative;
-        padding-left: 14px;
+        padding-left: $space-4;
         border-left: 1px solid var(--border-soft);
 
-        p { margin: 5px 0 0; font-size: 13px; }
+        p { margin: 5px 0 0; font-size: $text-sm; }
     }
 
     &__dot {
@@ -1183,9 +1118,8 @@
     &__head {
         display: flex;
         align-items: center;
-        gap: 9px;
-        font-family: var(--mono);
-        font-size: 11px;
+        gap: $space-2;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -1194,15 +1128,15 @@
 .status-attach-list {
     display: flex;
     flex-direction: column;
-    margin-top: 12px;
+    margin-top: $space-3;
 
     .status-attach-row {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
+        gap: $space-3;
         width: 100%;
-        padding: 11px 4px;
+        padding: $space-3 $space-1;
         border: none;
         border-bottom: 1px solid var(--border-soft);
         background: transparent;
@@ -1216,14 +1150,13 @@
 
         &__body { min-width: 0; }
 
-        strong { display: block; font-size: 13px; font-weight: 550; }
+        strong { display: block; font-size: $text-sm; font-weight: $font-weight-semibold; }
 
         span span,
         &__body > span {
             display: block;
-            margin-top: 2px;
-            font-family: var(--mono);
-            font-size: 11px;
+            margin-top: $space-hair;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }

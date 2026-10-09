@@ -15,6 +15,7 @@ import {
 import EmptyState from '../components/EmptyState';
 import { useTranslation } from 'react-i18next';
 import { t } from '../i18n/t';
+import { toastError } from '@/utils/errorMessage';
 
 // Fleet-wide reverse-proxy dashboard (Phase 4 of C6). Aggregates every
 // server's managed-proxy posture into one table: which proxy each server runs
@@ -52,7 +53,7 @@ function formatTimestamp(value) {
 }
 
 function typeMeta(type) {
-    return PROXY_TYPE_META[type] || { label: type || 'Unknown', kind: 'gray' };
+    return PROXY_TYPE_META[type] || { label: type || t('app.fleetProxy.unknown', 'Unknown'), kind: 'gray' };
 }
 
 const statusLabel = (row) => dsStatusLabel(row.status);
@@ -73,7 +74,7 @@ const FLEET_COLUMNS = [
         render: (row) => (
             <Link to={`/servers/${row.server_id}/proxy`} className="fleet-proxy__server">
                 <ServerIcon size={14} />
-                <span>{row.server_name || 'Unnamed server'}</span>
+                <span>{row.server_name || t('app.fleetProxy.unnamedServer', 'Unnamed server')}</span>
             </Link>
         ),
     },
@@ -110,7 +111,7 @@ const FLEET_COLUMNS = [
     },
     {
         key: 'apps',
-        headerKey: 'app.fleetProxy.apps', header: 'Apps',
+        headerKey: 'app.fleetProxy.apps', header: 'Services',
         sortable: true,
         type: 'num',
         value: (row) => row.app_count ?? 0,
@@ -323,7 +324,7 @@ const FleetProxy = () => {
             setError(null);
         } catch (err) {
             setError(err.message || 'Failed to load fleet proxy overview');
-            toast.error(t('app.fleetProxy.failedToLoadFleetProxyOverview', 'Failed to load fleet proxy overview'));
+            toastError(toast, t('app.fleetProxy.failedToLoadFleetProxyOverview', "Couldn't load the fleet proxy overview."), err);
         } finally {
             setLoading(false);
         }

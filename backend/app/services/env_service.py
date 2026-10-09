@@ -148,7 +148,7 @@ class EnvService:
             return None, False, error
         app = Application.query_active().filter_by(id=application_id).first()
         if not app:
-            return None, False, 'Application not found'
+            return None, False, 'Service not found'
 
         norm_target = None if target_service in ('', _UNSET) else target_service
         existing = EnvService.get_env_var(application_id, key)
@@ -269,7 +269,7 @@ class EnvService:
         # Check if application exists
         app = Application.query_active().filter_by(id=application_id).first()
         if not app:
-            return None, False, "Application not found"
+            return None, False, "Service not found"
 
         # Check if key already exists
         existing = EnvService.get_env_var(application_id, key)

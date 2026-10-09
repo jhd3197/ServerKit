@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-    Check, ChevronDown, Grid2x2, History, Keyboard, Maximize2, Plus,
+    Grid2x2, History, Keyboard, Maximize2, Plus,
     RefreshCw, SlidersHorizontal, X,
 } from 'lucide-react';
 import api from '../services/api';
@@ -8,7 +8,8 @@ import { useAuth } from '../contexts/useAuth.js';
 import { useToast } from '../contexts/useToast.js';
 import { useMetrics } from '../hooks/useMetrics';
 import useDashboardBoards from '../hooks/useDashboardBoards';
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import ServerPicker from '../components/ServerPicker';
 import { SegControl } from '@/components/ds';
 import { Button } from '@/components/ui/button';
 import ChangeBar from '../components/ds/ChangeBar';
@@ -30,6 +31,7 @@ import useEditingSession from '../hooks/useEditingSession';
 import { useShortcut, useShortcutCommands } from '../hooks/useShortcut';
 import { useUnsavedChangesGuard } from '../hooks/useUnsavedChangesGuard';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Auto-refresh choices, in seconds. 0 means "don't".
 const REFRESH_OPTIONS = [
@@ -80,7 +82,6 @@ const Dashboard = () => {
     const [systemInfo, setSystemInfo] = useState(null);
     const [servers, setServers] = useState([]);
     const [selectedServer, setSelectedServer] = useState({ id: 'local', name: 'Local (this server)' });
-    const [serverMenuOpen, setServerMenuOpen] = useState(false);
     const [remoteMetrics, setRemoteMetrics] = useState(null);
     const [remoteSystemInfo, setRemoteSystemInfo] = useState(null);
     const isRemote = selectedServer.id !== 'local';
@@ -126,7 +127,7 @@ const Dashboard = () => {
     const selectedType = getWidgetType(widgetTypes, selectedWidget?.type);
 
     const resources = useMemo(() => ([
-        { id: 'local', labelKey: 'app.dashboard.localThisServer', label: 'Local (this server)', kind: 'panel host' },
+        { id: 'local', labelKey: 'app.dashboard.localThisServer', label: 'Local (this server)', kind: 'panel server' },
         ...servers
             .filter((s) => s && s.id && s.id !== 'local')
             .map((s) => ({ id: s.id, label: s.name || s.id, kind: 'server' })),
@@ -304,10 +305,10 @@ const Dashboard = () => {
             setEdit(false);
             setSelectedId(null);
             toast.success(t('app.dashboard.dashboardSaved', 'Dashboard saved'), {
-                description: t('app.dashboard.widget', '{{length}} widget{{value}} · {{value2}}', { length: savedWidgets.length, value: savedWidgets.length === 1 ? '' : 's', value2: activeBoard?.name }),
+                description: t('app.dashboard.widgetsOnBoard', { count: savedWidgets.length, board: activeBoard?.name, defaultValue_one: '1 widget · {{board}}', defaultValue_other: '{{count}} widgets · {{board}}' }),
             });
-        } catch {
-            toast.error(t('app.dashboard.couldNotSave', 'Could not save'), { description: t('app.dashboard.yourLayoutIsStillHereTry', 'Your layout is still here — try again.') });
+        } catch (err) {
+            toastError(toast, t('app.dashboard.couldNotSave', "Couldn't save the board."), err, { description: t('app.dashboard.yourLayoutIsStillHereTry', 'Your layout is still here. Try again.') });
         }
     }, [activeBoard?.name, saveActive, saveEditing, t, toast]);
 
@@ -378,8 +379,8 @@ const Dashboard = () => {
             const board = await resetActiveBoard();
             resetEditing(board?.widgets || []);
             toast.info(t('app.dashboard.resetToTheShippedLayout', 'Reset to the shipped layout'), { description: activeBoard?.name });
-        } catch {
-            toast.error(t('app.dashboard.couldNotReset', 'Could not reset'), { description: t('app.dashboard.thisBoardHasNoShippedDefault', 'This board has no shipped default.') });
+        } catch (err) {
+            toastError(toast, t('app.dashboard.couldNotReset', "Couldn't reset the board."), err, { description: t('app.dashboard.thisBoardHasNoShippedDefault', 'This board has no shipped default.') });
         }
     };
 
@@ -408,8 +409,10 @@ const Dashboard = () => {
         await removeBoard(boardId);
     }, [leaveEditor, removeBoard]);
 
-    const handleServerChange = (serverId) => {
-        const server = servers.find((s) => s.id === serverId) || { id: 'local', name: 'Local (this server)' };
+    const handleServerChange = (serverId, row) => {
+        const server = row
+            || servers.find((s) => String(s.id) === String(serverId))
+            || { id: 'local', name: 'Local (this server)' };
         setSelectedServer(server);
         lastServerUptime.current = null;
         lastServerTime.current = null;
@@ -459,12 +462,12 @@ const Dashboard = () => {
                     <span className="skw-tv__name">{activeBoard?.name}</span>
                     <span className={`conn-status conn-status--${isConnected ? 'live' : 'down'}`} role="status">
                         <span className="conn-status__dot" aria-hidden="true"></span>
-                        {isConnected ? 'Live' : 'Reconnecting'}
+                        {isConnected ? t('app.dashboard.live', 'Live') : t('app.dashboard.reconnecting', 'Reconnecting')}
                     </span>
-                    <span className="skw-tv__meta mono">
+                    <span className="skw-tv__meta">
                         {selectedServer.name} · {range} {t('app.dashboard.refresh', '· refresh')} {refreshInterval ? `${refreshInterval}s` : 'off'}
                     </span>
-                    <span className="skw-tv__clock mono">{displayTime}</span>
+                    <span className="skw-tv__clock">{displayTime}</span>
                     <Button variant="unstyled" type="button" className="btn btn-outline btn-sm" onClick={() => setTvMode(false)}>
                         <X size={14} /> {t('app.dashboard.exit', 'Exit')}
                     </Button>
@@ -519,7 +522,7 @@ const Dashboard = () => {
                             ) : (
                                 <span>{board.name}</span>
                             )}
-                            <span className="skw-tab__count mono">
+                            <span className="skw-tab__count">
                                 {board.id === activeBoardId && edit ? widgets.length : (board.widgets || []).length}
                             </span>
                             {edit && boards.length > 1 && board.id === activeBoardId && (
@@ -551,53 +554,16 @@ const Dashboard = () => {
                         single host this is a plain readout. */}
                     {servers.length < 2 ? (
                         <span className="skw-varpick skw-varpick--static">
-                            <span className="skw-varpick__k mono">server</span>
+                            <span className="skw-varpick__k">server</span>
                             <span className="skw-varpick__v">{hostname}</span>
                         </span>
                     ) : (
-                        <Popover open={serverMenuOpen} onOpenChange={setServerMenuOpen}>
-                            <PopoverTrigger asChild>
-                                <Button variant="unstyled"
-                                    type="button"
-                                    className={`skw-varpick${serverMenuOpen ? ' is-open' : ''}`}
-                                    aria-label={t('app.dashboard.switchServer', 'Switch server')}
-                                >
-                                    <span className="skw-varpick__k mono">server</span>
-                                    <span className="skw-varpick__v">{selectedServer.name || hostname}</span>
-                                    <ChevronDown size={13} aria-hidden="true" />
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent align="start" sideOffset={7} className="env-menu">
-                                <div className="env-menu__head">{t('app.dashboard.dashboardVariableServer', 'Dashboard variable · $server')}</div>
-                                {servers.map((server) => {
-                                    const online = server.status === 'online';
-                                    return (
-                                        <Button variant="unstyled"
-                                            type="button"
-                                            key={server.id}
-                                            className="env-opt"
-                                            onClick={() => { handleServerChange(server.id); setServerMenuOpen(false); }}
-                                        >
-                                            <span
-                                                className={`env-opt__dot env-opt__dot--${online ? 'online' : 'offline'}`}
-                                                aria-hidden="true"
-                                            ></span>
-                                            <span className="env-opt__body">
-                                                <span className="env-opt__name">{server.name}</span>
-                                                <span className="env-opt__meta">
-                                                    {server.group_name || (server.is_local ? 'local' : server.id)}
-                                                    {' · '}
-                                                    {online ? 'online' : 'offline'}
-                                                </span>
-                                            </span>
-                                            {server.id === selectedServer.id && (
-                                                <span className="env-opt__check" aria-hidden="true"><Check size={15} /></span>
-                                            )}
-                                        </Button>
-                                    );
-                                })}
-                            </PopoverContent>
-                        </Popover>
+                        <ServerPicker
+                            value={selectedServer.id}
+                            onChange={handleServerChange}
+                            label={t('app.dashboard.switchServer', 'Switch server')}
+                            className="skw-serverpick"
+                        />
                     )}
                     <SegControl
                         options={RANGES.map(([value, label]) => ({ value, label }))}
@@ -605,18 +571,23 @@ const Dashboard = () => {
                         onChange={setRange}
                         aria-label={t('app.dashboard.timeRange', 'Time range')}
                     />
-                    <div className="skw-refresh">
-                        <select
-                            value={refreshInterval}
-                            onChange={(e) => handleRefreshIntervalChange(parseInt(e.target.value, 10))}
+                    <Select
+                        value={String(refreshInterval)}
+                        onValueChange={(value) => handleRefreshIntervalChange(parseInt(value, 10))}
+                    >
+                        <SelectTrigger
+                            className="skw-refresh-trigger"
                             title={t('app.dashboard.autoRefreshInterval', 'Auto-refresh interval')}
                             aria-label={t('app.dashboard.autoRefreshInterval', 'Auto-refresh interval')}
                         >
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
                             {REFRESH_OPTIONS.map((opt) => (
-                                <option key={opt.value} value={opt.value}>↻ {opt.label}</option>
+                                <SelectItem key={opt.value} value={String(opt.value)}>↻ {opt.label}</SelectItem>
                             ))}
-                        </select>
-                    </div>
+                        </SelectContent>
+                    </Select>
                     <Button variant="unstyled"
                         type="button"
                         className="skw-iconbtn"
@@ -672,16 +643,18 @@ const Dashboard = () => {
             {boardsError && <div className="skw-hint skw-hint--error">{boardsError}</div>}
 
             {edit && (
-                <div className="skw-hint mono">
-                    <Grid2x2 size={13} aria-hidden="true" /> {t('app.dashboard.dragHeadersToMoveDragThe', 'Drag headers to move · drag the corner to resize · click a widget to configure it')}{selectedId ? ' · Delete removes it' : ''}
+                <div className="skw-hint">
+                    <Grid2x2 size={13} aria-hidden="true" /> {t('app.dashboard.dragHeadersToMoveDragThe', 'Drag headers to move · drag the corner to resize · click a widget to configure it')}{selectedId ? ` · ${t('app.dashboard.deleteRemovesIt', 'Delete removes it')}` : ''}
                 </div>
             )}
 
             {widgets.length === 0 ? (
                 <div className="skw-empty-board">
-                    <div className="skw-empty-board__title">{t('app.dashboard.build', 'Build “')}{activeBoard?.name || 'this dashboard'}”</div>
+                    <div className="skw-empty-board__title">{activeBoard?.name
+                        ? t('app.dashboard.buildBoardName', 'Build "{{name}}"', { name: activeBoard.name })
+                        : t('app.dashboard.buildThisDashboard', 'Build this dashboard')}</div>
                     <div className="skw-empty-board__desc">
-                        {t('app.dashboard.thisBoardHasNoWidgetsYet', 'This board has no widgets yet. Add one to get started, or restore the layout it shipped with.')}
+                        {t('app.dashboard.thisBoardHasNoWidgetsYet', 'This board has no widgets yet. Add one, or restore the layout it shipped with.')}
                     </div>
                     <div className="skw-empty-board__acts">
                         <Button variant="unstyled"

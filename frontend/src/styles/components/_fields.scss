@@ -1,0 +1,104 @@
+// Shared field components: CopyField, PortField, EnvEditor, ServerPicker.
+// One look per job; pages do not restyle these.
+
+.sk-copy-field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    min-width: 0;
+
+    &__label { font-size: $text-xs; color: var(--text-dim); }
+
+    &__box {
+        display: flex;
+        align-items: flex-start;
+        gap: $space-1;
+        min-width: 0;
+        padding: $space-1 $space-1 $space-1 $space-3;
+        background: var(--surface-2);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-sm);
+    }
+
+    &__value {
+        flex: 1;
+        min-width: 0;
+        align-self: center;
+        margin: 0;
+        padding: 0;
+        background: none;
+        font-family: var(--mono);
+        font-size: $text-xs;
+        color: var(--text);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &--multiline &__value {
+        padding-block: $space-1;
+        white-space: pre-wrap;
+        word-break: break-all;
+        max-height: 240px;
+        overflow: auto;
+    }
+
+    &__actions { display: inline-flex; flex-shrink: 0; }
+}
+
+.sk-port-field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    min-width: 0;
+
+    &__input { max-width: 160px; font-family: var(--mono); }
+
+    &__status {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: $space-2;
+        margin: 0;
+        font-size: $text-xs;
+        color: var(--text-dim);
+
+        &.is-error { color: var(--red); }
+    }
+
+    &__suggest { height: auto; padding: 0; font-size: $text-xs; }
+}
+
+.sk-env-editor {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    &__row {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto auto;
+        align-items: center;
+        gap: $space-2;
+    }
+
+    &__key, &__value { font-family: var(--mono); }
+    &__spacer { width: 32px; }
+
+    &__error {
+        grid-column: 1 / -1;
+        margin: 0;
+        font-size: $text-xs;
+        color: var(--red);
+    }
+
+    &__foot {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: $space-3;
+    }
+
+    &__hint { font-size: $text-xs; color: var(--text-faint); }
+}
+
+.sk-server-picker { min-width: 220px; }

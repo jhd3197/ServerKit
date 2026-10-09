@@ -18,14 +18,13 @@
 
 .server-identity {
     h1 {
-        font-size: 1.5rem;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         letter-spacing: -0.02em;
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: $space-3;
         color: $text-primary;
-        font-family: $font-mono;
     }
 }
 
@@ -34,20 +33,19 @@
 .srv-switch {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 2px 4px;
+    gap: $space-3;
+    padding: $space-hair $space-1;
     border: none;
     background: transparent;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     cursor: pointer;
     color: $text-primary;
     @include focus-ring();
 
     &__name {
-        font-size: 1.5rem;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         letter-spacing: -0.02em;
-        font-family: $font-mono;
         color: $text-primary;
     }
 
@@ -67,32 +65,29 @@
 // as `.ui-popover-content`.
 .env-menu {
     min-width: 280px;
-    padding: 7px;
+    padding: $space-2;
     background: var(--surface-2);
     border: 1px solid var(--border-strong);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    border-radius: $radius-overlay;
+    box-shadow: $shadow-raised;
     color: var(--text);
 
     &__head {
-        font-family: var(--mono);
-        font-size: 10px;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
+        font-size: $text-xs;
         color: var(--text-ghost);
-        padding: 7px 10px 5px;
+        padding: $space-2 $space-3 $space-tight;
     }
 }
 
 .env-opt {
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: $space-3;
     width: 100%;
-    padding: 9px 10px;
+    padding: $space-2 $space-3;
     border: none;
     background: transparent;
-    border-radius: 9px;
+    border-radius: $radius-card;
     text-align: left;
     cursor: pointer;
     transition: background 0.1s ease;
@@ -110,7 +105,7 @@
 
         &--online {
             background: var(--green);
-            box-shadow: 0 0 6px var(--green);
+            box-shadow: none;
         }
 
         &--offline {
@@ -127,7 +122,7 @@
 
     &__name {
         font-weight: $font-weight-semibold;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text);
         white-space: nowrap;
         overflow: hidden;
@@ -135,8 +130,7 @@
     }
 
     &__meta {
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         margin-top: 1px;
     }
@@ -158,9 +152,8 @@
     align-items: center;
     gap: $space-3;
     margin-top: $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-tertiary;
-    font-family: $font-mono;
 
     .detail-separator {
         color: $border-default;
@@ -182,9 +175,8 @@
 }
 
 .clock-time {
-    font-family: $font-mono;
-    font-size: 1.25rem;
-    font-weight: $font-weight-bold;
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
     color: $text-primary;
     letter-spacing: -0.01em;
     font-variant-numeric: tabular-nums;
@@ -193,9 +185,7 @@
 .clock-zone {
     color: $accent-primary;
     font-weight: $font-weight-semibold;
-    font-size: $font-size-xs;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-size: $text-xs;
 }
 
 // --- Grid System ---
@@ -203,8 +193,6 @@
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: $space-5;
-    max-width: 1800px;
-    margin: 0 auto;
     width: 100%;
 }
 
@@ -213,7 +201,7 @@
     grid-column: span 3;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     padding: $space-5;
     position: relative;
     overflow: hidden;
@@ -260,11 +248,9 @@
 }
 
 .tile-title {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    text-transform: uppercase;
     color: $text-tertiary;
-    letter-spacing: 0.05em;
 }
 
 .tile-icon {
@@ -275,21 +261,20 @@
 }
 
 .tile-val {
-    font-family: $font-mono;
-    font-size: 1.75rem;
-    font-weight: $font-weight-bold;
+    font-size: $text-2xl;
+    font-weight: $font-weight-semibold;
     color: $text-primary;
 }
 
 .tile-val-unit {
-    font-size: $font-size-base;
+    font-size: $text-base;
     font-weight: $font-weight-normal;
     color: $text-tertiary;
     margin-left: $space-1;
 }
 
 .tile-sub {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-tertiary;
     margin-top: $space-2;
     display: flex;
@@ -304,7 +289,7 @@
     grid-column: span 8;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     padding: $space-5;
     min-height: 450px;
     display: flex;
@@ -332,7 +317,7 @@
 
     .graph-title {
         font-weight: $font-weight-semibold;
-        font-size: $font-size-base;
+        font-size: $text-base;
         color: $text-primary;
     }
 
@@ -359,7 +344,7 @@
     grid-column: span 4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     padding: $space-5;
     display: flex;
     flex-direction: column;
@@ -371,11 +356,9 @@
 }
 
 .spec-panel-title {
-    font-size: $font-size-sm;
-    text-transform: uppercase;
+    font-size: $text-xs;
     color: $text-tertiary;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.05em;
 }
 
 .spec-row {
@@ -383,7 +366,7 @@
     justify-content: space-between;
     border-bottom: 1px solid $border-subtle;
     padding-bottom: $space-3;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     &:last-child {
         border: none;
@@ -396,7 +379,6 @@
 }
 
 .spec-data {
-    font-family: $font-mono;
     color: $text-primary;
     text-align: right;
     max-width: 60%;
@@ -410,10 +392,10 @@
     padding: $space-3;
     background: $bg-hover;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-primary;
     font-weight: $font-weight-semibold;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     cursor: pointer;
     text-align: left;
     display: flex;
@@ -439,7 +421,7 @@
     grid-column: span 8;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     overflow: hidden;
 
     @media (max-width: $breakpoint-lg) {
@@ -454,7 +436,7 @@
     grid-column: span 4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     padding: $space-5;
     display: flex;
     flex-direction: column;
@@ -472,21 +454,19 @@
     }
 
     &__title {
-        font-size: $font-size-sm;
-        text-transform: uppercase;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.05em;
     }
 
     &__link {
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         text-decoration: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         transition: color $transition-fast;
         @include focus-ring();
 
@@ -498,7 +478,7 @@
     &__empty {
         padding: $space-5 0;
         text-align: center;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 }
@@ -523,7 +503,7 @@
 .app-name-link {
     color: $text-primary;
     text-decoration: none;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     @include focus-ring();
 
     &:hover {
@@ -567,15 +547,6 @@
     .clock-widget {
         text-align: left;
     }
-
-    .data-table {
-        th:nth-child(3),
-        th:nth-child(5),
-        td:nth-child(3),
-        td:nth-child(5) {
-            display: none;
-        }
-    }
 }
 
 @media (max-width: $breakpoint-sm) {
@@ -589,7 +560,7 @@
     }
 
     .tile-val {
-        font-size: 1.5rem;
+        font-size: $text-xl;
     }
 }
 
@@ -611,10 +582,9 @@
 .refresh-select {
     background: $bg-hover;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-primary;
-    font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     padding: $space-1 $space-2;
     cursor: pointer;
     outline: none;
@@ -625,7 +595,7 @@
 
     &:focus {
         border-color: $accent-primary;
-        box-shadow: 0 0 0 2px $accent-glow;
+        box-shadow: $focus-ring;
     }
 }
 
@@ -635,7 +605,7 @@
     justify-content: center;
     background: $bg-hover;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-secondary;
     padding: $space-2;
     cursor: pointer;
@@ -656,4 +626,19 @@
         margin-left: 0;
         padding-left: 0;
     }
+}
+
+// Bar controls built on the shared pickers: sized to the bar's 32px row and
+// the compact mono look of the other bar controls.
+.skw-bar__ctl .skw-refresh-trigger,
+.skw-bar__ctl .skw-serverpick {
+    height: $control-md;
+    width: auto;
+    padding: 0 $space-3;
+    border-radius: $radius-control;
+    font-size: $text-xs;
+}
+
+.skw-bar__ctl .skw-refresh-trigger {
+    min-width: 0;
 }

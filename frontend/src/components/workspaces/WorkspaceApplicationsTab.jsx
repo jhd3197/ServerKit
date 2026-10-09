@@ -9,6 +9,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { Button } from '@/components/ui/button';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { useTranslation } from 'react-i18next';
 
 // What the Status cell shows when the row carries none. A real word, not '':
@@ -36,7 +37,9 @@ const BUILTIN_VIEWS = Object.fromEntries(Object.entries(CONFIG).map(([kind, conf
     },
 ]]));
 
-const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShare }) => {
+// `loadError` / `onRetry`: the page's apps request failed, so an empty list
+// means "unknown", not "nothing here".
+const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShare, loadError, onRetry }) => {
     const { t } = useTranslation();
     const config = CONFIG[kind];
     const labels = kind === 'sites' ? {
@@ -48,7 +51,7 @@ const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShar
         header: t('common.labels.service', 'Service'),
         empty: t('app.workspaceServicesTab.noServicesInThisWorkspaceYet', 'No services in this workspace yet'),
         moveBelow: t('app.workspaceServicesTab.moveOneInBelow', 'Move one in below.'),
-        move: t('app.workspaceServicesTab.moveAnApplicationIntoThisWorkspace', 'Move an application into this workspace'),
+        move: t('app.workspaceServicesTab.moveAnApplicationIntoThisWorkspace', 'Move a service into this workspace'),
     };
     const navigate = useNavigate();
     const { sorts, setSorts } = useTableSort({ storageKey: `serverkit-table-ws-${kind}-sort` });
@@ -149,8 +152,15 @@ const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShar
                 onSortsChange={setSorts}
                 {...chrome.tableProps}
                 onRowClick={(a) => navigate(`/services/${a.id}`)}
-                className="ws-detail__tablecard"
-                emptyState={(
+                emptyState={loadError ? (
+                    <ErrorState
+                        title={kind === 'sites'
+                            ? t('app.workspaceApplicationsTab.couldntLoadSites', "Couldn't load sites.")
+                            : t('app.workspaceApplicationsTab.couldntLoadServices', "Couldn't load services.")}
+                        error={loadError}
+                        onRetry={onRetry}
+                    />
+                ) : (
                     <EmptyState icon={config.icon} title={labels.empty} description={labels.moveBelow} />
                 )}
                 footer={(

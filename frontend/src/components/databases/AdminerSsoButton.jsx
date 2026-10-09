@@ -4,6 +4,7 @@ import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Adminer accepts a plain form POST into its login screen; submitting the
 // descriptor from a hidden form means the single-use password never touches
@@ -49,7 +50,7 @@ export default function AdminerSsoButton({ databaseId, disabled = false }) {
             postToAdminer(descriptor);
             toast.success(t('app.adminerSsoButton.openedAdminerWithA5Minute', 'Opened Adminer with a 5-minute scoped credential'));
         } catch (err) {
-            toast.error(err.message || t('app.adminerSsoButton.failedToLaunchAdminer', 'Failed to launch Adminer'));
+            toastError(toast, t('app.adminerSsoButton.failedToLaunchAdminer', "Couldn't open Adminer."), err);
         } finally {
             setBusy(false);
         }
@@ -58,7 +59,7 @@ export default function AdminerSsoButton({ databaseId, disabled = false }) {
     return (
         <Button type="button" size="sm" variant="outline"
             disabled={disabled || busy} onClick={launch}>
-            <ExternalLink size={14} /> {busy ? 'Opening…' : 'Open in Adminer'}
+            <ExternalLink size={14} /> {busy ? t('app.adminerSsoButton.opening', 'Opening…') : t('app.adminerSsoButton.openInAdminer', 'Open in Adminer')}
         </Button>
     );
 }

@@ -10,7 +10,7 @@
     background: var(--surface);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius);
-    box-shadow: var(--shadow-lg);
+    box-shadow: none;
     overflow: hidden;
 
     .terminal-header {
@@ -26,8 +26,8 @@
     // Icon tile (demo SSH drawer: green terminal tile)
     .terminal-ico {
         width: 28px;
-        height: 28px;
-        border-radius: 8px;
+        height: 28px; // geometry: icon tile
+        border-radius: $radius-control;
         display: grid;
         place-items: center;
         @include status-variant(var(--green), var(--green-bg));
@@ -45,7 +45,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-semibold;
         color: var(--text);
         white-space: nowrap;
@@ -60,7 +60,7 @@
 
         &.connected {
             background: var(--green);
-            box-shadow: 0 0 7px var(--green);
+            box-shadow: none;
             animation: sk-overlay-blink 1.4s infinite;
         }
 
@@ -71,7 +71,7 @@
 
     .session-id {
         font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
         overflow: hidden;
@@ -86,13 +86,13 @@
     }
 
     .terminal-close-btn {
-        width: 28px;
-        height: 28px;
+        width: $control-sm;
+        height: $control-sm;
         display: grid;
         place-items: center;
         background: transparent;
         border: none;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: var(--text-faint);
         cursor: pointer;
         transition: background $transition-fast, color $transition-fast;
@@ -122,6 +122,6 @@
         border-top: 1px solid var(--border-soft);
         @include status-variant(var(--red), var(--red-bg));
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }

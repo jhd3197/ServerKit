@@ -16,7 +16,7 @@
       {
         "group": "monitoring",
         "to": "/status-pages",
-        "label": "Status Pages",
+        "label": "Status pages",
         "icon": "<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20\"/><path d=\"M2 12h20\"/>"
       }
     ],
@@ -24,11 +24,11 @@
       { "path": "status-pages", "component": "StatusPagesPage", "group": "monitoring" }
     ],
     "page_titles": {
-      "/status-pages": "Status Pages"
+      "/status-pages": "Status pages"
     },
     "command_palette": [
       {
-        "label": "Status Pages",
+        "label": "Status pages",
         "path": "/status-pages",
         "category": "Pages",
         "keywords": "uptime incidents public status"

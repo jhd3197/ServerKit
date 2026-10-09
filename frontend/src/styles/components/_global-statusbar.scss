@@ -10,24 +10,25 @@
     display: flex;
     align-items: center;
     height: var(--sk-statusbar-height);
-    gap: 2px;
-    padding-inline: 6px;
-    border-block-start: 1px solid var(--border-soft);
-    background: var(--bg-sidebar);
+    gap: $space-hair;
+    padding-inline: $space-tight;
+    // Same chrome surface and edge as the sidebar and top bar.
+    border-block-start: 1px solid var(--border);
+    background: var(--surface);
     color: var(--text-faint);
     font-family: $font-main;
-    font-size: 11.5px;
+    font-size: $text-xs;
 
     &__segment,
     .statusbar-select {
         display: inline-flex;
         align-items: center;
-        height: 22px;
+        height: 22px; // geometry: fixed 22px status-bar segment (chrome)
         min-width: 0;
-        gap: 7px;
-        padding-inline: 8px;
+        gap: $space-2;
+        padding-inline: $space-2;
         border: 0;
-        border-radius: 5px;
+        border-radius: $radius-control;
         background: transparent;
         color: var(--text-faint);
         font: inherit;
@@ -57,8 +58,7 @@
 
     &__muted {
         color: var(--text-faint);
-        font-size: 10.5px;
-        letter-spacing: 0.02em;
+        font-size: $text-xs;
     }
 
     &__segment.is-active &__muted {
@@ -77,9 +77,9 @@
         width: 6px;
         height: 6px;
 
-        &.is-online { background: var(--green); box-shadow: 0 0 6px var(--green); }
-        &.is-idle { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
-        &.is-down { background: var(--red); box-shadow: 0 0 6px var(--red); }
+        &.is-online { background: var(--green); }
+        &.is-idle { background: var(--amber); }
+        &.is-down { background: var(--red); }
     }
 
     &__pip {
@@ -96,7 +96,7 @@
             height: 3px;
             overflow: hidden;
             border: 0;
-            border-radius: 999px;
+            border-radius: $radius-full;
             background: var(--surface-3);
             appearance: none;
 
@@ -151,32 +151,30 @@
     min-width: 280px;
     max-height: min(46vh, 380px);
     overflow-y: auto;
-    padding: 5px;
+    padding: $space-tight;
     border: 1px solid var(--border-strong);
-    border-radius: 12px;
+    border-radius: $radius-overlay;
     background: var(--surface-2);
-    box-shadow: var(--shadow-lg);
+    box-shadow: $shadow-raised;
     animation: statusbar-menu-enter 140ms ease-out;
 
     &--wide { min-width: 308px; }
 
     &__head {
-        padding: 7px 10px 5px;
+        padding: $space-2 $space-3 $space-tight;
         color: var(--text-ghost);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
     }
 
     &__option {
         display: flex;
         align-items: center;
         width: 100%;
-        gap: 11px;
-        padding: 9px 10px;
+        gap: $space-3;
+        padding: $space-2 $space-3;
         border: 0;
-        border-radius: 9px;
+        border-radius: $radius-card;
         background: transparent;
         color: var(--text);
         font: inherit;
@@ -196,9 +194,9 @@
         background: var(--accent);
 
         &.is-ghost { background: var(--text-ghost); }
-        &.is-online { background: var(--green); box-shadow: 0 0 6px var(--green); }
-        &.is-idle { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
-        &.is-down { background: var(--red); box-shadow: 0 0 6px var(--red); }
+        &.is-online { background: var(--green); }
+        &.is-idle { background: var(--amber); }
+        &.is-down { background: var(--red); }
     }
 
     &__copy {
@@ -210,8 +208,8 @@
 
     &__name {
         overflow: hidden;
-        font-size: 13px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
@@ -219,7 +217,7 @@
     &__meta {
         margin-block-start: 1px;
         color: var(--text-faint);
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 
     &__check {
@@ -247,7 +245,7 @@
     overflow: hidden;
     border-block-start: 1px solid var(--border-strong);
     background: var(--surface);
-    box-shadow: 0 -20px 45px rgba(0, 0, 0, 0.18);
+    box-shadow: $shadow-overlay;
     animation: shell-panel-enter 160ms ease-out;
 
     &.is-expanded { height: min(62vh, 720px); }
@@ -260,10 +258,10 @@
     }
 
     &__head {
-        min-height: 38px;
+        min-height: 38px; // geometry: dock header strip (chrome), holds 28px controls
         flex: 0 0 auto;
         gap: $space-2;
-        padding-inline: 8px 8px;
+        padding-inline: $space-2 $space-2;
         border-block-end: 1px solid var(--border-soft);
     }
 
@@ -271,19 +269,19 @@
     // panel-scoped actions (prototype cp-filters).
     &__filters {
         flex: 0 0 auto;
-        gap: 2px;
-        padding: 6px 8px;
+        gap: $space-hair;
+        padding: $space-tight $space-2;
         border-block-end: 1px solid var(--border-soft);
     }
 
     &__filters button,
     &__action {
-        min-height: 22px;
+        min-height: $control-sm;
         border: 0;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: transparent;
         color: var(--text-ghost);
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         white-space: nowrap;
         cursor: pointer;
         @include focus-ring();
@@ -311,18 +309,17 @@
         flex: 1;
         place-items: center;
         color: var(--text-faint);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__footer {
-        min-height: 34px;
+        min-height: 34px; // geometry: dock footer strip (chrome)
         justify-content: space-between;
         gap: $space-3;
         padding-inline: $space-4;
         border-block-start: 1px solid var(--border-soft);
         color: var(--text-ghost);
-        font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
 
         button {
             border: 0;
@@ -342,19 +339,19 @@
     align-items: center;
     flex: 1;
     min-width: 0;
-    gap: 2px;
+    gap: $space-hair;
 
     &__tab {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        height: 26px;
-        padding: 0 10px;
+        gap: $space-2;
+        height: $control-sm;
+        padding: 0 $space-3;
         border: 0;
-        border-radius: 6px;
+        border-radius: $radius-control;
         background: transparent;
         color: var(--text-faint);
-        font-size: 12.5px;
+        font-size: $text-sm;
         white-space: nowrap;
         cursor: pointer;
         transition: color 120ms ease, background-color 120ms ease;
@@ -365,9 +362,9 @@
     }
 
     &__badge {
-        padding: 1px 5px;
-        border-radius: 20px;
-        font-size: 10px;
+        padding: 1px $space-tight;
+        border-radius: $radius-badge;
+        font-size: $text-xs;
         @include status-variant(var(--accent-bright), var(--accent-bg));
     }
 
@@ -375,12 +372,12 @@
 
     &__control {
         display: grid;
-        width: 26px;
-        height: 26px;
+        width: $control-sm;
+        height: $control-sm;
         flex: 0 0 auto;
         place-items: center;
         border: 0;
-        border-radius: 6px;
+        border-radius: $radius-control;
         background: transparent;
         color: var(--text-faint);
         cursor: pointer;
@@ -391,8 +388,8 @@
 
     // The refresh IconButton passed in as a control matches the square look.
     .icon-button {
-        width: 26px;
-        height: 26px;
+        width: $control-sm;
+        height: $control-sm;
         border: 0;
         background: transparent;
     }
@@ -420,7 +417,7 @@
         width: 100%;
         min-width: 0;
         gap: $space-3;
-        padding: 9px 13px;
+        padding: $space-2 $space-3;
         border: 0;
         background: transparent;
         color: var(--text);
@@ -436,8 +433,8 @@
         border-radius: 50%;
         background: var(--text-faint);
 
-        .is-critical & { background: var(--red); box-shadow: 0 0 6px var(--red); }
-        .is-warning & { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+        .is-critical & { background: var(--red); }
+        .is-warning & { background: var(--amber); }
         .is-success & { background: var(--green); }
         .is-info & { background: var(--cyan); }
     }
@@ -454,13 +451,13 @@
             white-space: nowrap;
         }
 
-        strong { font-size: 12.5px; font-weight: $font-weight-medium; }
-        span { margin-block-start: 1px; color: var(--text-ghost); font-size: 11px; }
+        strong { font-size: $text-sm; font-weight: $font-weight-medium; }
+        span { margin-block-start: 1px; color: var(--text-ghost); font-size: $text-xs; }
     }
 
     &__meta {
         color: var(--text-ghost);
-        font-size: 10.5px;
+        font-size: $text-xs;
         white-space: nowrap;
     }
 
@@ -498,7 +495,7 @@
         border: 0;
         border-block-start: 1px solid var(--border-strong);
         border-radius: 0;
-        box-shadow: 0 -20px 45px rgba(0, 0, 0, 0.18);
+        box-shadow: $shadow-overlay;
         animation: shell-panel-enter 160ms ease-out;
     }
 
@@ -506,8 +503,8 @@
 
     .operations-dock__header {
         grid-area: header;
-        min-height: 38px;
-        padding: 0 8px;
+        min-height: 38px; // geometry: dock header strip (chrome), holds 28px controls
+        padding: 0 $space-2;
         border-block-end: 1px solid var(--border-soft);
     }
     .operations-dock__tabs { grid-area: tabs; }
@@ -580,7 +577,7 @@
 
     .global-statusbar {
         justify-content: space-around;
-        padding-inline: max(4px, env(safe-area-inset-left)) max(4px, env(safe-area-inset-right));
+        padding-inline: max($space-1, env(safe-area-inset-left)) max($space-1, env(safe-area-inset-right));
 
         &__segment,
         .statusbar-select { justify-content: center; min-width: 32px; padding-inline: 7px; }

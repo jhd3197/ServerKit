@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import ErrorState from '@/components/ErrorState';
 import { DataTable, DataTableFooter, ListToolbar } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
@@ -168,6 +169,8 @@ const IntegrityTab = () => {
     const [busy, setBusy] = useState(null); // `${scope}:${action}` while a call runs
     const [savingOptins, setSavingOptins] = useState(false);
     const [message, setMessage] = useState(null);
+    const [loadError, setLoadError] = useState(null);
+    const [appsError, setAppsError] = useState(null);
     const [expanded, setExpanded] = useState(null); // scope whose changes table is open
 
     // Lifted out of <DataTable storageKey> so the chrome can capture and
@@ -184,18 +187,25 @@ const IntegrityTab = () => {
         try {
             const data = await api.request('/security/fim');
             setStatus(data);
+            setLoadError(null);
         } catch (err) {
-            setMessage({ type: 'error', text: err.message });
+            setLoadError(err);
         }
+    }, []);
+
+    const loadApps = useCallback(() => {
+        api.getApps().then(
+            (data) => { setApps(data.apps || []); setAppsError(null); },
+            // The apps list is optional chrome; FIM still works without it, but
+            // a failed read must not claim there are no applications.
+            (err) => setAppsError(err),
+        );
     }, []);
 
     useEffect(() => {
         load();
-        api.getApps().then(
-            (data) => setApps(data.apps || []),
-            () => {} // apps list is optional chrome; FIM still works without it
-        );
-    }, [load]);
+        loadApps();
+    }, [load, loadApps]);
 
     async function runAction(scope, action) {
         setBusy(`${scope}:${action}`);
@@ -288,7 +298,7 @@ const IntegrityTab = () => {
                     <h3>
                         {scopeLabel(scope)}{' '}
                         <span className="sec-count">
-                            · {SCOPE_META[key]?.hint || (scope.roots[0] || 'no docroot')}
+                            · {SCOPE_META[key]?.hint || (scope.roots[0] || t('app.integrityTab.noDocroot', 'no docroot'))}
                         </span>
                     </h3>
                     {!scope.available && <span className="sec-state sec-state--gray">{t('app.integrityTab.notPresent', 'not present')}</span>}
@@ -301,9 +311,14 @@ const IntegrityTab = () => {
                 <SharedCardContent variant="legacy" className="card-body">
                     <p className="sec-hint--lead sec-hint">
                         {baseline
-                            ? `Baseline: ${baseline.file_count} files, ${formatAge(baseline.created_at) || 'unknown age'}`
-                            : 'No baseline yet — create one to start tracking changes.'}
-                        {check && ` · Last check ${formatAge(check.checked_at) || ''}`}
+                            ? t('app.integrityTab.baselineSummary', {
+                                count: baseline.file_count,
+                                age: formatAge(baseline.created_at) || t('app.integrityTab.unknownAge', 'unknown age'),
+                                defaultValue_one: 'Baseline: 1 file, {{age}}',
+                                defaultValue_other: 'Baseline: {{count}} files, {{age}}',
+                            })
+                            : t('app.integrityTab.noBaselineYet', 'No baseline yet. Create one to start tracking changes.')}
+                        {check && ` · ${t('app.integrityTab.lastCheck', 'Last check {{age}}', { age: formatAge(check.checked_at) || '' })}`}
                     </p>
                     {/* These act on the SCOPE and are there whether or not the
                         changes list is open, so they keep their own bar; the
@@ -315,7 +330,7 @@ const IntegrityTab = () => {
                             onClick={() => runAction(key, 'baseline')}
                             disabled={!scope.available || busy !== null}
                         >
-                            {busy === `${key}:baseline` ? 'Baselining…' : 'Baseline'}
+                            {busy === `${key}:baseline` ? t('app.integrityTab.baselining', 'Baselining…') : t('app.integrityTab.baseline', 'Baseline')}
                         </Button>
                         <Button
                             variant="default"
@@ -323,7 +338,7 @@ const IntegrityTab = () => {
                             onClick={() => runAction(key, 'check')}
                             disabled={!baseline || busy !== null}
                         >
-                            {busy === `${key}:check` ? 'Checking…' : 'Check now'}
+                            {busy === `${key}:check` ? t('common.checking', 'Checking…') : t('app.integrityTab.checkNow', 'Check now')}
                         </Button>
                         {changed && (
                             <>
@@ -333,14 +348,14 @@ const IntegrityTab = () => {
                                     onClick={() => runAction(key, 'accept')}
                                     disabled={busy !== null}
                                 >
-                                    {busy === `${key}:accept` ? 'Accepting…' : 'Accept changes'}
+                                    {busy === `${key}:accept` ? t('app.integrityTab.accepting', 'Accepting…') : t('app.integrityTab.acceptChanges', 'Accept changes')}
                                 </Button>
                                 <Button
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => setExpanded(expanded === key ? null : key)}
                                 >
-                                    {expanded === key ? 'Hide changes' : 'View changes'}
+                                    {expanded === key ? t('app.integrityTab.hideChanges', 'Hide changes') : t('app.integrityTab.viewChanges', 'View changes')}
                                 </Button>
                             </>
                         )}
@@ -391,8 +406,21 @@ const IntegrityTab = () => {
     const managedScopes = scopes.filter((s) => !s.scope.startsWith('app:'));
     const appScopes = scopes.filter((s) => s.scope.startsWith('app:'));
 
+    if (!status) {
+        return loadError ? (
+            <ErrorState
+                title={t('app.integrityTab.couldntLoadIntegrity', "Couldn't load file integrity status.")}
+                error={loadError}
+                onRetry={load}
+            />
+        ) : (
+            <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
+        );
+    }
+
     return (
         <div className="integrity-tab">
+            {loadError && <ErrorState compact error={loadError} onRetry={load} />}
             {message && (
                 <div className={`alert alert-${message.type === 'success' ? 'success' : 'danger'}`}>
                     {message.text}
@@ -400,7 +428,7 @@ const IntegrityTab = () => {
             )}
 
             <p className="sec-hint sec-hint--lead">
-                {t('app.integrityTab.baselineAndDiffMonitoringOverThe', 'Baseline-and-diff monitoring over the paths ServerKit manages. Baseline a scope, then check it (or let the scheduled sweep do it) — any added, removed or modified files are flagged and admins are notified. Accepting changes re-baselines the scope.')}
+                {t('app.integrityTab.baselineAndDiffMonitoringOverThe', 'Baseline-and-diff monitoring over the paths ServerKit manages. Baseline a scope, then check it (or let the scheduled sweep do it). Any added, removed or modified files are flagged and admins are notified. Accepting changes re-baselines the scope.')}
             </p>
 
             {managedScopes.map(renderScopeCard)}
@@ -408,14 +436,16 @@ const IntegrityTab = () => {
 
             <SharedCard variant="legacy" className="card">
                 <SharedCardHeader variant="legacy" className="card-header">
-                    <h3>{t('app.integrityTab.applicationDocroots', 'Application docroots')} <span className="sec-count">{t('app.integrityTab.optIn', '· opt-in')}</span></h3>
+                    <h3>{t('app.integrityTab.applicationDocroots', 'Service docroots')} <span className="sec-count">{t('app.integrityTab.optIn', '· opt-in')}</span></h3>
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">
                     <p className="sec-hint sec-hint--lead">
-                        {t('app.integrityTab.watchingADocrootHashesEveryFile', 'Watching a docroot hashes every file outside upload/cache directories, so it is opt-in per application.')}
+                        {t('app.integrityTab.watchingADocrootHashesEveryFile', 'Watching a docroot hashes every file outside upload/cache directories, so it is opt-in per service.')}
                     </p>
-                    {apps.length === 0 ? (
-                        <p className="sec-faint">{t('app.integrityTab.noApplicationsFound', 'No applications found.')}</p>
+                    {appsError ? (
+                        <ErrorState compact error={appsError} onRetry={loadApps} />
+                    ) : apps.length === 0 ? (
+                        <p className="sec-faint">{t('app.integrityTab.noApplicationsFound', 'No services found.')}</p>
                     ) : (
                         <div className="sec-finding-list">
                             {apps.map((appItem) => (
@@ -427,7 +457,7 @@ const IntegrityTab = () => {
                                     />
                                     <div className="sec-finding__msg">
                                         {appItem.name}{' '}
-                                        <span className="sec-mono">{appItem.root_path || 'no docroot'}</span>
+                                        <span className="sec-mono">{appItem.root_path || t('app.integrityTab.noDocroot', 'no docroot')}</span>
                                     </div>
                                 </div>
                             ))}

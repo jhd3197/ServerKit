@@ -12,9 +12,6 @@
         .card {
             background: var(--surface);
             border: 1px solid var(--border-soft);
-            border-radius: var(--radius);
-            padding: $space-5;
-            box-shadow: none;
         }
 
         .card-header {
@@ -25,12 +22,9 @@
                 margin: 0;
                 display: flex;
                 align-items: center;
-                gap: 6px;
-                font-family: var(--mono);
-                font-size: 10.5px;
+                gap: $space-tight;
+                font-size: $text-xs;
                 font-weight: $font-weight-semibold;
-                letter-spacing: 0.08em;
-                text-transform: uppercase;
                 color: var(--text-faint);
 
                 &.sec-listtitle--green { color: var(--green); }
@@ -38,13 +32,13 @@
             }
         }
 
-        // Flush variant: header padded, table bleeds to the card edges
-        // (16px horizontal padding aligns with .sk-dtable cell padding)
+        // Flush variant: the card drops its padding so the table bleeds to
+        // its edges; .sk-dtable-wrap already renders frameless inside .card.
         .card.sec-flush {
             padding: 0;
 
-            .card-header { padding: $space-5 $space-4 0; }
-            > .card-body { padding: 0 $space-4 $space-5; }
+            .card-header { padding: $space-4 $space-4 0; }
+            > .card-body { padding: 0 $space-4 $space-4; }
         }
 
         // Stateful card borders
@@ -92,9 +86,9 @@
     .sec-dot {
         width: 8px;
         height: 8px;
-        border-radius: 3px;
+        border-radius: $radius-badge;
         flex-shrink: 0;
-        margin-top: 5px;
+        margin-top: $space-tight;
         background: var(--text-ghost);
 
         &--red   { background: var(--red); }
@@ -112,7 +106,7 @@
     .sec-what {
         display: inline-flex;
         flex-wrap: wrap;
-        gap: 6px;
+        gap: $space-tight;
     }
 
     // Right-aligned chip cluster inside an info row (jail tags…)
@@ -120,7 +114,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-end;
-        gap: 6px;
+        gap: $space-tight;
     }
 
     // Findings / log rows (audit findings, lynis warnings + suggestions)
@@ -132,10 +126,10 @@
     .sec-finding {
         display: flex;
         align-items: flex-start;
-        gap: 10px;
-        padding: 9px 0;
+        gap: $space-3;
+        padding: $space-2 0;
         border-top: 1px solid var(--border-soft);
-        font-size: 13px;
+        font-size: $text-sm;
         line-height: 1.45;
 
         &:first-child { border-top: none; }
@@ -149,8 +143,7 @@
         }
 
         &--more {
-            font-family: var(--mono);
-            font-size: 11.5px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -158,7 +151,7 @@
     // Inline helpers
     .sec-mono {
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
@@ -166,7 +159,6 @@
     .sk-dtable .sec-faint { color: var(--text-faint); }
 
     .sec-dash {
-        font-family: var(--mono);
         color: var(--text-ghost);
     }
 
@@ -179,24 +171,22 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-size: 11.5px;
+            font-size: $text-xs;
 
             &--red { color: var(--red); }
         }
 
         .sec-proto {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
+            font-size: $text-xs;
         }
 
         .sec-rich-rule {
-            font-size: 11px;
+            font-size: $text-xs;
             word-break: break-all;
         }
 
         .sec-fp {
-            font-size: 11px;
+            font-size: $text-xs;
             word-break: break-all;
         }
 
@@ -206,7 +196,7 @@
     // Hint / note copy
     .sec-hint {
         margin: $space-4 0 0;
-        font-size: 12px;
+        font-size: $text-xs;
         line-height: 1.55;
         color: var(--text-faint);
 
@@ -219,7 +209,7 @@
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
         border-radius: var(--radius-sm);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-dim);
 
         p { margin: 0; line-height: 1.55; }
@@ -283,7 +273,7 @@
         width: 104px;
         height: 104px;
         flex-shrink: 0;
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
 
         svg { color: var(--text-faint); }
@@ -296,7 +286,7 @@
 
     .sec-posture__verdict {
         margin: 0 0 $space-3;
-        font-size: 14px;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
@@ -312,28 +302,24 @@
         display: grid;
         grid-template-columns: auto auto;
         grid-template-rows: auto auto;
-        column-gap: 7px;
+        column-gap: $space-2;
         align-items: center;
 
         &__icon { grid-row: 1 / span 2; color: var(--text-faint); }
 
         &__val {
-            font-family: var(--mono);
-            font-size: 19px;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             line-height: 1.1;
             letter-spacing: -0.02em;
             color: var(--text);
 
-            &--text { font-size: 14px; }
+            &--text { font-size: $text-base; }
         }
 
         &__label {
-            font-family: var(--mono);
-            font-size: 9.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
 
@@ -354,10 +340,10 @@
         display: flex;
         align-items: center;
         gap: $space-3;
-        min-height: 46px;
-        padding: 6px 0;
+        min-height: 40px; // geometry: list-row height (40 default row)
+        padding: $space-tight 0;
         border-top: 1px solid var(--border-soft);
-        font-size: 13px;
+        font-size: $text-sm;
 
         &:first-child { border-top: none; }
 
@@ -375,8 +361,7 @@
     }
 
     .sec-posture__detail {
-        font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
     }
@@ -447,14 +432,14 @@
 
         h4 {
             margin: 0 0 $space-1;
-            font-size: 14px;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: var(--text);
         }
 
         .scan-desc {
             margin-bottom: $space-4;
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
 
@@ -465,9 +450,9 @@
         display: grid;
         place-items: center;
         width: 38px;
-        height: 38px;
+        height: 38px; // geometry: icon tile
         margin-bottom: $space-3;
-        border-radius: 10px;
+        border-radius: $radius-card;
         background: var(--surface-2);
         color: var(--text-dim);
     }
@@ -504,12 +489,12 @@
         flex: 1;
         min-width: 0;
         padding: 0 $space-2;
-        height: 32px;
+        height: $control-md;
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
-        border-radius: var(--radius-sm);
+        border-radius: $radius-control;
         color: var(--text);
-        font-size: 12.5px;
+        font-size: $text-sm;
 
         &:focus {
             outline: none;
@@ -532,7 +517,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -549,7 +534,7 @@
         display: flex;
         align-items: center;
         gap: $space-3;
-        padding: 8px 0;
+        padding: $space-2 0;
         border-top: 1px solid var(--border-soft);
 
         &:first-child { border-top: none; }
@@ -567,12 +552,12 @@
 
         .spinner {
             width: 32px;
-            height: 32px;
+            height: 32px; // geometry: spinner icon
         }
 
         p {
             margin: 0;
-            font-size: 13px;
+            font-size: $text-sm;
 
             &:not(:last-child) {
                 margin-bottom: $space-1;
@@ -595,7 +580,7 @@
 .integrity-tab {
     .description {
         margin-bottom: $space-5;
-        font-size: 13px;
+        font-size: $text-sm;
         line-height: 1.55;
         color: var(--text-dim);
     }
@@ -630,14 +615,14 @@
     .status-indicator {
         display: flex;
         align-items: center;
-        gap: 11px;
+        gap: $space-3;
 
         .sec-shield {
             display: grid;
             place-items: center;
             width: 32px;
-            height: 32px;
-            border-radius: 9px;
+            height: 32px; // geometry: icon tile
+            border-radius: $radius-card;
             flex-shrink: 0;
         }
 
@@ -654,15 +639,13 @@
         }
 
         &__label {
-            font-size: 13.5px;
+            font-size: $text-sm;
             font-weight: $font-weight-semibold;
             color: var(--text);
         }
 
         .firewall-type {
-            font-family: var(--mono);
-            font-size: 11px;
-            letter-spacing: 0.05em;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -683,26 +666,22 @@
         display: flex;
         flex-direction: column;
         min-width: 120px;
-        padding: 12px 16px;
+        padding: $space-3 $space-4;
         background: var(--surface);
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
 
         .stat-value {
-            font-family: var(--mono);
-            font-size: 22px;
+            font-size: $text-xl;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.02em;
             line-height: 1.1;
         }
 
         .stat-label {
-            margin-top: 5px;
-            font-family: var(--mono);
-            font-size: 10px;
+            margin-top: $space-tight;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
     }
@@ -735,14 +714,14 @@
             min-width: 0;
 
             .port-name {
-                font-size: 13px;
+                font-size: $text-sm;
                 font-weight: $font-weight-medium;
             }
 
             .port-number {
-                margin-top: 2px;
+                margin-top: $space-hair;
                 font-family: var(--mono);
-                font-size: 11px;
+                font-size: $text-xs;
                 color: var(--text-faint);
             }
         }
@@ -758,12 +737,12 @@
         justify-content: space-between;
         align-items: center;
         gap: $space-3;
-        padding: 11px $space-4;
+        padding: $space-3 $space-4;
         border-top: 1px solid var(--border-soft);
 
         .blocked-ip {
             font-family: var(--mono);
-            font-size: 12.5px;
+            font-size: $text-sm;
             font-weight: $font-weight-medium;
             color: var(--red);
         }
@@ -778,7 +757,7 @@
 
         p {
             margin: 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 }
@@ -808,7 +787,7 @@
 
         .spinner {
             width: 40px;
-            height: 40px;
+            height: 40px; // geometry: spinner icon
         }
     }
 
@@ -827,8 +806,7 @@
     }
 
     .sec-audit-meta {
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -837,11 +815,8 @@
             margin: 0 0 $space-2;
             padding-bottom: $space-2;
             border-bottom: 1px solid var(--border-soft);
-            font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
 
@@ -863,7 +838,7 @@
 
                 li {
                     margin-bottom: $space-2;
-                    font-size: 13px;
+                    font-size: $text-sm;
                     line-height: 1.5;
                     color: var(--text-dim);
 
@@ -887,14 +862,13 @@
         border-bottom: 1px solid var(--border-soft);
 
         &__title {
-            font-size: 14px;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
         }
 
         &__sub {
-            margin-top: 5px;
-            font-family: var(--mono);
-            font-size: 11.5px;
+            margin-top: $space-tight;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -906,11 +880,8 @@
 
         h4 {
             margin: 0 0 $space-2;
-            font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
     }
@@ -940,7 +911,7 @@
 
 .help-text {
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // Scrollable tabs for many tabs
@@ -959,7 +930,7 @@
 
     &::-webkit-scrollbar-thumb {
         background: $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 }
 
@@ -968,46 +939,44 @@
     .f2b-jails {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 12px;
-        margin-bottom: 16px;
+        gap: $space-3;
+        margin-bottom: $space-4;
     }
 
     .f2b-jail {
         background: var(--surface);
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
-        padding: 14px 16px;
+        padding: $space-4 $space-4;
 
         &__name {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            font-size: 13.5px;
-            margin-bottom: 12px;
+            gap: $space-2;
+            font-weight: $font-weight-semibold;
+            font-size: $text-sm;
+            margin-bottom: $space-3;
 
             svg { color: var(--accent-bright); }
         }
 
         &__stats {
             display: flex;
-            gap: 20px;
+            gap: $space-5;
         }
 
         &__v {
             font-family: var(--mono);
-            font-size: 18px;
-            font-weight: 600;
+            font-size: $text-lg;
+            font-weight: $font-weight-semibold;
 
             &--amber { color: var(--amber); }
         }
 
         &__l {
-            font-size: 10px;
+            font-size: $text-xs;
             color: var(--text-faint);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 2px;
+            margin-top: $space-hair;
         }
     }
 }

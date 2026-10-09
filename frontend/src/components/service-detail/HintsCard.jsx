@@ -28,13 +28,13 @@ export default function HintsCard({ app }) {
         case 'crash_loop':
             return {
                 signal: t('app.hints.crashLoopSignal', '{{count}} restarts in the last 10 minutes.', { count: p.restarts }),
-                hint: t('app.hints.crashLoop', 'The app keeps crashing and Docker keeps restarting it. Read its logs from just before a restart; no cache or database change helps until it stays up.'),
-                failure: t('app.hints.crashLoopFailure', 'A restart policy hides a crash: the app looks running between crashes.'),
+                hint: t('app.hints.crashLoop', 'The service keeps crashing and Docker keeps restarting it. Read its logs from just before a restart; no cache or database change helps until it stays up.'),
+                failure: t('app.hints.crashLoopFailure', 'A restart policy hides a crash: the service looks running between crashes.'),
             };
         case 'app_bound':
             return {
-                signal: t('app.hints.appBoundSignal', 'p95 {{ms}} ms while the app uses {{cpu}}% CPU and its database is idle.', { ms: p.p95_ms, cpu: p.cpu }),
-                hint: t('app.hints.appBound', 'The app itself is the bottleneck. Cache whole pages in front of it, or give it a bigger box.'),
+                signal: t('app.hints.appBoundSignal', 'p95 {{ms}} ms while the service uses {{cpu}}% CPU and its database is idle.', { ms: p.p95_ms, cpu: p.cpu }),
+                hint: t('app.hints.appBound', 'The service itself is the bottleneck. Cache whole pages in front of it, or give it a bigger server.'),
                 failure: t('app.hints.appBoundFailure', 'A cached page can be stale for up to its lifetime.'),
             };
         case 'database_bound':

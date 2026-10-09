@@ -13,7 +13,7 @@ restart, so responses say ``redeploy_required``.
 """
 from flask import Blueprint, jsonify, request
 
-from app.exceptions import NotFoundError, ValidationError
+from app.exceptions import NotFoundError, ValidationError, not_found
 from app.middleware.rbac import developer_required, get_current_user, viewer_required
 from app.models.app_attachment import AppAttachment
 from app.services.app_attachment_service import (
@@ -28,7 +28,7 @@ app_attachments_bp = Blueprint('app_attachments', __name__)
 def list_attachments(app_id):
     app = AppAttachmentService.live_app(app_id)
     if app is None or not ResourceGrantService.can_access_app(get_current_user(), app):
-        raise NotFoundError('Application not found')
+        raise not_found('service')
     return jsonify({'attachments': [a.to_dict() for a in AppAttachmentService.list_for_app(app)],
                     'kinds': AppAttachmentService.kinds_for(app)})
 
@@ -57,7 +57,7 @@ def attach_service(app_id, kind):
     user = get_current_user()
     app = AppAttachmentService.live_app(app_id)
     if app is None or not ResourceGrantService.can_edit_app(user, app):
-        raise NotFoundError('Application not found')
+        raise not_found('service')
     data = request.get_json(silent=True) or {}
     service_app_id = data.get('service_app_id')
     if not isinstance(service_app_id, int) or isinstance(service_app_id, bool):
@@ -65,7 +65,7 @@ def attach_service(app_id, kind):
     kind = _kind_or_400(kind)
     service = AppAttachmentService.live_app(service_app_id)
     if service is None or not ResourceGrantService.can_access_app(user, service):
-        raise NotFoundError('Service not found')
+        raise not_found('service')
     try:
         row, created = AppAttachmentService.attach(app, service, kind, user_id=user.id)
     except AttachmentError as exc:
@@ -79,7 +79,7 @@ def detach(app_id, attachment_id):
     user = get_current_user()
     app = AppAttachmentService.live_app(app_id)
     if app is None or not ResourceGrantService.can_edit_app(user, app):
-        raise NotFoundError('Application not found')
+        raise not_found('service')
     attachment = AppAttachmentService.get(app, attachment_id)
     if attachment is None:
         raise NotFoundError('Attachment not found')
@@ -98,7 +98,7 @@ def get_pooler(app_id):
     from app.services import pooler_service
     app = AppAttachmentService.live_app(app_id)
     if app is None or not ResourceGrantService.can_access_app(get_current_user(), app):
-        raise NotFoundError('Application not found')
+        raise not_found('service')
     return jsonify({'available': pooler_service.is_postgres_engine(app),
                     'enabled': bool(app.pooler_enabled),
                     'host': pooler_service.container_name(app),
@@ -111,7 +111,7 @@ def set_pooler(app_id):
     from app.services import pooler_service
     app = AppAttachmentService.live_app(app_id)
     if app is None or not ResourceGrantService.can_edit_app(get_current_user(), app):
-        raise NotFoundError('Application not found')
+        raise not_found('service')
     if not pooler_service.is_postgres_engine(app):
         raise ValidationError('Connection pooling is for an installed PostgreSQL')
     data = request.get_json(silent=True) or {}
@@ -129,7 +129,7 @@ def get_hints(app_id):
     from app.services.bottleneck_hints_service import BottleneckHintsService
     app = AppAttachmentService.live_app(app_id)
     if app is None or not ResourceGrantService.can_access_app(get_current_user(), app):
-        raise NotFoundError('Application not found')
+        raise not_found('service')
     return jsonify({'hints': BottleneckHintsService.hints(app)})
 
 
@@ -143,7 +143,7 @@ def set_immutable_assets(app_id):
     from app.services.site_domain_service import SiteDomainService
     app = AppAttachmentService.live_app(app_id)
     if app is None or not ResourceGrantService.can_edit_app(get_current_user(), app):
-        raise NotFoundError('Application not found')
+        raise not_found('service')
     data = request.get_json(silent=True) or {}
     if not isinstance(data.get('enabled'), bool):
         raise ValidationError("'enabled' must be true or false")

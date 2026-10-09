@@ -11,6 +11,7 @@ from app.models import Application
 from app.services.resource_grant_service import ResourceGrantService
 from app.services.volume_service import VolumeService, VolumeError
 from app.middleware.rbac import get_current_user
+from app.exceptions import not_found, permission_denied
 
 app_volumes_bp = Blueprint('app_volumes', __name__)
 
@@ -20,11 +21,11 @@ def _load_app_for(app_id, *, write):
     user = get_current_user()
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return None, None, (jsonify({'error': 'Application not found'}), 404)
+        raise not_found('service')
     allowed = (ResourceGrantService.can_edit_app(user, app) if write
                else ResourceGrantService.can_access_app(user, app))
     if not allowed:
-        return None, None, (jsonify({'error': 'Access denied'}), 403)
+        raise permission_denied()
     return user, app, None
 
 

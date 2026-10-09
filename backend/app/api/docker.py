@@ -614,7 +614,7 @@ def cleanup_all_apps():
 
     return jsonify({
         'success': True,
-        'message': f'Removed {len(results)} apps',
+        'message': f'Removed {len(results)} services',
         'results': results
     }), 200
 

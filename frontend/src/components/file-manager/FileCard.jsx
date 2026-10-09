@@ -61,7 +61,7 @@ function FileCard({
             <div className="file-card-body">
                 <div className="file-card-name" title={entry.name}>{entry.name}</div>
                 <div className="file-card-meta">
-                    {entry.is_dir ? 'Folder' : entry.size_human}
+                    {entry.is_dir ? t('app.fileCard.folder', 'Folder') : entry.size_human}
                 </div>
             </div>
         </div>

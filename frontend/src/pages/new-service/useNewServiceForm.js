@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
+import { toastError } from '@/utils/errorMessage';
 
 export const APP_TYPE_OPTIONS = [
     { value: 'auto', labelKey: 'app.useNewServiceForm.autoDetect', label: 'Auto-detect' },
@@ -162,7 +163,7 @@ export function useNewServiceForm() {
             const data = await api.getGithubSourceStatus();
             setGithubStatus(data);
         } catch (err) {
-            toast.error(err.message || t('app.useNewServiceForm.failedToLoadGithubConnection', 'Failed to load GitHub connection'));
+            toastError(toast, t('app.useNewServiceForm.failedToLoadGithubConnection', "Couldn't load the GitHub connection."), err);
         }
     }, [t, toast]);
 
@@ -172,7 +173,7 @@ export function useNewServiceForm() {
             const data = await api.listGithubRepositories({ search, perPage: 80 });
             setRepos(data.repos || []);
         } catch (err) {
-            toast.error(err.message || t('app.useNewServiceForm.failedToLoadGithubRepositories', 'Failed to load GitHub repositories'));
+            toastError(toast, t('app.useNewServiceForm.failedToLoadGithubRepositories', "Couldn't load GitHub repositories."), err);
         } finally {
             setReposLoading(false);
         }
@@ -185,7 +186,7 @@ export function useNewServiceForm() {
             setBranches(data.branches || []);
         } catch (err) {
             setBranches([]);
-            toast.error(err.message || t('app.useNewServiceForm.failedToLoadBranches', 'Failed to load branches'));
+            toastError(toast, t('app.useNewServiceForm.failedToLoadBranches', "Couldn't load branches."), err);
         } finally {
             setBranchesLoading(false);
         }
@@ -266,7 +267,7 @@ export function useNewServiceForm() {
             .catch((err) => {
                 if (!cancelled) {
                     setRepoManifest(null);
-                    toast.error(err.message || t('app.useNewServiceForm.failedToInspectManifests', 'Failed to inspect repository manifests'));
+                    toastError(toast, t('app.useNewServiceForm.failedToInspectManifests', "Couldn't inspect the repository manifests."), err);
                 }
             })
             .finally(() => { if (!cancelled) setRepoManifestLoading(false); });
@@ -315,7 +316,7 @@ export function useNewServiceForm() {
             const { auth_url } = await api.startSourceConnection('github', redirectUri);
             window.location.href = auth_url;
         } catch (err) {
-            toast.error(err.message || t('app.useNewServiceForm.failedToStartGithubConnection', 'Failed to start GitHub connection'));
+            toastError(toast, t('app.useNewServiceForm.failedToStartGithubConnection', "Couldn't start the GitHub connection."), err);
         }
     }
 
@@ -456,16 +457,16 @@ export function useNewServiceForm() {
                 if (result.deploy_job_id) {
                     // A deploy job was queued — take the user straight to the
                     // full-page Deploy Console to watch the build/startup live.
-                    toast.success(t('app.useNewServiceForm.repositoryServiceCreatedDeploying', 'Repository service created — deploying…'));
+                    toast.success(t('app.useNewServiceForm.repositoryServiceCreatedDeploying', 'Repository service created. Deploying…'));
                     navigate(`/deployments/${result.deploy_job_id}`);
                 } else {
                     toast.success(t('app.useNewServiceForm.repositoryServiceCreated', 'Repository service created'));
-                    toast.warning(t('app.useNewServiceForm.serviceCreatedWithoutAutoDeploy', 'Service was created without auto-deploy — start it manually from the service page.'));
+                    toast.warning(t('app.useNewServiceForm.serviceCreatedWithoutAutoDeploy', 'Service was created without auto-deploy. Start it manually from the service page.'));
                     navigate(`/services/${result.app.id}`);
                 }
             }
         } catch (err) {
-            toast.error(err.message || t('app.useNewServiceForm.failedToCreateService', 'Failed to create service'));
+            toastError(toast, t('app.useNewServiceForm.failedToCreateService', "Couldn't create the service."), err);
         } finally {
             setSubmitting(false);
         }

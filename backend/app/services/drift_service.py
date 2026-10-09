@@ -413,7 +413,7 @@ def _nginx_repair(app_id):
 
     app = Application.query_active().filter_by(id=app_id).first()
     if app is None:
-        return {'success': False, 'error': f'Application {app_id} not found'}
+        return {'success': False, 'error': 'Service not found'}
     res = SiteDomainService.write_app_vhost(app)
     if res.get('warning') and not (res.get('nginx') or {}).get('success'):
         return {'success': False, 'error': res['warning']}
@@ -500,7 +500,7 @@ def _compose_repair(app_id):
 
     app = Application.query_active().filter_by(id=app_id).first()
     if app is None:
-        return {'success': False, 'error': f'Application {app_id} not found'}
+        return {'success': False, 'error': 'Service not found'}
     written = ComposeEnvService.refresh_for_project(app.root_path, app.compose_file)
     # Apply the regenerated override the same way a deploy does.
     up = DockerService.compose_up(app.root_path, detach=True,
@@ -594,9 +594,9 @@ def _manifest_repair(app_id):
 
     app = Application.query_active().filter_by(id=app_id).first()
     if app is None:
-        return {'success': False, 'error': f'Application {app_id} not found'}
+        return {'success': False, 'error': 'Service not found'}
     if not app.project_id:
-        return {'success': False, 'error': f'Application {app_id} is not manifest-managed'}
+        return {'success': False, 'error': 'This service is not managed by a manifest'}
     result = ManifestApplyService.apply_stored(app.project_id)
     ok = bool(result.get('success', False))
     return {

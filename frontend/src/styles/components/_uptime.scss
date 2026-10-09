@@ -5,8 +5,8 @@
 .uptime-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
-    padding: $space-6;
+    border-radius: $radius-card;
+    padding: $space-4;
 
     &.loading,
     &.error {
@@ -40,7 +40,7 @@
     }
 
     h3 {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         margin: 0 0 $space-1 0;
@@ -51,7 +51,7 @@
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 
     .status-dot {
@@ -66,7 +66,7 @@
 
         .status-dot {
             background: $success;
-            box-shadow: 0 0 8px $success;
+            box-shadow: none;
             animation: uptime-pulse-dot 2s ease-in-out infinite;
         }
     }
@@ -107,9 +107,8 @@
 
     .percentage-value {
         display: block;
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-bold;
-        font-family: $font-mono;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
 
         &.excellent {
@@ -130,10 +129,8 @@
     }
 
     .percentage-label {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
     }
 }
 
@@ -146,7 +143,7 @@
     padding: $space-5;
     background: linear-gradient(135deg, fade($accent-primary-raw, 5%), fade($success-raw, 5%));
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-6;
 }
 
@@ -157,26 +154,22 @@
     min-width: 60px;
 
     .counter-value {
-        font-size: 32px;
-        font-weight: $font-weight-bold;
-        font-family: $font-mono;
+        font-size: $text-2xl;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
         line-height: 1;
     }
 
     .counter-label {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
         margin-top: $space-1;
     }
 }
 
 .counter-separator {
-    font-size: 32px;
-    font-weight: $font-weight-bold;
-    font-family: $font-mono;
+    font-size: $text-2xl;
+    font-weight: $font-weight-semibold;
     color: $text-tertiary;
     margin: 0 $space-1;
     margin-bottom: $space-4;
@@ -194,7 +187,7 @@
     margin-bottom: $space-3;
 
     .graph-title {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-secondary;
     }
@@ -205,17 +198,17 @@
     gap: $space-1;
     background: $bg-hover;
     padding: $space-1;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 }
 
 .period-btn {
     padding: $space-1 $space-3;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-tertiary;
     background: transparent;
     border: none;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -231,17 +224,17 @@
 
 .uptime-graph {
     display: flex;
-    gap: 2px;
-    height: 32px;
+    gap: $space-hair;
+    height: 32px; // geometry: uptime bar strip (chart)
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     overflow: hidden;
-    padding: 4px;
+    padding: $space-1;
 }
 
 .graph-bar {
     flex: 1;
-    border-radius: 2px;
+    border-radius: $radius-badge;
     transition: transform $transition-fast, opacity $transition-fast;
     cursor: pointer;
     min-width: 4px;
@@ -273,7 +266,7 @@
     display: flex;
     justify-content: space-between;
     margin-top: $space-2;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -292,7 +285,7 @@
 .legend-dot {
     width: 10px;
     height: 10px;
-    border-radius: 2px;
+    border-radius: $radius-badge;
 
     &.up {
         background: $success;
@@ -319,19 +312,17 @@
     align-items: center;
     padding: $space-3;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     .stat-period {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
-        text-transform: uppercase;
         margin-bottom: $space-1;
     }
 
     .stat-value {
-        font-size: $font-size-md;
-        font-weight: $font-weight-bold;
-        font-family: $font-mono;
+        font-size: $text-md;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
 
         &.excellent,
@@ -357,7 +348,7 @@
     padding: $space-4 $space-5;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 }
 
 .uptime-compact-status {
@@ -366,16 +357,15 @@
     gap: $space-3;
 
     .uptime-compact-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
     .uptime-compact-percent {
-        font-size: $font-size-base;
-        font-weight: $font-weight-bold;
-        font-family: $font-mono;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
         padding: $space-1 $space-2;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         @include status-variant($success, $success-bg);
 
         &.fair {
@@ -391,17 +381,16 @@
 .uptime-compact-time {
     display: flex;
     align-items: baseline;
-    gap: 2px;
-    font-family: $font-mono;
+    gap: $space-hair;
 
     .value {
-        font-size: $font-size-lg;
-        font-weight: $font-weight-bold;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     .unit {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
         margin-right: $space-1;
     }
@@ -413,12 +402,12 @@
         min-width: 50px;
 
         .counter-value {
-            font-size: 24px;
+            font-size: $text-xl;
         }
     }
 
     .counter-separator {
-        font-size: 24px;
+        font-size: $text-xl;
     }
 
     .uptime-legend {

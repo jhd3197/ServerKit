@@ -140,7 +140,7 @@ def test_host_owned_by_other_app_is_rejected(client, auth_headers, app):
     assert DomainAttachService.attach(a1, 'shared.example.com', ssl='off')['success'] is True
     result = DomainAttachService.attach(a2, 'shared.example.com', ssl='off')
     assert result['success'] is False
-    assert 'another app' in result['error']
+    assert 'another service' in result['error']
 
 
 # ── SSL best-effort ──────────────────────────────────────────────────────────

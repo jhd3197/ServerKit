@@ -31,6 +31,7 @@ import {
     PlayIcon,
     TrashIcon,
 } from './serverDetailShared';
+import { toastError } from '@/utils/errorMessage';
 
 // Built-in saved views. A remote cron entry is only
 // { id, schedule, command, enabled, name?, description? } — the agent parses
@@ -136,26 +137,29 @@ const CronTab = ({ serverId, serverStatus }) => {
     async function handleToggle(job) {
         try {
             await api.toggleRemoteCronJob(serverId, job.id, !job.enabled);
-            toast.success(t('app.cronTab.job', 'Job {{value}}', { value: !job.enabled ? 'enabled' : 'disabled' }));
+            toast.success(!job.enabled
+                ? t('app.cronTab.jobOn', 'Job turned on')
+                : t('app.cronTab.jobOff', 'Job turned off'));
             loadJobs();
         } catch (err) {
-            toast.error(err.message || t('app.cronTab.failedToToggleJob', 'Failed to toggle job'));
+            toastError(toast, t('app.cronTab.failedToToggleJob', "Couldn't turn the job on or off."), err);
         }
     }
 
     async function handleRemove(job) {
         const ok = await confirmCron({
-            titleKey: 'app.cronTab.removeCronJob', title: 'Remove Cron Job',
-            message: `Remove this entry from the host crontab?\n\n${job.schedule} ${job.command}`,
+            titleKey: 'app.cronTab.removeCronJob', title: 'Delete cron job',
+            message: `${t('app.cronTab.deleteThisEntryFromThe', 'Delete this entry from the host crontab?')}\n\n${job.schedule} ${job.command}`,
+            confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',
         });
         if (!ok) return;
         try {
             await api.removeRemoteCronJob(serverId, job.id);
-            toast.success(t('app.cronTab.cronJobRemoved', 'Cron job removed'));
+            toast.success(t('app.cronTab.cronJobRemoved', 'Cron job deleted'));
             loadJobs();
         } catch (err) {
-            toast.error(err.message || t('app.cronTab.failedToRemoveJob', 'Failed to remove job'));
+            toastError(toast, t('app.cronTab.failedToRemoveJob', "Couldn't delete the job."), err);
         }
     }
 
@@ -181,15 +185,14 @@ const CronTab = ({ serverId, serverStatus }) => {
             setForm({ name: '', schedule: '0 * * * *', command: '' });
             loadJobs();
         } catch (err) {
-            toast.error(err.message || t('app.cronTab.failedToAddCronJob', 'Failed to add cron job'));
+            toastError(toast, t('app.cronTab.failedToAddCronJob', "Couldn't add the cron job."), err);
         } finally {
             setSubmitting(false);
         }
     }
 
-    // Jobs table columns. Cell markup and classNames are identical to the
-    // hand-rolled table they replace so the .cron-tab / .data-table SCSS
-    // keeps applying (.cron-tab__name, .cron-tab__command, .mono).
+    // Jobs table columns. The table's look is .sk-dtable's; only cell content
+    // carries page classes (.cron-tab__name, .cron-tab__command).
     //
     // Declared above the offline/loading guards: the chrome below is a hook, so
     // it cannot sit behind an early return.
@@ -206,7 +209,7 @@ const CronTab = ({ serverId, serverStatus }) => {
             sortValue: (job) => job.schedule || '',
             render: (job) => (
                 <>
-                    <span className="mono" title={job.schedule}>{job.schedule}</span>
+                    <span className="sk-cell-mono" title={job.schedule}>{job.schedule}</span>
                     {job.description && job.description !== job.schedule && (
                         <div className="cron-tab__description">{job.description}</div>
                     )}
@@ -266,7 +269,7 @@ const CronTab = ({ serverId, serverStatus }) => {
                     <Button variant="unstyled" type="button"
                         className="btn-icon danger"
                         onClick={() => handleRemove(job)}
-                        title={t('common.actions.remove', 'Remove')}
+                        title={t('common.actions.delete', 'Delete')}
                     >
                         <TrashIcon />
                     </Button>
@@ -295,7 +298,7 @@ const CronTab = ({ serverId, serverStatus }) => {
         return (
             <div className="offline-notice">
                 <OfflineIcon />
-                <h4>{t('app.cronTab.serverOffline', 'Server Offline')}</h4>
+                <h4>{t('app.cronTab.serverOffline', 'Server offline')}</h4>
                 <p>{t('app.cronTab.cronManagementRequiresTheServerTo', 'Cron management requires the server to be online.')}</p>
             </div>
         );
@@ -322,7 +325,7 @@ const CronTab = ({ serverId, serverStatus }) => {
                 <div className="cron-tab__actions">
                     <Button variant="outline" onClick={loadJobs}>{t('common.actions.refresh', 'Refresh')}</Button>
                     <Button onClick={() => setShowAddModal(true)} disabled={status?.available === false}>
-                        {t('app.cronTab.addJob', 'Add Job')}
+                        {t('app.cronTab.addJob', 'New cron job')}
                     </Button>
                 </div>
             </div>
@@ -335,7 +338,7 @@ const CronTab = ({ serverId, serverStatus }) => {
                 <EmptyState
                     icon={Clock3}
                     title={t('app.cronTab.noCronJobs', 'No cron jobs')}
-                    description={t('app.cronTab.noScheduledJobsOnThisServer', 'No scheduled jobs on this server. Use Add Job to schedule one.')}
+                    description={t('app.cronTab.noScheduledJobsOnThisServer', 'No scheduled jobs on this server. Use Add job to schedule one.')}
                 />
             ) : (
                 <>
@@ -367,7 +370,8 @@ const CronTab = ({ serverId, serverStatus }) => {
                         onSortsChange={setSorts}
                         {...chrome.tableProps}
                         rowClassName={(job) => (!job.enabled ? 'row-disabled' : '')}
-                        tableClassName="data-table"
+                        // .cron-tab is the frame; the table runs flush in it.
+                        className="sk-dtable-wrap--flush"
                         emptyTitle="No jobs match this view."
                         emptyMessage=""
                         footer={(
@@ -389,7 +393,7 @@ const CronTab = ({ serverId, serverStatus }) => {
             <Modal
                 open={showAddModal}
                 onClose={() => { if (!submitting) setShowAddModal(false); }}
-                title={t('app.cronTab.addCronJob', 'Add Cron Job')}
+                title={t('app.cronTab.addCronJob', 'New cron job')}
             >
                 <p className="sk-modal__subtitle">
                     {t('app.cronTab.scheduleACommandOnTheHost', 'Schedule a command on the host crontab. Runs as the agent user.')}
@@ -445,7 +449,7 @@ const CronTab = ({ serverId, serverStatus }) => {
                         </div>
                         <div className="modal-actions">
                             <Button type="button" variant="outline" onClick={() => setShowAddModal(false)} disabled={submitting}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={submitting}>{submitting ? 'Adding…' : 'Add Job'}</Button>
+                            <Button type="submit" disabled={submitting}>{submitting ? t('app.cronTab.creating', 'Creating…') : t('app.cronTab.createCronJob', 'Create cron job')}</Button>
                         </div>
                     </form>
             </Modal>

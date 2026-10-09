@@ -5,8 +5,8 @@
 .metrics-graph-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
-    padding: $space-6;
+    border-radius: $radius-card;
+    padding: $space-4;
     margin-bottom: $space-6;
 
     &.loading,
@@ -21,7 +21,7 @@
         color: $text-tertiary;
 
         .muted {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -41,7 +41,7 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-base;
+    font-size: $text-base;
     font-weight: $font-weight-semibold;
     color: $text-primary;
 }
@@ -52,7 +52,7 @@
     gap: $space-6;
     padding: $space-4;
     background: $bg-hover;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-5;
 }
 
@@ -67,17 +67,14 @@
 
     .stat-label {
         display: block;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
     }
 
     .stat-value {
         display: block;
-        font-size: $font-size-lg;
-        font-weight: $font-weight-bold;
-        font-family: $font-mono;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 }
@@ -86,7 +83,7 @@
 .metrics-chart-container {
     margin-bottom: $space-4;
     background: linear-gradient(180deg, var(--bg-hover) 0%, transparent 100%);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-2 0;
 
     &.compact {
@@ -126,13 +123,13 @@
     background: var(--surface-2);
     backdrop-filter: blur(8px);
     border: 1px solid var(--border-strong);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-3 $space-4;
-    box-shadow: var(--shadow-lg);
+    box-shadow: $shadow-raised;
     min-width: 140px;
 
     .tooltip-time {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         margin-bottom: $space-2;
         padding-bottom: $space-2;
@@ -144,7 +141,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         padding: $space-1 0;
     }
 
@@ -161,8 +158,7 @@
     }
 
     .tooltip-value {
-        font-family: $font-mono;
-        font-weight: $font-weight-bold;
+        font-weight: $font-weight-semibold;
         min-width: 48px;
         text-align: right;
     }
@@ -174,8 +170,8 @@
     align-items: center;
     gap: $space-2;
     background: $bg-hover;
-    padding: 4px;
-    border-radius: $radius-md;
+    padding: $space-1;
+    border-radius: $radius-control;
     border: 1px solid $border-subtle;
 }
 
@@ -183,13 +179,12 @@
     background: transparent;
     border: 1px solid transparent;
     color: $text-tertiary;
-    padding: 6px 12px;
-    font-size: $font-size-xs;
+    padding: $space-tight $space-3;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     cursor: pointer;
     transition: all $transition-fast;
-    text-transform: uppercase;
 
     &:hover {
         color: $text-primary;
@@ -233,7 +228,7 @@
     display: flex;
     align-items: center;
     gap: $space-3;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
     padding: $space-1 $space-3;
     border-radius: $radius-full;
@@ -248,7 +243,7 @@
 .legend-line {
     width: 24px;
     height: 3px;
-    border-radius: 2px;
+    border-radius: $radius-badge;
     position: relative;
 
     &::after {
@@ -265,17 +260,17 @@
 
     &.cpu {
         background: var(--accent-bright);
-        box-shadow: 0 0 8px var(--accent-glow);
+        box-shadow: none;
     }
 
     &.memory {
         background: var(--green);
-        box-shadow: 0 0 8px rgba(61, 220, 151, 0.5);
+        box-shadow: none;
     }
 
     &.disk {
         background: var(--amber);
-        box-shadow: 0 0 8px rgba(245, 185, 69, 0.5);
+        box-shadow: none;
     }
 }
 
@@ -283,7 +278,7 @@
 .metrics-graph-compact {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
+    border-radius: $radius-card;
     padding: $space-4;
     margin-bottom: $space-6;
 
@@ -291,7 +286,7 @@
         margin-bottom: $space-3;
 
         .graph-title {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 }
@@ -308,7 +303,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
 
         svg {
@@ -316,7 +311,6 @@
         }
 
         span {
-            font-family: $font-mono;
             font-weight: $font-weight-medium;
         }
     }

@@ -68,31 +68,28 @@ $lk-default:  #646b7a;
     }
 
     &__grp {
-        padding: 8px 14px 6px;
-        font-family: var(--mono);
-        font-size: 10px;
+        padding: $space-2 $space-4 $space-tight;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-ghost);
     }
 
     &__hint {
-        padding: 8px 14px;
-        font-size: 12.5px;
+        padding: $space-2 $space-4;
+        font-size: $text-sm;
         color: var(--text-faint);
     }
 
     &__row {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
         width: 100%;
-        padding: 8px 14px;
+        padding: $space-2 $space-4;
         background: transparent;
         border: none;
         text-align: left;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-dim);
         cursor: pointer;
         transition: background 0.12s, color 0.12s;
@@ -114,7 +111,7 @@ $lk-default:  #646b7a;
         background: var(--text-ghost);
         flex-shrink: 0;
 
-        &.is-on { background: var(--green); box-shadow: 0 0 5px var(--green); }
+        &.is-on { background: var(--green); }
     }
 
     &__name {
@@ -126,8 +123,7 @@ $lk-default:  #646b7a;
     }
 
     &__sub {
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-ghost);
     }
 
@@ -161,7 +157,7 @@ $lk-default:  #646b7a;
         p {
             max-width: 400px;
             margin: 0;
-            font-size: 13px;
+            font-size: $text-sm;
             line-height: 1.6;
         }
     }
@@ -206,7 +202,7 @@ $lk-default:  #646b7a;
     justify-content: space-between;
     align-items: center;
     gap: $space-4;
-    padding: 9px $space-4;
+    padding: $space-2 $space-4;
     background: var(--surface);
     border-bottom: 1px solid var(--border-soft);
     flex-wrap: wrap;
@@ -221,10 +217,7 @@ $lk-default:  #646b7a;
 }
 
 .lv-header-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: var(--text-ghost);
 
@@ -235,13 +228,12 @@ $lk-default:  #646b7a;
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    padding: 3px $space-2;
+    padding: $space-1 $space-2;
     background: $warning-bg;
     border: 1px solid $warning-border;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $warning;
-    font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
 
     svg { flex-shrink: 0; }
 
@@ -258,7 +250,7 @@ $lk-default:  #646b7a;
     gap: $space-3;
     flex-wrap: wrap;
     color: var(--text-faint);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .lv-stat {
@@ -271,17 +263,13 @@ $lk-default:  #646b7a;
 }
 
 .lv-stat-label {
-    font-family: var(--mono);
-    font-size: 9.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: var(--text-ghost);
 }
 
 .lv-stat-value {
-    font-family: var(--mono);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: var(--text-dim);
 }
 
@@ -300,7 +288,7 @@ $lk-default:  #646b7a;
     background: $danger-bg;
     border-bottom: 1px solid $danger-border;
     color: $danger;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     flex-shrink: 0;
 
     > svg { flex-shrink: 0; }
@@ -311,9 +299,9 @@ $lk-default:  #646b7a;
         border: none;
         color: $danger;
         cursor: pointer;
-        font-size: 18px;
+        font-size: $text-lg;
         line-height: 1;
-        padding: 0 4px;
+        padding: 0 $space-1;
         opacity: 0.7;
 
         &:hover { opacity: 1; }
@@ -375,9 +363,10 @@ $lk-default:  #646b7a;
         width: 100%;
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 6px 8px 6px 28px;
-        font-size: $font-size-sm + 0.5;
+        height: $control-md;
+        border-radius: $radius-control;
+        padding: 0 $space-2 0 $space-8;
+        font-size: $text-sm;
         color: $text-primary;
         @include transition(all);
 
@@ -399,7 +388,7 @@ $lk-default:  #646b7a;
     scrollbar-width: thin;
 
     &::-webkit-scrollbar { width: 4px; }
-    &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: $radius-sm; }
+    &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: $radius-badge; }
 }
 
 .lv-empty-hint {
@@ -413,7 +402,7 @@ $lk-default:  #646b7a;
     text-align: center;
 
     svg { opacity: 0.6; }
-    p { margin: 0; font-size: $font-size-sm; }
+    p { margin: 0; font-size: $text-xs; }
 
     &.is-compact { padding: 12px; }
     &.is-medium { min-height: 320px; }
@@ -422,7 +411,7 @@ $lk-default:  #646b7a;
     &__title {
         margin: 0;
         color: var(--text-primary);
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
     }
 }
@@ -438,17 +427,14 @@ $lk-default:  #646b7a;
     display: flex;
     align-items: center;
     gap: $space-1;
-    padding: 9px 6px 4px;
+    padding: $space-2 $space-tight $space-1;
     background: transparent;
     border: none;
     color: var(--text-ghost);
-    font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
     cursor: pointer;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
 
     &.is-static { cursor: default; }
     &__spacer { width: 12px; }
@@ -462,11 +448,10 @@ $lk-default:  #646b7a;
 }
 
 .lv-group-count {
-    font-family: var(--mono);
     background: transparent;
     color: var(--text-ghost);
-    padding: 0 2px;
-    font-size: 10px;
+    padding: 0 $space-hair;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     line-height: 14px;
     letter-spacing: 0;
@@ -477,7 +462,7 @@ $lk-default:  #646b7a;
     display: flex;
     flex-direction: column;
     gap: 1px;
-    padding: 2px 0 $space-2;
+    padding: $space-hair 0 $space-2;
 }
 
 // ─── Target row (demo con-target look) ────────────────
@@ -489,13 +474,13 @@ $lk-default:  #646b7a;
         'dot name size'
         'dot name time';
     align-items: center;
-    gap: 2px $space-2;
-    padding: 6px 9px;
+    gap: $space-hair $space-2;
+    padding: $space-tight $space-2;
     background: transparent;
     border: none;
-    border-radius: 8px;
+    border-radius: $radius-card;
     color: var(--text-dim);
-    font-size: 13px;
+    font-size: $text-sm;
     text-align: left;
     cursor: pointer;
     @include transition(background);
@@ -542,15 +527,13 @@ $lk-default:  #646b7a;
 
 .lv-file-size {
     grid-area: size;
-    font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: $text-xs;
     color: var(--text-ghost);
 }
 
 .lv-file-time {
     grid-area: time;
-    font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     color: var(--text-ghost);
 }
 
@@ -575,7 +558,7 @@ $lk-default:  #646b7a;
 
     code {
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-dim);
         background: transparent;
         padding: 0;
@@ -629,7 +612,7 @@ $lk-default:  #646b7a;
     align-items: center;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-card;
     min-width: 220px;
     @include transition(all);
 
@@ -650,8 +633,8 @@ $lk-default:  #646b7a;
     input {
         background: transparent;
         border: none;
-        padding: 6px $space-3 6px 30px;
-        font-size: $font-size-sm + 0.5;
+        padding: $space-tight $space-3 $space-tight $space-8;
+        font-size: $text-sm;
         color: $text-primary;
         width: 100%;
 
@@ -664,10 +647,10 @@ $lk-default:  #646b7a;
         right: 6px;
         background: transparent;
         border: none;
-        padding: 4px;
+        padding: $space-1;
         color: var(--text-faint);
         cursor: pointer;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         display: flex;
         align-items: center;
 
@@ -678,9 +661,10 @@ $lk-default:  #646b7a;
 .lv-select {
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 6px $space-2;
-    font-size: $font-size-sm + 0.5;
+    border-radius: $radius-control;
+    height: $control-md;
+    padding: 0 $space-2;
+    font-size: $text-sm;
     color: $text-primary;
     cursor: pointer;
     @include transition(all);
@@ -689,13 +673,22 @@ $lk-default:  #646b7a;
         border-color: var(--border-strong);
         outline: none;
     }
+
+    // The Radix trigger (LogToolbar) sizes to its value, not the full-width
+    // form field it defaults to.
+    &.ui-select-trigger {
+        width: auto;
+        gap: $space-1;
+    }
 }
 
 .lv-icon-btn {
+    width: $control-sm;
+    height: $control-sm;
     background: transparent;
     border: none;
-    padding: 6px;
-    border-radius: 8px;
+    padding: 0;
+    border-radius: $radius-control;
     color: var(--text-dim);
     cursor: pointer;
     display: flex;
@@ -722,12 +715,13 @@ $lk-default:  #646b7a;
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    padding: 5px 11px;
+    height: $control-md;
+    padding: 0 $space-3;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-control;
     color: var(--text-dim);
-    font-size: $font-size-sm + 0.5;
+    font-size: $text-sm;
     font-weight: $font-weight-medium;
     cursor: pointer;
     @include transition(all);
@@ -749,15 +743,14 @@ $lk-default:  #646b7a;
 
     &.on {
         background: var(--green);
-        box-shadow: 0 0 0 0 fade($success-raw, 60%);
         animation: lv-pulse 1.6s ease-out infinite;
     }
 }
 
 @keyframes lv-pulse {
-    0%   { box-shadow: 0 0 0 0 fade($success-raw, 60%); }
-    70%  { box-shadow: 0 0 0 8px fade($success-raw, 0%); }
-    100% { box-shadow: 0 0 0 0 fade($success-raw, 0%); }
+    0%   { opacity: 1; }
+    70%  { opacity: 0.4; }
+    100% { opacity: 1; }
 }
 
 // ─── Content (the log well) ───────────────────────────
@@ -766,13 +759,13 @@ $lk-default:  #646b7a;
     overflow: auto;
     background: var(--bg-code);
     font-family: var(--mono);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     line-height: 1.65;
     min-height: 0;
     scrollbar-width: thin;
 
     &::-webkit-scrollbar { width: 8px; height: 8px; }
-    &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: $radius-sm; }
+    &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: $radius-badge; }
     &::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
 
     &.wrap {
@@ -800,15 +793,14 @@ $lk-default:  #646b7a;
     z-index: 4;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    gap: $space-tight;
+    padding: $space-1 $space-3;
+    border-radius: $radius-full;
+    font-size: $text-xs;
+    font-weight: $font-weight-semibold;
     color: #fff;
     background: var(--red, #dc2626);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: $shadow-raised;
     pointer-events: none;
 }
 
@@ -909,7 +901,7 @@ $lk-default:  #646b7a;
     text-align: right;
     color: var(--text-ghost);
     user-select: none;
-    font-size: 11px;
+    font-size: $text-xs;
     line-height: inherit;
 }
 
@@ -921,8 +913,8 @@ $lk-default:  #646b7a;
 .lv-match {
     background: $warning;
     color: $black;
-    padding: 0 2px;
-    border-radius: 2px;
+    padding: 0 $space-hair;
+    border-radius: $radius-badge;
     font-weight: $font-weight-semibold;
 }
 
@@ -947,12 +939,12 @@ $lk-default:  #646b7a;
 
 .proc-command {
     font-family: var(--mono);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: var(--text-code);
     background: var(--bg-code);
     border: 1px solid var(--border-soft);
     padding: $space-3;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin: 0;
     overflow-x: auto;
     white-space: pre-wrap;
@@ -986,23 +978,28 @@ $lk-default:  #646b7a;
         gap: $space-2;
 
         label {
-            font-size: $font-size-xs;
-            font-weight: 500;
+            font-size: $text-xs;
+            font-weight: $font-weight-medium;
             color: $text-secondary;
         }
 
         input,
-        select {
-            min-height: 36px;
-            padding: $space-2 $space-3;
+        .ui-select-trigger {
+            min-height: $control-md;
+            padding: 0 $space-3;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             background: $bg-card;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
 
         input {
             width: 200px;
+        }
+
+        .ui-select-trigger {
+            height: auto;
+            min-width: 120px;
         }
     }
 }
@@ -1020,12 +1017,12 @@ $lk-default:  #646b7a;
 }
 
 .unit-chip {
-    min-height: 24px;
-    padding: 4px $space-3;
+    min-height: $control-sm;
+    padding: 0 $space-3;
     border: 1px solid $border-subtle;
-    border-radius: $radius-full;
+    border-radius: $radius-control;
     background: $bg-card;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -1049,8 +1046,8 @@ $lk-default:  #646b7a;
     padding: $space-2 $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
-    font-size: $font-size-xs;
+    border-radius: $radius-control;
+    font-size: $text-xs;
     color: $text-secondary;
     margin-top: -$space-4;
 
@@ -1061,14 +1058,14 @@ $lk-default:  #646b7a;
 .journal-viewer {
     flex: 1;
     background: var(--bg-code);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: auto;
     padding: 1rem;
 
     pre {
         margin: 0;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.4;
         color: var(--text-code);
         white-space: pre-wrap;
@@ -1100,64 +1097,15 @@ $lk-default:  #646b7a;
     select {
         padding: $space-1 $space-2;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: $bg-card;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
-.processes-table-wrapper {
-    overflow-x: auto;
-    background: $bg-card;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
-}
-
+// `.processes-table` is the DataTable wrap; only cell content is styled here.
 .processes-table {
-    width: 100%;
-    min-width: 800px;
-    border-collapse: collapse;
-
-    th, td {
-        padding: $space-2 $space-3;
-        text-align: left;
-        vertical-align: middle;
-        font-size: $font-size-sm;
-    }
-
-    th {
-        position: sticky;
-        top: 0;
-        background: $bg-card;
-        z-index: 1;
-        font-weight: $font-weight-semibold;
-        color: $text-secondary;
-        font-size: $font-size-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-        border-bottom: 1px solid $border-subtle;
-    }
-
-    // No nth-child column widths: columns can now be hidden and reordered from
-    // the header menu, so a width pinned to a POSITION lands on whatever column
-    // happens to sit there.
-
-    tr {
-        cursor: pointer;
-        transition: background 0.15s ease;
-
-        &:hover {
-            background: $bg-hover;
-        }
-
-        &.selected {
-            background: fade($info-raw, 10%);
-        }
-    }
-
-    tbody tr {
-        border-bottom: 1px solid $border-subtle;
-    }
+    .sk-dtable { min-width: 800px; } // scrolls inside the wrap on narrow screens
 
     .process-name {
         overflow: hidden;
@@ -1173,7 +1121,7 @@ $lk-default:  #646b7a;
             left: 0;
             bottom: 0;
             height: 3px;
-            border-radius: 2px;
+            border-radius: $radius-badge;
             opacity: 0.4;
 
             &.cpu {
@@ -1187,8 +1135,7 @@ $lk-default:  #646b7a;
 
         span {
             position: relative;
-            font-size: $font-size-xs;
-            font-family: $font-mono;
+            font-size: $text-xs;
         }
     }
 
@@ -1199,15 +1146,15 @@ $lk-default:  #646b7a;
     }
 
     .process-action-button {
-        width: 28px;
-        height: 28px;
+        width: $control-sm;
+        height: $control-sm;
     }
 }
 
 .process-details-panel {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: hidden;
 
     .panel-header {
@@ -1218,8 +1165,8 @@ $lk-default:  #646b7a;
         border-bottom: 1px solid $border-subtle;
 
         h3 {
-            font-size: $font-size-md;
-            font-weight: 600;
+            font-size: $text-md;
+            font-weight: $font-weight-semibold;
             margin: 0;
         }
     }
@@ -1240,13 +1187,13 @@ $lk-default:  #646b7a;
         gap: $space-1;
 
         .detail-label {
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
 
         .detail-value {
-            font-size: $font-size-sm;
-            font-weight: 500;
+            font-size: $text-xs;
+            font-weight: $font-weight-medium;
 
             &.mono {
                 font-family: $font-mono;
@@ -1261,7 +1208,7 @@ $lk-default:  #646b7a;
 
         .detail-label {
             display: block;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
             margin-bottom: $space-1;
         }
@@ -1270,9 +1217,9 @@ $lk-default:  #646b7a;
             display: block;
             padding: $space-2;
             background: $bg-hover;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             word-break: break-all;
         }
     }
@@ -1299,7 +1246,7 @@ $lk-default:  #646b7a;
 .service-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-4;
     display: flex;
     flex-direction: column;
@@ -1342,15 +1289,15 @@ $lk-default:  #646b7a;
             }
 
             h4 {
-                font-size: $font-size-sm;
-                font-weight: 600;
+                font-size: $text-xs;
+                font-weight: $font-weight-semibold;
                 margin: 0;
             }
         }
     }
 
     .service-description {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
         margin: 0;
     }
@@ -1358,7 +1305,7 @@ $lk-default:  #646b7a;
     .service-meta {
         display: flex;
         gap: $space-4;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
 
         .meta-label {
@@ -1387,13 +1334,13 @@ $lk-default:  #646b7a;
     max-height: 500px;
     overflow: auto;
     background: var(--bg-code);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: 1rem;
 
     pre {
         margin: 0;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.4;
         color: var(--text-code);
         white-space: pre-wrap;

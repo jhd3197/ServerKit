@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 
 from app import db
-from app.exceptions import NotFoundError, ValidationError
+from app.exceptions import ValidationError, not_found
 from app.models import Application
 from app.models.image_update import ImageUpdateCheck
 from app.services.docker_service import DockerService
@@ -55,7 +55,7 @@ class ImageUpdateService:
         # (and a `docker login` when a private registry is bound).
         app = Application.query_active().filter_by(id=application_id).first()
         if not app:
-            raise NotFoundError('Application not found')
+            raise not_found('service')
         image_ref = app.docker_image
         if not image_ref:
             raise ValidationError('Application has no Docker image')

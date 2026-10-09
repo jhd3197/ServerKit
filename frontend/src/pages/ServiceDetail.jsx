@@ -29,6 +29,7 @@ import { Pill, ServiceTile, PageTopbar, statusKind } from '@/components/ds';
 import FavoriteStar from '@/components/FavoriteStar';
 import { useRecordVisit } from '@/hooks/useRecordVisit';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const TAB_LABELS = {
     overview: 'Overview',
@@ -36,7 +37,7 @@ const TAB_LABELS = {
     logs: 'Logs',
     // 'Environment Variables' instead of 'Environment' so it isn't confused
     // with Settings → Environment Type (deployment environment).
-    environment: 'Env Vars',
+    environment: 'Environment variables',
     shell: 'Shell',
     metrics: 'Metrics',
     packages: 'Packages',
@@ -76,7 +77,7 @@ const ServiceDetail = () => {
     const { id, tab: rawTab } = useParams();
     const navigate = useNavigate();
     const toast = useToast();
-    const toastError = toast.error;
+    const showError = toast.error;
     const { confirm } = useConfirm();
     const { service, deployConfig, loading, error, reload, performAction, deleteService } = useService(id);
     // Active tab lives in the URL (/services/:id/:tab) so it's shareable and
@@ -117,9 +118,9 @@ const ServiceDetail = () => {
                 setVersions(data.versions || []);
                 setCurrentVersion(data.current);
             })
-            .catch(() => toastError(t('app.serviceDetail.failedToLoadVersions', 'Failed to load versions')))
+            .catch((err) => toastError(showError, t('app.serviceDetail.failedToLoadVersions', "Couldn't load versions."), err))
             .finally(() => setVersionsLoading(false));
-    }, [service?.source, id, toastError, t]);
+    }, [service?.source, id, showError, t]);
 
     // Close menus on outside click
     useEffect(() => {
@@ -139,9 +140,21 @@ const ServiceDetail = () => {
         setActionLoading(action);
         try {
             await performAction(action);
-            toast.success(t('app.serviceDetail.serviceEdSuccessfully', 'Service {{action}}ed successfully', { action: action }));
+            // One string per action: interpolating the verb produced
+            // "stoped" and could not be translated.
+            const done = {
+                start: t('app.serviceDetail.serviceStarted', 'Service started'),
+                stop: t('app.serviceDetail.serviceStopped', 'Service stopped'),
+                restart: t('app.serviceDetail.serviceRestarted', 'Service restarted'),
+            };
+            toast.success(done[action] || t('app.serviceDetail.serviceUpdated', 'Service updated'));
         } catch (err) {
-            toast.error(err?.data?.error || err?.message || t('app.serviceDetail.failedToService', 'Failed to {{action}} service', { action: action }));
+            const failed = {
+                start: t('app.serviceDetail.couldntStartService', "Couldn't start the service."),
+                stop: t('app.serviceDetail.couldntStopService', "Couldn't stop the service."),
+                restart: t('app.serviceDetail.couldntRestartService', "Couldn't restart the service."),
+            };
+            toastError(toast, failed[action] || t('app.serviceDetail.couldntUpdateService', "Couldn't update the service."), err);
         } finally {
             setActionLoading(null);
             setShowDeployMenu(false);
@@ -173,7 +186,7 @@ const ServiceDetail = () => {
             toast.success(t('app.serviceDetail.deploymentStarted', 'Deployment started'));
             await reload();
         } catch (err) {
-            toast.error(err.message || t('app.serviceDetail.failedToDeployLatestCommit', 'Failed to deploy latest commit'));
+            toastError(toast, t('app.serviceDetail.failedToDeployLatestCommit', "Couldn't deploy the latest commit."), err);
         } finally {
             setActionLoading(null);
             setShowDeployMenu(false);
@@ -190,7 +203,7 @@ const ServiceDetail = () => {
             setVersions(data.versions || []);
             setCurrentVersion(data.current);
         } catch (err) {
-            toast.error(err.message || t('app.serviceDetail.failedToRollback', 'Failed to rollback'));
+            toastError(toast, t('app.serviceDetail.failedToRollback', "Couldn't roll back."), err);
         } finally {
             setActionLoading(null);
         }
@@ -213,16 +226,16 @@ const ServiceDetail = () => {
             setVersions(data.versions || []);
             setCurrentVersion(data.current);
         } catch (err) {
-            toast.error(err.message || t('app.serviceDetail.failedToUploadNewVersion', 'Failed to upload new version'));
+            toastError(toast, t('app.serviceDetail.failedToUploadNewVersion', "Couldn't upload the new version."), err);
         } finally {
             setActionLoading(null);
         }
     }
 
     async function handleDelete() {
-        const firstConfirm = await confirm({ title: t('app.serviceDetail.deleteService', 'Delete Service'), message: t('app.serviceDetail.deleteThisActionCannotBeUndone', 'Delete {{name}}? This action cannot be undone.', { name: service.name }) });
+        const firstConfirm = await confirm({ title: t('app.serviceDetail.deleteService', 'Delete service'), message: t('app.serviceDetail.deleteThisActionCannotBeUndone', 'Delete {{name}}? This action cannot be undone.', { name: service.name }) });
         if (!firstConfirm) return;
-        const secondConfirm = await confirm({ title: t('app.serviceDetail.confirmDeletion', 'Confirm Deletion'), message: t('app.serviceDetail.areYouSureThisWillPermanently', 'Are you sure? This will permanently remove the service and all its data.') });
+        const secondConfirm = await confirm({ title: t('app.serviceDetail.confirmDeletion', 'Confirm deletion'), message: t('app.serviceDetail.areYouSureThisWillPermanently', 'Delete this service? This permanently removes it and all its data.') });
         if (!secondConfirm) return;
 
         setActionLoading('delete');
@@ -230,7 +243,7 @@ const ServiceDetail = () => {
             await deleteService();
             navigate('/services');
         } catch (err) {
-            toast.error(err?.data?.error || err?.message || t('app.serviceDetail.failedToDeleteService', 'Failed to delete service'));
+            toastError(toast, t('app.serviceDetail.failedToDeleteService', "Couldn't delete the service."), err);
             setActionLoading(null);
         }
     }
@@ -249,7 +262,7 @@ const ServiceDetail = () => {
                 icon={Layers}
                 title={t('app.serviceDetail.serviceNotFound', 'Service not found')}
                 description={error || t('app.serviceDetail.theServiceYouAreLookingFor', 'The service you are looking for does not exist.')}
-                action={<Button onClick={() => navigate('/services')}>{t('app.serviceDetail.backToServices', 'Back to Services')}</Button>}
+                action={<Button onClick={() => navigate('/services')}>{t('app.serviceDetail.backToServices', 'Back to services')}</Button>}
             />
         );
     }
@@ -300,7 +313,7 @@ const ServiceDetail = () => {
                                         <polyline points="23 4 23 10 17 10"/>
                                         <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
                                     </svg>
-                                    {t('app.serviceDetail.manualDeployRestart', 'Manual Deploy (Restart)')}
+                                    {t('app.serviceDetail.manualDeployRestart', 'Manual deploy (restart)')}
                                 </Button>
                                 {isGitBased && deployConfig && (
                                     <Button variant="unstyled" type="button" onClick={handleDeployLatest} disabled={actionLoading === 'deploy-latest'}>
@@ -309,7 +322,7 @@ const ServiceDetail = () => {
                                             <circle cx="6" cy="6" r="3"/>
                                             <path d="M6 21V9a9 9 0 0 0 9 9"/>
                                         </svg>
-                                        {actionLoading === 'deploy-latest' ? 'Deploying...' : 'Deploy Latest Commit'}
+                                        {actionLoading === 'deploy-latest' ? t('app.serviceDetail.deploying', 'Deploying…') : t('app.serviceDetail.deployLatestCommit', 'Deploy latest commit')}
                                     </Button>
                                 )}
                             </div>
@@ -323,7 +336,7 @@ const ServiceDetail = () => {
                             onClick={() => handleAction('restart')}
                             disabled={actionLoading === 'restart'}
                         >
-                            {actionLoading === 'restart' ? 'Restarting...' : 'Restart'}
+                            {actionLoading === 'restart' ? t('app.serviceDetail.restarting', 'Restarting…') : t('common.actions.restart', 'Restart')}
                         </Button>
                     )}
 
@@ -334,7 +347,7 @@ const ServiceDetail = () => {
                             onClick={() => handleAction('start')}
                             disabled={actionLoading === 'start'}
                         >
-                            {actionLoading === 'start' ? 'Starting...' : 'Start'}
+                            {actionLoading === 'start' ? t('app.serviceDetail.starting', 'Starting…') : t('common.actions.start', 'Start')}
                         </Button>
                     )}
 
@@ -358,7 +371,7 @@ const ServiceDetail = () => {
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                             <rect x="6" y="6" width="12" height="12"/>
                                         </svg>
-                                        {t('app.serviceDetail.suspendService', 'Suspend Service')}
+                                        {t('app.serviceDetail.suspendService', 'Suspend service')}
                                     </Button>
                                 )}
                                 {openUrl && (
@@ -373,7 +386,7 @@ const ServiceDetail = () => {
                                             <polyline points="15 3 21 3 21 9"/>
                                             <line x1="10" y1="14" x2="21" y2="3"/>
                                         </svg>
-                                        {t('app.serviceDetail.openInBrowser', 'Open in Browser')}
+                                        {t('app.serviceDetail.openInBrowser', 'Open in browser')}
                                     </a>
                                 )}
                                 <div className="svc-detail__dropdown-divider" />
@@ -386,7 +399,7 @@ const ServiceDetail = () => {
                                         <polyline points="3 6 5 6 21 6"/>
                                         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                                     </svg>
-                                    {t('app.serviceDetail.deleteService', 'Delete Service')}
+                                    {t('app.serviceDetail.deleteService', 'Delete service')}
                                 </Button>
                             </div>
                         )}
@@ -481,11 +494,11 @@ const ServiceDetail = () => {
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
                         </svg>
-                        <span className="svc-detail__repo-url">{service.root_path || 'Local service'}</span>
+                        <span className="svc-detail__repo-url">{service.root_path || t('app.serviceDetail.localService', 'Local service')}</span>
                         {service.managed_by && (
                             <>
                                 <span className="svc-detail__repo-arrow">&rarr;</span>
-                                <span className="svc-detail__repo-branch">{service.managed_by === 'docker_compose' ? 'Docker Compose' : 'systemd'}</span>
+                                <span className="svc-detail__repo-branch">{service.managed_by === 'docker_compose' ? t('app.serviceDetail.dockerCompose', 'Docker Compose') : 'systemd'}</span>
                             </>
                         )}
                     </span>
@@ -528,7 +541,7 @@ const ServiceDetail = () => {
                                 disabled={actionLoading === 'upload-version'}
                             />
                             <FileArchive size={14} />
-                            {actionLoading === 'upload-version' ? 'Uploading...' : 'Upload New Version'}
+                            {actionLoading === 'upload-version' ? t('app.serviceDetail.uploading', 'Uploading…') : t('app.serviceDetail.uploadNewVersion', 'Upload new version')}
                         </label>
                     </div>
                     {versionsLoading ? (

@@ -4,10 +4,11 @@
 
 .sidebar {
     width: $sidebar-width;
-    // Subtle top→bottom gradient (theme-aware: dark rail in dark mode, light in
-    // light mode). Redesign "infra console" look — see docs/REDESIGN_MAP.md §2.
-    background: var(--bg-sidebar);
-    border-right: 1px solid $border-subtle;
+    // One surface step above the canvas plus a hairline edge, so the rail
+    // separates from the page without becoming a boxed card. --bg-sidebar sat
+    // ~2% off the light canvas and its --border-subtle edge vanished on both.
+    background: var(--surface);
+    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -31,7 +32,7 @@
 
         &.sidebar--mobile-open {
             transform: translateX(0);
-            box-shadow: 8px 0 32px rgba(0, 0, 0, 0.45);
+            box-shadow: $shadow-overlay;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -49,12 +50,12 @@
         align-items: center;
         justify-content: center;
         width: 44px;
-        height: 44px;
+        height: 44px; // geometry: mobile-only 44px touch target
         margin: $space-2 0 $space-1 auto;
         border: none;
         background: transparent;
         color: $text-secondary;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         cursor: pointer;
         @include transition(color);
         @include focus-ring();
@@ -112,12 +113,12 @@
     align-items: center;
     justify-content: center;
     width: 44px;
-    height: 44px;
+    height: 44px; // geometry: mobile-only 44px touch target
     flex-shrink: 0;
     border: none;
     background: transparent;
     color: $text-primary;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     @include transition(background);
     @include focus-ring();
@@ -138,7 +139,7 @@
     display: grid;
     place-items: center;
     width: 26px;
-    height: 26px;
+    height: 26px; // geometry: logo image box
     flex-shrink: 0;
 
     img {
@@ -149,8 +150,8 @@
 }
 
 .mobile-topbar__name {
-    font-size: 1.05rem;
-    font-weight: $font-weight-bold;
+    font-size: $text-md;
+    font-weight: $font-weight-semibold;
     color: $text-primary;
     letter-spacing: -0.01em;
     @include truncate();
@@ -161,7 +162,7 @@
     height: $sidebar-header-height;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: $space-3;
     padding: 0 0.5rem;
     flex-shrink: 0;
 }
@@ -169,14 +170,14 @@
 // Demo logo: a periwinkle gradient tile with a white server glyph.
 .brand-logo {
     width: 34px;
-    height: 34px;
-    border-radius: 9px;
+    height: 34px; // geometry: brand logo tile
+    border-radius: $radius-card;
     display: grid;
     place-items: center;
     flex-shrink: 0;
     color: #fff;
     background: linear-gradient(160deg, var(--accent-bright), var(--accent));
-    box-shadow: 0 4px 14px -2px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    box-shadow: none;
 
     svg {
         stroke: #fff;
@@ -189,8 +190,8 @@
 }
 
 .brand-text {
-    font-size: 1.15rem;
-    font-weight: $font-weight-bold;
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
     color: $text-primary;
     letter-spacing: -0.02em;
 }
@@ -222,8 +223,8 @@
 
 .brand-custom-logo {
     width: 32px;
-    height: 32px;
-    border-radius: $radius-md;
+    height: 32px; // geometry: custom brand logo box
+    border-radius: $radius-control;
     overflow: hidden;
     display: grid;
     place-items: center;
@@ -255,8 +256,8 @@
 }
 
 .brand-custom-text {
-    font-size: 1.15rem;
-    font-weight: $font-weight-bold;
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
     letter-spacing: -0.02em;
     color: $text-primary;
     white-space: nowrap;
@@ -267,12 +268,12 @@
 // Quick-create now lives in the brand row: logo → name → GitHub star → create.
 // The square accent treatment matches the prototype's compact app-chrome tool.
 .quick-create.quick-create--header {
-    width: 27px;
-    height: 27px;
+    width: $control-sm;
+    height: $control-sm;
     border: none;
-    border-radius: 8px;
-    background: linear-gradient(160deg, var(--accent-bright), var(--accent));
-    box-shadow: 0 2px 8px -1px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    border-radius: $radius-control;
+    background: var(--accent);
+    box-shadow: none;
     color: #fff;
     flex-shrink: 0;
     transition: filter 0.15s, transform 0.15s;
@@ -306,9 +307,9 @@
     padding: $space-1 $space-2;
     background-color: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     cursor: pointer;
     transition: border-color $transition-base, background-color $transition-base;
 
@@ -349,14 +350,11 @@
     }
 }
 
-// Navigation Category Labels — mono, uppercase, ghost (redesign)
+// Navigation category labels — quiet ghost text
 .nav-category {
-    font-family: var(--mono);
-    font-size: 0.66rem;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
     margin: 1.5rem 0 0.5rem 0.65rem;
 
     &:first-of-type {
@@ -368,22 +366,22 @@
 .nav {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: $space-hair;
 }
 
 // Navigation Item
 .nav-item {
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: $space-3;
     padding: 0.5rem 0.625rem;
-    border-radius: 8px;
+    border-radius: $radius-card;
     color: var(--text-dim);
     text-decoration: none;
-    font-size: 0.84rem;
-    font-weight: 450;
+    font-size: $text-sm;
+    font-weight: $font-weight-normal;
     transition: background-color 0.14s ease, color 0.14s ease;
-    margin-bottom: 2px;
+    margin-bottom: $space-hair;
     position: relative;
     white-space: nowrap;
     overflow: hidden;
@@ -408,7 +406,7 @@
     &.active {
         background: linear-gradient(90deg, var(--accent-bg), var(--accent-bg-soft));
         color: var(--text-primary);
-        font-weight: 500;
+        font-weight: $font-weight-medium;
 
         .nav-icon { stroke: var(--accent-bright); }
 
@@ -420,9 +418,9 @@
             transform: translateY(-50%);
             width: 3px;
             height: 18px;
-            border-radius: 0 3px 3px 0;
+            border-radius: 0 $radius-badge $radius-badge 0;
             background: var(--accent);
-            box-shadow: 0 0 10px var(--accent-glow);
+            box-shadow: none;
         }
     }
 }
@@ -446,16 +444,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: $control-sm;
+    height: $control-sm;
     border: none;
     background: transparent;
     color: $text-tertiary;
     cursor: pointer;
-    border-radius: $radius-sm;
+    border-radius: $radius-control;
     flex-shrink: 0;
     transition: all 0.15s ease;
-    margin-right: 4px;
+    margin-right: $space-1;
     @include focus-ring();
 
     &:hover {
@@ -475,7 +473,7 @@
 // Sub Navigation Item (indented under parent)
 .nav-sub-item {
     padding-left: 2.25rem;
-    font-size: 0.8rem;
+    font-size: $text-sm;
 }
 
 // Navigation Icon
@@ -494,7 +492,7 @@
 // Sidebar Footer — compact rail like the prototype's sb-foot: the divider
 // hugs the user card instead of floating a full spacing unit above it.
 .sidebar-footer {
-    padding: 11px 0;
+    padding: $space-3 0;
     margin-top: auto;
     border-top: 1px solid $border-subtle;
     flex-shrink: 0;
@@ -510,7 +508,7 @@
     background: var(--surface-2);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: $shadow-raised;
     padding: $space-1;
     z-index: $z-tooltip;
     animation: contextMenuIn 0.15s ease-out;
@@ -528,26 +526,23 @@
 }
 
 .context-menu-section {
-    padding: 6px 8px;
+    padding: $space-tight $space-2;
 }
 
 .context-menu-label {
-    font-family: var(--mono);
-    font-size: 0.6rem;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin-bottom: 6px;
+    margin-bottom: $space-tight;
 }
 
 .theme-switcher {
     display: flex;
-    gap: 2px;
+    gap: $space-hair;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 3px;
+    border-radius: $radius-card;
+    padding: $space-1;
 }
 
 .theme-btn {
@@ -555,11 +550,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 0;
+    padding: $space-tight 0;
     border: none;
     background: transparent;
     color: var(--text-faint);
-    border-radius: 6px;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all 0.15s ease;
     @include focus-ring();
@@ -571,40 +566,6 @@
     &.active {
         background: var(--accent-bg);
         color: var(--accent-bright);
-    }
-}
-
-.view-switcher {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-}
-
-.view-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 8px;
-    border: 1px solid var(--border);
-    background: var(--surface-2);
-    color: var(--text-faint);
-    font-size: 0.65rem;
-    font-weight: $font-weight-medium;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    @include focus-ring();
-
-    &:hover {
-        border-color: var(--border-strong);
-        color: var(--text-primary);
-        background: var(--surface-3);
-    }
-
-    &.active {
-        border-color: var(--accent-dim);
-        color: var(--accent-bright);
-        background: var(--accent-bg);
     }
 }
 
@@ -617,15 +578,15 @@
 .context-menu-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: $space-3;
     width: 100%;
-    padding: 8px 10px;
+    padding: $space-2 $space-3;
     border: none;
     background: transparent;
     color: $text-secondary;
-    font-size: 0.82rem;
+    font-size: $text-sm;
     font-weight: $font-weight-medium;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all 0.15s ease;
     text-align: left;
@@ -656,7 +617,7 @@
 .user-mini {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: $space-3;
     width: auto;
     padding: 0.5rem;
     cursor: pointer;
@@ -665,7 +626,7 @@
     color: inherit;
     font: inherit;
     text-align: left;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     transition: all 0.2s ease;
     @include focus-ring();
 
@@ -676,14 +637,13 @@
 
 .user-avatar {
     width: 32px;
-    height: 32px;
+    height: 32px; // geometry: avatar
     background: linear-gradient(150deg, var(--surface-3), var(--surface-2));
     border: 1px solid var(--border-strong);
-    border-radius: 9px;
+    border-radius: $radius-card;
     display: grid;
     place-items: center;
-    font-family: var(--mono);
-    font-size: 0.78rem;
+    font-size: $text-sm;
     font-weight: $font-weight-semibold;
     color: var(--text-primary);
 }
@@ -710,18 +670,17 @@
 }
 
 .user-handle {
-    font-size: 0.8rem;
-    font-weight: 550;
+    font-size: $text-sm;
+    font-weight: $font-weight-semibold;
     color: var(--text-primary);
 }
 
 .user-status {
-    font-family: var(--mono);
-    font-size: 0.64rem;
+    font-size: $text-xs;
     color: var(--green);
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: $space-tight;
     margin-top: 1px;
 
     &::before {
@@ -730,7 +689,6 @@
         height: 5px;
         background: currentColor;
         border-radius: 50%;
-        box-shadow: 0 0 6px currentColor;
     }
 }
 
@@ -759,7 +717,7 @@
             &:hover,
             &:focus-within {
                 width: $sidebar-width;
-                box-shadow: 8px 0 32px rgba(0, 0, 0, 0.28);
+                box-shadow: $shadow-overlay;
             }
 
             // Collapsed state: bare icon rail. font-size: 0 hides nav text while
@@ -830,8 +788,8 @@
             gap: $space-3;
             padding: 0 $space-4;
             border-right: none;
-            border-bottom: 1px solid $border-subtle;
-            background: var(--bg-sidebar);
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
         }
 
         .brand-section {
@@ -881,7 +839,7 @@
                 width: auto;
                 height: 2px;
                 transform: none;
-                border-radius: 2px 2px 0 0;
+                border-radius: $radius-badge $radius-badge 0 0;
             }
         }
 

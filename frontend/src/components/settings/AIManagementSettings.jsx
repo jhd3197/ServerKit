@@ -5,8 +5,12 @@ import { FormField } from '../FormField';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Switch } from '../ui/switch';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '../ui/select';
 import ModelBinding from '../ai/ModelBinding';
 import EmptyState from '../EmptyState';
+
+// Radix Select cannot hold an empty value; this stands in for "no override".
+const PROVIDER_DEFAULT = '__default';
 
 export default function AIManagementSettings({ connections, defaultId }) {
     const { t } = useTranslation();
@@ -50,9 +54,14 @@ export default function AIManagementSettings({ connections, defaultId }) {
         {config[key].map((candidate, index) => <div className="sk-ai-candidates__row" key={`${key}-${index}`}>
             <ModelBinding id={`ai-${key}-${index}`} value={candidate} connections={connections} disabled={busy} discover onChange={(next) => change(key, config[key].map((item, i) => i === index ? { ...next, ...(key === 'pool' ? { tier: candidate.tier } : {}) } : item))} />
             {key === 'pool' && <FormField htmlFor={`ai-tier-${index}`} label={t('ai.management.tier', 'Capability tier')}>
-                <select id={`ai-tier-${index}`} value={candidate.tier} disabled={busy} onChange={(e) => change(key, config[key].map((item, i) => i === index ? { ...item, tier: e.target.value } : item))}>
-                    <option value="budget">{t('ai.management.utility', 'Utility')}</option><option value="standard">{t('ai.management.standard', 'Standard')}</option><option value="premium">{t('ai.management.advanced', 'Advanced')}</option>
-                </select>
+                <Select value={candidate.tier} disabled={busy} onValueChange={(tier) => change(key, config[key].map((item, i) => i === index ? { ...item, tier } : item))}>
+                    <SelectTrigger id={`ai-tier-${index}`}><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="budget">{t('ai.management.utility', 'Utility')}</SelectItem>
+                        <SelectItem value="standard">{t('ai.management.standard', 'Standard')}</SelectItem>
+                        <SelectItem value="premium">{t('ai.management.advanced', 'Advanced')}</SelectItem>
+                    </SelectContent>
+                </Select>
             </FormField>}
             <div className="settings-actions">
                 {key === 'fallbacks' && <Button type="button" variant="outline" disabled={busy || index === 0} onClick={() => { const next = [...config[key]]; [next[index - 1], next[index]] = [next[index], next[index - 1]]; change(key, next); }}>{t('ai.management.moveUp', 'Move up')}</Button>}
@@ -82,10 +91,15 @@ export default function AIManagementSettings({ connections, defaultId }) {
             <p>{t('ai.management.routingHint', 'Automatic routing uses only the approved pool below. An explicit model choice takes priority. Capability tiers guide selection; speed is not a measured guarantee.')}</p>
             {toggle('routing_enabled', t('ai.management.enableRouting', 'Enable automatic routing'))}
             <FormField htmlFor="ai-routing-strategy" label={t('ai.management.strategy', 'Strategy')}>
-                <select id="ai-routing-strategy" value={config.strategy} disabled={busy} onChange={(e) => change('strategy', e.target.value)}>
-                    <option value="cost_optimized">{t('ai.management.economical', 'Cost optimized')}</option><option value="balanced">{t('ai.management.balanced', 'Balanced')}</option>
-                    <option value="quality_first">{t('ai.management.quality', 'Quality first')}</option><option value="fast">{t('ai.management.fast', 'Fast')}</option>
-                </select>
+                <Select value={config.strategy} disabled={busy} onValueChange={(value) => change('strategy', value)}>
+                    <SelectTrigger id="ai-routing-strategy"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="cost_optimized">{t('ai.management.economical', 'Cost optimized')}</SelectItem>
+                        <SelectItem value="balanced">{t('ai.management.balanced', 'Balanced')}</SelectItem>
+                        <SelectItem value="quality_first">{t('ai.management.quality', 'Quality first')}</SelectItem>
+                        <SelectItem value="fast">{t('ai.management.fast', 'Fast')}</SelectItem>
+                    </SelectContent>
+                </Select>
             </FormField>
             {candidates('pool')}
             <FormField htmlFor="ai-routing-sample" label={t('ai.management.previewTask', 'Preview a task')} hint={t('ai.management.previewHint', 'Uses the current draft. Preview does not send your task to a provider or spend tokens.')}>
@@ -100,11 +114,14 @@ export default function AIManagementSettings({ connections, defaultId }) {
         <section className="settings-card">
             <h3>{t('ai.management.behavior', 'Generation and spending')}</h3>
             <FormField htmlFor="ai-budget-policy" label={t('ai.management.budgetPolicy', 'Conversation budget behavior')}>
-                <select id="ai-budget-policy" value={config.budget_policy} disabled={busy} onChange={(e) => change('budget_policy', e.target.value)}>
-                    <option value="hard_stop">{t('ai.management.stop', 'Stop at the limit')}</option>
-                    <option value="warn_and_continue">{t('ai.management.warn', 'Warn and continue')}</option>
-                    <option value="degrade">{t('ai.management.degrade', 'Use a cheaper model near the limit, then stop')}</option>
-                </select>
+                <Select value={config.budget_policy} disabled={busy} onValueChange={(value) => change('budget_policy', value)}>
+                    <SelectTrigger id="ai-budget-policy"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="hard_stop">{t('ai.management.stop', 'Stop at the limit')}</SelectItem>
+                        <SelectItem value="warn_and_continue">{t('ai.management.warn', 'Warn and continue')}</SelectItem>
+                        <SelectItem value="degrade">{t('ai.management.degrade', 'Use a cheaper model near the limit, then stop')}</SelectItem>
+                    </SelectContent>
+                </Select>
             </FormField>
             <div className="ai-connections__fields">
                 {numberField('max_output_tokens', t('ai.management.outputTokens', 'Maximum output tokens per response'), 64, 65536)}
@@ -119,9 +136,15 @@ export default function AIManagementSettings({ connections, defaultId }) {
                         <Input id="ai-temperature" type="number" min="0" max="2" step="0.1" disabled={busy} value={config.temperature ?? ''} onChange={(e) => change('temperature', e.target.value === '' ? null : e.target.value)} />
                     </FormField>
                     <FormField htmlFor="ai-reasoning" label={t('ai.management.reasoning', 'Reasoning effort')} hint={t('ai.management.reasoningHint', 'Applied to supported OpenAI reasoning models. Other models retain provider defaults.')}>
-                        <select id="ai-reasoning" disabled={busy} value={config.reasoning_effort || ''} onChange={(e) => change('reasoning_effort', e.target.value || null)}>
-                            <option value="">{t('ai.management.providerDefault', 'Provider default')}</option><option value="low">{t('ai.management.low', 'Low')}</option><option value="medium">{t('ai.management.medium', 'Medium')}</option><option value="high">{t('ai.management.high', 'High')}</option>
-                        </select>
+                        <Select disabled={busy} value={config.reasoning_effort || PROVIDER_DEFAULT} onValueChange={(value) => change('reasoning_effort', value === PROVIDER_DEFAULT ? null : value)}>
+                            <SelectTrigger id="ai-reasoning"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={PROVIDER_DEFAULT}>{t('ai.management.providerDefault', 'Provider default')}</SelectItem>
+                                <SelectItem value="low">{t('ai.management.low', 'Low')}</SelectItem>
+                                <SelectItem value="medium">{t('ai.management.medium', 'Medium')}</SelectItem>
+                                <SelectItem value="high">{t('ai.management.high', 'High')}</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </FormField>
                 </div>
             </details>

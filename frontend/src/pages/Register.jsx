@@ -136,7 +136,7 @@ const Register = () => {
                         <ServerKitLogo width={40} height={40} />
                     </div>
                     <h1>{publicTitle}</h1>
-                    <p>{inviteInfo ? `You've been invited as ${inviteInfo.role}` : 'Create your account'}</p>
+                    <p>{inviteInfo ? t('auth.invitedAsRole', "You've been invited as {{role}}", { role: inviteInfo.role }) : t('auth.createYourAccount', 'Create your account')}</p>
                 </div>
 
                 {error && <div className="error-message">{error}</div>}
@@ -180,7 +180,7 @@ const Register = () => {
                     </div>
 
                     <div className="form-group">
-                        <Label htmlFor="confirmPassword">{t('auth.confirmPassword', 'Confirm Password')}</Label>
+                        <Label htmlFor="confirmPassword">{t('auth.confirmPassword', 'Confirm password')}</Label>
                         <Input
                             type="password"
                             id="confirmPassword"
@@ -192,7 +192,7 @@ const Register = () => {
                     </div>
 
                     <Button type="submit" className="btn-full" disabled={loading}>
-                        {loading ? t('auth.creatingAccount', 'Creating account…') : t('auth.createAccount', 'Create Account')}
+                        {loading ? t('auth.creatingAccount', 'Creating account…') : t('auth.createAccount', 'Create account')}
                     </Button>
                 </form>
 

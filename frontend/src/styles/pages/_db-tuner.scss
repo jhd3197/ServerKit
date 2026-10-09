@@ -1,6 +1,8 @@
 // ============================================
 // DB CONFIG TUNER
 // Curated engine settings: current vs suggested, apply/rollback.
+// Also the Database Explorer Insights tab. Both are Databases studio
+// surfaces (components/databases/), so check-tables.mjs exempts this file.
 // ============================================
 
 .db-tuner {
@@ -17,13 +19,13 @@
     &__hint {
         flex: 1;
         margin: 0;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
         color: $text-secondary;
     }
 
     &__error {
         margin: 0;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
         color: $color-danger;
     }
 
@@ -31,7 +33,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
         color: $text-secondary;
         white-space: nowrap;
         cursor: pointer;
@@ -40,13 +42,13 @@
     &__table-wrap {
         overflow-x: auto;
         border: 1px solid $border-color;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
 
         th,
         td {
@@ -58,7 +60,7 @@
 
         th {
             color: $text-secondary;
-            font-weight: 600;
+            font-weight: $font-weight-semibold;
             background: $bg-secondary;
             white-space: nowrap;
         }
@@ -80,9 +82,9 @@
 
     &__desc {
         display: block;
-        margin-top: 2px;
+        margin-top: $space-hair;
         color: $text-muted;
-        font-size: 0.75rem;
+        font-size: $text-xs;
         max-width: 340px;
     }
 
@@ -93,19 +95,19 @@
 
         &--suggest {
             color: $accent-primary;
-            font-weight: 600;
+            font-weight: $font-weight-semibold;
         }
     }
 
     &__input {
         width: 110px;
-        padding: 4px $space-2;
+        padding: $space-1 $space-2;
         background: $bg-input;
         border: 1px solid $border-color;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-primary;
         font-family: $font-mono;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
 
         &:focus {
             outline: none;
@@ -115,8 +117,8 @@
 
     &__range {
         display: block;
-        margin-top: 2px;
-        font-size: 0.6875rem;
+        margin-top: $space-hair;
+        font-size: $text-xs;
         color: $text-muted;
     }
 
@@ -124,5 +126,95 @@
         display: flex;
         align-items: center;
         gap: $space-3;
+    }
+}
+
+// Database Explorer: Insights tab (plan 86 §A3).
+// Component: databases/InsightsPanel.
+.dbx-insights {
+    padding: $space-4;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    overflow: auto;
+
+    &__head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: $space-4;
+    }
+
+    &__gauges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $space-8;
+    }
+
+    &__gauge {
+        display: flex;
+        flex-direction: column;
+        gap: $space-hair;
+    }
+
+    &__label,
+    &__sub {
+        font-size: $text-xs;
+        color: var(--text-dim);
+    }
+
+    &__value {
+        font-size: $text-lg;
+        color: var(--text);
+    }
+
+    &__title {
+        margin: $space-2 0 0;
+        font-size: $text-sm;
+        color: var(--text);
+    }
+
+    &__table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: $text-sm;
+
+        th {
+            text-align: start;
+            font-weight: $font-weight-medium;
+            color: var(--text-dim);
+            padding: $space-tight $space-2;
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        td {
+            padding: $space-tight $space-2;
+            border-bottom: 1px solid var(--border-soft);
+            font-family: var(--mono);
+            white-space: nowrap;
+        }
+    }
+
+    &__query {
+        max-width: 0;
+        width: 60%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__note {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $space-2;
+        margin: 0;
+        font-size: $text-sm;
+        color: var(--text-dim);
+
+        p { margin: 0; }
+    }
+
+    &__error {
+        color: var(--red);
     }
 }

@@ -16,7 +16,7 @@
 
     &__blurb {
         margin: 0 0 $space-4;
-        font-size: 12.5px;
+        font-size: $text-sm;
         line-height: 1.5;
         color: var(--text-dim);
         max-width: 68ch;
@@ -55,27 +55,26 @@
     &__body {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 0;
         flex: 1;
     }
 
     &__title {
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
 
     &__detail {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
         overflow-wrap: anywhere;
     }
 
     // Rendered as a ghost Button — just tighten it to a mono affordance.
     &__difftoggle {
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 }
@@ -88,7 +87,7 @@
     border-radius: var(--radius);
     background: var(--surface-2);
     font-family: var(--mono);
-    font-size: 11.5px;
+    font-size: $text-xs;
     line-height: 1.5;
     color: var(--text-dim);
     max-height: 320px;
@@ -116,17 +115,15 @@
 
     &__heading {
         margin: 0 0 $space-3;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         color: var(--text-faint);
     }
 }
 
 .doctor-check__why {
-    margin-top: 2px;
-    font-size: 11.5px;
+    margin-top: $space-hair;
+    font-size: $text-xs;
     line-height: 1.45;
     color: var(--text-faint);
 }
@@ -154,12 +151,12 @@
     gap: $space-1;
     max-height: 240px;
     overflow: auto;
-    font-size: 12.5px;
+    font-size: $text-sm;
     color: var(--text-dim);
 
     code {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
     }
 
     &__warn {
@@ -171,7 +168,7 @@
 .doctor-check--snoozed {
     opacity: 0.6;
 
-    .doctor-check__title { font-weight: 500; }
+    .doctor-check__title { font-weight: $font-weight-medium; }
 }
 
 .doctor-check__snooze {
@@ -189,9 +186,7 @@
     margin-right: $space-2;
 
     &-label {
-        font-size: 11.5px;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -201,7 +196,7 @@
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
         color: var(--text);
-        font-size: 12.5px;
+        font-size: $text-sm;
         padding: $space-1 $space-3;
         cursor: pointer;
 
@@ -223,14 +218,14 @@
 
     &__name {
         font-weight: $font-weight-semibold;
-        font-size: 13.5px;
+        font-size: $text-sm;
         color: var(--text);
     }
 
     // The agent's advertised hostname, next to the display name.
     &__host {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         overflow-wrap: anywhere;
     }
@@ -239,7 +234,7 @@
         display: flex;
         gap: $space-2;
         margin-left: auto;
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -248,7 +243,7 @@
     // A paired server the sweep has not reached yet.
     &__hint {
         margin: 0;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }

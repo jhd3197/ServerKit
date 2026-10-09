@@ -29,7 +29,7 @@ import GlobalStatusBar from '../components/GlobalStatusBar';
 
 // The Automations extension (tramo) contributes /automations/edit/:slug with
 // layout:'full', so it's picked up dynamically via fullPagePaths below.
-const FULL_PAGE_ROUTES = ['/files', '/docker'];
+const FULL_PAGE_ROUTES = ['/files'];
 
 const DashboardLayout = () => {
     const { t } = useTranslation();
@@ -170,7 +170,7 @@ const ManagedOutlet = ({ pathname, isFullPageRoute }) => {
         <>
             {lapsed && (
                 <div className="managed-lapsed-banner" data-testid="managed-profile-lapsed">
-                    {t('managed.lapsed', 'The managed profile from ServerKit Cloud lapsed — the full panel is back. It returns if Cloud reconnects and re-sends it.')}
+                    {t('managed.lapsed', 'The managed profile from ServerKit Cloud lapsed, so the full panel is back. It returns if Cloud reconnects and re-sends it.')}
                 </div>
             )}
             <ErrorBoundary resetKey={pathname}>

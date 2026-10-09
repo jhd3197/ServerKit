@@ -3,6 +3,7 @@ import { RefreshCw, Search, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 
 /**
  * One repo picker for every git provider (plan 79 G1).
@@ -197,15 +198,14 @@ const RepoPicker = ({ provider, onPick }) => {
                     <label htmlFor={`${provider.id}-branch`}>
                         {t('git.picker.branch', 'Branch')}
                     </label>
-                    <select
-                        id={`${provider.id}-branch`}
-                        value={branch}
-                        onChange={(e) => pickBranch(e.target.value)}
-                    >
-                        {branches.map((name) => (
-                            <option key={name} value={name}>{name}</option>
-                        ))}
-                    </select>
+                    <Select value={branch} onValueChange={pickBranch}>
+                        <SelectTrigger id={`${provider.id}-branch`}><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {branches.map((name) => (
+                                <SelectItem key={name} value={name}>{name}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
             )}
         </div>

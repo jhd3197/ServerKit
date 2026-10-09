@@ -140,7 +140,7 @@ export default function ResourcePicker({
                         )}
                         {search.isError && (
                             <div className="sk-resource-picker__message sk-resource-picker__message--error" role="alert">
-                                {t('common.error.failedToLoad', 'Failed to load')}
+                                {t('common.error.failedToLoad', "Couldn't load this.")}
                             </div>
                         )}
                         {!search.isLoading && !search.isError && !hasOptions && (

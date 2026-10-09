@@ -43,16 +43,16 @@ $skw-z-tv: 200;
 .skw-bar {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: $space-4;
     flex-wrap: wrap;
-    margin-bottom: 14px;
+    margin-bottom: $space-4;
 
     // Range / refresh / variable pickers + edit toggle. `margin-left:auto`
     // rather than a spacer element so the tabs keep their natural width.
     &__ctl {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         margin-left: auto;
         flex-wrap: wrap;
 
@@ -66,7 +66,7 @@ $skw-z-tv: 200;
         .skw-varpick,
         .skw-iconbtn,
         .skw-barbtn {
-            height: 32px;
+            height: $control-md;
             flex-shrink: 0;
         }
 
@@ -92,15 +92,15 @@ $skw-z-tv: 200;
 .skw-barbtn {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 0 12px;
+    gap: $space-2;
+    padding: 0 $space-3;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-card;
     background: var(--surface-2);
     color: var(--text-dim);
     font-family: inherit;
-    font-size: 12.5px;
-    font-weight: 500;
+    font-size: $text-sm;
+    font-weight: $font-weight-medium;
     white-space: nowrap;
     cursor: pointer;
     transition: 0.13s;
@@ -130,21 +130,22 @@ $skw-z-tv: 200;
 .skw-tabs {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: $space-1;
     flex-wrap: wrap;
 }
 
 .skw-tab {
     display: flex;
     align-items: center;
-    gap: 7px;
-    padding: 7px 11px;
+    gap: $space-2;
+    height: $control-md;
+    padding: 0 $space-3;
     border: 1px solid transparent;
-    border-radius: 9px;
+    border-radius: $radius-control;
     background: none;
     color: var(--text-faint);
     font-family: inherit;
-    font-size: 13px;
+    font-size: $text-sm;
     cursor: pointer;
     transition: 0.13s;
 
@@ -167,17 +168,16 @@ $skw-z-tv: 200;
 
     // Widget count on the tab.
     &__count {
-        padding: 1px 5px;
-        border-radius: 5px;
+        padding: 1px $space-tight;
+        border-radius: $radius-control;
         background: var(--surface-3);
         color: var(--text-ghost);
-        font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
     }
 
     // "+" new-board affordance — icon only, so it drops the label padding.
     &--add {
-        padding: 8px;
+        padding: $space-2;
         color: var(--text-faint);
     }
 }
@@ -186,13 +186,13 @@ $skw-z-tv: 200;
 // replaces the tab in place and has to read as "editing" without growing.
 .skw-rename {
     width: 130px;
-    padding: 2px 6px;
+    padding: $space-hair $space-tight;
     border: 1px solid var(--accent);
-    border-radius: 6px;
+    border-radius: $radius-control;
     background: var(--surface-3);
     color: var(--text);
     font-family: var(--sans);
-    font-size: 13px;
+    font-size: $text-sm;
     outline: none;
 }
 
@@ -200,15 +200,15 @@ $skw-z-tv: 200;
 .skw-varpick {
     display: flex;
     align-items: center;
-    gap: 8px;
-    height: 32px;
-    padding: 0 10px;
+    gap: $space-2;
+    height: $control-md;
+    padding: 0 $space-3;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-control;
     background: var(--surface-2);
     color: var(--text);
     font-family: inherit;
-    font-size: 12.5px;
+    font-size: $text-sm;
     cursor: pointer;
     transition: 0.13s;
 
@@ -233,81 +233,22 @@ $skw-z-tv: 200;
 
     &__k {
         color: var(--text-ghost);
-        font-size: 10px;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
+        font-size: $text-xs;
     }
     &__v {
         font-family: var(--mono);
-        font-size: 12px;
-    }
-}
-
-// Refresh-interval select. Sizing only — the select chrome comes from the
-// shared form styles.
-.skw-refresh {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-
-    select {
-        // `appearance: none` matters: without it the browser paints its own
-        // control, which on a dark panel arrives as a light box with a
-        // system chevron and ignores every rule below.
-        appearance: none;
-        height: 32px;
-        padding: 0 26px 0 10px;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        background: var(--surface-2);
-        color: var(--text-dim);
-        font-family: var(--mono);
-        font-size: 11.5px;
-        cursor: pointer;
-        outline: none;
-        transition: 0.13s;
-
-        &:hover {
-            color: var(--text);
-            border-color: var(--border-strong);
-            background: var(--surface-3);
-        }
-
-        &:focus-visible {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-bg);
-        }
-
-        // Native popups are drawn by the OS; name the colours or a dark theme
-        // gets white-on-white options.
-        option {
-            background: var(--surface-2);
-            color: var(--text);
-        }
-    }
-
-    // Our own chevron, since the native one is gone.
-    &::after {
-        content: '';
-        position: absolute;
-        right: 10px;
-        width: 6px;
-        height: 6px;
-        border-right: 1.5px solid var(--text-faint);
-        border-bottom: 1.5px solid var(--text-faint);
-        transform: translateY(-2px) rotate(45deg);
-        pointer-events: none;
+        font-size: $text-xs;
     }
 }
 
 // Square icon button used across the bar and the widget head.
 .skw-iconbtn {
-    width: 32px;
-    height: 32px;
+    width: $control-md;
+    height: $control-md;
     display: grid;
     place-items: center;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-control;
     background: var(--surface-2);
     color: var(--text-faint);
     cursor: pointer;
@@ -322,7 +263,7 @@ $skw-z-tv: 200;
     // Head actions are smaller and borderless — they live inside a 30px row.
     &--bare {
         width: 24px;
-        height: 24px;
+        height: 24px; // geometry: widget head is sized by the dashboard grid (GRID_ROW 88); 28 would eat 1-row widget bodies
         border-color: transparent;
         background: none;
 
@@ -334,13 +275,13 @@ $skw-z-tv: 200;
 .skw-hint {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-    padding: 8px 12px;
+    gap: $space-2;
+    margin-bottom: $space-3;
+    padding: $space-2 $space-3;
     border: 1px solid var(--accent-dim);
-    border-radius: 8px;
+    border-radius: $radius-card;
     @include status-variant(var(--accent-bright), var(--accent-bg));
-    font-size: 11.5px;
+    font-size: $text-xs;
 
     // Same shape, but for a board that failed to save or load.
     &--error {
@@ -385,7 +326,7 @@ $skw-z-tv: 200;
         position: absolute;
         inset: 0;
         pointer-events: none;
-        border-radius: 8px;
+        border-radius: $radius-card;
         background-image:
             linear-gradient(to right, var(--accent-bg) 1px, transparent 1px),
             linear-gradient(to bottom, var(--accent-bg) 1px, transparent 1px);
@@ -400,11 +341,11 @@ $skw-z-tv: 200;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: $space-3;
         border: 1.5px dashed var(--border-strong);
         border-radius: var(--radius);
         color: var(--text-faint);
-        font-size: 13px;
+        font-size: $text-sm;
     }
 }
 
@@ -439,15 +380,15 @@ $skw-z-tv: 200;
     &.is-selected,
     &.is-sel {
         border-color: var(--accent-bright);
-        box-shadow: 0 0 0 3px var(--accent-bg);
+        box-shadow: $focus-ring;
     }
 
     &__head {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         flex-shrink: 0;
-        padding: 9px 11px 8px;
+        padding: $space-2 $space-3 $space-2;
         border-bottom: 1px solid var(--border-soft);
     }
 
@@ -463,8 +404,8 @@ $skw-z-tv: 200;
     &__title {
         flex: 1;
         min-width: 0;
-        font-size: 12.5px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -480,7 +421,7 @@ $skw-z-tv: 200;
         flex-shrink: 0;
         border-radius: 50%;
         background: var(--green);
-        box-shadow: 0 0 6px var(--green);
+        box-shadow: none;
         animation: skw-tick-pulse 1.6s ease-in-out infinite;
 
         // A paused / disconnected stream keeps the dot but drops the pulse,
@@ -570,24 +511,24 @@ $skw-z-tv: 200;
     right: 0;
     z-index: $z-tooltip;
     width: 196px;
-    padding: 4px;
+    padding: $space-1;
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-md);
+    box-shadow: $shadow-raised;
 
     &__item {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: $space-3;
         width: 100%;
-        padding: 7px 10px;
+        padding: $space-2 $space-3;
         border: none;
-        border-radius: 6px;
+        border-radius: $radius-control;
         background: none;
         color: var(--text-dim);
         font-family: inherit;
-        font-size: 12.5px;
+        font-size: $text-sm;
         text-align: left;
         cursor: pointer;
         transition: 0.12s;
@@ -622,7 +563,7 @@ $skw-z-tv: 200;
     // Negative margins pull the rule to the panel edges, past the 4px pad.
     &__sep {
         height: 1px;
-        margin: 4px -4px;
+        margin: $space-1 -4px;
         background: var(--border-soft);
     }
 }
@@ -630,9 +571,9 @@ $skw-z-tv: 200;
 // Unknown widget type / no data. Deliberately plain: an unrecognised type is
 // a config problem, not an error, and the frame around it already names it.
 .skw-empty {
-    padding: 16px;
+    padding: $space-4;
     color: var(--text-faint);
-    font-size: 12.5px;
+    font-size: $text-sm;
 
     // In-flight, not a message. Quieter than the resting note and pulsing on
     // the shared tick, so a frame that is still fetching cannot be misread as
@@ -663,13 +604,13 @@ $skw-z-tv: 200;
     // tile — the reading is the point of this widget, so it is pinned first and
     // the chart gets whatever is left.
     justify-content: flex-start;
-    padding: 12px 13px;
+    padding: $space-3 $space-3;
 
     &__value {
         flex: 0 0 auto;
         color: var(--text);
-        font-size: 28px;
-        font-weight: 700;
+        font-size: $text-2xl;
+        font-weight: $font-weight-semibold;
         line-height: 1.1;
         letter-spacing: -0.01em;
         // Even digit columns, and an ellipsis instead of a burst tile when a
@@ -684,16 +625,16 @@ $skw-z-tv: 200;
         flex: 0 0 auto;
         display: flex;
         align-items: center;
-        gap: 9px;
-        margin-top: 5px;
+        gap: $space-2;
+        margin-top: $space-tight;
         color: var(--text-faint);
-        font-size: 11px;
+        font-size: $text-xs;
     }
 
     &__delta {
         display: inline-flex;
         align-items: center;
-        gap: 2px;
+        gap: $space-hair;
 
         &--up,
         .up { color: var(--green); }
@@ -708,7 +649,7 @@ $skw-z-tv: 200;
         // taller stat widget grows its trend line instead of banking dead
         // space under the value. `min-height: 0` lets it shrink in a 2-row
         // tile without pushing the meta row out.
-        margin-top: 8px;
+        margin-top: $space-2;
         margin-left: -2px;
         margin-right: -2px;
         line-height: 0;
@@ -729,7 +670,7 @@ $skw-z-tv: 200;
     min-height: 0;
     display: flex;
     flex-direction: column;
-    padding: 8px 10px 6px;
+    padding: $space-2 $space-3 $space-tight;
 
     &__chart {
         flex: 1;
@@ -748,18 +689,17 @@ $skw-z-tv: 200;
 .skw-legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    padding-top: 8px;
+    gap: $space-3;
+    padding-top: $space-2;
     color: var(--text-faint);
-    font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: $text-xs;
 
     &__item {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
 
-        b { color: var(--text); font-weight: 600; }
+        b { color: var(--text); font-weight: $font-weight-semibold; }
     }
 
     // Series swatch — colour comes inline from the metric catalog.
@@ -767,7 +707,7 @@ $skw-z-tv: 200;
     .sw {
         width: 8px;
         height: 8px;
-        border-radius: 2px;
+        border-radius: $radius-badge;
         flex-shrink: 0;
     }
 }
@@ -779,12 +719,12 @@ $skw-z-tv: 200;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 10px;
+    gap: $space-tight;
+    padding: $space-3;
 
     &__sub {
         color: var(--text-faint);
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 
     &__svg {
@@ -792,7 +732,7 @@ $skw-z-tv: 200;
         max-width: 200px;
 
         text {
-            font: 600 24px var(--sans);
+            font: $font-weight-semibold $text-xl var(--sans);
         }
     }
 }
@@ -801,8 +741,8 @@ $skw-z-tv: 200;
 .skw-topn {
     display: flex;
     flex-direction: column;
-    gap: 9px;
-    padding: 12px 13px;
+    gap: $space-2;
+    padding: $space-3 $space-3;
     overflow: auto;
     @include custom-scrollbar;
 
@@ -812,11 +752,11 @@ $skw-z-tv: 200;
         display: grid;
         grid-template-columns: 1fr 2fr auto;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
     }
 
     &__label {
-        font-size: 12px;
+        font-size: $text-xs;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -824,7 +764,7 @@ $skw-z-tv: 200;
 
     &__track {
         height: 7px;
-        border-radius: 4px;
+        border-radius: $radius-badge;
         background: var(--surface-3);
         overflow: hidden;
     }
@@ -834,17 +774,23 @@ $skw-z-tv: 200;
     &__track i {
         display: block;
         height: 100%;
-        border-radius: 4px;
+        border-radius: $radius-badge;
         transition: width 0.4s ease;
     }
 
     &__value {
         color: var(--text-dim);
-        font-size: 11px;
+        font-size: $text-xs;
     }
 }
 
 // ---- table: apps / servers / containers / deploys -----------
+// The one list table that is not a DataTable (listed in check-tables.mjs
+// OWNERS): a widget can be three rows tall, so it keeps compact rows instead
+// of the 40px DataTable minimum, and its header sticks inside the widget body.
+// Everything else follows the .sk-dtable spec — 32px unfilled header (the
+// frame's own surface, so scrolled rows slide under it), faint labels,
+// horizontal separators only, $space-4 outer edges.
 .skw-table-wrap {
     flex: 1;
     overflow: auto;
@@ -854,54 +800,59 @@ $skw-z-tv: 200;
 .skw-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12px;
+    font-size: $text-xs;
 
-    // Sticky head so a widget only 3 rows tall still shows its columns.
     th {
         position: sticky;
         top: 0;
         z-index: 1;
-        padding: 7px 12px;
-        border-bottom: 1px solid var(--border-soft);
-        background: var(--surface-2);
-        color: var(--text-ghost);
-        font-size: 10px;
-        font-weight: 600;
-        letter-spacing: 0.05em;
+        height: $control-md;
+        padding: 0 $space-3;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text-faint);
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         text-align: left;
-        text-transform: uppercase;
+        white-space: nowrap;
     }
 
     td {
         max-width: 180px;
-        padding: 7px 12px;
+        padding: $space-2 $space-3;
         border-bottom: 1px solid var(--border-soft);
         color: var(--text-dim);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
 
-        &.nm { color: var(--text); font-weight: 500; }
-        &.mono { font-family: var(--mono); font-size: 11px; }
+        &.nm { color: var(--text); font-weight: $font-weight-medium; }
+        &.mono { font-family: var(--mono); font-size: $text-xs; }
     }
+
+    th:first-child,
+    td:first-child { padding-inline-start: $space-4; }
+
+    th:last-child,
+    td:last-child { padding-inline-end: $space-4; }
 
     tbody tr {
         cursor: pointer;
-        transition: background 0.1s;
+        transition: background 0.12s;
 
         &:hover { background: var(--surface-2); }
+        &:last-child td { border-bottom: none; }
     }
 }
 
 // Mono status chip used by the table and list widgets. Kept local rather than
 // @extend-ing %sk-state: this one is lowercase and sized for a 12px row.
 .skw-pill {
-    padding: 2px 7px;
-    border-radius: 5px;
+    padding: $space-hair $space-2;
+    border-radius: $radius-control;
     background: var(--surface-3);
     color: var(--text-faint);
-    font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
 
     &--ok,
     &.ok { color: var(--green); background: var(--green-bg); }
@@ -921,12 +872,12 @@ $skw-z-tv: 200;
     &__bar {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: $space-3;
         flex-shrink: 0;
-        padding: 6px 11px;
+        padding: $space-tight $space-3;
         border-bottom: 1px solid var(--border-soft);
         color: var(--text-faint);
-        font-size: 10.5px;
+        font-size: $text-xs;
 
         .lv-err { color: var(--red); }
         .lv-warn { color: var(--amber); }
@@ -938,18 +889,18 @@ $skw-z-tv: 200;
     &__body {
         flex: 1;
         overflow: auto;
-        padding: 6px 0;
+        padding: $space-tight 0;
         background: var(--bg-code);
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         line-height: 1.65;
         @include custom-scrollbar;
     }
 
     &__line {
         display: flex;
-        gap: 9px;
-        padding: 0 11px;
+        gap: $space-2;
+        padding: 0 $space-3;
         color: var(--text-dim);
         white-space: pre-wrap;
         word-break: break-all;
@@ -976,13 +927,13 @@ $skw-z-tv: 200;
 .skw-list {
     flex: 1;
     overflow: auto;
-    padding: 6px 0;
+    padding: $space-tight 0;
     @include custom-scrollbar;
 }
 
 // ---- deploys: recent deployment jobs ------------------------
 .skw-dep {
-    padding: 9px 13px;
+    padding: $space-2 $space-3;
     border-bottom: 1px solid var(--border-soft);
     cursor: pointer;
     transition: background 0.12s;
@@ -993,23 +944,23 @@ $skw-z-tv: 200;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
+        gap: $space-3;
     }
 
-    &__name { font-size: 12.5px; font-weight: 550; }
-    &__state { font-size: 10.5px; }
+    &__name { font-size: $text-sm; font-weight: $font-weight-semibold; }
+    &__state { font-size: $text-xs; }
 
     // Step ribbon: one segment per pipeline stage, so progress reads at a
     // glance without a percentage.
     &__steps {
         display: flex;
-        gap: 3px;
-        margin: 7px 0 5px;
+        gap: $space-1;
+        margin: $space-2 0 $space-tight;
 
         .st {
             flex: 1;
             height: 4px;
-            border-radius: 2px;
+            border-radius: $radius-badge;
             background: var(--surface-3);
 
             &.done { background: var(--green); }
@@ -1023,7 +974,7 @@ $skw-z-tv: 200;
 
     &__meta {
         color: var(--text-ghost);
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 }
 
@@ -1031,8 +982,8 @@ $skw-z-tv: 200;
 .skw-alert {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 13px;
+    gap: $space-3;
+    padding: $space-3 $space-3;
     border-bottom: 1px solid var(--border-soft);
     cursor: pointer;
     transition: background 0.12s;
@@ -1056,16 +1007,16 @@ $skw-z-tv: 200;
     }
 
     &__title {
-        font-size: 12.5px;
+        font-size: $text-sm;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
     &__meta {
-        margin-top: 2px;
+        margin-top: $space-hair;
         color: var(--text-faint);
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 }
 
@@ -1075,15 +1026,15 @@ $skw-z-tv: 200;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
     align-content: start;
-    gap: 8px;
-    padding: 12px 13px;
+    gap: $space-2;
+    padding: $space-3 $space-3;
     overflow: auto;
     @include custom-scrollbar;
 
     &__cell {
-        padding: 9px 10px;
+        padding: $space-2 $space-3;
         border: 1px solid var(--border-soft);
-        border-radius: 8px;
+        border-radius: $radius-card;
         background: var(--surface-2);
         cursor: pointer;
         transition: 0.12s;
@@ -1095,21 +1046,21 @@ $skw-z-tv: 200;
         display: block;
         width: 7px;
         height: 7px;
-        margin-bottom: 6px;
+        margin-bottom: $space-tight;
         border-radius: 50%;
     }
 
     &__name {
-        font-size: 11.5px;
+        font-size: $text-xs;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
     &__meta {
-        margin-top: 2px;
+        margin-top: $space-hair;
         color: var(--text-faint);
-        font-size: 10px;
+        font-size: $text-xs;
     }
 }
 
@@ -1121,8 +1072,8 @@ $skw-z-tv: 200;
     &__item {
         display: flex;
         align-items: flex-start;
-        gap: 9px;
-        padding: 8px 13px;
+        gap: $space-2;
+        padding: $space-2 $space-3;
         border-bottom: 1px solid var(--border-soft);
         cursor: pointer;
         transition: background 0.12s;
@@ -1136,7 +1087,7 @@ $skw-z-tv: 200;
     &__dot {
         width: 6px;
         height: 6px;
-        margin-top: 5px;
+        margin-top: $space-tight;
         flex-shrink: 0;
         border-radius: 50%;
         background: var(--text-ghost);
@@ -1152,15 +1103,15 @@ $skw-z-tv: 200;
     // target id breaks instead of widening the widget.
     &__text {
         color: var(--text-dim);
-        font-size: 12px;
+        font-size: $text-xs;
         line-height: 1.45;
         overflow-wrap: anywhere;
     }
 
     &__time {
-        margin-top: 2px;
+        margin-top: $space-hair;
         color: var(--text-ghost);
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 }
 
@@ -1168,8 +1119,8 @@ $skw-z-tv: 200;
 .skw-actions {
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    padding: 12px 13px;
+    gap: $space-2;
+    padding: $space-3 $space-3;
     overflow: auto;
     @include custom-scrollbar;
 
@@ -1179,15 +1130,16 @@ $skw-z-tv: 200;
     &__row {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: $space-3;
         width: 100%;
-        padding: 8px 10px;
+        min-height: $control-md;
+        padding: 0 $space-3;
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: $radius-control;
         background: var(--surface-2);
         color: var(--text-dim);
         font-family: inherit;
-        font-size: 12.5px;
+        font-size: $text-sm;
         text-align: left;
         cursor: pointer;
         transition: 0.13s;
@@ -1213,9 +1165,9 @@ $skw-z-tv: 200;
         display: grid;
         place-items: center;
         width: 24px;
-        height: 24px;
+        height: 24px; // geometry: fixed glyph chip, not a control
         flex-shrink: 0;
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: var(--surface-3);
         color: var(--text-faint);
         transition: 0.13s;
@@ -1228,7 +1180,7 @@ $skw-z-tv: 200;
 
 // ---- specs: key/value host details --------------------------
 .skw-kv {
-    padding: 4px 13px 8px;
+    padding: $space-1 $space-3 $space-2;
     overflow: auto;
     @include custom-scrollbar;
 
@@ -1237,41 +1189,41 @@ $skw-z-tv: 200;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
+        gap: $space-3;
         min-height: 0;
-        padding: 6px 0;
+        padding: $space-tight 0;
         border-top: 1px solid var(--border-soft);
 
         &:first-child { border-top: none; }
     }
-    &__k { color: var(--text-faint); font-family: var(--mono); font-size: 11.5px; }
-    &__v { color: var(--text); font-family: var(--mono); font-size: 12px; text-align: right; overflow-wrap: anywhere; }
+    &__k { color: var(--text-faint); font-size: $text-xs; }
+    &__v { color: var(--text); font-size: $text-xs; text-align: right; overflow-wrap: anywhere; }
 
     // …and a density override when the renderer reuses the shared
     // .sk-info-row primitive instead, which is spaced for a drawer.
     .sk-info-row {
-        padding: 6px 0;
+        padding: $space-tight 0;
         min-height: 0;
 
-        .k { font-size: 11.5px; }
+        .k { font-size: $text-xs; }
     }
 }
 
 // ---- note: markdown-ish text --------------------------------
 .skw-note {
-    padding: 13px;
+    padding: $space-3;
     overflow: auto;
     color: var(--text-dim);
-    font-size: 12.5px;
+    font-size: $text-sm;
     line-height: 1.6;
     @include custom-scrollbar;
 
     code {
-        padding: 1px 5px;
-        border-radius: 4px;
+        padding: 1px $space-tight;
+        border-radius: $radius-badge;
         background: var(--surface-3);
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
     }
 }
 
@@ -1285,7 +1237,7 @@ $skw-z-tv: 200;
     // .sk-drawer__body deliberately has none (it is the scroll region), and
     // the sticky filter bar below cancels this padding with negative margins
     // to span the panel edge to edge. Both numbers therefore live here.
-    padding: 14px 16px 18px;
+    padding: $space-4 $space-4 $space-5;
 
     // Search + category chips. The library renders inside the shared
     // ds/Drawer, whose .sk-drawer__body owns the scroll — so this bar has to
@@ -1299,9 +1251,9 @@ $skw-z-tv: 200;
         z-index: 2;
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        margin: -14px -16px 14px;
-        padding: 14px 16px 12px;
+        gap: $space-3;
+        margin: -14px -16px $space-4;
+        padding: $space-4 $space-4 $space-3;
         background: var(--surface);
         border-bottom: 1px solid var(--border-soft);
     }
@@ -1320,17 +1272,17 @@ $skw-z-tv: 200;
     &__chips {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px;
+        gap: $space-tight;
     }
 
     &__chip {
-        padding: 4px 11px;
+        padding: $space-1 $space-3;
         border: 1px solid var(--border);
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: var(--surface-2);
         color: var(--text-dim);
         font-family: inherit;
-        font-size: 11.5px;
+        font-size: $text-xs;
         white-space: nowrap;
         cursor: pointer;
         transition: 0.13s;
@@ -1344,22 +1296,22 @@ $skw-z-tv: 200;
         &.is-on {
             @include status-variant(var(--accent-bright), var(--accent-bg));
             border-color: var(--accent-dim);
-            font-weight: 550;
+            font-weight: $font-weight-semibold;
         }
     }
 
     // "No widget matches that search."
     &__empty {
-        padding: 40px 16px;
+        padding: $space-10 $space-4;
         color: var(--text-faint);
-        font-size: 12.5px;
+        font-size: $text-sm;
         text-align: center;
     }
 
     &__grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(196px, 1fr));
-        gap: 12px;
+        gap: $space-3;
     }
 
     &__card {
@@ -1388,7 +1340,7 @@ $skw-z-tv: 200;
         height: 88px;
         display: flex;
         align-items: stretch;
-        padding: 6px;
+        padding: $space-tight;
         border-bottom: 1px solid var(--border-soft);
         background: var(--bg-sidebar);
     }
@@ -1408,11 +1360,11 @@ $skw-z-tv: 200;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
+        gap: $space-tight;
         background: var(--surface);
         color: var(--accent-bright);
-        font-size: 12px;
-        font-weight: 550;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         opacity: 0;
         transition: opacity 0.14s;
     }
@@ -1431,26 +1383,25 @@ $skw-z-tv: 200;
     &__name {
         display: flex;
         align-items: center;
-        gap: 7px;
-        font-size: 12.5px;
-        font-weight: 550;
+        gap: $space-2;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
     }
 
     // Default cell span ("3×2"), pushed to the right edge of the name row.
     &__size {
         margin-left: auto;
-        padding: 1px 5px;
-        border-radius: 4px;
+        padding: 1px $space-tight;
+        border-radius: $radius-badge;
         background: var(--surface-3);
         color: var(--text-ghost);
-        font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: $text-xs;
     }
 
     &__desc {
-        margin-top: 5px;
+        margin-top: $space-tight;
         color: var(--text-faint);
-        font-size: 11px;
+        font-size: $text-xs;
         line-height: 1.45;
     }
 }
@@ -1475,7 +1426,7 @@ $skw-z-tv: 200;
     background: var(--surface);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: $shadow-overlay;
     overflow: hidden;
     animation: skw-modal-in 0.18s cubic-bezier(0.2, 0.7, 0.3, 1);
 
@@ -1522,37 +1473,36 @@ $skw-z-tv: 200;
     &__bar {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: $space-4;
         flex-shrink: 0;
-        padding: 12px 20px;
+        padding: $space-3 $space-5;
         border-bottom: 1px solid var(--border-soft);
     }
 
     &__body {
         flex: 1;
         overflow: auto;
-        padding: 18px 20px;
+        padding: $space-5 $space-5;
         @include custom-scrollbar;
     }
 
     // Wall-display bar: board name, live dot, what the board is scoped to, and
     // the time. Larger than the normal chrome because this is read at distance.
     &__name {
-        font-family: var(--mono);
-        font-size: 14px;
-        font-weight: 600;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
         color: var(--text);
     }
 
     &__meta {
         color: var(--text-faint);
-        font-size: 12px;
+        font-size: $text-xs;
     }
 
     &__clock {
         margin-left: auto;
-        font-size: 16px;
-        font-weight: 600;
+        font-size: $text-md;
+        font-weight: $font-weight-semibold;
         color: var(--text);
         font-variant-numeric: tabular-nums;
     }
@@ -1564,33 +1514,33 @@ $skw-z-tv: 200;
 // A blank 12-column grid is not a starting point, so a new board offers
 // ready-made layouts before it offers an "add widget" button.
 .skw-empty-board {
-    padding: 70px 20px;
+    padding: $space-16 $space-5;
     border: 1.5px dashed var(--border-strong);
-    border-radius: var(--radius-lg);
+    border-radius: $radius-card;
     text-align: center;
 
-    &__title { margin: 0 0 6px; color: var(--text); font-size: 15px; font-weight: 600; }
-    &__desc { margin: 0 auto 24px; max-width: 460px; color: var(--text-dim); font-size: 13px; }
+    &__title { margin: 0 0 6px; color: var(--text); font-size: $text-base; font-weight: $font-weight-semibold; }
+    &__desc { margin: 0 auto 24px; max-width: 460px; color: var(--text-dim); font-size: $text-sm; }
 
     &__acts {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 9px;
-        margin-top: 18px;
+        gap: $space-2;
+        margin-top: $space-5;
     }
 }
 
 .skw-tpl {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 12px;
+    gap: $space-3;
     max-width: 900px;
     margin: 0 auto;
     text-align: left;
 
     &__card {
-        padding: 15px;
+        padding: $space-4;
         border: 1px solid var(--border);
         border-radius: var(--radius);
         background: var(--surface-2);
@@ -1606,17 +1556,17 @@ $skw-z-tv: 200;
 
     &__icon {
         width: 34px;
-        height: 34px;
-        margin-bottom: 11px;
+        height: 34px; // geometry: icon tile
+        margin-bottom: $space-3;
         display: grid;
         place-items: center;
-        border-radius: 9px;
+        border-radius: $radius-card;
         background: var(--surface-3);
         color: var(--accent-bright);
     }
 
-    &__name { font-size: 13.5px; font-weight: 600; }
-    &__desc { margin-top: 4px; color: var(--text-faint); font-size: 11.5px; line-height: 1.5; }
+    &__name { font-size: $text-sm; font-weight: $font-weight-semibold; }
+    &__desc { margin-top: 4px; color: var(--text-faint); font-size: $text-xs; line-height: 1.5; }
 }
 
 // ============================================================
@@ -1707,29 +1657,26 @@ $skw-z-tv: 200;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    padding: 10px 12px;
+    gap: $space-hair;
+    padding: $space-3 $space-3;
     text-align: center;
 
     &__time {
         color: var(--text);
-        font-size: 30px;
-        font-weight: 600;
+        font-size: $text-2xl;
+        font-weight: $font-weight-semibold;
         line-height: 1.05;
-        letter-spacing: 0.01em;
         font-variant-numeric: tabular-nums;
     }
 
     &__date {
         color: var(--text-dim);
-        font-size: 12.5px;
+        font-size: $text-sm;
     }
 
     &__zone {
         color: var(--text-ghost);
-        font-size: 10.5px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: $text-xs;
     }
 }
 
@@ -1781,12 +1728,12 @@ $skw-z-tv: 200;
         top: 8px;
         z-index: 2;
         min-width: 132px;
-        margin-left: 12px;
-        padding: 8px 10px;
+        margin-left: $space-3;
+        padding: $space-2 $space-3;
         border: 1px solid var(--border);
         border-radius: var(--radius);
         background: var(--surface-2);
-        box-shadow: var(--shadow-md);
+        box-shadow: $shadow-raised;
         pointer-events: none;
 
         &--flip {
@@ -1796,18 +1743,18 @@ $skw-z-tv: 200;
     }
 
     &__tip-when {
-        margin-bottom: 6px;
+        margin-bottom: $space-tight;
         color: var(--text-faint);
-        font-size: 10.5px;
+        font-size: $text-xs;
         text-align: center;
     }
 
     &__tip-row {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 2px 0;
-        font-size: 11.5px;
+        gap: $space-2;
+        padding: $space-hair 0;
+        font-size: $text-xs;
     }
 
     &__tip-dot {
@@ -1825,7 +1772,7 @@ $skw-z-tv: 200;
     // Values right-aligned in their own column so a stack of them reads down.
     &__tip-value {
         margin-left: auto;
-        font-weight: 600;
+        font-weight: $font-weight-semibold;
         font-variant-numeric: tabular-nums;
     }
 }

@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
+import { toastError } from '@/utils/errorMessage';
 
 const RECORD_TYPES = ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'SRV', 'CAA', 'NS'];
 const PROXYABLE = ['A', 'AAAA', 'CNAME'];
@@ -152,7 +153,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             setForm(EMPTY_FORM);
             await load();
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.failedToAddRecord', 'Failed to add record'));
+            toastError(toast, t('app.domainDnsPanel.failedToAddRecord', "Couldn't add the record."), e);
         } finally {
             setSaving(false);
         }
@@ -168,7 +169,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             toast.success(t('app.domainDnsPanel.dynamicDnsEnabled', 'Dynamic DNS enabled'));
             await loadHosts();
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.failedToEnableDynamicDns', 'Failed to enable Dynamic DNS'));
+            toastError(toast, t('app.domainDnsPanel.failedToEnableDynamicDns', "Couldn't turn on dynamic DNS."), e);
         } finally {
             setBusyKey(null);
         }
@@ -181,15 +182,15 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             toast.success(t('app.domainDnsPanel.tokenRegenerated', 'Token regenerated'));
             await loadHosts();
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.failedToRegenerateToken', 'Failed to regenerate token'));
+            toastError(toast, t('app.domainDnsPanel.failedToRegenerateToken', "Couldn't regenerate the token."), e);
         }
     }
 
     async function handleStopDynamic(host) {
         if (!await confirm({
-            title: t('app.domainDnsPanel.disableDynamicDns', 'Disable Dynamic DNS'),
-            message: t('app.domainDnsPanel.disableDynamicDnsForItsUpdate', 'Disable Dynamic DNS for {{hostname}}? Its update token will stop working.', { hostname: host.hostname }),
-            confirmText: t('app.domainDnsPanel.disableDynamicDns', 'Disable Dynamic DNS'),
+            title: t('app.domainDnsPanel.disableDynamicDns', 'Disable dynamic DNS'),
+            message: t('app.domainDnsPanel.disableDynamicDnsForItsUpdate', 'Disable dynamic DNS for {{hostname}}? Its update token will stop working.', { hostname: host.hostname }),
+            confirmText: t('app.domainDnsPanel.disableDynamicDns', 'Disable dynamic DNS'),
         })) return;
         try {
             await api.deleteDdnsHost(host.id);
@@ -197,7 +198,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             toast.success(t('app.domainDnsPanel.dynamicDnsDisabled', 'Dynamic DNS disabled'));
             await loadHosts();
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.failedToDisableDynamicDns', 'Failed to disable Dynamic DNS'));
+            toastError(toast, t('app.domainDnsPanel.failedToDisableDynamicDns', "Couldn't turn off dynamic DNS."), e);
         }
     }
 
@@ -209,7 +210,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             const data = await api.exportDNSZone(zid);
             downloadBlob(data.zone_file || '', `${domain.name}.txt`);
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.exportFailed', 'Export failed'));
+            toastError(toast, t('app.domainDnsPanel.exportFailed', "Couldn't export the records."), e);
         } finally {
             setExporting(false);
         }
@@ -223,7 +224,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             const d = await api.checkDNSPropagation(domain.name);
             setPropResults(d.results || []);
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.propagationCheckFailed', 'Propagation check failed'));
+            toastError(toast, t('app.domainDnsPanel.propagationCheckFailed', "Couldn't check propagation."), e);
             setPropResults([]);
         } finally {
             setPropLoading(false);
@@ -235,7 +236,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             const zid = await ensureZone();
             navigate(`/cloudflare/zones/${zid}`);
         } catch (e) {
-            toast.error(e.message || t('app.domainDnsPanel.couldNotOpenCloudflare', 'Could not open Cloudflare'));
+            toastError(toast, t('app.domainDnsPanel.couldNotOpenCloudflare', "Couldn't open Cloudflare."), e);
         }
     }
 
@@ -283,7 +284,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             header: 'TTL',
             sortable: true,
             className: 'ddp__c-ttl',
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             sortValue: (r) => (r.ttl ?? null),
             render: (r) => (r.ttl === 1 ? 'Auto' : r.ttl),
         },
@@ -327,7 +328,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
                                 <Button variant="ghost" size="sm" className="ddp__iconbtn" title={t('app.domainDnsPanel.regenerateToken', 'Regenerate token')} onClick={() => handleRegenerate(host)}>
                                     <RefreshCw size={13} />
                                 </Button>
-                                <Button variant="ghost" size="sm" className="ddp__stopbtn" title={t('app.domainDnsPanel.disableDynamicDns', 'Disable Dynamic DNS')} onClick={() => handleStopDynamic(host)}>
+                                <Button variant="ghost" size="sm" className="ddp__stopbtn" title={t('app.domainDnsPanel.disableDynamicDns', 'Disable dynamic DNS')} onClick={() => handleStopDynamic(host)}>
                                     {t('common.actions.stop', 'Stop')}
                                 </Button>
                             </>
@@ -341,7 +342,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
                             onClick={() => handleMakeDynamic(r)}
                             disabled={busyKey === recordFqdn(r)}
                         >
-                            <Radio size={13} /> {busyKey === recordFqdn(r) ? 'Enabling…' : 'Make dynamic'}
+                            <Radio size={13} /> {busyKey === recordFqdn(r) ? t('app.domainDnsPanel.enabling', 'Enabling…') : t('app.domainDnsPanel.makeDynamic', 'Make dynamic')}
                         </Button>
                     )
                 );
@@ -373,13 +374,13 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
 
             {canLive && (
                 <p className="ddp__hint">
-                    {t('app.domainDnsPanel.liveFromCloudflareRecordsServerkitManages', 'Live from Cloudflare — records ServerKit manages are tagged; the rest are your own and shown read-only.')}
+                    {t('app.domainDnsPanel.liveFromCloudflareRecordsServerkitManages', 'Live from Cloudflare. Records ServerKit manages are tagged; the rest are your own and shown read-only.')}
                 </p>
             )}
 
             {state === 'ready' && hasProxiedSSL && (
                 <p className="ddp__ssl">
-                    <ShieldCheck size={13} /> {t('app.domainDnsPanel.httpsIsServedByCloudflareOn', 'HTTPS is served by Cloudflare on proxied records — no separate certificate needed.')}
+                    <ShieldCheck size={13} /> {t('app.domainDnsPanel.httpsIsServedByCloudflareOn', 'HTTPS is served by Cloudflare on proxied records, so no separate certificate is needed.')}
                 </p>
             )}
 
@@ -418,7 +419,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
                     <div className="ddp__form-actions">
                         <Button variant="outline" size="sm" onClick={() => setShowAdd(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button size="sm" disabled={!form.content || saving} onClick={handleAdd}>
-                            {saving ? 'Adding…' : 'Add record'}
+                            {saving ? t('app.domainDnsPanel.adding', 'Adding…') : t('app.domainDnsPanel.addRecord', 'Add record')}
                         </Button>
                     </div>
                 </div>
@@ -453,7 +454,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
                                 <span className={`status-dot status-dot--${r.propagated ? 'success' : 'danger'}`} />
                                 <strong>{r.nameserver}</strong>
                                 <span className="ddp__prop-ip">({r.ip})</span>
-                                <span className="ddp__prop-res">{r.result?.join(', ') || 'No result'}</span>
+                                <span className="ddp__prop-res">{r.result?.join(', ') || t('app.domainDnsPanel.noResult', 'No result')}</span>
                             </div>
                         ))
                     ) : (
@@ -465,11 +466,11 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
             <div className="ddp__foot">
                 {canExport && (
                     <Button variant="outline" size="sm" onClick={handleExport} disabled={exporting}>
-                        <Download size={14} /> {exporting ? 'Exporting…' : 'Export'}
+                        <Download size={14} /> {exporting ? t('app.domainDnsPanel.exporting', 'Exporting…') : t('common.actions.export', 'Export')}
                     </Button>
                 )}
                 <Button variant="outline" size="sm" onClick={handleCheckPropagation}>
-                    <Activity size={14} /> {propOpen ? 'Hide propagation' : 'Check propagation'}
+                    <Activity size={14} /> {propOpen ? t('app.domainDnsPanel.hidePropagation', 'Hide propagation') : t('app.domainDnsPanel.checkPropagation', 'Check propagation')}
                 </Button>
                 {isCloudflare && (
                     <Button variant="outline" size="sm" onClick={openCloudflareOps}>

@@ -44,7 +44,7 @@ function countNoun(node) {
 function emptyLabel(node) {
     if (node.kind === 'database') return 'No tables yet';
     if (node.kind === 'app') return 'No databases';
-    if (node.kind === 'engine' && node.engine === 'docker') return 'No Docker apps';
+    if (node.kind === 'engine' && node.engine === 'docker') return 'No Docker services';
     return 'No databases yet';
 }
 
@@ -114,7 +114,10 @@ function TreeRow({ node, depth, expanded, childrenCache, loading, activeKey, sel
                     </span>
                 )}
 
-                {node.kind === 'engine' && node.status && node.status !== 'available' && (
+                {/* The Install button already says "not installed"; repeating it
+                    as a status squeezed the engine name to "MyS…". */}
+                {node.kind === 'engine' && node.status && node.status !== 'available'
+                    && !(node.status === 'missing' && canInstall) && (
                     <span className={`dbx-tree-status is-${node.status}`} title={STATUS_LABEL[node.status]}>
                         {node.status === 'installing'
                             ? <Loader2 size={11} className="dbx-spin" aria-hidden="true" />
@@ -135,7 +138,7 @@ function TreeRow({ node, depth, expanded, childrenCache, loading, activeKey, sel
                         type="button"
                         className="dbx-tree-install-btn"
                         onClick={(e) => { e.stopPropagation(); handlers.onInstall(node); }}
-                        aria-label={t('app.sourceTree.isNotInstalledInstallIt', '{{label}} is not installed — install it', { label: node.label })}
+                        aria-label={t('app.sourceTree.isNotInstalledInstallIt', '{{label}} is not installed. Install it', { label: node.label })}
                         title={t('app.sourceTree.install', 'Install {{label}}', { label: node.label })}
                     >
                         <Download size={11} aria-hidden="true" /> {t('app.sourceTree.install2', 'Install')}
@@ -162,8 +165,8 @@ function TreeRow({ node, depth, expanded, childrenCache, loading, activeKey, sel
                         type="button"
                         className="dbx-tree-add"
                         onClick={(e) => { e.stopPropagation(); handlers.onCreateChild(node); }}
-                        aria-label={t('app.sourceTree.createADatabaseIn', 'Create a database in {{label}}', { label: node.label })}
-                        title={t('app.sourceTree.createADatabase', 'Create a database')}
+                        aria-label={t('app.sourceTree.createADatabaseIn', 'New database in {{label}}', { label: node.label })}
+                        title={t('app.sourceTree.createADatabase', 'New database')}
                         tabIndex={-1}
                     >
                         <Plus size={12} aria-hidden="true" />
@@ -199,7 +202,7 @@ function TreeRow({ node, depth, expanded, childrenCache, loading, activeKey, sel
                                     className="dbx-tree-leaf-link"
                                     onClick={() => handlers.onInstall(node)}
                                 >
-                                    {t('app.sourceTree.notInstalledInstall', 'Not installed — install')} {node.label}
+                                    {t('app.sourceTree.notInstalledInstall', 'Not installed. Install')} {node.label}
                                 </SharedButton>
                             ) : emptyLabel(node)}
                         </li>

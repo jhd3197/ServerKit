@@ -16,9 +16,9 @@
     align-items: flex-start;
     gap: $space-3;
     padding: $space-3 $space-4;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     border: 1px solid transparent;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     line-height: 1.5;
     background: $bg-card;
 
@@ -39,7 +39,7 @@
 
     &__message {
         color: $text-secondary;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     &__actions {
@@ -53,7 +53,7 @@
         height: auto;
         min-width: 0;
         padding: $space-1 $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         gap: $space-1;
     }
 
@@ -61,14 +61,14 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 28px;
-        height: 28px;
+        width: $control-sm;
+        height: $control-sm;
         border: none;
         background: transparent;
         color: inherit;
         opacity: 0.6;
         cursor: pointer;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         transition: opacity $transition-fast, background $transition-fast;
 
         &:hover {

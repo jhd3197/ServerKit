@@ -69,7 +69,7 @@ const Login = () => {
                 navigate(consumeRedirect(), { replace: true });
             })
             .catch((err) => {
-                setError(err.message || 'Invalid or expired login link');
+                setError(err.message || t('auth.linkExpired', 'This sign-in link is invalid or has expired. Request a new one.'));
                 setRedeemingLink(false);
                 navigate('/login', { replace: true });
             });
@@ -154,7 +154,7 @@ const Login = () => {
 
             navigate(consumeRedirect());
         } catch (err) {
-            setError(err.message || 'Invalid verification code');
+            setError(err.message || t('auth.codeMismatch', "That code didn't match. Enter the current 6-digit code from your authenticator app."));
             // Clear the code inputs on error
             if (!useBackupCode) {
                 setTotpCode(['', '', '', '', '', '']);
@@ -164,7 +164,7 @@ const Login = () => {
             twoFactorInFlight.current = false;
             setLoading(false);
         }
-    }, [useBackupCode, backupCode, totpCode, tempToken, setUser, navigate]);
+    }, [useBackupCode, backupCode, totpCode, tempToken, setUser, navigate, t]);
 
     function handleTotpChange(index, value) {
         // Only allow digits
@@ -240,10 +240,10 @@ const Login = () => {
                         <div className="brand-logo">
                             <ServerKitLogo width={40} height={40} />
                         </div>
-                        <h1>{t('auth.twoFactor.title', 'Two-Factor Authentication')}</h1>
+                        <h1>{t('auth.twoFactor.title', 'Two-factor authentication')}</h1>
                         <p>{useBackupCode
-                            ? t('auth.twoFactor.backupHint', 'Enter a backup code')
-                            : t('auth.twoFactor.codeHint', 'Enter the 6-digit code from your authenticator app')}</p>
+                            ? t('auth.twoFactor.backupHint', 'Enter a backup code.')
+                            : t('auth.twoFactor.codeHint', 'Enter the 6-digit code from your authenticator app.')}</p>
                     </div>
 
                     {error && <div className="error-message">{error}</div>}
@@ -269,7 +269,7 @@ const Login = () => {
                             </div>
                         ) : (
                             <div className="form-group">
-                                <Label htmlFor="backupCode">{t('auth.twoFactor.backupCode', 'Backup Code')}</Label>
+                                <Label htmlFor="backupCode">{t('auth.twoFactor.backupCode', 'Backup code')}</Label>
                                 <Input
                                     type="text"
                                     id="backupCode"
@@ -282,7 +282,7 @@ const Login = () => {
                         )}
 
                         <Button type="submit" className="btn-full" disabled={loading}>
-                            {loading ? 'Verifying...' : 'Verify'}
+                            {loading ? t('auth.twoFactor.verifying', 'Verifying…') : t('auth.twoFactor.verify', 'Verify')}
                         </Button>
                     </form>
 
@@ -292,14 +292,14 @@ const Login = () => {
                             variant="link"
                             onClick={() => setUseBackupCode(!useBackupCode)}
                         >
-                            {useBackupCode ? 'Use authenticator app instead' : 'Use a backup code instead'}
+                            {useBackupCode ? t('auth.twoFactor.useAuthenticatorInstead', 'Use authenticator app instead') : t('auth.twoFactor.useBackupCodeInstead', 'Use a backup code instead')}
                         </Button>
                         <Button
                             type="button"
                             variant="link"
                             onClick={handleBack}
                         >
-                            {t('auth.backToLogin', 'Back to login')}
+                            {t('auth.backToLogin', 'Back to sign in')}
                         </Button>
                     </div>
             </AuthLayout>
@@ -336,7 +336,7 @@ const Login = () => {
 
                 {demoInfo && (
                     <div className="demo-hint">
-                        <div className="demo-hint__title">{t('auth.demoMode', 'Demo mode — sign in read-only')}</div>
+                        <div className="demo-hint__title">{t('auth.demoMode', 'Demo mode: sign in read-only')}</div>
                         <div className="demo-hint__creds">
                             <code>{demoInfo.username}</code> / <code>{demoInfo.password}</code>
                         </div>
@@ -356,7 +356,7 @@ const Login = () => {
                                 disabled={ssoLoading !== null}
                             >
                                 <SSOProviderIcon provider={p.id} />
-                                {ssoLoading === p.id ? 'Redirecting...' : `Continue with ${p.name}`}
+                                {ssoLoading === p.id ? t('auth.redirecting', 'Redirecting…') : t('auth.continueWithProvider', 'Continue with {{name}}', { name: p.name })}
                             </Button>
                         ))}
                     </div>
@@ -371,7 +371,7 @@ const Login = () => {
                 {passwordLoginEnabled && (
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <Label htmlFor="email">{t('auth.usernameOrEmail', 'Username or Email')}</Label>
+                            <Label htmlFor="email">{t('auth.usernameOrEmail', 'Username or email')}</Label>
                             <Input
                                 type="text"
                                 id="email"
@@ -396,7 +396,7 @@ const Login = () => {
                         </div>
 
                         <Button type="submit" className="btn-full" disabled={loading}>
-                            {loading ? t('auth.signingIn', 'Signing in…') : t('auth.signIn', 'Sign In')}
+                            {loading ? t('auth.signingIn', 'Signing in…') : t('auth.signIn', 'Sign in')}
                         </Button>
                     </form>
                 )}

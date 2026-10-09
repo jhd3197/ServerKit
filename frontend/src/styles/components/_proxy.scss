@@ -20,7 +20,7 @@
 
         h3 {
             margin: 0;
-            font-size: $font-size-lg;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             color: $text-primary;
         }
@@ -33,15 +33,13 @@
     }
 
     &__status-label {
-        font-size: $font-size-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
     &__hint {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: 1.5;
     }
@@ -53,11 +51,11 @@
         padding: $space-4;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-secondary;
     }
@@ -75,9 +73,9 @@
         padding: $space-3;
         background: $bg-body;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.5;
         color: $text-secondary;
         white-space: pre;
@@ -85,7 +83,7 @@
 
     &__empty {
         padding: $space-3;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -94,9 +92,9 @@
         margin-bottom: $space-3;
         background: $danger-bg;
         border: 1px solid $danger-border;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $danger-color;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     // Ingress-plane mismatch banner: apps whose expected plane disagrees with
@@ -108,7 +106,7 @@
         padding: $space-4;
         background: $warning-bg;
         border: 1px solid $warning-border;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__ingress-warning-head {
@@ -118,7 +116,7 @@
         color: $warning;
 
         strong {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: $text-primary;
         }
@@ -126,7 +124,7 @@
 
     &__ingress-warning-text {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: 1.5;
 
@@ -149,7 +147,7 @@
         align-items: baseline;
         flex-wrap: wrap;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__ingress-link {
@@ -164,7 +162,7 @@
 
     &__ingress-reason {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     // Subtle "all aligned" note when there are apps but no mismatches.
@@ -172,7 +170,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $success;
     }
 }

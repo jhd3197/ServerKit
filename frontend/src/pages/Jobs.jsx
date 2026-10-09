@@ -24,6 +24,7 @@ import {
 } from '@/components/ds/grid';
 import { Button } from '@/components/ui/button';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -32,6 +33,7 @@ import { useToast } from '../contexts/useToast.js';
 import { timeAgo } from '../utils/time';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const titleCase = (value = '') => value.charAt(0).toUpperCase() + value.slice(1);
 
@@ -171,6 +173,7 @@ export default function Jobs() {
     const [q, setQ] = useState('');
     const [page, setPage] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [loadErrors, setLoadErrors] = useState({ jobs: null, scheduled: null });
 
     // Table sort + column visibility, controlled so saved views can drive
     // them — same localStorage keys the DataTables used when uncontrolled.
@@ -211,15 +214,26 @@ export default function Jobs() {
             // No /jobs/stats call any more: its whole-table group-bys only ever
             // fed the count line above the table, and the footer counts the
             // rows the query actually returned.
-            const [jobsRes, schedRes] = await Promise.all([
+            // Each tab's request settles on its own. A failure keeps the last
+            // good rows on screen and is recorded for that tab, so it renders
+            // as an error instead of "No jobs have run yet".
+            const [jobsRes, schedRes] = await Promise.allSettled([
                 api.getJobs(params),
-                api.getScheduledJobs().catch(() => null),
+                api.getScheduledJobs(),
             ]);
-            setJobs(jobsRes?.jobs || []);
-            setTotal(jobsRes?.total ?? (jobsRes?.jobs?.length || 0));
-            setScheduled(schedRes?.scheduled || schedRes?.jobs || schedRes || []);
-        } catch {
-            // Keep the last good state on screen rather than blanking the page.
+            if (jobsRes.status === 'fulfilled') {
+                const data = jobsRes.value;
+                setJobs(data?.jobs || []);
+                setTotal(data?.total ?? (data?.jobs?.length || 0));
+            }
+            if (schedRes.status === 'fulfilled') {
+                const data = schedRes.value;
+                setScheduled(data?.scheduled || data?.jobs || data || []);
+            }
+            setLoadErrors({
+                jobs: jobsRes.status === 'rejected' ? jobsRes.reason : null,
+                scheduled: schedRes.status === 'rejected' ? schedRes.reason : null,
+            });
         } finally {
             setLoading(false);
         }
@@ -268,19 +282,19 @@ export default function Jobs() {
 
     const onRetry = async (id) => {
         try { await api.retryJob(id); toast.success(t('app.jobs.jobReQueued', 'Job re-queued')); load(); }
-        catch { toast.error(t('app.jobs.retryFailed', 'Retry failed')); }
+        catch (err) { toastError(toast, t('app.jobs.retryFailed', "Couldn't retry the job."), err); }
     };
     const onCancel = async (id) => {
         try { await api.cancelJob(id); toast.success(t('app.jobs.jobCancelled', 'Job cancelled')); load(); }
-        catch { toast.error(t('app.jobs.cancelFailed', 'Cancel failed')); }
+        catch (err) { toastError(toast, t('app.jobs.cancelFailed', "Couldn't cancel the job."), err); }
     };
     const onRunScheduled = async (id) => {
         try { await api.runScheduledJob(id); toast.success(t('app.jobs.scheduledJobTriggered', 'Scheduled job triggered')); load(); }
-        catch { toast.error(t('app.jobs.triggerFailed', 'Trigger failed')); }
+        catch (err) { toastError(toast, t('app.jobs.triggerFailed', "Couldn't run the scheduled job."), err); }
     };
     const onToggleScheduled = async (id, enabled) => {
         try { await api.setScheduledJobEnabled(id, enabled); load(); }
-        catch { toast.error(t('app.jobs.updateFailed', 'Update failed')); }
+        catch (err) { toastError(toast, t('app.jobs.updateFailed', "Couldn't update the scheduled job."), err); }
     };
 
     // Declared above the admin gate because useTableChrome is a hook and the
@@ -412,7 +426,7 @@ export default function Jobs() {
         { key: 'kind', headerKey: 'common.labels.kind', header: 'Kind', sortable: true, cellClassName: 'sk-jobs__kind', render: (s) => s.kind || '—' },
         { key: 'schedule', headerKey: 'common.labels.schedule', header: 'Schedule', sortable: true, sortValue: (s) => s.schedule || s.cron || null, cellClassName: 'sk-jobs__owner', render: (s) => s.schedule || s.cron || (s.interval_seconds ? `every ${s.interval_seconds}s` : '—') },
         { key: 'next', headerKey: 'app.jobs.nextRun', header: 'Next run', cellClassName: 'sk-jobs__when', render: (s) => (s.next_run_at ? timeAgo(s.next_run_at) : '—') },
-        { key: 'enabled', headerKey: 'app.jobs.enabled', header: 'Enabled', render: (s) => <Pill kind={s.enabled ? 'green' : 'gray'}>{s.enabled ? 'On' : 'Off'}</Pill> },
+        { key: 'enabled', headerKey: 'app.jobs.enabled', header: 'Enabled', render: (s) => <Pill kind={s.enabled ? 'green' : 'gray'}>{s.enabled ? t('app.jobs.on', 'On') : t('app.jobs.off', 'Off')}</Pill> },
         {
             key: 'actions',
             header: '',
@@ -424,7 +438,7 @@ export default function Jobs() {
                         <Play size={14} /> {t('app.jobs.runNow', 'Run now')}
                     </Button>
                     <Button variant="ghost" size="sm" onClick={() => onToggleScheduled(s.id, !s.enabled)}>
-                        {s.enabled ? 'Disable' : 'Enable'}
+                        {s.enabled ? t('common.actions.disable', 'Disable') : t('common.actions.enable', 'Enable')}
                     </Button>
                 </div>
             ),
@@ -448,7 +462,16 @@ export default function Jobs() {
                     />
                 </div>
 
-                {scheduledView ? (
+                {scheduledView && loadErrors.scheduled && scheduled.length > 0 && (
+                    <ErrorState compact error={loadErrors.scheduled} onRetry={load} />
+                )}
+                {scheduledView && loadErrors.scheduled && scheduled.length === 0 ? (
+                    <ErrorState
+                        title={t('app.jobs.couldntLoadScheduledJobs', "Couldn't load scheduled jobs.")}
+                        error={loadErrors.scheduled}
+                        onRetry={load}
+                    />
+                ) : scheduledView ? (
                     <DataTable
                         columns={scheduledColumns}
                         data={scheduled}
@@ -487,6 +510,17 @@ export default function Jobs() {
                             </div>
                         )}
 
+                        {loadErrors.jobs && jobs.length > 0 && (
+                            <ErrorState compact error={loadErrors.jobs} onRetry={load} />
+                        )}
+
+                        {loadErrors.jobs && jobs.length === 0 ? (
+                            <ErrorState
+                                title={t('app.jobs.couldntLoadJobs', "Couldn't load jobs.")}
+                                error={loadErrors.jobs}
+                                onRetry={load}
+                            />
+                        ) : (
                         <DataTable
                             columns={chrome.columns}
                             data={jobs}
@@ -508,6 +542,7 @@ export default function Jobs() {
                             emptyTitle={hasFilters ? 'No jobs match these filters.' : 'No jobs have run yet.'}
                             emptyMessage=""
                         />
+                        )}
                     </>
                 )}
             </div>

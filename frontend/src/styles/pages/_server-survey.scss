@@ -21,12 +21,12 @@
 
     &__muted {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__mono {
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__section {
@@ -40,16 +40,14 @@
         align-items: center;
         gap: $space-2;
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-secondary;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
     }
 
     &__count {
         margin-left: auto;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
         text-transform: none;
@@ -64,8 +62,8 @@
     &__migrated {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        font-size: $font-size-xs;
+        gap: $space-1;
+        font-size: $text-xs;
         color: $success;
 
         svg { color: $success; }
@@ -85,7 +83,7 @@
         padding: $space-2 $space-3;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         svg { color: $text-tertiary; flex-shrink: 0; }
     }
@@ -97,35 +95,8 @@
 
     &__service-ports {
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
-    }
-
-    // Sites table
-    &__table-wrap {
-        overflow-x: auto;
-        border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
-    }
-
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: $font-size-sm;
-
-        th, td {
-            padding: $space-2 $space-3;
-            text-align: left;
-            border-bottom: 1px solid $border-subtle;
-        }
-
-        th {
-            color: $text-tertiary;
-            font-weight: $font-weight-medium;
-            background: $bg-secondary;
-        }
-
-        tr:last-child td { border-bottom: none; }
     }
 
     &__list {
@@ -138,7 +109,7 @@
 
         li {
             padding: $space-1 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -159,7 +130,7 @@
         padding: $space-4;
         background: $bg-secondary;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__catalog-list {
@@ -170,7 +141,7 @@
         flex-direction: column;
         gap: $space-3;
 
-        li { font-size: $font-size-sm; }
+        li { font-size: $text-xs; }
     }
 
     &__catalog-locs {
@@ -181,11 +152,11 @@
 
         code {
             font-family: $font-mono;
-            font-size: $font-size-xs;
-            padding: 1px 6px;
+            font-size: $text-xs;
+            padding: 1px $space-tight;
             background: $bg-card;
             border: 1px solid $border-subtle;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             color: $text-tertiary;
         }
     }
@@ -197,7 +168,7 @@
         padding: $space-4;
         background: rgba($success-raw, 0.06);
         border: 1px solid rgba($success-raw, 0.3);
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         .survey-tab__section-title { color: $success; }
         .survey-tab__section-title svg { color: $success; }
@@ -211,7 +182,7 @@
         gap: $space-2;
 
         li {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
             line-height: 1.5;
         }
@@ -227,7 +198,7 @@
         padding: $space-4;
         background: $warning-bg;
         border: 1px solid $warning-border;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         > svg { color: $warning; flex-shrink: 0; margin-top: 2px; }
 
@@ -241,7 +212,7 @@
 
         p {
             margin: 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
             line-height: 1.5;
         }
@@ -253,7 +224,7 @@
         padding: $space-4;
         background: $warning-bg;
         border: 1px solid $warning-border;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         p { margin: $space-2 0; }
     }
@@ -269,15 +240,15 @@
         display: flex;
         align-items: flex-start;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
         cursor: pointer;
 
         input { margin-top: 3px; flex-shrink: 0; }
 
         code {
-            padding: 1px 4px;
-            border-radius: $radius-sm;
+            padding: 1px $space-1;
+            border-radius: $radius-badge;
             background: rgba(0, 0, 0, 0.06);
         }
     }
@@ -293,10 +264,10 @@
     padding: $space-3 $space-4;
     background: $warning-bg;
     border: 1px solid $warning-border;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 
     &__text {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: 1.5;
 
@@ -308,13 +279,15 @@
 
 // Observed-mode chip on the server list rows.
 .server-row__mode-chip {
-    display: inline-block;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
+    display: inline-flex;
     margin-left: $space-2;
-    padding: 1px 8px;
-    font-size: $font-size-xs;
+    padding: 0 $space-tight;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     @include status-variant($warning, $warning-bg);
     border: 1px solid $warning-border;
-    border-radius: $radius-full;
+    border-radius: $radius-badge;
     vertical-align: middle;
 }

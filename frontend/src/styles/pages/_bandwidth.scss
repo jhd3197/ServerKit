@@ -13,7 +13,7 @@
     &--wide {
         width: 100%;
         max-width: 640px;
-        height: 48px;
+        height: 48px; // geometry: sparkline chart box
     }
 }
 
@@ -21,13 +21,12 @@
 .bw-cell {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: $space-2;
 
     .bw-spark { flex-shrink: 0; }
 
     &__month {
-        font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
         white-space: nowrap;
     }
@@ -36,15 +35,14 @@
 // Service detail Overview: full-width bandwidth card additions.
 .overview-tab__bandwidth {
     &-month {
-        font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
     &-caption {
         display: block;
-        margin-top: 6px;
-        font-size: 11px;
+        margin-top: $space-tight;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -53,31 +51,30 @@
 // from the timed access log). Component: service-detail/RequestMetricsCard.
 .request-metrics {
     &__window {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     &__grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 16px;
+        gap: $space-4;
     }
 
     &__stat {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: $space-1;
         min-width: 0;
     }
 
     &__label {
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     &__value {
-        font-family: var(--mono);
-        font-size: 18px;
+        font-size: $text-lg;
         color: var(--text);
     }
 
@@ -95,22 +92,22 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: $space-tight;
     }
 
     &__row {
         display: grid;
         grid-template-columns: 80px minmax(0, 1fr) minmax(0, 2fr) auto;
         align-items: center;
-        gap: 12px;
-        padding: 6px 0;
+        gap: $space-3;
+        padding: $space-tight 0;
         border-top: 1px solid var(--border-soft);
 
         &:first-child { border-top: 0; }
     }
 
     &__kind {
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
@@ -118,7 +115,7 @@
 
     &__env {
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
         overflow: hidden;
         text-overflow: ellipsis;
@@ -127,7 +124,7 @@
 
     &__empty {
         margin: 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -135,113 +132,22 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 10px;
-        font-size: 12.5px;
+        gap: $space-3;
+        margin-bottom: $space-3;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
     &__dialog {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: $space-3;
     }
 
     &__failure-mode {
         margin: 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
-    }
-}
-
-// Database Explorer: Insights tab (plan 86 §A3).
-// Component: databases/InsightsPanel.
-.dbx-insights {
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    overflow: auto;
-
-    &__head {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 16px;
-    }
-
-    &__gauges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 32px;
-    }
-
-    &__gauge {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-    }
-
-    &__label,
-    &__sub {
-        font-size: 11.5px;
-        color: var(--text-dim);
-    }
-
-    &__value {
-        font-family: var(--mono);
-        font-size: 18px;
-        color: var(--text);
-    }
-
-    &__title {
-        margin: 8px 0 0;
-        font-size: 13px;
-        color: var(--text);
-    }
-
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 12.5px;
-
-        th {
-            text-align: start;
-            font-weight: 500;
-            color: var(--text-dim);
-            padding: 6px 8px;
-            border-bottom: 1px solid var(--border-soft);
-        }
-
-        td {
-            padding: 6px 8px;
-            border-bottom: 1px solid var(--border-soft);
-            font-family: var(--mono);
-            white-space: nowrap;
-        }
-    }
-
-    &__query {
-        max-width: 0;
-        width: 60%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    &__note {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-        margin: 0;
-        font-size: 12.5px;
-        color: var(--text-dim);
-
-        p { margin: 0; }
-    }
-
-    &__error {
-        color: var(--red);
     }
 }
 
@@ -250,8 +156,8 @@
 .pooler {
     &__hint,
     &__tradeoff {
-        margin: 0 0 6px;
-        font-size: 12.5px;
+        margin: 0 0 $space-tight;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -262,7 +168,7 @@
 // Component: service-detail/HintsCard.
 .hints {
     &__window {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
@@ -272,14 +178,14 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: $space-3;
     }
 
     &__item {
         display: flex;
         flex-direction: column;
-        gap: 4px;
-        padding-top: 10px;
+        gap: $space-1;
+        padding-top: $space-3;
         border-top: 1px solid var(--border-soft);
 
         &:first-child { border-top: 0; padding-top: 0; }
@@ -287,25 +193,24 @@
 
     &__signal {
         margin: 0;
-        font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text);
     }
 
     &__hint {
         margin: 0;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text);
     }
 
     &__failure {
         margin: 0;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     &__action {
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--accent-bright);
 
         &--here { color: var(--text-dim); }
@@ -318,7 +223,7 @@
     &__slots {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: $space-3;
         margin: 0;
     }
 
@@ -326,12 +231,10 @@
         display: grid;
         grid-template-columns: 72px 1fr;
         align-items: center;
-        gap: 12px;
+        gap: $space-3;
 
         dt {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
+            font-size: $text-xs;
             color: var(--text-dim);
         }
 
@@ -339,21 +242,21 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 10px;
+            gap: $space-3;
             margin: 0;
         }
     }
 
     &__release {
         font-family: var(--mono);
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text);
     }
 
     &__meta,
     &__hint {
         margin: 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -361,22 +264,22 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: 10px;
-        margin-top: 12px;
-        padding-top: 12px;
+        gap: $space-3;
+        margin-top: $space-3;
+        padding-top: $space-3;
         border-top: 1px solid var(--border-soft);
     }
 
     &__off {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: $space-tight;
     }
 
     &__reasons {
-        margin: 6px 0 0;
-        padding-inline-start: 18px;
-        font-size: 12.5px;
+        margin: $space-tight 0 0;
+        padding-inline-start: $space-5;
+        font-size: $text-sm;
         color: var(--text-dim);
 
         li + li { margin-top: 4px; }
@@ -389,28 +292,26 @@
 // Component: apps/SlotDeploysPanel.
 .slot-split {
     &__downtime {
-        margin: 0 0 12px;
-        font-size: 13px;
+        margin: 0 0 $space-3;
+        font-size: $text-sm;
         color: var(--amber);
     }
 
     &__label {
-        margin: 12px 0 6px;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
+        margin: $space-3 0 $space-tight;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     &__yaml {
         max-height: 240px;
         margin: 0;
-        padding: 10px 12px;
+        padding: $space-3 $space-3;
         overflow: auto;
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         background: var(--bg-code);
         border: 1px solid var(--border-soft);
-        border-radius: 6px;
+        border-radius: $radius-control;
     }
 }

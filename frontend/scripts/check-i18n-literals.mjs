@@ -2,12 +2,19 @@
 // Plan 79 D3 ratchet — untranslated user-visible copy.
 //
 // Counts string literals that a user can READ and that are not addressed by a
-// translation key. Four shapes, because copy escapes into all four:
+// translation key. Five shapes, because copy escapes into all five:
 //
 //   1. JSX text nodes            <p>No applications yet</p>
 //   2. JSX copy attributes       <Input placeholder="Search apps" />
 //   3. Toast / confirm arguments toast.error('Failed to save')
 //   4. Copy keys in data objects { label: 'Applications' }   <- sidebarItems.js
+//   5. Inline alternatives       {saving ? 'Saving…' : 'Save'}  {`${n} services`}
+//
+// Shapes 4 and 5 look through the expression to the strings a user can end
+// up reading: both arms of a ternary, the fallback of `a || 'Unknown'`, the
+// right side of `ok && 'Ready'`, and the text of a template literal (its
+// `${}` holes stand in as {{x}}). The CONDITION of a ternary is not read --
+// `status === 'Running' ? ...` compares a value, it does not show one.
 //
 // Shape 4 is the one that usually escapes an extraction pass: a label sitting
 // in a data file is still copy, and if it is resolved at module load it also
@@ -28,6 +35,7 @@
 //   node scripts/check-i18n-literals.mjs --report --file src/pages/Apps.jsx
 //   node scripts/check-i18n-literals.mjs --update    # write the current count
 
+import { execFileSync } from 'node:child_process';
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -79,6 +87,12 @@ const COPY_CALLS = new Set([
 ]);
 const TOAST_OBJECTS = new Set(['toast', 'toasts', 'sonner', 'notifications']);
 
+// Callees whose arguments go to the panel's error tracker, never to a screen:
+// `api.reportClientError({ message: err?.message || 'Unknown error' })`. That
+// English is for whoever reads the server log, and translating it would make
+// reports arrive in each viewer's language.
+const TELEMETRY_CALLS = new Set(['reportClientError']);
+
 // Directories that hold no user-facing copy, or hold it deliberately.
 const SKIP_DIRS = new Set(['__tests__', '__mocks__', 'node_modules']);
 const SKIP_FILE = /\.(test|spec|stories)\.[jt]sx?$/;
@@ -102,7 +116,9 @@ function isCopy(raw) {
     if (value.length < 2) return false;
     if (!/[A-Za-z]/.test(value)) return false;          // numbers, symbols, spacers
     if (/^https?:\/\//.test(value)) return false;        // URLs
-    if (/^[/#.]/.test(value)) return false;              // routes, selectors, anchors
+    // routes, selectors, anchors -- but ". It takes a minute." is the tail of
+    // a sentence split around an element: a dot then a space is never a selector.
+    if (/^[/#.]/.test(value) && !/^[.,;:]\s/.test(value)) return false;
     if (/^[a-z0-9]+([-_.:][a-z0-9]+)+$/.test(value)) return false;  // ids, css classes, keys
     if (/^[A-Z0-9]+(_[A-Z0-9]+)*$/.test(value)) return false;       // CONSTANT_CASE
     if (/^[a-z]+$/.test(value)) return false;            // bare lowercase token: 'sm', 'primary'
@@ -180,9 +196,7 @@ function collectStrings(node, out) {
         return;
     }
     if (node.type === 'TemplateLiteral') {
-        for (const quasi of node.quasis) {
-            if (quasi.value.cooked) out.push({ ...quasi, value: quasi.value.cooked });
-        }
+        out.push({ loc: node.loc, value: templateText(node) });
         for (const expr of node.expressions) collectStrings(expr, out);
         return;
     }
@@ -191,6 +205,68 @@ function collectStrings(node, out) {
         collectStrings(node[key], out);
     }
 }
+
+// A template literal read as one sentence: `${n} services` is the copy
+// "{{x}} services", not the lone word "services" (which isCopy would drop as
+// a bare lowercase token).
+const HOLE = '{{x}}';
+
+// A number and its unit -- `${ms} ms`, `${pct}%`, `${size} GB` -- is a
+// measurement, not a sentence: the unit symbol is the same in every locale
+// the panel ships. Only bare SI/byte symbols qualify; a unit spelled as a
+// word ("{{x}} days", "{{x}}% cpu") is still copy.
+const UNIT_ONLY = /^(ms|s|%|[KMGT]i?B|px)$/;
+function templateText(node) {
+    return node.quasis.map((quasi) => quasi.value.cooked ?? quasi.value.raw).join(HOLE);
+}
+
+/**
+ * The strings a user can end up READING out of an expression, without the
+ * ones it merely computes with. Ternaries yield both arms (never the test);
+ * `a || 'x'` and `a ?? 'x'` yield both sides; `ok && 'x'` only the right one;
+ * a template literal yields its text. Calls (t() included), member reads and
+ * JSX stop the walk -- JSX is visited on its own terms.
+ */
+function leafStrings(node, out) {
+    if (!node) return;
+    switch (node.type) {
+        case 'Literal':
+            if (typeof node.value === 'string') out.push(node);
+            return;
+        case 'TemplateLiteral':
+            out.push({ loc: node.loc, value: templateText(node) });
+            for (const expr of node.expressions) leafStrings(expr, out);
+            return;
+        case 'ConditionalExpression':
+            leafStrings(node.consequent, out);
+            leafStrings(node.alternate, out);
+            return;
+        case 'LogicalExpression':
+            if (node.operator !== '&&') leafStrings(node.left, out);
+            leafStrings(node.right, out);
+            return;
+        default:
+            return;
+    }
+}
+
+const CODE_TAGS = new Set(['code', 'pre']);
+
+/**
+ * Is this child of a <code>/<pre> the sample itself -- a log line,
+ * `S3_BUCKET=${bucket}` -- rather than a placeholder shown in its place?
+ * Only the value (a literal, or `cond && literal`) is exempt; a fallback such
+ * as `{logs || 'Waiting for logs…'}` or a ternary arm is still copy.
+ */
+function isCodeSample(element, expression) {
+    if (!CODE_TAGS.has(element.openingElement?.name?.name)) return false;
+    const value = expression.type === 'LogicalExpression' && expression.operator === '&&'
+        ? expression.right
+        : expression;
+    return value.type === 'Literal' || value.type === 'TemplateLiteral';
+}
+
+const INLINE_SHAPES = new Set(['ConditionalExpression', 'LogicalExpression', 'TemplateLiteral', 'Literal']);
 
 function censusFile(path, rel) {
     const source = readFileSync(path, 'utf8');
@@ -215,6 +291,9 @@ function censusFile(path, rel) {
     const keyed = new WeakSet();
     const record = (node, kind, value) => {
         const text = String(value).trim().replace(/\s+/g, ' ');
+        // `${a} ${b}` is all holes: nothing in it is copy of its own.
+        if (text.includes(HOLE) && !/[A-Za-z]{2,}/.test(text.split(HOLE).join(' '))) return;
+        if (text.includes(HOLE) && UNIT_ONLY.test(text.split(HOLE).join('').trim())) return;
         if (!isCopy(text)) return;
         hits.push({ line: node.loc?.start.line ?? 0, kind, text: text.slice(0, 70) });
     };
@@ -237,6 +316,21 @@ function censusFile(path, rel) {
                 record(node, 'text', node.value);
                 break;
 
+            // 5. Inline alternatives rendered as a child:
+            //    {saving ? 'Saving…' : 'Save'}   {`${n} services`}   {err || 'Failed'}
+            //    Attribute values are not children; shape 2 owns those.
+            case 'JSXElement':
+            case 'JSXFragment':
+                for (const child of node.children) {
+                    if (child.type !== 'JSXExpressionContainer') continue;
+                    if (!INLINE_SHAPES.has(child.expression?.type)) continue;
+                    if (isCodeSample(node, child.expression)) continue;
+                    const strings = [];
+                    leafStrings(child.expression, strings);
+                    for (const literal of strings) record(literal, 'expr', literal.value);
+                }
+                break;
+
             // 2. JSX copy attributes.
             case 'JSXAttribute': {
                 const name = attributeName(node);
@@ -245,7 +339,13 @@ function censusFile(path, rel) {
                         record(node, 'prop', node.value.value);
                     } else if (node.value.type === 'JSXExpressionContainer') {
                         const strings = [];
-                        collectStrings(node.value.expression, strings);
+                        // A ternary's test is a comparison, not copy:
+                        // title={status === 'Running' ? t(...) : t(...)}.
+                        if (INLINE_SHAPES.has(node.value.expression?.type)) {
+                            leafStrings(node.value.expression, strings);
+                        } else {
+                            collectStrings(node.value.expression, strings);
+                        }
                         for (const literal of strings) record(literal, 'prop', literal.value);
                     }
                     // Value handled; keep descending for nested JSX only.
@@ -258,6 +358,7 @@ function censusFile(path, rel) {
             // 3. Toast / confirm arguments.
             case 'CallExpression': {
                 const name = calleeName(node.callee);
+                if (TELEMETRY_CALLS.has(name)) return;
                 const object = calleeObject(node.callee);
                 const isCopyCall = name && COPY_CALLS.has(name)
                     && (object === null || TOAST_OBJECTS.has(object) || name === 'confirm');
@@ -299,6 +400,13 @@ function censusFile(path, rel) {
                     record(node, 'data', node.value.value);
                     return;
                 }
+                // { label: busy ? 'Saving…' : 'Save' }, { title: `Delete ${name}` }
+                if (key && COPY_KEYS.has(key) && INLINE_SHAPES.has(node.value?.type)) {
+                    const strings = [];
+                    leafStrings(node.value, strings);
+                    for (const literal of strings) record(literal, 'data', literal.value);
+                    // Keep descending: an arm may hold JSX or a t() call.
+                }
                 break;
             }
 
@@ -316,11 +424,34 @@ function censusFile(path, rel) {
     return hits;
 }
 
+/**
+ * Extension copies under plugins/ that git does not track: a sibling repo's
+ * build dropped into a dev checkout. They are censused in their own repo
+ * (`--root`), and counting them here made the host number depend on which
+ * extensions a machine happens to have installed -- a fresh clone could never
+ * reach a ceiling written on a dev box. Null when git is unavailable (release
+ * tarball): then everything on disk is counted.
+ */
+function trackedPluginDirs() {
+    if (rootArg) return null;
+    try {
+        const out = execFileSync('git', ['ls-files', '--', 'plugins'], {
+            cwd: srcDir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'],
+        });
+        return new Set(out.split('\n').filter(Boolean).map((line) => line.split('/')[1]));
+    } catch {
+        return null;
+    }
+}
+
 export function census() {
     const byFile = new Map();
+    const tracked = trackedPluginDirs();
     for (const path of walkFiles(srcDir)) {
         const rel = relative(srcDir, path).replaceAll('\\', '/');
         if (SKIP_PATH.test(rel)) continue;
+        const parts = rel.split('/');
+        if (tracked && parts[0] === 'plugins' && parts.length > 2 && !tracked.has(parts[1])) continue;
         const hits = censusFile(path, rel);
         if (hits.length) byFile.set(rel, hits);
     }

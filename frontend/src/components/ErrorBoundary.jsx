@@ -54,8 +54,8 @@ export class ErrorBoundary extends Component {
         if (this.state.hasError) {
             return (
                 <ErrorState
-                    title={t('common.error.title', 'Something went wrong')}
-                    message={t('common.error.unexpected', 'An unexpected error occurred')}
+                    title={t('common.error.title', "This page couldn't load. Try again, or check the server logs.")}
+                    message={t('common.error.unexpected', 'The page hit an unexpected error.')}
                     onRetry={this.handleRetry}
                 />
             );

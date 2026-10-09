@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
-import { AlertTriangle, RefreshCw, Copy, Sparkles, ChevronDown, ChevronRight } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Sparkles, ChevronDown, ChevronRight } from 'lucide-react';
 import { AIContext } from '../../contexts/useServerkitAI.js';
-import { copyToClipboard } from '@/utils/clipboard';
+import { CopyButton } from '@/components/CopyButton';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
 
@@ -25,14 +25,11 @@ export default function ErrorCard({ failedStepName, failureTail, hint, errorMess
     const tailText = Array.isArray(failureTail) ? failureTail.join('\n') : (failureTail || '');
     const tailLines = tailText ? tailText.split('\n') : [];
 
-    const copyError = () => {
-        const blob = [
-            failedStepName ? `Failed step: ${failedStepName}` : null,
-            errorMessage ? `Error: ${errorMessage}` : null,
-            tailText ? `\n${tailText}` : null,
-        ].filter(Boolean).join('\n');
-        copyToClipboard(blob);
-    };
+    const errorReport = [
+        failedStepName ? `Failed step: ${failedStepName}` : null,
+        errorMessage ? `Error: ${errorMessage}` : null,
+        tailText ? `\n${tailText}` : null,
+    ].filter(Boolean).join('\n');
 
     const askAI = () => {
         if (!ai?.open) return;
@@ -51,7 +48,9 @@ export default function ErrorCard({ failedStepName, failureTail, hint, errorMess
             <div className="deploy-console__error-head">
                 <AlertTriangle size={18} />
                 <div>
-                    <strong>{t('app.errorCard.deploymentFailed', 'Deployment failed')}{failedStepName ? ` at "${failedStepName}"` : ''}</strong>
+                    <strong>{failedStepName
+                        ? t('app.errorCard.deploymentFailedAtStep', "Couldn't deploy at “{{step}}”", { step: failedStepName })
+                        : t('app.errorCard.deploymentFailed', "Couldn't deploy")}</strong>
                     {errorMessage && <p className="deploy-console__error-msg">{errorMessage}</p>}
                 </div>
             </div>
@@ -69,11 +68,18 @@ export default function ErrorCard({ failedStepName, failureTail, hint, errorMess
             <div className="deploy-console__error-actions">
                 <SharedButton variant="unstyled" type="button" className="deploy-console__btn deploy-console__btn--primary" onClick={onRetry} disabled={retrying}>
                     <RefreshCw size={14} className={retrying ? 'deploy-console__spin' : ''} />
-                    {retrying ? 'Retrying…' : 'Retry deploy'}
+                    {retrying ? t('app.errorCard.retrying', 'Retrying…') : t('app.errorCard.retryDeploy', 'Retry deploy')}
                 </SharedButton>
-                <SharedButton variant="unstyled" type="button" className="deploy-console__btn" onClick={copyError}>
-                    <Copy size={14} /> {t('app.errorCard.copyError', 'Copy error')}
-                </SharedButton>
+                <CopyButton
+                    value={errorReport}
+                    variant="unstyled"
+                    size="default"
+                    className="deploy-console__btn"
+                    label={t('app.errorCard.copyError', 'Copy error')}
+                    copiedLabel={t('app.copyField.copied', 'Copied')}
+                >
+                    {t('app.errorCard.copyError', 'Copy error')}
+                </CopyButton>
                 {ai?.open && (
                     <SharedButton variant="unstyled" type="button" className="deploy-console__btn" onClick={askAI}>
                         <Sparkles size={14} /> {t('app.errorCard.askAi', 'Ask AI')}
@@ -88,8 +94,8 @@ export default function ErrorCard({ failedStepName, failureTail, hint, errorMess
                     >
                         {showTail ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
                         {showTail
-                            ? 'Hide output'
-                            : `Show output (${tailLines.length} line${tailLines.length === 1 ? '' : 's'})`}
+                            ? t('app.errorCard.hideOutput', 'Hide output')
+                            : t('app.errorCard.showOutput', { count: tailLines.length, defaultValue_one: 'Show output (1 line)', defaultValue_other: 'Show output ({{count}} lines)' })}
                     </SharedButton>
                 )}
             </div>

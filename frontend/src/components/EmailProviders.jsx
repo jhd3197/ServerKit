@@ -4,8 +4,10 @@ import api from '../services/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import PortField from './PortField';
 import { useToast } from '../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const FIELD_LABELS = {
     host: 'Host', port: 'Port', username: 'Username', password: 'Password', use_tls: 'Use TLS',
@@ -66,14 +68,14 @@ export default function EmailProviders() {
             (spec.fields || []).forEach((f) => { if (form[f] !== undefined) payload[f] = form[f]; });
             const res = await api.addEmailProvider(payload);
             if (res?.test && res.test.success === false) {
-                toast.warning(t('app.emailProviders.addedButTestFailed', 'Added, but test failed: {{value}}', { value: res.test.error || 'check credentials' }));
+                toast.warning(t('app.emailProviders.addedButTestFailed', "Added, but the test didn't pass. {{value}}", { value: res.test.error || 'check credentials' }));
             } else {
                 toast.success(t('app.emailProviders.emailProviderAdded', 'Email provider added'));
             }
             cancel();
             load();
         } catch (e) {
-            toast.error(e?.message || t('app.emailProviders.failedToAddProvider', 'Failed to add provider'));
+            toastError(toast, t('app.emailProviders.failedToAddProvider', "Couldn't add the provider."), e);
         } finally {
             setBusy(false);
         }
@@ -83,10 +85,10 @@ export default function EmailProviders() {
         setBusy(true);
         try {
             const r = await api.testEmailProvider(id);
-            if (r.success) toast.success(t('app.emailProviders.credentialsOk', 'Credentials OK')); else toast.error(r.error || t('app.emailProviders.testFailed', 'Test failed'));
+            if (r.success) toast.success(t('app.emailProviders.credentialsOk', 'Credentials OK')); else toastError(toast, t('app.emailProviders.testFailed', "The test didn't pass."), r.error);
             load();
-        } catch {
-            toast.error(t('app.emailProviders.testFailed', 'Test failed'));
+        } catch (err) {
+            toastError(toast, t('app.emailProviders.testFailed', "The test didn't pass."), err);
         } finally {
             setBusy(false);
         }
@@ -94,12 +96,12 @@ export default function EmailProviders() {
 
     const onDefault = async (id) => {
         try { await api.setDefaultEmailProvider(id); toast.success(t('app.emailProviders.defaultTransportUpdated', 'Default transport updated')); load(); }
-        catch { toast.error(t('app.emailProviders.failedToSetDefault', 'Failed to set default')); }
+        catch (err) { toastError(toast, t('app.emailProviders.failedToSetDefault', "Couldn't set the default."), err); }
     };
 
     const onDelete = async (id) => {
-        try { await api.deleteEmailProvider(id); toast.success(t('app.emailProviders.providerRemoved', 'Provider removed')); setConfirmId(null); load(); }
-        catch { toast.error(t('app.emailProviders.failedToRemove', 'Failed to remove')); }
+        try { await api.deleteEmailProvider(id); toast.success(t('app.emailProviders.providerRemoved', 'Provider deleted')); setConfirmId(null); load(); }
+        catch (err) { toastError(toast, t('app.emailProviders.failedToRemove', "Couldn't delete the provider."), err); }
     };
 
     return (
@@ -115,7 +117,7 @@ export default function EmailProviders() {
                 <>
                     {providers.length === 0 ? (
                         <div className="sk-eprov__empty">
-                            {t('app.emailProviders.noProviderConfiguredEmailsFallBack', 'No provider configured — emails fall back to the SMTP channel settings.')}
+                            {t('app.emailProviders.noProviderConfiguredEmailsFallBack', 'No provider configured. Emails fall back to the SMTP channel settings.')}
                         </div>
                     ) : (
                         <ul className="sk-eprov__list">
@@ -129,8 +131,8 @@ export default function EmailProviders() {
                                         <span className="sk-eprov__type">
                                             {p.provider}
                                             {p.from_address ? ` · ${p.from_address}` : ''}
-                                            {p.last_test_ok === true ? ' · ✓ tested' : ''}
-                                            {p.last_test_ok === false ? ' · ✗ test failed' : ''}
+                                            {p.last_test_ok === true ? ` · ${t('app.emailProviders.tested', '✓ tested')}` : ''}
+                                            {p.last_test_ok === false ? ` · ${t('app.emailProviders.testFailedBadge', '✗ test failed')}` : ''}
                                         </span>
                                     </div>
                                     <div className="sk-eprov__actions">
@@ -145,7 +147,7 @@ export default function EmailProviders() {
                                         {confirmId === p.id ? (
                                             <Button variant="destructive" size="sm" onClick={() => onDelete(p.id)}>{t('app.emailProviders.confirm', 'Confirm')}</Button>
                                         ) : (
-                                            <Button variant="ghost" size="sm" onClick={() => setConfirmId(p.id)} aria-label={t('common.actions.remove', 'Remove')}>
+                                            <Button variant="ghost" size="sm" onClick={() => setConfirmId(p.id)} aria-label={t('common.actions.delete', 'Delete')}>
                                                 <Trash2 size={14} />
                                             </Button>
                                         )}
@@ -188,10 +190,22 @@ export default function EmailProviders() {
                                                 STARTTLS
                                             </label>
                                         </Field>
+                                    ) : f === 'port' ? (
+                                        // The relay's SMTP port (25/465/587): a remote port,
+                                        // never one this host binds, so no host check.
+                                        <Field key={f} label={FIELD_LABELS[f] || f}>
+                                            <PortField
+                                                host={false}
+                                                allowPrivileged
+                                                placeholder="587"
+                                                value={form.port || ''}
+                                                onChange={(v) => onField('port', v === '' ? '' : String(v))}
+                                            />
+                                        </Field>
                                     ) : (
                                         <Field key={f} label={FIELD_LABELS[f] || f}>
                                             <Input
-                                                type={spec.secrets.includes(f) ? 'password' : (f === 'port' ? 'number' : 'text')}
+                                                type={spec.secrets.includes(f) ? 'password' : 'text'}
                                                 value={form[f] || ''}
                                                 onChange={(e) => onField(f, e.target.value)}
                                             />
@@ -201,7 +215,7 @@ export default function EmailProviders() {
                             </div>
                             <div className="sk-eprov__form-actions">
                                 <Button variant="outline" size="sm" onClick={cancel} disabled={busy}>{t('common.actions.cancel', 'Cancel')}</Button>
-                                <Button size="sm" onClick={submit} disabled={busy}>{busy ? 'Adding…' : 'Add & test'}</Button>
+                                <Button size="sm" onClick={submit} disabled={busy}>{busy ? t('app.emailProviders.adding', 'Adding…') : t('app.emailProviders.addAndTest', 'Add & test')}</Button>
                             </div>
                         </div>
                     )}

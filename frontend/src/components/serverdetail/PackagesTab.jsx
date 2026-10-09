@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { ListToolbar } from '../ds';
 import JobProgressModal from '../JobProgressModal';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Quick-install presets — packages most users want first when setting
 // up a new server. The agent's manager-detect handles distro mapping;
@@ -46,7 +47,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             setInstalledRaw(data?.output || '');
             setManager(data?.manager || '');
         } catch (err) {
-            toast.error(err.message || t('app.serverPackagesTab.failedToLoadPackages', 'Failed to load packages'));
+            toastError(toast, t('app.serverPackagesTab.failedToLoadPackages', "Couldn't load packages."), err);
         } finally {
             setLoadingInstalled(false);
         }
@@ -72,7 +73,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             const data = await api.searchRemotePackages(serverId, q, 100);
             setSearchResults(data?.results || []);
         } catch (err) {
-            toast.error(err.message || t('app.serverPackagesTab.searchFailed', 'Search failed'));
+            toastError(toast, t('app.serverPackagesTab.searchFailed', "Couldn't search packages."), err);
             setSearchResults([]);
         } finally {
             setSearching(false);
@@ -83,24 +84,25 @@ const PackagesTab = ({ serverId, serverStatus }) => {
         try {
             const result = await api.installRemotePackages(serverId, [name]);
             const channel = result?.channel || `job:${result?.job_id}`;
-            setJob({ channel, title: `Installing ${name}` });
+            setJob({ channel, title: t('app.serverPackagesTab.installingPackage', 'Installing {{name}}', { name }) });
         } catch (err) {
-            toast.error(err.message || t('app.serverPackagesTab.failedToStartInstall', 'Failed to start install', {  }));
+            toastError(toast, t('app.serverPackagesTab.failedToStartInstall', "Couldn't start the install.", {  }), err);
         }
     }
 
     async function handleRemove(name) {
         const ok = await confirm({
-            title: t('app.serverPackagesTab.remove', 'Remove {{name}}', { name: name }),
+            title: t('app.serverPackagesTab.remove', 'Uninstall {{name}}', { name: name }),
             message: t('app.serverPackagesTab.uninstallFromThisServer', 'Uninstall {{name}} from this server?', { name: name }),
+            confirmText: t('common.actions.uninstall', 'Uninstall'),
             variant: 'danger',
         });
         if (!ok) return;
         try {
             await api.removeRemotePackage(serverId, name);
-            toast.success(`${name} removed`);
+            toast.success(t('app.serverPackagesTab.packageRemoved', '{{name}} removed', { name }));
         } catch (err) {
-            toast.error(err.message || t('app.serverPackagesTab.removeFailed', 'Remove failed'));
+            toastError(toast, t('app.serverPackagesTab.removeFailed', "Couldn't uninstall the package."), err);
         }
     }
 
@@ -109,7 +111,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             await api.updateRemotePackageCache(serverId);
             toast.success(t('app.serverPackagesTab.packageCacheUpdated', 'Package cache updated ({{value}})', { value: manager || 'manager' }));
         } catch (err) {
-            toast.error(err.message || t('app.serverPackagesTab.updateFailed', 'Update failed'));
+            toastError(toast, t('app.serverPackagesTab.updateFailed', "Couldn't update the package."), err);
         }
     }
 
@@ -124,7 +126,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             const channel = result?.channel || `job:${result?.job_id}`;
             setJob({ channel, titleKey: 'app.serverPackagesTab.upgradingAllPackages', title: 'Upgrading all packages' });
         } catch (err) {
-            toast.error(err.message || t('app.serverPackagesTab.upgradeFailedToStart', 'Upgrade failed to start'));
+            toastError(toast, t('app.serverPackagesTab.upgradeFailedToStart', "Couldn't start the upgrade."), err);
         }
     }
 
@@ -159,7 +161,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
                         placeholder={t('app.serverPackagesTab.searchPackages', 'Search packages…')}
                     />
                     <Button type="submit" variant="outline" disabled={searching}>
-                        {searching ? 'Searching…' : 'Search'}
+                        {searching ? t('app.serverPackagesTab.searching', 'Searching…') : t('app.serverPackagesTab.search', 'Search')}
                     </Button>
                 </form>
             </ListToolbar>
@@ -212,7 +214,7 @@ const PackagesTab = ({ serverId, serverStatus }) => {
                     <p className="text-muted-foreground">{t('common.loading', 'Loading…')}</p>
                 ) : (
                     <pre className="server-packages__raw">
-                        {installedRaw || 'No packages reported.'}
+                        {installedRaw || t('app.serverPackagesTab.noPackagesReported', 'No packages reported.')}
                     </pre>
                 )}
                 <p className="server-packages__hint text-muted-foreground">
@@ -230,9 +232,9 @@ const PackagesTab = ({ serverId, serverStatus }) => {
             />
 
             <div className="server-packages__remove-tip text-muted-foreground">
-                {t('app.serverPackagesTab.tipToRemoveASpecificPackage', 'Tip: to remove a specific package, search for it and use the row\'s')}
+                {t('app.serverPackagesTab.tipToRemoveASpecificPackage', "Tip: to uninstall a specific package, search for it and use the row's")}
                 <em> {t('app.serverPackagesTab.install', 'Install')} </em>
-                {t('app.serverPackagesTab.buttonToReinstallOrOpenA', 'button to reinstall, or open a terminal session for advanced operations. Direct remove from this UI:')}
+                {t('app.serverPackagesTab.buttonToReinstallOrOpenA', 'button to reinstall, or open a terminal session for advanced operations. Direct uninstall from this UI:')}
                 <RemoveByName onRemove={handleRemove} />
             </div>
         </div>
@@ -261,7 +263,7 @@ function RemoveByName({ onRemove }) {
                 size="sm"
             />
             <Button type="submit" variant="outline" size="sm" disabled={!name.trim()}>
-                {t('common.actions.remove', 'Remove')}
+                {t('common.actions.uninstall', 'Uninstall')}
             </Button>
         </form>
     );

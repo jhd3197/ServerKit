@@ -2,7 +2,7 @@
 // formatting, search highlighting.
 
 export const LOG_GROUPS = [
-    { id: 'web',      labelKey: 'app.logHelpers.webServers', label: 'Web Servers', match: (p) => /(nginx|apache2|httpd)/i.test(p) },
+    { id: 'web',      labelKey: 'app.logHelpers.webServers', label: 'Web servers', match: (p) => /(nginx|apache2|httpd)/i.test(p) },
     { id: 'app',      labelKey: 'app.logHelpers.applications', label: 'Applications', match: (p) => /(php-fpm|gunicorn|uwsgi|node|app)/i.test(p) && !/nginx|apache/i.test(p) },
     { id: 'database', labelKey: 'common.labels.databases', label: 'Databases', match: (p) => /(mysql|mariadb|postgres|redis|mongo)/i.test(p) },
     { id: 'system',   labelKey: 'common.labels.system', label: 'System', match: (p) => /(syslog|messages|auth|secure|kern|dmesg|boot|cron)/i.test(p) },

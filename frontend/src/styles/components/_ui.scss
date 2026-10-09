@@ -20,7 +20,7 @@
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     font-weight: $font-weight-medium;
     line-height: 1;
     color: $text-secondary;
@@ -39,13 +39,13 @@
 %ui-field-base {
     display: block;
     width: 100%;
-    padding: 0 $space-3 + 1; // 13px
+    padding: 0 $space-3;
     background: $bg-body;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-control;
     color: $text-primary;
     font-family: inherit;
-    font-size: $font-size-base;
+    font-size: $text-base;
     line-height: 1.5;
     @include transition(border-color);
 
@@ -57,7 +57,7 @@
     &:focus-visible {
         border-color: $accent-primary;
         outline: none;
-        box-shadow: 0 0 0 3px fade($accent-primary-raw, 18%);
+        box-shadow: $focus-ring;
     }
 
     &:disabled,
@@ -68,23 +68,22 @@
 
     &[aria-invalid='true'] {
         border-color: $danger;
-        box-shadow: 0 0 0 3px fade($danger-raw, 18%);
     }
 }
 
 .ui-input {
     @extend %ui-field-base;
-    height: 40px;
+    height: $control-md;
 
     &::file-selector-button {
         margin-right: $space-3;
         padding: 0 $space-2;
-        height: 28px;
+        height: $control-sm - 8px;
         background: transparent;
         border: none;
         color: $text-primary;
         font-weight: $font-weight-medium;
-        font-size: $font-size-sm + 1;
+        font-size: $text-sm;
         cursor: pointer;
     }
 }
@@ -92,8 +91,8 @@
 .ui-textarea {
     @extend %ui-field-base;
     min-height: 80px;
-    padding-top: $space-2 + 1;
-    padding-bottom: $space-2 + 1;
+    padding-top: 0;
+    padding-bottom: 0;
     resize: vertical;
 }
 
@@ -105,7 +104,7 @@
     width: 16px;
     height: 16px;
     border: 1px solid $border-active;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     background: $bg-body;
     cursor: pointer;
     @include transition();
@@ -143,7 +142,7 @@
     position: relative;
     flex-shrink: 0;
     width: 36px;
-    height: 20px;
+    height: 20px; // geometry: switch track
     padding: 0;
     border: none;
     border-radius: $radius-full;
@@ -170,10 +169,10 @@
         display: block;
         width: 16px;
         height: 16px;
-        margin: 2px;
+        margin: $space-hair;
         background: #fff;
         border-radius: 50%;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); // geometry: draws the knob's edge against a light track
         transition: transform 150ms ease;
         transform: translateX(0);
     }
@@ -190,8 +189,8 @@
     background: $bg-card;
     color: $text-primary;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
-    box-shadow: $shadow-sm;
+    border-radius: $radius-card;
+    box-shadow: none;
     display: flex;
     flex-direction: column;
 }
@@ -199,12 +198,12 @@
 .ui-card-header {
     display: flex;
     flex-direction: column;
-    gap: $space-1 + 2; // 6px
-    padding: $space-6;
+    gap: $space-tight; // 6px
+    padding: $space-4;
 }
 
 .ui-card-title {
-    font-size: $font-size-md;
+    font-size: $text-md;
     font-weight: $font-weight-semibold;
     line-height: 1.2;
     color: $text-primary;
@@ -212,14 +211,14 @@
 }
 
 .ui-card-description {
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     color: $text-tertiary;
     line-height: 1.45;
     margin: 0;
 }
 
 .ui-card-content {
-    padding: 0 $space-6 $space-6;
+    padding: 0 $space-4 $space-4;
     flex: 1;
 }
 
@@ -227,7 +226,7 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    padding: 0 $space-6 $space-6;
+    padding: 0 $space-4 $space-4;
 }
 
 // --------------------------------------------
@@ -244,7 +243,7 @@
     width: 100%;
     caption-side: bottom;
     border-collapse: collapse;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
 }
 
 .ui-table-header tr {
@@ -278,25 +277,33 @@
 }
 
 .ui-table-head {
-    height: 40px;
-    padding: 0 $space-4;
+    height: $control-md; // table header spec: 32
+    padding: 0 $space-3;
     text-align: left;
     vertical-align: middle;
     color: $text-tertiary;
     font-weight: $font-weight-medium;
-    font-size: $font-size-xs + 1;
+    font-size: $text-xs;
 }
 
 .ui-table-cell {
-    padding: $space-3 + 1 $space-4; // 13px 16px
+    // Rows: min 40 (height on a cell is a minimum; two-line rows grow).
+    height: $control-lg;
+    padding: $space-2 $space-3;
     vertical-align: middle;
     color: $text-primary;
 }
 
+// Outer edges get $space-4.
+.ui-table-head:first-child,
+.ui-table-cell:first-child { padding-inline-start: $space-4; }
+.ui-table-head:last-child,
+.ui-table-cell:last-child { padding-inline-end: $space-4; }
+
 .ui-table-caption {
     margin-top: $space-4;
     color: $text-tertiary;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
 }
 
 // --------------------------------------------
@@ -325,8 +332,8 @@
     padding: $space-6;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
-    box-shadow: $shadow-lg;
+    border-radius: $radius-overlay;
+    box-shadow: $shadow-overlay;
     overflow-y: auto;
     @include custom-scrollbar();
 
@@ -341,11 +348,11 @@
     top: $space-4;
     right: $space-4;
     width: 28px;
-    height: 28px;
+    height: $control-sm;
     padding: 0;
     background: transparent;
     border: none;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-tertiary;
     cursor: pointer;
     display: inline-flex;
@@ -372,7 +379,7 @@
 .ui-dialog-header {
     display: flex;
     flex-direction: column;
-    gap: $space-1 + 2;
+    gap: $space-tight;
     text-align: left;
 }
 
@@ -389,7 +396,7 @@
 }
 
 .ui-dialog-title {
-    font-size: $font-size-lg;
+    font-size: $text-lg;
     font-weight: $font-weight-semibold;
     line-height: 1.2;
     color: $text-primary;
@@ -397,7 +404,7 @@
 }
 
 .ui-dialog-description {
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     color: $text-tertiary;
     line-height: 1.5;
     margin: 0;
@@ -419,7 +426,7 @@
     padding: $space-6;
     background: $bg-card;
     border-color: $border-subtle;
-    box-shadow: $shadow-lg;
+    box-shadow: $shadow-overlay;
     overflow-y: auto;
     @include custom-scrollbar();
 
@@ -486,7 +493,7 @@
 // --------------------------------------------
 .ui-select-trigger {
     @extend %ui-field-base;
-    height: 40px;
+    height: $control-md;
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
@@ -510,6 +517,17 @@
         color: $text-tertiary;
         flex-shrink: 0;
     }
+
+    &--sm {
+        width: auto;
+        height: $control-sm;
+        padding-block: 0;
+        padding-inline: $space-2;
+        gap: $space-1;
+        font-size: $text-sm;
+
+        .ui-select-icon { width: 14px; height: 14px; }
+    }
 }
 
 .ui-select-content {
@@ -520,8 +538,8 @@
     overflow: hidden;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-md;
+    border-radius: $radius-card;
+    box-shadow: $shadow-raised;
     color: $text-primary;
 }
 
@@ -533,18 +551,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 24px;
+    height: 24px; // geometry: menu scroll arrow strip, not a control
     cursor: default;
     color: $text-tertiary;
 }
 
 .ui-select-label {
-    padding: $space-1 + 2 $space-2;
-    font-size: $font-size-xs + 1;
+    padding: $space-tight $space-2;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
 }
 
 .ui-select-item {
@@ -553,8 +569,8 @@
     align-items: center;
     width: 100%;
     padding: $space-2 $space-2 $space-2 $space-8;
-    border-radius: $radius-md;
-    font-size: $font-size-sm + 1;
+    border-radius: $radius-control;
+    font-size: $text-sm;
     color: $text-primary;
     cursor: default;
     user-select: none;
@@ -604,8 +620,8 @@
     padding: $space-1;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-md;
+    border-radius: $radius-card;
+    box-shadow: $shadow-raised;
     color: $text-primary;
     outline: none;
 }
@@ -618,8 +634,8 @@
     padding: $space-4;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
-    box-shadow: $shadow-md;
+    border-radius: $radius-control;
+    box-shadow: $shadow-raised;
     color: $text-primary;
     outline: none;
 }
@@ -635,13 +651,13 @@
     padding: $space-1;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
-    box-shadow: $shadow-md;
+    border-radius: $radius-control;
+    box-shadow: $shadow-raised;
     color: $text-primary;
 }
 
 .ui-dropdown-sub-content {
-    box-shadow: $shadow-lg;
+    box-shadow: $shadow-overlay;
 }
 
 .ui-dropdown-item,
@@ -652,9 +668,9 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    padding: $space-1 + 2 $space-2; // 6px 8px
-    border-radius: $radius-sm;
-    font-size: $font-size-sm + 1;
+    padding: $space-tight $space-2; // 6px 8px
+    border-radius: $radius-badge;
+    font-size: $text-sm;
     color: $text-primary;
     cursor: default;
     user-select: none;
@@ -702,8 +718,8 @@
 }
 
 .ui-dropdown-label {
-    padding: $space-1 + 2 $space-2;
-    font-size: $font-size-xs + 1;
+    padding: $space-tight $space-2;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
 
@@ -718,8 +734,7 @@
 
 .ui-dropdown-shortcut {
     margin-left: auto;
-    font-size: $font-size-xs + 1;
-    letter-spacing: 0.1em;
+    font-size: $text-xs;
     opacity: 0.6;
 }
 
@@ -734,7 +749,7 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-elevated;
     color: $text-primary;
 }
@@ -758,14 +773,14 @@
 .ui-command-input {
     flex: 1;
     width: 100%;
-    height: 44px;
-    padding: $space-3 0;
+    height: $control-lg; // borderless search row heading the command list
+    padding: 0;
     background: transparent;
     border: none;
     outline: none;
     color: $text-primary;
     font-family: inherit;
-    font-size: $font-size-base;
+    font-size: $text-base;
 
     &::placeholder { color: $text-tertiary; }
 
@@ -785,7 +800,7 @@
 .ui-command-empty {
     padding: $space-6 0;
     text-align: center;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     color: $text-tertiary;
 }
 
@@ -795,8 +810,8 @@
     color: $text-primary;
 
     [cmdk-group-heading] {
-        padding: $space-1 + 2 $space-2;
-        font-size: $font-size-xs + 1;
+        padding: $space-tight $space-2;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
     }
@@ -813,9 +828,9 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    padding: $space-1 + 2 $space-2;
-    border-radius: $radius-sm;
-    font-size: $font-size-sm + 1;
+    padding: $space-tight $space-2;
+    border-radius: $radius-badge;
+    font-size: $text-sm;
     color: $text-primary;
     cursor: default;
     user-select: none;
@@ -842,8 +857,7 @@
 
 .ui-command-shortcut {
     margin-left: auto;
-    font-size: $font-size-xs + 1;
-    letter-spacing: 0.1em;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -872,19 +886,15 @@
     &--2xl { max-width: 72rem; }
 
     .form-group > label:not(.checkbox-label) {
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
     .form-help {
         display: block;
         margin-top: $space-2;
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -892,7 +902,7 @@
 .sk-modal__header {
     display: flex;
     flex-direction: column;
-    gap: $space-1 + 2;
+    gap: $space-tight;
     padding: $space-4 $space-10 $space-4 $space-6; // right pad clears the close btn
     border-bottom: 1px solid $border-subtle;
 }
@@ -902,7 +912,7 @@
 .sk-modal__subtitle {
     margin: 0 0 $space-4;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     line-height: 1.5;
 }
 
@@ -955,7 +965,7 @@
     justify-content: center;
     flex-shrink: 0;
     width: 48px;
-    height: 48px;
+    height: 48px; // geometry: icon medallion
     border-radius: 50%;
     border: 1px solid transparent;
 
@@ -981,8 +991,8 @@
 }
 
 .sk-confirm__details {
-    margin: $space-1 + 2 0 0;
-    font-size: $font-size-sm + 1;
+    margin: $space-tight 0 0;
+    font-size: $text-sm;
     color: $text-tertiary;
 }
 

@@ -11,7 +11,7 @@
         padding: $space-5;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-xl;
+        border-radius: $radius-overlay;
     }
 
     &__mode-title {
@@ -19,7 +19,7 @@
         align-items: center;
         gap: $space-2;
         margin: 0 0 $space-3;
-        font-size: $font-size-lg;
+        font-size: $text-lg;
 
         svg { color: $primary-color; flex-shrink: 0; }
     }
@@ -60,7 +60,7 @@
         padding: $space-4 $space-5;
         background: $warning-bg;
         border: 1px solid $warning-border;
-        border-radius: $radius-xl;
+        border-radius: $radius-overlay;
 
         > svg { color: $warning; flex-shrink: 0; margin-top: 2px; }
 

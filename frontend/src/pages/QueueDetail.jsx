@@ -19,6 +19,9 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
+import {
     DataTable, DataTableFooter, MetricCard, KpiBand, Pill, SortChipBar,
     statusKind, statusLabel,
 } from '@/components/ds';
@@ -30,6 +33,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const STATUS_ORDER = ['pending', 'in_flight', 'completed', 'failed', 'dead_letter'];
 
@@ -136,12 +140,12 @@ const QueueDetail = () => {
             setQueue(queueRes.queue || null);
             setGroup(groupRes?.group || null);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueDetail.couldntLoadQueue', "Couldn't load the queue."), err);
             navigate('/queue');
         } finally {
             setLoading(false);
         }
-    }, [groupSlug, queueSlug, navigate, toast]);
+    }, [groupSlug, queueSlug, navigate, t, toast]);
 
     const loadMessages = useCallback(async (status) => {
         try {
@@ -151,9 +155,9 @@ const QueueDetail = () => {
             });
             setMessages(res.messages || []);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueDetail.couldntLoadMessages', "Couldn't load messages."), err);
         }
-    }, [groupSlug, queueSlug, toast]);
+    }, [groupSlug, queueSlug, t, toast]);
 
     useEffect(() => {
         loadMeta();
@@ -183,8 +187,8 @@ const QueueDetail = () => {
         let payload = {};
         try {
             payload = JSON.parse(sendForm.payload);
-        } catch {
-            toast.error(t('app.queueDetail.payloadMustBeValidJson', 'Payload must be valid JSON'));
+        } catch (err) {
+            toastError(toast, t('app.queueDetail.payloadMustBeValidJson', 'Payload must be valid JSON, like {"key": "value"}.'), err);
             return;
         }
         try {
@@ -197,7 +201,7 @@ const QueueDetail = () => {
             setSendForm({ payload: '{}', priority: 0, delay_ms: 0 });
             loadMessages(statusFilter);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueDetail.couldntSend', "Couldn't send the message."), err);
         }
     };
 
@@ -207,13 +211,13 @@ const QueueDetail = () => {
             toast.success(t('app.queueDetail.messageRequeued', 'Message requeued'));
             loadMessages(statusFilter);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueDetail.couldntRequeue', "Couldn't requeue the message."), err);
         }
     };
 
     const handleDelete = async (msg) => {
         const confirmed = await confirm({
-            title: t('app.queueDetail.deleteMessage', 'Delete Message'),
+            title: t('app.queueDetail.deleteMessage', 'Delete message'),
             message: t('app.queueDetail.permanentlyDeleteThisMessage', 'Permanently delete this message?'),
             variant: 'danger',
         });
@@ -224,7 +228,7 @@ const QueueDetail = () => {
             if (selectedMessage?.id === msg.id) setSelectedMessage(null);
             loadMessages(statusFilter);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.queueDetail.couldntDelete', "Couldn't delete the message."), err);
         }
     };
 
@@ -286,6 +290,7 @@ const QueueDetail = () => {
             header: '',
             sortable: false,
             hideable: false,
+            width: '1%',
             className: 'col-actions',
             cellClassName: 'col-actions',
             render: (msg) => (
@@ -334,7 +339,7 @@ const QueueDetail = () => {
         <div className="queue-page queue-detail">
             <div className="queue-detail-header">
                 <Button variant="unstyled" type="button" className="queue-back" onClick={() => navigate('/queue')}>
-                    <ArrowLeft size={16} /> {t('app.queueDetail.queueBus', 'Queue Bus')}
+                    <ArrowLeft size={16} /> {t('app.queueDetail.queueBus', 'Queue bus')}
                 </Button>
                 <div className="queue-detail-headline">
                     <div className="queue-workbar-title">
@@ -350,7 +355,7 @@ const QueueDetail = () => {
                         )}
                         {!viewOnly && (
                             <Button variant="outline" onClick={() => setShowSend(true)}>
-                                <Send size={16} /> {t('app.queueDetail.sendMessage', 'Send Message')}
+                                <Send size={16} /> {t('app.queueDetail.sendMessage', 'Send message')}
                             </Button>
                         )}
                         <Button variant="outline" onClick={() => { loadMeta(); loadMessages(statusFilter); }}>
@@ -400,14 +405,15 @@ const QueueDetail = () => {
                         filter, not table chrome — changing it refetches. */}
                     <div className="queue-messages-toolbar">
                         <div className="queue-messages-selects">
-                            <select
-                                className="queue-select"
-                                value={statusFilter}
-                                onChange={(e) => setStatusFilter(e.target.value)}
-                            >
-                                <option value="all">{t('app.queueDetail.allStatuses', 'All statuses')}</option>
-                                {STATUS_ORDER.map(s => <option key={s} value={s}>{statusLabel(s)}</option>)}
-                            </select>
+                            <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                <SelectTrigger className="queue-select" aria-label={t('app.queueDetail.allStatuses', 'All statuses')}>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">{t('app.queueDetail.allStatuses', 'All statuses')}</SelectItem>
+                                    {STATUS_ORDER.map(s => <SelectItem key={s} value={s}>{statusLabel(s)}</SelectItem>)}
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
 
@@ -421,7 +427,7 @@ const QueueDetail = () => {
                             title={t('app.queueDetail.noMessages', 'No messages')}
                             description={viewOnly
                                 ? t('app.queueDetail.thisSystemQueueHasNoMessages', 'This system queue has no messages in this view.')
-                                : t('app.queueDetail.thisQueueIsEmptySendA', 'This queue is empty. Send a message to get started.')}
+                                : t('app.queueDetail.thisQueueIsEmptySendA', 'This queue is empty. Messages you send appear here.')}
                         />
                     ) : (
                         <DataTable
@@ -433,8 +439,7 @@ const QueueDetail = () => {
                             {...chrome.tableProps}
                             onRowClick={(msg) => setSelectedMessage(msg)}
                             rowClassName={(msg) => (selectedMessage?.id === msg.id ? 'is-selected' : '')}
-                            className="queue-table-wrap"
-                            tableClassName="queue-table"
+                            className="queue-table"
                             footer={(
                                 <DataTableFooter
                                     shown={messages.length}
@@ -460,7 +465,7 @@ const QueueDetail = () => {
                             <div><strong>{t('app.queueDetail.attempts2', 'Attempts:')}</strong> {selectedMessage.attempts} / {selectedMessage.max_attempts}</div>
                             <div><strong>{t('app.queueDetail.created2', 'Created:')}</strong> {new Date(selectedMessage.created_at).toLocaleString()}</div>
                             {selectedMessage.error_message && (
-                                <div className="queue-message-error"><strong>{t('app.queueDetail.error', 'Error:')}</strong> {selectedMessage.error_message}</div>
+                                <div className="queue-message-error"><strong>{t('app.queueDetail.error', 'Reason:')}</strong> {selectedMessage.error_message}</div>
                             )}
                             <div className="queue-message-section"><strong>{t('app.queueDetail.payload2', 'Payload:')}</strong>
                                 <pre>{JSON.stringify(selectedMessage.payload, null, 2)}</pre>
@@ -482,7 +487,7 @@ const QueueDetail = () => {
                 )}
             </div>
 
-            <Modal open={showSend && !viewOnly} onClose={() => setShowSend(false)} title={t('app.queueDetail.sendMessage', 'Send Message')}>
+            <Modal open={showSend && !viewOnly} onClose={() => setShowSend(false)} title={t('app.queueDetail.sendMessage', 'Send message')}>
                         <form onSubmit={handleSend}>
                                 <div className="form-group">
                                     <Label htmlFor="payload">{t('app.queueDetail.payloadJson', 'Payload (JSON)')}</Label>

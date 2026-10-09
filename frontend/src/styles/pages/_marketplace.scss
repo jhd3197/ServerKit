@@ -1,9 +1,6 @@
 // Marketplace page styles
 
 .marketplace-page {
-    .card {
-        border-radius: $radius-lg;
-    }
 
     .marketplace-hero {
         position: relative;
@@ -15,7 +12,7 @@
         padding: $space-6;
         overflow: hidden;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: $bg-card;
     }
 
@@ -34,11 +31,8 @@
         gap: $space-2;
         margin-bottom: $space-3;
         color: $accent-primary;
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
 
         svg {
             width: 15px;
@@ -78,178 +72,39 @@
         h2 {
             margin: 0;
             color: $text-primary;
-            font-size: $font-size-lg;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             letter-spacing: 0;
         }
     }
 
-    .marketplace-kicker {
-        margin: 0 0 $space-1;
-        color: var(--text-ghost);
-        font-family: var(--mono);
-        font-size: $font-size-xs;
-        font-weight: $font-weight-medium;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-    }
-
-    .extensions-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: $space-3;
-    }
-
-    .extension-card {
-        display: flex;
-        flex-direction: column;
-        gap: $space-3;
-        padding: $space-4;
-        background: $bg-card;
-        transition:
-            transform $transition-base,
-            border-color $transition-base,
-            box-shadow $transition-base;
-
-        &:hover {
-            transform: translateY(-2px);
-            border-color: $border-active;
-            box-shadow: var(--shadow-lg);
-        }
-    }
-
-    .extension-card--clickable {
-        cursor: pointer;
-
-        &:focus-visible {
-            outline: 2px solid $accent-primary;
-            outline-offset: 2px;
-        }
-    }
-
-    // Cover banner. Gradient variant (per-slug hue set inline via
-    // extensionCoverStyle) holds the brand mark / manifest icon / category glyph.
-    .extension-card__cover {
-        position: relative;
+    // ExtensionCover in compact form: the CatalogCard's 36px icon slot. It
+    // keeps the cover's fallback chain (light tile for image art, per-slug
+    // gradient for the white brand mark / glyph), just at icon size.
+    .sk-catalog-card__art {
         display: grid;
         place-items: center;
-        height: 140px;
-        border-radius: $radius-md;
-        overflow: hidden;
+        width: 100%;
+        height: 100%;
 
-        // Illustrated-icon variant: a clean light tile that lets the colourful
-        // 3D art sit centred with breathing room (drawn for a light backdrop).
         &--icon {
             background: #fff;
         }
-    }
 
-    // Featured ribbon (top-left of the cover). Driven by manifest `featured`;
-    // the feature_score only orders cards, it is not shown.
-    .extension-featured-badge {
-        position: absolute;
-        top: 8px;
-        left: 8px;
-        z-index: 2;
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 3px 9px 3px 7px;
-        border-radius: $radius-full;
-        background: linear-gradient(135deg, #f7b733, #fc9d3c);
-        color: #1c1200;
-        font-size: 11px;
-        font-weight: 700;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+        .extension-card__brand,
+        .extension-card__glyph {
+            color: rgba(255, 255, 255, 0.92);
+        }
 
-        svg {
-            width: 12px;
-            height: 12px;
-            fill: currentColor;
+        .extension-card__glyph {
+            width: 20px;
+            height: 20px; // geometry: icon
         }
     }
 
-    .extension-card--featured {
-        border-color: rgba(247, 183, 51, 0.5);
-        box-shadow: 0 0 0 1px rgba(247, 183, 51, 0.22);
-    }
-
-    .extension-card__brand,
-    .extension-card__glyph {
-        color: rgba(255, 255, 255, 0.92);
-    }
-
-    .extension-card__glyph {
-        width: 34px;
-        height: 34px;
-    }
-
-    // Registry logos and bundled illustrated icons share one size (never
-    // stretched or zoomed) so every card reads consistently with room around
-    // the art; registry logos are normalized to the same fill at the source.
-    .extension-card__icon {
-        width: 92px;
-        height: 92px;
-        max-width: 66%;
-        object-fit: contain;
-    }
-
-    .extension-card__footer,
-    .extension-card__info,
-    .extension-card__actions {
-        display: flex;
-        align-items: center;
-    }
-
-    .extension-card__footer {
-        justify-content: space-between;
-        gap: $space-3;
-    }
-
-    .extension-card__badges {
-        display: flex;
-        align-items: center;
-        gap: $space-2;
-        flex-wrap: wrap;
-        min-width: 0;
-    }
-
-    .extension-card__body {
-        min-width: 0;
-
-        h3 {
-            margin: 0 0 $space-2;
-            color: $text-primary;
-            font-size: $font-size-md;
-            line-height: $line-height-tight;
-            letter-spacing: 0;
-        }
-    }
-
-    .extension-card__desc {
-        display: -webkit-box;
-        min-height: 40px;
-        margin: 0;
-        overflow: hidden;
-        color: $text-secondary;
-        font-size: $font-size-base;
-        line-height: $line-height-normal;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-    }
-
-    .extension-card__footer {
-        margin-top: auto;
-        padding-top: $space-3;
-        border-top: 1px solid $border-subtle;
-    }
-
-    .extension-card__info {
-        flex-wrap: wrap;
-        gap: $space-2;
-        min-width: 0;
+    .marketplace-installed-label {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .installed-list {
@@ -279,9 +134,9 @@
         align-items: center;
         justify-content: center;
         width: 34px;
-        height: 34px;
+        height: 34px; // geometry: icon tile
         flex: 0 0 34px;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         svg {
             width: 17px;
@@ -312,7 +167,7 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-base;
+            font-size: $text-base;
         }
     }
 
@@ -328,7 +183,7 @@
     .installed-item__error {
         margin: $space-1 0 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
     }
 
@@ -348,11 +203,11 @@
     }
 
     .marketplace-empty {
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         svg {
             width: 30px;
-            height: 30px;
+            height: 30px; // geometry: icon
         }
     }
 
@@ -368,10 +223,6 @@
             .btn {
                 width: 100%;
             }
-        }
-
-        .extensions-grid {
-            grid-template-columns: 1fr;
         }
 
         .installed-item {
@@ -393,25 +244,15 @@
             align-items: flex-start;
             flex-direction: column;
         }
-
-        .extension-card__footer {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-
-        .extension-card__actions,
-        .extension-card__actions .btn {
-            width: 100%;
-        }
     }
 }
 
-// First-party "by ServerKit" badge. Rendered both inside .marketplace-page
-// (cards) and inside the detail Modal (a Radix portal outside the page tree),
-// so it lives at the root. Matches the `secondary` variant selector specificity
-// and wins on source order to apply the accent tint.
+// First-party "by ServerKit" badge, rendered in the detail Modal (a Radix
+// portal outside the page tree), so it lives at the root. Matches the
+// `secondary` variant selector specificity and wins on source order to apply
+// the accent tint.
 [data-slot='badge'].extension-firstparty {
-    gap: 4px;
+    gap: $space-1;
     border-color: var(--accent-dim);
     @include status-variant(var(--accent-bright), var(--accent-bg));
     font-weight: $font-weight-semibold;
@@ -435,7 +276,7 @@
         display: grid;
         place-items: center;
         height: 128px;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         overflow: hidden;
 
         &--icon {
@@ -449,7 +290,7 @@
 
         .extension-card__glyph {
             width: 46px;
-            height: 46px;
+            height: 46px; // geometry: icon
         }
 
         .extension-card__icon {
@@ -480,7 +321,7 @@
         flex-wrap: wrap;
         gap: $space-3;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__repo-link {
@@ -503,7 +344,7 @@
     &__desc {
         margin: 0;
         color: $text-secondary;
-        font-size: $font-size-base;
+        font-size: $text-base;
         line-height: $line-height-normal;
     }
 
@@ -517,7 +358,7 @@
         width: 100%;
         height: auto;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-elevated;
         object-fit: cover;
     }
@@ -532,7 +373,7 @@
     &__section-label {
         margin: 0 0 $space-2;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
     }
 
@@ -558,7 +399,7 @@
         list-style: none;
 
         code {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
         }
     }
@@ -580,7 +421,7 @@
     h3 {
         margin: 0 0 $space-1;
         color: $text-primary;
-        font-size: $font-size-md;
+        font-size: $text-md;
         font-weight: $font-weight-semibold;
     }
 
@@ -594,9 +435,9 @@
     align-items: center;
     justify-content: center;
     width: 38px;
-    height: 38px;
+    height: 38px; // geometry: icon tile
     flex: 0 0 38px;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     color: $accent-primary;
     background: fade($accent-primary-raw, 12%);
 
@@ -612,7 +453,7 @@
     margin-bottom: $space-4;
     padding: $space-1;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     background: $bg-body;
 }
 
@@ -620,14 +461,14 @@
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    height: 32px;
+    height: $control-sm;
     padding: 0 $space-3;
     border: 1px solid transparent;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: transparent;
     color: $text-secondary;
     font-family: inherit;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     font-weight: $font-weight-semibold;
     cursor: pointer;
     transition:
@@ -654,7 +495,7 @@
 .plugin-install-source {
     p {
         margin: 0 0 $space-3;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -687,7 +528,7 @@
 .plugin-file-note {
     margin-top: $space-2;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // Two-step GitHub install: consent card shown after resolve, before install.
@@ -697,7 +538,7 @@
     gap: $space-4;
     padding: $space-4;
     border: 1px solid $border-color;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     background: $bg-elevated;
 
     &__head {
@@ -708,7 +549,7 @@
 
         h4 {
             margin: 0 0 $space-1;
-            font-size: $font-size-lg;
+            font-size: $text-lg;
         }
     }
 
@@ -718,7 +559,7 @@
         align-items: center;
         gap: $space-3;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         code {
             font-family: $font-mono;
@@ -740,7 +581,7 @@
     &__desc {
         margin: 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
     }
 
@@ -748,7 +589,7 @@
     // unsigned / unknown-publisher, red when the signature failed to verify.
     &__sig-note {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
         color: $text-tertiary;
 
@@ -759,7 +600,7 @@
 
     &__label {
         margin: 0 0 $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-secondary;
     }
@@ -782,14 +623,14 @@
             display: flex;
             align-items: flex-start;
             gap: $space-2;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $warning;
 
             svg {
                 flex-shrink: 0;
                 width: 15px;
                 height: 15px;
-                margin-top: 2px;
+                margin-top: $space-hair;
             }
         }
     }
@@ -839,12 +680,12 @@
     }
 
     &__label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 
     &__hint {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: $line-height-normal;
     }
 }
@@ -874,21 +715,21 @@
 
         h4 {
             margin: 0;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
         }
     }
 
     &__count {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     // The observation-window caveat under a section heading.
     &__scope {
         margin: 0;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
     }
 
@@ -908,7 +749,7 @@
         padding: $space-3;
         border: 1px solid $border-subtle;
         border-left: 2px solid $border-active;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-elevated;
 
         // Left edge carries the verdict so a scan down the list reads the
@@ -928,7 +769,7 @@
 
         code {
             font-family: $font-mono;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-primary;
             overflow-wrap: anywhere;
         }
@@ -937,14 +778,14 @@
     &__note {
         margin: 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
 
         code {
             font-family: $font-mono;
-            font-size: $font-size-sm;
-            padding: 1px 4px;
-            border-radius: $radius-sm;
+            font-size: $text-xs;
+            padding: 1px $space-1;
+            border-radius: $radius-badge;
             background: $bg-code;
             color: $text-primary;
             overflow-wrap: anywhere;
@@ -963,7 +804,7 @@
         padding-top: $space-2;
         border-top: 1px solid $border-subtle;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: $line-height-normal;
     }
 
@@ -975,11 +816,11 @@
         overflow: auto;
         padding: $space-3;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-code;
         color: $text-secondary;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-normal;
         white-space: pre;
     }
@@ -993,7 +834,7 @@
         p {
             margin: 0;
             color: $danger;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: $line-height-normal;
         }
     }

@@ -4,7 +4,7 @@ import {
     Layers, Check, Download, Loader2, PackageX, ShieldAlert, RefreshCw, ChevronRight,
 } from 'lucide-react';
 import api from '../../services/api';
-import { Drawer, SearchField } from '@/components/ds';
+import { Drawer, SearchField, CatalogCard, CatalogGrid } from '@/components/ds';
 import EmptyState from '../EmptyState';
 import { useToast } from '../../contexts/useToast.js';
 import EngineGlyph from './EngineGlyph';
@@ -14,6 +14,7 @@ import {
     formatMemory,
 } from './engineHelpers';
 import { Button as SharedButton } from '@/components/ui/button';
+import { toastError } from '@/utils/errorMessage';
 
 // "Add a database engine" — the browse half of the install flow.
 //
@@ -80,35 +81,26 @@ function EngineCard({ entry, onPick }) {
     ].filter(Boolean).join(' · ');
 
     return (
-        <li className="dbx-engine-card">
-            <SharedButton variant="unstyled"
-                type="button"
-                className="dbx-engine-card__hit"
-                onClick={() => onPick(entry)}
-                aria-label={t('app.engineCatalogDrawer.install', 'Install {{name}}', { name: entry.name })}
-            >
-                <span className="dbx-engine-card__top">
-                    <span className="dbx-eng-glyph dbx-eng-glyph--lg">
-                        <EngineGlyph entry={entry} size={20} />
-                    </span>
-                    <span className="dbx-eng-rowtext">
-                        <span className="dbx-eng-name">{entry.name}</span>
-                        <span className="dbx-eng-sub">
-                            {[entry.version ? `v${entry.version}` : null, entry.id].filter(Boolean).join(' · ')}
-                        </span>
-                    </span>
-                    {meta.family && <span className="dbx-eng-family">{meta.family}</span>}
-                </span>
-                <span className="dbx-engine-card__desc">{entry.description}</span>
-                <span className="dbx-engine-card__foot">
-                    <span className="dbx-eng-facts">{facts || ' '}</span>
-                    <span className="dbx-engine-card__cta">
-                        <Download size={12} aria-hidden="true" />
-                        {entry.installed_count > 0 ? 'Add another' : 'Install'}
-                    </span>
-                </span>
-            </SharedButton>
-        </li>
+        <CatalogCard
+            icon={<EngineGlyph entry={entry} size={20} />}
+            title={entry.name}
+            sub={[entry.version ? `v${entry.version}` : null, entry.id].filter(Boolean).join(' · ')}
+            tag={meta.family}
+            description={entry.description}
+            facts={facts}
+            onClick={() => onPick(entry)}
+            action={(
+                <SharedButton
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onPick(entry)}
+                    aria-label={t('app.engineCatalogDrawer.install', 'Install {{name}}', { name: entry.name })}
+                >
+                    <Download size={12} aria-hidden="true" />
+                    {entry.installed_count > 0 ? t('app.engineCatalogDrawer.addAnother', 'Add another') : t('app.engineCatalogDrawer.installAction', 'Install')}
+                </SharedButton>
+            )}
+        />
     );
 }
 
@@ -170,7 +162,7 @@ export default function EngineCatalogDrawer({
             toast.success(t('app.engineCatalogDrawer.templateRepositoriesSynced', 'Template repositories synced'));
             await onSynced?.();
         } catch (err) {
-            toast.error(err.message || t('app.engineCatalogDrawer.couldNotSyncTemplateRepositories', 'Could not sync template repositories'));
+            toastError(toast, t('app.engineCatalogDrawer.couldNotSyncTemplateRepositories', "Couldn't sync template repositories."), err);
         } finally {
             setSyncing(false);
         }
@@ -227,7 +219,7 @@ export default function EngineCatalogDrawer({
                         <EmptyState
                             icon={PackageX}
                             title={t('app.engineCatalogDrawer.engineCatalogUnavailable', 'Engine catalog unavailable')}
-                            description={t('app.engineCatalogDrawer.thisPanelCouldnTReachThe', 'This panel couldn\'t reach the engine catalog. Databases that already exist keep working — try again once the backend is up to date.')}
+                            description={t('app.engineCatalogDrawer.thisPanelCouldnTReachThe', "This panel couldn't reach the engine catalog. Databases that already exist keep working. Try again once the backend is up to date.")}
                         />
                     ) : loading ? (
                         <EmptyState loading loadingVariant="cards" loadingRows={6} title={t('app.engineCatalogDrawer.loadingEngines', 'Loading engines')} />
@@ -251,15 +243,15 @@ export default function EngineCatalogDrawer({
                                         icon={Layers}
                                         title={catalog.length === 0 ? t('app.engineCatalogDrawer.noEngineTemplatesYet', 'No engine templates yet') : t('app.engineCatalogDrawer.noEnginesMatch', 'No engines match')}
                                         description={catalog.length === 0
-                                            ? t('app.engineCatalogDrawer.anEngineIsAnAppTemplate', 'An engine is an app template carrying an engine block. Sync your template repositories to pull more in.')
+                                            ? t('app.engineCatalogDrawer.anEngineIsAnAppTemplate', 'An engine is a service template carrying an engine block. Sync your template repositories to pull more in.')
                                             : t('app.engineCatalogDrawer.tryADifferentSearchTermOr', 'Try a different search term or clear the family filter.')}
                                     />
                                 ) : (
-                                    <ul className="dbx-engine-grid">
+                                    <CatalogGrid>
                                         {results.map((entry) => (
                                             <EngineCard key={entry.id} entry={entry} onPick={onPick} />
                                         ))}
-                                    </ul>
+                                    </CatalogGrid>
                                 )}
                             </section>
                         </>
@@ -274,7 +266,7 @@ export default function EngineCatalogDrawer({
                         disabled={syncing}
                     >
                         <RefreshCw size={13} className={syncing ? 'dbx-spin' : undefined} aria-hidden="true" />
-                        {syncing ? 'Syncing…' : 'Sync template repositories'}
+                        {syncing ? t('app.engineCatalogDrawer.syncing', 'Syncing…') : t('app.engineCatalogDrawer.syncTemplateRepositories', 'Sync template repositories')}
                     </SharedButton>
                     <Link
                         className="dbx-inline-link"

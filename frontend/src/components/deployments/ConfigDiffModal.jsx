@@ -7,6 +7,7 @@ import { Pill } from '@/components/ds';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 function displayValue(value, notSet) {
     if (value === null || value === undefined || value === '') return notSet;
@@ -227,14 +228,14 @@ const ConfigDiffModal = ({
                 : await api.restoreSnapshot(appId, snapId);
             if (res.success) {
                 toast.success(isRestorePoint
-                    ? t('app.configDiffModal.restorePointRestored', 'Restore point applied successfully.')
+                    ? t('app.configDiffModal.restorePointRestored', 'Restore point applied')
                     : t('app.configDiffModal.configurationRestoredRedeployTriggered', 'Configuration restored. Redeploy triggered.'));
                 onRestored?.(res);
             } else {
-                toast.error(res.error || t('app.configDiffModal.restoreFailed', 'Restore failed'));
+                toastError(toast, t('app.configDiffModal.restoreFailed', "Couldn't restore the config."), res.error);
             }
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.configDiffModal.restoreFailed', "Couldn't restore the config."), err);
         } finally {
             setRestoring(false);
         }
@@ -290,7 +291,7 @@ const ConfigDiffModal = ({
                                     <p className="config-diff__summary">
                                         {meta.hasChanges && meta.summary
                                             ? meta.summary
-                                            : t('app.configDiffModal.noConfigurationChanges', 'No configuration changes compared with this checkpoint.')}
+                                            : t('app.configDiffModal.noConfigurationChanges', 'No configuration changes compared with this restore point.')}
                                     </p>
                                 </div>
                             </div>
@@ -332,7 +333,7 @@ const ConfigDiffModal = ({
                         <div className="config-diff__point-meta">
                             <div>
                                 <span className="config-diff__summary-label">
-                                    {t('app.configDiffModal.savedCheckpoint', 'Saved checkpoint')}
+                                    {t('app.configDiffModal.savedCheckpoint', 'Saved restore point')}
                                 </span>
                                 <p className="config-diff__summary">
                                     {restorePoint?.label || t('app.configDiffModal.unlabelledRestorePoint', 'Unlabelled restore point')}
@@ -367,7 +368,7 @@ const ConfigDiffModal = ({
                                 <ShieldCheck size={17} />
                                 <div>
                                     <h3>{t('app.configDiffModal.coverageAndLimits', 'Coverage and limits')}</h3>
-                                    <p>{t('app.configDiffModal.coverageDescription', 'Review what this checkpoint does not restore before continuing.')}</p>
+                                    <p>{t('app.configDiffModal.coverageDescription', 'Review what this restore point does not restore before continuing.')}</p>
                                 </div>
                             </div>
                             {((preview?.outside_checkpoint || restorePoint?.coverage || []).length > 0) ? (
@@ -378,7 +379,7 @@ const ConfigDiffModal = ({
                                 </ul>
                             ) : (
                                 <p className="config-diff__none">
-                                    {t('app.configDiffModal.noCoverageGaps', 'The checkpoint reported nothing outside its coverage.')}
+                                    {t('app.configDiffModal.noCoverageGaps', 'The restore point reported nothing outside its coverage.')}
                                 </p>
                             )}
                         </div>
@@ -399,9 +400,9 @@ const ConfigDiffModal = ({
                             <div className="config-diff__group-heading">
                                 <h3>{t('app.configDiffModal.historicalDiff', 'Historical diff')}</h3>
                                 <p>{error
-                                    ? t('app.configDiffModal.historicalDiffUnavailable', 'The comparison with the previous checkpoint could not be loaded.')
+                                    ? t('app.configDiffModal.historicalDiffUnavailable', 'The comparison with the previous restore point could not be loaded.')
                                     : (meta?.againstId
-                                        ? t('app.configDiffModal.historicalDiffDescription', 'These changes compare this restore point with the checkpoint captured before it.')
+                                        ? t('app.configDiffModal.historicalDiffDescription', 'These changes compare this restore point with the one captured before it.')
                                         : t('app.configDiffModal.firstRestorePoint', 'This is the first restore point in this scope.'))}</p>
                             </div>
                             {error ? (

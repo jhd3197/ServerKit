@@ -38,13 +38,13 @@ test('route selectors partition the manifest without duplication', () => {
 });
 
 test('title resolution prefers static routes and handles dynamic workspace titles', () => {
-    assert.equal(resolveExactCoreRouteTitle('/services/new'), 'New Service');
+    assert.equal(resolveExactCoreRouteTitle('/services/new'), 'New service');
     assert.equal(resolveExactCoreRouteTitle('/services/123'), '');
-    assert.equal(resolveCoreRouteTitle('/services/new'), 'New Service');
+    assert.equal(resolveCoreRouteTitle('/services/new'), 'New service');
     assert.equal(resolveCoreRouteTitle('/services/123/settings'), 'Services');
-    assert.equal(resolveCoreRouteTitle('/workspaces/42/overview'), 'Workspace Overview');
-    assert.equal(resolveCoreRouteTitle('/workspaces/42/settings/navigation'), 'Workspace Navigation Permissions');
-    assert.equal(resolveCoreRouteTitle('/connections/callback/github'), 'GitHub Connection');
+    assert.equal(resolveCoreRouteTitle('/workspaces/42/overview'), 'Workspace overview');
+    assert.equal(resolveCoreRouteTitle('/workspaces/42/settings/navigation'), 'Workspace navigation permissions');
+    assert.equal(resolveCoreRouteTitle('/connections/callback/github'), 'GitHub connection');
     assert.equal(resolveCoreRouteTitle('/status/public'), '');
     assert.equal(resolveCoreRouteTitle('/not-a-core-route'), '');
 });

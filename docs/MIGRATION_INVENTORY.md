@@ -13,18 +13,18 @@ debt. Regenerate with `python scripts/generate-migration-inventory.py`.
 | Concern | Door | Remaining | Ceiling | Policy |
 |---|---|---:|---:|---|
 | Identity lookups outside rbac.get_current_user() | rbac.get_current_user() | 69 | 69 | JWT-only routes; the API-key-capable population is held at 0 by a companion assertion |
-| Routes on bare @jwt_required() | auth_required() / role decorators | 601 | 601 | REGISTERED EXCEPTION: JWT-only is the deliberate default; conversion grants API-key access and happens per route, on decision |
+| Routes on bare @jwt_required() | auth_required() / role decorators | 600 | 600 | REGISTERED EXCEPTION: JWT-only is the deliberate default; conversion grants API-key access and happens per route, on decision |
 | HTTP statuses chosen by sniffing error text | typed errors from app.exceptions | 0 | 0 | INVARIANT at 0 - migration completed 2026-08-19 |
 | API crashes swallowed without recording | app.error_reporting | 0 | 0 | INVARIANT at 0 |
-| Hand-shaped {'error': ...} bodies in app/api | typed errors + the global handler | 1132 | 1150 | migrate when touched; new endpoints raise |
+| Hand-shaped {'error': ...} bodies in app/api | typed errors + the global handler | 850 | 850 | migrate when touched; new endpoints raise |
 | Raw subprocess calls outside the runners | app/utils/system.py runners | 24 | 24 | migrate when touched |
 | Controller-boundary violations (routes doing service work) | service layer extraction | 491 | 491 | migrate when touched (first-wave ratchet) |
-| raw api.* calls in pages/ | E1: useServerQuery/useServerMutation | 398 | 398 | migrate when touched |
-| per-page toast.error extractions in pages/ | E1: query-layer error presentation | 206 | 206 | migrate when touched |
-| hand-rolled form-group blocks | F2: FormField/useForm | 317 | 321 | migrate when touched |
+| raw api.* calls in pages/ | E1: useServerQuery/useServerMutation | 396 | 398 | migrate when touched |
+| per-page toast.error extractions in pages/ | E1: query-layer error presentation | 200 | 206 | migrate when touched |
+| hand-rolled form-group blocks | F2: FormField/useForm | 320 | 321 | migrate when touched |
 | unencoded ?k=${v} query interpolations in services/api | C4: buildQuery/encoding template | 0 | 0 | INVARIANT at 0 |
 | raw setInterval pollers | E2: usePolling/refetchInterval | 7 | 7 | DELIBERATE RESIDUE: clock ticks, socket-fallback hooks, and sibling-repo extension timers - each listed per file |
 | direct navigator.clipboard call sites | F3: copyToClipboard | 0 | 0 | INVARIANT at 0 |
-| hex colour literals outside token files | G: var(--token) | 150 | 150 | migrate when touched |
+| hex colour literals outside token files | G: var(--token) | 139 | 139 | migrate when touched |
 | SCSS class names defined in multiple files | single-owner partials | 0 | 0 | needs eyes on pages (no byte-identical proof available) |
 

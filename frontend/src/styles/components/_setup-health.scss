@@ -11,22 +11,22 @@
     align-items: center;
     gap: $space-3;
     min-width: 0;
-    padding: 9px 8px 9px 13px;
+    padding: $space-2 $space-2 $space-2 $space-3;
     border: 1px solid var(--border-soft, #{$border-default});
-    border-radius: 10px;
+    border-radius: $radius-card;
     background: var(--surface, #{$bg-card});
 
     &__title {
         color: $text-primary;
-        font-size: 12.5px;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         white-space: nowrap;
     }
 
     &__score {
         color: var(--amber);
-        font-size: 12px;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         font-variant-numeric: tabular-nums;
     }
 
@@ -40,7 +40,7 @@
         height: 4px;
         overflow: hidden;
         border: 0;
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: var(--surface-3);
         appearance: none;
 
@@ -53,7 +53,7 @@
     &__muted {
         overflow: hidden;
         color: $text-tertiary;
-        font-size: 11.5px;
+        font-size: $text-xs;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
@@ -64,12 +64,12 @@
 
     &__dismiss {
         display: grid;
-        width: 26px;
-        height: 26px;
+        width: $control-sm;
+        height: $control-sm;
         flex: 0 0 auto;
         place-items: center;
         border: 0;
-        border-radius: $radius-sm;
+        border-radius: $radius-control;
         background: transparent;
         color: $text-tertiary;
         cursor: pointer;
@@ -85,8 +85,8 @@
         gap: $space-2;
         cursor: pointer;
         color: $success;
-        font-size: 12.5px;
-        font-weight: 500;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
 
         &:hover {
             border-color: var(--border-default, #{$border-default});
@@ -99,7 +99,7 @@
     }
 
     &--loading {
-        min-height: 46px;
+        min-height: 46px; // geometry: reserves the loaded banner's height (no layout jump)
     }
 
     @media (max-width: $breakpoint-md) {
@@ -116,7 +116,7 @@
     padding: $space-3 $space-4;
     margin-bottom: $space-4;
     border: 1px solid var(--warning-border, rgba(245, 179, 66, 0.35));
-    border-radius: var(--radius, #{$radius-lg});
+    border-radius: var(--radius, #{$radius-card});
     background: var(--warning-bg, rgba(245, 179, 66, 0.08));
 
     &__icon {
@@ -127,19 +127,19 @@
     &__body {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         flex: 1;
         min-width: 0;
     }
 
     &__title {
-        font-size: 13px;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__detail {
-        font-size: 12px;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 

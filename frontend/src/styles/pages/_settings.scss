@@ -45,7 +45,7 @@
         overflow-y: visible;
         background: $bg-card;
         padding: $space-2;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 }
 
@@ -58,7 +58,7 @@
     margin-bottom: $space-3;
     background: $bg-card;
     border: 1px solid $border-color;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     @media (max-width: $breakpoint-lg) {
         flex-basis: 100%;
@@ -71,9 +71,9 @@
     border: none;
     background: transparent;
     padding: $space-2 $space-3;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     cursor: pointer;
     transition: all $transition-fast;
@@ -89,27 +89,29 @@
     }
 }
 
-.settings-nav-item,
-.settings-nav-item.settings-nav-item {
+// Nav rows, not buttons: one row height, flush with the rail.
+.settings-nav-item {
     display: flex;
     align-items: center;
-    justify-content: flex-start !important;
-    gap: $space-3;
-    padding: $space-3 $space-4;
+    gap: $space-2;
+    min-height: $control-md;
+    padding: 0 $space-3;
     background: transparent;
     border: none;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-family: inherit;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
+    line-height: $line-height-tight;
     cursor: pointer;
-    transition: all $transition-fast;
-    text-align: left;
+    transition: background $transition-fast, color $transition-fast;
+    text-align: start;
     width: 100%;
 
     svg {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
         stroke: currentColor;
         fill: none;
         stroke-width: 2;
@@ -119,6 +121,11 @@
     &:hover {
         background: $bg-hover;
         color: $text-primary;
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: $focus-ring;
     }
 
     &.active {
@@ -131,7 +138,6 @@
 
     @media (max-width: $breakpoint-lg) {
         width: auto;
-        padding: $space-2 $space-3;
     }
 }
 
@@ -144,34 +150,13 @@
 // Settings Content Area
 .settings-content {
     min-width: 0;
+    // Forms keep a reading width; the page around them is full width like
+    // every other page, so the column sits beside the nav, not centered.
+    max-width: 1100px;
 
     // Status is carried by the tint and border; copy keeps readable contrast.
     .alert { color: $text-primary; }
     .settings-card > .form-group:last-child { margin-bottom: 0; }
-
-    // Settings panes used to drop their table straight onto the page
-    // background, so a tab read as unfinished next to /servers or /services —
-    // those sit their grid on a panel (`.wp-list__card`). Same panel, declared
-    // once here, so a pane gets it by rendering a table rather than by
-    // remembering to wrap one. No `overflow: hidden`: the wrap's own
-    // `overflow-x: auto` already clips to the radius, and hiding the y axis
-    // would cut the sticky-header variant's scroll.
-    .sk-dtable-wrap {
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-    }
-
-    // …except where the pane already put the table on a surface of its own.
-    // Two panels nested one pixel apart is the seam this rule exists to remove.
-    .settings-card,
-    .users-table-container {
-        .sk-dtable-wrap {
-            background: none;
-            border: 0;
-            border-radius: 0;
-        }
-    }
 }
 
 // Settings Section
@@ -188,7 +173,7 @@
         margin-bottom: $space-2;
 
         h2 {
-            font-size: $font-size-lg;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             margin: 0 0 $space-1 0;
         }
@@ -196,12 +181,12 @@
         p {
             color: $text-secondary;
             margin: 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
     h3 {
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         margin: 0 0 $space-3 0;
         color: $text-primary;
@@ -212,7 +197,7 @@
 .settings-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-5;
 
     h3 {
@@ -221,7 +206,7 @@
 
     > p {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin: 0 0 $space-4 0;
     }
 }
@@ -242,11 +227,11 @@
     > svg {
         flex-shrink: 0;
         color: $text-tertiary;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     h3 {
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         margin: 0;
@@ -254,7 +239,7 @@
 
     p {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin: $space-1 0 0 0;
     }
 }
@@ -269,7 +254,7 @@
         border: 1px solid $border-subtle;
         border-radius: $radius-full;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
 
         &--connected {
@@ -287,13 +272,13 @@
         padding: $space-4;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     .source-connection-profile {
         img {
             width: 42px;
-            height: 42px;
+            height: 42px; // geometry: avatar
             border-radius: $radius-full;
         }
 
@@ -304,14 +289,14 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
 
         span {
-            margin-top: 2px;
+            margin-top: $space-hair;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
         }
     }
 
@@ -327,14 +312,14 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
 
         span {
-            margin-top: 3px;
+            margin-top: $space-1;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.45;
         }
     }
@@ -355,9 +340,9 @@
         padding: $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         overflow-wrap: anywhere;
 
         svg {
@@ -389,7 +374,7 @@
     padding: $space-6;
     text-align: center;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .settings-card__footer {
@@ -411,7 +396,7 @@
     align-items: center;
     padding: $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-top: $space-3;
 
     .session-info {
@@ -433,7 +418,7 @@
 
         .session-details {
             display: block;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }
@@ -458,7 +443,7 @@
     padding: $space-4;
     background: transparent;
     border: 2px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -472,7 +457,7 @@
     }
 
     span {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
     }
@@ -481,7 +466,7 @@
 .theme-preview {
     width: 100%;
     height: 80px;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     display: flex;
     overflow: hidden;
 
@@ -500,7 +485,7 @@
 
     .preview-card {
         flex: 1;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 
     &.dark {
@@ -573,7 +558,7 @@
     }
 
     span {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
     }
 }
@@ -591,7 +576,7 @@
     align-items: center;
     padding: $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     gap: $space-4;
 
     .notification-info {
@@ -606,7 +591,7 @@
 
         .notification-desc {
             display: block;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }
@@ -617,7 +602,7 @@
     position: relative;
     display: inline-block;
     width: 44px;
-    height: 24px;
+    height: 24px; // geometry: switch track (fixed chrome)
     flex-shrink: 0;
 
     input {
@@ -634,7 +619,7 @@
         }
 
         &:focus + .toggle-slider {
-            box-shadow: 0 0 0 2px var(--accent-bg);
+            box-shadow: $focus-ring;
         }
     }
 
@@ -647,7 +632,7 @@
         bottom: 0;
         background: var(--surface-3);
         border: 1px solid var(--border);
-        border-radius: 24px;
+        border-radius: $radius-full;
         transition: all $transition-fast;
 
         &::before {
@@ -668,10 +653,10 @@
 // Mirrors the input-based .toggle-switch above but driven by .on class
 .toggle-switch:not(:has(input)) {
     width: 44px;
-    height: 24px;
+    height: 24px; // geometry: switch track (fixed chrome)
     background: var(--surface-3);
     border: 1px solid var(--border);
-    border-radius: 24px;
+    border-radius: $radius-full;
     cursor: pointer;
     transition: background $transition-fast;
     flex-shrink: 0;
@@ -694,7 +679,7 @@
         background: white;
         border-radius: 50%;
         transition: transform $transition-fast;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+        box-shadow: none;
     }
 }
 
@@ -714,7 +699,7 @@
     }
 
     span {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
     }
@@ -813,7 +798,7 @@
     }
 
     input {
-        padding-left: 36px;
+        padding-left: $space-10;
     }
 }
 
@@ -849,8 +834,8 @@
 .timezone-message {
     margin-top: $space-2;
     padding: $space-2 $space-3;
-    border-radius: $radius-md;
-    font-size: $font-size-sm;
+    border-radius: $radius-control;
+    font-size: $text-xs;
 
     &.success {
         background: fade($success-raw, 15%);
@@ -867,7 +852,7 @@
 .about-card {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-8;
     text-align: center;
 
@@ -881,19 +866,19 @@
     }
 
     h3 {
-        font-size: $font-size-xl;
+        font-size: $text-lg;
         margin-bottom: $space-1;
     }
 
     .version {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin-bottom: $space-4;
     }
 
     .description {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: $line-height-relaxed;
         max-width: 500px;
         margin: 0 auto;
@@ -905,8 +890,6 @@
         border-top: 1px solid $border-subtle;
 
         .btn-sm {
-            font-size: $font-size-xs;
-            padding: $space-2 $space-3;
             display: inline-flex;
             align-items: center;
             gap: $space-1;
@@ -921,7 +904,7 @@
             align-items: center;
             justify-content: center;
             gap: $space-2;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
 
             &.current {
                 color: $success;
@@ -952,7 +935,7 @@
                     color: $accent-primary;
                     cursor: pointer;
                     text-decoration: underline;
-                    font-size: $font-size-sm;
+                    font-size: $text-xs;
                     padding: 0;
                     margin-left: $space-2;
 
@@ -970,7 +953,7 @@
             flex-wrap: wrap;
             gap: $space-2;
             margin-top: $space-3;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $warning;
 
             span {
@@ -981,7 +964,7 @@
 
         .update-capability-note {
             margin-top: $space-2;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-muted;
         }
 
@@ -997,8 +980,8 @@
                 padding: $space-3;
                 background: $bg-elevated;
                 border: 1px solid $border-subtle;
-                border-radius: $radius-md;
-                font-size: $font-size-xs;
+                border-radius: $radius-control;
+                font-size: $text-xs;
                 text-align: start;
                 white-space: pre-wrap;
                 word-break: break-word;
@@ -1013,7 +996,7 @@
     position: relative;
     background: linear-gradient(135deg, $accent-glow 0%, fade($accent-primary-raw, 8%) 100%);
     border: 1px solid fade($accent-primary-raw, 30%);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-6;
     display: flex;
     align-items: flex-start;
@@ -1028,7 +1011,7 @@
         color: $text-tertiary;
         cursor: pointer;
         padding: $space-1;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         transition: all $transition-fast;
 
         &:hover {
@@ -1040,9 +1023,9 @@
     .star-icon {
         flex-shrink: 0;
         width: 48px;
-        height: 48px;
+        height: 48px; // geometry: icon tile
         background: linear-gradient(135deg, $warning 0%, darken($warning-raw, 10%) 100%);
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1055,13 +1038,13 @@
 
         h4 {
             margin: 0 0 $space-2;
-            font-size: $font-size-md;
+            font-size: $text-md;
             font-weight: $font-weight-semibold;
         }
 
         p {
             margin: 0 0 $space-4;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
             line-height: $line-height-relaxed;
         }
@@ -1101,7 +1084,7 @@
         align-items: center;
         gap: $space-2;
         padding: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
 
         svg {
@@ -1126,10 +1109,10 @@
     gap: $space-3;
     padding: $space-3 $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-secondary;
     text-decoration: none;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     transition: all $transition-fast;
 
     svg {
@@ -1148,7 +1131,7 @@
 // License Text
 .license-text {
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     margin: 0;
 }
 
@@ -1161,7 +1144,7 @@
     align-items: flex-start;
     padding: $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     gap: $space-4;
 
     &:not(:last-child) {
@@ -1186,7 +1169,7 @@
 
     .settings-hint {
         display: block;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 }
@@ -1203,9 +1186,9 @@
     padding: $space-2 $space-3;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     cursor: pointer;
     transition: border-color $transition-fast;
 
@@ -1225,7 +1208,7 @@
 }
 
 .settings-saving {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
     font-style: italic;
 }
@@ -1248,7 +1231,7 @@
     gap: $space-1;
     padding: $space-3 $space-2;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-card;
     cursor: pointer;
     transition: all 0.15s ease;
@@ -1269,7 +1252,7 @@
     }
 
     .icon-reference-name {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
         text-align: center;
         word-break: break-word;
@@ -1304,7 +1287,7 @@
     padding: $space-2 $space-3;
     background: transparent;
     border: 2px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -1320,13 +1303,13 @@
 
 .accent-swatch {
     width: 20px;
-    height: 20px;
+    height: 20px; // geometry: color swatch
     border-radius: $radius-full;
     flex-shrink: 0;
 }
 
 .accent-label {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-primary;
 }
@@ -1338,7 +1321,7 @@
 
 .accent-custom-label {
     display: block;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-secondary;
     margin-bottom: $space-2;
@@ -1352,41 +1335,41 @@
 
 .accent-custom-input {
     width: 40px;
-    height: 32px;
+    height: $control-md;
     padding: 0;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: transparent;
     cursor: pointer;
 
     &::-webkit-color-swatch-wrapper {
-        padding: 2px;
+        padding: $space-hair;
     }
 
     &::-webkit-color-swatch {
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 }
 
 .accent-custom-hex {
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
 .accent-custom-reset {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: $space-1;
     margin-left: auto;
-    padding: 4px 10px;
-    font-size: $font-size-xs;
+    padding: $space-1 $space-3;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-dim);
     background: transparent;
     border: 1px solid var(--border);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -1436,7 +1419,7 @@
     text-align: left;
     background: var(--surface-2);
     border: 2px solid var(--border);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -1446,13 +1429,13 @@
 
     &--active {
         border-color: var(--accent-primary);
-        box-shadow: 0 0 0 1px var(--accent-primary);
+        box-shadow: inset 0 0 0 1px var(--accent-primary); // geometry: doubles the selected border
     }
 
     &__swatches {
         display: flex;
-        height: 44px;
-        border-radius: $radius-md;
+        height: 44px; // geometry: palette preview strip
+        border-radius: $radius-control;
         overflow: hidden;
         border: 1px solid var(--border-soft);
     }
@@ -1469,24 +1452,22 @@
     }
 
     &__name {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
 
     &__base {
-        font-size: $font-size-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
+        font-size: $text-xs;
         color: var(--text-faint);
-        padding: 1px 6px;
+        padding: 1px $space-tight;
         border: 1px solid var(--border);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 
     &__desc {
         margin: 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.4;
         color: var(--text-dim);
     }
@@ -1502,8 +1483,8 @@
     &__applied {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        font-size: $font-size-xs;
+        gap: $space-1;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--accent-primary);
     }
@@ -1511,8 +1492,8 @@
     &__default {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        font-size: $font-size-xs;
+        gap: $space-1;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--amber);
     }
@@ -1528,14 +1509,14 @@
     &__admin-btn {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 3px 8px;
-        font-size: $font-size-xs;
+        gap: $space-1;
+        padding: $space-1 $space-2;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--text-dim);
         background: transparent;
         border: 1px solid var(--border);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         cursor: pointer;
         transition: all $transition-fast;
 
@@ -1560,7 +1541,7 @@
     gap: $space-2;
     padding: $space-5 $space-3;
     color: var(--text-dim);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     .spin { animation: theme-spin 1s linear infinite; }
 }
@@ -1571,7 +1552,7 @@
     gap: $space-3;
     max-height: 60vh;
     overflow-y: auto;
-    padding: 2px;
+    padding: $space-hair;
 }
 
 .theme-browse__card {
@@ -1581,12 +1562,12 @@
     padding: $space-3;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 
     .theme-browse__swatches {
         display: flex;
-        height: 40px;
-        border-radius: $radius-md;
+        height: 40px; // geometry: palette preview strip
+        border-radius: $radius-control;
         overflow: hidden;
         border: 1px solid var(--border-soft);
 
@@ -1601,19 +1582,19 @@
     }
 
     .theme-browse__name {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
 
     .theme-browse__author {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .theme-browse__desc {
         margin: 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.4;
         color: var(--text-dim);
     }
@@ -1621,8 +1602,8 @@
     .theme-browse__installed {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        font-size: $font-size-xs;
+        gap: $space-1;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--green);
     }
@@ -1631,14 +1612,14 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
-        padding: 5px 10px;
-        font-size: $font-size-xs;
+        gap: $space-tight;
+        padding: $space-tight $space-3;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--text);
         background: var(--surface-3);
         border: 1px solid var(--border);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         cursor: pointer;
         transition: all $transition-fast;
 
@@ -1670,21 +1651,22 @@
     &__field {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: $space-1;
 
-        span {
-            font-size: $font-size-xs;
+        // Direct child only: the Select and SegControl inside carry spans of their own.
+        > span {
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: var(--text-dim);
         }
 
-        input, select {
-            padding: 6px 10px;
-            font-size: $font-size-sm;
+        input {
+            padding: $space-tight $space-3;
+            font-size: $text-xs;
             color: var(--text);
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
         }
     }
 
@@ -1702,15 +1684,15 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-dim);
 
         input[type="color"] {
             width: 34px;
-            height: 28px;
+            height: $control-sm;
             padding: 0;
             border: 1px solid var(--border);
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             background: transparent;
             cursor: pointer;
         }
@@ -1719,12 +1701,12 @@
     &__modes {
         display: inline-flex;
         border: 1px solid var(--border);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         overflow: hidden;
 
         button {
-            padding: 5px 12px;
-            font-size: $font-size-xs;
+            padding: $space-tight $space-3;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: var(--text-dim);
             background: transparent;
@@ -1742,14 +1724,12 @@
         display: flex;
         flex-direction: column;
         gap: $space-4;
-        padding-right: 2px;
+        padding-right: $space-hair;
     }
 
     &__group h4 {
         margin: 0 0 $space-2;
-        font-size: $font-size-xs;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -1766,11 +1746,10 @@
     &__token {
         display: flex;
         flex-direction: column;
-        gap: 3px;
+        gap: $space-1;
 
         label {
-            font-family: $font-mono;
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-dim);
         }
     }
@@ -1778,15 +1757,15 @@
     &__token-input {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
 
         input[type="color"] {
             width: 30px;
-            height: 26px;
+            height: $control-sm;
             flex-shrink: 0;
             padding: 0;
             border: 1px solid var(--border);
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             background: transparent;
             cursor: pointer;
         }
@@ -1794,13 +1773,14 @@
         input[type="text"] {
             flex: 1;
             min-width: 0;
-            padding: 5px 8px;
+            height: $control-sm;
+            padding: 0 $space-2;
             font-family: $font-mono;
-            font-size: 12px;
+            font-size: $text-xs;
             color: var(--text);
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
         }
     }
 
@@ -1831,7 +1811,7 @@
     align-items: center;
     padding: $space-3 $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     transition: opacity $transition-fast;
 
     &--hidden {
@@ -1846,7 +1826,7 @@
 }
 
 .widget-item__label {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-primary;
 }
@@ -1860,11 +1840,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: $control-sm;
+    height: $control-sm;
     background: transparent;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-secondary;
     cursor: pointer;
     transition: all $transition-fast;
@@ -1904,7 +1884,7 @@
     padding: $space-4;
     background: transparent;
     border: 2px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     cursor: pointer;
     transition: all $transition-fast;
     text-align: center;
@@ -1930,13 +1910,13 @@
     }
 
     .whitelabel-mode__label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
     }
 
     .whitelabel-mode__desc {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 }
@@ -1950,7 +1930,7 @@
     .form-group {
         label {
             display: block;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: $text-secondary;
             margin-bottom: $space-2;
@@ -1962,9 +1942,9 @@
             padding: $space-3;
             background: $bg-hover;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             transition: border-color $transition-fast;
 
             &:focus {
@@ -1977,7 +1957,7 @@
 
 .whitelabel-upload {
     border: 2px dashed $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-5;
     cursor: pointer;
     transition: all $transition-fast;
@@ -2000,12 +1980,12 @@
         }
 
         span {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
     .whitelabel-upload__hint {
-        font-size: $font-size-xs !important;
+        font-size: $text-xs !important;
         color: $text-tertiary;
         opacity: 0.7;
     }
@@ -2019,9 +1999,9 @@
 
     img {
         width: 48px;
-        height: 48px;
+        height: 48px; // geometry: logo preview image
         object-fit: contain;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         background: $bg-hover;
         padding: $space-1;
@@ -2033,23 +2013,21 @@
 
     .whitelabel-preview__label {
         display: block;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
         margin-bottom: $space-2;
     }
 
     .whitelabel-preview__box {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: $space-3;
         height: 70px;
         padding: 0 $space-4;
         background: $bg-body;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 }
 
@@ -2057,7 +2035,7 @@
     margin-top: $space-4;
     background: linear-gradient(135deg, $accent-glow 0%, fade($accent-primary-raw, 8%) 100%);
     border: 1px solid fade($accent-primary-raw, 30%);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-5;
     display: flex;
     align-items: flex-start;
@@ -2066,9 +2044,9 @@
     .star-icon {
         flex-shrink: 0;
         width: 44px;
-        height: 44px;
+        height: 44px; // geometry: icon tile
         background: linear-gradient(135deg, $warning 0%, darken($warning-raw, 10%) 100%);
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -2080,13 +2058,13 @@
 
         h4 {
             margin: 0 0 $space-2;
-            font-size: $font-size-md;
+            font-size: $text-md;
             font-weight: $font-weight-semibold;
         }
 
         p {
             margin: 0 0 $space-3;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
             line-height: $line-height-relaxed;
         }
@@ -2121,7 +2099,7 @@
     .form-group {
         label {
             display: block;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: $text-secondary;
             margin-bottom: $space-2;
@@ -2133,9 +2111,9 @@
             padding: $space-3;
             background: $bg-hover;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
 
             &:focus {
                 outline: none;
@@ -2175,7 +2153,7 @@
     }
 
     .sso-provider-config__status {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         padding: $space-1 $space-2;
         border-radius: $radius-full;
         font-weight: $font-weight-medium;
@@ -2196,7 +2174,7 @@
         .form-group {
             label {
                 display: block;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
                 font-weight: $font-weight-medium;
                 color: $text-secondary;
                 margin-bottom: $space-2;
@@ -2208,9 +2186,9 @@
                 padding: $space-3;
                 background: $bg-hover;
                 border: 1px solid $border-subtle;
-                border-radius: $radius-md;
+                border-radius: $radius-control;
                 color: $text-primary;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
                 font-family: $font-mono;
 
                 &:focus {
@@ -2247,7 +2225,7 @@
     justify-content: space-between;
     padding: $space-3;
     background: $bg-secondary;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     border: 1px solid $border-subtle;
 
     .linked-account__info {
@@ -2267,7 +2245,7 @@
     }
 
     .linked-account__email {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -2296,7 +2274,7 @@
 
     .settings-section-desc {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin: 0;
         line-height: $line-height-normal;
     }
@@ -2312,7 +2290,7 @@
 }
 
 .sidebar-item-count {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
     background: $bg-secondary;
     padding: $space-1 $space-2;
@@ -2335,7 +2313,7 @@
     padding: $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     cursor: pointer;
     transition: all $transition-fast;
     text-align: left;
@@ -2350,18 +2328,18 @@
     &.active {
         border-color: $accent-primary;
         background: $bg-card;
-        box-shadow: 0 0 0 1px $accent-primary;
+        box-shadow: inset 0 0 0 1px $accent-primary; // geometry: doubles the selected border
     }
 
     .preset-card-icon {
         flex-shrink: 0;
         width: 36px;
-        height: 36px;
+        height: 36px; // geometry: icon tile
         display: flex;
         align-items: center;
         justify-content: center;
         background: $bg-secondary;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-secondary;
 
         svg {
@@ -2383,13 +2361,13 @@
     }
 
     .preset-card-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     .preset-card-desc {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         line-height: $line-height-normal;
     }
@@ -2412,7 +2390,7 @@
     margin-bottom: $space-4;
     background: fade($warning-raw, 10%);
     border: 1px solid fade($warning-raw, 20%);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     .migration-pending-icon { color: $warning; flex-shrink: 0; margin-top: 1px; }
     .migration-pending-body { flex: 1; min-width: 0; }
@@ -2425,7 +2403,7 @@
 
     .migration-pending-desc {
         margin: 0 0 $space-3;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -2440,7 +2418,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         cursor: pointer;
         user-select: none;
@@ -2454,7 +2432,7 @@
     align-items: center;
     gap: $space-2;
     margin-bottom: $space-4;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 
     svg { color: $success; flex-shrink: 0; }
@@ -2464,10 +2442,10 @@
 .migration-pending-desc code,
 .migration-uptodate code {
     font-family: $font-mono;
-    font-size: $font-size-xs;
-    padding: 1px 5px;
+    font-size: $text-xs;
+    padding: 1px $space-tight;
     background: $bg-tertiary;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-primary;
 }
 
@@ -2486,11 +2464,9 @@
 }
 
 .sidebar-items-group-label {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     padding: 0 0 $space-2 0;
     border-bottom: 1px solid $border-subtle;
     margin-bottom: $space-1;
@@ -2501,7 +2477,7 @@
     align-items: center;
     justify-content: space-between;
     padding: $space-3 $space-2;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -2523,7 +2499,7 @@
     transition: opacity $transition-fast;
 
     span {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
         font-weight: $font-weight-medium;
     }
@@ -2559,11 +2535,9 @@
 .settings-site-action-label { display: flex; align-items: center; gap: 0.5rem; }
 .settings-webhook-actions { text-align: right; }
 .settings-webhook-action-icon { margin-inline-end: 0.5rem; }
-.settings-webhook-event-id { @include truncate(); font-size: 0.75rem; max-width: 200px; }
-.settings-webhook-secret { display: flex; gap: 0.5rem; }
+.settings-webhook-event-id { @include truncate(); font-size: $text-xs; max-width: 200px; }
 
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
-.settings-webhook-row { cursor: pointer; }
 .settings-webhook-name { font-weight: $font-weight-medium; }
 .settings-webhook-form > * + * { margin-top: 1rem; }
 .settings-webhook-secret-field > * + * { margin-top: 0.5rem; }
@@ -2591,10 +2565,8 @@
         padding: 0;
     }
     &__name { flex: 1; overflow-wrap: anywhere; font-family: $font-mono; }
-    &__name small { display: block; margin-top: $space-1; color: $text-secondary; font-size: $font-size-xs; }
-    &__filters { padding: $space-3; display: flex; align-items: center; gap: $space-3;
-        select { @include input-base; min-width: 0; }
-    }
+    &__name small { display: block; margin-top: $space-1; color: $text-secondary; font-size: $text-xs; }
+    &__filters { padding: $space-3; display: flex; align-items: center; gap: $space-3; }
     @media (max-width: $breakpoint-sm) {
         flex-direction: column;
         align-items: stretch;
@@ -2614,7 +2586,7 @@
 }
 .sk-ai-candidates { display: grid; gap: $space-3; margin-block: $space-4;
     > button { justify-self: start; }
-    &__row { padding: $space-4; background: $bg-elevated; border: 1px solid $border-default; border-radius: $radius-md; min-width: 0;
+    &__row { padding: $space-4; background: $bg-elevated; border: 1px solid $border-default; border-radius: $radius-control; min-width: 0;
         > .form-field { margin-block: $space-4; }
         .settings-actions { justify-content: flex-end; }
     }
@@ -2622,18 +2594,18 @@
 .sk-ai-advanced { border-top: 1px solid $border-subtle; padding-block: $space-4;
     summary { cursor: pointer; font-weight: $font-weight-medium; margin-bottom: $space-3; }
 }
-.sk-ai-routing-result { background: $bg-body; border: 1px solid $border-default; border-radius: $radius-md; padding: $space-4; margin-block: $space-4; overflow-wrap: anywhere; }
+.sk-ai-routing-result { background: $bg-body; border: 1px solid $border-default; border-radius: $radius-control; padding: $space-4; margin-block: $space-4; overflow-wrap: anywhere; }
 .sk-ai-usage { min-width: 0;
     .stat-strip { margin-block: $space-4; }
     .stat-strip__item { background: $bg-body; }
-    .stat-strip__item > strong { font-family: $font-mono; font-size: $font-size-lg; }
+    .stat-strip__item > strong { font-size: $text-lg; }
     .card-header { flex-wrap: wrap; gap: $space-3; }
     h4 { margin-top: $space-5; }
 }
 .sk-ai-task-selector { padding: $space-3; min-width: 0;
-    summary { cursor: pointer; color: $text-secondary; font-size: $font-size-xs; }
+    summary { cursor: pointer; color: $text-secondary; font-size: $text-xs; }
     .sk-ai-binding { margin-top: $space-3; }
 }
-.sk-ai-message__usage { font-size: $font-size-xs; color: $text-secondary; border-top: 1px solid $border-subtle; margin-top: $space-3; padding-top: $space-2; overflow-wrap: anywhere;
+.sk-ai-message__usage { font-size: $text-xs; color: $text-secondary; border-top: 1px solid $border-subtle; margin-top: $space-3; padding-top: $space-2; overflow-wrap: anywhere;
     summary { cursor: pointer; }
 }

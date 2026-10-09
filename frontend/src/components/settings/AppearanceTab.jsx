@@ -13,6 +13,7 @@ import ThemeBrowseModal from './ThemeBrowseModal';
 import ThemeStudioModal from './ThemeStudioModal';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const ACCENT_PRESETS = [
     { labelKey: 'app.appearanceTab.indigo', label: 'Indigo', color: '#6366f1' },
@@ -49,7 +50,7 @@ const AppearanceTab = () => {
             if (imported?.slug) setSkin(imported.slug);
             toast.success(t('app.appearanceTab.importedTheme', 'Imported theme "{{value}}"', { value: imported?.name || imported?.slug }));
         } catch (err) {
-            toast.error(err?.message || t('app.appearanceTab.couldNotImportThatThemeJson', 'Could not import that theme.json'));
+            toastError(toast, t('app.appearanceTab.couldNotImportThatThemeJson', "Couldn't import that theme.json."), err);
         }
     };
 
@@ -57,7 +58,6 @@ const AppearanceTab = () => {
         <div className="settings-section">
             <div className="section-header">
                 <h2>{t('app.appearanceTab.appearance', 'Appearance')}</h2>
-                <p>{t('app.appearanceTab.customizeTheLookAndFeelOf', 'Customize the look and feel of your dashboard')}</p>
             </div>
 
             <LanguageSelector />
@@ -146,8 +146,8 @@ const AppearanceTab = () => {
             </div>
 
             <div {...register('appearance-accent-color', 'settings-card')}>
-                <h3>{t('app.appearanceTab.accentColor', 'Accent Color')}</h3>
-                <p>{t('app.appearanceTab.chooseThePrimaryAccentColorUsed', 'Choose the primary accent color used across the interface')}</p>
+                <h3>{t('app.appearanceTab.accentColor', 'Accent color')}</h3>
+                <p>{t('app.appearanceTab.chooseThePrimaryAccentColorUsed', 'Choose the primary accent color used across the interface.')}</p>
                 <div className="accent-presets">
                     {ACCENT_PRESETS.map(({ label, color }) => (
                         <Button variant="unstyled" type="button"
@@ -185,9 +185,9 @@ const AppearanceTab = () => {
             </div>
 
             <div {...register('appearance-widgets', 'settings-card')}>
-                <h3>{t('app.appearanceTab.dashboardWidgets', 'Dashboard Widgets')}</h3>
+                <h3>{t('app.appearanceTab.dashboardWidgets', 'Dashboard widgets')}</h3>
                 <p>
-                    {t('app.appearanceTab.widgetsAreArrangedOnTheDashboard', 'Widgets are arranged on the dashboard itself now — add, move, resize and configure them in place, across as many boards as you need.')}
+                    {t('app.appearanceTab.widgetsAreArrangedOnTheDashboard', 'Widgets are arranged on the dashboard itself now. Add, move, resize and configure them in place, across as many boards as you need.')}
                 </p>
                 <Button variant="outline" size="sm" asChild>
                     <Link to="/">

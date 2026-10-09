@@ -111,7 +111,7 @@ const SetupStepAccount = ({ onComplete }) => {
                         className="btn-wizard-next btn-wizard-next--block"
                         disabled={loading}
                     >
-                        {loading ? 'Signing in...' : 'Sign In & Continue'}
+                        {loading ? t('app.setupStepAccount.signingIn', 'Signing in…') : t('app.setupStepAccount.signInAndContinue', 'Sign in and continue')}
                     </SharedButton>
                 </form>
             </div>
@@ -120,7 +120,7 @@ const SetupStepAccount = ({ onComplete }) => {
 
     return (
         <div className="wizard-step">
-            <h2 className="wizard-step-title">{t('app.setupStepAccount.createAdminAccount', 'Create Admin Account')}</h2>
+            <h2 className="wizard-step-title">{t('app.setupStepAccount.createAdminAccount', 'Create admin account')}</h2>
             <p className="wizard-step-description">
                 {t('app.setupStepAccount.setUpTheAdministratorAccountFor', 'Set up the administrator account for your server.')}
             </p>
@@ -128,7 +128,7 @@ const SetupStepAccount = ({ onComplete }) => {
             <div className="alert alert-info">
                 <Info size={20} />
                 <p>
-                    {t('app.setupStepAccount.thisIsYourFirstTimeUsing', 'This is your first time using ServerKit. Create an administrator account to get started. This account will have full access to manage your server.')}
+                    {t('app.setupStepAccount.thisIsYourFirstTimeUsing', 'This is your first time using ServerKit. Create an administrator account. This account will have full access to manage your server.')}
                 </p>
             </div>
 
@@ -156,7 +156,7 @@ const SetupStepAccount = ({ onComplete }) => {
                 )}
 
                 <div className="form-group">
-                    <Label htmlFor="email">{t('app.setupStepAccount.adminEmail', 'Admin Email')}</Label>
+                    <Label htmlFor="email">{t('app.setupStepAccount.adminEmail', 'Admin email')}</Label>
                     <Input
                         type="email"
                         id="email"
@@ -193,7 +193,7 @@ const SetupStepAccount = ({ onComplete }) => {
                 </div>
 
                 <div className="form-group">
-                    <Label htmlFor="confirmPassword">{t('app.setupStepAccount.confirmPassword', 'Confirm Password')}</Label>
+                    <Label htmlFor="confirmPassword">{t('app.setupStepAccount.confirmPassword', 'Confirm password')}</Label>
                     <Input
                         type="password"
                         id="confirmPassword"
@@ -209,7 +209,7 @@ const SetupStepAccount = ({ onComplete }) => {
                     className="btn-wizard-next btn-wizard-next--block"
                     disabled={loading}
                 >
-                    {loading ? 'Creating account...' : 'Continue'}
+                    {loading ? t('app.setupStepAccount.creatingAccount', 'Creating account…') : t('common.actions.continue', 'Continue')}
                 </SharedButton>
             </form>
         </div>

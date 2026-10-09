@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Boxes, ChevronDown, FileCode2, Layers, Terminal, Zap } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import PortField from '@/components/PortField';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
 
@@ -95,10 +96,10 @@ function BuildpackPreview({ plan, dockerfile, overrides = {}, onChange, loading 
                     <strong>{BUILDER_LABEL[builder] || builder}</strong>
                     <span>
                         {present
-                            ? 'This repository ships its own Dockerfile — ServerKit will build it directly.'
+                            ? t('app.buildpackPreview.shipsOwnDockerfile', 'This repository ships its own Dockerfile. ServerKit will build it directly.')
                             : unknown
-                                ? 'Could not confidently detect the stack. Pick a build method manually or add a Dockerfile.'
-                                : 'ServerKit will generate a Dockerfile from the detected stack.'}
+                                ? t('app.buildpackPreview.couldNotDetectStack', "Couldn't detect the stack with confidence. Pick a build method manually or add a Dockerfile.")
+                                : t('app.buildpackPreview.willGenerateDockerfile', 'ServerKit will generate a Dockerfile from the detected stack.')}
                     </span>
                 </div>
                 <span className="buildpack-preview__confidence" data-level={confidenceLabel(plan.confidence).toLowerCase()}>
@@ -113,11 +114,11 @@ function BuildpackPreview({ plan, dockerfile, overrides = {}, onChange, loading 
                 </div>
                 <div className="buildpack-preview__fact">
                     <span><Zap size={13} /> {t('app.buildpackPreview.framework', 'Framework')}</span>
-                    <strong>{plan.framework || 'Generic'}</strong>
+                    <strong>{plan.framework || t('app.buildpackPreview.generic', 'Generic')}</strong>
                 </div>
                 <div className="buildpack-preview__fact">
                     <span><Boxes size={13} /> {t('common.labels.port', 'Port')}</span>
-                    <strong>{plan.port || 'Auto'}</strong>
+                    <strong>{plan.port || t('app.buildpackPreview.auto', 'Auto')}</strong>
                 </div>
             </div>
 
@@ -145,14 +146,13 @@ function BuildpackPreview({ plan, dockerfile, overrides = {}, onChange, loading 
                     )}
                     <div className="buildpack-preview__field">
                         <Label htmlFor="bp-port">{t('common.labels.port', 'Port')}</Label>
-                        <Input
+                        {/* The port the app listens on inside its container. */}
+                        <PortField
                             id="bp-port"
-                            type="number"
+                            host={false}
                             value={portValue}
-                            onChange={(e) => emit('port', e.target.value)}
+                            onChange={(next) => emit('port', next === '' ? '' : String(next))}
                             placeholder={String(plan.port || '')}
-                            min="1"
-                            max="65535"
                         />
                     </div>
                     <div className="buildpack-preview__field buildpack-preview__field--wide">

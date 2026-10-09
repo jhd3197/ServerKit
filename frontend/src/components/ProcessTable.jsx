@@ -239,7 +239,7 @@ export function ProcessTable({
                             size="icon"
                             className="process-action-button"
                             onClick={(e) => { e.stopPropagation(); onForceKill(p); }}
-                            title={t('app.processTable.forceKill', 'Force Kill')}
+                            title={t('app.processTable.forceKill', 'Force kill')}
                             aria-label={t('app.processTable.forceKill2', 'Force kill {{name}}', { name: p.name })}
                         >
                             <AlertTriangle size={12} />
@@ -275,9 +275,8 @@ export function ProcessTable({
             onSortsChange={setSorts}
             {...chrome.tableProps}
             onRowClick={(p) => onSelect?.(p)}
-            rowClassName={(p) => (selectedPid === p.pid ? 'selected' : '')}
-            className="processes-table-wrapper"
-            tableClassName="table processes-table"
+            rowClassName={(p) => (selectedPid === p.pid ? 'is-selected' : '')}
+            className="processes-table"
             emptyTitle="No processes match this view."
             emptyMessage=""
             footer={(
@@ -333,7 +332,7 @@ export function ProcessDetailsPanel({ process, onClose, formatMemory = defaultFo
     return (
         <div className="process-details-panel">
             <div className="panel-header">
-                <h3>{t('app.processTable.processDetails', 'Process Details')}</h3>
+                <h3>{t('app.processTable.processDetails', 'Process details')}</h3>
                 <Button variant="outline" size="sm" onClick={onClose}>{t('common.actions.close', 'Close')}</Button>
             </div>
             <div className="panel-body">

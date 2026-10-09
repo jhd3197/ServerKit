@@ -28,7 +28,7 @@ export default function ContextMenu({
         >
             <SharedButton variant="unstyled" type="button" onClick={() => { onOpen(entry); onClose(); }}>
                 {entry.is_dir ? <Folder size={14} /> : <Eye size={14} />}
-                {entry.is_dir ? 'Open' : 'Preview'}
+                {entry.is_dir ? t('common.actions.open', 'Open') : t('app.contextMenu.preview', 'Preview')}
             </SharedButton>
             {!entry.is_dir && (
                 <SharedButton variant="unstyled" type="button" onClick={() => { onDownload(entry); onClose(); }}>
@@ -46,7 +46,9 @@ export default function ContextMenu({
             </SharedButton>
             <div className="context-menu-divider" />
             <SharedButton variant="unstyled" type="button" className="danger" onClick={() => { onDelete(entry); onClose(); }}>
-                <Trash2 size={14} /> {t('common.actions.delete', 'Delete')}{multi ? ` ${selectionCount} items` : ''}
+                <Trash2 size={14} /> {multi
+                    ? t('app.contextMenu.deleteItems', { count: selectionCount, defaultValue_one: 'Delete 1 item', defaultValue_other: 'Delete {{count}} items' })
+                    : t('common.actions.delete', 'Delete')}
             </SharedButton>
         </div>
     );

@@ -31,6 +31,7 @@ import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/useAuth.js';
 import ServerRestorePointsTab from '../components/serverdetail/ServerRestorePointsTab';
+import { toastError } from '@/utils/errorMessage';
 
 // Live host metrics cadence while the server is online.
 const METRICS_POLL_MS = 10000;
@@ -132,8 +133,8 @@ const ServerDetail = () => {
             setSecurityAlerts(prev => prev.map(a =>
                 a.id === alertId ? { ...a, status: 'acknowledged' } : a
             ));
-        } catch {
-            toast.error(t('app.serverDetail.failedToAcknowledgeAlert', 'Failed to acknowledge alert'));
+        } catch (err) {
+            toastError(toast, t('app.serverDetail.failedToAcknowledgeAlert', "Couldn't acknowledge the alert."), err);
         }
     }
 
@@ -141,8 +142,8 @@ const ServerDetail = () => {
         try {
             await api.resolveAlert(alertId);
             setSecurityAlerts(prev => prev.filter(a => a.id !== alertId));
-        } catch {
-            toast.error(t('app.serverDetail.failedToResolveAlert', 'Failed to resolve alert'));
+        } catch (err) {
+            toastError(toast, t('app.serverDetail.failedToResolveAlert', "Couldn't resolve the alert."), err);
         }
     }
 
@@ -158,15 +159,15 @@ const ServerDetail = () => {
     });
 
     async function handleDeleteServer() {
-        const confirmed = await confirm({ title: t('app.serverDetail.removeServer', 'Remove Server'), message: t('app.serverDetail.areYouSureYouWantTo', 'Are you sure you want to remove this server? This action cannot be undone.') });
+        const confirmed = await confirm({ title: t('app.serverDetail.removeServer', 'Remove server'), message: t('app.serverDetail.areYouSureYouWantTo', "Remove this server? This can't be undone.") });
         if (!confirmed) return;
 
         try {
             await api.deleteServer(id);
-            toast.success(t('app.serverDetail.serverRemovedSuccessfully', 'Server removed successfully'));
+            toast.success(t('app.serverDetail.serverRemovedSuccessfully', 'Server removed'));
             navigate('/servers');
         } catch (err) {
-            toast.error(err.message || t('app.serverDetail.failedToRemoveServer', 'Failed to remove server'));
+            toastError(toast, t('app.serverDetail.failedToRemoveServer', "Couldn't remove the server."), err);
         }
     }
 
@@ -179,8 +180,8 @@ const ServerDetail = () => {
             } else {
                 toast.error(t('app.serverDetail.serverDidNotRespond', 'Server did not respond'));
             }
-        } catch {
-            toast.error(t('app.serverDetail.failedToPingServer', 'Failed to ping server'));
+        } catch (err) {
+            toastError(toast, t('app.serverDetail.failedToPingServer', "Couldn't ping the server."), err);
         }
     }
 
@@ -213,9 +214,9 @@ const ServerDetail = () => {
     if (error) {
         return (
             <div className="error-page">
-                <h2>{t('app.serverDetail.errorLoadingServer', 'Error Loading Server')}</h2>
+                <h2>{t('app.serverDetail.errorLoadingServer', "Couldn't load the server.")}</h2>
                 <p>{error}</p>
-                <Button asChild><Link to="/servers">{t('app.serverDetail.backToServers', 'Back to Servers')}</Link></Button>
+                <Button asChild><Link to="/servers">{t('app.serverDetail.backToServers', 'Back to servers')}</Link></Button>
             </div>
         );
     }
@@ -223,9 +224,9 @@ const ServerDetail = () => {
     if (!server) {
         return (
             <div className="error-page">
-                <h2>{t('app.serverDetail.serverNotFound', 'Server Not Found')}</h2>
+                <h2>{t('app.serverDetail.serverNotFound', 'Server not found')}</h2>
                 <p>{t('app.serverDetail.theRequestedServerCouldNotBe', 'The requested server could not be found.')}</p>
-                <Button asChild><Link to="/servers">{t('app.serverDetail.backToServers', 'Back to Servers')}</Link></Button>
+                <Button asChild><Link to="/servers">{t('app.serverDetail.backToServers', 'Back to servers')}</Link></Button>
             </div>
         );
     }
@@ -254,7 +255,7 @@ const ServerDetail = () => {
     // the host can't do" behaviour.
     const tabs = [
         { id: 'overview', label: t('common.labels.overview', 'Overview') },
-        ...(isDeveloper ? [{ id: 'restore-points', label: t('app.serverDetail.restorePoints', 'Restore Points') }] : []),
+        ...(isDeveloper ? [{ id: 'restore-points', label: t('app.serverDetail.restorePoints', 'Restore points') }] : []),
         { id: 'docker', label: t('common.labels.docker', 'Docker') },
         { id: 'proxy', label: t('app.serverDetail.proxy', 'Proxy') },
         ...(server.capabilities?.cron ? [{ id: 'cron', label: t('app.serverDetail.cron', 'Cron') }] : []),
@@ -266,7 +267,7 @@ const ServerDetail = () => {
         ...(totalAlertCount > 0
             ? [{ id: 'alerts', label: t('app.serverDetail.alerts', 'Alerts'), badge: totalAlertCount }]
             : [{ id: 'alerts', label: t('app.serverDetail.alerts', 'Alerts') }]),
-        ...(server.capabilities?.wireguard ? [{ id: 'remote-access', label: t('app.serverDetail.remoteAccess', 'Remote Access') }] : []),
+        ...(server.capabilities?.wireguard ? [{ id: 'remote-access', label: t('app.serverDetail.remoteAccess', 'Remote access') }] : []),
         { id: 'settings', label: t('common.labels.settings', 'Settings') }
     ];
 
@@ -299,7 +300,7 @@ const ServerDetail = () => {
                         </div>
                         <div className="server-detail-header__meta">
                             <span className="server-detail-header__meta-item">
-                                {server.hostname || server.ip_address || 'No endpoint configured'}
+                                {server.hostname || server.ip_address || t('app.serverDetail.noEndpointConfigured', 'No endpoint configured')}
                             </span>
                             {server.group_name && (
                                 <>

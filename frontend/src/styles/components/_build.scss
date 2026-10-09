@@ -24,14 +24,12 @@
 }
 
 .detection-label {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
 }
 
 .detection-value {
-    font-size: $font-size-md;
+    font-size: $text-md;
     font-weight: $font-weight-medium;
     color: $text-primary;
     text-transform: capitalize;
@@ -71,8 +69,8 @@
     }
 
     .version-number {
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
@@ -84,14 +82,14 @@
 
     .commit-hash {
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         padding: $space-1 $space-2;
         background: $bg-hover;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 
     .commit-message {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         max-width: 400px;
         overflow: hidden;
@@ -102,7 +100,7 @@
     .deployment-meta {
         display: flex;
         gap: $space-4;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -116,7 +114,7 @@
 // Deployment History Table
 .version-tag {
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
 }
 
@@ -133,29 +131,29 @@
     gap: $space-3;
     padding: $space-3;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all $transition-fast;
 
     &:hover {
         background: $bg-card;
-        box-shadow: $shadow-sm;
+        box-shadow: none;
     }
 
     .build-log-method {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
         text-transform: capitalize;
     }
 
     .build-log-time {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
     .build-log-lines {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         margin-left: auto;
     }
@@ -172,7 +170,7 @@
     flex-wrap: wrap;
 
     span {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -181,9 +179,9 @@
     margin: 0;
     padding: $space-4;
     background: $bg-body;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     line-height: $line-height-relaxed;
     color: $text-primary;
     max-height: 500px;

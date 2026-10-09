@@ -90,18 +90,18 @@ try {
         assert.equal(surfaces.length, 2);
         for (const surface of surfaces) assert.notEqual(surface.color, 'rgba(0, 0, 0, 0)', `${theme} table has no resting surface`);
         await page.screenshot({ path: `test-results/settings-${theme}.png`, fullPage: true });
-        assert.equal(await page.getByRole('columnheader', { name: /^MFA\b/ }).count(), 1);
+        assert.equal(await page.getByRole('columnheader', { name: /^2FA\b/ }).count(), 1);
         assert.equal(await page.getByRole('columnheader', { name: /^Passkey\b/ }).count(), 1);
 
         await page.getByRole('button', { name: 'All users', exact: true }).click();
-        await page.getByRole('button', { name: 'Admins without MFA', exact: true }).click();
+        await page.getByRole('button', { name: 'Admins without 2FA', exact: true }).click();
         await page.locator('.users-table').first().getByText('needs-mfa', { exact: true }).waitFor();
         assert.equal(await page.locator('.users-table').first().locator('tbody tr').count(), 1);
         assert.equal(await page.locator('.users-table').first().getByText('disabled-admin', { exact: true }).count(), 0);
 
         await page.getByRole('button', { name: 'Delete user', exact: true }).click();
         await page.getByRole('alertdialog').waitFor();
-        await page.getByRole('alertdialog').getByRole('button', { name: 'Delete User', exact: true }).click();
+        await page.getByRole('alertdialog').getByRole('button', { name: 'Delete user', exact: true }).click();
         await withinDeadline(deleteStarted);
         await page.waitForFunction(() => document.querySelector('.users-table button[aria-busy="true"]'));
         assert.equal(await page.locator('.users-table').first().locator('tbody button:not(:disabled)').count(), 0);
@@ -127,7 +127,7 @@ try {
         await page.getByRole('alert').filter({ hasText: 'Synthetic users failure' }).waitFor();
         assert.deepEqual(errors, []);
         await context.close();
-        console.log(`Settings ${theme}: surfaces, MFA view, guarded delete/revoke, loading, empty and error states passed`);
+        console.log(`Settings ${theme}: surfaces, 2FA view, guarded delete/revoke, loading, empty and error states passed`);
     }
 } finally {
     await browser?.close();

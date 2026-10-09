@@ -8,7 +8,7 @@
     gap: $space-2;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: $space-2 $space-3;
 
     svg {
@@ -20,7 +20,7 @@
         background: transparent;
         border: none;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         cursor: pointer;
         padding-right: $space-4;
         min-width: 140px;

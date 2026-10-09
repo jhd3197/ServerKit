@@ -81,7 +81,7 @@ def test_empty_counters_mean_no_ratio_not_zero(monkeypatch):
     ({'engine': 'postgresql'}, 'insights need a Docker database container'),
 ])
 def test_refused_targets(target, error):
-    assert DbInsightsService.insights(target) == {'error': error}
+    assert DbInsightsService.insights(target)['error'] == error
 
 
 class TestEnablePgStatStatements:

@@ -7,7 +7,7 @@
 
     label {
         display: block;
-        font-size: $font-size-sm + 1;
+        font-size: $text-sm;
         font-weight: $font-weight-medium;
         color: $text-secondary;
         margin-bottom: $space-2;
@@ -57,7 +57,7 @@ display: grid;
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-secondary;
         margin-bottom: $space-2;
@@ -90,14 +90,14 @@ display: grid;
     }
 
     &__hint {
-        font-size: $font-size-xs + 1;
+        font-size: $text-xs;
         color: $text-tertiary;
         margin-top: $space-1;
         margin-bottom: 0;
     }
 
     &__error {
-        font-size: $font-size-xs + 1;
+        font-size: $text-xs;
         color: $danger;
         margin-top: $space-1;
         margin-bottom: 0;
@@ -121,7 +121,7 @@ display: grid;
 // Hint text
 .hint {
     color: $text-tertiary;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     margin-bottom: $space-4;
 }
 
@@ -134,7 +134,7 @@ display: grid;
 
     > svg {
         flex-shrink: 0;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 }
 
@@ -143,9 +143,9 @@ display: grid;
     border: 1px solid $danger-border;
     color: $danger;
     padding: $space-3 $space-4;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-5;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
 }
 
 // Filter toggle (checkbox)
@@ -157,7 +157,7 @@ display: grid;
         @include flex-start();
         gap: $space-2;
         color: $text-secondary;
-        font-size: $font-size-sm + 1;
+        font-size: $text-sm;
         cursor: pointer;
     }
 
@@ -190,10 +190,10 @@ display: grid;
     padding: $space-4;
     background: $bg-body;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     color: $text-primary;
     font-family: $font-mono;
-    font-size: $font-size-sm + 1;
+    font-size: $text-sm;
     line-height: $line-height-relaxed;
     resize: vertical;
     @include transition(border-color);
@@ -215,7 +215,7 @@ display: grid;
         accent-color: $accent-primary;
     }
 
-    .checkbox-text { font-weight: 400; }
+    .checkbox-text { font-weight: $font-weight-normal; }
 }
 
 .permission-checkbox {
@@ -223,7 +223,7 @@ display: flex;
     justify-content: center;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
     cursor: pointer;
 
@@ -241,7 +241,7 @@ display: flex;
     margin-bottom: 0;
     background: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     padding: $space-5;
 
     // Forms already inside a card inherit its surface and spacing.
@@ -261,7 +261,7 @@ display: flex;
 
         label {
             display: block;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: $text-secondary;
             margin-bottom: $space-2;
@@ -272,9 +272,9 @@ display: flex;
             padding: $space-3;
             background: $bg-hover;
             border: 1px solid $border-default;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             transition: border-color $transition-fast;
 
             &:focus {
@@ -293,7 +293,7 @@ display: flex;
         .form-help {
             display: block;
             margin-top: $space-1;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }

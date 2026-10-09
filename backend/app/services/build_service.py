@@ -620,7 +620,7 @@ class BuildService:
         """
         build_config = cls.get_app_build_config(app_id)
         if not build_config:
-            return {'success': False, 'error': 'Build not configured for this app'}
+            return {'success': False, 'error': 'Build is not set up for this service'}
 
         app_path = build_config['app_path']
         build_method = build_config.get('build_method', 'auto')

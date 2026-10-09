@@ -70,14 +70,16 @@ const STATUS_CONFIG = {
 const DEPLOY_STATUS = {
     success: { labelKey: 'app.serviceTypes.live', label: 'Live', color: '#3ddc97' },
     failed: { labelKey: 'common.state.failed', label: 'Failed', color: '#fb6f6f' },
-    in_progress: { labelKey: 'app.serviceTypes.inProgress', label: 'In Progress', color: '#f5b945' },
-    rolled_back: { labelKey: 'app.serviceTypes.rolledBack', label: 'Rolled Back', color: '#646b7a' },
+    in_progress: { labelKey: 'app.serviceTypes.inProgress', label: 'In progress', color: '#f5b945' },
+    rolled_back: { labelKey: 'app.serviceTypes.rolledBack', label: 'Rolled back', color: '#646b7a' },
     pending: { labelKey: 'app.serviceTypes.pending', label: 'Pending', color: '#49c7f0' },
 };
 
 export function getServiceType(appType) {
     return SERVICE_TYPES[appType] || {
-        label: appType?.charAt(0).toUpperCase() + appType?.slice(1) || 'Unknown',
+        ...(appType
+            ? { label: appType.charAt(0).toUpperCase() + appType.slice(1) }
+            : { labelKey: 'app.serviceTypes.unknown', label: 'Unknown' }),
         color: '#646b7a',
         bgColor: 'rgba(100, 107, 122, 0.1)',
         borderColor: 'rgba(100, 107, 122, 0.2)',

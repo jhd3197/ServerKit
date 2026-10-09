@@ -10,7 +10,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import { InfoList, InfoItem } from '../InfoList';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Short SHA helper for image digests (handles "sha256:abcdef..." or bare hashes)
 function shortDigest(digest) {
@@ -20,9 +23,13 @@ function shortDigest(digest) {
 }
 
 
+// Radix Select items cannot carry an empty value; this stands for "no registry".
+const NO_REGISTRY = '__none';
+
 function formatStatusLabel(status) {
     if (!status) return 'Not checked';
-    return status.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    const words = status.replace(/_/g, ' ');
+    return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
 // ============================================================
@@ -57,13 +64,13 @@ const ImageUpdateSection = ({ app, onChanged }) => {
             const data = await api.checkImageUpdate(app.id);
             setInfo(data);
             if (data.update_available) {
-                toast.info(t('app.containerOpsPanel.anImageUpdateIsAvailable', 'An image update is available.'));
+                toast.info(t('app.containerOpsPanel.anImageUpdateIsAvailable', 'An image update is available'));
             } else {
-                toast.success(t('app.containerOpsPanel.imageIsUpToDate', 'Image is up to date.'));
+                toast.success(t('app.containerOpsPanel.imageIsUpToDate', 'Image is up to date'));
             }
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.containerOpsPanel.failedToCheckForUpdates', 'Failed to check for updates'));
+            toastError(toast, t('app.containerOpsPanel.failedToCheckForUpdates', "Couldn't check for updates."), err);
         } finally {
             setChecking(false);
         }
@@ -72,7 +79,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
     async function handleApply() {
         const confirmed = await confirm({
             title: t('app.containerOpsPanel.updateImage', 'Update image'),
-            message: t('app.containerOpsPanel.pullTheLatestImageAndRecreate', 'Pull the latest image and recreate the container? The app will briefly restart.'),
+            message: t('app.containerOpsPanel.pullTheLatestImageAndRecreate', 'Pull the latest image and recreate the container? The service will briefly restart.'),
             confirmText: t('app.containerOpsPanel.updateNow', 'Update now'),
         });
         if (!confirmed) return;
@@ -80,7 +87,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
         setApplying(true);
         try {
             const data = await api.applyImageUpdate(app.id);
-            toast.success(data.message || t('app.containerOpsPanel.imageUpdated', 'Image updated.'));
+            toast.success(data.message || t('app.containerOpsPanel.imageUpdated', 'Image updated'));
             onChanged?.();
             // Refresh the local check after applying
             try {
@@ -88,7 +95,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
                 if (refreshed) setInfo(refreshed);
             } catch { /* optional */ }
         } catch (err) {
-            toast.error(err.message || t('app.containerOpsPanel.failedToApplyUpdate', 'Failed to apply update'));
+            toastError(toast, t('app.containerOpsPanel.failedToApplyUpdate', "Couldn't apply the update."), err);
         } finally {
             setApplying(false);
         }
@@ -102,7 +109,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
         <div className="app-panel container-ops__section">
             <div className="app-panel-header">
                 <RefreshCw />
-                <span>{t('app.containerOpsPanel.imageUpdate', 'Image Update')}</span>
+                <span>{t('app.containerOpsPanel.imageUpdate', 'Image update')}</span>
                 <span className="app-panel-header-actions">
                     {status && (
                         <Pill kind={statusKind(status)}>
@@ -114,35 +121,27 @@ const ImageUpdateSection = ({ app, onChanged }) => {
             <div className="app-panel-body">
                 {!isCompose && (
                     <p className="app-panel-hint">
-                        {t('app.containerOpsPanel.imageUpdatesApplyToDockerCompose', 'Image updates apply to Docker Compose apps. You can still check this app\'s digest, but "Update now" is only available for docker-compose apps.')}
+                        {t('app.containerOpsPanel.imageUpdatesApplyToDockerCompose', 'Image updates apply to services deployed with Docker Compose. You can still check this service\'s digest, but "Update now" is only available for Docker Compose deployments.')}
                     </p>
                 )}
 
-                <div className="app-info-grid container-ops__digests">
-                    <div className="app-info-item">
-                        <span className="app-info-label">{t('app.containerOpsPanel.currentDigest', 'Current digest')}</span>
-                        <span className="app-info-value mono">{shortDigest(info?.current_digest)}</span>
-                    </div>
-                    <div className="app-info-item">
-                        <span className="app-info-label">{t('app.containerOpsPanel.latestDigest', 'Latest digest')}</span>
-                        <span className="app-info-value mono">{shortDigest(info?.latest_digest)}</span>
-                    </div>
-                    <div className="app-info-item">
-                        <span className="app-info-label">{t('app.containerOpsPanel.lastChecked', 'Last checked')}</span>
-                        <span className="app-info-value">
-                            {checkedAt ? new Date(checkedAt).toLocaleString() : 'Never'}
-                        </span>
-                    </div>
-                </div>
+                <InfoList className="container-ops__digests">
+                    <InfoItem label={t('app.containerOpsPanel.currentDigest', 'Current digest')} value={shortDigest(info?.current_digest)} mono />
+                    <InfoItem label={t('app.containerOpsPanel.latestDigest', 'Latest digest')} value={shortDigest(info?.latest_digest)} mono />
+                    <InfoItem
+                        label={t('app.containerOpsPanel.lastChecked', 'Last checked')}
+                        value={checkedAt ? new Date(checkedAt).toLocaleString() : 'Never'}
+                    />
+                </InfoList>
 
                 <div className="app-detail-actions container-ops__actions">
                     <Button variant="outline" size="sm" onClick={handleCheck} disabled={checking}>
-                        {checking ? 'Checking…' : 'Check for update'}
+                        {checking ? t('common.checking', 'Checking…') : t('app.containerOpsPanel.checkForUpdate', 'Check for update')}
                     </Button>
                     {updateAvailable && isCompose && (
                         <Button size="sm" onClick={handleApply} disabled={applying}>
                             <ArrowUpCircle size={15} />
-                            {applying ? 'Updating…' : 'Update now'}
+                            {applying ? t('app.containerOpsPanel.updating', 'Updating…') : t('app.containerOpsPanel.updateNow', 'Update now')}
                         </Button>
                     )}
                 </div>
@@ -186,10 +185,10 @@ const RegistrySection = ({ app, onChanged }) => {
         setSaving(true);
         try {
             await api.updateApp(app.id, { registry_id: next });
-            toast.success(next ? t('app.containerOpsPanel.registryAttached', 'Registry attached.') : t('app.containerOpsPanel.registryDetachedPullsAreAnonymous', 'Registry detached — pulls are anonymous.'));
+            toast.success(next ? t('app.containerOpsPanel.registryAttached', 'Registry attached') : t('app.containerOpsPanel.registryDetachedPullsAreAnonymous', 'Registry detached. Pulls are anonymous.'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.containerOpsPanel.failedToUpdateRegistry', 'Failed to update registry'));
+            toastError(toast, t('app.containerOpsPanel.failedToUpdateRegistry', "Couldn't update the registry."), err);
             setSelected(app.registry_id ?? '');
         } finally {
             setSaving(false);
@@ -200,11 +199,11 @@ const RegistrySection = ({ app, onChanged }) => {
         <div className="app-panel container-ops__section">
             <div className="app-panel-header">
                 <Boxes />
-                <span>{t('app.containerOpsPanel.privateRegistry', 'Private Registry')}</span>
+                <span>{t('app.containerOpsPanel.privateRegistry', 'Private registry')}</span>
             </div>
             <div className="app-panel-body">
                 <p className="app-panel-hint">
-                    {t('app.containerOpsPanel.authenticateWithStoredCredentialsBeforePulling', 'Authenticate with stored credentials before pulling this app\'s image. Add registries under')} <Link to="/settings/connections">{t('app.containerOpsPanel.settingsConnections', 'Settings → Connections')}</Link>.
+                    {t('app.containerOpsPanel.authenticateWithStoredCredentialsBeforePulling', "Authenticate with stored credentials before pulling this service's image. Add registries under")} <Link to="/settings/connections">{t('app.containerOpsPanel.settingsConnections', 'Settings → Connections')}</Link>.
                 </p>
 
                 <div className="container-ops__field">
@@ -214,20 +213,23 @@ const RegistrySection = ({ app, onChanged }) => {
                             {t('app.containerOpsPanel.publicImagesPullAnonymouslyPickA', 'Public images pull anonymously; pick a registry for private images.')}
                         </span>
                     </div>
-                    <select
-                        id={`registry-${app.id}`}
-                        className="container-ops__select"
-                        value={selected}
-                        onChange={(e) => handleChange(e.target.value)}
+                    <Select
+                        value={selected === '' || selected == null ? NO_REGISTRY : String(selected)}
+                        onValueChange={(value) => handleChange(value === NO_REGISTRY ? '' : value)}
                         disabled={loading || saving}
                     >
-                        <option value="">{t('app.containerOpsPanel.publicNoAuth', 'Public (no auth)')}</option>
-                        {registries.map((r) => (
-                            <option key={r.id} value={r.id}>
-                                {r.name} · {r.login_host}
-                            </option>
-                        ))}
-                    </select>
+                        <SelectTrigger id={`registry-${app.id}`} className="container-ops__select">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value={NO_REGISTRY}>{t('app.containerOpsPanel.publicNoAuth', 'Public (no auth)')}</SelectItem>
+                            {registries.map((r) => (
+                                <SelectItem key={r.id} value={String(r.id)}>
+                                    {r.name} · {r.login_host}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
             </div>
         </div>
@@ -268,10 +270,10 @@ const AutoSleepSection = ({ app, onChanged }) => {
         try {
             const data = await api.updateSleepPolicy(app.id, next);
             setPolicy((prev) => ({ ...prev, ...(data || next) }));
-            toast.success(t('app.containerOpsPanel.autoSleepPolicySaved', 'Auto-sleep policy saved.'));
+            toast.success(t('app.containerOpsPanel.autoSleepPolicySaved', 'Auto-sleep policy saved'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.containerOpsPanel.failedToSavePolicy', 'Failed to save policy'));
+            toastError(toast, t('app.containerOpsPanel.failedToSavePolicy', "Couldn't save the policy."), err);
             load();
         } finally {
             setSaving(false);
@@ -296,15 +298,15 @@ const AutoSleepSection = ({ app, onChanged }) => {
         try {
             if (policy?.asleep) {
                 await api.wakeApp(app.id);
-                toast.success(t('app.containerOpsPanel.appWoken', 'App woken.'));
+                toast.success(t('app.containerOpsPanel.appWoken', 'Service woken'));
             } else {
                 await api.sleepApp(app.id);
-                toast.success(t('app.containerOpsPanel.appPutToSleep', 'App put to sleep.'));
+                toast.success(t('app.containerOpsPanel.appPutToSleep', 'Service put to sleep'));
             }
             await load();
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.containerOpsPanel.actionFailed', 'Action failed'));
+            toastError(toast, t('app.containerOpsPanel.actionFailed', "Couldn't run that action."), err);
         } finally {
             setBusy(false);
         }
@@ -316,10 +318,10 @@ const AutoSleepSection = ({ app, onChanged }) => {
         <div className="app-panel container-ops__section">
             <div className="app-panel-header">
                 <Moon />
-                <span>{t('app.containerOpsPanel.autoSleep', 'Auto-Sleep')}</span>
+                <span>{t('app.containerOpsPanel.autoSleep', 'Auto-sleep')}</span>
                 <span className="app-panel-header-actions">
                     {!loading && (
-                        <Pill kind={asleep ? 'gray' : 'green'}>{asleep ? 'Asleep' : 'Awake'}</Pill>
+                        <Pill kind={asleep ? 'gray' : 'green'}>{asleep ? t('app.containerOpsPanel.asleep', 'Asleep') : t('app.containerOpsPanel.awake', 'Awake')}</Pill>
                     )}
                 </span>
             </div>
@@ -332,7 +334,7 @@ const AutoSleepSection = ({ app, onChanged }) => {
                     <div className="container-ops__field-text">
                         <Label htmlFor={`sleep-enabled-${app.id}`}>{t('app.containerOpsPanel.enableAutoSleep', 'Enable auto-sleep')}</Label>
                         <span className="container-ops__field-hint">
-                            {t('app.containerOpsPanel.idleAppsAreSuspendedAfterThe', 'Idle apps are suspended after the timeout below.')}
+                            {t('app.containerOpsPanel.idleAppsAreSuspendedAfterThe', 'Idle services are suspended after the timeout below.')}
                         </span>
                     </div>
                     <Switch
@@ -348,8 +350,8 @@ const AutoSleepSection = ({ app, onChanged }) => {
                         <Label htmlFor={`sleep-timeout-${app.id}`}>{t('app.containerOpsPanel.idleTimeoutMinutes', 'Idle timeout (minutes)')}</Label>
                         <span className="container-ops__field-hint">
                             {policy?.last_activity_at
-                                ? `Last activity ${new Date(policy.last_activity_at).toLocaleString()}`
-                                : 'No recorded activity yet.'}
+                                ? t('app.containerOpsPanel.lastActivity', 'Last activity {{when}}', { when: new Date(policy.last_activity_at).toLocaleString() })
+                                : t('app.containerOpsPanel.noRecordedActivityYet', 'No recorded activity yet.')}
                         </span>
                     </div>
                     <Input
@@ -367,7 +369,7 @@ const AutoSleepSection = ({ app, onChanged }) => {
                 <div className="app-detail-actions container-ops__actions">
                     <Button variant="outline" size="sm" onClick={handleSleepWake} disabled={busy || loading}>
                         {asleep ? <Sun size={15} /> : <Moon size={15} />}
-                        {busy ? 'Working…' : asleep ? 'Wake now' : 'Sleep now'}
+                        {busy ? t('app.containerOpsPanel.working', 'Working…') : asleep ? t('app.containerOpsPanel.wakeNow', 'Wake now') : t('app.containerOpsPanel.sleepNow', 'Sleep now')}
                     </Button>
                 </div>
             </div>

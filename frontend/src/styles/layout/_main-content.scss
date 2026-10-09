@@ -49,7 +49,7 @@
     border-bottom: 1px solid $border-subtle;
 
     h1 {
-        font-size: $font-size-2xl;
+        font-size: $text-xl;
         font-weight: $font-weight-semibold;
         letter-spacing: -0.5px;
     }
@@ -67,9 +67,8 @@
 
 // Shared Page Wrapper
 .page-container {
+    // Full width like every page body (Dashboard, Server detail).
     width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
     padding-bottom: $space-10;
 
     &--full-bleed {
@@ -97,7 +96,7 @@
 
     > .sk-topbar {
         flex-shrink: 0;
-        padding: 10px $space-4;
+        padding: $space-3 $space-4;
         margin: 0;
 
         // Match the 18px header icon the per-page top bars used to render.
@@ -117,11 +116,13 @@
 }
 
 // Centered body: the reading column every ordinary page sits in.
+// Full width on every page (lists, dashboards, detail pages alike) with one
+// gutter; a form that needs a reading width caps its own column (Settings).
 @mixin page-shell-inner {
     width: 100%;
-    max-width: 1400px;
-    margin-inline: auto;
-    padding: $space-6 $space-6 $space-10;
+    // One gutter on every side for every page body; page roots inside add no
+    // padding of their own, so content starts at the same spot everywhere.
+    padding: $space-5 $space-5 $space-8;
 
     @media (max-width: $breakpoint-md) { padding: $space-4 $space-4 $space-8; }
 }
@@ -201,16 +202,16 @@
         justify-content: center;
         width: 76px;
         height: 76px;
-        border-radius: 20px;
+        border-radius: $radius-overlay;
         color: #fff;
         background: linear-gradient(150deg, var(--accent-bright), var(--accent-hover));
-        box-shadow: 0 14px 34px -10px var(--accent-shadow), inset 0 0 0 1px rgba(255, 255, 255, 0.10);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.10); // geometry: inset 1px rim used as a border
         animation: app-loader-breathe 2.6s ease-in-out infinite;
     }
 
     &__glyph {
         width: 42px;
-        height: 42px;
+        height: 42px; // geometry: icon size
     }
 
     // Status LEDs blink like a booting machine; the lower one is "online" green.
@@ -228,7 +229,7 @@
         position: relative;
         width: 132px;
         height: 4px;
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: var(--surface-3);
         overflow: hidden;
     }
@@ -245,10 +246,9 @@
     }
 
     &__label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: var(--text-dim);
-        letter-spacing: 0.02em;
     }
 }
 

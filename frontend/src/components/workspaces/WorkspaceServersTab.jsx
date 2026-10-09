@@ -9,6 +9,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { Button } from '@/components/ui/button';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { statusKind } from '@/components/ds/status';
 import { useTranslation } from 'react-i18next';
 
@@ -43,7 +44,9 @@ const WORKSPACE_SERVER_VIEWS = [
     },
 ];
 
-const WorkspaceServersTab = ({ wsId, srvIn, srvOut, onMoveServer }) => {
+// `loadError` / `onRetry`: the page's servers request failed, so an empty
+// list means "unknown", not "no servers".
+const WorkspaceServersTab = ({ wsId, srvIn, srvOut, onMoveServer, loadError, onRetry }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { sorts, setSorts } = useTableSort({ storageKey: 'serverkit-table-ws-servers-sort' });
@@ -146,8 +149,13 @@ const WorkspaceServersTab = ({ wsId, srvIn, srvOut, onMoveServer }) => {
                 onSortsChange={setSorts}
                 {...chrome.tableProps}
                 onRowClick={(s) => navigate(`/servers/${s.id}`)}
-                className="ws-detail__tablecard"
-                emptyState={(
+                emptyState={loadError ? (
+                    <ErrorState
+                        title={t('app.workspaceServersTab.couldntLoadServers', "Couldn't load servers.")}
+                        error={loadError}
+                        onRetry={onRetry}
+                    />
+                ) : (
                     <EmptyState icon={Server} title={t('app.workspaceServersTab.noServersInThisWorkspaceYet', 'No servers in this workspace yet')} description={t('app.workspaceServersTab.moveOneInBelow', 'Move one in below.')} />
                 )}
                 footer={(
@@ -172,7 +180,7 @@ const WorkspaceServersTab = ({ wsId, srvIn, srvOut, onMoveServer }) => {
                             <div key={s.id} className="ws-pick__item" onClick={() => onMoveServer(s.id, wsId)}>
                                 <ServiceTile name={s.name} size={28} className="ws-pick__tile" />
                                 <span className="ws-pick__name">{s.name}</span>
-                                {s.ip_address && <span className="sk-tag">{s.ip_address}</span>}
+                                {s.ip_address && <span className="sk-tag mono">{s.ip_address}</span>}
                                 <Plus size={16} className="ws-pick__plus" />
                             </div>
                         ))}

@@ -3,7 +3,10 @@ export const isEditableTarget = (target) => {
     const tagName = String(target.tagName || '').toLowerCase();
     return target.isContentEditable
         || ['input', 'textarea', 'select'].includes(tagName)
-        || Boolean(target.closest?.('[contenteditable="true"]'));
+        // A Radix Select (trigger = combobox, open list = listbox) owns its
+        // keys the way a native <select> did: Escape closes the list, not
+        // whatever page shortcut is bound to Escape.
+        || Boolean(target.closest?.('[contenteditable="true"], [role="combobox"], [role="listbox"]'));
 };
 
 export const matchesShortcut = (event, shortcut) => {

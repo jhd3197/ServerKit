@@ -626,7 +626,7 @@ class SiteDomainService:
         # success with a URL that was never published.
         existing = Domain.query_active().filter_by(name=host).first()
         if existing and existing.application_id != app.id:
-            return {'success': False, 'error': f'{host} is already used by another app.'}
+            return {'success': False, 'error': f'{host} is already used by another service.'}
 
         try:
             if not existing:

@@ -85,10 +85,10 @@
     --violet: #b07bf5;
     --violet-bg: rgba(176, 123, 245, 0.12);
 
-    // ---- Radius scale (new) ----
-    --radius: 10px;
-    --radius-sm: 7px;
-    --radius-lg: 14px;
+    // ---- Radius: controls / surfaces / overlays ----
+    --radius: 8px;
+    --radius-sm: 6px;
+    --radius-lg: 12px;
 
     // ---- Fonts (new; IBM Plex) ----
     --sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;

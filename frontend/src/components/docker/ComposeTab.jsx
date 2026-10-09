@@ -12,6 +12,7 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { Button } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { Package, Play, Square, RotateCw, FileText, Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -19,10 +20,15 @@ import {
     unwrapRemoteData,
     normalizeListResponse,
 } from './dockerHelpers';
+import { toastError } from '@/utils/errorMessage';
 
 // `docker compose ls --format json` capitalises its keys; the label-scanning
 // fallback in docker_service builds the same shape by hand. Read through one
 // accessor each so a payload from either path lands in the same column.
+// Radix Select items cannot carry an empty value; this stands for "all services".
+const ALL_SERVICES = '__all';
+const LOG_LINE_OPTIONS = [50, 100, 200, 500, 1000];
+
 const projectName = (project) => project.Name || project.name || '';
 const projectStatus = (project) => project.Status || project.status || '';
 const projectConfig = (project) => project.ConfigFiles || project.config_files || '';
@@ -125,7 +131,7 @@ const ComposeTab = ({ onStatsChange }) => {
     async function handleAction(project, action) {
         const projectPath = projectConfig(project);
         if (!projectPath) {
-            toast.error(t('app.composeTab.projectPathNotFound', 'Project path not found'));
+            toast.error(t('app.composeTab.projectPathNotFound', 'Compose project path not found'));
             return;
         }
 
@@ -139,9 +145,9 @@ const ComposeTab = ({ onStatsChange }) => {
                 } else {
                     await api.composeUp(projectPath, true, false);
                 }
-                toast.success(t('app.composeTab.projectStarted', 'Project started'));
+                toast.success(t('app.composeTab.projectStarted', 'Compose project started'));
             } else if (action === 'down') {
-                const downConfirmed = await confirmCompose({ titleKey: 'app.composeTab.stopComposeProject', title: 'Stop Compose Project', messageKey: 'app.composeTab.stopThisComposeProjectContainersWill', message: 'Stop this compose project? Containers will be removed.' });
+                const downConfirmed = await confirmCompose({ titleKey: 'app.composeTab.stopComposeProject', title: 'Stop Compose project', messageKey: 'app.composeTab.stopThisComposeProjectContainersWill', message: 'Stop this compose project? Containers will be removed.' });
                 if (!downConfirmed) {
                     setActionLoading(prev => ({ ...prev, [name]: false }));
                     return;
@@ -151,14 +157,14 @@ const ComposeTab = ({ onStatsChange }) => {
                 } else {
                     await api.composeDown(projectPath, false, true);
                 }
-                toast.success(t('app.composeTab.projectStopped', 'Project stopped'));
+                toast.success(t('app.composeTab.projectStopped', 'Compose project stopped'));
             } else if (action === 'restart') {
                 if (isRemote) {
                     await api.remoteComposeRestart(serverId, projectPath);
                 } else {
                     await api.composeRestart(projectPath);
                 }
-                toast.success(t('app.composeTab.projectRestarted', 'Project restarted'));
+                toast.success(t('app.composeTab.projectRestarted', 'Compose project restarted'));
             } else if (action === 'pull') {
                 if (isRemote) {
                     await api.remoteComposePull(serverId, projectPath);
@@ -171,7 +177,13 @@ const ComposeTab = ({ onStatsChange }) => {
             onStatsChange?.();
         } catch (err) {
             console.error(`Failed to ${action} project:`, err);
-            toast.error(err.message || t('app.composeTab.failedToProject', 'Failed to {{action}} project', { action: action }));
+            const failed = {
+                up: t('app.composeTab.couldntStartProject', "Couldn't start the compose project."),
+                down: t('app.composeTab.couldntStopProject', "Couldn't stop the compose project."),
+                restart: t('app.composeTab.couldntRestartProject', "Couldn't restart the compose project."),
+                pull: t('app.composeTab.couldntPullImages', "Couldn't pull the images."),
+            };
+            toastError(toast, failed[action] || t('app.composeTab.couldntUpdateProject', "Couldn't update the compose project."), err);
         } finally {
             setActionLoading(prev => ({ ...prev, [name]: false }));
         }
@@ -241,12 +253,12 @@ const ComposeTab = ({ onStatsChange }) => {
             render: (project) => {
                 const count = projectRunningCount(project);
                 if (!count) return <span className="dx-muted-line">-</span>;
-                return <span className="dx-muted-line mono">{count}</span>;
+                return <span className="dx-muted-line">{count}</span>;
             },
         },
         {
             key: 'config',
-            headerKey: 'app.composeTab.configFile', header: 'Config File',
+            headerKey: 'app.composeTab.configFile', header: 'Config file',
             sortable: true,
             type: 'text',
             value: projectConfig,
@@ -368,7 +380,7 @@ const ComposeTab = ({ onStatsChange }) => {
                         <SearchField
                             value={searchTerm}
                             onSearch={setSearchTerm}
-                            placeholder={t('app.composeTab.filterProjectOrConfigPath', 'Filter project or config path…')}
+                            placeholder={t('app.composeTab.filterProjectOrConfigPath', 'Filter compose project or config path…')}
                         />
                         <GridFilterButton
                             count={chrome.filterCount}
@@ -386,10 +398,10 @@ const ComposeTab = ({ onStatsChange }) => {
             {filteredProjects.length === 0 ? (
                 <EmptyState
                     icon={Package}
-                    title={projects.length === 0 ? t('app.composeTab.noComposeProjects', 'No Compose projects') : t('app.composeTab.noMatchingProjects', 'No matching projects')}
+                    title={projects.length === 0 ? t('app.composeTab.noComposeProjects', 'No compose projects') : t('app.composeTab.noMatchingProjects', 'No matching compose projects')}
                     description={projects.length === 0
                         ? t('app.composeTab.noDockerComposeProjectsAreRunning', 'No Docker Compose projects are running on this server.')
-                        : t('app.composeTab.noProjectsMatchTheCurrentSearch', 'No projects match the current search.')}
+                        : t('app.composeTab.noProjectsMatchTheCurrentSearch', 'No compose projects match the current search.')}
                     action={projects.length === 0 ? <code>{t('app.composeTab.dockerComposeUpD', 'docker compose up -d')}</code> : null}
                 />
             ) : (
@@ -401,8 +413,7 @@ const ComposeTab = ({ onStatsChange }) => {
                         keyField={(project) => projectName(project)}
                         sorts={sorts}
                         onSortsChange={setSorts}
-                        className="dx-table-wrap"
-                        tableClassName="dx-manager-table dx-plain-table"
+                        className="dx-table-wrap sk-dtable-wrap--sticky"
                         footer={(
                             <DataTableFooter
                                 shown={chrome.shownCount}
@@ -490,31 +501,32 @@ const ComposeLogsModal = ({ project, onClose }) => {
         <Modal open onClose={onClose} title={t('app.composeTab.logs2', 'Logs: {{name}}', { name: name })} size="lg">
             <div className="modal-body">
                 <div className="logs-controls docker-compose-log-controls">
-                    <label>{t('app.composeTab.service', 'Service:')}</label>
-                    <select
-                        value={selectedService}
-                        onChange={(e) => setSelectedService(e.target.value)}
-                        className="docker-compose-log-select"
+                    <label htmlFor="compose-log-service">{t('app.composeTab.service', 'Service:')}</label>
+                    <Select
+                        value={selectedService === '' ? ALL_SERVICES : selectedService}
+                        onValueChange={(value) => setSelectedService(value === ALL_SERVICES ? '' : value)}
                     >
-                        <option value="">{t('app.composeTab.allServices', 'All Services')}</option>
-                        {services.map(service => (
-                            <option key={service} value={service}>{service}</option>
-                        ))}
-                    </select>
-                    <label>{t('app.composeTab.lines', 'Lines:')}</label>
-                    <select value={tail} onChange={(e) => setTail(Number(e.target.value))} className="docker-compose-log-select">
-                        <option value={50}>50</option>
-                        <option value={100}>100</option>
-                        <option value={200}>200</option>
-                        <option value={500}>500</option>
-                        <option value={1000}>1000</option>
-                    </select>
+                        <SelectTrigger id="compose-log-service" className="docker-compose-log-select"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value={ALL_SERVICES}>{t('app.composeTab.allServices', 'All services')}</SelectItem>
+                            {services.map(service => (
+                                <SelectItem key={service} value={service}>{service}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <label htmlFor="compose-log-lines">{t('app.composeTab.lines', 'Lines:')}</label>
+                    <Select value={String(tail)} onValueChange={(value) => setTail(Number(value))}>
+                        <SelectTrigger id="compose-log-lines" className="docker-compose-log-select"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            {LOG_LINE_OPTIONS.map((n) => <SelectItem key={n} value={String(n)}>{n}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
                 </div>
-                <pre className="log-viewer">{loading ? 'Loading...' : logs}</pre>
+                <pre className="log-viewer">{loading ? t('common.loading', 'Loading…') : logs}</pre>
             </div>
             <div className="modal-actions">
                 <Button variant="outline" onClick={loadLogs} disabled={loading}>
-                    {loading ? 'Loading...' : 'Refresh'}
+                    {loading ? t('common.loading', 'Loading…') : t('common.actions.refresh', 'Refresh')}
                 </Button>
                 <Button onClick={onClose}>{t('common.actions.close', 'Close')}</Button>
             </div>

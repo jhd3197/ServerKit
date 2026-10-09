@@ -16,7 +16,7 @@
     gap: $space-3;
     padding: $space-3;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-secondary;
 }
 
@@ -27,7 +27,7 @@
     color: $text-primary;
 
     svg {
-        margin-top: 2px;
+        margin-top: $space-hair;
         color: $color-primary;
         flex-shrink: 0;
     }
@@ -39,17 +39,17 @@
 }
 
 .api-key-scopes__master-title {
-    font-weight: 600;
-    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    font-size: $text-xs;
 }
 
 .api-key-scopes__master-desc {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
 .api-key-scopes__loading {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
     margin: 0;
 }
@@ -75,11 +75,9 @@
 
 .api-key-scopes__group-title {
     margin: 0;
-    font-size: $font-size-xs;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-size: $text-xs;
     color: $text-secondary;
-    font-weight: 600;
+    font-weight: $font-weight-semibold;
 }
 
 .api-key-scopes__item {
@@ -87,7 +85,7 @@
     align-items: flex-start;
     gap: $space-2;
     padding: $space-2;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     cursor: pointer;
 
     &:hover {
@@ -98,24 +96,24 @@
 .api-key-scopes__item-text {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: $space-hair;
     min-width: 0;
 }
 
 .api-key-scopes__item-label {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-primary;
-    font-weight: 500;
+    font-weight: $font-weight-medium;
 }
 
 .api-key-scopes__item-key {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
     font-family: $font-mono;
 }
 
 .api-key-scopes__item-desc {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 

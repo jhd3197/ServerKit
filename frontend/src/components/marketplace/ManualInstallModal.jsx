@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import DocsLink from '@/components/DocsLink';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const INSTALL_SOURCES = [
     { id: 'url', label: 'URL', icon: Globe2 },
@@ -125,8 +126,8 @@ const PreviewConsent = ({ preview, installing, onInstall, onCancel }) => {
 
             {sigStatus === 'invalid' && (
                 <p className="plugin-install-consent__sig-note plugin-install-consent__sig-note--danger">
-                    {preview.signature?.error || 'The signature does not match this archive.'}
-                    {' '}{t('app.manualInstallModal.theDownloadMayHaveBeenTampered', 'The download may have been tampered with — do not install it.')}
+                    {preview.signature?.error || t('app.manualInstallModal.signatureMismatch', 'The signature does not match this archive.')}
+                    {' '}{t('app.manualInstallModal.theDownloadMayHaveBeenTampered', 'The download may have been tampered with. Do not install it.')}
                 </p>
             )}
             {sigStatus === 'untrusted_key' && (
@@ -136,7 +137,7 @@ const PreviewConsent = ({ preview, installing, onInstall, onCancel }) => {
             )}
             {sigStatus === 'unsigned' && (
                 <p className="plugin-install-consent__sig-note">
-                    {t('app.manualInstallModal.thisReleaseCarriesNoPublisherSignature', 'This release carries no publisher signature. It will run with full panel privileges — install only if you trust the source.')}
+                    {t('app.manualInstallModal.thisReleaseCarriesNoPublisherSignature', 'This release carries no publisher signature. It will run with full panel privileges, so install it only if you trust the source.')}
                 </p>
             )}
 
@@ -174,8 +175,8 @@ const PreviewConsent = ({ preview, installing, onInstall, onCancel }) => {
                     variant={sigStatus === 'verified' ? 'default' : 'destructive'}
                 >
                     <DownloadCloud aria-hidden="true" />
-                    {installing ? 'Installing...'
-                        : sigStatus === 'verified' ? 'Install' : 'Install anyway'}
+                    {installing ? t('app.manualInstallModal.installing', 'Installing…')
+                        : sigStatus === 'verified' ? t('app.manualInstallModal.install', 'Install') : t('app.manualInstallModal.installAnyway', 'Install anyway')}
                 </Button>
             </div>
         </div>
@@ -214,7 +215,7 @@ const ManualInstallModal = ({ defaultSource = 'url', onClose, onInstalled }) => 
             const result = await api.previewPlugin(pluginUrl.trim());
             setPreview(result);
         } catch (err) {
-            toast.error(err.message || t('app.manualInstallModal.couldNotResolveThatExtension', 'Could not resolve that extension'));
+            toastError(toast, t('app.manualInstallModal.couldNotResolveThatExtension', "Couldn't find that extension."), err);
         } finally {
             setPreviewing(false);
         }
@@ -230,7 +231,7 @@ const ManualInstallModal = ({ defaultSource = 'url', onClose, onInstalled }) => 
             toast.success(t('app.manualInstallModal.extensionInstalledRestartBackendToActivate', 'Extension "{{displayname}}" installed. Restart backend to activate routes.', { displayname: result.display_name }));
             onInstalled();
         } catch (err) {
-            toast.error(err.message || t('app.manualInstallModal.extensionInstallationFailed', 'Extension installation failed'));
+            toastError(toast, t('app.manualInstallModal.extensionInstallationFailed', "Couldn't install the extension."), err);
         } finally {
             setInstalling(false);
         }
@@ -254,7 +255,7 @@ const ManualInstallModal = ({ defaultSource = 'url', onClose, onInstalled }) => 
             toast.success(t('app.manualInstallModal.extensionInstalledRestartBackendToActivate', 'Extension "{{displayname}}" installed. Restart backend to activate routes.', { displayname: result.display_name }));
             onInstalled();
         } catch (err) {
-            toast.error(err.message || t('app.manualInstallModal.extensionInstallationFailed', 'Extension installation failed'));
+            toastError(toast, t('app.manualInstallModal.extensionInstallationFailed', "Couldn't install the extension."), err);
         } finally {
             setInstalling(false);
         }
@@ -347,7 +348,7 @@ const ManualInstallModal = ({ defaultSource = 'url', onClose, onInstalled }) => 
                                 disabled={installing || !pluginFile}
                             >
                                 <DownloadCloud aria-hidden="true" />
-                                {installing ? 'Installing...' : 'Install'}
+                                {installing ? t('app.manualInstallModal.installing', 'Installing…') : t('app.manualInstallModal.install', 'Install')}
                             </Button>
                         </div>
                         {pluginFile && (

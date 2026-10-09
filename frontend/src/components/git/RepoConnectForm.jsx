@@ -40,14 +40,14 @@ const RepoConnectForm = ({
     onDisconnect,
     intro = {
         titleKey: 'app.repoConnectForm.connectAGitRepository', title: 'Connect a Git repository',
-        subtitleKey: 'app.repoConnectForm.trackThisServiceInVersionControl', subtitle: 'Track this service in version control — push to deploy.',
+        subtitleKey: 'app.repoConnectForm.trackThisServiceInVersionControl', subtitle: 'Track this service in version control. Push to deploy.',
     },
     showPaths = false,
     defaultPaths = [],
-    pathsLabel = 'Tracked paths',
+    pathsLabel,
     pathsHint = '',
     urlPlaceholder = 'https://github.com/user/repo.git',
-    submitLabel = 'Connect Repository',
+    submitLabel,
     idPrefix = 'repo',
     enableGithub = true,
 }) => {
@@ -160,12 +160,12 @@ const RepoConnectForm = ({
                         <strong>{gitStatus.branch}</strong>
                     </div>
                     <div className="git-connect-status__meta-item">
-                        <span>{t('app.repoConnectForm.autoDeploy', 'Auto Deploy')}</span>
-                        <strong>{gitStatus.auto_deploy ? 'Enabled' : 'Disabled'}</strong>
+                        <span>{t('app.repoConnectForm.autoDeploy', 'Auto deploy')}</span>
+                        <strong>{gitStatus.auto_deploy ? t('app.repoConnectForm.enabled', 'Enabled') : t('app.repoConnectForm.disabled', 'Disabled')}</strong>
                     </div>
                     {gitStatus.last_deploy_commit && (
                         <div className="git-connect-status__meta-item">
-                            <span>{t('app.repoConnectForm.lastDeploy', 'Last Deploy')}</span>
+                            <span>{t('app.repoConnectForm.lastDeploy', 'Last deploy')}</span>
                             <strong className="mono">{gitStatus.last_deploy_commit.substring(0, 7)}</strong>
                         </div>
                     )}
@@ -180,7 +180,7 @@ const RepoConnectForm = ({
                 <div className="git-connect-status__actions">
                     <Button variant="destructive" onClick={handleDisconnect} disabled={loading}>
                         <Unlink size={14} />
-                        {loading ? 'Disconnecting...' : 'Disconnect'}
+                        {loading ? t('app.repoConnectForm.disconnecting', 'Disconnecting…') : t('app.repoConnectForm.disconnect', 'Disconnect')}
                     </Button>
                 </div>
             </div>
@@ -271,7 +271,7 @@ const RepoConnectForm = ({
                     id={`${idPrefix}-paths`}
                     paths={formData.paths}
                     onChange={handlePathsChange}
-                    label={pathsLabel}
+                    label={pathsLabel ?? t('app.repoConnectForm.trackedPaths', 'Tracked paths')}
                     hint={pathsHint}
                 />
             )}
@@ -292,7 +292,7 @@ const RepoConnectForm = ({
             <div className="git-connect__actions">
                 <Button type="submit" disabled={loading}>
                     <GitBranch size={14} />
-                    {loading ? 'Connecting...' : submitLabel}
+                    {loading ? t('app.repoConnectForm.connecting', 'Connecting…') : (submitLabel ?? t('app.repoConnectForm.connectRepository', 'Connect repository'))}
                 </Button>
             </div>
         </form>

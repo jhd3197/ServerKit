@@ -12,8 +12,8 @@ const FULL_ACCESS = '*';
 const FALLBACK_SCOPES = [
     { key: 'read', labelKey: 'app.apiKeyScopesModal.readAll', label: 'Read (all)', group: 'General', descriptionKey: 'app.apiKeyScopesModal.readOnlyAccessAcrossAllResources', description: 'Read-only access across all resources.' },
     { key: 'write', labelKey: 'app.apiKeyScopesModal.writeAll', label: 'Write (all)', group: 'General', descriptionKey: 'app.apiKeyScopesModal.createAndModifyAccessAcrossAll', description: 'Create and modify access across all resources.' },
-    { key: 'apps:read', labelKey: 'app.apiKeyScopesModal.viewApplications', label: 'View applications', group: 'Applications', descriptionKey: 'app.apiKeyScopesModal.listAndInspectManagedApplications', description: 'List and inspect managed applications.' },
-    { key: 'apps:write', labelKey: 'app.apiKeyScopesModal.manageApplications', label: 'Manage applications', group: 'Applications', descriptionKey: 'app.apiKeyScopesModal.createUpdateAndDeleteApplications', description: 'Create, update, and delete applications.' },
+    { key: 'apps:read', labelKey: 'app.apiKeyScopesModal.viewApplications', label: 'View services', group: 'Applications', descriptionKey: 'app.apiKeyScopesModal.listAndInspectManagedApplications', description: 'List and inspect managed services.' },
+    { key: 'apps:write', labelKey: 'app.apiKeyScopesModal.manageApplications', label: 'Manage services', group: 'Applications', descriptionKey: 'app.apiKeyScopesModal.createUpdateAndDeleteApplications', description: 'Create, update, and delete services.' },
 ];
 
 /**

@@ -17,7 +17,7 @@
         align-items: center;
         gap: $space-2;
         margin: 0;
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
@@ -35,10 +35,10 @@
     gap: $space-3;
     padding: $space-3;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     .env-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -48,7 +48,7 @@
     align-items: center;
     gap: $space-3;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     &::before,
     &::after {
@@ -72,7 +72,7 @@
     padding: $space-3;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     transition: border-color $transition-fast;
 
     &:hover {
@@ -91,10 +91,10 @@
     align-items: center;
     justify-content: center;
     width: 36px;
-    height: 36px;
+    height: 36px; // geometry: icon tile
     background: $accent-glow;
     color: $accent-primary;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 }
 
 .linked-app-details {
@@ -112,13 +112,13 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .linked-app-port {
     color: $text-tertiary;
     font-family: $font-mono;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
 }
 
 .linked-app-actions {
@@ -131,12 +131,12 @@
     padding: $space-4;
     text-align: center;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     p {
         margin: 0 0 $space-3;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .btn {
@@ -153,14 +153,14 @@
     padding: $space-3;
     background: fade($accent-primary-raw, 10%);
     border: 1px solid fade($accent-primary-raw, 20%);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 }
 
 .shared-config-badge {
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $accent-primary;
     margin-bottom: $space-2;
@@ -170,14 +170,13 @@
     display: flex;
     flex-wrap: wrap;
     gap: $space-3;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-secondary;
-    font-family: $font-mono;
 
     span {
         background: $bg-card;
         padding: $space-1 $space-2;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 }
 
@@ -201,12 +200,12 @@
     gap: $space-2;
     padding: $space-3;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-bottom: $space-4;
 
     .link-app-label {
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .link-app-name {
@@ -226,12 +225,12 @@
 
     h3 {
         margin: 0 0 $space-2;
-        font-size: $font-size-lg;
+        font-size: $text-lg;
     }
 
     p {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin-bottom: $space-4;
     }
 }
@@ -250,7 +249,7 @@
     padding: $space-3;
     background: $bg-card;
     border: 2px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
     transition: all $transition-fast;
 
@@ -268,7 +267,7 @@
     }
 
     .env-radio-label {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -277,14 +276,12 @@
     margin: $space-4 0;
     padding: $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 }
 
 .link-preview-title {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
     margin-bottom: $space-3;
 }
 
@@ -303,12 +300,12 @@
     padding: $space-3;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     min-width: 120px;
 }
 
 .link-preview-name {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-primary;
 }
@@ -318,7 +315,7 @@
     align-items: center;
     justify-content: center;
     width: 32px;
-    height: 32px;
+    height: 32px; // geometry: connector icon disc
     background: $accent-glow;
     color: $accent-primary;
     border-radius: 50%;
@@ -334,10 +331,10 @@
 .status-badge-sm {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
+    gap: $space-1;
+    padding: $space-hair $space-2;
     border-radius: $radius-full;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
 
     .status-dot {

@@ -5,8 +5,10 @@ import Modal from '../Modal';
 import FormField from '../FormField';
 import DeploymentTimeline from '../deployments/DeploymentTimeline';
 import { Button } from '../ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '../ui/select';
 import { useToast } from '../../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 export default function ServerRestorePointsTab({ serverId }) {
     const { t } = useTranslation();
@@ -59,7 +61,7 @@ export default function ServerRestorePointsTab({ serverId }) {
 
     async function handleQuicksave() {
         if (!selectedAppId) {
-            setSaveError(t('app.serverRestorePoints.chooseApplication', 'Choose an application to quicksave.'));
+            setSaveError(t('app.serverRestorePoints.chooseApplication', 'Choose a service to save a restore point for.'));
             return;
         }
         try {
@@ -72,10 +74,10 @@ export default function ServerRestorePointsTab({ serverId }) {
             });
             setShowQuicksave(false);
             setTimelineRefreshKey((value) => value + 1);
-            toast.success(t('app.serverRestorePoints.quicksaveCreated', 'Environment quicksave created.'));
+            toast.success(t('app.serverRestorePoints.quicksaveCreated', 'Environment restore point saved'));
         } catch (err) {
             setSaveError(err.message);
-            toast.error(err.message || t('app.serverRestorePoints.quicksaveFailed', 'Failed to create quicksave.'));
+            toastError(toast, t('app.serverRestorePoints.quicksaveFailed', "Couldn't save the restore point."), err);
         } finally {
             setSaving(false);
         }
@@ -90,7 +92,7 @@ export default function ServerRestorePointsTab({ serverId }) {
                 <Save size={14} />
                 {saving
                     ? t('app.serverRestorePoints.saving', 'Saving…')
-                    : t('app.serverRestorePoints.createQuicksave', 'Create quicksave')}
+                    : t('app.serverRestorePoints.createQuicksave', 'Save restore point')}
             </Button>
         </>
     );
@@ -100,7 +102,6 @@ export default function ServerRestorePointsTab({ serverId }) {
             <header className="server-restore-points__header">
                 <div>
                     <h2>{t('app.serverRestorePoints.title', 'Restore points')}</h2>
-                    <p>{t('app.serverRestorePoints.description', 'Review checkpoints, deployments, and server audit activity in one timeline.')}</p>
                 </div>
                 <div className="server-restore-points__actions">
                     <Button
@@ -115,19 +116,19 @@ export default function ServerRestorePointsTab({ serverId }) {
                         onClick={openQuicksave}
                         disabled={appsLoading || serverApps.length === 0}
                     >
-                        <Save size={14} /> {t('app.serverRestorePoints.quicksave', 'Quicksave')}
+                        <Save size={14} /> {t('app.serverRestorePoints.quicksave', 'Save restore point')}
                     </Button>
                 </div>
             </header>
 
             <div className="server-restore-points__scope-note">
                 <Info size={17} />
-                <p>{t('app.serverRestorePoints.scopeNote', 'Remote quicksave currently covers application environment variables stored by ServerKit. Secret values are masked and cannot be recovered. Shared variable groups and host-level cron, firewall, DNS, and Nginx are not included.')}</p>
+                <p>{t('app.serverRestorePoints.scopeNote', 'Remote restore points currently cover service environment variables stored by ServerKit. Secret values are masked and cannot be recovered. Shared variable groups and host-level cron, firewall, DNS, and Nginx are not included.')}</p>
             </div>
 
             {appsLoading && (
                 <div className="server-restore-points__apps-status" role="status">
-                    {t('app.serverRestorePoints.loadingApplications', 'Loading applications for this server…')}
+                    {t('app.serverRestorePoints.loadingApplications', 'Loading services for this server…')}
                 </div>
             )}
 
@@ -144,8 +145,8 @@ export default function ServerRestorePointsTab({ serverId }) {
                 <div className="server-restore-points__apps-status server-restore-points__apps-status--empty">
                     <Save size={16} />
                     <div>
-                        <strong>{t('app.serverRestorePoints.noApplications', 'No applications are available for quicksave')}</strong>
-                        <span>{t('app.serverRestorePoints.noApplicationsDescription', 'The timeline remains available. Add or gain access to an application on this server to create an environment quicksave.')}</span>
+                        <strong>{t('app.serverRestorePoints.noApplications', 'No services are available for a restore point')}</strong>
+                        <span>{t('app.serverRestorePoints.noApplicationsDescription', 'The timeline remains available. Add or gain access to a service on this server to save an environment restore point.')}</span>
                     </div>
                 </div>
             )}
@@ -156,33 +157,36 @@ export default function ServerRestorePointsTab({ serverId }) {
                 <Modal
                     open
                     onClose={() => setShowQuicksave(false)}
-                    title={t('app.serverRestorePoints.createEnvironmentQuicksave', 'Create environment quicksave')}
+                    title={t('app.serverRestorePoints.createEnvironmentQuicksave', 'Save environment restore point')}
                     onSubmit={handleQuicksave}
                     footer={quicksaveFooter}
                 >
                     <div className="server-restore-points__form">
                         <p className="server-restore-points__form-intro">
-                            {t('app.serverRestorePoints.formDescription', 'Choose one application on this server. Only its ServerKit-managed environment variables will be captured.')}
+                            {t('app.serverRestorePoints.formDescription', 'Choose one service on this server. Only its ServerKit-managed environment variables will be captured.')}
                         </p>
                         <FormField
-                            label={t('app.serverRestorePoints.application', 'Application')}
+                            label={t('app.serverRestorePoints.application', 'Service')}
                             htmlFor="restore-point-app"
                             required
                         >
-                            <select
-                                id="restore-point-app"
-                                value={selectedAppId}
-                                onChange={(event) => {
-                                    setSelectedAppId(event.target.value);
+                            <Select
+                                value={selectedAppId === '' || selectedAppId == null ? '' : String(selectedAppId)}
+                                onValueChange={(value) => {
+                                    setSelectedAppId(value);
                                     setSaveError(null);
                                 }}
                                 required
                             >
-                                <option value="">{t('app.serverRestorePoints.selectApplication', 'Select an application')}</option>
-                                {serverApps.map((app) => (
-                                    <option key={app.id} value={app.id}>{app.name}</option>
-                                ))}
-                            </select>
+                                <SelectTrigger id="restore-point-app">
+                                    <SelectValue placeholder={t('app.serverRestorePoints.selectApplication', 'Select a service')} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {serverApps.map((app) => (
+                                        <SelectItem key={app.id} value={String(app.id)}>{app.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </FormField>
                         <FormField
                             label={t('app.serverRestorePoints.label', 'Label (optional)')}

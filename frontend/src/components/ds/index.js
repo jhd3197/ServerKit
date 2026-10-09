@@ -23,6 +23,7 @@ export { FilterDrawer, FilterButton } from './FilterDrawer';
 export { countActiveFilters, emptyFilterValue } from './filterValues';
 export { PageTopbar } from './PageTopbar';
 export { DataTable } from './DataTable';
+export { CatalogCard, CatalogGrid } from './CatalogCard';
 export { SortChipBar } from './SortChipBar';
 export { DataTableFooter } from './DataTableFooter';
 export { ListToolbar } from './ListToolbar';

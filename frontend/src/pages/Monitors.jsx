@@ -17,6 +17,7 @@ import {
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import {
     DataTable, DataTableFooter, Drawer, FilterButton, FilterDrawer,
     Pill, SearchField, Sparkline, countActiveFilters,
@@ -28,6 +29,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -35,6 +39,7 @@ import useFocusParam from '@/hooks/useFocusParam';
 import { CHECK_TYPES, MONITOR_STATUS, monitorStateOf } from '../components/monitoring/monitorShared';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const POLL_MS = 15000;
 
@@ -187,6 +192,7 @@ export default function Monitors() {
 
     const [monitors, setMonitors] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [q, setQ] = useState('');
     const [filters, setFilters] = useState({ status: '', type: '' });
     const [filtersOpen, setFiltersOpen] = useState(false);
@@ -203,8 +209,11 @@ export default function Monitors() {
                 q: q || undefined, status: filters.status || undefined, type: filters.type || undefined,
             });
             setMonitors(listRes?.monitors || []);
-        } catch {
-            // Keep the last good list on screen rather than blanking the page.
+            setLoadError(null);
+        } catch (err) {
+            // Keep the last good list on screen rather than blanking the page;
+            // the error shows above it, or in its place on a first load.
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -247,7 +256,7 @@ export default function Monitors() {
                 <RefreshCw size={14} /> {t('common.actions.refresh', 'Refresh')}
             </Button>
             <Button size="sm" onClick={openCreate}>
-                <Plus size={14} /> {t('app.monitors.addMonitor', 'Add monitor')}
+                <Plus size={14} /> {t('app.monitors.addMonitor', 'New monitor')}
             </Button>
         </>
     ), [q, activeFilterCount, load]);
@@ -271,7 +280,7 @@ export default function Monitors() {
             setFormOpen(false);
             load();
         } catch (err) {
-            toast.error(err.message || t('app.monitors.couldNotCreateTheMonitor', 'Could not create the monitor'));
+            toastError(toast, t('app.monitors.couldNotCreateTheMonitor', "Couldn't create the monitor."), err);
         } finally {
             setSaving(false);
         }
@@ -283,7 +292,7 @@ export default function Monitors() {
             toast.success(monitor.is_paused ? t('app.monitors.resumed', 'Resumed {{name}}', { name: monitor.name }) : t('app.monitors.paused', 'Paused {{name}}', { name: monitor.name }));
             load();
         } catch (err) {
-            toast.error(err.message || t('app.monitors.couldNotChangeTheMonitor', 'Could not change the monitor'));
+            toastError(toast, t('app.monitors.couldNotChangeTheMonitor', "Couldn't change the monitor."), err);
         }
     };
 
@@ -298,7 +307,7 @@ export default function Monitors() {
             }));
             load();
         } catch (err) {
-            toast.error(err.message || t('app.monitors.checkFailed', 'Check failed'));
+            toastError(toast, t('app.monitors.checkFailed', "Couldn't run the check."), err);
         }
     };
 
@@ -329,7 +338,7 @@ export default function Monitors() {
                     <span className="mon-ico"><Globe size={15} /></span>
                     <div className="mon-namecell">
                         <div className="mon-namecell__name">{m.name}</div>
-                        <div className="mon-namecell__target">{m.check_target || 'bound site'}</div>
+                        <div className="mon-namecell__target">{m.check_target || t('app.monitors.boundSite', 'bound site')}</div>
                     </div>
                 </div>
             ),
@@ -487,35 +496,42 @@ export default function Monitors() {
 
             <GridChips {...chrome.chipProps} />
 
+            {loadError && monitors.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={load} />
+            )}
+
             {loading && monitors.length === 0 ? (
                 <EmptyState loading loadingVariant="table" title={t('app.monitors.loadingMonitors', 'Loading monitors')} />
+            ) : loadError && monitors.length === 0 ? (
+                <ErrorState
+                    title={t('app.monitors.couldntLoadMonitors', "Couldn't load monitors.")}
+                    error={loadError}
+                    onRetry={load}
+                />
             ) : monitors.length === 0 ? (
                 <EmptyState
                     icon={Radar}
                     title={hasFilters ? t('app.monitors.noMonitorsMatch', 'No monitors match') : t('app.monitors.nothingIsBeingWatchedYet', 'Nothing is being watched yet')}
                     description={hasFilters
                         ? t('app.monitors.tryADifferentSearchOrClear', 'Try a different search or clear the filters.')
-                        : t('app.monitors.addAMonitorToWatchA', 'Add a monitor to watch a website, an API endpoint, a database port or a WordPress site — and get an incident when it stops answering.')}
+                        : t('app.monitors.addAMonitorToWatchA', 'Add a monitor to watch a website, an API endpoint, a database port or a WordPress site, and get an incident when it stops answering.')}
                     action={hasFilters
                         ? <Button variant="outline" onClick={() => { setQ(''); setFilters({ status: '', type: '' }); }}>{t('common.actions.clearFilters', 'Clear filters')}</Button>
-                        : <Button onClick={openCreate}><Plus size={16} /> {t('app.monitors.addMonitor', 'Add monitor')}</Button>}
+                        : <Button onClick={openCreate}><Plus size={16} /> {t('app.monitors.addMonitor', 'New monitor')}</Button>}
                 />
             ) : (
-                <div className="mon-card">
-                    <DataTable
-                        tableClassName="sk-dtable monitors-table"
-                        storageKey="serverkit-table-monitors"
-                        data={monitors}
-                        keyField="id"
-                        columns={chrome.columns}
-                        sorts={sorts}
-                        onSortsChange={setSorts}
-                        {...chrome.tableProps}
-                        onRowClick={(m) => navigate(`/monitoring/monitors/${m.id}`)}
-                        rowClassName={(m) => (m.is_paused ? 'is-disabled' : undefined)}
-                        footer={<DataTableFooter shown={monitors.length} total={monitors.length} noun="monitor" />}
-                    />
-                </div>
+                <DataTable
+                    storageKey="serverkit-table-monitors"
+                    data={monitors}
+                    keyField="id"
+                    columns={chrome.columns}
+                    sorts={sorts}
+                    onSortsChange={setSorts}
+                    {...chrome.tableProps}
+                    onRowClick={(m) => navigate(`/monitoring/monitors/${m.id}`)}
+                    rowClassName={(m) => (m.is_paused ? 'is-disabled' : undefined)}
+                    footer={<DataTableFooter shown={monitors.length} total={monitors.length} noun="monitor" />}
+                />
             )}
 
             {/* The SERVER-side pair: this one changes what /monitors is asked
@@ -534,8 +550,8 @@ export default function Monitors() {
             <Drawer
                 open={formOpen}
                 onOpenChange={setFormOpen}
-                title={t('app.monitors.addMonitor', 'Add monitor')}
-                subtitle={t('app.monitors.probeAUrlHostOrPort', 'Probe a URL, host or port on a schedule')}
+                title={t('app.monitors.addMonitor', 'New monitor')}
+                subtitle={t('app.monitors.probeAUrlHostOrPort', 'Probe a URL, host or port on a schedule.')}
                 icon={<Radar size={18} />}
             >
                 <form className="mon-form" onSubmit={onSave} data-walkthrough="monitor-form">
@@ -550,14 +566,17 @@ export default function Monitors() {
 
                     <div className="form-group">
                         <Label htmlFor="mon-type">{t('app.monitors.checkType', 'Check type')}</Label>
-                        <select
-                            id="mon-type" className="mon-select" value={form.check_type}
-                            onChange={(e) => setForm({ ...form, check_type: e.target.value })}
+                        <Select
+                            value={form.check_type}
+                            onValueChange={(v) => setForm({ ...form, check_type: v })}
                         >
-                            {CHECK_TYPES.map((t) => (
-                                <option key={t.value} value={t.value}>{t.label} — {t.hint}</option>
-                            ))}
-                        </select>
+                            <SelectTrigger id="mon-type"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                {CHECK_TYPES.map((t) => (
+                                    <SelectItem key={t.value} value={t.value}>{t.label} — {t.hint}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div className="form-group">
@@ -613,14 +632,17 @@ export default function Monitors() {
                             <div className="mon-form__row">
                                 <div className="form-group">
                                     <Label htmlFor="mon-method">{t('app.monitors.method', 'Method')}</Label>
-                                    <select
-                                        id="mon-method" className="mon-select" value={form.check_method}
-                                        onChange={(e) => setForm({ ...form, check_method: e.target.value })}
+                                    <Select
+                                        value={form.check_method}
+                                        onValueChange={(v) => setForm({ ...form, check_method: v })}
                                     >
-                                        {['GET', 'HEAD', 'POST', 'PUT', 'OPTIONS'].map((m) => (
-                                            <option key={m} value={m}>{m}</option>
-                                        ))}
-                                    </select>
+                                        <SelectTrigger id="mon-method"><SelectValue /></SelectTrigger>
+                                        <SelectContent>
+                                            {['GET', 'HEAD', 'POST', 'PUT', 'OPTIONS'].map((m) => (
+                                                <SelectItem key={m} value={m}>{m}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                                 <div className="form-group">
                                     <Label htmlFor="mon-expected">{t('app.monitors.expectedStatus', 'Expected status')}</Label>
@@ -658,7 +680,7 @@ export default function Monitors() {
                     <div className="mon-form__actions">
                         <Button type="button" variant="ghost" onClick={() => setFormOpen(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button type="submit" disabled={saving} data-walkthrough="monitor-submit">
-                            {saving ? 'Adding…' : 'Add monitor'}
+                            {saving ? t('app.monitors.creating', 'Creating…') : t('app.monitors.createMonitor', 'Create monitor')}
                         </Button>
                     </div>
                 </form>

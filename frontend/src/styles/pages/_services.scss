@@ -7,15 +7,15 @@
 .services-page {
     // Source badge (repo / manual / upload) used inside the shared .sk-dtable.
     &__src-badge {
+        height: 20px; // geometry: badge height (20px badge spec)
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 3px 9px;
+        gap: $space-tight;
+        padding: 0 $space-tight;
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
-        border-radius: 6px;
-        font-family: var(--mono);
-        font-size: 11.5px;
+        border-radius: $radius-badge;
+        font-size: $text-xs;
         color: var(--text-dim);
         max-width: 200px;
         overflow: hidden;
@@ -49,12 +49,12 @@
     &__project-name {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         max-width: 160px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
 
         svg { flex-shrink: 0; color: $text-secondary; }
@@ -63,10 +63,10 @@
     &__unassigned {
         display: inline-flex;
         align-items: center;
-        padding: 2px 8px;
+        padding: $space-hair $space-2;
         border: 1px dashed $border-subtle;
-        border-radius: 999px;
-        font-size: 11.5px;
+        border-radius: $radius-full;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -113,7 +113,7 @@
     &__name {
         overflow: hidden;
         color: $text-primary;
-        font-size: 14.5px;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -121,10 +121,10 @@
 
     &__domain {
         overflow: hidden;
-        margin-bottom: 14px;
+        margin-bottom: $space-4;
         color: $text-secondary;
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
@@ -132,24 +132,22 @@
     &__stats {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 2px;
-        padding-top: 13px;
+        gap: $space-hair;
+        padding-top: $space-3;
         border-top: 1px solid $border-subtle;
 
         .l {
             display: block;
             color: $text-tertiary;
-            font-size: 10px;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+            font-size: $text-xs;
         }
 
         .v {
             display: block;
             overflow: hidden;
-            margin-top: 3px;
+            margin-top: $space-1;
             color: $text-primary;
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-semibold;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -160,9 +158,9 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 2px;
-        margin-top: 14px;
-        padding-top: 13px;
+        gap: $space-hair;
+        margin-top: $space-4;
+        padding-top: $space-3;
         border-top: 1px solid $border-subtle;
     }
 }

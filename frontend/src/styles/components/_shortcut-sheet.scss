@@ -8,7 +8,7 @@
         align-items: center;
         justify-content: space-between;
         gap: $space-4;
-        min-height: 42px;
+        min-height: $control-lg; // list row: 40 (table row spec)
         padding-block: $space-2;
         border-block-end: 1px solid $border-subtle;
 
@@ -18,7 +18,7 @@
 
         dt {
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
 
         dd {
@@ -30,14 +30,14 @@
         }
 
         kbd {
-            padding: 3px $space-2;
+            padding: $space-1 $space-2;
             border: 1px solid $border-default;
             border-block-end-color: $border-active;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             background: $bg-elevated;
             color: $text-secondary;
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.4;
             white-space: nowrap;
         }

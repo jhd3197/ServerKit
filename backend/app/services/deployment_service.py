@@ -44,7 +44,7 @@ class DeploymentService:
         # a tombstoned app must fail here rather than be redeployed.
         app = Application.query_active().filter_by(id=app_id).first()
         if not app:
-            return {'success': False, 'error': 'Application not found'}
+            return {'success': False, 'error': 'Service not found'}
 
         # Get git commit info if available
         commit_hash = None
@@ -357,7 +357,7 @@ class DeploymentService:
             verdict = SlotDeployService.eligibility(app)
             if not verdict['eligible']:
                 return {'success': False, 'still_serving': True,
-                        'error': 'Slot deploys are on but this app no longer qualifies: '
+                        'error': 'Slot deploys are on but this service no longer qualifies: '
                                  + ' '.join(verdict['reasons'])}
             try:
                 return SlotDeployService.deploy_compose(app, deployment, log=log_callback)
@@ -458,7 +458,7 @@ class DeploymentService:
             verdict = SlotDeployService.eligibility(app)
             if not verdict['eligible']:
                 return {'success': False, 'still_serving': True,
-                        'error': 'Slot deploys are on but this app no longer qualifies: '
+                        'error': 'Slot deploys are on but this service no longer qualifies: '
                                  + ' '.join(verdict['reasons'])
                                  + ' Turn slot deploys off to deploy in place.'}
             return SlotDeployService.deploy_container(app, deployment, image_tag, env, volumes,
@@ -585,7 +585,7 @@ class DeploymentService:
         # query_active: a rollback re-deploys code and restarts the app.
         app = Application.query_active().filter_by(id=app_id).first()
         if not app:
-            return {'success': False, 'error': 'Application not found'}
+            return {'success': False, 'error': 'Service not found'}
 
         current = Deployment.get_current(app_id)
         if not current:

@@ -213,7 +213,7 @@ class ApiClient {
             // exactly today's behaviour. The 257 `toast.error(err.message)`
             // sites keep working unchanged and gain translations as codes land.
             const serverMessage = data.error || data.msg || fallback;
-            const err = new Error(translateServerError(data.code, serverMessage));
+            const err = new Error(translateServerError(data.code, serverMessage, data.details));
             err.status = response.status;
             err.code = data.code || null;
             err.serverMessage = serverMessage;

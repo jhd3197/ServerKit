@@ -24,14 +24,14 @@
         flex-wrap: wrap;
 
         .sk-pill svg {
-            margin-right: 2px;
+            margin-right: $space-hair;
         }
     }
 
     &__table {
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         overflow: hidden;
     }
 
@@ -45,7 +45,7 @@
         align-items: center;
         gap: $space-2;
         color: $text-primary;
-        font-weight: 500;
+        font-weight: $font-weight-medium;
         text-decoration: none;
 
         &:hover {
@@ -55,7 +55,7 @@
 
     &__muted {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     // Per-row actionable recommendation pill. The text can be a full sentence,
@@ -80,8 +80,8 @@
         padding: $space-4;
         background: $danger-bg;
         border: 1px solid $danger-border;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $danger;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }

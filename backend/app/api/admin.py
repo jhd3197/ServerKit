@@ -13,6 +13,7 @@ from app.services.audit_service import AuditService
 from app.services.settings_service import SettingsService
 from app.services.permission_service import PermissionService
 from app.utils.domain import detect_request_domain, canonical_origin, is_valid_canonical_domain
+from app.exceptions import not_found
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -94,7 +95,7 @@ def get_user(user_id):
     """Get a specific user."""
     user = User.query.get(user_id)
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     return jsonify({'user': user.to_dict()}), 200
 
@@ -108,7 +109,7 @@ def update_user(user_id):
 
     user = User.query.get(user_id)
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     changes = {}
 
@@ -204,7 +205,7 @@ def delete_user(user_id):
 
     user = User.query.get(user_id)
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     # Prevent self-deletion
     if user.id == current_user_id:
@@ -221,9 +222,9 @@ def delete_user(user_id):
     from app.services.application_restore import applications_owned_by
     owned = applications_owned_by(user.id)
     if owned:
-        return jsonify({'error': f'User still owns {owned} application(s), '
-                                 'including any in the Recycle Bin — delete or '
-                                 'purge them first'}), 409
+        return jsonify({'error': f'This user still owns {owned} service(s), '
+                                 'including any in the recycle bin. Delete or '
+                                 'purge them first.'}), 409
 
     username = user.username
     user_id_deleted = user.id
@@ -532,7 +533,7 @@ def get_user_permissions(user_id):
     """Get a user's resolved permissions."""
     perms = PermissionService.get_user_permissions(user_id)
     if perms is None:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
     return jsonify({'permissions': perms}), 200
 
 

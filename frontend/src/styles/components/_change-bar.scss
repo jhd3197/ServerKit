@@ -11,9 +11,9 @@
     margin: $space-6 auto $space-4;
     padding: $space-2 $space-3 $space-2 $space-4;
     border: 1px solid $border-active;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     background: $bg-elevated;
-    box-shadow: $shadow-lg;
+    box-shadow: $shadow-overlay;
 
     &__state,
     &__actions {
@@ -25,7 +25,7 @@
         gap: $space-2;
         min-width: 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         svg {
             flex: 0 0 auto;
@@ -46,7 +46,7 @@
 
     &__divider {
         width: 1px;
-        height: 20px;
+        height: 20px; // geometry: divider rule
         margin-inline: $space-1;
         background: $border-default;
     }

@@ -12,7 +12,7 @@
 .migration-status-panel {
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     padding: $space-4;
     margin-bottom: $space-4;
 }
@@ -30,17 +30,17 @@
 
 .migration-status-label {
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .migration-status-value {
     font-weight: $font-weight-semibold;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     @at-root code#{&} {
         background: $bg-secondary;
-        padding: 2px 8px;
-        border-radius: $radius-md;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
         font-family: $font-family-mono;
     }
 }
@@ -55,10 +55,10 @@
 
     code {
         font-family: $font-family-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         background: $bg-secondary;
-        padding: 1px 6px;
-        border-radius: $radius-sm;
+        padding: 1px $space-tight;
+        border-radius: $radius-badge;
         white-space: nowrap;
     }
 }
@@ -80,7 +80,7 @@
 }
 
 .migration-list-title {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-secondary;
 }
@@ -90,7 +90,7 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $accent-primary;
 
@@ -109,7 +109,7 @@
 
 .migration-list-more {
     margin-top: $space-2;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -120,8 +120,8 @@
     padding: $space-2 $space-3;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
-    font-size: $font-size-sm;
+    border-radius: $radius-card;
+    font-size: $text-xs;
 
     &:not(:last-child) {
         margin-bottom: $space-2;
@@ -135,7 +135,7 @@
     code {
         font-family: $font-family-mono;
         color: $text-secondary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     span {
@@ -163,8 +163,8 @@
         padding: $space-3 $space-4;
         background: $bg-elevated;
         border: 1px solid $border-default;
-        border-radius: $radius-lg;
-        font-size: $font-size-base;
+        border-radius: $radius-card;
+        font-size: $text-base;
         color: $text-primary;
         @include transition(border-color);
 
@@ -187,9 +187,9 @@
     padding: $space-3;
     background: $danger-bg;
     border: 1px solid $danger-border;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     color: $danger;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 // --------------------------------------------
@@ -204,7 +204,7 @@
     align-items: flex-start;
     gap: $space-3;
     padding: $space-4;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-6;
 
     &--success {
@@ -221,7 +221,7 @@
 
     svg {
         flex-shrink: 0;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     strong {
@@ -231,14 +231,14 @@
 
     code {
         display: block;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
         word-break: break-all;
         font-family: $font-family-mono;
     }
 
     span {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -263,7 +263,7 @@
     }
 
     span {
-        font-size: $font-size-base;
+        font-size: $text-base;
     }
 }
 
@@ -280,22 +280,22 @@
     }
 
     h2 {
-        font-size: $font-size-xl;
-        font-weight: $font-weight-bold;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         margin-bottom: $space-2;
     }
 
     p {
         color: $text-secondary;
-        font-size: $font-size-base;
+        font-size: $text-base;
     }
 
     code {
         background: $bg-secondary;
-        padding: 2px 8px;
-        border-radius: $radius-md;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
         font-family: $font-family-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -306,13 +306,13 @@
     padding: $space-4;
     background: $danger-bg;
     border: 1px solid $danger-border;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-6;
 
     > svg {
         flex-shrink: 0;
         color: $danger;
-        margin-top: 2px;
+        margin-top: $space-hair;
     }
 
     strong {
@@ -323,7 +323,7 @@
 
     span {
         display: block;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -347,7 +347,7 @@
     background: none;
     border: none;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     cursor: pointer;
     padding: 0;
     text-decoration: underline;

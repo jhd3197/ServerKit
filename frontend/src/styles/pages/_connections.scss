@@ -15,7 +15,7 @@
         padding: $space-8;
         text-align: center;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__warning {
@@ -25,8 +25,8 @@
         padding: $space-3 $space-4;
         background: fade($warning-raw, 10%);
         border: 1px solid fade($warning-raw, 30%);
-        border-radius: $radius-md;
-        font-size: $font-size-sm;
+        border-radius: $radius-control;
+        font-size: $text-xs;
         color: $text-secondary;
 
         svg {
@@ -50,14 +50,14 @@
     &__category-head {
         h3 {
             margin: 0;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: $text-primary;
         }
 
         p {
-            margin: 2px 0 0;
-            font-size: $font-size-xs;
+            margin: $space-hair 0 0;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }
@@ -77,7 +77,7 @@
     padding: $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     transition: border-color $transition-fast, background $transition-fast;
 
     &:hover {
@@ -104,8 +104,8 @@
         justify-content: center;
         flex-shrink: 0;
         width: 40px;
-        height: 40px;
-        border-radius: $radius-md;
+        height: 40px; // geometry: icon tile
+        border-radius: $radius-control;
         background: var(--surface-2);
         color: $text-primary;
     }
@@ -117,14 +117,14 @@
 
     &__name {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__blurb {
-        margin: 2px 0 0;
-        font-size: $font-size-xs;
+        margin: $space-hair 0 0;
+        font-size: $text-xs;
         color: $text-tertiary;
         line-height: 1.45;
     }
@@ -137,7 +137,7 @@
     }
 
     &__subtitle {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -168,8 +168,8 @@
     &__crosslink {
         display: inline-flex;
         align-items: center;
-        gap: 3px;
-        font-size: $font-size-xs;
+        gap: $space-1;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
         text-decoration: none;
@@ -181,7 +181,7 @@
     }
 
     &__soon-tag {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
     }
@@ -191,12 +191,13 @@
 
 // ── Scope chip (access level) ──
 .conn-pill {
+    height: 20px; // geometry: badge height (20px badge spec)
     display: inline-flex;
     align-items: center;
-    padding: 1px $space-2;
+    padding: 0 $space-tight;
     border: 1px solid $border-subtle;
-    border-radius: $radius-full;
-    font-size: 11px;
+    border-radius: $radius-badge;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: $text-secondary;
 
@@ -239,8 +240,8 @@
         justify-content: center;
         flex-shrink: 0;
         width: 38px;
-        height: 38px;
-        border-radius: $radius-md;
+        height: 38px; // geometry: icon tile
+        border-radius: $radius-control;
         background: var(--surface-2);
         color: $text-primary;
     }
@@ -259,7 +260,7 @@
         align-items: center;
         gap: $space-2;
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -276,7 +277,7 @@
     .form-group {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: $space-tight;
     }
 }
 
@@ -290,13 +291,13 @@
     padding: $space-3 $space-4;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 }
 
 .conn-profile {
     img {
         width: 40px;
-        height: 40px;
+        height: 40px; // geometry: avatar
         border-radius: $radius-full;
     }
 
@@ -306,15 +307,15 @@
         strong {
             display: block;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
 
         span {
             display: block;
-            margin-top: 2px;
+            margin-top: $space-hair;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
         }
     }
 }
@@ -331,15 +332,15 @@
         strong {
             display: block;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
 
         span {
             display: block;
-            margin-top: 3px;
+            margin-top: $space-1;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.45;
         }
     }
@@ -354,7 +355,7 @@
     &__item {
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         overflow: hidden;
     }
 
@@ -365,7 +366,7 @@
         padding: $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         // When nested inside an expandable item the border/radius come from the
         // wrapper, so the row itself sits flush.
@@ -388,16 +389,16 @@
         strong {
             display: block;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
         }
     }
 
     &__key {
         display: block;
-        margin-top: 2px;
+        margin-top: $space-hair;
         font-family: $font-mono;
-        font-size: 11px;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -414,12 +415,10 @@
 .dns-activity {
     border-top: 1px solid $border-subtle;
     background: $bg-card;
-    max-height: 320px;
-    overflow-y: auto;
 
     &__status {
         padding: $space-3 $space-4;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
 
         &--error { color: $danger; }
@@ -431,32 +430,13 @@
         justify-content: center;
         gap: $space-2;
         padding: $space-4;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: $font-size-xs;
-
-        th {
-            position: sticky;
-            top: 0;
-            text-align: left;
-            padding: $space-2 $space-3;
-            background: $bg-elevated;
-            color: $text-tertiary;
-            font-weight: $font-weight-semibold;
-            white-space: nowrap;
-        }
-
-        td {
-            padding: $space-2 $space-3;
-            border-top: 1px solid $border-subtle;
-            vertical-align: top;
-            color: $text-secondary;
-        }
+    // The change log DataTable: capped, sticky header, scrolls in place.
+    &__table-wrap {
+        --dtable-max-height: 320px;
     }
 
     &__time {
@@ -489,7 +469,7 @@
 
     &__error {
         flex-basis: 100%;
-        margin-top: 2px;
+        margin-top: $space-hair;
         color: $danger;
         line-height: 1.4;
     }
@@ -504,13 +484,13 @@
     padding: $space-4;
     background: var(--accent-bg, rgba(109, 124, 255, 0.08));
     border: 1px solid var(--accent-dim, $border-subtle);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     &__head {
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
 
@@ -519,7 +499,7 @@
 
     &__blurb {
         margin: 0;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.5;
         color: $text-tertiary;
     }
@@ -529,7 +509,7 @@
         align-items: center;
         gap: $space-2;
         flex-wrap: wrap;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
 
         svg { color: $success; }
@@ -539,7 +519,7 @@
         a {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: $space-1;
             color: $accent-primary;
             text-decoration: none;
 
@@ -563,7 +543,7 @@
         background: none;
         border: none;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         cursor: pointer;
 
         span {
@@ -583,13 +563,13 @@
     padding: $space-4;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     &__heading {
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
@@ -609,7 +589,7 @@
         align-items: center;
         gap: $space-2;
         flex-wrap: wrap;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
 
         code {
@@ -624,7 +604,7 @@
         align-items: center;
         gap: $space-1;
         width: max-content;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: var(--accent-bright);
         text-decoration: none;
 
@@ -658,7 +638,7 @@
         text-align: left;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         cursor: pointer;
         transition: border-color $transition-fast, background $transition-fast;
 
@@ -676,22 +656,20 @@
         display: flex;
         align-items: center;
         gap: $space-1;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__rec {
         margin-left: auto;
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $success;
     }
 
     &__desc {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         line-height: 1.45;
     }
@@ -704,11 +682,11 @@
     gap: $space-2;
 
     &__opt {
-        padding: 5px $space-3;
+        padding: $space-tight $space-3;
         background: $bg-card;
         border: 1px solid $border-subtle;
         border-radius: $radius-full;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-secondary;
         cursor: pointer;
@@ -731,7 +709,7 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
     cursor: pointer;
 }
@@ -754,7 +732,7 @@
     margin-bottom: $space-5;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: hidden;
 
     &__head {
@@ -774,7 +752,7 @@
 
         h2 {
             margin: 0;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
             color: $text-primary;
         }
@@ -785,11 +763,11 @@
         align-items: center;
         justify-content: center;
         min-width: 22px;
-        height: 20px;
-        padding: 0 6px;
+        height: 20px; // geometry: counter badge height (20px badge spec)
+        padding: 0 $space-tight;
         border-radius: $radius-full;
         background: var(--surface-2);
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-secondary;
     }
@@ -797,8 +775,8 @@
     &__warn {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        font-size: $font-size-xs;
+        gap: $space-1;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $warning;
     }
@@ -806,12 +784,12 @@
     &__refresh {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        padding: 5px $space-2;
+        gap: $space-tight;
+        padding: $space-tight $space-2;
         background: transparent;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
-        font-size: $font-size-xs;
+        border-radius: $radius-control;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-secondary;
         cursor: pointer;
@@ -843,7 +821,7 @@
     }
 
     &__domain {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         overflow: hidden;
@@ -852,14 +830,14 @@
     }
 
     &__via {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
     &__expiry {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        padding: 2px $space-2;
+        padding: $space-hair $space-2;
         border-radius: $radius-full;
         white-space: nowrap;
         text-align: center;
@@ -872,13 +850,13 @@
     }
 
     &__date {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         white-space: nowrap;
     }
 
     &__renew {
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
 

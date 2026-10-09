@@ -43,6 +43,7 @@ const localesDir = localesArg
 const manifestFile = resolve(root, 'src', 'i18n', 'languages.json');
 
 const DEFAULT_LOCALE = 'en';
+const PLURAL_FORM = /^(.+)_(zero|one|two|few|many|other)$/;
 const PLACEHOLDER = /\{\{\s*(\w+)[^}]*\}\}/g;
 
 function readJson(path) {
@@ -94,8 +95,13 @@ for (const code of shipped.filter((name) => name !== DEFAULT_LOCALE)) {
     const translated = flatten(readJson(join(localesDir, `${code}.json`)));
 
     for (const [key, value] of translated) {
-        // 1. orphans
-        if (!base.has(key)) {
+        // 1. orphans. A plural form English lacks (`k_few`, `k_many`) is
+        // legitimate when English declares the pair (`k_one` / `k_other`):
+        // other languages have more plural categories than English.
+        const plural = PLURAL_FORM.exec(key);
+        const reference = !base.has(key) && plural && base.has(`${plural[1]}_other`)
+            ? `${plural[1]}_other` : key;
+        if (!base.has(reference)) {
             problems.push(`${code}.json: '${key}' does not exist in ${DEFAULT_LOCALE}.json`);
             continue;
         }
@@ -105,7 +111,7 @@ for (const code of shipped.filter((name) => name !== DEFAULT_LOCALE)) {
             continue;
         }
         // 2. placeholders
-        const expected = placeholders(base.get(key));
+        const expected = placeholders(base.get(reference));
         const actual = placeholders(value);
         for (const name of expected) {
             if (!actual.has(name)) {

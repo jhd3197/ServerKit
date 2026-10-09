@@ -4,6 +4,8 @@ import api from '../../services/api';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import CopyField from '@/components/CopyField';
 import { EngineIcon } from '../icons/DatabaseBrands';
 import { ENGINE_META } from './dbAdapter';
 import { useTranslation } from 'react-i18next';
@@ -14,17 +16,31 @@ import { useTranslation } from 'react-i18next';
 // The submit button stays inside <form>, so actions live in the body (not the
 // Modal footer slot).
 
+// Radix Select items cannot carry an empty value; this stands for "none".
+const NONE = '__none';
+
+// "Grant privileges on database": a database name, or '' for none.
+function DatabaseSelect({ id, databases, value, onChange }) {
+    const { t } = useTranslation();
+    return (
+        <Select value={value === '' ? NONE : value} onValueChange={(next) => onChange(next === NONE ? '' : next)}>
+            <SelectTrigger id={id}><SelectValue /></SelectTrigger>
+            <SelectContent>
+                <SelectItem value={NONE}>{t('app.modals.none', 'None')}</SelectItem>
+                {databases.map((db) => <SelectItem key={db.name} value={db.name}>{db.name}</SelectItem>)}
+            </SelectContent>
+        </Select>
+    );
+}
+
 function CredentialsResult({ title, rows, onDone }) {
     const { t } = useTranslation();
     return (
         <Modal open onClose={onDone} title={title}>
-            <div className="credentials-box">
-                <p>{t('app.modals.saveTheseCredentialsThePasswordWon', 'Save these credentials — the password won\'t be shown again.')}</p>
-                {rows.map(([label, value]) => (
-                    <div className="credential-item" key={label}>
-                        <label>{label}:</label>
-                        <code>{value}</code>
-                    </div>
+            <div className="credentials-box dbx-credentials">
+                <p>{t('app.modals.saveTheseCredentialsThePasswordWon', "Save these credentials. The password won't be shown again.")}</p>
+                {rows.map(([label, value, secret]) => (
+                    <CopyField key={label} label={label} value={value} secret={Boolean(secret)} />
                 ))}
             </div>
             <div className="modal-actions">
@@ -68,7 +84,7 @@ function EnginePicker({ value, onChange, status, onInstallEngine }) {
                         </span>
                         <span className="dbx-eng-opt__text">
                             <span className="dbx-eng-opt__name">{ENGINE_META[engine].label}</span>
-                            <span className="dbx-eng-opt__sub">{running ? 'running' : 'not running'}</span>
+                            <span className="dbx-eng-opt__sub">{running ? t('app.modals.running', 'running') : t('app.modals.notRunning', 'not running')}</span>
                         </span>
                     </Button>
                 );
@@ -149,7 +165,7 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                 rows={[
                     ['Database', createdInfo.database],
                     ['Username', createdInfo.user],
-                    ['Password', createdInfo.password],
+                    ['Password', createdInfo.password, true],
                     ...(attached ? [['Attached to', attached.name]] : []),
                 ]}
                 onDone={() => { onCreated(); onClose(); }}
@@ -179,48 +195,59 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                 {isMySQL ? (
                     <div className="form-row">
                         <div className="form-group">
-                            <label>{t('app.modals.characterSet', 'Character set')}</label>
-                            <select value={formData.charset} onChange={(e) => setFormData({ ...formData, charset: e.target.value })}>
-                                <option value="utf8mb4">utf8mb4</option>
-                                <option value="utf8">utf8</option>
-                                <option value="latin1">latin1</option>
-                            </select>
+                            <label htmlFor="dbx-new-charset">{t('app.modals.characterSet', 'Character set')}</label>
+                            <Select value={formData.charset} onValueChange={(value) => setFormData({ ...formData, charset: value })}>
+                                <SelectTrigger id="dbx-new-charset"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="utf8mb4">utf8mb4</SelectItem>
+                                    <SelectItem value="utf8">utf8</SelectItem>
+                                    <SelectItem value="latin1">latin1</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div className="form-group">
-                            <label>{t('app.modals.collation', 'Collation')}</label>
-                            <select value={formData.collation} onChange={(e) => setFormData({ ...formData, collation: e.target.value })}>
-                                <option value="utf8mb4_unicode_ci">utf8mb4_unicode_ci</option>
-                                <option value="utf8mb4_general_ci">utf8mb4_general_ci</option>
-                                <option value="utf8_general_ci">utf8_general_ci</option>
-                            </select>
+                            <label htmlFor="dbx-new-collation">{t('app.modals.collation', 'Collation')}</label>
+                            <Select value={formData.collation} onValueChange={(value) => setFormData({ ...formData, collation: value })}>
+                                <SelectTrigger id="dbx-new-collation"><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="utf8mb4_unicode_ci">utf8mb4_unicode_ci</SelectItem>
+                                    <SelectItem value="utf8mb4_general_ci">utf8mb4_general_ci</SelectItem>
+                                    <SelectItem value="utf8_general_ci">utf8_general_ci</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
                 ) : (
                     <div className="form-group">
-                        <label>{t('app.modals.encoding', 'Encoding')}</label>
-                        <select value={formData.encoding} onChange={(e) => setFormData({ ...formData, encoding: e.target.value })}>
-                            <option value="UTF8">UTF8</option>
-                            <option value="LATIN1">LATIN1</option>
-                            <option value="SQL_ASCII">SQL_ASCII</option>
-                        </select>
+                        <label htmlFor="dbx-new-encoding">{t('app.modals.encoding', 'Encoding')}</label>
+                        <Select value={formData.encoding} onValueChange={(value) => setFormData({ ...formData, encoding: value })}>
+                            <SelectTrigger id="dbx-new-encoding"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="UTF8">UTF8</SelectItem>
+                                <SelectItem value="LATIN1">LATIN1</SelectItem>
+                                <SelectItem value="SQL_ASCII">SQL_ASCII</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                 )}
 
                 <div className="form-group">
-                    <label htmlFor="dbx-attach-app">{t('app.modals.attachToApplication', 'Attach to application')}</label>
-                    <select
-                        id="dbx-attach-app"
-                        value={applicationId}
-                        onChange={(e) => setApplicationId(e.target.value)}
+                    <label htmlFor="dbx-attach-app">{t('app.modals.attachToApplication', 'Attach to service')}</label>
+                    <Select
+                        value={applicationId === '' ? NONE : String(applicationId)}
+                        onValueChange={(value) => setApplicationId(value === NONE ? '' : value)}
                         disabled={appsLoading}
                     >
-                        <option value="">{t('app.modals.none', '— None —')}</option>
-                        {apps.map((app) => <option key={app.id} value={app.id}>{app.name}</option>)}
-                    </select>
+                        <SelectTrigger id="dbx-attach-app"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value={NONE}>{t('app.modals.none', 'None')}</SelectItem>
+                            {apps.map((app) => <SelectItem key={app.id} value={String(app.id)}>{app.name}</SelectItem>)}
+                        </SelectContent>
+                    </Select>
                     <span className="form-help">
                         {appsLoading
-                            ? 'Loading applications…'
-                            : 'Optional. An attached database is listed on the application and is cleaned up with it.'}
+                            ? t('app.modals.loadingServices', 'Loading services…')
+                            : t('app.modals.attachServiceHint', 'Optional. An attached database is listed on the service and is cleaned up with it.')}
                     </span>
                 </div>
 
@@ -232,7 +259,7 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                 </div>
                 <div className="modal-actions">
                     <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
-                    <Button type="submit" disabled={loading}>{loading ? 'Creating…' : 'Create database'}</Button>
+                    <Button type="submit" disabled={loading}>{loading ? t('app.modals.creating', 'Creating…') : t('app.modals.createDatabase', 'Create database')}</Button>
                 </div>
             </form>
         </Modal>
@@ -273,14 +300,14 @@ export function CreateMySQLUserModal({ databases, onClose, onCreated }) {
         return (
             <CredentialsResult
                 title={t('app.modals.userCreated', 'User created')}
-                rows={[['Username', createdInfo.username], ['Password', createdInfo.password], ['Host', createdInfo.host]]}
+                rows={[['Username', createdInfo.username], ['Password', createdInfo.password, true], ['Host', createdInfo.host]]}
                 onDone={() => { onCreated(); onClose(); }}
             />
         );
     }
 
     return (
-        <Modal open onClose={onClose} title={t('app.modals.createMysqlUser', 'Create MySQL user')}>
+        <Modal open onClose={onClose} title={t('app.modals.createMysqlUser', 'New MySQL user')}>
             {error && <div className="error-message">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -295,23 +322,28 @@ export function CreateMySQLUserModal({ databases, onClose, onCreated }) {
                     </div>
                 </div>
                 <div className="form-group">
-                    <label>{t('app.modals.host', 'Host')}</label>
-                    <select value={formData.host} onChange={(e) => setFormData({ ...formData, host: e.target.value })}>
-                        <option value="localhost">localhost</option>
-                        <option value="%">{t('app.modals.anyHost', '% (any host)')}</option>
-                        <option value="127.0.0.1">127.0.0.1</option>
-                    </select>
+                    <label htmlFor="dbx-mysql-user-host">{t('app.modals.host', 'Host')}</label>
+                    <Select value={formData.host} onValueChange={(value) => setFormData({ ...formData, host: value })}>
+                        <SelectTrigger id="dbx-mysql-user-host"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="localhost">localhost</SelectItem>
+                            <SelectItem value="%">{t('app.modals.anyHost', '% (any host)')}</SelectItem>
+                            <SelectItem value="127.0.0.1">127.0.0.1</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
                 <div className="form-group">
-                    <label>{t('app.modals.grantPrivilegesOnDatabase', 'Grant privileges on database')}</label>
-                    <select value={formData.database} onChange={(e) => setFormData({ ...formData, database: e.target.value })}>
-                        <option value="">{t('app.modals.none', '— None —')}</option>
-                        {databases.map((db) => <option key={db.name} value={db.name}>{db.name}</option>)}
-                    </select>
+                    <label htmlFor="dbx-mysql-user-db">{t('app.modals.grantPrivilegesOnDatabase', 'Grant privileges on database')}</label>
+                    <DatabaseSelect
+                        id="dbx-mysql-user-db"
+                        databases={databases}
+                        value={formData.database}
+                        onChange={(value) => setFormData({ ...formData, database: value })}
+                    />
                 </div>
                 <div className="modal-actions">
                     <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
-                    <Button type="submit" disabled={loading}>{loading ? 'Creating…' : 'Create user'}</Button>
+                    <Button type="submit" disabled={loading}>{loading ? t('app.modals.creating', 'Creating…') : t('app.modals.createUser', 'Create user')}</Button>
                 </div>
             </form>
         </Modal>
@@ -352,14 +384,14 @@ export function CreatePostgreSQLUserModal({ databases, onClose, onCreated }) {
         return (
             <CredentialsResult
                 title={t('app.modals.userCreated', 'User created')}
-                rows={[['Username', createdInfo.username], ['Password', createdInfo.password]]}
+                rows={[['Username', createdInfo.username], ['Password', createdInfo.password, true]]}
                 onDone={() => { onCreated(); onClose(); }}
             />
         );
     }
 
     return (
-        <Modal open onClose={onClose} title={t('app.modals.createPostgresqlUser', 'Create PostgreSQL user')}>
+        <Modal open onClose={onClose} title={t('app.modals.createPostgresqlUser', 'New PostgreSQL user')}>
             {error && <div className="error-message">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -374,15 +406,17 @@ export function CreatePostgreSQLUserModal({ databases, onClose, onCreated }) {
                     </div>
                 </div>
                 <div className="form-group">
-                    <label>{t('app.modals.grantPrivilegesOnDatabase', 'Grant privileges on database')}</label>
-                    <select value={formData.database} onChange={(e) => setFormData({ ...formData, database: e.target.value })}>
-                        <option value="">{t('app.modals.none', '— None —')}</option>
-                        {databases.map((db) => <option key={db.name} value={db.name}>{db.name}</option>)}
-                    </select>
+                    <label htmlFor="dbx-pg-user-db">{t('app.modals.grantPrivilegesOnDatabase', 'Grant privileges on database')}</label>
+                    <DatabaseSelect
+                        id="dbx-pg-user-db"
+                        databases={databases}
+                        value={formData.database}
+                        onChange={(value) => setFormData({ ...formData, database: value })}
+                    />
                 </div>
                 <div className="modal-actions">
                     <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
-                    <Button type="submit" disabled={loading}>{loading ? 'Creating…' : 'Create user'}</Button>
+                    <Button type="submit" disabled={loading}>{loading ? t('app.modals.creating', 'Creating…') : t('app.modals.createUser', 'Create user')}</Button>
                 </div>
             </form>
         </Modal>

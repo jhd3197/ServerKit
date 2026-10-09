@@ -2,9 +2,9 @@
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
 .fleet-rollout-progress { display: flex; align-items: center; gap: 0.75rem; }
 .fleet-rollout-progress__gauge { width: 6rem; }
-.fleet-caption { font-size: 0.875rem; color: $text-secondary; }
+.fleet-caption { font-size: $text-base; color: $text-secondary; }
 .fleet-rollout-failure { margin-inline-start: 0.25rem; color: $danger; }
-.fleet-command-error { font-size: 0.75rem; color: $danger; }
+.fleet-command-error { font-size: $text-xs; color: $danger; }
 .fleet-tab-count { margin-inline-start: 0.5rem; }
 .fleet-tab-content { margin-top: 1.5rem; }
 .fleet-section-stack > * + * { margin-top: 1.5rem; }
@@ -21,14 +21,14 @@
 .fleet-warnrow--spaced { margin-top: 1rem; }
 .fleet-inline-label { display: flex; align-items: center; gap: 0.5rem; }
 .fleet-version-distribution > * + * { margin-top: 0.25rem; }
-.fleet-version-distribution__label { display: flex; justify-content: space-between; font-size: 0.875rem; }
+.fleet-version-distribution__label { display: flex; justify-content: space-between; font-size: $text-base; }
 .fleet-note { color: $text-secondary; }
 .fleet-version-empty { padding-top: 1rem; padding-bottom: 1rem; color: $text-secondary; text-align: center; }
 .fleet-table-scroll { overflow-x: auto; }
 .fleet-table-empty { color: $text-secondary; text-align: center; padding-top: 2rem; padding-bottom: 2rem; }
 .fleet-release-notes { border-top: 1px solid $border-subtle; }
-.fleet-release-notes__title { font-weight: $font-weight-semibold; margin-bottom: 0.5rem; font-size: 0.875rem; }
-.fleet-release-notes__text { font-size: 0.875rem; color: $text-secondary; white-space: pre-wrap; }
+.fleet-release-notes__title { font-weight: $font-weight-semibold; margin-bottom: 0.5rem; font-size: $text-base; }
+.fleet-release-notes__text { font-size: $text-base; color: $text-secondary; white-space: pre-wrap; }
 .fleet-rollout-description { margin-bottom: 1rem; color: $text-secondary; }
 .fleet-rollout-fields { display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 1rem; }
 @media (min-width: $breakpoint-md) {
@@ -54,9 +54,9 @@
 }
 .fleet-discovered-agent { display: flex; flex-direction: column; justify-content: space-between; }
 .fleet-discovered-agent__heading { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.5rem; }
-.fleet-agent-name { font-weight: $font-weight-bold; }
+.fleet-agent-name { font-weight: $font-weight-semibold; }
 .fleet-agent-facts > * + * { margin-top: 0.5rem; }
-.fleet-agent-facts { margin-top: 1rem; font-size: 0.875rem; }
+.fleet-agent-facts { margin-top: 1rem; font-size: $text-base; }
 .fleet-agent-fact { display: flex; justify-content: space-between; }
 .fleet-agent-actions { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid $border-subtle; }
 .fleet-agent-action { width: 100%; }
@@ -64,7 +64,7 @@
 .fleet-diagnostics-overlay { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 50; background-color: rgba(0, 0, 0, 0.6); }
 .fleet-diagnostics-dialog { width: 100%; overflow-y: auto; max-width: 42rem; max-height: 80vh; margin: 1rem; }
 .fleet-diagnostics-heading { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; border-bottom: 1px solid $border-subtle; }
-.fleet-diagnostics-title { font-weight: $font-weight-semibold; font-size: 1.125rem; }
+.fleet-diagnostics-title { font-weight: $font-weight-semibold; font-size: $text-lg; }
 .fleet-diagnostics-body > * + * { margin-top: 1.5rem; }
 .fleet-diagnostics-body { padding: 1.5rem; }
 .fleet-diagnostics-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
@@ -73,18 +73,18 @@
 .fleet-disconnected-icon { color: $danger; }
 .fleet-diagnostics-section-title { font-weight: $font-weight-semibold; margin-bottom: 0.75rem; }
 .fleet-command-statistics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
-.fleet-command-total { font-weight: $font-weight-bold; font-size: 1.125rem; }
-.fleet-command-statistic-label { font-size: 0.75rem; color: $text-secondary; }
-.fleet-command-success { font-weight: $font-weight-bold; font-size: 1.125rem; color: $success; }
-.fleet-command-failed { font-weight: $font-weight-bold; font-size: 1.125rem; color: $danger; }
-.fleet-command-timeout { font-weight: $font-weight-bold; font-size: 1.125rem; color: $warning; }
-.fleet-queued-description { font-size: 0.875rem; }
+.fleet-command-total { font-weight: $font-weight-semibold; font-size: $text-lg; }
+.fleet-command-statistic-label { font-size: $text-xs; color: $text-secondary; }
+.fleet-command-success { font-weight: $font-weight-semibold; font-size: $text-lg; color: $success; }
+.fleet-command-failed { font-weight: $font-weight-semibold; font-size: $text-lg; color: $danger; }
+.fleet-command-timeout { font-weight: $font-weight-semibold; font-size: $text-lg; color: $warning; }
+.fleet-queued-description { font-size: $text-base; }
 .fleet-session-list > * + * { margin-top: 0.5rem; }
 .fleet-session-list { overflow-y: auto; max-height: 12rem; }
-.fleet-session-row { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem; font-size: 0.875rem; border-radius: $radius-md; }
+.fleet-session-row { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem; font-size: $text-base; border-radius: $radius-control; }
 .fleet-session-offline { color: $text-tertiary; }
 .fleet-session-disconnect-reason { margin-inline-start: 0.5rem; color: $danger; }
 .fleet-command-retry { color: $warning; }
 
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
-.fleet-command-type { font-size: 0.875rem; }
+.fleet-command-type { font-size: $text-base; }

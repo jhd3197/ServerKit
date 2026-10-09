@@ -10,11 +10,13 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import useSettingFocus from '../../hooks/useSettingFocus';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { errorReason } from '@/utils/errorMessage';
 
 // Revisions in this project are short descriptive slugs (e.g. 016_resource_grants),
 // so show them in full rather than truncating mid-word.
@@ -84,7 +86,7 @@ const MigrationHistoryTab = () => {
             setRevisions(hist.revisions || []);
             setStatus(stat);
         } catch (err) {
-            setError(err.message || 'Failed to load migration history');
+            setError(err);
         } finally {
             setLoading(false);
         }
@@ -103,7 +105,6 @@ const MigrationHistoryTab = () => {
     const currentRev = status?.current_revision;
     const headRev = status?.head_revision;
     const count = pending.length;
-    const plural = count === 1 ? '' : 's';
 
     // The DB records a revision that no longer exists in the migration scripts
     // (renamed during development). The schema is already in sync, so applying
@@ -183,13 +184,13 @@ const MigrationHistoryTab = () => {
 
     async function runMigrations() {
         const ok = await confirm({
-            title: orphaned ? t('app.migrationHistoryTab.reSyncDatabaseVersion', 'Re-sync database version?') : t('app.migrationHistoryTab.applyMigration', 'Apply {{count}} migration{{plural}}?', { count: count, plural: plural }),
+            title: orphaned ? t('app.migrationHistoryTab.reSyncDatabaseVersion', 'Re-sync database version?') : t('app.migrationHistoryTab.applyMigrations', { count, defaultValue_one: 'Apply 1 migration?', defaultValue_other: 'Apply {{count}} migrations?' }),
             message: orphaned
                 ? t('app.migrationHistoryTab.yourSchemaAlreadyMatchesThisRepairs', 'Your schema already matches {{value}}; this repairs the version pointer{{value2}}.', { value: short(headRev) || 'head', value2: backupFirst ? ' after creating a backup' : ' (no backup will be created)' })
                 : backupFirst
                     ? t('app.migrationHistoryTab.aDatabaseBackupIsCreatedFirst', 'A database backup is created first, then the schema is upgraded from {{value}} to {{value2}}.', { value: short(currentRev) || 'none', value2: short(headRev) || 'head' })
                     : t('app.migrationHistoryTab.theSchemaIsUpgradedFromTo', 'The schema is upgraded from {{value}} to {{value2}}. No backup will be created.', { value: short(currentRev) || 'none', value2: short(headRev) || 'head' }),
-            confirmText: orphaned ? t('app.migrationHistoryTab.reSyncDatabase', 'Re-sync database') : t('app.migrationHistoryTab.applyMigration2', 'Apply migration{{plural}}', { plural: plural }),
+            confirmText: orphaned ? t('app.migrationHistoryTab.reSyncDatabase', 'Re-sync database') : t('app.migrationHistoryTab.applyMigrationsButton', { count, defaultValue_one: 'Apply migration', defaultValue_other: 'Apply migrations' }),
             cancelText: t('common.actions.cancel', 'Cancel'),
             variant: 'warning',
         });
@@ -203,15 +204,15 @@ const MigrationHistoryTab = () => {
                     const name = b?.path ? b.path.split(/[\\/]/).pop() : null;
                     toast.success(name ? t('app.migrationHistoryTab.databaseBackedUp', 'Database backed up ({{name}})', { name: name }) : t('app.migrationHistoryTab.databaseBackedUp2', 'Database backed up'));
                 } catch (err) {
-                    toast.error(t('app.migrationHistoryTab.backupFailedMigrationsNotApplied', 'Backup failed: {{value}} — migrations not applied', { value: err.message || 'unknown error' }));
+                    toast.error(t('app.migrationHistoryTab.backupFailedMigrationsNotApplied', "Couldn't back up, so no migrations ran. {{value}}", { value: errorReason(err) }));
                     return;
                 }
             }
             const res = await api.applyMigrations();
-            toast.success(t('app.migrationHistoryTab.migrationsAppliedNowAt', 'Migrations applied — now at {{value}}', { value: short(res?.revision || headRev) }));
+            toast.success(t('app.migrationHistoryTab.migrationsAppliedNowAt', 'Migrations applied (now at {{value}})', { value: short(res?.revision || headRev) }));
             await load();
         } catch (err) {
-            toast.error(t('app.migrationHistoryTab.migrationFailed', 'Migration failed: {{value}}', { value: err.message || 'unknown error' }));
+            toast.error(t('app.migrationHistoryTab.migrationFailed', "Couldn't run the migration. {{value}}", { value: errorReason(err) }));
         } finally {
             setApplying(false);
         }
@@ -231,7 +232,11 @@ const MigrationHistoryTab = () => {
     if (error) {
         return (
             <div className="settings-section">
-                <EmptyState icon={Database} title={error} />
+                <ErrorState
+                    title={t('app.migrationHistoryTab.couldntLoadMigrationHistory', "Couldn't load migration history.")}
+                    error={error}
+                    onRetry={load}
+                />
             </div>
         );
     }
@@ -239,7 +244,7 @@ const MigrationHistoryTab = () => {
     return (
         <div className="settings-section">
             <div className="settings-section-header">
-                <h2>{t('app.migrationHistoryTab.databaseMigrations', 'Database Migrations')}</h2>
+                <h2>{t('app.migrationHistoryTab.databaseMigrations', 'Database migrations')}</h2>
                 <p className="settings-section-description">
                     {t('app.migrationHistoryTab.schemaVersionsAppliedToThisInstance', 'Schema versions applied to this instance. Apply pending updates after upgrading ServerKit.')}
                 </p>
@@ -250,18 +255,21 @@ const MigrationHistoryTab = () => {
                     <ArrowUpCircle size={20} className="migration-pending-icon" aria-hidden="true" />
                     <div className="migration-pending-body">
                         <p className="migration-pending-title">
-                            {orphaned ? 'Database version needs repair' : `${count} migration${plural} pending`}
+                            {orphaned
+                                ? t('app.migrationHistoryTab.versionNeedsRepair', 'Database version needs repair')
+                                : t('app.migrationHistoryTab.migrationsPending', { count, defaultValue_one: '1 migration pending', defaultValue_other: '{{count}} migrations pending' })}
                         </p>
                         <p className="migration-pending-desc">
                             {orphaned ? (
                                 <>
-                                    {t('app.migrationHistoryTab.recordedVersion', 'Recorded version')} <code>{short(currentRev)}</code> {t('app.migrationHistoryTab.isnTInTheMigrationHistory', 'isn’t in the migration history (it was renamed). Your schema already matches')}{' '}
-                                    <code>{short(headRev) || 'head'}</code> {t('app.migrationHistoryTab.reSyncToRepairTheVersion', '— re-sync to repair the version pointer.')}
+                                    {t('app.migrationHistoryTab.recordedVersion', 'Recorded version')} <code>{short(currentRev)}</code> {t('app.migrationHistoryTab.isnTInTheMigrationHistory', "isn't in the migration history (it was renamed). Your schema already matches")}{' '}
+                                    <code>{short(headRev) || 'head'}</code> {t('app.migrationHistoryTab.reSyncToRepairTheVersion', '(re-sync to repair the version pointer).')}
                                 </>
                             ) : (
                                 <>
                                     {t('app.migrationHistoryTab.yourDatabaseIsAt', 'Your database is at')} <code>{short(currentRev) || 'none'}</code>{t('app.migrationHistoryTab.latestIs', ', latest is')}{' '}
-                                    <code>{short(headRev) || 'unknown'}</code>. Apply to bring the schema up to date.
+                                    <code>{short(headRev) || 'unknown'}</code>.{' '}
+                                    {t('app.migrationHistoryTab.applyToBringTheSchemaUpToDate', 'Apply to bring the schema up to date.')}
                                 </>
                             )}
                         </p>
@@ -273,11 +281,11 @@ const MigrationHistoryTab = () => {
                                 disabled={applying}
                             >
                                 {applying ? (
-                                    <><Loader size={14} className="spin" /> {orphaned ? 'Repairing…' : 'Applying…'}</>
+                                    <><Loader size={14} className="spin" /> {orphaned ? t('app.migrationHistoryTab.repairing', 'Repairing…') : t('app.migrationHistoryTab.applying', 'Applying…')}</>
                                 ) : orphaned ? (
                                     <><Database size={14} /> {t('app.migrationHistoryTab.reSyncDatabase', 'Re-sync database')}</>
                                 ) : (
-                                    <><Database size={14} /> {t('app.migrationHistoryTab.apply', 'Apply')} {count} migration{plural}</>
+                                    <><Database size={14} /> {t('app.migrationHistoryTab.applyCount', { count, defaultValue_one: 'Apply 1 migration', defaultValue_other: 'Apply {{count}} migrations' })}</>
                                 )}
                             </SharedButton>
                             <label className="migration-backup-toggle">
@@ -296,7 +304,7 @@ const MigrationHistoryTab = () => {
                 revisions.length > 0 && (
                     <div className="migration-uptodate">
                         <ShieldCheck size={16} aria-hidden="true" />
-                        {t('app.migrationHistoryTab.schemaIsUpToDate', 'Schema is up to date')}{currentRev && <> {t('app.migrationHistoryTab.revision2', '— revision')} <code>{short(currentRev)}</code></>}.
+                        {t('app.migrationHistoryTab.schemaIsUpToDate', 'Schema is up to date')}{currentRev && <> {t('app.migrationHistoryTab.revision2', 'at revision')} <code>{short(currentRev)}</code></>}.
                     </div>
                 )
             )}
@@ -333,7 +341,6 @@ const MigrationHistoryTab = () => {
                             sorts={sorts}
                             onSortsChange={setSorts}
                             {...chrome.tableProps}
-                            tableClassName="data-table"
                         />
                     </div>
                 </>

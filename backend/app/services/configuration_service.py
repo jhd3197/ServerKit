@@ -393,7 +393,7 @@ class ConfigurationService:
 
         snapshot = DeploymentSnapshot.query.get(snapshot_id)
         if not snapshot:
-            return {'success': False, 'error': 'Snapshot not found'}
+            return {'success': False, 'error': 'Config checkpoint not found'}
 
         # query_active(): restoring a snapshot rewrites env and redeploys, so a
         # tombstoned app must 404 here rather than be brought back to life
@@ -401,7 +401,7 @@ class ConfigurationService:
         application = Application.query_active().filter_by(
             id=snapshot.application_id).first()
         if not application:
-            return {'success': False, 'error': 'Application not found'}
+            return {'success': False, 'error': 'Service not found'}
 
         config = snapshot.get_config()
         result = {

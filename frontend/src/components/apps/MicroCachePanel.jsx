@@ -8,6 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { useConfirm } from '@/hooks/useConfirm';
 import { formatPercent } from '@/utils/intl';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Must match NginxService.MICROCACHE_TTL_DEFAULT / MICROCACHE_TTL_MAX.
 const TTL_DEFAULT = 10;
@@ -65,21 +66,21 @@ const MicroCachePanel = ({ app, onChanged }) => {
             const data = await save(next, ttlValid ? ttlNumber : undefined);
             if (!data.note) {
                 toast.success(next
-                    ? t('app.microCachePanel.microCacheEnabledTheSiteConfig', 'Micro-cache enabled — the site config was updated.')
-                    : t('app.microCachePanel.microCacheDisabledTheSiteConfig', 'Micro-cache disabled — the site config was updated.'));
+                    ? t('app.microCachePanel.microCacheEnabledTheSiteConfig', 'Micro-cache enabled. The site config was updated.')
+                    : t('app.microCachePanel.microCacheDisabledTheSiteConfig', 'Micro-cache disabled. The site config was updated.'));
             }
         } catch (err) {
             setEnabled(!next);
-            toast.error(err.message || t('app.microCachePanel.failedToUpdateMicroCache', 'Failed to update micro-cache'));
+            toastError(toast, t('app.microCachePanel.failedToUpdateMicroCache', "Couldn't update the micro-cache."), err);
         }
     }
 
     async function handleSaveTtl() {
         try {
             await save(enabled, ttlNumber);
-            toast.success(t('app.microCachePanel.cacheLifetimeSaved', 'Cache lifetime saved.'));
+            toast.success(t('app.microCachePanel.cacheLifetimeSaved', 'Cache lifetime saved'));
         } catch (err) {
-            toast.error(err.message || t('app.microCachePanel.failedToUpdateMicroCache', 'Failed to update micro-cache'));
+            toastError(toast, t('app.microCachePanel.failedToUpdateMicroCache', "Couldn't update the micro-cache."), err);
         }
     }
 
@@ -88,18 +89,18 @@ const MicroCachePanel = ({ app, onChanged }) => {
         try {
             const data = await api.setImmutableAssets(app.id, next);
             if (data.warning) toast.warning(data.warning);
-            else toast.success(t('app.microCachePanel.assetCachingSaved', 'Asset caching saved.'));
+            else toast.success(t('app.microCachePanel.assetCachingSaved', 'Asset caching saved'));
             onChanged?.();
         } catch (err) {
             setImmutable(!next);
-            toast.error(err.message);
+            toastError(toast, t('app.microCachePanel.couldntUpdateImmutableAssets', "Couldn't update immutable asset caching."), err);
         }
     }
 
     async function handlePurge() {
         if (!await confirm({
             title: t('app.microCachePanel.clearMicroCache', 'Clear micro-cache'),
-            message: t('app.microCachePanel.clearCachedPagesForThisSite', 'Clear the cached pages for this site? Other sites keep their cache.'),
+            message: t('app.microCachePanel.clearCachedPagesForThisSite', 'Clear the cached pages for this service? Other services keep their cache.'),
             confirmText: t('app.microCachePanel.clearCache', 'Clear cache'),
         })) return;
         setPurging(true);
@@ -107,7 +108,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
             const data = await api.purgeMicroCache(app.id);
             toast.success(data.message || t('app.microCachePanel.microCacheCleared', 'Micro-cache cleared'));
         } catch (err) {
-            toast.error(err.message || t('app.microCachePanel.failedToClearTheMicroCache', 'Failed to clear the micro-cache'));
+            toastError(toast, t('app.microCachePanel.failedToClearTheMicroCache', "Couldn't clear the micro-cache."), err);
         } finally {
             setPurging(false);
         }
@@ -121,14 +122,14 @@ const MicroCachePanel = ({ app, onChanged }) => {
             </div>
             <div className="app-panel-body">
                 <p className="app-panel-hint">
-                    {t('app.microCachePanel.cachesFullPagesInNginx', 'Caches full pages in nginx for a few seconds, so traffic spikes hit the cache instead of your app, and visitors still get the last good page while the app restarts or errors. It is safe to enable: requests from logged-in users, carts and checkouts, admin and login pages, non-GET requests, and URLs with query strings always bypass the cache and reach the app directly.')}
+                    {t('app.microCachePanel.cachesFullPagesInNginx', 'Caches full pages in nginx for a few seconds, so traffic spikes hit the cache instead of your service, and visitors still get the last good page while the service restarts or errors. It is safe to enable: requests from logged-in users, carts and checkouts, admin and login pages, non-GET requests, and URLs with query strings always bypass the cache and reach the service directly.')}
                 </p>
 
                 <div className="settings-row">
                     <div className="settings-label">
                         <span>{t('app.microCachePanel.enableMicroCache', 'Enable micro-cache')}</span>
                         <span className="settings-hint">
-                            {t('app.microCachePanel.rewritesThisSiteSNginxConfig', 'Rewrites this site\'s nginx config with the cache rules. Turning it off removes them again.')}
+                            {t('app.microCachePanel.rewritesThisSiteSNginxConfig', "Rewrites this service's nginx config with the cache rules. Turning it off removes them again.")}
                         </span>
                     </div>
                     <div className="settings-control">
@@ -168,7 +169,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
                                     {t('app.microCachePanel.cacheLifetime', 'Cache lifetime (seconds)')}
                                 </label>
                                 <span className="settings-hint">
-                                    {t('app.microCachePanel.cacheLifetimeHint', 'How long a page is served from the cache before the app is asked again (1–{{max}}). Longer means fewer requests reach the app, and changes take longer to show.', { max: TTL_MAX })}
+                                    {t('app.microCachePanel.cacheLifetimeHint', 'How long a page is served from the cache before the service is asked again (1–{{max}}). Longer means fewer requests reach the service, and changes take longer to show.', { max: TTL_MAX })}
                                 </span>
                             </div>
                             <div className="settings-control micro-cache__ttl">
@@ -208,7 +209,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
                             <div className="settings-label">
                                 <span>{t('app.microCachePanel.clearCache', 'Clear cache')}</span>
                                 <span className="settings-hint">
-                                    {t('app.microCachePanel.clearThisSitesEntries', 'Entries expire on their own after the cache lifetime; use this when a change must be visible now. Only this site\'s pages are cleared.')}
+                                    {t('app.microCachePanel.clearThisSitesEntries', "Entries expire on their own after the cache lifetime; use this when a change must be visible now. Only this service's pages are cleared.")}
                                 </span>
                             </div>
                             <div className="settings-control">

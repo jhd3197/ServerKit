@@ -603,3 +603,13 @@ export async function previewAppComposeSplit(appId) {
 export async function applyAppComposeSplit(appId) {
     return this.request(`/apps/${appId}/slots/compose-split`, { method: 'POST', body: { confirm: true } });
 }
+
+// Host-port checks behind the shared PortField: is it valid, free, and who
+// holds it; and the next free port at or above `start`.
+export async function checkPort(port) {
+    return this.request(`/ports/check?port=${encodeURIComponent(port)}`);
+}
+
+export async function suggestPort(start = 8000) {
+    return this.request(`/ports/suggest?start=${encodeURIComponent(start)}`);
+}

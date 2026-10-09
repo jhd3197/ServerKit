@@ -51,7 +51,7 @@ function createGuide(t) {
         id: 'my-walkthrough',
         title: t('walkthroughStudio.initialTitle', 'My walkthrough'),
         description: t('walkthroughStudio.initialDescription', 'Help an operator complete one clear outcome.'),
-        duration: 'About 5 minutes',
+        duration: t('walkthroughStudio.initialDuration', 'About 5 minutes'),
         icon: 'guide',
         tone: 'cyan',
         secondary: true,
@@ -159,7 +159,9 @@ function GuidePreview({ guide, issues, onRun, t }) {
             </div>
 
             <div className={`wts-guide-card is-${guide.tone || 'cyan'}`}>
-                <span className="wts-guide-card__kicker">{guide.secondary ? 'OPTIONAL GUIDE' : 'ESSENTIAL GUIDE'}</span>
+                <span className="wts-guide-card__kicker">{guide.secondary
+                    ? t('walkthroughStudio.optionalKicker', 'OPTIONAL GUIDE')
+                    : t('walkthroughStudio.essentialKicker', 'ESSENTIAL GUIDE')}</span>
                 <h2>{guide.title || t('walkthroughStudio.untitled', 'Untitled walkthrough')}</h2>
                 <p>{guide.description || t('walkthroughStudio.addDescription', 'Add a description to explain the outcome.')}</p>
                 <div className="wts-guide-card__meta">
@@ -223,7 +225,7 @@ export function WalkthroughStudioPage() {
             const response = await api.getWalkthroughDefinitions();
             setLibrary(Array.isArray(response?.definitions) ? response.definitions : []);
         } catch (error) {
-            toast.error(error.message || t('walkthroughStudio.loadFailed', 'Could not load the walkthrough library.'));
+            toast.error(error.message || t('walkthroughStudio.loadFailed', 'Couldn\'t load the walkthrough library'));
         } finally {
             setLoading(false);
         }
@@ -261,7 +263,7 @@ export function WalkthroughStudioPage() {
             id: `step-${nextNumber}`,
             title: t('walkthroughStudio.numberedStep', 'Step {{number}}', { number: nextNumber }),
             description: t('walkthroughStudio.newStepDescription', 'Describe the operator action and the expected outcome.'),
-            action: 'Open page',
+            action: t('walkthroughStudio.initialStepAction', 'Open page'),
             path: '/',
             target: '',
             completion: { type: 'manual' },
@@ -311,9 +313,9 @@ export function WalkthroughStudioPage() {
             setOriginalId(draft.id);
             await refreshDefinitions();
             emitWalkthroughSignal('walkthrough-studio-guide-saved', { guideId: draft.id });
-            toast.success(t('walkthroughStudio.published', 'Walkthrough published.'));
+            toast.success(t('walkthroughStudio.published', 'Walkthrough published'));
         } catch (error) {
-            toast.error(error.message || t('walkthroughStudio.publishFailed', 'Could not publish the walkthrough.'));
+            toast.error(error.message || t('walkthroughStudio.publishFailed', 'Couldn\'t publish the walkthrough'));
         } finally {
             setSaving(false);
         }
@@ -322,7 +324,7 @@ export function WalkthroughStudioPage() {
     const deleteGuide = async (guide) => {
         if (!await confirm({
             title: t('walkthroughStudio.deleteTitle', 'Delete walkthrough'),
-            message: t('walkthroughStudio.deleteMessage', 'Delete “{{title}}” from the shared walkthrough library?', { title: guide.title }),
+            message: t('walkthroughStudio.deleteMessage', 'Delete "{{title}}"? It\'s removed from the shared library and the walkthrough dock for everyone. This can\'t be undone.', { title: guide.title }),
             confirmText: t('common.actions.delete', 'Delete'),
         })) return;
         try {
@@ -331,9 +333,9 @@ export function WalkthroughStudioPage() {
             setLibrary(nextLibrary);
             if (originalId === guide.id) newGuide();
             await refreshDefinitions();
-            toast.success(t('walkthroughStudio.deleted', 'Walkthrough deleted.'));
+            toast.success(t('walkthroughStudio.deleted', 'Walkthrough deleted'));
         } catch (error) {
-            toast.error(error.message || t('walkthroughStudio.deleteFailed', 'Could not delete the walkthrough.'));
+            toast.error(error.message || t('walkthroughStudio.deleteFailed', 'Couldn\'t delete the walkthrough'));
         }
     };
 
@@ -352,20 +354,20 @@ export function WalkthroughStudioPage() {
             setDraft(imported);
             setOriginalId(null);
             setStepIndex(0);
-            toast.success(t('walkthroughStudio.imported', 'Walkthrough imported as a draft.'));
+            toast.success(t('walkthroughStudio.imported', 'Walkthrough imported as a draft'));
         } catch (error) {
-            toast.error(error.message || t('walkthroughStudio.importFailed', 'Could not import this file.'));
+            toast.error(error.message || t('walkthroughStudio.importFailed', 'Couldn\'t import this file'));
         }
     };
 
     const copyContribution = async () => {
         await copyToClipboard(JSON.stringify({ walkthroughs: [draft] }, null, 2));
-        toast.success(t('walkthroughStudio.contributionCopied', 'Extension contribution copied.'));
+        toast.success(t('walkthroughStudio.contributionCopied', 'Extension contribution copied'));
     };
 
     const runPreview = () => {
         if (!preview(draft)) {
-            toast.error(t('walkthroughStudio.previewFailed', 'The draft could not be previewed.'));
+            toast.error(t('walkthroughStudio.previewFailed', 'Couldn\'t preview the draft'));
             return;
         }
         toast.info(t('walkthroughStudio.previewOpened', 'Draft opened in the walkthrough dock.'));
@@ -503,7 +505,7 @@ export function WalkthroughStudioPage() {
                             {activeStep && (
                                 <div className="wts-step-editor">
                                     <div className="wts-step-editor__tools">
-                                        <span>STEP {String(stepIndex + 1).padStart(2, '0')}</span>
+                                        <span>{t('walkthroughStudio.stepEyebrow', 'STEP {{number}}', { number: String(stepIndex + 1).padStart(2, '0') })}</span>
                                         <Button type="button" variant="ghost" size="icon" onClick={() => moveStep(-1)} disabled={stepIndex === 0} aria-label={t('common.actions.moveUp', 'Move up')}><ArrowUp size={14} /></Button>
                                         <Button type="button" variant="ghost" size="icon" onClick={() => moveStep(1)} disabled={stepIndex === draft.steps.length - 1} aria-label={t('common.actions.moveDown', 'Move down')}><ArrowDown size={14} /></Button>
                                         <Button type="button" variant="ghost" size="icon" onClick={deleteStep} aria-label={t('common.actions.delete', 'Delete')}><Trash2 size={14} /></Button>

@@ -17,6 +17,7 @@ from app.services.manifest_spec_service import ManifestSpecService, ManifestErro
 from app.services.manifest_apply_service import ManifestApplyService
 from app.services.manifest_persistence_service import ManifestPersistenceService
 from app.middleware.rbac import require_admin_user
+from app.exceptions import not_found
 
 manifests_bp = Blueprint('manifests', __name__)
 
@@ -54,7 +55,7 @@ def scaffold_manifest():
 
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     fmt = (request.args.get('format') or 'json').lower()
     if fmt == 'yaml':
@@ -175,9 +176,9 @@ def reset_bootstrap():
     app = (Application.query_active().filter_by(id=data.get('app_id')).first()
            if data.get('app_id') else None)
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
     if (data.get('confirm') or '') != app.name:
-        return jsonify({'error': f'Type the app name "{app.name}" to confirm'}), 400
+        return jsonify({'error': f'Type the service name "{app.name}" to confirm'}), 400
     app.bootstrap_done = False
     db.session.commit()
     return jsonify({'success': True, 'app_id': app.id, 'bootstrap_done': False}), 200

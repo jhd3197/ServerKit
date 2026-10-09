@@ -13,6 +13,7 @@ from app.models.project import Project
 from app.services.project_service import ProjectService
 from app.services.workspace_service import WorkspaceService
 from app.middleware.rbac import get_current_user
+from app.exceptions import permission_denied
 
 projects_bp = Blueprint('projects', __name__)
 
@@ -101,7 +102,7 @@ def get_project(project_id):
     if not project:
         return jsonify({'error': 'Project not found'}), 404
     if not _can_view_project(user, project):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     result = project.to_dict(include_counts=True)
     result['environments'] = [e.to_dict(include_counts=True)
@@ -117,7 +118,7 @@ def update_project(project_id):
     if not project:
         return jsonify({'error': 'Project not found'}), 404
     if not _can_view_project(user, project):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
     if not WorkspaceService.can_write_in_workspace(user, project.workspace_id):
         return jsonify({'error': 'You have read-only access to this workspace'}), 403
 
@@ -140,7 +141,7 @@ def delete_project(project_id):
     if not project:
         return jsonify({'error': 'Project not found'}), 404
     if not _can_view_project(user, project):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
     if not WorkspaceService.can_write_in_workspace(user, project.workspace_id):
         return jsonify({'error': 'You have read-only access to this workspace'}), 403
 

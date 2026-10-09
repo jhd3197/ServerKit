@@ -24,7 +24,7 @@ const CATEGORY_CHIPS = [
     { key: 'system', labelKey: 'common.labels.system', label: 'System' },
     { key: 'security', labelKey: 'common.labels.security', label: 'Security' },
     { key: 'backups', labelKey: 'common.labels.backups', label: 'Backups' },
-    { key: 'apps', labelKey: 'app.notifications.apps', label: 'Apps' },
+    { key: 'apps', labelKey: 'app.notifications.apps', label: 'Services' },
 ];
 const SEVERITY_CHIPS = [
     { key: '', labelKey: 'app.notifications.any', label: 'Any' },
@@ -106,7 +106,7 @@ export default function Notifications() {
                         </Button>
                     )}
                     <Button variant="outline" size="sm" onClick={onMarkAll} disabled={!unreadCount}>
-                        <CheckCheck size={15} /> {category ? `Mark ${category} read` : 'Mark all read'}
+                        <CheckCheck size={15} /> {category ? t('app.notifications.markCategoryRead', 'Mark {{category}} read', { category }) : t('app.notifications.markAllRead', 'Mark all read')}
                     </Button>
                 </>
             )}
@@ -165,7 +165,7 @@ export default function Notifications() {
                 ) : items.length === 0 && noticeItems.length === 0 ? (
                     <div className="sk-notif-page__state">
                         <Bell size={26} aria-hidden="true" />
-                        <p>{unreadOnly ? 'No unread notifications.' : 'No notifications yet.'}</p>
+                        <p>{unreadOnly ? t('app.notifications.noUnreadNotifications', 'No unread notifications.') : t('app.notifications.noNotificationsYet', 'No notifications yet.')}</p>
                     </div>
                 ) : (
                     <ul className="sk-notif-page__list">
@@ -212,7 +212,7 @@ export default function Notifications() {
                                     <div className="sk-notif-row__title">{item.title}</div>
                                     {item.body && <div className="sk-notif-row__text">{item.body}</div>}
                                     {item.action_path && (
-                                        <div className="sk-notif-row__action">{item.action_label || 'Open'} →</div>
+                                        <div className="sk-notif-row__action">{item.action_label || t('common.actions.open', 'Open')} →</div>
                                     )}
                                 </div>
                                 <span className="sk-notif-row__time">{timeAgo(item.created_at)}</span>

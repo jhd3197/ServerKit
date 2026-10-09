@@ -13,57 +13,57 @@ import { copyToClipboard } from '@/utils/clipboard';
 export const COMMAND_ACTIONS = [
     {
         id: 'new-service',
-        labelKey: 'app.commandActions.newService', label: 'New Service',
+        labelKey: 'app.commandActions.newService', label: 'New service',
         keywords: 'create app deploy add service container',
         suggested: true,
         perform: ({ navigate }) => navigate('/services/new'),
     },
     {
         id: 'add-server',
-        labelKey: 'app.commandActions.addServer', label: 'Add Server',
+        labelKey: 'app.commandActions.addServer', label: 'Add server',
         keywords: 'connect agent fleet new server node',
         suggested: true,
         perform: ({ navigate }) => navigate('/servers'),
     },
     {
         id: 'add-domain',
-        labelKey: 'app.commandActions.addDomain', label: 'Add Domain',
+        labelKey: 'app.commandActions.addDomain', label: 'Add domain',
         keywords: 'dns new create domain zone',
         perform: ({ navigate }) => navigate('/domains'),
     },
     {
         id: 'new-cron',
-        labelKey: 'app.commandActions.newCronJob', label: 'New Cron Job',
+        labelKey: 'app.commandActions.newCronJob', label: 'New cron job',
         keywords: 'schedule task create cron job',
         perform: ({ navigate }) => navigate('/cron'),
     },
     {
         id: 'new-backup-policy',
-        labelKey: 'app.commandActions.newBackupPolicy', label: 'New Backup Policy',
+        labelKey: 'app.commandActions.newBackupPolicy', label: 'New backup policy',
         keywords: 'backup schedule protection create policy',
         perform: ({ navigate }) => navigate('/backups'),
     },
     {
         id: 'install-extension',
-        labelKey: 'app.commandActions.installExtension', label: 'Install Extension',
+        labelKey: 'app.commandActions.installExtension', label: 'Install extension',
         keywords: 'marketplace plugin add manual install extension',
         perform: ({ navigate }) => navigate('/extensions'),
     },
     {
         id: 'open-terminal',
-        labelKey: 'app.commandActions.openTerminal', label: 'Open Terminal',
+        labelKey: 'app.commandActions.openTerminal', label: 'Open terminal',
         keywords: 'shell ssh console terminal logs',
         perform: ({ navigate }) => navigate('/terminal'),
     },
     {
         id: 'toggle-theme',
-        labelKey: 'app.commandActions.toggleTheme', label: 'Toggle Theme',
+        labelKey: 'app.commandActions.toggleTheme', label: 'Toggle theme',
         keywords: 'dark light mode appearance theme switch',
         perform: ({ toggleTheme }) => toggleTheme && toggleTheme(),
     },
     {
         id: 'copy-version',
-        labelKey: 'app.commandActions.copyPanelVersion', label: 'Copy Panel Version',
+        labelKey: 'app.commandActions.copyPanelVersion', label: 'Copy panel version',
         keywords: 'about build version copy',
         perform: async ({ api }) => {
             try {
@@ -79,7 +79,7 @@ export const COMMAND_ACTIONS = [
     },
     {
         id: 'sign-out',
-        labelKey: 'app.commandActions.signOut', label: 'Sign Out',
+        labelKey: 'app.commandActions.signOut', label: 'Sign out',
         keywords: 'logout log out exit sign out',
         perform: ({ logout }) => logout && logout(),
     },

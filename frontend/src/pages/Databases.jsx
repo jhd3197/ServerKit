@@ -14,6 +14,7 @@ import { formatBytes } from '@/utils/formatBytes';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import SourceTree from '../components/databases/SourceTree';
 import ConsoleTab from '../components/databases/ConsoleTab';
 import TableDataTab from '../components/databases/TableDataTab';
@@ -35,16 +36,44 @@ import {
     engineBrandKey, engineInstanceKey, engineTreeStatus, engineUnit, singular,
 } from '../components/databases/engineHelpers';
 import { listTables, connKey, connLabel, quoteIdent, ENGINE_META } from '../components/databases/dbAdapter';
-import { copyToClipboard } from '@/utils/clipboard';
+import { useClipboard } from '@/hooks/useClipboard';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
-import { Button as SharedButton } from '@/components/ui/button';
+import { Button as SharedButton, Button } from '@/components/ui/button';
+import {
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import PageLayout from '@/layouts/PageLayout';
+import { toastError } from '@/utils/errorMessage';
 
 // Cadence while an engine install is in flight.
 const ENGINE_POLL_MS = 4000;
 
 
 const SIDEBAR_KEY = 'serverkit-dbx-sidebar';
+
+// Host + Docker listings for one engine, fetched side by side. A side that
+// fails contributes nothing and its error is returned as the third element.
+async function settleBoth(hostPromise, dockerPromise) {
+    const [host, docker] = await Promise.allSettled([hostPromise, dockerPromise]);
+    const failure = [host, docker].find((r) => r.status === 'rejected')?.reason || null;
+    return [
+        host.status === 'fulfilled' ? host.value || {} : {},
+        docker.status === 'fulfilled' ? docker.value || {} : {},
+        failure,
+    ];
+}
+
+// A partial listing is still worth showing; an empty one after a failure is
+// not "no databases", so it becomes the tree's error row instead.
+function nodesOrThrow(nodes, failure) {
+    if (failure && nodes.length === 0) {
+        const e = new Error(failure.message || 'request failed');
+        e.userMessage = `Couldn't load databases: ${failure.message || 'request failed'}`;
+        throw e;
+    }
+    return nodes;
+}
 
 function engineState(engine, status) {
     if (engine !== 'mysql' && engine !== 'postgresql') return 'available';
@@ -90,11 +119,16 @@ export default function Databases() {
     const { t } = useTranslation();
     const toast = useToast();
     const { confirm } = useConfirm();
+    const { copy } = useClipboard({
+        successMessage: t('app.databases.copiedName', 'Copied name'),
+        errorMessage: t('app.databases.couldNotCopy', "Couldn't copy."),
+    });
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [status, setStatus] = useState(null);
     const [statusLoading, setStatusLoading] = useState(true);
+    const [statusError, setStatusError] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
 
     const [expanded, setExpanded] = useState(new Set());
@@ -109,7 +143,6 @@ export default function Databases() {
     const [sidebarVisible, setSidebarVisible] = useState(() => localStorage.getItem(SIDEBAR_KEY) !== 'false');
     const [filter, setFilter] = useState('');
     const [ctxMenu, setCtxMenu] = useState(null);
-    const [showNewMenu, setShowNewMenu] = useState(false);
     const [showManaged, setShowManaged] = useState(false);
     const [tunerTarget, setTunerTarget] = useState(null);
     const [modal, setModal] = useState(null); // { type, databases }
@@ -125,22 +158,29 @@ export default function Databases() {
     // What the workspace shows when there is no tab to show: an engine that is
     // still installing, an engine that is up but empty, an empty database.
     const [blank, setBlank] = useState(null);
-    const newMenuRef = useRef(null);
     const didAutoExpand = useRef(false);
     const didDeepLink = useRef(false);
 
     useEffect(() => { localStorage.setItem(SIDEBAR_KEY, String(sidebarVisible)); }, [sidebarVisible]);
 
+    // Which host engines are installed/running. A failure is kept, not
+    // logged away: the tree then says it couldn't check, rather than drawing
+    // the host engines as if their state were known.
+    const loadStatus = useCallback(async () => {
+        try {
+            const data = await api.getDatabaseStatus();
+            setStatus(data);
+            setStatusError(null);
+        } catch (err) {
+            setStatusError(err);
+        } finally {
+            setStatusLoading(false);
+        }
+    }, []);
+
     useEffect(() => {
         (async () => {
-            try {
-                const data = await api.getDatabaseStatus();
-                setStatus(data);
-            } catch (err) {
-                console.error('Failed to get database status:', err);
-            } finally {
-                setStatusLoading(false);
-            }
+            await loadStatus();
             try {
                 // GET /auth/me answers {user: {...}} — reading `.role` off the
                 // envelope was always undefined, so every admin was treated as
@@ -149,7 +189,7 @@ export default function Databases() {
                 setIsAdmin((me?.user?.role ?? me?.role) === 'admin');
             } catch { /* non-admin / not logged in handled by route guard */ }
         })();
-    }, []);
+    }, [loadStatus]);
 
     // The engine catalog is optional: an older backend simply doesn't serve it,
     // and the explorer has to keep working on its four built-in roots.
@@ -270,22 +310,16 @@ export default function Databases() {
     const loadChildren = useCallback(async (node) => {
         if (node.kind === 'engine') {
             if (node.engine === 'mysql') {
-                const [host, docker] = await Promise.all([
-                    api.getMySQLDatabases().catch(() => ({ databases: [] })),
-                    api.getAllDockerDatabases().catch(() => ({ databases: [] })),
-                ]);
+                const [host, docker, failure] = await settleBoth(api.getMySQLDatabases(), api.getAllDockerDatabases());
                 const hostNodes = (host.databases || []).map((db) => dbNode('mysql', { dbType: 'mysql', name: db.name }, db.name, db.size));
                 const dockerNodes = (docker.databases || []).filter((db) => db.type === 'mysql').map((db, i) => dockerDbNode('mysql', db, i));
-                return [...hostNodes, ...dockerNodes];
+                return nodesOrThrow([...hostNodes, ...dockerNodes], failure);
             }
             if (node.engine === 'postgresql') {
-                const [host, docker] = await Promise.all([
-                    api.getPostgreSQLDatabases().catch(() => ({ databases: [] })),
-                    api.getAllDockerDatabases().catch(() => ({ databases: [] })),
-                ]);
+                const [host, docker, failure] = await settleBoth(api.getPostgreSQLDatabases(), api.getAllDockerDatabases());
                 const hostNodes = (host.databases || []).map((db) => dbNode('postgresql', { dbType: 'postgresql', name: db.name }, db.name, db.size));
                 const dockerNodes = (docker.databases || []).filter((db) => db.type === 'postgresql').map((db, i) => dockerDbNode('postgresql', db, i));
-                return [...hostNodes, ...dockerNodes];
+                return nodesOrThrow([...hostNodes, ...dockerNodes], failure);
             }
             if (node.engine === 'sqlite') {
                 const d = await api.getSQLiteDatabases();
@@ -443,7 +477,7 @@ export default function Databases() {
         // One insights tab per container, like processes.
         const id = `insights:${engine}:${conn.container}`;
         setTabs((prev) => prev.some((t) => t.id === id) ? prev
-            : [...prev, { id, kind: 'insights', title: `Insights · ${conn.container}`, conn, engine }]);
+            : [...prev, { id, kind: 'insights', title: t('app.databases.insightsTabTitle', 'Insights · {{name}}', { name: conn.container }), conn, engine }]);
         showTab(id);
     }
 
@@ -517,24 +551,20 @@ export default function Databases() {
     }
 
     useEffect(() => {
-        if (!ctxMenu && !showNewMenu) return;
-        const close = (e) => {
-            if (showNewMenu && newMenuRef.current?.contains(e.target)) return;
-            setCtxMenu(null);
-            setShowNewMenu(false);
-        };
-        const onEsc = (e) => { if (e.key === 'Escape') { setCtxMenu(null); setShowNewMenu(false); } };
+        if (!ctxMenu) return;
+        const close = () => setCtxMenu(null);
+        const onEsc = (e) => { if (e.key === 'Escape') setCtxMenu(null); };
         document.addEventListener('click', close);
         document.addEventListener('keydown', onEsc);
         return () => { document.removeEventListener('click', close); document.removeEventListener('keydown', onEsc); };
-    }, [ctxMenu, showNewMenu]);
+    }, [ctxMenu]);
 
     async function backupDatabase(node) {
         try {
             const res = node.engine === 'mysql' ? await api.backupMySQLDatabase(node.label) : await api.backupPostgreSQLDatabase(node.label);
             if (res.success) toast.success(t('app.databases.backupCreated', 'Backup created: {{backuppath}}', { backuppath: res.backup_path }));
-        } catch {
-            toast.error(t('app.databases.failedToCreateBackup', 'Failed to create backup'));
+        } catch (err) {
+            toastError(toast, t('app.databases.failedToCreateBackup', "Couldn't create the backup."), err);
         }
     }
 
@@ -553,8 +583,8 @@ export default function Databases() {
             const eng = roots.find((r) => r.engine === node.engine);
             if (eng) refresh(eng);
             setTabs((prev) => prev.filter((t) => !(t.conn && connKey(t.conn) === connKey(node.conn))));
-        } catch {
-            toast.error(t('app.databases.failedToDropDatabase', 'Failed to drop database'));
+        } catch (err) {
+            toastError(toast, t('app.databases.failedToDropDatabase', "Couldn't drop the database."), err);
         }
     }
 
@@ -580,9 +610,7 @@ export default function Databases() {
     }
 
     function copyName(node) {
-        copyToClipboard(node.label).then((ok) => (ok
-            ? toast.success(t('app.databases.copiedName', 'Copied name'))
-            : toast.error(t('app.databases.couldNotCopy', 'Could not copy'))));
+        copy(node.label);
     }
 
     function ctxActions(node) {
@@ -600,30 +628,30 @@ export default function Databases() {
                 }
                 if (node.engine === 'mysql' && node.status === 'active') {
                     return [
-                        { labelKey: 'app.databases.createDatabase', label: 'Create database', icon: Plus, onClick: () => setModal({ type: 'mysql-db' }) },
-                        { labelKey: 'app.databases.createUser', label: 'Create user', icon: Plus, onClick: () => openUserModal('mysql') },
+                        { labelKey: 'app.databases.createDatabase', label: 'New database', icon: Plus, onClick: () => setModal({ type: 'mysql-db' }) },
+                        { labelKey: 'app.databases.createUser', label: 'New user', icon: Plus, onClick: () => openUserModal('mysql') },
                         { labelKey: 'app.databases.processes', label: 'Processes', icon: Activity, onClick: () => openProcesses({ dbType: 'mysql' }, 'mysql') },
                         { labelKey: 'common.actions.refresh', label: 'Refresh', icon: RefreshCw, onClick: () => refresh(node) },
                     ];
                 }
                 if (node.engine === 'postgresql' && node.status === 'active') {
                     return [
-                        { labelKey: 'app.databases.createDatabase', label: 'Create database', icon: Plus, onClick: () => setModal({ type: 'pg-db' }) },
-                        { labelKey: 'app.databases.createUser', label: 'Create user', icon: Plus, onClick: () => openUserModal('postgresql') },
+                        { labelKey: 'app.databases.createDatabase', label: 'New database', icon: Plus, onClick: () => setModal({ type: 'pg-db' }) },
+                        { labelKey: 'app.databases.createUser', label: 'New user', icon: Plus, onClick: () => openUserModal('postgresql') },
                         { labelKey: 'app.databases.processes', label: 'Processes', icon: Activity, onClick: () => openProcesses({ dbType: 'postgresql' }, 'postgresql') },
                         { labelKey: 'common.actions.refresh', label: 'Refresh', icon: RefreshCw, onClick: () => refresh(node) },
                     ];
                 }
                 if (node.installers?.length) {
                     return [
-                        { label: `Install ${node.label}…`, icon: Download, onClick: () => startInstall(node) },
+                        { label: t('app.databases.installEngineName', 'Install {{name}}…', { name: node.label }), icon: Download, onClick: () => startInstall(node) },
                         { labelKey: 'common.actions.refresh', label: 'Refresh', icon: RefreshCw, onClick: () => refresh(node) },
                     ];
                 }
                 return [{ labelKey: 'common.actions.refresh', label: 'Refresh', icon: RefreshCw, onClick: () => refresh(node) }];
             case 'database': {
                 const actions = [
-                    { label: `New ${singular(engineUnit(node))}`, icon: Plus, onClick: () => setModal({ type: 'new-table', preset: dbPreset(node) }) },
+                    { label: t('app.databases.newUnit', 'New {{unit}}', { unit: singular(engineUnit(node)) }), icon: Plus, onClick: () => setModal({ type: 'new-table', preset: dbPreset(node) }) },
                     { labelKey: 'app.databases.openSqlConsole', label: 'Open SQL console', icon: Terminal, onClick: () => openConsole(node.conn, node.engine) },
                     { labelKey: 'app.databases.refreshTables', label: 'Refresh tables', icon: RefreshCw, onClick: () => refresh(node) },
                 ];
@@ -710,88 +738,68 @@ export default function Databases() {
     }), [toggle, startInstall]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
-        <div className="page-container page-container--full-bleed db-explorer">
-            {/* ─── Toolbar ─────────────────────────────── */}
-            <header className="dbx-toolbar">
-                <div className="dbx-toolbar-left">
-                    <SharedButton variant="unstyled"
-                        type="button"
-                        className="dbx-icon-btn"
+        <PageLayout
+            className="db-explorer"
+            fill
+            icon={<Database size={18} />}
+            title={t('common.labels.databases', 'Databases')}
+            actions={(
+                <>
+                    <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => setSidebarVisible((v) => !v)}
                         aria-label={sidebarVisible ? t('app.databases.hideSources', 'Hide sources') : t('app.databases.showSources', 'Show sources')}
                         title={sidebarVisible ? t('app.databases.hideSources', 'Hide sources') : t('app.databases.showSources', 'Show sources')}
                     >
-                        {sidebarVisible ? <PanelLeftClose size={16} aria-hidden="true" /> : <PanelLeftOpen size={16} aria-hidden="true" />}
-                    </SharedButton>
-                    <h1 className="dbx-title"><Database size={17} aria-hidden="true" /> {t('app.databases.databaseExplorer', 'Database Explorer')}</h1>
-                </div>
-
-                <div className="dbx-toolbar-right">
-                    <div className="dbx-new" ref={newMenuRef}>
-                        <SharedButton variant="unstyled"
-                            type="button"
-                            className="dbx-primary"
-                            onClick={() => setShowNewMenu((s) => !s)}
-                            aria-haspopup="menu"
-                            aria-expanded={showNewMenu}
-                        >
-                            <Plus size={15} aria-hidden="true" /> {t('app.databases.new', 'New')} <ChevronDown size={13} aria-hidden="true" />
-                        </SharedButton>
-                        {showNewMenu && (
-                            <div className="dbx-menu" role="menu">
-                                <SharedButton variant="unstyled"
-                                    type="button"
-                                    role="menuitem"
-                                    disabled={!newConsoleConn}
-                                    onClick={() => { if (newConsoleConn) openConsole(newConsoleConn, selectedNode.engine); setShowNewMenu(false); }}
-                                >
-                                    <Terminal size={14} aria-hidden="true" /> {t('app.databases.sqlConsole', 'SQL console')}
-                                    {!newConsoleConn && <span className="dbx-menu-hint">{t('app.databases.selectADatabase', 'select a database')}</span>}
-                                </SharedButton>
-                                <SharedButton variant="unstyled"
-                                    type="button"
-                                    role="menuitem"
-                                    onClick={() => { setModal({ type: 'new-table', preset: dbPreset(selectedNode) }); setShowNewMenu(false); }}
-                                >
-                                    <Table2 size={14} aria-hidden="true" /> {t('app.databases.tableOrCollection', 'Table or collection')}
-                                </SharedButton>
-                                <SharedButton variant="unstyled"
-                                    type="button"
-                                    role="menuitem"
-                                    onClick={() => { setModal({ type: 'import', preset: dbPreset(selectedNode) }); setShowNewMenu(false); }}
-                                >
-                                    <Download size={14} aria-hidden="true" /> {t('app.databases.importSqlDump', 'Import SQL dump…')}
-                                </SharedButton>
-                                <div className="dbx-menu-sep" />
-                                <SharedButton variant="unstyled" type="button" role="menuitem" disabled={engineState('mysql', status) !== 'active'} onClick={() => { setModal({ type: 'mysql-db' }); setShowNewMenu(false); }}>
-                                    <Database size={14} aria-hidden="true" /> {t('app.databases.mysqlDatabase', 'MySQL database')}
-                                </SharedButton>
-                                <SharedButton variant="unstyled" type="button" role="menuitem" disabled={engineState('postgresql', status) !== 'active'} onClick={() => { setModal({ type: 'pg-db' }); setShowNewMenu(false); }}>
-                                    <Database size={14} aria-hidden="true" /> {t('app.databases.postgresqlDatabase', 'PostgreSQL database')}
-                                </SharedButton>
-                                <div className="dbx-menu-sep" />
-                                <SharedButton variant="unstyled" type="button" role="menuitem" disabled={engineState('mysql', status) !== 'active'} onClick={() => { openUserModal('mysql'); setShowNewMenu(false); }}>
-                                    <Server size={14} aria-hidden="true" /> {t('app.databases.mysqlUser', 'MySQL user')}
-                                </SharedButton>
-                                <SharedButton variant="unstyled" type="button" role="menuitem" disabled={engineState('postgresql', status) !== 'active'} onClick={() => { openUserModal('postgresql'); setShowNewMenu(false); }}>
-                                    <Server size={14} aria-hidden="true" /> {t('app.databases.postgresqlUser', 'PostgreSQL user')}
-                                </SharedButton>
-                                <div className="dbx-menu-sep" />
-                                <SharedButton variant="unstyled" type="button" role="menuitem" onClick={() => { openCatalog(); setShowNewMenu(false); }}>
-                                    <Layers size={14} aria-hidden="true" /> {t('app.databases.installADatabaseEngine', 'Install a database engine…')}
-                                </SharedButton>
-                            </div>
-                        )}
-                    </div>
-                    <SharedButton variant="unstyled" type="button" className="dbx-chip" onClick={() => setShowManaged(true)}>
-                        <BookMarked size={14} aria-hidden="true" /> {t('app.databases.managed', 'Managed')}
-                    </SharedButton>
-                    <SharedButton variant="unstyled" type="button" className="dbx-chip" onClick={openBackups}>
-                        <Archive size={14} aria-hidden="true" /> {t('common.labels.backups', 'Backups')}
-                    </SharedButton>
-                </div>
-            </header>
-
+                        {sidebarVisible ? <PanelLeftClose size={15} aria-hidden="true" /> : <PanelLeftOpen size={15} aria-hidden="true" />}
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => setShowManaged(true)}>
+                        <BookMarked size={15} aria-hidden="true" /> {t('app.databases.managed', 'Managed')}
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={openBackups}>
+                        <Archive size={15} aria-hidden="true" /> {t('common.labels.backups', 'Backups')}
+                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button size="sm">
+                                <Plus size={15} aria-hidden="true" /> {t('app.databases.new', 'New')} <ChevronDown size={13} aria-hidden="true" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem disabled={!newConsoleConn} onSelect={() => openConsole(newConsoleConn, selectedNode.engine)}>
+                                <Terminal size={14} aria-hidden="true" /> {t('app.databases.sqlConsole', 'SQL console')}
+                                {!newConsoleConn && <span className="dbx-menu-hint">{t('app.databases.selectADatabase', 'select a database')}</span>}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => setModal({ type: 'new-table', preset: dbPreset(selectedNode) })}>
+                                <Table2 size={14} aria-hidden="true" /> {t('app.databases.tableOrCollection', 'Table or collection')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => setModal({ type: 'import', preset: dbPreset(selectedNode) })}>
+                                <Download size={14} aria-hidden="true" /> {t('app.databases.importSqlDump', 'Import SQL dump…')}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem disabled={engineState('mysql', status) !== 'active'} onSelect={() => setModal({ type: 'mysql-db' })}>
+                                <Database size={14} aria-hidden="true" /> {t('app.databases.mysqlDatabase', 'MySQL database')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem disabled={engineState('postgresql', status) !== 'active'} onSelect={() => setModal({ type: 'pg-db' })}>
+                                <Database size={14} aria-hidden="true" /> {t('app.databases.postgresqlDatabase', 'PostgreSQL database')}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem disabled={engineState('mysql', status) !== 'active'} onSelect={() => openUserModal('mysql')}>
+                                <Server size={14} aria-hidden="true" /> {t('app.databases.mysqlUser', 'MySQL user')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem disabled={engineState('postgresql', status) !== 'active'} onSelect={() => openUserModal('postgresql')}>
+                                <Server size={14} aria-hidden="true" /> {t('app.databases.postgresqlUser', 'PostgreSQL user')}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onSelect={() => openCatalog()}>
+                                <Layers size={14} aria-hidden="true" /> {t('app.databases.installADatabaseEngine', 'Install a database engine…')}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </>
+            )}
+        >
             {/* ─── Body: tree + workspace ─────────────────── */}
             <div className={`dbx-body ${sidebarVisible ? '' : 'is-collapsed'}`}>
                 {sidebarVisible && (
@@ -811,6 +819,13 @@ export default function Databases() {
                                 <div className="dbx-tree-loading"><RefreshCw size={14} className="dbx-spin" aria-hidden="true" /> {t('app.databases.checkingServers', 'Checking servers…')}</div>
                             ) : (
                                 <>
+                                    {statusError && (
+                                        <ErrorState
+                                            compact
+                                            message={t('app.databases.couldntCheckDatabaseServers', "Couldn't check database servers. {{reason}}", { reason: statusError.message })}
+                                            onRetry={loadStatus}
+                                        />
+                                    )}
                                     <SourceTree
                                         roots={roots}
                                         expanded={expanded}
@@ -982,7 +997,7 @@ export default function Databases() {
                             <span className="dbx-status-item"><Database size={12} aria-hidden="true" /> {activeStatus.connText}</span>
                             {activeStatus.readonly != null && (
                                 <span className={`dbx-status-item ${activeStatus.readonly ? '' : 'is-write'}`}>
-                                    {activeStatus.readonly ? <><Lock size={11} aria-hidden="true" /> {t('app.databases.readOnly', 'Read-only')}</> : 'Writes enabled'}
+                                    {activeStatus.readonly ? <><Lock size={11} aria-hidden="true" /> {t('app.databases.readOnly', 'Read-only')}</> : t('app.databases.writesEnabled', 'Writes enabled')}
                                 </span>
                             )}
                             <span className="dbx-status-item dbx-status-muted">{t('app.databases.utf8', 'UTF-8')}</span>
@@ -994,9 +1009,11 @@ export default function Databases() {
                 <div className="dbx-statusbar-right">
                     {activeStatus?.rangeText && <span className="dbx-status-item">{activeStatus.rangeText}</span>}
                     {activeStatus?.rowCount != null && (
-                        <span className="dbx-status-item">{activeStatus.rowCount} row{activeStatus.rowCount === 1 ? '' : 's'}{activeStatus.truncated ? ` of ${activeStatus.totalRows}` : ''}</span>
+                        <span className="dbx-status-item">{activeStatus.truncated
+                            ? t('app.databases.rowCountOfTotal', { count: activeStatus.rowCount, total: activeStatus.totalRows, defaultValue_one: '1 row of {{total}}', defaultValue_other: '{{count}} rows of {{total}}' })
+                            : t('app.databases.rowCount', { count: activeStatus.rowCount, defaultValue_one: '1 row', defaultValue_other: '{{count}} rows' })}</span>
                     )}
-                    {activeStatus?.execTime != null && <span className="dbx-status-item dbx-mono">{activeStatus.execTime}s</span>}
+                    {activeStatus?.execTime != null && <span className="dbx-status-item">{activeStatus.execTime}s</span>}
                     {activeStatus && <span className="dbx-status-item is-connected">{t('app.databases.connected', 'Connected')}</span>}
                 </div>
             </footer>
@@ -1078,6 +1095,6 @@ export default function Databases() {
                 )}
             </Modal>
 
-        </div>
+        </PageLayout>
     );
 }

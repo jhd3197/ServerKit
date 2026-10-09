@@ -4,9 +4,13 @@ import { ChevronRight, Folder, Plus, RefreshCw, Server as ServerLucideIcon, X } 
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import {
     DataTable, DataTableFooter, Drawer, Gauge, Pill, SearchField, statusKind,
 } from '@/components/ds';
@@ -14,7 +18,7 @@ import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useConfirm } from '@/hooks/useConfirm';
-import { useClipboard } from '@/hooks/useClipboard';
+import CopyField from '../components/CopyField';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
@@ -23,6 +27,10 @@ import useFocusParam from '@/hooks/useFocusParam';
 import LinkPanelForm from '../components/servers/LinkPanelForm';
 import { useTranslation } from 'react-i18next';
 import { t } from '../i18n/t';
+import { toastError } from '@/utils/errorMessage';
+
+// Radix Select items cannot use '' — stands in for "no group".
+const NO_GROUP = '__none';
 
 // Status -> Pill tone. `connecting` and `pending` both mean "not reporting
 // yet" but for different reasons (handshake in flight vs agent never
@@ -135,6 +143,7 @@ const meterColumn = (key, header, metricKey) => ({
     header,
     sortable: true,
     sortValue: (server) => (isLive(server) ? clamp(server.metrics?.[metricKey]) : null),
+    width: '108px',
     className: 'servers-table__meter',
     cellClassName: 'servers-table__meter',
     render: (server) => {
@@ -142,7 +151,7 @@ const meterColumn = (key, header, metricKey) => ({
         const value = clamp(server.metrics?.[metricKey]);
         return (
             <>
-                <div className="sk-cell-mono">{value.toFixed(0)}%</div>
+                <div className="sk-cell-dim">{value.toFixed(0)}%</div>
                 <Gauge value={value} />
             </>
         );
@@ -183,8 +192,11 @@ const SERVER_COLUMNS = [
     {
         key: 'agent',
         headerKey: 'app.servers.agent', header: 'Agent',
-        cellClassName: 'sk-cell-mono servers-row__agent',
-        render: (server) => server.agent_version || 'not installed',
+        cellClassName: 'sk-cell-dim servers-row__agent',
+        // The version is a machine value; the "not installed" fallback is words.
+        render: (server) => (server.agent_version
+            ? <span className="mono">{server.agent_version}</span>
+            : 'not installed'),
     },
     {
         key: 'group',
@@ -226,7 +238,7 @@ const SERVER_COLUMNS = [
         headerKey: 'app.servers.lastSeen', header: 'Last seen',
         sortable: true,
         sortValue: (server) => (server.last_seen ? new Date(server.last_seen).getTime() : null),
-        cellClassName: 'sk-cell-mono servers-row__seen',
+        cellClassName: 'sk-cell-dim servers-row__seen',
         render: (server) => formatLastSeen(server.last_seen),
     },
     {
@@ -249,6 +261,7 @@ const Servers = () => {
     const [servers, setServers] = useState([]);
     const [groups, setGroups] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [showAddModal, setShowAddModal] = useState(false);
     // Quick-create deep link: /servers?focus=create:server opens the add modal.
     useFocusParam('create', () => setShowAddModal(true));
@@ -291,19 +304,26 @@ const Servers = () => {
     const loadData = useCallback(async () => {
         setLoading(true);
         try {
-            const [serversData, groupsData] = await Promise.all([
+            // Settled separately: failing groups must not hide the servers.
+            const [serversRes, groupsRes] = await Promise.allSettled([
                 api.getServers(),
                 api.getServerGroups(),
             ]);
-            setServers(Array.isArray(serversData) ? serversData : []);
-            setGroups(Array.isArray(groupsData) ? groupsData : []);
-        } catch (err) {
-            console.error('Failed to load servers:', err);
-            toast.error(t('app.servers.failedToLoadServers', 'Failed to load servers'));
+            if (serversRes.status === 'fulfilled') {
+                setServers(Array.isArray(serversRes.value) ? serversRes.value : []);
+            }
+            if (groupsRes.status === 'fulfilled') {
+                setGroups(Array.isArray(groupsRes.value) ? groupsRes.value : []);
+            }
+            setLoadError(
+                (serversRes.status === 'rejected' && serversRes.reason)
+                || (groupsRes.status === 'rejected' && groupsRes.reason)
+                || null,
+            );
         } finally {
             setLoading(false);
         }
-    }, [t, toast]);
+    }, []);
 
     useEffect(() => {
         loadData();
@@ -389,12 +409,22 @@ const Servers = () => {
 
             <GridChips {...chrome.chipProps} />
 
-            {filteredServers.length === 0 ? (
+            {loadError && servers.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={loadData} />
+            )}
+
+            {loadError && servers.length === 0 ? (
+                <ErrorState
+                    title={t('app.servers.couldntLoadServers', "Couldn't load servers.")}
+                    error={loadError}
+                    onRetry={loadData}
+                />
+            ) : filteredServers.length === 0 ? (
                 <EmptyState
                     icon={ServerLucideIcon}
                     title={servers.length === 0 ? t('app.servers.noServersYet', 'No servers yet') : t('app.servers.noServersMatchTheseFilters', 'No servers match these filters')}
                     description={servers.length === 0
-                        ? t('app.servers.pairAnAgentAndTheMachine', 'Pair an agent and the machine shows up here with its CPU, memory and disk alongside every other box you run.')
+                        ? t('app.servers.pairAnAgentAndTheMachine', 'Pair an agent and the server shows up here with its CPU, memory and disk alongside every other server you run.')
                         : t('app.servers.adjustTheSearchOrClearThe', 'Adjust the search or clear the column filters to see your servers.')}
                     action={servers.length === 0 ? (
                         <Button onClick={() => setShowAddModal(true)}>
@@ -436,8 +466,6 @@ const Servers = () => {
                     keyboardNav
                     onRowClick={(server) => navigate(`/servers/${server.id}`)}
                     rowClassName="servers-row"
-                    className="servers-card"
-                    tableClassName="servers-table"
                     footer={(
                         <DataTableFooter
                             shown={chrome.shownCount}
@@ -455,13 +483,11 @@ const Servers = () => {
                 <div className="sk-bulkbar" role="status">
                     <span className="sk-bulkbar__count">{selectedIds.size} selected</span>
                     <div className="sk-bulkbar__actions">
-                        <select
-                            className="sk-listhead__select"
-                            defaultValue=""
+                        {/* An action, not a setting: the trigger always reads "Set group…". */}
+                        <Select
+                            value=""
                             disabled={bulkBusy}
-                            aria-label={t('app.servers.setGroupForSelectedServers', 'Set group for selected servers')}
-                            onChange={async (e) => {
-                                const groupId = e.target.value;
+                            onValueChange={async (groupId) => {
                                 if (!groupId) return;
                                 setBulkBusy(true);
                                 try {
@@ -471,21 +497,27 @@ const Servers = () => {
                                     const groupName = groupId === 'none'
                                         ? 'Ungrouped'
                                         : groups.find((g) => String(g.id) === groupId)?.name;
-                                    toast.success(t('app.servers.movedServerSTo', 'Moved {{size}} server(s) to {{groupName}}', { size: selectedIds.size, groupName: groupName }));
+                                    toast.success(t('app.servers.movedServersTo', { count: selectedIds.size, groupName: groupName, defaultValue_one: 'Moved 1 server to {{groupName}}', defaultValue_other: 'Moved {{count}} servers to {{groupName}}' }));
                                     setSelectedIds(new Set());
                                     loadData();
                                 } catch (err) {
-                                    toast.error(err.message || t('app.servers.couldNotSetTheGroup', 'Could not set the group'));
+                                    toastError(toast, t('app.servers.couldNotSetTheGroup', "Couldn't set the group."), err);
                                 } finally {
                                     setBulkBusy(false);
-                                    e.target.value = '';
                                 }
                             }}
                         >
-                            <option value="" disabled>{t('app.servers.setGroup', 'Set group…')}</option>
-                            {groups.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
-                            <option value="none">{t('app.servers.ungrouped', 'Ungrouped')}</option>
-                        </select>
+                            <SelectTrigger
+                                className="servers-bulk-group"
+                                aria-label={t('app.servers.setGroupForSelectedServers', 'Set group for selected servers')}
+                            >
+                                <SelectValue placeholder={t('app.servers.setGroup', 'Set group…')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {groups.map((g) => <SelectItem key={g.id} value={String(g.id)}>{g.name}</SelectItem>)}
+                                <SelectItem value="none">{t('app.servers.ungrouped', 'Ungrouped')}</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <Button variant="unstyled"
                         type="button"
@@ -587,7 +619,7 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
                 group_id: groupId || undefined,
                 trust_fingerprint: true
             });
-            toast.success(t('app.servers.agentPairedSuccessfully', 'Agent paired successfully'));
+            toast.success(t('app.servers.agentPairedSuccessfully', 'Agent paired'));
             window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
                 detail: { type: 'server-paired' },
             }));
@@ -616,7 +648,7 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
             <div className="server-setup-form__body">
                 <div className="pair-instructions">
                     <p>
-                        {t('app.servers.onTheTargetMachineStartThe', 'On the target machine, start the agent. It will display a 6-character pair code and a passphrase — enter both below.')}
+                        {t('app.servers.onTheTargetMachineStartThe', 'On the target server, start the agent. It will display a 6-character pair code and a passphrase. Enter both below.')}
                     </p>
                 </div>
 
@@ -685,13 +717,19 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
                         <span className="form-hint">{t('app.servers.leaveBlankToUseTheAgent', 'Leave blank to use the agent\'s hostname.')}</span>
                     </div>
                     <div className="form-group">
-                        <label>{t('app.servers.group', 'Group')}</label>
-                        <select value={groupId} onChange={(e) => setGroupId(e.target.value)}>
-                            <option value="">{t('app.servers.noGroup', 'No Group')}</option>
-                            {groups.map(g => (
-                                <option key={g.id} value={g.id}>{g.name}</option>
-                            ))}
-                        </select>
+                        <label htmlFor="pair-group">{t('app.servers.group', 'Group')}</label>
+                        <Select
+                            value={groupId === '' ? NO_GROUP : String(groupId)}
+                            onValueChange={(v) => setGroupId(v === NO_GROUP ? '' : v)}
+                        >
+                            <SelectTrigger id="pair-group"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={NO_GROUP}>{t('app.servers.noGroup', 'No group')}</SelectItem>
+                                {groups.map(g => (
+                                    <SelectItem key={g.id} value={String(g.id)}>{g.name}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
 
@@ -703,7 +741,7 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
                     {t('common.actions.cancel', 'Cancel')}
                 </Button>
                 <Button type="submit" disabled={loading || formattedCode.length !== 6}>
-                    {loading ? 'Pairing…' : 'Pair Agent'}
+                    {loading ? t('app.servers.pairing', 'Pairing…') : t('app.servers.pairAgentAction', 'Pair agent')}
                 </Button>
             </div>
         </form>
@@ -733,7 +771,6 @@ const AddServerModal = ({ groups, onClose, onCreated }) => {
     const [registrationData, setRegistrationData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const { copy } = useClipboard();
 
     async function handleCreateServer(e) {
         e.preventDefault();
@@ -843,29 +880,38 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                             {error && <div className="error-message">{error}</div>}
 
                             <p className="section-description">
-                                {t('app.servers.generateASingleConnectionStringPaste', 'Generate a single connection string. Paste it into the agent\'s pairing wizard, or use it with the one-liner installer. The agent\'s hostname becomes the server name on first connect — you can rename it later from the server\'s Settings tab.')}
+                                {t('app.servers.generateASingleConnectionStringPaste', "Generate a single connection string. Paste it into the agent's pairing wizard, or use it with the one-liner installer. The agent's hostname becomes the server name on first connect; you can rename it later from the server's Settings tab.")}
                             </p>
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>{t('app.servers.group', 'Group')}</label>
-                                    <select value={groupId} onChange={(e) => setGroupId(e.target.value)}>
-                                        <option value="">{t('app.servers.noGroup', 'No Group')}</option>
-                                        {groups.map(group => (
-                                            <option key={group.id} value={group.id}>{group.name}</option>
-                                        ))}
-                                    </select>
+                                    <label htmlFor="add-server-group">{t('app.servers.group', 'Group')}</label>
+                                    <Select
+                                        value={groupId === '' ? NO_GROUP : String(groupId)}
+                                        onValueChange={(v) => setGroupId(v === NO_GROUP ? '' : v)}
+                                    >
+                                        <SelectTrigger id="add-server-group"><SelectValue /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value={NO_GROUP}>{t('app.servers.noGroup', 'No group')}</SelectItem>
+                                            {groups.map(group => (
+                                                <SelectItem key={group.id} value={String(group.id)}>{group.name}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                                 <div className="form-group">
-                                    <label>{t('app.servers.tokenExpires', 'Token expires')}</label>
-                                    <select
-                                        value={expiresIn}
-                                        onChange={(e) => setExpiresIn(Number(e.target.value))}
+                                    <label htmlFor="add-server-expiry">{t('app.servers.tokenExpires', 'Token expires')}</label>
+                                    <Select
+                                        value={String(expiresIn)}
+                                        onValueChange={(v) => setExpiresIn(Number(v))}
                                     >
-                                        {EXPIRY_OPTIONS.map(opt => (
-                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                        ))}
-                                    </select>
+                                        <SelectTrigger id="add-server-expiry"><SelectValue /></SelectTrigger>
+                                        <SelectContent>
+                                            {EXPIRY_OPTIONS.map(opt => (
+                                                <SelectItem key={opt.value} value={String(opt.value)}>{opt.label}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                     <span className="form-hint">{t('app.servers.singleUseBurnedTheMomentAn', 'Single-use. Burned the moment an agent registers with it.')}</span>
                                 </div>
                             </div>
@@ -876,7 +922,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                                 {t('common.actions.cancel', 'Cancel')}
                             </Button>
                             <Button type="submit" disabled={loading}>
-                                {loading ? 'Generating…' : 'Generate Connection String'}
+                                {loading ? t('app.servers.generating', 'Generating…') : t('app.servers.generateConnectionString', 'Generate connection string')}
                             </Button>
                         </div>
                     </form>
@@ -891,32 +937,31 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                                 </div>
                             </div>
 
-                            <ConnectionStringField
-                                value={connectionString}
-                                onCopy={() => {
-                                    copy(connectionString);
-                                    window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
-                                        detail: { type: 'server-connection-string-copied' },
-                                    }));
-                                }}
-                            />
+                            <div className="server-connection-string" data-walkthrough="server-connection-string">
+                                <CopyField
+                                    label={t('app.servers.connectionString', 'Connection string')}
+                                    value={connectionString}
+                                    multiline
+                                    onCopy={() => {
+                                        window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
+                                            detail: { type: 'server-connection-string-copied' },
+                                        }));
+                                    }}
+                                />
+                            </div>
 
                             <details className="install-fallback">
                                 <summary>{t('app.servers.needToInstallTheAgentFirst', 'Need to install the agent first? Use the one-liner installer.')}</summary>
                                 <div className="install-tabs install-tabs--after-summary">
-                                    <InstallTab
-                                        title={t('app.servers.linux', 'Linux')}
-                                        description={t('app.servers.curlTarSudoAndSystemd', 'curl, tar, sudo, and systemd')}
-                                        icon={<TerminalIcon />}
-                                        script={linuxInstallScript}
-                                        onCopy={() => copy(linuxInstallScript)}
+                                    <CopyField
+                                        label={`${t('app.servers.linux', 'Linux')} · ${t('app.servers.curlTarSudoAndSystemd', 'curl, tar, sudo, and systemd')}`}
+                                        value={linuxInstallScript}
+                                        multiline
                                     />
-                                    <InstallTab
-                                        title={t('app.servers.windowsPowershell', 'Windows (PowerShell)')}
-                                        description={t('app.servers.runAsAdministrator', 'Run as Administrator')}
-                                        icon={<WindowsIcon />}
-                                        script={windowsInstallScript}
-                                        onCopy={() => copy(windowsInstallScript)}
+                                    <CopyField
+                                        label={`${t('app.servers.windowsPowershell', 'Windows (PowerShell)')} · ${t('app.servers.runAsAdministrator', 'Run as administrator')}`}
+                                        value={windowsInstallScript}
+                                        multiline
                                     />
                                 </div>
                             </details>
@@ -924,7 +969,7 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                             <div className="install-info">
                                 <h4>{t('app.servers.whatHappensNext', 'What happens next?')}</h4>
                                 <ol>
-                                    <li>{t('app.servers.openTheAgentOnYourTarget', 'Open the agent on your target machine and paste the connection string.')}</li>
+                                    <li>{t('app.servers.openTheAgentOnYourTarget', 'Open the agent on your target server and paste the connection string.')}</li>
                                     <li>{t('app.servers.theAgentRegistersAutomaticallyAndReports', 'The agent registers automatically and reports its hostname back as the server name.')}</li>
                                     <li>{t('app.servers.theRowInThisListWill', 'The row in this list will switch from')} <strong>{t('app.servers.pending', 'Pending')}</strong> to <strong>{t('app.servers.online', 'Online')}</strong>.</li>
                                 </ol>
@@ -942,41 +987,6 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                     </div>
                 )}
         </Drawer>
-    );
-};
-
-const ConnectionStringField = ({ value, onCopy }) => {
-    const { t } = useTranslation();
-    return (
-        <div className="connection-string-field" data-walkthrough="server-connection-string">
-            <div className="connection-string-field__header">
-                <KeyIcon />
-                <span>{t('app.servers.connectionString', 'Connection string')}</span>
-                <Button variant="outline" size="sm" onClick={onCopy}>
-                    <CopyIcon /> {t('common.actions.copy', 'Copy')}
-                </Button>
-            </div>
-            <pre className="connection-string-field__value">{value}</pre>
-        </div>
-    );
-};
-
-const InstallTab = ({ title, description, icon, script, onCopy }) => {
-    const { t } = useTranslation();
-    return (
-        <div className="install-tab">
-            <div className="install-tab-header">
-                {icon}
-                <div className="install-tab-title">
-                    <span>{title}</span>
-                    {description && <span className="install-tab-description">{description}</span>}
-                </div>
-                <Button variant="outline" size="sm" onClick={onCopy}>
-                    <CopyIcon /> {t('common.actions.copy', 'Copy')}
-                </Button>
-            </div>
-            <pre className="install-script">{script}</pre>
-        </div>
     );
 };
 
@@ -1002,7 +1012,7 @@ const ManageGroupsModal = ({ groups, onClose, onUpdated }) => {
             const data = await api.getServerGroups();
             setGroupList(Array.isArray(data) ? data : []);
         } catch (err) {
-            toast.error(err.message || t('app.servers.failedToCreateGroup', 'Failed to create group'));
+            toastError(toast, t('app.servers.failedToCreateGroup', "Couldn't create the group."), err);
         } finally {
             setLoading(false);
         }
@@ -1017,7 +1027,7 @@ const ManageGroupsModal = ({ groups, onClose, onUpdated }) => {
             const data = await api.getServerGroups();
             setGroupList(Array.isArray(data) ? data : []);
         } catch (err) {
-            toast.error(err.message || t('app.servers.failedToUpdateGroup', 'Failed to update group'));
+            toastError(toast, t('app.servers.failedToUpdateGroup', "Couldn't update the group."), err);
         }
     }
 
@@ -1035,12 +1045,12 @@ const ManageGroupsModal = ({ groups, onClose, onUpdated }) => {
             const data = await api.getServerGroups();
             setGroupList(Array.isArray(data) ? data : []);
         } catch (err) {
-            toast.error(err.message || t('app.servers.failedToDeleteGroup', 'Failed to delete group'));
+            toastError(toast, t('app.servers.failedToDeleteGroup', "Couldn't delete the group."), err);
         }
     }
 
     return (
-        <Modal open onClose={onClose} title={t('app.servers.manageServerGroups', 'Manage Server Groups')}>
+        <Modal open onClose={onClose} title={t('app.servers.manageServerGroups', 'Manage server groups')}>
                 <form onSubmit={handleCreateGroup} className="group-form">
                     <Input
                         type="text"
@@ -1129,26 +1139,6 @@ const CheckCircleIcon = () => (
     </svg>
 );
 
-const TerminalIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <polyline points="4 17 10 11 4 5"/>
-        <line x1="12" y1="19" x2="20" y2="19"/>
-    </svg>
-);
-
-const WindowsIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
-    </svg>
-);
-
-const CopyIcon = () => (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-    </svg>
-);
-
 const EditIcon = () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -1160,12 +1150,6 @@ const TrashIcon = () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <polyline points="3 6 5 6 21 6"/>
         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-    </svg>
-);
-
-const KeyIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
     </svg>
 );
 

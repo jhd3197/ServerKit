@@ -11,7 +11,7 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import EmptyState from '../EmptyState';
-import { copyToClipboard } from '@/utils/clipboard';
+import { CopyButton } from '../CopyButton';
 import { useTranslation } from 'react-i18next';
 import useFocusParam from '@/hooks/useFocusParam';
 import useFormat from '@/hooks/useFormat';
@@ -72,7 +72,6 @@ const InvitationsTab = () => {
     const [invitations, setInvitations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showInviteModal, setShowInviteModal] = useState(false);
-    const [copied, setCopied] = useState(null);
     const [error, setError] = useState('');
     const [pendingId, setPendingId] = useState(null);
     const actionInFlight = useRef(false);
@@ -99,7 +98,7 @@ const InvitationsTab = () => {
             setInvitations(data.invitations || []);
             setError('');
         } catch (err) {
-            setError(err.message || t('app.invitationsTab.loadFailed', 'Failed to load invitations'));
+            setError(err.message || t('app.invitationsTab.loadFailed', "Couldn't load invitations."));
         } finally {
             setLoading(false);
         }
@@ -115,7 +114,7 @@ const InvitationsTab = () => {
             await api.revokeInvitation(id);
             await loadInvitations();
         } catch (err) {
-            setError(err.message || t('app.invitationsTab.revokeFailed', 'Failed to revoke invitation'));
+            setError(err.message || t('app.invitationsTab.revokeFailed', "Couldn't revoke the invitation."));
         } finally {
             actionInFlight.current = false;
             setPendingId(null);
@@ -130,18 +129,15 @@ const InvitationsTab = () => {
             await api.resendInvitation(id);
             setError('');
         } catch (err) {
-            setError(err.message || t('app.invitationsTab.resendFailed', 'Failed to resend invitation'));
+            setError(err.message || t('app.invitationsTab.resendFailed', "Couldn't resend the invitation."));
         } finally {
             actionInFlight.current = false;
             setPendingId(null);
         }
     }
 
-    async function copyLink(token) {
-        const url = `${window.location.origin}/register?invite=${token}`;
-        if (!await copyToClipboard(url)) return;
-        setCopied(token);
-        setTimeout(() => setCopied(null), 2000);
+    function inviteUrl(token) {
+        return `${window.location.origin}/register?invite=${token}`;
     }
 
     function formatDate(dateString) {
@@ -241,14 +237,15 @@ const InvitationsTab = () => {
             render: (inv) => (
                 inv.status === 'pending' && !inv.is_expired && (
                     <>
-                        <Button
+                        <CopyButton
+                            value={inviteUrl(inv.token)}
                             variant="ghost"
                             size="sm"
-                            onClick={() => copyLink(inv.token)}
-                            title={t('app.invitationsTab.copyInviteLink', 'Copy invite link')}
+                            label={t('app.invitationsTab.copyInviteLink', 'Copy invite link')}
+                            copiedLabel={t('app.copyField.copied', 'Copied')}
                         >
-                            {copied === inv.token ? 'Copied!' : 'Copy Link'}
-                        </Button>
+                            {t('app.invitationsTab.copyLink', 'Copy link')}
+                        </CopyButton>
                         {inv.email && (
                             <Button
                                 variant="ghost"
@@ -316,7 +313,7 @@ const InvitationsTab = () => {
                                 <line x1="20" y1="8" x2="20" y2="14"/>
                                 <line x1="23" y1="11" x2="17" y2="11"/>
                             </svg>
-                            {t('app.invitationsTab.inviteUser', 'Invite User')}
+                            {t('app.invitationsTab.inviteUser', 'Invite user')}
                         </Button>
                         <GridFilterButton
                             count={chrome.filterCount}
@@ -336,17 +333,15 @@ const InvitationsTab = () => {
             ) : invitations.length === 0 && !error ? (
                 <EmptyState title={t('app.invitationsTab.noInvitationsYet', 'No invitations yet')} />
             ) : (
-                <div className="users-table-container">
-                    <DataTable
-                        columns={chrome.columns}
-                        data={invitations}
-                        keyField="id"
-                        sorts={sorts}
-                        onSortsChange={setSorts}
-                        {...chrome.tableProps}
-                        tableClassName="users-table"
-                    />
-                </div>
+                <DataTable
+                    columns={chrome.columns}
+                    data={invitations}
+                    keyField="id"
+                    sorts={sorts}
+                    onSortsChange={setSorts}
+                    {...chrome.tableProps}
+                    className="users-table-container users-table"
+                />
             )}
 
             {showInviteModal && (

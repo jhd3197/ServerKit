@@ -48,7 +48,7 @@ def _authorize_scope(user, scope_type, scope_id, *, write=False):
             ResourceGrantService.can_access_app(user, application)
         )
         if not allowed:
-            raise PermissionDeniedError('Access denied to application scope')
+            raise PermissionDeniedError("You don't have access to this service")
         return application
 
     _require_developer(user)

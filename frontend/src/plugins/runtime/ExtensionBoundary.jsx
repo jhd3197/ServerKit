@@ -21,7 +21,7 @@ export function ExtensionFailureCard({ slug, title, message }) {
             <div className="sk-ext-failcard__icon" aria-hidden="true">⚠</div>
             <div className="sk-ext-failcard__body">
                 <h2 className="sk-ext-failcard__title">
-                    {title || 'Extension failed to load'}
+                    {title || t('app.extensionBoundary.failedToLoad', "Couldn't load the extension.")}
                 </h2>
                 <p className="sk-ext-failcard__desc">
                     {/* One key with a component slot, not prefix/suffix

@@ -40,7 +40,7 @@ class BootstrapService:
         root = getattr(app, 'root_path', None)
         if not root:
             return {'success': False,
-                    'error': 'app has no deployed compose project to run bootstrap in'}
+                    'error': 'This service has no deployed Compose project to run bootstrap in. Deploy it first.'}
         cmd = ['docker', 'compose', 'run', '--rm', service] + shlex.split(command)
         proc = run_checked(cmd, cwd=root, timeout=timeout_seconds or 300)
         if proc['returncode'] is None:

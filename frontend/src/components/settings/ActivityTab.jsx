@@ -2,6 +2,7 @@ import { useCallback, useState, useEffect  } from 'react';
 import api from '../../services/api';
 import ContributionGraph from './ContributionGraph';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { Search, Filter, X, User as UserIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DataTableFooter } from '@/components/ds';
@@ -16,6 +17,8 @@ const ActivityTab = () => {
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [feedLoading, setFeedLoading] = useState(false);
+    const [summaryError, setSummaryError] = useState(null);
+    const [logsError, setLogsError] = useState(null);
     const [users, setUsers] = useState([]);
     const [actions, setActions] = useState([]);
     const [pagination, setPagination] = useState({
@@ -46,8 +49,9 @@ const ActivityTab = () => {
                 total: data.pagination?.total || 0,
                 pages: data.pagination?.pages || 1
             }));
-        } catch {
-            // Silently handle
+            setLogsError(null);
+        } catch (err) {
+            setLogsError(err);
         } finally {
             setFeedLoading(false);
         }
@@ -61,8 +65,9 @@ const ActivityTab = () => {
         try {
             const data = await api.getActivitySummary();
             setSummary(data);
-        } catch {
-            // Silently handle
+            setSummaryError(null);
+        } catch (err) {
+            setSummaryError(err);
         } finally {
             setLoading(false);
         }
@@ -130,10 +135,18 @@ const ActivityTab = () => {
         <div className="activity-tab">
             <div className="tab-header">
                 <div className="tab-header-content">
-                    <h3>{t('app.activityTab.activityDashboard', 'Activity Dashboard')}</h3>
-                    <p>{t('app.activityTab.monitorTeamActivityAuditActionsAnd', 'Monitor team activity, audit actions, and system events')}</p>
+                    <h3>{t('app.activityTab.activityDashboard', 'Activity dashboard')}</h3>
+                    <p>{t('app.activityTab.monitorTeamActivityAuditActionsAnd', 'Monitor team activity, audit actions, and system events.')}</p>
                 </div>
             </div>
+
+            {summaryError && !summary && (
+                <ErrorState
+                    title={t('app.activityTab.couldntLoadSummary', "Couldn't load activity summary.")}
+                    error={summaryError}
+                    onRetry={loadSummary}
+                />
+            )}
 
             {summary && (
                 <>
@@ -155,12 +168,12 @@ const ActivityTab = () => {
                     <div className="graphs-section">
                         <ContributionGraph
                             data={summary.daily_counts}
-                            title={t('app.activityTab.overallSystemActivity', 'Overall System Activity')}
+                            title={t('app.activityTab.overallSystemActivity', 'Overall system activity')}
                         />
                         {summary.top_user_daily && summary.top_user_daily.length > 0 && summary.top_users?.length > 1 && (
                             <ContributionGraph
                                 data={summary.top_user_daily}
-                                title={t('app.activityTab.mostActiveUserActivity', 'Most Active User Activity')}
+                                title={t('app.activityTab.mostActiveUserActivity', 'Most active user activity')}
                                 username={summary.top_users[0]?.username}
                             />
                         )}
@@ -168,7 +181,7 @@ const ActivityTab = () => {
 
                     {summary.top_users && summary.top_users.length > 0 && (
                         <div className="most-active-users">
-                            <h4>{t('app.activityTab.mostActiveUsersThisWeek', 'Most Active Users (This Week)')}</h4>
+                            <h4>{t('app.activityTab.mostActiveUsersThisWeek', 'Most active users (this week)')}</h4>
                             <div className="active-users-list">
                                 {summary.top_users.map((u, i) => (
                                     <div key={u.user_id} className="active-user-item">
@@ -193,21 +206,21 @@ const ActivityTab = () => {
 
             <div {...register('activity-audit-log', 'activity-feed-section')}>
                 <div className="section-header">
-                    <h4>{t('app.activityTab.auditLog', 'Audit Log')}</h4>
+                    <h4>{t('app.activityTab.auditLog', 'Audit log')}</h4>
                 </div>
 
                 <div className="filters-bar">
                     <div className="filter-group">
-                        <label><Filter size={12} /> {t('app.activityTab.actionType', 'Action Type')}</label>
+                        <label><Filter size={12} /> {t('app.activityTab.actionType', 'Action type')}</label>
                         <Select
                             value={filters.action || '__all__'}
                             onValueChange={(val) => handleFilterChange('action', val === '__all__' ? '' : val)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder={t('app.activityTab.allActions', 'All Actions')} />
+                                <SelectValue placeholder={t('app.activityTab.allActions', 'All actions')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="__all__">{t('app.activityTab.allActions', 'All Actions')}</SelectItem>
+                                <SelectItem value="__all__">{t('app.activityTab.allActions', 'All actions')}</SelectItem>
                                 {actions.map(action => (
                                     <SelectItem key={action} value={action}>{formatActionName(action)}</SelectItem>
                                 ))}
@@ -221,10 +234,10 @@ const ActivityTab = () => {
                             onValueChange={(val) => handleFilterChange('user_id', val === '__all__' ? '' : val)}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder={t('app.activityTab.allUsers', 'All Users')} />
+                                <SelectValue placeholder={t('app.activityTab.allUsers', 'All users')} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="__all__">{t('app.activityTab.allUsers', 'All Users')}</SelectItem>
+                                <SelectItem value="__all__">{t('app.activityTab.allUsers', 'All users')}</SelectItem>
                                 {users.map(u => (
                                     <SelectItem key={u.id} value={String(u.id)}>{u.username}</SelectItem>
                                 ))}
@@ -250,9 +263,17 @@ const ActivityTab = () => {
                         <div className="spinner" />
                         {t('app.activityTab.loadingLogs', 'Loading logs…')}
                     </div>
+                ) : logsError && logs.length === 0 ? (
+                    <ErrorState
+                        title={t('app.activityTab.couldntLoadAuditLogs', "Couldn't load audit logs.")}
+                        error={logsError}
+                        onRetry={loadLogs}
+                    />
                 ) : logs.length === 0 ? (
                     <EmptyState icon={Search} title={t('app.activityTab.noAuditLogsFound', 'No audit logs found')} />
                 ) : (
+                    <>
+                    {logsError && <ErrorState compact error={logsError} onRetry={loadLogs} />}
                     <div className="audit-log-list" role="list">
                         {logs.map(log => (
                             <div key={log.id} className={`log-row ${getActionClass(log.action)}`} role="listitem">
@@ -274,6 +295,7 @@ const ActivityTab = () => {
                             </div>
                         ))}
                     </div>
+                    </>
                 )}
 
                 {/* The audit feed is a flex-wrapped log-row layout, not a

@@ -56,7 +56,7 @@ const UserModal = ({ user, onSave, onClose }) => {
     }
 
     return (
-        <Modal open={true} onClose={onClose} title={isEditing ? t('app.userModal.editUser', 'Edit User') : t('app.userModal.addNewUser', 'Add New User')} size="md">
+        <Modal open={true} onClose={onClose} title={isEditing ? t('app.userModal.editUser', 'Edit user') : t('app.userModal.addNewUser', 'New user')} size="md">
                 <form onSubmit={form.handleSubmit}>
                     <div className="modal-body">
                         {form.submitError && <div className="error-message" role="alert">{form.submitError}</div>}
@@ -83,7 +83,7 @@ const UserModal = ({ user, onSave, onClose }) => {
 
                         <FormRow>
                             <FormField
-                                label={isEditing ? t('app.userModal.newPasswordLeaveBlankToKeep', 'New Password (leave blank to keep current)') : t('common.labels.password', 'Password')}
+                                label={isEditing ? t('app.userModal.newPasswordLeaveBlankToKeep', 'New password (leave blank to keep current)') : t('common.labels.password', 'Password')}
                                 htmlFor="password"
                                 required={!isEditing}
                                 error={form.getFieldError('password')}
@@ -98,7 +98,7 @@ const UserModal = ({ user, onSave, onClose }) => {
                             </FormField>
 
                             <FormField
-                                label={t('app.userModal.confirmPassword', 'Confirm Password')}
+                                label={t('app.userModal.confirmPassword', 'Confirm password')}
                                 htmlFor="confirmPassword"
                                 required={Boolean(form.values.password)}
                                 error={form.getFieldError('confirmPassword')}
@@ -124,9 +124,9 @@ const UserModal = ({ user, onSave, onClose }) => {
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="admin">{t('app.userModal.adminFullAccess', 'Admin - Full access')}</SelectItem>
-                                    <SelectItem value="developer">{t('app.userModal.developerManageAppsAndDeployments', 'Developer - Manage apps and deployments')}</SelectItem>
-                                    <SelectItem value="viewer">{t('app.userModal.viewerReadOnlyAccess', 'Viewer - Read-only access')}</SelectItem>
+                                    <SelectItem value="admin">{t('app.userModal.adminFullAccess', 'Admin - full access')}</SelectItem>
+                                    <SelectItem value="developer">{t('app.userModal.developerManageAppsAndDeployments', 'Developer - manage services and deployments')}</SelectItem>
+                                    <SelectItem value="viewer">{t('app.userModal.viewerReadOnlyAccess', 'Viewer - read-only access')}</SelectItem>
                                 </SelectContent>
                             </Select>
                             {isSelf && (
@@ -150,14 +150,14 @@ const UserModal = ({ user, onSave, onClose }) => {
                         </div>
 
                         <div className="role-descriptions">
-                            <h4>{t('app.userModal.rolePermissions', 'Role Permissions')}</h4>
+                            <h4>{t('app.userModal.rolePermissions', 'Role permissions')}</h4>
                             <div className="role-item">
                                 <span className="role-name">{t('app.userModal.admin', 'Admin')}</span>
                                 <span className="role-desc">{t('app.userModal.fullSystemAccessIncludingUserManagement', 'Full system access including user management and settings')}</span>
                             </div>
                             <div className="role-item">
                                 <span className="role-name">{t('app.userModal.developer', 'Developer')}</span>
-                                <span className="role-desc">{t('app.userModal.manageApplicationsDeploymentsDatabasesAndDomains', 'Manage applications, deployments, databases, and domains')}</span>
+                                <span className="role-desc">{t('app.userModal.manageApplicationsDeploymentsDatabasesAndDomains', 'Manage services, deployments, databases, and domains')}</span>
                             </div>
                             <div className="role-item">
                                 <span className="role-name">{t('app.userModal.viewer', 'Viewer')}</span>
@@ -178,7 +178,7 @@ const UserModal = ({ user, onSave, onClose }) => {
                                         setShowPermissions(!showPermissions);
                                     }}
                                 >
-                                    {showPermissions ? 'Hide' : 'Customize'} {t('common.labels.permissions', 'Permissions')}
+                                    {showPermissions ? t('app.userModal.hide', 'Hide') : t('app.userModal.customize', 'Customize')} {t('common.labels.permissions', 'Permissions')}
                                     <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" strokeWidth="2">
                                         {showPermissions
                                             ? <polyline points="18 15 12 9 6 15"/>
@@ -201,7 +201,7 @@ const UserModal = ({ user, onSave, onClose }) => {
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
                         <Button type="submit" variant="default" disabled={form.isSubmitting}>
-                            {form.isSubmitting ? 'Saving...' : (isEditing ? 'Save Changes' : 'Create User')}
+                            {form.isSubmitting ? t('common.saving', 'Saving…') : (isEditing ? t('app.userModal.saveChanges', 'Save changes') : t('app.userModal.createUser', 'Create user'))}
                         </Button>
                     </div>
                 </form>

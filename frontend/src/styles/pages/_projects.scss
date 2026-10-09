@@ -29,19 +29,16 @@
     display: flex;
     flex-direction: column;
     gap: $space-3;
-    padding: $space-5;
+    padding: $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     text-decoration: none;
     color: inherit;
-    transition: border-color $transition-fast, transform $transition-fast,
-        box-shadow $transition-fast;
+    transition: border-color $transition-fast;
 
     &:hover {
         border-color: $border-active;
-        transform: translateY(-2px);
-        box-shadow: $shadow-md;
     }
 
     &__header {
@@ -55,8 +52,8 @@
         align-items: center;
         justify-content: center;
         width: 38px;
-        height: 38px;
-        border-radius: $radius-md;
+        height: 38px; // geometry: icon tile
+        border-radius: $radius-control;
         background: $bg-hover;
         color: $accent-primary;
         flex-shrink: 0;
@@ -68,7 +65,7 @@
 
     &__name {
         margin: 0;
-        font-size: $font-size-md;
+        font-size: $text-md;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         overflow: hidden;
@@ -78,14 +75,14 @@
 
     &__slug {
         display: block;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-family: $font-mono;
     }
 
     &__description {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: 1.5;
         display: -webkit-box;
@@ -105,7 +102,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
 
         svg {
@@ -152,7 +149,7 @@
 
     &__description {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         max-width: 70ch;
     }
@@ -168,24 +165,22 @@
     padding: $space-2 $space-3;
     background: $bg-elevated;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     &__label {
         color: $text-secondary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
     }
 
     &__pill {
         display: inline-flex;
         align-items: center;
-        min-height: 20px;
-        padding: 0 10px;
-        border-radius: $radius-full;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-semibold;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         text-transform: capitalize;
         background: $bg-card;
         color: $text-secondary;
@@ -198,7 +193,7 @@
 
     &__source {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-family: $font-mono;
         overflow-wrap: anywhere;
     }
@@ -219,7 +214,7 @@
     padding: $space-1 $space-2 $space-1 $space-3;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     transition: border-color $transition-fast, background $transition-fast;
 
     &.is-active {
@@ -234,7 +229,7 @@
         background: none;
         border: none;
         cursor: pointer;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
         padding: 0;
@@ -245,30 +240,30 @@
         align-items: center;
         justify-content: center;
         min-width: 20px;
-        height: 20px;
-        padding: 0 6px;
-        border-radius: 999px;
+        height: 20px; // geometry: counter badge height (20px badge spec)
+        padding: 0 $space-tight;
+        border-radius: $radius-full;
         background: $bg-hover;
         color: $text-secondary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 
     &__controls {
         display: inline-flex;
         align-items: center;
-        gap: 2px;
+        gap: $space-hair;
         margin-left: $space-1;
 
         button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 22px;
-            height: 22px;
+            width: $control-sm;
+            height: $control-sm;
             background: none;
             border: none;
-            border-radius: $radius-sm;
+            border-radius: $radius-control;
             color: $text-tertiary;
             cursor: pointer;
             transition: background $transition-fast, color $transition-fast;
@@ -302,13 +297,13 @@
 
         h2 {
             margin: 0;
-            font-size: $font-size-lg;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             color: $text-primary;
         }
 
         span {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }
@@ -328,13 +323,13 @@
 
         h3 {
             margin: 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: $text-secondary;
         }
 
         span {
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }
@@ -356,7 +351,7 @@
     padding: $space-3 $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     &__status {
         width: 8px;
@@ -380,9 +375,8 @@
     }
 
     &__type {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
-        font-family: $font-mono;
     }
 
     &__link {
@@ -398,10 +392,10 @@
 .project-detail-page .status-pill {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 2px 10px;
-    border-radius: 999px;
-    font-size: $font-size-xs;
+    gap: $space-tight;
+    padding: $space-hair $space-3;
+    border-radius: $radius-full;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     text-transform: capitalize;
     background: $bg-hover;

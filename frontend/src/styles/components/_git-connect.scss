@@ -32,8 +32,8 @@
         justify-content: center;
         flex-shrink: 0;
         width: 38px;
-        height: 38px;
-        border-radius: $radius-lg;
+        height: 38px; // geometry: icon tile
+        border-radius: $radius-card;
         @include status-variant(var(--accent-bright), var(--accent-bg));
     }
 
@@ -41,15 +41,15 @@
         strong {
             display: block;
             color: $text-primary;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
         }
 
         span {
             display: block;
-            margin-top: 2px;
+            margin-top: $space-hair;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.5;
         }
     }
@@ -94,8 +94,8 @@
         align-items: center;
         justify-content: center;
         width: 30px;
-        height: 30px;
-        border-radius: $radius-md;
+        height: 30px; // geometry: icon tile
+        border-radius: $radius-control;
         background: var(--surface-2);
         color: var(--text-dim);
         transition: background $transition-fast, color $transition-fast;
@@ -106,13 +106,13 @@
 
     &__provider-label {
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 
     &__provider-hint {
         color: var(--text-faint);
-        font-size: 11.5px;
+        font-size: $text-xs;
         line-height: 1.4;
     }
 
@@ -120,14 +120,14 @@
     &__detected {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
         width: max-content;
         margin-top: $space-1;
-        padding: 3px $space-2;
+        padding: $space-1 $space-2;
         border: 1px solid var(--accent-dim);
         border-radius: $radius-full;
         @include status-variant(var(--accent-bright), var(--accent-bg));
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         line-height: 1;
     }
@@ -138,14 +138,14 @@
 
         label {
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
         }
     }
 
     &__field-hint {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.45;
     }
 
@@ -157,7 +157,7 @@
         padding: $space-3;
         background: var(--surface);
         border: 1px solid var(--border-soft);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         strong,
         span {
@@ -166,14 +166,14 @@
 
         strong {
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
         }
 
         span {
-            margin-top: 2px;
+            margin-top: $space-hair;
             color: $text-tertiary;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.4;
         }
     }
@@ -185,11 +185,11 @@
         align-items: center;
         justify-content: space-between;
         gap: $space-3;
-        min-height: 44px;
+        min-height: $control-md;
         padding: 0 $space-3;
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-secondary;
         cursor: pointer;
         transition: border-color $transition-fast, background $transition-fast;
@@ -203,7 +203,7 @@
             display: flex;
             align-items: center;
             gap: $space-2;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
         }
 
@@ -257,8 +257,8 @@
         justify-content: center;
         flex-shrink: 0;
         width: 38px;
-        height: 38px;
-        border-radius: $radius-lg;
+        height: 38px; // geometry: icon tile
+        border-radius: $radius-card;
         @include status-variant(var(--green), var(--green-bg));
     }
 
@@ -268,14 +268,14 @@
         strong {
             display: block;
             color: $text-primary;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
         }
     }
 
     &__url {
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--accent-bright);
         text-decoration: none;
         overflow-wrap: anywhere;
@@ -292,28 +292,25 @@
         padding: $space-4;
         background: var(--surface-2);
         border: 1px solid var(--border-soft);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__meta-item {
         span {
             display: block;
-            margin-bottom: 3px;
-            font-family: var(--mono);
-            font-size: 10.5px;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+            margin-bottom: $space-1;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
 
         strong {
             color: $text-primary;
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-normal;
 
             &.mono {
                 font-family: var(--mono);
-                font-size: 12px;
+                font-size: $text-xs;
             }
         }
     }
@@ -332,9 +329,7 @@
     align-items: center;
     gap: $space-3;
     color: var(--text-faint);
-    font-size: 11.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-size: $text-xs;
 
     &::before,
     &::after {
@@ -353,9 +348,9 @@
     &--hint {
         display: flex;
         align-items: center;
-        gap: 9px;
-        padding: 11px 13px;
-        font-size: 12.5px;
+        gap: $space-2;
+        padding: $space-3 $space-3;
+        font-size: $text-sm;
         color: var(--text-dim);
 
         a { color: var(--accent-bright); }
@@ -365,8 +360,8 @@
     &--connect {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 14px 15px;
+        gap: $space-3;
+        padding: $space-4 $space-4;
 
         > svg { color: var(--text); flex-shrink: 0; }
     }
@@ -377,8 +372,8 @@
         flex: 1;
         min-width: 0;
 
-        strong { font-size: 13.5px; }
-        span { font-size: 12px; color: var(--text-faint); }
+        strong { font-size: $text-sm; }
+        span { font-size: $text-xs; color: var(--text-faint); }
     }
 
     &--picker { padding: 12px; display: grid; gap: 10px; }
@@ -386,15 +381,15 @@
     &-account {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
 
         img { width: 26px; height: 26px; border-radius: 50%; }
         .git-connect__gh-account-name {
             display: flex;
             flex-direction: column;
             line-height: 1.25;
-            strong { font-size: 13px; }
-            small { font-size: 11px; color: var(--text-faint); }
+            strong { font-size: $text-sm; }
+            small { font-size: $text-xs; color: var(--text-faint); }
         }
         > .ui-button { margin-left: auto; }
     }
@@ -402,11 +397,11 @@
     &-search {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 0 10px;
+        gap: $space-2;
+        padding: 0 $space-3;
         background: var(--surface);
         border: 1px solid var(--border-soft);
-        border-radius: 8px;
+        border-radius: $radius-card;
 
         svg { color: var(--text-faint); flex-shrink: 0; }
         .ui-input { border: none; background: none; padding-left: 0; height: 34px; }
@@ -415,20 +410,20 @@
     &-list {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: $space-1;
         max-height: 240px;
         overflow-y: auto;
     }
 
-    &-state { padding: 12px; font-size: 12.5px; color: var(--text-faint); text-align: center; }
+    &-state { padding: 12px; font-size: $text-sm; color: var(--text-faint); text-align: center; }
 
     &-repo {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 9px 11px;
+        gap: $space-3;
+        padding: $space-2 $space-3;
         border: 1px solid var(--border-soft);
-        border-radius: 8px;
+        border-radius: $radius-card;
         background: var(--surface);
         text-align: left;
         cursor: pointer;
@@ -448,13 +443,12 @@
         flex: 1;
         min-width: 0;
 
-        strong { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        small { font-size: 11.5px; color: var(--text-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        strong { font-size: $text-sm; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        small { font-size: $text-xs; color: var(--text-faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     }
 
     &-repo-vis {
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         flex-shrink: 0;
     }
@@ -462,17 +456,17 @@
     &-branch {
         display: flex;
         align-items: center;
-        gap: 10px;
-        font-size: 12.5px;
+        gap: $space-3;
+        font-size: $text-sm;
 
         label { color: var(--text-dim); }
         select {
             flex: 1;
-            height: 34px;
-            padding: 0 10px;
+            height: $control-md;
+            padding: 0 $space-3;
             background: var(--surface);
             border: 1px solid var(--border-soft);
-            border-radius: 8px;
+            border-radius: $radius-control;
             color: var(--text);
         }
     }
@@ -499,7 +493,7 @@
 
     &__label {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
     }
 
@@ -512,13 +506,13 @@
     &__chip {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        padding: 5px 10px;
+        gap: $space-tight;
+        padding: $space-tight $space-3;
         border: 1px solid var(--border);
         border-radius: $radius-full;
         background: var(--surface);
         color: $text-secondary;
-        font-size: 12px;
+        font-size: $text-xs;
         cursor: pointer;
         transition: border-color $transition-fast, background $transition-fast, color $transition-fast;
 
@@ -563,11 +557,11 @@
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        padding: 4px 8px 4px 10px;
+        padding: $space-1 $space-2 $space-1 $space-3;
         background: var(--bg-code);
         border: 1px solid var(--border-soft);
-        border-radius: $radius-md;
-        font-size: 12.5px;
+        border-radius: $radius-control;
+        font-size: $text-sm;
 
         code {
             font-family: var(--mono);
@@ -583,7 +577,7 @@
         height: 18px;
         padding: 0;
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: transparent;
         color: var(--text-faint);
         cursor: pointer;
@@ -596,6 +590,6 @@
     &__empty {
         margin: 0;
         color: var(--text-faint);
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 }

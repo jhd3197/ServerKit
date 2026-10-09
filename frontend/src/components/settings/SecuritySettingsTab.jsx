@@ -5,11 +5,12 @@ import useSettingFocus from '../../hooks/useSettingFocus';
 import TwoFactorPolicyCard from './TwoFactorPolicyCard';
 import SSOProviderIcon from '../SSOProviderIcon';
 import Modal from '../Modal';
+import ErrorState from '../ErrorState';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '../CopyField';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
 
@@ -21,6 +22,7 @@ const LinkedAccounts = ({ register }) => {
     const [unlinking, setUnlinking] = useState(null);
     const [linkingProvider, setLinkingProvider] = useState(null);
     const [error, setError] = useState('');
+    const [loadError, setLoadError] = useState(null);
 
     useEffect(() => {
         loadIdentities();
@@ -30,8 +32,11 @@ const LinkedAccounts = ({ register }) => {
         try {
             const data = await api.getSSOIdentities();
             setIdentities(data.identities || []);
-        } catch {
-            // SSO may not be configured; silently handle
+            setLoadError(null);
+        } catch (err) {
+            // Only surfaced when SSO providers exist (the card is hidden
+            // otherwise), so an unconfigured SSO stays quiet.
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -72,10 +77,11 @@ const LinkedAccounts = ({ register }) => {
 
     return (
         <div {...register('security-linked-accounts', 'settings-card')}>
-            <h3>{t('app.securitySettingsTab.linkedAccounts', 'Linked Accounts')}</h3>
+            <h3>{t('app.securitySettingsTab.linkedAccounts', 'Linked accounts')}</h3>
             <p className="text-secondary">{t('app.securitySettingsTab.connectExternalIdentityProvidersToYour', 'Connect external identity providers to your account')}</p>
 
             {error && <div className="alert alert-danger">{error}</div>}
+            {loadError && <ErrorState compact error={loadError} onRetry={loadIdentities} />}
 
             {identities.length > 0 && (
                 <div className="linked-accounts-list">
@@ -94,7 +100,7 @@ const LinkedAccounts = ({ register }) => {
                                 onClick={() => handleUnlink(identity.provider)}
                                 disabled={unlinking === identity.provider}
                             >
-                                {unlinking === identity.provider ? 'Unlinking...' : 'Unlink'}
+                                {unlinking === identity.provider ? t('app.securitySettingsTab.unlinking', 'Unlinking…') : t('app.securitySettingsTab.unlink', 'Unlink')}
                             </Button>
                         </div>
                     ))}
@@ -112,7 +118,7 @@ const LinkedAccounts = ({ register }) => {
                             disabled={linkingProvider === p.id}
                         >
                             <SSOProviderIcon provider={p.id} />
-                            {linkingProvider === p.id ? 'Redirecting...' : `Link ${p.name}`}
+                            {linkingProvider === p.id ? t('app.securitySettingsTab.redirecting', 'Redirecting…') : t('app.securitySettingsTab.linkProvider', 'Link {{name}}', { name: p.name })}
                         </Button>
                     ))}
                 </div>
@@ -143,17 +149,21 @@ const SecuritySettingsTab = () => {
     const [verificationCode, setVerificationCode] = useState('');
     const [backupCodes, setBackupCodes] = useState([]);
     const [twoFAError, setTwoFAError] = useState('');
+    const [twoFALoadError, setTwoFALoadError] = useState(null);
 
     useEffect(() => {
         load2FAStatus();
     }, []);
 
     async function load2FAStatus() {
+        setTwoFALoading(true);
         try {
             const status = await api.get2FAStatus();
             setTwoFAStatus(status);
+            setTwoFALoadError(null);
         } catch (err) {
             console.error('Failed to load 2FA status:', err);
+            setTwoFALoadError(err);
         } finally {
             setTwoFALoading(false);
         }
@@ -225,7 +235,7 @@ const SecuritySettingsTab = () => {
                 detail: { type: 'two-factor-enabled' },
             }));
         } catch (err) {
-            setTwoFAError(err.message || 'Invalid verification code');
+            setTwoFAError(err.message || t('auth.codeMismatch', "That code didn't match. Enter the current 6-digit code from your authenticator app."));
         } finally {
             setTwoFALoading(false);
         }
@@ -245,7 +255,7 @@ const SecuritySettingsTab = () => {
             setVerificationCode('');
             load2FAStatus();
         } catch (err) {
-            setTwoFAError(err.message || 'Invalid verification code');
+            setTwoFAError(err.message || t('auth.codeMismatch', "That code didn't match. Enter the current 6-digit code from your authenticator app."));
         } finally {
             setTwoFALoading(false);
         }
@@ -266,7 +276,7 @@ const SecuritySettingsTab = () => {
             setVerificationCode('');
             load2FAStatus();
         } catch (err) {
-            setTwoFAError(err.message || 'Invalid verification code');
+            setTwoFAError(err.message || t('auth.codeMismatch', "That code didn't match. Enter the current 6-digit code from your authenticator app."));
         } finally {
             setTwoFALoading(false);
         }
@@ -286,15 +296,10 @@ Keep these codes in a safe place.`;
         downloadBlob(content, 'serverkit-backup-codes.txt');
     }
 
-    function copyBackupCodes() {
-        copyToClipboard(backupCodes.join('\n'));
-    }
-
     return (
         <div className="settings-section">
             <div className="section-header">
-                <h2>{t('app.securitySettingsTab.securitySettings', 'Security Settings')}</h2>
-                <p>{t('app.securitySettingsTab.manageYourPasswordAndSecurityPreferences', 'Manage your password and security preferences')}</p>
+                <h2>{t('app.securitySettingsTab.securitySettings', 'Security settings')}</h2>
             </div>
 
             {message && (
@@ -313,13 +318,19 @@ Keep these codes in a safe place.`;
                         </svg>
                     </div>
                     <div>
-                        <h3>{t('app.securitySettingsTab.twoFactorAuthentication2fa', 'Two-Factor Authentication (2FA)')}</h3>
-                        <p>{t('app.securitySettingsTab.addAnExtraLayerOfSecurity', 'Add an extra layer of security to your account')}</p>
+                        <h3>{t('app.securitySettingsTab.twoFactorAuthentication2fa', 'Two-factor authentication (2FA)')}</h3>
+                        <p>{t('app.securitySettingsTab.addAnExtraLayerOfSecurity', 'Add an extra layer of security to your account.')}</p>
                     </div>
                 </div>
 
                 {twoFALoading && !twoFAStatus ? (
                     <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
+                ) : twoFALoadError && !twoFAStatus ? (
+                    <ErrorState
+                        title={t('app.securitySettingsTab.couldntLoad2fa', "Couldn't load 2FA status.")}
+                        error={twoFALoadError}
+                        onRetry={load2FAStatus}
+                    />
                 ) : twoFAStatus?.enabled ? (
                     <div className="two-fa-enabled">
                         <div className="two-fa-status">
@@ -343,7 +354,7 @@ Keep these codes in a safe place.`;
                                     setShowBackupCodesModal(true);
                                 }}
                             >
-                                {t('app.securitySettingsTab.regenerateBackupCodes', 'Regenerate Backup Codes')}
+                                {t('app.securitySettingsTab.regenerateBackupCodes', 'Regenerate backup codes')}
                             </Button>
                             <Button
                                 variant="destructive"
@@ -367,17 +378,17 @@ Keep these codes in a safe place.`;
                             onClick={handleInitiate2FA}
                             disabled={twoFALoading}
                         >
-                            {t('app.securitySettingsTab.enableTwoFactorAuthentication', 'Enable Two-Factor Authentication')}
+                            {t('app.securitySettingsTab.enableTwoFactorAuthentication', 'Enable two-factor authentication')}
                         </Button>
                     </div>
                 )}
             </div>
 
             <form onSubmit={handleSubmit} {...register('security-password', 'settings-form')}>
-                <h3>{t('app.securitySettingsTab.changePassword', 'Change Password')}</h3>
+                <h3>{t('app.securitySettingsTab.changePassword', 'Change password')}</h3>
 
                 <div className="form-group">
-                    <Label>{t('app.securitySettingsTab.currentPassword', 'Current Password')}</Label>
+                    <Label>{t('app.securitySettingsTab.currentPassword', 'Current password')}</Label>
                     <Input
                         type="password"
                         value={formData.currentPassword}
@@ -387,7 +398,7 @@ Keep these codes in a safe place.`;
                 </div>
 
                 <div className="form-group">
-                    <Label>{t('app.securitySettingsTab.newPassword', 'New Password')}</Label>
+                    <Label>{t('app.securitySettingsTab.newPassword', 'New password')}</Label>
                     <Input
                         type="password"
                         value={formData.newPassword}
@@ -399,7 +410,7 @@ Keep these codes in a safe place.`;
                 </div>
 
                 <div className="form-group">
-                    <Label>{t('app.securitySettingsTab.confirmNewPassword', 'Confirm New Password')}</Label>
+                    <Label>{t('app.securitySettingsTab.confirmNewPassword', 'Confirm new password')}</Label>
                     <Input
                         type="password"
                         value={formData.confirmPassword}
@@ -411,7 +422,7 @@ Keep these codes in a safe place.`;
 
                 <div className="form-actions">
                     <Button type="submit" variant="default" disabled={loading}>
-                        {loading ? 'Changing...' : 'Change Password'}
+                        {loading ? t('app.securitySettingsTab.changing', 'Changing…') : t('app.securitySettingsTab.changePassword', 'Change password')}
                     </Button>
                 </div>
             </form>
@@ -427,8 +438,8 @@ Keep these codes in a safe place.`;
                             <line x1="12" y1="17" x2="12" y2="21"/>
                         </svg>
                         <div>
-                            <span className="session-device">{t('app.securitySettingsTab.currentSession', 'Current Session')}</span>
-                            <span className="session-details">{t('app.securitySettingsTab.thisDeviceActiveNow', 'This device - Active now')}</span>
+                            <span className="session-device">{t('app.securitySettingsTab.currentSession', 'Current session')}</span>
+                            <span className="session-details">{t('app.securitySettingsTab.thisDeviceActiveNow', 'This device - active now')}</span>
                         </div>
                     </div>
                     <Badge variant="success">{t('common.labels.current', 'Current')}</Badge>
@@ -443,27 +454,27 @@ Keep these codes in a safe place.`;
 
             {/* 2FA Setup Modal */}
             {showSetupModal && setupData && (
-                <Modal open={true} onClose={() => setShowSetupModal(false)} title={t('app.securitySettingsTab.setUpTwoFactorAuthentication', 'Set Up Two-Factor Authentication')} size="md">
+                <Modal open={true} onClose={() => setShowSetupModal(false)} title={t('app.securitySettingsTab.setUpTwoFactorAuthentication', 'Set up two-factor authentication')} size="md">
                             <div className="setup-steps" data-walkthrough="two-factor-verify">
                                 <div className="setup-step">
                                     <span className="step-number">1</span>
                                     <div className="step-content">
-                                        <h4>{t('app.securitySettingsTab.scanTheQrCode', 'Scan the QR Code')}</h4>
+                                        <h4>{t('app.securitySettingsTab.scanTheQrCode', 'Scan the QR code')}</h4>
                                         <p>{t('app.securitySettingsTab.useYourAuthenticatorAppGoogleAuthenticator', 'Use your authenticator app (Google Authenticator, Authy, 1Password, etc.) to scan this QR code.')}</p>
                                         {setupData.qr_code ? (
                                             <div className="qr-code-container">
-                                                <img src={setupData.qr_code} alt={t('app.securitySettingsTab.2faQrCode', '2FA QR Code')} className="qr-code" />
+                                                <img src={setupData.qr_code} alt={t('app.securitySettingsTab.2faQrCode', '2FA QR code')} className="qr-code" />
                                             </div>
                                         ) : (
                                             <div className="qr-fallback">
                                                 <p>{t('app.securitySettingsTab.qrCodeUnavailableEnterThisSecret', 'QR code unavailable. Enter this secret manually:')}</p>
-                                                <code className="secret-key">{setupData.secret}</code>
+                                                <CopyField value={setupData.secret} secret />
                                             </div>
                                         )}
                                         <details className="manual-entry">
                                             <summary>{t('app.securitySettingsTab.canTScanEnterManually', 'Can\'t scan? Enter manually')}</summary>
                                             <p>{t('app.securitySettingsTab.account', 'Account:')} {user?.email ?? ''}</p>
-                                            <p>{t('app.securitySettingsTab.secret', 'Secret:')} <code>{setupData.secret}</code></p>
+                                            <CopyField label={t('app.securitySettingsTab.secretLabel', 'Secret')} value={setupData.secret} secret />
                                         </details>
                                     </div>
                                 </div>
@@ -471,7 +482,7 @@ Keep these codes in a safe place.`;
                                 <div className="setup-step">
                                     <span className="step-number">2</span>
                                     <div className="step-content">
-                                        <h4>{t('app.securitySettingsTab.enterVerificationCode', 'Enter Verification Code')}</h4>
+                                        <h4>{t('app.securitySettingsTab.enterVerificationCode', 'Enter verification code')}</h4>
                                         <p>{t('app.securitySettingsTab.enterThe6DigitCodeFrom', 'Enter the 6-digit code from your authenticator app to verify setup.')}</p>
                                         <Input
                                             type="text"
@@ -494,7 +505,7 @@ Keep these codes in a safe place.`;
                                 onClick={handleConfirm2FA}
                                 disabled={twoFALoading || verificationCode.length !== 6}
                             >
-                                {twoFALoading ? 'Verifying...' : 'Enable 2FA'}
+                                {twoFALoading ? t('app.securitySettingsTab.verifying', 'Verifying…') : t('app.securitySettingsTab.enable2fa', 'Enable 2FA')}
                             </Button>
                         </div>
                 </Modal>
@@ -502,14 +513,14 @@ Keep these codes in a safe place.`;
 
             {/* Disable 2FA Modal */}
             {showDisableModal && (
-                <Modal open={true} onClose={() => setShowDisableModal(false)} title={t('app.securitySettingsTab.disableTwoFactorAuthentication', 'Disable Two-Factor Authentication')}>
+                <Modal open={true} onClose={() => setShowDisableModal(false)} title={t('app.securitySettingsTab.disableTwoFactorAuthentication', 'Disable two-factor authentication')}>
                             <div className="warning-box">
                                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" strokeWidth="2">
                                     <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
                                     <line x1="12" y1="9" x2="12" y2="13"/>
                                     <line x1="12" y1="17" x2="12.01" y2="17"/>
                                 </svg>
-                                <p>{t('app.securitySettingsTab.disabling2faWillMakeYourAccount', 'Disabling 2FA will make your account less secure. You will only need your password to log in.')}</p>
+                                <p>{t('app.securitySettingsTab.disabling2faWillMakeYourAccount', 'Disabling 2FA will make your account less secure. You will only need your password to sign in.')}</p>
                             </div>
                             <div className="form-group">
                                 <Label>{t('app.securitySettingsTab.enterAVerificationCodeOrBackup', 'Enter a verification code or backup code to disable 2FA:')}</Label>
@@ -531,7 +542,7 @@ Keep these codes in a safe place.`;
                                 onClick={handleDisable2FA}
                                 disabled={twoFALoading || !verificationCode}
                             >
-                                {twoFALoading ? 'Disabling...' : 'Disable 2FA'}
+                                {twoFALoading ? t('app.securitySettingsTab.disabling', 'Disabling…') : t('app.securitySettingsTab.disable2fa', 'Disable 2FA')}
                             </Button>
                         </div>
                 </Modal>
@@ -539,7 +550,7 @@ Keep these codes in a safe place.`;
 
             {/* Backup Codes Modal */}
             {showBackupCodesModal && (
-                <Modal open={true} onClose={() => setShowBackupCodesModal(false)} title={backupCodes.length > 0 ? t('app.securitySettingsTab.yourBackupCodes', 'Your Backup Codes') : t('app.securitySettingsTab.regenerateBackupCodes', 'Regenerate Backup Codes')} size="md">
+                <Modal open={true} onClose={() => setShowBackupCodesModal(false)} title={backupCodes.length > 0 ? t('app.securitySettingsTab.yourBackupCodes', 'Your backup codes') : t('app.securitySettingsTab.regenerateBackupCodes', 'Regenerate backup codes')} size="md">
                             {backupCodes.length > 0 ? (
                                 <>
                                     <div className="warning-box">
@@ -550,11 +561,7 @@ Keep these codes in a safe place.`;
                                         </svg>
                                         <p>{t('app.securitySettingsTab.saveTheseBackupCodesInA', 'Save these backup codes in a secure location. They will not be shown again. Each code can only be used once.')}</p>
                                     </div>
-                                    <div className="backup-codes-grid">
-                                        {backupCodes.map((code, index) => (
-                                            <code key={index} className="backup-code">{code}</code>
-                                        ))}
-                                    </div>
+                                    <CopyField value={backupCodes.join('\n')} multiline />
                                     <div className="backup-codes-actions">
                                         <Button variant="outline" onClick={downloadBackupCodes}>
                                             <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" strokeWidth="2">
@@ -562,20 +569,13 @@ Keep these codes in a safe place.`;
                                             </svg>
                                             {t('common.actions.download', 'Download')}
                                         </Button>
-                                        <Button variant="outline" onClick={copyBackupCodes}>
-                                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" strokeWidth="2">
-                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-                                            </svg>
-                                            {t('common.actions.copy', 'Copy')}
-                                        </Button>
                                     </div>
                                 </>
                             ) : (
                                 <>
                                     <p>{t('app.securitySettingsTab.enterACodeFromYourAuthenticator', 'Enter a code from your authenticator app to generate new backup codes. This will invalidate all existing backup codes.')}</p>
                                     <div className="form-group">
-                                        <Label>{t('app.securitySettingsTab.verificationCode', 'Verification Code')}</Label>
+                                        <Label>{t('app.securitySettingsTab.verificationCode', 'Verification code')}</Label>
                                         <Input
                                             type="text"
                                             value={verificationCode}
@@ -593,7 +593,7 @@ Keep these codes in a safe place.`;
                                 setBackupCodes([]);
                                 setVerificationCode('');
                             }}>
-                                {backupCodes.length > 0 ? 'Done' : 'Cancel'}
+                                {backupCodes.length > 0 ? t('common.actions.done', 'Done') : t('common.actions.cancel', 'Cancel')}
                             </Button>
                             {backupCodes.length === 0 && (
                                 <Button
@@ -601,7 +601,7 @@ Keep these codes in a safe place.`;
                                     onClick={handleRegenerateBackupCodes}
                                     disabled={twoFALoading || verificationCode.length !== 6}
                                 >
-                                    {twoFALoading ? 'Generating...' : 'Generate New Codes'}
+                                    {twoFALoading ? t('app.securitySettingsTab.generating', 'Generating…') : t('app.securitySettingsTab.generateNewCodes', 'Generate new codes')}
                                 </Button>
                             )}
                         </div>

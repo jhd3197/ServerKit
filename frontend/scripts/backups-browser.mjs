@@ -69,8 +69,8 @@ try {
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(`http://127.0.0.1:${server.httpServer.address().port}/backups-check`);
-    await page.getByLabel('Schedule Name', { exact: false }).fill('Daily 2');
-    await page.getByLabel('Application Name', { exact: false }).fill('my-app');
+    await page.getByLabel('Schedule name', { exact: false }).fill('Daily 2');
+    await page.getByLabel('Service name', { exact: false }).fill('my-app');
     assert.equal(await page.locator('.form-field__hint').textContent(), 'America/New_York');
     await page.evaluate(() => {
         const form = document.querySelector('[data-walkthrough="backup-schedule-form"]');
@@ -81,8 +81,8 @@ try {
     assert.equal(await page.locator('[data-walkthrough="backup-schedule-submit"]').isDisabled(), true);
     await page.evaluate(() => window.failCreate());
     await page.getByText('Already exists', { exact: true }).waitFor();
-    assert.equal(await page.getByLabel('Schedule Name', { exact: false }).inputValue(), 'Daily 2');
-    await page.getByLabel('Schedule Name', { exact: false }).fill('Unique schedule');
+    assert.equal(await page.getByLabel('Schedule name', { exact: false }).inputValue(), 'Daily 2');
+    await page.getByLabel('Schedule name', { exact: false }).fill('Unique schedule');
     await page.locator('[data-walkthrough="backup-schedule-submit"]').click();
     await page.waitForFunction(() => window.calls.filter(([type]) => type === 'create').length === 2);
     await page.evaluate(() => window.finishCreate());

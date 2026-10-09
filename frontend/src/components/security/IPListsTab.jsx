@@ -3,6 +3,7 @@ import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
 import Modal from '../Modal';
+import ErrorState from '@/components/ErrorState';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,6 +17,7 @@ import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useTranslation } from 'react-i18next';
 import { t } from '../../i18n/t';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
+import { errorReason } from '@/utils/errorMessage';
 
 // Both lists have the same columns; only the accent tone and the remove
 // target differ, so one factory builds both. Two accessors per column on
@@ -61,7 +63,7 @@ const ipListColumns = (listType, tone, onRemove) => [
             const t = new Date(item.added_at).getTime();
             return Number.isNaN(t) ? null : t;
         },
-        cellClassName: 'sk-cell-mono sec-faint',
+        cellClassName: 'sk-cell-dim sec-faint',
         render: (item) => new Date(item.added_at).toLocaleDateString(),
     },
     {
@@ -131,6 +133,8 @@ const IPListsTab = () => {
     const { t } = useTranslation();
     const [lists, setLists] = useState({ allowlist: [], blocklist: [] });
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
+    const [loaded, setLoaded] = useState(false);
     const [showAddModal, setShowAddModal] = useState(null);
     const [newIP, setNewIP] = useState('');
     const [newComment, setNewComment] = useState('');
@@ -155,8 +159,11 @@ const IPListsTab = () => {
                 allowlist: data.allowlist || [],
                 blocklist: data.blocklist || []
             });
+            setLoaded(true);
+            setLoadError(null);
         } catch (error) {
             console.error('Failed to load IP lists:', error);
+            setLoadError(error);
         } finally {
             setLoading(false);
         }
@@ -173,7 +180,7 @@ const IPListsTab = () => {
             setNewComment('');
             await loadLists();
         } catch (error) {
-            toast.error(t('app.iPListsTab.failedToAddIp', 'Failed to add IP: {{message}}', { message: error.message }));
+            toast.error(t('app.iPListsTab.failedToAddIp', "Couldn't add the IP. {{message}}", { message: errorReason(error) }));
         } finally {
             setActionLoading(false);
         }
@@ -182,7 +189,7 @@ const IPListsTab = () => {
     const handleRemove = async (item, listType) => {
         const confirmed = await confirm({
             title: t('app.iPListsTab.removeFrom', 'Remove from {{listType}}', { listType: listType }),
-            message: t('app.iPListsTab.areYouSureYouWantTo', 'Are you sure you want to remove {{ip}} from the {{listType}}?', { ip: item.ip, listType: listType }),
+            message: t('app.iPListsTab.areYouSureYouWantTo', 'Remove {{ip}} from the {{listType}}? The list stops applying to it.', { ip: item.ip, listType: listType }),
             confirmText: t('common.actions.remove', 'Remove'),
             variant: 'warning',
         });
@@ -199,14 +206,14 @@ const IPListsTab = () => {
                             toast.success(t('app.iPListsTab.ipRestoredTo', 'IP restored to {{listType}}', { listType: listType }));
                             await loadLists();
                         } catch (error) {
-                            toast.error(t('app.iPListsTab.couldNotRestoreIp', 'Could not restore IP: {{message}}', { message: error.message }));
+                            toast.error(t('app.iPListsTab.couldNotRestoreIp', "Couldn't restore the IP. {{message}}", { message: errorReason(error) }));
                         }
                     },
                 },
             });
             await loadLists();
         } catch (error) {
-            toast.error(t('app.iPListsTab.failedToRemoveIp', 'Failed to remove IP: {{message}}', { message: error.message }));
+            toast.error(t('app.iPListsTab.failedToRemoveIp', "Couldn't remove the IP. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -255,7 +262,9 @@ const IPListsTab = () => {
                     used to be told apart by this line alone. */}
                 <GridViewPicker
                     views={chrome.views}
-                    label={`${listType} entries`}
+                    label={listType === 'allowlist'
+                        ? t('app.iPListsTab.allowlistEntries', 'Allowlist entries')
+                        : t('app.iPListsTab.blocklistEntries', 'Blocklist entries')}
                     onCreate={chrome.createView}
                     actions={(
                         <>
@@ -304,8 +313,19 @@ const IPListsTab = () => {
         return <div className="loading-sm">{t('app.iPListsTab.loadingIpLists', 'Loading IP lists…')}</div>;
     }
 
+    if (loadError && !loaded) {
+        return (
+            <ErrorState
+                title={t('app.iPListsTab.couldntLoadIpLists', "Couldn't load IP lists.")}
+                error={loadError}
+                onRetry={loadLists}
+            />
+        );
+    }
+
     return (
         <div className="ip-lists-tab">
+            {loadError && <ErrorState compact error={loadError} onRetry={loadLists} />}
             <div className="ip-lists-grid">
                 {renderList('allowlist', lists.allowlist, allowSorts, allowChrome)}
                 {renderList('blocklist', lists.blocklist, blockSorts, blockChrome)}
@@ -313,7 +333,7 @@ const IPListsTab = () => {
 
             <Modal open={!!showAddModal} onClose={() => setShowAddModal(null)} title={t('app.iPListsTab.addTo2', 'Add to {{value}}', { value: showAddModal || '' })}>
                 <div className="form-group">
-                    <Label>{t('app.iPListsTab.ipAddressOrCidr', 'IP Address or CIDR')}</Label>
+                    <Label>{t('app.iPListsTab.ipAddressOrCidr', 'IP address or CIDR')}</Label>
                     <Input
                         type="text"
                         value={newIP}
@@ -333,7 +353,7 @@ const IPListsTab = () => {
                 <div className="modal-footer">
                     <Button variant="outline" onClick={() => setShowAddModal(null)}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button variant="default" onClick={handleAdd} disabled={actionLoading || !newIP.trim()}>
-                        {actionLoading ? 'Adding...' : 'Add'}
+                        {actionLoading ? t('app.iPListsTab.adding', 'Adding…') : t('common.actions.add', 'Add')}
                     </Button>
                 </div>
             </Modal>

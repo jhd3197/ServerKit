@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import useSettingFocus from '../../hooks/useSettingFocus';
 import { useManagedProfile } from '../../contexts/useManagedProfile';
 import { useTranslation } from 'react-i18next';
+import { translateLabel } from '../../i18n/labels';
 
 const PRESET_ICONS = {
     recommended: <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
@@ -103,7 +104,7 @@ const SidebarSettings = () => {
     return (
         <div className="sidebar-settings">
             <div {...register('sidebar-view-profiles', 'settings-section')}>
-                <h3>{t('app.sidebarSettings.viewProfiles', 'View Profiles')}</h3>
+                <h3>{t('app.sidebarSettings.viewProfiles', 'View profiles')}</h3>
                 <p className="settings-section-desc">
                     {t('app.sidebarSettings.chooseAPresetOrBuildA', 'Choose a preset or build a custom view. Only visible items appear in your sidebar.')}
                 </p>
@@ -153,13 +154,13 @@ const SidebarSettings = () => {
 
             <div {...register('sidebar-items', 'settings-section')}>
                 <div className="settings-section-header">
-                    <h3>{t('app.sidebarSettings.sidebarItems', 'Sidebar Items')}</h3>
-                    <span className="sidebar-item-count">{visibleCount} of {SIDEBAR_ITEMS.length} visible</span>
+                    <h3>{t('app.sidebarSettings.sidebarItems', 'Sidebar items')}</h3>
+                    <span className="sidebar-item-count">{t('app.sidebarSettings.visibleCount', '{{visible}} of {{total}} visible', { visible: visibleCount, total: SIDEBAR_ITEMS.length })}</span>
                 </div>
                 <p className="settings-section-desc">
                     {preset === 'custom'
-                        ? 'Toggle items to show or hide them in your sidebar.'
-                        : `Showing items for the "${SIDEBAR_PRESETS[preset]?.label || preset}" profile. Switch to Custom to modify individually.`
+                        ? t('app.sidebarSettings.toggleItemsToShowOrHide', 'Toggle items to show or hide them in your sidebar.')
+                        : t('app.sidebarSettings.showingItemsForProfile', 'Showing items for the "{{profile}}" profile. Switch to Custom to change items one by one.', { profile: translateLabel(t, SIDEBAR_PRESETS[preset]) || preset })
                     }
                 </p>
 
@@ -207,14 +208,14 @@ const SidebarSettings = () => {
                     disabled={preset === 'recommended' && hiddenItems.length === 0}
                 >
                     <RotateCcw size={14} />
-                    {t('app.sidebarSettings.resetToDefault', 'Reset to Default')}
+                    {t('app.sidebarSettings.resetToDefault', 'Reset to default')}
                 </Button>
                 <Button
                     variant="default"
                     onClick={handleSave}
                     disabled={saving || !hasChanges}
                 >
-                    {saving ? 'Saving...' : 'Save Changes'}
+                    {saving ? t('common.saving', 'Saving…') : t('app.sidebarSettings.saveChanges', 'Save changes')}
                 </Button>
             </div>
 

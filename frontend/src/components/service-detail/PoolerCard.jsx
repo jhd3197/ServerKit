@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '../../contexts/useToast.js';
+import { toastError } from '@/utils/errorMessage';
 
 // Opt-in PgBouncer beside an installed PostgreSQL (plan 86 §D1). Renders only
 // for PostgreSQL installs. Apps keep the direct connection unless they switch
@@ -33,11 +34,11 @@ export default function PoolerCard({ app }) {
                 toast.warning(t('app.pooler.savedNotApplied', 'Saved, but the pooler could not be started. Check the containers.'));
             } else {
                 toast.success(next
-                    ? t('app.pooler.on', 'Pooler running at {{host}}:5432.', { host: data.host })
-                    : t('app.pooler.off', 'Pooler removed.'));
+                    ? t('app.pooler.on', 'Pooler running at {{host}}:5432', { host: data.host })
+                    : t('app.pooler.off', 'Pooler removed'));
             }
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.pooler.couldntChangePooler', "Couldn't change the connection pooler."), err);
         } finally {
             setSaving(false);
         }
@@ -55,10 +56,10 @@ export default function PoolerCard({ app }) {
                 />
             </div>
             <p className="pooler__hint">
-                {t('app.pooler.hint', 'Runs PgBouncer in transaction mode beside this database, so many app connections share a few server connections. Apps opt in by referencing pooledUrl instead of connectionString.')}
+                {t('app.pooler.hint', 'Runs PgBouncer in transaction mode beside this database, so many client connections share a few server connections. Services opt in by referencing pooledUrl instead of connectionString.')}
             </p>
             <p className="pooler__tradeoff">
-                {t('app.pooler.tradeoff', 'Transaction pooling breaks session features: prepared statements in some drivers, LISTEN/NOTIFY, advisory locks and session SET. Apps keep the direct connection unless they switch.')}
+                {t('app.pooler.tradeoff', 'Transaction pooling breaks session features: prepared statements in some drivers, LISTEN/NOTIFY, advisory locks and session SET. Services keep the direct connection unless they switch.')}
             </p>
         </div>
     );

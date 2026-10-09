@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Must match app/services/deploy_settings.py DEFAULTS / _RULES.
 const TIMEOUT_DEFAULT = 120;
@@ -41,10 +42,10 @@ const DeploySafetyPanel = ({ app, onChanged }) => {
                     healthcheck_allow_4xx: allow4xx,
                 },
             });
-            toast.success(t('app.deploySafetyPanel.saved', 'Health check settings saved.'));
+            toast.success(t('app.deploySafetyPanel.saved', 'Health check settings saved'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.deploySafetyPanel.saveFailed', 'Failed to save health check settings'));
+            toastError(toast, t('app.deploySafetyPanel.saveFailed', "Couldn't save the health check settings."), err);
         } finally {
             setSaving(false);
         }
@@ -107,7 +108,7 @@ const DeploySafetyPanel = ({ app, onChanged }) => {
                     <div className="settings-label">
                         <span>{t('app.deploySafetyPanel.allow4xx', 'Accept a 4xx answer')}</span>
                         <span className="settings-hint">
-                            {t('app.deploySafetyPanel.allow4xxHint', 'Only for a health path that sits behind a login and answers 401 or 403 when the app is up. Otherwise a 4xx means the release is broken.')}
+                            {t('app.deploySafetyPanel.allow4xxHint', 'Only for a health path that sits behind a login and answers 401 or 403 when the service is up. Otherwise a 4xx means the release is broken.')}
                         </span>
                     </div>
                     <div className="settings-control">

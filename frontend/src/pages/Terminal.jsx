@@ -3,7 +3,8 @@ import useTabParam from '../hooks/useTabParam';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
-import TargetPicker from '../components/TargetPicker';
+import ServerPicker from '../components/ServerPicker';
+import { serverTarget, targetServerId } from '../utils/serverTarget';
 import RemoteTerminal from '../components/RemoteTerminal';
 import LogFileList from '../components/log-viewer/LogFileList';
 import LogToolbar from '../components/log-viewer/LogToolbar';
@@ -31,6 +32,10 @@ import {
     ScrollText, Cpu, Settings,
 } from 'lucide-react';
 import { Button as SharedButton } from '@/components/ui/button';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
+import { errorReason } from '@/utils/errorMessage';
 
 // 'logs' stays first so the default landing keeps working on installs with no
 // paired agents (the interactive shell needs a connected agent).
@@ -41,9 +46,9 @@ const VALID_TABS = ['logs', 'journal', 'processes', 'services', 'shell'];
 // paired agent — so it's listed first, keeping the highlighted tab and the
 // landing view in sync. The interactive Terminal sits next.
 const TERMINAL_TABS = [
-    { to: '/terminal', labelKey: 'app.terminal.logFiles', label: 'Log Files', end: true, icon: <FileText size={15} /> },
+    { to: '/terminal', labelKey: 'app.terminal.logFiles', label: 'Log files', end: true, icon: <FileText size={15} /> },
     { to: '/terminal/shell', labelKey: 'app.terminal.terminal', label: 'Terminal', icon: <TerminalIcon size={15} /> },
-    { to: '/terminal/journal', labelKey: 'app.terminal.systemJournal', label: 'System Journal', icon: <ScrollText size={15} /> },
+    { to: '/terminal/journal', labelKey: 'app.terminal.systemJournal', label: 'System journal', icon: <ScrollText size={15} /> },
     { to: '/terminal/processes', labelKey: 'app.terminal.processes', label: 'Processes', icon: <Cpu size={15} /> },
     { to: '/terminal/services', labelKey: 'common.labels.services', label: 'Services', icon: <Settings size={15} /> },
 ];
@@ -136,8 +141,8 @@ const TerminalShellTab = () => {
                         <TerminalIcon size={26} />
                         <p>
                             {anyOnline
-                                ? 'Pick a server on the left to open a shell.'
-                                : 'Interactive shells run over the ServerKit agent. Pair a server (Servers → Add Server) with shell access and it will show up here.'}
+                                ? t('app.terminal.pickServerToOpenShell', 'Pick a server on the left to open a shell.')
+                                : t('app.terminal.shellsRunOverAgent', 'Interactive shells run over the ServerKit agent. Pair a server (Servers → Add server) with shell access and it shows up here.')}
                         </p>
                     </div>
                 )}
@@ -171,6 +176,9 @@ const LogFilesTab = () => {
     const [loading, setLoading] = useState(true);
     const [loadingContent, setLoadingContent] = useState(false);
     const [error, setError] = useState(null);
+    // The file list's own failure, kept apart from `error` (which any action
+    // can set) so the viewer never says "no log files" when it couldn't look.
+    const [listError, setListError] = useState(null);
     const [lastUpdated, setLastUpdated] = useState(null);
 
     const [lineCount, setLineCount] = useState(() => {
@@ -227,11 +235,12 @@ const LogFilesTab = () => {
         }
         setLoading(true);
         setError(null);
+        setListError(null);
         try {
             const data = await api.getLogFiles();
             setLogFiles(data.logs || []);
         } catch (err) {
-            setError(err.message);
+            setListError(err);
         } finally {
             setLoading(false);
         }
@@ -313,7 +322,7 @@ const LogFilesTab = () => {
             toast.success(t('app.terminal.logFileTruncated', 'Log file truncated'));
             loadLogFiles();
         } catch (err) {
-            toast.error(t('app.terminal.failed', 'Failed: {{message}}', { message: err.message }));
+            toast.error(t('app.terminal.failed', "Couldn't do that. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -332,10 +341,10 @@ const LogFilesTab = () => {
             <div className="lv-header">
                 <div className="lv-header-target">
                     <span className="lv-header-label">{t('common.labels.source', 'Source')}</span>
-                    <TargetPicker
-                        feature="logs"
-                        value={target}
-                        onChange={setTarget}
+                    <ServerPicker
+                        capability="logs"
+                        value={targetServerId(target)}
+                        onChange={(id, server) => setTarget(serverTarget(id, server))}
                     />
                     {isRemote && (
                         <span className="lv-header-hint">
@@ -386,6 +395,7 @@ const LogFilesTab = () => {
                     onSelect={handleSelectFile}
                     onRefresh={loadLogFiles}
                     loading={loading}
+                    error={listError}
                 />
 
                 <div className="lv-viewer">
@@ -425,7 +435,11 @@ const LogFilesTab = () => {
                         content={selectedLog ? logContent : ''}
                         loading={loadingContent}
                         emptyMessage={
-                            isRemote && logFiles.length === 0
+                            loading && logFiles.length === 0
+                                ? t('app.terminal.loadingLogFiles', 'Loading log files…')
+                            : listError && logFiles.length === 0
+                                ? t('app.terminal.couldntLoadLogFiles', "Couldn't load the log files. Use Refresh in the list to try again.")
+                            : isRemote && logFiles.length === 0
                                 ? t('app.terminal.remoteLogBrowsingIsnTSupported', 'Remote log browsing isn\'t supported yet for {{name}}.', { name: target.name })
                                 : logFiles.length === 0
                                     ? t('app.terminal.noLogFilesWereFoundOn', 'No log files were found on this server.')
@@ -592,12 +606,12 @@ const JournalTab = () => {
             <div className="lv-page">
                 <div className="lv-empty-hint is-tall">
                     <AlertCircle size={48} />
-                    <h3 className="lv-empty-hint__title">{t('app.terminal.systemLogsUnavailable', 'System Logs Unavailable')}</h3>
+                    <h3 className="lv-empty-hint__title">{t('app.terminal.systemLogsUnavailable', 'System logs unavailable')}</h3>
                     <p>
                         {t('app.terminal.noSystemLogSourceWasFound', 'No system log source was found. Neither')} <code>journalctl</code>,
                         <code> /var/log/syslog</code>{t('app.terminal.norTheWindowsEventLogAre', ', nor the Windows Event Log are available.')}
                     </p>
-                    <p>{t('app.terminal.useThe', 'Use the')} <strong>{t('app.terminal.logFiles', 'Log Files')}</strong> {t('app.terminal.tabToBrowseAvailableLogFiles', 'tab to browse available log files instead.')}</p>
+                    <p>{t('app.terminal.useThe', 'Use the')} <strong>{t('app.terminal.logFiles', 'Log files')}</strong> {t('app.terminal.tabToBrowseAvailableLogFiles', 'tab to browse available log files instead.')}</p>
                 </div>
             </div>
         );
@@ -608,7 +622,11 @@ const JournalTab = () => {
             <div className="lv-header">
                 <div className="lv-header-target">
                     <span className="lv-header-label">{t('common.labels.source', 'Source')}</span>
-                    <TargetPicker feature="logs" value={target} onChange={setTarget} />
+                    <ServerPicker
+                        capability="logs"
+                        value={targetServerId(target)}
+                        onChange={(id, server) => setTarget(serverTarget(id, server))}
+                    />
                     {isRemote && (
                         <span className="lv-header-hint">
                             <AlertCircle size={12} />
@@ -830,7 +848,7 @@ const ProcessesTab = () => {
             setLastUpdated(new Date());
         } catch (err) {
             console.error('Failed to load processes:', err);
-            toast.error(t('app.terminal.failed', 'Failed: {{message}}', { message: err.message }));
+            toast.error(t('app.terminal.failed', "Couldn't do that. {{message}}", { message: errorReason(err) }));
         } finally {
             setLoading(false);
         }
@@ -874,7 +892,7 @@ const ProcessesTab = () => {
             loadProcesses();
             setSelectedProcess(null);
         } catch (err) {
-            toast.error(t('app.terminal.failed', 'Failed: {{message}}', { message: err.message }));
+            toast.error(t('app.terminal.failed', "Couldn't do that. {{message}}", { message: errorReason(err) }));
         }
     }
 
@@ -888,7 +906,11 @@ const ProcessesTab = () => {
             <div className="lv-header">
                 <div className="lv-header-target">
                     <span className="lv-header-label">{t('common.labels.source', 'Source')}</span>
-                    <TargetPicker feature="processes" value={target} onChange={setTarget} />
+                    <ServerPicker
+                        capability="processes"
+                        value={targetServerId(target)}
+                        onChange={(id, server) => setTarget(serverTarget(id, server))}
+                    />
                     {isRemote && (
                         <span className="lv-header-hint">
                             <AlertCircle size={12} />
@@ -936,16 +958,20 @@ const ProcessesTab = () => {
                     onSortsChange={setSorts}
                     actions={(
                         <>
-                            <select
-                                className="lv-select"
-                                value={limit}
-                                onChange={(e) => setLimit(parseInt(e.target.value, 10))}
-                                title={t('app.terminal.processesToFetch', 'Processes to fetch')}
-                            >
-                                {PROCESS_LIMITS.map((n) => (
-                                    <option key={n} value={n}>{t('app.terminal.top', 'Top')} {n}</option>
-                                ))}
-                            </select>
+                            <Select value={String(limit)} onValueChange={(v) => setLimit(parseInt(v, 10))}>
+                                <SelectTrigger
+                                    className="lv-select"
+                                    title={t('app.terminal.processesToFetch', 'Processes to fetch')}
+                                    aria-label={t('app.terminal.processesToFetch', 'Processes to fetch')}
+                                >
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {PROCESS_LIMITS.map((n) => (
+                                        <SelectItem key={n} value={String(n)}>{t('app.terminal.top', 'Top')} {n}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                             <SharedButton variant="unstyled" type="button"
                                 className={`lv-chip ${autoRefresh ? 'active' : ''}`}
                                 onClick={() => setAutoRefresh(!autoRefresh)}
@@ -1042,7 +1068,11 @@ const ServicesTab = () => {
             <div className="lv-header">
                 <div className="lv-header-target">
                     <span className="lv-header-label">{t('common.labels.source', 'Source')}</span>
-                    <TargetPicker feature="services" value={target} onChange={setTarget} />
+                    <ServerPicker
+                        capability="services"
+                        value={targetServerId(target)}
+                        onChange={(id, server) => setTarget(serverTarget(id, server))}
+                    />
                 </div>
             </div>
             <SystemdServicesTab

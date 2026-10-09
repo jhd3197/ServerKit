@@ -12,6 +12,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import PageLayout from '../layouts/PageLayout';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '../contexts/useAuth.js';
 import { useToast } from '../contexts/useToast.js';
@@ -19,6 +20,7 @@ import { timeAgo } from '../utils/time';
 import EmailProviders from '../components/EmailProviders';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { errorReason } from '@/utils/errorMessage';
 
 const STATUSES = ['all', 'pending', 'sent', 'failed', 'skipped'];
 const CHANNELS = ['all', 'inapp', 'email', 'discord', 'slack', 'telegram', 'webhook'];
@@ -86,6 +88,7 @@ export default function DeliveryLog() {
     const [channel, setChannel] = useState('all');
     const [filtersOpen, setFiltersOpen] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
 
     const load = useCallback(async () => {
         try {
@@ -94,8 +97,11 @@ export default function DeliveryLog() {
             if (channel !== 'all') params.channel = channel;
             const data = await api.getDeliveryLog(params);
             setDeliveries(data.deliveries || []);
-        } catch {
-            // leave the last good state on screen
+            setLoadError(null);
+        } catch (err) {
+            // Leave the last good state on screen; the error renders above it,
+            // or in its place when nothing has loaded yet.
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -112,8 +118,8 @@ export default function DeliveryLog() {
             await api.retryDelivery(id);
             toast.success(t('app.deliveryLog.deliveryReQueued', 'Delivery re-queued'));
             load();
-        } catch {
-            toast.error(t('app.deliveryLog.retryFailed', 'Retry failed'));
+        } catch (err) {
+            toast.error(t('app.deliveryLog.couldntRetryDelivery', "Couldn't retry the delivery. {{reason}}", { reason: errorReason(err) }));
         }
     };
 
@@ -233,7 +239,7 @@ export default function DeliveryLog() {
 
     if (!isAdmin) {
         return (
-            <PageLayout icon={<Send size={18} />} title={t('app.deliveryLog.notificationDeliveryLog', 'Notification Delivery Log')}>
+            <PageLayout icon={<Send size={18} />} title={t('app.deliveryLog.notificationDeliveryLog', 'Notification delivery log')}>
                 <div className="sk-dlog"><EmptyState title={t('app.deliveryLog.adminsOnly', 'Admins only.')} /></div>
             </PageLayout>
         );
@@ -244,7 +250,7 @@ export default function DeliveryLog() {
     return (
         <PageLayout
             icon={<Send size={18} />}
-            title={t('app.deliveryLog.notificationDeliveryLog', 'Notification Delivery Log')}
+            title={t('app.deliveryLog.notificationDeliveryLog', 'Notification delivery log')}
             meta="Outbound deliveries across all channels"
             actions={(
                 // Labelled "Server filters" to keep it apart from the toolbar's
@@ -275,9 +281,9 @@ export default function DeliveryLog() {
                                 changes what is loaded with nothing on screen to
                                 explain it. */}
                             <span className="sk-listhead__count">
-                                {status === 'all' ? 'all statuses' : status}
+                                {status === 'all' ? t('app.deliveryLog.allStatusesLower', 'all statuses') : status}
                                 <i>&middot;</i>
-                                {channel === 'all' ? 'all channels' : channel}
+                                {channel === 'all' ? t('app.deliveryLog.allChannelsLower', 'all channels') : channel}
                             </span>
                             <GridFilterButton
                                 count={chrome.filterCount}
@@ -290,8 +296,18 @@ export default function DeliveryLog() {
 
                 <GridChips {...chrome.chipProps} />
 
+                {loadError && deliveries.length > 0 && (
+                    <ErrorState compact error={loadError} onRetry={load} />
+                )}
+
                 {loading && deliveries.length === 0 ? (
                     <EmptyState loading loadingVariant="table" title={t('common.loading', 'Loading…')} />
+                ) : loadError && deliveries.length === 0 ? (
+                    <ErrorState
+                        title={t('app.deliveryLog.couldntLoadDeliveries', "Couldn't load deliveries.")}
+                        error={loadError}
+                        onRetry={load}
+                    />
                 ) : deliveries.length === 0 ? (
                     <EmptyState
                         icon={Inbox}
@@ -310,8 +326,6 @@ export default function DeliveryLog() {
                         sorts={sorts}
                         onSortsChange={setSorts}
                         {...chrome.tableProps}
-                        className="sk-dlog__table-wrap"
-                        tableClassName="sk-dlog__table"
                         footer={(
                             <DataTableFooter
                                 shown={deliveries.length}

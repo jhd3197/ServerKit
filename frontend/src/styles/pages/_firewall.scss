@@ -15,20 +15,20 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 80px $space-6;
+        padding: $space-16 $space-6;
         background: $bg-card;
-        border-radius: $radius-xl;
+        border-radius: $radius-overlay;
         text-align: center;
 
         .icon {
-            font-size: 64px;
+            font-size: 64px; // icon glyph, not text
             color: $text-tertiary;
             margin-bottom: $space-6;
         }
 
         h2 {
             margin: 0 0 $space-3 0;
-            font-size: $font-size-2xl;
+            font-size: $text-xl;
             font-weight: $font-weight-semibold;
         }
 
@@ -49,7 +49,7 @@
             padding: $space-3 $space-5;
             background: none;
             border: none;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-medium;
             color: $text-secondary;
             cursor: pointer;
@@ -85,7 +85,7 @@
 
             h3 {
                 margin: 0;
-                font-size: $font-size-md;
+                font-size: $text-md;
                 font-weight: $font-weight-semibold;
             }
         }
@@ -97,11 +97,11 @@
             justify-content: center;
             padding: $space-12;
             background: $bg-card;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
             color: $text-tertiary;
 
             .icon {
-                font-size: 48px;
+                font-size: 48px; // icon glyph, not text
                 margin-bottom: $space-4;
             }
 
@@ -124,12 +124,12 @@
         .info-card,
         .protection-summary {
             background: $bg-card;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
             padding: $space-5;
 
             h3 {
                 margin: 0 0 $space-4 0;
-                font-size: $font-size-md;
+                font-size: $text-md;
                 font-weight: $font-weight-semibold;
             }
         }
@@ -151,12 +151,12 @@
             }
 
             .info-label {
-                font-size: $font-size-sm;
+                font-size: $text-xs;
                 color: $text-secondary;
             }
 
             .info-value {
-                font-size: $font-size-sm;
+                font-size: $text-xs;
                 font-weight: $font-weight-medium;
 
                 &.text-success {
@@ -191,52 +191,7 @@
             }
 
             .summary-text {
-                font-size: $font-size-sm;
-            }
-        }
-    }
-
-    // Rules Tab
-    .rules-tab {
-        .rules-table {
-            background: $bg-card;
-            border-radius: $radius-lg;
-            overflow: hidden;
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-
-                th,
-                td {
-                    padding: $space-3 $space-4;
-                    text-align: left;
-                }
-
-                th {
-                    background: $bg-hover;
-                    font-size: $font-size-xs;
-                    font-weight: $font-weight-semibold;
-                    text-transform: uppercase;
-                    color: $text-tertiary;
-                }
-
-                td {
-                    border-bottom: 1px solid $border-subtle;
-                    font-size: $font-size-sm;
-
-                    .rule-code {
-                        font-family: $font-mono;
-                        font-size: $font-size-xs;
-                        background: $bg-hover;
-                        padding: $space-1 $space-2;
-                        border-radius: $radius-sm;
-                    }
-                }
-
-                tr:last-child td {
-                    border-bottom: none;
-                }
+                font-size: $text-xs;
             }
         }
     }
@@ -255,7 +210,7 @@
             align-items: center;
             padding: $space-4;
             background: $bg-card;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
             border: 1px solid $border-subtle;
 
             .blocked-info {
@@ -270,7 +225,7 @@
 
                 .blocked-rule {
                     font-family: $font-mono;
-                    font-size: $font-size-xs;
+                    font-size: $text-xs;
                     color: $text-tertiary;
                 }
             }
@@ -281,7 +236,7 @@
     .quick-tab {
         h3 {
             margin: 0 0 $space-2 0;
-            font-size: $font-size-md;
+            font-size: $text-md;
             font-weight: $font-weight-semibold;
         }
 
@@ -298,7 +253,7 @@
             align-items: center;
             padding: $space-4;
             background: $bg-card;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
             border: 1px solid $border-subtle;
 
             .port-info {
@@ -311,7 +266,7 @@
                 }
 
                 .port-number {
-                    font-size: $font-size-sm;
+                    font-size: $text-xs;
                     color: $text-tertiary;
                     font-family: $font-mono;
                 }
@@ -323,12 +278,12 @@
     .install-info {
         padding: $space-4;
         background: $bg-hover;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         margin-top: $space-4;
 
         p {
             margin: 0;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: $line-height-relaxed;
 
             strong {

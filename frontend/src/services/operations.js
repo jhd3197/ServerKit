@@ -1,4 +1,5 @@
 import { isTerminalRunStatus } from '../hooks/runStream.js';
+import { t } from '../i18n/t.js';
 
 // A Recipe waiting on a human handoff is still an active run. It belongs in
 // the active list and the Needs attention filter, not buried in history.
@@ -66,7 +67,7 @@ function deploymentResource(job) {
         return {
             type: 'app',
             id: stringId(job.app_id),
-            label: job.app_name || `App ${job.app_id}`,
+            label: job.app_name || t('app.operations.serviceFallback', 'Service {{id}}', { id: job.app_id }),
             status: null,
             capabilities: [],
             scope: {},
@@ -76,7 +77,7 @@ function deploymentResource(job) {
         return {
             type: 'server',
             id: stringId(job.target_server_id),
-            label: job.target_server_name || `Server ${job.target_server_id}`,
+            label: job.target_server_name || t('app.operations.serverFallback', 'Server {{id}}', { id: job.target_server_id }),
             status: null,
             capabilities: [],
             scope: {},
@@ -103,7 +104,9 @@ export function normalizeDeploymentOperation(job) {
         runKind: 'deploy',
         kind: job.kind || 'deploy',
         status: job.status || 'pending',
-        title: job.title || (target ? `Deploy ${target}` : 'Application deployment'),
+        title: job.title || (target
+            ? t('app.operations.deployTarget', 'Deploy {{target}}', { target })
+            : t('app.operations.serviceDeployment', 'Service deployment')),
         resource: deploymentResource(job),
         progress: normalizeProgress(job),
         currentStepName: job.current_step_name || job.currentStepName || null,

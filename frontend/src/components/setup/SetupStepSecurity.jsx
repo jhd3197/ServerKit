@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { ShieldCheck, Copy, Download, AlertTriangle, Check, Loader } from 'lucide-react';
+import { ShieldCheck, Download, AlertTriangle, Check, Loader } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import api from '../../services/api';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '../CopyField';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
 
@@ -76,11 +76,6 @@ const SetupStepSecurity = ({ onComplete }) => {
         }
     }
 
-    function copyCodes() {
-        copyToClipboard(backupCodes.join('\n'));
-        setSavedCodes(true);
-    }
-
     function downloadCodes() {
         const body = [
             'ServerKit backup codes',
@@ -98,7 +93,7 @@ const SetupStepSecurity = ({ onComplete }) => {
     if (stage === STAGE_ALREADY) {
         return (
             <div className="wizard-step">
-                <h2 className="wizard-step-title">{t('app.setupStepSecurity.twoFactorIsOn', 'Two-factor is on')}</h2>
+                <h2 className="wizard-step-title">{t('app.setupStepSecurity.twoFactorIsOn', 'Two-factor authentication is on')}</h2>
                 <p className="wizard-step-description">
                     {t('app.setupStepSecurity.thisAccountAlreadyHasTwoFactor', 'This account already has two-factor authentication enabled. You can regenerate backup codes or turn it off from Settings.')}
                 </p>
@@ -147,7 +142,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                             {t('app.setupStepSecurity.twoFactorAuthentication', 'Two-factor authentication')}
                         </div>
                         <p className="security-offer__desc">
-                            {t('app.setupStepSecurity.takesAboutThirtySecondsWithAny', 'Takes about thirty seconds with any authenticator app — 1Password, Aegis, Google Authenticator. You\'ll get backup codes in case you lose the device.')}
+                            {t('app.setupStepSecurity.takesAboutThirtySecondsWithAny', "Takes about thirty seconds with any authenticator app, such as 1Password, Aegis or Google Authenticator. You'll get backup codes in case you lose the device.")}
                         </p>
                     </div>
                 </div>
@@ -169,7 +164,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                         onClick={handleEnable}
                         disabled={busy}
                     >
-                        {busy ? 'Starting...' : 'Enable two-factor'}
+                        {busy ? t('app.setupStepSecurity.starting', 'Starting…') : t('app.setupStepSecurity.enableTwoFactor', 'Enable two-factor')}
                     </Button>
                 </div>
             </div>
@@ -188,7 +183,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                     {setupData?.qr_code ? (
                         <img
                             src={setupData.qr_code}
-                            alt={t('app.setupStepSecurity.twoFactorQrCode', 'Two-factor QR code')}
+                            alt={t('app.setupStepSecurity.twoFactorQrCode', '2FA QR code')}
                             className="security-enroll__qr"
                         />
                     ) : (
@@ -201,7 +196,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                         <div className="security-enroll__manual-label">
                             {t('app.setupStepSecurity.canTScanEnterThisKey', 'Can\'t scan? Enter this key instead:')}
                         </div>
-                        <code className="security-enroll__secret">{setupData?.secret}</code>
+                        <CopyField value={setupData?.secret} secret />
                     </div>
                 </div>
 
@@ -239,7 +234,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                         onClick={handleConfirm}
                         disabled={busy || code.length !== CODE_LENGTH}
                     >
-                        {busy ? 'Verifying...' : 'Verify and enable'}
+                        {busy ? t('app.setupStepSecurity.verifying', 'Verifying…') : t('app.setupStepSecurity.verifyAndEnable', 'Verify and enable')}
                     </Button>
                 </div>
             </div>
@@ -251,22 +246,17 @@ const SetupStepSecurity = ({ onComplete }) => {
         <div className="wizard-step">
             <h2 className="wizard-step-title">{t('app.setupStepSecurity.saveYourBackupCodes', 'Save your backup codes')}</h2>
             <p className="wizard-step-description">
-                {t('app.setupStepSecurity.theseAreShownOnceAndNever', 'These are shown once and never again. Each works a single time if you lose your authenticator — keep them somewhere that does not depend on this server being reachable.')}
+                {t('app.setupStepSecurity.theseAreShownOnceAndNever', 'These are shown once and never again. Each works a single time if you lose your authenticator. Keep them somewhere that does not depend on this server being reachable.')}
             </p>
 
-            <div className="security-codes">
-                {backupCodes.map((backupCode) => (
-                    <code key={backupCode} className="security-codes__item">
-                        {backupCode}
-                    </code>
-                ))}
-            </div>
+            <CopyField
+                className="security-codes__list"
+                value={backupCodes.join('\n')}
+                multiline
+                onCopy={() => setSavedCodes(true)}
+            />
 
             <div className="security-codes__actions">
-                <Button variant="outline" onClick={copyCodes}>
-                    <Copy size={15} />
-                    {t('common.actions.copy', 'Copy')}
-                </Button>
                 <Button variant="outline" onClick={downloadCodes}>
                     <Download size={15} />
                     {t('common.actions.download', 'Download')}
@@ -285,7 +275,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                     className="btn-wizard-next"
                     onClick={() => onComplete(true)}
                 >
-                    {savedCodes ? 'Continue' : 'I have saved these'}
+                    {savedCodes ? t('common.actions.continue', 'Continue') : t('app.setupStepSecurity.iHaveSavedThese', 'I have saved these')}
                 </Button>
             </div>
         </div>

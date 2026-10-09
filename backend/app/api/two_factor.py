@@ -13,6 +13,7 @@ from app.models import User
 from app.services.totp_service import TOTPService, TwoFactorSetup
 from app.services import auth_throttle_service
 from app.utils.client_ip import get_client_ip
+from app.exceptions import not_found
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ def get_2fa_status():
     user = User.query.get(current_user_id)
 
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     setup = TwoFactorSetup(user)
 
@@ -49,7 +50,7 @@ def initiate_2fa_setup():
     user = User.query.get(current_user_id)
 
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     if user.totp_enabled:
         return jsonify({'error': '2FA is already enabled'}), 400
@@ -77,7 +78,7 @@ def confirm_2fa_setup():
     user = User.query.get(current_user_id)
 
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     if user.totp_enabled:
         return jsonify({'error': '2FA is already enabled'}), 400
@@ -109,7 +110,7 @@ def disable_2fa():
     user = User.query.get(current_user_id)
 
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     if not user.totp_enabled:
         return jsonify({'error': '2FA is not enabled'}), 400
@@ -142,7 +143,7 @@ def regenerate_backup_codes():
     user = User.query.get(current_user_id)
 
     if not user:
-        return jsonify({'error': 'User not found'}), 404
+        raise not_found('user')
 
     if not user.totp_enabled:
         return jsonify({'error': '2FA is not enabled'}), 400

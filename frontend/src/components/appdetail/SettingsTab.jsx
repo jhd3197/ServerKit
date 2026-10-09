@@ -4,6 +4,7 @@ import api from '../../services/api';
 import { useConfirm } from '../../hooks/useConfirm';
 import { DangerZone } from '../DangerZone';
 import { Button } from '@/components/ui/button';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { EnvTag } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import { Card as SharedCard } from '@/components/ui/card';
@@ -36,9 +37,9 @@ const SettingsTab = ({ app, onUpdate }) => {
             }
         } catch { /* cron visibility is best-effort — never block the delete */ }
 
-        const firstConfirm = await confirmAppSettings({ titleKey: 'app.settingsTab.deleteApplication', title: 'Delete Application', message: `Delete ${app.name}? It stops serving and moves to the recycle bin, where you can restore it for 30 days.${cronNote}` });
+        const firstConfirm = await confirmAppSettings({ titleKey: 'app.settingsTab.deleteApplication', title: 'Delete service', message: t('app.settingsTab.deleteServiceConfirmMessage', 'Delete {{name}}? It stops serving and moves to the recycle bin, where you can restore it for 30 days.', { name: app.name }) + cronNote });
         if (!firstConfirm) return;
-        const secondConfirm = await confirmAppSettings({ titleKey: 'app.settingsTab.confirmDeletion', title: 'Confirm Deletion', messageKey: 'app.settingsTab.areYouSureItsContainersStop', message: 'Are you sure? Its containers stop and it stops being served. Files and data volumes are kept until you purge it from the recycle bin.' });
+        const secondConfirm = await confirmAppSettings({ titleKey: 'app.settingsTab.confirmDeletion', title: 'Confirm deletion', messageKey: 'app.settingsTab.areYouSureItsContainersStop', message: 'Delete this service? Its containers stop and it stops being served. Files and data volumes are kept until you purge it from the recycle bin.' });
         if (!secondConfirm) return;
 
         setDeleting(true);
@@ -68,7 +69,7 @@ const SettingsTab = ({ app, onUpdate }) => {
     }
 
     async function handleUnlink() {
-        const confirmed = await confirmAppSettings({ titleKey: 'app.settingsTab.unlinkApplication', title: 'Unlink Application', message: `Unlink ${app.name} from its linked application? Both apps will become standalone.`, variant: 'warning' });
+        const confirmed = await confirmAppSettings({ titleKey: 'app.settingsTab.unlinkApplication', title: 'Unlink service', message: t('app.settingsTab.unlinkServiceConfirmMessage', 'Unlink {{name}} from its linked service? Both services will become standalone.', { name: app.name }), variant: 'warning' });
         if (!confirmed) return;
 
         setUnlinking(true);
@@ -84,17 +85,17 @@ const SettingsTab = ({ app, onUpdate }) => {
 
     return (
         <div>
-            <h3 className="app-eyebrow">{t('app.settingsTab.applicationSettings', 'Application Settings')}</h3>
+            <h3 className="app-eyebrow">{t('app.settingsTab.applicationSettings', 'Service settings')}</h3>
 
             <SharedCard variant="legacy" className="card settings-section">
-                <h4>{t('app.settingsTab.environmentConfiguration', 'Environment Configuration')}</h4>
+                <h4>{t('app.settingsTab.environmentConfiguration', 'Environment settings')}</h4>
                 <div className="settings-row">
                     <div className="settings-label">
-                        <span>{t('app.settingsTab.environmentType', 'Environment Type')}</span>
+                        <span>{t('app.settingsTab.environmentType', 'Environment type')}</span>
                         <span className="settings-hint">
                             {app.has_linked_app
-                                ? 'This app is linked. Unlink to change environment type.'
-                                : 'Set how this application is used in your workflow.'}
+                                ? t('app.settingsTab.linkedUnlinkToChangeEnvType', 'This service is linked. Unlink to change environment type.')
+                                : t('app.settingsTab.setHowServiceIsUsed', 'Set how this service is used in your workflow.')}
                         </span>
                     </div>
                     <div className="settings-control">
@@ -103,17 +104,21 @@ const SettingsTab = ({ app, onUpdate }) => {
                                 {envLabels[app.environment_type] || app.environment_type}
                             </EnvTag>
                         ) : (
-                            <select
+                            <Select
                                 value={environmentType}
-                                onChange={(e) => handleEnvironmentChange(e.target.value)}
+                                onValueChange={handleEnvironmentChange}
                                 disabled={savingEnvironment}
-                                className="settings-select"
                             >
-                                <option value="standalone">{t('app.settingsTab.standalone', 'Standalone')}</option>
-                                <option value="development">{t('app.settingsTab.development', 'Development')}</option>
-                                <option value="staging">{t('app.settingsTab.staging', 'Staging')}</option>
-                                <option value="production">{t('app.settingsTab.production', 'Production')}</option>
-                            </select>
+                                <SelectTrigger className="settings-select" aria-label={t('app.settingsTab.environmentType', 'Environment type')}>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="standalone">{t('app.settingsTab.standalone', 'Standalone')}</SelectItem>
+                                    <SelectItem value="development">{t('app.settingsTab.development', 'Development')}</SelectItem>
+                                    <SelectItem value="staging">{t('app.settingsTab.staging', 'Staging')}</SelectItem>
+                                    <SelectItem value="production">{t('app.settingsTab.production', 'Production')}</SelectItem>
+                                </SelectContent>
+                            </Select>
                         )}
                         {savingEnvironment && <span className="settings-saving">{t('common.editing.saving', 'Saving…')}</span>}
                     </div>
@@ -122,9 +127,9 @@ const SettingsTab = ({ app, onUpdate }) => {
                 {app.has_linked_app && (
                     <div className="settings-row settings-linked-warning">
                         <div className="settings-label">
-                            <span>{t('app.settingsTab.linkedApplication', 'Linked Application')}</span>
+                            <span>{t('app.settingsTab.linkedApplication', 'Linked service')}</span>
                             <span className="settings-hint">
-                                {t('app.settingsTab.thisAppIsLinkedToAnother', 'This app is linked to another application. Unlinking will reset both apps to standalone mode.')}
+                                {t('app.settingsTab.thisAppIsLinkedToAnother', 'This service is linked to another service. Unlinking will reset both services to standalone mode.')}
                             </span>
                         </div>
                         <div className="settings-control">
@@ -133,7 +138,7 @@ const SettingsTab = ({ app, onUpdate }) => {
                                 onClick={handleUnlink}
                                 disabled={unlinking}
                             >
-                                {unlinking ? 'Unlinking...' : 'Unlink Application'}
+                                {unlinking ? t('app.settingsTab.unlinking', 'Unlinking…') : t('app.settingsTab.unlinkService', 'Unlink service')}
                             </Button>
                         </div>
                     </div>
@@ -141,11 +146,11 @@ const SettingsTab = ({ app, onUpdate }) => {
             </SharedCard>
 
             <DangerZone
-                title={t('app.settingsTab.dangerZone', 'Danger Zone')}
-                description={t('app.settingsTab.onceYouDeleteAnApplicationThere', 'Once you delete an application, there is no going back.')}
+                title={t('app.settingsTab.dangerZone', 'Delete service')}
+                description={t('app.settingsTab.onceYouDeleteAnApplicationThere', "Deleting a service is permanent. You can't undo this.")}
                 action={
                     <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
-                        {deleting ? 'Deleting...' : 'Delete Application'}
+                        {deleting ? t('app.settingsTab.deleting', 'Deleting…') : t('app.settingsTab.deleteService', 'Delete service')}
                     </Button>
                 }
             />

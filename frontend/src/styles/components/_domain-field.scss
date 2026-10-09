@@ -1,0 +1,43 @@
+// DomainField (components/DomainField.jsx): the one domain input.
+.sk-domain-field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    min-width: 0;
+
+    &__modes { align-self: flex-start; }
+
+    &__row {
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+
+        input { flex: 1; min-width: 0; }
+    }
+
+    &__suffix,
+    &__dot {
+        font-family: var(--mono);
+        font-size: $text-xs;
+        color: var(--text-dim);
+        white-space: nowrap;
+    }
+
+    // The base picker sizes to its value; the label input takes the rest.
+    .sk-domain-field__row .sk-domain-field__base {
+        flex: 0 0 auto;
+        width: auto;
+        max-width: 45%;
+        gap: $space-hair;
+        justify-content: flex-start;
+        font-family: var(--mono);
+    }
+
+    &__status {
+        margin: 0;
+        font-size: $text-xs;
+        color: var(--text-dim);
+
+        &.is-error { color: var(--red); }
+    }
+}

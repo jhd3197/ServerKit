@@ -14,58 +14,55 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
+        gap: $space-3;
         flex-wrap: wrap;
-        margin: 16px 0 12px;
-        padding: 10px 14px;
+        margin: $space-4 0 $space-3;
+        padding: $space-3 $space-4;
         border: 1px solid var(--border-soft);
         border-left: 3px solid var(--violet);
-        border-radius: 8px;
+        border-radius: $radius-card;
         background: var(--surface-2);
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
 
         code {
             font-family: var(--mono);
-            font-size: 11.5px;
+            font-size: $text-xs;
             color: var(--violet);
         }
     }
 
-    .telemetry-table { margin-top: 16px; }
-
     .telemetry-cell__message {
-        font-size: 13px;
-        font-weight: 500;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
     }
 
     .telemetry-cell__meta {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         flex-wrap: wrap;
-        margin-top: 4px;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        margin-top: $space-1;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .telemetry-cell__source {
         color: var(--accent-bright);
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
     }
 
     .telemetry-cell__badge {
-        padding: 1px 6px;
-        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
         border: 1px solid var(--border);
         color: var(--text-dim);
     }
 
     .telemetry-cell__when {
-        font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
     }
@@ -74,15 +71,15 @@
 
     // Severity accent down the left edge of a row — the one visual the DataTable
     // does not provide and the whole point of skimming an event log.
-    tr.is-critical,
-    tr.is-error { box-shadow: inset 3px 0 0 var(--red); }
-    tr.is-warning { box-shadow: inset 3px 0 0 var(--amber); }
-    tr.is-debug { opacity: 0.72; }
+    .sk-dtable .is-critical,
+    .sk-dtable .is-error { box-shadow: inset 3px 0 0 var(--red); } // geometry: draws the severity rule
+    .sk-dtable .is-warning { box-shadow: inset 3px 0 0 var(--amber); } // geometry: draws the severity rule
+    .sk-dtable .is-debug { opacity: 0.72; }
 
     .telemetry-loading {
         display: flex;
         justify-content: center;
-        padding: 18px 0;
+        padding: $space-5 0;
     }
 }
 
@@ -90,14 +87,11 @@
 .telemetry-detail {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: $space-4;
 
     &__heading {
         margin: 0;
-        font-family: var(--mono);
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -105,19 +99,19 @@
         margin: 0;
         max-height: 340px;
         overflow: auto;
-        padding: 12px;
-        border-radius: 8px;
+        padding: $space-3;
+        border-radius: $radius-card;
         border: 1px solid var(--border-soft);
         background: var(--surface-2);
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         line-height: 1.55;
         color: var(--text-dim);
     }
 
     code {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
     }
 
     // Same definition rows the monitor surfaces use.
@@ -130,19 +124,18 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            padding: 9px 0;
+            gap: $space-4;
+            padding: $space-2 0;
             border-bottom: 1px solid var(--border-soft);
 
             &:last-child { border-bottom: none; }
         }
 
-        dt { font-size: 12.5px; color: var(--text-faint); }
+        dt { font-size: $text-sm; color: var(--text-faint); }
 
         dd {
             margin: 0;
-            font-family: var(--mono);
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--text-dim);
             text-align: right;
             word-break: break-word;

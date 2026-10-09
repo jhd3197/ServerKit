@@ -4,6 +4,7 @@ from app.services.server_template_service import ServerTemplateService
 from app.services.audit_service import AuditService
 from app.models.audit_log import AuditLog
 from app.middleware.rbac import admin_required, get_current_user
+from app.exceptions import not_found
 
 server_templates_bp = Blueprint('server_templates', __name__)
 
@@ -40,7 +41,7 @@ def create_from_library(key):
 def get_template(template_id):
     template = ServerTemplateService.get_template(template_id)
     if not template:
-        return jsonify({'error': 'Template not found'}), 404
+        raise not_found('template')
     return jsonify(template.to_dict())
 
 
@@ -77,7 +78,7 @@ def update_template(template_id):
     data = request.get_json()
     template = ServerTemplateService.update_template(template_id, data)
     if not template:
-        return jsonify({'error': 'Template not found'}), 404
+        raise not_found('template')
     return jsonify(template.to_dict())
 
 

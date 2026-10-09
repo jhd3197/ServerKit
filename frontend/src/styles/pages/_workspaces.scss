@@ -13,11 +13,8 @@
     .modal-body {
         h4 {
             margin: 0 0 $space-3;
-            font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
 
@@ -28,19 +25,15 @@
         }
 
         .form-group label {
-            font-family: var(--mono);
-            font-size: 10px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
 
         .form-hint {
             display: block;
             margin-top: $space-2;
-            font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             line-height: 1.5;
             color: var(--text-faint);
         }
@@ -55,8 +48,8 @@
     .ws-row {
         display: flex;
         align-items: center;
-        gap: 11px;
-        padding: 10px 0;
+        gap: $space-3;
+        padding: $space-3 0;
         border-bottom: 1px solid var(--border-soft);
 
         &:last-child { border-bottom: none; }
@@ -69,8 +62,8 @@
             min-width: 0;
 
             strong {
-                font-size: 13px;
-                font-weight: 550;
+                font-size: $text-sm;
+                font-weight: $font-weight-semibold;
                 color: var(--text);
             }
 
@@ -78,9 +71,8 @@
         }
 
         &__sub {
-            margin-top: 2px;
-            font-family: var(--mono);
-            font-size: 11px;
+            margin-top: $space-hair;
+            font-size: $text-xs;
             color: var(--text-faint);
             @include truncate();
         }
@@ -91,11 +83,8 @@
 // ── clickable "add / move into this workspace" lists ────
 .ws-pick-label {
     margin: $space-4 0 $space-2;
-    font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--text-ghost);
 }
 
@@ -111,8 +100,8 @@
     &__item {
         display: flex;
         align-items: center;
-        gap: 11px;
-        padding: 10px 14px;
+        gap: $space-3;
+        padding: $space-3 $space-4;
         cursor: pointer;
         transition: background 0.12s, border-color 0.12s;
 
@@ -130,13 +119,13 @@
 
     &__tile {
         flex-shrink: 0;
-        border-radius: 8px;
+        border-radius: $radius-card;
     }
 
     &__name {
         flex: 1;
         min-width: 0;
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-medium;
         color: var(--text);
         @include truncate();
@@ -157,10 +146,9 @@
     &__back {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         margin: $space-4 0 $space-3;
-        font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         text-decoration: none;
         transition: color 0.14s;
@@ -173,7 +161,7 @@
         display: flex;
         align-items: center;
         gap: $space-4;
-        padding: 18px 20px;
+        padding: $space-5 $space-5;
         background: linear-gradient(135deg, var(--surface), var(--surface-2));
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
@@ -190,7 +178,7 @@
 
         h1 {
             margin: 0;
-            font-size: 21px;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             letter-spacing: -0.01em;
             color: var(--text);
@@ -200,10 +188,9 @@
     &__meta {
         display: flex;
         align-items: center;
-        gap: 7px;
-        margin-top: 5px;
-        font-family: var(--mono);
-        font-size: 11.5px;
+        gap: $space-2;
+        margin-top: $space-tight;
+        font-size: $text-xs;
         color: var(--text-faint);
 
         .dotsep { color: var(--text-ghost); }
@@ -219,7 +206,7 @@
 
     &__desc {
         margin: $space-3 0 0;
-        font-size: 13px;
+        font-size: $text-sm;
         line-height: 1.55;
         color: var(--text-dim);
         max-width: 720px;
@@ -236,18 +223,15 @@
     }
 
     &__card {
-        padding: 16px 18px;
+        padding: $space-4 $space-5;
         background: var(--surface);
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
 
         h3 {
             margin: 0 0 $space-2;
-            font-family: var(--mono);
-            font-size: 10.5px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
     }
@@ -275,19 +259,16 @@
     }
 
     &__value {
-        font-family: var(--mono);
-        font-size: 24px;
+        font-size: $text-xl;
         font-weight: $font-weight-semibold;
         color: var(--text);
         line-height: 1.2;
     }
 
     &__label {
-        margin-top: 4px;
-        font-size: 11.5px;
+        margin-top: $space-1;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 }
@@ -296,20 +277,20 @@
     // tab strip (prototype wp-tabs: accent underline + mono counts)
     &__tabs {
         display: flex;
-        gap: 2px;
+        gap: $space-hair;
         border-bottom: 1px solid var(--border-soft);
     }
 
     &__tab {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        padding: 9px 13px;
+        gap: $space-2;
+        padding: $space-2 $space-3;
         background: transparent;
         border: none;
         border-bottom: 2px solid transparent;
         margin-bottom: -1px;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-dim);
         cursor: pointer;
         transition: color 0.14s, border-color 0.14s;
@@ -324,19 +305,11 @@
     }
 
     &__tabcount {
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-ghost);
     }
 
     &__pane { margin-top: $space-4; }
-
-    &__tablecard {
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-        overflow: hidden;
-    }
 
     &__rowactions {
         display: flex;
@@ -348,8 +321,8 @@
     &__manage {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        font-size: 12px;
+        gap: $space-1;
+        font-size: $text-xs;
         color: var(--text-faint);
         cursor: pointer;
         white-space: nowrap;
@@ -371,9 +344,9 @@
     // Full-bleed top bar with breadcrumb + title; matches the WordPress/service
     // detail pages and the Workspaces list page chrome.
     .ws-detail-topbar {
-        padding: 10px $space-4;
+        padding: $space-3 $space-4;
         flex-wrap: wrap;
-        row-gap: 8px;
+        row-gap: $space-2;
 
         .sk-topbar__spacer { display: none; }
         .sk-topbar__titles { flex-shrink: 0; }
@@ -381,7 +354,7 @@
         .ws-crumbs {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: $space-2;
             white-space: nowrap;
 
             a {
@@ -397,26 +370,25 @@
             margin-left: auto;
             flex-wrap: wrap;
             justify-content: flex-end;
-            row-gap: 6px;
+            row-gap: $space-tight;
         }
     }
 
-    // Centered max-width column below the full-bleed top bar, same as WordPress
+    // Full-width body below the full-bleed top bar, same as WordPress
     // and service detail pages.
     .app-detail-body {
         display: flex;
         flex-direction: column;
         gap: $space-5;
         width: 100%;
-        max-width: 1200px;
-        margin-inline: auto;
-        padding: $space-6 $space-6 $space-10;
+        // Same full width and gutter as every page body (page-shell-inner).
+        padding: $space-5 $space-5 $space-8;
     }
 
     // Identity row — flat on the page, no card background.
     .app-detail-header {
         gap: $space-4;
-        padding: 4px 0 0;
+        padding: $space-1 0 0;
         background: none;
         border: none;
         border-radius: 0;
@@ -426,7 +398,7 @@
 
     .ws-detail__desc {
         margin: 0;
-        font-size: 13px;
+        font-size: $text-sm;
         line-height: 1.55;
         color: var(--text-dim);
         max-width: 720px;
@@ -436,7 +408,7 @@
     .app-detail-tabs {
         flex-wrap: wrap;
         overflow-x: visible;
-        row-gap: 2px;
+        row-gap: $space-hair;
     }
 
     // Settings tab pinned to the far right of the tab strip.
@@ -447,10 +419,10 @@
 // applies if the modal is ever portaled outside the page block.
 .workspace-color-input {
     width: 48px;
-    height: 32px;
-    padding: 2px;
+    height: $control-md;
+    padding: $space-hair;
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
+    border-radius: $radius-control;
     background: var(--surface-2);
     cursor: pointer;
 }
@@ -467,10 +439,8 @@
     margin-top: $space-3;
 
     &__label {
-        font-size: 12px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
         color: var(--text-faint);
         margin-bottom: $space-2;
     }
@@ -485,7 +455,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text);
         cursor: pointer;
 
@@ -509,7 +479,7 @@
     &__nav {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         position: sticky;
         top: $space-4;
 
@@ -521,13 +491,10 @@
     &__group + &__group { margin-top: $space-4; }
 
     &__grouplabel {
-        padding: 0 12px;
-        margin-bottom: 6px;
-        font-family: var(--mono);
-        font-size: 10px;
+        padding: 0 $space-3;
+        margin-bottom: $space-tight;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -535,13 +502,13 @@
         display: flex;
         width: 100%;
         align-items: center;
-        gap: 9px;
-        padding: 9px 12px;
+        gap: $space-2;
+        padding: $space-2 $space-3;
         border: none;
-        border-radius: 8px;
+        border-radius: $radius-card;
         background: transparent;
         color: var(--text-dim);
-        font-size: 13px;
+        font-size: $text-sm;
         cursor: pointer;
         transition: background-color 0.14s, color 0.14s;
 
@@ -565,7 +532,7 @@
 
     &__section-title {
         margin: 0 0 $space-3;
-        font-size: 15px;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }

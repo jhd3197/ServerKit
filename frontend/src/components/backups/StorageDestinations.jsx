@@ -12,7 +12,7 @@ const PROVIDER_META = {
 // Where the archive can land, as a card per destination — the design mock's
 // Storage section. Local disk is always present (it is where a backup is
 // written before anything is uploaded); a configured remote joins it and takes
-// the PRIMARY badge, because that is the copy that survives losing the box.
+// the Primary badge, because that is the copy that survives losing the box.
 export default function StorageDestinations({
     stats, storageConfig, costSummary, onTest, onBrowse, onAdd, testing,
 }) {
@@ -76,12 +76,12 @@ export default function StorageDestinations({
                             <div className="bk-destcard__id">
                                 <div className="bk-destcard__name">
                                     {card.name}
-                                    {card.primary && <span className="bk-dest__tag">PRIMARY</span>}
+                                    {card.primary && <span className="bk-dest__tag">{t('app.backups.primary', 'Primary')}</span>}
                                 </div>
                                 <div className="bk-destcard__type">{card.type}</div>
                             </div>
                             <Pill kind={card.connected ? 'green' : 'gray'}>
-                                {card.connected ? 'connected' : 'not set up'}
+                                {card.connected ? t('app.storageDestinations.connected', 'connected') : t('app.storageDestinations.notSetUp', 'not set up')}
                             </Pill>
                         </div>
 
@@ -90,7 +90,7 @@ export default function StorageDestinations({
                         </div>
                         <div className="bk-destcard__usage">
                             <span>{formatBytes(card.bytes, { defaultValue: '0 B' })} stored</span>
-                            <span>{card.cost > 0 ? `$${card.cost.toFixed(2)}/mo` : 'no charge'}</span>
+                            <span>{card.cost > 0 ? `$${card.cost.toFixed(2)}/mo` : t('app.storageDestinations.noCharge', 'no charge')}</span>
                         </div>
 
                         <dl className="bk-destcard__rows">
@@ -105,11 +105,11 @@ export default function StorageDestinations({
                         <div className="bk-destcard__actions">
                             {card.testable && (
                                 <Button variant="outline" size="sm" onClick={onTest} disabled={testing}>
-                                    <Activity size={14} /> {testing ? 'Testing…' : 'Test'}
+                                    <Activity size={14} /> {testing ? t('app.storageDestinations.testing', 'Testing…') : t('common.actions.test', 'Test')}
                                 </Button>
                             )}
                             <Button variant="outline" size="sm" onClick={onBrowse}>
-                                <Archive size={14} /> {t('app.storageDestinations.snapshots', 'Snapshots')}
+                                <Archive size={14} /> {t('app.storageDestinations.snapshots', 'Backups')}
                             </Button>
                         </div>
                     </article>
@@ -120,7 +120,7 @@ export default function StorageDestinations({
                 configuration form below rather than adding a second card. */}
             <Button variant="unstyled" type="button" className="bk-destcard bk-destcard--add" onClick={onAdd}>
                 <Plus size={24} />
-                <span>{remote ? 'Change destination' : 'Add destination'}</span>
+                <span>{remote ? t('app.storageDestinations.changeDestination', 'Change destination') : t('app.storageDestinations.addDestination', 'Add destination')}</span>
             </Button>
         </div>
     );

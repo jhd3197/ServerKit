@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import Modal from '@/components/Modal';
 import ResourceListPage from '../layouts/ResourceListPage';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { SearchField, Pill, ServiceTile } from '@/components/ds';
 import { useConfirm } from '@/hooks/useConfirm';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const RESOURCE_TYPES = ['application', 'database', 'service', 'wordpress', 'server'];
 
@@ -70,25 +72,28 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
     const [attachType, setAttachType] = useState(RESOURCE_TYPES[0]);
     const [attachId, setAttachId] = useState('');
 
+    const [loadError, setLoadError] = useState(null);
+
     const loadGroups = useCallback(async () => {
         try {
             setLoading(true);
             const data = await api.listVariableGroups(scopeType, scopeId);
             setGroups(data.groups || []);
-        } catch {
-            toast.error(t('app.sharedVariableGroups.failedToLoadVariableGroups', 'Failed to load variable groups'));
+            setLoadError(null);
+        } catch (err) {
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
-    }, [scopeType, scopeId, toast, t]);
+    }, [scopeType, scopeId]);
 
     const loadDetail = useCallback(async (groupId) => {
         if (!groupId) { setDetail(null); return; }
         try {
             const data = await api.getVariableGroup(groupId);
             setDetail(data);
-        } catch {
-            toast.error(t('app.sharedVariableGroups.failedToLoadGroup', 'Failed to load group'));
+        } catch (err) {
+            toastError(toast, t('app.sharedVariableGroups.failedToLoadGroup', "Couldn't load the group."), err);
         }
     }, [t, toast]);
 
@@ -110,7 +115,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             await loadGroups();
             setSelectedId(group.id);
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToCreateGroup', 'Failed to create group'));
+            toastError(toast, t('app.sharedVariableGroups.failedToCreateGroup', "Couldn't create the group."), err);
         }
     }
 
@@ -126,7 +131,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             if (selectedId === groupId) setSelectedId(null);
             loadGroups();
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToDeleteGroup', 'Failed to delete group'));
+            toastError(toast, t('app.sharedVariableGroups.failedToDeleteGroup', "Couldn't delete the group."), err);
         }
     }
 
@@ -145,7 +150,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToAddVariable', 'Failed to add variable'));
+            toastError(toast, t('app.sharedVariableGroups.failedToAddVariable', "Couldn't add the variable."), err);
         }
     }
 
@@ -155,7 +160,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToDeleteVariable', 'Failed to delete variable'));
+            toastError(toast, t('app.sharedVariableGroups.failedToDeleteVariable', "Couldn't delete the variable."), err);
         }
     }
 
@@ -169,7 +174,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToAttachGroup', 'Failed to attach group'));
+            toastError(toast, t('app.sharedVariableGroups.failedToAttachGroup', "Couldn't attach the group."), err);
         }
     }
 
@@ -179,7 +184,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             loadDetail(selectedId);
             loadGroups();
         } catch (err) {
-            toast.error(err.message || t('app.sharedVariableGroups.failedToDetach', 'Failed to detach'));
+            toastError(toast, t('app.sharedVariableGroups.failedToDetach', "Couldn't detach the group."), err);
         }
     }
 
@@ -250,7 +255,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             type: 'number',
             sortable: true,
             width: 110,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             value: (g) => g.variable_count ?? 0,
             render: (g) => g.variable_count ?? 0,
         },
@@ -260,7 +265,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
             type: 'number',
             sortable: true,
             width: 110,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             value: (g) => g.attachment_count ?? 0,
             render: (g) => g.attachment_count ?? 0,
         },
@@ -353,6 +358,9 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                 <ResourceListPage
                     className="shared-groups"
                     loading={loading}
+                    error={loadError}
+                    errorTitle={t('app.sharedVariableGroups.couldntLoadVariableGroups', "Couldn't load variable groups.")}
+                    onRetry={loadGroups}
                     loadingTitle="Loading variable groups…"
                     storageKey="serverkit-list-variable-groups"
                     viewPageKey="variable-groups"
@@ -502,20 +510,24 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                             )}
 
                             <form className="shared-groups__attach" onSubmit={handleAttach}>
-                                <select
-                                    value={attachType}
-                                    onChange={(e) => setAttachType(e.target.value)}
-                                    className="shared-groups__attach-type"
-                                >
-                                    {RESOURCE_TYPES.map((t) => (
-                                        <option key={t} value={t}>{t}</option>
-                                    ))}
-                                </select>
+                                <Select value={attachType} onValueChange={setAttachType}>
+                                    <SelectTrigger
+                                        className="shared-groups__attach-type"
+                                        aria-label={t('app.sharedVariableGroups.resourceType', 'Resource type')}
+                                    >
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {RESOURCE_TYPES.map((type) => (
+                                            <SelectItem key={type} value={type}>{type}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                                 <Input
                                     type="text"
                                     value={attachId}
                                     onChange={(e) => setAttachId(e.target.value)}
-                                    placeholder={t('app.sharedVariableGroups.resourceId', 'resource id')}
+                                    placeholder={t('app.sharedVariableGroups.resourceId', 'resource ID')}
                                     className="shared-groups__attach-id"
                                 />
                                 <Button type="submit" size="sm" disabled={!attachId.trim()}>

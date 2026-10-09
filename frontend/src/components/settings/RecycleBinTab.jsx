@@ -5,6 +5,7 @@ import { useToast } from '@/contexts/useToast.js';
 import { useAuth } from '@/contexts/useAuth.js';
 import { Button } from '@/components/ui/button';
 import EmptyState from '@/components/EmptyState';
+import ErrorState from '@/components/ErrorState';
 import { Pill, DataTable, DataTableFooter } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
@@ -14,6 +15,7 @@ import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import ConfirmDialog from '@/components/ConfirmDialog';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Built-in saved views. Neither one names a `kind`: the registry decides what
 // lands here, so a preset that spelled out 'domain' would be a list this file
@@ -58,6 +60,8 @@ export default function RecycleBinTab() {
     const [items, setItems] = useState([]);
     const [retentionDays, setRetentionDays] = useState(30);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
+    const [loaded, setLoaded] = useState(false);
     const [busyId, setBusyId] = useState(null);
     const [purgeTarget, setPurgeTarget] = useState(null);
 
@@ -80,12 +84,14 @@ export default function RecycleBinTab() {
             const data = await api.getRecycleBin();
             setItems(data.items || []);
             setRetentionDays(data.retention_days ?? 30);
+            setLoaded(true);
+            setLoadError(null);
         } catch (err) {
-            toast.error(err.message || t('app.recycleBinTab.couldNotLoadTheRecycleBin', 'Could not load the recycle bin'));
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
-    }, [t, toast]);
+    }, []);
 
     useEffect(() => { load(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -100,10 +106,10 @@ export default function RecycleBinTab() {
             // domain that came back without its certificate), or it just worked.
             if (res?.warning) toast.error(res.warning);
             else if (res?.item?.notice) toast.warning(res.item.notice);
-            else toast.success(t('app.recycleBinTab.restored', 'Restored {{noun}} “{{label}}”', { noun: row.noun, label: row.label }));
+            else toast.success(t('app.recycleBinTab.restored', 'Restored {{noun}} "{{label}}"', { noun: row.noun, label: row.label }));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.recycleBinTab.restoreFailed', 'Restore failed'));
+            toastError(toast, t('app.recycleBinTab.restoreFailed', "Couldn't restore it."), err);
         } finally {
             setBusyId(null);
         }
@@ -113,10 +119,10 @@ export default function RecycleBinTab() {
         setBusyId(rowKey(row));
         try {
             await api.purgeRecord(row.kind, row.id);
-            toast.success(t('app.recycleBinTab.permanentlyDeleted', 'Permanently deleted “{{label}}”', { label: row.label }));
+            toast.success(t('app.recycleBinTab.permanentlyDeleted', 'Permanently deleted "{{label}}"', { label: row.label }));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.recycleBinTab.deleteFailed', 'Delete failed'));
+            toastError(toast, t('app.recycleBinTab.deleteFailed', "Couldn't delete it."), err);
         } finally {
             setBusyId(null);
             setPurgeTarget(null);
@@ -166,9 +172,9 @@ export default function RecycleBinTab() {
                 const left = retentionDays - days;
                 return (
                     <div>
-                        <div className="sk-cell-mono">{when.toLocaleDateString()}</div>
+                        <div className="sk-cell-dim">{when.toLocaleDateString()}</div>
                         <div className={`sk-cell-sub ${left <= 3 ? 'is-urgent' : ''}`}>
-                            {left > 0 ? `purges in ${left}d` : 'past retention'}
+                            {left > 0 ? t('app.recycleBinTab.purgesInDays', 'purges in {{days}}d', { days: left }) : t('app.recycleBinTab.pastRetention', 'past retention')}
                         </div>
                     </div>
                 );
@@ -230,6 +236,12 @@ export default function RecycleBinTab() {
         <div className="settings-section recyclebin">
             {loading ? (
                 <EmptyState loading loadingVariant="table" title={t('app.recycleBinTab.loadingDeletedRecords', 'Loading deleted records…')} />
+            ) : loadError && (!loaded || items.length === 0) ? (
+                <ErrorState
+                    title={t('app.recycleBinTab.couldntLoadRecycleBin', "Couldn't load the recycle bin.")}
+                    error={loadError}
+                    onRetry={load}
+                />
             ) : items.length === 0 ? (
                 <EmptyState
                     icon={Trash2}
@@ -238,6 +250,7 @@ export default function RecycleBinTab() {
                 />
             ) : (
                 <>
+                    {loadError && <ErrorState compact error={loadError} onRetry={load} />}
                     <GridViewPicker
                         views={chrome.views}
                         label="items"
@@ -280,7 +293,7 @@ export default function RecycleBinTab() {
             <ConfirmDialog
                 isOpen={!!purgeTarget}
                 variant="danger"
-                title={t('app.recycleBinTab.permanentlyDelete', 'Permanently delete “{{value}}”?', { value: purgeTarget?.label ?? '' })}
+                title={t('app.recycleBinTab.permanentlyDelete', 'Permanently delete "{{value}}"?', { value: purgeTarget?.label ?? '' })}
                 message={t('app.recycleBinTab.thisCannotBeUndoneTheRecord', 'This cannot be undone. The record is removed from the database for good.')}
                 details={purgeTarget ? `${purgeTarget.noun} · deleted ${purgeTarget.deleted_at?.slice(0, 10) || ''}` : ''}
                 confirmText={t('app.recycleBinTab.deletePermanently', 'Delete permanently')}

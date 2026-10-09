@@ -4,6 +4,10 @@ import api from '../../services/api';
 import { FormField } from '../FormField';
 import { Button } from '../ui/button';
 import ModelPicker from './ModelPicker';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '../ui/select';
+
+// Radix Select reserves '' for "no selection", so "inherit / none" is a sentinel.
+const NO_CONNECTION = '__none';
 
 export default function ModelBinding({ id, value, onChange, connections, disabled, allowInherit = false, inheritLabel, discover = false }) {
     const { t } = useTranslation();
@@ -22,14 +26,17 @@ export default function ModelBinding({ id, value, onChange, connections, disable
     };
     return <div className="sk-ai-binding">
         <FormField htmlFor={`${id}-connection`} label={t('ai.connections.connection', 'Connection')}>
-            <select id={`${id}-connection`} disabled={disabled || busy} value={value?.connection_id || ''} onChange={(event) => {
-                const next = connections.find((item) => item.id === event.target.value);
+            <Select disabled={disabled || busy} value={value?.connection_id ? String(value.connection_id) : NO_CONNECTION} onValueChange={(picked) => {
+                const next = connections.find((item) => String(item.id) === picked);
                 setModels(null); setError('');
                 onChange(next ? { connection_id: next.id, model: next.model } : null);
             }}>
-                <option value="">{allowInherit ? (inheritLabel || t('ai.management.inherit', 'Use Standard / panel default')) : t('ai.management.chooseConnection', 'Choose a connection')}</option>
-                {connections.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-            </select>
+                <SelectTrigger id={`${id}-connection`}><SelectValue /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value={NO_CONNECTION}>{allowInherit ? (inheritLabel || t('ai.management.inherit', 'Use standard / panel default')) : t('ai.management.chooseConnection', 'Choose a connection')}</SelectItem>
+                    {connections.map((item) => <SelectItem key={item.id} value={String(item.id)}>{item.name}</SelectItem>)}
+                </SelectContent>
+            </Select>
         </FormField>
         {value && <FormField htmlFor={`${id}-model`} label={t('ai.connections.model', 'Model')}>
             <ModelPicker id={`${id}-model`} value={value.model} models={catalog} disabled={disabled || busy}

@@ -14,7 +14,7 @@
         align-items: center;
         gap: $space-2;
         margin: 0 0 $space-3;
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: $text-primary;
     }
@@ -37,7 +37,7 @@
         gap: $space-2;
         padding: $space-2 $space-3;
         border-radius: $radius-full;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
         white-space: nowrap;
 
@@ -74,10 +74,10 @@
         align-items: center;
         justify-content: center;
         width: 20px;
-        height: 20px;
+        height: 20px; // geometry: stepper dot
         border: 1px solid $border-default;
         border-radius: $radius-full;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         flex-shrink: 0;
     }
@@ -93,23 +93,23 @@
 
     &__lead {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.6;
         color: $text-secondary;
 
         code {
             font-family: $font-mono;
-            font-size: $font-size-xs;
-            padding: 1px 5px;
+            font-size: $text-xs;
+            padding: 1px $space-tight;
             background: $bg-secondary;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
         }
     }
 
     &__muted {
         margin: 0;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__field {
@@ -119,7 +119,7 @@
     }
 
     &__hint {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
 
         &--warn {
@@ -140,8 +140,8 @@
         padding: $space-2 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
-        font-size: $font-size-sm;
+        border-radius: $radius-control;
+        font-size: $text-xs;
         color: $text-primary;
         cursor: pointer;
     }
@@ -166,22 +166,22 @@
     &__stat {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         padding: $space-3 $space-4;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__stat-val {
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         word-break: break-word;
     }
 
     &__stat-label {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -189,44 +189,7 @@
     // Tables (ops diff + resolver rows)
     // --------------------------------------------
     &__table-wrap {
-        overflow-x: auto;
-        border: 1px solid $border-subtle;
-        border-radius: $radius-md;
         margin-bottom: $space-3;
-    }
-
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: $font-size-sm;
-
-        th,
-        td {
-            padding: $space-2 $space-3;
-            text-align: left;
-            border-bottom: 1px solid $border-subtle;
-            white-space: nowrap;
-        }
-
-        th {
-            color: $text-tertiary;
-            font-weight: $font-weight-medium;
-            background: $bg-elevated;
-        }
-
-        td {
-            color: $text-primary;
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        code {
-            font-family: $font-mono;
-            font-size: $font-size-xs;
-            color: $text-secondary;
-        }
     }
 
     &__verify-head {
@@ -248,12 +211,12 @@
         display: flex;
         gap: $space-3;
         padding: $space-3 $space-4;
-        border-radius: $radius-md;
-        font-size: $font-size-sm;
+        border-radius: $radius-control;
+        font-size: $text-xs;
 
         svg {
             flex-shrink: 0;
-            margin-top: 2px;
+            margin-top: $space-hair;
         }
 
         p {
@@ -261,10 +224,10 @@
 
             code {
                 font-family: $font-mono;
-                font-size: $font-size-xs;
-                padding: 1px 5px;
+                font-size: $text-xs;
+                padding: 1px $space-tight;
                 background: $bg-secondary;
-                border-radius: $radius-sm;
+                border-radius: $radius-badge;
             }
         }
 

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { api } from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useServerMutation, useServerQuery } from './useServerQuery';
+import { toastError } from '@/utils/errorMessage';
 
 // Data door for the Recipe catalog (serverkit-recipes registry). Pages render
 // from this hook; raw api.* calls and query-layer error presentation stay here.
@@ -18,9 +19,7 @@ export function useRecipeCatalog() {
             // The backend serves last-good/bundled when upstream is down, so
             // failures here are local (auth/network); surface once.
             staleTime: 60_000,
-            onError: () => toast.error(
-                t('app.recipes.loadFailed', 'Could not load the recipe catalog'),
-            ),
+            onError: (err) => toastError(toast, t('app.recipes.loadFailed', "Couldn't load the recipe catalog."), err),
         },
     );
 

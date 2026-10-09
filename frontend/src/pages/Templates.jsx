@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect, useMemo, useRef  } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
-    Search, Star, ExternalLink, BookOpen, Container, Globe, BarChart3,
+    Search, BookOpen, Container, Globe, BarChart3,
     Database, Shield, Cloud, MessageSquare, Video, Music, Image, Home,
     Code, Server, GitBranch, Workflow, HardDrive, Lock, Users, FileText,
     Layers, LayoutTemplate, Check, Cpu,
@@ -12,19 +12,25 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import {
+    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
+} from '@/components/ui/select';
 import {
     SearchField, FilterDrawer, FilterButton, countActiveFilters, Drawer,
-    DataTableFooter,
+    DataTableFooter, CatalogCard, CatalogGrid,
 } from '@/components/ds';
 import { useTableChrome, GridViewPicker, GridToolsMenu } from '@/components/ds/grid';
-import ServerPicker from '@/components/templates/ServerPicker';
+import ServerPicker from '@/components/ServerPicker';
+import PortField from '@/components/PortField';
+import { LOCAL_SERVER_ID } from '@/utils/serverTarget';
 import { useTopbarChrome } from '@/hooks/useTopbarActions';
 import { applyTableSorts, useTableSort } from '@/hooks/useTableSort';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { useManagedProfile } from '../contexts/useManagedProfile';
 import ManagedCard from '../components/ManagedCard';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Featured templates (curated list)
 const FEATURED_TEMPLATES = [
@@ -220,12 +226,13 @@ const Templates = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const toast = useToast();
-    const toastError = toast.error;
+    const showError = toast.error;
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [templates, setTemplates] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [failedIcons, setFailedIcons] = useState(new Set());
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [showInstallModal, setShowInstallModal] = useState(false);
@@ -254,18 +261,22 @@ const Templates = () => {
             const result = await api.getTemplateCategories();
             setCategories(result.categories || []);
         } catch {
-            toastError(t('app.templates.failedToLoadTemplates', 'Failed to load templates'));
+            // Categories only feed the filter drawer's options; the catalog
+            // itself reports its own load failure in the content area.
         }
-    }, [t, toastError]);
+    }, []);
 
     const loadTemplates = useCallback(async () => {
         const request = ++templatesRequest.current;
         setLoading(true);
         try {
             const result = await api.listTemplates(selectedCategory || null, searchQuery || null);
-            if (request === templatesRequest.current) setTemplates(result.templates || []);
+            if (request === templatesRequest.current) {
+                setTemplates(result.templates || []);
+                setLoadError(null);
+            }
         } catch (err) {
-            console.error('Failed to load templates:', err);
+            if (request === templatesRequest.current) setLoadError(err);
         } finally {
             if (request === templatesRequest.current) setLoading(false);
         }
@@ -282,10 +293,10 @@ const Templates = () => {
             if (result.template) {
                 setSelectedTemplate(result.template);
             }
-        } catch {
-            toastError(t('app.templates.failedToLoadTemplateDetails', 'Failed to load template details'));
+        } catch (err) {
+            toastError(showError, t('app.templates.failedToLoadTemplateDetails', "Couldn't load the template details."), err);
         }
-    }, [navigate, t, toastError]);
+    }, [navigate, t, showError]);
 
     useEffect(() => {
         loadCategories();
@@ -409,8 +420,8 @@ const Templates = () => {
                 setSelectedTemplate(result.template);
                 setShowInstallModal(true);
             }
-        } catch {
-            toast.error(t('app.templates.failedToLoadTemplateDetails', 'Failed to load template details'));
+        } catch (err) {
+            toastError(toast, t('app.templates.failedToLoadTemplateDetails', "Couldn't load the template details."), err);
         }
     }
 
@@ -533,7 +544,7 @@ const Templates = () => {
                     <span className="tpl-quickstart__ico"><Download size={18} /></span>
                     <span className="tpl-quickstart__body">
                         <span className="tpl-quickstart__title">{t('app.templates.importAZip', 'Import a ZIP')}</span>
-                        <span className="tpl-quickstart__sub">{t('app.templates.dropInAProjectArchiveTo', 'Drop in a project archive to build & run')}</span>
+                        <span className="tpl-quickstart__sub">{t('app.templates.dropInAProjectArchiveTo', 'Drop in a project archive to build and run')}</span>
                     </span>
                     <ChevronRight size={16} className="tpl-quickstart__arrow" />
                 </Button>
@@ -549,79 +560,54 @@ const Templates = () => {
                 actions={chromeActions}
             />
 
-            {/* Templates Grid */}
-            <div className="templates-grid">
-                {deployManaged && (
-                    <ManagedCard capability="fleet" profile={managedProfile} compact />
-                )}
-                {sortedTemplates.length === 0 ? (
-                    <EmptyState
-                        icon={LayoutTemplate}
-                        title={t('app.templates.noTemplatesFound', 'No templates found')}
-                        description={hasActiveFilters ? t('app.templates.tryAdjustingYourFilters', 'Try adjusting your filters') : t('app.templates.noTemplatesAreAvailableYet', 'No templates are available yet')}
-                        action={hasActiveFilters && (
-                            <Button variant="outline" size="sm" onClick={clearAllFilters}>
-                                {t('app.templates.clearFilters', 'Clear Filters')}
-                            </Button>
-                        )}
-                    />
-                ) : (
-                    sortedTemplates.map(template => {
+            {deployManaged && (
+                <ManagedCard capability="fleet" profile={managedProfile} compact />
+            )}
+            {loadError && templates.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={loadTemplates} />
+            )}
+            {loadError && templates.length === 0 ? (
+                <ErrorState
+                    title={t('app.templates.couldntLoadTemplates', "Couldn't load templates.")}
+                    error={loadError}
+                    onRetry={loadTemplates}
+                />
+            ) : sortedTemplates.length === 0 ? (
+                <EmptyState
+                    icon={LayoutTemplate}
+                    title={t('app.templates.noTemplatesFound', 'No templates found')}
+                    description={hasActiveFilters ? t('app.templates.tryAdjustingYourFilters', 'Try adjusting your filters') : t('app.templates.noTemplatesAreAvailableYet', 'No templates are available yet')}
+                    action={hasActiveFilters && (
+                        <Button variant="outline" size="sm" onClick={clearAllFilters}>
+                            {t('app.templates.clearFilters', 'Clear filters')}
+                        </Button>
+                    )}
+                />
+            ) : (
+                <CatalogGrid>
+                    {sortedTemplates.map(template => {
                         const isRepo = (template.kind || 'compose') === 'repo';
                         return (
-                            <div key={template.id} className="tpl-card" onClick={() => !deployManaged && handleDeploy(template)}>
-                                {isFeatured(template.id) && (
-                                    <span className="tpl-ft" title={t('app.templates.featured', 'Featured')}>
-                                        <Star size={14} />
-                                    </span>
-                                )}
-                                <div className="tpl-top">
-                                    <span className="tpl-ico">
-                                        {renderIcon(template, 22)}
-                                    </span>
-                                    <div className="tpl-id">
-                                        <div className="tpl-name">{template.name}</div>
-                                        <div className="tpl-ver">v{template.version}</div>
-                                    </div>
-                                </div>
-                                <p className="tpl-desc">{template.description}</p>
-                                <div className="tpl-tags">
-                                    <Badge variant={isRepo ? 'info' : 'outline'} className="tpl-kind">
-                                        {isRepo ? 'Git repo' : 'One-click'}
-                                    </Badge>
-                                    {(template.categories || []).slice(0, 2).map(cat => (
-                                        <span key={cat} className="tg">
-                                            {cat}
-                                        </span>
-                                    ))}
-                                    {template.website && (
-                                        <span className="tpl-link" title={t('app.templates.hasWebsite', 'Has website')}>
-                                            <ExternalLink size={12} />
-                                        </span>
-                                    )}
-                                    {template.documentation && (
-                                        <span className="tpl-link" title={t('app.templates.hasDocumentation', 'Has documentation')}>
-                                            <BookOpen size={12} />
-                                        </span>
-                                    )}
-                                    {!deployManaged && (
-                                    <Button
-                                        size="sm"
-                                        className="tpl-deploy"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDeploy(template);
-                                        }}
-                                    >
+                            <CatalogCard
+                                key={template.id}
+                                icon={renderIcon(template, 22)}
+                                title={template.name}
+                                sub={`v${template.version}`}
+                                tag={isRepo ? t('app.templates.gitRepo', 'Git repo') : t('app.templates.oneClick', 'One-click')}
+                                featured={isFeatured(template.id)}
+                                description={template.description}
+                                facts={(template.categories || []).slice(0, 2).join(' · ')}
+                                onClick={deployManaged ? undefined : () => handleDeploy(template)}
+                                action={!deployManaged && (
+                                    <Button variant="outline" size="sm" onClick={() => handleDeploy(template)}>
                                         <Rocket size={12} /> {t('app.templates.deploy', 'Deploy')}
                                     </Button>
-                                    )}
-                                </div>
-                            </div>
+                                )}
+                            />
                         );
-                    })
-                )}
-            </div>
+                    })}
+                </CatalogGrid>
+            )}
 
             {/* Under the cards, not above them: `templates` is what the category
                 and search query returned, `sortedTemplates` is what the kind
@@ -646,7 +632,7 @@ const Templates = () => {
                     onSuccess={(appId) => {
                         setShowInstallModal(false);
                         setSelectedTemplate(null);
-                        toast.success(t('app.templates.applicationInstalledSuccessfully', 'Application installed successfully!'));
+                        toast.success(t('app.templates.applicationInstalledSuccessfully', 'Service installed'));
                         navigate(`/services/${appId}/logs`);
                     }}
                 />
@@ -712,8 +698,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
     );
     const [branch, setBranch] = useState(template.repo?.branch || 'main');
     const [variables, setVariables] = useState({});
-    const [servers, setServers] = useState([{ id: 'local', name: 'Local server', is_local: true }]);
-    const [selectedServerId, setSelectedServerId] = useState('local');
+    const [selectedServerId, setSelectedServerId] = useState(LOCAL_SERVER_ID);
     const [capacity, setCapacity] = useState(null);
     const [capacityLoading, setCapacityLoading] = useState(false);
     const [installing, setInstalling] = useState(false);
@@ -735,7 +720,6 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
     }, [template]);
 
     useEffect(() => {
-        loadServers();
         api.getSiteBaseDomains()
             .then((data) => {
                 const bases = data?.base_domains || [];
@@ -745,20 +729,6 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
             })
             .catch(() => setBaseDomain(null));
     }, []);
-
-    async function loadServers() {
-        try {
-            const data = await api.getAvailableServers();
-            const list = Array.isArray(data) ? data : [];
-            if (list.length > 0) {
-                setServers(list);
-                setSelectedServerId(list[0].id);
-            }
-        } catch {
-            setServers([{ id: 'local', name: 'Local server', is_local: true }]);
-            setSelectedServerId('local');
-        }
-    }
 
     // Ask whether this template fits the chosen server, and re-ask whenever
     // they switch — the whole point is to answer before the deploy, not after.
@@ -777,8 +747,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
     // container on a remote server — and the repo pipeline has no auto-publish
     // step at all. Showing it and then landing on host:port is worse than not
     // offering it (the operator had to redo the domain in service settings).
-    const selectedServer = servers.find((s) => s.id === selectedServerId);
-    const isLocalTarget = selectedServerId === 'local' || !!selectedServer?.is_local;
+    const isLocalTarget = selectedServerId === LOCAL_SERVER_ID;
     const domainPreview = baseDomain && appName && isLocalTarget && !isRepo
         ? `${appName}.${baseDomain}` : null;
 
@@ -926,7 +895,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                                 />
                             </div>
                             <span className="sk-formdrawer__hint">
-                                {template.repo?.url || 'Builds from the template repository'}
+                                {template.repo?.url || t('app.templates.buildsFromTemplateRepository', 'Builds from the template repository')}
                             </span>
                         </div>
                     )}
@@ -943,8 +912,8 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                             </div>
                             <span className="sk-formdrawer__hint">
                                 {httpsBase
-                                    ? 'Published automatically with HTTPS once the deploy finishes'
-                                    : 'Published automatically once the deploy finishes'}
+                                    ? t('app.templates.publishedAutomaticallyWithHttps', 'Published automatically with HTTPS once the deploy finishes')
+                                    : t('app.templates.publishedAutomatically', 'Published automatically once the deploy finishes')}
                             </span>
                         </div>
                     )}
@@ -952,9 +921,10 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                     <div className="sk-formdrawer__field">
                         <span className="sk-formdrawer__label">{t('app.templates.deployToServer', 'Deploy to server')}</span>
                         <ServerPicker
-                            servers={servers}
                             value={selectedServerId}
-                            onChange={setSelectedServerId}
+                            onChange={(id) => setSelectedServerId(id)}
+                            capability="docker"
+                            label={t('app.serverPicker.deployToServer', 'Deploy to server')}
                         />
                         {/* Sits under the picker because the answer depends on
                             which server is chosen — switching re-asks. */}
@@ -963,7 +933,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
 
                     {visibleVars.length > 0 && (
                         <div className="sk-formdrawer__field">
-                            <span className="sk-formdrawer__label">{t('app.templates.configuration', 'Configuration')}</span>
+                            <span className="sk-formdrawer__label">{t('app.templates.configuration', 'Settings')}</span>
                             {visibleVars.map(variable => (
                                 <div key={variable.name} className="form-group">
                                     <label>
@@ -971,16 +941,30 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                                         {variable.required && ' *'}
                                     </label>
                                     {variable.options ? (
-                                        <select
+                                        <Select
                                             value={variables[variable.name] || ''}
-                                            onChange={(e) => setVariables({...variables, [variable.name]: e.target.value})}
+                                            onValueChange={(v) => setVariables({...variables, [variable.name]: v})}
                                             required={variable.required}
                                         >
-                                            <option value="">{t('app.templates.select', 'Select…')}</option>
-                                            {variable.options.map(opt => (
-                                                <option key={opt} value={opt}>{opt}</option>
-                                            ))}
-                                        </select>
+                                            <SelectTrigger aria-label={variable.name}>
+                                                <SelectValue placeholder={t('app.templates.select', 'Select…')} />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {variable.options.filter(opt => opt !== '').map(opt => (
+                                                    <SelectItem key={opt} value={String(opt)}>{opt}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    ) : variable.type === 'port' ? (
+                                        // Host ports are only checked against this panel's
+                                        // host; on a remote server just the range applies.
+                                        <PortField
+                                            value={variables[variable.name] || ''}
+                                            onChange={(port) => setVariables({...variables, [variable.name]: port === '' ? '' : String(port)})}
+                                            host={isLocalTarget}
+                                            placeholder={variable.default || ''}
+                                            required={variable.required}
+                                        />
                                     ) : variable.type === 'password' ? (
                                         <Input
                                             type="password"
@@ -991,7 +975,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                                         />
                                     ) : (
                                         <Input
-                                            type={variable.type === 'port' ? 'number' : 'text'}
+                                            type="text"
                                             value={variables[variable.name] || ''}
                                             onChange={(e) => setVariables({...variables, [variable.name]: e.target.value})}
                                             placeholder={variable.default || ''}
@@ -1013,7 +997,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                     </Button>
                     <Button type="submit" disabled={installing}>
                         <Rocket size={15} />
-                        {installing ? 'Deploying…' : `Deploy ${template.name}`}
+                        {installing ? t('app.templates.deploying', 'Deploying…') : t('app.templates.deployName', 'Deploy {{name}}', { name: template.name })}
                     </Button>
                 </div>
             </form>

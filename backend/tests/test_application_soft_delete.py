@@ -333,7 +333,7 @@ def test_deleting_a_user_who_owns_applications_is_refused(app, client, auth_head
 
     res = client.delete(f'/api/v1/admin/users/{owner_id}', headers=auth_headers)
     assert res.status_code == 409, res.get_json()
-    assert 'application' in res.get_json()['error']
+    assert 'service' in res.get_json()['error']
 
 
 def test_purge_honours_an_explicit_remove_data_false(app, dead_app, monkeypatch):

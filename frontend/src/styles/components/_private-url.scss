@@ -5,7 +5,7 @@
 .private-url-section {
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: $space-5;
     margin-bottom: $space-5;
 
@@ -17,8 +17,8 @@
             align-items: center;
             gap: $space-2;
             margin: 0;
-            font-size: $font-size-lg;
-            font-weight: 500;
+            font-size: $text-lg;
+            font-weight: $font-weight-medium;
             color: $text-primary;
 
             svg {
@@ -31,14 +31,14 @@
 .private-url-disabled {
     .hint {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin-bottom: $space-4;
         line-height: 1.5;
     }
 
     .slug-hint {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         margin-top: $space-2;
     }
 }
@@ -61,19 +61,19 @@
         background: $bg-tertiary;
         border: 1px solid $border-subtle;
         border-right: none;
-        border-radius: $radius-sm 0 0 $radius-sm;
-        padding: $space-2 $space-3;
+        border-radius: $radius-control 0 0 $radius-control;
+        padding: 0 $space-3;
         color: $text-tertiary;
         font-family: $font-mono;
-        font-size: $font-size-sm;
-        height: 40px;
+        font-size: $text-xs;
+        height: $control-md; // matches the 32px slug input it prefixes
         display: flex;
         align-items: center;
     }
 
     .slug-input {
         flex: 1;
-        border-radius: 0 $radius-sm $radius-sm 0;
+        border-radius: 0 $radius-control $radius-control 0;
         font-family: $font-mono;
         min-width: 150px;
     }
@@ -83,7 +83,7 @@
     .private-url-display {
         background: fade($success-raw, 10%);
         border: 1px solid fade($success-raw, 30%);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         padding: $space-4;
         margin-bottom: $space-4;
     }
@@ -93,22 +93,6 @@
         flex-direction: column;
         gap: $space-2;
         margin-bottom: $space-3;
-    }
-
-    .url-label {
-        color: $text-secondary;
-        font-size: $font-size-sm;
-    }
-
-    .url-value {
-        background: $bg-secondary;
-        padding: $space-2 $space-3;
-        border-radius: $radius-sm;
-        font-family: $font-mono;
-        font-size: $font-size-sm;
-        color: $text-primary;
-        word-break: break-all;
-        user-select: all;
     }
 
     .url-actions {
@@ -136,7 +120,7 @@
     align-items: center;
     gap: $space-1;
     color: $success;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     svg {
         width: 14px;

@@ -15,11 +15,11 @@
         display: inline-flex;
         align-items: center;
         padding: 1px $space-1;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: $warning-bg;
         border: 1px solid $warning-border;
         color: $warning;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         line-height: 1.3;
         font-variant-numeric: tabular-nums;
@@ -39,9 +39,9 @@
         padding: $space-2 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-default;
-        border-radius: $radius-md;
-        box-shadow: $shadow-lg;
-        font-size: $font-size-xs;
+        border-radius: $radius-control;
+        box-shadow: $shadow-overlay;
+        font-size: $text-xs;
         line-height: 1.4;
         color: $text-secondary;
         white-space: normal;

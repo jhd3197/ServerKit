@@ -11,8 +11,8 @@ import { Button as SharedButton } from '@/components/ui/button';
 // also what their cards and Deploy buttons open — one surface, not two.
 const SOURCES = [
     { mode: 'github', Icon: SiGithub, titleKey: 'app.sourceStep.github', title: 'GitHub', sub: 'Connect with OAuth and choose a repository' },
-    { mode: 'manual', Icon: GitBranch, titleKey: 'app.sourceStep.otherGitRemote', title: 'Other Git Remote', sub: 'GitLab, Bitbucket, Gitea, or SSH' },
-    { mode: 'local', Icon: FolderOpen, titleKey: 'app.sourceStep.manualLocal', title: 'Manual / Local', sub: 'Register an app already on the server' },
+    { mode: 'manual', Icon: GitBranch, titleKey: 'app.sourceStep.otherGitRemote', title: 'Other Git remote', sub: 'GitLab, Bitbucket, Gitea, or SSH' },
+    { mode: 'local', Icon: FolderOpen, titleKey: 'app.sourceStep.manualLocal', title: 'Manual / local', sub: 'Register an app already on the server' },
     { mode: 'upload', Icon: FileArchive, titleKey: 'app.sourceStep.uploadZip', title: 'Upload ZIP', sub: 'Deploy or update from a zip archive' },
 ];
 
@@ -27,7 +27,6 @@ const SourceStep = ({ form }) => {
         <div className="new-service-page__step">
             <div className="new-service-page__step-head">
                 <h2>{t('app.sourceStep.howDoYouWantToDeploy', 'How do you want to deploy?')}</h2>
-                <p>{t('app.sourceStep.pickASourceYouCanChange', 'Pick a source. You can change it on the next step.')}</p>
             </div>
             <div className="new-service-page__sources" data-walkthrough="service-sources" role="radiogroup" aria-label={t('app.sourceStep.serviceSource', 'Service source')}>
                 {SOURCES.map(({ mode, Icon, title, sub }) => (

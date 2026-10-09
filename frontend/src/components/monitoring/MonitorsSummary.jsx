@@ -81,11 +81,11 @@ export default function MonitorsSummary({ refreshKey = 0 }) {
                         <span className="mon-panel-sub">{t('app.monitorsSummary.nothingIsBeingWatchedYet', 'Nothing is being watched yet')}</span>
                     </div>
                     <Button size="sm" onClick={() => navigate('/monitoring/monitors')}>
-                        <Plus size={14} /> {t('app.monitorsSummary.addMonitor', 'Add monitor')}
+                        <Plus size={14} /> {t('app.monitorsSummary.addMonitor', 'New monitor')}
                     </Button>
                 </div>
                 <p className="mon-panel-hint">
-                    {t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkit', 'Everything below describes the machines ServerKit runs on. Add a monitor to watch a website, an API endpoint, a database port or a WordPress site and get an incident when it stops answering.')}
+                    {t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkit', 'Everything below describes the servers ServerKit runs on. Add a monitor to watch a website, an API endpoint, a database port or a WordPress site and get an incident when it stops answering.')}
                 </p>
             </section>
         );
@@ -154,7 +154,7 @@ export default function MonitorsSummary({ refreshKey = 0 }) {
                                     <span className="mon-monitor-row__body">
                                         <span className="mon-monitor-row__name">{monitor.name}</span>
                                         <span className="mon-monitor-row__sub">
-                                            {monitor.check_type} · {monitor.check_target || 'bound site'}
+                                            {monitor.check_type} · {monitor.check_target || t('app.monitorsSummary.boundSite', 'bound site')}
                                         </span>
                                     </span>
                                     <span className="mon-monitor-row__ms">
@@ -176,7 +176,7 @@ export default function MonitorsSummary({ refreshKey = 0 }) {
                     </div>
                     {feed.length === 0 ? (
                         <p className="mon-panel-hint">
-                            {t('app.monitorsSummary.noChecksRecordedYetTheScheduler', 'No checks recorded yet — the scheduler polls on each monitor\'s interval.')}
+                            {t('app.monitorsSummary.noChecksRecordedYetTheScheduler', "No checks recorded yet. The scheduler polls on each monitor's interval.")}
                         </p>
                     ) : (
                         <div className="mon-feed">

@@ -76,7 +76,7 @@ const MetricsTabContent = ({ app }) => {
                 <div className="metrics-tab__grid">
                     <div className="metrics-tab__card">
                         <div className="metrics-tab__card-header">
-                            <h4>{t('app.metricsTab.cpuUsage', 'CPU Usage')}</h4>
+                            <h4>{t('app.metricsTab.cpuUsage', 'CPU usage')}</h4>
                             <span>{cpuPercent.toFixed(1)}%</span>
                         </div>
                         <Gauge value={cpuPercent} />
@@ -84,7 +84,7 @@ const MetricsTabContent = ({ app }) => {
 
                     <div className="metrics-tab__card">
                         <div className="metrics-tab__card-header">
-                            <h4>{t('app.metricsTab.memoryUsage', 'Memory Usage')}</h4>
+                            <h4>{t('app.metricsTab.memoryUsage', 'Memory usage')}</h4>
                             <span>{memPercent.toFixed(1)}%</span>
                         </div>
                         <Gauge value={memPercent} />
@@ -122,10 +122,10 @@ const MetricsTabContent = ({ app }) => {
                 <div className="metrics-tab__grid">
                     <div className="metrics-tab__card">
                         <div className="metrics-tab__card-header">
-                            <h4>{t('app.metricsTab.serviceStatus', 'Service Status')}</h4>
+                            <h4>{t('app.metricsTab.serviceStatus', 'Service status')}</h4>
                         </div>
                         <div className="metrics-tab__info">
-                            {processInfo.active ? 'Active (running)' : 'Inactive'}
+                            {processInfo.active ? t('app.metricsTab.activeRunning', 'Active (running)') : t('app.metricsTab.inactive', 'Inactive')}
                         </div>
                     </div>
 

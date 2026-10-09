@@ -4,8 +4,9 @@ import { RefreshCw, Loader2, PlayCircle, FlaskConical } from 'lucide-react';
 import api from '../services/api';
 import Modal from '../components/Modal';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { Button } from '@/components/ui/button';
-import { DataTable, DataTableFooter, Pill, SearchField, statusKind } from '@/components/ds';
+import { DataTable, DataTableFooter, Pill, SearchField, SegControl, statusKind } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
@@ -94,6 +95,7 @@ const Deployments = () => {
     const navigate = useNavigate();
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [search, setSearch] = useState('');
     const [autoRefresh, setAutoRefresh] = useState(true);
 
@@ -134,8 +136,11 @@ const Deployments = () => {
             setJobs(rows);
             setHasMore(rows.length >= limit);
             setLoaded(limit);
+            setLoadError(null);
         } catch (err) {
-            console.error('Failed to load deployment jobs', err);
+            // Keep whatever is on screen; the error renders above it (or in
+            // place of the table when nothing has loaded yet).
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -266,7 +271,7 @@ const Deployments = () => {
             value: (job) => job.target_server_name || 'Local server',
             sortValue: (job) => job.target_server_name || 'Local server',
             groupValue: (job) => job.target_server_name || 'Local server',
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (job) => job.target_server_name || 'Local server',
         },
         {
@@ -277,7 +282,7 @@ const Deployments = () => {
             unit: 's',
             value: (job) => job.duration ?? null,
             sortValue: (job) => job.duration ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (job) => formatDuration(job.duration),
         },
         {
@@ -292,7 +297,7 @@ const Deployments = () => {
                 return Number.isNaN(time) ? null : time;
             },
             groupValue: (job) => activityGroup(job),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (job) => (job.status === 'pending'
                 ? 'queued'
                 : relativeTime(job.started_at || job.created_at)),
@@ -349,7 +354,7 @@ const Deployments = () => {
                 title={t('app.deployments.autoRefreshEvery3s', 'Auto-refresh every 3s')}
             >
                 <RefreshCw size={16} className={autoRefresh ? 'spin' : ''} />
-                {autoRefresh ? 'Live' : 'Paused'}
+                {autoRefresh ? t('app.deployments.live', 'Live') : t('app.deployments.paused', 'Paused')}
             </Button>
         </>,
         [autoRefresh, simInfo?.enabled]
@@ -369,6 +374,17 @@ const Deployments = () => {
 
             <GridChips {...chrome.chipProps} />
 
+            {loadError && jobs.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={() => loadJobs(loaded)} />
+            )}
+
+            {loadError && jobs.length === 0 ? (
+                <ErrorState
+                    title={t('app.deployments.couldntLoadDeployments', "Couldn't load deployments.")}
+                    error={loadError}
+                    onRetry={() => loadJobs(loaded)}
+                />
+            ) : (
             <DataTable
                 columns={chrome.columns}
                 data={searched}
@@ -405,6 +421,7 @@ const Deployments = () => {
                     />
                 )}
             />
+            )}
 
             <GridFilterDrawer {...chrome.drawerProps} />
 
@@ -415,15 +432,20 @@ const Deployments = () => {
                 size="md"
             >
                 <p className="deployments-page__sim-intro">
-                    {t('app.deployments.streamsScriptedOutputThroughTheReal', 'Streams scripted output through the real deploy pipeline — no containers, files, or servers are touched. Development only.')}
+                    {t('app.deployments.streamsScriptedOutputThroughTheReal', 'Streams scripted output through the real deploy pipeline. No containers, files, or servers are touched. Development only.')}
                 </p>
-                <label className="deployments-page__sim-speed">
-                    {t('app.deployments.speed', 'Speed')}
-                    <select value={simSpeed} onChange={(e) => setSimSpeed(e.target.value)}>
-                        <option value="fast">{t('app.deployments.fast', 'Fast')}</option>
-                        <option value="realtime">{t('app.deployments.realtime', 'Realtime')}</option>
-                    </select>
-                </label>
+                <div className="deployments-page__sim-speed">
+                    <span>{t('app.deployments.speed', 'Speed')}</span>
+                    <SegControl
+                        options={[
+                            { value: 'fast', label: t('app.deployments.fast', 'Fast') },
+                            { value: 'realtime', label: t('app.deployments.realtime', 'Realtime') },
+                        ]}
+                        value={simSpeed}
+                        onChange={setSimSpeed}
+                        aria-label={t('app.deployments.speed', 'Speed')}
+                    />
+                </div>
                 <div className="deployments-page__sim-list">
                     {(simInfo?.scenarios || []).map((s) => (
                         <Button variant="unstyled"

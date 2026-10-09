@@ -25,15 +25,25 @@ $dbx-sqlite: #3d8fd1;
     box-sizing: border-box;
     overflow: hidden;
 
+    // On PageLayout the console renders inside the shell's fill region, which
+    // is a plain block: make it the flex column `.dbx-body { flex: 1 }` needs,
+    // or the body collapses to its content and the status bar floats up.
+    .sk-pageshell__fill {
+        display: flex;
+        flex-direction: column;
+    }
+
     // ─── shared controls ─────────────────────────────────
     .dbx-icon-btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 7px;
+        width: $control-sm;
+        height: $control-sm;
+        padding: 0;
         background: transparent;
         border: 1px solid transparent;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-secondary;
         cursor: pointer;
         transition: background $transition-fast, color $transition-fast;
@@ -47,12 +57,13 @@ $dbx-sqlite: #3d8fd1;
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: 6px $space-3;
+        height: $control-sm;
+        padding: 0 $space-3;
         background: $bg-tertiary;
         border: 1px solid transparent;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         cursor: pointer;
         white-space: nowrap;
@@ -64,121 +75,9 @@ $dbx-sqlite: #3d8fd1;
         svg { flex-shrink: 0; }
     }
 
-    .dbx-primary {
-        display: inline-flex;
-        align-items: center;
-        gap: $space-1;
-        padding: 6px $space-3;
-        background: $accent-primary;
-        border: none;
-        border-radius: $radius-md;
-        color: #fff;
-        font-size: $font-size-sm;
-        font-weight: $font-weight-semibold;
-        cursor: pointer;
-        box-shadow: $shadow-accent;
-        transition: background $transition-fast, transform $transition-fast;
-
-        &:hover { background: $accent-hover; }
-        &:active { transform: translateY(1px); }
-        svg { flex-shrink: 0; }
-    }
-
-    .dbx-mono { font-family: $font-mono; font-size: $font-size-xs; }
+    .dbx-mono { font-family: $font-mono; font-size: $text-xs; }
     .dbx-spin { animation: dbx-spin 1s linear infinite; }
     @keyframes dbx-spin { to { transform: rotate(360deg); } }
-
-    // ─── Toolbar ──────────────────────────────────────────
-    .dbx-toolbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $space-3;
-        min-height: 54px;
-        padding: $space-2 $space-3;
-        background: $bg-card;
-        border-bottom: 1px solid $border-default;
-        flex-shrink: 0;
-    }
-
-    .dbx-toolbar-left { display: flex; align-items: center; gap: $space-2; min-width: 0; }
-    .dbx-toolbar-right { display: flex; align-items: center; gap: $space-2; }
-
-    .dbx-title {
-        display: inline-flex;
-        align-items: center;
-        gap: $space-2;
-        margin: 0;
-        font-size: $font-size-md;
-        font-weight: $font-weight-semibold;
-        letter-spacing: -0.01em;
-        color: $text-primary;
-
-        svg { color: $accent-primary; }
-    }
-
-    @media (max-width: $breakpoint-sm) {
-        .dbx-toolbar {
-            justify-content: flex-start;
-            overflow-x: auto;
-            overflow-y: hidden;
-            scrollbar-width: none;
-            -webkit-mask-image: linear-gradient(to right, black 0, black calc(100% - 28px), transparent 100%);
-            mask-image: linear-gradient(to right, black 0, black calc(100% - 28px), transparent 100%);
-
-            &::-webkit-scrollbar { display: none; }
-        }
-
-        .dbx-toolbar-left,
-        .dbx-toolbar-right { flex-shrink: 0; }
-
-        .dbx-title { white-space: nowrap; }
-    }
-
-    // ─── New menu ─────────────────────────────────────────
-    .dbx-new { position: relative; }
-
-    .dbx-menu {
-        position: absolute;
-        top: calc(100% + 6px);
-        right: 0;
-        min-width: 230px;
-        padding: 4px;
-        background: $bg-card;
-        border: 1px solid $border-default;
-        border-radius: $radius-md;
-        box-shadow: $shadow-lg;
-        z-index: $z-dropdown;
-        animation: dbx-pop 0.12s $ease-out-quart;
-
-        button {
-            display: flex;
-            align-items: center;
-            gap: $space-2;
-            width: 100%;
-            padding: $space-2 $space-3;
-            background: transparent;
-            border: none;
-            border-radius: $radius-sm;
-            color: $text-primary;
-            font-size: $font-size-sm;
-            text-align: left;
-            cursor: pointer;
-            transition: background $transition-fast;
-
-            &:hover:not(:disabled) { background: $bg-hover; }
-            &:disabled { opacity: 0.4; cursor: not-allowed; }
-            svg { flex-shrink: 0; color: $text-secondary; }
-        }
-    }
-
-    .dbx-menu-hint {
-        margin-left: auto;
-        font-size: $font-size-xs;
-        color: $text-tertiary;
-        font-style: italic;
-    }
-    .dbx-menu-sep { height: 1px; background: $border-default; margin: 4px 2px; }
 
     @keyframes dbx-pop {
         from { opacity: 0; transform: translateY(-4px); }
@@ -238,7 +137,7 @@ $dbx-sqlite: #3d8fd1;
         padding: $space-2;
         scrollbar-width: thin;
         &::-webkit-scrollbar { width: 6px; }
-        &::-webkit-scrollbar-thumb { background: $border-active; border-radius: $radius-sm; }
+        &::-webkit-scrollbar-thumb { background: $border-active; border-radius: $radius-badge; }
     }
 
     .dbx-tree-loading {
@@ -247,7 +146,7 @@ $dbx-sqlite: #3d8fd1;
         gap: $space-2;
         padding: $space-4;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     // ─── Tree rows ────────────────────────────────────────
@@ -265,8 +164,8 @@ $dbx-sqlite: #3d8fd1;
         display: flex;
         align-items: center;
         gap: $space-1;
-        padding: 5px 4px;
-        border-radius: $radius-sm;
+        padding: $space-tight $space-1;
+        border-radius: $radius-badge;
         cursor: pointer;
         color: $text-primary;
         user-select: none;
@@ -294,11 +193,11 @@ $dbx-sqlite: #3d8fd1;
     .dbx-tree-source {
         display: inline-flex;
         align-items: center;
-        gap: 3px;
+        gap: $space-1;
         flex-shrink: 0;
         margin-left: $space-1;
-        padding: 1px 6px;
-        font-size: 10px;
+        padding: 1px $space-tight;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         line-height: 1.5;
         border-radius: $radius-full;
@@ -318,7 +217,7 @@ $dbx-sqlite: #3d8fd1;
         border: none;
         color: $text-tertiary;
         cursor: pointer;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         &:hover { color: $text-primary; }
         &--leaf { cursor: default; }
     }
@@ -329,14 +228,13 @@ $dbx-sqlite: #3d8fd1;
         flex: 1;
         min-width: 0;
         @include dbx-trunc;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .dbx-tree-badge {
         flex-shrink: 0;
-        padding: 0 6px;
-        font-family: $font-mono;
-        font-size: 10px;
+        padding: 0 $space-tight;
+        font-size: $text-xs;
         color: $text-tertiary;
         background: $bg-tertiary;
         border-radius: $radius-full;
@@ -347,8 +245,7 @@ $dbx-sqlite: #3d8fd1;
     // fact read off the loaded tree, so it sits quieter than the size badge.
     .dbx-tree-count {
         flex-shrink: 0;
-        font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         line-height: 16px;
         color: $text-tertiary;
         font-variant-numeric: tabular-nums;
@@ -357,7 +254,7 @@ $dbx-sqlite: #3d8fd1;
     // Why a not-installed engine offers no install button.
     .dbx-tree-hint {
         flex-shrink: 0;
-        font-size: 10px;
+        font-size: $text-xs;
         font-style: italic;
         color: $text-tertiary;
     }
@@ -365,15 +262,15 @@ $dbx-sqlite: #3d8fd1;
     .dbx-tree-status {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: $space-tight;
         flex-shrink: 0;
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
 
         .dbx-status-dot { width: 7px; height: 7px; border-radius: $radius-full; background: currentColor; }
-        &.is-active { color: $success; .dbx-status-dot { box-shadow: 0 0 6px currentColor; } }
-        &.is-inactive { color: $warning; .dbx-status-dot { box-shadow: 0 0 6px currentColor; } }
+        &.is-active { color: $success; }
+        &.is-inactive { color: $warning; }
         &.is-missing { color: $text-tertiary; }
     }
 
@@ -382,10 +279,10 @@ $dbx-sqlite: #3d8fd1;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 2px;
+        padding: $space-hair;
         background: transparent;
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-tertiary;
         cursor: pointer;
         opacity: 0;
@@ -394,8 +291,8 @@ $dbx-sqlite: #3d8fd1;
     }
 
     .dbx-tree-leaf-msg {
-        padding: 4px 6px;
-        font-size: $font-size-xs;
+        padding: $space-1 $space-tight;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-style: italic;
         &.is-error { color: $danger; }
@@ -432,7 +329,7 @@ $dbx-sqlite: #3d8fd1;
     .dbx-tabbar {
         display: flex;
         align-items: stretch;
-        gap: 2px;
+        gap: $space-hair;
         padding: $space-1 $space-1 0;
         background: $bg-elevated;
         border-bottom: 1px solid $border-default;
@@ -440,21 +337,22 @@ $dbx-sqlite: #3d8fd1;
         flex-shrink: 0;
         scrollbar-width: thin;
         &::-webkit-scrollbar { height: 4px; }
-        &::-webkit-scrollbar-thumb { background: $border-active; border-radius: $radius-sm; }
+        &::-webkit-scrollbar-thumb { background: $border-active; border-radius: $radius-badge; }
     }
 
     .dbx-tab {
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: $space-2 $space-2 $space-2 $space-3;
+        height: $control-md;
+        padding: 0 $space-2 0 $space-3;
         max-width: 220px;
         background: transparent;
         border: 1px solid transparent;
         border-bottom: none;
-        border-radius: $radius-md $radius-md 0 0;
+        border-radius: $radius-control $radius-control 0 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         cursor: pointer;
         white-space: nowrap;
         transition: background $transition-fast, color $transition-fast;
@@ -468,7 +366,7 @@ $dbx-sqlite: #3d8fd1;
             border-color: $border-default;
             position: relative;
             // accent rule along the top edge marks the live tab
-            box-shadow: inset 0 2px 0 $accent-primary;
+            box-shadow: inset 0 2px 0 $accent-primary; // geometry: draws the active-tab top rule
         }
 
         // engine-tinted icon
@@ -483,9 +381,14 @@ $dbx-sqlite: #3d8fd1;
 
     // demo's `+` new-tab pill at the end of the strip
     .dbx-tab-new {
-        padding: $space-2;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: $control-sm;
+        height: $control-sm;
+        padding: 0;
         align-self: center;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-tertiary;
 
         &:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -496,10 +399,10 @@ $dbx-sqlite: #3d8fd1;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 2px;
+        padding: $space-hair;
         background: transparent;
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-tertiary;
         cursor: pointer;
         flex-shrink: 0;
@@ -558,15 +461,15 @@ $dbx-sqlite: #3d8fd1;
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        padding: 6px $space-3;
+        padding: $space-tight $space-3;
         background: $accent-primary;
         border: none;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: #fff;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         cursor: pointer;
-        box-shadow: $shadow-accent;
+        box-shadow: none;
         transition: background $transition-fast, transform $transition-fast;
 
         &:hover:not(:disabled) { background: $accent-hover; }
@@ -574,23 +477,23 @@ $dbx-sqlite: #3d8fd1;
         &:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
         kbd {
             font-family: $font-mono;
-            font-size: 10px;
-            padding: 1px 5px;
+            font-size: $text-xs;
+            padding: 1px $space-tight;
             background: rgba(255, 255, 255, 0.18);
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
         }
     }
 
     .dbx-toggle {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 6px $space-3;
+        gap: $space-tight;
+        padding: $space-tight $space-3;
         background: $bg-tertiary;
         border: 1px solid transparent;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         cursor: pointer;
         transition: background $transition-fast, color $transition-fast;
@@ -623,11 +526,11 @@ $dbx-sqlite: #3d8fd1;
         &__gutter {
             flex-shrink: 0;
             min-width: 40px;
-            padding: $space-3 10px $space-3 $space-3;
+            padding: $space-3 $space-3 $space-3 $space-3;
             overflow: hidden;
             text-align: right;
             font-family: $font-mono;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: $line-height-relaxed;
             color: $text-tertiary;
             border-right: 1px solid $border-subtle;
@@ -647,7 +550,7 @@ $dbx-sqlite: #3d8fd1;
             margin: 0;
             padding: $space-3 $space-4;
             font-family: $font-mono;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: $line-height-relaxed;
             white-space: pre;
             tab-size: 4;
@@ -679,17 +582,18 @@ $dbx-sqlite: #3d8fd1;
     }
 
     .dbx-editor-badge {
+        height: 20px; // geometry: badge height (20px badge spec)
         position: absolute;
         bottom: 10px;
         right: 14px;
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 2px 7px;
+        gap: $space-1;
+        padding: 0 $space-tight;
         background: $bg-card;
         border: 1px solid $border-default;
-        border-radius: $radius-full;
-        font-size: 10px;
+        border-radius: $radius-badge;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-tertiary;
         pointer-events: none;
@@ -705,14 +609,12 @@ $dbx-sqlite: #3d8fd1;
 
         .dbx-history-head {
             padding: $space-2 $space-3;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
             color: $text-tertiary;
             border-bottom: 1px solid $border-subtle;
         }
-        .dbx-history-empty { padding: $space-3; font-size: $font-size-sm; color: $text-tertiary; }
+        .dbx-history-empty { padding: $space-3; font-size: $text-xs; color: $text-tertiary; }
         ul { list-style: none; margin: 0; padding: 0; }
         li button {
             display: block;
@@ -728,7 +630,7 @@ $dbx-sqlite: #3d8fd1;
             code {
                 display: block;
                 font-family: $font-mono;
-                font-size: $font-size-xs;
+                font-size: $text-xs;
                 color: $text-primary;
                 @include dbx-trunc;
             }
@@ -736,9 +638,9 @@ $dbx-sqlite: #3d8fd1;
         .dbx-history-time {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            margin-top: 3px;
-            font-size: 10px;
+            gap: $space-1;
+            margin-top: $space-1;
+            font-size: $text-xs;
             color: $text-tertiary;
         }
     }
@@ -751,15 +653,15 @@ $dbx-sqlite: #3d8fd1;
         align-items: center;
         justify-content: center;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         p { margin: 0; }
         kbd {
             font-family: $font-mono;
-            font-size: 11px;
-            padding: 1px 6px;
+            font-size: $text-xs;
+            padding: 1px $space-tight;
             background: $bg-tertiary;
             border: 1px solid $border-default;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             color: $text-secondary;
         }
     }
@@ -782,26 +684,26 @@ $dbx-sqlite: #3d8fd1;
 
     .dbx-segmented {
         display: inline-flex;
-        gap: 2px;
-        padding: 2px;
+        gap: $space-hair;
+        padding: $space-hair;
         background: $bg-tertiary;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         button {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 5px $space-3;
+            gap: $space-tight;
+            padding: $space-tight $space-3;
             background: transparent;
             border: none;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             cursor: pointer;
             transition: background $transition-fast, color $transition-fast;
             &:hover { color: $text-primary; }
-            &.is-active { background: $bg-card; color: $accent-primary; box-shadow: $shadow-sm; }
+            &.is-active { background: $bg-card; color: $accent-primary; box-shadow: none; }
             svg { flex-shrink: 0; }
         }
     }
@@ -810,7 +712,7 @@ $dbx-sqlite: #3d8fd1;
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        .dbx-pager-label { font-size: $font-size-sm; color: $text-secondary; font-variant-numeric: tabular-nums; }
+        .dbx-pager-label { font-size: $text-xs; color: $text-secondary; font-variant-numeric: tabular-nums; }
         .dbx-pager-total { color: $text-tertiary; }
     }
 
@@ -823,7 +725,7 @@ $dbx-sqlite: #3d8fd1;
         background: $bg-card;
         scrollbar-width: thin;
         &::-webkit-scrollbar { width: 10px; height: 10px; }
-        &::-webkit-scrollbar-thumb { background: $border-active; border-radius: $radius-sm; }
+        &::-webkit-scrollbar-thumb { background: $border-active; border-radius: $radius-badge; }
     }
 
     .dbx-grid {
@@ -831,7 +733,7 @@ $dbx-sqlite: #3d8fd1;
         border-spacing: 0;
         width: max-content;
         min-width: 100%;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         thead th {
             position: sticky;
@@ -852,9 +754,10 @@ $dbx-sqlite: #3d8fd1;
         .dbx-grid-th {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: $space-1;
             width: 100%;
-            padding: $space-2 $space-3;
+            min-height: $control-md;
+            padding: 0 $space-3;
             background: transparent;
             border: none;
             color: inherit;
@@ -869,12 +772,12 @@ $dbx-sqlite: #3d8fd1;
 
         tbody td {
             max-width: 380px;
-            padding: 6px $space-3;
+            padding: $space-tight $space-3;
             border-bottom: 1px solid $border-subtle;
             border-right: 1px solid $border-subtle;
             color: $text-primary;
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             @include dbx-trunc;
             &:last-child { border-right: none; }
             &.is-null { color: $text-tertiary; font-style: italic; }
@@ -895,8 +798,7 @@ $dbx-sqlite: #3d8fd1;
             color: $text-tertiary;
             background: $bg-elevated;
             border-right: 1px solid $border-default;
-            font-family: $font-mono;
-            font-size: 11px;
+            font-size: $text-xs;
             user-select: none;
         }
         thead .dbx-grid-rownum { z-index: 2; }
@@ -922,10 +824,12 @@ $dbx-sqlite: #3d8fd1;
     .dbx-pk { color: $color-star; flex-shrink: 0; }
 
     .dbx-engine-tag {
-        display: inline-block;
-        padding: 1px 8px;
-        border-radius: $radius-full;
-        font-size: 11px;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
+        display: inline-flex;
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         &.is-mysql { background: fade($color-mysql, 16%); color: $color-mysql; }
         &.is-postgresql { background: fade($color-postgresql, 20%); color: $color-postgresql-secondary; }
@@ -947,14 +851,14 @@ $dbx-sqlite: #3d8fd1;
         margin: $space-4;
         background: $danger-bg;
         border: 1px solid $danger-border;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $danger;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         svg { flex-shrink: 0; margin-top: 2px; }
-        pre { margin: 0; white-space: pre-wrap; word-break: break-word; font-family: $font-mono; font-size: $font-size-xs; }
+        pre { margin: 0; white-space: pre-wrap; word-break: break-word; font-family: $font-mono; font-size: $text-xs; }
     }
 
-    .dbx-structure-fallback { padding: $space-6; color: $text-secondary; font-size: $font-size-sm; }
+    .dbx-structure-fallback { padding: $space-6; color: $text-secondary; font-size: $text-xs; }
 
     // ─── Backups tab ──────────────────────────────────────
     .dbx-backups {
@@ -971,7 +875,7 @@ $dbx-sqlite: #3d8fd1;
         align-items: center;
         justify-content: space-between;
         gap: $space-3;
-        min-height: 32px;
+        min-height: 32px; // geometry: fixed status-bar chrome
         padding: $space-1 $space-3;
         background: $bg-card;
         border-top: 1px solid $border-default;
@@ -983,8 +887,8 @@ $dbx-sqlite: #3d8fd1;
     .dbx-status-item {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        font-size: $font-size-xs;
+        gap: $space-tight;
+        font-size: $text-xs;
         color: $text-secondary;
         svg { color: $text-tertiary; }
         &.is-write { color: $warning; font-weight: $font-weight-medium; }
@@ -1000,7 +904,6 @@ $dbx-sqlite: #3d8fd1;
                 height: 6px;
                 border-radius: $radius-full;
                 background: currentColor;
-                box-shadow: 0 0 6px currentColor;
             }
         }
     }
@@ -1018,7 +921,7 @@ $dbx-sqlite: #3d8fd1;
         padding: 0;
         background: $bg-tertiary;
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-tertiary;
         cursor: pointer;
         opacity: 0;
@@ -1034,17 +937,18 @@ $dbx-sqlite: #3d8fd1;
     .dbx-tree-install-btn {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         flex-shrink: 0;
-        padding: 1px 7px;
+        height: 20px; // geometry: inline action inside a dense tree row (badge-sized)
+        padding: 0 $space-2;
         background: $accent-glow;
         border: 1px solid transparent;
-        border-radius: $radius-full;
+        border-radius: $radius-control;
         color: $accent-primary;
         font-family: inherit;
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
-        line-height: 1.6;
+        line-height: 1;
         cursor: pointer;
         transition: background $transition-fast, color $transition-fast, border-color $transition-fast;
 
@@ -1064,12 +968,13 @@ $dbx-sqlite: #3d8fd1;
         gap: $space-2;
         width: 100%;
         margin: $space-2 0 $space-1;
-        padding: $space-2 $space-3;
+        min-height: $control-md;
+        padding: 0 $space-3;
         background: transparent;
         border: 1px dashed $border-active;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         text-align: left;
         cursor: pointer;
         transition: color $transition-fast, border-color $transition-fast, background $transition-fast;
@@ -1086,8 +991,7 @@ $dbx-sqlite: #3d8fd1;
     .dbx-tree-install-count {
         margin-left: auto;
         flex-shrink: 0;
-        font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-variant-numeric: tabular-nums;
     }
@@ -1113,7 +1017,7 @@ $dbx-sqlite: #3d8fd1;
             margin-bottom: $space-4;
             background: $bg-elevated;
             border: 1px solid $border-default;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
             color: $text-secondary;
 
             &.is-failed { border-color: $danger-border; color: $danger; }
@@ -1134,7 +1038,7 @@ $dbx-sqlite: #3d8fd1;
             align-items: center;
             gap: $space-2;
             margin: 0;
-            font-size: $font-size-lg;
+            font-size: $text-lg;
             font-weight: $font-weight-semibold;
             color: $text-primary;
         }
@@ -1143,15 +1047,15 @@ $dbx-sqlite: #3d8fd1;
             max-width: 46ch;
             margin: $space-2 0 0;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: 1.6;
 
             code {
-                padding: 1px 5px;
-                border-radius: $radius-sm;
+                padding: 1px $space-tight;
+                border-radius: $radius-badge;
                 background: $bg-tertiary;
                 font-family: $font-mono;
-                font-size: $font-size-xs;
+                font-size: $text-xs;
                 color: $text-primary;
             }
         }
@@ -1167,11 +1071,10 @@ $dbx-sqlite: #3d8fd1;
         &__note {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: $space-tight;
             max-width: 46ch;
             margin: $space-5 0 0;
-            font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
             svg { flex-shrink: 0; }
         }
@@ -1181,11 +1084,11 @@ $dbx-sqlite: #3d8fd1;
     .dbx-context {
         position: fixed;
         min-width: 200px;
-        padding: 4px;
+        padding: $space-1;
         background: $bg-card;
         border: 1px solid $border-default;
-        border-radius: $radius-md;
-        box-shadow: $shadow-lg;
+        border-radius: $radius-control;
+        box-shadow: $shadow-raised;
         z-index: $z-tooltip;
         animation: dbx-pop 0.12s $ease-out-quart;
 
@@ -1197,9 +1100,9 @@ $dbx-sqlite: #3d8fd1;
             padding: $space-2 $space-3;
             background: transparent;
             border: none;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             text-align: left;
             cursor: pointer;
             transition: background $transition-fast;
@@ -1214,7 +1117,7 @@ $dbx-sqlite: #3d8fd1;
 // Honor reduced-motion: drop the entrance animations and spinners.
 @media (prefers-reduced-motion: reduce) {
     .db-explorer {
-        .dbx-menu, .dbx-context { animation: none; }
+        .dbx-context { animation: none; }
         .dbx-spin { animation: none; }
     }
 }
@@ -1251,7 +1154,7 @@ $dbx-sqlite: #3d8fd1;
     &__lead {
         margin: 0 0 $space-4;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.55;
     }
 
@@ -1270,7 +1173,7 @@ $dbx-sqlite: #3d8fd1;
 
     &__footnote {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.5;
     }
 
@@ -1278,19 +1181,19 @@ $dbx-sqlite: #3d8fd1;
     // to inherit — give them the panel's own instead of the browser's.
     select {
         width: 100%;
-        padding: 8px 11px;
+        padding: $space-2 $space-3;
         background: $bg-elevated;
         border: 1px solid $border-default;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-primary;
         font-family: inherit;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         cursor: pointer;
 
         &:focus {
             outline: none;
             border-color: $accent-primary;
-            box-shadow: 0 0 0 3px $accent-glow;
+            box-shadow: $focus-ring;
         }
     }
 }
@@ -1302,9 +1205,9 @@ $dbx-sqlite: #3d8fd1;
 
     &__label {
         display: block;
-        margin-bottom: 7px;
+        margin-bottom: $space-2;
         color: $text-secondary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
     }
 
@@ -1319,14 +1222,14 @@ $dbx-sqlite: #3d8fd1;
 }
 
 .dbx-field-hint {
-    margin: 6px 0 0;
+    margin: $space-tight 0 0;
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     line-height: 1.5;
 
     code {
-        padding: 1px 5px;
-        border-radius: $radius-sm;
+        padding: 1px $space-tight;
+        border-radius: $radius-badge;
         background: $bg-tertiary;
         font-family: $font-mono;
         color: $text-secondary;
@@ -1336,16 +1239,17 @@ $dbx-sqlite: #3d8fd1;
 .dbx-input {
     display: flex;
     align-items: center;
-    gap: 9px;
-    padding: 8px 11px;
+    gap: $space-2;
+    min-height: $control-md;
+    padding: 0 $space-3;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     transition: border-color $transition-fast, box-shadow $transition-fast;
 
     &:focus-within {
         border-color: $accent-primary;
-        box-shadow: 0 0 0 3px $accent-glow;
+        box-shadow: $focus-ring;
     }
 
     > svg { flex-shrink: 0; color: $text-tertiary; }
@@ -1357,7 +1261,7 @@ $dbx-sqlite: #3d8fd1;
         border: none;
         outline: none;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         &::placeholder { color: $text-tertiary; }
     }
 }
@@ -1365,12 +1269,12 @@ $dbx-sqlite: #3d8fd1;
 .dbx-inline-link {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: $space-tight;
     padding: 0;
     background: none;
     border: none;
     color: $accent-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     text-decoration: none;
     cursor: pointer;
 
@@ -1380,78 +1284,72 @@ $dbx-sqlite: #3d8fd1;
 }
 
 // ─── Key / value facts ────────────────────────────────────
+// InfoList rows boxed for the drawer; the option list reuses the row look.
 .dbx-kv {
     margin: 0;
+    gap: 0;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     overflow: hidden;
-
-    &__row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $space-3;
-        padding: 9px 13px;
-        border-top: 1px solid $border-subtle;
-        &:first-child { border-top: none; }
-
-        dt, .dbx-kv__key {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin: 0;
-            flex-shrink: 0;
-            color: $text-tertiary;
-            font-size: $font-size-xs;
-            svg { color: $text-tertiary; }
-        }
-
-        dd {
-            margin: 0;
-            min-width: 0;
-            color: $text-primary;
-            font-size: $font-size-sm;
-            text-align: right;
-        }
-    }
-
-    &__mono {
-        font-family: $font-mono;
-        font-size: $font-size-xs;
-        word-break: break-all;
-    }
 
     &__ok { color: $success; }
 }
 
+.dbx-kv,
+.dbx-optlist {
+    .info-item {
+        gap: $space-3;
+        padding: $space-2 $space-3;
+        border-bottom: none;
+
+        .info-label {
+            display: inline-flex;
+            align-items: center;
+            gap: $space-tight;
+            flex-shrink: 0;
+            color: $text-tertiary;
+            font-size: $text-xs;
+            svg { color: $text-tertiary; }
+        }
+
+        .info-value {
+            min-width: 0;
+            font-size: $text-xs;
+            font-weight: $font-weight-normal;
+            text-align: right;
+
+            &.mono {
+                font-family: $font-mono;
+                font-size: $text-xs;
+                word-break: break-all;
+            }
+        }
+
+        .info-value.dbx-kv__ok { color: $success; }
+    }
+}
+
+.dbx-kv .info-item + .info-item { border-top: 1px solid $border-subtle; }
+
 // The password is the one thing on the panel you cannot recover later, so it
-// gets reveal, regenerate and copy in the same row as the dots.
+// gets reveal, regenerate and copy in the same row.
 .dbx-secret {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 6px;
-
-    &__value {
-        font-family: $font-mono;
-        font-size: $font-size-xs;
-        letter-spacing: 0.06em;
-        color: $text-primary;
-        word-break: break-all;
-    }
-
-    &__actions { display: inline-flex; gap: 2px; flex-shrink: 0; }
+    gap: $space-tight;
+    min-width: 0;
 }
 
 .dbx-icon-xs {
     display: grid;
     place-items: center;
     width: 24px;
-    height: 24px;
+    height: 24px; // geometry: inline icon button inside a 32px compact grid cell
     padding: 0;
     background: transparent;
     border: none;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-tertiary;
     cursor: pointer;
     flex-shrink: 0;
@@ -1464,7 +1362,7 @@ $dbx-sqlite: #3d8fd1;
 // ─── Option rows + the public-port warning ────────────────
 .dbx-optlist {
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     overflow: hidden;
 
     > * + * { border-top: 1px solid $border-subtle; }
@@ -1475,11 +1373,11 @@ $dbx-sqlite: #3d8fd1;
     align-items: center;
     justify-content: space-between;
     gap: $space-4;
-    padding: 11px 13px;
+    padding: $space-3 $space-3;
 
     &__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-    &__title { color: $text-primary; font-size: $font-size-sm; font-weight: $font-weight-medium; }
-    &__sub { color: $text-tertiary; font-size: $font-size-xs; line-height: 1.45; }
+    &__title { color: $text-primary; font-size: $text-xs; font-weight: $font-weight-medium; }
+    &__sub { color: $text-tertiary; font-size: $text-xs; line-height: 1.45; }
 }
 
 // Not decorative. A public database port is the single most consequential thing
@@ -1489,12 +1387,12 @@ $dbx-sqlite: #3d8fd1;
     align-items: flex-start;
     gap: $space-2;
     margin: $space-3 0 0;
-    padding: 10px 12px;
+    padding: $space-3 $space-3;
     background: $warning-bg;
     border: 1px solid $warning-border;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-secondary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     line-height: 1.55;
 
     svg { flex-shrink: 0; margin-top: 1px; color: $warning; }
@@ -1505,12 +1403,12 @@ $dbx-sqlite: #3d8fd1;
     align-items: flex-start;
     gap: $space-2;
     margin-bottom: $space-4;
-    padding: 11px 13px;
+    padding: $space-3 $space-3;
     background: $success-bg;
     border: 1px solid $success-border;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     line-height: 1.55;
 
     svg { flex-shrink: 0; margin-top: 2px; color: $success; }
@@ -1532,12 +1430,12 @@ $dbx-sqlite: #3d8fd1;
 .dbx-cat-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .dbx-cat-chip {
-    padding: 3px 10px;
+    padding: $space-1 $space-3;
     background: $bg-tertiary;
     border: 1px solid transparent;
     border-radius: $radius-full;
     color: $text-secondary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     cursor: pointer;
     transition: background $transition-fast, color $transition-fast, border-color $transition-fast;
 
@@ -1554,26 +1452,17 @@ $dbx-sqlite: #3d8fd1;
 .dbx-eyebrow {
     margin: 0 0 $space-2;
     color: $text-tertiary;
-    font-size: 10.5px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
 }
 
 .dbx-eng-glyph {
     display: grid;
     place-items: center;
     width: 24px;
-    height: 24px;
+    height: 24px; // geometry: engine glyph icon
     flex-shrink: 0;
     color: $text-secondary;
-
-    &--lg {
-        width: 38px;
-        height: 38px;
-        background: $bg-tertiary;
-        border-radius: $radius-md;
-    }
 }
 
 .dbx-eng-img { object-fit: contain; border-radius: 3px; }
@@ -1582,44 +1471,26 @@ $dbx-sqlite: #3d8fd1;
 
 .dbx-eng-name {
     color: $text-primary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     @include dbx-trunc;
 }
 
 .dbx-eng-sub {
     color: $text-tertiary;
-    font-family: $font-mono;
-    font-size: 11px;
-    @include dbx-trunc;
-}
-
-.dbx-eng-family {
-    flex-shrink: 0;
-    color: $text-tertiary;
-    font-family: $font-mono;
-    font-size: 10px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-}
-
-.dbx-eng-facts {
-    min-width: 0;
-    color: $text-tertiary;
-    font-family: $font-mono;
-    font-size: 11px;
+    font-size: $text-xs;
     @include dbx-trunc;
 }
 
 .dbx-eng-badge {
+    height: 20px; // geometry: badge height (20px badge spec)
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: $space-tight;
     flex-shrink: 0;
-    padding: 3px 8px;
-    border-radius: $radius-sm;
-    font-family: $font-mono;
-    font-size: 10.5px;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
+    font-size: $text-xs;
 
     &.is-running { color: $success; background: $success-bg; }
     &.is-installing { color: $warning; background: $warning-bg; }
@@ -1632,7 +1503,7 @@ $dbx-sqlite: #3d8fd1;
     margin: 0;
     padding: 0;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     overflow: hidden;
 }
 
@@ -1640,75 +1511,9 @@ $dbx-sqlite: #3d8fd1;
     display: flex;
     align-items: center;
     gap: $space-3;
-    padding: 11px 13px;
+    padding: $space-3 $space-3;
     border-top: 1px solid $border-subtle;
     &:first-child { border-top: none; }
-}
-
-.dbx-engine-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
-    gap: $space-3;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.dbx-engine-card {
-    display: flex;
-
-    // The whole card is the hit target — a card you can only activate by its
-    // small "Install" label is a card that reads as clickable and isn't.
-    &__hit {
-        display: flex;
-        flex-direction: column;
-        gap: 9px;
-        width: 100%;
-        min-height: 168px;
-        padding: $space-3;
-        background: $bg-elevated;
-        border: 1px solid $border-default;
-        border-radius: $radius-md;
-        text-align: left;
-        cursor: pointer;
-        transition: border-color $transition-fast, background $transition-fast, transform $transition-fast;
-
-        &:hover {
-            border-color: $accent-primary;
-            background: $bg-hover;
-            transform: translateY(-1px);
-        }
-        &:focus-visible { outline: 2px solid $accent-primary; outline-offset: 2px; }
-    }
-
-    &__top { display: flex; align-items: flex-start; gap: $space-2; }
-
-    &__desc {
-        flex: 1;
-        color: $text-tertiary;
-        font-size: $font-size-xs;
-        line-height: 1.5;
-    }
-
-    &__foot {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $space-2;
-    }
-
-    &__cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        flex-shrink: 0;
-        padding: 3px 10px;
-        background: $accent-primary;
-        border-radius: $radius-sm;
-        color: #fff;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-semibold;
-    }
 }
 
 // ─── Engine picker (create-database modal) ────────────────
@@ -1721,12 +1526,12 @@ $dbx-sqlite: #3d8fd1;
 .dbx-eng-opt {
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: $space-2;
     min-width: 0;
-    padding: 9px 11px;
+    padding: $space-2 $space-3;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     text-align: left;
     cursor: pointer;
     transition: border-color $transition-fast, background $transition-fast;
@@ -1750,16 +1555,15 @@ $dbx-sqlite: #3d8fd1;
     &__text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
     &__name {
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         @include dbx-trunc;
     }
-    &__sub { color: $text-tertiary; font-family: $font-mono; font-size: 10.5px; }
+    &__sub { color: $text-tertiary; font-size: $text-xs; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .dbx-spin { animation: none; }
-    .dbx-engine-card__hit:hover { transform: none; }
 }
 
 // ============================================
@@ -1769,53 +1573,26 @@ $dbx-sqlite: #3d8fd1;
 // ============================================
 
 // ─── Shared: select, notices, statement preview ───────────
-.dbx-select {
-    position: relative;
-    display: flex;
-    align-items: center;
+// Radix select triggers in the builder and import modals.
+.dbx-select.ui-select-trigger {
+    width: 100%;
 
-    select {
-        appearance: none;
-        width: 100%;
-        padding: 8px 30px 8px 11px;
-        background: $bg-elevated;
-        border: 1px solid $border-default;
-        border-radius: $radius-md;
-        color: $text-primary;
-        font-family: inherit;
-        font-size: $font-size-sm;
-        cursor: pointer;
-
-        &:focus {
-            outline: none;
-            border-color: $accent-primary;
-            box-shadow: 0 0 0 3px $accent-glow;
-        }
-    }
-
-    > svg {
-        position: absolute;
-        right: 10px;
-        color: $text-tertiary;
-        pointer-events: none;
-    }
-
-    &--sm {
-        select {
-            padding: 5px 22px 5px 8px;
-            font-family: $font-mono;
-            font-size: 11.5px;
-        }
-        > svg { right: 6px; }
+    &.dbx-select--sm {
+        height: auto;
+        min-width: 0;
+        padding: $space-tight $space-2;
+        font-family: $font-mono;
+        font-size: $text-xs;
     }
 }
 
 // Compact variant of the shared .dbx-input, for the column grid's cells.
 .dbx-input--sm {
-    padding: 5px 8px;
+    min-height: $control-sm;
+    padding: 0 $space-2;
     input {
         font-family: $font-mono;
-        font-size: 11.5px;
+        font-size: $text-xs;
     }
 }
 
@@ -1826,12 +1603,12 @@ $dbx-sqlite: #3d8fd1;
     align-items: flex-start;
     gap: $space-2;
     margin-bottom: $space-4;
-    padding: 11px 13px;
+    padding: $space-3 $space-3;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-elevated;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     line-height: 1.55;
 
     > svg { flex-shrink: 0; margin-top: 2px; color: $text-tertiary; }
@@ -1872,15 +1649,15 @@ $dbx-sqlite: #3d8fd1;
     }
 
     &__detail {
-        margin: 6px 0 0;
-        padding: 8px 10px;
+        margin: $space-tight 0 0;
+        padding: $space-2 $space-3;
         max-height: 160px;
         overflow: auto;
         background: var(--bg-code);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: var(--text-code);
         font-family: $font-mono;
-        font-size: 11.5px;
+        font-size: $text-xs;
         line-height: 1.5;
         white-space: pre-wrap;
         word-break: break-word;
@@ -1891,15 +1668,15 @@ $dbx-sqlite: #3d8fd1;
 // is the safety story of the whole builder, so it must not read as prose.
 .dbx-sqlprev {
     margin: 0;
-    padding: 11px 13px;
+    padding: $space-3 $space-3;
     max-height: 220px;
     overflow: auto;
     background: var(--bg-code);
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     color: var(--text-code);
     font-family: $font-mono;
-    font-size: 11.5px;
+    font-size: $text-xs;
     line-height: 1.65;
     white-space: pre-wrap;
     word-break: break-word;
@@ -1914,10 +1691,10 @@ $dbx-sqlite: #3d8fd1;
     li {
         display: flex;
         align-items: flex-start;
-        gap: 7px;
-        padding: 3px 0;
+        gap: $space-2;
+        padding: $space-1 0;
         color: $danger;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.5;
 
         svg { flex-shrink: 0; margin-top: 2px; }
@@ -1942,21 +1719,21 @@ $dbx-sqlite: #3d8fd1;
         margin: 0;
         padding: $space-6 0;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__target {
         display: flex;
         align-items: center;
-        gap: 7px;
+        gap: $space-2;
         margin: -$space-2 0 $space-4;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.5;
 
         code {
-            padding: 1px 5px;
-            border-radius: $radius-sm;
+            padding: 1px $space-tight;
+            border-radius: $radius-badge;
             background: $bg-tertiary;
             font-family: $font-mono;
             color: $text-secondary;
@@ -1975,28 +1752,25 @@ $dbx-sqlite: #3d8fd1;
     &__row {
         display: grid;
         grid-template-columns: 1.4fr 1.3fr 34px 52px 1fr 26px;
-        gap: 7px;
+        gap: $space-2;
         align-items: center;
     }
 
     &__head {
-        padding: 0 2px 6px;
+        padding: 0 $space-hair $space-tight;
         color: $text-tertiary;
-        font-family: $font-mono;
-        font-size: 10px;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
+        font-size: $text-xs;
     }
 
     &__rows {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: $space-tight;
     }
 
     &__add {
         margin-top: $space-2;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 }
 
@@ -2006,11 +1780,11 @@ $dbx-sqlite: #3d8fd1;
     display: grid;
     place-items: center;
     width: 22px;
-    height: 22px;
+    height: 22px; // geometry: drawn checkbox sized to the compact grid cell
     padding: 0;
     background: transparent;
     border: 1.5px solid $border-active;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $white;
     cursor: pointer;
     transition: background $transition-fast, border-color $transition-fast;
@@ -2026,33 +1800,7 @@ $dbx-sqlite: #3d8fd1;
 }
 
 .dbx-choice {
-    display: flex;
-    gap: 4px;
     margin-bottom: $space-3;
-    padding: 3px;
-    background: $bg-tertiary;
-    border-radius: $radius-md;
-
-    &__btn {
-        flex: 1;
-        padding: 6px 10px;
-        background: transparent;
-        border: none;
-        border-radius: $radius-sm;
-        color: $text-secondary;
-        font-family: inherit;
-        font-size: $font-size-xs;
-        cursor: pointer;
-        transition: background $transition-fast, color $transition-fast;
-
-        &:hover { color: $text-primary; }
-        &:focus-visible { outline: 2px solid $accent-primary; outline-offset: -2px; }
-        &.is-on {
-            background: $bg-card;
-            color: $accent-primary;
-            box-shadow: $shadow-sm;
-        }
-    }
 }
 
 .dbx-dumps {
@@ -2061,16 +1809,16 @@ $dbx-sqlite: #3d8fd1;
     max-height: 210px;
     overflow-y: auto;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     &__empty {
         display: flex;
         align-items: center;
-        gap: 7px;
+        gap: $space-2;
         margin: 0;
         padding: $space-4;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.5;
 
         svg { flex-shrink: 0; }
@@ -2081,7 +1829,7 @@ $dbx-sqlite: #3d8fd1;
     display: flex;
     align-items: center;
     gap: $space-3;
-    padding: 9px 12px;
+    padding: $space-2 $space-3;
     background: transparent;
     border: none;
     border-top: 1px solid $border-subtle;
@@ -2099,22 +1847,21 @@ $dbx-sqlite: #3d8fd1;
     &__name {
         color: $text-primary;
         font-family: $font-mono;
-        font-size: 11.5px;
+        font-size: $text-xs;
         @include dbx-trunc;
     }
 
     &__meta {
         color: $text-tertiary;
-        font-size: 10.5px;
+        font-size: $text-xs;
         @include dbx-trunc;
     }
 
     &__tag {
         flex-shrink: 0;
-        padding: 2px 8px;
-        border-radius: $radius-sm;
-        font-family: $font-mono;
-        font-size: 10px;
+        padding: $space-hair $space-2;
+        border-radius: $radius-badge;
+        font-size: $text-xs;
         background: $bg-tertiary;
         color: $text-tertiary;
 
@@ -2126,25 +1873,25 @@ $dbx-sqlite: #3d8fd1;
 .dbx-check {
     display: flex;
     align-items: flex-start;
-    gap: 9px;
+    gap: $space-2;
     margin-bottom: $space-4;
-    padding: 11px 13px;
+    padding: $space-3 $space-3;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     cursor: pointer;
 
     input { margin-top: 2px; flex-shrink: 0; accent-color: $accent-primary; }
     > span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 
-    &__title { color: $text-primary; font-size: $font-size-sm; font-weight: $font-weight-medium; }
-    &__sub { color: $text-tertiary; font-size: $font-size-xs; line-height: 1.45; }
+    &__title { color: $text-primary; font-size: $text-xs; font-weight: $font-weight-medium; }
+    &__sub { color: $text-tertiary; font-size: $text-xs; line-height: 1.45; }
 }
 
 // A label may name an identifier the operator has to retype — give it the same
 // code treatment the hints get.
 .dbx-field__label code {
-    padding: 1px 5px;
-    border-radius: $radius-sm;
+    padding: 1px $space-tight;
+    border-radius: $radius-badge;
     background: $bg-tertiary;
     font-family: $font-mono;
     color: $text-secondary;
@@ -2166,7 +1913,7 @@ $dbx-sqlite: #3d8fd1;
     }
 
     &__hint {
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-dim);
         line-height: 1.5;
         margin: 0;
@@ -2175,8 +1922,8 @@ $dbx-sqlite: #3d8fd1;
     &__empty {
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 13px;
+        gap: $space-2;
+        font-size: $text-sm;
         color: var(--text-faint);
         padding: $spacing-lg 0;
     }
@@ -2217,30 +1964,31 @@ $dbx-sqlite: #3d8fd1;
 
     &__secret {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         gap: $spacing-md;
         padding: $spacing-sm;
         border: 1px dashed var(--border-soft);
-        border-radius: 6px;
+        border-radius: $radius-control;
 
-        code { word-break: break-all; }
+        .sk-copy-field { flex: 1 1 220px; }
     }
 
     &__user-form {
         display: flex;
-        gap: 6px;
+        gap: $space-tight;
         flex-wrap: wrap;
         align-items: center;
 
         input {
             flex: 1;
             min-width: 160px;
-            padding: 6px 10px;
-            font-size: 13px;
+            padding: $space-tight $space-3;
+            font-size: $text-sm;
             background: var(--bg-input, transparent);
             border: 1px solid var(--border-soft);
-            border-radius: 6px;
+            border-radius: $radius-control;
             color: var(--text);
         }
     }
@@ -2248,22 +1996,39 @@ $dbx-sqlite: #3d8fd1;
     &__info {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 0;
         flex: 1;
     }
 
     &__meta {
-        font-family: $font-mono, monospace;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
         word-break: break-all;
     }
 
     &__actions {
         display: flex;
-        gap: 6px;
+        gap: $space-tight;
         flex-wrap: wrap;
         justify-content: flex-end;
     }
+}
+
+// "select a database" hint inside the New menu. The menu is portaled out of
+// `.db-explorer`, so this rule lives at the top level.
+.dbx-menu-hint {
+    margin-left: auto;
+    font-size: $text-xs;
+    color: $text-tertiary;
+}
+
+// Created-credentials result in the explorer's create modals: one CopyField
+// per credential.
+.dbx-credentials {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+
+    > p { margin: 0; }
 }

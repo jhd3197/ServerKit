@@ -14,6 +14,7 @@ import logging
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 
+from app.exceptions import NotFoundError
 from app.services import theme_service
 from app.services.audit_service import AuditService
 from app.models.audit_log import AuditLog
@@ -93,8 +94,9 @@ def delete_theme(slug):
     user = require_admin_user()
     ok, derr = theme_service.delete_theme(slug)
     if not ok:
-        code = 404 if derr == 'Theme not found' else 400
-        return jsonify({'error': derr}), code
+        if derr is theme_service.THEME_NOT_FOUND:
+            raise NotFoundError(derr)
+        return jsonify({'error': derr}), 400
     AuditService.log(
         action=AuditLog.ACTION_RESOURCE_DELETE,
         user_id=user.id,

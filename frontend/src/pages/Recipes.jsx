@@ -146,7 +146,7 @@ export default function Recipes() {
         <div className="recipes-page">
             <div className="recipes-page__head">
                 <p className="recipes-page__lede">
-                    {t('app.recipes.lede', 'Ready-to-go installers that run as real operations — probe, derive, apply, verify. Secrets are asked for mid-run and kept in the vault.')}
+                    {t('app.recipes.lede', 'Ready-to-go installers that run as real operations: probe, derive, apply, verify. Secrets are asked for mid-run and kept in the vault.')}
                 </p>
                 <label className="recipes-page__search">
                     <Search size={14} />
@@ -198,9 +198,9 @@ export default function Recipes() {
                                     <span className="recipe-card__ico"><RecipeIcon icon={recipe.icon} /></span>
                                     <div className="recipe-card__id">
                                         <div className="recipe-card__name">{recipe.name}</div>
-                                        <div className="recipe-card__meta mono">
+                                        <div className="recipe-card__meta">
                                             v{recipe.version}{recipe.category ? ` · ${recipe.category}` : ''}
-                                            {recipe.minutes ? ` · ~${recipe.minutes} min` : ''}
+                                            {recipe.minutes ? ` · ${t('app.recipes.approxMinutes', '~{{count}} min', { count: recipe.minutes })}` : ''}
                                         </div>
                                     </div>
                                     {recipe.featured && (
@@ -210,7 +210,7 @@ export default function Recipes() {
                                     )}
                                 </div>
                                 <p className="recipe-card__desc">{recipe.description}</p>
-                                <div className="recipe-card__reqs mono">
+                                <div className="recipe-card__reqs">
                                     {(recipe.requirements?.cpuCores)
                                         && <span>{recipe.requirements.cpuCores} vCPU</span>}
                                     {(recipe.requirements?.memoryMB)
@@ -227,12 +227,10 @@ export default function Recipes() {
                                         </span>}
                                 </div>
                                 <div className="recipe-card__foot">
-                                    <span className="recipe-card__steps mono">
-                                        {t('app.recipes.stepsLine', '{{steps}} steps · {{handoffs}} secret ask{{plural}}', {
-                                            steps: recipe.steps ?? '?',
-                                            handoffs: handoffCount || 0,
-                                            plural: handoffCount === 1 ? '' : 's',
-                                        })}
+                                    <span className="recipe-card__steps">
+                                        {t('app.recipes.stepsCount', { count: recipe.steps ?? 0, defaultValue_one: '1 step', defaultValue_other: '{{count}} steps' })}
+                                        {' · '}
+                                        {t('app.recipes.secretAsks', { count: handoffCount || 0, defaultValue_one: '1 secret ask', defaultValue_other: '{{count}} secret asks' })}
                                     </span>
                                     <SharedButton variant="primary"
                                         type="button"
@@ -253,7 +251,7 @@ export default function Recipes() {
                 open={!!selected}
                 onOpenChange={open => { if (!open) setSelected(null); }}
                 title={selected ? t('app.recipes.runTitle', 'Run {{name}}', { name: selected.name }) : ''}
-                subtitle={selected ? `recipe ${selected.slug}@${selected.version}` : ''}
+                subtitle={selected ? t('app.recipes.recipeSlugVersion', 'recipe {{slug}}@{{version}}', { slug: selected.slug, version: selected.version }) : ''}
                 icon={selected ? <RecipeIcon icon={selected.icon} /> : null}
                 width={520}
             >
@@ -270,8 +268,8 @@ export default function Recipes() {
                                     >
                                         <span className="recipe-install__radio" aria-hidden="true" />
                                         <span className="recipe-install__srvname">{server.name}</span>
-                                        <span className="recipe-install__srvspec mono">
-                                            {server.cpu_cores ? `${server.cpu_cores} vCPU · ` : ''}
+                                        <span className="recipe-install__srvspec">
+                                            {server.cpu_cores ? `${t('app.recipes.vcpuCount', '{{count}} vCPU', { count: server.cpu_cores })} · ` : ''}
                                             {formatBytes(server.total_memory, { decimals: 0 })}
                                         </span>
                                         {String(targetId) === String(server.id) && <Check size={15} />}
@@ -298,8 +296,8 @@ export default function Recipes() {
                                             <div key={row.key} className={`recipe-preflight${row.ok ? ' is-ok' : ' is-bad'}`}>
                                                 {row.ok ? <Check size={13} /> : <X size={13} />}
                                                 <span className="recipe-preflight__k">{label}</span>
-                                                <span className="recipe-preflight__need mono">{row.need}</span>
-                                                <span className="recipe-preflight__have mono">{row.have}</span>
+                                                <span className="recipe-preflight__need">{row.need}</span>
+                                                <span className="recipe-preflight__have">{row.have}</span>
                                             </div>
                                         );
                                     })}
@@ -346,7 +344,7 @@ export default function Recipes() {
                                 </SharedCard>
                             ) : (
                                 <p className="recipe-install__unattended">
-                                    {t('app.recipes.noHandoffs', 'Nothing — this recipe runs unattended.')}
+                                    {t('app.recipes.noHandoffs', 'Nothing. This recipe runs unattended.')}
                                 </p>
                             )}
                         </FormField>
@@ -370,8 +368,8 @@ export default function Recipes() {
             </Drawer>
 
             {source === 'bundled' && !!recipes.length && (
-                <p className="recipes-page__source mono">
-                    {t('app.recipes.bundledSource', 'Showing the bundled catalog — the live registry is unreachable right now.')}
+                <p className="recipes-page__source">
+                    {t('app.recipes.bundledSource', 'Showing the bundled catalog. The live registry is unreachable right now.')}
                 </p>
             )}
         </div>

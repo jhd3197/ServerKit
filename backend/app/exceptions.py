@@ -73,3 +73,100 @@ class DependencyUnavailableError(ApplicationError):
     status_code = 503
     code = 'dependency_unavailable'
     default_message = 'Dependency unavailable'
+
+
+class AgentOfflineError(DependencyUnavailableError):
+    """The target server's agent is not connected, so nothing can reach it."""
+
+    code = 'agent.offline'
+    default_message = (
+        "The server's agent is offline. Start the agent on that server, "
+        'then try again.'
+    )
+
+
+# ---------------------------------------------------------------------------
+# Stable codes the client translates (plan 88 §C).
+#
+# The frontend (``frontend/src/services/api/errorCodes.js``) swaps the server's
+# English for its own translation when it knows the ``code``. A translated code
+# must therefore mean exactly ONE message — a code whose text varied per call
+# would lose its specifics on the client. So the dotted codes below come only
+# from these factories, each with a fixed message (parameterised by ``details``
+# at most). The class defaults (``not_found``, ``validation_error``,
+# ``permission_denied``, ``conflict``) stay for raises that carry their own
+# prose; the client shows that prose untranslated, as before.
+#
+#   code                   message                          details
+#   not_found.<resource>   "<Resource> not found"           resource
+#   validation.required    "<field> is required"            field
+#   permission.denied      PERMISSION_DENIED_MESSAGE        -
+#   conflict.exists        "<Resource> already exists"      resource
+#   agent.offline          AgentOfflineError's message      -
+#
+# Resource words are the UI's nouns (plan 88 glossary), not model names: an
+# ``Application`` row is a "service" to the person reading the toast.
+# ---------------------------------------------------------------------------
+
+RESOURCE_LABELS = {
+    'service': 'Service',
+    'server': 'Server',
+    'domain': 'Domain',
+    'database': 'Database',
+    'backup': 'Backup',
+    'snapshot': 'Snapshot',
+    'config_checkpoint': 'Config checkpoint',
+    'deployment': 'Deployment',
+    'template': 'Template',
+    'user': 'User',
+}
+
+PERMISSION_DENIED_MESSAGE = "You don't have permission to do this. Ask an admin for access."
+
+
+def _resource_label(resource):
+    try:
+        return RESOURCE_LABELS[resource]
+    except KeyError:  # a typo here would ship a code nobody translates
+        raise ValueError(f'unknown resource kind {resource!r}; add it to RESOURCE_LABELS') from None
+
+
+def not_found(resource):
+    """``NotFoundError`` for one resource kind: ``raise not_found('service')``."""
+    return NotFoundError(
+        f'{_resource_label(resource)} not found',
+        code=f'not_found.{resource}',
+        details={'resource': resource},
+    )
+
+
+def field_required(field):
+    """``ValidationError`` for a missing request field: ``raise field_required('name')``."""
+    return ValidationError(
+        f'{field} is required',
+        code='validation.required',
+        details={'field': field},
+    )
+
+
+def permission_denied():
+    """``PermissionDeniedError`` for a caller who may not act on this resource.
+
+    The message is deliberately generic: it reveals nothing the status code
+    doesn't, and tells the caller what they can do about it.
+    """
+    return PermissionDeniedError(PERMISSION_DENIED_MESSAGE, code='permission.denied')
+
+
+def already_exists(resource):
+    """``ConflictError`` for a create that collides with an existing row."""
+    return ConflictError(
+        f'{_resource_label(resource)} already exists',
+        code='conflict.exists',
+        details={'resource': resource},
+    )
+
+
+def agent_offline():
+    """``AgentOfflineError`` (503) for a server whose agent is not connected."""
+    return AgentOfflineError()

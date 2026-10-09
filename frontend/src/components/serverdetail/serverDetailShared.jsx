@@ -1,7 +1,6 @@
-import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Gauge } from '../ds';
-import { copyToClipboard } from '@/utils/clipboard';
+import { useClipboard } from '@/hooks/useClipboard';
 import { useTranslation } from 'react-i18next';
 
 export const SecurityAlertItem = ({ alert, onAcknowledge, onResolve }) => {
@@ -27,7 +26,9 @@ export const SecurityAlertItem = ({ alert, onAcknowledge, onResolve }) => {
                 <p className="notification__message">
                     {alert.source_ip && <><strong>{t('app.serverDetailShared.ip', 'IP:')}</strong> {alert.source_ip}{'  '}</>}
                     {alert.details?.message || ''}
-                    {alert.details?.attempts ? ` (${alert.details.attempts} attempts)` : ''}
+                    {alert.details?.attempts
+                        ? ` ${t('app.serverDetailShared.attempts', { count: alert.details.attempts, defaultValue_one: '(1 attempt)', defaultValue_other: '({{count}} attempts)' })}`
+                        : ''}
                 </p>
                 <div className="notification__actions">
                     {alert.status === 'open' && (
@@ -44,15 +45,6 @@ export const SecurityAlertItem = ({ alert, onAcknowledge, onResolve }) => {
     );
 };
 
-export const InfoRow = ({ icon, label, value, mono, children }) => (
-    <li className="info-row">
-        <span className="info-row__icon">{icon}</span>
-        <span className="info-row__label">{label}</span>
-        <span className={`info-row__value${mono ? ' mono' : ''}`}>
-            {children ?? value}
-        </span>
-    </li>
-);
 
 export const KpiTile = ({ icon, label, value, sub, tone }) => (
     <div className={`kpi-tile${tone ? ` kpi-tile--${tone}` : ''}`}>
@@ -87,13 +79,12 @@ export const KpiGauge = ({ icon, label, percent, color, sub }) => {
 
 export const CopyChip = ({ label, value, title, mono }) => {
     const { t } = useTranslation();
-    const toast = useToast();
+    const { copy } = useClipboard();
     const handleCopy = (e) => {
         e.preventDefault();
         e.stopPropagation();
         if (!value) return;
-        copyToClipboard(value);
-        toast.success(`${label[0].toUpperCase()}${label.slice(1)} copied`);
+        copy(String(value), `${label[0].toUpperCase()}${label.slice(1)} copied`);
     };
     return (
         <Button variant="unstyled"

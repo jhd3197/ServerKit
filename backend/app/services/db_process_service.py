@@ -62,7 +62,7 @@ class DbProcessService:
         """
         engine = (target or {}).get('engine')
         if engine not in SUPPORTED_ENGINES:
-            return {'error': 'unsupported engine'}
+            return {'error': 'unsupported engine', 'code': 'unsupported_engine'}
 
         sql = _MYSQL_PROCESSLIST if engine == 'mysql' else _PG_PROCESSLIST
         result = cls._exec_sql(target, sql)
@@ -83,7 +83,7 @@ class DbProcessService:
         """
         engine = (target or {}).get('engine')
         if engine not in SUPPORTED_ENGINES:
-            return {'error': 'unsupported engine'}
+            return {'error': 'unsupported engine', 'code': 'unsupported_engine'}
         try:
             pid = int(pid)
         except (TypeError, ValueError):

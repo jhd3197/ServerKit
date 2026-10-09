@@ -143,10 +143,14 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                         <div className="sec-posture__summary">
                             <p className="sec-posture__verdict">
                                 {score === null
-                                    ? 'Checking this server…'
+                                    ? t('app.overviewTab.checkingThisServer', 'Checking this server…')
                                     : warnCount === 0
-                                        ? 'All hardening checks pass.'
-                                        : `${warnCount} ${warnCount === 1 ? 'check needs' : 'checks need'} attention.`}
+                                        ? t('app.overviewTab.allHardeningChecksPass', 'All hardening checks pass.')
+                                        : t('app.overviewTab.checksNeedAttention', {
+                                            count: warnCount,
+                                            defaultValue_one: '1 check needs attention.',
+                                            defaultValue_other: '{{count}} checks need attention.',
+                                        })}
                             </p>
                             <KpiBand dense className="sec-posture__kpis">
                                 {kpis.map((k) => {
@@ -182,7 +186,7 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                                             onClick={() => (c.fix.nav ? c.fix.run() : runFix(c.key, c.fix.run))}
                                             disabled={busy}
                                         >
-                                            {rowBusy ? 'Working…' : c.fix.label}
+                                            {rowBusy ? t('app.overviewTab.fixWorking', 'Working…') : c.fix.label}
                                         </Button>
                                     ) : (
                                         <Pill kind={statusKind(c.state)}>{c.state === 'unknown' ? 'pending' : c.state}</Pill>
@@ -195,9 +199,9 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                     <p className="sec-hint sec-posture__foot">
                         {!hasSecurityExtensions && (
                             <>
-                                {t('app.overviewTab.moreSecurityTools', 'More security tools — malware scanning, brute-force protection, vulnerability scans, auto-updates — are available as extensions in the')}
+                                {t('app.overviewTab.moreSecurityTools', 'More security tools (malware scanning, brute-force protection, vulnerability scans, auto-updates) are available as extensions in the')}
                                 {' '}
-                                <Link to="/marketplace">{t('app.overviewTab.marketplaceLink', 'Marketplace')}</Link>
+                                <Link to="/marketplace">{t('app.overviewTab.marketplaceLink', 'Extensions')}</Link>
                                 {'. '}
                             </>
                         )}

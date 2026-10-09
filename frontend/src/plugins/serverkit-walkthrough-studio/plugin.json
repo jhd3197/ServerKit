@@ -2,7 +2,7 @@
   "name": "serverkit-walkthrough-studio",
   "display_name": "Walkthrough Studio",
   "version": "1.0.0",
-  "description": "Create, validate, preview, import, and export guided ServerKit walkthroughs without writing application code.",
+  "description": "Create, validate, preview, import and export guided ServerKit walkthroughs without writing code.",
   "author": "ServerKit",
   "license": "MIT",
   "category": "utility",

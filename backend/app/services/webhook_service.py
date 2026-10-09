@@ -63,7 +63,7 @@ class WebhookService:
             # push fire deploys and outbound callbacks for a deleted app.
             app = Application.query_active().filter_by(id=app_id).first()
             if not app:
-                return {'success': False, 'error': 'Application not found'}
+                return {'success': False, 'error': 'Service not found'}
 
         # Generate secure tokens
         secret = secrets.token_hex(32)

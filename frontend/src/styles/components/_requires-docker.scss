@@ -17,14 +17,14 @@
     }
 
     &__title {
-        font-size: $font-size-xl;
-        font-weight: $font-weight-bold;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
         margin-bottom: $space-3;
     }
 
     &__text {
-        font-size: $font-size-md;
+        font-size: $text-md;
         color: $text-secondary;
         line-height: $line-height-relaxed;
         margin-bottom: $space-6;
@@ -36,14 +36,14 @@
         margin-bottom: $space-5;
         background: $bg-elevated;
         border: 1px solid $border-default;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__how-label {
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         margin-bottom: $space-3;
     }
@@ -51,11 +51,11 @@
     &__cmd {
         display: block;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-primary;
         padding: $space-2 $space-3;
         background: $bg-tertiary;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         overflow-x: auto;
         white-space: nowrap;
 
@@ -65,7 +65,7 @@
     }
 
     &__footnote {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
         line-height: $line-height-normal;
 

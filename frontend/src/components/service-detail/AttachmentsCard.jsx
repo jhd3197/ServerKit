@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '../../contexts/useToast.js';
 import { useAuth } from '../../contexts/useAuth.js';
 import { useConfirm } from '@/hooks/useConfirm';
+import { toastError } from '@/utils/errorMessage';
 
 // Kind -> the template installed when none exists yet. Must match what the
 // backend accepts for that kind (app_attachment_service.CONNECTION_KINDS).
@@ -45,7 +46,7 @@ export default function AttachmentsCard({ app }) {
     // API's `failure_mode` (app_attachment_service.FAILURE_MODES), translated.
     const failureMode = (k) => ({
         cache: t('app.attachments.failureCache', 'Cached data can be stale; invalidate on write, and never keep the only copy in a cache.'),
-        storage: t('app.attachments.failureStorage', 'Objects outlive the app: detaching keeps the bucket and its data.'),
+        storage: t('app.attachments.failureStorage', 'Objects outlive the service: detaching keeps the bucket and its data.'),
         queue: t('app.attachments.failureQueue', 'A job can be delivered twice; make jobs safe to run again.'),
         metrics: t('app.attachments.failureMetrics', 'Grafana shows what Prometheus kept: past its retention, history is gone.'),
         logs: t('app.attachments.failureLogs', 'Grafana shows what Loki kept: past its retention, logs are gone.'),
@@ -83,7 +84,7 @@ export default function AttachmentsCard({ app }) {
             setChoices(data);
             if (data.services?.length) setSelected(String(data.services[0].id));
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.attachments.couldntLoadAttachable', "Couldn't load the services you can attach."), err);
             setKind(null);
         }
     }
@@ -97,7 +98,7 @@ export default function AttachmentsCard({ app }) {
             setKind(null);
             load();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.attachments.couldntAttach', "Couldn't attach the service."), err);
         } finally {
             setBusy(false);
         }
@@ -110,13 +111,13 @@ export default function AttachmentsCard({ app }) {
             const installed = await api.installTemplate(
                 templateId, `${app.name}-${kind}`, {}, { wait: true });
             if (installed.job?.status === 'failed') {
-                throw new Error(installed.job.error_message || t('app.attachments.installFailed', 'The install failed.'));
+                throw new Error(installed.job.error_message || t('app.attachments.installFailed', "Couldn't install it."));
             }
             const serviceId = installed.job?.app_id;
             if (!serviceId) throw new Error(t('app.attachments.installNoId', 'Installed, but the new service could not be found. Attach it from the list.'));
             await attach(serviceId);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.attachments.couldntInstallAndAttach', "Couldn't install and attach the service."), err);
             setBusy(false);
         }
     }
@@ -125,8 +126,8 @@ export default function AttachmentsCard({ app }) {
         if (!await confirm({
             title: t('app.attachments.detachTitle', 'Detach {{name}}?', { name: row.service_name }),
             message: row.kind === 'storage'
-                ? t('app.attachments.detachStorage', 'The app loses its key and S3 settings. The bucket and its files are kept.')
-                : t('app.attachments.detachConnection', 'The app loses the settings that point at this service.'),
+                ? t('app.attachments.detachStorage', 'The service loses its key and S3 settings. The bucket and its files are kept.')
+                : t('app.attachments.detachConnection', 'The service loses the settings that point at the attached one.'),
             confirmText: t('app.attachments.detach', 'Detach'),
         })) return;
         try {
@@ -135,7 +136,7 @@ export default function AttachmentsCard({ app }) {
             setNeedsRedeploy(true);
             load();
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.attachments.couldntDetach', "Couldn't detach the service."), err);
         }
     }
 
@@ -143,10 +144,10 @@ export default function AttachmentsCard({ app }) {
         setBusy(true);
         try {
             await api.deployApp(app.id);
-            toast.success(t('app.attachments.redeploying', 'Redeploy started.'));
+            toast.success(t('app.attachments.redeploying', 'Redeploy started'));
             setNeedsRedeploy(false);
         } catch (err) {
-            toast.error(err.message);
+            toastError(toast, t('app.attachments.couldntRedeploy', "Couldn't redeploy the service."), err);
         } finally {
             setBusy(false);
         }
@@ -180,7 +181,7 @@ export default function AttachmentsCard({ app }) {
 
             {needsRedeploy && (
                 <div className="attachments__redeploy">
-                    <span>{t('app.attachments.redeployHint', 'The app picks up the change on its next deploy.')}</span>
+                    <span>{t('app.attachments.redeployHint', 'The service picks up the change on its next deploy.')}</span>
                     <Button size="sm" onClick={redeploy} disabled={busy}>
                         <RotateCw size={14} />
                         {t('app.attachments.redeployNow', 'Redeploy now')}
@@ -209,7 +210,7 @@ export default function AttachmentsCard({ app }) {
                 </ul>
             ) : (
                 <p className="attachments__empty">
-                    {t('app.attachments.empty', 'Nothing attached. Attach a cache, object storage or a queue and the app gets its connection settings as environment variables.')}
+                    {t('app.attachments.empty', 'Nothing attached. Attach a cache, object storage or a queue and the service gets its connection settings as environment variables.')}
                 </p>
             )}
 

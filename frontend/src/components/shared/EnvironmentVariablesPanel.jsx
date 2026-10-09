@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
+import { DataTable } from '@/components/ds';
 
 /**
  * Read-mostly facade showing the *resolved* shared variables for a resource —
@@ -73,7 +75,7 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
                 resolved = data.variables || [];
                 attachedGroups = data.groups || [];
             } catch (err) {
-                toast.error(t('app.environmentVariablesPanel.failedToLoadSharedVariables', 'Failed to load shared variables'));
+                toastError(toast, t('app.environmentVariablesPanel.failedToLoadSharedVariables', "Couldn't load shared variables."), err);
                 console.error('Failed to load resolved variables:', err);
             }
         }
@@ -120,14 +122,57 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
         return <div className="shared-vars-panel shared-vars-panel--loading">{t('app.environmentVariablesPanel.loadingSharedVariables', 'Loading shared variables…')}</div>;
     }
 
+    const columns = [
+        {
+            key: 'key',
+            headerKey: 'common.labels.key', header: 'Key',
+            cellClassName: 'shared-vars-table__key',
+            render: (v) => (
+                <>
+                    {v.key}
+                    {localKeys && localKeys.has(v.key) && (
+                        <span
+                            className="conflict-badge"
+                            title={t('app.environmentVariablesPanel.thisKeyIsAlsoSetOn', "This key is also set on the service's Environment variables tab. The local value is what the container uses; the shared value is overridden.")}
+                        >
+                            {t('app.environmentVariablesPanel.setLocallyLocalValueApplies', 'Set locally (local value applies)')}
+                        </span>
+                    )}
+                </>
+            ),
+        },
+        {
+            key: 'value',
+            headerKey: 'common.labels.value', header: 'Value',
+            cellClassName: 'shared-vars-table__value',
+        },
+        {
+            key: 'source',
+            headerKey: 'common.labels.source', header: 'Source',
+            cellClassName: 'shared-vars-table__group',
+            render: (v) => (
+                <>
+                    {v.source_scope && SCOPE_ORDER.includes(v.source_scope) && (
+                        <span className={`scope-badge scope-badge--${v.source_scope}`}>
+                            {SCOPE_LABELS[v.source_scope]}
+                        </span>
+                    )}
+                    <span className="shared-vars-table__group-name">
+                        {v.group_name || '—'}
+                    </span>
+                </>
+            ),
+        },
+    ];
+
     const showProvenance = hierarchical && variables.some((v) => v.source_scope);
 
     return (
         <div className="shared-vars-panel">
             <div className="shared-vars-panel__header">
-                <h3>{t('app.environmentVariablesPanel.sharedVariables', 'Shared Variables')}</h3>
+                <h3>{t('app.environmentVariablesPanel.sharedVariables', 'Shared variables')}</h3>
                 <span className="shared-vars-panel__count">
-                    {variables.length} {t('app.environmentVariablesPanel.resolved', 'resolved ·')} {groups.length} group{groups.length !== 1 ? 's' : ''}
+                    {t('app.environmentVariablesPanel.resolvedCount', '{{count}} resolved', { count: variables.length })} · {t('app.environmentVariablesPanel.groupCount', { count: groups.length, defaultValue_one: '1 group', defaultValue_other: '{{count}} groups' })}
                 </span>
             </div>
 
@@ -154,7 +199,7 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
 
             {resourceType === 'application' && localKeys && (
                 <p className="shared-vars-panel__hint shared-vars-panel__hint--note">
-                    {t('app.environmentVariablesPanel.sharedVariablesAreInjectedIntoThe', 'Shared variables are injected into the container at deploy. The app\'s own Environment tab takes precedence, so where a key also exists locally the local value is what the container uses.')}
+                    {t('app.environmentVariablesPanel.sharedVariablesAreInjectedIntoThe', "Shared variables are injected into the container at deploy. The service's own Environment variables tab takes precedence, so where a key also exists locally the local value is what the container uses.")}
                 </p>
             )}
 
@@ -172,54 +217,22 @@ const EnvironmentVariablesPanel = ({ resourceType, resourceId }) => {
             {filtered.length === 0 ? (
                 <div className="shared-vars-panel__empty">
                     {filter
-                        ? 'No matching variables'
-                        : 'No shared variable groups attached to this resource yet.'}
+                        ? t('app.environmentVariablesPanel.noMatchingVariables', 'No matching variables')
+                        : t('app.environmentVariablesPanel.noSharedGroupsYet', 'No shared variable groups attached to this resource yet.')}
                 </div>
             ) : (
-                <table className="shared-vars-table">
-                    <thead>
-                        <tr>
-                            <th>{t('common.labels.key', 'Key')}</th>
-                            <th>{t('common.labels.value', 'Value')}</th>
-                            <th>{t('common.labels.source', 'Source')}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filtered.map((v) => {
-                            const scope = v.source_scope;
-                            const conflict = !!(localKeys && localKeys.has(v.key));
-                            return (
-                                <tr
-                                    key={v.key}
-                                    className={`${v.is_secret ? 'is-secret' : ''} ${conflict ? 'has-conflict' : ''}`.trim()}
-                                >
-                                    <td className="shared-vars-table__key">
-                                        {v.key}
-                                        {conflict && (
-                                            <span
-                                                className="conflict-badge"
-                                                title={t('app.environmentVariablesPanel.thisKeyIsAlsoSetOn', 'This key is also set on the app\'s Environment tab. The local value is what the container uses; the shared value is overridden.')}
-                                            >
-                                                {t('app.environmentVariablesPanel.setLocallyLocalValueApplies', 'Set locally — local value applies')}
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className="shared-vars-table__value">{v.value}</td>
-                                    <td className="shared-vars-table__group">
-                                        {scope && SCOPE_ORDER.includes(scope) && (
-                                            <span className={`scope-badge scope-badge--${scope}`}>
-                                                {SCOPE_LABELS[scope]}
-                                            </span>
-                                        )}
-                                        <span className="shared-vars-table__group-name">
-                                            {v.group_name || '—'}
-                                        </span>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                <DataTable
+                    className="shared-vars-table"
+                    columns={columns}
+                    data={filtered}
+                    keyField="key"
+                    sortable={false}
+                    columnMenu={false}
+                    rowClassName={(v) => [
+                        v.is_secret ? 'is-secret' : null,
+                        localKeys && localKeys.has(v.key) ? 'has-conflict' : null,
+                    ].filter(Boolean).join(' ') || undefined}
+                />
             )}
         </div>
     );

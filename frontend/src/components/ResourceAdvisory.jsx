@@ -40,7 +40,7 @@ const ResourceAdvisory = ({ workload = 'wordpress' }) => {
             <AlertTriangle size={18} className="resource-advisory__icon" />
             <div className="resource-advisory__body">
                 <div className="resource-advisory__title">
-                    {t('app.resourceAdvisory.tightOnMemory', 'Tight on memory —')} {headroom.summary}
+                    {t('app.resourceAdvisory.tightOnMemory', 'Tight on memory:')} {headroom.summary}
                 </div>
                 <p className="resource-advisory__text">
                     {meta.name} {t('app.resourceAdvisory.typicallyNeedsAbout', 'typically needs about')} {meta.needsMb} {t('app.resourceAdvisory.mbAndThisServerHas', 'MB and this server has')} {free} {t('app.resourceAdvisory.mbFreeForWorkloadsYouCan', 'MB free for workloads. You can still create one; expect it to be slow or to get OOM-killed under load. Adding RAM or swap fixes it.')}

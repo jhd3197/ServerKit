@@ -76,14 +76,15 @@ function SynthWindow({ win }) {
 }
 
 function WindowBody({ body }) {
+    const { t } = useTranslation();
     if (Array.isArray(body)) {
         return (
             <ul className="sk-synth__list">
                 {body.map((row, i) => (
                     <li key={i}>
                         <span>{row.name}</span>
-                        <span>{row.cpu != null ? `${row.cpu.toFixed?.(1) ?? row.cpu}% cpu` : ''}</span>
-                        <span>{row.mem != null ? `${row.mem.toFixed?.(1) ?? row.mem}% mem` : ''}</span>
+                        <span>{row.cpu != null ? t('gui.cpuPercent', '{{value}}% CPU', { value: row.cpu.toFixed?.(1) ?? row.cpu }) : ''}</span>
+                        <span>{row.mem != null ? t('gui.memPercent', '{{value}}% memory', { value: row.mem.toFixed?.(1) ?? row.mem }) : ''}</span>
                     </li>
                 ))}
             </ul>

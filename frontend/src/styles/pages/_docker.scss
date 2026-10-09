@@ -2,205 +2,6 @@
 // DOCKER PAGE - NEW DESIGN
 // ============================================
 
-// Page Layout
-.docker-page-new {
-    padding: 0;
-}
-
-.docker-page-title {
-    h2 {
-        font-size: $font-size-xl;
-        font-weight: $font-weight-semibold;
-        color: $text-primary;
-        margin: 0;
-    }
-}
-
-.docker-page-subtitle {
-    color: $text-secondary;
-    font-size: $font-size-sm;
-    margin-top: $space-1;
-}
-
-.docker-page-actions {
-    display: flex;
-    align-items: center;
-    gap: $space-3;
-}
-
-// Docker-specific server-selector spacing (base styles in components/_server-selector)
-.docker-page-actions .server-selector {
-    margin-right: $space-2;
-}
-
-// Stats Row
-.docker-stats-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: $space-4;
-    margin-bottom: $space-6;
-
-    @media (max-width: $breakpoint-lg) {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media (max-width: $breakpoint-sm) {
-        grid-template-columns: 1fr;
-    }
-}
-
-.docker-stat-card {
-    background: $bg-card;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-md;
-    padding: $space-5;
-}
-
-.docker-stat-label {
-    font-size: $font-size-xs;
-    font-weight: $font-weight-semibold;
-    text-transform: uppercase;
-    color: $text-tertiary;
-    margin-bottom: $space-2;
-    letter-spacing: 0.05em;
-}
-
-.docker-stat-value {
-    font-family: $font-mono;
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
-    color: $text-primary;
-}
-
-.docker-stat-meta {
-    font-size: $font-size-xs;
-    color: $text-tertiary;
-    margin-top: $space-1;
-    display: flex;
-    align-items: center;
-    gap: $space-3;
-}
-
-.docker-stat-running {
-    color: $success;
-
-    &::before {
-        content: '';
-        display: inline-block;
-        width: 6px;
-        height: 6px;
-        background: $success;
-        border-radius: 50%;
-        margin-right: $space-1;
-    }
-}
-
-.docker-stat-stopped {
-    color: $text-tertiary;
-
-    &::before {
-        content: '';
-        display: inline-block;
-        width: 6px;
-        height: 6px;
-        background: $text-tertiary;
-        border-radius: 50%;
-        margin-right: $space-1;
-    }
-}
-
-// Panel
-.docker-panel {
-    background: $bg-card;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-md;
-    overflow: hidden;
-}
-
-.docker-panel-header {
-    padding: $space-4 $space-5;
-    border-bottom: 1px solid $border-subtle;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.docker-panel-tabs {
-    display: flex;
-    gap: $space-6;
-}
-
-.docker-panel-tab {
-    color: $text-tertiary;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    cursor: pointer;
-    padding-bottom: $space-1;
-    border-bottom: 2px solid transparent;
-    transition: all 0.2s;
-
-    &:hover {
-        color: $text-primary;
-    }
-
-    &.active {
-        color: $text-primary;
-        border-color: $accent-primary;
-    }
-}
-
-.docker-panel-actions {
-    display: flex;
-    gap: $space-2;
-}
-
-.docker-panel-content {
-    // Content area - no padding needed, tabs handle their own
-}
-
-// The hand-rolled `.docker-table` markup and its cell/pill/toolbar styles are
-// gone: every Docker tab renders through <DataTable> under .dx-manager-table
-// now, and each one carries its own chrome row instead of a bespoke toolbar.
-
-// Resource Bars
-.docker-res-container {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    font-size: $font-size-xs;
-    color: $text-tertiary;
-    margin-bottom: $space-1;
-
-    &:last-child {
-        margin-bottom: 0;
-    }
-}
-
-.docker-res-label {
-    width: 28px;
-    flex-shrink: 0;
-}
-
-.docker-res-track {
-    width: 50px;
-    height: 4px;
-    background: $bg-hover;
-    border-radius: 2px;
-    overflow: hidden;
-}
-
-.docker-res-fill {
-    height: 100%;
-    border-radius: 2px;
-    transition: width 0.3s ease;
-}
-
-.docker-res-value {
-    width: 32px;
-    text-align: right;
-    font-family: $font-mono;
-}
-
 .faded {
     opacity: 0.3;
 }
@@ -212,7 +13,7 @@
     color: $text-secondary;
 
     h3 {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         margin: 0 0 $space-2 0;
@@ -220,7 +21,7 @@
 
     p {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 }
 
@@ -228,81 +29,6 @@
     text-align: center;
     padding: $space-12;
     color: $text-secondary;
-}
-
-// ============================================
-// LEGACY STYLES (keep for Docker unavailable state)
-// ============================================
-
-.docker-list {
-    @include flex-column-gap($space-3);
-}
-
-.docker-item {
-    @include list-item-base();
-}
-
-.docker-item-info {
-    @include flex-start();
-    gap: $space-4;
-    flex: 1;
-    min-width: 0;
-}
-
-.docker-item-icon {
-    @include icon-box();
-    background: $bg-hover;
-    border-radius: $radius-lg;
-    color: $color-docker;
-
-    &.image-icon {
-        color: $violet; // Purple for images
-    }
-
-    &.network-icon {
-        color: $success; // Green for networks
-    }
-
-    &.volume-icon {
-        color: $warning; // Yellow for volumes
-    }
-}
-
-.docker-item-details {
-    min-width: 0;
-
-    h3 {
-        font-size: $font-size-base;
-        font-weight: $font-weight-semibold;
-        color: $text-primary;
-        margin-bottom: $space-1;
-        @include truncate();
-    }
-}
-
-.docker-item-meta {
-    @include flex-start();
-    gap: $space-3;
-    font-size: $font-size-sm;
-    color: $text-tertiary;
-    flex-wrap: wrap;
-
-    .mono {
-        @include mono-text();
-        background: $bg-hover;
-        padding: $space-1 - 2 $space-2 - 2;
-        border-radius: $radius-sm;
-    }
-}
-
-.docker-item-status {
-    flex-shrink: 0;
-}
-
-.docker-item-actions {
-    display: flex;
-    gap: $space-2;
-    flex-shrink: 0;
 }
 
 // Container Exec Modal
@@ -316,11 +42,11 @@
     flex: 1;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: $space-4;
     overflow-y: auto;
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     margin-bottom: $space-3;
 }
 
@@ -336,7 +62,7 @@
     code {
         background: $bg-hover;
         padding: $space-1 $space-2;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $accent-primary;
     }
 }
@@ -365,7 +91,7 @@
 
     &.exec-info {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &.exec-loading {
@@ -382,7 +108,7 @@
     gap: $space-2;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: $space-2 $space-3;
 
     &:focus-within {
@@ -402,7 +128,7 @@
     background: transparent;
     color: $text-primary;
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     outline: none;
 
     &::placeholder {
@@ -415,17 +141,6 @@
 }
 
 // Docker Unavailable State
-.docker-page {
-    // /docker is a full-page route, so .main-content drops its padding. Unlike
-    // the workspace branch, this state has no shell of its own, so restore the
-    // standard route padding or the header sits flush against the viewport top.
-    padding: $space-10;
-
-    @media (max-width: $breakpoint-md) {
-        padding: $space-5;
-    }
-}
-
 .docker-unavailable {
     display: flex;
     flex-direction: column;
@@ -435,7 +150,7 @@
     padding: $space-12 $space-6;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     max-width: 600px;
     margin: 0 auto;
 
@@ -446,7 +161,7 @@
         align-items: center;
         justify-content: center;
         background: fade($color-docker, 10%);
-        border-radius: $radius-xl;
+        border-radius: $radius-overlay;
         margin-bottom: $space-6;
 
         svg {
@@ -456,7 +171,7 @@
     }
 
     h2 {
-        font-size: $font-size-xl;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         margin: 0 0 $space-2 0;
         color: $text-primary;
@@ -464,7 +179,7 @@
 
     .docker-unavailable-message {
         color: $text-secondary;
-        font-size: $font-size-base;
+        font-size: $text-base;
         margin: 0 0 $space-4 0;
     }
 
@@ -477,9 +192,9 @@
             padding: $space-3 $space-4;
             background: $bg-hover;
             border: 1px solid $border-subtle;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             font-family: $font-mono;
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             color: $text-tertiary;
             word-break: break-all;
             text-align: left;
@@ -490,12 +205,12 @@
         width: 100%;
         padding: $space-5;
         background: $bg-hover;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         text-align: left;
         margin-bottom: $space-6;
 
         h4 {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             margin: 0 0 $space-3 0;
             color: $text-primary;
@@ -506,7 +221,7 @@
             padding-left: $space-5;
 
             li {
-                font-size: $font-size-sm;
+                font-size: $text-xs;
                 color: $text-secondary;
                 margin-bottom: $space-2;
 
@@ -532,16 +247,14 @@
 // ============================================
 // DOCKER REDESIGN (dx-*)
 // ============================================
+// Fill body of the Docker PageLayout: the list and the container inspector
+// scroll on their own, so the page itself is a fixed-height column.
 .dx-page {
+    height: 100%;
     display: flex;
     flex-direction: column;
     gap: $space-3;
-}
-
-.dx-stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: $space-3;
+    padding: $space-5;
 }
 
 .dx-stat {
@@ -551,114 +264,22 @@
     padding: $space-4;
     background: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     @include transition(all);
 
     &:hover {
         border-color: $border-hover;
-        transform: translateY(-1px);
-        box-shadow: $shadow-md;
     }
 
-    &[data-kind='containers'] .dx-stat-icon { color: $info; background: fade($info-raw, 12%); }
-    &[data-kind='images']     .dx-stat-icon { color: $violet; background: fade($violet, 12%); }
-    &[data-kind='volumes']    .dx-stat-icon { color: $success; background: fade($success-raw, 12%); }
-    &[data-kind='networks']   .dx-stat-icon { color: $warning; background: fade($warning-raw, 12%); }
-}
-
-.dx-stat-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: $radius-md;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.dx-stat-body {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-    flex: 1;
-}
-
-.dx-stat-label {
-    font-size: 9px;
-    font-weight: $font-weight-semibold;
-    color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-
-.dx-stat-value {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-semibold;
-    color: $text-primary;
-    line-height: 1;
-}
-
-.dx-stat-meta {
-    display: flex;
-    gap: $space-2;
-    margin-top: 2px;
-    flex-wrap: wrap;
-}
-
-.dx-stat-sub {
-    font-size: $font-size-xs;
-    color: $text-tertiary;
-}
-
-.dx-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 1px 7px;
-    border-radius: $radius-full;
-    font-size: 10px;
-    font-weight: $font-weight-medium;
-    background: $bg-tertiary;
-    color: $text-secondary;
-
-    .dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: $text-tertiary;
-    }
-
-    &.running {
-        background: fade($success-raw, 12%);
-        color: $success;
-        .dot { background: $success; }
-    }
-    &.stopped {
-        background: $bg-tertiary;
-        color: $text-tertiary;
-    }
-}
-
-// ─── Tabs (replaces docker-panel-tabs) ──────────
-.dx-tabs {
-    display: flex;
-    gap: $space-1;
-    padding: 4px;
-    background: $bg-card;
-    border: 1px solid $border-default;
-    border-radius: $radius-lg;
-    overflow-x: auto;
-    scrollbar-width: thin;
 }
 
 .dx-tab {
     background: transparent;
     border: none;
-    padding: 8px $space-4;
-    border-radius: $radius-md;
+    padding: $space-2 $space-4;
+    border-radius: $radius-control;
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     cursor: pointer;
     white-space: nowrap;
@@ -674,7 +295,7 @@
 .dx-panel {
     background: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: hidden;
     min-height: 400px;
 }
@@ -683,95 +304,24 @@
     padding: $space-3;
 }
 
-.dx-tab-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: $space-3;
-    padding-bottom: $space-3;
-    margin-bottom: $space-3;
-    border-bottom: 1px solid $border-subtle;
-    flex-wrap: wrap;
-}
-
-.dx-tab-toolbar-right {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    flex-wrap: wrap;
-}
-
-// ─── Container card grid ─────────────────────────
-.dx-container-grid {
-    display: grid;
-    gap: $space-3;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-}
-
-.dx-container-card {
-    position: relative;
-    background: $bg-elevated;
-    border: 1px solid $border-default;
-    border-radius: $radius-lg;
-    padding: $space-3 $space-4 $space-4;
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    cursor: pointer;
-    @include transition(all);
-    overflow: hidden;
-
-    &.is-running { border-color: fade($success-raw, 40%); }
-    &.is-stopped { border-color: $border-default; }
-
-    &:hover {
-        border-color: $border-hover;
-        transform: translateY(-2px);
-        box-shadow: $shadow-md;
-    }
-}
-
-.dx-card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: $space-2;
-}
-
-.dx-card-title {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    min-width: 0;
-    flex: 1;
-
-    h4 {
-        margin: 0;
-        font-size: $font-size-sm;
-        font-weight: $font-weight-semibold;
-        color: $text-primary;
-        @include truncate();
-    }
-}
-
 .dx-status-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
     flex-shrink: 0;
 
-    &.running { background: $success; box-shadow: 0 0 0 3px fade($success-raw, 16%); opacity: 1; }
+    &.running { background: $success; opacity: 1; }
     &.stopped { background: $text-tertiary; opacity: 0.4; }
 }
 
 .dx-status-pill {
     display: inline-flex;
-    padding: 1px 8px;
-    border-radius: $radius-full;
-    font-size: 10px;
-    font-weight: $font-weight-semibold;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
+    font-size: $text-xs;
+    font-weight: $font-weight-medium;
     background: $bg-tertiary;
     color: $text-tertiary;
 
@@ -779,38 +329,14 @@
     &.stopped { background: $bg-tertiary; color: $text-tertiary; }
 }
 
-.dx-card-image {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: $text-tertiary;
-    font-family: $font-mono;
-    font-size: $font-size-xs;
-
-    span { @include truncate(); }
-    svg { color: $violet; flex-shrink: 0; }
-}
-
-.dx-card-detail {
-    font-size: $font-size-xs;
-    color: $text-secondary;
-    @include truncate();
-}
-
-.dx-card-ports {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-}
-
 .dx-port-pill {
     display: inline-flex;
     align-items: center;
-    padding: 1px 6px;
+    padding: 1px $space-tight;
     background: $bg-tertiary;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-family: $font-mono;
-    font-size: 10px;
+    font-size: $text-xs;
     color: $text-secondary;
     @include truncate();
     max-width: 220px;
@@ -819,18 +345,11 @@
 .dx-port-more {
     display: inline-flex;
     align-items: center;
-    padding: 1px 6px;
+    padding: 1px $space-tight;
     background: $bg-tertiary;
-    border-radius: $radius-sm;
-    font-size: 10px;
+    border-radius: $radius-badge;
+    font-size: $text-xs;
     color: $text-tertiary;
-}
-
-.dx-card-resources {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-top: $space-1;
 }
 
 .dx-res {
@@ -840,21 +359,10 @@
     align-items: center;
 }
 
-.dx-res-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    font-size: 10px;
-    color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    font-weight: $font-weight-semibold;
-}
-
 .dx-res-track {
     height: 4px;
     background: $border-default;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     overflow: hidden;
 }
 
@@ -866,34 +374,9 @@
     &.mem { background: $success; }
 }
 
-.dx-res-value {
-    text-align: right;
-    font-family: $font-mono;
-    font-size: 10px;
-    color: $text-secondary;
-}
-
-.dx-card-actions {
-    display: flex;
-    gap: $space-1;
-    flex-wrap: wrap;
-    padding-top: $space-2;
-    margin-top: auto;
-    border-top: 1px solid $border-subtle;
-}
-
 // Full-width manager shell
-.docker-page-new.dx-page {
-    height: 100vh;
-    min-height: 0;
-    padding: $space-5;
-    overflow: hidden;
-
-    .lv-header,
-    .dx-stats-row,
-    .dx-tabs {
-        flex-shrink: 0;
-    }
+.dx-page > .sk-kpiband-wrap {
+    flex-shrink: 0;
 }
 
 .dx-panel {
@@ -934,122 +417,12 @@
     }
 }
 
-// Status filter rendered as a segmented control (redesign seg look).
-.dx-filter-chips {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-    flex-wrap: wrap;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 3px;
-
-    .filter-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: $space-2;
-        min-height: 28px;
-        padding: 0 $space-3;
-        border: 1px solid transparent;
-        border-radius: 6px;
-        background: transparent;
-        color: $text-tertiary;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-medium;
-        cursor: pointer;
-        @include transition(all);
-
-        &:hover:not(:disabled) { color: $text-primary; }
-
-        &.active {
-            background: var(--surface-3);
-            color: $text-primary;
-            box-shadow: var(--shadow-sm);
-        }
-
-        &:disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-        }
-    }
-
-    .filter-chip-count {
-        font-family: $font-mono;
-        font-size: 10.5px;
-        color: inherit;
-        opacity: 0.7;
-    }
-}
-
-// KPI tile strip atop the Docker content area (uses the shared .sk-kpi cards).
-.dx-kpi-strip {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: $space-4;
-    margin-bottom: $space-4;
-
-    @media (max-width: $breakpoint-lg) { grid-template-columns: repeat(2, 1fr); }
-    @media (max-width: $breakpoint-sm) { grid-template-columns: 1fr; }
-}
-
-.dx-search-field {
-    position: relative;
-    display: flex;
-    align-items: center;
-    min-width: 280px;
-
-    .lv-search-field-icon {
-        position: absolute;
-        left: $space-3;
-        color: $text-tertiary;
-        pointer-events: none;
-    }
-
-    input {
-        width: 100%;
-        height: 32px;
-        border: 1px solid $border-default;
-        border-radius: $radius-md;
-        background: $bg-elevated;
-        color: $text-primary;
-        padding: 0 $space-8 0 $space-8;
-        font-size: $font-size-sm;
-
-        &:focus {
-            outline: none;
-            border-color: $accent-primary;
-            box-shadow: 0 0 0 2px $accent-glow;
-        }
-    }
-
-    .lv-search-field-clear {
-        position: absolute;
-        right: $space-2;
-        width: 22px;
-        height: 22px;
-        border: none;
-        border-radius: $radius-sm;
-        background: transparent;
-        color: $text-tertiary;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-
-        &:hover {
-            background: $bg-hover;
-            color: $text-primary;
-        }
-    }
-}
-
 .dx-toggle {
     display: inline-flex;
     align-items: center;
     gap: $space-2;
     color: $text-secondary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     cursor: pointer;
     // Sits in the view row next to the search box now, where a flex parent will
     // happily wrap "Include stopped" onto two lines and make the row taller
@@ -1075,81 +448,26 @@
 .dx-resource-list,
 .dx-inspector {
     min-height: 0;
+}
+
+// The inspector is its own panel; the list carries no frame of its own,
+// the DataTable wrap (.sk-dtable-wrap) is the frame.
+.dx-inspector {
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 }
 
-.dx-resource-list {
-    overflow: hidden;
-}
-
+// The wrap fills the pane at most and scrolls inside it; the header pins
+// through the shared .sk-dtable-wrap--sticky modifier.
 .dx-table-wrap {
-    height: 100%;
-    overflow: auto;
-}
-
-.dx-manager-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    font-size: $font-size-sm;
-
-    th,
-    td {
-        padding: $space-3 $space-4;
-        border-bottom: 1px solid $border-subtle;
-        vertical-align: middle;
-    }
-
-    th {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-        background: $bg-card;
-        color: $text-tertiary;
-        text-align: left;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-semibold;
-    }
-
-    th:nth-child(1) { width: 20%; }
-    th:nth-child(2) { width: 22%; }
-    th:nth-child(3) { width: 17%; }
-    th:nth-child(4) { width: 15%; }
-    th:nth-child(5) { width: 16%; }
-    th:nth-child(6) { width: 10%; }
-    th:nth-child(7) { width: 116px; }
-
-    // Those track widths are tuned for the Containers grid (checkbox + seven
-    // columns). The sibling resource tabs have four or five and no row click,
-    // so they drop the track list and let their own column descriptors decide.
-    // `table-layout: fixed` stays: without it a 64-character volume name or a
-    // long mountpoint widens the row and pushes the actions off the right edge.
-    &.dx-plain-table {
-        th:nth-child(n) { width: auto; }
-        tbody tr { cursor: default; }
-    }
-
-    tbody tr {
-        cursor: pointer;
-        @include transition(background);
-
-        &:hover,
-        &.is-selected {
-            background: $bg-hover;
-        }
-
-        &.is-selected {
-            box-shadow: inset 3px 0 0 $accent-primary;
-        }
-    }
+    --dtable-max-height: 100%;
 }
 
 .dx-name-stack {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: $space-1;
     min-width: 0;
 }
 
@@ -1169,7 +487,7 @@
 .dx-muted-line {
     display: block;
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     @include truncate();
 
     &.mono {
@@ -1178,21 +496,23 @@
 }
 
 .dx-code-pill {
-    display: inline-flex;
+    display: inline-block;
+    height: 20px; // geometry: badge height (20px badge spec)
+    line-height: 20px; // block, not flex, so the truncate ellipsis still works
     max-width: 100%;
-    padding: 2px $space-2;
-    border-radius: $radius-sm;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
     background: $bg-tertiary;
     color: $text-secondary;
     font-family: $font-mono;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     @include truncate();
 }
 
 .dx-port-list {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: $space-1;
     flex-wrap: wrap;
     min-width: 0;
 
@@ -1208,7 +528,7 @@
 .dx-mini-resources {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: $space-tight;
     min-width: 150px;
 
     &.is-muted {
@@ -1224,14 +544,13 @@
 
     span {
         color: $text-tertiary;
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
     }
 
     strong {
         color: $text-secondary;
-        font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         text-align: right;
     }
@@ -1241,14 +560,14 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 4px;
+    gap: $space-1;
 }
 
 .dx-row-action {
-    width: 28px;
-    height: 28px;
+    width: $control-sm;
+    height: $control-sm;
     border: 1px solid $border-default;
-    border-radius: $radius-sm;
+    border-radius: $radius-control;
     background: transparent;
     color: $text-tertiary;
     display: inline-flex;
@@ -1275,9 +594,9 @@
 }
 
 .dx-action-btn {
-    min-height: 30px;
+    min-height: $control-md;
     border: 1px solid $border-default;
-    border-radius: $radius-sm;
+    border-radius: $radius-control;
     background: $bg-card;
     color: $text-secondary;
     display: inline-flex;
@@ -1285,7 +604,7 @@
     justify-content: center;
     gap: $space-2;
     padding: 0 $space-3;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     cursor: pointer;
     @include transition(all);
 
@@ -1311,27 +630,27 @@
 .dx-row-protected {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    height: 28px;
+    gap: $space-1;
+    height: $control-sm;
     padding: 0 $space-2;
     border: 1px dashed $border-default;
-    border-radius: $radius-sm;
+    border-radius: $radius-control;
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     white-space: nowrap;
     cursor: default;
 }
 
 .dx-action-protected {
-    min-height: 30px;
+    min-height: $control-md;
     display: inline-flex;
     align-items: center;
     gap: $space-2;
     padding: 0 $space-3;
     border: 1px dashed $border-default;
-    border-radius: $radius-sm;
+    border-radius: $radius-control;
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     white-space: nowrap;
     cursor: default;
 }
@@ -1340,26 +659,6 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-}
-
-.dx-inspector-empty {
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: $space-8;
-    color: $text-secondary;
-
-    h3 {
-        margin: $space-3 0 $space-2;
-        color: $text-primary;
-        font-size: $font-size-base;
-    }
-
-    p {
-        margin: 0;
-        max-width: 260px;
-        font-size: $font-size-sm;
-    }
 }
 
 .dx-inspector-header {
@@ -1372,8 +671,8 @@
 
 .dx-inspector-icon {
     width: 38px;
-    height: 38px;
-    border-radius: $radius-md;
+    height: 38px; // geometry: icon tile
+    border-radius: $radius-control;
     background: fade($info-raw, 12%);
     color: $info;
     display: flex;
@@ -1389,7 +688,7 @@
     h3 {
         margin: 0;
         color: $text-primary;
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         @include truncate();
     }
@@ -1397,7 +696,7 @@
     span {
         color: $text-tertiary;
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 }
 
@@ -1409,7 +708,7 @@
     padding: $space-3 $space-4;
     border-bottom: 1px solid $border-subtle;
     color: $text-tertiary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
 }
 
 .dx-inspector-actions {
@@ -1429,10 +728,10 @@
 
     button {
         border: none;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         background: transparent;
         color: $text-secondary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         padding: $space-2 $space-3;
         text-transform: capitalize;
         cursor: pointer;
@@ -1457,7 +756,7 @@
 
 .dx-inspector-loading {
     color: $text-secondary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     padding: $space-4 0;
 }
 
@@ -1469,7 +768,7 @@
     div {
         min-width: 0;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         padding: $space-3;
         background: $bg-card;
     }
@@ -1477,14 +776,14 @@
     span {
         display: block;
         color: $text-tertiary;
-        font-size: 10px;
-        margin-bottom: 4px;
+        font-size: $text-xs;
+        margin-bottom: $space-1;
     }
 
     strong {
         display: block;
         color: $text-primary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         @include truncate();
     }
@@ -1495,7 +794,7 @@
     align-items: center;
     gap: $space-2;
     color: $text-secondary;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
 }
 
@@ -1508,7 +807,7 @@
     span {
         min-width: 0;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         @include truncate();
     }
 
@@ -1516,11 +815,11 @@
         min-width: 0;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-secondary;
         font-family: $font-mono;
-        font-size: 10px;
-        padding: 3px $space-2;
+        font-size: $text-xs;
+        padding: $space-1 $space-2;
         @include truncate();
     }
 }
@@ -1534,10 +833,10 @@
         display: block;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-secondary;
         font-family: $font-mono;
-        font-size: 10px;
+        font-size: $text-xs;
         padding: $space-2;
         white-space: pre-wrap;
         word-break: break-word;
@@ -1564,24 +863,13 @@
 }
 
 @media (max-width: $breakpoint-md) {
-    .docker-page-new.dx-page {
+    .dx-page {
         height: auto;
-        min-height: 100vh;
-        overflow: auto;
         padding: $space-4;
     }
 
-    .dx-tab-toolbar,
-    .dx-tab-toolbar-right {
-        align-items: stretch;
-    }
-
-    .dx-search-field {
-        min-width: 100%;
-    }
-
-    .dx-manager-table {
-        min-width: 960px;
+    .dx-table-wrap .sk-dtable {
+        min-width: 960px; // scrolls inside the wrap
     }
 
     .dx-detail-grid,
@@ -1590,228 +878,7 @@
     }
 }
 
-// Docker workspace polish: File Manager-style rail + click-open details drawer
-.docker-page-new.dx-page {
-    // Full-bleed zeroes out .main-content's padding, and this workspace carries
-    // no page bar, so without this the workbar hugs the viewport top. Give it
-    // the same breathing room other routes get from .main-content.
-    padding: $space-6 $space-5 $space-5;
-    gap: $space-3;
-    background: transparent;
-
-    .lv-header,
-    .dx-stats-row,
-    .dx-tabs {
-        display: none;
-    }
-}
-
-.dx-workspace {
-    flex: 1;
-    min-height: 0;
-    display: grid;
-    grid-template-columns: 252px minmax(0, 1fr);
-    gap: $space-3;
-    overflow: hidden;
-}
-
-.dx-docker-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    min-height: 0;
-    overflow-y: auto;
-    scrollbar-width: thin;
-
-    &::-webkit-scrollbar { width: 4px; }
-    &::-webkit-scrollbar-thumb { background: $border-default; border-radius: $radius-sm; }
-}
-
-.dx-sidebar-section {
-    background: $bg-card;
-    border: 1px solid $border-default;
-    border-radius: $radius-lg;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.dx-sidebar-section-header {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    padding: $space-3;
-    background: $bg-elevated;
-    border-bottom: 1px solid $border-subtle;
-    color: $text-primary;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-
-    svg {
-        color: $accent-primary;
-        flex-shrink: 0;
-    }
-}
-
-.dx-sidebar-section-content {
-    padding: $space-2;
-
-    .btn,
-    button {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-.dx-resource-nav {
-    display: grid;
-    gap: 2px;
-    padding: $space-2;
-}
-
-.dx-resource-nav-item {
-    display: grid;
-    grid-template-columns: 18px minmax(0, 1fr) auto;
-    align-items: center;
-    gap: $space-2;
-    width: 100%;
-    min-height: 34px;
-    padding: 0 $space-2;
-    border: none;
-    border-radius: $radius-md;
-    background: transparent;
-    color: $text-secondary;
-    font-size: $font-size-sm;
-    text-align: left;
-    cursor: pointer;
-    @include transition(all);
-
-    svg {
-        color: $text-tertiary;
-    }
-
-    span {
-        @include truncate();
-    }
-
-    strong {
-        min-width: 24px;
-        padding: 1px 7px;
-        border-radius: $radius-full;
-        background: $bg-tertiary;
-        color: $text-tertiary;
-        font-family: $font-mono;
-        font-size: 10px;
-        font-weight: $font-weight-medium;
-        text-align: center;
-    }
-
-    &:hover {
-        background: $bg-hover;
-        color: $text-primary;
-    }
-
-    &.active {
-        background: $accent-glow;
-        color: $accent-primary;
-
-        svg { color: $accent-primary; }
-        strong {
-            background: fade($accent-primary-raw, 18%);
-            color: $accent-primary;
-        }
-    }
-}
-
-.dx-inventory-list {
-    display: grid;
-    gap: 1px;
-    padding: $space-2;
-}
-
-.dx-inventory-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: $space-2;
-    min-height: 30px;
-    padding: 0 $space-2;
-    border-radius: $radius-md;
-
-    span {
-        color: $text-secondary;
-        font-size: $font-size-xs;
-    }
-
-    strong {
-        color: $text-primary;
-        font-family: $font-mono;
-        font-size: $font-size-xs;
-        font-weight: $font-weight-medium;
-        @include truncate();
-    }
-}
-
-.dx-main {
-    min-width: 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-}
-
-.dx-workbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: $space-3;
-    min-height: 46px;
-    padding: $space-2;
-    background: $bg-card;
-    border: 1px solid $border-default;
-    border-radius: $radius-lg;
-    flex-shrink: 0;
-}
-
-.dx-workbar-title {
-    display: flex;
-    align-items: baseline;
-    gap: $space-2;
-    min-width: 0;
-
-    span {
-        color: $text-tertiary;
-        font-size: 10px;
-        font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-    }
-
-    strong {
-        color: $text-primary;
-        font-size: $font-size-base;
-        font-weight: $font-weight-semibold;
-    }
-
-    em {
-        color: $text-tertiary;
-        font-size: $font-size-xs;
-        font-style: normal;
-        @include truncate();
-    }
-}
-
-.dx-workbar-actions {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    flex-wrap: wrap;
-
-    .btn,
-    button {
-        min-height: 32px;
-    }
-}
-
+// Docker panel: tables and the inspector sit on the page surface
 .dx-panel {
     flex: 1;
     min-height: 0;
@@ -1829,53 +896,9 @@
     gap: $space-2;
 }
 
-.dx-tab-toolbar {
-    margin: 0;
-    padding: $space-2;
-    background: $bg-card;
-    border: 1px solid $border-default;
-    border-radius: $radius-lg;
-}
-
-.dx-tab-toolbar-right {
-    margin-left: auto;
-}
-
 .dx-manager-layout {
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
-}
-
-.dx-resource-list {
-    background: $bg-card;
-    border-color: $border-default;
-}
-
-.dx-table-wrap {
-    background: $bg-card;
-}
-
-.dx-manager-table {
-    th {
-        background: $bg-elevated;
-    }
-
-    th,
-    td {
-        padding: $space-3;
-    }
-
-    tbody tr {
-        background: $bg-card;
-
-        &:hover {
-            background: $bg-hover;
-        }
-
-        &.is-selected {
-            background: $accent-glow;
-        }
-    }
 }
 
 .dx-drawer-backdrop {
@@ -1899,55 +922,19 @@
     border: none;
     border-left: 1px solid $border-default;
     border-radius: 0;
-    box-shadow: -10px 0 36px rgba(0, 0, 0, 0.42);
+    box-shadow: $shadow-overlay;
     z-index: $z-modal;
     animation: drawer-slide 0.24s cubic-bezier(0.32, 0.72, 0.24, 1);
 }
 
 @media (max-width: $breakpoint-xl) {
-    .dx-workspace {
-        grid-template-columns: 220px minmax(0, 1fr);
-    }
 }
 
 @media (max-width: $breakpoint-lg) {
-    .dx-workspace {
-        grid-template-columns: 1fr;
-        overflow: auto;
-    }
 
-    .dx-docker-sidebar {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        overflow: visible;
-    }
-
-    .dx-main {
-        min-height: 620px;
-    }
 }
 
 @media (max-width: $breakpoint-md) {
-    .dx-docker-sidebar {
-        grid-template-columns: 1fr;
-    }
-
-    .dx-workbar {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .dx-workbar-actions {
-        width: 100%;
-
-        > * {
-            flex: 1;
-        }
-    }
-
-    .dx-tab-toolbar-right {
-        margin-left: 0;
-    }
 
     .dx-inspector-drawer {
         width: 100%;
@@ -1956,7 +943,35 @@
 
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
 .docker-compose-log-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
-.docker-compose-log-select { padding-inline-start: 0.5rem; padding-inline-end: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+.docker-compose-log-select.ui-select-trigger { width: auto; min-width: 8rem; }
 
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
 .docker-compose-actions-column { text-align: right; }
+
+// Run Container modal: host → container port rows.
+.dx-run-ports {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    &__head,
+    &__row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+        gap: $space-2;
+        align-items: start;
+    }
+
+    &__head {
+        font-size: $text-xs;
+        color: $text-tertiary;
+    }
+
+    &__sep {
+        padding-top: $space-2;
+        color: $text-tertiary;
+        font-family: $font-mono;
+    }
+
+    &__add { align-self: flex-start; }
+}

@@ -65,7 +65,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                         onOpenChange={(o) => setMenuFor(o ? key : null)}
                     >
                         <PopoverTrigger asChild>
-                            <SharedButton variant="unstyled" type="button" className="sk-viewpick__cog" aria-label={`${view.name} options`}>
+                            <SharedButton variant="unstyled" type="button" className="sk-viewpick__cog" aria-label={t('app.gridViewPicker.viewOptions', '{{name}} options', { name: view.name })}>
                                 <MoreVertical size={14} />
                             </SharedButton>
                         </PopoverTrigger>
@@ -75,7 +75,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                                 className="sk-gridmenu__opt"
                                 onClick={() => { views.toggleDefault(view); setMenuFor(null); }}
                             >
-                                <Star size={13} />{view.is_default ? 'Unset as default' : 'Make default'}
+                                <Star size={13} />{view.is_default ? t('app.gridViewPicker.unsetAsDefault', 'Unset as default') : t('app.gridViewPicker.makeDefault', 'Make default')}
                             </SharedButton>
                             <SharedButton variant="unstyled"
                                 type="button"
@@ -115,7 +115,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                     <div className="sk-gridmenu__head">{t('app.gridViewPicker.myViews', 'My views')}</div>
                     {mine.length ? mine.map(renderRow) : (
                         <div className="sk-gridmenu__note">
-                            {t('app.gridViewPicker.noPersonalViewsYetTuneThe', 'No personal views yet — tune the grid, then save it here.')}
+                            {t('app.gridViewPicker.noPersonalViewsYetTuneThe', 'No personal views yet. Tune the grid, then save it here.')}
                         </div>
                     )}
                     <div className="sk-gridmenu__sep" />
@@ -139,7 +139,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                                 onClick={() => setFromCurrent((v) => !v)}
                             >
                                 <span className="sk-gridmenu__box"><Check size={11} /></span>
-                                {t('app.gridViewPicker.startFromCurrentFiltersColumns', 'Start from current filters & columns')}
+                                {t('app.gridViewPicker.startFromCurrentFiltersColumns', 'Start from current filters and columns')}
                             </SharedButton>
                             <div className="sk-gridmenu__foot">
                                 <SharedButton variant="unstyled" type="button" onClick={() => setCreating(false)}>{t('common.actions.cancel', 'Cancel')}</SharedButton>
@@ -171,7 +171,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                             else setOpen(true);
                         }}
                     >
-                        {active && !active.builtin ? 'Save' : 'Save as…'}
+                        {active && !active.builtin ? t('common.actions.save', 'Save') : t('app.gridViewPicker.saveAs', 'Save as…')}
                     </SharedButton>
                 </div>
             )}

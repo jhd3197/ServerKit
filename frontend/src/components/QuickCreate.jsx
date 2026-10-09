@@ -17,7 +17,7 @@ export function QuickCreate({ className, variant = 'icon' }) {
         <SharedButton variant="unstyled"
             type="button"
             className={cn('quick-create', header && 'quick-create--header', className)}
-            title={t('app.quickCreate.createOrSearch', 'Create or search — Ctrl K')}
+            title={t('app.quickCreate.createOrSearch', 'Create or search (Ctrl K)')}
             aria-label={t('app.quickCreate.createNew2', 'Create new')}
             onClick={() => window.dispatchEvent(new CustomEvent('serverkit:open-palette'))}
         >

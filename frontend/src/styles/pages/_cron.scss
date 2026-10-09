@@ -4,8 +4,7 @@
 
 .cron-page {
     .cron-servicenote {
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--amber);
     }
 
@@ -14,42 +13,27 @@
         align-items: center;
         gap: $space-2;
         margin-top: $space-3;
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
 
         svg { flex-shrink: 0; }
     }
 
     // ── jobs table ──────────────────────────────────────────
-    .cron-card {
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-        overflow: hidden;
-    }
-
     .cron-empty {
         padding: $space-10;
         text-align: center;
         color: var(--text-faint);
-        font-size: 13px;
+        font-size: $text-sm;
         background: var(--surface);
         border: 1px solid var(--border-soft);
         border-radius: var(--radius);
     }
 
+    // `.cron-table` is the DataTable wrap; column widths live on the column
+    // definitions in CronJobs.jsx.
     .cron-table {
-        // Job grows; everything after it is sized to its content.
-        th:nth-child(2) { width: 200px; }   // Schedule
-        th:nth-child(3) { width: 120px; }   // Last run
-        th:nth-child(4) { width: 120px; }   // Next run
-        th:nth-child(5) { width: 120px; }   // Status
-        th:nth-child(6) { width: 56px; }    // On
-        th:last-child { width: 1%; }
-        td:last-child { white-space: nowrap; }
-
-        tbody tr.is-disabled {
+        .is-disabled {
             opacity: 0.55;
 
             .cron-ico {
@@ -61,20 +45,20 @@
 
     .cron-cell-mono {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
         white-space: nowrap;
     }
 
-    .cron-cell-actions { text-align: right; }
+    .cron-cell-actions { text-align: right; white-space: nowrap; }
 
     .cron-switch { display: inline-flex; }
 
     // job cell: accent icon tile + name / description / mono command
     .cron-ico {
         width: 30px;
-        height: 30px;
-        border-radius: 8px;
+        height: 30px; // geometry: icon tile
+        border-radius: $radius-card;
         display: grid;
         place-items: center;
         flex-shrink: 0;
@@ -92,8 +76,8 @@
         }
 
         &__desc {
-            margin-top: 2px;
-            font-size: 12px;
+            margin-top: $space-hair;
+            font-size: $text-xs;
             font-weight: $font-weight-normal;
             color: var(--text-dim);
         }
@@ -109,14 +93,14 @@
     .cron-sched {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        padding: 2px 8px;
+        gap: $space-tight;
+        padding: $space-hair $space-2;
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: 6px;
+        border-radius: $radius-control;
         white-space: nowrap;
 
         svg {
@@ -126,14 +110,13 @@
     }
 
     .cron-sched-readable {
-        margin-top: 3px;
-        font-size: 11px;
+        margin-top: $space-1;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     @media (max-width: $breakpoint-md) {
-        .cron-card { overflow-x: auto; }
-        .cron-table { min-width: 860px; }
+        .cron-table .sk-dtable { min-width: 860px; }
     }
 }
 
@@ -157,11 +140,8 @@
 }
 
 .run-output-label {
-    font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--text-faint);
 }
 
@@ -175,7 +155,7 @@
     margin: 0;
     padding: $space-3 $space-4;
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: $text-xs;
     line-height: 1.62;
     background: var(--bg-code);
     color: var(--text-code);
@@ -202,7 +182,7 @@
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: $space-2;
-    padding-right: 32px;    // clear the sheet's close button
+    padding-right: $space-8;    // clear the sheet's close button
 }
 
 .cron-drawer {
@@ -220,14 +200,14 @@
 
     &__sectiontitle {
         margin: 0;
-        font-size: 14px;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
 
     &__hint {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -275,25 +255,22 @@
 
     .k {
         flex: 0 0 118px;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
     .v {
         flex: 1;
         min-width: 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text);
         word-break: break-word;
     }
 
     &__cmd {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
     }
 }
 
@@ -312,17 +289,14 @@
     padding: $space-3 $space-4;
 
     .l {
-        font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
     .v {
         margin-top: $space-1;
-        font-size: 15px;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         color: var(--text);
 
@@ -334,8 +308,7 @@
 
     .s {
         margin-top: $space-2;
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -357,7 +330,7 @@
         align-items: center;
         gap: $space-2;
         margin-bottom: $space-3;
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-semibold;
         color: var(--text);
 
@@ -370,7 +343,7 @@
     &__loading,
     &__empty {
         padding: $space-2 0;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-faint);
     }
 
@@ -397,23 +370,23 @@
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
     }
 
     &__name {
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text);
         @include truncate();
     }
 
     &__sched {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
     }
 
     &__cron {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -425,7 +398,7 @@
     }
 
     &__next {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
         white-space: nowrap;
     }
@@ -438,7 +411,7 @@
     }
 
     &__status-hint {
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
     }
@@ -447,9 +420,9 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 3px;
+        padding: $space-1;
         border: 1px solid var(--border-soft);
-        border-radius: var(--radius-sm, 6px);
+        border-radius: var(--radius-sm, $radius-control);
         background: transparent;
         color: var(--text-faint);
         cursor: pointer;
@@ -468,12 +441,12 @@
     gap: $space-3;
 
     &__empty {
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-faint);
     }
 
     &__rate {
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -493,7 +466,7 @@
         gap: $space-2;
         padding: $space-2 0;
         border-top: 1px solid var(--border-soft);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
 
         &:first-child { border-top: 0; }
@@ -502,10 +475,10 @@
     &__when { white-space: nowrap; }
     &__dur,
     &__exit {
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
+    &__exit { font-family: var(--mono); }
 }
 
 // ============================================
@@ -528,7 +501,7 @@
         gap: $space-2;
 
         > label {
-            font-size: 12px;
+            font-size: $text-xs;
             font-weight: $font-weight-medium;
             color: var(--text-dim);
         }
@@ -536,24 +509,29 @@
 
     &__input {
         width: 100%;
-        padding: 9px 11px;
-        font-size: 13px;
+        padding: $space-2 $space-3;
+        font-size: $text-sm;
         color: var(--text);
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
+        border-radius: $radius-control;
         outline: none;
+
+        &:not(textarea) {
+            height: $control-md;
+            padding-block: 0;
+        }
 
         &::placeholder { color: var(--text-ghost); }
 
         &:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-bg);
+            box-shadow: $focus-ring;
         }
 
         &--mono {
             font-family: var(--mono);
-            font-size: 12.5px;
+            font-size: $text-sm;
         }
     }
 
@@ -563,16 +541,16 @@
     }
 
     &__hint {
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     &__entry {
         margin: 0;
-        padding: 10px 12px;
+        padding: $space-3 $space-3;
         overflow-x: auto;
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         line-height: 1.5;
         color: var(--text-dim);
         white-space: pre;

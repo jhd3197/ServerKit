@@ -65,9 +65,9 @@ export function GridToolsMenu({
                                 }}
                             >
                                 {copied === 'ok' ? <Check size={13} /> : <Link2 size={13} />}
-                                {copied === 'ok' ? 'Link copied'
-                                    : copied === 'fail' ? 'Copy failed — check permissions'
-                                        : 'Copy link to this view'}
+                                {copied === 'ok' ? t('app.gridToolsMenu.linkCopied', 'Link copied')
+                                    : copied === 'fail' ? t('app.gridToolsMenu.copyFailed', "Couldn't copy the link. Check clipboard permissions.")
+                                        : t('app.gridToolsMenu.copyLinkToThisView', 'Copy link to this view')}
                             </SharedButton>
                         )}
                         <SharedButton variant="unstyled" type="button" className="sk-gridmenu__opt" onClick={() => setPane('export')}>

@@ -20,21 +20,21 @@ import { Button as SharedButton } from '@/components/ui/button';
 const VIEWS = [
     {
         id: 'stack',
-        labelKey: 'app.appMap.requestStack', label: 'Request Stack',
+        labelKey: 'app.appMap.requestStack', label: 'Request stack',
         icon: Layers,
         descriptionKey: 'app.appMap.howARequestFlowsFromThe', description: 'How a request flows from the browser through the frontend, backend, services and database.',
     },
     {
         id: 'routes',
-        labelKey: 'app.appMap.routesApis', label: 'Routes & APIs',
+        labelKey: 'app.appMap.routesApis', label: 'Routes and APIs',
         icon: Compass,
         descriptionKey: 'app.appMap.sidebarNavigationPagesBackendApiBlueprints', description: 'Sidebar navigation → pages → backend API blueprints they call.',
     },
     {
         id: 'topology',
-        labelKey: 'app.appMap.runtimeTopology', label: 'Runtime Topology',
+        labelKey: 'app.appMap.runtimeTopology', label: 'Runtime topology',
         icon: Network,
-        descriptionKey: 'app.appMap.howThePanelConnectsToServers', description: 'How the panel connects to servers, agents, services and apps in production.',
+        descriptionKey: 'app.appMap.howThePanelConnectsToServers', description: 'How the panel connects to servers, agents and services in production.',
     },
 ];
 
@@ -83,7 +83,7 @@ const edge = (id, source, target, label, animated = false) => ({
     animated,
     type: 'smoothstep',
     style: { stroke: 'var(--border-default)', strokeWidth: 1.5 },
-    labelStyle: { fontSize: 10, fill: 'var(--text-secondary)' },
+    labelStyle: { fontSize: 12, fill: 'var(--text-secondary)' },
     labelBgStyle: { fill: 'var(--bg-card)' },
     markerEnd: { type: MarkerType.ArrowClosed, color: 'var(--border-default)' },
 });
@@ -287,7 +287,7 @@ export default function AppMap() {
     const view = VIEWS.find(v => v.id === activeView) || VIEWS[0];
 
     return (
-        <PageLayout className="app-map" icon={<MapIcon size={18} />} title={t('app.appMap.appMap', 'App Map')}>
+        <PageLayout className="app-map" icon={<MapIcon size={18} />} title={t('app.appMap.appMap', 'App map')}>
             <Tabs value={activeView} onValueChange={setActiveView}>
                 <TabsList>
                     {VIEWS.map(v => (
@@ -307,7 +307,7 @@ export default function AppMap() {
                     className="app-map__legend-toggle"
                     onClick={() => setShowLegend(s => !s)}
                 >
-                    {showLegend ? 'Hide legend' : 'Show legend'}
+                    {showLegend ? t('app.appMap.hideLegend', 'Hide legend') : t('app.appMap.showLegend', 'Show legend')}
                 </SharedButton>
             </div>
 

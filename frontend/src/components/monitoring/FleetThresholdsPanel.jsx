@@ -6,10 +6,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { DataTable, DataTableFooter } from '@/components/ds';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
+import ServerPicker from '@/components/ServerPicker';
+
+// ServerPicker's "no server" entry: a threshold without server_id is the
+// fleet default.
+const FLEET_DEFAULT = '__fleet';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { METRIC_LABELS } from './fleetMetrics';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const DEFAULT_THRESHOLD = {
     metric: 'cpu',
@@ -21,7 +28,7 @@ const DEFAULT_THRESHOLD = {
 // Per-server limits, sitting under the panel host's own limits on the Rules
 // tab: same idea, wider scope. Two lists rather than one because they are two
 // backends — the host's four values are a single config, these are rows.
-export default function FleetThresholdsPanel({ servers = [], refreshKey = 0 }) {
+export default function FleetThresholdsPanel({ refreshKey = 0 }) {
     const { t } = useTranslation();
     const toast = useToast();
     const [thresholds, setThresholds] = useState([]);
@@ -46,8 +53,8 @@ export default function FleetThresholdsPanel({ servers = [], refreshKey = 0 }) {
             setDraft(DEFAULT_THRESHOLD);
             setAdding(false);
             reload();
-        } catch {
-            toast.error(t('app.fleetThresholdsPanel.failedToSaveThreshold', 'Failed to save threshold'));
+        } catch (err) {
+            toastError(toast, t('app.fleetThresholdsPanel.failedToSaveThreshold', "Couldn't save the threshold."), err);
         }
     };
 
@@ -55,8 +62,8 @@ export default function FleetThresholdsPanel({ servers = [], refreshKey = 0 }) {
         try {
             await api.deleteFleetThreshold(id);
             reload();
-        } catch {
-            toast.error(t('app.fleetThresholdsPanel.failedToDeleteThreshold', 'Failed to delete threshold'));
+        } catch (err) {
+            toastError(toast, t('app.fleetThresholdsPanel.failedToDeleteThreshold', "Couldn't delete the threshold."), err);
         }
     };
 
@@ -88,7 +95,7 @@ export default function FleetThresholdsPanel({ servers = [], refreshKey = 0 }) {
             headerKey: 'common.labels.warning', header: 'Warning',
             sortable: true,
             sortValue: (t) => t.warning_threshold ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (t) => `${t.warning_threshold}%`,
         },
         {
@@ -96,7 +103,7 @@ export default function FleetThresholdsPanel({ servers = [], refreshKey = 0 }) {
             headerKey: 'app.fleetThresholdsPanel.critical', header: 'Critical',
             sortable: true,
             sortValue: (t) => t.critical_threshold ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (t) => `${t.critical_threshold}%`,
         },
         {
@@ -104,7 +111,7 @@ export default function FleetThresholdsPanel({ servers = [], refreshKey = 0 }) {
             headerKey: 'app.fleetThresholdsPanel.sustained', header: 'Sustained',
             sortable: true,
             sortValue: (t) => t.duration_seconds ?? null,
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (t) => `${t.duration_seconds}s`,
         },
         {
@@ -130,7 +137,7 @@ export default function FleetThresholdsPanel({ servers = [], refreshKey = 0 }) {
                 </div>
                 <div>
                     <Button size="sm" variant={adding ? 'outline' : 'default'} onClick={() => setAdding((v) => !v)}>
-                        <Plus size={14} /> {adding ? 'Cancel' : 'Add rule'}
+                        <Plus size={14} /> {adding ? t('common.actions.cancel', 'Cancel') : t('app.fleetThresholdsPanel.addRule', 'Add rule')}
                     </Button>
                 </div>
             </div>
@@ -138,27 +145,26 @@ export default function FleetThresholdsPanel({ servers = [], refreshKey = 0 }) {
             {adding && (
                 <div className="mon-threshold-form">
                     <div className="form-group">
-                        <Label htmlFor="fleet-threshold-server">{t('app.fleetThresholdsPanel.appliesTo', 'Applies to')}</Label>
-                        <select
-                            id="fleet-threshold-server"
-                            value={draft.server_id || ''}
-                            onChange={(e) => setDraft((p) => ({ ...p, server_id: e.target.value || undefined }))}
-                        >
-                            <option value="">{t('app.fleetThresholdsPanel.everyServerFleetDefault', 'Every server (fleet default)')}</option>
-                            {servers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-                        </select>
+                        <Label>{t('app.fleetThresholdsPanel.appliesTo', 'Applies to')}</Label>
+                        <ServerPicker
+                            value={draft.server_id || FLEET_DEFAULT}
+                            onChange={(id) => setDraft((p) => ({ ...p, server_id: id === FLEET_DEFAULT ? undefined : id }))}
+                            includeLocal={false}
+                            onlineOnly={false}
+                            extraOptions={[{ value: FLEET_DEFAULT, label: t('app.fleetThresholdsPanel.everyServerFleetDefault', 'Every server (fleet default)') }]}
+                            label={t('app.fleetThresholdsPanel.appliesTo', 'Applies to')}
+                        />
                     </div>
                     <div className="form-group">
                         <Label htmlFor="fleet-threshold-metric">{t('app.fleetThresholdsPanel.metric', 'Metric')}</Label>
-                        <select
-                            id="fleet-threshold-metric"
-                            value={draft.metric}
-                            onChange={(e) => setDraft((p) => ({ ...p, metric: e.target.value }))}
-                        >
-                            <option value="cpu">CPU</option>
-                            <option value="memory">{t('common.labels.memory', 'Memory')}</option>
-                            <option value="disk">{t('common.labels.disk', 'Disk')}</option>
-                        </select>
+                        <Select value={draft.metric} onValueChange={(metric) => setDraft((p) => ({ ...p, metric }))}>
+                            <SelectTrigger id="fleet-threshold-metric"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="cpu">CPU</SelectItem>
+                                <SelectItem value="memory">{t('common.labels.memory', 'Memory')}</SelectItem>
+                                <SelectItem value="disk">{t('common.labels.disk', 'Disk')}</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div className="form-group">
                         <Label htmlFor="fleet-threshold-warning">{t('app.fleetThresholdsPanel.warning2', 'Warning (%)')}</Label>
@@ -211,7 +217,7 @@ export default function FleetThresholdsPanel({ servers = [], refreshKey = 0 }) {
                 />
             ) : (
                 <p className="mon-panel-hint">
-                    {t('app.fleetThresholdsPanel.noPerServerRulesYetPaired', 'No per-server rules yet — paired servers fall back to their agent defaults.')}
+                    {t('app.fleetThresholdsPanel.noPerServerRulesYetPaired', 'No per-server rules yet. Paired servers fall back to their agent defaults.')}
                 </p>
             )}
         </section>

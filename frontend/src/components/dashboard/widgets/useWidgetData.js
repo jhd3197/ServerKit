@@ -11,6 +11,7 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 import api from '@/services/api';
+import { t } from '@/i18n/t';
 import { queryClient } from '@/services/queryClient';
 import { fetchShared, widgetQueryKey, pruneWidgetQueries } from '@/services/widgetQueries';
 import { useWorkspace } from '@/contexts/useWorkspace.js';
@@ -33,7 +34,7 @@ import {
 function toWidgetError(err) {
     const status = err?.status ?? null;
     return {
-        message: err?.message || (err ? String(err) : 'Request failed'),
+        message: err?.message || (err ? String(err) : t('app.useWidgetData.requestFailed', "Couldn't load this widget.")),
         status,
         forbidden: status === 403,
     };
@@ -256,8 +257,8 @@ function normalizeFleetAlert(alert) {
     return {
         id: `fleet:${alert.id}`,
         title: value !== null && threshold !== null
-            ? `${metric} at ${value} (threshold ${threshold})`
-            : `${metric} threshold exceeded`,
+            ? t('app.useWidgetData.metricAtThreshold', '{{metric}} at {{value}} (threshold {{threshold}})', { metric, value, threshold })
+            : t('app.useWidgetData.metricThresholdExceeded', '{{metric}} threshold exceeded', { metric }),
         target: alert.server_name || alert.server_id || 'unknown server',
         severity: alert.severity === 'critical' ? 'critical' : 'warning',
         state: alert.status === 'acknowledged' ? 'acknowledged' : 'firing',
@@ -268,8 +269,8 @@ function normalizeFleetAlert(alert) {
 function normalizeLocalAlert(alert, index) {
     return {
         id: `local:${alert.type || index}`,
-        title: alert.message || `${alert.type || 'threshold'} exceeded`,
-        target: 'Local (this server)',
+        title: alert.message || t('app.useWidgetData.typeExceeded', '{{type}} exceeded', { type: alert.type || 'threshold' }),
+        target: t('app.useWidgetData.localThisServer', 'Local (this server)'),
         severity: alert.severity === 'critical' ? 'critical' : 'warning',
         state: 'firing',
         time: null,

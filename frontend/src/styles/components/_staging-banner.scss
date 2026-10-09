@@ -16,16 +16,14 @@
     background-color: $warning;
     border-bottom: 1px solid $warning-border;
     color: #1a1300; // dark text on amber — legible in both themes
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     line-height: $line-height-tight;
     text-align: center;
 
     &__label {
-        font-weight: $font-weight-bold;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        padding: 2px $spacing-sm;
-        border-radius: $radius-sm;
+        font-weight: $font-weight-semibold;
+        padding: $space-hair $spacing-sm;
+        border-radius: $radius-badge;
         background-color: rgba(0, 0, 0, 0.16);
     }
 

@@ -28,7 +28,7 @@ const statusLabel = (user) => (user.is_active ? 'Active' : 'Disabled');
 // than whatever the API happens to call the field.
 const USER_VIEWS = [
     {
-        name: 'Admins without MFA',
+        name: 'Admins without 2FA',
         state: {
             sorts: [{ key: 'user', direction: 'asc' }],
             hiddenKeys: [],
@@ -119,7 +119,7 @@ const UsersTab = () => {
             setUsers(data.users || []);
             setError('');
         } catch (err) {
-            setError(err.message || t('app.usersTab.loadFailed', 'Failed to load users'));
+            setError(err.message || t('app.usersTab.loadFailed', "Couldn't load users."));
         } finally {
             setLoading(false);
         }
@@ -160,15 +160,15 @@ const UsersTab = () => {
         setPendingUserId(user.id);
         try {
             if (!await confirm({
-                title: t('app.usersTab.deleteUser2', 'Delete User'),
+                title: t('app.usersTab.deleteUser2', 'Delete user'),
                 message: t('app.usersTab.confirmDeleteUser', 'Delete {{username}}? This action cannot be undone.', { username: user.username }),
-                confirmText: t('app.usersTab.deleteUser2', 'Delete User'),
+                confirmText: t('app.usersTab.deleteUser2', 'Delete user'),
                 variant: 'danger',
             })) return;
             await api.deleteUser(user.id);
             await loadUsers();
         } catch (err) {
-            setError(err.message || t('app.usersTab.deleteFailed', 'Failed to delete user'));
+            setError(err.message || t('app.usersTab.deleteFailed', "Couldn't delete the user."));
         } finally {
             actionInFlight.current = false;
             setPendingUserId(null);
@@ -183,7 +183,7 @@ const UsersTab = () => {
             await api.updateUser(user.id, { is_active: !user.is_active });
             await loadUsers();
         } catch (err) {
-            setError(err.message || t('app.usersTab.updateFailed', 'Failed to update user status'));
+            setError(err.message || t('app.usersTab.updateFailed', "Couldn't update the user's status."));
         } finally {
             actionInFlight.current = false;
             setPendingUserId(null);
@@ -273,7 +273,7 @@ const UsersTab = () => {
         },
         {
             key: 'mfa',
-            headerKey: 'app.usersTab.mfa', header: 'MFA',
+            headerKey: 'app.usersTab.mfa', header: '2FA',
             type: 'bool',
             sortable: true,
             value: (user) => Boolean(user.totp_enabled),
@@ -304,7 +304,7 @@ const UsersTab = () => {
             // last sign in" is the access-review question, and without an
             // accessor the column had nothing behind it to sort or filter on.
             key: 'lastLogin',
-            headerKey: 'app.usersTab.lastLogin', header: 'Last Login',
+            headerKey: 'app.usersTab.lastLogin', header: 'Last sign-in',
             sortable: true,
             type: 'date',
             value: (user) => user.last_login_at || null,
@@ -439,7 +439,7 @@ const UsersTab = () => {
                                 <line x1="12" y1="5" x2="12" y2="19"/>
                                 <line x1="5" y1="12" x2="19" y2="12"/>
                             </svg>
-                            {t('app.usersTab.addUser', 'Add User')}
+                            {t('app.usersTab.addUser', 'New user')}
                         </Button>
                         <GridFilterButton
                             count={chrome.filterCount}
@@ -454,7 +454,7 @@ const UsersTab = () => {
 
             {error && <div className="error-message" role="alert">{error}</div>}
 
-            <div {...register('users-management', 'users-table-container')}>
+            <div {...register('users-management')}>
                 <DataTable
                     columns={chrome.columns}
                     data={users}
@@ -465,7 +465,7 @@ const UsersTab = () => {
                     groupBy={groupBy}
                     onGroupByChange={setGroupBy}
                     rowClassName={(user) => (!user.is_active ? 'inactive' : '')}
-                    tableClassName="users-table"
+                    className="users-table-container users-table"
                 />
             </div>
 

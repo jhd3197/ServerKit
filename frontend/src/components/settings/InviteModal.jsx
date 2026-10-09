@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
-import { copyToClipboard } from '@/utils/clipboard';
+import CopyField from '../CopyField';
 import { useTranslation } from 'react-i18next';
 
 const InviteModal = ({ onClose, onCreated }) => {
@@ -20,7 +20,6 @@ const InviteModal = ({ onClose, onCreated }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [result, setResult] = useState(null);
-    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         api.getPermissionTemplates().then(data => {
@@ -66,26 +65,19 @@ const InviteModal = ({ onClose, onCreated }) => {
         }
     }
 
-    async function copyLink() {
-        if (result?.invite_url && await copyToClipboard(result.invite_url)) {
-            setCopied(true);
-            window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
-                detail: { type: 'invitation-link-copied' },
-            }));
-            setTimeout(() => setCopied(false), 2000);
-        }
+    function signalLinkCopied() {
+        window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
+            detail: { type: 'invitation-link-copied' },
+        }));
     }
 
     // Show result screen after creation
     if (result) {
         return (
-            <Modal open={true} onClose={onClose} title={t('app.inviteModal.invitationCreated', 'Invitation Created')} size="md">
+            <Modal open={true} onClose={onClose} title={t('app.inviteModal.invitationCreated', 'Invitation created')} size="md">
                         <p>{t('app.inviteModal.shareThisInvitationLink', 'Share this invitation link:')}</p>
-                        <div className="invite-link-display" data-walkthrough="invite-result">
-                            <code>{result.invite_url}</code>
-                            <Button variant="ghost" size="sm" onClick={copyLink}>
-                                {copied ? 'Copied!' : 'Copy'}
-                            </Button>
+                        <div data-walkthrough="invite-result">
+                            <CopyField value={result.invite_url} onCopy={signalLinkCopied} />
                         </div>
                         {result.email_sent && (
                             <p className="text-success invite-result-note">
@@ -105,7 +97,7 @@ const InviteModal = ({ onClose, onCreated }) => {
     }
 
     return (
-        <Modal open={true} onClose={onClose} title={t('app.inviteModal.inviteUser', 'Invite User')} size="md">
+        <Modal open={true} onClose={onClose} title={t('app.inviteModal.inviteUser', 'Invite user')} size="md">
                 <form onSubmit={handleSubmit} data-walkthrough="invite-form">
                     <div className="modal-body">
                         {error && <div className="error-message">{error}</div>}
@@ -172,7 +164,7 @@ const InviteModal = ({ onClose, onCreated }) => {
                                         setShowPermissions(!showPermissions);
                                     }}
                                 >
-                                    {showPermissions ? 'Hide' : 'Customize'} {t('common.labels.permissions', 'Permissions')}
+                                    {showPermissions ? t('app.inviteModal.hide', 'Hide') : t('app.inviteModal.customize', 'Customize')} {t('common.labels.permissions', 'Permissions')}
                                     <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" strokeWidth="2" className="invite-caret">
                                         {showPermissions
                                             ? <polyline points="18 15 12 9 6 15"/>
@@ -193,7 +185,7 @@ const InviteModal = ({ onClose, onCreated }) => {
                     <div className="modal-footer">
                         <Button type="button" variant="ghost" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
                         <Button type="submit" variant="default" disabled={loading} data-walkthrough="invite-submit">
-                            {loading ? 'Creating...' : 'Create Invitation'}
+                            {loading ? t('app.inviteModal.creating', 'Creating…') : t('app.inviteModal.createInvitation', 'Create invitation')}
                         </Button>
                     </div>
                 </form>

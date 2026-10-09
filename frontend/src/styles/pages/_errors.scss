@@ -8,8 +8,6 @@
 
 .errors-page {
 
-    .errors-table { margin-top: 16px; }
-
     .sk-err__cell {
         min-width: 0;
         max-width: 520px;
@@ -17,13 +15,13 @@
 
     .sk-err__type {
         font-family: var(--mono);
-        font-size: 12px;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
     }
 
     .sk-err__message {
-        margin-top: 2px;
-        font-size: 12.5px;
+        margin-top: $space-hair;
+        font-size: $text-sm;
         color: var(--text-dim);
         white-space: nowrap;
         overflow: hidden;
@@ -32,7 +30,7 @@
 
     .sk-err__endpoint {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-dim);
         white-space: nowrap;
         max-width: 260px;
@@ -41,8 +39,7 @@
     }
 
     .sk-err__when {
-        font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
         white-space: nowrap;
     }
@@ -50,12 +47,11 @@
     // Occurrence badge — only rendered when the same fingerprint hit >1 time.
     .sk-err__count {
         display: inline-block;
-        padding: 1px 8px;
-        border-radius: 999px;
+        padding: 1px $space-2;
+        border-radius: $radius-full;
         border: 1px solid var(--border);
         background: var(--surface-2);
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--amber);
     }
 
@@ -63,14 +59,14 @@
 
     // A resolved error is handled business; dim the whole row like the event
     // log dims debug rows, so the unresolved work stands out.
-    tr.is-resolved { opacity: 0.6; }
+    .sk-dtable .is-resolved { opacity: 0.6; }
 }
 
 // Error detail drawer body
 .err-detail {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: $space-4;
 
     &__rows {
         margin: 0;
@@ -81,19 +77,18 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            padding: 9px 0;
+            gap: $space-4;
+            padding: $space-2 0;
             border-bottom: 1px solid var(--border-soft);
 
             &:last-child { border-bottom: none; }
         }
 
-        dt { font-size: 12.5px; color: var(--text-faint); }
+        dt { font-size: $text-sm; color: var(--text-faint); }
 
         dd {
             margin: 0;
-            font-family: var(--mono);
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--text-dim);
             text-align: right;
             word-break: break-word;
@@ -101,16 +96,13 @@
 
         code {
             font-family: var(--mono);
-            font-size: 11.5px;
+            font-size: $text-xs;
         }
     }
 
     &__heading {
         margin: 0;
-        font-family: var(--mono);
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -120,12 +112,12 @@
     &__context {
         margin: 0;
         overflow: auto;
-        padding: 12px;
-        border-radius: 8px;
+        padding: $space-3;
+        border-radius: $radius-card;
         border: 1px solid var(--border-soft);
         background: var(--surface-2);
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         line-height: 1.55;
         color: var(--text-dim);
         white-space: pre;
@@ -137,6 +129,6 @@
     &__actions {
         display: flex;
         justify-content: flex-end;
-        gap: 8px;
+        gap: $space-2;
     }
 }

@@ -263,7 +263,9 @@ export function DataTable({
         if (!keyboardNav) return undefined;
         const onKey = (event) => {
             const target = event.target;
-            if (target instanceof Element && target.closest('input, textarea, select, [contenteditable="true"], [role="dialog"]')) {
+            // A focused Radix Select (trigger = combobox, open list = listbox)
+            // owns its arrows and Enter, exactly like the native <select> did.
+            if (target instanceof Element && target.closest('input, textarea, select, [role="combobox"], [role="listbox"], [contenteditable="true"], [role="dialog"]')) {
                 return;
             }
             if (event.metaKey || event.ctrlKey || event.altKey) return;

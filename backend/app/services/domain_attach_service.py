@@ -58,7 +58,7 @@ class DomainAttachService:
         or ``{'success': False, 'error': msg}`` on an invalid host / DB failure.
         """
         if not app:
-            return {'success': False, 'error': 'An application is required'}
+            return {'success': False, 'error': 'Choose a service'}
 
         host = cls._normalize_host(host)
         if not host or '.' not in host:
@@ -85,7 +85,7 @@ class DomainAttachService:
                 clash = Domain.query_active().filter_by(name=host).first()
                 if clash and clash.application_id != app.id:
                     return {'success': False,
-                            'error': f'{host} is already attached to another app'}
+                            'error': f'{host} is already attached to another service'}
                 domain = Domain(name=host, is_primary=bool(make_primary),
                                 application_id=app.id)
                 db.session.add(domain)

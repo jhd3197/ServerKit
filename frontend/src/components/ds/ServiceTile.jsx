@@ -1,8 +1,9 @@
 import { cn } from '@/lib/utils';
-import { svcGrad, initials } from './utils';
+import { initials } from './utils';
 
-// Gradient initial avatar. Defaults to a deterministic gradient + first letter
-// derived from `name`; pass `gradient` and/or `label` to override.
+// Initial avatar: a neutral square with the first letter of `name`. Pass
+// `gradient` only for a real brand colour; a per-name rainbow down a list is
+// decoration, not identity. `label` overrides the letter.
 export function ServiceTile({ name = '', size = 38, label, gradient, className, style, ...props }) {
     return (
         <span
@@ -11,7 +12,7 @@ export function ServiceTile({ name = '', size = 38, label, gradient, className, 
                 width: size,
                 height: size,
                 fontSize: Math.round(size * 0.4),
-                background: gradient || svcGrad(name),
+                ...(gradient ? { background: gradient, color: '#fff' } : null),
                 ...style,
             }}
             {...props}

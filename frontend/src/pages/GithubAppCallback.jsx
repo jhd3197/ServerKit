@@ -61,7 +61,7 @@ const GithubAppCallback = () => {
                     <>
                         <p className="auth-error">{error}</p>
                         <SharedButton variant="primary" type="button" className="btn btn-primary" onClick={() => navigate('/settings/connections')}>
-                            {t('app.githubAppCallback.backToConnections', 'Back to Connections')}
+                            {t('app.githubAppCallback.backToConnections', 'Back to connections')}
                         </SharedButton>
                     </>
                 ) : (

@@ -48,7 +48,7 @@ function ScopeMenu({ label, options, value, onPick, wide = false }) {
             role="listbox"
             aria-label={label}
         >
-            <div className="statusbar-menu__head mono">{label}</div>
+            <div className="statusbar-menu__head">{label}</div>
             {options.map((option) => (
                 <SharedButton variant="unstyled"
                     key={option.id}
@@ -61,7 +61,7 @@ function ScopeMenu({ label, options, value, onPick, wide = false }) {
                     <span className={`statusbar-menu__swatch is-${option.tone || 'accent'}`} aria-hidden="true" />
                     <span className="statusbar-menu__copy">
                         <span className="statusbar-menu__name">{option.name}</span>
-                        {option.meta && <span className="statusbar-menu__meta mono">{option.meta}</span>}
+                        {option.meta && <span className={`statusbar-menu__meta${option.metaMono ? ' mono' : ''}`}>{option.meta}</span>}
                     </span>
                     {String(option.id) === String(value) && (
                         <Check size={15} className="statusbar-menu__check" aria-hidden="true" />
@@ -138,7 +138,7 @@ function AlertsPanel({ onClose }) {
                 {loading && items.length === 0 ? (
                     <div className="shell-panel__empty">{t('common.state.loading', 'Loading')}</div>
                 ) : visibleItems.length === 0 ? (
-                    <div className="shell-panel__empty">{t('notifications.empty', 'You’re all caught up.')}</div>
+                    <div className="shell-panel__empty">{t('notifications.empty', "You're all caught up.")}</div>
                 ) : visibleItems.map((item) => (
                     <div
                         key={item.delivery_id || item.notice_id}
@@ -150,7 +150,7 @@ function AlertsPanel({ onClose }) {
                                 <strong>{item.title}</strong>
                                 {item.body && <span>{item.body}</span>}
                             </span>
-                            <span className="shell-alerts__meta mono">
+                            <span className="shell-alerts__meta">
                                 {item.kind === 'notice'
                                     ? item.action_label || t('notifications.review', 'Review')
                                     : timeAgo(item.created_at)}
@@ -269,6 +269,7 @@ export default function GlobalStatusBar({ onOpenPalette }) {
         id: String(server.id),
         name: server.name || server.id,
         meta: server.hostname || server.ip_address || server.host || null,
+        metaMono: true,
         tone: statusTone(server),
     })), [scopedServers]);
 
@@ -340,7 +341,7 @@ export default function GlobalStatusBar({ onOpenPalette }) {
                     >
                         <span className={`global-statusbar__dot is-${statusTone(selectedServer)}`} aria-hidden="true" />
                         <Server size={13} className="global-statusbar__mobile-icon" aria-hidden="true" />
-                        <span className="statusbar-select__value mono">{selectedServer.name || selectedServer.id}</span>
+                        <span className="statusbar-select__value">{selectedServer.name || selectedServer.id}</span>
                         <ChevronUp size={12} aria-hidden="true" />
                     </SharedButton>
                 </span>
@@ -356,7 +357,7 @@ export default function GlobalStatusBar({ onOpenPalette }) {
                 >
                     <Activity size={13} />
                     <span>{t('app.operationsDock.title', 'Operations')}</span>
-                    <span className="global-statusbar__muted mono">
+                    <span className="global-statusbar__muted">
                         {runningCount
                             ? t('app.statusbar.runningCount', '{{count}} running', { count: runningCount })
                             : t('app.statusbar.idle', 'idle')}
@@ -375,7 +376,7 @@ export default function GlobalStatusBar({ onOpenPalette }) {
                     <BookOpenCheck size={13} />
                     <span>{activeWalkthrough?.title || t('app.walkthroughs.title', 'Walkthroughs')}</span>
                     {activeWalkthrough && (
-                            <span className="global-statusbar__muted mono">{activeProgress?.count || 0}/{activeProgress?.total || 0}</span>
+                            <span className="global-statusbar__muted">{activeProgress?.count || 0}/{activeProgress?.total || 0}</span>
                     )}
                 </SharedButton>
 
@@ -386,10 +387,10 @@ export default function GlobalStatusBar({ onOpenPalette }) {
                         type="button"
                         className="global-statusbar__segment global-statusbar__setup"
                         onClick={() => navigate('/monitoring/doctor')}
-                        title={t('app.setupHealthWidget.setupHealth', 'Setup Health')}
+                        title={t('app.setupHealthWidget.setupHealth', 'Setup health')}
                     >
                         <ShieldAlert size={13} />
-                        <span className="global-statusbar__muted mono">
+                        <span className="global-statusbar__muted">
                             {t('app.statusbar.setupScore', 'setup {{score}}%', { score: setupSummary.score })}
                         </span>
                         <progress max="100" value={setupSummary.score} aria-label={t('app.setupHealthWidget.progress', 'Setup health progress')} />
@@ -407,7 +408,7 @@ export default function GlobalStatusBar({ onOpenPalette }) {
                 >
                     <Bell size={13} />
                     <span>{t('app.statusbar.alerts', 'Alerts')}</span>
-                    {unreadCount > 0 && <span className="global-statusbar__muted mono">{unreadCount}</span>}
+                    {unreadCount > 0 && <span className="global-statusbar__muted">{unreadCount}</span>}
                     {unreadCount > 0 && <span className="global-statusbar__pip is-critical" aria-hidden="true" />}
                 </SharedButton>
 
@@ -422,7 +423,7 @@ export default function GlobalStatusBar({ onOpenPalette }) {
                 >
                     <Sparkles size={13} />
                     <span>{t('app.ai.assistant', 'Assistant')}</span>
-                    {assistantUnread > 0 && <span className="global-statusbar__muted mono">{assistantUnread}</span>}
+                    {assistantUnread > 0 && <span className="global-statusbar__muted">{assistantUnread}</span>}
                 </SharedButton>
 
                 <span className="global-statusbar__separator" aria-hidden="true" />

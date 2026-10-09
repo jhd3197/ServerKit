@@ -10,7 +10,7 @@ import LogPane from '../components/deploy-console/LogPane';
 import ErrorCard from '../components/deploy-console/ErrorCard';
 import SuccessBanner from '../components/deploy-console/SuccessBanner';
 import { sourceRef } from '../utils/deployActivity';
-import { copyToClipboard } from '@/utils/clipboard';
+import { useClipboard } from '@/hooks/useClipboard';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
 
@@ -65,6 +65,7 @@ export default function DeployConsole() {
     const { jobId } = useParams();
     const navigate = useNavigate();
     const { job, lines, isLive, transport, error, loading } = useDeployJobStream(jobId, { includePlan: true });
+    const { copy } = useClipboard({ successMessage: t('app.deployConsole.logsCopied', 'Logs copied') });
 
     const [follow, setFollow] = useState(true);
     const [wrap, setWrap] = useState(true);
@@ -193,8 +194,8 @@ export default function DeployConsole() {
 
     const copyLogs = useCallback(() => {
         const text = lines.map((l) => l.message).join('\n');
-        copyToClipboard(text);
-    }, [lines]);
+        copy(text);
+    }, [lines, copy]);
 
     const downloadLogs = useCallback(() => {
         const text = lines.map((l) => {
@@ -266,7 +267,7 @@ export default function DeployConsole() {
                 <h1 className="deploy-console__title">{humanizeTitle(job)}</h1>
                 <div className="deploy-console__meta">
                     {job?.kind === 'demo_deploy' && (
-                        <span className="deploy-console__pill deploy-console__pill--demo" title={t('app.deployConsole.scriptedTestDeploymentNoRealResources', 'Scripted test deployment — no real resources were touched')}>
+                        <span className="deploy-console__pill deploy-console__pill--demo" title={t('app.deployConsole.scriptedTestDeploymentNoRealResources', 'Scripted test deployment: no real resources were touched')}>
                             {t('app.deployConsole.simulated', 'Simulated')}
                         </span>
                     )}
@@ -285,7 +286,7 @@ export default function DeployConsole() {
 
             {degraded && (
                 <div className="deploy-console__degraded">
-                    <WifiOff size={14} /> {t('app.deployConsole.liveUpdatesUnavailableRefreshingEvery2s', 'Live updates unavailable — refreshing every 2s.')}
+                    <WifiOff size={14} /> {t('app.deployConsole.liveUpdatesUnavailableRefreshingEvery2s', 'Live updates unavailable. Refreshing every 2s.')}
                 </div>
             )}
 
@@ -324,7 +325,7 @@ export default function DeployConsole() {
                     <span><b>{jobId}</b></span>
                     <span>trigger <b>{job?.trigger || 'manual'}</b></span>
                     {sourceLabel && <span>source <b>{sourceLabel}</b></span>}
-                    <span>target <b>{job?.target_server_name || 'Local server'}</b></span>
+                    <span>target <b>{job?.target_server_name || t('app.deployConsole.localServer', 'Local server')}</b></span>
                     <span>started <b>{fmtStarted(job?.started_at || job?.created_at)}</b></span>
                 </div>
             )}

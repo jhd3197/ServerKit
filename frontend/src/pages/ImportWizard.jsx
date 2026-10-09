@@ -10,14 +10,16 @@ import api from '../services/api';
 import HtaccessConverter from '../components/apps/HtaccessConverter';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
-import { Pill, statusKind } from '@/components/ds';
+import { DataTable, Pill, statusKind } from '@/components/ds';
 import PageLayout from '../layouts/PageLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Spinner from '../components/Spinner';
+import ErrorState from '../components/ErrorState';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import { errorReason } from '@/utils/errorMessage';
 
 const POLL_MS = 2000;
 
@@ -49,6 +51,54 @@ function StatusPill({ status }) {
 
 // Analysis report (step 3): domains/databases tables, db users, crontab,
 // warnings + unsupported callouts. Pure render off the contract's shape.
+// Analysis report tables: what the archive holds, read-only.
+const DOMAIN_COLUMNS = [
+    {
+        key: 'domain',
+        headerKey: 'common.labels.domain', header: 'Domain',
+        cellClassName: 'sk-cell-mono',
+        render: (d) => d.domain,
+    },
+    {
+        key: 'type',
+        headerKey: 'common.labels.type', header: 'Type',
+        cellClassName: 'sk-cell-dim',
+        render: (d) => d.type || '—',
+    },
+    {
+        key: 'docroot',
+        headerKey: 'app.importWizard.docroot', header: 'Docroot',
+        cellClassName: 'sk-cell-mono',
+        render: (d) => d.docroot || '—',
+    },
+];
+
+const DATABASE_COLUMNS = [
+    {
+        key: 'name',
+        headerKey: 'common.labels.name', header: 'Name',
+        render: (db) => db.name,
+    },
+    {
+        key: 'engine',
+        headerKey: 'app.importWizard.engine', header: 'Engine',
+        cellClassName: 'sk-cell-dim',
+        render: (db) => db.engine || '—',
+    },
+    {
+        key: 'size',
+        headerKey: 'common.labels.size', header: 'Size',
+        cellClassName: 'sk-cell-dim',
+        render: (db) => formatBytes(db.size),
+    },
+    {
+        key: 'dump_path',
+        headerKey: 'app.importWizard.dump', header: 'Dump',
+        cellClassName: 'sk-cell-mono',
+        render: (db) => db.dump_path || '—',
+    },
+];
+
 function AnalysisReport({ analysis }) {
     const { t } = useTranslation();
     const domains = analysis.domains || [];
@@ -70,7 +120,7 @@ function AnalysisReport({ analysis }) {
                 <div className="import-wizard__callout import-wizard__callout--danger">
                     <AlertTriangle size={16} aria-hidden="true" />
                     <div>
-                        <strong>{t('app.importWizard.notSupportedTheseItemsWillBe', 'Not supported — these items will be skipped:')}</strong>
+                        <strong>{t('app.importWizard.notSupportedTheseItemsWillBe', 'Not supported. These items will be skipped:')}</strong>
                         <ul>{unsupported.map((u, i) => <li key={i}>{u}</li>)}</ul>
                     </div>
                 </div>
@@ -90,22 +140,13 @@ function AnalysisReport({ analysis }) {
                 {domains.length === 0 ? (
                     <p className="import-wizard__muted">{t('app.importWizard.noDomainsFoundInTheArchive', 'No domains found in the archive.')}</p>
                 ) : (
-                    <div className="import-wizard__table-wrap">
-                        <table className="import-wizard__table">
-                            <thead>
-                                <tr><th>{t('common.labels.domain', 'Domain')}</th><th>{t('common.labels.type', 'Type')}</th><th>{t('app.importWizard.docroot', 'Docroot')}</th></tr>
-                            </thead>
-                            <tbody>
-                                {domains.map((d) => (
-                                    <tr key={d.domain}>
-                                        <td>{d.domain}</td>
-                                        <td>{d.type || '—'}</td>
-                                        <td><code>{d.docroot || '—'}</code></td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <DataTable
+                        columns={DOMAIN_COLUMNS}
+                        data={domains}
+                        keyField="domain"
+                        sortable={false}
+                        columnMenu={false}
+                    />
                 )}
             </section>
 
@@ -114,23 +155,13 @@ function AnalysisReport({ analysis }) {
                 {databases.length === 0 ? (
                     <p className="import-wizard__muted">{t('app.importWizard.noDatabaseDumpsFound', 'No database dumps found.')}</p>
                 ) : (
-                    <div className="import-wizard__table-wrap">
-                        <table className="import-wizard__table">
-                            <thead>
-                                <tr><th>{t('common.labels.name', 'Name')}</th><th>{t('app.importWizard.engine', 'Engine')}</th><th>{t('common.labels.size', 'Size')}</th><th>{t('app.importWizard.dump', 'Dump')}</th></tr>
-                            </thead>
-                            <tbody>
-                                {databases.map((db) => (
-                                    <tr key={db.name}>
-                                        <td>{db.name}</td>
-                                        <td>{db.engine || '—'}</td>
-                                        <td>{formatBytes(db.size)}</td>
-                                        <td><code>{db.dump_path || '—'}</code></td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <DataTable
+                        columns={DATABASE_COLUMNS}
+                        data={databases}
+                        keyField="name"
+                        sortable={false}
+                        columnMenu={false}
+                    />
                 )}
             </section>
 
@@ -187,6 +218,9 @@ function ImportWizard() {
     // Previous imports (history list)
     const [history, setHistory] = useState([]);
     const [historyLoading, setHistoryLoading] = useState(true);
+    const [historyError, setHistoryError] = useState(null);
+    // Set while polling the active import fails; cleared by the next good poll.
+    const [pollError, setPollError] = useState(null);
 
     const logRef = useRef(null);
 
@@ -194,8 +228,9 @@ function ImportWizard() {
         try {
             const data = await api.getImports();
             setHistory(data.imports || []);
-        } catch {
-            setHistory([]);
+            setHistoryError(null);
+        } catch (err) {
+            setHistoryError(err);
         } finally {
             setHistoryLoading(false);
         }
@@ -211,8 +246,11 @@ function ImportWizard() {
         try {
             const data = await api.getImport(imp.id);
             if (data.import) setImp(data.import);
-        } catch {
-            // transient poll failure — keep polling
+            setPollError(null);
+        } catch (err) {
+            // Keep polling (it may be transient), but say the status shown is
+            // stale rather than letting it sit there looking live.
+            setPollError(err);
         }
     }, POLL_MS, {
         enabled: Boolean(imp?.id)
@@ -268,7 +306,7 @@ function ImportWizard() {
             // Reflect the analyze kick-off immediately; the poller takes over.
             setImp((prev) => (prev ? { ...prev, status: 'analyzing' } : prev));
         } catch (error) {
-            toast.error(t('app.importWizard.importFailedToStart', 'Import failed to start: {{message}}', { message: error.message }));
+            toast.error(t('app.importWizard.importFailedToStart', "Couldn't start the import. {{message}}", { message: errorReason(error) }));
         } finally {
             setBusy(false);
             setUploadProgress(null);
@@ -283,7 +321,7 @@ function ImportWizard() {
             setImp((prev) => (prev ? { ...prev, status: 'running', error: null } : prev));
             setStep(5);
         } catch (error) {
-            toast.error(t('app.importWizard.failedToStartTheImportRun', 'Failed to start the import run: {{message}}', { message: error.message }));
+            toast.error(t('app.importWizard.failedToStartTheImportRun', "Couldn't start the import run. {{message}}", { message: errorReason(error) }));
         } finally {
             setBusy(false);
         }
@@ -302,7 +340,7 @@ function ImportWizard() {
                 setStep(3);
             }
         } catch (error) {
-            toast.error(t('app.importWizard.failedToLoadImport', 'Failed to load import: {{message}}', { message: error.message }));
+            toast.error(t('app.importWizard.failedToLoadImport', "Couldn't load the import. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -320,7 +358,7 @@ function ImportWizard() {
             await loadHistory();
             toast.success(t('app.importWizard.importDeleted', 'Import deleted'));
         } catch (error) {
-            toast.error(t('app.importWizard.failedToDeleteImport', 'Failed to delete import: {{message}}', { message: error.message }));
+            toast.error(t('app.importWizard.failedToDeleteImport', "Couldn't delete the import. {{message}}", { message: errorReason(error) }));
         }
     };
 
@@ -479,7 +517,7 @@ function ImportWizard() {
                                     placeholder="https://old-server.example.com/backup-user.tar.gz"
                                     disabled={busy}
                                 />
-                                <span className="import-wizard__muted">{t('app.importWizard.thePanelDownloadsTheArchiveServer', 'The panel downloads the archive server-side — handy when the backup is too large to route through your browser.')}</span>
+                                <span className="import-wizard__muted">{t('app.importWizard.thePanelDownloadsTheArchiveServer', 'The panel downloads the archive server-side, which helps when the backup is too large to route through your browser.')}</span>
                             </div>
                         )}
 
@@ -488,7 +526,7 @@ function ImportWizard() {
                                 <ArrowLeft size={14} /> {t('common.actions.back', 'Back')}
                             </Button>
                             <Button onClick={startAnalyse} disabled={busy || !canContinueFromBackup}>
-                                {busy ? <><Spinner size="sm" /> {inputMode === 'upload' ? 'Uploading…' : 'Starting…'}</> : <>{t('app.importWizard.analyseBackup', 'Analyse backup')} <ArrowRight size={14} /></>}
+                                {busy ? <><Spinner size="sm" /> {inputMode === 'upload' ? t('app.importWizard.uploading', 'Uploading…') : t('app.importWizard.starting', 'Starting…')}</> : <>{t('app.importWizard.analyseBackup', 'Analyse backup')} <ArrowRight size={14} /></>}
                             </Button>
                         </div>
                     </div>
@@ -508,10 +546,16 @@ function ImportWizard() {
                             <div className="import-wizard__callout import-wizard__callout--danger">
                                 <AlertTriangle size={16} aria-hidden="true" />
                                 <div>
-                                    <strong>{t('app.importWizard.analysisFailed', 'Analysis failed.')}</strong>
-                                    <p>{imp.error || 'The archive could not be analysed.'}</p>
+                                    <strong>{t('app.importWizard.analysisFailed', "Couldn't analyze it.")}</strong>
+                                    <p>{imp.error || t('app.importWizard.archiveCouldNotBeAnalyzed', "Couldn't analyze the archive.")}</p>
                                 </div>
                             </div>
+                        )}
+                        {pollError && (
+                            <ErrorState
+                                compact
+                                message={t('app.importWizard.couldntRefreshImportStatus', "Couldn't refresh the import status. {{reason}}", { reason: pollError.message })}
+                            />
                         )}
                         {analysis && <AnalysisReport analysis={analysis} />}
                         <div className="import-wizard__actions">
@@ -524,7 +568,7 @@ function ImportWizard() {
                                         await api.analyzeImport(imp.id);
                                         setImp((prev) => (prev ? { ...prev, status: 'analyzing', error: null } : prev));
                                     } catch (error) {
-                                        toast.error(t('app.importWizard.failedToReAnalyse', 'Failed to re-analyse: {{message}}', { message: error.message }));
+                                        toast.error(t('app.importWizard.failedToReAnalyse', "Couldn't re-analyze. {{message}}", { message: errorReason(error) }));
                                     }
                                 }}>
                                     <RotateCcw size={14} /> {t('app.importWizard.reAnalyse', 'Re-analyse')}
@@ -544,11 +588,11 @@ function ImportWizard() {
                         <ul className="import-wizard__plan">
                             <li>
                                 <Globe size={15} aria-hidden="true" />
-                                <span><strong>{domainCount}</strong> {t('app.importWizard.appContainer', 'app container')}{domainCount === 1 ? '' : 's'} {t('app.importWizard.onePerDomainDocrootCopiedIn', '— one per domain, docroot copied in and served behind Nginx')}</span>
+                                <span>{t('app.importWizard.serviceContainers', { count: domainCount, defaultValue_one: '1 service container (one per domain, docroot copied in and served behind Nginx)', defaultValue_other: '{{count}} service containers (one per domain, docroot copied in and served behind Nginx)' })}</span>
                             </li>
                             <li className={skipDb ? 'is-skipped' : ''}>
                                 <Database size={15} aria-hidden="true" />
-                                <span><strong>{dbCount}</strong> {t('app.importWizard.managedDatabase', 'managed database')}{dbCount === 1 ? '' : 's'} {t('app.importWizard.restoredFromTheArchiveSDumps', 'restored from the archive\'s dumps')}{skipDb && ' (skipped)'}</span>
+                                <span>{t('app.importWizard.managedDatabases', { count: dbCount, defaultValue_one: "1 managed database restored from the archive's dumps", defaultValue_other: "{{count}} managed databases restored from the archive's dumps" })}{skipDb && ` ${t('app.importWizard.skipped', '(skipped)')}`}</span>
                             </li>
                             <li className={skipCrontab ? 'is-skipped' : ''}>
                                 <Clock size={15} aria-hidden="true" />
@@ -559,7 +603,7 @@ function ImportWizard() {
                             <div className="import-wizard__callout import-wizard__callout--warning">
                                 <AlertTriangle size={16} aria-hidden="true" />
                                 <div>
-                                    <p>{analysis.mail_accounts_count} {t('app.importWizard.mailAccount', 'mail account')}{analysis.mail_accounts_count === 1 ? '' : 's'} {t('app.importWizard.foundInTheBackupWillNot', 'found in the backup will not be imported — mail is handled by the mail extension.')}</p>
+                                    <p>{t('app.importWizard.mailAccountsSkipped', { count: analysis.mail_accounts_count, defaultValue_one: "1 mail account in the backup won't be imported. The mail extension handles mail.", defaultValue_other: "{{count}} mail accounts in the backup won't be imported. The mail extension handles mail." })}</p>
                                 </div>
                             </div>
                         )}
@@ -601,7 +645,7 @@ function ImportWizard() {
                                 <AlertTriangle size={16} aria-hidden="true" />
                                 <div>
                                     <strong>{t('app.importWizard.failedAtStep', 'Failed at step')} <code>{imp.current_step || 'unknown'}</code>.</strong>
-                                    <p>{imp.error || 'The import run failed.'}</p>
+                                    <p>{imp.error || t('app.importWizard.importRunFailed', "Couldn't finish the import.")}</p>
                                 </div>
                             </div>
                         )}
@@ -614,8 +658,15 @@ function ImportWizard() {
                             </div>
                         )}
 
+                        {pollError && (
+                            <ErrorState
+                                compact
+                                message={t('app.importWizard.couldntRefreshImportStatus', "Couldn't refresh the import status. {{reason}}", { reason: pollError.message })}
+                            />
+                        )}
+
                         <pre ref={logRef} className="import-wizard__log">
-                            {imp.log_text || 'Waiting for log output…'}
+                            {imp.log_text || t('app.importWizard.waitingForLogOutput', 'Waiting for log output…')}
                         </pre>
 
                         <div className="import-wizard__actions">
@@ -629,7 +680,7 @@ function ImportWizard() {
                             )}
                             {imp.status === 'completed' && (
                                 <Button asChild>
-                                    <Link to="/services">{t('app.importWizard.goToServices', 'Go to Services')}</Link>
+                                    <Link to="/services">{t('app.importWizard.goToServices', 'Go to services')}</Link>
                                 </Button>
                             )}
                         </div>
@@ -639,8 +690,17 @@ function ImportWizard() {
                 {/* Previous imports */}
                 <section className="import-wizard__history">
                     <h2>{t('app.importWizard.previousImports', 'Previous imports')}</h2>
+                    {historyError && history.length > 0 && (
+                        <ErrorState compact error={historyError} onRetry={loadHistory} />
+                    )}
                     {historyLoading ? (
                         <p className="import-wizard__muted">{t('common.loading', 'Loading…')}</p>
+                    ) : historyError && history.length === 0 ? (
+                        <ErrorState
+                            title={t('app.importWizard.couldntLoadPreviousImports', "Couldn't load previous imports.")}
+                            error={historyError}
+                            onRetry={loadHistory}
+                        />
                     ) : history.length === 0 ? (
                         <p className="import-wizard__muted">{t('app.importWizard.noImportsYet', 'No imports yet.')}</p>
                     ) : (
@@ -654,7 +714,7 @@ function ImportWizard() {
                                     </span>
                                     <span className="import-wizard__history-actions">
                                         <Button variant="ghost" size="sm" onClick={() => resumeImport(rec)}>
-                                            {rec.status === 'running' || rec.status === 'analyzing' ? 'Resume' : 'View'}
+                                            {rec.status === 'running' || rec.status === 'analyzing' ? t('app.importWizard.resume', 'Resume') : t('app.importWizard.view', 'View')}
                                         </Button>
                                         <Button variant="ghost" size="sm" onClick={() => removeImport(rec)} aria-label={t('app.importWizard.deleteImport3', 'Delete import')}>
                                             <Trash2 size={14} />

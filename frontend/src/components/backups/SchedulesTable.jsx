@@ -66,7 +66,7 @@ export default function SchedulesTable({
             headerKey: 'app.schedulesTable.frequency', header: 'Frequency',
             sortable: true,
             sortValue: (s) => frequencyLabel(s),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (schedule) => frequencyLabel(schedule),
         },
         {
@@ -84,7 +84,7 @@ export default function SchedulesTable({
             headerKey: 'app.schedulesTable.destination', header: 'Destination',
             sortable: true,
             sortValue: (s) => (s.upload_remote ? remoteLabel : 'Local disk'),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (schedule) => (schedule.upload_remote ? remoteLabel : 'Local disk'),
         },
         {
@@ -111,10 +111,10 @@ export default function SchedulesTable({
                 const next = nextFire(s);
                 return next ? next.getTime() : null;
             },
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (schedule) => {
                 const next = nextFire(schedule);
-                if (schedule.schedule_error) return <span title={schedule.schedule_error}>{t('app.schedulesTable.invalidSchedule', 'Invalid schedule')}</span>;
+                if (schedule.schedule_error) return <span title={schedule.schedule_error}>{t('app.schedulesTable.invalidSchedule', "Schedule isn't valid")}</span>;
                 return schedule.enabled
                     ? (next ? <span title={schedule.next_run_at}>{untilLabel(next, now)}</span> : '—')
                     : <span className="bk-paused">paused</span>;
@@ -125,6 +125,7 @@ export default function SchedulesTable({
             header: 'On',
             sortable: true,
             sortValue: (s) => (s.enabled ? 1 : 0),
+            width: '1%',
             className: 'bk-col-on',
             cellClassName: 'bk-col-on',
             render: (schedule) => (
@@ -139,6 +140,7 @@ export default function SchedulesTable({
         },
         {
             key: 'actions',
+            width: '1%',
             header: '',
             sortable: false,
             hideable: false,
@@ -171,26 +173,24 @@ export default function SchedulesTable({
 
     return (
         <>
-            <div className="bk-card">
-                <DataTable
-                    columns={columns}
-                    data={schedules}
-                    keyField="id"
-                    storageKey="serverkit-table-backup-schedules"
-                    rowClassName={(schedule) => (schedule.enabled ? undefined : 'is-off')}
-                    tableClassName="bk-table bk-table--schedules"
-                    footer={(
-                        <DataTableFooter
-                            shown={schedules.length}
-                            total={schedules.length}
-                            noun="schedule"
-                        />
-                    )}
-                />
-            </div>
+            <DataTable
+                columns={columns}
+                data={schedules}
+                keyField="id"
+                storageKey="serverkit-table-backup-schedules"
+                rowClassName={(schedule) => (schedule.enabled ? undefined : 'is-off')}
+                className="bk-table bk-table--schedules"
+                footer={(
+                    <DataTableFooter
+                        shown={schedules.length}
+                        total={schedules.length}
+                        noun="schedule"
+                    />
+                )}
+            />
             <p className="bk-hint bk-hint--foot">
                 <ShieldCheck size={13} />
-                {t('app.schedulesTable.snapshotsOlderThan', 'Snapshots older than')} {retentionDays} {t('app.schedulesTable.daysArePrunedAutomaticallyPerResource', 'days are pruned automatically. Per-resource policies (with their own retention) are set on each site or database.')}
+                {t('app.schedulesTable.snapshotsOlderThan', 'Backups older than')} {retentionDays} {t('app.schedulesTable.daysArePrunedAutomaticallyPerResource', 'days are pruned automatically. Per-resource policies (with their own retention) are set on each service or database.')}
             </p>
         </>
     );

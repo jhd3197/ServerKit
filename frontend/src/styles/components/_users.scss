@@ -14,7 +14,7 @@
     gap: $space-4;
     padding: $space-4;
     background: fade($accent-primary-raw, 10%);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-bottom: $space-6;
 
     .setup-info-icon {
@@ -24,7 +24,7 @@
 
     p {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: 1.5;
     }
@@ -39,7 +39,7 @@
     padding-top: $space-6;
     border-top: 1px solid $border-default;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     svg {
         color: $success;
@@ -59,63 +59,27 @@
         .tab-header-content {
             h3 {
                 margin: 0 0 $space-1 0;
-                font-size: $font-size-lg;
-                font-weight: 600;
+                font-size: $text-lg;
+                font-weight: $font-weight-semibold;
             }
 
             p {
                 margin: 0;
                 color: $text-secondary;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
             }
         }
     }
-}
-
-.users-table-container {
-    overflow-x: auto;
-    background: var(--surface);
-    border: 1px solid $border-default;
-    border-radius: $radius-md;
 }
 
 .users-action--warning { color: $warning; }
 .users-action--success { color: $success; }
 .users-action--danger { color: $danger; }
 
+// `.users-table` is the DataTable wrap; only row/cell content is styled here.
 .users-table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th, td {
-        padding: $space-4;
-        text-align: left;
-        border-bottom: 1px solid $border-default;
-    }
-
-    th {
-        background: $bg-hover;
-        font-weight: 500;
-        font-size: $font-size-sm;
-        color: $text-secondary;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    tr:last-child td {
-        border-bottom: none;
-    }
-
-    tr:hover td {
-        background: $bg-card;
-    }
-
-    tr.inactive {
+    .inactive {
         opacity: 0.6;
-
-        td {
-            background: fade($warning-raw, 5%);
-        }
     }
 
     .user-info {
@@ -126,52 +90,52 @@
 
     .user-avatar {
         width: 40px;
-        height: 40px;
+        height: 40px; // geometry: avatar
         border-radius: 50%;
         background: $accent-primary;
         color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: 600;
-        font-size: $font-size-md;
+        font-weight: $font-weight-semibold;
+        font-size: $text-md;
         flex-shrink: 0;
     }
 
     .user-details {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
 
         .username {
-            font-weight: 500;
+            font-weight: $font-weight-medium;
             display: flex;
             align-items: center;
             gap: $space-2;
         }
 
         .email {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
         }
     }
 
     .you-badge {
-        font-size: $font-size-xs;
-        padding: 2px 6px;
+        font-size: $text-xs;
+        padding: $space-hair $space-tight;
         background: $accent-primary;
         color: #fff;
-        border-radius: $radius-sm;
-        font-weight: 500;
+        border-radius: $radius-badge;
+        font-weight: $font-weight-medium;
     }
 
     .status-badge {
         display: inline-flex;
         align-items: center;
-        padding: 4px 10px;
+        padding: $space-1 $space-3;
         border-radius: $radius-full;
-        font-size: $font-size-xs;
-        font-weight: 500;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
 
         &.active {
             background: fade($success-raw, 15%);
@@ -185,7 +149,7 @@
     }
 
     .date-cell {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         white-space: nowrap;
     }
@@ -203,7 +167,7 @@
 .form-help {
     display: block;
     margin-top: $space-1;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 }
 
@@ -211,12 +175,12 @@
     margin-top: $space-6;
     padding: $space-4;
     background: $bg-hover;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     h4 {
         margin: 0 0 $space-4 0;
-        font-size: $font-size-sm;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         color: $text-secondary;
     }
 
@@ -230,13 +194,13 @@
         }
 
         .role-name {
-            font-weight: 500;
+            font-weight: $font-weight-medium;
             min-width: 80px;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
 
         .role-desc {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
         }
     }
@@ -251,14 +215,14 @@
 
         h3 {
             margin: 0 0 $space-1 0;
-            font-size: $font-size-lg;
-            font-weight: 600;
+            font-size: $text-lg;
+            font-weight: $font-weight-semibold;
         }
 
         p {
             margin: 0;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 }
@@ -277,7 +241,7 @@
     border-top: 1px solid $border-default;
 
     .pagination-info {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 }
@@ -288,12 +252,9 @@
 .settings-nav-divider {
     padding: $space-3 $space-3 $space-1;
     margin-top: $space-3;
-    font-family: var(--mono);
-    font-size: 0.62rem;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--text-ghost);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
 
     &:first-child {
         margin-top: 0;
@@ -337,7 +298,7 @@
 .permission-editor {
     margin-top: $space-4;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     max-height: 400px;
     overflow-y: auto;
 }
@@ -348,11 +309,9 @@
     gap: $space-2;
     padding: $space-2 $space-4;
     background: $bg-hover;
-    font-size: $font-size-xs;
-    font-weight: 600;
+    font-size: $text-xs;
+    font-weight: $font-weight-semibold;
     color: $text-secondary;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     border-bottom: 1px solid $border-default;
     position: sticky;
     top: 0;
@@ -371,11 +330,9 @@
 
 .permission-group-label {
     padding: $space-2 $space-4;
-    font-size: $font-size-xs;
-    font-weight: 600;
+    font-size: $text-xs;
+    font-weight: $font-weight-semibold;
     color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
     background: fade($bg-hover-raw, 50%);
 }
 
@@ -392,7 +349,7 @@
 }
 
 .permission-feature-name {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 }
 
 .customize-permissions-section {
@@ -424,45 +381,26 @@
         .tab-header-content {
             h4 {
                 margin: 0 0 $space-1 0;
-                font-size: $font-size-md;
-                font-weight: 600;
+                font-size: $text-md;
+                font-weight: $font-weight-semibold;
             }
 
             p {
                 margin: 0;
                 color: $text-secondary;
-                font-size: $font-size-sm;
+                font-size: $text-xs;
             }
         }
-    }
-}
-
-.invite-link-display {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    padding: $space-3;
-    background: $bg-hover;
-    border: 1px solid $border-default;
-    border-radius: $radius-md;
-    margin-top: $space-2;
-
-    code {
-        flex: 1;
-        font-family: $font-mono;
-        font-size: $font-size-sm;
-        word-break: break-all;
-        color: $text-primary;
     }
 }
 
 .invitation-status {
     display: inline-flex;
     align-items: center;
-    padding: 3px 8px;
+    padding: $space-1 $space-2;
     border-radius: $radius-full;
-    font-size: $font-size-xs;
-    font-weight: 500;
+    font-size: $text-xs;
+    font-weight: $font-weight-medium;
     text-transform: capitalize;
 
     &.pending {
@@ -495,15 +433,15 @@
 
         h3 {
             margin: 0 0 $space-1 0;
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: $text-xl;
+            font-weight: $font-weight-semibold;
             color: $text-primary;
         }
 
         p {
             margin: 0;
             color: $text-secondary;
-            font-size: $font-size-md;
+            font-size: $text-md;
         }
     }
 }
@@ -519,7 +457,7 @@
     padding-bottom: $space-5;
     border-bottom: 1px solid $border-subtle;
     color: $text-tertiary;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     &__item {
         display: inline-flex;
@@ -528,8 +466,7 @@
     }
 
     &__value {
-        font-family: $font-mono;
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         font-variant-numeric: tabular-nums;
@@ -541,13 +478,13 @@
     padding: $space-6;
     background: $bg-card;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
-    box-shadow: $shadow-sm;
+    border-radius: $radius-card;
+    box-shadow: none;
 
     h4 {
         margin: 0 0 $space-6 0;
-        font-size: $font-size-lg;
-        font-weight: 600;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 }
@@ -565,14 +502,14 @@
 
     .active-user-rank {
         width: 28px;
-        height: 28px;
+        height: 28px; // geometry: rank medallion, not a control
         display: flex;
         align-items: center;
         justify-content: center;
         background: $bg-hover;
         border-radius: 50%;
-        font-weight: 700;
-        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -584,8 +521,8 @@
     }
 
     .active-user-name {
-        font-size: $font-size-sm;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
@@ -604,8 +541,8 @@
     }
 
     .active-user-count {
-        font-size: $font-size-sm;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         color: $text-secondary;
         white-space: nowrap;
     }
@@ -622,8 +559,8 @@
 
         h4 {
             margin: 0;
-            font-size: $font-size-lg;
-            font-weight: 600;
+            font-size: $text-lg;
+            font-weight: $font-weight-semibold;
             color: $text-primary;
         }
     }
@@ -637,7 +574,7 @@
     margin-bottom: $space-6;
     padding: $space-5;
     background: $bg-hover;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     border: 1px solid $border-default;
 
     .filter-group {
@@ -649,21 +586,19 @@
             display: flex;
             align-items: center;
             gap: $space-2;
-            font-size: $font-size-xs;
-            font-weight: 600;
+            font-size: $text-xs;
+            font-weight: $font-weight-semibold;
             color: $text-tertiary;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
         select.form-control {
             min-width: 200px;
-            height: 38px;
+            height: $control-md;
             padding: 0 $space-3;
             background: $bg-card;
             border: 1px solid $border-default;
-            border-radius: $radius-md;
-            font-size: $font-size-sm;
+            border-radius: $radius-control;
+            font-size: $text-xs;
             color: $text-primary;
             cursor: pointer;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -671,7 +606,7 @@
             &:focus {
                 outline: none;
                 border-color: $accent-primary;
-                box-shadow: 0 0 0 3px fade($accent-primary-raw, 10%);
+                box-shadow: $focus-ring;
             }
 
             &:hover {
@@ -681,7 +616,7 @@
     }
 
     .btn-clear {
-        height: 38px;
+        height: $control-md;
         display: flex;
         align-items: center;
         gap: $space-2;
@@ -699,7 +634,7 @@
 // per event inside a single bordered surface with hairline separators.
 .audit-log-list {
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: hidden;
     background: $bg-card;
 }
@@ -711,7 +646,7 @@
     gap: $space-2 $space-3;
     padding: $space-2 $space-4;
     border-bottom: 1px solid $border-subtle;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     transition: background-color $transition-fast;
 
     &:last-child { border-bottom: none; }
@@ -738,8 +673,7 @@
     .log-row__time {
         flex-shrink: 0;
         width: 124px;
-        font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
@@ -770,8 +704,7 @@
         align-items: baseline;
         gap: $space-1 $space-3;
         min-width: 0;
-        font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -810,20 +743,22 @@
         flex-direction: column;
         gap: $space-1;
 
-        span {
-            font-size: $font-size-xs;
+        // The caption only: a bare `span` also matched the Select's value.
+        > span {
+            font-size: $text-xs;
             color: $text-secondary;
         }
 
-        select,
+        > .ui-select-trigger { min-width: 160px; }
+
         input {
             min-width: 160px;
             padding: $space-2 $space-3;
             background: $bg-card;
             border: 1px solid $border-default;
-            border-radius: $radius-md;
+            border-radius: $radius-control;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -832,14 +767,14 @@
         align-items: center;
         gap: $space-2;
         padding-bottom: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         cursor: pointer;
     }
 
     &__note {
         margin-top: $space-2;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
@@ -847,26 +782,13 @@
         margin-top: $space-4;
         padding: $space-4;
         border: 1px solid $border-default;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: $bg-hover;
 
         &-title {
             margin: 0 0 $space-2;
-            font-size: $font-size-sm;
-            font-weight: 600;
-        }
-
-        &-row {
-            display: flex;
-            align-items: center;
-            gap: $space-3;
-
-            code {
-                flex: 1;
-                overflow-x: auto;
-                white-space: nowrap;
-                font-size: $font-size-xs;
-            }
+            font-size: $text-xs;
+            font-weight: $font-weight-semibold;
         }
     }
 
@@ -875,7 +797,7 @@
         margin: $space-4 0 0;
         padding: 0;
         border: 1px solid $border-default;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__item {
@@ -891,13 +813,13 @@
     }
 
     &__item-user {
-        font-size: $font-size-sm;
-        font-weight: 500;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         margin-right: $space-2;
     }
 
     &__item-meta {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 }

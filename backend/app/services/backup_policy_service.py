@@ -314,7 +314,7 @@ class BackupPolicyService:
         from app.models.application import Application
         app = Application.query_active().filter_by(id=policy.target_id).first()
         if not app:
-            raise BackupPolicyError('Application not found')
+            raise BackupPolicyError('Service not found')
         if not app.root_path:
             raise BackupPolicyError('Target path not found')
         return {

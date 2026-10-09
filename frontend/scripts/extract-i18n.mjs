@@ -20,7 +20,7 @@
 //   node scripts/extract-i18n.mjs           # write en.json
 //   node scripts/extract-i18n.mjs --check   # fail if en.json is out of date
 
-import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'espree';
@@ -48,7 +48,14 @@ const SKIP_FILE = /\.(test|spec|stories)\.[jt]sx?$/;
 function walk(dir) {
     return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
         const path = join(dir, entry.name);
-        if (entry.isDirectory()) return SKIP_DIRS.has(entry.name) ? [] : walk(path);
+        // An extension that ships its own locales/en.json (an installed,
+        // git-ignored copy under src/plugins/) owns its keys; collecting them
+        // into core's en.json made the --check fail on machines that have it.
+        if (entry.isDirectory()) {
+            if (SKIP_DIRS.has(entry.name)) return [];
+            if (existsSync(join(path, 'plugin.json')) && existsSync(join(path, 'locales', 'en.json'))) return [];
+            return walk(path);
+        }
         if (!['.js', '.jsx'].includes(extname(entry.name))) return [];
         if (SKIP_FILE.test(entry.name)) return [];
         return [path];
@@ -99,6 +106,34 @@ function defaultValueOf(node) {
                 return String(property.value.value);
             }
         }
+    }
+    return null;
+}
+
+// Plurals: `t('k', { count, defaultValue_one: '1 file', defaultValue_other:
+// '{{count}} files' })`. i18next resolves `k_one` / `k_other` by the
+// language's plural rules, so the extractor writes those keys, never a bare
+// `k`. A hand-rolled `file{{s}}` or `file(s)` cannot be translated: other
+// languages have more than two forms, and check-i18n accepts a translator's
+// `k_few` / `k_many` next to the English pair.
+export const PLURAL_SUFFIXES = ['zero', 'one', 'two', 'few', 'many', 'other'];
+
+/** { one: '…', other: '…' } declared at a call site, or null. */
+function pluralDefaultsOf(node) {
+    const [, second, third] = node.arguments;
+    for (const candidate of [second, third]) {
+        if (candidate?.type !== 'ObjectExpression') continue;
+        const forms = {};
+        for (const property of candidate.properties) {
+            if (property.type !== 'Property' || property.computed) continue;
+            const name = property.key.name || property.key.value;
+            const match = /^defaultValue_(\w+)$/.exec(name);
+            if (match && PLURAL_SUFFIXES.includes(match[1])
+                && property.value.type === 'Literal' && typeof property.value.value === 'string') {
+                forms[match[1]] = property.value.value;
+            }
+        }
+        if (forms.one !== undefined || forms.other !== undefined) return forms;
     }
     return null;
 }
@@ -232,6 +267,17 @@ export function collect() {
                     // bundle renders the raw key path to a user.
                     if (!hasDefault(node)) {
                         problems.push(`${site}: t() has a computed key and no defaultValue`);
+                    }
+                    return;
+                }
+                const plural = pluralDefaultsOf(node);
+                if (plural) {
+                    if (plural.other === undefined) {
+                        problems.push(`${site}: t('${first.value}') declares plural defaults without defaultValue_other`);
+                        return;
+                    }
+                    for (const [suffix, form] of Object.entries(plural)) {
+                        record(`${first.value}_${suffix}`, form, site);
                     }
                     return;
                 }

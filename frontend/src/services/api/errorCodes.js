@@ -23,12 +23,25 @@ import { t } from '../../i18n/t.js';
  * else falls through to the server's English, which is exactly today's
  * behaviour.
  *
- * WHY ONLY AUTH CODES SO FAR: plan 76 §C measured 23 sites that pick an HTTP
- * status by grepping their own error prose (`403 if 'denied' in error else
- * 400`). Until those services raise typed errors, translating that prose would
- * turn those 403s into 400s. The auth and onboarding routes carry codes today;
- * the rest waits on plan 76 milestone C rather than shipping a silent status
- * regression.
+ * WHICH CODES: plan 76 §C's 23 status-from-prose sites are gone (the status
+ * sniffing ratchet is at 0), so translating a message can no longer change a
+ * status. Beyond auth, plan 88 §C added the common families, each minted by a
+ * factory in `backend/app/exceptions.py` with ONE fixed message per code:
+ *
+ *     not_found.<resource>   "<Resource> not found"
+ *     validation.required    "<field> is required"        (details.field)
+ *     permission.denied      generic "no permission" text
+ *     conflict.exists        "<Resource> already exists"  (details.resource)
+ *     agent.offline          the agent is not connected
+ *
+ * A code is only listed here when its message is fixed. The class defaults
+ * (`not_found`, `validation_error`, `permission_denied`, `conflict`) carry
+ * per-call prose, so they deliberately stay untranslated: swapping them for a
+ * generic sentence would drop the specifics the server wrote.
+ *
+ * `details` (the body's `details` object) fills the two codes whose message
+ * names something. Without it they fall back to the server's English, so a
+ * caller that passes only (code, message) keeps today's behaviour.
  */
 function translatedServerErrors() {
     return {
@@ -39,7 +52,7 @@ function translatedServerErrors() {
         'auth.registration_disabled': t(
             'errors.auth.registrationDisabled', 'Registration is disabled'),
         'auth.password_login_disabled': t(
-            'errors.auth.passwordLoginDisabled', 'Password login is disabled. Please use SSO.'),
+            'errors.auth.passwordLoginDisabled', 'Password sign-in is disabled. Please use SSO.'),
         'auth.missing_credentials': t(
             'errors.auth.missingCredentials', 'Missing email/username or password'),
         'auth.missing_fields': t(
@@ -56,14 +69,60 @@ function translatedServerErrors() {
             'errors.auth.invitationInvalid', 'Invalid or expired invitation'),
         'auth.link_invalid': t(
             'errors.auth.linkInvalid', 'Invalid or expired link'),
+
+        // One literal per resource kind, so each is a key a translator can see
+        // (and so a language with grammatical gender can agree per noun).
+        'not_found.service': t('errors.notFound.service', 'Service not found'),
+        'not_found.server': t('errors.notFound.server', 'Server not found'),
+        'not_found.domain': t('errors.notFound.domain', 'Domain not found'),
+        'not_found.database': t('errors.notFound.database', 'Database not found'),
+        'not_found.backup': t('errors.notFound.backup', 'Backup not found'),
+        'not_found.snapshot': t('errors.notFound.snapshot', 'Snapshot not found'),
+        'not_found.config_checkpoint': t(
+            'errors.notFound.configCheckpoint', 'Config checkpoint not found'),
+        'not_found.deployment': t('errors.notFound.deployment', 'Deployment not found'),
+        'not_found.template': t('errors.notFound.template', 'Template not found'),
+        'not_found.user': t('errors.notFound.user', 'User not found'),
+
+        'permission.denied': t(
+            'errors.permission.denied',
+            "You don't have permission to do this. Ask an admin for access."),
+
+        'agent.offline': agentOffline(),
+        // The agent dispatcher's own result code. Command results reach the
+        // client verbatim on some routes, and its meaning is the same.
+        AGENT_OFFLINE: agentOffline(),
     };
 }
 
-export function translateServerError(code, serverMessage) {
+function agentOffline() {
+    return t(
+        'errors.agent.offline',
+        "The server's agent is offline. Start the agent on that server, then try again.");
+}
+
+/** Codes whose message names something carried in the body's `details`. */
+function detailedServerError(code, details) {
+    if (!details || typeof details !== 'object') return undefined;
+    if (code === 'validation.required' && typeof details.field === 'string') {
+        return t('errors.validation.required', '{{field}} is required', { field: details.field });
+    }
+    if (code === 'conflict.exists') {
+        const exists = {
+            domain: t('errors.conflict.domainExists', 'Domain already exists'),
+        };
+        return exists[details.resource];
+    }
+    return undefined;
+}
+
+export function translateServerError(code, serverMessage, details) {
     if (!code || typeof code !== 'string') return serverMessage;
     // Built per call, not at module load: a table resolved at import would
     // freeze the language of the session's first paint.
-    return translatedServerErrors()[code] ?? serverMessage;
+    return translatedServerErrors()[code]
+        ?? detailedServerError(code, details)
+        ?? serverMessage;
 }
 
 export default translateServerError;

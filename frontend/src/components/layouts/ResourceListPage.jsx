@@ -7,6 +7,7 @@ import {
     useTableChrome,
 } from '@/components/ds/grid';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import DataTable from '@/components/ds/DataTable';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -103,6 +104,14 @@ export default function ResourceListPage({
     filteredEmptyIcon,
     filteredEmptyTitle = 'No results found',
     filteredEmptyDescription = 'Try adjusting your search or filter.',
+    // load error: the request failed, so "no items" is not known to be true.
+    // With nothing loaded it replaces the empty state; with rows already on
+    // screen (a failed background refresh) it shows compact above them.
+    // `error` is the thrown Error (its message is the server's reason) or a
+    // string; `onRetry` re-runs the page's loader.
+    error = null,
+    errorTitle,
+    onRetry,
     // Where the table's chrome (filter · "⋮") goes. `true` publishes it into the
     // enclosing tab group's top bar, on the same line as the page's actions and
     // search — the shape every top-level list page has. Set it false for a
@@ -134,6 +143,7 @@ export default function ResourceListPage({
 }) {
     const { t } = useTranslation();
     const resolvedTotal = totalCount ?? items.length;
+    const errorObj = typeof error === 'string' ? { message: error } : error;
     const [view, setView] = useState(() => {
         if (!renderCard) return 'list';
         try {
@@ -329,7 +339,16 @@ export default function ResourceListPage({
         <div className={cn('sk-tabgroup__inner', className)}>
             {chromePortal}
             {header}
-            {resolvedTotal === 0 ? (
+            {error && resolvedTotal > 0 && (
+                <ErrorState compact error={errorObj} onRetry={onRetry} />
+            )}
+            {error && resolvedTotal === 0 ? (
+                <ErrorState
+                    title={errorTitle || t('app.resourceListPage.couldntLoad', "Couldn't load {{noun}}.", { noun })}
+                    error={errorObj}
+                    onRetry={onRetry}
+                />
+            ) : resolvedTotal === 0 ? (
                 <EmptyState
                     size="lg"
                     icon={emptyIcon}

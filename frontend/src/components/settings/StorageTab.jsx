@@ -11,6 +11,7 @@ import EmptyState from '@/components/EmptyState';
 import DiskReclaimModal from '@/components/monitoring/DiskReclaimModal';
 import formatBytes from '@/utils/formatBytes';
 import { formatDateTime, formatPercent, formatRelative } from '@/utils/intl';
+import { toastError } from '@/utils/errorMessage';
 
 // The four day-count windows plus the rollback window: integers, 0 = off.
 const NUMBER_KEYS = [
@@ -56,8 +57,8 @@ export default function StorageTab() {
     const [saving, setSaving] = useState(false);
 
     const itemLabels = {
-        docker_images: t('app.storageTab.itemDockerImages', 'App images'),
-        docker_volumes: t('app.storageTab.itemDockerVolumes', 'App volumes'),
+        docker_images: t('app.storageTab.itemDockerImages', 'Service images'),
+        docker_volumes: t('app.storageTab.itemDockerVolumes', 'Service volumes'),
         docker_build_cache: t('app.storageTab.itemDockerBuildCache', 'Docker build cache'),
         panel_database: t('app.storageTab.itemPanelDatabase', 'Panel database'),
         backups: t('app.storageTab.itemBackups', 'Backups and upgrade snapshots'),
@@ -96,7 +97,7 @@ export default function StorageTab() {
             setOverview(data);
             setForm(toForm(data?.retention));
         } catch (err) {
-            setError(err.message || t('app.storageTab.couldNotLoad', 'Could not load the storage overview'));
+            setError(err.message || t('app.storageTab.couldNotLoad', "Couldn't load the storage overview."));
         } finally {
             setLoading(false);
         }
@@ -134,7 +135,7 @@ export default function StorageTab() {
             toast.success(t('app.storageTab.retentionSaved', 'Retention settings saved'));
             await load();
         } catch (err) {
-            toast.error(err.message || t('app.storageTab.saveFailed', 'Could not save retention settings'));
+            toastError(toast, t('app.storageTab.saveFailed', "Couldn't save the retention settings."), err);
         } finally {
             setSaving(false);
         }
@@ -153,7 +154,7 @@ export default function StorageTab() {
             <div className="settings-section">
                 <EmptyState
                     icon={HardDrive}
-                    title={t('app.storageTab.couldNotLoad', 'Could not load the storage overview')}
+                    title={t('app.storageTab.couldNotLoad', "Couldn't load the storage overview.")}
                     description={error}
                     action={(
                         <Button variant="outline" onClick={load}>
@@ -187,7 +188,6 @@ export default function StorageTab() {
         <div className="settings-section storage-tab">
             <div className="section-header">
                 <h2>{t('app.storageTab.title', 'Storage')}</h2>
-                <p>{t('app.storageTab.subtitle', 'Where this server\'s disk goes, and how long ServerKit keeps its own history.')}</p>
             </div>
 
             <div {...register('storage-disk', 'settings-card')}>
@@ -245,9 +245,9 @@ export default function StorageTab() {
 
             <div {...register('storage-breakdown', 'settings-card')}>
                 <h3>{t('app.storageTab.breakdown', 'What is using the disk')}</h3>
-                <p>{t('app.storageTab.breakdownHint', 'Measured now. Reclaimable is what Docker reports it could free without touching running apps.')}</p>
+                <p>{t('app.storageTab.breakdownHint', 'Measured now. Reclaimable is what Docker reports it could free without touching running services.')}</p>
                 {items.length === 0 ? (
-                    <p className="storage-tab__muted">{t('app.storageTab.noItems', 'Nothing to report — Docker is not answering and no panel data was found.')}</p>
+                    <p className="storage-tab__muted">{t('app.storageTab.noItems', 'Nothing to report. Docker is not answering and no panel data was found.')}</p>
                 ) : (
                     <ul className="storage-breakdown">
                         {items.map((item) => (

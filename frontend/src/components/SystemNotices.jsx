@@ -75,7 +75,7 @@ export default function SystemNotices() {
                         className="system-notice__action"
                         onClick={() => handleAction(notice)}
                     >
-                        {notice.action_label || 'Fix'}
+                        {notice.action_label || t('app.systemNotices.fix', 'Fix')}
                         {notice.action_path?.startsWith('http') ? (
                             <ExternalLink size={13} />
                         ) : (

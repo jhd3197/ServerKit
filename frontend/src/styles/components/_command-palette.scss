@@ -18,8 +18,8 @@
     max-height: 460px;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-xl;
-    box-shadow: $shadow-lg;
+    border-radius: $radius-overlay;
+    box-shadow: $shadow-overlay;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -54,7 +54,7 @@
         background: none;
         border: none;
         outline: none;
-        font-size: $font-size-md;
+        font-size: $text-md;
         color: $text-primary;
         font-family: $font-main;
 
@@ -64,12 +64,12 @@
     }
 
     &__kbd {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-family: $font-main;
-        padding: 2px 6px;
+        padding: $space-hair $space-tight;
         background: $bg-hover;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: $text-tertiary;
         flex-shrink: 0;
     }
@@ -84,7 +84,7 @@
         padding: $space-8 $space-5;
         text-align: center;
         color: $text-tertiary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__group {
@@ -95,11 +95,9 @@
 
     &__group-label {
         padding: $space-2 $space-5;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: $text-tertiary;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
     }
 
     &__item {
@@ -111,7 +109,7 @@
         background: none;
         border: none;
         cursor: pointer;
-        font-size: $font-size-base;
+        font-size: $text-base;
         color: $text-secondary;
         text-align: left;
         transition: background $transition-fast, color $transition-fast;
@@ -132,7 +130,7 @@
     }
 
     &__item-path {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-family: $font-mono;
     }
@@ -158,7 +156,7 @@
 }
 
 .command-palette__item-sublabel {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
     white-space: nowrap;
     overflow: hidden;
@@ -186,19 +184,19 @@
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-tertiary;
 
     kbd {
         min-width: 16px;
-        padding: 1px 5px;
+        padding: 1px $space-tight;
         text-align: center;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-family: $font-mono;
         color: $text-secondary;
         background: $bg-hover;
         border: 1px solid $border-subtle;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 }
 
@@ -212,7 +210,7 @@
     flex-shrink: 0;
     margin-inline-start: auto;
     color: $text-tertiary;
-    font-size: 10.5px;
+    font-size: $text-xs;
 }
 
 // --------------------------------------------
@@ -223,8 +221,8 @@
     [cmdk-group-items] {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px;
-        padding: 2px 4px 8px;
+        gap: $space-tight;
+        padding: $space-hair $space-1 $space-2;
     }
 }
 
@@ -234,13 +232,13 @@
     flex: 0 0 118px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 9px;
-    padding: 11px 11px 10px;
+    gap: $space-2;
+    padding: $space-3 $space-3 $space-3;
     border: 1px solid $border-subtle;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: var(--surface);
     color: $text-secondary;
-    font-size: 11.5px;
+    font-size: $text-xs;
 
     &[data-selected='true'] {
         @include status-variant(var(--accent-bright), var(--accent-bg), var(--accent-dim));
@@ -281,16 +279,16 @@
 .command-palette__more {
     display: flex;
     width: calc(100% - 8px);
-    height: 29px;
+    height: $control-sm;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    margin: 0 4px 6px;
+    gap: $space-2;
+    margin: 0 $space-1 $space-tight;
     border: 1px dashed $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: transparent;
     color: $text-tertiary;
-    font-size: 11.5px;
+    font-size: $text-xs;
     cursor: pointer;
     transition: color 120ms ease, border-color 120ms ease, background-color 120ms ease;
     @include focus-ring();
@@ -310,20 +308,20 @@
 .is-setting-focused {
     scroll-margin-top: $space-6;
     animation: setting-focus-flash 2s ease-out;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 }
 
 @keyframes setting-focus-flash {
     0% {
-        box-shadow: 0 0 0 3px var(--accent-bright);
+        box-shadow: $focus-ring;
         background-color: var(--accent-bg-soft);
     }
     70% {
-        box-shadow: 0 0 0 3px var(--accent-bright);
+        box-shadow: $focus-ring;
         background-color: var(--accent-bg-soft);
     }
     100% {
-        box-shadow: 0 0 0 0 transparent;
+        box-shadow: 0 0 0 0 transparent; // geometry: end frame of the focus-ring flash
         background-color: transparent;
     }
 }

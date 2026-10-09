@@ -14,6 +14,8 @@ from app.models.application_preview import ApplicationPreview
 from app.services.preview_service import PreviewService
 from app.services.resource_grant_service import ResourceGrantService
 from app.middleware.rbac import get_current_user
+from app.error_reporting import unexpected_response
+from app.exceptions import not_found
 
 previews_bp = Blueprint('previews', __name__)
 
@@ -24,12 +26,12 @@ def _get_app_or_404(app_id, write=False):
     members). A caller without the needed tier gets a sealed 404 (no leak)."""
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return None, (jsonify({'error': 'Application not found'}), 404)
+        raise not_found('service')
     user = get_current_user()
     ok = ResourceGrantService.can_edit_app(user, app) if write \
         else ResourceGrantService.can_access_app(user, app)
     if not ok:
-        return None, (jsonify({'error': 'Application not found'}), 404)
+        raise not_found('service')
     return app, None
 
 
@@ -69,7 +71,8 @@ def update_preview_settings(app_id):
     try:
         result = PreviewService.enable_previews(app_id, data)
     except Exception as exc:  # pragma: no cover - defensive
-        return jsonify({'error': str(exc)}), 400
+        # Only a failed commit lands here: a crash, not the caller's mistake.
+        return unexpected_response(exc)
     return jsonify(result), 200
 
 

@@ -223,6 +223,14 @@ let cachedValue = null;
 let generation = 0;
 const subscribers = new Set();
 
+// A failed fetch (typically the backend restarting under an update) must not
+// pin the baked fallback for the whole session: the baked manifest can be
+// empty, which drops every extension from the nav until a full reload. Retry
+// a few times with backoff, then leave it to the next deliberate refresh.
+const RETRY_DELAYS_MS = [3000, 10000, 30000];
+let retryAttempt = 0;
+let retryTimer = null;
+
 function notify(value) {
     cachedValue = value;
     for (const cb of subscribers) {
@@ -264,11 +272,13 @@ export function refreshContributions() {
             // Mark the envelope as loaded so consumers (e.g. the NotFound page)
             // can tell "contributions still loading" from "genuinely no route".
             merged.__ready = true;
+            retryAttempt = 0;
             notify(merged);
             return merged;
         })
         .catch(() => {
             if (requestGeneration !== generation) return cachedValue || EMPTY;
+            scheduleRetry(requestGeneration);
             // If the backend contribution endpoint is unavailable (common
             // while running only the Vite dev server), use the active plugin
             // manifest baked into this frontend build instead of leaving
@@ -279,6 +289,19 @@ export function refreshContributions() {
             return fallback;
         });
     return cachedPromise;
+}
+
+function scheduleRetry(requestGeneration) {
+    // Forget the failed promise so ensureContributions() re-fetches too.
+    cachedPromise = null;
+    if (retryTimer || retryAttempt >= RETRY_DELAYS_MS.length) return;
+    retryTimer = setTimeout(() => {
+        retryTimer = null;
+        // A newer refresh already superseded this one; it owns any retry.
+        if (requestGeneration !== generation) return;
+        retryAttempt += 1;
+        refreshContributions();
+    }, RETRY_DELAYS_MS[retryAttempt]);
 }
 
 export function useContributions() {

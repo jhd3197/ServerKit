@@ -29,7 +29,7 @@ export function GroupMenu({ columns = [], groupBy = null, onChange, className })
                     className={cn('sk-filter-btn', active && 'sk-filter-btn--active', className)}
                 >
                     <Group aria-hidden="true" />
-                    {active ? labelFor(active) : 'Group'}
+                    {active ? labelFor(active) : t('app.groupMenu.group', 'Group')}
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="sk-tablemenu">

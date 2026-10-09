@@ -7,26 +7,20 @@
 // ============================================
 
 .deployments-page {
-    // A fixed reading column rather than full bleed: the rightmost columns
-    // (took / started) are narrow and fixed, so on a wide monitor a full-bleed
-    // row strands the name miles from its own timing.
-    max-width: 1180px;
-    margin: 0 auto;
+    // Full width like every list (plan 89); the Deploy cell takes the spare
+    // width, so a row's timing columns stay together at the right edge.
 
     // Target / Took / Started are short and fixed, but they sit beside a Deploy
     // cell that takes every spare pixel — left to wrap, "Local server" alone
     // doubles the height of every row.
-    .sk-cell-mono { white-space: nowrap; }
+    .sk-cell-dim { white-space: nowrap; }
 
     &__kind {
-        padding: 1px 5px;
+        padding: 1px $space-tight;
         border: 1px solid var(--border);
-        border-radius: 4px;
+        border-radius: $radius-badge;
         color: var(--text-ghost);
-        font-family: var(--mono);
-        font-size: 9.5px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        font-size: $text-xs;
     }
 
     &__error { color: var(--red); }
@@ -34,18 +28,18 @@
     &__pipe {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
     }
 
     &__ticks {
         display: flex;
-        gap: 3px;
+        gap: $space-1;
 
         i {
             display: block;
             width: 7px;
             height: 15px;
-            border-radius: 2px;
+            border-radius: $radius-badge;
             background: var(--surface-3);
 
             &.is-done { background: var(--green); }
@@ -59,15 +53,14 @@
 
     &__pipe-count {
         color: var(--text-ghost);
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 
     // ---- test-deployment (simulated) scenario picker ----
     &__sim-intro {
         margin: 0 0 $space-3;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.5;
     }
 
@@ -77,19 +70,8 @@
         gap: $space-2;
         margin-bottom: $space-3;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-
-        select {
-            min-height: 30px;
-            padding: $space-1 $space-2;
-            background: $bg-elevated;
-            border: 1px solid $border-subtle;
-            border-radius: $radius-md;
-            color: $text-primary;
-            font-size: $font-size-sm;
-            cursor: pointer;
-        }
     }
 
     &__sim-list {
@@ -106,7 +88,7 @@
         padding: $space-3;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         cursor: pointer;
         text-align: left;
 
@@ -123,11 +105,11 @@
 
     &__sim-scenario-text {
         display: grid;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 0;
 
-        strong { color: $text-primary; font-size: $font-size-sm; font-weight: $font-weight-semibold; }
-        span { color: $text-tertiary; font-size: $font-size-xs; line-height: 1.4; }
+        strong { color: $text-primary; font-size: $text-xs; font-weight: $font-weight-semibold; }
+        span { color: $text-tertiary; font-size: $text-xs; line-height: 1.4; }
     }
 }
 

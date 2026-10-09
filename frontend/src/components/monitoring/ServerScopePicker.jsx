@@ -35,7 +35,7 @@ export default function ServerScopePicker({ scope, servers, onChange, label }) {
                     <HardDrive size={14} />
                     <span>
                         {t('app.serverScopePicker.thisServer', 'This server')}
-                        <small>{t('app.serverScopePicker.theMachineRunningThePanel', 'The machine running the panel')}</small>
+                        <small>{t('app.serverScopePicker.theMachineRunningThePanel', 'The panel server')}</small>
                     </span>
                     {scope === HOST_SCOPE && <Check size={14} />}
                 </SharedButton>

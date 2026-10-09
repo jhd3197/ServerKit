@@ -422,7 +422,7 @@ class BackupService:
 
             return {
                 'success': True,
-                'message': f'Application restored to {restore_path}',
+                'message': f'Service restored to {restore_path}',
                 'restore_path': restore_path
             }
 
@@ -996,7 +996,7 @@ class BackupService:
                 if app:
                     result = cls.backup_application(app.name, app.root_path, correlation_id=correlation_id)
                 else:
-                    result = {'success': False, 'error': f'Application "{target}" not found'}
+                    result = {'success': False, 'error': f'Service "{target}" not found'}
 
             elif backup_type == 'files':
                 paths_list = [p.strip() for p in target.split(',') if p.strip()]

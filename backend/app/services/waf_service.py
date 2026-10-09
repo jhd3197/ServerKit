@@ -433,7 +433,7 @@ class WafService:
 
         application = Application.query_active().filter_by(id=application_id).first()
         if not application:
-            return {'success': False, 'error': 'Application not found'}
+            return {'success': False, 'error': 'Service not found'}
 
         policy = WafPolicy.query.filter_by(application_id=application_id).first()
         if policy is None:

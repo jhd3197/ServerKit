@@ -22,6 +22,7 @@ import {
     Activity, Bell, Cpu, Gauge as GaugeIcon, HardDrive, MemoryStick,
     PlayCircle, RefreshCw, Settings,
 } from 'lucide-react';
+import { toastError } from '@/utils/errorMessage';
 
 // One section per top-bar tab. There is deliberately no second tab strip inside
 // the page: the group's own bar (MONITOR_TABS) carries these, the way the
@@ -200,7 +201,7 @@ const Monitoring = () => {
             toast.success(t('app.monitoring.monitoringDeliverySaved', 'Monitoring delivery saved'));
             await loadData();
         } catch (err) {
-            toast.error(err.message || t('app.monitoring.failedToSaveMonitoringSettings', 'Failed to save monitoring settings'));
+            toastError(toast, t('app.monitoring.failedToSaveMonitoringSettings', "Couldn't save the monitoring settings."), err);
         } finally {
             setSavingConfig(false);
         }
@@ -219,7 +220,7 @@ const Monitoring = () => {
             toast.success(t('app.monitoring.alertRulesSaved', 'Alert rules saved'));
             await loadData();
         } catch (err) {
-            toast.error(err.message || t('app.monitoring.failedToSaveAlertRules', 'Failed to save alert rules'));
+            toastError(toast, t('app.monitoring.failedToSaveAlertRules', "Couldn't save the alert rules."), err);
         } finally {
             setSavingThresholds(false);
         }
@@ -236,14 +237,14 @@ const Monitoring = () => {
                 const res = await loadSpeedTest();
                 const latest = res?.last_result;
                 if (latest?.tested_at && latest.tested_at !== previousTestedAt) {
-                    if (latest.success === false) toast.error(latest.error || t('app.monitoring.speedTestFailed', 'Speed test failed'));
+                    if (latest.success === false) toastError(toast, t('app.monitoring.speedTestFailed', "Couldn't finish the speed test."), latest.error);
                     else toast.success(t('app.monitoring.speedTestComplete', 'Speed test complete'));
                     return;
                 }
             }
-            toast.warning(t('app.monitoring.speedTestIsStillRunningRefresh', 'Speed test is still running — refresh in a moment'));
+            toast.warning(t('app.monitoring.speedTestIsStillRunningRefresh', 'Speed test is still running. Refresh in a moment.'));
         } catch (err) {
-            toast.error(err.message || t('app.monitoring.failedToStartSpeedTest', 'Failed to start speed test'));
+            toastError(toast, t('app.monitoring.failedToStartSpeedTest', "Couldn't start the speed test."), err);
         } finally {
             setSpeedTestRunning(false);
         }
@@ -270,8 +271,8 @@ const Monitoring = () => {
                     onClick={handleToggleMonitoring}
                 >
                     {status?.enabled
-                        ? <><Activity size={16} />{t('app.monitoring.stopMonitoring', 'Stop Monitoring')}</>
-                        : <><PlayCircle size={16} />{t('app.monitoring.startMonitoring', 'Start Monitoring')}</>}
+                        ? <><Activity size={16} />{t('app.monitoring.stopMonitoring', 'Stop monitoring')}</>
+                        : <><PlayCircle size={16} />{t('app.monitoring.startMonitoring', 'Start monitoring')}</>}
                 </Button>
                 <ServerScopePicker
                     scope={scope}
@@ -323,10 +324,10 @@ const Monitoring = () => {
                         <div className="monitoring-panel__header">
                             <div>
                                 <h3>{t('app.monitoring.thisServer', 'This server')}</h3>
-                                <span className="mon-panel-sub">{t('app.monitoring.limitsForTheMachineRunningThe', 'Limits for the machine running the panel')}</span>
+                                <span className="mon-panel-sub">{t('app.monitoring.limitsForTheMachineRunningThe', 'Limits for the panel server')}</span>
                             </div>
                             <Button type="submit" size="sm" disabled={savingThresholds}>
-                                {savingThresholds ? 'Saving…' : 'Save rules'}
+                                {savingThresholds ? t('common.saving', 'Saving…') : t('app.monitoring.saveRules', 'Save rules')}
                             </Button>
                         </div>
                         <div className="metric-rule-grid">
@@ -357,7 +358,7 @@ const Monitoring = () => {
                                             />
                                         </div>
                                         <Pill kind={isTriggered ? 'amber' : 'gray'}>
-                                            {isTriggered ? 'would alert now' : 'quiet'}
+                                            {isTriggered ? t('app.monitoring.wouldAlertNow', 'Would alert now') : t('app.monitoring.quiet', 'Quiet')}
                                         </Pill>
                                     </article>
                                 );
@@ -366,7 +367,7 @@ const Monitoring = () => {
                     </form>
 
                     {servers.length > 0 && (
-                        <FleetThresholdsPanel servers={servers} refreshKey={refreshKey} />
+                        <FleetThresholdsPanel refreshKey={refreshKey} />
                     )}
 
                     <div className="monitoring-delivery-layout">
@@ -377,13 +378,13 @@ const Monitoring = () => {
                                     <span className="mon-panel-sub">{t('app.monitoring.howOftenTheChecksRun', 'How often the checks run')}</span>
                                 </div>
                                 <Button type="submit" size="sm" disabled={savingConfig}>
-                                    {savingConfig ? 'Saving…' : 'Save'}
+                                    {savingConfig ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
                                 </Button>
                             </div>
                             <div className="monitoring-switch-row">
                                 <div>
                                     <strong>{t('app.monitoring.runResourceChecks', 'Run resource checks')}</strong>
-                                    <span>{configForm.enabled ? 'Enabled' : 'Paused'}</span>
+                                    <span>{configForm.enabled ? t('app.monitoring.enabled', 'Enabled') : t('app.monitoring.paused', 'Paused')}</span>
                                 </div>
                                 <Switch
                                     checked={configForm.enabled}
@@ -433,10 +434,10 @@ const Monitoring = () => {
                                                 <strong>{channel.label}</strong>
                                                 <span>
                                                     {ready
-                                                        ? 'Sending alerts'
+                                                        ? t('app.monitoring.sendingAlerts', 'Sending alerts')
                                                         : channel.configured
-                                                            ? 'Configured but off'
-                                                            : 'Not configured'}
+                                                            ? t('app.monitoring.configuredButOff', 'Configured but off')
+                                                            : t('app.monitoring.notConfigured', 'Not configured')}
                                                 </span>
                                             </div>
                                             <Pill kind={ready ? 'green' : channel.configured ? 'amber' : 'gray'}>

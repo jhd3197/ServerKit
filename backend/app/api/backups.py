@@ -7,6 +7,7 @@ from app.services.backup_service import BackupService
 from app.services.backup_policy_service import BackupPolicyService, BackupPolicyError
 from app.services.storage_provider_service import StorageProviderService
 from app import db, paths
+from app.exceptions import field_required, not_found
 
 backups_bp = Blueprint('backups', __name__)
 
@@ -340,11 +341,11 @@ def backup_application():
 
     app_id = data.get('application_id')
     if not app_id:
-        return jsonify({'error': 'application_id is required'}), 400
+        raise field_required('application_id')
 
     app = Application.query_active().filter_by(id=app_id).first()
     if not app:
-        return jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     result = BackupService.backup_application(
         app_name=app.name,
@@ -409,7 +410,7 @@ def restore_application():
     data = request.get_json()
 
     if not data or 'backup_path' not in data:
-        return jsonify({'error': 'backup_path is required'}), 400
+        raise field_required('backup_path')
 
     result = BackupService.restore_application(
         backup_path=data['backup_path'],
@@ -576,7 +577,7 @@ def upload_to_remote():
     """Upload a local backup to remote storage."""
     data = request.get_json()
     if not data or 'backup_path' not in data:
-        return jsonify({'error': 'backup_path is required'}), 400
+        raise field_required('backup_path')
 
     backup_path = os.path.realpath(data['backup_path'])
 
@@ -588,7 +589,7 @@ def upload_to_remote():
     elif os.path.isfile(backup_path):
         result = StorageProviderService.upload_file(backup_path)
     else:
-        return jsonify({'error': 'Backup not found'}), 404
+        raise not_found('backup')
 
     return jsonify(result), 200 if result['success'] else 400
 
@@ -630,7 +631,7 @@ def download_from_remote():
     """Download a backup from remote storage to local."""
     data = request.get_json()
     if not data or 'remote_key' not in data:
-        return jsonify({'error': 'remote_key is required'}), 400
+        raise field_required('remote_key')
 
     remote_key = data['remote_key']
     # Determine local path from remote key

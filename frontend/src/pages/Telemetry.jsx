@@ -40,8 +40,10 @@ import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useAuth } from '../contexts/useAuth.js';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import { statusKind } from '@/components/ds/status';
 import { useTranslation } from 'react-i18next';
+import { errorReason } from '@/utils/errorMessage';
 
 const SEVERITY_ORDER = ['critical', 'error', 'warning', 'info', 'debug'];
 
@@ -110,11 +112,12 @@ const BUILTIN_VIEWS = [
 export default function Telemetry() {
     const { t } = useTranslation();
     const { isAdmin } = useAuth();
-    const { showToast } = useToast();
+    const { success: toastSuccess, error: showError } = useToast();
     const { confirm } = useConfirm();
 
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [hasMore, setHasMore] = useState(false);
     const [page, setPage] = useState(1);
     const [sources, setSources] = useState([]);
@@ -165,13 +168,16 @@ export default function Telemetry() {
             setEvents((prev) => (replace ? fresh : [...prev, ...fresh]));
             setHasMore(fresh.length === PAGE_SIZE);
             setPage(nextPage);
+            setLoadError(null);
         } catch (err) {
-            showToast(t('app.telemetry.failedToLoadTelemetry', 'Failed to load telemetry: {{message}}', { message: err.message }), 'error');
+            // Rendered in the list area (with Retry) rather than as a toast
+            // that fades and leaves "No events recorded yet" behind.
+            setLoadError(err);
             setHasMore(false);
         } finally {
             setLoading(false);
         }
-    }, [filters, q, showToast, t]);
+    }, [filters, q]);
 
     useEffect(() => {
         loadFilterOptions();
@@ -187,16 +193,16 @@ export default function Telemetry() {
                 severity: 'info',
                 payload: { from_ui: true },
             });
-            showToast(t('app.telemetry.testEventEmitted', 'Test event emitted'), 'success');
+            toastSuccess(t('app.telemetry.testEventEmitted', 'Test event emitted'));
             fetchEvents(1, true);
         } catch (err) {
-            showToast(t('app.telemetry.failedToEmitTestEvent', 'Failed to emit test event: {{message}}', { message: err.message }), 'error');
+            showError(t('app.telemetry.failedToEmitTestEvent', "Couldn't emit the test event. {{message}}", { message: errorReason(err) }));
         }
     };
 
     const cleanupOldEvents = async () => {
         const confirmed = await confirm({
-            title: t('app.telemetry.cleanUpOldEvents', 'Clean Up Old Events'),
+            title: t('app.telemetry.cleanUpOldEvents', 'Clean up old events'),
             message: t('app.telemetry.deleteTelemetryEventsOlderThan90', 'Delete telemetry events older than 90 days? This cannot be undone.'),
             confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',
@@ -206,10 +212,10 @@ export default function Telemetry() {
         }
         try {
             const data = await api.cleanupTelemetryEvents(90);
-            showToast(t('app.telemetry.deletedOldEvents', 'Deleted {{deleted}} old events', { deleted: data.deleted }), 'success');
+            toastSuccess(t('app.telemetry.deletedOldEvents', 'Deleted {{deleted}} old events', { deleted: data.deleted }));
             fetchEvents(1, true);
         } catch (err) {
-            showToast(t('app.telemetry.cleanupFailed', 'Cleanup failed: {{message}}', { message: err.message }), 'error');
+            showError(t('app.telemetry.cleanupFailed', "Couldn't clean up events. {{message}}", { message: errorReason(err) }));
         }
     };
 
@@ -395,7 +401,17 @@ export default function Telemetry() {
                 </div>
             )}
 
-            {events.length === 0 && !loading ? (
+            {loadError && events.length > 0 && (
+                <ErrorState compact error={loadError} onRetry={() => fetchEvents(1, true)} />
+            )}
+
+            {loadError && events.length === 0 && !loading ? (
+                <ErrorState
+                    title={t('app.telemetry.couldntLoadTelemetry', "Couldn't load telemetry.")}
+                    error={loadError}
+                    onRetry={() => fetchEvents(1, true)}
+                />
+            ) : events.length === 0 && !loading ? (
                 <EmptyState
                     icon={Info}
                     title={hasFilters ? t('app.telemetry.noEventsMatch', 'No events match') : t('app.telemetry.noEventsRecordedYet', 'No events recorded yet')}
@@ -423,7 +439,6 @@ export default function Telemetry() {
             ) : (
                 <>
                     <DataTable
-                        tableClassName="sk-dtable telemetry-table"
                         data={events}
                         keyField="id"
                         columns={chrome.columns}

@@ -6,13 +6,13 @@
     font-family: $font-main;
 
     &__launcher {
-        min-height: 42px;
+        min-height: $control-md;
         gap: $space-2;
         border: 1px solid var(--border-strong);
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: var(--surface);
         color: var(--text);
-        box-shadow: $shadow-lg;
+        box-shadow: $shadow-overlay;
 
         svg.is-active { color: var(--cyan); }
     }
@@ -21,12 +21,11 @@
     &__unread {
         display: inline-grid;
         min-width: 20px;
-        height: 20px;
-        padding-inline: 5px;
+        height: 20px; // geometry: count badge (20px badge spec)
+        padding-inline: $space-tight;
         place-items: center;
-        border-radius: 999px;
-        font-family: var(--mono);
-        font-size: 10px;
+        border-radius: $radius-full;
+        font-size: $text-xs;
         line-height: 1;
     }
 
@@ -40,9 +39,9 @@
         height: min(720px, calc(100vh - #{$space-8}));
         overflow: hidden;
         border: 1px solid var(--border-strong);
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: var(--surface);
-        box-shadow: $shadow-lg;
+        box-shadow: $shadow-overlay;
     }
 
     &__header,
@@ -68,17 +67,17 @@
     &__heading { gap: $space-3; min-width: 0; }
     &__heading h2,
     &__detail-head h3 { margin: 0; color: var(--text); }
-    &__heading h2 { font-size: $font-size-base; }
-    &__heading > div > span { color: var(--text-faint); font-family: var(--mono); font-size: 10px; }
+    &__heading h2 { font-size: $text-base; }
+    &__heading > div > span { color: var(--text-faint); font-size: $text-xs; }
     &__header-actions { gap: $space-1; }
 
     &__icon {
         display: grid;
         width: 30px;
-        height: 30px;
+        height: 30px; // geometry: icon tile
         flex: 0 0 auto;
         place-items: center;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         @include status-variant(var(--cyan), var(--cyan-bg));
     }
 
@@ -91,10 +90,10 @@
         .btn {
             flex: 1;
             justify-content: center;
-            gap: 6px;
+            gap: $space-tight;
             color: var(--text-dim);
 
-            span { color: var(--text-faint); font-family: var(--mono); font-size: 10px; }
+            span { color: var(--text-faint); font-size: $text-xs; }
             &.is-active { background: var(--surface-hover); color: var(--text); }
         }
     }
@@ -141,14 +140,14 @@
 
         strong,
         small { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        strong { color: var(--text); font-size: $font-size-sm; }
-        small { color: var(--text-faint); font-family: var(--mono); font-size: 10px; }
+        strong { color: var(--text); font-size: $text-xs; }
+        small { color: var(--text-faint); font-size: $text-xs; }
     }
 
     &__row-unread {
         position: absolute;
-        inset-block-start: 7px;
-        inset-inline-end: 7px;
+        inset-block-start: $space-2;
+        inset-inline-end: $space-2;
         width: 6px;
         height: 6px;
         border-radius: 50%;
@@ -161,7 +160,7 @@
         place-items: center;
         padding: $space-4;
         color: var(--text-faint);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         text-align: center;
     }
 
@@ -182,20 +181,20 @@
 
     &__detail-head { justify-content: space-between; gap: $space-3; }
     &__detail-head > div { min-width: 0; }
-    &__detail-head h3 { overflow: hidden; font-size: $font-size-lg; text-overflow: ellipsis; white-space: nowrap; }
-    &__eyebrow { color: var(--text-faint); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+    &__detail-head h3 { overflow: hidden; font-size: $text-lg; text-overflow: ellipsis; white-space: nowrap; }
+    &__eyebrow { color: var(--text-faint); font-size: $text-xs; }
 
-    &__meta { gap: $space-3; color: var(--text-faint); font-family: var(--mono); font-size: 10px; }
+    &__meta { gap: $space-3; color: var(--text-faint); font-size: $text-xs; }
     &__meta span { display: inline-flex; align-items: center; gap: 5px; }
 
     &__progress { display: grid; gap: $space-2; }
-    &__progress-copy { justify-content: space-between; color: var(--text-dim); font-size: $font-size-xs; }
+    &__progress-copy { justify-content: space-between; color: var(--text-dim); font-size: $text-xs; }
     &__progress progress {
         width: 100%;
         height: 5px;
         overflow: hidden;
         border: 0;
-        border-radius: 999px;
+        border-radius: $radius-full;
         background: var(--surface-hover);
         accent-color: var(--accent-primary);
     }
@@ -211,7 +210,7 @@
         background: var(--surface);
 
         &.is-complete { @include status-variant(var(--green), var(--green), var(--green)); }
-        &.is-current { @include status-variant(var(--cyan), null, var(--cyan)); box-shadow: 0 0 0 3px var(--cyan-bg); }
+        &.is-current { @include status-variant(var(--cyan), null, var(--cyan)); }
     }
 
     &__error {
@@ -220,9 +219,9 @@
         gap: $space-2;
         padding: $space-2 $space-3;
         border: 1px solid transparent;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         @include status-variant(var(--red), var(--red-bg), var(--red));
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &__handoff {
@@ -232,7 +231,7 @@
         padding: $space-3;
         overflow: hidden;
         border: 1px solid var(--amber);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: var(--amber-bg);
 
         &::before {
@@ -247,14 +246,14 @@
         > p {
             margin: 0;
             color: var(--text-dim);
-            font-size: $font-size-xs;
+            font-size: $text-xs;
             line-height: 1.55;
         }
 
         .form-field { gap: $space-1; }
-        .form-field__label { color: var(--text); font-size: $font-size-xs; }
+        .form-field__label { color: var(--text); font-size: $text-xs; }
         .form-field__hint,
-        .form-field__error { margin-block: $space-1 0; font-size: 10px; }
+        .form-field__error { margin-block: $space-1 0; font-size: $text-xs; }
         input { font-family: var(--mono); }
     }
 
@@ -271,16 +270,13 @@
 
         span:not(.operations-dock__handoff-icon) {
             color: var(--amber);
-            font-family: var(--mono);
-            font-size: 9px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
+            font-size: $text-xs;
         }
 
         strong {
             overflow: hidden;
             color: var(--text);
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
@@ -289,11 +285,11 @@
     &__handoff-icon {
         display: grid;
         width: 28px;
-        height: 28px;
+        height: 28px; // geometry: icon tile
         flex: 0 0 auto;
         place-items: center;
         border: 1px solid var(--amber);
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
         color: var(--amber);
         background: var(--surface);
     }
@@ -311,10 +307,10 @@
         overflow: auto;
         padding: $space-3;
         border: 1px solid var(--border-soft);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: var(--bg-code);
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         line-height: 1.6;
         scrollbar-width: thin;
     }
@@ -333,7 +329,7 @@
 
     @media (max-width: $breakpoint-md) {
         inset-inline: $space-3;
-        inset-block-end: 72px;
+        inset-block-end: $space-16;
 
         &__panel {
             width: auto;

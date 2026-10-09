@@ -10,10 +10,10 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 34px;
-        height: 34px;
+        width: $control-md;
+        height: $control-md;
         border: 1px solid $border-subtle;
-        border-radius: 9px;
+        border-radius: $radius-control;
         background: $bg-card;
         color: $text-secondary;
         cursor: pointer;
@@ -30,17 +30,18 @@
         position: absolute;
         top: -5px;
         right: -5px;
-        min-width: 17px;
-        height: 17px;
-        padding: 0 4px;
-        border-radius: 999px;
+        // Counter bubble: 16px round.
+        min-width: 16px;
+        height: 16px;
+        padding: 0 $space-1;
+        border-radius: $radius-full;
         background: $danger;
         color: #fff;
-        font-size: 10px;
-        font-weight: 700;
-        line-height: 17px;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
+        line-height: 16px;
         text-align: center;
-        box-shadow: 0 0 0 2px $bg-card;
+        box-shadow: 0 0 0 2px $bg-card; // geometry: cutout ring separating the counter from the bell
     }
 
     &__panel {
@@ -52,8 +53,8 @@
         max-width: calc(100vw - 32px);
         background: $bg-elevated;
         border: 1px solid $border-default;
-        border-radius: 12px;
-        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+        border-radius: $radius-overlay;
+        box-shadow: $shadow-raised;
         z-index: 1000;
         overflow: hidden;
         display: flex;
@@ -66,26 +67,26 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 12px 14px;
+        padding: $space-3 $space-4;
         border-bottom: 1px solid $border-subtle;
     }
 
     &__heading {
-        font-weight: 600;
-        font-size: 14px;
+        font-weight: $font-weight-semibold;
+        font-size: $text-base;
         color: $text-primary;
     }
 
     &__markall {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         border: none;
         background: none;
         cursor: pointer;
         color: $accent-primary;
-        font-size: 12px;
-        font-weight: 500;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
 
         &:hover { text-decoration: underline; }
     }
@@ -96,17 +97,17 @@
     }
 
     &__empty {
-        padding: 28px 14px;
+        padding: $space-8 $space-4;
         text-align: center;
         color: $text-secondary;
-        font-size: 13px;
+        font-size: $text-sm;
     }
 
     &__item {
         display: flex;
-        gap: 10px;
+        gap: $space-3;
         width: 100%;
-        padding: 11px 14px;
+        padding: $space-3 $space-4;
         border: none;
         background: none;
         cursor: pointer;
@@ -122,25 +123,25 @@
         flex: 0 0 auto;
         width: 8px;
         height: 8px;
-        margin-top: 6px;
+        margin-top: $space-tight;
         border-radius: 50%;
     }
 
     &__content {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 0;
     }
 
     &__title {
-        font-size: 13px;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
     &__text {
-        font-size: 12px;
+        font-size: $text-xs;
         color: $text-secondary;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -150,7 +151,7 @@
     }
 
     &__time {
-        font-size: 11px;
+        font-size: $text-xs;
         color: $text-secondary;
         opacity: 0.8;
     }
@@ -161,7 +162,7 @@
 
     &__hit {
         display: flex;
-        gap: 10px;
+        gap: $space-3;
         flex: 1;
         min-width: 0;
         padding: 0;
@@ -175,11 +176,11 @@
     &__dismiss {
         flex: 0 0 auto;
         align-self: flex-start;
-        margin-top: 2px;
-        padding: 2px;
+        margin-top: $space-hair;
+        padding: $space-hair;
         border: none;
         background: none;
-        border-radius: 6px;
+        border-radius: $radius-control;
         cursor: pointer;
         color: $text-secondary;
         line-height: 0;
@@ -188,13 +189,13 @@
     }
 
     &__seeall {
-        padding: 11px 14px;
+        padding: $space-3 $space-4;
         border: none;
         background: none;
         cursor: pointer;
         color: $accent-primary;
-        font-size: 13px;
-        font-weight: 500;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
         border-top: 1px solid $border-subtle;
 
         &:hover { background: $bg-hover; }
@@ -206,7 +207,7 @@
 .sidebar-footer__row {
     display: flex;
     align-items: stretch;
-    gap: 8px;
+    gap: $space-2;
 
     .user-mini {
         flex: 1;
@@ -221,7 +222,7 @@
     .sk-notif__bell {
         width: 38px;
         height: auto;
-        min-height: 34px;
+        min-height: $control-md;
         align-self: stretch;
     }
 }
@@ -232,10 +233,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: $control-md;
+    height: $control-md;
     border: 1px solid $border-subtle;
-    border-radius: 9px;
+    border-radius: $radius-control;
     background: $bg-card;
     color: $text-secondary;
     cursor: pointer;
@@ -253,10 +254,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: $control-sm;
+    height: $control-sm;
     border: none;
-    border-radius: 7px;
+    border-radius: $radius-control;
     background: transparent;
     color: var(--text-faint);
     cursor: pointer;
@@ -315,7 +316,7 @@
     [data-layout="rail"] .sidebar:not(:hover):not(:focus-within) .sidebar-footer__row {
         flex-direction: column;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
 
         .user-mini {
             flex: 0 0 auto;
@@ -323,8 +324,8 @@
         }
 
         .sk-notif__bell {
-            width: 34px;
-            min-height: 34px;
+            width: $control-md;
+            min-height: $control-md;
             align-self: center;
         }
     }

@@ -45,7 +45,7 @@ class GitDeployService:
         # code and rebuilds/restarts containers, so a tombstone must not deploy.
         app = Application.query_active().filter_by(id=app_id).first()
         if not app:
-            return {'success': False, 'error': 'Application not found'}
+            return {'success': False, 'error': 'Service not found'}
 
         webhook = GitWebhook.query.get(webhook_id) if webhook_id else None
 
@@ -187,7 +187,7 @@ class GitDeployService:
 
         app = Application.query_active().filter_by(id=app_id).first()
         if not app:
-            return {'success': False, 'error': 'Application not found'}
+            return {'success': False, 'error': 'Service not found'}
 
         # Get current deployment
         current = GitDeployment.query.filter_by(app_id=app_id, status='success')\
@@ -324,7 +324,7 @@ class GitDeployService:
 
         app = Application.query_active().filter_by(id=app_id).first()
         if not app:
-            return {'success': False, 'error': 'Application not found'}
+            return {'success': False, 'error': 'Service not found'}
 
         # Find webhook for this app to get settings
         webhook = GitWebhook.query.filter_by(app_id=app_id, is_active=True).first()

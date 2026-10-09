@@ -14,6 +14,7 @@ import {
     PlayIcon,
     TrashIcon,
 } from './serverDetailShared';
+import { toastError } from '@/utils/errorMessage';
 
 // The /servers/<id>/docker/* endpoints return raw arrays from Flask
 // (route extracts result.get('data') before jsonify). The agent envelope's
@@ -75,7 +76,7 @@ const IMAGE_COLUMNS = [
     {
         key: 'id',
         headerKey: 'app.serverDockerTab.imageId', header: 'Image ID',
-        cellClassName: 'mono',
+        cellClassName: 'sk-cell-mono',
         render: (image) => image.id?.substring(0, 12),
     },
     {
@@ -167,14 +168,20 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
                 await api.restartRemoteContainer(serverId, containerId);
                 toast.success(t('app.serverDockerTab.containerRestarted', 'Container restarted'));
             } else if (action === 'remove') {
-                const removeConfirmed = await confirmDocker({ titleKey: 'app.serverDockerTab.removeContainer', title: 'Remove Container', messageKey: 'app.serverDockerTab.removeThisContainer', message: 'Remove this container?' });
+                const removeConfirmed = await confirmDocker({ titleKey: 'app.serverDockerTab.removeContainer', title: 'Delete container', messageKey: 'app.serverDockerTab.removeThisContainer', message: 'Delete this container?', confirmText: t('common.actions.delete', 'Delete') });
                 if (!removeConfirmed) return;
                 await api.removeRemoteContainer(serverId, containerId, true);
-                toast.success(t('app.serverDockerTab.containerRemoved', 'Container removed'));
+                toast.success(t('app.serverDockerTab.containerRemoved', 'Container deleted'));
             }
             loadDockerData();
         } catch (err) {
-            toast.error(err.message || t('app.serverDockerTab.failedToContainer', 'Failed to {{action}} container', { action: action }));
+            const failed = {
+                start: t('app.serverDockerTab.couldntStartContainer', "Couldn't start the container."),
+                stop: t('app.serverDockerTab.couldntStopContainer', "Couldn't stop the container."),
+                restart: t('app.serverDockerTab.couldntRestartContainer', "Couldn't restart the container."),
+                remove: t('app.serverDockerTab.couldntDeleteContainer', "Couldn't delete the container."),
+            };
+            toastError(toast, failed[action] || t('app.serverDockerTab.couldntUpdateContainer', "Couldn't update the container."), err);
         }
     }
 
@@ -182,7 +189,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
         return (
             <div className="offline-notice">
                 <OfflineIcon />
-                <h4>{t('app.serverDockerTab.serverOffline', 'Server Offline')}</h4>
+                <h4>{t('app.serverDockerTab.serverOffline', 'Server offline')}</h4>
                 <p>{t('app.serverDockerTab.dockerManagementRequiresTheServerTo', 'Docker management requires the server to be online.')}</p>
             </div>
         );
@@ -277,7 +284,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
                         <Button variant="unstyled" type="button"
                             className="btn-icon danger"
                             onClick={() => handleContainerAction(container.id, 'remove')}
-                            title={t('common.actions.remove', 'Remove')}
+                            title={t('common.actions.delete', 'Delete')}
                         >
                             <TrashIcon />
                         </Button>
@@ -291,7 +298,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
         <div className="docker-tab">
             {loadError && (
                 <div className="docker-tab__error">
-                    <strong>{t('app.serverDockerTab.couldnTLoadDockerData', 'Couldn\'t load Docker data:')}</strong> {loadError}
+                    <strong>{t('app.serverDockerTab.couldnTLoadDockerData', "Couldn't load Docker data.")}</strong> {loadError}
                     <Button size="sm" variant="outline" onClick={loadDockerData}>{t('common.actions.retry', 'Retry')}</Button>
                 </div>
             )}
@@ -320,7 +327,8 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
                             data={containers}
                             keyField="id"
                             storageKey="serverkit-table-sd-docker-containers"
-                            tableClassName="data-table"
+                            // .docker-tab is the frame; the table runs flush in it.
+                            className="data-table sk-dtable-wrap--flush"
                             footer={(
                                 <DataTableFooter
                                     shown={containers.length}
@@ -343,7 +351,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
                             data={images}
                             keyField="id"
                             storageKey="serverkit-table-sd-docker-images"
-                            tableClassName="data-table"
+                            className="sk-dtable-wrap--flush"
                             footer={(
                                 <DataTableFooter
                                     shown={images.length}

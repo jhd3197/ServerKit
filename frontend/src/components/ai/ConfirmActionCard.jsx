@@ -47,7 +47,7 @@ const ConfirmActionCard = () => {
                     className="sk-ai-btn sk-ai-btn--danger"
                     onClick={() => confirmAction('approve')}
                 >
-                    {t('app.confirmActionCard.approveRun', 'Approve & run')}
+                    {t('app.confirmActionCard.approveRun', 'Approve and run')}
                 </SharedButton>
             </div>
         </div>

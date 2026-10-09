@@ -3,9 +3,9 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/useAuth.js';
 import { useTheme } from '../contexts/useTheme.js';
 import { useLayout } from '../contexts/useLayout.js';
-import { Star, Settings, LogOut, Sun, Moon, Monitor, ChevronRight, ChevronUp, Layers, Palette, PanelLeft, PanelLeftClose, PanelTop, Check, X, Server } from 'lucide-react';
+import { Star, Settings, LogOut, Sun, Moon, Monitor, ChevronRight, ChevronUp, Layers, Palette, PanelLeft, PanelLeftClose, PanelTop, X, Server } from 'lucide-react';
 import { api } from '../services/api';
-import { SIDEBAR_CATEGORIES, SIDEBAR_CATEGORY_LABELS, SIDEBAR_PRESETS, getHiddenItemIds, getVisibleItems, applyWorkspaceNavPermissions } from './sidebarItems';
+import { SIDEBAR_CATEGORIES, SIDEBAR_CATEGORY_LABELS, getHiddenItemIds, getVisibleItems, applyWorkspaceNavPermissions } from './sidebarItems';
 import { useTranslation } from 'react-i18next';
 import useLabel from '../i18n/labels';
 import { useContributions } from '../plugins/contributions';
@@ -20,7 +20,7 @@ import { Button as SharedButton } from '@/components/ui/button';
 const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {} }) => {
     const { t } = useTranslation();
     const label = useLabel();
-    const { user, logout, updateUser, hasPermission } = useAuth();
+    const { user, logout, hasPermission } = useAuth();
     const { theme, setTheme, whiteLabel } = useTheme();
     const { layout, setLayout } = useLayout();
     const { activeWorkspace } = useWorkspace();
@@ -149,7 +149,6 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
     const { hiddenSidebarIds: managedHidden } = useManagedProfile();
 
     const conditions = { wpInstalled, gpuAvailable, wordpressEnabled, devMode };
-    const currentPreset = user?.sidebar_config?.preset || 'recommended';
     const [manualExpanded, setManualExpanded] = useState({});
     const [autoExpanded, setAutoExpanded] = useState(null);
     const location = useLocation();
@@ -157,14 +156,6 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
     const toggleExpand = (itemId) => {
         const currentlyExpanded = manualExpanded[itemId] ?? (autoExpanded === itemId);
         setManualExpanded(prev => ({ ...prev, [itemId]: !currentlyExpanded }));
-    };
-
-    const handlePresetSwitch = (presetKey) => {
-        if (presetKey === currentPreset) return;
-        const config = { preset: presetKey, hiddenItems: [] };
-        // Update locally first (instant), persist to backend in background
-        updateUser({ sidebar_config: config });
-        api.updateCurrentUser({ sidebar_config: config }).catch(() => {});
     };
 
     const visibleItems = useMemo(() => {
@@ -340,7 +331,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                         </div>
                     ) : whiteLabel.mode === 'text_only' ? (
                         <span className="brand-custom-text">
-                            {whiteLabel.brandName || 'Brand'}
+                            {whiteLabel.brandName || t('nav.brandFallback', 'Brand')}
                         </span>
                     ) : (
                         <>
@@ -352,7 +343,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                                 )}
                             </div>
                             <span className="brand-custom-text">
-                                {whiteLabel.brandName || 'Brand'}
+                                {whiteLabel.brandName || t('nav.brandFallback', 'Brand')}
                             </span>
                             </>
                         )}
@@ -395,7 +386,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
 
             {devMode && (
                 <>
-                    <div className="nav-category nav-category--dev">{t('nav.devTools', 'Dev Tools')}</div>
+                    <div className="nav-category nav-category--dev">{t('nav.devTools', 'Dev tools')}</div>
                     <nav className="nav">
                         {import.meta.env.DEV && (
                             <>
@@ -408,7 +399,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                                         <line x1="8" y1="2" x2="8" y2="18"/>
                                         <line x1="16" y1="6" x2="16" y2="22"/>
                                     </svg>
-                                    {t('nav.appMap', 'App Map')}
+                                    {t('nav.appMap', 'App map')}
                                 </NavLink>
                                 <NavLink
                                     to="/documentation"
@@ -427,7 +418,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                                     <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                         <circle cx="13.5" cy="6.5" r="2.5"/><path d="M17 2H7a5 5 0 0 0-5 5v10a5 5 0 0 0 5 5h10a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5z"/><path d="M9.5 14.5l-3 3"/><path d="M14.5 9.5l3-3"/>
                                     </svg>
-                                    {t('nav.styleGuide', 'Style Guide')}
+                                    {t('nav.styleGuide', 'Style guide')}
                                 </NavLink>
                             </>
                         )}
@@ -442,7 +433,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                             <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>
                             </svg>
-                            {t('nav.testSandbox', 'Test Sandbox')}
+                            {t('nav.testSandbox', 'Test sandbox')}
                         </NavLink>
                     </nav>
                 </>
@@ -450,7 +441,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
 
             <div className="sidebar-footer" ref={menuRef}>
                 {menuOpen && (
-                    <div className="user-context-menu" id="user-context-menu" aria-label={t('nav.accountMenu', 'Account and preferences')}>
+                    <div className="user-context-menu" id="user-context-menu" aria-label={t('nav.accountMenu', 'Account and settings')}>
                         <div className="context-menu-section">
                             <div className="context-menu-label" id="theme-switcher-label">{t('nav.theme', 'Theme')}</div>
                             <div className="theme-switcher" role="group" aria-labelledby="theme-switcher-label">
@@ -521,24 +512,6 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                                 </SharedButton>
                             </div>
                         </div>
-                        <div className="context-menu-section">
-                            <div className="context-menu-label" id="sidebar-view-label">{t('nav.sidebarView', 'Sidebar View')}</div>
-                            <div className="view-switcher" role="group" aria-labelledby="sidebar-view-label">
-                                {Object.entries(SIDEBAR_PRESETS).map(([key, preset]) => (
-                                    <SharedButton variant="unstyled"
-                                        key={key}
-                                        type="button"
-                                        className={`view-btn ${currentPreset === key ? 'active' : ''}`}
-                                        onClick={() => handlePresetSwitch(key)}
-                                        aria-pressed={currentPreset === key}
-                                        title={label(preset, 'description')}
-                                    >
-                                        {label(preset)}
-                                        {currentPreset === key && <Check size={10} aria-hidden="true" />}
-                                    </SharedButton>
-                                ))}
-                            </div>
-                        </div>
                         <div className="context-menu-divider" />
                         <SharedButton variant="unstyled"
                             type="button"
@@ -555,7 +528,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                             onClick={() => { navigate('/settings/sidebar'); setMenuOpen(false); }}
                         >
                             <PanelLeft size={15} aria-hidden="true" />
-                            {t('nav.customizeSidebar', 'Customize Sidebar')}
+                            {t('nav.customizeSidebar', 'Customize sidebar')}
                             <ChevronRight size={14} className="context-menu-arrow" aria-hidden="true" />
                         </SharedButton>
                         <SharedButton variant="unstyled"
@@ -564,13 +537,13 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                             onClick={() => { navigate('/settings'); setMenuOpen(false); }}
                         >
                             <Settings size={15} aria-hidden="true" />
-                            {t('nav.allSettings', 'All Settings')}
+                            {t('nav.allSettings', 'All settings')}
                             <ChevronRight size={14} className="context-menu-arrow" aria-hidden="true" />
                         </SharedButton>
                         <div className="context-menu-divider" />
                         <SharedButton variant="unstyled" type="button" className="context-menu-item danger" onClick={logout}>
                             <LogOut size={15} aria-hidden="true" />
-                            {t('common.actions.logOut', 'Log out')}
+                            {t('common.actions.logOut', 'Sign out')}
                         </SharedButton>
                     </div>
                 )}
@@ -587,7 +560,7 @@ const Sidebar = ({ mobileOpen = false, isMobile = false, onMobileClose = () => {
                             {user?.username?.charAt(0).toUpperCase() || 'U'}
                         </span>
                         <span className="user-meta">
-                            <span className="user-handle">{user?.username || 'User'}</span>
+                            <span className="user-handle">{user?.username || t('nav.userFallback', 'User')}</span>
                             <span className="user-status">{t('nav.online', 'Online')}</span>
                         </span>
                         <ChevronUp size={14} className={`user-menu-arrow ${menuOpen ? 'open' : ''}`} aria-hidden="true" />

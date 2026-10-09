@@ -2,11 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { ShieldCheck, ListChecks, X, RefreshCw } from 'lucide-react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
-import { Pill, SegControl } from '../ds';
+import { DataTable, Pill, SegControl } from '../ds';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
+import { translateLabel } from '@/i18n/labels';
 
 // WAF modes with one-line descriptions shown under the selector.
 const MODE_OPTIONS = [
@@ -16,7 +18,7 @@ const MODE_OPTIONS = [
 ];
 
 const MODE_HINTS = {
-    off: 'ModSecurity is disabled for this app — no rules are evaluated.',
+    off: 'ModSecurity is disabled for this service. No rules are evaluated.',
     detect: 'Rules are evaluated and matches are logged, but requests are never blocked.',
     block: 'Malicious requests that exceed the anomaly threshold are rejected.',
 };
@@ -43,6 +45,47 @@ function severityKind(severity) {
     if (!severity) return 'gray';
     return SEVERITY_PILL[String(severity).toLowerCase()] || 'gray';
 }
+
+// Recent WAF events. Read-only log rows: no sorting, no column menu.
+const WAF_EVENT_COLUMNS = [
+    {
+        key: 'rule_id',
+        headerKey: 'app.appWafPanel.ruleId', header: 'Rule ID',
+        cellClassName: 'sk-cell-mono',
+        render: (ev) => ev.rule_id ?? '—',
+    },
+    {
+        key: 'severity',
+        headerKey: 'common.labels.severity', header: 'Severity',
+        render: (ev) => (ev.severity
+            ? <Pill kind={severityKind(ev.severity)}>{ev.severity}</Pill>
+            : '—'),
+    },
+    {
+        key: 'message',
+        headerKey: 'app.appWafPanel.message', header: 'Message',
+        cellClassName: 'waf-panel__msg',
+        render: (ev) => ev.message || '—',
+    },
+    {
+        key: 'uri',
+        header: 'URI',
+        cellClassName: 'sk-cell-mono waf-panel__uri',
+        render: (ev) => ev.uri || '—',
+    },
+    {
+        key: 'client',
+        headerKey: 'app.appWafPanel.client', header: 'Client',
+        cellClassName: 'sk-cell-mono',
+        render: (ev) => ev.client_ip || ev.client || '—',
+    },
+    {
+        key: 'time',
+        headerKey: 'common.labels.time', header: 'Time',
+        cellClassName: 'sk-cell-dim waf-panel__time',
+        render: (ev) => (ev.timestamp ? new Date(ev.timestamp).toLocaleString() : '—'),
+    },
+];
 
 const DEFAULT_POLICY = {
     mode: 'off',
@@ -124,13 +167,13 @@ const AppWafPanel = ({ app, onChanged }) => {
         try {
             const result = await api.installWaf();
             if (result?.success === false) {
-                toast.error(result.message || result.error || t('app.appWafPanel.failedToInstallModsecurity', 'Failed to install ModSecurity'));
+                toastError(toast, t('app.appWafPanel.failedToInstallModsecurity', "Couldn't install ModSecurity."), result);
             } else {
-                toast.success(result?.message || t('app.appWafPanel.modsecurityInstalled', 'ModSecurity installed.'));
+                toast.success(result?.message || t('app.appWafPanel.modsecurityInstalled', 'ModSecurity installed'));
             }
             await loadStatus();
         } catch (err) {
-            toast.error(err.message || t('app.appWafPanel.failedToInstallModsecurity', 'Failed to install ModSecurity'));
+            toastError(toast, t('app.appWafPanel.failedToInstallModsecurity', "Couldn't install ModSecurity."), err);
         } finally {
             setInstalling(false);
         }
@@ -181,10 +224,10 @@ const AppWafPanel = ({ app, onChanged }) => {
                     : payload.disabled_rule_ids;
                 setPolicy(merged);
             }
-            toast.success(t('app.appWafPanel.wafPolicySaved', 'WAF policy saved.'));
+            toast.success(t('app.appWafPanel.wafPolicySaved', 'WAF policy saved'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.appWafPanel.failedToSaveWafPolicy', 'Failed to save WAF policy'));
+            toastError(toast, t('app.appWafPanel.failedToSaveWafPolicy', "Couldn't save the WAF policy."), err);
         } finally {
             setSaving(false);
         }
@@ -195,7 +238,7 @@ const AppWafPanel = ({ app, onChanged }) => {
         try {
             const result = await api.applyWaf(app.id);
             if (result?.success === false) {
-                toast.error(result.message || result.error || t('app.appWafPanel.failedToApplyWafRules', 'Failed to apply WAF rules'));
+                toastError(toast, t('app.appWafPanel.failedToApplyWafRules', "Couldn't apply the WAF rules."), result);
             } else if (result?.manual_include) {
                 toast.warning(
                     t('app.appWafPanel.rulesWrittenButNoVhostWas', 'Rules written, but no vhost was found. Include it manually: {{manualinclude}}', { manualinclude: result.manual_include }),
@@ -205,7 +248,7 @@ const AppWafPanel = ({ app, onChanged }) => {
                 toast.success(result?.message || t('app.appWafPanel.wafRulesAppliedAndNginxReloaded', 'WAF rules applied and nginx reloaded.'));
             }
         } catch (err) {
-            toast.error(err.message || t('app.appWafPanel.failedToApplyWafRules', 'Failed to apply WAF rules'));
+            toastError(toast, t('app.appWafPanel.failedToApplyWafRules', "Couldn't apply the WAF rules."), err);
         } finally {
             setApplying(false);
         }
@@ -222,11 +265,11 @@ const AppWafPanel = ({ app, onChanged }) => {
                     <div className="waf-panel__banner-text">
                         <strong>{t('app.appWafPanel.modsecurityIsNotInstalledOnThis', 'ModSecurity is not installed on this server')}</strong>
                         <span>
-                            {t('app.appWafPanel.installModsecurityAndTheOwaspCore', 'Install ModSecurity and the OWASP Core Rule Set to enable the web application firewall for this app.')}
+                            {t('app.appWafPanel.installModsecurityAndTheOwaspCore', 'Install ModSecurity and the OWASP Core Rule Set to enable the web application firewall for this service.')}
                         </span>
                     </div>
                     <Button size="sm" onClick={handleInstall} disabled={installing}>
-                        {installing ? 'Installing…' : 'Install'}
+                        {installing ? t('app.appWafPanel.installing', 'Installing…') : t('app.appWafPanel.install', 'Install')}
                     </Button>
                 </div>
             )}
@@ -235,18 +278,18 @@ const AppWafPanel = ({ app, onChanged }) => {
             <div className="app-panel waf-panel__section">
                 <div className="app-panel-header">
                     <ShieldCheck />
-                    <span>{t('app.appWafPanel.firewallPolicy', 'Firewall Policy')}</span>
+                    <span>{t('app.appWafPanel.firewallPolicy', 'Firewall policy')}</span>
                     <span className="app-panel-header-actions">
                         {!loading && (
                             <Pill kind={MODE_PILL[policy.mode] || 'gray'}>
-                                {MODE_OPTIONS.find((m) => m.value === policy.mode)?.label || 'Off'}
+                                {translateLabel(t, MODE_OPTIONS.find((m) => m.value === policy.mode) || MODE_OPTIONS[0])}
                             </Pill>
                         )}
                     </span>
                 </div>
                 <div className="app-panel-body">
                     <p className="app-panel-hint">
-                        {t('app.appWafPanel.modsecurityWithTheOwaspCoreRule', 'ModSecurity with the OWASP Core Rule Set inspects incoming requests for common attacks (SQL injection, XSS, and more) before they reach this app.')}
+                        {t('app.appWafPanel.modsecurityWithTheOwaspCoreRule', 'ModSecurity with the OWASP Core Rule Set inspects incoming requests for common attacks (SQL injection, XSS, and more) before they reach this service.')}
                     </p>
 
                     <div className="waf-panel__mode">
@@ -288,7 +331,7 @@ const AppWafPanel = ({ app, onChanged }) => {
                     <div className="waf-panel__rules">
                         <Label htmlFor={`waf-rule-${app.id}`}>{t('app.appWafPanel.disabledCrsRuleIds', 'Disabled CRS rule IDs')}</Label>
                         <span className="container-ops__field-hint">
-                            {t('app.appWafPanel.suppressSpecificCoreRuleSetRules', 'Suppress specific Core Rule Set rules that cause false positives for this app.')}
+                            {t('app.appWafPanel.suppressSpecificCoreRuleSetRules', 'Suppress specific Core Rule Set rules that cause false positives for this service.')}
                         </span>
                         <div className="waf-panel__rules-input">
                             <Input
@@ -332,10 +375,10 @@ const AppWafPanel = ({ app, onChanged }) => {
 
                     <div className="app-detail-actions container-ops__actions">
                         <Button size="sm" onClick={handleSave} disabled={saving || loading}>
-                            {saving ? 'Saving…' : 'Save policy'}
+                            {saving ? t('common.saving', 'Saving…') : t('app.appWafPanel.savePolicy', 'Save policy')}
                         </Button>
                         <Button variant="outline" size="sm" onClick={handleApply} disabled={applying || loading}>
-                            {applying ? 'Applying…' : 'Re-apply'}
+                            {applying ? t('app.appWafPanel.applying', 'Applying…') : t('app.appWafPanel.reapply', 'Re-apply')}
                         </Button>
                     </div>
                 </div>
@@ -349,50 +392,25 @@ const AppWafPanel = ({ app, onChanged }) => {
                     <span className="app-panel-header-actions">
                         <Button variant="ghost" size="sm" onClick={loadEvents} disabled={eventsLoading}>
                             <RefreshCw size={14} />
-                            {eventsLoading ? 'Loading…' : 'Refresh'}
+                            {eventsLoading ? t('common.loading', 'Loading…') : t('common.actions.refresh', 'Refresh')}
                         </Button>
                     </span>
                 </div>
-                <div className="app-panel-body">
-                    {events.length > 0 ? (
-                        <div className="waf-panel__table-wrap">
-                            <table className="waf-panel__table">
-                                <thead>
-                                    <tr>
-                                        <th>{t('app.appWafPanel.ruleId', 'Rule ID')}</th>
-                                        <th>{t('common.labels.severity', 'Severity')}</th>
-                                        <th>{t('app.appWafPanel.message', 'Message')}</th>
-                                        <th>URI</th>
-                                        <th>{t('app.appWafPanel.client', 'Client')}</th>
-                                        <th>{t('common.labels.time', 'Time')}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {events.map((ev, i) => (
-                                        <tr key={ev.id ?? `${ev.rule_id ?? 'rule'}-${i}`}>
-                                            <td className="mono">{ev.rule_id ?? '—'}</td>
-                                            <td>
-                                                {ev.severity ? (
-                                                    <Pill kind={severityKind(ev.severity)}>{ev.severity}</Pill>
-                                                ) : '—'}
-                                            </td>
-                                            <td className="waf-panel__msg">{ev.message || '—'}</td>
-                                            <td className="mono waf-panel__uri">{ev.uri || '—'}</td>
-                                            <td className="mono">{ev.client_ip || ev.client || '—'}</td>
-                                            <td className="waf-panel__time">
-                                                {ev.timestamp ? new Date(ev.timestamp).toLocaleString() : '—'}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    ) : (
+                {events.length > 0 ? (
+                    <DataTable
+                        columns={WAF_EVENT_COLUMNS}
+                        data={events.map((ev, i) => ({ ...ev, __idx: i }))}
+                        keyField={(ev) => ev.id ?? `${ev.rule_id ?? 'rule'}-${ev.__idx}`}
+                        sortable={false}
+                        columnMenu={false}
+                    />
+                ) : (
+                    <div className="app-panel-body">
                         <p className="app-panel-hint">
-                            {eventsLoading ? 'Loading events…' : 'No WAF events recorded.'}
+                            {eventsLoading ? t('app.appWafPanel.loadingEvents', 'Loading events…') : t('app.appWafPanel.noWafEventsRecorded', 'No WAF events recorded.')}
                         </p>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     );

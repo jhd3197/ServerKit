@@ -2,15 +2,15 @@ import { useState } from 'react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
-import { useClipboard } from '../hooks/useClipboard';
+import CopyField from './CopyField';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { toastError } from '@/utils/errorMessage';
 
 const PrivateURLSection = ({ app, onUpdate }) => {
     const { t } = useTranslation();
     const toast = useToast();
     const { confirm } = useConfirm();
-    const { copy } = useClipboard({ successMessage: 'URL copied to clipboard' });
     const [loading, setLoading] = useState(false);
     const [customSlug, setCustomSlug] = useState('');
     const [editMode, setEditMode] = useState(false);
@@ -27,7 +27,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             onUpdate();
             setCustomSlug('');
         } catch (error) {
-            toast.error(error.message || t('app.privateURLSection.failedToEnablePrivateUrl', 'Failed to enable private URL'));
+            toastError(toast, t('app.privateURLSection.failedToEnablePrivateUrl', "Couldn't turn on the private URL."), error);
         } finally {
             setLoading(false);
         }
@@ -46,7 +46,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             toast.success(t('app.privateURLSection.privateUrlDisabled', 'Private URL disabled'));
             onUpdate();
         } catch (error) {
-            toast.error(error.message || t('app.privateURLSection.failedToDisablePrivateUrl', 'Failed to disable private URL'));
+            toastError(toast, t('app.privateURLSection.failedToDisablePrivateUrl', "Couldn't turn off the private URL."), error);
         } finally {
             setLoading(false);
         }
@@ -65,7 +65,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             toast.success(t('app.privateURLSection.privateUrlRegenerated', 'Private URL regenerated'));
             onUpdate();
         } catch (error) {
-            toast.error(error.message || t('app.privateURLSection.failedToRegenerate', 'Failed to regenerate'));
+            toastError(toast, t('app.privateURLSection.failedToRegenerate', "Couldn't regenerate the URL."), error);
         } finally {
             setLoading(false);
         }
@@ -83,14 +83,10 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             setEditMode(false);
             setCustomSlug('');
         } catch (error) {
-            toast.error(error.message || t('app.privateURLSection.failedToUpdateSlug', 'Failed to update slug'));
+            toastError(toast, t('app.privateURLSection.failedToUpdateSlug', "Couldn't update the slug."), error);
         } finally {
             setLoading(false);
         }
-    }
-
-    function copyToClipboard() {
-        copy(privateUrl);
     }
 
     function handleSlugInput(e) {
@@ -114,7 +110,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
             {!app.private_url_enabled ? (
                 <div className="private-url-disabled">
                     <p className="hint">
-                        {t('app.privateURLSection.enableAPrivateShareableUrlFor', 'Enable a private, shareable URL for this application. Private URLs are not publicly indexed and can be shared with specific people.')}
+                        {t('app.privateURLSection.enableAPrivateShareableUrlFor', 'Enable a private, shareable URL for this service. Private URLs are not publicly indexed and can be shared with specific people.')}
                     </p>
                     <form onSubmit={handleEnable} className="private-url-form">
                         <div className="input-group">
@@ -134,7 +130,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
                             className="btn btn-primary"
                             disabled={loading}
                         >
-                            {loading ? 'Enabling...' : 'Enable Private URL'}
+                            {loading ? t('app.privateURLSection.enabling', 'Enabling…') : t('app.privateURLSection.enablePrivateUrl', 'Enable private URL')}
                         </SharedButton>
                     </form>
                     <p className="slug-hint">
@@ -145,21 +141,9 @@ const PrivateURLSection = ({ app, onUpdate }) => {
                 <div className="private-url-enabled">
                     <div className="private-url-display">
                         <div className="url-box">
-                            <span className="url-label">{t('app.privateURLSection.yourPrivateUrl', 'Your private URL:')}</span>
-                            <code className="url-value">{privateUrl}</code>
+                            <CopyField label={t('app.privateURLSection.yourPrivateUrl', 'Your private URL:')} value={privateUrl} />
                         </div>
                         <div className="url-actions">
-                            <SharedButton variant="outline" type="button"
-                                className="btn btn-secondary btn-sm"
-                                onClick={copyToClipboard}
-                                title={t('app.privateURLSection.copyToClipboard', 'Copy to clipboard')}
-                            >
-                                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" strokeWidth="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                                </svg>
-                                {t('common.actions.copy', 'Copy')}
-                            </SharedButton>
                             <SharedButton variant="outline" type="button"
                                 className="btn btn-secondary btn-sm"
                                 onClick={handleRegenerate}
@@ -224,7 +208,7 @@ const PrivateURLSection = ({ app, onUpdate }) => {
                             onClick={handleDisable}
                             disabled={loading}
                         >
-                            {t('app.privateURLSection.disablePrivateUrl3', 'Disable Private URL')}
+                            {t('app.privateURLSection.disablePrivateUrl3', 'Disable private URL')}
                         </SharedButton>
                     </div>
                 </div>

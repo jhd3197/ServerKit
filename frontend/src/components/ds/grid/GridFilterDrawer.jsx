@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Filter, Layers, X, Plus, History, ChevronDown, GripVertical } from 'lucide-react';
+import { Filter, Layers, X, Plus, History, GripVertical } from 'lucide-react';
 import { Drawer } from '../Drawer';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import {
@@ -51,17 +52,18 @@ export function GridFilterDrawer({
         if (!column) return null;
         if (column.type === 'bool') {
             return (
-                <div className="sk-gridrule__sel">
-                    <select
-                        value={String(rule.value)}
-                        onChange={(e) => patchRule(rule.id, { value: e.target.value === 'true' })}
-                        aria-label={t('common.labels.value', 'Value')}
-                    >
-                        <option value="true">On</option>
-                        <option value="false">{t('app.gridFilterDrawer.off', 'Off')}</option>
-                    </select>
-                    <ChevronDown size={13} />
-                </div>
+                <Select
+                    value={String(rule.value)}
+                    onValueChange={(v) => patchRule(rule.id, { value: v === 'true' })}
+                >
+                    <SelectTrigger size="sm" className="sk-gridrule__sel" aria-label={t('common.labels.value', 'Value')}>
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="true">On</SelectItem>
+                        <SelectItem value="false">{t('app.gridFilterDrawer.off', 'Off')}</SelectItem>
+                    </SelectContent>
+                </Select>
             );
         }
         if (column.type === 'enum') {
@@ -101,8 +103,8 @@ export function GridFilterDrawer({
         <Drawer
             open={open}
             onOpenChange={onOpenChange}
-            title={t('app.gridFilterDrawer.filtersFields', 'Filters & fields')}
-            subtitle={t('app.gridFilterDrawer.conditionFieldsShown', '{{length}} condition{{value}} · {{length2}} fields shown', { length: rules.length, value: rules.length === 1 ? '' : 's', length2: cfg.cols.length })}
+            title={t('app.gridFilterDrawer.filtersFields', 'Filters and fields')}
+            subtitle={`${t('app.gridFilterDrawer.conditions', { count: rules.length, defaultValue_one: '1 condition', defaultValue_other: '{{count}} conditions' })} · ${t('app.gridFilterDrawer.fieldsShown', { count: cfg.cols.length, defaultValue_one: '1 field shown', defaultValue_other: '{{count}} fields shown' })}`}
             icon={<Filter size={18} />}
             iconColor="var(--accent-bright)"
             width={470}
@@ -152,7 +154,7 @@ export function GridFilterDrawer({
 
                         {rules.length === 0 && (
                             <div className="sk-gridsec__none">
-                                {t('app.gridFilterDrawer.noConditionsThisViewShowsEvery', 'No conditions — this view shows every')} {noun.replace(/s$/, '')}.
+                                {t('app.gridFilterDrawer.noConditionsThisViewShowsEvery', 'No conditions. This view shows every')} {noun.replace(/s$/, '')}.
                             </div>
                         )}
 
@@ -171,37 +173,39 @@ export function GridFilterDrawer({
                                         </div>
                                     )}
                                     <div className="sk-gridrule">
-                                        <div className="sk-gridrule__sel">
-                                            <select
-                                                value={rule.field}
-                                                aria-label={t('app.gridFilterDrawer.field', 'Field')}
-                                                onChange={(e) => {
-                                                    const next = map.get(e.target.value);
-                                                    patchRule(rule.id, {
-                                                        field: next.key,
-                                                        op: OPS[next.type][0][0],
-                                                        value: emptyValueFor(next.type),
-                                                    });
-                                                }}
-                                            >
+                                        <Select
+                                            value={rule.field}
+                                            onValueChange={(key) => {
+                                                const next = map.get(key);
+                                                patchRule(rule.id, {
+                                                    field: next.key,
+                                                    op: OPS[next.type][0][0],
+                                                    value: emptyValueFor(next.type),
+                                                });
+                                            }}
+                                        >
+                                            <SelectTrigger size="sm" className="sk-gridrule__sel" aria-label={t('app.gridFilterDrawer.field', 'Field')}>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
                                                 {filterable.map((c) => (
-                                                    <option key={c.key} value={c.key}>{columnLabel(c)}</option>
+                                                    <SelectItem key={c.key} value={c.key}>{columnLabel(c)}</SelectItem>
                                                 ))}
-                                            </select>
-                                            <ChevronDown size={13} />
-                                        </div>
-                                        <div className="sk-gridrule__sel">
-                                            <select
-                                                value={rule.op}
-                                                aria-label={t('app.gridFilterDrawer.operator', 'Operator')}
-                                                onChange={(e) => patchRule(rule.id, { op: e.target.value })}
-                                            >
+                                            </SelectContent>
+                                        </Select>
+                                        <Select
+                                            value={rule.op}
+                                            onValueChange={(op) => patchRule(rule.id, { op })}
+                                        >
+                                            <SelectTrigger size="sm" className="sk-gridrule__sel" aria-label={t('app.gridFilterDrawer.operator', 'Operator')}>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
                                                 {OPS[column.type].map(([op, text]) => (
-                                                    <option key={op} value={op}>{text}</option>
+                                                    <SelectItem key={op} value={op}>{text}</SelectItem>
                                                 ))}
-                                            </select>
-                                            <ChevronDown size={13} />
-                                        </div>
+                                            </SelectContent>
+                                        </Select>
                                         <Button variant="unstyled"
                                             type="button"
                                             className="sk-gridrule__del"

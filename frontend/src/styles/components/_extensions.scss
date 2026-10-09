@@ -13,11 +13,11 @@
     background: $bg-card;
     border: 1px solid $border-color;
     border-left: 3px solid $color-danger;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     &__icon {
         flex: 0 0 auto;
-        font-size: 1.5rem;
+        font-size: $text-xl;
         line-height: 1;
         color: $color-danger;
     }
@@ -28,8 +28,8 @@
 
     &__title {
         margin: 0 0 $spacing-xs;
-        font-size: 1.05rem;
-        font-weight: 600;
+        font-size: $text-md;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
     }
 
@@ -38,16 +38,15 @@
         color: $text-secondary;
 
         code {
-            padding: 0 4px;
+            padding: 0 $space-1;
             background: $bg-hover;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             font-size: 0.9em;
         }
     }
 
     &__reason {
         color: $text-primary;
-        font-family: $font-mono;
         font-size: 0.85em;
         word-break: break-word;
     }
@@ -55,6 +54,6 @@
     &__hint {
         margin: 0;
         color: $text-muted;
-        font-size: 0.85rem;
+        font-size: $text-sm;
     }
 }

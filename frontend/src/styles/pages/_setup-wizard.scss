@@ -7,6 +7,22 @@
     @include flex-center();
     padding: $space-5;
     background: $bg-body;
+
+    // Setup is the other screen (with sign-in) where controls default to the
+    // large size.
+    .btn:not(.btn-sm):not(.btn-link):not(.btn-icon),
+    .btn-wizard-next,
+    .btn-wizard-prev,
+    .ui-input,
+    .ui-select-trigger {
+        height: $control-lg;
+    }
+
+    .btn-wizard-next,
+    .btn-wizard-prev {
+        padding-block: 0;
+        border-radius: $radius-control;
+    }
 }
 
 .wizard-card {
@@ -14,7 +30,7 @@
     max-width: 700px;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-2xl;
+    border-radius: $radius-overlay;
     padding: $space-10;
 }
 
@@ -27,13 +43,13 @@
 
     .wizard-logo {
         width: 48px;
-        height: 48px;
+        height: 48px; // geometry: logo
         margin: 0 auto $space-4;
     }
 
     h1 {
-        font-size: $font-size-2xl;
-        font-weight: $font-weight-bold;
+        font-size: $text-xl;
+        font-weight: $font-weight-semibold;
         margin-bottom: $space-2;
     }
 
@@ -56,9 +72,9 @@
 .wizard-progress-step {
     @include flex-center();
     width: 32px;
-    height: 32px;
+    height: 32px; // geometry: stepper dot
     border-radius: $radius-full;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     border: 2px solid $border-default;
     color: $text-tertiary;
@@ -108,14 +124,14 @@
 }
 
 .wizard-step-title {
-    font-size: $font-size-lg;
+    font-size: $text-lg;
     font-weight: $font-weight-semibold;
     margin-bottom: $space-2;
 }
 
 .wizard-step-description {
     color: $text-secondary;
-    font-size: $font-size-base;
+    font-size: $text-base;
     margin-bottom: $space-6;
 }
 
@@ -140,7 +156,7 @@
     padding: $space-5;
     background: $bg-elevated;
     border: 2px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     cursor: pointer;
     @include transition();
     position: relative;
@@ -158,16 +174,16 @@
         @include icon-box(40px);
         background: $bg-secondary;
         color: $text-secondary;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     .option-card-label {
         font-weight: $font-weight-semibold;
-        font-size: $font-size-base;
+        font-size: $text-base;
     }
 
     .option-card-desc {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: $line-height-normal;
     }
@@ -177,7 +193,7 @@
         top: $space-3;
         right: $space-3;
         width: 22px;
-        height: 22px;
+        height: 22px; // geometry: check badge icon
         border-radius: $radius-full;
         @include flex-center();
         background: $accent-primary;
@@ -213,7 +229,7 @@
     padding: $space-5;
     background: $bg-elevated;
     border: 2px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     @include transition();
 
     &.detected {
@@ -229,21 +245,24 @@
     }
 
     .tier-card-name {
-        font-weight: $font-weight-bold;
-        font-size: $font-size-md;
+        font-weight: $font-weight-semibold;
+        font-size: $text-md;
     }
 
     .tier-card-badge {
-        font-size: $font-size-xs;
-        padding: 2px 8px;
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
+        font-size: $text-xs;
+        padding: 0 $space-tight;
         background: $accent-primary;
         color: #fff;
-        border-radius: $radius-full;
+        border-radius: $radius-badge;
         font-weight: $font-weight-medium;
     }
 
     .tier-card-specs {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         margin-bottom: $space-4;
         padding-bottom: $space-4;
@@ -261,7 +280,7 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         .feature-icon {
             flex-shrink: 0;
@@ -310,10 +329,10 @@
     margin-bottom: $space-5;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
 
     &__summary {
-        font-size: $font-size-lg;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         color: $text-primary;
         line-height: $line-height-tight;
@@ -331,7 +350,7 @@
     display: inline-flex;
     align-items: center;
     gap: $space-2;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 
     &--muted {
@@ -347,15 +366,15 @@
     padding: $space-4;
     background: $warning-bg;
     border: 1px solid $warning-border;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     margin-bottom: $space-6;
 
     code {
         font-family: $font-mono;
-        font-size: $font-size-xs;
-        padding: 1px 5px;
+        font-size: $text-xs;
+        padding: 1px $space-tight;
         background: $bg-tertiary;
-        border-radius: $radius-sm;
+        border-radius: $radius-badge;
     }
 
     .tier-warning-icon {
@@ -364,7 +383,7 @@
     }
 
     .tier-warning-text {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: $line-height-normal;
     }
@@ -381,7 +400,7 @@
     margin-bottom: $space-6;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
 
     &__icon {
         flex-shrink: 0;
@@ -394,7 +413,7 @@
     }
 
     &__desc {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: $line-height-normal;
         margin: 0;
@@ -409,7 +428,7 @@
     margin-bottom: $space-5;
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
 
     @media (max-width: $breakpoint-md) {
         flex-direction: column;
@@ -420,7 +439,7 @@
         flex-shrink: 0;
         width: 160px;
         height: 160px;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         // QR codes render as dark-on-transparent; a white plate keeps them
         // scannable in dark mode.
         background: #fff;
@@ -433,20 +452,9 @@
     }
 
     &__manual-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         margin-bottom: $space-2;
-    }
-
-    &__secret {
-        display: inline-block;
-        font-family: $font-mono;
-        font-size: $font-size-sm;
-        letter-spacing: 1px;
-        word-break: break-all;
-        padding: $space-2 $space-3;
-        background: $bg-tertiary;
-        border-radius: $radius-md;
     }
 
     &__verify {
@@ -455,30 +463,15 @@
 
     &__input {
         font-family: $font-mono;
-        font-size: $font-size-xl;
-        letter-spacing: 8px;
+        font-size: $text-lg;
         text-align: center;
         max-width: 220px;
     }
 }
 
 .security-codes {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: $space-2;
-    padding: $space-4;
-    margin-bottom: $space-4;
-    background: $bg-elevated;
-    border: 1px solid $border-default;
-    border-radius: $radius-xl;
-
-    &__item {
-        font-family: $font-mono;
-        font-size: $font-size-sm;
-        text-align: center;
-        padding: $space-2;
-        background: $bg-tertiary;
-        border-radius: $radius-md;
+    &__list {
+        margin-bottom: $space-4;
     }
 
     &__actions {
@@ -492,7 +485,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-2;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $success;
     }
 }
@@ -503,7 +496,7 @@
 .summary-panel {
     background: $bg-elevated;
     border: 1px solid $border-default;
-    border-radius: $radius-xl;
+    border-radius: $radius-overlay;
     padding: $space-6;
     margin-bottom: $space-6;
 }
@@ -517,11 +510,9 @@
 }
 
 .summary-section-title {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
     color: $text-tertiary;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     margin-bottom: $space-3;
 }
 
@@ -533,12 +524,12 @@
 
     .summary-label {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .summary-value {
         font-weight: $font-weight-medium;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     // Sidebar-profile row: label, item count, and the "Change" toggle that
@@ -561,7 +552,7 @@
     padding: 0;
     cursor: pointer;
     color: $primary-color;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
 
     &:hover {
@@ -587,7 +578,7 @@
     text-align: left;
     padding: $space-3;
     border: 1px solid $border-default;
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: $bg-card;
     cursor: pointer;
     transition: border-color 0.15s ease, background-color 0.15s ease;
@@ -607,13 +598,13 @@
         justify-content: space-between;
         gap: $space-2;
         color: $text-primary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
     }
 
     &__desc {
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         line-height: 1.4;
     }
 }
@@ -627,11 +618,12 @@
 .summary-tag {
     display: inline-flex;
     align-items: center;
-    padding: $space-1 $space-3;
+    height: 20px; // geometry: badge height (20px badge spec)
+    padding: 0 $space-tight;
     background: fade($accent-primary-raw, 12%);
     color: $accent-primary;
-    border-radius: $radius-full;
-    font-size: $font-size-sm;
+    border-radius: $radius-badge;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
 }
 
@@ -648,8 +640,8 @@
     padding: $space-2 $space-4;
     background: $bg-secondary;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
-    font-size: $font-size-sm;
+    border-radius: $radius-card;
+    font-size: $text-xs;
     color: $text-primary;
 }
 
@@ -658,7 +650,7 @@
 // --------------------------------------------
 .recommendation-hint {
     margin: 0 0 $space-3;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
@@ -675,7 +667,7 @@
     padding: $space-3 $space-4;
     background: $bg-secondary;
     border: 1px solid $border-default;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     cursor: pointer;
 
     &:hover {
@@ -683,7 +675,7 @@
     }
 
     &__check {
-        margin-top: 3px;
+        margin-top: $space-1;
         flex-shrink: 0;
         cursor: pointer;
     }
@@ -691,19 +683,19 @@
     &__body {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         flex: 1;
         min-width: 0;
     }
 
     &__name {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
     }
 
     &__desc {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -714,7 +706,7 @@
     }
 
     &__status {
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         flex-shrink: 0;
 
         &--installed {
@@ -735,7 +727,7 @@
 
 .recommendation-error {
     margin: $space-3 0 0;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $danger-color;
 
     a {
@@ -772,7 +764,7 @@
 .summary-rec-ico {
     display: inline;
     vertical-align: middle;
-    margin-right: 6px;
+    margin-right: $space-tight;
 }
 
 .btn-wizard-prev {
@@ -811,7 +803,7 @@
     gap: $space-4;
     padding: $space-4;
     background: fade($accent-primary-raw, 10%);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     margin-bottom: $space-6;
 
     .wizard-info-icon {
@@ -821,7 +813,7 @@
 
     p {
         margin: 0;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         line-height: $line-height-normal;
     }

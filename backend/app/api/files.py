@@ -2,7 +2,7 @@
 
 from flask import Blueprint, request, jsonify, send_file
 from app.error_reporting import unexpected_response
-from app.exceptions import NotFoundError, PermissionDeniedError, ValidationError
+from app.exceptions import NotFoundError, PermissionDeniedError, ValidationError, permission_denied
 from ..middleware.rbac import permission_required
 from ..services.file_service import FileService
 from ..services.storage_provider_service import StorageProviderService
@@ -285,7 +285,7 @@ def download_file():
         raise ValidationError('Path is required')
 
     if not FileService.is_path_allowed(path):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     if not os.path.exists(path):
         return jsonify({'error': 'File not found'}), 404
@@ -319,7 +319,7 @@ def upload_file():
     # Upload writes straight to disk without going through FileService's
     # mutating methods, so it has to repeat the writable check itself.
     if not FileService.is_path_writable(destination):
-        return jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     if file.filename == '':
         return jsonify({'error': 'No file selected'}), 400

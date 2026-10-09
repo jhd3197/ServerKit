@@ -47,7 +47,7 @@ const MessageList = () => {
                     {!providerConfigured ? (
                         <p className="sk-ai-empty__hint">
                             {!enabled ? t('ai.settings.disabledHelp', 'The assistant is disabled. An admin can enable it in') : t('app.messageList.theAssistantIsnTConfiguredYet', 'The assistant isn\'t configured yet. An admin can set a provider in')}
-                            {' '}{t('app.messageList.settingsAiAssistant', 'Settings → AI Assistant.')}
+                            {' '}{t('app.messageList.settingsAiAssistant', 'Settings → AI assistant.')}
                         </p>
                     ) : (
                         <div className="sk-ai-empty__prompts">

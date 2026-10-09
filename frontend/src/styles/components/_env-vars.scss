@@ -5,7 +5,7 @@
 .env-vars-container {
     .hint {
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         margin-bottom: $space-5;
     }
 }
@@ -20,7 +20,7 @@
 
 .env-cell-value {
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
     word-break: break-all;
 }
@@ -35,27 +35,6 @@
 .env-key-input {
     width: 100%;
     font-family: $font-mono;
-    text-transform: uppercase;
-}
-
-// "Applies to" compose-service select — used in the Add modal and the inline
-// edit row. Full-width inside a modal .form-group; intrinsic in the edit row.
-.env-target-select__control {
-    padding: $space-2 $space-3;
-    background: $bg-body;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
-    color: $text-primary;
-    font-size: $font-size-sm;
-    flex-shrink: 0;
-
-    &:hover {
-        border-color: $border-active;
-    }
-}
-
-.form-group .env-target-select__control {
-    width: 100%;
 }
 
 // Small "(optional)" tag + reassurance hint inside the Add Variable modal
@@ -97,7 +76,7 @@
     @include card-base();
     background: var(--surface-2);
     border: 1px solid var(--border-soft);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     padding: $space-3 $space-4;
     transition: border-color 0.15s, background 0.15s;
 
@@ -111,7 +90,7 @@
 
     .env-key {
         font-family: $font-mono;
-        font-weight: 600;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
         display: flex;
         align-items: center;
@@ -120,7 +99,7 @@
 
     .env-value {
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         word-break: break-all;
         padding: $space-1 0;
@@ -134,10 +113,10 @@
     align-items: center;
     gap: $space-1;
     padding: 1px $space-2;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     font-family: $font-mono;
-    font-size: $font-size-xs;
-    font-weight: 600;
+    font-size: $text-xs;
+    font-weight: $font-weight-semibold;
     line-height: 1.5;
     color: $accent-primary;
     background: rgba($accent-primary-raw, 0.12);
@@ -172,10 +151,10 @@
 .import-textarea {
     width: 100%;
     font-family: $font-mono;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     background: $bg-body;
     border: 1px solid $border-subtle;
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     padding: $space-4;
     resize: vertical;
     min-height: 200px;

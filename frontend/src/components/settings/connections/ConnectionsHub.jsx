@@ -20,8 +20,10 @@ import {
     CONNECTION_CATEGORIES, CONNECTION_PROVIDERS, deriveScope, dedupeScopes,
 } from './providerCatalog';
 import ProviderCard from './ProviderCard';
+import ErrorState from '../../ErrorState';
 import ConnectProviderModal from './ConnectProviderModal';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // The settings-index deep-link id each category section is landable from. The
 // cards are rendered by ProviderCard (presentational, no ref), so the flash
@@ -56,24 +58,43 @@ export default function ConnectionsHub() {
     const [containerRegistries, setContainerRegistries] = useState([]);
     const [allConnections, setAllConnections] = useState([]);
     const [loading, setLoading] = useState(true);
+    // Which status reads failed on the last load. A failed read must render as
+    // "couldn't load", never as "Not connected" with a Connect button.
+    const [failed, setFailed] = useState({});
+    const [firstError, setFirstError] = useState(null);
     const [modalProvider, setModalProvider] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
 
     const loadData = useCallback(async () => {
+        const failures = {};
+        let firstErr = null;
+        // Keep partial results, but remember which reads failed.
+        const soft = (key, promise, fallback) => promise.catch((err) => {
+            failures[key] = true;
+            if (!firstErr) firstErr = err;
+            return fallback;
+        });
         try {
             const [ghStatus, glStatus, bbStatus, dns, cloudP, storage, relay, regConns, regDomains, registries, allConns] = await Promise.all([
-                api.getGithubSourceStatus().catch(() => null),
-                api.getGitlabSourceStatus().catch(() => null),
-                api.getBitbucketSourceStatus().catch(() => null),
-                api.getEmailDNSProviders().then((d) => d.providers || []).catch(() => []),
-                api.getCloudProviders().then((d) => d.providers || []).catch(() => []),
-                api.getStorageConfig().catch(() => null),
-                api.getEmailRelay().catch(() => null),
-                api.getRegistrarConnections().then((d) => d.connections || []).catch(() => []),
-                api.getRegistrarDomains().then((d) => d.domains || []).catch(() => []),
-                api.getContainerRegistries().then((d) => d.registries || []).catch(() => []),
-                api.getAllConnections().then((d) => d.connections || []).catch(() => []),
+                soft('github', api.getGithubSourceStatus(), null),
+                soft('gitlab', api.getGitlabSourceStatus(), null),
+                soft('bitbucket', api.getBitbucketSourceStatus(), null),
+                soft('dns', api.getEmailDNSProviders().then((d) => d.providers || []), []),
+                soft('cloud', api.getCloudProviders().then((d) => d.providers || []), []),
+                soft('storage', api.getStorageConfig(), null),
+                // The relay endpoint belongs to the Email extension: a 404 means
+                // it isn't installed (no relay), not that the read failed.
+                soft('email', api.getEmailRelay().catch((err) => {
+                    if (err?.status === 404) return null;
+                    throw err;
+                }), null),
+                soft('registrar', api.getRegistrarConnections().then((d) => d.connections || []), []),
+                soft('registrarDomains', api.getRegistrarDomains().then((d) => d.domains || []), []),
+                soft('registry', api.getContainerRegistries().then((d) => d.registries || []), []),
+                soft('all', api.getAllConnections().then((d) => d.connections || []), []),
             ]);
+            setFailed(failures);
+            setFirstError(firstErr);
             setSourceStatus({ github: ghStatus, gitlab: glStatus, bitbucket: bbStatus });
             setDnsProviders(dns);
             setCloudProviders(cloudP);
@@ -110,18 +131,18 @@ export default function ConnectionsHub() {
             const { auth_url } = await api.startSourceConnection(provider.provider, redirectUri);
             window.location.href = auth_url;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToStartConnection', 'Failed to start {{name}} connection', { name: provider.name }));
+            toastError(toast, t('app.connectionsHub.failedToStartConnection', "Couldn't start the {{name}} connection.", { name: provider.name }), err);
         }
     }, [t, toast]);
 
     const onDisconnectSource = useCallback(async (provider) => {
         try {
             await api.disconnectSourceConnection(provider.provider);
-            toast.success(`${provider.name} disconnected`);
+            toast.success(t('app.connectionsHub.providerDisconnected', '{{name}} disconnected', { name: provider.name }));
             await loadData();
             setModalOpen(false);
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToDisconnect', 'Failed to disconnect'));
+            toastError(toast, t('app.connectionsHub.failedToDisconnect', "Couldn't disconnect."), err);
         }
     }, [toast, loadData, t]);
 
@@ -145,7 +166,7 @@ export default function ConnectionsHub() {
             document.body.appendChild(form);
             form.submit();
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToStartGithubAppSetup', 'Failed to start GitHub App setup'));
+            toastError(toast, t('app.connectionsHub.failedToStartGithubAppSetup', "Couldn't start the GitHub App setup."), err);
         }
     }, [t, toast]);
 
@@ -158,7 +179,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToSaveOauthApp', 'Failed to save OAuth app'));
+            toastError(toast, t('app.connectionsHub.failedToSaveOauthApp', "Couldn't save the OAuth app."), err);
             return false;
         }
     }, [toast, t, loadData]);
@@ -167,31 +188,31 @@ export default function ConnectionsHub() {
     const onAddDns = useCallback(async (payload) => {
         try {
             const res = await api.addEmailDNSProvider(payload);
-            if (res && res.success === false) throw new Error(res.error || 'Failed to add connection');
-            toast.success(`${payload.name} connected`);
+            if (res && res.success === false) throw new Error(res.error || t('app.connectionsHub.couldntAddConnection', "Couldn't add the connection."));
+            toast.success(t('app.connectionsHub.providerConnected', '{{name}} connected', { name: payload.name }));
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToAddConnection', 'Failed to add connection'));
+            toastError(toast, t('app.connectionsHub.failedToAddConnection', "Couldn't add the connection."), err);
             return false;
         }
     }, [toast, loadData, t]);
 
     const onRemoveDns = useCallback(async (record) => {
         const confirmed = await confirm({
-            title: t('app.connectionsHub.removeConnection', 'Remove Connection'),
-            message: t('app.connectionsHub.removeTheConnection', 'Remove the connection "{{name}}"?', { name: record.name }),
-            confirmText: t('common.actions.remove', 'Remove'),
+            title: t('app.connectionsHub.removeConnection', 'Delete connection'),
+            message: t('app.connectionsHub.removeTheConnection', 'Delete the connection "{{name}}"?', { name: record.name }),
+            confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',
         });
         if (!confirmed) return false;
         try {
             await api.deleteEmailDNSProvider(record.id);
-            toast.success(`${record.name} removed`);
+            toast.success(t('app.connectionsHub.connectionDeleted', '{{name}} deleted', { name: record.name }));
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToRemoveConnection', 'Failed to remove connection'));
+            toastError(toast, t('app.connectionsHub.failedToRemoveConnection', "Couldn't delete the connection."), err);
             return false;
         }
     }, [confirm, t, toast, loadData]);
@@ -200,10 +221,10 @@ export default function ConnectionsHub() {
         try {
             const res = await api.testEmailDNSProvider(id);
             if (res && res.success) toast.success(res.message || t('app.connectionsHub.connectionWorks', 'Connection works'));
-            else toast.error((res && res.error) || t('app.connectionsHub.connectionTestFailed', 'Connection test failed'));
+            else toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), res && res.error);
             return res;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.connectionTestFailed', 'Connection test failed'));
+            toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), err);
             return null;
         }
     }, [t, toast]);
@@ -216,14 +237,14 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToConnectProvider', 'Failed to connect provider'));
+            toastError(toast, t('app.connectionsHub.failedToConnectProvider', "Couldn't connect the provider."), err);
             return false;
         }
     }, [toast, t, loadData]);
 
     const onRemoveCloud = useCallback(async (id) => {
         const confirmed = await confirm({
-            title: t('app.connectionsHub.disconnectCloudAccount', 'Disconnect Cloud Account'),
+            title: t('app.connectionsHub.disconnectCloudAccount', 'Disconnect cloud account'),
             message: t('app.connectionsHub.disconnectThisCloudAccountExistingServers', 'Disconnect this cloud account? Existing servers are not affected.'),
             confirmText: t('app.connectionsHub.disconnect', 'Disconnect'),
             variant: 'danger',
@@ -235,7 +256,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToDisconnect', 'Failed to disconnect'));
+            toastError(toast, t('app.connectionsHub.failedToDisconnect', "Couldn't disconnect."), err);
             return false;
         }
     }, [confirm, t, toast, loadData]);
@@ -249,7 +270,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToSaveStorage', 'Failed to save storage'));
+            toastError(toast, t('app.connectionsHub.failedToSaveStorage', "Couldn't save the storage settings."), err);
             return false;
         }
     }, [toast, t, loadData]);
@@ -258,10 +279,10 @@ export default function ConnectionsHub() {
         try {
             const res = await api.testStorageConnection(config);
             if (res && res.success) toast.success(res.message || t('app.connectionsHub.connectionWorks', 'Connection works'));
-            else toast.error((res && res.error) || t('app.connectionsHub.connectionTestFailed', 'Connection test failed'));
+            else toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), res && res.error);
             return res;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.connectionTestFailed', 'Connection test failed'));
+            toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), err);
             return null;
         }
     }, [t, toast]);
@@ -274,7 +295,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToSaveRelay', 'Failed to save relay'));
+            toastError(toast, t('app.connectionsHub.failedToSaveRelay', "Couldn't save the relay."), err);
             return false;
         }
     }, [toast, t, loadData]);
@@ -283,10 +304,10 @@ export default function ConnectionsHub() {
         try {
             const res = await api.testEmailRelay(payload);
             if (res && res.success) toast.success(res.message || t('app.connectionsHub.connectionWorks', 'Connection works'));
-            else toast.error((res && res.error) || t('app.connectionsHub.connectionTestFailed', 'Connection test failed'));
+            else toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), res && res.error);
             return res;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.connectionTestFailed', 'Connection test failed'));
+            toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), err);
             return null;
         }
     }, [t, toast]);
@@ -298,7 +319,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToDisableRelay', 'Failed to disable relay'));
+            toastError(toast, t('app.connectionsHub.failedToDisableRelay', "Couldn't turn off the relay."), err);
             return false;
         }
     }, [toast, t, loadData]);
@@ -311,14 +332,14 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToConnectRegistrar', 'Failed to connect registrar'));
+            toastError(toast, t('app.connectionsHub.failedToConnectRegistrar', "Couldn't connect the registrar."), err);
             return false;
         }
     }, [toast, t, loadData]);
 
     const onRemoveRegistrar = useCallback(async (id) => {
         const confirmed = await confirm({
-            title: t('app.connectionsHub.disconnectRegistrar', 'Disconnect Registrar'),
+            title: t('app.connectionsHub.disconnectRegistrar', 'Disconnect registrar'),
             message: t('app.connectionsHub.disconnectThisRegistrar', 'Disconnect this registrar?'),
             confirmText: t('app.connectionsHub.disconnect', 'Disconnect'),
             variant: 'danger',
@@ -330,7 +351,7 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToDisconnect', 'Failed to disconnect'));
+            toastError(toast, t('app.connectionsHub.failedToDisconnect', "Couldn't disconnect."), err);
             return false;
         }
     }, [confirm, t, toast, loadData]);
@@ -339,10 +360,10 @@ export default function ConnectionsHub() {
         try {
             const res = await api.testRegistrarConnection(id);
             if (res && res.success) toast.success(res.message || t('app.connectionsHub.connectionWorks', 'Connection works'));
-            else toast.error((res && res.error) || t('app.connectionsHub.connectionTestFailed', 'Connection test failed'));
+            else toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), res && res.error);
             return res;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.connectionTestFailed', 'Connection test failed'));
+            toastError(toast, t('app.connectionsHub.connectionTestFailed', "Couldn't connect."), err);
             return null;
         }
     }, [t, toast]);
@@ -355,26 +376,26 @@ export default function ConnectionsHub() {
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToAddRegistry', 'Failed to add registry'));
+            toastError(toast, t('app.connectionsHub.failedToAddRegistry', "Couldn't add the registry."), err);
             return false;
         }
     }, [toast, t, loadData]);
 
     const onRemoveRegistry = useCallback(async (id) => {
         const confirmed = await confirm({
-            title: t('app.connectionsHub.removeContainerRegistry', 'Remove Container Registry'),
-            message: t('app.connectionsHub.removeThisContainerRegistryAppsThat', 'Remove this container registry? Apps that pull from it will lose access.'),
-            confirmText: t('common.actions.remove', 'Remove'),
+            title: t('app.connectionsHub.removeContainerRegistry', 'Delete container registry'),
+            message: t('app.connectionsHub.removeThisContainerRegistryAppsThat', 'Delete this container registry? Services that pull from it will lose access.'),
+            confirmText: t('common.actions.delete', 'Delete'),
             variant: 'danger',
         });
         if (!confirmed) return false;
         try {
             await api.deleteContainerRegistry(id);
-            toast.success(t('app.connectionsHub.registryRemoved', 'Registry removed'));
+            toast.success(t('app.connectionsHub.registryRemoved', 'Registry deleted'));
             await loadData();
             return true;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.failedToRemoveRegistry', 'Failed to remove registry'));
+            toastError(toast, t('app.connectionsHub.failedToRemoveRegistry', "Couldn't delete the registry."), err);
             return false;
         }
     }, [confirm, t, toast, loadData]);
@@ -383,10 +404,10 @@ export default function ConnectionsHub() {
         try {
             const res = await api.testContainerRegistry(id);
             if (res && res.success) toast.success(res.message || t('app.connectionsHub.loginWorks', 'Login works'));
-            else toast.error((res && res.error) || t('app.connectionsHub.loginFailed', 'Login failed'));
+            else toastError(toast, t('app.connectionsHub.loginFailed', "Couldn't sign in."), res && res.error);
             return res;
         } catch (err) {
-            toast.error(err.message || t('app.connectionsHub.loginFailed', 'Login failed'));
+            toastError(toast, t('app.connectionsHub.loginFailed', "Couldn't sign in."), err);
             return null;
         }
     }, [t, toast]);
@@ -398,6 +419,11 @@ export default function ConnectionsHub() {
 
         for (const provider of CONNECTION_PROVIDERS) {
             if (provider.comingSoon) { out[provider.id] = { connected: false }; continue; }
+            const failedKey = provider.kind === 'source' ? provider.provider : provider.kind;
+            if (failed[failedKey]) {
+                out[provider.id] = { connected: false, loadFailed: true, statusLabel: t('app.connectionsHub.couldntLoad', "Couldn't load."), statusTone: 'danger', scopes: [] };
+                continue;
+            }
             const manageHref = provider.manageHref;
 
             if (provider.kind === 'source') {
@@ -405,78 +431,78 @@ export default function ConnectionsHub() {
                 const conn = status?.connection;
                 out[provider.id] = conn
                     ? {
-                        connected: true, statusLabel: 'Connected', statusTone: 'ok',
+                        connected: true, statusLabel: t('app.connectionsHub.statusConnected', 'Connected'), statusTone: 'ok',
                         subtitle: conn.provider_username ? `@${conn.provider_username}` : (conn.display_name || null),
-                        scopes: [{ labelKey: 'app.connectionsHub.oauth', label: 'OAuth', tone: 'neutral', hint: conn.scope || 'Authorized via OAuth' }],
-                        manageHref, manageLabel: 'New service',
+                        scopes: [{ labelKey: 'app.connectionsHub.oauth', label: 'OAuth', tone: 'neutral', hint: conn.scope || t('app.connectionsHub.authorizedViaOauth', 'Authorized via OAuth') }],
+                        manageHref, manageLabel: t('app.connectionsHub.manageNewService', 'New service'),
                     }
-                    : { connected: false, statusLabel: status?.configured ? 'Not connected' : 'Setup needed', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: status?.configured ? t('app.connectionsHub.statusNotConnected', 'Not connected') : t('app.connectionsHub.statusSetupNeeded', 'Setup needed'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'cloud') {
                 const matches = cloudByType(provider.providerType);
                 const count = matches.reduce((n, p) => n + (p.server_count || 0), 0);
                 out[provider.id] = matches.length
                     ? {
-                        connected: true, statusLabel: 'Connected', statusTone: 'ok',
-                        subtitle: count ? `${count} server${count === 1 ? '' : 's'}` : 'No servers yet',
-                        scopes: [], manageHref, manageLabel: 'Servers',
+                        connected: true, statusLabel: t('app.connectionsHub.statusConnected', 'Connected'), statusTone: 'ok',
+                        subtitle: count ? t('app.connectionsHub.serverCount', { count, defaultValue_one: '1 server', defaultValue_other: '{{count}} servers' }) : t('app.connectionsHub.noServersYet', 'No servers yet'),
+                        scopes: [], manageHref, manageLabel: t('app.connectionsHub.manageServers', 'Servers'),
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'dns') {
                 const list = dnsProviders.filter((p) => p.provider === provider.provider);
                 out[provider.id] = list.length
                     ? {
-                        connected: true, statusLabel: list.length === 1 ? 'Connected' : `${list.length} connected`, statusTone: 'ok',
+                        connected: true, statusLabel: list.length === 1 ? t('app.connectionsHub.statusConnected', 'Connected') : t('app.connectionsHub.countConnected', '{{count}} connected', { count: list.length }), statusTone: 'ok',
                         subtitle: list.map((p) => p.name).join(', '),
                         scopes: dedupeScopes(list.map(deriveScope).filter(Boolean)),
-                        manageHref: '/domains', manageLabel: 'Domains',
+                        manageHref: '/domains', manageLabel: t('app.connectionsHub.manageDomains', 'Domains'),
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'registrar') {
                 const list = registrarConnections.filter((c) => c.provider === provider.provider);
                 const mine = registrarDomains.filter((d) => d.registrar === provider.provider);
                 const expiring = mine.filter((d) => d.days_until_expiry != null && d.days_until_expiry <= 30).length;
                 out[provider.id] = list.length
                     ? {
-                        connected: true, statusLabel: 'Connected', statusTone: 'ok',
-                        subtitle: `${mine.length} domain${mine.length === 1 ? '' : 's'}${expiring ? ` · ${expiring} expiring ≤30d` : ''}`,
-                        scopes: expiring ? [{ label: `${expiring} expiring`, tone: 'warn', hintKey: 'app.connectionsHub.registrationExpiresWithin30Days', hint: 'Registration expires within 30 days' }] : [],
-                        manageHref, manageLabel: 'Domains',
+                        connected: true, statusLabel: t('app.connectionsHub.statusConnected', 'Connected'), statusTone: 'ok',
+                        subtitle: `${t('app.connectionsHub.domainCount', { count: mine.length, defaultValue_one: '1 domain', defaultValue_other: '{{count}} domains' })}${expiring ? ` · ${t('app.connectionsHub.expiringWithin30d', '{{count}} expiring ≤30d', { count: expiring })}` : ''}`,
+                        scopes: expiring ? [{ label: t('app.connectionsHub.expiringCount', '{{count}} expiring', { count: expiring }), tone: 'warn', hintKey: 'app.connectionsHub.registrationExpiresWithin30Days', hint: 'Registration expires within 30 days' }] : [],
+                        manageHref, manageLabel: t('app.connectionsHub.manageDomains', 'Domains'),
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'registry') {
                 const list = containerRegistries;
                 out[provider.id] = list.length
                     ? {
-                        connected: true, statusLabel: list.length === 1 ? 'Connected' : `${list.length} connected`, statusTone: 'ok',
+                        connected: true, statusLabel: list.length === 1 ? t('app.connectionsHub.statusConnected', 'Connected') : t('app.connectionsHub.countConnected', '{{count}} connected', { count: list.length }), statusTone: 'ok',
                         subtitle: list.map((r) => r.name).join(', '),
-                        scopes: [], manageHref, manageLabel: 'New service',
+                        scopes: [], manageHref, manageLabel: t('app.connectionsHub.manageNewService', 'New service'),
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'storage') {
                 const active = storageConfig?.provider === provider.storageProvider;
                 const sub = storageConfig?.[provider.storageProvider];
                 out[provider.id] = active && sub?.bucket
                     ? {
-                        connected: true, statusLabel: 'Active', statusTone: 'ok',
-                        subtitle: `Bucket: ${sub.bucket}`,
+                        connected: true, statusLabel: t('app.connectionsHub.statusActive', 'Active'), statusTone: 'ok',
+                        subtitle: t('app.connectionsHub.bucket', 'Bucket: {{bucket}}', { bucket: sub.bucket }),
                         scopes: [{ labelKey: 'common.labels.backups', label: 'Backups', tone: 'neutral', hintKey: 'app.connectionsHub.usedAsTheOffsiteBackupDestination', hint: 'Used as the offsite backup destination' }],
-                        manageHref, manageLabel: 'Backups',
+                        manageHref, manageLabel: t('app.connectionsHub.manageBackups', 'Backups'),
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else if (provider.kind === 'email') {
                 out[provider.id] = (relayConfig?.enabled && relayConfig?.host)
                     ? {
-                        connected: true, statusLabel: 'Active', statusTone: 'ok',
+                        connected: true, statusLabel: t('app.connectionsHub.statusActive', 'Active'), statusTone: 'ok',
                         subtitle: `${relayConfig.host}:${relayConfig.port || 587}`,
                         scopes: relayConfig.use_tls ? [{ label: 'TLS', tone: 'ok', hintKey: 'app.connectionsHub.starttlsEnabled', hint: 'STARTTLS enabled' }] : [],
                     }
-                    : { connected: false, statusLabel: 'Not connected', statusTone: 'neutral', scopes: [] };
+                    : { connected: false, statusLabel: t('app.connectionsHub.statusNotConnected', 'Not connected'), statusTone: 'neutral', scopes: [] };
             } else {
                 out[provider.id] = { connected: false };
             }
         }
         return out;
-    }, [sourceStatus, cloudProviders, dnsProviders, registrarConnections, registrarDomains, containerRegistries, storageConfig, relayConfig]);
+    }, [sourceStatus, cloudProviders, dnsProviders, registrarConnections, registrarDomains, containerRegistries, storageConfig, relayConfig, failed, t]);
 
     function handleManage(provider) {
         setModalProvider(provider);
@@ -504,9 +530,16 @@ export default function ConnectionsHub() {
                 <div className="connections-hub__warning">
                     <ShieldAlert size={16} />
                     <span>
-                        {unencryptedCount} {t('app.connectionsHub.connectedAccount', 'connected account')}{unencryptedCount === 1 ? '' : 's'} {unencryptedCount === 1 ? 'has' : 'have'} {t('app.connectionsHub.credentialsNotEncryptedAtRestRestart', 'credentials not encrypted at rest. Restart the panel to migrate them, or check that')} <code>SERVERKIT_ENCRYPTION_KEY</code> {t('app.connectionsHub.isSet', 'is set.')}
+                        {t('app.connectionsHub.unencryptedAccounts', { count: unencryptedCount, defaultValue_one: '1 connected account has credentials not encrypted at rest. Restart the panel to migrate them, or check that', defaultValue_other: '{{count}} connected accounts have credentials not encrypted at rest. Restart the panel to migrate them, or check that' })} <code>SERVERKIT_ENCRYPTION_KEY</code> {t('app.connectionsHub.isSet', 'is set.')}
                     </span>
                 </div>
+            )}
+            {!loading && firstError && (
+                <ErrorState
+                    compact
+                    error={firstError}
+                    onRetry={loadData}
+                />
             )}
             {loading ? (
                 <div className="connections-hub__loading">{t('app.connectionsHub.loadingConnections', 'Loading connections…')}</div>

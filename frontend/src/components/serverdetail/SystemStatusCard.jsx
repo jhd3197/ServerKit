@@ -4,6 +4,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Surfaces everything the agent's capability probe reports: detected
 // runtimes (python/node/php/go/ruby/java versions), runtime version
@@ -36,7 +37,7 @@ export default function SystemStatusCard({ server, onRefresh }) {
             toast.success(t('app.systemStatusCard.capabilitiesReProbed', 'Capabilities re-probed'));
             if (onRefresh) await onRefresh();
         } catch (err) {
-            toast.error(err.message || t('app.systemStatusCard.refreshFailed', 'Refresh failed'));
+            toastError(toast, t('app.systemStatusCard.refreshFailed', "Couldn't refresh."), err);
         } finally {
             setRefreshing(false);
         }
@@ -49,9 +50,9 @@ export default function SystemStatusCard({ server, onRefresh }) {
         <div className="info-card system-status-card">
             <div className="system-status-card__header">
                 <div className="system-status-card__title">
-                    <h3>{t('app.systemStatusCard.systemStatus', 'System Status')}</h3>
+                    <h3>{t('app.systemStatusCard.systemStatus', 'System status')}</h3>
                     {stale && (
-                        <Badge variant="outline" title={t('app.systemStatusCard.agentOfflineShowingLastCachedSnapshot', 'Agent offline — showing last cached snapshot')}>
+                        <Badge variant="outline" title={t('app.systemStatusCard.agentOfflineShowingLastCachedSnapshot', 'Agent offline. Showing the last cached snapshot')}>
                             {t('app.systemStatusCard.stale', 'Stale')}
                         </Badge>
                     )}
@@ -69,7 +70,7 @@ export default function SystemStatusCard({ server, onRefresh }) {
                         disabled={refreshing || !server.is_connected}
                         title={server.is_connected ? t('app.systemStatusCard.reRunCapabilityProbeOnThe', 'Re-run capability probe on the agent') : t('app.systemStatusCard.agentMustBeOnlineToRefresh', 'Agent must be online to refresh')}
                     >
-                        {refreshing ? 'Refreshing…' : 'Refresh'}
+                        {refreshing ? t('app.systemStatusCard.refreshing', 'Refreshing…') : t('common.actions.refresh', 'Refresh')}
                     </Button>
                 </div>
             </div>

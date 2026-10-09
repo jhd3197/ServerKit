@@ -5,7 +5,7 @@
     padding: $spacing-lg 0;
     text-align: center;
     color: $text-muted;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
     &--error p {
         color: var(--amber);
@@ -28,7 +28,7 @@
         'title size'
         'detail size';
     column-gap: $spacing-md;
-    row-gap: 2px;
+    row-gap: $space-hair;
     padding: $spacing-sm 0;
 
     & + & {
@@ -38,19 +38,18 @@
 
 .disk-reclaim__item-title {
     grid-area: title;
-    font-weight: 500;
+    font-weight: $font-weight-medium;
 }
 
 .disk-reclaim__item-detail {
     grid-area: detail;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     color: $text-muted;
 }
 
 .disk-reclaim__item-size {
     grid-area: size;
     align-self: center;
-    font-family: $font-mono;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
 }
@@ -62,5 +61,5 @@
     margin-top: $spacing-sm;
     padding-top: $spacing-md;
     border-top: 2px solid $border-color;
-    font-weight: 600;
+    font-weight: $font-weight-semibold;
 }

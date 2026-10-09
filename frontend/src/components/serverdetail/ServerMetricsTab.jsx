@@ -11,7 +11,7 @@ const ServerMetricsTab = ({ serverId, metrics }) => {
             {metrics && (
                 <div className="metrics-live-stats">
                     <div className="live-stat-card">
-                        <h4>{t('app.serverMetricsTab.currentSnapshot', 'Current Snapshot')}</h4>
+                        <h4>{t('app.serverMetricsTab.currentSnapshot', 'Current snapshot')}</h4>
                         <div className="live-stats-grid">
                             <div className="live-stat">
                                 <span className="live-stat-label">CPU</span>

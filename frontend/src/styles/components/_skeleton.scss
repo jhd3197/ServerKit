@@ -10,7 +10,7 @@
     position: relative;
     overflow: hidden;
     background: var(--surface-2);
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
 
     // Shimmer sweep — a soft highlight travelling left → right.
     &::after {
@@ -34,21 +34,21 @@
 
     &--title {
         width: 40%;
-        height: 20px;
-        border-radius: $radius-md;
+        height: 20px; // geometry: skeleton title bar (content placeholder)
+        border-radius: $radius-control;
     }
 
     &--avatar {
         flex: none;
         width: 48px;
-        height: 48px;
-        border-radius: $radius-lg;
+        height: 48px; // geometry: skeleton avatar
+        border-radius: $radius-card;
     }
 
     &--card {
         width: 100%;
         height: 84px;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &--block {
@@ -172,7 +172,7 @@
     // ---- table ----
     &__table {
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         overflow: hidden;
     }
 
@@ -210,11 +210,11 @@
         display: grid;
         grid-template-columns: 16px minmax(0, 1fr) auto 70px 54px;
         align-items: center;
-        gap: 18px;
-        padding: 12px 16px;
+        gap: $space-5;
+        padding: $space-3 $space-4;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__ticks { display: flex; gap: 3px; }
@@ -223,7 +223,7 @@
     &--cards {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
-        gap: 14px;
+        gap: $space-4;
     }
 
     &__card {
@@ -233,7 +233,7 @@
         padding: $space-4;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__card-top {
@@ -245,7 +245,7 @@
 
     &__card-tags {
         display: flex;
-        gap: 5px;
+        gap: $space-tight;
         margin-top: $space-2;
     }
 
@@ -257,7 +257,7 @@
         padding: $space-5;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__stats {
@@ -273,7 +273,7 @@
         padding: $space-4;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__panels {
@@ -289,7 +289,7 @@
         padding: $space-4;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__kv {
@@ -307,7 +307,7 @@
             padding: $space-3 $space-4;
             background: #0d1117;
             border: 1px solid $border-subtle;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
         }
     }
 
@@ -347,7 +347,7 @@
         padding: $space-4;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__plot-bars {
@@ -388,7 +388,7 @@
         padding: $space-3;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
     }
 
     &__twig {
@@ -492,7 +492,7 @@
     padding: $space-4;
     background: $bg-card;
     border: 1px solid $border-subtle;
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
 
     + .sk-gallery { margin-top: $space-4; }
 
@@ -500,8 +500,6 @@
         margin-bottom: $space-3;
         color: $text-tertiary;
         font-family: var(--mono);
-        font-size: 11px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
+        font-size: $text-xs;
     }
 }

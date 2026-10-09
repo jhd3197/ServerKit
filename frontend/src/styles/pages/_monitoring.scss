@@ -12,15 +12,15 @@
 .mon-scope {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    height: 32px;
-    padding: 0 10px;
+    gap: $space-2;
+    height: $control-md;
+    padding: 0 $space-3;
     max-width: 210px;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-control;
     background: var(--surface-2);
     color: var(--text-dim);
-    font-size: 12.5px;
+    font-size: $text-sm;
     cursor: pointer;
     transition: border-color 0.14s, color 0.14s;
 
@@ -34,18 +34,18 @@
 
     &__sep {
         height: 1px;
-        margin: 5px 2px;
+        margin: $space-tight $space-hair;
         background: var(--border-soft);
     }
 
     &__item {
         display: flex;
         align-items: center;
-        gap: 9px;
+        gap: $space-2;
         width: 100%;
-        padding: 7px 9px;
+        padding: $space-2 $space-2;
         border: 0;
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: none;
         color: var(--text-dim);
         text-align: left;
@@ -57,14 +57,13 @@
         > span {
             flex: 1;
             min-width: 0;
-            font-size: 12.5px;
+            font-size: $text-sm;
             @include truncate();
         }
 
         small {
             display: block;
-            font-family: var(--mono);
-            font-size: 10px;
+            font-size: $text-xs;
             color: var(--text-faint);
             @include truncate();
         }

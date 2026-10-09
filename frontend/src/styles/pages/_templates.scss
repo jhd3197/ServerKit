@@ -1,7 +1,6 @@
 // ============================================
-// TEMPLATES PAGE (redesign — catalog grid, see docs/REDESIGN_MAP.md #13)
-// Catalog cards use the demo's .tpl-card pattern, page-scoped here (NOT a
-// design-system primitive). Detail/install modal styles stay below.
+// TEMPLATES PAGE. Cards are the shared CatalogCard (_design-system.scss);
+// this file holds the quickstart row and the detail/install modal styles.
 // ============================================
 
 .templates-page {
@@ -21,160 +20,7 @@
 
         p {
             margin: 0;
-            font-size: $font-size-lg;
-        }
-    }
-
-    // ── Catalog grid ────────────────────────────────────────
-    .templates-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
-        gap: 14px;
-        padding-top: $space-1;
-    }
-
-    // ── Template card (demo .tpl-card pattern) ──────────────
-    .tpl-card {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        padding: $space-4;
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-        cursor: pointer;
-        transition: border-color 0.14s, transform 0.14s, box-shadow 0.14s;
-
-        &:hover {
-            border-color: var(--border-strong);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-
-            .tpl-deploy {
-                opacity: 1;
-                pointer-events: auto;
-            }
-        }
-    }
-
-    .tpl-top {
-        display: flex;
-        align-items: center;
-        gap: $space-3;
-        margin-bottom: 11px;
-    }
-
-    .tpl-ico {
-        width: 42px;
-        height: 42px;
-        border-radius: 11px;
-        display: grid;
-        place-items: center;
-        flex-shrink: 0;
-        overflow: hidden;
-        background: var(--surface-2);
-        color: var(--accent-bright);
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 6px;
-        }
-
-        svg {
-            flex-shrink: 0;
-        }
-    }
-
-    .tpl-id {
-        min-width: 0;
-    }
-
-    .tpl-name {
-        font-size: $font-size-base;
-        font-weight: $font-weight-semibold;
-        color: $text-primary;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .tpl-ver {
-        font-family: var(--mono);
-        font-size: 10.5px;
-        color: var(--text-faint);
-        margin-top: 1px;
-    }
-
-    // Featured flag — amber star, top-right
-    .tpl-ft {
-        position: absolute;
-        top: 13px;
-        right: 13px;
-        color: var(--amber);
-
-        svg {
-            fill: currentColor;
-        }
-    }
-
-    .tpl-desc {
-        margin: 0;
-        font-size: $font-size-sm + 0.5;
-        color: var(--text-faint);
-        line-height: 1.5;
-        flex: 1;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .tpl-tags {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        flex-wrap: wrap;
-        margin-top: $space-3;
-        min-height: 26px;
-
-        .tg {
-            font-family: var(--mono);
-            font-size: 10px;
-            padding: 2px 7px;
-            border-radius: 5px;
-            background: var(--surface-2);
-            color: var(--text-dim);
-            text-transform: capitalize;
-            white-space: nowrap;
-        }
-    }
-
-    .tpl-link {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 20px;
-        height: 20px;
-        border-radius: 5px;
-        background: var(--surface-2);
-        color: var(--text-faint);
-    }
-
-    // Hover-reveal Deploy button
-    .tpl-deploy {
-        margin-left: auto;
-        height: 26px;
-        padding: 3px 10px;
-        font-size: $font-size-sm;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.14s;
-
-        &:focus-visible {
-            opacity: 1;
-            pointer-events: auto;
+            font-size: $text-lg;
         }
     }
 }
@@ -200,11 +46,11 @@
     &__card {
         display: flex;
         align-items: center;
-        gap: 13px;
-        padding: 14px 16px;
+        gap: $space-3;
+        padding: $space-4 $space-4;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         text-align: left;
         cursor: pointer;
         transition: background $transition-fast, border-color $transition-fast;
@@ -222,8 +68,8 @@
         place-items: center;
         flex-shrink: 0;
         width: 36px;
-        height: 36px;
-        border-radius: $radius-md;
+        height: 36px; // geometry: icon tile
+        border-radius: $radius-control;
         background: var(--surface-2);
         border: 1px solid $border-subtle;
         color: var(--accent-bright);
@@ -234,15 +80,15 @@
     &__title {
         display: block;
         color: $text-primary;
-        font-size: 13.5px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
     }
 
     &__sub {
         display: block;
-        margin-top: 2px;
+        margin-top: $space-hair;
         color: $text-tertiary;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 
     &__arrow {
@@ -250,11 +96,6 @@
         color: var(--text-ghost);
         transition: color $transition-fast, transform $transition-fast;
     }
-}
-
-// Kind badge on catalog cards ("Git repo" / "One-click").
-.tpl-kind {
-    text-transform: none;
 }
 
 // Repo-template detail body
@@ -265,7 +106,7 @@
 
     &__url {
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--accent-bright);
         word-break: break-all;
     }
@@ -274,7 +115,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: $space-3;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
 
         code {
@@ -285,15 +126,16 @@
 }
 
 .detail-source-tag {
+    display: inline-flex;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
     margin-left: auto;
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.04em;
+    font-size: $text-xs;
     text-transform: none;
     color: var(--text-faint);
     background: var(--surface-2);
-    padding: 2px $space-2;
-    border-radius: $radius-sm;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
 }
 
 .manifest-file-list {
@@ -306,11 +148,11 @@
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    padding: 2px 8px;
+    padding: $space-hair $space-2;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
     @include status-variant(var(--green), var(--green-bg));
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
 }
 
 .env-preview-list {
@@ -320,12 +162,15 @@
 }
 
 .env-preview-chip {
-    padding: 2px 8px;
+    display: inline-flex;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
+    padding: 0 $space-tight;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
     color: var(--text-dim);
     background: var(--surface-2);
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
 
     &--secret {
         color: var(--amber);
@@ -335,7 +180,7 @@
 
 .env-preview-note {
     margin: $space-2 0 0;
-    font-size: $font-size-xs;
+    font-size: $text-xs;
 }
 
 // Template icon (detail modal header)
@@ -347,7 +192,7 @@
     align-items: center;
     justify-content: center;
     background: var(--surface-2);
-    border-radius: $radius-lg;
+    border-radius: $radius-card;
     overflow: hidden;
     color: var(--accent-bright);
 
@@ -359,13 +204,13 @@
     }
 
     .template-icon-placeholder {
-        font-size: $font-size-3xl;
+        font-size: $text-2xl;
     }
 }
 
 .template-icon-placeholder {
-    font-size: $font-size-2xl;
-    font-weight: $font-weight-bold;
+    font-size: $text-xl;
+    font-weight: $font-weight-semibold;
     color: var(--accent-bright);
 }
 
@@ -377,12 +222,12 @@
 
 .template-version {
     font-family: var(--mono);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--accent-bright);
     padding: $space-1 $space-2;
     background: var(--accent-bg);
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
 }
 
 .template-categories {
@@ -392,15 +237,15 @@
 }
 
 .category-badge {
+    height: 20px; // geometry: badge height (20px badge spec)
     display: inline-flex;
     align-items: center;
     gap: $space-1;
-    padding: 2px 7px;
-    font-family: var(--mono);
-    font-size: 10.5px;
+    padding: 0 $space-tight;
+    font-size: $text-xs;
     color: var(--text-dim);
     background: var(--surface-2);
-    border-radius: 5px;
+    border-radius: $radius-badge;
     text-transform: capitalize;
 }
 
@@ -413,12 +258,12 @@
     width: 520px;
     max-width: 100vw;
     max-height: none;
-    border-radius: $radius-2xl 0 0 $radius-2xl;
+    border-radius: $radius-overlay 0 0 $radius-overlay;
     border-left: 1px solid var(--border-soft);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-lg);
+    box-shadow: $shadow-overlay;
     animation: drawer-slide-in 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 
     .modal-header {
@@ -482,12 +327,9 @@
         align-items: center;
         gap: $space-2;
         margin: 0 0 $space-3 0;
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
 
         svg {
             flex-shrink: 0;
@@ -500,7 +342,7 @@
             border: none;
             color: $text-tertiary;
             cursor: pointer;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
             display: flex;
             align-items: center;
             transition: all $transition-fast;
@@ -526,18 +368,17 @@
     gap: $space-2;
     padding: $space-2 $space-3;
     background: var(--surface-2);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 
     .requirement-label {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
     .requirement-value {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         font-weight: $font-weight-medium;
         color: $text-primary;
-        font-family: var(--mono);
     }
 }
 
@@ -554,7 +395,7 @@
     gap: $space-1;
     padding: $space-3;
     background: var(--surface-2);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     border: 1px solid var(--border-soft);
 
     &.required {
@@ -571,40 +412,40 @@
 
 .variable-name {
     font-family: var(--mono);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     font-weight: $font-weight-medium;
     color: var(--accent-bright);
 }
 
 .required-badge {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 2px $space-2;
+    display: inline-flex;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
+    font-size: $text-xs;
+    padding: 0 $space-tight;
     @include status-variant(var(--accent-bright), var(--accent-bg));
-    border-radius: $radius-sm;
-    font-weight: $font-weight-semibold;
+    border-radius: $radius-badge;
+    font-weight: $font-weight-medium;
 }
 
 .auto-badge {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 2px $space-2;
+    display: inline-flex;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
+    font-size: $text-xs;
+    padding: 0 $space-tight;
     @include status-variant(var(--green), var(--green-bg));
-    border-radius: $radius-sm;
-    font-weight: $font-weight-semibold;
+    border-radius: $radius-badge;
+    font-weight: $font-weight-medium;
 }
 
 .variable-description {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
 .variable-default {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: var(--text-faint);
     font-family: var(--mono);
 }
@@ -622,7 +463,7 @@
     gap: $space-2;
     padding: $space-2 $space-3;
     background: var(--surface-2);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
 }
 
 .port-number {
@@ -632,17 +473,15 @@
 }
 
 .port-protocol {
-    font-family: var(--mono);
-    font-size: 10px;
+    font-size: $text-xs;
     padding: $space-1;
     background: var(--surface-3);
-    border-radius: $radius-sm;
+    border-radius: $radius-badge;
     color: $text-secondary;
-    text-transform: uppercase;
 }
 
 .port-description {
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: $text-secondary;
 }
 
@@ -650,12 +489,12 @@
 .compose-preview {
     padding: $space-4;
     background: var(--bg-code);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     border: 1px solid var(--border-soft);
 
     code {
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: var(--text-code);
     }
 }
@@ -664,7 +503,7 @@
 .install-modal {
     h4 {
         margin: $space-4 0 $space-3 0;
-        font-size: $font-size-base;
+        font-size: $text-base;
         font-weight: $font-weight-semibold;
         padding-top: $space-4;
         border-top: 1px solid var(--border-soft);
@@ -679,8 +518,7 @@
     margin-bottom: $space-3;
 
     span {
-        font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
         text-transform: capitalize;
         white-space: nowrap;
@@ -690,37 +528,18 @@
 .deployment-progress-track {
     height: 5px;
     background: var(--surface-3);
-    border-radius: 3px;
+    border-radius: $radius-badge;
     overflow: hidden;
 }
 
 .deployment-progress-fill {
     height: 100%;
-    border-radius: 3px;
+    border-radius: $radius-badge;
     background: var(--accent-primary);
     transition: width 180ms ease;
 }
 
 // Responsive
-@media (max-width: $breakpoint-md) {
-    .templates-page {
-        .templates-grid {
-            grid-template-columns: 1fr;
-        }
-
-        // No hover on touch — keep Deploy reachable
-        .tpl-deploy {
-            opacity: 1;
-            pointer-events: auto;
-        }
-    }
-}
-
-
-.sk-srvpick__resource-picker {
-    width: 100%;
-    max-width: none;
-}
 
 // Capacity note in the deploy drawer — does this template fit the server the
 // operator just picked. Toned by verdict, but deliberately quiet: it sits under
@@ -728,12 +547,12 @@
 // the deploy.
 .tpl-capacity {
     display: flex;
-    gap: 8px;
+    gap: $space-2;
     align-items: flex-start;
-    margin-top: 8px;
-    padding: 10px 12px;
+    margin-top: $space-2;
+    padding: $space-3 $space-3;
     border: 1px solid var(--surface-3);
-    border-radius: $radius-md;
+    border-radius: $radius-control;
     background: var(--surface-2);
     transition: opacity 0.15s ease;
 
@@ -746,19 +565,19 @@
     &__text {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 0;
     }
 
     &__headline {
         color: $text-primary;
-        font-size: 12.5px;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
     }
 
     &__detail {
         color: $text-tertiary;
-        font-size: 11.5px;
+        font-size: $text-xs;
         line-height: 1.45;
     }
 

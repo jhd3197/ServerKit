@@ -477,6 +477,8 @@ Regenerate (backend/):
 - `GET /plugins/{plugin_id}/permissions`
 - `GET /plugins/{plugin_id}/requirements`
 - `GET /plugins/{slug}/assets/<path:asset_path>`
+- `GET /ports/check`
+- `GET /ports/suggest`
 - `GET /processes`
 - `GET /processes/services`
 - `GET /processes/services/{service_name}/logs`

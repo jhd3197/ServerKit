@@ -55,7 +55,7 @@
     align-items: center;
     gap: $space-3;
     flex-wrap: wrap;
-    padding: 10px 14px;
+    padding: $space-3 $space-4;
     border-bottom: 1px solid var(--border-soft);
 }
 
@@ -65,7 +65,7 @@
     gap: $space-2;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: $radius-card;
     padding: 0 $space-3;
     min-width: 230px;
     transition: border-color $transition-fast;
@@ -83,9 +83,9 @@
         flex: 1;
         background: none;
         border: none;
-        padding: 7px 0;
+        padding: $space-2 0;
         color: var(--text);
-        font-size: 13px;
+        font-size: $text-sm;
         outline: none;
         box-shadow: none;
         min-width: 0;
@@ -96,42 +96,28 @@
     }
 }
 
-.apps-table {
-    th:last-child,
-    td:last-child {
-        text-align: right;
-    }
-
-    .sk-cell-name > div {
-        min-width: 0;
-    }
-}
-
 // Tinted type glyph tile (brand colors arrive via inline style props,
 // same convention as the Services list type icon)
 .apps-type-ico {
     width: 34px;
-    height: 34px;
-    border-radius: 9px;
+    height: 34px; // geometry: icon tile
+    border-radius: $radius-card;
     display: grid;
     place-items: center;
     flex-shrink: 0;
-    font-family: var(--mono);
-    font-size: 14px;
-    font-weight: $font-weight-bold;
+    font-size: $text-base;
+    font-weight: $font-weight-semibold;
 }
 
 // Mono type chip (brand colors via inline style props)
 .apps-type-chip {
+    height: 20px; // geometry: badge height (20px badge spec)
     display: inline-flex;
     align-items: center;
-    font-family: var(--mono);
-    font-size: 10.5px;
-    font-weight: $font-weight-semibold;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 2px 7px;
-    border-radius: 5px;
+    font-size: $text-xs;
+    font-weight: $font-weight-medium;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
     border: 1px solid;
     white-space: nowrap;
 }
@@ -139,14 +125,14 @@
 .apps-domain {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: $space-1;
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: $text-xs;
 
     a {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: $space-tight;
         color: var(--text-dim);
         text-decoration: none;
 
@@ -162,8 +148,7 @@
 }
 
 .apps-none {
-    font-family: var(--mono);
-    font-size: 12px;
+    font-size: $text-xs;
     color: var(--text-ghost);
 }
 
@@ -174,7 +159,7 @@
     gap: $space-2;
 
     & + & {
-        margin-top: 6px;
+        margin-top: $space-tight;
     }
 
     .sk-gauge {
@@ -184,19 +169,15 @@
 
     &__label {
         width: 28px;
-        font-family: var(--mono);
-        font-size: 10px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
         color: var(--text-faint);
         flex-shrink: 0;
     }
 
     &__val {
         width: 36px;
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-dim);
         text-align: right;
         flex-shrink: 0;
@@ -212,19 +193,19 @@
     display: inline-flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 2px;
+    gap: $space-hair;
     white-space: nowrap;
 }
 
 .apps-icon-action {
-    width: 27px;
-    height: 27px;
+    width: $control-sm;
+    height: $control-sm;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     background: transparent;
     border: none;
-    border-radius: 7px;
+    border-radius: $radius-control;
     color: var(--text-faint);
     cursor: pointer;
     transition: background 0.12s, color 0.12s;
@@ -259,10 +240,10 @@
     .app-logs-select {
         background: var(--surface-2);
         border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 6px 10px;
+        border-radius: $radius-card;
+        padding: $space-tight $space-3;
         color: var(--text);
-        font-size: 13px;
+        font-size: $text-sm;
         cursor: pointer;
 
         &:focus {
@@ -277,7 +258,7 @@
         border-radius: var(--radius);
         color: var(--text-code);
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
     }
 }
 
@@ -287,19 +268,19 @@
 
 // Used by components/LinkAppModal.jsx
 .app-type-badge {
-    font-family: var(--mono);
-    font-size: 10.5px;
-    font-weight: $font-weight-semibold;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    height: 20px; // geometry: badge height (20px badge spec)
+    font-size: $text-xs;
+    font-weight: $font-weight-medium;
     @include status-variant(var(--accent-bright), var(--accent-bg));
-    padding: 2px 7px;
-    border-radius: 5px;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
 }
 
 // Used by pages/Firewall.jsx
 .port-status {
-    font-size: $font-size-xs;
+    font-size: $text-xs;
     margin-left: $space-2;
 
     &.accessible {
@@ -316,7 +297,7 @@
     text-align: center;
     padding: $space-6;
     color: var(--text-faint);
-    font-size: 13px;
+    font-size: $text-sm;
 }
 
 // Icon-only button (legacy global utility; LinkedAppsSection consumes it)
@@ -354,8 +335,7 @@
     display: flex;
     align-items: center;
     gap: $space-2;
-    font-family: var(--mono);
-    font-size: $font-size-sm;
+    font-size: $text-xs;
     color: var(--text-faint);
 
     a {
@@ -383,49 +363,37 @@
     gap: $space-2;
 }
 
-// Header — gradient surface card + radial accent wash
 .app-detail-header {
     position: relative;
     display: flex;
     align-items: center;
     gap: $space-4;
-    padding: 20px 22px;
-    background: linear-gradient(120deg, var(--surface) 0%, var(--surface-2) 100%);
+    padding: $space-5 $space-6;
+    background: var(--surface);
     border: 1px solid var(--border-soft);
-    border-radius: var(--radius-lg);
-
-    // No overflow:hidden (header menus must escape), so the wash carries
-    // its own radius instead.
-    &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: var(--radius-lg);
-        background: radial-gradient(420px 200px at 0% 0%, var(--accent-bg-soft), transparent 70%);
-        pointer-events: none;
-    }
+    border-radius: $radius-card;
 }
 
 .app-detail-icon {
     position: relative;
     width: 52px;
     height: 52px;
-    border-radius: 13px;
+    border-radius: $radius-overlay;
     border: 1px solid fade(#fff, 8%);
-    box-shadow: var(--shadow-sm);
+    box-shadow: none;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    font-size: $font-size-xl;
-    font-weight: $font-weight-bold;
+    font-size: $text-lg;
+    font-weight: $font-weight-semibold;
     color: #fff;
 
     img {
         width: 100%;
         height: 100%;
         object-fit: contain;
-        border-radius: 13px;
+        border-radius: $radius-overlay;
     }
 
     svg {
@@ -440,17 +408,17 @@
     h1 {
         display: flex;
         align-items: center;
-        gap: 11px;
+        gap: $space-3;
         flex-wrap: wrap;
         margin: 0;
-        font-size: 21px;
+        font-size: $text-lg;
         font-weight: $font-weight-semibold;
         letter-spacing: -0.02em;
         color: var(--text);
 
         // linked-app glyph inside the EnvTag
         .sk-tag svg {
-            margin-left: 4px;
+            margin-left: $space-1;
         }
     }
 }
@@ -459,11 +427,10 @@
 .app-detail-subtitle {
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: $space-2;
     flex-wrap: wrap;
-    margin-top: 4px;
-    font-family: var(--mono);
-    font-size: 12px;
+    margin-top: $space-1;
+    font-size: $text-xs;
     color: var(--text-dim);
 
     a {
@@ -483,15 +450,14 @@
 // Status badge (WordPressProject still renders this class; ApplicationDetail
 // uses the ds Pill) — sk-pill visual spec.
 .app-status-badge {
+    height: 20px; // geometry: badge height (20px badge spec)
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 3px 9px;
-    border-radius: 6px;
-    font-family: var(--mono);
-    font-size: 11.5px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
+    gap: $space-tight;
+    padding: 0 $space-tight;
+    border-radius: $radius-badge;
+    font-size: $text-xs;
+    font-weight: $font-weight-medium;
     white-space: nowrap;
 
     &.running {
@@ -516,18 +482,13 @@
     flex-shrink: 0;
 
     .running & {
-        box-shadow: 0 0 6px currentColor;
         animation: pulse-green 2s ease-in-out infinite;
     }
 }
 
 @keyframes pulse-green {
-    0%, 100% {
-        box-shadow: 0 0 0 0 fade($success-raw, 40%);
-    }
-    50% {
-        box-shadow: 0 0 0 4px fade($success-raw, 0%);
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
 }
 
 // Tabs navigation (WordPress pages render these classes; ApplicationDetail
@@ -537,11 +498,11 @@
 // it; the active pill is filled so the current section is unmistakable.
 .app-detail-tabs {
     display: flex;
-    gap: 3px;
+    gap: $space-1;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 4px;
+    padding: $space-1;
     overflow-x: auto;
 
     &::-webkit-scrollbar {
@@ -552,13 +513,14 @@
 .app-detail-tab {
     display: flex;
     align-items: center;
-    gap: 7px;
-    padding: 8px 13px;
+    gap: $space-2;
+    height: $control-md;
+    padding: 0 $space-3;
     background: transparent;
     border: none;
-    border-radius: 7px;
+    border-radius: $radius-control;
     color: var(--text-dim);
-    font-size: 13px;
+    font-size: $text-sm;
     font-weight: $font-weight-medium;
     cursor: pointer;
     white-space: nowrap;
@@ -632,14 +594,11 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 7px;
-    padding: 12px 17px;
+    gap: $space-2;
+    padding: $space-3 $space-4;
     border-bottom: 1px solid var(--border-soft);
-    font-family: var(--mono);
-    font-size: 10.5px;
+    font-size: $text-xs;
     font-weight: $font-weight-semibold;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--text-faint);
 
     svg {
@@ -663,7 +622,7 @@
 }
 
 .app-panel-body {
-    padding: $space-4 17px;
+    padding: $space-4 $space-4;
 
     .hint:last-child {
         margin-bottom: 0;
@@ -679,15 +638,15 @@
         }
     }
 
-    .app-info-grid + .app-detail-actions,
-    .app-info-grid + .hint {
+    .info-list + .app-detail-actions,
+    .info-list + .hint {
         margin-top: $space-3;
     }
 }
 
 .app-panel-hint {
     margin: 0 0 $space-3;
-    font-size: 13px;
+    font-size: $text-sm;
     line-height: 1.5;
     color: var(--text-dim);
 
@@ -696,80 +655,23 @@
     }
 }
 
-// Info grids → k/v spec rows (.sk-info-row look)
-.app-info-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
-.app-info-item {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: $space-4;
-    padding: 10px 0;
-    border-top: 1px solid var(--border-soft);
-
-    &:first-child {
-        border-top: none;
-        padding-top: 0;
-    }
-
-    &:last-child {
-        padding-bottom: 0;
-    }
-}
-
-.app-info-label {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text-faint);
-    min-width: 0;
-    overflow-wrap: anywhere;
-}
-
-.app-info-value {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    gap: $space-2;
-    font-family: var(--mono);
-    font-size: 12.5px;
-    color: var(--text);
-    text-align: right;
-    min-width: 0;
-    overflow-wrap: anywhere;
-
-    a {
-        color: var(--accent-bright);
-        text-decoration: none;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-}
-
 // Mono path chip (Root Path row)
 .app-path-value {
     display: inline-block;
     font-family: var(--mono);
-    font-size: 11.5px;
+    font-size: $text-xs;
     color: var(--text-dim);
     background: var(--surface-2);
     border: 1px solid var(--border-soft);
-    padding: 3px 8px;
-    border-radius: 5px;
+    padding: $space-1 $space-2;
+    border-radius: $radius-control;
     overflow-wrap: anywhere;
 }
 
 // Port reachability hint inside the info value
 .port-indicator {
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
     color: var(--red);
 
     &.accessible {
@@ -785,19 +687,19 @@
 .app-detail-page {
     // ---- shadcn tab strip (.tabs/.tab) → accent-wash chips ----
     .tabs {
-        gap: 2px;
+        gap: $space-hair;
         border-bottom: 1px solid var(--border-soft);
         padding-bottom: $space-2;
         margin-bottom: $space-5;
     }
 
     .tab {
-        padding: 7px 12px;
+        padding: $space-2 $space-3;
         border-bottom: none;
         margin-bottom: 0;
-        border-radius: 8px;
+        border-radius: $radius-card;
         color: var(--text-dim);
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-normal;
 
         &:hover {
@@ -817,13 +719,10 @@
     h3.app-eyebrow {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
         margin: 0 0 $space-3;
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 
@@ -834,13 +733,10 @@
         h3 {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: $space-tight;
             margin: 0;
-            font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
     }
@@ -849,25 +745,20 @@
     .card {
         background: var(--surface);
         border: 1px solid var(--border-soft);
-        border-radius: var(--radius);
-        box-shadow: none;
 
         > h3,
         .card-header-row h3 {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: $space-tight;
             margin: 0 0 $space-3;
-            font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
 
         h4 {
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
             color: var(--text);
         }
@@ -894,7 +785,7 @@
 
     // ---- InfoList rows → k/v spec rows ----
     .info-item {
-        padding: 10px 0;
+        padding: $space-3 0;
         border-bottom: 1px solid var(--border-soft);
 
         &:last-child {
@@ -903,14 +794,12 @@
     }
 
     .info-label {
-        font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .info-value {
-        font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text);
         overflow-wrap: anywhere;
         text-align: right;
@@ -918,14 +807,12 @@
 
     // ---- Build auto-detection grid ----
     .detection-label {
-        font-family: var(--mono);
-        font-size: 10.5px;
-        letter-spacing: 0.06em;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .detection-value {
-        font-size: 13px;
+        font-size: $text-sm;
         font-weight: $font-weight-medium;
         color: var(--text);
     }
@@ -940,7 +827,7 @@
         display: flex;
         align-items: center;
         gap: $space-3;
-        padding: 10px 0;
+        padding: $space-3 0;
         border-top: 1px solid var(--border-soft);
 
         &:first-child {
@@ -952,7 +839,7 @@
             margin: 0 (-$space-2);
             padding-left: $space-2;
             padding-right: $space-2;
-            border-radius: $radius-sm;
+            border-radius: $radius-badge;
         }
 
         > .btn,
@@ -969,24 +856,22 @@
 
     .deployment-version {
         font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         @include status-variant(var(--accent-bright), var(--accent-bg));
-        padding: 2px 7px;
-        border-radius: 5px;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
     }
 
     .deployment-meta {
         display: flex;
         align-items: center;
         gap: $space-3;
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
     .deployment-date {
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -1001,7 +886,7 @@
         align-items: center;
         justify-content: space-between;
         gap: $space-3;
-        padding: 10px 0;
+        padding: $space-3 0;
         border-top: 1px solid var(--border-soft);
 
         &:first-child {
@@ -1015,7 +900,7 @@
 
         a {
             font-family: var(--mono);
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--accent-bright);
             text-decoration: none;
             overflow-wrap: anywhere;
@@ -1027,14 +912,14 @@
     }
 
     .ssl-badge {
-        font-family: var(--mono);
-        font-size: 10px;
-        font-weight: $font-weight-semibold;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        height: 20px; // geometry: badge height (20px badge spec)
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         @include status-variant(var(--green), var(--green-bg));
-        padding: 2px 7px;
-        border-radius: 5px;
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
         flex-shrink: 0;
     }
 
@@ -1042,7 +927,7 @@
     .resource-bar-container {
         display: flex;
         flex-direction: column;
-        gap: 7px;
+        gap: $space-2;
 
         & + .resource-bar-container {
             margin-top: $space-4;
@@ -1056,13 +941,12 @@
     }
 
     .resource-bar-label {
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
     .resource-bar-value {
-        font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
@@ -1070,14 +954,14 @@
     .resource-bar-track {
         height: 5px;
         background: var(--surface-3);
-        border-radius: 3px;
+        border-radius: $radius-badge;
         overflow: hidden;
     }
 
     .resource-bar-fill {
         display: block;
         height: 100%;
-        border-radius: 3px;
+        border-radius: $radius-badge;
         transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
         &.cpu {
@@ -1091,8 +975,7 @@
 
     .resource-hint {
         margin: $space-3 0 0;
-        font-family: var(--mono);
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -1115,13 +998,13 @@
 
     .diag-icon {
         width: 30px;
-        height: 30px;
+        height: 30px; // geometry: icon tile
         display: grid;
         place-items: center;
-        border-radius: 8px;
+        border-radius: $radius-card;
         font-family: var(--mono);
-        font-size: 14px;
-        font-weight: $font-weight-bold;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
         flex-shrink: 0;
 
         &.healthy {
@@ -1138,15 +1021,15 @@
 
         h4 {
             margin: 0;
-            font-size: 13px;
+            font-size: $text-sm;
             font-weight: $font-weight-semibold;
             color: var(--text);
         }
 
         p {
-            margin: 2px 0 0;
+            margin: $space-hair 0 0;
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-dim);
         }
     }
@@ -1154,7 +1037,7 @@
     .diag-issues {
         margin: $space-3 0 0;
         padding-left: $space-5;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--red);
 
         li {
@@ -1182,7 +1065,7 @@
         border: none;
         border-radius: 0;
         box-shadow: none;
-        padding: 11px 16px;
+        padding: $space-3 $space-4;
 
         & + .package-item {
             border-top: 1px solid var(--border-soft);
@@ -1191,13 +1074,13 @@
 
     .package-name {
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--accent-bright);
     }
 
     .package-version {
         font-family: var(--mono);
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
@@ -1211,7 +1094,7 @@
         border-color: var(--border-soft);
         color: var(--text-code);
         font-family: var(--mono);
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     .command-output {
@@ -1221,7 +1104,7 @@
 
         pre {
             color: var(--text-code);
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
 
         &.error {
@@ -1239,7 +1122,7 @@
         border-radius: var(--radius);
         color: var(--text-code);
         font-family: var(--mono);
-        font-size: 12.5px;
+        font-size: $text-sm;
     }
 
     // ---- Logs tab chrome ----
@@ -1254,13 +1137,10 @@
         h3 {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: $space-tight;
             margin: 0;
-            font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             font-weight: $font-weight-semibold;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
             color: var(--text-faint);
         }
     }
@@ -1272,8 +1152,7 @@
 
         .hint {
             margin: 0;
-            font-family: var(--mono);
-            font-size: 11px;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
     }
@@ -1282,7 +1161,7 @@
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-dim);
         cursor: pointer;
         white-space: nowrap;
@@ -1294,11 +1173,8 @@
 
     // ---- Config modals (Build / Deploy) — mono eyebrow field labels ----
     .modal .form-group > label:not(.checkbox-label) {
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         font-weight: $font-weight-semibold;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
         color: var(--text-faint);
     }
 }
@@ -1362,12 +1238,12 @@
     &__field-text {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 0;
     }
 
     &__field-hint {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
         line-height: 1.4;
     }
@@ -1380,12 +1256,12 @@
     // registry picker (native select, themed to match the Input control)
     &__select {
         max-width: 280px;
-        padding: 8px 10px;
+        padding: $space-2 $space-3;
         border: 1px solid var(--border-soft);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: var(--surface-2, var(--bg-card));
         color: var(--text-strong, inherit);
-        font-size: 13px;
+        font-size: $text-sm;
 
         &:focus {
             outline: none;
@@ -1412,10 +1288,10 @@
     &__input {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: $space-tight;
 
         label {
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--text-dim);
         }
     }
@@ -1442,7 +1318,7 @@
 
 .app-volumes {
     &__empty {
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-faint);
         padding: $space-3 0;
     }
@@ -1463,39 +1339,37 @@
 
         &--head {
             border-top: none;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
+            font-size: $text-xs;
             color: var(--text-faint);
         }
 
         @media (max-width: $breakpoint-sm) {
             grid-template-columns: 1fr;
-            gap: 4px;
+            gap: $space-1;
         }
     }
 
     &__cell {
         min-width: 0;
-        font-size: 13px;
+        font-size: $text-sm;
 
         &--name {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: $space-hair;
         }
     }
 
     &__mono {
         font-family: $font-mono, monospace;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-dim);
         word-break: break-all;
     }
 
     &__pills {
         display: flex;
-        gap: 6px;
+        gap: $space-tight;
         flex-wrap: wrap;
     }
 
@@ -1516,8 +1390,8 @@
     &__ro {
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 12.5px;
+        gap: $space-2;
+        font-size: $text-sm;
         color: var(--text-dim);
     }
 
@@ -1541,9 +1415,9 @@
     &__note {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: $space-tight;
         margin-top: $spacing-md;
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 }
@@ -1569,18 +1443,18 @@
         gap: $spacing-md;
         padding: $spacing-md;
         border: 1px solid var(--border-soft);
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: var(--surface-2, var(--bg-card));
     }
 
     &__banner-text {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
         min-width: 0;
 
         span {
-            font-size: 12.5px;
+            font-size: $text-sm;
             color: var(--text-dim);
             line-height: 1.4;
         }
@@ -1589,7 +1463,7 @@
     &__mode {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: $space-2;
         margin-top: $space-3;
 
         .sk-seg {
@@ -1598,7 +1472,7 @@
     }
 
     &__mode-hint {
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-dim);
         line-height: 1.4;
     }
@@ -1606,7 +1480,7 @@
     &__rules {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: $space-tight;
         margin-top: $spacing-md;
         padding-top: $spacing-md;
         border-top: 1px solid var(--border-soft);
@@ -1616,7 +1490,7 @@
         display: flex;
         align-items: center;
         gap: $spacing-sm;
-        margin-top: 4px;
+        margin-top: $space-1;
 
         .input,
         input {
@@ -1628,18 +1502,18 @@
         display: flex;
         flex-wrap: wrap;
         gap: $spacing-sm;
-        margin-top: 8px;
+        margin-top: $space-2;
     }
 
     &__chip {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 3px 6px 3px 10px;
+        gap: $space-tight;
+        padding: $space-1 $space-tight $space-1 $space-3;
         border: 1px solid var(--border-soft);
         border-radius: $radius-full;
         background: var(--surface-2, var(--bg-card));
-        font-size: 12.5px;
+        font-size: $text-sm;
     }
 
     &__chip-remove {
@@ -1659,36 +1533,6 @@
         &:hover {
             color: var(--danger, #ef4444);
             background: var(--border-soft);
-        }
-    }
-
-    &__table-wrap {
-        overflow-x: auto;
-    }
-
-    &__table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13px;
-
-        th,
-        td {
-            text-align: left;
-            padding: $space-3 $spacing-md;
-            border-bottom: 1px solid var(--border-soft);
-            vertical-align: top;
-        }
-
-        th {
-            font-size: 11.5px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--text-faint);
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
         }
     }
 
@@ -1714,13 +1558,12 @@
     &__ttl {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
 
         input { width: 96px; }
     }
 
     &__ratio {
-        font-family: var(--mono);
         color: var(--text);
     }
 }

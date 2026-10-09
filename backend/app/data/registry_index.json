@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated": "2026-09-30",
+  "updated": "2026-10-09",
   "note": "Bundled fallback copy of the ServerKit extension registry index. The live index is fetched from SERVERKIT_REGISTRY_URL when configured; this file is used offline and in tests. It is a MIRROR of serverkit-extensions/index.json on main \u2014 do not hand-edit entries here, or it drifts from the artifacts it pins and installs fail checksum verification on exactly the panels that are already offline. Regenerate by copying that file's extensions array; tests/test_registry_bundled_index.py checks the two agree. Schema v3 adds optional per-entry `signature` + `publisher_key_id` (ed25519 minisign-style detached signature over the release zip, verified against the panel's pinned publisher keys at install \u2014 plan 55 D3). v1/v2 indexes without those fields remain valid; their entries are treated as unsigned.",
   "extensions": [
     {
@@ -299,7 +299,7 @@
       "slug": "serverkit-wordpress",
       "display_name": "WordPress",
       "description": "The full WordPress suite: one-click site provisioning, a curated plugin library, environments and promote pipelines, update runs, security hardening, vulnerability scanning, analytics and reports. Offered during onboarding; uninstall it to slim the panel.",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "category": "integration",
       "author": "ServerKit",
       "first_party": true,
@@ -311,16 +311,16 @@
         "docker",
         "database"
       ],
-      "min_panel_version": "1.7.81",
+      "min_panel_version": "1.11.18",
       "max_panel_version": null,
-      "source": "https://github.com/jhd3197/serverkit-wordpress/releases/download/v1.0.2/serverkit-wordpress-1.0.2.zip",
-      "sha256": "a0affcd7d014cde41269f41cdc5058e7b0c8fa27efa687d844f5d64201b7d872",
+      "source": "https://github.com/jhd3197/serverkit-wordpress/releases/download/v1.0.3/serverkit-wordpress-1.0.3.zip",
+      "sha256": "5d6155aea4807c10c3535fd3131d11d178a164b2ac8c84da7e26290af3075aea",
       "repo": "https://github.com/jhd3197/serverkit-wordpress",
       "homepage": "https://github.com/jhd3197/serverkit-wordpress",
       "featured": true,
       "feature_score": 80,
       "logo": "assets/serverkit-wordpress/logo.png",
-      "signature": "RUSisf2r8uF4y8MM6PT19vklhMj+hZe4tdIHg9tqRJZAYgA96APK5kUEGCwbgUANqbMQVwyX1m0GPA0EEqbzsWypgzb1hIGtBws=",
+      "signature": "RUSisf2r8uF4y8N4K2ba7aYvsoTw9FNZA+GzRja/6gIPR+lHzjR5nRvDX63qKbbjz0SHbxjoFovex1OmleM+3Q9nrNhyMcogiwc=",
       "publisher_key_id": "serverkit-official"
     },
     {
@@ -353,7 +353,7 @@
       "slug": "serverkit-tramo",
       "display_name": "Automations",
       "description": "Node-based automation builder powered by tramo. Design workflows on a visual canvas (triggers, actions, branches, loops, approval gates) that react to panel events or run on a schedule, with 21 brand integration packs (Telegram, GitHub, Gmail, Discord, Notion, Stripe, Cloudflare, Postgres, Twilio and more). Enabled workflows deploy to a managed tramo container on the panel host that runs them headless, with run history, approvals, and inbound webhooks proxied through the panel. This replaces the older drag-and-drop Workflow Builder.",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "category": "deployment",
       "author": "ServerKit",
       "first_party": true,
@@ -366,14 +366,14 @@
       ],
       "min_panel_version": "1.7.0",
       "max_panel_version": null,
-      "source": "https://github.com/jhd3197/serverkit-tramo/releases/download/v1.0.3/serverkit-tramo-1.0.3.zip",
-      "sha256": "2fd311523098c3d8f192de744d10494b35af713d1349d5f3056503e969af731e",
+      "source": "https://github.com/jhd3197/serverkit-tramo/releases/download/v1.0.4/serverkit-tramo-1.0.4.zip",
+      "sha256": "dc575c301d217b8e063e632517673e6f34ba8476167f7a3759a1419535f708f5",
       "repo": "https://github.com/jhd3197/serverkit-tramo",
       "homepage": "https://github.com/jhd3197/serverkit-tramo",
       "featured": true,
       "feature_score": 90,
       "logo": "assets/serverkit-tramo/logo.png",
-      "signature": "RUSisf2r8uF4ywuRVgO2yST6e48hVZHQi2ufxlCiJkYUEcE/u87nQFhhtF9Uo6rJL1o+HPdZ1TcTPYURPASJ9+pe89l/YhQkowc=",
+      "signature": "RUSisf2r8uF4y0hGYapwSn9kjlfmSQg52Parc6Z5xcUoY4uKqF1BpCdfvG4Lpc4zN02QmeMbAK30qlRv0dHZpGgM9v/G7Os+fAQ=",
       "publisher_key_id": "serverkit-official"
     },
     {
@@ -570,6 +570,31 @@
       "feature_score": 0,
       "logo": "assets/serverkit-image-scan/logo.svg",
       "signature": "RUSisf2r8uF4y4+3tYKno5YiN4FFI7Q6EDgcSLJbY8ns2NU39qs40mPaG/V92tZI6nj8HPVQvoFuNYcqVvJJf00AUiu+gJACtg4=",
+      "publisher_key_id": "serverkit-official"
+    },
+    {
+      "slug": "serverkit-vela",
+      "display_name": "Vela",
+      "description": "Create and manage named Vela instances on panel-managed servers. Each instance is a virtual server with its own container, data disk, domain and login, deployed from the official Vela serverkit.yaml recipe as a ServerKit managed app.",
+      "version": "0.1.0",
+      "category": "deployment",
+      "author": "ServerKit",
+      "first_party": true,
+      "bundled": false,
+      "permissions": [
+        "docker",
+        "network",
+        "filesystem"
+      ],
+      "min_panel_version": "1.11.17",
+      "max_panel_version": null,
+      "source": "https://github.com/jhd3197/serverkit-vela/releases/download/v0.1.0/serverkit-vela-0.1.0.zip",
+      "sha256": "c02574a88c567b0722b3d811c14851f7e8f64bb1a03e603ab92c81ea544d3c34",
+      "repo": "https://github.com/jhd3197/serverkit-vela",
+      "homepage": "https://github.com/jhd3197/serverkit-vela",
+      "featured": false,
+      "logo": "assets/serverkit-vela/logo.svg",
+      "signature": "RUSisf2r8uF4yxkY4gZoKC1/rTCMWR3pgGG8+Vr6bUDxudQ5Ke6upmB80I1FAonQ0SLDBrxHkI3I5I5/2D6cVGiL2dlIRoCZ9gM=",
       "publisher_key_id": "serverkit-official"
     },
     {

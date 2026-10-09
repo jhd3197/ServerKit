@@ -38,7 +38,9 @@ export function monitorStateOf(monitor) {
         case 'maintenance':
             return { key: 'maintenance', labelKey: 'app.monitorShared.maintenance', label: 'Maintenance', tone: 'cyan' };
         default:
-            return { key: 'unknown', label: monitor.status || 'Unknown', tone: 'gray' };
+            return monitor.status
+                ? { key: 'unknown', label: monitor.status, tone: 'gray' }
+                : { key: 'unknown', labelKey: 'app.monitorShared.unknown', label: 'Unknown', tone: 'gray' };
     }
 }
 

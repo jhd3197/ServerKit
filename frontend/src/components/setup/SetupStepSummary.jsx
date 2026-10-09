@@ -5,6 +5,7 @@ import { Sparkles, Check, Loader, AlertTriangle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
+import { translateLabel } from '../../i18n/labels';
 import {
     SIDEBAR_ITEMS,
     SIDEBAR_PRESETS,
@@ -15,7 +16,7 @@ import { Button as SharedButton } from '@/components/ui/button';
 
 const USE_CASE_LABELS = {
     wordpress: 'WordPress Sites',
-    'web-apps': 'Web Applications',
+    'web-apps': 'Web services',
     'self-hosted': 'Self-Hosted Services',
     devops: 'DevOps & Monitoring',
 };
@@ -152,7 +153,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
 
     return (
         <div className="wizard-step">
-            <h2 className="wizard-step-title">{t('app.setupStepSummary.youReAllSet', 'You\'re all set')}</h2>
+            <h2 className="wizard-step-title">{t('app.setupStepSummary.youReAllSet', 'Setup complete')}</h2>
             <p className="wizard-step-description">
                 {t('app.setupStepSummary.hereSASummaryOfYour', 'Here\'s a summary of your setup. You can change these later in Settings.')}
             </p>
@@ -171,7 +172,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                 </div>
 
                 <div className="summary-section">
-                    <div className="summary-section-title">{t('app.setupStepSummary.useCases', 'Use Cases')}</div>
+                    <div className="summary-section-title">{t('app.setupStepSummary.useCases', 'Use cases')}</div>
                     {useCases && useCases.length > 0 ? (
                         <div className="summary-tags">
                             {useCases.map((uc) => (
@@ -208,9 +209,9 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                 <div className="summary-section">
                     <div className="summary-section-title">{t('common.labels.security', 'Security')}</div>
                     <div className="summary-row">
-                        <span className="summary-label">{t('app.setupStepSummary.twoFactor', 'Two-factor')}</span>
+                        <span className="summary-label">{t('app.setupStepSummary.twoFactor', '2FA')}</span>
                         <span className="summary-value">
-                            {twoFactorEnabled ? 'Enabled' : 'Off — you can turn it on in Settings'}
+                            {twoFactorEnabled ? t('app.setupStepSummary.enabled', 'Enabled') : t('app.setupStepSummary.offTurnOnInSettings', 'Off. You can turn it on in Settings.')}
                         </span>
                     </div>
 
@@ -219,11 +220,11 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                         installable extension differ from "minimal"; each card
                         names exactly what it would install. */}
                     <p className="recommendation-hint">
-                        {t('app.setupStepSummary.howMuchSecurityTooling', 'How much security tooling should we install? Everything here is an extension — add or remove any of it later from the Marketplace.')}
+                        {t('app.setupStepSummary.howMuchSecurityTooling', 'How much security tooling should we install? Everything here is an extension. Install or uninstall any of it later from Extensions.')}
                     </p>
                     <div className="summary-preset-list">
                         {[
-                            { key: 'minimal', label: t('app.setupStepSummary.postureMinimal', 'Minimal'), desc: t('app.setupStepSummary.postureMinimalDesc', 'The lean default: firewall, SSH keys, IP lists, integrity and audit — nothing extra installed.') },
+                            { key: 'minimal', label: t('app.setupStepSummary.postureMinimal', 'Minimal'), desc: t('app.setupStepSummary.postureMinimalDesc', 'The lean default: firewall, SSH keys, IP lists, integrity and audit, with nothing extra installed.') },
                             { key: 'recommended', label: t('app.setupStepSummary.postureRecommended', 'Recommended'), desc: t('app.setupStepSummary.postureRecommendedDesc', 'Adds brute-force protection and automatic security updates.') },
                             { key: 'hardened', label: t('app.setupStepSummary.postureHardened', 'Hardened'), desc: t('app.setupStepSummary.postureHardenedDesc', 'Adds malware scanning, host audits, container image scanning and crowd-sourced IP blocking.') },
                         ].map((level) => {
@@ -247,7 +248,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                                             <> {'— '}{exts.map((e) => e.display_name).join(', ')}</>
                                         )}
                                         {level.key !== 'minimal' && exts.length === 0 && (
-                                            <> {t('app.setupStepSummary.postureNotYetAvailable', '— not yet available from the extension registry; pick it later from the Marketplace.')}</>
+                                            <> {t('app.setupStepSummary.postureNotYetAvailable', '(not yet available from the extension registry; pick it later from Extensions)')}</>
                                         )}
                                     </span>
                                 </SharedButton>
@@ -261,9 +262,9 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                     <div className="summary-row">
                         <span className="summary-label">{t('app.setupStepSummary.view', 'View')}</span>
                         <span className="summary-value summary-value--action">
-                            {SIDEBAR_PRESETS[sidebarPreset]?.label || 'Recommended'}
+                            {translateLabel(t, SIDEBAR_PRESETS[sidebarPreset]) || t('nav.preset.recommended.label', 'Recommended')}
                             <span className="summary-value-note">
-                                {visibleCountForPreset(sidebarPreset)} of {SIDEBAR_ITEMS.length} items
+                                {t('app.setupStepSummary.visibleOfTotalItems', '{{visible}} of {{total}} items', { visible: visibleCountForPreset(sidebarPreset), total: SIDEBAR_ITEMS.length })}
                             </span>
                             <SharedButton variant="unstyled"
                                 type="button"
@@ -271,7 +272,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                                 onClick={() => setPresetOpen((open) => !open)}
                                 aria-expanded={presetOpen}
                             >
-                                {presetOpen ? 'Done' : 'Change'}
+                                {presetOpen ? t('common.actions.done', 'Done') : t('app.setupStepSummary.change', 'Change')}
                             </SharedButton>
                         </span>
                     </div>
@@ -279,7 +280,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                     {presetOpen && (
                         <div className="summary-preset-picker">
                             <p className="recommendation-hint">
-                                {t('app.setupStepSummary.hiddenPagesStayReachableByUrl', 'Hidden pages stay reachable by URL and from search — this only trims the sidebar. Change it any time in Settings.')}
+                                {t('app.setupStepSummary.hiddenPagesStayReachableByUrl', 'Hidden pages stay reachable by URL and from search; this only trims the sidebar. Change it any time in Settings.')}
                             </p>
                             <div className="summary-preset-list">
                                 {Object.entries(SIDEBAR_PRESETS).map(([key, profile]) => (
@@ -319,7 +320,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                         ) : (
                             <>
                                 <p className="recommendation-hint">
-                                    {t('app.setupStepSummary.weLlInstallWhatYouCheck', 'We\'ll install what you check. Uncheck anything you don\'t need — you can add it later from Extensions.')}
+                                    {t('app.setupStepSummary.weLlInstallWhatYouCheck', "We'll install what you check. Uncheck anything you don't need; you can add it later from Extensions.")}
                                 </p>
                                 <div className="recommendation-list">
                                     {recommendations.map((rec) => (
@@ -363,7 +364,7 @@ const SetupStepSummary = ({ accountInfo, useCases, twoFactorEnabled, onFinish })
                     onClick={handleFinish}
                     disabled={installing}
                 >
-                    {installing ? 'Setting up...' : 'Go to Dashboard'}
+                    {installing ? t('app.setupStepSummary.settingUp', 'Setting up…') : t('app.setupStepSummary.goToDashboard', 'Go to dashboard')}
                 </SharedButton>
             </div>
         </div>

@@ -18,12 +18,14 @@
     right: 4px;
     top: 50%;
     transform: translateY(-50%);
+    // Sized to the 24px lane the header reserves for it, not a toolbar
+    // control: it is a hover affordance inside a 32px header cell.
     width: 20px;
-    height: 20px;
+    height: 20px; // geometry: header-cell ⋮ affordance sized to its reserved lane
     display: grid;
     place-items: center;
     border: none;
-    border-radius: 5px;
+    border-radius: $radius-control;
     background: transparent;
     color: var(--text-ghost);
     cursor: pointer;
@@ -39,7 +41,7 @@
         height: 3px;
         border-radius: 50%;
         background: currentcolor;
-        box-shadow: 0 -5px 0 currentcolor, 0 5px 0 currentcolor;
+        box-shadow: 0 -5px 0 currentcolor, 0 5px 0 currentcolor; // geometry: draws the ⋮ dots, not a shadow
     }
 }
 
@@ -47,8 +49,8 @@
 .sk-viewbar {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-bottom: 14px;
+    gap: $space-4;
+    margin-bottom: $space-4;
 
     // The table's own chrome (search, filter, "⋮") sits on the SAME line as the
     // view name. It used to go in a ListToolbar underneath, which on a page
@@ -57,7 +59,7 @@
     &__actions {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         margin-left: auto;
     }
 
@@ -65,24 +67,24 @@
     &__dirty {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 4px 5px 4px 11px;
+        gap: $space-2;
+        padding: $space-1 $space-tight $space-1 $space-3;
         border: 1px solid rgba(245, 185, 69, 0.28);
         background: rgba(245, 185, 69, 0.07);
-        border-radius: 9px;
-        font-size: 12px;
+        border-radius: $radius-card;
+        font-size: $text-xs;
         color: var(--amber);
         white-space: nowrap;
 
         button {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            font-size: 12px;
-            font-weight: 500;
-            padding: 4px 9px;
+            gap: $space-1;
+            font-size: $text-xs;
+            font-weight: $font-weight-medium;
+            padding: $space-1 $space-2;
             border: none;
-            border-radius: 6px;
+            border-radius: $radius-control;
             background: transparent;
             color: var(--text-dim);
             cursor: pointer;
@@ -92,7 +94,7 @@
             &.is-primary {
                 background: var(--amber);
                 color: #20180a;
-                font-weight: 600;
+                font-weight: $font-weight-semibold;
 
                 &:hover { background: #ffc75c; }
             }
@@ -103,10 +105,10 @@
 .sk-viewpick {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 5px 10px 5px 4px;
+    gap: $space-2;
+    padding: $space-tight $space-3 $space-tight $space-1;
     border: none;
-    border-radius: 9px;
+    border-radius: $radius-card;
     background: transparent;
     color: var(--text);
     cursor: pointer;
@@ -116,14 +118,14 @@
     &.is-open { background: var(--surface-2); }
 
     &__title {
-        font-size: 20px;
-        font-weight: 600;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         letter-spacing: -0.02em;
     }
 
     &__ast {
         color: var(--amber);
-        font-size: 18px;
+        font-size: $text-lg;
         margin-left: -4px;
     }
 
@@ -134,7 +136,7 @@
     &__row {
         display: flex;
         align-items: center;
-        border-radius: 8px;
+        border-radius: $radius-card;
 
         &:hover { background: var(--surface-3); }
         &.is-on { background: var(--accent-bg); }
@@ -146,11 +148,11 @@
         min-width: 0;
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 8px 9px;
+        gap: $space-3;
+        padding: $space-2 $space-2;
         border: none;
         background: transparent;
-        font-size: 13px;
+        font-size: $text-sm;
         color: var(--text-dim);
         text-align: left;
         cursor: pointer;
@@ -177,8 +179,7 @@
     &__star { color: var(--amber); flex-shrink: 0; }
 
     &__n {
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-ghost);
     }
 
@@ -186,11 +187,11 @@
         opacity: 0;
         display: grid;
         place-items: center;
-        width: 24px;
-        height: 24px;
-        margin-right: 5px;
+        width: $control-sm;
+        height: $control-sm;
+        margin-right: $space-tight;
         border: none;
-        border-radius: 5px;
+        border-radius: $radius-control;
         background: transparent;
         color: var(--text-ghost);
         cursor: pointer;
@@ -206,13 +207,13 @@
 // ---------------------------------------------------------------- toolbar bits
 .sk-gridicon {
     position: relative;
-    width: 34px;
-    height: 32px;
+    width: $control-md;
+    height: $control-md;
     display: grid;
     place-items: center;
     border: 1px solid var(--border);
     background: var(--surface-2);
-    border-radius: 9px;
+    border-radius: $radius-control;
     color: var(--text-dim);
     cursor: pointer;
     flex-shrink: 0;
@@ -233,15 +234,14 @@
         position: absolute;
         top: -6px;
         right: -6px;
-        font-family: var(--mono);
-        font-size: 9.5px;
+        font-size: $text-xs;
         background: var(--accent);
         color: #fff;
         border: 2px solid var(--bg-body);
-        border-radius: 20px;
-        min-width: 17px;
-        height: 17px;
-        padding: 0 4px;
+        border-radius: $radius-full; // counter bubble: 16px round
+        min-width: 16px;
+        height: 16px;
+        padding: 0 $space-1;
         display: grid;
         place-items: center;
     }
@@ -252,15 +252,16 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 7px;
-    margin-bottom: 13px;
+    gap: $space-2;
+    margin-bottom: $space-3;
 
     &__clear {
-        font-size: 12px;
+        font-size: $text-xs;
         color: var(--text-faint);
-        padding: 5px 8px;
+        height: $control-sm;
+        padding: 0 $space-2;
         border: none;
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: transparent;
         cursor: pointer;
 
@@ -271,12 +272,13 @@
 .sk-gridchip {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 5px 6px 5px 10px;
+    gap: $space-2;
+    height: $control-sm;
+    padding: 0 $space-tight 0 $space-3;
     border: 1px solid var(--border);
     background: var(--surface-2);
-    border-radius: 9px;
-    font-size: 12.5px;
+    border-radius: $radius-control;
+    font-size: $text-sm;
     color: var(--text);
     max-width: 360px;
     white-space: nowrap;
@@ -284,14 +286,11 @@
     &:hover { border-color: var(--border-strong); }
 
     &__k {
-        font-family: var(--mono);
-        font-size: 10px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        font-size: $text-xs;
         color: var(--text-faint);
     }
 
-    &__op { color: var(--text-faint); font-size: 11.5px; }
+    &__op { color: var(--text-faint); font-size: $text-xs; }
 
     &__v { overflow: hidden; text-overflow: ellipsis; }
 
@@ -299,7 +298,7 @@
         width: 18px;
         height: 18px;
         border: none;
-        border-radius: 5px;
+        border-radius: $radius-control;
         background: transparent;
         display: grid;
         place-items: center;
@@ -313,11 +312,8 @@
         background: var(--accent-bg-soft);
         border-color: var(--accent-dim);
         color: var(--accent-bright);
-        font-family: var(--mono);
-        font-size: 10.5px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        padding: 6px 10px;
+        font-size: $text-xs;
+        padding: 0 $space-3;
         cursor: pointer;
     }
 }
@@ -330,7 +326,7 @@
 // ---------------------------------------------------------------- the grid
 .sk-grid {
     border: 1px solid var(--border-soft);
-    border-radius: var(--radius-lg);
+    border-radius: $radius-card;
     background: var(--surface);
     position: relative;
 
@@ -345,31 +341,33 @@
         position: sticky;
         top: 0;
         z-index: 6;
-        border-bottom: 1px solid var(--border-soft);
-        // Top-lit, not a flat fill — the header reads as a lid on the surface.
-        background: linear-gradient(180deg, var(--surface-2), var(--surface));
-        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        min-height: $control-md; // table header spec: 32
+        border-bottom: 1px solid var(--border);
+        // Unfilled like .sk-dtable; the surface only backs the sticky header.
+        background: var(--surface);
+        border-radius: $radius-card $radius-card 0 0;
     }
 
     &__th {
         position: relative;
         display: flex;
         align-items: center;
-        gap: 6px;
-        // 26px of right padding is the reserved lane for the "⋮" button, so the
-        // label never reflows when it appears on hover.
-        padding: 10px 26px 10px 14px;
-        font-family: var(--mono);
-        font-size: 10px;
-        letter-spacing: 0.055em;
-        text-transform: uppercase;
-        color: var(--text-ghost);
+        gap: $space-tight;
+        // 24px of end padding is the reserved lane for the "⋮" button, so the
+        // label never reflows when it appears on hover. Header row: 32 tall
+        // (min-height on __head).
+        padding: 0 $space-6 0 $space-3;
+
+        &:first-child { padding-inline-start: $space-4; }
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
+        color: var(--text-faint);
         user-select: none;
         min-width: 0;
 
         &.is-sortable { cursor: pointer; }
         &.is-sortable:hover { color: var(--text-dim); }
-        &.is-sorted { color: var(--text); }
+        &.is-sorted { color: var(--accent-bright); }
         &.is-filtered { color: var(--accent-bright); }
         &.is-num { justify-content: flex-end; }
     }
@@ -390,9 +388,13 @@
     &__th.is-filtered .sk-colmenu-btn { opacity: 1; color: var(--accent-bright); }
 
     // ---- rows ----
+    // Rows: min 40; two-line identity cells grow past it.
     &__row {
-        border-top: 1px solid var(--border-soft);
+        min-height: $control-lg;
+        border-bottom: 1px solid var(--border-soft);
         transition: background 0.12s;
+
+        &:last-child { border-bottom: none; }
 
         &.is-clickable { cursor: pointer; }
         &:hover { background: var(--surface-2); }
@@ -401,16 +403,17 @@
     }
 
     &__td {
-        padding: 11px 14px;
+        padding: $space-2 $space-3;
         min-width: 0;
-        font-size: 13px;
-        color: var(--text-dim);
+
+        &:first-child { padding-inline-start: $space-4; }
+        &:last-child { padding-inline-end: $space-4; }
+        font-size: $text-sm;
         overflow: hidden;
 
         &.is-num {
             text-align: right;
-            font-family: var(--mono);
-            font-size: 12px;
+            font-size: $text-xs;
         }
     }
 
@@ -418,33 +421,26 @@
     &__name {
         display: flex;
         align-items: center;
-        gap: 11px;
+        gap: $space-3;
         min-width: 0;
     }
 
+    // A bare leading glyph, like the sidebar's: no tile, border or hover tint
+    // — a boxed icon repeated down every row is noise, not identity.
     &__avatar {
-        width: 30px;
-        height: 30px;
-        border-radius: 9px;
         flex-shrink: 0;
         display: grid;
         place-items: center;
-        background: var(--surface-3);
-        border: 1px solid var(--border);
         color: var(--text-faint);
-        transition: 0.12s;
-    }
 
-    &__row:hover &__avatar {
-        border-color: var(--accent-dim);
-        @include status-variant(var(--accent-bright), var(--accent-bg));
+        svg { width: 16px; height: 16px; } // geometry: icon size
     }
 
     &__nameinner { min-width: 0; }
 
     &__nm {
-        font-size: 13.5px;
-        font-weight: 550;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         color: var(--text);
         white-space: nowrap;
         overflow: hidden;
@@ -454,15 +450,14 @@
     &__sub {
         display: flex;
         align-items: center;
-        gap: 9px;
-        margin-top: 2px;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        gap: $space-2;
+        margin-top: $space-hair;
+        font-size: $text-xs;
         color: var(--text-ghost);
         white-space: nowrap;
         overflow: hidden;
 
-        b { font-weight: 500; color: var(--text-faint); margin-right: 4px; }
+        b { font-weight: $font-weight-medium; color: var(--text-faint); margin-right: 4px; }
     }
 
     &__subitem {
@@ -475,7 +470,7 @@
             border-radius: 50%;
             background: var(--border-strong);
             flex-shrink: 0;
-            margin-right: 9px;
+            margin-right: $space-2;
         }
     }
 
@@ -484,7 +479,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding-left: 12px !important;
+        padding-left: $space-3 !important;
         padding-right: 0 !important;
         cursor: pointer;
     }
@@ -492,7 +487,7 @@
     &__box {
         width: 16px;
         height: 16px;
-        border-radius: 5px;
+        border-radius: $radius-control;
         border: 1.5px solid var(--border-strong);
         display: grid;
         place-items: center;
@@ -511,14 +506,14 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 2px;
-        padding-right: 10px !important;
+        gap: $space-hair;
+        padding-right: $space-3 !important;
 
         button {
-            width: 24px;
-            height: 24px;
+            width: $control-sm;
+            height: $control-sm;
             border: none;
-            border-radius: 6px;
+            border-radius: $radius-control;
             background: transparent;
             display: grid;
             place-items: center;
@@ -537,20 +532,17 @@
     &__group {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: $space-3;
         width: 100%;
-        padding: 9px 16px;
+        padding: $space-2 $space-4;
         border: none;
         border-top: 1px solid var(--border-soft);
         background: var(--surface-0);
-        font-family: var(--mono);
-        font-size: 10.5px;
-        letter-spacing: 0.09em;
-        text-transform: uppercase;
+        font-size: $text-xs;
         color: var(--text-faint);
         cursor: pointer;
         position: sticky;
-        top: 41px;               // sits under the sticky header, never over it
+        top: calc(#{$control-md} + 1px); // sits under the sticky header (32 + border), never over it
         z-index: 2;
 
         &:hover { color: var(--text); }
@@ -560,13 +552,15 @@
 
     &__groupcount { color: var(--text-ghost); }
 
-    &__empty { padding: 56px 20px; text-align: center; }
+    &__empty { padding: $space-12 $space-5; text-align: center; }
 
     // ---- density ----
     &--compact {
-        .sk-grid__td { padding: 7px 14px; }
+        // Compact rows: min 32.
+        .sk-grid__row { min-height: $control-md; }
+        .sk-grid__td { padding-block: $space-1; }
         .sk-grid__sub { display: none; }
-        .sk-grid__avatar { width: 22px; height: 22px; border-radius: 7px; }
+        .sk-grid__avatar { width: 22px; height: 22px; border-radius: $radius-control; }
     }
 }
 
@@ -574,11 +568,10 @@
 .sk-gridfoot {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 12px 16px;
+    gap: $space-4;
+    padding: $space-3 $space-4;
     border-top: 1px solid var(--border-soft);
-    font-family: var(--mono);
-    font-size: 11px;
+    font-size: $text-xs;
     color: var(--text-ghost);
     flex-wrap: wrap;
 
@@ -588,51 +581,29 @@
 .sk-gridpager {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: $space-tight;
 
     &__label {
-        font-family: var(--mono);
-        font-size: 10.5px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+        font-size: $text-xs;
         color: var(--text-ghost);
     }
 
-    &__sel {
-        position: relative;
-        display: flex;
-        align-items: center;
-        margin-right: 6px;
-
-        select {
-            appearance: none;
-            padding: 4px 20px 4px 8px;
-            border-radius: 7px;
-            border: 1px solid var(--border);
-            background: var(--surface-2);
-            color: var(--text-dim);
-            font-family: var(--mono);
-            font-size: 11px;
-            outline: none;
-            cursor: pointer;
-
-            &:hover { border-color: var(--border-strong); color: var(--text); }
-        }
-
-        svg {
-            position: absolute;
-            right: 5px;
-            pointer-events: none;
-            color: var(--text-ghost);
-        }
+    // The shared compact Select trigger, sized down to the pager's mono scale.
+    &__sel.ui-select-trigger {
+        height: $control-sm;
+        margin-right: $space-tight;
+        border-radius: $radius-control;
+        font-size: $text-xs;
+        color: var(--text-dim);
     }
 
-    button {
-        width: 26px;
-        height: 24px;
+    // Page arrows only: the rows-per-page trigger is a <button> too.
+    > button:not(.ui-select-trigger) {
+        width: $control-sm;
+        height: $control-sm;
         display: grid;
         place-items: center;
-        border-radius: 7px;
+        border-radius: $radius-control;
         border: 1px solid var(--border);
         background: var(--surface-2);
         color: var(--text-dim);
@@ -649,10 +620,9 @@
     }
 
     &__pos {
-        font-family: var(--mono);
-        font-size: 11px;
+        font-size: $text-xs;
         color: var(--text-dim);
-        padding: 0 4px;
+        padding: 0 $space-1;
         min-width: 44px;
         text-align: center;
     }
@@ -665,43 +635,41 @@
     width: auto;
     min-width: 15.5rem;
     max-width: 20rem;
-    padding: 8px;
+    padding: $space-2;
     display: flex;
     flex-direction: column;
     gap: 1px;
 
     &__head {
-        font-family: var(--mono);
-        font-size: 10px;
-        letter-spacing: 0.11em;
-        text-transform: uppercase;
+        font-size: $text-xs;
         color: var(--text-ghost);
-        padding: 5px 8px 7px;
+        padding: $space-tight $space-2 $space-2;
     }
 
     &__note {
-        font-size: 11.5px;
+        font-size: $text-xs;
         color: var(--text-ghost);
-        padding: 2px 9px 8px;
+        padding: $space-hair $space-2 $space-2;
         line-height: 1.45;
     }
 
     &__sep {
         height: 1px;
         background: var(--border-soft);
-        margin: 6px 4px;
+        margin: $space-tight $space-1;
     }
 
     &__opt {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: $space-3;
         width: 100%;
-        padding: 7px 9px;
+        min-height: $control-md;
+        padding: $space-1 $space-2;
         border: none;
-        border-radius: 8px;
+        border-radius: $radius-control;
         background: transparent;
-        font-size: 12.5px;
+        font-size: $text-sm;
         font-family: inherit;
         color: var(--text-dim);
         text-align: left;
@@ -722,7 +690,7 @@
     &__box {
         width: 15px;
         height: 15px;
-        border-radius: 4px;
+        border-radius: $radius-badge;
         border: 1.5px solid var(--border-strong);
         display: grid;
         place-items: center;
@@ -740,8 +708,7 @@
 
     &__rest {
         margin-left: auto;
-        font-family: var(--mono);
-        font-size: 10.5px;
+        font-size: $text-xs;
         color: var(--text-ghost);
     }
 
@@ -750,44 +717,51 @@
     &__mini {
         display: flex;
         align-items: center;
-        gap: 7px;
-        padding: 6px 9px;
+        gap: $space-2;
+        height: $control-md;
+        padding: 0 $space-2;
         border: 1px solid var(--border);
         background: var(--surface-3);
-        border-radius: 8px;
-        margin: 2px 4px 6px;
+        border-radius: $radius-control;
+        margin: $space-hair $space-1 $space-tight;
 
         svg { color: var(--text-ghost); flex-shrink: 0; }
 
-        input,
-        select {
+        input {
             width: 100%;
             min-width: 0;
             background: none;
             border: none;
             outline: none;
             color: var(--text);
-            font-size: 12.5px;
-            font-family: var(--mono);
+            font-size: $text-sm;
         }
 
-        select { color: var(--text-dim); font-family: var(--sans); cursor: pointer; }
-
         input::placeholder { color: var(--text-ghost); font-family: var(--sans); }
+    }
+
+    // Filter operator: the shared compact Select, stretched to the menu width.
+    // Block-level flex fills the row both in the menu's flex column and in
+    // the plain-block `__scroll` list.
+    &__op.ui-select-trigger {
+        display: flex;
+        margin: $space-hair $space-1 $space-tight;
+        font-size: $text-sm;
     }
 
     &__quick {
         display: flex;
         flex-wrap: wrap;
-        gap: 5px;
-        padding: 2px 4px 6px;
+        gap: $space-tight;
+        padding: $space-hair $space-1 $space-tight;
 
         button {
-            padding: 5px 9px;
-            border-radius: 7px;
+            height: $control-sm;
+            padding: 0 $space-2;
+            border-radius: $radius-control;
             border: 1px solid var(--border);
             background: var(--surface-3);
-            font-size: 11.5px;
+            font-size: $text-xs;
             color: var(--text-dim);
             cursor: pointer;
 
@@ -797,18 +771,19 @@
 
     &__foot {
         display: flex;
-        gap: 6px;
-        padding: 6px 4px 0;
-        margin-top: 4px;
+        gap: $space-tight;
+        padding: $space-tight $space-1 0;
+        margin-top: $space-1;
         border-top: 1px solid var(--border-soft);
 
         button {
             flex: 1;
-            padding: 7px;
+            height: $control-md;
+            padding: 0 $space-2;
             border: none;
-            border-radius: 7px;
-            font-size: 12px;
-            font-weight: 500;
+            border-radius: $radius-control;
+            font-size: $text-xs;
+            font-weight: $font-weight-medium;
             font-family: inherit;
             color: var(--text-dim);
             background: var(--surface-3);
@@ -839,8 +814,8 @@
 
     &__tabs {
         display: flex;
-        gap: 2px;
-        padding: 0 16px;
+        gap: $space-hair;
+        padding: 0 $space-4;
         border-bottom: 1px solid var(--border);
         background: var(--surface-0);
         flex-shrink: 0;
@@ -849,12 +824,13 @@
             position: relative;
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 11px 13px 12px;
+            gap: $space-2;
+            height: $control-lg; // underline tabs: 40
+            padding: 0 $space-3;
             border: none;
             background: transparent;
-            font-size: 13px;
-            font-weight: 500;
+            font-size: $text-sm;
+            font-weight: $font-weight-medium;
             font-family: inherit;
             color: var(--text-faint);
             cursor: pointer;
@@ -870,19 +846,17 @@
                 right: 8px;
                 bottom: -1px;
                 height: 2px;
-                border-radius: 2px 2px 0 0;
+                border-radius: $radius-badge $radius-badge 0 0;
                 background: var(--accent);
-                box-shadow: 0 -1px 12px var(--accent-glow);
             }
 
             .n {
-                font-family: var(--mono);
-                font-size: 10.5px;
+                font-size: $text-xs;
                 color: var(--text-ghost);
                 background: var(--surface-2);
                 border: 1px solid var(--border-soft);
-                border-radius: 5px;
-                padding: 1px 5px;
+                border-radius: $radius-control;
+                padding: 1px $space-tight;
             }
 
             &.is-on .n { color: var(--text-dim); background: var(--surface-3); border-color: var(--border); }
@@ -894,8 +868,8 @@
     &__foot {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 14px 20px;
+        gap: $space-2;
+        padding: $space-4 $space-5;
         border-top: 1px solid var(--border);
         background: var(--surface-0);
         flex-shrink: 0;
@@ -905,23 +879,20 @@
 }
 
 .sk-gridsec {
-    padding: 18px 20px;
+    padding: $space-5 $space-5;
     border-bottom: 1px solid var(--border-soft);
 
     &__head {
         display: flex;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 13px;
+        gap: $space-3;
+        margin-bottom: $space-3;
 
         &--separated { margin-top: 18px; }
     }
 
     &__t {
-        font-family: var(--mono);
-        font-size: 10.5px;
-        letter-spacing: 0.11em;
-        text-transform: uppercase;
+        font-size: $text-xs;
         color: var(--text-faint);
         flex: 1;
     }
@@ -929,13 +900,14 @@
     &__add {
         display: flex;
         align-items: center;
-        gap: 5px;
-        font-size: 12px;
+        gap: $space-tight;
+        font-size: $text-xs;
         font-family: inherit;
         color: var(--accent-bright);
-        padding: 4px 8px;
+        height: $control-sm;
+        padding: 0 $space-2;
         border: none;
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: transparent;
         cursor: pointer;
 
@@ -943,18 +915,18 @@
     }
 
     &__none {
-        padding: 14px;
+        padding: $space-4;
         border: 1px dashed var(--border);
-        border-radius: 10px;
+        border-radius: $radius-card;
         text-align: center;
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-ghost);
     }
 
     &__hint {
-        font-size: 12.5px;
+        font-size: $text-sm;
         color: var(--text-faint);
-        margin-bottom: 10px;
+        margin-bottom: $space-3;
     }
 
     &__tags { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -963,27 +935,28 @@
 .sk-gridmatch {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    font-size: 12.5px;
+    gap: $space-2;
+    font-size: $text-sm;
     color: var(--text-faint);
-    margin-bottom: 11px;
+    margin-bottom: $space-3;
 }
 
 .sk-gridseg {
     display: inline-flex;
-    gap: 2px;
+    gap: $space-hair;
     background: var(--surface-3);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 2px;
+    border-radius: $radius-control;
+    padding: 1px; // segmented: 28px items + 1px inset + border = 32
 
     button {
-        padding: 4px 10px;
+        height: $control-sm;
+        padding: 0 $space-3;
         border: none;
-        border-radius: 6px;
+        border-radius: $radius-control;
         background: transparent;
-        font-size: 11.5px;
-        font-weight: 500;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         font-family: inherit;
         color: var(--text-faint);
         cursor: pointer;
@@ -996,64 +969,42 @@
 
 .sk-gridrule {
     display: grid;
-    grid-template-columns: 1fr 116px 26px;
-    gap: 6px;
+    grid-template-columns: 1fr 116px $control-md;
+    gap: $space-tight;
     align-items: center;
-    margin-bottom: 9px;
+    margin-bottom: $space-2;
 
     &__value { grid-column: 1 / -1; }
 
-    &__sel {
-        position: relative;
-
-        select {
-            appearance: none;
-            width: 100%;
-            padding: 8px 22px 8px 10px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: var(--surface-2);
-            color: var(--text);
-            font-size: 12.5px;
-            font-family: inherit;
-            outline: none;
-            cursor: pointer;
-            text-overflow: ellipsis;
-
-            &:focus { border-color: var(--accent-dim); }
-        }
-
-        svg {
-            position: absolute;
-            right: 7px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: var(--text-ghost);
-        }
+    // Field / operator / on-off pickers: the shared compact Select, filling
+    // its grid cell instead of sizing to content.
+    &__sel.ui-select-trigger {
+        width: 100%;
+        min-width: 0;
+        font-size: $text-sm;
     }
 
     input[type='text'],
     input[type='number'],
     input[type='date'] {
         width: 100%;
-        padding: 8px 10px;
-        border-radius: 8px;
+        height: $control-md;
+        padding: 0 $space-3;
+        border-radius: $radius-control;
         border: 1px solid var(--border);
         background: var(--surface-2);
         color: var(--text);
-        font-size: 12.5px;
-        font-family: var(--mono);
+        font-size: $text-sm;
         outline: none;
 
         &:focus { border-color: var(--accent-dim); }
     }
 
     &__del {
-        width: 26px;
-        height: 30px;
+        width: $control-md;
+        height: $control-md;
         border: none;
-        border-radius: 7px;
+        border-radius: $radius-control;
         background: transparent;
         display: grid;
         place-items: center;
@@ -1064,22 +1015,20 @@
     }
 
     &__join {
-        font-family: var(--mono);
-        font-size: 10px;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
+        font-size: $text-xs;
         color: var(--text-ghost);
-        padding: 1px 0 6px 2px;
+        padding: 1px 0 $space-tight $space-hair;
     }
 
     &__enum { display: flex; flex-wrap: wrap; gap: 6px; }
 
     &__tag {
-        padding: 5px 10px;
-        border-radius: 7px;
+        height: $control-sm;
+        padding: 0 $space-3;
+        border-radius: $radius-control;
         border: 1px solid var(--border);
         background: var(--surface-2);
-        font-size: 11.5px;
+        font-size: $text-xs;
         font-family: inherit;
         color: var(--text-dim);
         cursor: pointer;
@@ -1098,11 +1047,11 @@
 .sk-gridcol {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 7px 9px;
-    border-radius: 8px;
+    gap: $space-3;
+    padding: $space-2 $space-2;
+    border-radius: $radius-card;
     border: 1px solid transparent;
-    font-size: 12.5px;
+    font-size: $text-sm;
     color: var(--text-dim);
     transition: 0.11s;
 
@@ -1114,10 +1063,7 @@
     &__nm { flex: 1; min-width: 0; }
 
     &__lock {
-        font-family: var(--mono);
-        font-size: 9.5px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        font-size: $text-xs;
         color: var(--text-ghost);
     }
 }
@@ -1138,7 +1084,7 @@
         &__row { min-width: 760px; }
     }
 
-    .sk-viewpick__title { font-size: 17px; }
+    .sk-viewpick__title { font-size: $text-md; }
 }
 
 // ---------------------------------------------------------------- recycle bin
@@ -1149,7 +1095,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 6px;
+        gap: $space-tight;
     }
 
     // Purge is the one irreversible control here, so it stays a quiet icon

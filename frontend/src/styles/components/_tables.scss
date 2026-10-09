@@ -5,19 +5,23 @@
 .table {
     width: 100%;
     border-collapse: collapse;
-    font-size: $font-size-sm;
+    font-size: $text-xs;
 
+    // Header 32, rows min 40 (height on a cell is a minimum), cell padding
+    // $space-3 with $space-4 at the outer edges.
     thead {
         th {
-            padding: $space-3 $space-4;
+            height: $control-md;
+            padding: 0 $space-3;
             text-align: left;
             font-weight: $font-weight-semibold;
-            font-size: $font-size-xs + 1;
+            font-size: $text-xs;
             color: $text-tertiary;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
             border-bottom: 1px solid $border-default;
             white-space: nowrap;
+
+            &:first-child { padding-inline-start: $space-4; }
+            &:last-child { padding-inline-end: $space-4; }
         }
     }
 
@@ -35,51 +39,30 @@
             }
         }
 
+        td:first-child { padding-inline-start: $space-4; }
+        td:last-child { padding-inline-end: $space-4; }
+
         td {
-            padding: $space-3 $space-4;
+            height: $control-lg;
+            padding: $space-2 $space-3;
             color: $text-primary;
             vertical-align: middle;
 
             code {
                 font-family: $font-mono;
-                font-size: $font-size-xs;
+                font-size: $text-xs;
                 background: $bg-elevated;
                 padding: $space-1 $space-2;
-                border-radius: $radius-sm;
+                border-radius: $radius-badge;
                 color: $text-secondary;
             }
         }
     }
 }
 
+// `.data-table` is only ever a DataTable tableClassName now: the table is
+// .sk-dtable, so only the legacy cell-content helpers stay here.
 .data-table {
-width: 100%;
-    border-collapse: collapse;
-    font-size: $font-size-sm;
-
-    th {
-        text-align: left;
-        padding: $space-3;
-        background: $bg-hover;
-        color: $text-tertiary;
-        font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        font-size: $font-size-xs;
-        letter-spacing: 0.05em;
-        border-bottom: 1px solid $border-subtle;
-    }
-
-    td {
-        padding: $space-3;
-        border-bottom: 1px solid $border-subtle;
-        font-family: $font-mono;
-        font-size: $font-size-sm;
-        color: $text-secondary;
-    }
-
-    tr:hover { background: $bg-hover; }
-    tr:last-child td { border-bottom: none; }
-
     .container-name {
         display: block;
         color: $text-primary;
@@ -89,12 +72,12 @@ width: 100%;
     .container-id {
         display: block;
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
         color: $text-tertiary;
     }
 
     .mono {
         font-family: $font-mono;
-        font-size: $font-size-xs;
+        font-size: $text-xs;
     }
 }

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Docker memory limit: number + one-letter unit (b/k/m/g), e.g. "512m", "2g".
 const MEMORY_LIMIT_RE = /^\d+(\.\d+)?(b|k|m|g)$/i;
@@ -77,11 +78,11 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
             });
             setRestartRequired(!data.applied && data.note === 'restart required');
             toast.success(data.applied
-                ? t('app.resourceLimitsPanel.resourceLimitsSavedAndApplied', 'Resource limits saved and applied.')
-                : t('app.resourceLimitsPanel.resourceLimitsSaved', 'Resource limits saved.'));
+                ? t('app.resourceLimitsPanel.resourceLimitsSavedAndApplied', 'Resource limits saved and applied')
+                : t('app.resourceLimitsPanel.resourceLimitsSaved', 'Resource limits saved'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.resourceLimitsPanel.failedToSaveResourceLimits', 'Failed to save resource limits'));
+            toastError(toast, t('app.resourceLimitsPanel.failedToSaveResourceLimits', "Couldn't save the resource limits."), err);
         } finally {
             setSaving(false);
         }
@@ -99,7 +100,7 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
         <div className="app-panel">
             <div className="app-panel-header">
                 <Gauge />
-                <span>{t('app.resourceLimitsPanel.resourceLimits', 'Resource Limits')}</span>
+                <span>{t('app.resourceLimitsPanel.resourceLimits', 'Resource limits')}</span>
             </div>
             <div className="app-panel-body">
                 <p className="app-panel-hint">
@@ -113,7 +114,12 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
                                 <span className="resource-bar-label">CPU</span>
                                 <span className="resource-bar-value">
                                     {usage.cpu_percent != null ? `${usage.cpu_percent.toFixed(1)}%` : '—'}
-                                    {String(cpuLimit).trim() ? ` of ${String(cpuLimit).trim()} core(s)` : ''}
+                                    {String(cpuLimit).trim() ? ` ${t('app.resourceLimitsPanel.ofCores', {
+                                        count: Number(String(cpuLimit).trim()) || 0,
+                                        cores: String(cpuLimit).trim(),
+                                        defaultValue_one: 'of {{cores}} core',
+                                        defaultValue_other: 'of {{cores}} cores',
+                                    })}` : ''}
                                 </span>
                             </div>
                             <div className="resource-bar-track">
@@ -141,7 +147,9 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
                     </>
                 ) : (
                     <p className="resource-hint">
-                        {loading ? 'Loading live usage…' : 'Live usage is unavailable (service stopped or Docker stats not reachable).'}
+                        {loading
+                            ? t('app.resourceLimitsPanel.loadingLiveUsage', 'Loading live usage…')
+                            : t('app.resourceLimitsPanel.liveUsageUnavailable', "Live usage isn't available. The service is stopped or Docker stats aren't reachable.")}
                     </p>
                 )}
 
@@ -174,13 +182,13 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
 
                 {restartRequired && (
                     <p className="app-panel-hint">
-                        {t('app.resourceLimitsPanel.limitsSavedRestartOrRedeployThe', 'Limits saved — restart or redeploy the service for them to take effect.')}
+                        {t('app.resourceLimitsPanel.limitsSavedRestartOrRedeployThe', 'Limits saved. Restart or redeploy the service for them to take effect.')}
                     </p>
                 )}
 
                 <div className="app-detail-actions container-ops__actions">
                     <Button size="sm" onClick={handleSave} disabled={saving || loading || !!cpuError || !!memoryError}>
-                        {saving ? 'Saving…' : 'Save limits'}
+                        {saving ? t('common.saving', 'Saving…') : t('app.resourceLimitsPanel.saveLimits', 'Save limits')}
                     </Button>
                 </div>
             </div>

@@ -20,6 +20,7 @@ import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
 import { timeAgo } from '../utils/time';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 const PAGE_SIZE = 50;
 
@@ -157,7 +158,7 @@ export default function Errors() {
             setSelected(null);
             refresh();
         } catch (err) {
-            toast.error(err.message || t('app.errors.updateFailed', 'Update failed'));
+            toastError(toast, t('app.errors.updateFailed', "Couldn't update it."), err);
         }
     };
 
@@ -175,7 +176,7 @@ export default function Errors() {
             setSelected(null);
             refresh();
         } catch (err) {
-            toast.error(err.message || t('app.errors.deleteFailed', 'Delete failed'));
+            toastError(toast, t('app.errors.deleteFailed', "Couldn't delete it."), err);
         }
     };
 
@@ -207,7 +208,7 @@ export default function Errors() {
             sortValue: (e) => e.exception_type || e.message || '',
             render: (e) => (
                 <div className="sk-err__cell">
-                    <div className="sk-err__type">{e.exception_type || 'Error'}</div>
+                    <div className="sk-err__type">{e.exception_type || t('app.errors.errorType', 'Error')}</div>
                     <div className="sk-err__message" title={e.message}>{e.message}</div>
                 </div>
             ),
@@ -251,7 +252,7 @@ export default function Errors() {
             value: (e) => (e.resolved ? 'Resolved' : 'Unresolved'),
             sortValue: (e) => (e.resolved ? 'Resolved' : 'Unresolved'),
             render: (e) => (
-                <Pill kind={e.resolved ? 'green' : 'red'}>{e.resolved ? 'Resolved' : 'Unresolved'}</Pill>
+                <Pill kind={e.resolved ? 'green' : 'red'}>{e.resolved ? t('app.errors.resolved', 'Resolved') : t('app.errors.unresolved', 'Unresolved')}</Pill>
             ),
         },
     ];
@@ -319,7 +320,6 @@ export default function Errors() {
             />
 
             <DataTable
-                tableClassName="sk-dtable errors-table"
                 storageKey="serverkit-table-errors"
                 data={entries}
                 keyField="id"
@@ -377,7 +377,7 @@ export default function Errors() {
                                 <dt>{t('common.labels.status', 'Status')}</dt>
                                 <dd>
                                     <Pill kind={selected.resolved ? 'green' : 'red'}>
-                                        {selected.resolved ? 'Resolved' : 'Unresolved'}
+                                        {selected.resolved ? t('app.errors.resolved', 'Resolved') : t('app.errors.unresolved', 'Unresolved')}
                                     </Pill>
                                 </dd>
                             </div>

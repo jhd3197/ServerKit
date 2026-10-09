@@ -21,6 +21,8 @@ import {
 import Modal from '@/components/Modal';
 import RequiresDocker from '../components/RequiresDocker';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
+import { translateLabel } from '@/i18n/labels';
 
 // Severity order for status sorting — also the page's default row order.
 const STATUS_SORT_ORDER = { running: 0, deploying: 1, building: 2, stopped: 3, failed: 4 };
@@ -106,9 +108,9 @@ const Services = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const toast = useToast();
-    const toastError = toast.error;
     const [apps, setApps] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [actionLoading, setActionLoading] = useState(null);
     const [selectedIds, setSelectedIds] = useState(new Set());
@@ -120,12 +122,13 @@ const Services = () => {
         try {
             const data = await api.getApps();
             setApps(data.apps || []);
-        } catch {
-            toastError(t('app.services.failedToLoadServices', 'Failed to load services'));
+            setLoadError(null);
+        } catch (err) {
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
-    }, [t, toastError]);
+    }, []);
 
     useEffect(() => {
         loadApps();
@@ -144,8 +147,13 @@ const Services = () => {
             else if (action === 'stop') await api.stopApp(appId);
             else if (action === 'restart') await api.restartApp(appId);
             await loadApps();
-        } catch {
-            toast.error(t('app.services.failedToService', 'Failed to {{action}} service', { action: action }));
+        } catch (err) {
+            const failed = {
+                start: t('app.services.couldntStartService', "Couldn't start the service."),
+                stop: t('app.services.couldntStopService', "Couldn't stop the service."),
+                restart: t('app.services.couldntRestartService', "Couldn't restart the service."),
+            };
+            toastError(toast, failed[action] || t('app.services.couldntUpdateService', "Couldn't update the service."), err);
         } finally {
             setActionLoading(null);
         }
@@ -162,11 +170,20 @@ const Services = () => {
                 return Promise.resolve();
             });
             await Promise.allSettled(promises);
-            toast.success(t('app.services.sentToServiceS', '{{action}} sent to {{size}} service(s)', { action: action, size: selectedIds.size }));
+            const size = selectedIds.size;
+            toast.success(action === 'start'
+                ? t('app.services.bulkStartSent', { count: size, defaultValue_one: 'Start sent to 1 service', defaultValue_other: 'Start sent to {{count}} services' })
+                : action === 'stop'
+                    ? t('app.services.bulkStopSent', { count: size, defaultValue_one: 'Stop sent to 1 service', defaultValue_other: 'Stop sent to {{count}} services' })
+                    : t('app.services.bulkRestartSent', { count: size, defaultValue_one: 'Restart sent to 1 service', defaultValue_other: 'Restart sent to {{count}} services' }));
             setSelectedIds(new Set());
             await loadApps();
-        } catch {
-            toast.error(t('app.services.bulkFailed', 'Bulk {{action}} failed', { action: action }));
+        } catch (err) {
+            toastError(toast, action === 'start'
+                ? t('app.services.couldntStartServices', "Couldn't start the services.")
+                : action === 'stop'
+                    ? t('app.services.couldntStopServices', "Couldn't stop the services.")
+                    : t('app.services.couldntRestartServices', "Couldn't restart the services."), err);
         } finally {
             setBulkLoading(false);
         }
@@ -192,7 +209,7 @@ const Services = () => {
             <Button size="sm" asChild>
                 <Link to="/services/new">
                     <Plus size={16} />
-                    {t('app.services.newService', 'New Service')}
+                    {t('app.services.newService', 'New service')}
                 </Link>
             </Button>
             <SearchField
@@ -228,7 +245,7 @@ const Services = () => {
                         <ServiceTile name={app.name} size={30} className="wp-list__tile" aria-hidden="true" />
                         <span>
                             <div>{app.name}</div>
-                            <div className="sk-cell-sub">{typeInfo.label}</div>
+                            <div className="sk-cell-sub">{translateLabel(t, typeInfo)}</div>
                         </span>
                     </div>
                 );
@@ -311,7 +328,7 @@ const Services = () => {
                     return <span className="wp-list__dash">—</span>;
                 }
                 return (
-                    <span className="bw-cell" title={t('app.services.transferLast30Days', 'Transfer — last 30 days')}>
+                    <span className="bw-cell" title={t('app.services.transferLast30Days', 'Transfer (last 30 days)')}>
                         <BandwidthSparkline data={bw.series30} width={72} height={20} />
                         <span className="bw-cell__month">{formatBytes(bw.month_bytes)}/mo</span>
                     </span>
@@ -338,11 +355,11 @@ const Services = () => {
         },
         {
             key: 'last_deploy',
-            headerKey: 'app.services.lastDeploy', header: 'Last Deploy',
+            headerKey: 'app.services.lastDeploy', header: 'Last deploy',
             sortable: true,
             // Numeric timestamp sort; never-deployed services sort last.
             sortValue: (app) => (app.last_deploy_at ? new Date(app.last_deploy_at).getTime() : null),
-            cellClassName: 'sk-cell-mono',
+            cellClassName: 'sk-cell-dim',
             render: (app) => (
                 app.last_deploy_at ? formatRelativeTime(app.last_deploy_at) : <span className="wp-list__dash">—</span>
             ),
@@ -388,6 +405,9 @@ const Services = () => {
             noun="services"
             builtinViews={SERVICE_VIEWS}
             totalCount={apps.length}
+            error={loadError}
+            errorTitle={t('app.services.couldntLoadServices', "Couldn't load services.")}
+            onRetry={loadApps}
             items={filteredApps}
             columns={columns}
             keyField="id"
@@ -404,9 +424,9 @@ const Services = () => {
                         <FolderKanban size={14} />
                         {t('app.services.moveToProject', 'Move to project')}
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('restart')} disabled={bulkLoading}>{t('app.services.restartAll', 'Restart All')}</Button>
-                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('stop')} disabled={bulkLoading}>{t('app.services.stopAll', 'Stop All')}</Button>
-                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('start')} disabled={bulkLoading}>{t('app.services.startAll', 'Start All')}</Button>
+                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('restart')} disabled={bulkLoading}>{t('app.services.restartAll', 'Restart all')}</Button>
+                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('stop')} disabled={bulkLoading}>{t('app.services.stopAll', 'Stop all')}</Button>
+                    <Button variant="outline" size="sm" onClick={() => handleBulkAction('start')} disabled={bulkLoading}>{t('app.services.startAll', 'Start all')}</Button>
                 </>
             }
             emptyIcon={Layers}
@@ -414,7 +434,7 @@ const Services = () => {
             emptyDescription="Connect a repository or install a template to get started"
             emptyAction={
                 <Button asChild>
-                    <Link to="/services/new">{t('app.services.createService', 'Create Service')}</Link>
+                    <Link to="/services/new">{t('app.services.createService', 'New service')}</Link>
                 </Button>
             }
             filteredEmptyIcon={Layers}
@@ -431,14 +451,14 @@ const Services = () => {
                         await api.moveAppsToProject([...selectedIds], projectId, environmentId);
                         toast.success(
                             projectId === null
-                                ? t('app.services.unassignedServiceS', 'Unassigned {{size}} service(s)', { size: selectedIds.size })
-                                : t('app.services.movedServiceS', 'Moved {{size}} service(s)', { size: selectedIds.size })
+                                ? t('app.services.unassignedServices', { count: selectedIds.size, defaultValue_one: 'Unassigned 1 service', defaultValue_other: 'Unassigned {{count}} services' })
+                                : t('app.services.movedServices', { count: selectedIds.size, defaultValue_one: 'Moved 1 service', defaultValue_other: 'Moved {{count}} services' })
                         );
                         setShowMoveDialog(false);
                         setSelectedIds(new Set());
                         await loadApps();
                     } catch (err) {
-                        toast.error(err.message || t('app.services.failedToMoveServices', 'Failed to move services'));
+                        toastError(toast, t('app.services.failedToMoveServices', "Couldn't move the services."), err);
                     } finally {
                         setBulkLoading(false);
                     }
@@ -455,7 +475,7 @@ const Services = () => {
 const MoveToProjectDialog = ({ open, onOpenChange, count, onMove }) => {
     const { t } = useTranslation();
     const toast = useToast();
-    const toastError = toast.error;
+    const showError = toast.error;
     const [projects, setProjects] = useState([]);
     const [environments, setEnvironments] = useState([]);
     const [projectValue, setProjectValue] = useState(UNASSIGN);
@@ -473,9 +493,9 @@ const MoveToProjectDialog = ({ open, onOpenChange, count, onMove }) => {
         setLoadingProjects(true);
         api.getProjects()
             .then((data) => setProjects(Array.isArray(data?.projects) ? data.projects : []))
-            .catch(() => toastError(t('app.services.failedToLoadProjects', 'Failed to load projects')))
+            .catch((err) => toastError(showError, t('app.services.failedToLoadProjects', "Couldn't load projects."), err))
             .finally(() => setLoadingProjects(false));
-    }, [open, toastError, t]);
+    }, [open, showError, t]);
 
     async function handleProjectChange(value) {
         setProjectValue(value);
@@ -487,8 +507,8 @@ const MoveToProjectDialog = ({ open, onOpenChange, count, onMove }) => {
             const data = await api.getProject(value);
             const envs = Array.isArray(data?.project?.environments) ? data.project.environments : [];
             setEnvironments(envs);
-        } catch {
-            toast.error(t('app.services.failedToLoadEnvironments', 'Failed to load environments'));
+        } catch (err) {
+            toastError(toast, t('app.services.failedToLoadEnvironments', "Couldn't load environments."), err);
         } finally {
             setLoadingEnvs(false);
         }
@@ -516,13 +536,13 @@ const MoveToProjectDialog = ({ open, onOpenChange, count, onMove }) => {
                         {t('common.actions.cancel', 'Cancel')}
                     </Button>
                     <Button type="button" onClick={handleSubmit} disabled={submitting || loadingProjects}>
-                        {submitting ? 'Moving…' : (projectValue === UNASSIGN ? 'Unassign' : 'Move')}
+                        {submitting ? t('app.services.moving', 'Moving…') : (projectValue === UNASSIGN ? t('app.services.unassign', 'Unassign') : t('app.services.move', 'Move'))}
                     </Button>
                 </>
             )}
         >
             <p className="sk-modal__subtitle">
-                {t('app.services.assign', 'Assign')} {count} {t('app.services.selectedService', 'selected service')}{count === 1 ? '' : 's'} {t('app.services.toAProjectAndEnvironmentOr', 'to a project and environment, or leave them unassigned.')}
+                {t('app.services.assignSelected', { count, defaultValue_one: 'Assign 1 selected service to a project and environment, or leave it unassigned.', defaultValue_other: 'Assign {{count}} selected services to a project and environment, or leave them unassigned.' })}
             </p>
 
             <div className="services-move">

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { useTranslation } from 'react-i18next';
+import { toastError } from '@/utils/errorMessage';
 
 // Must match app/services/deploy_settings.py DEFAULTS / _RULES.
 const WATCH_DEFAULT = 60;
@@ -62,10 +63,10 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
             setStatus(data.slots);
             toast.success(next
                 ? t('app.slotDeploysPanel.enabled', 'Slot deploys on. The running container is now slot A; the next deploy boots slot B.')
-                : (data.note || t('app.slotDeploysPanel.disabled', 'Slot deploys off.')));
+                : (data.note || t('app.slotDeploysPanel.disabled', 'Slot deploys off')));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.slotDeploysPanel.toggleFailed', 'Could not change slot deploys'));
+            toastError(toast, t('app.slotDeploysPanel.toggleFailed', "Couldn't change slot deploys."), err);
         } finally {
             setToggling(false);
         }
@@ -84,10 +85,10 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                     stop_old_before_release: stopOld,
                 },
             });
-            toast.success(t('app.slotDeploysPanel.saved', 'Rollout settings saved.'));
+            toast.success(t('app.slotDeploysPanel.saved', 'Rollout settings saved'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.slotDeploysPanel.saveFailed', 'Failed to save rollout settings'));
+            toastError(toast, t('app.slotDeploysPanel.saveFailed', "Couldn't save the rollout settings."), err);
         } finally {
             setSaving(false);
         }
@@ -97,7 +98,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
         try {
             setSplit(await api.previewAppComposeSplit(app.id));
         } catch (err) {
-            toast.error(err.message || t('app.slotDeploysPanel.splitPreviewFailed', 'Could not preview the split'));
+            toastError(toast, t('app.slotDeploysPanel.splitPreviewFailed', "Couldn't preview the split."), err);
         }
     }
 
@@ -107,10 +108,10 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
             const data = await api.applyAppComposeSplit(app.id);
             setStatus(data.slots);
             setSplit(null);
-            toast.success(t('app.slotDeploysPanel.splitDone', 'Stateful services moved. The app now deploys through slots.'));
+            toast.success(t('app.slotDeploysPanel.splitDone', 'Stateful compose services moved. The service now deploys through slots.'));
             onChanged?.();
         } catch (err) {
-            toast.error(err.message || t('app.slotDeploysPanel.splitFailed', 'The split failed'));
+            toastError(toast, t('app.slotDeploysPanel.splitFailed', "Couldn't split traffic."), err);
         } finally {
             setSplitting(false);
         }
@@ -155,7 +156,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                         <div className="settings-label">
                             <span>{t('app.slotDeploysPanel.split', 'Move the stateful services first')}</span>
                             <span className="settings-hint">
-                                {t('app.slotDeploysPanel.splitHint', 'A database or cache cannot run twice. It moves once into a shared data project that both slots reach by the same name, on the same volumes. Preview exactly what changes before anything happens.')}
+                                {t('app.slotDeploysPanel.splitHint', 'A database or cache cannot run twice. It moves once into a shared data compose project that both slots reach by the same name, on the same volumes. Preview exactly what changes before anything happens.')}
                             </span>
                         </div>
                         <div className="settings-control">
@@ -201,7 +202,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                         <div className="settings-label">
                             <span>{t('app.slotDeploysPanel.volumes', 'Two copies may share the volumes')}</span>
                             <span className="settings-hint">
-                                {t('app.slotDeploysPanel.volumesHint', 'For a few seconds around each switch both releases mount the same volumes. Leave this off if the app keeps something like SQLite there, which breaks when two processes write to it.')}
+                                {t('app.slotDeploysPanel.volumesHint', 'For a few seconds around each switch both releases mount the same volumes. Leave this off if the service keeps something like SQLite there, which breaks when two processes write to it.')}
                             </span>
                         </div>
                         <div className="settings-control">
@@ -230,7 +231,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                     <div className="settings-label">
                         <span>{t('app.slotDeploysPanel.snapshot', 'Snapshot the databases first')}</span>
                         <span className="settings-hint">
-                            {t('app.slotDeploysPanel.snapshotHint', 'Dumps the databases this app owns before the release command runs, so a migration can be undone after a switch back.')}
+                            {t('app.slotDeploysPanel.snapshotHint', 'Dumps the databases this service owns before the release command runs, so a migration can be undone after a switch back.')}
                         </span>
                     </div>
                     <div className="settings-control">
@@ -243,7 +244,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                     <div className="settings-label">
                         <span>{t('app.slotDeploysPanel.stopOld', 'Stop the live release before the release command')}</span>
                         <span className="settings-hint">
-                            {t('app.slotDeploysPanel.stopOldHint', 'For schema changes the running release cannot survive. The site is down from the release command until the new release passes its health check; a failure starts the old release again.')}
+                            {t('app.slotDeploysPanel.stopOldHint', 'For schema changes the running release cannot survive. The service is down from the release command until the new release passes its health check; a failure starts the old release again.')}
                         </span>
                     </div>
                     <div className="settings-control">
@@ -278,13 +279,13 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                                 <Button onClick={handleApplySplit} disabled={splitting}>
                                     {splitting
                                         ? t('app.slotDeploysPanel.splitting', 'Moving…')
-                                        : t('app.slotDeploysPanel.applySplit', 'Stop the app once and move them')}
+                                        : t('app.slotDeploysPanel.applySplit', 'Stop the service once and move them')}
                                 </Button>
                             </>
                         )}
                     >
                         <p className="slot-split__downtime">{split.downtime}</p>
-                        <h4 className="slot-split__label">{t('app.slotDeploysPanel.dataProject', 'Shared data project')}</h4>
+                        <h4 className="slot-split__label">{t('app.slotDeploysPanel.dataProject', 'Shared data compose project')}</h4>
                         <pre className="slot-split__yaml">{split.data_compose}</pre>
                         <h4 className="slot-split__label">{t('app.slotDeploysPanel.slotProject', 'Each slot')}</h4>
                         <pre className="slot-split__yaml">{split.slot_compose}</pre>

@@ -4,7 +4,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import EmptyState from '../EmptyState';
 import Modal from '@/components/Modal';
-import { DataTable, DataTableFooter, Pill, SearchField } from '@/components/ds';
+import { DataTable, DataTableFooter, Pill, SearchField, SegControl } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
@@ -20,6 +20,7 @@ import {
     normalizeListResponse,
     shortId,
 } from './dockerHelpers';
+import { toastError } from '@/utils/errorMessage';
 
 export const CreateNetworkButton = () => {
     const { t } = useTranslation();
@@ -30,9 +31,9 @@ export const CreateNetworkButton = () => {
             <Button
                 onClick={() => setShowModal(true)}
                 disabled={isRemote}
-                title={isRemote ? t('app.networksTab.creatingNetworksIsOnlyAvailableOn', 'Creating networks is only available on the local Docker target right now') : t('app.networksTab.createNetwork', 'Create network')}
+                title={isRemote ? t('app.networksTab.creatingNetworksIsOnlyAvailableOn', 'Creating networks is only available on the panel server right now') : t('app.networksTab.createNetwork', 'Create network')}
             >
-                <span>+</span> {t('app.networksTab.createNetwork2', 'Create Network')}
+                <span>+</span> {t('app.networksTab.createNetwork2', 'Create network')}
             </Button>
             {showModal && <CreateNetworkModal onClose={() => setShowModal(false)} onCreated={() => window.location.reload()} />}
         </>
@@ -136,7 +137,7 @@ const NetworksTab = ({ onStatsChange }) => {
     }
 
     async function handleRemove(network) {
-        const confirmed = await confirmNetwork({ titleKey: 'app.networksTab.removeNetwork', title: 'Remove Network', messageKey: 'app.networksTab.removeThisNetwork', message: 'Remove this network?' });
+        const confirmed = await confirmNetwork({ titleKey: 'app.networksTab.removeNetwork', title: 'Delete network', messageKey: 'app.networksTab.removeThisNetwork', message: 'Delete this network?', confirmText: t('common.actions.delete', 'Delete') });
         if (!confirmed) return;
 
         try {
@@ -145,12 +146,12 @@ const NetworksTab = ({ onStatsChange }) => {
             } else {
                 await api.removeNetwork(networkId(network));
             }
-            toast.success(t('app.networksTab.networkRemovedSuccessfully', 'Network removed successfully'));
+            toast.success(t('app.networksTab.networkRemovedSuccessfully', 'Network deleted'));
             loadNetworks();
             onStatsChange?.();
         } catch (err) {
             console.error('Failed to remove network:', err);
-            toast.error(t('app.networksTab.failedToRemoveNetworkItMay', 'Failed to remove network. It may be in use.'));
+            toastError(toast, t('app.networksTab.failedToRemoveNetworkItMay', "Couldn't delete the network. A container may still use it."), err);
         }
     }
 
@@ -237,7 +238,7 @@ const NetworksTab = ({ onStatsChange }) => {
             render: (network) => (
                 <div className="dx-row-actions">
                     {networkKind(network) === 'Built-in' ? (
-                        <span className="dx-row-protected" title={t('app.networksTab.shipsWithTheDockerDaemonIt', 'Ships with the Docker daemon — it cannot be removed')}>
+                        <span className="dx-row-protected" title={t('app.networksTab.shipsWithTheDockerDaemonIt', 'Ships with the Docker daemon, so it cannot be deleted')}>
                             <Lock size={11} /> {t('common.labels.system', 'System')}
                         </span>
                     ) : (
@@ -245,7 +246,7 @@ const NetworksTab = ({ onStatsChange }) => {
                             type="button"
                             className="dx-row-action is-danger"
                             onClick={() => handleRemove(network)}
-                            title={t('app.networksTab.removeNetwork2', 'Remove network')}
+                            title={t('app.networksTab.removeNetwork2', 'Delete network')}
                         >
                             <Trash2 size={13} />
                         </Button>
@@ -332,8 +333,7 @@ const NetworksTab = ({ onStatsChange }) => {
                         onSortsChange={setSorts}
                         groupBy={groupBy}
                         onGroupByChange={setGroupBy}
-                        className="dx-table-wrap"
-                        tableClassName="dx-manager-table dx-plain-table"
+                        className="dx-table-wrap sk-dtable-wrap--sticky"
                         footer={(
                             <DataTableFooter
                                 shown={chrome.shownCount}
@@ -374,12 +374,12 @@ const CreateNetworkModal = ({ onClose, onCreated }) => {
     }
 
     return (
-        <Modal open onClose={onClose} title={t('app.networksTab.createNetwork2', 'Create Network')} size="md">
+        <Modal open onClose={onClose} title={t('app.networksTab.createNetwork2', 'Create network')} size="md">
             {error && <div className="error-message">{error}</div>}
 
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label>{t('app.networksTab.networkName', 'Network Name *')}</label>
+                    <label>{t('app.networksTab.networkName', 'Network name *')}</label>
                     <Input
                         type="text"
                         value={name}
@@ -391,11 +391,12 @@ const CreateNetworkModal = ({ onClose, onCreated }) => {
 
                 <div className="form-group">
                     <label>{t('app.networksTab.driver', 'Driver')}</label>
-                    <select value={driver} onChange={(e) => setDriver(e.target.value)}>
-                        <option value="bridge">bridge</option>
-                        <option value="overlay">overlay</option>
-                        <option value="macvlan">macvlan</option>
-                    </select>
+                    <SegControl
+                        aria-label={t('app.networksTab.driver', 'Driver')}
+                        value={driver}
+                        onChange={setDriver}
+                        options={['bridge', 'overlay', 'macvlan']}
+                    />
                 </div>
 
                 <div className="modal-actions">
@@ -403,7 +404,7 @@ const CreateNetworkModal = ({ onClose, onCreated }) => {
                         {t('common.actions.cancel', 'Cancel')}
                     </Button>
                     <Button type="submit" disabled={loading}>
-                        {loading ? 'Creating...' : 'Create Network'}
+                        {loading ? t('app.networksTab.creating', 'Creating…') : t('app.networksTab.createNetwork', 'Create network')}
                     </Button>
                 </div>
             </form>

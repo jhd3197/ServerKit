@@ -1,16 +1,8 @@
 .status-badge {
+    @include badge-geometry(); // components/_badges.scss: the 20px badge spec
     justify-content: center;
     border: 1px solid transparent;
-    min-height: 24px;
-    line-height: 1;
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
     gap: $space-1;
-    padding: $space-1 $space-2;
-    border-radius: $radius-sm;
-    font-size: $font-size-xs;
-    font-weight: $font-weight-medium;
     text-transform: capitalize;
 
     &__dot {

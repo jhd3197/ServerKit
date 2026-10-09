@@ -13,6 +13,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import Application, User
 from app.services.env_service import EnvService
 from app.services.resource_grant_service import ResourceGrantService
+from app.exceptions import not_found, permission_denied
 
 env_vars_bp = Blueprint('env_vars', __name__)
 
@@ -28,12 +29,12 @@ def check_app_access(app_id, user_id, write=False):
     app = Application.query_active().filter_by(id=app_id).first()
 
     if not app:
-        return None, None, jsonify({'error': 'Application not found'}), 404
+        raise not_found('service')
 
     ok = (ResourceGrantService.can_edit_app(user, app) if write
           else ResourceGrantService.can_access_app(user, app))
     if not ok:
-        return None, None, jsonify({'error': 'Access denied'}), 403
+        raise permission_denied()
 
     return user, app, None, None
 

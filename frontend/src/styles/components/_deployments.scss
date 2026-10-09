@@ -18,7 +18,7 @@
         text-align: center;
         background: $bg-card;
         border: 1px dashed $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         svg {
             color: $text-tertiary;
@@ -46,7 +46,7 @@
         &::before {
             content: '';
             position: absolute;
-            inset-inline-start: 7px;
+            inset-inline-start: $space-2;
             top: 0;
             bottom: 0;
             width: 2px;
@@ -73,14 +73,14 @@
         &--current {
             background: $success;
             border-color: $success;
-            box-shadow: 0 0 0 4px $success-bg;
+            box-shadow: none;
         }
     }
 
     &__card {
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         padding: $space-4;
         display: flex;
         flex-direction: column;
@@ -107,7 +107,7 @@
         align-items: center;
         gap: $space-1;
         color: $text-tertiary;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
     }
 
     &__details {
@@ -120,19 +120,18 @@
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        padding: 2px $space-2;
+        padding: $space-hair $space-2;
         background: $bg-elevated;
         border: 1px solid $border-subtle;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         color: $text-secondary;
-        font-size: 0.8125rem;
-        font-family: $font-mono;
+        font-size: $text-sm;
     }
 
     &__summary {
         margin: 0;
         color: $text-secondary;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
     }
 
     &--server {
@@ -143,17 +142,17 @@
         }
 
         .deploy-timeline__item {
-            padding-inline-start: 44px;
+            padding-inline-start: $space-12;
 
             &::before {
-                inset-inline-start: 13px;
+                inset-inline-start: $space-3;
             }
         }
 
         .deploy-timeline__marker {
             inset-inline-start: 0;
             width: 28px;
-            height: 28px;
+            height: 28px; // geometry: timeline marker icon disc
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -181,8 +180,7 @@
 
     &__count {
         color: $text-tertiary;
-        font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         white-space: nowrap;
     }
 
@@ -195,20 +193,20 @@
         h3 {
             margin: 0;
             color: $text-primary;
-            font-size: $font-size-base;
+            font-size: $text-base;
             font-weight: $font-weight-semibold;
         }
 
         span {
             color: $text-tertiary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
     &__coverage-note {
         margin: 0;
         color: $warning;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__error,
@@ -235,7 +233,7 @@
         h2 {
             margin: 0;
             color: $text-primary;
-            font-size: $font-size-xl;
+            font-size: $text-lg;
         }
 
         p {
@@ -258,11 +256,11 @@
         padding: $space-3 $space-4;
         @include status-variant($info, $info-bg, $info-border);
         border: 1px solid $info-border;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         svg {
             flex-shrink: 0;
-            margin-block-start: 2px;
+            margin-block-start: $space-hair;
         }
 
         p {
@@ -278,7 +276,7 @@
         justify-content: space-between;
         gap: $space-3;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
 
         &--empty {
             justify-content: flex-start;
@@ -286,11 +284,11 @@
             padding: $space-3 $space-4;
             background: $bg-elevated;
             border: 1px solid $border-subtle;
-            border-radius: $radius-lg;
+            border-radius: $radius-card;
 
             > svg {
                 flex-shrink: 0;
-                margin-block-start: 2px;
+                margin-block-start: $space-hair;
                 color: $text-tertiary;
             }
 
@@ -329,7 +327,7 @@
     &__hint {
         margin: 0 0 $space-4;
         color: $text-secondary;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
         max-width: 70ch;
     }
 }
@@ -361,7 +359,7 @@
         padding: $space-3;
         background: $info-bg;
         border: 1px solid $info-border;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
     }
 
     &__summary-icon {
@@ -373,21 +371,19 @@
     &__summary-text {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
     }
 
     &__summary-label {
-        font-size: 0.6875rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         color: $text-tertiary;
     }
 
     &__summary {
         margin: 0;
         color: $text-primary;
-        font-size: 0.9375rem;
+        font-size: $text-base;
         line-height: 1.4;
     }
 
@@ -399,17 +395,15 @@
 
     &__section-title {
         margin: 0;
-        font-size: 0.8125rem;
-        font-weight: 600;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
         color: $text-secondary;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
     }
 
     &__none {
         margin: 0;
         color: $text-tertiary;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
     }
 
     &__lines {
@@ -418,17 +412,17 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: $space-hair;
     }
 
     &__line {
         display: flex;
         align-items: center;
         gap: $space-2;
-        padding: 2px $space-2;
-        border-radius: $radius-sm;
+        padding: $space-hair $space-2;
+        border-radius: $radius-badge;
         font-family: $font-mono;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
         min-width: 0;
 
         &--add {
@@ -445,7 +439,7 @@
     }
 
     &__sign {
-        font-weight: 700;
+        font-weight: $font-weight-semibold;
         width: 12px;
         display: inline-block;
         text-align: center;
@@ -470,7 +464,7 @@
         gap: $space-2;
         flex-wrap: wrap;
         font-family: $font-mono;
-        font-size: 0.8125rem;
+        font-size: $text-sm;
     }
 
     &__old {
@@ -489,7 +483,7 @@
     &__confirm-text {
         margin-right: auto;
         color: $text-secondary;
-        font-size: 0.875rem;
+        font-size: $text-base;
     }
 
     &__point-meta {
@@ -512,13 +506,13 @@
         h3 {
             margin: 0;
             color: $text-primary;
-            font-size: $font-size-base;
+            font-size: $text-base;
         }
 
         p {
             margin: $space-1 0 0;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             line-height: $line-height-normal;
         }
     }
@@ -530,13 +524,13 @@
         padding: $space-4;
         background: $warning-bg;
         border: 1px solid $warning-border;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
 
         > ul {
             margin: 0;
             padding-inline-start: $space-5;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 
@@ -559,7 +553,7 @@
         padding: $space-4;
         background: $danger-bg;
         border: 1px solid $danger-border;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         color: $danger;
 
         > svg {
@@ -570,14 +564,14 @@
         h3 {
             margin: 0 0 $space-2;
             color: $text-primary;
-            font-size: $font-size-base;
+            font-size: $text-base;
         }
 
         ul {
             margin: 0;
             padding-inline-start: $space-5;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
         }
     }
 }
@@ -621,7 +615,7 @@
 
         &__value {
             width: 100%;
-            margin-inline-start: 20px;
+            margin-inline-start: $space-5;
             text-align: start;
         }
     }

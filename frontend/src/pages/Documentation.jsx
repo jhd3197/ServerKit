@@ -10,11 +10,11 @@ const REPO_DOCS_URL = 'https://github.com/jhd3197/ServerKit/blob/main/docs';
 const DOC_GROUPS = [
     {
         id: 'getting-started',
-        titleKey: 'app.documentation.gettingStarted', title: 'Getting Started',
+        titleKey: 'app.documentation.gettingStarted', title: 'Getting started',
         docs: [
-            { file: 'README.md', titleKey: 'app.documentation.docsHome', title: 'Docs Home', desc: 'Documentation index' },
+            { file: 'README.md', titleKey: 'app.documentation.docsHome', title: 'Docs home', desc: 'Documentation index' },
             { file: 'INSTALLATION.md', titleKey: 'app.documentation.installation', title: 'Installation', desc: 'Install ServerKit on a server' },
-            { file: 'LOCAL_DEVELOPMENT.md', titleKey: 'app.documentation.localDevelopment', title: 'Local Development', desc: 'Run the panel locally' },
+            { file: 'LOCAL_DEVELOPMENT.md', titleKey: 'app.documentation.localDevelopment', title: 'Local development', desc: 'Run the panel locally' },
             { file: 'DEPLOYMENT.md', titleKey: 'app.documentation.deployment', title: 'Deployment', desc: 'Production deployment guide' },
         ],
     },
@@ -23,20 +23,20 @@ const DOC_GROUPS = [
         titleKey: 'app.documentation.reference', title: 'Reference',
         docs: [
             { file: 'ARCHITECTURE.md', titleKey: 'app.documentation.architecture', title: 'Architecture', desc: 'How ServerKit is structured' },
-            { file: 'API.md', titleKey: 'app.documentation.apiReference', title: 'API Reference', desc: 'REST API documentation' },
-            { file: 'MULTI_ENVIRONMENT.md', titleKey: 'app.documentation.multiEnvironment', title: 'Multi-Environment', desc: 'Manage multiple environments' },
-            { file: 'MCP_SERVER_ACCESS.md', titleKey: 'app.documentation.mcpServerAccess', title: 'MCP Server Access', desc: 'Model Context Protocol access' },
+            { file: 'API.md', titleKey: 'app.documentation.apiReference', title: 'API reference', desc: 'REST API documentation' },
+            { file: 'MULTI_ENVIRONMENT.md', titleKey: 'app.documentation.multiEnvironment', title: 'Multi-environment', desc: 'Manage multiple environments' },
+            { file: 'MCP_SERVER_ACCESS.md', titleKey: 'app.documentation.mcpServerAccess', title: 'MCP server access', desc: 'Model Context Protocol access' },
             { file: 'pairing.md', titleKey: 'app.documentation.pairing', title: 'Pairing', desc: 'Pairing servers with the panel' },
-            { file: 'PLAN_AGENT_FLEET.md', titleKey: 'app.documentation.agentFleetPlan', title: 'Agent Fleet Plan', desc: 'Multi-server agent design' },
+            { file: 'PLAN_AGENT_FLEET.md', titleKey: 'app.documentation.agentFleetPlan', title: 'Agent fleet plan', desc: 'Multi-server agent design' },
         ],
     },
     {
         id: 'product',
-        titleKey: 'app.documentation.productNotes', title: 'Product Notes',
+        titleKey: 'app.documentation.productNotes', title: 'Product notes',
         docs: [
-            { file: 'FEATURE_GAPS.md', titleKey: 'app.documentation.featureGaps', title: 'Feature Gaps', desc: 'Known gaps and limitations' },
-            { file: 'COMPETITIVE_ANALYSIS.md', titleKey: 'app.documentation.competitiveAnalysis', title: 'Competitive Analysis', desc: 'Market comparison' },
-            { file: 'MARKET_POSITIONING.md', titleKey: 'app.documentation.marketPositioning', title: 'Market Positioning', desc: 'Product positioning notes' },
+            { file: 'FEATURE_GAPS.md', titleKey: 'app.documentation.featureGaps', title: 'Feature gaps', desc: 'Known gaps and limitations' },
+            { file: 'COMPETITIVE_ANALYSIS.md', titleKey: 'app.documentation.competitiveAnalysis', title: 'Competitive analysis', desc: 'Market comparison' },
+            { file: 'MARKET_POSITIONING.md', titleKey: 'app.documentation.marketPositioning', title: 'Market positioning', desc: 'Product positioning notes' },
         ],
     },
     {
@@ -56,7 +56,7 @@ const ROOT_DOCS = [
     { file: 'AGENTS.md', titleKey: 'app.documentation.agentsMd', title: 'AGENTS.md', desc: 'Guidance for AI/agent contributors', root: true },
     { file: 'CLAUDE.md', titleKey: 'app.documentation.claudeMd', title: 'CLAUDE.md', desc: 'Guidance for Claude Code', root: true },
     { file: 'ROADMAP.md', titleKey: 'app.documentation.roadmap', title: 'Roadmap', desc: 'Planned features', root: true },
-    { file: 'SECURITY_AUDIT.md', titleKey: 'app.documentation.securityAudit', title: 'Security Audit', desc: 'Security findings', root: true },
+    { file: 'SECURITY_AUDIT.md', titleKey: 'app.documentation.securityAudit', title: 'Security audit', desc: 'Security findings', root: true },
 ];
 
 const REPO_ROOT_URL = 'https://github.com/jhd3197/ServerKit/blob/main';
@@ -102,12 +102,12 @@ export default function Documentation() {
             )}
         >
             {empty && (
-                <EmptyState icon={BookOpen} title={t('app.documentation.noDocsMatch', 'No docs match “{{query}}”.', { query: query })} />
+                <EmptyState icon={BookOpen} title={t('app.documentation.noDocsMatch', 'No docs match "{{query}}".', { query: query })} />
             )}
 
             {!!rootDocs.length && (
                 <section className="documentation__group">
-                    <h3 className="documentation__group-title">{t('app.documentation.repositoryRoot', 'Repository Root')}</h3>
+                    <h3 className="documentation__group-title">{t('app.documentation.repositoryRoot', 'Repository root')}</h3>
                     <ul className="documentation__list">
                         {rootDocs.map(d => (
                             <DocItem key={d.file} doc={d} baseUrl={REPO_ROOT_URL} pathPrefix="" />

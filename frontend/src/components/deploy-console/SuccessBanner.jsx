@@ -55,7 +55,7 @@ export default function SuccessBanner({ job, appUrl, engineTarget = null, armAut
             <div className="deploy-console__success-head">
                 <CheckCircle2 size={20} />
                 <div>
-                    <strong>{t('app.successBanner.deployedSuccessfully', 'Deployed successfully')}</strong>
+                    <strong>{t('app.successBanner.deployedSuccessfully', 'Deployed')}</strong>
                     <span className="deploy-console__success-dur">
                         {t('app.successBanner.completedIn', 'Completed in')} {fmtSeconds(job?.duration)}
                     </span>
@@ -64,10 +64,10 @@ export default function SuccessBanner({ job, appUrl, engineTarget = null, armAut
 
             {timings.length > 0 && (
                 <ul className="deploy-console__success-timings">
-                    {timings.map((t) => (
-                        <li key={t.index}>
-                            <span>{t.name || `Step ${t.index}`}</span>
-                            <span>{fmtSeconds(t.seconds)}</span>
+                    {timings.map((step) => (
+                        <li key={step.index}>
+                            <span>{step.name || t('app.successBanner.stepNumber', 'Step {{index}}', { index: step.index })}</span>
+                            <span>{fmtSeconds(step.seconds)}</span>
                         </li>
                     ))}
                 </ul>
@@ -77,8 +77,8 @@ export default function SuccessBanner({ job, appUrl, engineTarget = null, armAut
                 <div className="deploy-console__success-return">
                     <span>
                         {counting
-                            ? `Opening ${returnLabel} in Databases in ${countdown}s…`
-                            : `${returnLabel} is waiting in Databases.`}
+                            ? t('app.successBanner.openingInDatabases', 'Opening {{name}} in Databases in {{seconds}}s…', { name: returnLabel, seconds: countdown })
+                            : t('app.successBanner.waitingInDatabases', '{{name}} is waiting in Databases.', { name: returnLabel })}
                     </span>
                     {counting && (
                         <SharedButton variant="unstyled"
@@ -97,7 +97,7 @@ export default function SuccessBanner({ job, appUrl, engineTarget = null, armAut
                     <Link
                         className="deploy-console__btn deploy-console__btn--primary"
                         to={returnTo}
-                        title={t('app.successBanner.openInTheDatabaseExplorer', 'Open {{returnLabel}} in the Database Explorer', { returnLabel: returnLabel })}
+                        title={t('app.successBanner.openInTheDatabaseExplorer', 'Open {{returnLabel}} in the database explorer', { returnLabel: returnLabel })}
                     >
                         <Database size={14} /> {t('common.actions.open', 'Open')} {returnLabel} {t('app.successBanner.inDatabases', 'in Databases')}
                     </Link>
@@ -109,7 +109,7 @@ export default function SuccessBanner({ job, appUrl, engineTarget = null, armAut
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <ExternalLink size={14} /> {t('app.successBanner.openApp', 'Open app')}
+                        <ExternalLink size={14} /> {t('app.successBanner.openApp', 'Open service')}
                     </a>
                 )}
                 {appId && (

@@ -42,9 +42,9 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
-        border-radius: $radius-md;
+        width: $control-md;
+        height: $control-md;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         color: $text-secondary;
         background: $bg-card;
@@ -57,8 +57,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
 
     &__title {
         margin: 0;
-        font-size: 18px;
-        font-weight: 600;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
         min-width: 0;
         flex: 1;
@@ -74,10 +74,11 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        padding: 3px 10px;
-        border-radius: 999px;
-        font-size: $font-size-sm;
-        font-weight: 600;
+        height: 20px; // geometry: badge height (20px badge spec)
+        padding: 0 $space-tight;
+        border-radius: $radius-badge;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         text-transform: capitalize;
 
         &--pending { background: var(--surface-3); color: var(--text-faint); }
@@ -95,13 +96,12 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
 
     &__step-count,
     &__elapsed {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-tertiary;
         font-variant-numeric: tabular-nums;
     }
 
     &__elapsed {
-        font-family: $font-mono;
     }
 
     // ---- transient state strips ----
@@ -111,8 +111,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         align-items: center;
         gap: $space-2;
         padding: $space-2 $space-3;
-        border-radius: $radius-md;
-        font-size: $font-size-sm;
+        border-radius: $radius-control;
+        font-size: $text-xs;
     }
 
     &__degraded {
@@ -137,7 +137,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         flex-direction: column;
         min-width: 0;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         overflow: hidden;
     }
 
@@ -146,7 +146,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         display: flex;
         background: $bg-card;
         border: 1px solid $border-subtle;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         overflow: hidden;
 
         // Narrow viewports: segments would shrink past legibility, so the strip
@@ -159,7 +159,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__seg {
         flex: 1;
         min-width: 0;
-        padding: 12px 14px 13px;
+        padding: $space-3 $space-4 $space-3;
         background: none;
         border: none;
         // A 2px top edge carries the step's state colour — the strip reads as a
@@ -184,10 +184,10 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__seg-head {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         color: var(--text-ghost);
-        font-size: 12.5px;
-        font-weight: 500;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
 
         svg { flex-shrink: 0; }
     }
@@ -210,8 +210,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__seg-bar {
         display: block;
         height: 3px;
-        margin-top: 11px;
-        border-radius: 2px;
+        margin-top: $space-3;
+        border-radius: $radius-badge;
         background: var(--surface-3);
         overflow: hidden;
 
@@ -224,10 +224,9 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
 
     &__seg-dur {
         display: block;
-        margin-top: 6px;
+        margin-top: $space-tight;
         color: $text-tertiary;
-        font-family: $font-mono;
-        font-size: 10.5px;
+        font-size: $text-xs;
     }
 
     &__seg--running &__seg-dur { color: var(--amber); }
@@ -236,13 +235,12 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__runmeta {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px 20px;
-        padding: 0 3px;
+        gap: $space-tight $space-5;
+        padding: 0 $space-1;
         color: var(--text-ghost);
-        font-family: $font-mono;
-        font-size: 11.5px;
+        font-size: $text-xs;
 
-        b { color: $text-secondary; font-weight: 500; }
+        b { color: $text-secondary; font-weight: $font-weight-medium; }
     }
 
     // ---- toolbar ----
@@ -266,10 +264,11 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__toggle {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 4px 8px;
-        font-size: $font-size-sm;
-        border-radius: $radius-md;
+        gap: $space-1;
+        height: $control-sm;
+        padding: 0 $space-2;
+        font-size: $text-xs;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         background: transparent;
         color: $text-secondary;
@@ -282,32 +281,40 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         }
     }
 
-    &__level select {
-        padding: 4px 6px;
-        font-size: $font-size-sm;
-        border-radius: $radius-md;
+    &__level .ui-select-trigger {
+        width: auto;
+        height: auto;
+        gap: $space-1;
+        padding: $space-1 $space-tight;
+        font-size: $text-xs;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         background: $bg-card;
         color: $text-secondary;
+
+        .ui-select-icon {
+            width: 14px;
+            height: 14px;
+        }
     }
 
     &__search {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 2px 8px;
-        border-radius: $radius-md;
+        gap: $space-1;
+        padding: $space-hair $space-2;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         color: $text-tertiary;
         flex: 1 1 160px;
         max-width: 280px;
-        min-height: 28px;
+        min-height: $control-sm;
 
         input {
             border: none;
             background: transparent;
             color: $text-primary;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             outline: none;
             width: 100%;
             min-width: 0;
@@ -340,7 +347,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         width: 16px;
         display: flex;
         flex-direction: column;
-        padding: 2px 3px;
+        padding: $space-hair $space-1;
         gap: 1px;
         background: rgba(0, 0, 0, 0.25);
         border-left: 1px solid $dc-surface-line;
@@ -351,7 +358,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__map-tick {
         flex: 1 1 0;
         min-height: 1px;
-        border-radius: 1px;
+        border-radius: $radius-badge;
         // Unclassified slices stay empty rather than drawing a bar for
         // "nothing happened here".
         background: transparent;
@@ -364,7 +371,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         // still catches the eye.
         &--error {
             background: $dc-error;
-            box-shadow: 0 0 3px rgba($dc-error, 0.9);
+            box-shadow: 0 0 3px rgba($dc-error, 0.9); // geometry: deploy-console minimap error tick bleed (exempt segment)
             min-height: 2px;
         }
     }
@@ -375,7 +382,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         right: 0;
         min-height: 8px;
         border: 1px solid rgba(255, 255, 255, 0.5);
-        border-radius: 2px;
+        border-radius: $radius-badge;
         background: rgba(255, 255, 255, 0.1);
         pointer-events: none;
     }
@@ -387,7 +394,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         padding: $space-2 $space-3;
         background: $dc-surface;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.55;
         color: #c9d1d9;
 
@@ -400,8 +407,8 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__line {
         display: flex;
         gap: $space-2;
-        padding: 0 4px;
-        border-radius: 3px;
+        padding: 0 $space-1;
+        border-radius: $radius-badge;
 
         &[data-step] { scroll-margin-top: $space-2; }
 
@@ -434,22 +441,22 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         transform: translateX(-50%);
         display: inline-flex;
         align-items: center;
-        gap: 4px;
-        padding: 4px 12px;
-        border-radius: 999px;
+        gap: $space-1;
+        padding: $space-1 $space-3;
+        border-radius: $radius-full;
         border: none;
         background: var(--accent-primary);
         color: #fff;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         cursor: pointer;
-        box-shadow: $shadow-lg;
+        box-shadow: $shadow-raised;
     }
 
     // ---- error card ----
     &__error {
         border: 1px solid var(--red-bg);
         border-left: 3px solid $danger;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: var(--red-bg);
         padding: $space-3;
         display: flex;
@@ -466,9 +473,9 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     }
 
     &__error-msg {
-        margin: 2px 0 0;
+        margin: $space-hair 0 0;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__error-hint {
@@ -477,10 +484,10 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         gap: $space-1;
         margin: 0;
         padding: $space-2;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         background: rgba($warning-raw, 0.12);
         color: $warning;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     &__error-tail {
@@ -489,9 +496,9 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         overflow: auto;
         padding: $space-2;
         background: $dc-surface;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
         font-family: $font-mono;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         line-height: 1.5;
         color: #c9d1d9;
         white-space: pre-wrap;
@@ -509,7 +516,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__success {
         border: 1px solid var(--green-bg);
         border-left: 3px solid $success;
-        border-radius: $radius-lg;
+        border-radius: $radius-card;
         background: var(--green-bg);
         padding: $space-3;
         display: flex;
@@ -526,7 +533,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     }
 
     &__success-dur {
-        font-size: $font-size-sm;
+        font-size: $text-xs;
         color: $text-secondary;
     }
 
@@ -535,14 +542,14 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         margin: 0;
         padding: 0;
         display: grid;
-        gap: 2px;
+        gap: $space-hair;
 
         li {
             display: flex;
             justify-content: space-between;
-            font-size: $font-size-sm;
+            font-size: $text-xs;
             color: $text-secondary;
-            padding: 2px 0;
+            padding: $space-hair 0;
             border-bottom: 1px solid $dc-surface-line;
 
             span:last-child { font-variant-numeric: tabular-nums; }
@@ -561,7 +568,7 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         padding-top: $space-2;
         border-top: 1px solid $dc-surface-line;
         color: $text-secondary;
-        font-size: $font-size-sm;
+        font-size: $text-xs;
     }
 
     // ---- shared buttons ----
@@ -569,13 +576,13 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         display: inline-flex;
         align-items: center;
         gap: $space-1;
-        padding: 6px 12px;
-        border-radius: $radius-md;
+        padding: $space-tight $space-3;
+        border-radius: $radius-control;
         border: 1px solid $border-subtle;
         background: $bg-card;
         color: $text-primary;
-        font-size: $font-size-sm;
-        font-weight: 500;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
         cursor: pointer;
 
         &:hover { background: $bg-hover; }
@@ -611,13 +618,13 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     // Error / warning counts in the toolbar. They read as a summary first and
     // filter second, so they stay visible even when a filter is off.
     &__chip {
-        padding: 3px 9px;
-        border-radius: 999px;
+        padding: $space-1 $space-2;
+        border-radius: $radius-full;
         border: 1px solid transparent;
         background: var(--surface-3);
         color: $text-secondary;
-        font-size: 11.5px;
-        font-weight: 600;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
         cursor: pointer;
         white-space: nowrap;
 
@@ -631,13 +638,12 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__nav {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
     }
 
     &__nav-count {
         color: $text-tertiary;
-        font-family: $font-mono;
-        font-size: 11px;
+        font-size: $text-xs;
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
     }
@@ -652,15 +658,15 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
         z-index: 2;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: $space-2;
         width: 100%;
-        padding: 5px $space-2;
+        padding: $space-tight $space-2;
         border: none;
         border-top: 1px solid $dc-surface-line;
         background: #131a24;
         color: $text-secondary;
         font-family: $font-mono;
-        font-size: 11.5px;
+        font-size: $text-xs;
         text-align: left;
         cursor: pointer;
 
@@ -669,25 +675,25 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     }
 
     &__sec-name {
-        font-weight: 600;
+        font-weight: $font-weight-semibold;
         color: $text-primary;
         white-space: nowrap;
     }
 
     &__sec-meta {
         color: var(--text-ghost);
-        font-size: 10.5px;
+        font-size: $text-xs;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
-    &__sec-err { color: $dc-error; font-weight: 600; }
+    &__sec-err { color: $dc-error; font-weight: $font-weight-semibold; }
 
     // The line prev/next landed on, so the eye finds it after the scroll.
     &__line.is-current {
         background: rgba(255, 255, 255, 0.07);
-        box-shadow: inset 2px 0 0 var(--accent-bright);
+        box-shadow: inset 2px 0 0 var(--accent-bright); // geometry: draws the current-line rule
     }
 
     // Skip layout and paint for lines that are off-screen. This is what keeps a
@@ -706,15 +712,15 @@ $dc-surface-line: rgba(255, 255, 255, 0.04);
     &__error-toggle {
         display: inline-flex;
         align-items: center;
-        gap: 4px;
+        gap: $space-1;
         margin-left: auto;
-        padding: 4px 8px;
+        padding: $space-1 $space-2;
         border: none;
         background: transparent;
         color: $text-secondary;
-        font-size: 12px;
+        font-size: $text-xs;
         cursor: pointer;
-        border-radius: $radius-md;
+        border-radius: $radius-control;
 
         &:hover { color: $text-primary; background: rgba(255, 255, 255, 0.06); }
     }
