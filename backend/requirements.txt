@@ -83,7 +83,7 @@ tzlocal>=5.0
 
 # OpenAPI documentation
 apispec==6.4.0
-marshmallow==3.26.2
+marshmallow==4.3.1
 
 # AI assistant (core primitive — powered by Prompture)
 # Multi-provider LLM orchestration: Conversation, ToolRegistry, ask_live streaming,
