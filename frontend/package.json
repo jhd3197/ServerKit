@@ -82,7 +82,7 @@
         "globals": "^15.9.0",
         "playwright": "1.61.1",
         "sass": "^1.86.0",
-        "vite": "^8.1.4"
+        "vite": "^8.3.5"
     },
     "overrides": {
         "lodash": "4.18.1",
