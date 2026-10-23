@@ -96,6 +96,11 @@ release history; historical `agent-v*` tags are not panel releases.
   Scanner custom-path scan, #144). Blueprint registration now waives Flask's
   setup guard for the duration of the call, which is safe in the panel's
   single-worker threaded deployment.
+- Count only the requested window in the failed-login check. The Security →
+  Events card "Failed login attempts (24h)" and its alert counted every
+  failure still in the auth log, which under the usual weekly log rotation is
+  up to a week of SSH attempts, so the number was inflated and the alert kept
+  firing on old attempts.
 
 ## [1.11.4] - 2026-09-12
 

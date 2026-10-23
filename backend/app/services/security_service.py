@@ -15,6 +15,7 @@ serverkit-image-scan.
 """
 
 import os
+import re
 import json
 import shlex
 import hashlib
@@ -30,6 +31,19 @@ from app.utils.system import (
     run_privileged,
 )
 
+# The two stamps an auth log line starts with. RFC 3339 is rsyslog's
+# high-precision format, the default on recent Ubuntu releases:
+# "2026-10-22T09:15:02.123456+02:00". The traditional BSD stamp, still written
+# on Debian and the RHEL family and by syslog-ng, is local time with no year:
+# "Oct  2 09:15:02". Its month names are English whatever the locale, so they
+# are matched by hand rather than through strptime's %b.
+_RFC3339_STAMP_RE = re.compile(r'^(\d{4}-\d{2}-\d{2}T\S+)\s')
+_BSD_STAMP_RE = re.compile(r'^([A-Z][a-z]{2}) {1,2}(\d{1,2}) (\d{2}):(\d{2}):(\d{2})\s')
+_SYSLOG_MONTHS = {m: i for i, m in enumerate(
+    ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'), start=1)}
+
+
 class SecurityService:
     """Service for security scanning and monitoring."""
 
@@ -38,6 +52,8 @@ class SecurityService:
     INTEGRITY_DB = os.path.join(CONFIG_DIR, 'file_integrity.json')
     SCAN_LOG = os.path.join(paths.SERVERKIT_LOG_DIR, 'security_scans.log')
     ALERTS_LOG = os.path.join(paths.SERVERKIT_LOG_DIR, 'security_alerts.log')
+    # Where sshd/PAM failures land: Debian family, then the RHEL family.
+    AUTH_LOGS = ('/var/log/auth.log', '/var/log/secure')
 
     # Scan status tracking
     _current_scan = None
@@ -227,14 +243,42 @@ class SecurityService:
     # ==========================================
     # SUSPICIOUS ACTIVITY DETECTION
     # ==========================================
+    @staticmethod
+    def _auth_log_time(line: str, now: datetime) -> Optional[datetime]:
+        """When an auth log line was written, as naive local time, or None
+        when its stamp is neither of the two rsyslog writes by default.
+
+        The BSD stamp has no year, so it takes ``now``'s and steps back one
+        when that would put the line more than a day in the future, as a
+        December line read in January would be.
+        """
+        match = _RFC3339_STAMP_RE.match(line)
+        if match:
+            try:
+                stamp = datetime.fromisoformat(match.group(1))
+            except ValueError:
+                return None
+            return stamp.astimezone().replace(tzinfo=None)
+
+        match = _BSD_STAMP_RE.match(line)
+        if not match or match.group(1) not in _SYSLOG_MONTHS:
+            return None
+        month = _SYSLOG_MONTHS[match.group(1)]
+        day, hour, minute, second = (int(part) for part in match.groups()[1:])
+        try:
+            stamp = datetime(now.year, month, day, hour, minute, second)
+            if stamp > now + timedelta(days=1):
+                stamp = stamp.replace(year=now.year - 1)
+        except ValueError:  # Feb 29 outside a leap year, or a garbled stamp
+            return None
+        return stamp
+
     @classmethod
     def check_failed_logins(cls, since_hours: int = 24) -> Dict:
-        """Check for failed login attempts."""
+        """Count failed logins in the auth log over the last ``since_hours``."""
         try:
-            # Check auth.log or secure log
-            log_files = ['/var/log/auth.log', '/var/log/secure']
             log_file = None
-            for lf in log_files:
+            for lf in cls.AUTH_LOGS:
                 if os.path.exists(lf):
                     log_file = lf
                     break
@@ -242,13 +286,19 @@ class SecurityService:
             if not log_file:
                 return {'success': False, 'error': 'Auth log not found'}
 
-            cutoff_time = datetime.now() - timedelta(hours=since_hours)
+            now = datetime.now()
+            cutoff_time = now - timedelta(hours=since_hours)
             failed_attempts = []
 
             with open(log_file, 'r') as f:
                 for line in f:
                     if 'Failed password' in line or 'authentication failure' in line.lower():
-                        # Parse the log line to extract IP and user
+                        # A line whose stamp cannot be read is kept rather
+                        # than dropped: it may be recent, and leaving it out
+                        # would hide failures instead of counting them.
+                        written = cls._auth_log_time(line, now)
+                        if written is not None and written < cutoff_time:
+                            continue
                         failed_attempts.append(line.strip())
 
             config = cls.get_config()
