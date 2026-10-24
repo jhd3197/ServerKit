@@ -54,7 +54,7 @@ jobs:
       dev_tag: ${{ steps.dev.outputs.tag }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -73,7 +73,7 @@ jobs:
           echo "Dev build: v$version"
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -89,7 +89,7 @@ jobs:
 
       - name: Save the dev release files
         if: github.event_name == 'push'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dev-release
           path: |
@@ -108,7 +108,7 @@ jobs:
     steps:
       # No checkout or repository scripts run with the write token.
       - name: Download the built release files
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dev-release
 
@@ -157,13 +157,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Build image (amd64)
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
           context: .
           platforms: linux/amd64
