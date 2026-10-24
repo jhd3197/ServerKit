@@ -10,20 +10,20 @@ Flask-SQLAlchemy==3.1.1
 # attributes and SQLAlchemy's TypingOnly guard rejected them. Debian 13 ships
 # only 3.13, so this pin is what lets the panel install there at all.
 # Verified: 3542 passed / 0 failed on 3.11 with 2.0.52, identical to 2.0.23.
-SQLAlchemy==2.0.52
-Flask-Migrate==4.0.7
+SQLAlchemy==2.0.55
+Flask-Migrate==4.1.0
 
 # Authentication
-Flask-JWT-Extended==4.6.0
+Flask-JWT-Extended==4.7.4
 PyJWT==2.15.1
 
 # CORS
-Flask-Cors==6.0.2
+Flask-Cors==6.0.5
 
 # WebSocket support
-Flask-SocketIO==5.6.1
-python-socketio==5.16.3
-python-engineio==4.13.3
+Flask-SocketIO==5.7.0
+python-socketio==5.17.0
+python-engineio==4.14.0
 # WebSocket CLIENT for the ServerKit Cloud relay (see
 # app/services/connect_client.py). The server-side stack above cannot dial out.
 websockets==15.0.1
@@ -39,41 +39,41 @@ gunicorn==23.0.0
 simple-websocket==1.1.0
 
 # Environment variables
-python-dotenv==1.2.2
+python-dotenv==1.2.4
 
 # YAML / TOML parsing (for Docker Compose and repository manifests)
-PyYAML==6.0.1
+PyYAML==6.0.3
 tomli>=2.0.0; python_version < '3.11'
 
 # Rate limiting
 Flask-Limiter==3.5.0
 
 # CLI
-click==8.3.3
+click==8.5.0
 
 schedule==1.2.2
-croniter==6.0.0
+croniter==6.2.4
 passlib==1.7.4
 bcrypt==4.2.1
 
 # Encryption for env vars
-cryptography==50.0.0
+cryptography==50.0.2
 
 # Two-Factor Authentication
-pyotp==2.9.0
+pyotp==2.10.0
 qrcode[pil]==7.4.2
 
 # WebAuthn / Passkeys
 webauthn==2.5.0
 
 # HTTP Requests (for webhooks & notifications)
-requests==2.33.1
+requests==2.34.2
 
 # S3-compatible storage (AWS S3, Backblaze B2, MinIO, Wasabi)
-boto3==1.35.0
+boto3==1.43.116
 
 # SSO / OAuth
-Authlib==1.6.12
+Authlib==1.9.1
 python3-saml==1.16.0
 
 # Cross-platform local IANA timezone resolution (SystemService.get_server_time
@@ -82,7 +82,7 @@ python3-saml==1.16.0
 tzlocal>=5.0
 
 # OpenAPI documentation
-apispec==6.4.0
+apispec==6.10.0
 marshmallow==3.26.2
 
 # AI assistant (core primitive — powered by Prompture)
@@ -90,4 +90,4 @@ marshmallow==3.26.2
 # ProviderEnvironment, guardrails. Native OpenAI and Anthropic SDKs ship with the
 # panel; compatible gateways use Prompture's raw-HTTP driver. Other SDKs remain
 # optional. Pin the tested descriptor, streaming, and conversation APIs.
-prompture[openai,anthropic]==1.11.0
+prompture[openai,anthropic]==1.15.0
