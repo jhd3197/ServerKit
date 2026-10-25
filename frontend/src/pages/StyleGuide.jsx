@@ -41,6 +41,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useTranslation } from 'react-i18next';
+import ControlsShowcase from '../components/styleguide/ControlsShowcase';
 import {
     Sheet, SheetContent, SheetHeader, SheetFooter, SheetTitle, SheetDescription, SheetClose,
 } from '@/components/ui/sheet';
@@ -53,6 +54,7 @@ const SECTIONS = [
     { id: 'buttons', labelKey: 'app.styleGuide.buttons', label: 'Buttons', icon: Square },
     { id: 'forms', labelKey: 'app.styleGuide.forms', label: 'Forms', icon: ToggleLeft },
     { id: 'fields', labelKey: 'app.styleGuide.sharedFields', label: 'Shared fields', icon: Key },
+    { id: 'controls', labelKey: 'app.styleGuide.controlsTab', label: 'Controls', icon: Settings },
     { id: 'tables', labelKey: 'app.styleGuide.tables', label: 'Tables', icon: Table },
     { id: 'cards', labelKey: 'app.styleGuide.cardsStats', label: 'Cards and stats', icon: Layout },
     { id: 'badges', labelKey: 'app.styleGuide.badgesStatus', label: 'Badges and status', icon: Shield },
@@ -1397,6 +1399,13 @@ export default function StyleGuide() {
                 )}
 
                 {/* ── UTILITIES ── */}
+                {/* ── CONTROLS (plan 92) ── */}
+                {activeSection === 'controls' && (
+                    <div className="styleguide__section">
+                        <ControlsShowcase />
+                    </div>
+                )}
+
                 {activeSection === 'utilities' && (
                     <div className="styleguide__section">
                         <SectionTitle title={t('app.styleGuide.flexUtilities', 'Flex layouts')} />

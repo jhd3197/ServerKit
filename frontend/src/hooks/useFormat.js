@@ -26,6 +26,7 @@ export default function useFormat() {
         formatCompactNumber: intl.formatCompactNumber,
         formatPercent: intl.formatPercent,
         formatList: intl.formatList,
+        getWeekStart: intl.getWeekStart,
         locale: language,
 
     }), [language]);

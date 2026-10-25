@@ -102,6 +102,10 @@ display: grid;
         margin-top: $space-1;
         margin-bottom: 0;
     }
+
+    // The label carries the failure too, so a field scrolled half out of
+    // view still reads as the one to fix.
+    &--invalid &__label { color: $danger; }
 }
 
 // Inline form (input + button)

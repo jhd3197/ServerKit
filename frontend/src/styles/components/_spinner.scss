@@ -81,6 +81,17 @@
     pointer-events: none;
     color: transparent !important;
 
+    // Button `loading` wraps the label so it can be hidden from assistive
+    // tech; `contents` keeps the icon/text gap of the unwrapped label.
+    .btn__label { display: contents; }
+
+    // Loading is busy, not unavailable: keep full colour so the button does
+    // not read as disabled while the action it started is running.
+    &:disabled {
+        opacity: 1;
+        cursor: progress;
+    }
+
     .spinner {
         position: absolute;
         top: 50%;
@@ -98,8 +109,10 @@
         border-top-color: #fff;
     }
 
+    // Runtime tokens, not the compile-time dark raw: on a light theme the
+    // faded light ring disappeared against a white outline button.
     &.btn-secondary .spinner .spinner-ring {
-        border-color: fade($text-primary-raw, 30%);
+        border-color: $border-default;
         border-top-color: $text-primary;
     }
 

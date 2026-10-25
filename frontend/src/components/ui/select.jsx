@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { Check, ChevronDown, ChevronUp } from 'lucide-react';
+import { useFieldProps } from '@/components/ui/field-context';
 import { cn } from '@/lib/utils';
 
 const Select = SelectPrimitive.Root;
@@ -13,7 +14,7 @@ const SelectTrigger = React.forwardRef(({ className, children, size, ...props },
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn('ui-select-trigger', size === 'sm' && 'ui-select-trigger--sm', className)}
-    {...props}
+    {...useFieldProps(props)}
   >
     {children}
     <SelectPrimitive.Icon asChild>

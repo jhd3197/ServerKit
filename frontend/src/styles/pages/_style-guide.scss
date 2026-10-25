@@ -243,4 +243,111 @@
             grid-template-columns: 1fr;
         }
     }
+
+    // Controls tab (components/styleguide/ControlsShowcase.jsx).
+    &__controls {
+        display: flex;
+        flex-direction: column;
+        gap: $space-4;
+    }
+
+    &__control-demo {
+        display: flex;
+        flex-direction: column;
+        gap: $space-4;
+        padding: $space-5;
+        background: $bg-card;
+        border: 1px solid $border-subtle;
+        border-radius: $radius-card;
+    }
+
+    &__control-head {
+        h3 {
+            margin: 0;
+            font-size: $text-md;
+            font-weight: $font-weight-semibold;
+        }
+
+        p {
+            margin: $space-1 0 0;
+            max-width: 72ch;
+            color: $text-secondary;
+            font-size: $text-sm;
+        }
+    }
+
+    &__control-body {
+        display: flex;
+        flex-direction: column;
+        gap: $space-4;
+
+        .form-field { margin-bottom: 0; }
+    }
+
+    &__control-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: $space-2;
+
+        &--top { align-items: flex-start; gap: $space-8; }
+    }
+
+    &__control-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+        gap: $space-4;
+    }
+
+    &__control-stack {
+        display: flex;
+        flex-direction: column;
+        gap: $space-4;
+        max-width: 36rem;
+    }
+
+    &__control-state {
+        display: flex;
+        flex-direction: column;
+        gap: $space-tight;
+    }
+
+    &__control-state-label {
+        color: $text-secondary;
+        font-size: $text-xs;
+    }
+
+    &__control-split {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: $space-6;
+
+        @media (max-width: $breakpoint-lg) { grid-template-columns: 1fr; }
+    }
+
+    &__control-calendar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $space-8;
+        padding: $space-4;
+        border: 1px solid $border-subtle;
+        border-radius: $radius-card;
+        background: $bg-elevated;
+        width: fit-content;
+    }
+
+    &__control-tree {
+        max-width: 26rem;
+        border: 1px solid $border-subtle;
+        border-radius: $radius-card;
+        background: $bg-body;
+    }
+
+    &__control-tip-wrap { display: inline-flex; }
+
+    &__control-ok {
+        margin: 0;
+        color: $success;
+        font-size: $text-sm;
+    }
 }

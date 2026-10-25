@@ -248,7 +248,34 @@
 .progress-fill {
     height: 100%;
     border-radius: $radius-badge;
+    background: $accent-primary;
     @include transition(width);
+}
+
+// ProgressBar size, tone and indeterminate variants (components/ProgressBar.jsx).
+.progress-bar--md { height: 8px; } // geometry: bar thickness
+.progress-bar--accent .progress-fill { background: $accent-primary; }
+.progress-bar--success .progress-fill { background: $success; }
+.progress-bar--warning .progress-fill { background: $warning; }
+.progress-bar--danger .progress-fill { background: $danger; }
+.progress-bar--info .progress-fill { background: $info; }
+
+.progress-bar--indeterminate .progress-fill {
+    width: 35%;
+    animation: sk-progress-indeterminate 1.4s $ease-out-quart infinite;
+}
+
+@keyframes sk-progress-indeterminate {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(300%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .progress-bar--indeterminate .progress-fill {
+        width: 100%;
+        animation: none;
+        opacity: 0.5;
+    }
 }
 
 // Empty state card
