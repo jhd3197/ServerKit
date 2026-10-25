@@ -908,13 +908,56 @@ $calendar-cell: 32px;
         }
 
         &:has(:focus-visible) { box-shadow: $focus-ring; }
+
+        .ui-radio__copy { flex: 1; }
+
+        // The radio moves to the end corner and only shows once picked: the
+        // card border and fill already say which one is selected.
+        .ui-radio__control {
+            order: 1;
+            width: 18px;
+            height: 18px;
+            border-color: transparent;
+            background: transparent;
+
+            &[data-state='checked'] {
+                background: $accent-primary;
+                border-color: $accent-primary;
+            }
+
+            &:focus-visible { outline: none; }
+        }
+
+        .ui-radio__dot {
+            display: inline-flex;
+            width: auto;
+            height: auto;
+            background: none;
+            color: $on-accent;
+
+            svg { width: 12px; height: 12px; stroke-width: 3; }
+        }
+
+        .ui-radio__icon {
+            box-sizing: content-box;
+            margin-top: 0;
+            padding: $space-1 + $space-hair;
+            background: $bg-elevated;
+            border-radius: $radius-control;
+        }
+
+        &:has([data-state='checked']) .ui-radio__icon {
+            background: $bg-card;
+            color: $accent-bright;
+        }
     }
 }
 
 // --------------------------------------------
 // STEPPER
 // --------------------------------------------
-$stepper-marker: 24px;
+$stepper-marker: 28px; // geometry: step marker
+$stepper-rail: 2px;
 
 .sk-stepper {
     display: flex;
@@ -927,12 +970,16 @@ $stepper-marker: 24px;
         display: flex;
         flex: 1;
         min-width: 0;
+
+        // The last step has no rail after it, so it only takes its own width
+        // and the rails between steps share the row evenly.
+        &:last-child { flex: 0 0 auto; }
     }
 
     &__target {
         display: flex;
         align-items: flex-start;
-        gap: $space-2;
+        gap: $space-3;
         min-width: 0;
         padding: 0;
         background: none;
@@ -946,7 +993,8 @@ $stepper-marker: 24px;
     button.sk-stepper__target {
         cursor: pointer;
 
-        &:hover .sk-stepper__label { color: $text-primary; text-decoration: underline; }
+        &:hover .sk-stepper__label { color: $text-primary; }
+        &:hover .sk-stepper__marker { box-shadow: $halo-accent; }
         &:focus-visible { outline: none; box-shadow: $focus-ring; }
     }
 
@@ -957,16 +1005,16 @@ $stepper-marker: 24px;
         flex-shrink: 0;
         width: $stepper-marker;
         height: $stepper-marker;
-        border: 1px solid $border-active;
+        border: $stepper-rail solid $border-active;
         border-radius: $radius-full;
-        background: $bg-body;
+        background: $bg-elevated;
         color: $text-tertiary;
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         font-variant-numeric: tabular-nums;
         @include transition();
 
-        svg { width: 14px; height: 14px; }
+        svg { width: 14px; height: 14px; stroke-width: 3; }
     }
 
     &__copy {
@@ -974,31 +1022,36 @@ $stepper-marker: 24px;
         flex-direction: column;
         gap: $space-hair;
         min-width: 0;
-        padding-top: $space-hair;
+        padding-top: $space-1;
     }
 
     &__label {
         color: $text-secondary;
         font-size: $text-sm;
         font-weight: $font-weight-medium;
+        line-height: 1.4;
         @include truncate();
     }
 
     &__description {
         color: $text-tertiary;
         font-size: $text-xs;
+        line-height: 1.4;
         @include truncate();
     }
 
     &__connector {
         flex: 1;
         align-self: flex-start;
-        min-width: $space-4;
-        height: 1px;
-        margin: calc(#{$stepper-marker} / 2) $space-3 0;
+        min-width: $space-6;
+        height: $stepper-rail;
+        margin: calc((#{$stepper-marker} - #{$stepper-rail}) / 2) $space-4 0;
+        border-radius: $radius-full;
         background: $border-default;
+        @include transition(background);
     }
 
+    // Complete: solid accent disc with a check, rail filled up to the next step.
     .is-complete &__marker {
         background: $accent-primary;
         border-color: $accent-primary;
@@ -1007,39 +1060,47 @@ $stepper-marker: 24px;
 
     .is-complete &__connector { background: $accent-primary; }
 
+    // Current: ringed in accent with a soft halo, so it reads as "you are
+    // here" without looking like keyboard focus.
     .is-current &__marker {
+        background: $accent-bg-soft;
         border-color: $accent-primary;
-        color: $accent-bright;
-        box-shadow: $focus-ring;
+        color: $accent-primary;
+        box-shadow: $halo-accent;
     }
 
-    .is-current &__label,
+    .is-current &__label { color: $text-primary; font-weight: $font-weight-semibold; }
     .is-complete &__label { color: $text-primary; }
 
     .is-error &__marker {
         background: $danger-bg;
         border-color: $danger;
         color: $danger;
+        box-shadow: $halo-danger;
     }
 
-    .is-error &__label { color: $danger; }
+    .is-error &__label { color: $danger; font-weight: $font-weight-semibold; }
 
+    // Vertical: one continuous rail under the markers, running from each
+    // marker down to the next, with the copy hanging to its side.
     &--vertical {
         flex-direction: column;
 
         .sk-stepper__step {
-            flex-direction: column;
             flex: 0 0 auto;
+            padding-bottom: $space-5;
+
+            &:last-child { padding-bottom: 0; }
         }
 
         .sk-stepper__connector {
-            flex: 0 0 auto;
-            align-self: auto;
-            width: 1px;
+            position: absolute;
+            inset-block-start: calc(#{$stepper-marker} + #{$space-1});
+            inset-inline-start: calc((#{$stepper-marker} - #{$stepper-rail}) / 2);
+            width: $stepper-rail;
             min-width: 0;
-            height: auto;
-            min-height: $space-5;
-            margin: $space-1 0 $space-1 calc(#{$stepper-marker} / 2);
+            height: calc(100% - #{$stepper-marker} - #{$space-2});
+            margin: 0;
         }
 
         .sk-stepper__label,

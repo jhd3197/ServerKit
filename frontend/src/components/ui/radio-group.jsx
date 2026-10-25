@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // Styling lives in styles/components/_controls.scss (.ui-radio*).
@@ -25,6 +26,9 @@ const RadioGroup = React.forwardRef(({
     ...props
 }, ref) => {
     const baseId = React.useId();
+    // A card is its own selection target, so the radio becomes a check badge
+    // in the corner instead of a second circle next to the icon.
+    const isCard = variant === 'card';
     return (
         <RadioGroupPrimitive.Root
             ref={ref}
@@ -32,7 +36,7 @@ const RadioGroup = React.forwardRef(({
             className={cn(
                 'ui-radio-group',
                 `ui-radio-group--${orientation}`,
-                variant === 'card' && 'ui-radio-group--card',
+                isCard && 'ui-radio-group--card',
                 className,
             )}
             {...props}
@@ -54,7 +58,9 @@ const RadioGroup = React.forwardRef(({
                             aria-describedby={descriptionId}
                             className="ui-radio__control"
                         >
-                            <RadioGroupPrimitive.Indicator className="ui-radio__dot" />
+                            <RadioGroupPrimitive.Indicator className="ui-radio__dot">
+                                {isCard && <Check />}
+                            </RadioGroupPrimitive.Indicator>
                         </RadioGroupPrimitive.Item>
                         {Icon && <Icon className="ui-radio__icon" aria-hidden="true" />}
                         <span className="ui-radio__copy">

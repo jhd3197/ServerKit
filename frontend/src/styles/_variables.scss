@@ -248,6 +248,9 @@ $control-lg: 40px;
 $shadow-raised: var(--shadow-md);   // menus, popovers, dropdowns, toasts
 $shadow-overlay: var(--shadow-lg);  // modals, drawers
 $focus-ring: 0 0 0 2px var(--accent-bg, rgba(99, 102, 241, 0.35));
+// Soft 4px halo marking a "you are here" state (stepper current/error step).
+$halo-accent: 0 0 0 4px var(--accent-bg-soft);
+$halo-danger: 0 0 0 4px $danger-bg;
 
 // Legacy names (extensions); core uses the names above.
 $shadow-sm: none;
