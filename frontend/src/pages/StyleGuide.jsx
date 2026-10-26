@@ -1399,7 +1399,7 @@ export default function StyleGuide() {
                 )}
 
                 {/* ── UTILITIES ── */}
-                {/* ── CONTROLS (plan 92) ── */}
+                {/* ── CONTROLS ── */}
                 {activeSection === 'controls' && (
                     <div className="styleguide__section">
                         <ControlsShowcase />
