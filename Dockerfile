@@ -71,7 +71,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 # surfaces as a failed image build, never as a half-installed panel on a host.
 #
 # 1. Bundled test suites. Third-party packages ship their own pytest trees
-#    (passlib is the big one) that no running panel imports.
+#    that no running panel imports.
 # 2. botocore API models. botocore carries JSON models for 400+ AWS services
 #    (~15 MB); ServerKit constructs exactly three clients — s3
 #    (storage_provider_service), route53 (dns_provider_service) and ses

@@ -51,9 +51,7 @@ Flask-Limiter==3.5.0
 # CLI
 click==8.3.3
 
-schedule==1.2.2
 croniter==6.0.0
-passlib==1.7.4
 bcrypt==4.2.1
 
 # Encryption for env vars

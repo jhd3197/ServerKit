@@ -10,7 +10,6 @@ from pathlib import Path
 import threading
 import time
 import uuid
-import schedule
 
 from app import paths
 from app.utils import backup_crypto
