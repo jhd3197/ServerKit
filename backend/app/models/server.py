@@ -1,3 +1,5 @@
+import hashlib
+import hmac
 import uuid
 import secrets
 from datetime import datetime
@@ -203,9 +205,17 @@ class Server(TimestampMixin, JsonColumnMixin, db.Model):
         api_secret = secrets.token_urlsafe(32)
         return api_key, api_secret
 
+    @staticmethod
+    def registration_token_digest(token):
+        """SHA-256 of a registration token. The token is 256 random bits, so a
+        slow password hash buys nothing, and a fast exact digest lets the
+        public /register route look one row up instead of running a
+        deliberately slow check against every pending server."""
+        return 'sha256$' + hashlib.sha256(token.encode()).hexdigest()
+
     def set_registration_token(self, token):
         """Hash and store registration token"""
-        self.registration_token_hash = generate_password_hash(token)
+        self.registration_token_hash = Server.registration_token_digest(token)
 
     def verify_registration_token(self, token):
         """Verify a registration token"""
@@ -213,7 +223,27 @@ class Server(TimestampMixin, JsonColumnMixin, db.Model):
             return False
         if self.registration_token_expires and datetime.utcnow() > self.registration_token_expires:
             return False
+        if self.registration_token_hash.startswith('sha256$'):
+            return hmac.compare_digest(self.registration_token_hash,
+                                       Server.registration_token_digest(token))
+        # Tokens issued before the digest switch; they expire on their own.
         return check_password_hash(self.registration_token_hash, token)
+
+    @staticmethod
+    def find_by_registration_token(token):
+        """The pending server this token pairs, or None."""
+        server = Server.query.filter_by(
+            registration_token_hash=Server.registration_token_digest(token)).first()
+        if server is not None:
+            return server if server.verify_registration_token(token) else None
+        now = datetime.utcnow()
+        legacy = Server.query.filter(
+            Server.registration_token_hash.isnot(None),
+            ~Server.registration_token_hash.startswith('sha256$'),
+            db.or_(Server.registration_token_expires.is_(None),
+                   Server.registration_token_expires > now),
+        ).all()
+        return next((s for s in legacy if s.verify_registration_token(token)), None)
 
     def set_api_key(self, api_key):
         """Hash and store API key"""

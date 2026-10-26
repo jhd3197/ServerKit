@@ -746,15 +746,10 @@ def register_agent():
     data = json_object()
 
     token = data.get('token')
-    if not token:
+    if not token or not isinstance(token, str):
         return jsonify({'error': 'Registration token required'}), 400
 
-    # Find server by token (need to check all servers)
-    server = None
-    for s in Server.query.filter(Server.registration_token_hash.isnot(None)).all():
-        if s.verify_registration_token(token):
-            server = s
-            break
+    server = Server.find_by_registration_token(token)
 
     if not server:
         return jsonify({'error': 'Invalid or expired registration token'}), 401
