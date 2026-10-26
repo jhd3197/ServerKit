@@ -355,13 +355,13 @@ def find_or_create_user(provider, profile):
         return user, False
 
     # 3. Auto-provision
-    if not SettingsService.get('sso_auto_provision', True):
+    if not SettingsService.get('sso_auto_provision', False):
         raise ValueError('No matching account found and auto-provisioning is disabled')
 
     if not email:
         raise ValueError('SSO provider did not return an email address')
 
-    default_role = SettingsService.get('sso_default_role', 'developer')
+    default_role = SettingsService.get('sso_default_role', 'viewer')
     username = _generate_username(email, profile.get('display_name', ''))
 
     user = User(
