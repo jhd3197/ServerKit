@@ -142,6 +142,17 @@ def _room_allowed(user, room):
                 and _server_visible(user, server_id))
 
 
+def _emit_to_member(sid, room, event, payload):
+    """Emit to one socket, only while it is still allowed in ``room``."""
+    application = getattr(socketio, '_security_app', None)
+    if application is not None:
+        with application.app_context():
+            _prune_audience(room)
+    members = socketio.server.manager.get_participants('/', room)
+    if any(member == sid for member, _ in members):
+        socketio.emit(event, payload, to=sid)
+
+
 def _prune_audience(room=None):
     # Inspect only this delivery's audience; per-sid metrics should not scan
     # every other connection for each subscriber.
@@ -721,6 +732,14 @@ def handle_subscribe_container_logs(data):
 
     # Create stop event for this stream
     stop_event = threading.Event()
+    room = rooms.app_logs_room(app_id)
+
+    def deliver(event, payload):
+        # This `docker logs` process is this socket's alone, so are its lines:
+        # sending them to the shared room showed every line once per open
+        # viewer. Room membership is still the gate - pruning drops a socket
+        # whose access to the app was removed, and then it gets nothing.
+        _emit_to_member(sid, room, event, payload)
 
     # Create thread to read and emit logs
     def stream_logs():
@@ -730,27 +749,27 @@ def handle_subscribe_container_logs(data):
                 if not line:
                     # Process ended (container stopped or exited)
                     if not stop_event.is_set():
-                        socketio.emit('container_log_ended', {
+                        deliver('container_log_ended', {
                             'app_id': app_id,
                             'message': 'Container log stream ended'
-                        }, room=rooms.app_logs_room(app_id))
+                        })
                     break
 
                 # Parse the log line
                 parsed = DockerService.parse_log_line(line.rstrip('\n'))
 
-                socketio.emit('container_log', {
+                deliver('container_log', {
                     'app_id': app_id,
                     'line': line.rstrip('\n'),
                     'parsed': parsed,
                     'timestamp': time.time()
-                }, room=rooms.app_logs_room(app_id))
+                })
         except Exception as e:
             if not stop_event.is_set():
-                socketio.emit('container_log_error', {
+                deliver('container_log_error', {
                     'app_id': app_id,
                     'message': f'Stream error: {str(e)}'
-                }, room=rooms.app_logs_room(app_id))
+                })
         finally:
             # Clean up
             try:
