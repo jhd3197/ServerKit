@@ -191,6 +191,17 @@ PERMISSION_PROFILES = {
             'survey:read',
         ]
     },
+    'ssh_access': {
+        'name': 'SSH Access',
+        'description': 'Add and remove authorized SSH keys (Faro access grants), plus health reads',
+        'permissions': [
+            'ssh:keys:*',
+            'system:metrics:read',
+            'doctor:read',
+            'systemd:read',
+            'survey:read',
+        ]
+    },
     'full_access': {
         'name': 'Full Access',
         'description': 'All permissions including system commands',

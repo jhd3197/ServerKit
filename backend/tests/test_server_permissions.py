@@ -80,3 +80,16 @@ def test_scoped_profiles_grant_fleet_doctor_scopes():
     assert full.has_permission('doctor:probe')
     assert full.has_permission('systemd:restart')
     assert full.has_permission('cron:update')
+
+
+def test_ssh_access_profile_allows_only_ssh_keys():
+    """ssh_access lets an extension manage authorized_keys (ssh:keys:add /
+    remove / list) and nothing mutating beyond that."""
+    from app.api.servers import PERMISSION_PROFILES
+
+    server = Server(name='ssh', permissions=list(PERMISSION_PROFILES['ssh_access']['permissions']))
+    for action in ('ssh:keys:add', 'ssh:keys:remove', 'ssh:keys:list'):
+        assert server.has_permission(action), action
+    assert server.has_permission('doctor:probe')
+    for action in ('system:exec', 'file:write', 'docker:container:create', 'systemd:restart'):
+        assert not server.has_permission(action), action
