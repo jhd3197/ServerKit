@@ -52,7 +52,7 @@ Flask-Limiter==3.5.0
 click==8.3.3
 
 croniter==6.0.0
-bcrypt==4.2.1
+bcrypt==5.0.0
 
 # Encryption for env vars
 cryptography==50.0.0
