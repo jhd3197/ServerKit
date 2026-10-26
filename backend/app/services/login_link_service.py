@@ -76,8 +76,13 @@ def redeem(token, remote_ip=None):
     if user is None or not user.is_active:
         return None, 'inactive'
 
-    link.used_at = datetime.utcnow()
+    # Claim it in one conditional UPDATE: two concurrent redeems both pass the
+    # is_used check above, but only one can flip used_at from NULL.
+    claimed = LoginLink.query.filter_by(id=link.id, used_at=None).update(
+        {'used_at': datetime.utcnow()}, synchronize_session=False)
     db.session.commit()
+    if claimed != 1:
+        return None, 'used'
     return user, None
 
 
