@@ -58,44 +58,4 @@ export function useMetrics(useWebSocket = true, pollInterval = DEFAULT_POLL_INTE
     return { metrics, loading, error, connected, refresh: fetchMetrics };
 }
 
-export function useLogs(filepath) {
-    const [logs, setLogs] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        if (!filepath) return;
-
-        // Fetch initial logs
-        api.readLog(filepath, 100).then(result => {
-            if (result.success) {
-                setLogs(result.lines);
-            }
-            setLoading(false);
-        });
-
-        // Connect WebSocket for real-time updates
-        socketService.connect();
-
-        const unsubLine = socketService.on('log_line', (data) => {
-            if (data.filepath === filepath) {
-                setLogs(prev => [...prev.slice(-499), data.line]);
-            }
-        });
-
-        // Subscribe to log stream
-        socketService.subscribeLogs(filepath);
-
-        return () => {
-            unsubLine();
-            socketService.unsubscribeLogs();
-        };
-    }, [filepath]);
-
-    const clearLogs = useCallback(() => {
-        setLogs([]);
-    }, []);
-
-    return { logs, loading, clearLogs };
-}
-
 export default useMetrics;

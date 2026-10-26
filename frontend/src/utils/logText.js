@@ -22,10 +22,3 @@ export function logsToText(data) {
     }
     return '';
 }
-
-// Which backend the output came from ('Docker Compose', 'Docker Compose
-// (legacy)', ...), when the response says. Worth showing: it explains an empty
-// log more often than the log itself does.
-export function logsSourceLabel(data) {
-    return (data && typeof data === 'object' && data.source_label) || '';
-}
