@@ -265,7 +265,29 @@ export function formatList(items, { type = 'conjunction' } = {}) {
     })).format(list);
 }
 
+// ------------------------------------------------------------- calendar ---
+
+// Locales whose week starts on Sunday when Intl.Locale#weekInfo is missing
+// (Firefox, older Safari). Everything else falls back to Monday (ISO 8601).
+const SUNDAY_FIRST_REGIONS = new Set(['US', 'CA', 'MX', 'BR', 'JP', 'KR', 'TW', 'HK', 'IL', 'PH', 'TH', 'IN', 'SA']);
+
+/** First day of the week for the panel locale: 0 (Sunday) .. 6 (Saturday). */
+export function getWeekStart() {
+    return cached('weekStart', {}, (locale) => {
+        try {
+            const info = new Intl.Locale(locale);
+            const week = typeof info.getWeekInfo === 'function' ? info.getWeekInfo() : info.weekInfo;
+            if (week?.firstDay) return week.firstDay % 7;   // weekInfo: 1 = Monday … 7 = Sunday
+            const region = info.maximize().region;
+            return SUNDAY_FIRST_REGIONS.has(region) ? 0 : 1;
+        } catch {
+            return 0;
+        }
+    });
+}
+
 export default {
+    getWeekStart,
     formatDate,
     formatTime,
     formatDateTime,

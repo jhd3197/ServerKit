@@ -1,0 +1,1379 @@
+// ============================================
+// CONTROLS — tooltip, number field, combobox, tag input, calendar and date
+// pickers, pin input, slider, radio group, stepper, tree, dropzone.
+// ============================================
+//
+// One partial for the form and display controls in components/ui and components/ds.
+// They share a "field shell": a bordered box at control height that takes the
+// focus ring on :focus-within and turns red on .is-invalid, so a combobox, a
+// tag input and a number field line up with .ui-input in the same form row.
+// ============================================
+
+%control-shell {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: $control-md;
+    background: $bg-body;
+    border: 1px solid $border-default;
+    border-radius: $radius-control;
+    color: $text-primary;
+    font-size: $text-base;
+    @include transition(border-color);
+
+    &:hover:not(.is-disabled) { border-color: $border-hover; }
+
+    &:focus-within {
+        border-color: $accent-primary;
+        box-shadow: $focus-ring;
+    }
+
+    &.is-invalid { border-color: $danger; }
+
+    &.is-invalid:focus-within {
+        box-shadow: 0 0 0 2px $danger-bg; // geometry: focus ring in the error tone
+    }
+
+    &.is-disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+}
+
+%control-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: $radius-badge;
+    color: $text-tertiary;
+    cursor: pointer;
+    @include transition(color);
+
+    svg { width: 14px; height: 14px; }
+
+    &:hover:not(:disabled) { color: $text-primary; background: $bg-hover; }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: $focus-ring;
+    }
+
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+%chip {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    max-width: 100%;
+    min-height: 22px; // geometry: chip inside a 32px field
+    padding-block: 0;
+    padding-inline: $space-2 $space-1;
+    background: $bg-tertiary;
+    border: 1px solid $border-subtle;
+    border-radius: $radius-badge;
+    color: $text-primary;
+    font-size: $text-xs;
+    line-height: 1.2;
+}
+
+// --------------------------------------------
+// TOOLTIP
+// --------------------------------------------
+.ui-tooltip {
+    z-index: $z-tooltip + 10;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    max-width: 280px;
+    padding: $space-1 $space-2;
+    background: $bg-elevated;
+    border: 1px solid $border-active;
+    border-radius: $radius-control;
+    box-shadow: $shadow-raised;
+    color: $text-primary;
+    font-size: $text-xs;
+    line-height: 1.4;
+    transform-origin: var(--radix-tooltip-content-transform-origin);
+    animation: sk-tooltip-in 120ms $ease-out-quart;
+
+    &__kbd {
+        padding: 0 $space-1;
+        border: 1px solid $border-default;
+        border-radius: $radius-badge;
+        background: $bg-body;
+        color: $text-secondary;
+        font-family: $font-mono;
+        font-size: $text-xs;
+    }
+}
+
+@keyframes sk-tooltip-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+// --------------------------------------------
+// NUMBER FIELD
+// --------------------------------------------
+.ui-number-field {
+    @extend %control-shell;
+    height: $control-md;
+    overflow: hidden;
+
+    &--sm { height: $control-sm; min-height: $control-sm; }
+
+    &__input-wrap {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+        height: 100%;
+    }
+
+    &__input {
+        flex: 1;
+        min-width: 0;
+        height: 100%;
+        padding: 0 $space-2;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: inherit;
+        font-family: $font-mono;
+        font-size: $text-base;
+        font-variant-numeric: tabular-nums;
+        text-align: center;
+
+        &::placeholder { color: $text-tertiary; font-family: $font-main; }
+    }
+
+    &__unit {
+        padding-inline-end: $space-2;
+        color: $text-tertiary;
+        font-size: $text-sm;
+        white-space: nowrap;
+    }
+
+    &__step {
+        @extend %control-icon-button;
+        align-self: stretch;
+        width: $control-md;
+        border-radius: 0;
+        background: $bg-card;
+        color: $text-secondary;
+
+        &:first-child { border-inline-end: 1px solid $border-subtle; }
+        &:last-child { border-inline-start: 1px solid $border-subtle; }
+        &:active:not(:disabled) { background: $bg-tertiary; }
+    }
+
+    &--sm &__step { width: $control-sm; }
+}
+
+// --------------------------------------------
+// COMBOBOX
+// --------------------------------------------
+.ui-combobox {
+    @extend %control-shell;
+    flex-wrap: wrap;
+    gap: $space-1;
+    padding: $space-hair $space-1;
+    cursor: pointer;
+
+    &--sm { min-height: $control-sm; }
+
+    &__trigger {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        gap: $space-2;
+        min-width: 6rem;
+        min-height: 26px; // geometry: trigger row inside the 32px shell
+        padding: 0 $space-2;
+        background: none;
+        border: none;
+        outline: none;
+        color: inherit;
+        font: inherit;
+        text-align: start;
+        cursor: pointer;
+
+        &:disabled { cursor: not-allowed; }
+    }
+
+    &--multiple &__trigger { padding-inline-start: $space-1; }
+
+    &__value {
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__value-label { @include truncate(); }
+
+    &__placeholder {
+        flex: 1;
+        color: $text-tertiary;
+        @include truncate();
+    }
+
+    &__chevron {
+        width: 14px;
+        height: 14px;
+        margin-inline-start: auto;
+        flex-shrink: 0;
+        color: $text-tertiary;
+    }
+
+    &__clear {
+        @extend %control-icon-button;
+        width: 22px;
+        height: 22px; // geometry: icon hit area
+        margin-inline-end: $space-hair;
+    }
+
+    &__chip { @extend %chip; }
+    &__chip-label { @include truncate(); }
+
+    &__chip-remove {
+        @extend %control-icon-button;
+        width: 16px;
+        height: 16px;
+
+        svg { width: 12px; height: 12px; }
+    }
+
+    &__more {
+        padding: 0 $space-1;
+        color: $text-secondary;
+        font-size: $text-xs;
+    }
+
+    &__panel {
+        width: var(--radix-popover-trigger-width);
+        min-width: 14rem;
+        max-width: min(28rem, 92vw);
+        padding: 0;
+        overflow: hidden;
+    }
+
+    &__option {
+        gap: $space-2;
+    }
+
+    &__option-icon {
+        display: inline-flex;
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: $text-secondary;
+    }
+
+    &__option-copy {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 0;
+
+        > span { @include truncate(); }
+
+        small {
+            color: $text-tertiary;
+            font-size: $text-xs;
+            @include truncate();
+        }
+    }
+
+    &__checkbox {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        border: 1px solid $border-active;
+        border-radius: $radius-badge;
+        color: $on-accent;
+
+        svg { width: 12px; height: 12px; }
+    }
+
+    &__option[data-checked] &__checkbox {
+        background: $accent-primary;
+        border-color: $accent-primary;
+    }
+
+    &__check {
+        width: 14px;
+        height: 14px;
+        margin-inline-start: auto;
+        color: $accent-primary;
+    }
+
+    &__create { color: $accent-bright; }
+
+    &__message {
+        padding: $space-4 $space-3;
+        color: $text-tertiary;
+        font-size: $text-sm;
+        text-align: center;
+    }
+
+    &__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: $space-2 $space-3;
+        border-top: 1px solid $border-default;
+        color: $text-secondary;
+        font-size: $text-xs;
+    }
+
+    &__footer-action {
+        padding: 0;
+        background: none;
+        border: none;
+        color: $accent-bright;
+        font: inherit;
+        cursor: pointer;
+
+        &:hover { text-decoration: underline; }
+        &:focus-visible { outline: none; box-shadow: $focus-ring; border-radius: $radius-badge; }
+    }
+}
+
+// --------------------------------------------
+// TAG INPUT
+// --------------------------------------------
+.ui-tag-input-field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    width: 100%;
+}
+
+.ui-tag-input {
+    @extend %control-shell;
+    flex-wrap: wrap;
+    gap: $space-1;
+    padding: $space-hair $space-1;
+    cursor: text;
+
+    &--sm { min-height: $control-sm; }
+
+    &__chip {
+        @extend %chip;
+        font-family: $font-mono;
+        transition: background-color 120ms ease, border-color 120ms ease;
+
+        &.is-flashing {
+            background: $warning-bg;
+            border-color: $warning-border;
+        }
+    }
+
+    &__chip-label { @include truncate(); }
+
+    &__chip-remove {
+        @extend %control-icon-button;
+        width: 16px;
+        height: 16px;
+
+        svg { width: 12px; height: 12px; }
+    }
+
+    &__input {
+        flex: 1;
+        min-width: 8rem;
+        min-height: 26px; // geometry: input row inside the 32px shell
+        padding: 0 $space-1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: inherit;
+        font: inherit;
+
+        &::placeholder { color: $text-tertiary; }
+        &:disabled { cursor: not-allowed; }
+    }
+
+    &__error {
+        margin: 0;
+        color: $danger;
+        font-size: $text-xs;
+    }
+}
+
+// --------------------------------------------
+// DATE PICKER + DATE RANGE PICKER
+// --------------------------------------------
+.ui-date-picker {
+    @extend %control-shell;
+    height: $control-md;
+    padding-inline-end: $space-1;
+
+    &--sm { height: $control-sm; min-height: $control-sm; }
+
+    &__trigger {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        gap: $space-2;
+        min-width: 0;
+        height: 100%;
+        padding: 0 $space-3;
+        background: none;
+        border: none;
+        outline: none;
+        color: inherit;
+        font: inherit;
+        text-align: start;
+        cursor: pointer;
+
+        &:disabled { cursor: not-allowed; }
+    }
+
+    &__icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: $text-tertiary;
+    }
+
+    &__value {
+        font-variant-numeric: tabular-nums;
+        @include truncate();
+    }
+
+    &__placeholder {
+        color: $text-tertiary;
+        @include truncate();
+    }
+
+    &__clear {
+        @extend %control-icon-button;
+        width: 22px;
+        height: 22px; // geometry: icon hit area
+    }
+
+    &__panel {
+        width: auto;
+        padding: $space-3;
+
+        &--range {
+            display: flex;
+            gap: $space-3;
+            padding: 0;
+        }
+    }
+
+    &__presets {
+        display: flex;
+        flex-direction: column;
+        gap: $space-hair;
+        min-width: 9rem;
+        margin: 0;
+        padding: $space-2;
+        list-style: none;
+        border-inline-end: 1px solid $border-default;
+    }
+
+    &__preset {
+        width: 100%;
+        padding: $space-tight $space-2;
+        background: none;
+        border: none;
+        border-radius: $radius-badge;
+        color: $text-secondary;
+        font: inherit;
+        font-size: $text-sm;
+        text-align: start;
+        cursor: pointer;
+
+        &:hover { background: $bg-hover; color: $text-primary; }
+        &:focus-visible { outline: none; box-shadow: $focus-ring; }
+
+        &.is-active {
+            background: $accent-bg-soft;
+            color: $accent-bright;
+        }
+    }
+
+    &__range-body {
+        display: flex;
+        flex-direction: column;
+        gap: $space-2;
+        padding: $space-3;
+    }
+
+    &__hint {
+        margin: 0;
+        color: $text-tertiary;
+        font-size: $text-xs;
+    }
+}
+
+@include respond-to($breakpoint-md) {
+    .ui-date-picker__panel--range { flex-direction: column; }
+
+    .ui-date-picker__presets {
+        flex-direction: row;
+        flex-wrap: wrap;
+        border-inline-end: none;
+        border-bottom: 1px solid $border-default;
+    }
+
+    .ui-date-picker__presets li { flex: 0 0 auto; }
+}
+
+// --------------------------------------------
+// CALENDAR
+// --------------------------------------------
+$calendar-cell: 32px;
+
+.ui-calendar {
+    position: relative;
+    user-select: none;
+
+    &__nav {
+        position: absolute;
+        inset-inline: 0;
+        top: 0;
+        display: flex;
+        justify-content: space-between;
+        pointer-events: none;
+    }
+
+    &__nav-button {
+        @extend %control-icon-button;
+        width: $control-sm;
+        height: $control-sm;
+        color: $text-secondary;
+        pointer-events: auto;
+
+        svg { width: 16px; height: 16px; }
+    }
+
+    // In RTL the "previous" chevron sits on the right and must point there.
+    [dir='rtl'] &__nav-button svg { transform: scaleX(-1); }
+
+    &__months {
+        display: flex;
+        gap: $space-6;
+    }
+
+    &__title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: $control-sm;
+        margin-bottom: $space-2;
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
+        text-transform: capitalize;
+    }
+
+    &__grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__row {
+        display: flex;
+
+        &--head { margin-bottom: $space-hair; }
+    }
+
+    &__weekday {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: $calendar-cell;
+        height: 24px; // geometry: weekday header row
+        color: $text-tertiary;
+        font-size: $text-xs;
+        font-weight: $font-weight-medium;
+    }
+
+    &__cell {
+        display: block;
+        width: $calendar-cell;
+        height: $calendar-cell;
+
+        &.is-in-range { background: $accent-bg-soft; }
+        &.is-range-start { border-start-start-radius: $radius-control; border-end-start-radius: $radius-control; }
+        &.is-range-end { border-start-end-radius: $radius-control; border-end-end-radius: $radius-control; }
+    }
+
+    &__day {
+        position: relative;
+        width: $calendar-cell;
+        height: $calendar-cell;
+        padding: 0;
+        background: none;
+        border: 1px solid transparent;
+        border-radius: $radius-control;
+        color: $text-primary;
+        font: inherit;
+        font-size: $text-sm;
+        font-variant-numeric: tabular-nums;
+        cursor: pointer;
+
+        &:hover:not(:disabled) { background: $bg-hover; }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: $focus-ring;
+            border-color: $accent-primary;
+        }
+
+        &:disabled {
+            color: $text-tertiary;
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        &.is-today::after {
+            content: '';
+            position: absolute;
+            bottom: 4px; // geometry: today marker under the numeral
+            inset-inline-start: 50%;
+            width: 4px;
+            height: 4px;
+            border-radius: $radius-full;
+            background: $accent-primary;
+            transform: translateX(-50%);
+        }
+
+        &.is-selected:not(.is-endpoint) { color: $accent-bright; }
+
+        &.is-endpoint {
+            background: $accent-primary;
+            color: $on-accent;
+
+            &:hover { background: $accent-hover; }
+            &.is-today::after { background: $on-accent; }
+        }
+    }
+
+    &__cell.is-outside &__day { color: $text-tertiary; }
+}
+
+// --------------------------------------------
+// PIN INPUT
+// --------------------------------------------
+.ui-pin-input {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+
+    &__cell {
+        width: $control-lg;
+        height: $control-lg + 4px; // geometry: code cell is a little taller than wide
+        padding: 0;
+        background: $bg-body;
+        border: 1px solid $border-default;
+        border-radius: $radius-control;
+        color: $text-primary;
+        font-family: $font-mono;
+        font-size: $text-lg;
+        font-weight: $font-weight-medium;
+        text-align: center;
+        caret-color: $accent-primary;
+        @include transition(border-color);
+
+        &:hover:not(:disabled) { border-color: $border-hover; }
+
+        &:focus {
+            outline: none;
+            border-color: $accent-primary;
+            box-shadow: $focus-ring;
+        }
+
+        &.is-filled { border-color: $border-active; }
+        &:disabled { opacity: 0.55; cursor: not-allowed; }
+    }
+
+    &.is-invalid &__cell { border-color: $danger; }
+
+    &__separator {
+        width: $space-2;
+        height: 2px;
+        border-radius: $radius-full;
+        background: $border-active;
+    }
+}
+
+// --------------------------------------------
+// SLIDER
+// --------------------------------------------
+.ui-slider {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-4;
+    width: 100%;
+
+    &--marked { padding-bottom: $space-5; }
+
+    &__body {
+        position: relative;
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__root {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 20px; // geometry: thumb hit row
+        touch-action: none;
+        user-select: none;
+
+        &[data-disabled] { opacity: 0.55; cursor: not-allowed; }
+    }
+
+    &__track {
+        position: relative;
+        flex: 1;
+        height: 4px;
+        overflow: hidden;
+        background: $bg-tertiary;
+        border-radius: $radius-full;
+    }
+
+    &__range {
+        position: absolute;
+        height: 100%;
+        background: $accent-primary;
+    }
+
+    &__thumb {
+        display: block;
+        width: 16px;
+        height: 16px;
+        background: $on-accent;
+        border: 2px solid $accent-primary;
+        border-radius: $radius-full;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); // geometry: thumb edge on light tracks
+        cursor: grab;
+        @include transition(transform);
+
+        &:hover { transform: scale(1.1); }
+        &:active { cursor: grabbing; }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 4px $accent-bg; // geometry: focus halo around the thumb
+        }
+    }
+
+    &__marks {
+        position: absolute;
+        inset-inline: 0;
+        top: 24px; // geometry: labels under the track
+    }
+
+    &__mark {
+        position: absolute;
+        color: $text-tertiary;
+        font-size: $text-xs;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        transform: translateX(-50%);
+
+        &:first-child { transform: none; }
+        &:last-child { transform: translateX(-100%); }
+    }
+
+    &__value {
+        min-width: 4.5rem;
+        padding-top: $space-hair;
+        color: $text-primary;
+        font-family: $font-mono;
+        font-size: $text-sm;
+        font-variant-numeric: tabular-nums;
+        text-align: end;
+        white-space: nowrap;
+    }
+}
+
+// --------------------------------------------
+// RADIO GROUP
+// --------------------------------------------
+.ui-radio-group {
+    display: flex;
+    gap: $space-3;
+
+    &--vertical { flex-direction: column; }
+    &--horizontal { flex-wrap: wrap; }
+
+    &--card {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+        align-content: start;
+        align-items: start;
+        gap: $space-2;
+
+        &.ui-radio-group--vertical { grid-template-columns: 1fr; }
+    }
+}
+
+.ui-radio {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-2;
+    cursor: pointer;
+
+    &.is-disabled { opacity: 0.55; cursor: not-allowed; }
+
+    &__control {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
+        margin-top: $space-hair;
+        padding: 0;
+        background: $bg-body;
+        border: 1px solid $border-active;
+        border-radius: $radius-full;
+        cursor: inherit;
+        @include transition(border-color);
+
+        &[data-state='checked'] { border-color: $accent-primary; }
+
+        &:focus-visible {
+            outline: 2px solid $accent-primary;
+            outline-offset: 2px;
+        }
+    }
+
+    &__dot {
+        display: block;
+        width: 8px;
+        height: 8px;
+        border-radius: $radius-full;
+        background: $accent-primary;
+    }
+
+    &__icon {
+        width: 16px;
+        height: 16px;
+        margin-top: $space-hair;
+        flex-shrink: 0;
+        color: $text-secondary;
+    }
+
+    &__copy {
+        display: flex;
+        flex-direction: column;
+        gap: $space-hair;
+        min-width: 0;
+    }
+
+    &__label {
+        color: $text-primary;
+        font-size: $text-base;
+        font-weight: $font-weight-medium;
+        line-height: 1.4;
+    }
+
+    &__description {
+        color: $text-secondary;
+        font-size: $text-sm;
+        line-height: 1.4;
+    }
+
+    .ui-radio-group--card & {
+        padding: $space-3;
+        background: $bg-card;
+        border: 1px solid $border-default;
+        border-radius: $radius-card;
+        @include transition(border-color);
+
+        &:hover:not(.is-disabled) { border-color: $border-hover; }
+
+        &:has([data-state='checked']) {
+            background: $accent-bg-soft;
+            border-color: $accent-primary;
+        }
+
+        &:has(:focus-visible) { box-shadow: $focus-ring; }
+
+        .ui-radio__copy { flex: 1; }
+
+        // The radio moves to the end corner and only shows once picked: the
+        // card border and fill already say which one is selected.
+        .ui-radio__control {
+            order: 1;
+            width: 18px;
+            height: 18px;
+            border-color: transparent;
+            background: transparent;
+
+            &[data-state='checked'] {
+                background: $accent-primary;
+                border-color: $accent-primary;
+            }
+
+            &:focus-visible { outline: none; }
+        }
+
+        .ui-radio__dot {
+            display: inline-flex;
+            width: auto;
+            height: auto;
+            background: none;
+            color: $on-accent;
+
+            svg { width: 12px; height: 12px; stroke-width: 3; }
+        }
+
+        .ui-radio__icon {
+            box-sizing: content-box;
+            margin-top: 0;
+            padding: $space-1 + $space-hair;
+            background: $bg-elevated;
+            border-radius: $radius-control;
+        }
+
+        &:has([data-state='checked']) .ui-radio__icon {
+            background: $bg-card;
+            color: $accent-bright;
+        }
+    }
+}
+
+// --------------------------------------------
+// STEPPER
+// --------------------------------------------
+$stepper-marker: 28px; // geometry: step marker
+$stepper-rail: 2px;
+
+.sk-stepper {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__step {
+        position: relative;
+        display: flex;
+        flex: 1;
+        min-width: 0;
+
+        // The last step has no rail after it, so it only takes its own width
+        // and the rails between steps share the row evenly.
+        &:last-child { flex: 0 0 auto; }
+    }
+
+    &__target {
+        display: flex;
+        align-items: flex-start;
+        gap: $space-3;
+        min-width: 0;
+        padding: 0;
+        background: none;
+        border: none;
+        border-radius: $radius-control;
+        color: inherit;
+        font: inherit;
+        text-align: start;
+    }
+
+    button.sk-stepper__target {
+        cursor: pointer;
+
+        &:hover .sk-stepper__label { color: $text-primary; }
+        &:hover .sk-stepper__marker { box-shadow: $halo-accent; }
+        &:focus-visible { outline: none; box-shadow: $focus-ring; }
+    }
+
+    &__marker {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: $stepper-marker;
+        height: $stepper-marker;
+        border: $stepper-rail solid $border-active;
+        border-radius: $radius-full;
+        background: $bg-elevated;
+        color: $text-tertiary;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
+        font-variant-numeric: tabular-nums;
+        @include transition();
+
+        svg { width: 14px; height: 14px; stroke-width: 3; }
+    }
+
+    &__copy {
+        display: flex;
+        flex-direction: column;
+        gap: $space-hair;
+        min-width: 0;
+        padding-top: $space-1;
+    }
+
+    &__label {
+        color: $text-secondary;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
+        line-height: 1.4;
+        @include truncate();
+    }
+
+    &__description {
+        color: $text-tertiary;
+        font-size: $text-xs;
+        line-height: 1.4;
+        @include truncate();
+    }
+
+    &__connector {
+        flex: 1;
+        align-self: flex-start;
+        min-width: $space-6;
+        height: $stepper-rail;
+        margin: calc((#{$stepper-marker} - #{$stepper-rail}) / 2) $space-4 0;
+        border-radius: $radius-full;
+        background: $border-default;
+        @include transition(background);
+    }
+
+    // Complete: solid accent disc with a check, rail filled up to the next step.
+    .is-complete &__marker {
+        background: $accent-primary;
+        border-color: $accent-primary;
+        color: $on-accent;
+    }
+
+    .is-complete &__connector { background: $accent-primary; }
+
+    // Current: ringed in accent with a soft halo, so it reads as "you are
+    // here" without looking like keyboard focus.
+    .is-current &__marker {
+        background: $accent-bg-soft;
+        border-color: $accent-primary;
+        color: $accent-primary;
+        box-shadow: $halo-accent;
+    }
+
+    .is-current &__label { color: $text-primary; font-weight: $font-weight-semibold; }
+    .is-complete &__label { color: $text-primary; }
+
+    .is-error &__marker {
+        background: $danger-bg;
+        border-color: $danger;
+        color: $danger;
+        box-shadow: $halo-danger;
+    }
+
+    .is-error &__label { color: $danger; font-weight: $font-weight-semibold; }
+
+    // Vertical: one continuous rail under the markers, running from each
+    // marker down to the next, with the copy hanging to its side.
+    &--vertical {
+        flex-direction: column;
+
+        .sk-stepper__step {
+            flex: 0 0 auto;
+            padding-bottom: $space-5;
+
+            &:last-child { padding-bottom: 0; }
+        }
+
+        .sk-stepper__connector {
+            position: absolute;
+            inset-block-start: calc(#{$stepper-marker} + #{$space-1});
+            inset-inline-start: calc((#{$stepper-marker} - #{$stepper-rail}) / 2);
+            width: $stepper-rail;
+            min-width: 0;
+            height: calc(100% - #{$stepper-marker} - #{$space-2});
+            margin: 0;
+        }
+
+        .sk-stepper__label,
+        .sk-stepper__description { white-space: normal; }
+    }
+}
+
+// --------------------------------------------
+// TREE VIEW
+// --------------------------------------------
+$tree-indent: 16px;
+
+.sk-tree {
+    margin: 0;
+    padding: $space-1;
+    list-style: none;
+    font-size: $text-sm;
+
+    &__row {
+        display: flex;
+        align-items: center;
+        gap: $space-1;
+        height: $control-sm;
+        padding-inline: calc(var(--sk-tree-level, 0) * #{$tree-indent} + #{$space-1}) $space-2;
+        border-radius: $radius-badge;
+        color: $text-secondary;
+        cursor: pointer;
+        outline: none;
+        user-select: none;   // double-click toggles a branch; it must not select text
+
+        &:hover { background: $bg-hover; color: $text-primary; }
+
+        &:focus-visible { box-shadow: inset 0 0 0 1px $accent-primary; } // geometry: inset focus inside a dense list
+
+        &.is-selected {
+            background: $accent-bg-soft;
+            color: $text-primary;
+
+            .sk-tree__icon { color: $accent-bright; }
+        }
+
+        &.is-disabled { opacity: 0.5; cursor: not-allowed; }
+    }
+
+    &__toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: $radius-badge;
+        color: $text-tertiary;
+
+        svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 120ms $ease-out-quart;
+        }
+
+        &:not(.is-leaf):hover { background: $bg-tertiary; color: $text-primary; }
+        &.is-open svg { transform: rotate(90deg); }
+    }
+
+    [dir='rtl'] &__toggle:not(.is-open) svg { transform: scaleX(-1); }
+
+    &__spinner { animation: spinner-rotate 0.8s linear infinite; }
+
+    &__icon {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        color: $text-tertiary;
+    }
+
+    &__label {
+        flex: 1;
+        min-width: 0;
+        @include truncate();
+    }
+
+    &__meta {
+        flex-shrink: 0;
+        color: $text-tertiary;
+        font-family: $font-mono;
+        font-size: $text-xs;
+    }
+}
+
+// --------------------------------------------
+// FILE DROPZONE + UPLOAD LIST
+// --------------------------------------------
+.ui-dropzone-field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    width: 100%;
+}
+
+.ui-dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $space-2;
+    padding: $space-6 $space-4;
+    background: $bg-body;
+    border: 1px dashed $border-active;
+    border-radius: $radius-card;
+    color: $text-secondary;
+    text-align: center;
+    cursor: pointer;
+    @include transition();
+
+    &:hover:not(.is-disabled) { border-color: $text-tertiary; background: $bg-card; }
+
+    &:focus-visible {
+        outline: none;
+        border-color: $accent-primary;
+        box-shadow: $focus-ring;
+    }
+
+    &.is-dragging {
+        border-style: solid;
+        border-color: $accent-primary;
+        background: $accent-bg-soft;
+
+        .ui-dropzone__icon { color: $accent-bright; transform: translateY(-2px); }
+    }
+
+    &.is-invalid { border-color: $danger; }
+    &.is-disabled { opacity: 0.55; cursor: not-allowed; }
+
+    &--compact {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: $space-3 $space-4;
+        text-align: start;
+    }
+
+    &__icon {
+        width: 24px;
+        height: 24px; // geometry: icon size
+        flex-shrink: 0;
+        color: $text-tertiary;
+        @include transition(transform);
+    }
+
+    &__copy {
+        display: flex;
+        flex-direction: column;
+        gap: $space-hair;
+    }
+
+    &__title {
+        color: $text-primary;
+        font-size: $text-base;
+        font-weight: $font-weight-medium;
+    }
+
+    &__hint {
+        color: $text-tertiary;
+        font-size: $text-xs;
+    }
+
+    &__rejections {
+        display: flex;
+        flex-direction: column;
+        gap: $space-1;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+            display: flex;
+            align-items: flex-start;
+            gap: $space-2;
+            color: $danger;
+            font-size: $text-xs;
+        }
+
+        svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+    }
+}
+
+.ui-upload-list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__item {
+        display: flex;
+        align-items: flex-start;
+        gap: $space-3;
+        padding: $space-2 $space-3;
+        background: $bg-card;
+        border: 1px solid $border-subtle;
+        border-radius: $radius-control;
+
+        &.is-error { border-color: $danger-border; }
+    }
+
+    &__icon {
+        width: 16px;
+        height: 16px;
+        margin-top: $space-hair;
+        flex-shrink: 0;
+        color: $text-tertiary;
+
+        .is-done & { color: $success; }
+        .is-error & { color: $danger; }
+    }
+
+    &__body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: $space-1;
+        min-width: 0;
+
+        .progress-bar { margin-top: 0; }
+    }
+
+    &__row {
+        display: flex;
+        align-items: baseline;
+        gap: $space-2;
+        min-width: 0;
+    }
+
+    &__name {
+        flex: 1;
+        min-width: 0;
+        color: $text-primary;
+        font-size: $text-sm;
+        @include truncate();
+    }
+
+    &__size {
+        flex-shrink: 0;
+        color: $text-tertiary;
+        font-size: $text-xs;
+        font-variant-numeric: tabular-nums;
+    }
+
+    &__status {
+        color: $text-tertiary;
+        font-size: $text-xs;
+
+        .is-error & { color: $danger; }
+        .is-done & { color: $success; }
+    }
+
+    &__actions {
+        display: flex;
+        gap: $space-1;
+    }
+
+    &__action {
+        @extend %control-icon-button;
+        width: $control-sm;
+        height: $control-sm;
+
+        svg { width: 16px; height: 16px; }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ui-tooltip { animation: none; }
+    .sk-tree__toggle svg,
+    .ui-slider__thumb,
+    .ui-dropzone__icon { transition: none; }
+}

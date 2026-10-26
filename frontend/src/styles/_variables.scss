@@ -86,6 +86,9 @@ $accent-bright: var(--accent-bright);
 $accent-dim: var(--accent-dim);
 $accent-bg: var(--accent-bg);
 $accent-bg-soft: var(--accent-bg-soft);
+// Text and marks drawn ON an accent fill (a selected day, a checked box, a
+// completed step). A theme with a light accent sets --on-accent to a dark ink.
+$on-accent: var(--on-accent, #fff);
 
 // --------------------------------------------
 // COLORS - Semantic
@@ -245,6 +248,9 @@ $control-lg: 40px;
 $shadow-raised: var(--shadow-md);   // menus, popovers, dropdowns, toasts
 $shadow-overlay: var(--shadow-lg);  // modals, drawers
 $focus-ring: 0 0 0 2px var(--accent-bg, rgba(99, 102, 241, 0.35));
+// Soft 4px halo marking a "you are here" state (stepper current/error step).
+$halo-accent: 0 0 0 4px var(--accent-bg-soft);
+$halo-danger: 0 0 0 4px $danger-bg;
 
 // Legacy names (extensions); core uses the names above.
 $shadow-sm: none;

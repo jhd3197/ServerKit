@@ -12,6 +12,7 @@ import { WorkspaceProvider } from './contexts/WorkspaceContext';
 import { rememberRedirect } from './utils/redirectAfterLogin';
 import { TUNNEL_BASE } from './services/tunnelBase.js';
 import { Toaster } from './components/ui/sonner';
+import { TooltipProvider } from './components/ui/tooltip';
 import ThemeSync from './components/ThemeSync';
 import LocaleSync from './components/LocaleSync';
 import DashboardLayout from './layouts/DashboardLayout';
@@ -264,9 +265,11 @@ function App() {
                             <LocaleSync />
                             <ResourceTierProvider>
                                 <ToastProvider>
-                                    <NotificationsProvider>
-                                        <AppRoutes />
-                                    </NotificationsProvider>
+                                    <TooltipProvider>
+                                        <NotificationsProvider>
+                                            <AppRoutes />
+                                        </NotificationsProvider>
+                                    </TooltipProvider>
                                     <Toaster />
                                 </ToastProvider>
                             </ResourceTierProvider>
