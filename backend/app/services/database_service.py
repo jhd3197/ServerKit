@@ -7,7 +7,7 @@ import json
 from datetime import datetime
 
 from app import paths
-from app.utils.system import run_checked, unit_is_active
+from app.utils.system import run_checked, secret_env, unit_is_active
 
 
 def _validate_identifier(name: str, max_length: int = 64) -> bool:
@@ -1200,9 +1200,10 @@ class DatabaseService:
         try:
             cmd = ['docker', 'exec']
 
-            # Use MYSQL_PWD env var to avoid passing password on CLI
+            # Bare `-e MYSQL_PWD`: docker reads the value from our env, so the
+            # password never sits in the docker command line.
             if password:
-                cmd.extend(['-e', f'MYSQL_PWD={password}'])
+                cmd.extend(['-e', 'MYSQL_PWD'])
 
             cmd.extend([container_name, DatabaseService._docker_db_client(container_name), '-u', user])
 
@@ -1214,7 +1215,7 @@ class DatabaseService:
 
             cmd.extend(['-e', query])
 
-            return run_checked(cmd, timeout=timeout)
+            return run_checked(cmd, timeout=timeout, env=secret_env(MYSQL_PWD=password))
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
@@ -1236,7 +1237,7 @@ class DatabaseService:
             cmd = ['docker', 'exec']
             # PGPASSWORD via the exec environment, never on the command line.
             if password:
-                cmd.extend(['-e', f'PGPASSWORD={password}'])
+                cmd.extend(['-e', 'PGPASSWORD'])
             cmd.extend([container_name, 'psql', '-U', user,
                         '-d', database or 'postgres',
                         '-v', 'ON_ERROR_STOP=1',
@@ -1245,7 +1246,7 @@ class DatabaseService:
                 # tab, not the '|' default: the callers that parse this split
                 # on tabs, and a '|' is legal inside a value.
                 cmd.extend(['-F', '\t'])
-            return run_checked(cmd, timeout=timeout)
+            return run_checked(cmd, timeout=timeout, env=secret_env(PGPASSWORD=password))
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
@@ -1338,9 +1339,8 @@ class DatabaseService:
             start_time = time.time()
 
             cmd = ['docker', 'exec']
-            # Use MYSQL_PWD env var to avoid passing password on CLI
             if password:
-                cmd.extend(['-e', f'MYSQL_PWD={password}'])
+                cmd.extend(['-e', 'MYSQL_PWD'])
             cmd.extend([container_name, DatabaseService._docker_db_client(container_name), '-u', user])
             cmd.extend([
                 '-D', database,
@@ -1348,7 +1348,7 @@ class DatabaseService:
                 '--batch'
             ])
 
-            result = run_checked(cmd, timeout=timeout)
+            result = run_checked(cmd, timeout=timeout, env=secret_env(MYSQL_PWD=password))
             execution_time = time.time() - start_time
 
             if not result['success']:
