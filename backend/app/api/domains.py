@@ -407,19 +407,17 @@ def enable_ssl(domain_id):
     if not result['success']:
         return jsonify({'error': result.get('error', 'Failed to obtain certificate')}), 400
 
-    # Add SSL to Nginx site
-    nginx_result = NginxService.add_ssl_to_site(
-        app.name,
-        result['certificate_path'],
-        result['private_key_path']
-    )
-
-    if not nginx_result['success']:
-        return jsonify({'error': nginx_result.get('error', 'Failed to configure Nginx')}), 400
-
+    from app.services.site_domain_service import SiteDomainService
+    # Record the cert, then regenerate the vhost from the rows — the same
+    # door every later rewrite uses, so the HTTPS block survives them.
     domain.ssl_enabled = True
     domain.ssl_certificate_path = result['certificate_path']
-    domain.ssl_private_key_path = result['private_key_path']
+    domain.ssl_key_path = result['private_key_path']
+    db.session.flush()
+    published = SiteDomainService.write_app_vhost(app)
+    if published.get('warning'):
+        db.session.rollback()
+        return jsonify({'error': published['warning']}), 400
     db.session.commit()
 
     # Only after issuance actually worked — remembering an address that
@@ -449,10 +447,14 @@ def disable_ssl(domain_id):
     if not ResourceGrantService.can_edit_app(user, app):
         raise permission_denied()
 
+    from app.services.site_domain_service import SiteDomainService
     domain.ssl_enabled = False
     db.session.commit()
+    # Drop the domain's HTTPS server block; best-effort like other rewrites.
+    published = SiteDomainService.write_app_vhost(app)
 
     return jsonify({
+        'warning': published.get('warning'),
         'message': 'SSL disabled for domain',
         'domain': domain.to_dict()
     }), 200

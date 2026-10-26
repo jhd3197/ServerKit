@@ -39,15 +39,34 @@ def render_site_config(name: str, app_type: str, domains: List[str],
                        micro_cache_ttl: Optional[int] = None,
                        immutable_assets: bool = False,
                        wordpress_protection: bool = False, *,
+                       cert_groups: Optional[List[tuple]] = None,
                        settings: RenderSettings = DEFAULT_SETTINGS) -> Dict:
     """Render the vhost config for a site to a string — no side effects.
 
     This is the exact template pipeline :meth:`create_site` writes to disk;
     it is exposed separately so callers (e.g. drift detection) can compute
     the expected on-disk content without touching the filesystem.
+
+    ``cert_groups`` — ``[(domains, cert, key), ...]`` — serves each group of
+    domains from its own certificate (``cert=None`` for plain HTTP): one
+    server set per group, since a server block has exactly one certificate.
+    It replaces ``domains``/``ssl_cert``/``ssl_key``. Templates hold only
+    ``server`` blocks, so concatenated groups are a valid file.
     Returns ``{'success': True, 'config': str}`` or
     ``{'success': False, 'error': msg}``.
     """
+    if cert_groups:
+        parts = []
+        for group_domains, group_cert, group_key in cert_groups:
+            rendered = render_site_config(
+                name, app_type, list(group_domains), root_path, port, php_version,
+                group_cert, group_key, upstream, micro_cache, micro_cache_ttl,
+                immutable_assets, wordpress_protection, settings=settings)
+            if not rendered.get('success'):
+                return rendered
+            parts.append(rendered['config'])
+        return {'success': True, 'config': '\n'.join(parts)}
+
     if not domains:
         return {'success': False, 'error': 'At least one domain is required'}
 

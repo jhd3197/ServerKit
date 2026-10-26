@@ -240,12 +240,14 @@ class NginxService:
                            micro_cache: bool = False,
                            micro_cache_ttl: Optional[int] = None,
                            immutable_assets: bool = False,
-                           wordpress_protection: bool = False) -> Dict:
+                           wordpress_protection: bool = False,
+                           cert_groups: Optional[List[tuple]] = None) -> Dict:
         """Compatibility entry point for the pure configuration layer."""
         return rendering.render_site_config(
             name, app_type, domains, root_path, port, php_version, ssl_cert,
             ssl_key, upstream, micro_cache, micro_cache_ttl, immutable_assets,
-            wordpress_protection, settings=cls._render_settings())
+            wordpress_protection, cert_groups=cert_groups,
+            settings=cls._render_settings())
 
     @classmethod
     def _with_wordpress_protection(cls, config: str, port: int) -> str:
@@ -457,7 +459,8 @@ class NginxService:
                     upstream: str = None, micro_cache: bool = False,
                     micro_cache_ttl: Optional[int] = None,
                     immutable_assets: bool = False,
-                    wordpress_protection: bool = False) -> Dict:
+                    wordpress_protection: bool = False,
+                    cert_groups: Optional[List[tuple]] = None) -> Dict:
         """Create a new site configuration.
 
         When ``ssl_cert``/``ssl_key`` are given the generated vhost serves HTTPS
@@ -471,7 +474,7 @@ class NginxService:
             php_version=php_version, ssl_cert=ssl_cert, ssl_key=ssl_key,
             upstream=upstream, micro_cache=micro_cache,
             micro_cache_ttl=micro_cache_ttl, immutable_assets=immutable_assets,
-            wordpress_protection=wordpress_protection,
+            wordpress_protection=wordpress_protection, cert_groups=cert_groups,
         )
         if not rendered.get('success'):
             return rendered
@@ -720,6 +723,16 @@ class NginxService:
             content = cls.read_vhost(name)
             if content is None:
                 return {'success': False, 'error': f'Could not read site {name}'}
+
+            # Already HTTPS: swap the certificate in place. Re-running the
+            # insert below would rewrite the redirect block's `listen 80;`
+            # too and leave a duplicate 443 listen that fails `nginx -t`.
+            if re.search(r'^\s*ssl_certificate\s', content, re.M):
+                swapped = re.sub(r'^(\s*ssl_certificate)\s+[^;]+;',
+                                 lambda m: f'{m.group(1)} {cert_path};', content, flags=re.M)
+                swapped = re.sub(r'^(\s*ssl_certificate_key)\s+[^;]+;',
+                                 lambda m: f'{m.group(1)} {key_path};', swapped, flags=re.M)
+                return cls.write_vhost(name, swapped)
 
             # Extract domains for redirect
             match = re.search(r'server_name\s+([^;]+);', content)

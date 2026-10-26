@@ -477,7 +477,8 @@ class SiteDomainService:
         return warnings
 
     @classmethod
-    def _vhost_create_kwargs(cls, app, domains, ssl_cert, ssl_key, force_type=None):
+    def _vhost_create_kwargs(cls, app, domains, ssl_cert, ssl_key, force_type=None,
+                             cert_groups=None):
         """Build ``NginxService.create_site(**kwargs)`` for ``app``, or
         ``(None, reason)`` when the app type can't be served by host nginx or is
         missing what it needs (a port for proxied apps, a root for served ones).
@@ -492,6 +493,7 @@ class SiteDomainService:
         # (app_vhost_kwargs -> render_site_config) always agree on it —
         # an enabled cache must never show up as config drift.
         base = dict(name=app.name, domains=domains, ssl_cert=ssl_cert, ssl_key=ssl_key,
+                    **({'cert_groups': cert_groups} if cert_groups else {}),
                     micro_cache=bool(getattr(app, 'micro_cache_enabled', False)),
                     micro_cache_ttl=getattr(app, 'micro_cache_ttl', None),
                     immutable_assets=bool(getattr(app, 'immutable_assets', False)))
@@ -541,18 +543,43 @@ class SiteDomainService:
         # straight back into server_name — the vhost would keep serving a domain
         # the user removed, and drift detection (which renders through this same
         # function) would report the correct config as drifted.
-        domains = [d.name for d in Domain.query_active().filter_by(application_id=app.id).all()]
-        if not domains:
+        rows = Domain.query_active().filter_by(application_id=app.id).all()
+        if not rows:
             return None, None
+        domains = [d.name for d in rows]
 
-        # Pick a wildcard cert only when all domains sit under one base (whichever
-        # base covers them) and that base has HTTPS set up.
-        ssl_cert = ssl_key = None
-        cover = cls.covering_base(domains[0])
-        if cover and cls.https_enabled(cover) and all(cls.covering_base(d) == cover for d in domains):
-            ssl_cert, ssl_key = cls.wildcard_cert_paths(cover)
+        # Each domain's certificate: its base's wildcard when that base has
+        # HTTPS, else the domain's own issued cert. Rebuilding the vhost from
+        # rows (deploys, slot switches, drift repair, restore) used to know
+        # only wildcards, so a custom domain's HTTPS vanished on the next one.
+        pairs = [(d.name, cls._domain_cert(d)) for d in rows]
+        certs = {cert for _, cert in pairs}
+        if len(certs) == 1:
+            ssl_cert, ssl_key = next(iter(certs)) or (None, None)
+            return cls._vhost_create_kwargs(app, domains, ssl_cert, ssl_key, force_type)
 
-        return cls._vhost_create_kwargs(app, domains, ssl_cert, ssl_key, force_type)
+        groups = {}
+        for name, cert in pairs:
+            groups.setdefault(cert, []).append(name)
+        cert_groups = [(names, *(cert or (None, None))) for cert, names in groups.items()]
+        return cls._vhost_create_kwargs(app, domains, None, None, force_type,
+                                        cert_groups=cert_groups)
+
+    @classmethod
+    def _domain_cert(cls, domain):
+        """``(cert, key)`` serving ``domain`` over HTTPS, or ``None`` for HTTP."""
+        cover = cls.covering_base(domain.name)
+        if cover and cls.https_enabled(cover):
+            return cls.wildcard_cert_paths(cover)
+        if domain.ssl_enabled and domain.ssl_certificate_path:
+            key = domain.ssl_key_path
+            if not key and domain.ssl_certificate_path.endswith('/fullchain.pem'):
+                # Rows enabled through the domains API before it stored the
+                # key path: certbot keeps privkey.pem next to fullchain.pem.
+                key = domain.ssl_certificate_path[:-len('fullchain.pem')] + 'privkey.pem'
+            if key:
+                return domain.ssl_certificate_path, key
+        return None
 
     @classmethod
     def set_immutable_assets(cls, app, enabled):
