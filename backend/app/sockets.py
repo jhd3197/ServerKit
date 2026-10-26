@@ -65,7 +65,9 @@ def _client_user(sid):
         info = connected_clients.get(sid)
     if not info:
         return None
-    user = validate_session_claims(info.get('claims', {}))
+    # A socket outlives its 15-minute access token; ending it at `exp` froze
+    # every live view, since clients don't reconnect after a server disconnect.
+    user = validate_session_claims(info.get('claims', {}), check_expiry=False)
     # Disconnect on role changes instead of retaining previously joined rooms.
     if not user or user.role != info['role']:
         _disconnect_client(sid)

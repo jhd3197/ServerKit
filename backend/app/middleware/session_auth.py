@@ -15,8 +15,13 @@ def issue_session_tokens(user_id):
             create_refresh_token(identity=user_id, additional_claims=claims))
 
 
-def validate_session_claims(claims, *, allow_pending=False, token_type='access'):
-    """Return the live user only for an unexpired, unrevoked session JWT."""
+def validate_session_claims(claims, *, allow_pending=False, token_type='access',
+                            check_expiry=True):
+    """Return the live user only for an unexpired, unrevoked session JWT.
+
+    check_expiry=False is for re-checking an already-authenticated live
+    connection: its token was unexpired at connect, and revocation, the
+    auth_version bump and deactivation still end it."""
     from app.models import User, RevokedSession
 
     if not isinstance(claims, dict) or claims.get('type') != token_type:
@@ -29,7 +34,7 @@ def validate_session_claims(claims, *, allow_pending=False, token_type='access')
     if RevokedSession.query.filter_by(session_id=session_id).first() is not None:
         return None
     expiration = claims.get('exp')
-    if not isinstance(expiration, (int, float)) or expiration <= time.time():
+    if not isinstance(expiration, (int, float)) or (check_expiry and expiration <= time.time()):
         return None
     try:
         user_id = int(claims['sub'])
