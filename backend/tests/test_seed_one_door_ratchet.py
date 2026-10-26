@@ -94,7 +94,6 @@ APPLICATION_BASELINE = {
     'test_manifest_appliance_volumes_bootstrap.py',
     'test_manifest_network_identity.py',
     'test_manifest_persistence.py',
-    'test_manifest_reach.py',
     'test_manifest_references.py',
     'test_manifest_spec.py',
     'test_manifest_sync.py',

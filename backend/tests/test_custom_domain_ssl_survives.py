@@ -9,7 +9,8 @@ ssl_enabled. Rebuilds now read each domain's own cert.
 import pytest
 
 from app import db
-from app.models import Application, Domain
+from app.models import Domain
+from factories import make_application
 from app.services.nginx_service import NginxService
 from app.services.site_domain_service import SiteDomainService
 
@@ -23,9 +24,7 @@ def site(app, monkeypatch):
                         classmethod(lambda cls, h: 'acme.dev' if h.endswith('.acme.dev') else None))
     monkeypatch.setattr(SiteDomainService, 'https_enabled', classmethod(lambda cls, base: True))
     monkeypatch.setattr(SiteDomainService, 'wildcard_cert_paths', classmethod(lambda cls, base: WILD))
-    application = Application(name='shopcssl', app_type='docker', port=8011, user_id=1)
-    db.session.add(application)
-    db.session.flush()
+    application = make_application(db, name='shopcssl', port=8011)
     shop = Domain(name='shop.com', application_id=application.id, is_primary=True,
                   ssl_enabled=True, ssl_certificate_path=SHOP[0], ssl_key_path=SHOP[1])
     db.session.add(shop)
