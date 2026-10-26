@@ -408,17 +408,10 @@ def enable_ssl(domain_id):
         return jsonify({'error': result.get('error', 'Failed to obtain certificate')}), 400
 
     from app.services.site_domain_service import SiteDomainService
-    # Record the cert, then regenerate the vhost from the rows — the same
-    # door every later rewrite uses, so the HTTPS block survives them.
-    domain.ssl_enabled = True
-    domain.ssl_certificate_path = result['certificate_path']
-    domain.ssl_key_path = result['private_key_path']
-    db.session.flush()
-    published = SiteDomainService.write_app_vhost(app)
-    if published.get('warning'):
-        db.session.rollback()
-        return jsonify({'error': published['warning']}), 400
-    db.session.commit()
+    error = SiteDomainService.enable_domain_ssl(
+        app, domain, result['certificate_path'], result['private_key_path'])
+    if error:
+        return jsonify({'error': error}), 400
 
     # Only after issuance actually worked — remembering an address that
     # Let's Encrypt rejected would be worse than not remembering one.

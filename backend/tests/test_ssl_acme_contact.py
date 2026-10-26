@@ -150,8 +150,8 @@ class TestEnableSslUsesTheStoredContact:
                 'private_key_path': '/k.pem'}
         with patch('app.api.domains.SSLService.obtain_certificate',
                    return_value=cert) as obtain, \
-                patch('app.api.domains.NginxService.add_ssl_to_site',
-                      return_value={'success': True}):
+                patch('app.services.site_domain_service.SiteDomainService.write_app_vhost',
+                      return_value={'nginx': {'success': True}, 'warning': None}):
             resp = client.post(f'/api/v1/domains/{domain.id}/ssl/enable',
                                json=body, headers=headers)
         return resp, obtain

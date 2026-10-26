@@ -582,6 +582,25 @@ class SiteDomainService:
         return None
 
     @classmethod
+    def enable_domain_ssl(cls, app, domain, cert_path, key_path):
+        """Record ``domain``'s issued cert and republish ``app``'s vhost.
+
+        The vhost is regenerated from the rows - the same door every later
+        rewrite uses, so the HTTPS block survives them. Returns None on
+        success, else the reason, with the row left as it was."""
+        from app import db
+        domain.ssl_enabled = True
+        domain.ssl_certificate_path = cert_path
+        domain.ssl_key_path = key_path
+        db.session.flush()
+        published = cls.write_app_vhost(app)
+        if published.get('warning'):
+            db.session.rollback()
+            return published['warning']
+        db.session.commit()
+        return None
+
+    @classmethod
     def set_immutable_assets(cls, app, enabled):
         """Save the fingerprinted-asset caching flag and republish the vhost
         through the same path as every other vhost setting, so

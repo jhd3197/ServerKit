@@ -609,7 +609,7 @@ def update_server(server_id):
     if 'allowed_ips' in data:
         errors = _ip_pattern_errors(data['allowed_ips'])
         if errors:
-            return jsonify({'error': 'Invalid IP patterns', 'details': errors}), 400
+            raise ValidationError('Invalid IP patterns', details={'patterns': errors})
         server.allowed_ips = data['allowed_ips']
 
     # Handle permission profile
@@ -931,8 +931,7 @@ def compare_server_metrics():
 def get_servers_overview():
     """Get overview of all servers health"""
     from app.services.workspace_service import WorkspaceService
-    servers = WorkspaceService.filter_accessible_servers(
-        Server.query, get_current_user()).options(joinedload(Server.group)).all()
+    servers = WorkspaceService.accessible_servers(get_current_user())
     metrics_by_server = latest_metrics_by_server(server.id for server in servers)
     connected_ids = set(agent_registry.get_connected_servers()) & {s.id for s in servers}
 

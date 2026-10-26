@@ -174,6 +174,14 @@ class WorkspaceService:
         return query.filter(db.or_(*allowed))
 
     @staticmethod
+    def accessible_servers(user):
+        """Every server *user* may operate, with its group loaded."""
+        from sqlalchemy.orm import joinedload
+        from app.models.server import Server
+        query = WorkspaceService.filter_accessible_servers(Server.query, user)
+        return query.options(joinedload(Server.group)).all()
+
+    @staticmethod
     def get_accessible_server(user, server_id):
         """The server if *user* may operate it (see can_access_server), else None."""
         from app.models.server import Server
