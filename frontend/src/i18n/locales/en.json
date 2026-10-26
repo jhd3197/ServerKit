@@ -3821,6 +3821,7 @@
             "creating": "Creating…",
             "databaseCreated": "Database created",
             "databaseName": "Database name *",
+            "databaseUserNotCreated": "Database created, but its user was not: {{error}}",
             "encoding": "Encoding",
             "engine": "Engine",
             "fromTheTemplateCatalog": "from the template catalog",

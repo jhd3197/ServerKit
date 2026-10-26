@@ -3836,7 +3836,8 @@
             "running": "en ejecución",
             "saveTheseCredentialsThePasswordWon": "Guarda estas credenciales: la contraseña no se volverá a mostrar.",
             "userCreated": "Usuario creado",
-            "username": "Nombre de usuario *"
+            "username": "Nombre de usuario *",
+            "databaseUserNotCreated": "Base de datos creada, pero su usuario no: {{error}}"
         },
         "modeToggle": {
             "assistant": "Asistente",

@@ -15,6 +15,16 @@ def _validate_identifier(name: str, max_length: int = 64) -> bool:
     return bool(re.match(r'^[a-zA-Z0-9_$]{1,}$', name)) and len(name) <= max_length
 
 
+_INVALID_ID = {'success': False, 'error': 'Invalid identifier: only alphanumeric characters and underscores allowed'}
+_INVALID_PRIVILEGES = {'success': False, 'error': 'Invalid privileges: use privilege keywords such as ALL or SELECT, INSERT'}
+
+
+def _validate_privileges(privileges: str) -> bool:
+    """A comma list of privilege keywords (`ALL`, `SELECT, INSERT`): letters and
+    spaces only, so it can sit unquoted in GRANT/REVOKE."""
+    return bool(re.fullmatch(r'[A-Za-z ]+(,[A-Za-z ]+)*', privileges or ''))
+
+
 class DatabaseService:
     """Service for managing MySQL/MariaDB and PostgreSQL databases.
 
@@ -252,6 +262,8 @@ class DatabaseService:
             return {'success': False, 'error': 'Invalid identifier: only alphanumeric characters and underscores allowed'}
         if not _validate_identifier(host):
             return {'success': False, 'error': 'Invalid host identifier'}
+        if not _validate_privileges(privileges):
+            return _INVALID_PRIVILEGES
         query = f"GRANT {privileges} ON `{database}`.* TO '{username}'@'{host}'; FLUSH PRIVILEGES;"
         result = DatabaseService.mysql_execute(query, root_password=root_password)
         return result
@@ -265,6 +277,8 @@ class DatabaseService:
             return {'success': False, 'error': 'Invalid identifier: only alphanumeric characters and underscores allowed'}
         if not _validate_identifier(host):
             return {'success': False, 'error': 'Invalid host identifier'}
+        if not _validate_privileges(privileges):
+            return _INVALID_PRIVILEGES
         query = f"REVOKE {privileges} ON `{database}`.* FROM '{username}'@'{host}'; FLUSH PRIVILEGES;"
         result = DatabaseService.mysql_execute(query, root_password=root_password)
         return result
@@ -448,6 +462,10 @@ class DatabaseService:
     @staticmethod
     def pg_create_database(name, owner=None, encoding='UTF8'):
         """Create a PostgreSQL database."""
+        if not _validate_identifier(name) or (owner and not _validate_identifier(owner)):
+            return _INVALID_ID
+        if not _validate_identifier(encoding):
+            return {'success': False, 'error': 'Invalid encoding identifier'}
         query = f"CREATE DATABASE \"{name}\" ENCODING '{encoding}'"
         if owner:
             query += f" OWNER \"{owner}\""
@@ -495,20 +513,30 @@ class DatabaseService:
     @staticmethod
     def pg_create_user(username, password):
         """Create a PostgreSQL user."""
+        if not _validate_identifier(username):
+            return _INVALID_ID
+        # Standard-conforming strings: doubling the quote is the whole escape.
+        escaped = password.replace("'", "''")
         result = DatabaseService.pg_execute(
-            f"CREATE USER \"{username}\" WITH PASSWORD '{password}';"
+            f"CREATE USER \"{username}\" WITH PASSWORD '{escaped}';"
         )
         return result
 
     @staticmethod
     def pg_drop_user(username):
         """Drop a PostgreSQL user."""
+        if not _validate_identifier(username):
+            return _INVALID_ID
         result = DatabaseService.pg_execute(f'DROP USER IF EXISTS "{username}";')
         return result
 
     @staticmethod
     def pg_grant_privileges(username, database, privileges='ALL'):
         """Grant privileges to a PostgreSQL user."""
+        if not _validate_identifier(username) or not _validate_identifier(database):
+            return _INVALID_ID
+        if not _validate_privileges(privileges):
+            return _INVALID_PRIVILEGES
         result = DatabaseService.pg_execute(
             f'GRANT {privileges} PRIVILEGES ON DATABASE "{database}" TO "{username}";'
         )
@@ -517,9 +545,28 @@ class DatabaseService:
     @staticmethod
     def pg_revoke_privileges(username, database, privileges='ALL'):
         """Revoke privileges from a PostgreSQL user."""
+        if not _validate_identifier(username) or not _validate_identifier(database):
+            return _INVALID_ID
+        if not _validate_privileges(privileges):
+            return _INVALID_PRIVILEGES
         result = DatabaseService.pg_execute(
             f'REVOKE {privileges} PRIVILEGES ON DATABASE "{database}" FROM "{username}";'
         )
+        return result
+
+    @staticmethod
+    def create_database_user(engine, name, password, host='localhost', root_password=None):
+        """Create a user named after database *name* with ALL on it. Returns the
+        first failing step's result, so callers never hand out credentials for
+        a user that was not created."""
+        if engine == 'mysql':
+            result = DatabaseService.mysql_create_user(name, password, host, root_password)
+            if result.get('success'):
+                result = DatabaseService.mysql_grant_privileges(name, name, 'ALL', host, root_password)
+        else:
+            result = DatabaseService.pg_create_user(name, password)
+            if result.get('success'):
+                result = DatabaseService.pg_grant_privileges(name, name, 'ALL')
         return result
 
     @staticmethod

@@ -9,6 +9,7 @@ import CopyField from '@/components/CopyField';
 import { EngineIcon } from '../icons/DatabaseBrands';
 import { ENGINE_META } from './dbAdapter';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '../../contexts/useToast.js';
 
 // Create / credentials modals for the explorer. Logic is unchanged from the
 // original Databases page; the explorer wires them to its toolbar and tree.
@@ -108,6 +109,7 @@ function EnginePicker({ value, onChange, status, onInstallEngine }) {
 
 export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, onClose, onCreated, onInstallEngine }) {
     const { t } = useTranslation();
+    const toast = useToast();
     const fieldId = useId();
     const [engine, setEngine] = useState(initialEngine);
     const [formData, setFormData] = useState({
@@ -149,7 +151,13 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
 
             if (result.success) {
                 if (result.password) setCreatedInfo({ database: formData.name, user: result.user, password: result.password });
-                else { onCreated(); onClose(); }
+                else {
+                    if (result.user_error) {
+                        toast.error(t('app.modals.databaseUserNotCreated', 'Database created, but its user was not: {{error}}', { error: result.user_error }));
+                    }
+                    onCreated();
+                    onClose();
+                }
             }
         } catch (err) {
             setError(err.message || 'Failed to create database');
