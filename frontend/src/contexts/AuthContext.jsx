@@ -47,10 +47,11 @@ export function AuthProvider({ children }) {
                 const data = await api.getCurrentUser();
                 setUser(data.user);
             } catch (error) {
-                if (error.status !== 401) {
-                    console.error('Auth check failed:', error);
-                }
-                api.clearTokens();
+                // Only a 401 means the session is gone. A restarting backend
+                // (502, "database is locked") or a dropped connection must not
+                // delete a refresh token that is still good.
+                if (error.status === 401) api.clearTokens();
+                else console.error('Auth check failed:', error);
             }
         }
         setLoading(false);
