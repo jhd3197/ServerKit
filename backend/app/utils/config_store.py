@@ -57,11 +57,12 @@ def load_json_config(path, default):
             with open(path, 'r') as f:
                 return json.load(f)
         except Exception:  # noqa: BLE001
-            _quarantine(path)
+            quarantine(path)
     return copy.deepcopy(default)
 
 
-def _quarantine(path):
+def quarantine(path):
+    """Move an unreadable config aside so the next save can't overwrite it."""
     aside = f'{path}.corrupt-{time.strftime("%Y%m%d%H%M%S")}'
     try:
         os.replace(path, aside)

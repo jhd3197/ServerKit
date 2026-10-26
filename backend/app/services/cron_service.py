@@ -16,6 +16,7 @@ from typing import Dict, List, Optional
 from datetime import datetime
 import json
 
+from app.utils.config_store import quarantine, save_json_config
 from app.utils.system import run_checked, unit_is_active
 
 # Path for storing job metadata
@@ -85,7 +86,12 @@ class CronService:
         """Load job metadata from file."""
         try:
             return cls._load_jobs_metadata_strict()
-        except (json.JSONDecodeError, IOError, ValueError):
+        except (json.JSONDecodeError, ValueError):
+            # Callers save what they load: without moving the file aside the
+            # next add would replace every job's metadata with the new one.
+            quarantine(JOBS_FILE)
+            return {'jobs': {}}
+        except IOError:
             return {'jobs': {}}
 
     @classmethod
@@ -103,9 +109,10 @@ class CronService:
     @classmethod
     def _save_jobs_metadata(cls, data: Dict):
         """Save job metadata to file."""
-        cls._ensure_data_dir()
-        with open(JOBS_FILE, 'w') as f:
-            json.dump(data, f, indent=2)
+        # Atomic: a full disk or a kill mid-write must not truncate the file.
+        result = save_json_config(JOBS_FILE, data)
+        if not result['success']:
+            raise IOError(result['error'])
 
     @classmethod
     def is_linux(cls) -> bool:

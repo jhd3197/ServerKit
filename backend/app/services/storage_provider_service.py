@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Dict, List, Optional
 from urllib.parse import urlparse
 
+from app.utils.config_store import load_json_config, save_json_config
 from app import paths
 from app.utils.crypto import encrypt_secret, decrypt_secret_safe, is_encrypted
 from app.utils.formatting import format_bytes
@@ -33,12 +34,11 @@ class StorageProviderService:
     @classmethod
     def get_config(cls) -> Dict:
         """Get storage provider configuration (secrets decrypted in memory)."""
-        if os.path.exists(cls.CONFIG_FILE):
-            try:
-                with open(cls.CONFIG_FILE, 'r') as f:
-                    return cls._decrypt_config(json.load(f))
-            except Exception:
-                pass
+        # An unreadable file is moved aside rather than silently read as
+        # "local", which would quietly stop off-site backups.
+        stored = load_json_config(cls.CONFIG_FILE, None)
+        if stored is not None:
+            return cls._decrypt_config(stored)
 
         return {
             'provider': 'local',
@@ -118,8 +118,9 @@ class StorageProviderService:
                         if val and not is_encrypted(val):
                             config[provider][field] = encrypt_secret(val)
 
-            with open(cls.CONFIG_FILE, 'w') as f:
-                json.dump(config, f, indent=2)
+            saved = save_json_config(cls.CONFIG_FILE, config)
+            if not saved['success']:
+                return saved
             if os.name != 'nt':
                 os.chmod(cls.CONFIG_FILE, 0o600)
             return {'success': True, 'message': 'Storage configuration saved'}
