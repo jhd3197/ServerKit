@@ -40,6 +40,12 @@ release history; historical `agent-v*` tags are not panel releases.
 
 ### Fixed
 
+- The Docker tab on a server's detail page lists that server's images by
+  name and tag again, with readable sizes and dates. The agent reports
+  images as `repo_tags`, byte counts and epoch seconds, but the tab read
+  the CLI fields, so every row showed `<none>` and raw numbers. It now
+  uses the Docker page's image accessors, moved to `dockerHelpers.js`.
+
 - Importing a Git repository that has a `docker-compose.yml` now deploys the
   compose project — every service it declares — instead of building only its
   Dockerfile, which started the web container without its database.

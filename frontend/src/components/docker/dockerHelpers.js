@@ -106,3 +106,64 @@ export const getContainerProjectName = (container, details) => {
     const labels = details?.Config?.Labels || container?.Labels || {};
     return labels['com.docker.compose.project'] || labels['com.docker.compose.service'] || '-';
 };
+
+// The two transports describe the same image differently: `docker images`
+// hands back repository/tag as separate strings, the agent hands back
+// `repo_tags: ["nginx:latest"]` and nothing else. Every accessor below reads
+// both, because a column that silently blanks on remote hosts is worse than no
+// column at all.
+export const imageId = (image) => String(image.id || image.ID || '').replace(/^sha256:/, '');
+
+export const imageRef = (image) => {
+    if (image.repository || image.tag) {
+        return { repository: image.repository || '<none>', tag: image.tag || '<none>' };
+    }
+    const first = Array.isArray(image.repo_tags) ? image.repo_tags[0] : null;
+    if (!first) return { repository: '<none>', tag: '<none>' };
+    // A registry port ("registry:5000/app") puts a colon in the REPOSITORY
+    // half, so the last colon is only the tag separator when no '/' follows it.
+    const colon = first.lastIndexOf(':');
+    if (colon > 0 && !first.slice(colon).includes('/')) {
+        return { repository: first.slice(0, colon), tag: first.slice(colon + 1) };
+    }
+    return { repository: first, tag: '<none>' };
+};
+
+// Docker's CLI prints sizes in SI units ("142MB" = 142 * 10^6); the agent sends
+// a byte count. Parsed to MEGABYTES rather than bytes because this number is
+// also what the filter drawer and the chips show — "size is over 500 MB" is a
+// question you can ask, "is over 500000000" is not. The cell still renders
+// through the app's canonical formatter, so one host's images read the same way
+// as another's.
+const SIZE_MULTIPLIERS = {
+    b: 1, kb: 1e3, mb: 1e6, gb: 1e9, tb: 1e12,
+    kib: 1024, mib: 1024 ** 2, gib: 1024 ** 3, tib: 1024 ** 4,
+};
+
+export const imageSizeBytes = (image) => {
+    const raw = image.size ?? image.Size;
+    if (typeof raw === 'number') return Number.isFinite(raw) ? raw : null;
+    if (typeof raw !== 'string') return null;
+    const match = raw.trim().match(/^([\d.]+)\s*([a-z]+)?$/i);
+    if (!match) return null;
+    const amount = Number.parseFloat(match[1]);
+    if (!Number.isFinite(amount)) return null;
+    return amount * (SIZE_MULTIPLIERS[(match[2] || 'b').toLowerCase()] ?? 1);
+};
+
+// The number a filter rule compares against MUST be the number the cell shows,
+// or "Size is over 400 MB" matches a row whose own cell reads "392.9 MB". The
+// cell renders through the app-wide formatBytes, which is base-1024 with MB/GB
+// labels, so the rule value is mebibytes too — not docker's base-1000 MB.
+export const imageSizeMb = (image) => {
+    const bytes = imageSizeBytes(image);
+    return bytes == null ? null : bytes / (1024 * 1024);
+};
+
+export const imageCreatedMs = (image) => {
+    const raw = image.created ?? image.CreatedAt ?? image.Created;
+    // The agent sends epoch SECONDS, the CLI "2026-08-12 09:12:33 -0400 EDT".
+    if (typeof raw === 'number') return raw > 1e11 ? raw : raw * 1000;
+    const parsed = Date.parse(raw || '');
+    return Number.isNaN(parsed) ? null : parsed;
+};

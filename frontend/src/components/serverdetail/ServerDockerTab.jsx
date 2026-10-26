@@ -15,6 +15,10 @@ import {
     TrashIcon,
 } from './serverDetailShared';
 import { toastError } from '@/utils/errorMessage';
+import { formatBytes } from '@/utils/formatBytes';
+import { formatRelativeTime } from '@/utils/time';
+import { formatDateTime } from '@/utils/intl';
+import { imageId, imageRef, imageSizeBytes, imageCreatedMs } from '../docker/dockerHelpers';
 
 // The /servers/<id>/docker/* endpoints return raw arrays from Flask
 // (route extracts result.get('data') before jsonify). The agent envelope's
@@ -46,15 +50,6 @@ const formatPorts = (ports) => {
     return parts.join(', ');
 };
 
-// docker prints image sizes as strings ("25.5MB", "1.2GB") — parse to bytes
-// so the Size column sorts numerically instead of lexicographically.
-const SIZE_UNITS = { b: 1, kb: 1e3, mb: 1e6, gb: 1e9, tb: 1e12 };
-const parseDockerSize = (size) => {
-    const match = /^([\d.]+)\s*(b|kb|mb|gb|tb)$/i.exec(size || '');
-    if (!match) return null;
-    return parseFloat(match[1]) * (SIZE_UNITS[match[2].toLowerCase()] || 1);
-};
-
 // Images table columns. Cell markup and classNames are identical to the
 // hand-rolled table they replace so the .data-table SCSS keeps applying.
 const IMAGE_COLUMNS = [
@@ -63,35 +58,43 @@ const IMAGE_COLUMNS = [
         headerKey: 'app.serverDockerTab.repository', header: 'Repository',
         sortable: true,
         hideable: false,
-        sortValue: (image) => image.repository || '<none>',
-        render: (image) => image.repository || '<none>',
+        sortValue: (image) => imageRef(image).repository,
+        render: (image) => imageRef(image).repository,
     },
     {
         key: 'tag',
         headerKey: 'app.serverDockerTab.tag', header: 'Tag',
         sortable: true,
-        sortValue: (image) => image.tag || '<none>',
-        render: (image) => image.tag || '<none>',
+        sortValue: (image) => imageRef(image).tag,
+        render: (image) => imageRef(image).tag,
     },
     {
         key: 'id',
         headerKey: 'app.serverDockerTab.imageId', header: 'Image ID',
         cellClassName: 'sk-cell-mono',
-        render: (image) => image.id?.substring(0, 12),
+        render: (image) => imageId(image).substring(0, 12),
     },
     {
         key: 'size',
         headerKey: 'common.labels.size', header: 'Size',
         sortable: true,
-        sortValue: (image) => parseDockerSize(image.size),
-        render: (image) => image.size,
+        sortValue: imageSizeBytes,
+        render: (image) => formatBytes(imageSizeBytes(image)),
     },
     {
         key: 'created',
         headerKey: 'common.labels.created', header: 'Created',
         sortable: true,
-        sortValue: (image) => image.created || null,
-        render: (image) => image.created,
+        sortValue: imageCreatedMs,
+        render: (image) => {
+            const ms = imageCreatedMs(image);
+            if (ms == null) return '-';
+            return (
+                <span title={formatDateTime(ms)}>
+                    {formatRelativeTime(new Date(ms).toISOString())}
+                </span>
+            );
+        },
     },
 ];
 
