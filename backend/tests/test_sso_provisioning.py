@@ -25,3 +25,36 @@ def test_opted_in_provisioning_defaults_to_viewer(app):
         SettingsService.set('sso_auto_provision', False)
     assert is_new
     assert user.role == User.ROLE_VIEWER
+
+
+@pytest.mark.parametrize('provider,info', [
+    ('google', {'sub': 'g1', 'email': 'victim@example.com', 'email_verified': False}),
+    ('oidc', {'sub': 'o1', 'email': 'victim@example.com'}),
+    ('oidc', {'sub': 'o2', 'email': 'victim@example.com', 'email_verified': 'false'}),
+])
+def test_unverified_email_never_links_to_an_existing_account(app, provider, info):
+    from app import db
+    from factories import make_user
+    from app.models.oauth_identity import OAuthIdentity
+    victim = make_user(db, 'sso_victim_' + info['sub'], 'admin')
+    victim.email = 'victim@example.com'
+    db.session.commit()
+    profile = sso_service._normalize_profile(provider, info)
+    with pytest.raises(ValueError, match='not verified'):
+        sso_service.find_or_create_user(provider, profile)
+    assert OAuthIdentity.query.filter_by(user_id=victim.id).count() == 0
+    db.session.delete(victim)
+    db.session.commit()
+
+
+@pytest.mark.parametrize('verified', [True, 'true'])
+def test_verified_email_still_links(app, verified):
+    from app import db
+    from factories import make_user
+    user = make_user(db, 'sso_owner_' + str(verified), 'developer')
+    user.email = f'owner{verified}@example.com'
+    db.session.commit()
+    profile = sso_service._normalize_profile(
+        'google', {'sub': f'g-{verified}', 'email': user.email, 'email_verified': verified})
+    linked, is_new = sso_service.find_or_create_user('google', profile)
+    assert linked.id == user.id and not is_new

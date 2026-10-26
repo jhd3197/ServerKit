@@ -206,12 +206,19 @@ def handle_oauth_callback(provider, code, state, redirect_uri):
     return profile
 
 
+def _claims_verified(info):
+    """OIDC `email_verified`; some IdPs send it as the string "true"."""
+    value = info.get('email_verified')
+    return value is True or (isinstance(value, str) and value.lower() == 'true')
+
+
 def _normalize_profile(provider, info, headers=None):
     """Convert provider-specific userinfo into a standard dict."""
     if provider == 'google':
         return {
             'provider_user_id': info.get('sub', ''),
             'email': info.get('email', ''),
+            'email_verified': _claims_verified(info),
             'display_name': info.get('name', ''),
         }
     elif provider == 'github':
@@ -231,6 +238,9 @@ def _normalize_profile(provider, info, headers=None):
         return {
             'provider_user_id': str(info.get('id', '')),
             'email': email,
+            # GitHub only publishes verified addresses on a profile, and the
+            # /user/emails fallback above takes a verified primary only.
+            'email_verified': bool(email),
             'display_name': info.get('name') or info.get('login', ''),
         }
     else:
@@ -238,6 +248,7 @@ def _normalize_profile(provider, info, headers=None):
         return {
             'provider_user_id': info.get('sub', ''),
             'email': info.get('email', ''),
+            'email_verified': _claims_verified(info),
             'display_name': info.get('name', ''),
         }
 
@@ -307,6 +318,8 @@ def handle_saml_callback(saml_response_data, request_data):
         'provider_user_id': name_id,
         'email': attrs.get('email', [name_id])[0] if attrs.get('email') else name_id,
         'display_name': attrs.get('displayName', [''])[0] if attrs.get('displayName') else '',
+        # A signed assertion from the IdP the admin configured vouches for it.
+        'email_verified': True,
         '_tokens': {},
     }
 
@@ -351,6 +364,11 @@ def find_or_create_user(provider, profile):
     if user:
         if not user.is_active:
             raise ValueError('Account is deactivated')
+        # Anyone can put any address on an unverified IdP profile; linking on
+        # it would hand them the existing account, admin included.
+        if profile.get('email_verified') is not True:
+            raise ValueError("This SSO account's email is not verified by the provider; "
+                             'sign in with your password and link it from your profile')
         link_identity(user.id, provider, profile, profile.get('_tokens', {}))
         return user, False
 
