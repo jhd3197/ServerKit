@@ -84,7 +84,7 @@
         "eslint-plugin-react-hooks": "^5.1.0-rc.0",
         "eslint-plugin-react-refresh": "^0.4.9",
         "espree": "^11.2.0",
-        "globals": "^15.9.0",
+        "globals": "^17.13.0",
         "playwright": "1.61.1",
         "sass": "^1.86.0",
         "vite": "^8.1.4"
