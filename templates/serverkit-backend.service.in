@@ -17,6 +17,8 @@ WorkingDirectory=@SERVERKIT_DIR@/backend
 Environment="PATH=@SERVERKIT_VENV_DIR@/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 Environment="FLASK_ENV=production"
 Environment="SERVERKIT_INSTALL_DIR=@SERVERKIT_DIR@"
+# Request threads; .env may override. See docs/ENVIRONMENT.md.
+Environment="SERVERKIT_THREADS=100"
 EnvironmentFile=@SERVERKIT_DIR@/.env
 # Single PROCESS (-w 1) is mandatory: the agent gateway keeps connected-agent
 # state in memory. Threaded worker (not GeventWebSocketWorker): the app runs
@@ -24,7 +26,7 @@ EnvironmentFile=@SERVERKIT_DIR@/.env
 # on the raw socket — a gevent-websocket worker ALSO answers the upgrade,
 # producing a double 101 handshake the browser reports as
 # "Invalid frame header" (WS then silently degrades to polling).
-ExecStart=@SERVERKIT_VENV_DIR@/bin/gunicorn -w 1 --threads 100 -b @BIND_HOST@:@PORT@ --timeout 120 --access-logfile @LOG_DIR@/access.log --error-logfile @LOG_DIR@/error.log run:app
+ExecStart=@SERVERKIT_VENV_DIR@/bin/gunicorn -w 1 --threads ${SERVERKIT_THREADS} -b @BIND_HOST@:@PORT@ --timeout 120 --access-logfile @LOG_DIR@/access.log --error-logfile @LOG_DIR@/error.log run:app
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 RestartSec=5

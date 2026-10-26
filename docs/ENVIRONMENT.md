@@ -22,6 +22,7 @@ variable that is not listed here.
 | `DATABASE_URL` | `sqlite:////app/instance/serverkit.db` | SQLAlchemy URL (`sqlite:///...` or `postgresql://...`). In Docker see the compose note in INSTALLATION.md. |
 | `LOG_LEVEL` | `INFO` (`DEBUG` in development) | Python logging level name (`DEBUG`, `INFO`, `WARNING`, ...). |
 | `PORT` | `5000` | Port for `python run.py`. Gunicorn deployments bind with `-b` instead. |
+| `SERVERKIT_THREADS` | `100` | Request threads in the single panel process (systemd unit and Docker image). Every open WebSocket (a browser tab or an agent) and every long-polling agent holds one for as long as it is connected, so the sum must stay under this with room for normal requests. Raise it for large fleets. |
 | `SERVERKIT_PROFILE` | `standard` | Install profile (`minimal`, `standard`, `full`) when the panel setting has not overridden it. Written by the installer. |
 
 ## Network and proxy
