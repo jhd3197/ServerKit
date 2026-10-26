@@ -1,12 +1,33 @@
 #!/bin/sh
-# ServerKit pre-commit hook — lints staged frontend JS/JSX and blocks the commit
-# on ESLint ERRORS only (warnings are allowed). It exits early for commits that
-# touch no frontend JS/JSX (backend, SCSS, docs), so it never gets in the way of
-# those. Enable once per clone with:
+# ServerKit pre-commit hook — blocks internal plan citations in any staged app
+# file, then lints staged frontend JS/JSX and blocks the commit on ESLint
+# ERRORS only (warnings are allowed). The lint half exits early for commits
+# that touch no frontend JS/JSX (backend, SCSS, docs). Enable once per clone with:
 #
 #     git config core.hooksPath .githooks
 #
 # (Or run frontend/setup-hooks.sh.)
+
+# Plan-citation guard: same patterns and allowlist as
+# backend/tests/test_no_plan_references.py, run on the staged blobs of every
+# file type (SCSS and Python included) so CI never has to catch it.
+# First interpreter that actually runs (Windows ships a python3 stub that
+# only opens the Store); none found means the CI test still covers it.
+py=""
+for candidate in python3 python; do
+    if "$candidate" -c 'import sys; sys.exit(sys.version_info < (3, 8))' 2>/dev/null; then
+        py=$candidate
+        break
+    fi
+done
+if [ -n "$py" ]; then
+    if ! "$py" backend/tests/test_no_plan_references.py --staged; then
+        echo ""
+        echo "✖ Commit blocked: remove the plan reference(s) above."
+        echo "  To bypass for an emergency commit: git commit --no-verify"
+        exit 1
+    fi
+fi
 
 files=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^frontend/src/.*\.(js|jsx)$' || true)
 [ -z "$files" ] && exit 0

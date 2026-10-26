@@ -4,6 +4,10 @@ Plans live in a git-ignored folder, so "(plan 29 #9)" in a comment points
 at nothing for anyone but its author — 680 of them had piled up, and one
 reached users in a bottleneck hint. Say what the code does and why; the
 history belongs in the commit message.
+
+The pre-commit hook runs this file directly (``--staged``) so a citation is
+caught at commit time, on any file type, instead of in a CI shard minutes
+after the push.
 """
 import re
 import subprocess
@@ -33,6 +37,11 @@ def _tracked():
     return [p for p in out.decode().split('\0') if p and p not in EXCLUDED]
 
 
+def _hits(text):
+    return (len(PLAN_REF.findall(text)) + len(SPLIT_REF.findall(text))
+            + len(SECTION_REF.findall(text)))
+
+
 def _counts():
     found = {}
     for rel in _tracked():
@@ -40,8 +49,27 @@ def _counts():
             text = (REPO / rel).read_text(encoding='utf-8')
         except (UnicodeDecodeError, FileNotFoundError):
             continue
-        hits = (len(PLAN_REF.findall(text)) + len(SPLIT_REF.findall(text))
-                + len(SECTION_REF.findall(text)))
+        hits = _hits(text)
+        if hits:
+            found[rel] = hits
+    return found
+
+
+def _staged_counts():
+    """Hits in the staged (index) version of each staged file under ROOTS."""
+    out = subprocess.run(['git', 'diff', '--cached', '--name-only', '-z',
+                          '--diff-filter=ACMR', '--', *ROOTS], cwd=REPO,
+                         capture_output=True, check=True).stdout
+    found = {}
+    for rel in out.decode().split('\0'):
+        if not rel or rel in EXCLUDED:
+            continue
+        blob = subprocess.run(['git', 'show', f':{rel}'], cwd=REPO,
+                              capture_output=True, check=True).stdout
+        try:
+            hits = _hits(blob.decode('utf-8'))
+        except UnicodeDecodeError:
+            continue
         if hits:
             found[rel] = hits
     return found
@@ -58,3 +86,15 @@ def test_pending_list_is_not_stale():
     counts = _counts()
     stale = {rel: n for rel, n in PENDING.items() if counts.get(rel, 0) < n}
     assert not stale, f'Lower or remove these PENDING entries: {stale} (now {counts})'
+
+
+if __name__ == '__main__':
+    import sys
+    counts = _staged_counts() if '--staged' in sys.argv else _counts()
+    over = {rel: n for rel, n in counts.items() if n > PENDING.get(rel, 0)}
+    for rel, n in sorted(over.items()):
+        print(f'{rel}: {n} internal plan reference(s), e.g. "plan 92" or a bare section sign')
+    if over:
+        print('Plans are git-ignored, so these point at nothing. Say what the code '
+              'does instead; the history belongs in the commit message.')
+    sys.exit(1 if over else 0)
