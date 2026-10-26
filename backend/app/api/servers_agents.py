@@ -7,7 +7,7 @@ import requests
 from app.models.server import AgentVersion, Server
 from flask import Response, current_app, jsonify, redirect, request
 from app.middleware.rbac import admin_required, developer_required
-from app.exceptions import agent_offline, field_required, not_found
+from app.exceptions import agent_offline, field_required
 from app.services.agent_registry import agent_registry
 from datetime import datetime, timedelta
 from app import db
@@ -16,7 +16,7 @@ from app.services.remote_command_dispatcher import dispatch_agent_command
 from app.services.agent_fleet_service import fleet_service
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.api._request import json_object
-from app.api.servers import _get_external_base_url, servers_bp
+from app.api.servers import _get_external_base_url, _get_operable_server, servers_bp
 
 
 # ==================== Installation Scripts ====================
@@ -160,9 +160,7 @@ def get_install_instructions(server_id):
     Returns installation commands with the correct API endpoint. Registration
     tokens are only shown when they are generated, so the UI supplies the token.
     """
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    server = _get_operable_server(server_id)
 
     # Check if server has a valid registration token
     if not server.registration_token_hash:
@@ -492,9 +490,7 @@ def trigger_agent_update(server_id):
     service across the fleet, so it must not be reachable by read-only viewers
     (every other state-changing server route is already @developer_required).
     """
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    _get_operable_server(server_id)
 
     if not agent_registry.is_agent_connected(server_id):
         raise agent_offline()

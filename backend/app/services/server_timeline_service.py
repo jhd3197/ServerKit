@@ -214,11 +214,13 @@ def _require_developer(user):
         raise PermissionDeniedError('Developer access required')
 
 
-def _resolve_server(server_id):
+def _resolve_server(user, server_id):
     from app.models.server import Server
+    from app.services.workspace_service import WorkspaceService
 
     server = db.session.get(Server, str(server_id))
-    if server is None:
+    # A foreign workspace's server reads as missing, like every server route.
+    if server is None or not WorkspaceService.can_access_server(user, server):
         raise ServerTimelineNotFoundError(f'Server {server_id} not found')
     return server
 
@@ -493,7 +495,7 @@ def _event_sort_key(event):
 def get_timeline(user, server_id, *, types=None, before=None, limit=None):
     """Return one authorization-filtered keyset page, newest first."""
     _require_developer(user)
-    server = _resolve_server(server_id)
+    server = _resolve_server(user, server_id)
     requested_types = _parse_types(types)
     page_limit = _parse_limit(limit)
     cursor = decode_cursor(

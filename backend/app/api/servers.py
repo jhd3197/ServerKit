@@ -98,6 +98,18 @@ def _get_operable_server(server_id):
     return server
 
 
+def _ip_pattern_errors(allowed_ips):
+    """One message per invalid allow-list entry; empty when all are valid."""
+    if not isinstance(allowed_ips, list):
+        return ['allowed_ips must be a list']
+    errors = []
+    for ip_pattern in allowed_ips:
+        is_valid, error = validate_ip_pattern(ip_pattern)
+        if not is_valid:
+            errors.append(f"Invalid pattern '{ip_pattern}': {error}")
+    return errors
+
+
 def _get_external_base_url():
     """Return the public origin agents should use when this app sits behind a proxy."""
     public_url = current_app.config.get('PUBLIC_URL') or os.environ.get('SERVERKIT_PUBLIC_URL')
@@ -300,6 +312,7 @@ def list_servers():
         user, request.headers.get('X-Workspace-Id') or request.args.get('workspace_id'))
     query = WorkspaceService.scope_query(Server.query, Server, user,
                                          workspace_id=ws_id, owner_attr=None)
+    query = WorkspaceService.filter_accessible_servers(query, user)
 
     if group_id:
         query = query.filter_by(group_id=group_id)
@@ -486,9 +499,7 @@ def set_server_workspace(server_id):
 @jwt_required()
 def get_server(server_id):
     """Get a server by ID"""
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    server = _get_operable_server(server_id)
 
     result = server.to_dict(include_metrics=True)
     # Surface the live transport so the UI can disable / banner features
@@ -581,9 +592,7 @@ def get_server_timeline(server_id):
 @developer_required
 def update_server(server_id):
     """Update a server"""
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    server = _get_operable_server(server_id)
 
     data = json_object()
 
@@ -598,6 +607,9 @@ def update_server(server_id):
     if 'permissions' in data:
         server.permissions = data['permissions']
     if 'allowed_ips' in data:
+        errors = _ip_pattern_errors(data['allowed_ips'])
+        if errors:
+            return jsonify({'error': 'Invalid IP patterns', 'details': errors}), 400
         server.allowed_ips = data['allowed_ips']
 
     # Handle permission profile
@@ -614,9 +626,7 @@ def update_server(server_id):
 @admin_required
 def delete_server(server_id):
     """Delete a server"""
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    server = _get_operable_server(server_id)
 
     # Disconnect agent if connected
     if agent_registry.is_agent_connected(server_id):
@@ -637,9 +647,7 @@ def start_server_onboarding(server_id):
     """Begin the onboarding lifecycle for a server (pending -> validating ...)."""
     from app.services.server_onboarding_service import ServerOnboardingService
 
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    _get_operable_server(server_id)
 
     try:
         status = ServerOnboardingService.start(server_id)
@@ -654,9 +662,7 @@ def retry_server_onboarding(server_id):
     """Clear a failed onboarding and resume from validation."""
     from app.services.server_onboarding_service import ServerOnboardingService
 
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    _get_operable_server(server_id)
 
     try:
         status = ServerOnboardingService.retry(server_id)
@@ -671,9 +677,7 @@ def get_server_onboarding_status(server_id):
     """Return the onboarding state + ordered progress log for a server."""
     from app.services.server_onboarding_service import ServerOnboardingService
 
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    _get_operable_server(server_id)
 
     try:
         status = ServerOnboardingService.get_status(server_id)
@@ -814,9 +818,7 @@ def register_agent():
 @jwt_required()
 def get_server_status(server_id):
     """Get current server status and live metrics"""
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    server = _get_operable_server(server_id)
 
     is_connected = agent_registry.is_agent_connected(server_id)
 
@@ -841,9 +843,7 @@ def get_server_status(server_id):
 @developer_required
 def ping_server(server_id):
     """Force a ping/health check on a server"""
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    _get_operable_server(server_id)
 
     if not agent_registry.is_agent_connected(server_id):
         raise agent_offline()
@@ -864,9 +864,7 @@ def ping_server(server_id):
 @jwt_required()
 def get_server_metrics(server_id):
     """Get historical metrics for a server"""
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    _get_operable_server(server_id)
 
     # Query parameters
     from_time = request.args.get('from')
@@ -905,9 +903,10 @@ def compare_server_metrics():
     if not server_ids or server_ids == ['']:
         return jsonify({'error': 'Server IDs required'}), 400
 
+    from app.services.workspace_service import WorkspaceService
     result = {}
     for server_id in server_ids:
-        server = Server.query.get(server_id)
+        server = WorkspaceService.get_accessible_server(get_current_user(), server_id)
         if not server:
             continue
 
@@ -936,9 +935,11 @@ def compare_server_metrics():
 @jwt_required()
 def get_servers_overview():
     """Get overview of all servers health"""
-    servers = Server.query.options(joinedload(Server.group)).all()
+    from app.services.workspace_service import WorkspaceService
+    servers = WorkspaceService.filter_accessible_servers(
+        Server.query, get_current_user()).options(joinedload(Server.group)).all()
     metrics_by_server = latest_metrics_by_server(server.id for server in servers)
-    connected_ids = set(agent_registry.get_connected_servers())
+    connected_ids = set(agent_registry.get_connected_servers()) & {s.id for s in servers}
 
     total = len(servers)
     online = len(connected_ids)
@@ -995,9 +996,7 @@ def get_servers_overview():
 @jwt_required()
 def get_command_history(server_id):
     """Get command history for a server"""
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    _get_operable_server(server_id)
 
     limit = request.args.get('limit', 50, type=int)
 
@@ -1025,9 +1024,7 @@ def get_permission_profiles():
 @jwt_required()
 def get_allowed_ips(server_id):
     """Get allowed IPs for a server"""
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    server = _get_operable_server(server_id)
 
     return jsonify({
         'allowed_ips': server.allowed_ips or [],
@@ -1048,20 +1045,12 @@ def update_allowed_ips(server_id):
     - CIDR: "192.168.1.0/24"
     - Wildcards: "192.168.1.*"
     """
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    server = _get_operable_server(server_id)
 
     data = json_object()
     allowed_ips = data.get('allowed_ips', [])
 
-    # Validate each IP pattern
-    errors = []
-    for ip_pattern in allowed_ips:
-        is_valid, error = validate_ip_pattern(ip_pattern)
-        if not is_valid:
-            errors.append(f"Invalid pattern '{ip_pattern}': {error}")
-
+    errors = _ip_pattern_errors(allowed_ips)
     if errors:
         return jsonify({'error': 'Invalid IP patterns', 'details': errors}), 400
 
@@ -1078,9 +1067,7 @@ def update_allowed_ips(server_id):
 @jwt_required()
 def get_connection_info(server_id):
     """Get connection info for a server (current IP, connected status, etc.)"""
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    server = _get_operable_server(server_id)
 
     is_connected = agent_registry.is_agent_connected(server_id)
     agent = agent_registry.get_agent(server_id) if is_connected else None
@@ -1109,9 +1096,7 @@ def rotate_api_key(server_id):
     This generates new credentials and sends them to the connected agent.
     The agent must acknowledge the update within 5 minutes.
     """
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    server = _get_operable_server(server_id)
 
     if not agent_registry.is_agent_connected(server_id):
         raise agent_offline()
@@ -1180,9 +1165,7 @@ def rotate_api_key(server_id):
 @jwt_required()
 def get_server_security_alerts(server_id):
     """Get security alerts for a specific server"""
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    _get_operable_server(server_id)
 
     status = request.args.get('status')
     severity = request.args.get('severity')
@@ -1264,6 +1247,7 @@ def get_server_metrics_history(server_id):
     Query params:
         period: '1h', '6h', '24h', '7d', '30d' (default: '24h')
     """
+    _get_operable_server(server_id)
     period = request.args.get('period', '24h')
 
     result = ServerMetricsService.get_server_history(server_id, period)
@@ -1279,6 +1263,7 @@ def get_server_metrics_aggregated(server_id):
         period: '24h', '7d', '30d' (default: '24h')
         aggregation: 'hourly', 'daily' (default: 'hourly')
     """
+    _get_operable_server(server_id)
     period = request.args.get('period', '24h')
     aggregation = request.args.get('aggregation', 'hourly')
 

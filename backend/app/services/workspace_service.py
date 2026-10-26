@@ -160,6 +160,20 @@ class WorkspaceService:
         return WorkspaceService.get_user_role(server.workspace_id, user.id) is not None
 
     @staticmethod
+    def filter_accessible_servers(query, user):
+        """Narrow a Server query to what can_access_server allows, in SQL."""
+        if user.is_admin:
+            return query
+        from app.models.server import Server
+        member_ws = db.session.query(WorkspaceMember.workspace_id).filter_by(user_id=user.id)
+        allowed = [Server.workspace_id.is_(None), Server.workspace_id.in_(member_ws)]
+        default = Workspace.query.filter_by(
+            slug=WorkspaceService.DEFAULT_WORKSPACE_SLUG).first()
+        if default is not None:
+            allowed.append(Server.workspace_id == default.id)
+        return query.filter(db.or_(*allowed))
+
+    @staticmethod
     def get_accessible_server(user, server_id):
         """The server if *user* may operate it (see can_access_server), else None."""
         from app.models.server import Server

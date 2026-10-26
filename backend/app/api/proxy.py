@@ -13,7 +13,6 @@ from flask import Blueprint, request, jsonify
 
 from flask_jwt_extended import jwt_required
 
-from app.models.server import Server
 from app.middleware.rbac import developer_required
 from app.services.proxy_stack_service import ProxyStackService
 from app.api._request import json_object
@@ -23,7 +22,9 @@ proxy_bp = Blueprint('proxy', __name__)
 
 def _require_server(server_id):
     """Return (server, None) or (None, error_response_tuple)."""
-    server = Server.query.get(server_id)
+    from app.middleware.rbac import get_current_user
+    from app.services.workspace_service import WorkspaceService
+    server = WorkspaceService.get_accessible_server(get_current_user(), server_id)
     if not server:
         return None, (jsonify({'error': 'Server not found'}), 404)
     return server, None

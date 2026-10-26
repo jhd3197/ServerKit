@@ -21,8 +21,9 @@ This module is read-only; it does not write any state.
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 
-from app.models.server import Server
 from app.services.agent_registry import agent_registry
+from app.services.workspace_service import WorkspaceService
+from app.middleware.rbac import get_current_user
 
 
 fleet_bp = Blueprint('fleet', __name__)
@@ -48,6 +49,7 @@ def list_targets():
     feature = (request.args.get('feature') or '').strip() or None
 
     targets = [{'kind': 'local'}]
+    user = get_current_user()
 
     # Walk the in-memory registry of connected agents. We intentionally
     # do NOT pull from the Server table — capabilities are per-session
@@ -60,7 +62,7 @@ def list_targets():
         # Look up the display name. We could cache this on
         # ConnectedAgent, but the table is small and the lookup is
         # cheap; not worth the staleness risk.
-        server = Server.query.get(server_id)
+        server = WorkspaceService.get_accessible_server(user, server_id)
         if not server:
             # Connected agent without a Server row would be a bug
             # elsewhere; skip rather than 500.
