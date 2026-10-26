@@ -273,6 +273,8 @@ class CronService:
 
         minute, hour, day, month, weekday, command = match.groups()
         schedule = f"{minute} {hour} {day} {month} {weekday}"
+        # cron turns a bare % into a newline; lines we write escape it.
+        command = command.replace('\\%', '%')
 
         return {
             'id': f"cron_{index}",
@@ -325,7 +327,7 @@ class CronService:
         return parsed['command'] in {
             command,
             f"{SHIM_PATH} {job_id} -- {command}",
-            cls._crontab_command(command, True, job_id),
+            cls._wrapped_command(command, True, job_id),
         }
 
     @classmethod
@@ -442,7 +444,7 @@ class CronService:
                 clean_name = re.sub(r'\s+', ' ', str(name)).strip()
                 if clean_name:
                     comment += f" ({clean_name})"
-            new_line = f"{schedule} {command}"
+            new_line = f"{schedule} {cls._crontab_command(command, False, job_id)}"
             new_crontab = f"{current_crontab.rstrip()}\n{comment}\n{new_line}\n"
 
             failure = cls._install_crontab(new_crontab)
@@ -656,17 +658,8 @@ class CronService:
             current = cls._read_crontab()
             if current is not None:
                 tracked = bool(job_data.get('tracked', False))
-                old_line = f"{old_schedule} {cls._crontab_command(old_command, tracked, job_id)}"
                 new_line = f"{new_schedule} {cls._crontab_command(new_command, tracked, job_id)}"
-                lines = current.split('\n')
-                new_lines = []
-                for line in lines:
-                    if old_line in line:
-                        new_lines.append(new_line)
-                    else:
-                        new_lines.append(line)
-
-                failure = cls._install_crontab('\n'.join(new_lines))
+                failure = cls._rewrite_job_line(old_schedule, old_command, job_id, new_line)
                 if failure:
                     return failure
 
@@ -759,17 +752,21 @@ class CronService:
     # ------------------------------------------------------------------ #
 
     @classmethod
-    def _crontab_command(cls, command: str, tracked: bool, job_id: str) -> str:
-        """Build the crontab command for a job.
-
-        Tracked jobs are wrapped by the serverkit-cron-run shim so every run
-        records its exit code + output tail; untracked jobs are byte-identical
-        to the bare command (an untracked line is indistinguishable from a
-        hand-written one)."""
+    def _wrapped_command(cls, command: str, tracked: bool, job_id: str) -> str:
+        """The command a job's line runs: tracked jobs are wrapped by the
+        serverkit-cron-run shim so every run records its exit code + output
+        tail; untracked jobs run the bare command."""
         if not tracked:
             return command
         python = sys.executable or 'python3'
         return f"{python} {SHIM_PATH} {job_id} -- {command}"
+
+    @classmethod
+    def _crontab_command(cls, command: str, tracked: bool, job_id: str) -> str:
+        """The job's command as written into the crontab. An unescaped % ends
+        the command there and feeds the rest to it as stdin, so
+        `date +%F` would run as `date +`."""
+        return cls._wrapped_command(command, tracked, job_id).replace('%', '\\%')
 
     @classmethod
     def get_job(cls, job_id: str) -> Optional[Dict]:
@@ -803,9 +800,8 @@ class CronService:
         if cls.is_linux() and enabled != was_tracked:
             schedule = job_data.get('schedule', '')
             command = job_data.get('command', '')
-            old_line = f"{schedule} {cls._crontab_command(command, was_tracked, job_id)}"
             new_line = f"{schedule} {cls._crontab_command(command, enabled, job_id)}"
-            err = cls._replace_crontab_line(old_line, new_line)
+            err = cls._rewrite_job_line(schedule, command, job_id, new_line)
             if err is not None:
                 return err
 
@@ -822,14 +818,19 @@ class CronService:
         }
 
     @classmethod
-    def _replace_crontab_line(cls, old_line: str, new_line: str) -> Optional[Dict]:
-        """Swap one line in the current user's crontab. Returns None on success
-        or an error dict. Linux-only (callers guard with is_linux)."""
+    def _rewrite_job_line(cls, schedule: str, command: str, job_id: str,
+                          new_line: str) -> Optional[Dict]:
+        """Replace the job's crontab line (found by parsing, so legacy unescaped
+        and escaped lines both match), keeping a disabled job commented out.
+        Returns None on success or an error dict. Linux-only."""
         current = cls._read_crontab()
         if current is None:
             return None
-        lines = current.split('\n')
-        new_lines = [new_line if line == old_line else line for line in lines]
+        new_lines = [
+            (f"# {new_line}" if line.lstrip().startswith('#') else new_line)
+            if cls._line_is_job(line, schedule, command, job_id) else line
+            for line in current.split('\n')
+        ]
         return cls._install_crontab('\n'.join(new_lines))
 
     # ------------------------------------------------------------------ #
