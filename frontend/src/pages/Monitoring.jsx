@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useTabParam from '../hooks/useTabParam';
 import api from '../services/api';
@@ -226,6 +226,14 @@ const Monitoring = () => {
         }
     };
 
+    // The speed-test wait loop outlives a navigation unless it checks this:
+    // it kept polling for 90s and toasted on whatever page came next.
+    const mountedRef = useRef(true);
+    useEffect(() => {
+        mountedRef.current = true;  // StrictMode re-mounts after a cleanup
+        return () => { mountedRef.current = false; };
+    }, []);
+
     const handleRunSpeedTest = async () => {
         try {
             setSpeedTestRunning(true);
@@ -234,6 +242,7 @@ const Monitoring = () => {
             const deadline = Date.now() + SPEEDTEST_POLL_TIMEOUT_MS;
             while (Date.now() < deadline) {
                 await new Promise((resolve) => setTimeout(resolve, SPEEDTEST_POLL_INTERVAL_MS));
+                if (!mountedRef.current) return;
                 const res = await loadSpeedTest();
                 const latest = res?.last_result;
                 if (latest?.tested_at && latest.tested_at !== previousTestedAt) {
@@ -242,11 +251,12 @@ const Monitoring = () => {
                     return;
                 }
             }
+            if (!mountedRef.current) return;
             toast.warning(t('app.monitoring.speedTestIsStillRunningRefresh', 'Speed test is still running. Refresh in a moment.'));
         } catch (err) {
             toastError(toast, t('app.monitoring.failedToStartSpeedTest', "Couldn't start the speed test."), err);
         } finally {
-            setSpeedTestRunning(false);
+            if (mountedRef.current) setSpeedTestRunning(false);
         }
     };
 
