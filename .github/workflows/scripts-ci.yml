@@ -44,7 +44,7 @@ jobs:
     name: lint + unit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Syntax check (bash -n)
         run: |
@@ -123,7 +123,7 @@ jobs:
           - 'fedora:40'
           - 'opensuse/leap:15.5'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Pull ${{ matrix.image }} (Docker Hub, then mirror)
         env:
@@ -209,7 +209,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Run probe matrix
         run: bash scripts/test/probe-matrix.sh
 
@@ -241,7 +241,7 @@ jobs:
           - 'fedora:40'
           - 'opensuse/leap:15.5'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: provision_python on ${{ matrix.image }}
         run: |
@@ -265,7 +265,7 @@ jobs:
     # fails here instead of on someone's Pi. Real-hardware validation (GPIO,
     # SD-card I/O, 32-bit ARM) still needs a physical device.
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: bash -n + unit suites on arm64
         run: |
           set -e
@@ -294,7 +294,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Install ServerKit (non-interactive, no domain, plain HTTP)
         run: |
@@ -380,7 +380,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: ShellCheck --enable=all (advisory — never fails the build)
         continue-on-error: true
