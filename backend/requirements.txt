@@ -73,7 +73,7 @@ requests==2.33.1
 boto3==1.35.0
 
 # SSO / OAuth
-Authlib==1.6.12
+Authlib==1.9.1
 python3-saml==1.16.0
 
 # Cross-platform local IANA timezone resolution (SystemService.get_server_time
