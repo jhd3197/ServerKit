@@ -177,12 +177,12 @@ const WorkspaceServersTab = ({ wsId, srvIn, srvOut, onMoveServer, loadError, onR
                     <div className="ws-pick-label">{t('app.workspaceServersTab.moveAServerIntoThisWorkspace', 'Move a server into this workspace')}</div>
                     <div className="ws-pick">
                         {srvOut.map(s => (
-                            <div key={s.id} className="ws-pick__item" onClick={() => onMoveServer(s.id, wsId)}>
+                            <button type="button" key={s.id} className="ws-pick__item" onClick={() => onMoveServer(s.id, wsId)}>
                                 <ServiceTile name={s.name} size={28} className="ws-pick__tile" />
                                 <span className="ws-pick__name">{s.name}</span>
                                 {s.ip_address && <span className="sk-tag mono">{s.ip_address}</span>}
                                 <Plus size={16} className="ws-pick__plus" />
-                            </div>
+                            </button>
                         ))}
                     </div>
                 </>
