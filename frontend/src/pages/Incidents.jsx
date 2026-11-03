@@ -27,7 +27,7 @@ import { Input } from '@/components/ui/input';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
-import { METRIC_LABELS } from '../components/monitoring/fleetMetrics';
+import { fleetAlertText } from '../components/monitoring/alertText';
 import { impactTone, INCIDENT_STATES } from '../components/monitoring/monitorShared';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
@@ -238,14 +238,14 @@ export default function Incidents() {
         });
 
         const hostDetail = (alert) => (alert.type
-            ? `${alert.type} ${formatValue(alert.value)} / ${alert.threshold}`
-            : 'This server');
+            ? `${alert.type} ${formatValue(alert.value)}${alert.threshold == null ? '' : ` / ${alert.threshold}`}`
+            : t('app.incidents.thisServer', 'This server'));
 
         const fromActive = activeAlerts.map((alert, index) => ({
             kind: 'alert',
             key: `active-${alert.type}-${index}`,
             title: alert.message,
-            subject: 'This server',
+            subject: t('app.incidents.thisServer', 'This server'),
             detail: hostDetail(alert),
             state: 'firing',
             tone: 'red',
@@ -262,7 +262,7 @@ export default function Incidents() {
             kind: 'alert',
             key: `history-${alert.timestamp || index}-${index}`,
             title: alert.message,
-            subject: 'This server',
+            subject: t('app.incidents.thisServer', 'This server'),
             detail: hostDetail(alert),
             state: alert.severity,
             tone: statusKind(alert.severity),
@@ -282,19 +282,19 @@ export default function Incidents() {
         // sources above describe the panel's own box and have no server-side
         // lifecycle to ack or resolve.
         const fromFleet = fleetAlerts.map((alert) => {
-            const metric = METRIC_LABELS[alert.metric] || alert.metric;
-            const subject = alert.server_name || 'Unknown server';
+            const subject = alert.server_name || t('app.incidents.unknownServer', 'Unknown server');
+            const { title, detail } = fleetAlertText(t, alert, subject);
             return {
                 kind: 'alert',
                 key: `fleet-${alert.id}`,
                 alertId: alert.id,
-                title: `${metric} over limit on ${subject}`,
+                title,
                 subject,
-                detail: `${metric} ${formatValue(alert.value)} / ${alert.threshold}`,
+                detail,
                 state: alert.status,
                 tone: alertStatusKind(alert.status),
                 impact: alert.severity,
-                metric,
+                metric: alert.metric,
                 value: alert.value,
                 threshold: alert.threshold,
                 when: alert.created_at,
@@ -305,7 +305,7 @@ export default function Incidents() {
 
         return [...fromActive, ...fromFleet, ...fromIncidents, ...fromHistory]
             .sort((a, b) => new Date(b.when || 0) - new Date(a.when || 0));
-    }, [incidents, activeAlerts, alertHistory, fleetAlerts, monitorsById]);
+    }, [incidents, activeAlerts, alertHistory, fleetAlerts, monitorsById, t]);
 
     // Search only. The active/resolved split used to live here as a segment
     // filter; it is a column rule now, applied inside the table.
