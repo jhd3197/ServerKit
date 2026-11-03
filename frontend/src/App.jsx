@@ -145,6 +145,12 @@ function SetupRoute({ children }) {
 
 function LegacyGitExtRedirect() {
     const { tab } = useParams();
+    const { routes } = useContributions();
+    // /git only exists while the Git extension is installed; otherwise send
+    // the user to the extensions page where they can install it.
+    if (!routes.some((r) => r.path === '/git' || r.path?.startsWith('/git/'))) {
+        return <Navigate to="/extensions" replace />;
+    }
     return <Navigate to={tab ? `/git/${tab}` : '/git'} replace />;
 }
 
