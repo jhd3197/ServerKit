@@ -5,6 +5,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import CopyField from '@/components/CopyField';
 import { InfoList, InfoItem } from '../InfoList';
+import InfoTip from '../InfoTip';
 import { DangerZone } from '../DangerZone';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -45,12 +46,13 @@ const AgentRegistrationSection = ({ server, onRegenerateToken }) => {
             <div className="form-section__header">
                 <span className="form-section__icon"><KeyIcon /></span>
                 <div>
-                    <h3>{t('app.serverSettingsTab.connectionString', 'Connection string')}</h3>
-                    <p className="section-description">
+                    <h3>{t('app.serverSettingsTab.connectionString', 'Connection string')}
+                        <InfoTip>
                         {t('app.serverSettingsTab.generateAFreshConnectionStringTo', 'Generate a fresh connection string to pair (or re-pair) this server. Useful after reinstalling the agent: old credentials are gone, but a new string brings the agent right back to this row.')}
                         {isOnline && ` ${t('app.serverSettingsTab.onlineRegenerateNote', 'This server is online now; a new string only affects re-pairing.')}`}
                         {isExpired && ` ${t('app.serverSettingsTab.previousTokenExpired', 'The previous token has expired.')}`}
-                    </p>
+                        </InfoTip></h3>
+                    <p className="section-description">{t('app.serverSettingsTab.pairOrRepair', 'Pair or re-pair this server.')}</p>
                 </div>
             </div>
             <Button onClick={onRegenerateToken}>
@@ -261,10 +263,9 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                     <div className="form-section__header">
                         <span className="form-section__icon"><NetworkIcon /></span>
                         <div>
-                            <h3>{t('app.serverSettingsTab.connectionIpAllowlist', 'Connection and IP allowlist')}</h3>
-                            <p className="section-description">
-                                {t('app.serverSettingsTab.restrictWhichIpsCanConnectSupports', 'Restrict which IPs can connect. Supports single IPs, CIDR notation, and wildcards.')}
-                            </p>
+                            <h3>{t('app.serverSettingsTab.connectionIpAllowlist', 'Connection and IP allowlist')}
+                                <InfoTip>{t('app.serverSettingsTab.restrictWhichIpsCanConnectSupports', 'Restrict which IPs can connect. Supports single IPs, CIDR notation, and wildcards.')}</InfoTip></h3>
+                            <p className="section-description">{t('app.serverSettingsTab.allowedIps', 'Allowed IPs only.')}</p>
                         </div>
                     </div>
 
@@ -334,10 +335,9 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
                     <div className="form-section__header">
                         <span className="form-section__icon"><KeyIcon /></span>
                         <div>
-                            <h3>{t('app.serverSettingsTab.apiKeyRotation', 'API key rotation')}</h3>
-                            <p className="section-description">
-                                {t('app.serverSettingsTab.rotateTheApiCredentialsUsedBy', 'Rotate the API credentials used by the agent. The agent must be online to receive new credentials.')}
-                            </p>
+                            <h3>{t('app.serverSettingsTab.apiKeyRotation', 'API key rotation')}
+                                <InfoTip>{t('app.serverSettingsTab.rotateTheApiCredentialsUsedBy', 'Rotate the API credentials used by the agent. The agent must be online to receive new credentials.')}</InfoTip></h3>
+                            <p className="section-description">{t('app.serverSettingsTab.rotateAgentCredentials', 'Rotate agent credentials.')}</p>
                         </div>
                     </div>
                     <div className="key-rotation-actions">

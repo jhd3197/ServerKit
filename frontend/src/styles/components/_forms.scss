@@ -67,6 +67,16 @@ display: grid;
         color: $danger;
     }
 
+    // Label + (i) tip share one row; the label's own bottom margin moves to the row.
+    &__head {
+        display: flex;
+        align-items: center;
+        gap: $space-1;
+        margin-bottom: $space-2;
+
+        .form-field__label { margin-bottom: 0; }
+    }
+
     &__control {
         // Native controls and component controls share the same field contract.
         // Exclude checkboxes/radios and buttons: their intrinsic size matters.

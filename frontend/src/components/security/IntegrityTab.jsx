@@ -11,6 +11,11 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useTranslation } from 'react-i18next';
+import { Camera, Eye, GitCompare, ShieldOff } from 'lucide-react';
+import InfoTip from '@/components/InfoTip';
+import IconStepStrip from '@/components/IconStepStrip';
+import SectionIntro from '@/components/SectionIntro';
+import FileIntegrityIllustration from '@/components/illustrations/FileIntegrityIllustration';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
 
 // Scoped file-integrity monitoring: baseline-and-diff over the paths
@@ -309,17 +314,26 @@ const IntegrityTab = () => {
                         : <span className="sec-state sec-state--green">clean</span>)}
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">
-                    <p className="sec-hint--lead sec-hint">
-                        {baseline
-                            ? t('app.integrityTab.baselineSummary', {
+                    {baseline ? (
+                        <p className="sec-hint--lead sec-hint">
+                            {t('app.integrityTab.baselineSummary', {
                                 count: baseline.file_count,
                                 age: formatAge(baseline.created_at) || t('app.integrityTab.unknownAge', 'unknown age'),
                                 defaultValue_one: 'Baseline: 1 file, {{age}}',
                                 defaultValue_other: 'Baseline: {{count}} files, {{age}}',
-                            })
-                            : t('app.integrityTab.noBaselineYet', 'No baseline yet. Create one to start tracking changes.')}
-                        {check && ` · ${t('app.integrityTab.lastCheck', 'Last check {{age}}', { age: formatAge(check.checked_at) || '' })}`}
-                    </p>
+                            })}
+                            {check && ` · ${t('app.integrityTab.lastCheck', 'Last check {{age}}', { age: formatAge(check.checked_at) || '' })}`}
+                        </p>
+                    ) : (
+                        <p className="sec-hint--lead sec-hint tip-chip-row">
+                            <span className="tip-chip tip-chip--warning">
+                                <ShieldOff aria-hidden="true" />
+                                {t('app.integrityTab.noBaselineChip', 'No baseline')}
+                            </span>
+                            <InfoTip>{t('app.integrityTab.noBaselineYet', 'No baseline yet. Create one to start tracking changes.')}</InfoTip>
+                            {check && ` · ${t('app.integrityTab.lastCheck', 'Last check {{age}}', { age: formatAge(check.checked_at) || '' })}`}
+                        </p>
+                    )}
                     {/* These act on the SCOPE and are there whether or not the
                         changes list is open, so they keep their own bar; the
                         table's chrome rides the view line below. */}
@@ -427,21 +441,34 @@ const IntegrityTab = () => {
                 </div>
             )}
 
-            <p className="sec-hint sec-hint--lead">
-                {t('app.integrityTab.baselineAndDiffMonitoringOverThe', 'Baseline-and-diff monitoring over the paths ServerKit manages. Baseline a scope, then check it (or let the scheduled sweep do it). Any added, removed or modified files are flagged and admins are notified. Accepting changes re-baselines the scope.')}
-            </p>
+            <div className="tip-card-head">
+                <FileIntegrityIllustration />
+                <div className="tip-card-head__text">
+                    <SectionIntro
+                        info={t('app.integrityTab.baselineAndDiffMonitoringOverThe', 'Baseline-and-diff monitoring over the paths ServerKit manages. Baseline a scope, then check it (or let the scheduled sweep do it). Any added, removed or modified files are flagged and admins are notified. Accepting changes re-baselines the scope.')}
+                    >
+                        {t('app.integrityTab.headerLine', 'Detect changed config files.')}
+                    </SectionIntro>
+                    <IconStepStrip
+                        steps={[
+                            { icon: <Camera />, label: t('app.integrityTab.stepBaseline', 'Baseline'), info: t('app.integrityTab.stepBaselineInfo', 'Snapshot the current files of a scope.') },
+                            { icon: <Eye />, label: t('app.integrityTab.stepWatch', 'Watch'), info: t('app.integrityTab.stepWatchInfo', 'Check manually or let the scheduled sweep run.') },
+                            { icon: <GitCompare />, label: t('app.integrityTab.stepDiff', 'Diff'), info: t('app.integrityTab.stepDiffInfo', 'Added, removed or modified files are flagged and admins are notified. Accepting re-baselines.') },
+                        ]}
+                    />
+                </div>
+            </div>
 
             {managedScopes.map(renderScopeCard)}
             {appScopes.map(renderScopeCard)}
 
             <SharedCard variant="legacy" className="card">
                 <SharedCardHeader variant="legacy" className="card-header">
-                    <h3>{t('app.integrityTab.applicationDocroots', 'Service docroots')} <span className="sec-count">{t('app.integrityTab.optIn', '· opt-in')}</span></h3>
+                    <h3>{t('app.integrityTab.applicationDocroots', 'Service docroots')} <span className="sec-count">{t('app.integrityTab.optIn', '· opt-in')}</span>{' '}
+                        <InfoTip>{t('app.integrityTab.watchingADocrootHashesEveryFile', 'Watching a docroot hashes every file outside upload/cache directories, so it is opt-in per service.')}</InfoTip>
+                    </h3>
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">
-                    <p className="sec-hint sec-hint--lead">
-                        {t('app.integrityTab.watchingADocrootHashesEveryFile', 'Watching a docroot hashes every file outside upload/cache directories, so it is opt-in per service.')}
-                    </p>
                     {appsError ? (
                         <ErrorState compact error={appsError} onRetry={loadApps} />
                     ) : apps.length === 0 ? (

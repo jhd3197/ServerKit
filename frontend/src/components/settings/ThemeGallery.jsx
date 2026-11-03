@@ -7,6 +7,7 @@ import { DEFAULT_THEME_SLUG } from '../../data/bundledThemes';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import InfoTip from '../InfoTip';
 import { toastError } from '@/utils/errorMessage';
 
 // Theme Gallery — cards for every selectable skin (bundled seeds + installed).
@@ -87,10 +88,13 @@ const ThemeGallery = () => {
                         <div className="theme-card__meta">
                             <span className="theme-card__name">{themeEntry.name || themeEntry.slug}</span>
                             {themeEntry.base && <span className="theme-card__base">{themeEntry.base}</span>}
+                            {themeEntry.description && (
+                                // keydown must not reach the card's select-on-Enter handler
+                                <span onKeyDown={(e) => e.stopPropagation()}>
+                                    <InfoTip>{themeEntry.description}</InfoTip>
+                                </span>
+                            )}
                         </div>
-                        {themeEntry.description && (
-                            <p className="theme-card__desc">{themeEntry.description}</p>
-                        )}
                         <div className="theme-card__footer">
                             {active && (
                                 <span className="theme-card__applied">

@@ -1159,6 +1159,10 @@
 
 .settings-label {
     flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: $space-1;
 
     > span:first-child {
         display: block;
@@ -1169,6 +1173,7 @@
 
     .settings-hint {
         display: block;
+        flex-basis: 100%;
         font-size: $text-xs;
         color: $text-tertiary;
     }

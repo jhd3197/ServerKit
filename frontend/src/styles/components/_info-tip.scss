@@ -1,0 +1,192 @@
+// "Less text" building blocks: <InfoTip>, <IconStepStrip>, <SectionIntro>,
+// plus the small chip / tile / illustration helpers the pages share.
+
+.info-tip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: $text-muted;
+    cursor: pointer;
+    vertical-align: middle;
+
+    &:hover,
+    &[data-state='open'] { color: $accent-primary; }
+
+    &--sm { width: 18px; height: 18px; svg { width: 14px; height: 14px; } } // geometry: inline icon button
+    &--md { width: 24px; height: 24px; svg { width: 16px; height: 16px; } } // geometry: inline icon button
+
+    &:focus-visible {
+        outline: 2px solid $accent-primary;
+        outline-offset: 1px;
+    }
+}
+
+// Above Sheet (1150) and Modal; same layer as .ui-tooltip.
+.ui-popover-panel.info-tip__panel {
+    z-index: $z-tooltip + 10;
+    width: auto;
+    max-width: min(320px, calc(100vw - 24px));
+    padding: $space-2 $space-3;
+    font-size: $text-sm;
+    font-weight: $font-weight-normal;
+    line-height: 1.5;
+    text-transform: none;
+    letter-spacing: normal;
+
+    p { margin: 0; }
+    p + p { margin-top: $space-2; }
+    code { font-family: $font-mono; font-size: $text-xs; }
+}
+
+.section-intro {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    margin: 0;
+    color: $text-secondary;
+    font-size: $text-sm;
+}
+
+.icon-step-strip {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__step {
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+        min-width: 0;
+    }
+
+    &__tile {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+        width: $control-lg;
+        height: $control-lg;
+        border-radius: $radius-control;
+        background: $bg-secondary;
+        border: 1px solid $border-default;
+        color: $accent-primary;
+
+        svg { width: 20px; height: 20px; } // geometry: icon in tile
+    }
+
+    &__label {
+        color: $text-primary;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
+    }
+
+    &__arrow {
+        display: inline-flex;
+        color: $text-muted;
+        svg { width: 16px; height: 16px; } // geometry: connector icon
+    }
+
+    @include respond-to($breakpoint-sm) {
+        flex-direction: column;
+        align-items: flex-start;
+
+        &__arrow { transform: rotate(90deg); margin-inline-start: $space-3; }
+    }
+}
+
+// Status / tag chip with a leading icon.
+.tip-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: 2px $space-2; // geometry: chip
+    border-radius: $radius-badge;
+    background: $bg-secondary;
+    color: $text-secondary;
+    font-size: $text-xs;
+    font-weight: $font-weight-medium;
+    white-space: nowrap;
+
+    svg { width: 14px; height: 14px; } // geometry: chip icon
+
+    &--warning { color: $warning; }
+    &--success { color: $success; }
+    &--danger { color: $danger; }
+    &--accent { color: $accent-primary; }
+}
+
+.tip-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-1;
+}
+
+// Row of logo/icon tiles with a caption under each.
+.logo-tile-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-3;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $space-1;
+        color: $text-secondary;
+        font-size: $text-xs;
+    }
+
+    &__tile {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: $control-lg;
+        height: $control-lg;
+        border-radius: $radius-control;
+        background: $bg-secondary;
+        border: 1px solid $border-default;
+        color: $text-primary;
+
+        svg { width: 20px; height: 20px; } // geometry: logo in tile
+    }
+}
+
+.tip-illustration {
+    flex: none;
+    width: 48px;  // geometry: illustration
+    height: 48px; // geometry: illustration
+    color: $accent-primary;
+}
+
+.tip-card-head {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+
+    &__text { flex: 1; min-width: 0; }
+    &__title { display: flex; align-items: center; gap: $space-1; color: $text-primary; font-weight: $font-weight-medium; }
+    &__line { margin: 0; color: $text-secondary; font-size: $text-sm; }
+}
+
+// Label + (i) tip on one row, for plain <label> markup outside FormField.
+.label-with-tip {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    margin-bottom: $space-1;
+
+    > label { margin-bottom: 0; }
+}
