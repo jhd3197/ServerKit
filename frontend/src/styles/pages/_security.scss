@@ -294,6 +294,8 @@
     .sec-posture__summary {
         flex: 1;
         min-width: 0;
+
+        @media (max-width: $breakpoint-sm) { align-self: stretch; }
     }
 
     .sec-posture__verdict {
@@ -308,6 +310,12 @@
         display: flex;
         flex-wrap: wrap;
         gap: $space-2 $space-5;
+
+        @media (max-width: $breakpoint-sm) {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); // geometry: fluid tile track
+            gap: $space-2;
+        }
     }
 
     .sec-kpi {
@@ -358,6 +366,13 @@
         font-size: $text-sm;
 
         &:first-child { border-top: none; }
+
+        @media (max-width: $breakpoint-sm) {
+            flex-wrap: wrap;
+            padding-block: $space-2;
+
+            .sec-posture__fix { flex: 1 0 100%; }
+        }
 
         &--pass    .sec-posture__ico { color: var(--green); }
         &--warn    .sec-posture__ico { color: var(--amber); }
