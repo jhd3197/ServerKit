@@ -409,7 +409,8 @@ def _compare_versions(v1, v2):
             elif a > b:
                 return 1
         return 0
-    except:
+    except (ValueError, AttributeError, TypeError):
+        current_app.logger.warning('Could not compare versions %r and %r', v1, v2)
         return 0
 
 
