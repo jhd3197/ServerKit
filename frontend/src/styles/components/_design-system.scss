@@ -1434,6 +1434,35 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         &__tabs { order: 3; width: 100%; margin-left: 0; justify-content: flex-start; }
     }
 
+    // Phones: the one page-header rule. The title takes the row beside its icon
+    // and wraps (meta drops under it instead of squeezing the heading into a
+    // sliver); the actions drop below as a WRAPPING group of full-size targets
+    // rather than a clipped, side-scrolling strip.
+    @media (max-width: $breakpoint-sm - 1) {
+        &__titles {
+            flex: 1 1 0;
+            flex-wrap: wrap;
+            gap: 0 $space-3;
+        }
+        &__title { overflow-wrap: anywhere; }
+        &__spacer { flex: 0; }
+
+        &__actions {
+            flex-wrap: wrap;
+            overflow: visible;
+            -webkit-mask-image: none;
+            mask-image: none;
+
+            > *,
+            > .sk-topbar__chrome > * { flex-shrink: 1; }
+
+            // A search box is a row of its own; buttons share what is left.
+            > .sk-searchfield,
+            > .sk-topbar__chrome > .sk-searchfield { flex: 1 1 100%; }
+
+            :is(button, a, [role='button']) { min-height: $control-lg; }
+        }
+    }
 }
 
 // SSL-style pill with day count is just a Pill; provide the spec-card + ssl
