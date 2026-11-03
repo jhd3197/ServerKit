@@ -216,6 +216,7 @@ const Backups = () => {
             ]);
 
             setBackups(backupsRes.backups || []);
+            if (backupsRes.warning) setError(backupsRes.warning);
             setStats(statsRes);
             setConfig(configRes);
             if (refreshSchedules) await reloadSchedules();
