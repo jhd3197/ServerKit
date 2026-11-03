@@ -84,16 +84,7 @@
             --xy-controls-button-color: #{$text-secondary};
             --xy-controls-button-color-hover: #{$text-primary};
             --xy-controls-button-border-color: #{$border-subtle};
-            --xy-minimap-background-color: #{$bg-elevated};
-            --xy-minimap-mask-background-color: rgba(0, 0, 0, 0.35);
-            --xy-minimap-node-background-color: #{$border-default};
             --xy-background-color: transparent;
-        }
-
-        @media (max-width: 639px) {
-            .react-flow__minimap {
-                display: none;
-            }
         }
     }
 

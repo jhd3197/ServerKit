@@ -4,7 +4,6 @@ import {
     ReactFlowProvider,
     Background,
     Controls,
-    MiniMap,
     MarkerType,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -274,7 +273,6 @@ function Diagram({ viewId }) {
             maxZoom={1.5}
         >
             <Background gap={18} size={1} color="var(--border-subtle)" />
-            <MiniMap pannable zoomable />
             <Controls showInteractive={false} />
         </ReactFlow>
     );
