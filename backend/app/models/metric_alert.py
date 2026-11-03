@@ -49,6 +49,8 @@ class MetricAlert(db.Model):
     threshold = db.Column(db.Float)  # the threshold exceeded
     duration_seconds = db.Column(db.Integer)  # how long it was exceeded
 
+    detail = db.Column(db.Text)  # human message for offline / service-check alerts
+
     status = db.Column(db.String(20), default='active', index=True)  # active, acknowledged, resolved
     acknowledged_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True, index=True)
 
@@ -67,6 +69,7 @@ class MetricAlert(db.Model):
             'value': self.value,
             'threshold': self.threshold,
             'duration_seconds': self.duration_seconds,
+            'detail': self.detail,
             'status': self.status,
             'acknowledged_by': self.acknowledged_by,
             'created_at': self.created_at.isoformat() if self.created_at else None,

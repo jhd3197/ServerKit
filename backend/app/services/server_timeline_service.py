@@ -52,6 +52,7 @@ _AUDIT_DETAIL_KEYS = frozenset({
     'application_id',
     'code',
     'endpoint',
+    'escalation',
     'from',
     'kind',
     'label',

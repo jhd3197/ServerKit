@@ -47,6 +47,12 @@ trust boundaries:
   (`system:exec`) and interactive PTY sessions are controlled by the agent's
   `Features.Exec` flag, which is **off by default**. Enable it only on servers
   where you intend the panel to run shell commands.
+- **Permission levels bound what a compromised panel can do.** An agent runs as
+  Monitor (report-only, no inbound command channel), Protect (security allowlist
+  only) or Full. The level is read only from the agent's local config and can
+  only be changed on the server (`serverkit-agent permissions set`); the panel
+  records and audits the reported level but has no API to set it. See
+  [docs/AGENT_PERMISSION_LEVELS.md](docs/AGENT_PERMISSION_LEVELS.md).
 - **Transport & connection controls.** Agents authenticate to the panel with
   per-connection HMAC-SHA256 (with nonce/replay protection and a timestamp-skew
   check), and the panel enforces a per-server IP allowlist. Use `wss://`

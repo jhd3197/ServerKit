@@ -22,6 +22,7 @@ from collections import defaultdict
 
 from app import db
 from app.models.server import Server, ServerCommand, AgentSession
+from app.services import permission_levels
 
 # ---------------------------------------------------------------------------
 # Per-IP auth rate limiter — transport-neutral state shared by the WS
@@ -245,6 +246,12 @@ class AgentRegistry:
                                 self._agents.pop(server_id, None)
                                 self._socket_to_server.pop(socket_id, None)
 
+                # Report-only (monitor) agents hold no socket; sweep them too.
+                if self._app is not None:
+                    with self._app.app_context():
+                        from app.services import agent_health_service
+                        agent_health_service.sweep_silent_reporters()
+
             except Exception as e:
                 logger.error("Error in heartbeat checker: %s", e)
 
@@ -279,6 +286,8 @@ class AgentRegistry:
             if server:
                 server.status = 'offline'
                 server.last_error = 'Agent heartbeat timeout'
+                from app.services import agent_health_service
+                agent_health_service.mark_offline(server, 'heartbeat timeout')
                 db.session.commit()
 
             # Mark session as inactive
@@ -392,6 +401,8 @@ class AgentRegistry:
                 # even for healthy connected agents.
                 if ip_address and ip_address != 'unknown':
                     server.ip_address = ip_address
+                from app.services import agent_health_service
+                agent_health_service.mark_online(server)
                 db.session.commit()
 
             # Create session record
@@ -519,6 +530,8 @@ class AgentRegistry:
                 server.last_seen = now
                 if server.status != 'online':
                     server.status = 'online'
+                    from app.services import agent_health_service
+                    agent_health_service.mark_online(server)
                 db.session.commit()
 
             # Update session latency
@@ -589,6 +602,12 @@ class AgentRegistry:
 
         # Check permissions
         server = Server.query.get(server_id)
+        # Defence in depth: never send what the agent's reported level refuses.
+        refused = permission_levels.refusal(
+            server.permission_level if server else None, action)
+        if refused:
+            return {'success': False, 'error': refused, 'code': 'LEVEL_DENIED'}
+
         if server and not server.has_permission(action):
             return {
                 'success': False,
@@ -863,13 +882,15 @@ class AgentRegistry:
         # in-memory state — the adapter must not report success.
         if not session_token:
             return None, server, 'registration_failed'
+        self.record_agent_health(server.id, payload.get('permission_level'))
 
         logger.info("Agent %s authenticated successfully from %s (%s)",
                     agent_id, ip_address, transport)
         return session_token, server, None
 
     def ingest_agent_state(self, agent, metrics=None, sysinfo=None,
-                           capabilities=None):
+                           capabilities=None, permission_level=None,
+                           service_checks=None):
         """One ingest path for agent-reported state on BOTH transports.
 
         Owns the capability side-effects (the WireGuard tunnel reconcile
@@ -882,6 +903,20 @@ class AgentRegistry:
             self.update_system_info(agent.server_id, sysinfo)
         if capabilities:
             self.update_capabilities(agent.server_id, capabilities)
+        if permission_level is not None or service_checks is not None:
+            self.record_agent_health(agent.server_id, permission_level, service_checks)
+
+    def record_agent_health(self, server_id, permission_level=None, service_checks=None):
+        from app.services import agent_health_service
+        try:
+            server = Server.query.get(server_id)
+            if server:
+                agent_health_service.record_level(server, permission_level)
+                agent_health_service.record_service_checks(server, service_checks)
+                db.session.commit()
+        except Exception:
+            logger.exception("Error recording agent health")
+            db.session.rollback()
 
     def verify_agent_auth(
         self,
