@@ -482,6 +482,7 @@ export default function Jobs() {
                     />
                 ) : scheduledView ? (
                     <DataTable
+                        stackOnMobile
                         columns={scheduledColumns}
                         data={scheduled}
                         keyField="id"
@@ -531,6 +532,7 @@ export default function Jobs() {
                             />
                         ) : (
                         <DataTable
+                            stackOnMobile
                             columns={chrome.columns}
                             data={jobs}
                             keyField="id"

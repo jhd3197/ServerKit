@@ -510,6 +510,60 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     border-radius: $radius-card;
 }
 
+// Opt-in (DataTable `stackOnMobile`): phones get one card per row instead of a
+// sideways-scrolling grid. Header is hidden; each cell is "label  value", the
+// first column is the title and an unlabelled cell (actions) sits on the right.
+@media (max-width: $breakpoint-sm - 1px) {
+    .sk-dtable-wrap--stack {
+        overflow-x: visible;
+
+        .sk-dtable,
+        .sk-dtable tbody { display: block; }
+        .sk-dtable thead { display: none; }
+
+        .sk-dtable tbody tr {
+            display: flex;
+            flex-direction: column;
+            gap: $space-1;
+            padding: $space-3 $space-4;
+            border-bottom: 1px solid var(--border-soft);
+        }
+        .sk-dtable tbody tr:last-child { border-bottom: none; }
+
+        .sk-dtable tbody td,
+        .sk-dtable tbody td:first-child,
+        .sk-dtable tbody td:last-child {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: $space-3;
+            height: auto;
+            min-width: 0;
+            padding: 0;
+            border: 0;
+            text-align: right;
+        }
+        .sk-dtable tbody td[data-label]::before {
+            content: attr(data-label);
+            flex-shrink: 0;
+            font-size: $text-xs;
+            color: var(--text-faint);
+        }
+        .sk-dtable tbody td:not([data-label]) { justify-content: flex-end; }
+        .sk-dtable tbody td[data-primary] { justify-content: flex-start; text-align: left; font-size: $text-md; }
+        .sk-dtable tbody td[data-primary]::before { content: none; }
+        .sk-dtable tbody td:empty { display: none; }
+        // A cell that is only a "open" chevron rides the card's top-right corner
+        // instead of costing a row of its own.
+        .sk-dtable tbody tr { position: relative; }
+        .sk-dtable tbody td:has(> svg:only-child) {
+            position: absolute;
+            inset-block-start: $space-3;
+            inset-inline-end: $space-4;
+        }
+    }
+}
+
 // A table that is one section of a titled card/panel runs flush inside it:
 // two frames a pixel apart is the seam this rule removes. A page-specific
 // panel that frames its own header + table opts in with --flush.

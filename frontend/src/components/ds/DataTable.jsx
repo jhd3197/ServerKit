@@ -105,6 +105,9 @@ export function DataTable({
     className,
     rowClassName,
     tableClassName,
+    // Below 640px each row becomes a card: first column is the title, the rest
+    // are label/value pairs (CSS-only, see .sk-dtable-wrap--stack).
+    stackOnMobile = false,
 }) {
     const { t } = useTranslation();
     const internal = useTableSort({
@@ -365,10 +368,14 @@ export function DataTable({
                         />
                     </TableCell>
                 )}
-                {visibleColumns.map((column) => (
+                {visibleColumns.map((column, columnIndex) => (
                     <TableCell
                         key={`${key}-${column.key}`}
                         className={column.cellClassName}
+                        data-label={stackOnMobile && typeof column.header === 'string'
+                            ? translateLabel(t, column, 'header') || undefined
+                            : undefined}
+                        data-primary={stackOnMobile && columnIndex === 0 ? '' : undefined}
                     >
                         {column.render
                             ? column.render(row)
@@ -380,7 +387,7 @@ export function DataTable({
     };
 
     return (
-        <div className={cn('sk-dtable-wrap', className)} ref={wrapRef}>
+        <div className={cn('sk-dtable-wrap', stackOnMobile && 'sk-dtable-wrap--stack', className)} ref={wrapRef}>
             <Table className={cn('sk-dtable', tableClassName)}>
                 <TableHeader>
                     <TableRow>

@@ -533,6 +533,7 @@ export default function Incidents() {
                 />
             ) : (
                 <DataTable
+                    stackOnMobile
                     {...chrome.tableProps}
                     columns={chrome.columns}
                     data={shown}
