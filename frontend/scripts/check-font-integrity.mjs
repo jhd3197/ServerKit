@@ -9,6 +9,7 @@ const FRONTEND = join(dirname(fileURLToPath(import.meta.url)), '..');
 const FONT_DIR = join(FRONTEND, 'public', 'fonts');
 const FONT_STYLES = join(FRONTEND, 'src', 'styles', 'base', '_fonts.scss');
 const FONTS = [
+    ['ibm-plex-sans-400.woff2', 400],
     ['ibm-plex-sans-500.woff2', 500],
     ['ibm-plex-sans-600.woff2', 600],
     ['ibm-plex-sans-700.woff2', 700],
@@ -34,4 +35,4 @@ for (const [filename, weight] of FONTS) {
     }
 }
 
-console.log('✓ font integrity: IBM Plex Sans 500/600/700 are valid WOFF2 assets');
+console.log('✓ font integrity: IBM Plex Sans 400/500/600/700 are valid WOFF2 assets');
