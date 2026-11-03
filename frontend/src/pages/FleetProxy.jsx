@@ -400,6 +400,7 @@ const FleetProxy = () => {
 
                     <div className="fleet-proxy__table">
                         <DataTable
+                            stackOnMobile
                             loading={loading}
                             columns={chrome.columns}
                             data={rows}

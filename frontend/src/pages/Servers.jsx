@@ -447,6 +447,7 @@ const Servers = () => {
                 />
             ) : (
                 <DataTable
+                    stackOnMobile
                     columns={chrome.columns}
                     data={filteredServers}
                     keyField="id"
