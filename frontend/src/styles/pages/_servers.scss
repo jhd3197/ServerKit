@@ -2554,3 +2554,37 @@
     flex-direction: column;
     gap: $space-3;
 }
+
+// Header: dot / (i) / star share one centered row beside the title; on narrow
+// screens the title block and actions stay on ONE row (title truncates), tabs below.
+.server-detail-page .sk-topbar {
+    &__titles { align-items: center; }
+    &__meta { display: inline-flex; align-items: center; gap: $space-2; }
+
+    .fav-star {
+        width: 24px; // geometry: matches the InfoTip md footprint
+        height: 24px; // geometry: matches the InfoTip md footprint
+        svg { width: 14px; height: 14px; } // geometry: inline icon
+        opacity: 0.6;
+        &:hover, &.is-on { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+        &__titles { flex: 1 1 0; min-width: 0; flex-wrap: nowrap; }
+        &__title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; overflow-wrap: normal; }
+        &__spacer { display: none; }
+        &__actions { order: 0; width: auto; margin-left: auto; justify-content: flex-end; overflow: visible; flex-wrap: nowrap; }
+    }
+}
+
+.server-detail-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: $space-1 $space-3;
+    margin: 0;
+
+    dt { color: var(--text-faint); }
+    dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+
+    &__id { display: flex; align-items: center; gap: $space-1; code { font-family: $font-mono; } }
+}

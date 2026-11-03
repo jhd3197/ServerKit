@@ -14,6 +14,22 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 // ------------------------------------------------------------
 // Pill — status badge (dot + label)
 // ------------------------------------------------------------
+// StatusDot: the Pill's dot on its own, for headers that want colour without a label.
+.sk-statusdot {
+    display: inline-block;
+    flex: none;
+    width: 8px; // geometry: status dot
+    height: 8px; // geometry: status dot
+    border-radius: 50%;
+
+    &--green { background: var(--green); }
+    &--amber { background: var(--amber); }
+    &--red { background: var(--red); }
+    &--cyan { background: var(--cyan); }
+    &--violet { background: var(--violet); }
+    &--gray { background: var(--text-faint); }
+}
+
 .sk-pill {
     // Badge spec: 20px tall, 4px radius, 12px/500, tinted fill, flat dot.
     display: inline-flex;

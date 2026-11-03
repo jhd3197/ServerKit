@@ -5,6 +5,11 @@ import { statusKind } from '../ds/status.js';
 // Server connection states ride the shared vocabulary.
 export const serverStatusKind = (status) => statusKind(status);
 
+// The backend names an unpaired server "Pending pairing (<short id>)"
+// (api/servers.py _placeholder_name); the id suffix is noise in a heading.
+const PLACEHOLDER_NAME = /^Pending pairing \(.*\)$/;
+export const isPlaceholderServerName = (name) => PLACEHOLDER_NAME.test(name ?? '');
+
 export const PRESET_LABELS = {
     '* * * * *': 'Every minute',
     '*/5 * * * *': 'Every 5 minutes',

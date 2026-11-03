@@ -1,13 +1,12 @@
-import { serverStatusKind } from '../components/serverdetail/serverDetailData';
+import { isPlaceholderServerName } from '../components/serverdetail/serverDetailData';
+import ServerHeaderMeta from '../components/serverdetail/ServerHeaderMeta';
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import { useRecordVisit } from '@/hooks/useRecordVisit';
-import FavoriteStar from '@/components/FavoriteStar';
 import { Button } from '@/components/ui/button';
-import { Pill } from '../components/ds';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Tip } from '@/components/ui/tooltip';
 import { Server, ArrowLeft } from 'lucide-react';
@@ -276,17 +275,9 @@ const ServerDetail = () => {
         <PageLayout
             className="server-detail-page"
             icon={<Server size={18} />}
-            title={server.name}
+            title={isPlaceholderServerName(server.name) ? t('app.serverDetail.pendingPairing', 'Pending pairing') : server.name}
             navLabel={t('app.serverDetail.sections', 'Server sections')}
-            meta={(
-                <>
-                    <FavoriteStar type="server" id={server.id} path={`/servers/${server.id}`} label={server.name} />
-                    <Pill kind={serverStatusKind(server.status)}>{server.status || 'pending'}</Pill>
-                    <span>
-                        {server.hostname || server.ip_address || t('app.serverDetail.noEndpointConfigured', 'No endpoint configured')}
-                    </span>
-                </>
-            )}
+            meta={<ServerHeaderMeta server={server} />}
             tabs={tabs.map((item) => ({
                 id: item.id,
                 label: item.badge ? <>{item.label}<span className="tab-badge">{item.badge}</span></> : item.label,
