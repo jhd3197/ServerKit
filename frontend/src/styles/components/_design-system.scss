@@ -1471,9 +1471,11 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             > *,
             > .sk-topbar__chrome > * { flex-shrink: 1; }
 
-            // A search box is a row of its own; buttons share what is left.
+            // The search box leads its own row and the two icon buttons
+            // (filter, "⋮") sit inline after it: its basis leaves exactly their
+            // room, so they never wrap onto a row of their own.
             > .sk-searchfield,
-            > .sk-topbar__chrome > .sk-searchfield { flex: 1 1 100%; }
+            > .sk-topbar__chrome > .sk-searchfield { flex: 1 1 calc(100% - #{2 * ($control-lg + $space-2)}); min-width: 0; }
 
             :is(button, a, [role='button']) { min-height: $control-lg; }
         }
