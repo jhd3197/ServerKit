@@ -448,6 +448,11 @@ export function DataTable({
                                     onCheckedChange={(checked) => onToggleAll?.(!!checked)}
                                     aria-label={t('app.dataTable.selectAllRows', 'Select all rows')}
                                 />
+                                <span className="sk-dtable__checklabel" aria-hidden="true">
+                                    {selectedKeys?.length
+                                        ? t('app.dataTable.selectedCount', '{{count}} selected', { count: selectedKeys.length })
+                                        : t('app.dataTable.selectAll', 'Select all')}
+                                </span>
                             </TableHead>
                         )}
                         {visibleColumns.map((column, columnIndex) => {

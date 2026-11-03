@@ -504,6 +504,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
 // Desktop has the header row for sorting.
 .sk-dtable__sortbar { display: none; }
+.sk-dtable__checklabel { display: none; }
 
 // ---- card mode: rows become stacked cards under 640px --------------------
 // The markup is unchanged (DataTable `responsive`, on by default), so sorting,
@@ -555,7 +556,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             border-radius: $radius-full;
             background: var(--surface);
 
-            &.sk-dtable__check { display: inline-flex; }
+            &.sk-dtable__check { display: inline-flex; gap: $space-2; width: auto; }
+            .sk-dtable__checklabel { display: inline; font-size: $text-sm; color: var(--text-dim); white-space: nowrap; }
 
             // Header menus are hover affordances; there is no hover on a phone.
             .sk-colmenu-btn { display: none; }

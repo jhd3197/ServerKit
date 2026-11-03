@@ -1698,8 +1698,10 @@
             "defaultOrder": "Default order",
             "loading": "Loading",
             "noRowsMatchTheActiveColumn": "No rows match the active column filters.",
+            "selectAll": "Select all",
             "selectAllRows": "Select all rows",
             "selectRow": "Select row",
+            "selectedCount": "{{count}} selected",
             "sortAscending": "Sorted ascending, switch to descending",
             "sortBy": "Sort by",
             "sortDescending": "Sorted descending, switch to ascending"
