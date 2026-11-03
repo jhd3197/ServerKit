@@ -7,8 +7,8 @@ release line and the `main` branch.
 
 | Version | Supported |
 |---------|-----------|
-| 1.7.x   | ✅ |
-| < 1.7   | ❌ (please upgrade) |
+| 1.11.x  | ✅ |
+| < 1.11  | ❌ (please upgrade) |
 
 The **agent** ships from its own repository, `jhd3197/serverkit-agent`, and is
 versioned independently (`vX.Y.Z` — it used `agent-vX.Y.Z` while it lived in this
