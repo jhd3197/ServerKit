@@ -1,6 +1,7 @@
 import { useCallback, useState, useEffect, useMemo  } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Layers, Plus, Square, Play, RotateCw, GitBranch, Github, FolderOpen, FileArchive, FolderKanban, ArrowDownToLine } from 'lucide-react';
+import { Layers, Plus, Square, Play, RotateCw, GitBranch, FolderOpen, FileArchive, FolderKanban, ArrowDownToLine } from 'lucide-react';
+import { SiGithub as Github } from 'react-icons/si';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { getServiceType, getStatusConfig, formatRelativeTime } from '../utils/serviceTypes';

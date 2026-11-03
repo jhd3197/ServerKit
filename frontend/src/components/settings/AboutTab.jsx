@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import api from '../../services/api';
 import {
-    Github, FileText, HelpCircle, MessageSquare, Bug, Check, Download, CheckCircle,
+    FileText, HelpCircle, MessageSquare, Bug, Check, Download, CheckCircle,
     RefreshCw, ExternalLink, Star, X, AlertTriangle
 } from 'lucide-react';
+import { SiGithub as Github } from 'react-icons/si';
 import ServerKitLogo from '../ServerKitLogo';
 import ErrorState from '../ErrorState';
 import { Button } from '@/components/ui/button';
