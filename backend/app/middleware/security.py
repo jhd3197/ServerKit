@@ -2,6 +2,10 @@
 
 from flask import Flask
 
+# sha256 of the build-injected import map (frontend/vite.config.js, from
+# src/plugins/runtime/vendorManifest.js). test_security_headers recomputes it.
+VENDOR_IMPORTMAP_HASH = 'sha256-lIJXjhqB4GwFLcjRTSjM91Q7vwXxH4Wbcn475CzkW4U='
+
 
 def register_security_headers(app: Flask):
     """Register security headers as an after_request handler."""
@@ -37,9 +41,13 @@ def register_security_headers(app: Flask):
                 "form-action 'self' https://github.com",
             ]
         else:
+            # style-src keeps 'unsafe-inline' because React renders style="" attributes;
+            # script-src has no 'unsafe-inline'/'unsafe-eval': the FOUC snippet is
+            # /theme-init.js; the one inline script (build-injected vendor importmap)
+            # is allowed by hash; blob: is for runtime extensions (plugins/runtime/loader.js).
             csp_directives = [
                 "default-src 'self'",
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+                "script-src 'self' '%s' blob:" % VENDOR_IMPORTMAP_HASH,
                 "style-src 'self' 'unsafe-inline'",
                 "img-src 'self' data: https:",
                 "font-src 'self'",
