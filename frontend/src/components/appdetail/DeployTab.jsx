@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { Card as SharedCard } from '@/components/ui/card';
 import { CardFooter as SharedCardFooter } from '@/components/ui/card';
 import { formatDateTime } from '@/utils/intl';
+import InfoTip from '@/components/InfoTip';
 
 // `embedded` renders this inside the Settings → Git & Deploy section, where the
 // shared RepoConnectForm already owns the connect/disconnect + repo identity. In
@@ -257,7 +258,7 @@ const DeployTab = ({ appId, embedded = false }) => {
             <SharedCard variant="legacy" className="card deploy-timeline-card">
                 <h3>{t('app.deployTab.configCheckpoints', 'Restore points')}</h3>
                 <p className="deploy-timeline-card__hint">
-                    {t('app.deployTab.anImmutableConfigCheckpointEnvKeys', 'An immutable restore point (env keys, domains, image, build method, volumes) is captured before each deployment. Secret values are masked. Open a restore point to diff it against the previous one or restore it.')}
+                    {t('app.deployTab.restorePointsShort', 'Captured before every deployment.')} <InfoTip>{t('app.deployTab.anImmutableConfigCheckpointEnvKeys', 'An immutable restore point (env keys, domains, image, build method, volumes) is captured before each deployment. Secret values are masked. Open a restore point to diff it against the previous one or restore it.')}</InfoTip>
                 </p>
                 <DeploymentTimeline appId={appId} />
             </SharedCard>

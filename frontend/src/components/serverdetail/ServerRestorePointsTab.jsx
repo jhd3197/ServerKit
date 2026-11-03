@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import InfoTip from '@/components/InfoTip';
 import { Info, RefreshCw, Save } from 'lucide-react';
 import api from '../../services/api';
 import Modal from '../Modal';
@@ -123,7 +124,7 @@ export default function ServerRestorePointsTab({ serverId }) {
 
             <div className="server-restore-points__scope-note">
                 <Info size={17} />
-                <p>{t('app.serverRestorePoints.scopeNote', 'Remote restore points currently cover service environment variables stored by ServerKit. Secret values are masked and cannot be recovered. Shared variable groups and host-level cron, firewall, DNS, and Nginx are not included.')}</p>
+                <p>{t('app.serverRestorePoints.scopeNoteShort', 'Covers service environment variables only.')} <InfoTip>{t('app.serverRestorePoints.scopeNote', 'Remote restore points currently cover service environment variables stored by ServerKit. Secret values are masked and cannot be recovered. Shared variable groups and host-level cron, firewall, DNS, and Nginx are not included.')}</InfoTip></p>
             </div>
 
             {appsLoading && (

@@ -1,4 +1,5 @@
 import { useCallback, useState, useEffect, useMemo, useId } from 'react';
+import InfoTip from '@/components/InfoTip';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
@@ -685,7 +686,8 @@ const FirewallTab = () => {
                             )}
                         </InfoList>
                         <p className="sec-hint">
-                            {t('app.firewallTab.stopsAppContainersFromReachingThe', 'Stops service containers from reaching the cloud metadata endpoint, preventing SSRF attacks from stealing instance credentials.')}
+                            {t('app.firewallTab.blocksMetadataAccess', 'Blocks container access to cloud metadata.')}
+                            <InfoTip>{t('app.firewallTab.stopsAppContainersFromReachingThe', 'Stops service containers from reaching the cloud metadata endpoint, preventing SSRF attacks from stealing instance credentials.')}</InfoTip>
                         </p>
                     </SharedCardContent>
                 </SharedCard>

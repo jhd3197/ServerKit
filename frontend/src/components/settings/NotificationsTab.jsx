@@ -1,4 +1,5 @@
 import { useState, useEffect, useId } from 'react';
+import InfoTip from '@/components/InfoTip';
 import { useAuth } from '../../contexts/useAuth.js';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
@@ -380,7 +381,7 @@ const NotificationsTab = () => {
                 ]} />
             <p className="section-description">{activeSection === 'personal'
                 ? t('notifications.personalHint', 'Control notifications for your account. Save preferences to apply your changes.')
-                : t('notifications.deliveryHint', 'Configure shared destinations for server alerts. These settings affect everyone and are independent of personal preferences. Save a channel before sending a test.')}</p>
+                : <>{t('notifications.deliveryHintShort', 'Shared destinations for server alerts.')} <InfoTip>{t('notifications.deliveryHint', 'Configure shared destinations for server alerts. These settings affect everyone and are independent of personal preferences. Save a channel before sending a test.')}</InfoTip></>}</p>
 
             {activeSection === 'personal' && userPrefsUI}
 

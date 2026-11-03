@@ -179,12 +179,12 @@ const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShar
                     <div className="ws-pick-label">{labels.move}</div>
                     <div className="ws-pick">
                         {appsOut.map(a => (
-                            <button type="button" key={a.id} className="ws-pick__item" onClick={() => onMoveApp(a.id, wsId)}>
+                            <Button variant="unstyled" type="button" key={a.id} className="ws-pick__item" onClick={() => onMoveApp(a.id, wsId)}>
                                 <ServiceTile name={a.name} size={28} className="ws-pick__tile" />
                                 <span className="ws-pick__name">{a.name}</span>
                                 <span className="sk-tag">{a.app_type}</span>
                                 <Plus size={16} className="ws-pick__plus" />
-                            </button>
+                            </Button>
                         ))}
                     </div>
                 </>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import InfoTip from '@/components/InfoTip';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
     PanelLeftClose, PanelLeftOpen, X, RefreshCw, Plus, Terminal,
@@ -941,7 +942,12 @@ export default function Databases() {
                                     title={t('app.databases.openATableOrConsole', 'Open a table or console')}
                                     description={statusLoading
                                         ? t('app.databases.checkingYourDatabaseServers', 'Checking your database servers…')
-                                        : t('app.databases.pickATableFromTheLeft', 'Pick a table from the left to browse its rows, or open a SQL console on any database. Right-click a node for more actions.')}
+                                        : (
+                                            <>
+                                                {t('app.databases.pickATable', 'Pick a table or open a console.')}
+                                                <InfoTip>{t('app.databases.pickATableFromTheLeft', 'Pick a table from the left to browse its rows, or open a SQL console on any database. Right-click a node for more actions.')}</InfoTip>
+                                            </>
+                                        )}
                                 />
                             </div>
                         ) : null}

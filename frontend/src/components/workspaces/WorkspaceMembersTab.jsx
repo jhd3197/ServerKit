@@ -174,11 +174,11 @@ const WorkspaceMembersTab = ({ members, allUsers, onAddMember, onRemoveMember, l
                     <div className="ws-pick-label">{t('app.workspaceMembersTab.addAMember', 'Add a member')}</div>
                     <div className="ws-pick">
                         {unassigned.map(u => (
-                            <button type="button" key={u.id} className="ws-pick__item" onClick={() => onAddMember(u.id)}>
+                            <Button variant="unstyled" type="button" key={u.id} className="ws-pick__item" onClick={() => onAddMember(u.id)}>
                                 <ServiceTile name={u.username || u.email || '?'} size={24} className="ws-row__av" />
                                 <span className="ws-pick__name">{u.username || u.email}</span>
                                 <Plus size={14} className="ws-pick__plus" />
-                            </button>
+                            </Button>
                         ))}
                     </div>
                 </>

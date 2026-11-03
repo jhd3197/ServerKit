@@ -15,6 +15,7 @@ import { InfoList, InfoItem } from '../InfoList';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
+import InfoTip from '@/components/InfoTip';
 
 // Short SHA helper for image digests (handles "sha256:abcdef..." or bare hashes)
 function shortDigest(digest) {
@@ -122,7 +123,7 @@ const ImageUpdateSection = ({ app, onChanged }) => {
             <div className="app-panel-body">
                 {!isCompose && (
                     <p className="app-panel-hint">
-                        {t('app.containerOpsPanel.imageUpdatesApplyToDockerCompose', 'Image updates apply to services deployed with Docker Compose. You can still check this service\'s digest, but "Update now" is only available for Docker Compose deployments.')}
+                        {t('app.containerOpsPanel.imageUpdatesApplyToDockerComposeShort', 'Image updates need Docker Compose.')} <InfoTip>{t('app.containerOpsPanel.imageUpdatesApplyToDockerCompose', 'Image updates apply to services deployed with Docker Compose. You can still check this service\'s digest, but "Update now" is only available for Docker Compose deployments.')}</InfoTip>
                     </p>
                 )}
 

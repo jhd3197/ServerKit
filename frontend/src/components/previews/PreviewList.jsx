@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
+import InfoTip from '@/components/InfoTip';
 
 const DEFAULT_TEMPLATE = 'pr-{pr_number}.{app_domain}';
 
@@ -154,7 +155,7 @@ const PreviewList = ({ appId }) => {
                         <div>
                             <h3>{t('app.previewList.prPreviewEnvironments', 'PR preview environments')}</h3>
                             <p className="preview-settings__hint">
-                                {t('app.previewList.genericSupport', 'Generic previews support local Git-backed Dockerfile and container-buildpack apps with nginx. Compose, remote targets and host-command builds are not supported. Configure preview DNS to point at this server.')}
+                                {t('app.previewList.genericSupportShort', 'Git-backed Dockerfile and buildpack apps.')} <InfoTip>{t('app.previewList.genericSupport', 'Generic previews support local Git-backed Dockerfile and container-buildpack apps with nginx. Compose, remote targets and host-command builds are not supported. Configure preview DNS to point at this server.')}</InfoTip>
                             </p>
                         </div>
                     </div>

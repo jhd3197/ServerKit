@@ -8,6 +8,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
 import { formatRelativeShort } from '@/utils/intl';
 import { toastError } from '@/utils/errorMessage';
+import InfoTip from '@/components/InfoTip';
 
 // A/B slot deploys. Shows which slot serves, which one is the
 // standby and for how long it stays warm, with the instant switch back. When
@@ -144,7 +145,7 @@ export default function SlotsCard({ app }) {
             ) : (
                 <div className="slots-card__off">
                     <p className="slots-card__hint">
-                        {t('app.slots.explain', 'A deploy boots the new release beside the live one, checks that it answers, then switches traffic over. A release that fails never replaces the working one, and the previous release stays ready for an instant switch back.')}
+                        {t('app.slots.explainShort', 'Boot, check, then switch traffic over.')} <InfoTip>{t('app.slots.explain', 'A deploy boots the new release beside the live one, checks that it answers, then switches traffic over. A release that fails never replaces the working one, and the previous release stays ready for an instant switch back.')}</InfoTip>
                     </p>
                     {state.eligibility.eligible ? (
                         <p className="slots-card__hint">
