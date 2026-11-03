@@ -447,7 +447,8 @@ const FirewallTab = () => {
 
     return (
         <div className="firewall-tab">
-            {partialError && <ErrorState compact error={partialError} onRetry={loadData} />}
+            {/* No firewall: the empty state below already says so; the error would repeat it. */}
+            {partialError && status?.any_installed && <ErrorState compact error={partialError} onRetry={loadData} />}
             {!status?.any_installed ? (
                 <EmptyState
                     icon={Shield}
