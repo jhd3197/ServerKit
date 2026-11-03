@@ -51,3 +51,21 @@ export function serverHealth(server, now = Date.now()) {
     if (degraded.length) return { kind: 'amber', code: 'degraded', failing, degraded };
     return { kind: 'green', code: 'healthy', failing, degraded };
 }
+
+// What each level lets the panel do on a server. Mirrors
+// backend/app/services/permission_levels.py: monitor is report-only, protect
+// adds the PROTECT_ACTIONS (firewall, fail2ban/CrowdSec, Cloudflare origin
+// lock), full is everything.
+export const CAPABILITIES = ['cpu', 'memory', 'disk', 'services', 'database', 'firewall', 'ban', 'terminal', 'docker', 'files'];
+const HEALTH = ['cpu', 'memory', 'disk', 'services', 'database'];
+const PROTECT = [...HEALTH, 'firewall', 'ban'];
+
+export const LEVEL_CAPABILITIES = {
+    monitor: HEALTH,
+    protect: PROTECT,
+    full: CAPABILITIES,
+};
+
+export function levelAllows(level, capability) {
+    return (LEVEL_CAPABILITIES[normalizeLevel(level) || DEFAULT_LEVEL] || []).includes(capability);
+}

@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useMemo, useId } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight, Folder, Plus, RefreshCw, Server as ServerLucideIcon, X } from 'lucide-react';
+import { Ban, ChevronRight, Container, Cpu, Database, Flame, Folder, HardDrive, Info, Lock, MemoryStick, Plus, RefreshCw, Server as ServerLucideIcon, Terminal, X } from 'lucide-react';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import LevelIllustration from '../components/servers/LevelIllustrations';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
@@ -30,7 +32,7 @@ import { t } from '../i18n/t';
 import { toastError } from '@/utils/errorMessage';
 import { formatDate } from '@/utils/intl';
 import {
-    DEFAULT_LEVEL, PERMISSION_LEVELS, buildInstallCommands, levelKind, serverHealth,
+    DEFAULT_LEVEL, PERMISSION_LEVELS, buildInstallCommands, levelAllows, levelKind, serverHealth,
 } from '@/utils/agentPermissionLevel';
 
 // Radix Select items cannot use '' — stands in for "no group".
@@ -820,6 +822,19 @@ const healthLabel = (code) => {
     }
 };
 
+const CAPABILITY_ICONS = {
+    cpu: [Cpu, 'CPU'],
+    memory: [MemoryStick, 'Memory'],
+    disk: [HardDrive, 'Disk'],
+    services: [ServerLucideIcon, 'Web server and PHP'],
+    database: [Database, 'Database'],
+    firewall: [Flame, 'Firewall'],
+    ban: [Ban, 'Ban (fail2ban, CrowdSec)'],
+    terminal: [Terminal, 'Terminal'],
+    docker: [Container, 'Docker'],
+    files: [Folder, 'Files'],
+};
+
 const LevelPicker = ({ value, onChange }) => {
     const { t } = useTranslation();
     const copy = {
@@ -836,24 +851,59 @@ const LevelPicker = ({ value, onChange }) => {
             cannot: t('app.servers.levelFullCannot', 'No restrictions. Choose this only for servers you want this panel to fully manage.'),
         },
     };
+    const onKeyDown = (e, level) => {
+        if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            onChange(level);
+        }
+    };
     return (
         <div className="form-group">
             <span className="form-label" id="add-server-level-label">{t('app.servers.permissionLevel', 'Permission level')}</span>
             <div className="level-picker" role="radiogroup" aria-labelledby="add-server-level-label">
                 {PERMISSION_LEVELS.map((level) => (
-                    <Button variant="unstyled" type="button" key={level} role="radio"
-                        aria-checked={value === level}
-                        className={`level-picker__opt${value === level ? ' is-active' : ''}`}
-                        onClick={() => onChange(level)}
-                    >
-                        <span className="level-picker__head">{levelLabel(level)}</span>
-                        <span className="level-picker__desc">{copy[level].can}</span>
-                        <span className="level-picker__desc">{copy[level].cannot}</span>
-                    </Button>
+                    <div key={level} className="level-picker__cell">
+                        <div role="radio" tabIndex={0}
+                            aria-checked={value === level}
+                            className={`level-picker__opt${value === level ? ' is-active' : ''}`}
+                            onClick={() => onChange(level)}
+                            onKeyDown={(e) => onKeyDown(e, level)}
+                        >
+                            <span className="level-picker__art"><LevelIllustration level={level} /></span>
+                            <span className="level-picker__head">{levelLabel(level)}</span>
+                            <span className="level-picker__caps">
+                                {Object.entries(CAPABILITY_ICONS).map(([cap, [Icon, label]]) => {
+                                    const allowed = levelAllows(level, cap);
+                                    const text = `${label}: ${allowed ? t('app.servers.capAllowed', 'allowed') : t('app.servers.capBlocked', 'blocked')}`;
+                                    return (
+                                        <span key={cap} role="img" aria-label={text} title={text}
+                                            className={`level-picker__cap${allowed ? '' : ' is-blocked'}`}>
+                                            <Icon size={16} aria-hidden="true" />
+                                        </span>
+                                    );
+                                })}
+                            </span>
+                        </div>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button variant="unstyled" type="button" className="level-picker__info"
+                                    aria-label={t('app.servers.levelInfo', 'What can {{level}} do?', { level: levelLabel(level) })}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <Info size={14} aria-hidden="true" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side="top" align="end" className="level-picker__tip">
+                                <span>{copy[level].can}</span>
+                                <span>{copy[level].cannot}</span>
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
                 ))}
             </div>
-            <span className="form-hint">
-                {t('app.servers.levelEnforcedByAgent', 'The level is enforced by the agent and can only be changed on the server itself, with')}
+            <span className="form-hint level-picker__note">
+                <Lock size={12} aria-hidden="true" />
+                {t('app.servers.levelEnforcedShort', 'Enforced on the server by the agent. Change with')}
                 {' '}<code>{SET_HINT}</code>
             </span>
         </div>
