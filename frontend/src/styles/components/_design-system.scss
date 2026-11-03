@@ -502,6 +502,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__value { display: contents; }
 }
 
+// Desktop has the header row for sorting.
+.sk-dtable__sortbar { display: none; }
+
 // ---- card mode: rows become stacked cards under 640px --------------------
 // The markup is unchanged (DataTable `responsive`, on by default), so sorting,
 // selection, grouping and the keyboard cursor all keep working. Opt out with
@@ -514,10 +517,23 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         border-radius: 0;
     }
 
+    .sk-dtable__sortbar {
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+        margin-bottom: $space-3;
+
+        > [role='combobox'] { flex: 1 1 auto; min-width: 0; height: $control-lg; }
+        > button { flex: 0 0 auto; width: $control-lg; height: $control-lg; }
+    }
+
     .sk-dtable--stack {
         &, thead, tbody { display: block; }
 
-        // Sortable headers become a scrolling chip row above the cards.
+        // Sorting lives in the .sk-dtable__sortbar above; only the select-all
+        // checkbox stays up here, as a chip.
+        thead:not(:has(.sk-dtable__check)) { display: none; }
+
         thead tr {
             display: flex;
             gap: $space-2;
@@ -539,7 +555,6 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             border-radius: $radius-full;
             background: var(--surface);
 
-            &.is-sortable,
             &.sk-dtable__check { display: inline-flex; }
 
             // Header menus are hover affordances; there is no hover on a phone.

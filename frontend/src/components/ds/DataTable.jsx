@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronUp, ChevronDown, ChevronRight, Filter } from 'lucide-react';
+import { ArrowDownNarrowWide, ArrowUpNarrowWide, ChevronUp, ChevronDown, ChevronRight, Filter } from 'lucide-react';
 import {
     Table,
     TableBody,
@@ -9,6 +9,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { applyTableSorts, nextSorts, useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -18,6 +19,8 @@ import { applyFilters, isDecorative, withInferredTypes } from './grid/fields';
 import { useTranslation } from 'react-i18next';
 import { translateLabel } from '../../i18n/labels';
 import { Button as SharedButton } from '@/components/ui/button';
+
+const SORT_NONE = '__none__';
 
 /**
  * Declarative data table built on top of the shadcn/ui Table primitives.
@@ -46,7 +49,7 @@ import { Button as SharedButton } from '@/components/ui/button';
  * The first visible column is the card title, the rest become "label · value"
  * rows using the column header as the label, a header-less trailing column
  * (actions) becomes a footer row of 40px targets, and the sortable headers
- * collapse into a chip row above the cards. Pass `responsive={false}` for
+ * collapse into one sort select + direction toggle above the cards. Pass `responsive={false}` for
  * editor-style grids that must stay tabular on phones.
  *
  * Example:
@@ -398,8 +401,43 @@ export function DataTable({
         );
     };
 
+    // Phones hide the header, so column sort moves to a select + direction toggle.
+    const sortColumns = visibleColumns.filter((column) => sortable && column.sortable && typeof column.header === 'string');
+    const activeSort = sorts[0];
+    const sortBar = responsive && sortColumns.length > 0 && (
+        <div className="sk-dtable__sortbar">
+            <Select
+                value={activeSort?.key ?? SORT_NONE}
+                onValueChange={(key) => setSorts(key === SORT_NONE ? [] : [{ key, direction: activeSort?.direction ?? 'asc' }])}
+            >
+                <SelectTrigger aria-label={t('app.dataTable.sortBy', 'Sort by')}>
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value={SORT_NONE}>{t('app.dataTable.defaultOrder', 'Default order')}</SelectItem>
+                    {sortColumns.map((column) => (
+                        <SelectItem key={column.key} value={column.key}>{translateLabel(t, column, 'header')}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+            <SharedButton
+                type="button"
+                variant="outline"
+                size="icon"
+                disabled={!activeSort}
+                aria-label={activeSort?.direction === 'desc'
+                    ? t('app.dataTable.sortDescending', 'Sorted descending, switch to ascending')
+                    : t('app.dataTable.sortAscending', 'Sorted ascending, switch to descending')}
+                onClick={() => setSorts([{ key: activeSort.key, direction: activeSort.direction === 'asc' ? 'desc' : 'asc' }])}
+            >
+                {activeSort?.direction === 'desc' ? <ArrowDownNarrowWide size={16} /> : <ArrowUpNarrowWide size={16} />}
+            </SharedButton>
+        </div>
+    );
+
     return (
         <div className={cn('sk-dtable-wrap', className)} ref={wrapRef}>
+            {sortBar}
             <Table className={cn('sk-dtable', responsive && 'sk-dtable--stack', tableClassName)}>
                 <TableHeader>
                     <TableRow>

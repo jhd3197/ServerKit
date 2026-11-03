@@ -1695,10 +1695,14 @@
         },
         "dataTable": {
             "clickToSortShiftClickTo": "Click to sort · Shift+click to add a sort level",
+            "defaultOrder": "Default order",
             "loading": "Loading",
             "noRowsMatchTheActiveColumn": "No rows match the active column filters.",
             "selectAllRows": "Select all rows",
-            "selectRow": "Select row"
+            "selectRow": "Select row",
+            "sortAscending": "Sorted ascending, switch to descending",
+            "sortBy": "Sort by",
+            "sortDescending": "Sorted descending, switch to ascending"
         },
         "dataTableFooter": {
             "nextPage": "Next page",
