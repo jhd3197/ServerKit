@@ -129,3 +129,8 @@ def test_csp_importmap_hash_matches_vendor_manifest():
     assert VENDOR_IMPORTMAP_HASH == 'sha256-' + digest
     for path in ALL_CSP_CONFIGS:
         assert VENDOR_IMPORTMAP_HASH in path.read_text(encoding='utf-8')
+
+
+def test_managed_app_nginx_template_has_no_unsafe_eval():
+    from app.services.nginx import templates
+    assert 'unsafe-eval' not in Path(templates.__file__).read_text(encoding='utf-8')
