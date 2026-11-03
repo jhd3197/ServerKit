@@ -13,7 +13,6 @@ import {
     Plug,
     PlugZap,
     ServerCog,
-    ShieldAlert,
     ShieldCheck,
     ShieldQuestion,
     Sparkles,
@@ -28,6 +27,7 @@ import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import SignatureBadge from '@/components/marketplace/SignatureBadge';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
@@ -145,34 +145,6 @@ const TrustBadge = ({ entry }) => {
         return <Badge variant="warning">{t('app.marketplace.unreviewed', 'Unreviewed')}</Badge>;
     }
     return null;
-};
-
-// Release-signature badge. Shown on the registry detail modal next
-// to TrustBadge: 'signed · verified' means the index pins an ed25519 signature
-// whose publisher key this panel trusts (verified cryptographically at
-// install); unsigned entries get the honest unsigned treatment.
-const SignatureBadge = ({ entry }) => {
-    const { t } = useTranslation();
-    if (entry.source !== 'registry') return null;
-    if (entry.signed && entry.publisherTrusted) {
-        return (
-            <Badge variant="success" title={t('app.marketplace.releaseZipIsSignedThePanel', 'Release zip is signed; the panel verifies the ed25519 signature at install')}>
-                <ShieldCheck aria-hidden="true" /> {t('app.marketplace.signed', 'Signed')}
-            </Badge>
-        );
-    }
-    if (entry.signed) {
-        return (
-            <Badge variant="warning" title={t('app.marketplace.signedWithPublisherKeyWhichThis', 'Signed with publisher key \'{{publisherKeyId}}\', which this panel does not pin', { publisherKeyId: entry.publisherKeyId })}>
-                <ShieldAlert aria-hidden="true" /> {t('app.marketplace.unknownSigner', 'Unknown signer')}
-            </Badge>
-        );
-    }
-    return (
-        <Badge variant="outline" title={t('app.marketplace.thisReleaseCarriesNoPublisherSignature', 'This release carries no publisher signature')}>
-            {t('app.marketplace.unsigned', 'Unsigned')}
-        </Badge>
-    );
 };
 
 const getLocalCatalogEntry = (builtin) => {
@@ -907,7 +879,12 @@ const ExtensionDetailModal = ({ entry, installing, statusVariant, onClose, onIns
                                 <Badge variant="secondary" className="extension-firstparty">{t('app.marketplace.byServerkit2', 'by ServerKit')}</Badge>
                             )}
                             <TrustBadge entry={entry} />
-                            <SignatureBadge entry={entry} />
+                            {entry.source === 'registry' && (
+                                <SignatureBadge signature={{
+                                    status: entry.signed ? (entry.publisherTrusted ? 'verified' : 'untrusted_key') : 'unsigned',
+                                    key_id: entry.publisherKeyId,
+                                }} />
+                            )}
                             <Badge variant={sourceBadgeVariant(entry.source)}>{entry.sourceLabel}</Badge>
                             <Badge variant="outline">{titleCase(category)}</Badge>
                         </div>
