@@ -4620,7 +4620,6 @@
             "payloadMustBeValidJson": "পেলোড অবশ্যই বৈধ JSON হতে হবে",
             "permanentlyDeleteThisMessage": "এই বার্তাটি স্থায়ীভাবে মুছবেন?",
             "priority": "অগ্রাধিকার",
-            "queue": "সারি",
             "queueBus": "সারিবদ্ধ বাস",
             "readOnly": "শুধুমাত্র পঠনযোগ্য",
             "requeue": "Requeue",
@@ -5283,14 +5282,12 @@
             "alerts": "সতর্কতা",
             "areYouSureYouWantTo": "আপনি কি নিশ্চিত আপনি এই সার্ভার সরাতে চান? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না৷",
             "backToServers": "সার্ভারে ফিরে যান",
-            "copyServerId": "সার্ভার আইডি কপি করুন",
             "cron": "ক্রোন",
             "errorLoadingServer": "সার্ভার লোড করার সময় ত্রুটি৷",
             "failedToAcknowledgeAlert": "সতর্কতা স্বীকার করতে ব্যর্থ",
             "failedToPingServer": "সার্ভার পিং করতে ব্যর্থ হয়েছে৷",
             "failedToRemoveServer": "সার্ভার সরাতে ব্যর্থ হয়েছে৷",
             "failedToResolveAlert": "সতর্কতা সমাধান করতে ব্যর্থ হয়েছে৷",
-            "lastSeen": "শেষ দেখা",
             "limitedMode": "সীমিত মোড",
             "loadingServerDetails": "সার্ভারের বিবরণ লোড হচ্ছে",
             "metrics": "মেট্রিক্স",
@@ -7832,8 +7829,7 @@
             "workspaceArchived": "ওয়ার্কস্পেস আর্কাইভ করা হয়েছে",
             "workspaceDeleted": "ওয়ার্কস্পেস মুছে ফেলা হয়েছে",
             "workspaceNotFound": "ওয়ার্কস্পেস পাওয়া যায়নি",
-            "workspaceRestored": "ওয়ার্কস্পেস পুনরুদ্ধার করা হয়েছে",
-            "workspaces": "কর্মক্ষেত্র"
+            "workspaceRestored": "ওয়ার্কস্পেস পুনরুদ্ধার করা হয়েছে"
         },
         "workspaceMembersTab": {
             "addAMember": "একজন সদস্য যোগ করুন",

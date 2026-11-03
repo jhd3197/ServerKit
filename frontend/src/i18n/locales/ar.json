@@ -4620,7 +4620,6 @@
             "payloadMustBeValidJson": "يجب أن تكون الحمولة صالحة JSON",
             "permanentlyDeleteThisMessage": "هل تريد حذف هذه الرسالة نهائيًا؟",
             "priority": "أولوية",
-            "queue": "طابور",
             "queueBus": "حافلة الانتظار",
             "readOnly": "للقراءة فقط",
             "requeue": "قائمة الانتظار",
@@ -5283,14 +5282,12 @@
             "alerts": "التنبيهات",
             "areYouSureYouWantTo": "هل أنت متأكد أنك تريد إزالة هذا الخادم؟ لا يمكن التراجع عن هذا الإجراء.",
             "backToServers": "العودة إلى الخوادم",
-            "copyServerId": "انسخ معرف الخادم",
             "cron": "كرون",
             "errorLoadingServer": "حدث خطأ أثناء تحميل الخادم",
             "failedToAcknowledgeAlert": "فشل في الاعتراف بالتنبيه",
             "failedToPingServer": "فشل في تنفيذ الأمر ping على الخادم",
             "failedToRemoveServer": "فشل في إزالة الخادم",
             "failedToResolveAlert": "فشل في حل التنبيه",
-            "lastSeen": "شوهد آخر مرة",
             "limitedMode": "وضع محدود",
             "loadingServerDetails": "جارٍ تحميل تفاصيل الخادم",
             "metrics": "المقاييس",
@@ -7832,8 +7829,7 @@
             "workspaceArchived": "تمت أرشفة مساحة العمل",
             "workspaceDeleted": "تم حذف مساحة العمل",
             "workspaceNotFound": "لم يتم العثور على مساحة العمل",
-            "workspaceRestored": "تمت استعادة مساحة العمل",
-            "workspaces": "مساحات العمل"
+            "workspaceRestored": "تمت استعادة مساحة العمل"
         },
         "workspaceMembersTab": {
             "addAMember": "إضافة عضو",

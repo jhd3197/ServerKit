@@ -4620,7 +4620,6 @@
             "payloadMustBeValidJson": "负载必须是有效的 JSON",
             "permanentlyDeleteThisMessage": "永久删除此消息？",
             "priority": "优先级",
-            "queue": "队列",
             "queueBus": "队列总线",
             "readOnly": "只读",
             "requeue": "重新排队",
@@ -5283,14 +5282,12 @@
             "alerts": "警报",
             "areYouSureYouWantTo": "您确定要删除该服务器吗？此操作无法撤消。",
             "backToServers": "返回服务器",
-            "copyServerId": "复制服务器 ID",
             "cron": "克朗",
             "errorLoadingServer": "加载服务器时出错",
             "failedToAcknowledgeAlert": "未能确认警报",
             "failedToPingServer": "无法 ping 服务器",
             "failedToRemoveServer": "删除服务器失败",
             "failedToResolveAlert": "无法解决警报",
-            "lastSeen": "最后一次见到",
             "limitedMode": "限定模式",
             "loadingServerDetails": "正在加载服务器详细信息",
             "metrics": "指标",
@@ -7832,8 +7829,7 @@
             "workspaceArchived": "工作区已存档",
             "workspaceDeleted": "工作区已删除",
             "workspaceNotFound": "找不到工作区",
-            "workspaceRestored": "工作区已恢复",
-            "workspaces": "工作区"
+            "workspaceRestored": "工作区已恢复"
         },
         "workspaceMembersTab": {
             "addAMember": "添加会员",

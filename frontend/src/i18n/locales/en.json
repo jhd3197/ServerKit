@@ -348,7 +348,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Upgrade triggered for all online agents",
             "versionDistribution": "Version distribution",
             "versions": "Versions",
-            "viewDetails": "View details"
+            "viewDetails": "View details",
+            "views": "Fleet views"
         },
         "ai": {
             "assistant": "Assistant"
@@ -463,7 +464,8 @@
             "routesApis": "Routes and APIs",
             "runtimeTopology": "Runtime topology",
             "showLegend": "Show legend",
-            "sidebarNavigationPagesBackendApiBlueprints": "Sidebar navigation → pages → backend API blueprints they call."
+            "sidebarNavigationPagesBackendApiBlueprints": "Sidebar navigation → pages → backend API blueprints they call.",
+            "views": "Views"
         },
         "appWafPanel": {
             "anomalyThreshold": "Anomaly threshold",
@@ -895,7 +897,8 @@
             "selectSize": "Select size",
             "serverDestroyed": "Server deleted",
             "serverName": "Server name",
-            "serverProvisioningInitiated": "Server provisioning initiated"
+            "serverProvisioningInitiated": "Server provisioning initiated",
+            "views": "Cloud views"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "A CNAME for this hostname will be created in Cloudflare DNS, pointing at the tunnel.",
@@ -2676,6 +2679,7 @@
             "userOn": "User turned on",
             "username2": "Username *",
             "users": "Users",
+            "views": "FTP views",
             "vsftpdRecommended": "vsftpd (recommended)",
             "writePermission": "Write permission",
             "yourServerIpOrDomain": "Your server IP or domain"
@@ -4707,7 +4711,6 @@
             "payloadMustBeValidJson": "Payload must be valid JSON, like {\"key\": \"value\"}.",
             "permanentlyDeleteThisMessage": "Permanently delete this message?",
             "priority": "Priority",
-            "queue": "Queue",
             "queueBus": "Queue bus",
             "readOnly": "Read-only",
             "requeue": "Requeue",
@@ -5384,14 +5387,12 @@
             "alerts": "Alerts",
             "areYouSureYouWantTo": "Remove this server? This can't be undone.",
             "backToServers": "Back to servers",
-            "copyServerId": "Copy server ID",
             "cron": "Cron",
             "errorLoadingServer": "Couldn't load the server.",
             "failedToAcknowledgeAlert": "Couldn't acknowledge the alert.",
             "failedToPingServer": "Couldn't ping the server.",
             "failedToRemoveServer": "Couldn't remove the server.",
             "failedToResolveAlert": "Couldn't resolve the alert.",
-            "lastSeen": "last seen",
             "limitedMode": "Limited mode",
             "loadingServerDetails": "Loading server details",
             "metrics": "Metrics",
@@ -5402,6 +5403,7 @@
             "remoteAccess": "Remote access",
             "removeServer": "Remove server",
             "restorePoints": "Restore points",
+            "sections": "Server sections",
             "serverDidNotRespond": "Server did not respond",
             "serverNotFound": "Server not found",
             "serverRemovedSuccessfully": "Server removed",
@@ -5658,7 +5660,8 @@
             "templates": "Templates",
             "theLibraryIsEmpty": "The library is empty",
             "updated": "Updated",
-            "useTemplate": "Use template"
+            "useTemplate": "Use template",
+            "views": "Template views"
         },
         "servers": {
             "1Hour": "1 hour",
@@ -5779,6 +5782,7 @@
             "restarting": "Restarting…",
             "rollback": "Rollback",
             "rolledBackToVersion": "Rolled back to version {{version}}",
+            "sections": "Service sections",
             "serviceNotFound": "Service not found",
             "serviceRestarted": "Service restarted",
             "serviceStarted": "Service started",
@@ -6655,6 +6659,7 @@
             "theseMonitorsAreAlreadyRunningAnd": "These monitors are already running and are not on any status page yet. Adding one publishes it here, and it keeps the history it has already collected.",
             "thisRemovesTheSelectedRecordAnd": "This removes the selected record and related status data.",
             "timeout": "Timeout",
+            "views": "Status page views",
             "visibility": "Visibility"
         },
         "statusbar": {
@@ -8084,6 +8089,7 @@
             "notSharedWithAnyoneYet": "Not shared with anyone yet.",
             "revoke": "Revoke",
             "roleForNewGrants": "Role for new grants",
+            "sections": "Workspace sections",
             "serverMovedIn": "Server moved in",
             "serverRemoved": "Server removed",
             "sharing": "Sharing: {{name}}",
@@ -8093,8 +8099,7 @@
             "workspaceArchived": "Workspace archived",
             "workspaceDeleted": "Workspace deleted",
             "workspaceNotFound": "Workspace not found",
-            "workspaceRestored": "Workspace restored",
-            "workspaces": "Workspaces"
+            "workspaceRestored": "Workspace restored"
         },
         "workspaceMembersTab": {
             "addAMember": "Add a member",

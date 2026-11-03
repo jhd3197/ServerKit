@@ -4620,7 +4620,6 @@
             "payloadMustBeValidJson": "Muatan harus valid JSON",
             "permanentlyDeleteThisMessage": "Hapus pesan ini secara permanen?",
             "priority": "Prioritas",
-            "queue": "Antre",
             "queueBus": "Bus Antrian",
             "readOnly": "Hanya baca",
             "requeue": "Antrean",
@@ -5283,14 +5282,12 @@
             "alerts": "Peringatan",
             "areYouSureYouWantTo": "Apakah Anda yakin ingin menghapus server ini? Tindakan ini tidak dapat dibatalkan.",
             "backToServers": "Kembali ke Server",
-            "copyServerId": "Salin ID server",
             "cron": "Kron",
             "errorLoadingServer": "Kesalahan Memuat Server",
             "failedToAcknowledgeAlert": "Gagal mengakui peringatan",
             "failedToPingServer": "Gagal melakukan ping ke server",
             "failedToRemoveServer": "Gagal menghapus server",
             "failedToResolveAlert": "Gagal menyelesaikan peringatan",
-            "lastSeen": "terakhir terlihat",
             "limitedMode": "Modus terbatas",
             "loadingServerDetails": "Memuat detail server",
             "metrics": "Metrik",
@@ -7832,8 +7829,7 @@
             "workspaceArchived": "Ruang kerja diarsipkan",
             "workspaceDeleted": "Ruang kerja dihapus",
             "workspaceNotFound": "Ruang kerja tidak ditemukan",
-            "workspaceRestored": "Ruang kerja dipulihkan",
-            "workspaces": "Ruang kerja"
+            "workspaceRestored": "Ruang kerja dipulihkan"
         },
         "workspaceMembersTab": {
             "addAMember": "Tambahkan anggota",

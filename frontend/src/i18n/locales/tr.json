@@ -4620,7 +4620,6 @@
             "payloadMustBeValidJson": "Yük geçerli JSON olmalıdır",
             "permanentlyDeleteThisMessage": "Bu mesaj kalıcı olarak silinsin mi?",
             "priority": "Öncelik",
-            "queue": "Sıra",
             "queueBus": "Kuyruk Otobüsü",
             "readOnly": "Salt okunur",
             "requeue": "Yeniden sıraya al",
@@ -5283,14 +5282,12 @@
             "alerts": "Uyarılar",
             "areYouSureYouWantTo": "Bu sunucuyu kaldırmak istediğinizden emin misiniz? Bu eylem geri alınamaz.",
             "backToServers": "Sunuculara Geri Dön",
-            "copyServerId": "Sunucu kimliğini kopyala",
             "cron": "Cron",
             "errorLoadingServer": "Sunucu Yükleme Hatası",
             "failedToAcknowledgeAlert": "Uyarı onaylanamadı",
             "failedToPingServer": "Sunucuya ping işlemi yapılamadı",
             "failedToRemoveServer": "Sunucu kaldırılamadı",
             "failedToResolveAlert": "Uyarı çözülemedi",
-            "lastSeen": "son görülme",
             "limitedMode": "Sınırlı mod",
             "loadingServerDetails": "Sunucu ayrıntıları yükleniyor",
             "metrics": "Metrikler",
@@ -7832,8 +7829,7 @@
             "workspaceArchived": "Çalışma alanı arşivlendi",
             "workspaceDeleted": "Çalışma alanı silindi",
             "workspaceNotFound": "Çalışma alanı bulunamadı",
-            "workspaceRestored": "Çalışma alanı geri yüklendi",
-            "workspaces": "Çalışma alanları"
+            "workspaceRestored": "Çalışma alanı geri yüklendi"
         },
         "workspaceMembersTab": {
             "addAMember": "Üye ekle",

@@ -4620,7 +4620,6 @@
             "payloadMustBeValidJson": "Tải trọng phải hợp lệ JSON",
             "permanentlyDeleteThisMessage": "Xóa vĩnh viễn tin nhắn này?",
             "priority": "Sự ưu tiên",
-            "queue": "Hàng đợi",
             "queueBus": "Xe buýt xếp hàng",
             "readOnly": "Chỉ đọc",
             "requeue": "hàng đợi",
@@ -5283,14 +5282,12 @@
             "alerts": "Cảnh báo",
             "areYouSureYouWantTo": "Bạn có chắc chắn muốn xóa máy chủ này không? Không thể hoàn tác hành động này.",
             "backToServers": "Quay lại máy chủ",
-            "copyServerId": "Sao chép ID máy chủ",
             "cron": "Cron",
             "errorLoadingServer": "Lỗi tải máy chủ",
             "failedToAcknowledgeAlert": "Không thể xác nhận cảnh báo",
             "failedToPingServer": "Không ping được máy chủ",
             "failedToRemoveServer": "Không thể xóa máy chủ",
             "failedToResolveAlert": "Không giải quyết được cảnh báo",
-            "lastSeen": "nhìn thấy lần cuối",
             "limitedMode": "Chế độ giới hạn",
             "loadingServerDetails": "Đang tải chi tiết máy chủ",
             "metrics": "Số liệu",
@@ -7832,8 +7829,7 @@
             "workspaceArchived": "Đã lưu trữ không gian làm việc",
             "workspaceDeleted": "Đã xóa không gian làm việc",
             "workspaceNotFound": "Không tìm thấy không gian làm việc",
-            "workspaceRestored": "Đã khôi phục không gian làm việc",
-            "workspaces": "Không gian làm việc"
+            "workspaceRestored": "Đã khôi phục không gian làm việc"
         },
         "workspaceMembersTab": {
             "addAMember": "Thêm thành viên",

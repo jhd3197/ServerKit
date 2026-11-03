@@ -4621,7 +4621,6 @@
             "payloadMustBeValidJson": "El payload debe ser JSON válido",
             "permanentlyDeleteThisMessage": "¿Eliminar permanentemente este mensaje?",
             "priority": "Prioridad",
-            "queue": "Cola",
             "queueBus": "Bus de colas",
             "readOnly": "Solo lectura",
             "requeue": "Reencolar",
@@ -5284,14 +5283,12 @@
             "alerts": "Alertas",
             "areYouSureYouWantTo": "¿Seguro que quieres quitar este servidor? Esta acción no se puede deshacer.",
             "backToServers": "Volver a Servidores",
-            "copyServerId": "Copiar ID del servidor",
             "cron": "Cron",
             "errorLoadingServer": "Error al cargar el servidor",
             "failedToAcknowledgeAlert": "No se pudo confirmar la alerta",
             "failedToPingServer": "No se pudo hacer ping al servidor",
             "failedToRemoveServer": "No se pudo quitar el servidor",
             "failedToResolveAlert": "No se pudo resolver la alerta",
-            "lastSeen": "visto por última vez",
             "limitedMode": "Modo limitado",
             "loadingServerDetails": "Cargando los detalles del servidor",
             "metrics": "Métricas",
@@ -7833,8 +7830,7 @@
             "workspaceArchived": "Espacio de trabajo archivado",
             "workspaceDeleted": "Espacio de trabajo eliminado",
             "workspaceNotFound": "Espacio de trabajo no encontrado",
-            "workspaceRestored": "Espacio de trabajo restaurado",
-            "workspaces": "Espacios de trabajo"
+            "workspaceRestored": "Espacio de trabajo restaurado"
         },
         "workspaceMembersTab": {
             "addAMember": "Añadir un miembro",

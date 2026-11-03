@@ -4620,7 +4620,6 @@
             "payloadMustBeValidJson": "Полезная нагрузка должна быть действительным JSON.",
             "permanentlyDeleteThisMessage": "Удалить это сообщение навсегда?",
             "priority": "Приоритет",
-            "queue": "Очередь",
             "queueBus": "Шина очередей",
             "readOnly": "Только чтение",
             "requeue": "Запросить",
@@ -5283,14 +5282,12 @@
             "alerts": "Оповещения",
             "areYouSureYouWantTo": "Вы уверены, что хотите удалить этот сервер? Это действие невозможно отменить.",
             "backToServers": "Вернуться к Серверам",
-            "copyServerId": "Копировать идентификатор сервера",
             "cron": "Крон",
             "errorLoadingServer": "Ошибка загрузки сервера",
             "failedToAcknowledgeAlert": "Не удалось подтвердить оповещение",
             "failedToPingServer": "Не удалось выполнить пинг сервера",
             "failedToRemoveServer": "Не удалось удалить сервер",
             "failedToResolveAlert": "Не удалось разрешить оповещение",
-            "lastSeen": "последний раз видели",
             "limitedMode": "Ограниченный режим",
             "loadingServerDetails": "Загрузка сведений о сервере",
             "metrics": "Метрики",
@@ -7832,8 +7829,7 @@
             "workspaceArchived": "Рабочая область заархивирована",
             "workspaceDeleted": "Рабочая область удалена.",
             "workspaceNotFound": "Рабочее пространство не найдено",
-            "workspaceRestored": "Рабочая область восстановлена",
-            "workspaces": "Рабочие области"
+            "workspaceRestored": "Рабочая область восстановлена"
         },
         "workspaceMembersTab": {
             "addAMember": "Добавить участника",

@@ -4620,7 +4620,6 @@
             "payloadMustBeValidJson": "เพย์โหลดต้องเป็น JSON ที่ถูกต้อง",
             "permanentlyDeleteThisMessage": "ลบข้อความนี้อย่างถาวรใช่ไหม",
             "priority": "ลำดับความสำคัญ",
-            "queue": "คิว",
             "queueBus": "คิวรถบัส",
             "readOnly": "อ่านอย่างเดียว",
             "requeue": "รอคิว",
@@ -5283,14 +5282,12 @@
             "alerts": "การแจ้งเตือน",
             "areYouSureYouWantTo": "คุณแน่ใจหรือไม่ว่าต้องการลบเซิร์ฟเวอร์นี้ การดำเนินการนี้ไม่สามารถยกเลิกได้",
             "backToServers": "กลับไปที่เซิร์ฟเวอร์",
-            "copyServerId": "คัดลอกรหัสเซิร์ฟเวอร์",
             "cron": "ครอน",
             "errorLoadingServer": "เกิดข้อผิดพลาดในการโหลดเซิร์ฟเวอร์",
             "failedToAcknowledgeAlert": "ไม่สามารถรับทราบการแจ้งเตือนได้",
             "failedToPingServer": "ล้มเหลวในการปิงเซิร์ฟเวอร์",
             "failedToRemoveServer": "ไม่สามารถลบเซิร์ฟเวอร์",
             "failedToResolveAlert": "ไม่สามารถแก้ไขการแจ้งเตือน",
-            "lastSeen": "เห็นครั้งสุดท้าย",
             "limitedMode": "โหมดจำกัด",
             "loadingServerDetails": "กำลังโหลดรายละเอียดเซิร์ฟเวอร์",
             "metrics": "เมตริก",
@@ -7832,8 +7829,7 @@
             "workspaceArchived": "เก็บพื้นที่ทำงานแล้ว",
             "workspaceDeleted": "ลบพื้นที่ทำงานแล้ว",
             "workspaceNotFound": "ไม่พบพื้นที่ทำงาน",
-            "workspaceRestored": "กู้คืนพื้นที่ทำงานแล้ว",
-            "workspaces": "พื้นที่ทำงาน"
+            "workspaceRestored": "กู้คืนพื้นที่ทำงานแล้ว"
         },
         "workspaceMembersTab": {
             "addAMember": "เพิ่มสมาชิก",

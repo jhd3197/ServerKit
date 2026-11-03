@@ -4620,7 +4620,6 @@
             "payloadMustBeValidJson": "페이로드는 유효한 JSON이어야 합니다.",
             "permanentlyDeleteThisMessage": "이 메시지를 영구적으로 삭제하시겠습니까?",
             "priority": "우선순위",
-            "queue": "대기열",
             "queueBus": "대기열 버스",
             "readOnly": "읽기 전용",
             "requeue": "다시 대기열",
@@ -5283,14 +5282,12 @@
             "alerts": "경고",
             "areYouSureYouWantTo": "이 서버를 제거하시겠습니까? 이 작업은 취소할 수 없습니다.",
             "backToServers": "서버로 돌아가기",
-            "copyServerId": "서버 ID 복사",
             "cron": "크론",
             "errorLoadingServer": "서버를 로드하는 중 오류가 발생했습니다.",
             "failedToAcknowledgeAlert": "알림을 확인하지 못했습니다.",
             "failedToPingServer": "서버를 ping하지 못했습니다.",
             "failedToRemoveServer": "서버를 제거하지 못했습니다.",
             "failedToResolveAlert": "경고를 해결하지 못했습니다.",
-            "lastSeen": "마지막으로 본",
             "limitedMode": "제한 모드",
             "loadingServerDetails": "서버 세부정보 로드 중",
             "metrics": "측정항목",
@@ -7832,8 +7829,7 @@
             "workspaceArchived": "작업공간이 보관되었습니다.",
             "workspaceDeleted": "작업공간이 삭제되었습니다.",
             "workspaceNotFound": "작업공간을 찾을 수 없습니다",
-            "workspaceRestored": "작업공간이 복원되었습니다.",
-            "workspaces": "작업공간"
+            "workspaceRestored": "작업공간이 복원되었습니다."
         },
         "workspaceMembersTab": {
             "addAMember": "회원 추가",
