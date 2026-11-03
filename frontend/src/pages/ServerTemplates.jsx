@@ -340,15 +340,6 @@ const ServerTemplates = () => {
     // on a fresh panel Templates is empty; the default follows the data.
     useTopbarActions(() => (
         <>
-            <SegControl
-                aria-label={t('app.serverTemplates.views', 'Template views')}
-                value={activeTab || 'library'}
-                onChange={setActiveTab}
-                options={[
-                    { value: 'library', label: t('app.serverTemplates.library', 'Library') },
-                    { value: 'templates', label: t('app.serverTemplates.templates', 'Templates'), count: templates.length || undefined },
-                ]}
-            />
             {user?.is_admin && (
                 <Button size="sm" onClick={() => setShowCreateModal(true)}>{t('app.serverTemplates.createTemplate', 'Create template')}</Button>
             )}
@@ -566,6 +557,17 @@ const ServerTemplates = () => {
 
     return (
         <div className="sk-tabgroup__inner server-templates-page">
+            <div className="sk-viewswitch">
+                <SegControl
+                    aria-label={t('app.serverTemplates.views', 'Template views')}
+                    value={activeTab || 'library'}
+                    onChange={setActiveTab}
+                    options={[
+                        { value: 'library', label: t('app.serverTemplates.library', 'Library') },
+                        { value: 'templates', label: t('app.serverTemplates.templates', 'Templates'), count: templates.length || undefined },
+                    ]}
+                />
+            </div>
             {topbarChrome}
             <Tabs value={activeTab || 'library'} onValueChange={setActiveTab}>
                 <TabsContent value="templates">

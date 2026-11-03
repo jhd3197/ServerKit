@@ -107,19 +107,6 @@ const AgentFleet = () => {
     // re-registers on the values the node reads so spinner/counts stay in sync.
     useTopbarActions(() => (
         <>
-            <SegControl
-                aria-label={t('app.agentFleet.views', 'Fleet views')}
-                value={activeTab}
-                onChange={setActiveTab}
-                options={[
-                    { value: 'dashboard', icon: <Activity size={16} />, label: t('app.agentFleet.dashboard', 'Dashboard') },
-                    { value: 'versions', icon: <Package size={16} />, label: t('app.agentFleet.versions', 'Versions') },
-                    { value: 'rollouts', icon: <Zap size={16} />, label: t('app.agentFleet.rollouts', 'Rollouts') },
-                    { value: 'queue', icon: <Clock size={16} />, label: t('app.agentFleet.commandQueue', 'Command queue'), count: queuedCommands.length || undefined },
-                    { value: 'discovery', icon: <Search size={16} />, label: t('app.agentFleet.discovery', 'Discovery') },
-                    { value: 'approvals', icon: <Shield size={16} />, label: t('app.agentFleet.approvals', 'Approvals'), count: pendingServers.length || undefined },
-                ]}
-            />
             <Button size="sm" onClick={fetchData} disabled={loading}>
                 <RefreshCw size={18} className={loading ? 'fleet-refresh-spinner' : ''} />
                 {t('common.actions.refresh', 'Refresh')}
@@ -474,6 +461,21 @@ const AgentFleet = () => {
 
     return (
         <div className="sk-tabgroup__inner">
+            <div className="sk-viewswitch">
+                <SegControl
+                    aria-label={t('app.agentFleet.views', 'Fleet views')}
+                    value={activeTab}
+                    onChange={setActiveTab}
+                    options={[
+                        { value: 'dashboard', icon: <Activity size={16} />, label: t('app.agentFleet.dashboard', 'Dashboard') },
+                        { value: 'versions', icon: <Package size={16} />, label: t('app.agentFleet.versions', 'Versions') },
+                        { value: 'rollouts', icon: <Zap size={16} />, label: t('app.agentFleet.rollouts', 'Rollouts') },
+                        { value: 'queue', icon: <Clock size={16} />, label: t('app.agentFleet.commandQueue', 'Command queue'), count: queuedCommands.length || undefined },
+                        { value: 'discovery', icon: <Search size={16} />, label: t('app.agentFleet.discovery', 'Discovery') },
+                        { value: 'approvals', icon: <Shield size={16} />, label: t('app.agentFleet.approvals', 'Approvals'), count: pendingServers.length || undefined },
+                    ]}
+                />
+            </div>
             {loadError && !tabHasData ? (
                 <ErrorState
                     title={t('app.agentFleet.couldntLoadFleetData', "Couldn't load fleet data.")}

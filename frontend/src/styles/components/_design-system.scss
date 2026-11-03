@@ -2037,3 +2037,19 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         }
     }
 }
+
+// In-page view switch for a tab-group child ("Dashboard / Versions / …" on one
+// page): the group's bar owns the tab row, so the page's own sub-views are a
+// SegControl at the top of the body — the same pattern Jobs uses. Scrolls
+// sideways rather than wrapping when the views don't fit a phone.
+.sk-viewswitch {
+    display: flex;
+    margin-bottom: $space-4;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+
+    .sk-seg { flex-shrink: 0; }
+}

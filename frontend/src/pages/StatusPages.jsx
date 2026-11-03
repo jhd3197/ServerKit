@@ -332,18 +332,6 @@ const StatusPages = () => {
     useTopbarActions(() =>
         (
             <>
-                {selectedPage && (
-                    <SegControl
-                        aria-label={t('app.statusPages.views', 'Status page views')}
-                        value={detailTab}
-                        onChange={setDetailTab}
-                        options={[
-                            { value: 'components', label: t('app.statusPages.components', 'Components') },
-                            { value: 'incidents', label: t('app.statusPages.incidents', 'Incidents') },
-                            { value: 'settings', label: t('app.statusPages.page', 'Page') },
-                        ]}
-                    />
-                )}
                 <Button size="sm" variant="outline" onClick={loadPages}>
                     <RefreshCw size={16} />
                     {t('common.actions.refresh', 'Refresh')}
@@ -436,6 +424,18 @@ const StatusPages = () => {
                             </div>
                         </div>
 
+                        <div className="sk-viewswitch">
+                            <SegControl
+                                aria-label={t('app.statusPages.views', 'Status page views')}
+                                value={detailTab}
+                                onChange={setDetailTab}
+                                options={[
+                                    { value: 'components', label: t('app.statusPages.components', 'Components') },
+                                    { value: 'incidents', label: t('app.statusPages.incidents', 'Incidents') },
+                                    { value: 'settings', label: t('app.statusPages.page', 'Page') },
+                                ]}
+                            />
+                        </div>
                         <Tabs value={detailTab} onValueChange={setDetailTab}>
                             <TabsContent value="components">
                                 <div className="status-actions-bar">

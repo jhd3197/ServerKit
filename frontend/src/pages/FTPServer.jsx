@@ -506,19 +506,6 @@ function FTPServer() {
 
     useTopbarActions(() =>
         <>
-        {isInstalled && (
-            <SegControl
-                aria-label={t('app.fTPServer.views', 'FTP views')}
-                value={activeTab}
-                onChange={selectTab}
-                options={[
-                    { value: 'overview', label: t('common.labels.overview', 'Overview') },
-                    { value: 'users', label: t('app.fTPServer.users', 'Users') },
-                    { value: 'connections', label: t('app.fTPServer.connections', 'Connections') },
-                    { value: 'logs', label: t('common.labels.logs', 'Logs') },
-                ]}
-            />
-        )}
         {!isInstalled ? (
             <Button onClick={() => setShowInstallModal(true)}>
                 {t('app.fTPServer.installFtpServer', 'Install FTP server')}
@@ -620,6 +607,19 @@ function FTPServer() {
                         />
                     </KpiBand>
 
+                    <div className="sk-viewswitch">
+                    <SegControl
+                        aria-label={t('app.fTPServer.views', 'FTP views')}
+                        value={activeTab}
+                        onChange={selectTab}
+                        options={[
+                            { value: 'overview', label: t('common.labels.overview', 'Overview') },
+                            { value: 'users', label: t('app.fTPServer.users', 'Users') },
+                            { value: 'connections', label: t('app.fTPServer.connections', 'Connections') },
+                            { value: 'logs', label: t('common.labels.logs', 'Logs') },
+                        ]}
+                    />
+                    </div>
                     <Tabs value={activeTab} onValueChange={selectTab}>
                         <TabsContent value="overview">
                             <div className="overview-tab">

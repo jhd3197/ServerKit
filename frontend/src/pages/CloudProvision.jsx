@@ -58,16 +58,6 @@ const CloudProvision = () => {
     // Publish the admin actions to the shared tab-group top bar.
     useTopbarActions(() => (
         <>
-            <SegControl
-                aria-label={t('app.cloudProvision.views', 'Cloud views')}
-                value={view}
-                onChange={setView}
-                options={[
-                    { value: 'servers', label: t('common.labels.servers', 'Servers') },
-                    { value: 'providers', label: t('app.cloudProvision.providers', 'Providers') },
-                    { value: 'costs', label: t('app.cloudProvision.costs', 'Costs') },
-                ]}
-            />
             {user?.is_admin && (
                 <>
                     <Button size="sm" variant="outline" onClick={() => setShowCreateProvider(true)}>{t('app.cloudProvision.addProvider', 'Add provider')}</Button>
@@ -125,6 +115,18 @@ const CloudProvision = () => {
 
     return (
         <div className="sk-tabgroup__inner cloud-provision-page">
+            <div className="sk-viewswitch">
+                <SegControl
+                    aria-label={t('app.cloudProvision.views', 'Cloud views')}
+                    value={view}
+                    onChange={setView}
+                    options={[
+                        { value: 'servers', label: t('common.labels.servers', 'Servers') },
+                        { value: 'providers', label: t('app.cloudProvision.providers', 'Providers') },
+                        { value: 'costs', label: t('app.cloudProvision.costs', 'Costs') },
+                    ]}
+                />
+            </div>
             <Tabs value={view} onValueChange={setView}>
                 <TabsContent value="servers">
                     <div className="cloud-servers-grid">
