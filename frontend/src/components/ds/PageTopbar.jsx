@@ -77,8 +77,8 @@ function TopbarTabs({ tabs, label }) {
 
     const { containerRef, itemRefs, moreBtnRef, hiddenIndices, hiddenSet } = useOverflowItems({
         count: safeTabs.length,
-        gap: 2,
-        moreWidth: 56,
+        gap: 4,
+        moreWidth: 80,
         getActiveIndex,
         deps: [activeIndex],
     });

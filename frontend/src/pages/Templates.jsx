@@ -16,10 +16,10 @@ import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
 import {
-    SearchField, FilterDrawer, FilterButton, countActiveFilters, Drawer,
+    SearchField, FilterDrawer, countActiveFilters, Drawer,
     DataTableFooter, CatalogCard, CatalogGrid,
 } from '@/components/ds';
-import { useTableChrome, GridViewPicker, GridToolsMenu } from '@/components/ds/grid';
+import { useTableChrome, GridViewPicker, GridToolsMenu, GridFilterButton } from '@/components/ds/grid';
 import ServerPicker from '@/components/ServerPicker';
 import PortField from '@/components/PortField';
 import { LOCAL_SERVER_ID } from '@/utils/serverTarget';
@@ -513,7 +513,7 @@ const Templates = () => {
                 onSearch={setSearchQueryFilter}
                 placeholder={t('app.templates.searchTemplates', 'Search templates…')}
             />
-            <FilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
+            <GridFilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
             <GridToolsMenu {...chrome.toolsProps} onRefresh={() => Promise.all([loadCategories(), loadTemplates()])} />
         </>,
     );
