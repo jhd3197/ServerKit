@@ -1198,7 +1198,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             font-size: $text-sm;
 
             &::placeholder { color: var(--text-faint); }
-            &:focus { outline: none; }
+            &:focus-visible { outline-offset: -2px; }
         }
     }
 

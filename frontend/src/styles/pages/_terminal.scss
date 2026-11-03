@@ -639,7 +639,7 @@ $lk-default:  #646b7a;
         width: 100%;
 
         &::placeholder { color: var(--text-faint); }
-        &:focus { outline: none; }
+        &:focus-visible { outline-offset: -2px; }
     }
 
     .lv-search-field-clear {
