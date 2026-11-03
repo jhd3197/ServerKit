@@ -41,6 +41,14 @@ import { Button as SharedButton } from '@/components/ui/button';
  * Enter triggers onRowClick, x toggles the cursor row's selection. Keys are
  * ignored while typing in a field or while a dialog holds focus.
  *
+ * Responsive: under 640px every row becomes a stacked card (pure CSS on the
+ * same markup, so sorting, selection, grouping and keyboard nav keep working).
+ * The first visible column is the card title, the rest become "label · value"
+ * rows using the column header as the label, a header-less trailing column
+ * (actions) becomes a footer row of 40px targets, and the sortable headers
+ * collapse into a chip row above the cards. Pass `responsive={false}` for
+ * editor-style grids that must stay tabular on phones.
+ *
  * Example:
  *   <DataTable
  *     columns={[
@@ -105,6 +113,7 @@ export function DataTable({
     className,
     rowClassName,
     tableClassName,
+    responsive = true,
 }) {
     const { t } = useTranslation();
     const internal = useTableSort({
@@ -325,6 +334,13 @@ export function DataTable({
         return selectedKeys?.includes(key);
     });
 
+    // Card mode (<640px, see .sk-dtable--stack): the column header is the label.
+    const cellLabel = (column) => (typeof column.header === 'string' ? translateLabel(t, column, 'header') : '');
+    const cellRole = (column, index) => {
+        if (isDecorative(column)) return 'sk-dtable__cell--actions';
+        return index === 0 ? 'sk-dtable__cell--title' : undefined;
+    };
+
     const renderDataRow = (row) => {
         const key = typeof keyField === 'function' ? keyField(row) : row[keyField];
         const computedRowClass = typeof rowClassName === 'function'
@@ -365,14 +381,17 @@ export function DataTable({
                         />
                     </TableCell>
                 )}
-                {visibleColumns.map((column) => (
+                {visibleColumns.map((column, columnIndex) => (
                     <TableCell
                         key={`${key}-${column.key}`}
-                        className={column.cellClassName}
+                        className={cn(column.cellClassName, cellRole(column, columnIndex))}
+                        data-label={cellLabel(column) || undefined}
                     >
-                        {column.render
-                            ? column.render(row)
-                            : row[column.key]}
+                        <div className="sk-dtable__value">
+                            {column.render
+                                ? column.render(row)
+                                : row[column.key]}
+                        </div>
                     </TableCell>
                 ))}
             </TableRow>
@@ -381,7 +400,7 @@ export function DataTable({
 
     return (
         <div className={cn('sk-dtable-wrap', className)} ref={wrapRef}>
-            <Table className={cn('sk-dtable', tableClassName)}>
+            <Table className={cn('sk-dtable', responsive && 'sk-dtable--stack', tableClassName)}>
                 <TableHeader>
                     <TableRow>
                         {selectable && (

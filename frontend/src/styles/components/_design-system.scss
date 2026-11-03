@@ -496,6 +496,131 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         border-radius: $radius-full;
         padding: 1px $space-2;
     }
+
+    // Cell content is wrapped so card mode can lay a label beside it; on
+    // desktop the wrapper must not exist as far as layout is concerned.
+    &__value { display: contents; }
+}
+
+// ---- card mode: rows become stacked cards under 640px --------------------
+// The markup is unchanged (DataTable `responsive`, on by default), so sorting,
+// selection, grouping and the keyboard cursor all keep working. Opt out with
+// `responsive={false}` for editor grids.
+@media (max-width: $breakpoint-sm - 1) {
+    .sk-dtable-wrap:has(.sk-dtable--stack) {
+        overflow: visible;
+        background: none;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .sk-dtable--stack {
+        &, thead, tbody { display: block; }
+
+        // Sortable headers become a scrolling chip row above the cards.
+        thead tr {
+            display: flex;
+            gap: $space-2;
+            margin-bottom: $space-3;
+            border: 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+
+            &::-webkit-scrollbar { display: none; }
+        }
+
+        thead th {
+            display: none;
+            flex: 0 0 auto;
+            align-items: center;
+            height: $control-lg;
+            padding: 0 $space-3 !important;
+            border: 1px solid var(--border-soft);
+            border-radius: $radius-full;
+            background: var(--surface);
+
+            &.is-sortable,
+            &.sk-dtable__check { display: inline-flex; }
+
+            // Header menus are hover affordances; there is no hover on a phone.
+            .sk-colmenu-btn { display: none; }
+        }
+
+        tbody tr {
+            position: relative;
+            display: block;
+            margin-bottom: $space-3;
+            padding-block: $space-1;
+            background: var(--surface);
+            border: 1px solid var(--border-soft);
+            border-radius: $radius-card;
+            overflow: hidden;
+        }
+
+        tbody td {
+            display: block;
+            height: auto;
+            padding: $space-2 $space-4;
+            border-bottom: 0;
+        }
+
+        // label · value rows
+        tbody td[data-label] {
+            display: grid;
+            grid-template-columns: minmax(0, 38%) minmax(0, 1fr);
+            align-items: baseline;
+            column-gap: $space-3;
+
+            &::before {
+                content: attr(data-label);
+                font-size: $text-xs;
+                color: var(--text-faint);
+            }
+        }
+
+        // The title is its own heading, never a label · value pair.
+        tbody td.sk-dtable__cell--title {
+            display: block;
+            padding-block: $space-2;
+            font-weight: $font-weight-semibold;
+
+            &::before { content: none; }
+        }
+
+        // Actions: a footer row of full-size touch targets.
+        tbody td.sk-dtable__cell--actions {
+            display: block;
+            margin-top: $space-1;
+            border-top: 1px solid var(--border-soft);
+
+            .sk-dtable__value {
+                display: flex;
+                flex-wrap: wrap;
+                gap: $space-2;
+            }
+
+            :is(button, a, [role='button']) {
+                min-height: $control-lg;
+                min-width: $control-lg;
+            }
+        }
+
+        tbody td.sk-dtable__check {
+            position: absolute;
+            inset-block-start: $space-1;
+            inset-inline-end: $space-1;
+            width: auto;
+            padding: $space-2 !important;
+        }
+
+        // A lone chevron ("row opens a detail") has no job on a card.
+        tbody td.sk-dtable__cell--actions:has(> .sk-dtable__value > svg:only-child) { display: none; }
+
+        tbody tr:has(.sk-dtable__check) .sk-dtable__cell--title { padding-inline-end: $space-10; }
+
+        tbody tr.sk-dtable__group,
+        tbody tr.sk-dtable__nomatch { padding-block: 0; }
+    }
 }
 
 // THE table frame. Every list table in the panel (Databases studio aside)
@@ -1308,6 +1433,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         }
         &__tabs { order: 3; width: 100%; margin-left: 0; justify-content: flex-start; }
     }
+
 }
 
 // SSL-style pill with day count is just a Pill; provide the spec-card + ssl
