@@ -57,6 +57,12 @@ class PermissionDeniedError(ApplicationError, PermissionError):
     default_message = 'Access denied'
 
 
+class PayloadTooLargeError(ApplicationError):
+    status_code = 413
+    code = 'payload_too_large'
+    default_message = 'Payload too large'
+
+
 class NotFoundError(ApplicationError, LookupError):
     status_code = 404
     code = 'not_found'
