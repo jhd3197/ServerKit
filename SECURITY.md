@@ -142,7 +142,7 @@ silently.
 - **Tokens in `localStorage`.** The SPA keeps its JWT access/refresh tokens in
   `localStorage`, so an XSS bug would expose them. The production CSP now
   forbids inline and `eval` scripts (`script-src 'self'`) to reduce that risk;
-  a migration to `httpOnly` `SameSite` cookies is planned.
+  planned follow-up: move tokens to `httpOnly` `SameSite` cookies with CSRF protection.
 
 ## Extension Trust Model
 
