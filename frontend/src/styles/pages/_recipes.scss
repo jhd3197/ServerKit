@@ -62,9 +62,7 @@
         &:hover { color: var(--text-primary); }
 
         &.is-active {
-            border-color: var(--accent);
-            background: var(--accent-bg);
-            color: var(--accent);
+            @include status-variant(var(--accent), var(--accent-bg), var(--accent));
         }
     }
 
@@ -112,8 +110,7 @@
         height: 34px; // geometry: icon tile
         flex-shrink: 0;
         border-radius: $radius-control;
-        background: var(--accent-bg);
-        color: var(--accent);
+        @include status-variant(var(--accent), var(--accent-bg));
     }
 
     &__id {
