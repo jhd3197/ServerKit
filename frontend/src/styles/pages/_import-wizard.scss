@@ -5,7 +5,6 @@
 .import-wizard {
     max-width: 960px;
     margin: 0 auto;
-    padding: $space-6;
     display: flex;
     flex-direction: column;
     gap: $space-6;
@@ -31,6 +30,13 @@
         padding: 0;
         list-style: none;
         overflow-x: auto;
+
+        // Phones: only the current step keeps its label, so all five fit.
+        @media (max-width: $breakpoint-md) {
+            justify-content: space-between;
+            gap: $space-1;
+            overflow-x: visible;
+        }
     }
 
     &__step {
@@ -62,6 +68,13 @@
             }
         }
 
+        @media (max-width: $breakpoint-md) {
+            gap: $space-1;
+            padding: $space-1 $space-2;
+
+            &:not(.is-active) .import-wizard__step-label { display: none; }
+        }
+
         // Connector between steps
         & + &::before {
             content: '';
@@ -69,6 +82,8 @@
             height: 1px;
             margin-right: $space-2;
             background: $border-default;
+
+            @media (max-width: $breakpoint-md) { display: none; }
         }
     }
 
@@ -93,6 +108,8 @@
         border: 1px solid $border-subtle;
         border-radius: $radius-overlay;
         padding: $space-6;
+
+        @media (max-width: $breakpoint-md) { padding: $space-4; }
     }
 
     &__actions {
