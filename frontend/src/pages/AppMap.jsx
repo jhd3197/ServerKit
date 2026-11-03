@@ -10,7 +10,7 @@ import '@xyflow/react/dist/style.css';
 import {
     Map as MapIcon, Layers, Compass, Network, Info,
 } from 'lucide-react';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tip } from '@/components/ui/tooltip';
 import PageLayout from '../layouts/PageLayout';
 import useTabParam from '../hooks/useTabParam';
 import { useTranslation } from 'react-i18next';
@@ -284,30 +284,48 @@ export default function AppMap() {
     const [showLegend, setShowLegend] = useState(true);
     const view = VIEWS.find(v => v.id === activeView) || VIEWS[0];
 
-    return (
-        <PageLayout className="app-map" icon={<MapIcon size={18} />} title={t('app.appMap.appMap', 'App map')}>
-            <Tabs value={activeView} onValueChange={setActiveView}>
-                <TabsList>
-                    {VIEWS.map(v => (
-                        <TabsTrigger key={v.id} value={v.id}>
-                            <v.icon size={14} />
-                            {v.label}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
-            </Tabs>
+    const viewLabels = {
+        stack: t('app.appMap.requestStack', 'Request stack'),
+        routes: t('app.appMap.routesApis', 'Routes and APIs'),
+        topology: t('app.appMap.runtimeTopology', 'Runtime topology'),
+    };
+    const viewDescriptions = {
+        stack: t('app.appMap.howARequestFlowsFromThe', 'How a request flows from the browser through the frontend, backend, services and database.'),
+        routes: t('app.appMap.sidebarNavigationPagesBackendApiBlueprints', 'Sidebar navigation → pages → backend API blueprints they call.'),
+        topology: t('app.appMap.howThePanelConnectsToServers', 'How the panel connects to servers, agents and services in production.'),
+    };
+    const tabs = VIEWS.map(v => ({
+        id: v.id,
+        label: viewLabels[v.id],
+        icon: <v.icon size={15} />,
+        active: v.id === activeView,
+        onSelect: () => setActiveView(v.id),
+    }));
+    const legendLabel = showLegend ? t('app.appMap.hideLegend', 'Hide legend') : t('app.appMap.showLegend', 'Show legend');
 
-            <div className="app-map__viewmeta">
-                <Info size={14} />
-                <span>{view.description}</span>
-                <SharedButton variant="unstyled"
-                    type="button"
-                    className="app-map__legend-toggle"
-                    onClick={() => setShowLegend(s => !s)}
-                >
-                    {showLegend ? t('app.appMap.hideLegend', 'Hide legend') : t('app.appMap.showLegend', 'Show legend')}
-                </SharedButton>
-            </div>
+    return (
+        <PageLayout
+            className="app-map"
+            icon={<MapIcon size={18} />}
+            title={t('app.appMap.appMap', 'App map')}
+            tabs={tabs}
+            navLabel={t('app.appMap.views', 'Views')}
+            actions={(
+                <Tip content={legendLabel}>
+                        <SharedButton
+                            variant="ghost"
+                            size="icon"
+                            type="button"
+                            aria-label={legendLabel}
+                            aria-pressed={showLegend}
+                            onClick={() => setShowLegend(s => !s)}
+                        >
+                            <Info size={16} />
+                        </SharedButton>
+                </Tip>
+            )}
+        >
+            <p className="app-map__viewmeta">{viewDescriptions[view.id]}</p>
 
             {showLegend && (
                 <div className="app-map__legend">
