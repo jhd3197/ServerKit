@@ -8,7 +8,7 @@ from app.services.backup_service import BackupService
 from app.services.backup_policy_service import BackupPolicyService, BackupPolicyError
 from app.services.storage_provider_service import StorageProviderService
 from app import db, paths
-from app.exceptions import field_required, not_found
+from app.exceptions import DependencyUnavailableError, field_required, not_found
 from app.api._request import json_object
 
 backups_bp = Blueprint('backups', __name__)
@@ -16,6 +16,13 @@ logger = logging.getLogger(__name__)
 
 _STORAGE_UNAVAILABLE = ('Backup storage is not accessible: the panel cannot create or read '
                         'its backup directory. Check its ownership and permissions.')
+
+
+@backups_bp.errorhandler(PermissionError)
+def _backup_dir_unavailable(exc):
+    logger.error('Backup directory is not writable: %s', exc)
+    err = DependencyUnavailableError('Backup directory is not writable', code='backup_dir_unavailable')
+    return jsonify(err.to_dict()), err.status_code
 
 
 # UI-facing metadata for the CORE target types. Extension kinds
