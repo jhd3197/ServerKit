@@ -8,6 +8,7 @@ import LogContent from '../log-viewer/LogContent';
 import EmptyState from '../EmptyState';
 import { ErrorState } from '../ErrorState';
 import Modal from '@/components/Modal';
+import { SheetPanel } from '@/components/ui/sheet';
 import { Drawer, DataTable, DataTableFooter, Pill, SearchField } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
@@ -986,9 +987,12 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
 
 
     return (
-        <>
-        <div className="dx-drawer-backdrop" onClick={onClose} />
-        <aside className="dx-inspector dx-inspector-drawer">
+        <SheetPanel
+            className="dx-inspector dx-inspector-drawer"
+            overlayClassName="dx-drawer-backdrop"
+            label={getContainerName(container)}
+            onClose={onClose}
+        >
             <div className="dx-inspector-header">
                 <div className="dx-inspector-icon">
                     <Box size={18} />
@@ -1151,8 +1155,7 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
                     </>
                 )}
             </div>
-        </aside>
-        </>
+        </SheetPanel>
     );
 };
 

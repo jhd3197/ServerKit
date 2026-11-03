@@ -1,4 +1,5 @@
 import { useCallback, useId, useState, useEffect  } from 'react';
+import Modal from '@/components/Modal';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import {
     Shield,
@@ -822,16 +823,12 @@ const AgentFleet = () => {
 
                 {/* ==================== Diagnostics Modal ==================== */}
                 {diagnostics && (
-                    <div className="fleet-diagnostics-overlay" onClick={() => setDiagnostics(null)}>
-                        <div className="fleet-modal fleet-diagnostics-dialog" onClick={e => e.stopPropagation()}>
-                            <div className="fleet-diagnostics-heading">
-                                <h2 className="fleet-diagnostics-title">
-                                    {t('app.agentFleet.agentDiagnostics', 'Agent diagnostics -')} {diagnostics.server_name}
-                                </h2>
-                                <Button variant="ghost" size="sm" onClick={() => setDiagnostics(null)}>
-                                    <XCircle size={18} />
-                                </Button>
-                            </div>
+                    <Modal
+                        open
+                        onClose={() => setDiagnostics(null)}
+                        title={`${t('app.agentFleet.agentDiagnostics', 'Agent diagnostics -')} ${diagnostics.server_name}`}
+                        size="lg"
+                    >
                             <div className="fleet-diagnostics-body">
                                 <div className="fleet-diagnostics-facts">
                                     <div>
@@ -933,8 +930,7 @@ const AgentFleet = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                    </Modal>
                 )}
             </div>
             )}
