@@ -41,21 +41,21 @@
     > * { flex-shrink: 0; }
 
     &[data-fade-end] {
-        mask-image: linear-gradient(to right, #000 calc(100% - var(--sk-tabscroll-fade)), transparent);
+        mask-image: linear-gradient(to right, black calc(100% - var(--sk-tabscroll-fade)), transparent);
     }
 
     &[data-fade-start] {
-        mask-image: linear-gradient(to right, transparent, #000 var(--sk-tabscroll-fade));
+        mask-image: linear-gradient(to right, transparent, black var(--sk-tabscroll-fade));
     }
 
     &[data-fade-start][data-fade-end] {
-        mask-image: linear-gradient(to right, transparent, #000 var(--sk-tabscroll-fade), #000 calc(100% - var(--sk-tabscroll-fade)), transparent);
+        mask-image: linear-gradient(to right, transparent, black var(--sk-tabscroll-fade), black calc(100% - var(--sk-tabscroll-fade)), transparent);
     }
 
-    &:dir(rtl)[data-fade-end] { mask-image: linear-gradient(to left, #000 calc(100% - var(--sk-tabscroll-fade)), transparent); }
-    &:dir(rtl)[data-fade-start] { mask-image: linear-gradient(to left, transparent, #000 var(--sk-tabscroll-fade)); }
+    &:dir(rtl)[data-fade-end] { mask-image: linear-gradient(to left, black calc(100% - var(--sk-tabscroll-fade)), transparent); }
+    &:dir(rtl)[data-fade-start] { mask-image: linear-gradient(to left, transparent, black var(--sk-tabscroll-fade)); }
     &:dir(rtl)[data-fade-start][data-fade-end] {
-        mask-image: linear-gradient(to left, transparent, #000 var(--sk-tabscroll-fade), #000 calc(100% - var(--sk-tabscroll-fade)), transparent);
+        mask-image: linear-gradient(to left, transparent, black var(--sk-tabscroll-fade), black calc(100% - var(--sk-tabscroll-fade)), transparent);
     }
 }
 
