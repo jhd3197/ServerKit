@@ -64,8 +64,9 @@
     }
 
     &__canvas {
-        flex: 1 1 auto;
-        min-height: 480px;
+        // ReactFlow sizes itself at height:100%, which needs a definite parent
+        // height — a bare min-height collapses it to zero.
+        height: max(360px, calc(100dvh - 22rem));
         border: 1px solid $border-subtle;
         border-radius: $radius-card;
         background: $bg-card;
@@ -76,8 +77,23 @@
             display: none;
         }
 
-        .react-flow__minimap {
-            background: var(--bg-elevated);
+        // Re-skin ReactFlow's light defaults with the panel's theme tokens.
+        .react-flow {
+            --xy-controls-button-background-color: #{$bg-elevated};
+            --xy-controls-button-background-color-hover: #{$bg-hover};
+            --xy-controls-button-color: #{$text-secondary};
+            --xy-controls-button-color-hover: #{$text-primary};
+            --xy-controls-button-border-color: #{$border-subtle};
+            --xy-minimap-background-color: #{$bg-elevated};
+            --xy-minimap-mask-background-color: rgba(0, 0, 0, 0.35);
+            --xy-minimap-node-background-color: #{$border-default};
+            --xy-background-color: transparent;
+        }
+
+        @media (max-width: 639px) {
+            .react-flow__minimap {
+                display: none;
+            }
         }
     }
 
