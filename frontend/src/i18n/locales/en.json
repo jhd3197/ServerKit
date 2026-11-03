@@ -4152,6 +4152,7 @@
         },
         "notifications": {
             "allCategories": "All categories",
+            "allCaughtUp": "All caught up",
             "any": "Any",
             "apps": "Services",
             "critical": "Critical",
@@ -4167,7 +4168,8 @@
             "noUnreadNotifications": "No unread notifications.",
             "notifications": "Notifications",
             "success": "Success",
-            "unread": "Unread"
+            "unread": "Unread",
+            "unreadCount": "{{count}} unread"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, team@example.com",
