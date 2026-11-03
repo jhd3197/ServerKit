@@ -11,23 +11,12 @@ import { formatRelativeTime } from '@/utils/time';
  */
 import { Component, useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
-    Activity,
-    Archive,
     ArrowDown,
     ArrowUp,
-    Boxes,
-    Container,
-    Database,
-    FolderOpen,
-    Globe,
-    ListChecks,
-    Rocket,
-    Server,
-    ShieldCheck,
-    Terminal,
 } from 'lucide-react';
 import { Gauge, Pill, serviceStatusKind, statusKind, alertStatusKind } from '@/components/ds';
 import { getWidgetType } from './registry';
+import { ACTIONS } from './quickActions';
 import { useTranslation } from 'react-i18next';
 import { t } from '../../../i18n/t';
 import { formatTime } from '@/utils/intl';
@@ -752,29 +741,6 @@ function WFeed({ cfg, ctx }) {
 }
 
 /* ----------------------------------------------------------------- actions */
-
-// Every destination is a real route registered in App.jsx.
-const ACTIONS = {
-    servers: ['Manage servers', Server, '/servers'],
-    services: ['Services', Boxes, '/services'],
-    docker: ['Docker containers', Container, '/docker'],
-    terminal: ['Open terminal', Terminal, '/terminal'],
-    deploys: ['Deploy activity', Rocket, '/deployments'],
-    databases: ['Databases', Database, '/databases'],
-    backups: ['Backups', Archive, '/backups'],
-    monitoring: ['Monitoring', Activity, '/monitoring'],
-    domains: ['Domains', Globe, '/domains'],
-    files: ['File manager', FolderOpen, '/files'],
-    security: ['Security', ShieldCheck, '/security'],
-    jobs: ['Jobs', ListChecks, '/monitoring/jobs'],
-};
-
-export const QUICK_ACTION_KEYS = Object.keys(ACTIONS);
-
-// [key, label] pairs for the inspector's shortcut picker. Derived from ACTIONS
-// so the list of shortcuts a user can *choose* can never drift from the list
-// this widget can actually *render* — they did drift once already.
-export const QUICK_ACTION_OPTIONS = Object.entries(ACTIONS).map(([key, [label]]) => [key, label]);
 
 function WActions({ cfg, ctx }) {
     const { t } = useTranslation();
