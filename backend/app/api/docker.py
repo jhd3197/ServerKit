@@ -1,3 +1,5 @@
+import logging
+
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models import User, Application
@@ -6,6 +8,8 @@ from app.middleware.rbac import admin_required
 from app import db, paths
 from app.error_reporting import unexpected_response
 from app.api._request import json_object
+
+logger = logging.getLogger(__name__)
 
 docker_bp = Blueprint('docker', __name__)
 
@@ -505,8 +509,9 @@ def docker_cleanup():
             }
         else:
             results['containers'] = {'removed': 0, 'success': True}
-    except Exception as e:
-        results['containers'] = {'error': str(e)}
+    except Exception:
+        logger.exception('Docker cleanup step failed')
+        results['containers'] = {'error': 'Cleanup step failed; see server log'}
 
     # Remove dangling images
     try:
@@ -515,8 +520,9 @@ def docker_cleanup():
             'success': result['success'],
             'output': result['output'].strip()
         }
-    except Exception as e:
-        results['images'] = {'error': str(e)}
+    except Exception:
+        logger.exception('Docker cleanup step failed')
+        results['images'] = {'error': 'Cleanup step failed; see server log'}
 
     # Remove unused networks
     try:
@@ -525,8 +531,9 @@ def docker_cleanup():
             'success': result['success'],
             'output': result['output'].strip()
         }
-    except Exception as e:
-        results['networks'] = {'error': str(e)}
+    except Exception:
+        logger.exception('Docker cleanup step failed')
+        results['networks'] = {'error': 'Cleanup step failed; see server log'}
 
     # Remove unused volumes (optional)
     if include_volumes:
@@ -536,8 +543,9 @@ def docker_cleanup():
                 'success': result['success'],
                 'output': result['output'].strip()
             }
-        except Exception as e:
-            results['volumes'] = {'error': str(e)}
+        except Exception:
+            logger.exception('Docker cleanup step failed')
+            results['volumes'] = {'error': 'Cleanup step failed; see server log'}
     else:
         results['volumes'] = {'skipped': True, 'message': 'Volume cleanup not requested'}
 
@@ -581,24 +589,27 @@ def cleanup_all_apps():
             try:
                 compose_result = DockerService.compose_down(app.root_path, volumes=True, remove_orphans=True)
                 app_result['steps'].append({'action': 'docker_down', 'success': compose_result.get('success', False)})
-            except Exception as e:
-                app_result['steps'].append({'action': 'docker_down', 'error': str(e)})
+            except Exception:
+                logger.exception('App cleanup step failed')
+                app_result['steps'].append({'action': 'docker_down', 'error': 'Step failed; see server log'})
                 app_result['success'] = False
 
             # Delete folder
             try:
                 shutil.rmtree(app.root_path)
                 app_result['steps'].append({'action': 'delete_folder', 'success': True})
-            except Exception as e:
-                app_result['steps'].append({'action': 'delete_folder', 'error': str(e)})
+            except Exception:
+                logger.exception('App cleanup step failed')
+                app_result['steps'].append({'action': 'delete_folder', 'error': 'Step failed; see server log'})
                 app_result['success'] = False
 
         # Remove from database
         try:
             db.session.delete(app)
             app_result['steps'].append({'action': 'delete_db', 'success': True})
-        except Exception as e:
-            app_result['steps'].append({'action': 'delete_db', 'error': str(e)})
+        except Exception:
+            logger.exception('App cleanup step failed')
+            app_result['steps'].append({'action': 'delete_db', 'error': 'Step failed; see server log'})
             app_result['success'] = False
 
         results.append(app_result)
