@@ -9,6 +9,7 @@ import {
 
 import { Drawer } from '../components/ds';
 import EmptyState from '../components/EmptyState';
+import SectionIntro from '../components/SectionIntro';
 import FormField from '../components/FormField';
 import { runRecipe, useRecipeCatalog } from '../hooks/useRecipeCatalog';
 import { useToast } from '../contexts/useToast.js';
@@ -143,11 +144,14 @@ export default function Recipes() {
     };
 
     return (
-        <div className="recipes-page">
+        <div className="sk-tabgroup__inner recipes-page">
+            <SectionIntro
+                icon={<ChefHat />}
+                info={t('app.recipes.lede', 'Ready-to-go installers that run as real operations: probe, derive, apply, verify. Secrets are asked for mid-run and kept in the vault.')}
+            >
+                {t('app.recipes.headerLine', 'One-click installers')}
+            </SectionIntro>
             <div className="recipes-page__head">
-                <p className="recipes-page__lede">
-                    {t('app.recipes.lede', 'Ready-to-go installers that run as real operations: probe, derive, apply, verify. Secrets are asked for mid-run and kept in the vault.')}
-                </p>
                 <label className="recipes-page__search">
                     <Search size={14} />
                     <input
@@ -165,7 +169,7 @@ export default function Recipes() {
                         <SharedButton variant="unstyled"
                             key={cat}
                             type="button"
-                            className={`sk-pill${category === cat ? ' is-active' : ''}`}
+                            className={`recipes-page__cat${category === cat ? ' is-active' : ''}`}
                             onClick={() => setCategory(cat)}
                         >
                             {cat === 'all' ? t('common.labels.all', 'All') : cat}

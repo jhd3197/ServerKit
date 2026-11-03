@@ -4804,6 +4804,7 @@
             "cpu": "CPU",
             "disk": "Disk",
             "featured": "Featured",
+            "headerLine": "One-click installers",
             "install": "Install",
             "lede": "Ready-to-go installers that run as real operations: probe, derive, apply, verify. Secrets are asked for mid-run and kept in the vault.",
             "loadFailed": "Couldn't load the recipe catalog.",
