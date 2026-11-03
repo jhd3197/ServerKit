@@ -422,7 +422,7 @@ function ImportWizard() {
                             <span className="import-wizard__step-dot">
                                 {i < stepperIndex ? <CheckCircle2 size={14} aria-hidden="true" /> : i + 1}
                             </span>
-                            {label}
+                            <span className="import-wizard__step-label">{label}</span>
                         </li>
                     ))}
                 </ol>
