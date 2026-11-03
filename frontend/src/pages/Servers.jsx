@@ -649,13 +649,11 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
     return (
         <form className="server-setup-form" onSubmit={handleClaim}>
             <div className="server-setup-form__body">
-                <div className="pair-instructions">
-                    <IconStepStrip steps={[
-                        { icon: <Terminal />, label: t('app.servers.stepStartAgent', 'Start agent'), info: t('app.servers.onTheTargetMachineStartThe', 'On the target server, start the agent. It will display a 6-character pair code and a passphrase. Enter both below.') },
-                        { icon: <Hash />, label: t('app.servers.stepReadCode', 'Read code'), info: t('app.servers.theCodeIsShownInThe', 'The code is shown in the terminal output or system tray.') },
-                        { icon: <KeyRound />, label: t('app.servers.stepEnterBoth', 'Enter both') },
-                    ]} />
-                </div>
+                <IconStepStrip steps={[
+                    { icon: <Terminal />, label: t('app.servers.stepStartAgent', 'Start agent'), info: t('app.servers.onTheTargetMachineStartThe', 'On the target server, start the agent. It will display a 6-character pair code and a passphrase. Enter both below.') },
+                    { icon: <Hash />, label: t('app.servers.stepReadCode', 'Read code'), info: t('app.servers.theCodeIsShownInThe', 'The code is shown in the terminal output or system tray.') },
+                    { icon: <KeyRound />, label: t('app.servers.stepEnterBoth', 'Enter both') },
+                ]} />
 
                 <div className="form-group">
                     <label htmlFor={`${fieldId}-code`}>{t('app.servers.pairCode', 'Pair code')}</label>

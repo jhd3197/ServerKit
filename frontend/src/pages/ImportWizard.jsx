@@ -444,7 +444,7 @@ function ImportWizard() {
                                         <span className="tip-chip">{s.format}</span>
                                         <ChevronRight size={16} className="import-wizard__source-chev" aria-hidden="true" />
                                     </Button>
-                                    <InfoTip className="import-wizard__source-tip">{s.description}</InfoTip>
+                                    <InfoTip className="import-wizard__source-tip" title={s.name}>{s.description}</InfoTip>
                                 </div>
                             ))}
                             <div className="import-wizard__source">
@@ -454,7 +454,7 @@ function ImportWizard() {
                                     <span className="tip-chip">{t('app.importWizard.liveSite', 'Live site')}</span>
                                     <ChevronRight size={16} className="import-wizard__source-chev" aria-hidden="true" />
                                 </Link>
-                                <InfoTip className="import-wizard__source-tip">{t('app.importWizard.pullALiveWordpressSiteStraight', 'Pull a live WordPress site straight from its current server. Opens the WordPress import surface.')}</InfoTip>
+                                <InfoTip className="import-wizard__source-tip" title={t('app.importWizard.wordpressOverSsh', 'WordPress over SSH')}>{t('app.importWizard.pullALiveWordpressSiteStraight', 'Pull a live WordPress site straight from its current server. Opens the WordPress import surface.')}</InfoTip>
                             </div>
                         </div>
                     </div>

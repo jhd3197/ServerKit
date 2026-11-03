@@ -18,11 +18,11 @@ const SheetOverlay = React.forwardRef(({ className, ...props }, ref) => (
 ));
 SheetOverlay.displayName = SheetPrimitive.Overlay.displayName;
 
-const SheetContent = React.forwardRef(({ side = 'right', className, children, ...props }, ref) => {
+const SheetContent = React.forwardRef(({ side = 'right', className, overlayClassName, children, ...props }, ref) => {
   const { t } = useTranslation();
   return (
   <SheetPortal>
-    <SheetOverlay />
+    <SheetOverlay className={overlayClassName} />
     <SheetPrimitive.Content
       ref={ref}
       className={cn('ui-sheet-content', `ui-sheet-content--${side}`, className)}

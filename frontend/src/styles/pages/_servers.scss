@@ -179,32 +179,6 @@
     }
 }
 
-// Brief instruction callout shown above the pair-code input
-.pair-instructions {
-    display: flex;
-    gap: $space-3;
-    padding: $space-3 $space-4;
-    background: rgba($accent-primary-raw, 0.07);
-    border: 1px solid rgba($accent-primary-raw, 0.22);
-    border-radius: $radius-control;
-
-    p {
-        margin: 0;
-        font-size: $text-xs;
-        color: $text-secondary;
-        line-height: 1.5;
-
-        code {
-            font-family: $font-mono;
-            font-size: $text-xs;
-            color: $accent-primary;
-            background: rgba($accent-primary-raw, 0.12);
-            padding: 1px $space-tight;
-            border-radius: $radius-badge;
-        }
-    }
-}
-
 .server-setup-form {
     display: flex;
     flex-direction: column;

@@ -9,7 +9,8 @@
 .security-page {
     // ── card chrome (all tabs) ──────────────────────────────
     .tab-content {
-        .card {
+        .card,
+        .section-intro--banner {
             background: var(--surface);
             border: 1px solid var(--border-soft);
         }
@@ -26,6 +27,17 @@
                 font-size: $text-xs;
                 font-weight: $font-weight-semibold;
                 color: var(--text-faint);
+
+                // One line: the subtitle suffix gives way first (ellipsis).
+                white-space: nowrap;
+
+                // Subtitle suffix gives way first: one line, ellipsis.
+                .sec-count {
+                    min-width: 0;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
 
                 &.sec-listtitle--green { color: var(--green); }
                 &.sec-listtitle--red { color: var(--red); }
@@ -66,8 +78,6 @@
         font-weight: $font-weight-medium;
         color: var(--text-faint);
         letter-spacing: 0;
-
-        @include respond-to($breakpoint-sm) { display: block; }
     }
 
     // Severity / state chip (mono uppercase on a semantic wash) —

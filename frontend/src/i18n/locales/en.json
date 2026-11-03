@@ -3332,7 +3332,7 @@
             "change": "Change",
             "checkNow": "Check now",
             "couldntLoadIntegrity": "Couldn't load file integrity status.",
-            "headerLine": "Detect changed config files.",
+            "headerLine": "Detect changed config files",
             "hideChanges": "Hide changes",
             "lastCheck": "Last check {{age}}",
             "nginxConfiguration": "Nginx configuration",

@@ -11,11 +11,9 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useTranslation } from 'react-i18next';
-import { Camera, Eye, GitCompare, ShieldOff } from 'lucide-react';
+import { Camera, Eye, FileCheck, GitCompare, ShieldOff } from 'lucide-react';
 import InfoTip from '@/components/InfoTip';
-import IconStepStrip from '@/components/IconStepStrip';
 import SectionIntro from '@/components/SectionIntro';
-import FileIntegrityIllustration from '@/components/illustrations/FileIntegrityIllustration';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
 
 // Scoped file-integrity monitoring: baseline-and-diff over the paths
@@ -441,23 +439,17 @@ const IntegrityTab = () => {
                 </div>
             )}
 
-            <div className="tip-card-head">
-                <FileIntegrityIllustration />
-                <div className="tip-card-head__text">
-                    <SectionIntro
-                        info={t('app.integrityTab.baselineAndDiffMonitoringOverThe', 'Baseline-and-diff monitoring over the paths ServerKit manages. Baseline a scope, then check it (or let the scheduled sweep do it). Any added, removed or modified files are flagged and admins are notified. Accepting changes re-baselines the scope.')}
-                    >
-                        {t('app.integrityTab.headerLine', 'Detect changed config files.')}
-                    </SectionIntro>
-                    <IconStepStrip
-                        steps={[
-                            { icon: <Camera />, label: t('app.integrityTab.stepBaseline', 'Baseline'), info: t('app.integrityTab.stepBaselineInfo', 'Snapshot the current files of a scope.') },
-                            { icon: <Eye />, label: t('app.integrityTab.stepWatch', 'Watch'), info: t('app.integrityTab.stepWatchInfo', 'Check manually or let the scheduled sweep run.') },
-                            { icon: <GitCompare />, label: t('app.integrityTab.stepDiff', 'Diff'), info: t('app.integrityTab.stepDiffInfo', 'Added, removed or modified files are flagged and admins are notified. Accepting re-baselines.') },
-                        ]}
-                    />
-                </div>
-            </div>
+            <SectionIntro
+                icon={<FileCheck />}
+                info={t('app.integrityTab.baselineAndDiffMonitoringOverThe', 'Baseline-and-diff monitoring over the paths ServerKit manages. Baseline a scope, then check it (or let the scheduled sweep do it). Any added, removed or modified files are flagged and admins are notified. Accepting changes re-baselines the scope.')}
+                steps={[
+                    { icon: <Camera />, label: t('app.integrityTab.stepBaseline', 'Baseline'), info: t('app.integrityTab.stepBaselineInfo', 'Snapshot the current files of a scope.') },
+                    { icon: <Eye />, label: t('app.integrityTab.stepWatch', 'Watch'), info: t('app.integrityTab.stepWatchInfo', 'Check manually or let the scheduled sweep run.') },
+                    { icon: <GitCompare />, label: t('app.integrityTab.stepDiff', 'Diff'), info: t('app.integrityTab.stepDiffInfo', 'Added, removed or modified files are flagged and admins are notified. Accepting re-baselines.') },
+                ]}
+            >
+                {t('app.integrityTab.headerLine', 'Detect changed config files')}
+            </SectionIntro>
 
             {managedScopes.map(renderScopeCard)}
             {appScopes.map(renderScopeCard)}

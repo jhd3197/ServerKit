@@ -16,12 +16,13 @@
     @include flex-between();
     margin-bottom: $space-4;
 
-    // Narrow: title takes the row, trailing chips/actions wrap below.
+    // Narrow: the title shrinks first so a trailing chip stays on its row;
+    // only a wide chip/action cluster wraps below.
     @include respond-to($breakpoint-sm) {
         flex-wrap: wrap;
         gap: $space-2;
 
-        > h3 { flex: 1 1 auto; min-width: 0; }
+        > h3 { flex: 1 1 10rem; min-width: 0; }
     }
 }
 
