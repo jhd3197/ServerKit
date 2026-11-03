@@ -288,9 +288,10 @@ export default function Incidents() {
                 kind: 'alert',
                 key: `fleet-${alert.id}`,
                 alertId: alert.id,
-                title: `${metric} over limit on ${subject}`,
+                // Offline / service-check alerts carry their own message and no threshold.
+                title: alert.detail || `${metric} over limit on ${subject}`,
                 subject,
-                detail: `${metric} ${formatValue(alert.value)} / ${alert.threshold}`,
+                detail: alert.detail || `${metric} ${formatValue(alert.value)} / ${alert.threshold}`,
                 state: alert.status,
                 tone: alertStatusKind(alert.status),
                 impact: alert.severity,

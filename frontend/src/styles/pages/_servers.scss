@@ -2580,3 +2580,46 @@
     flex-direction: column;
     gap: $space-3;
 }
+
+// Permission-level picker in the Add Server drawer
+.level-picker {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $space-2;
+
+    &__opt {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $space-1;
+        padding: $space-3;
+        text-align: start;
+        background: $bg-card;
+        border: 1px solid $border-subtle;
+        border-radius: $radius-control;
+        cursor: pointer;
+        transition: border-color $transition-fast, background $transition-fast;
+
+        &:hover {
+            border-color: $border-active;
+        }
+
+        &.is-active {
+            border-color: var(--accent-dim);
+            background: var(--accent-bg);
+        }
+    }
+
+    &__head {
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+    }
+
+    &__desc {
+        font-size: $text-xs;
+        color: $text-tertiary;
+        line-height: 1.45;
+        white-space: normal;
+    }
+}
