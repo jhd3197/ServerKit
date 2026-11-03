@@ -518,15 +518,6 @@ const Templates = () => {
         </>,
     );
 
-    if (loading) {
-        return (
-            <div className="sk-tabgroup__inner">
-                {topbarChrome}
-                <EmptyState loading loadingVariant="cards" title={t('app.templates.loadingTemplates', 'Loading templates')} />
-            </div>
-        );
-    }
-
     return (
         <div className="sk-tabgroup__inner templates-page">
             {topbarChrome}
@@ -568,7 +559,14 @@ const Templates = () => {
             {loadError && templates.length > 0 && (
                 <ErrorState compact error={loadError} onRetry={loadTemplates} />
             )}
-            {loadError && templates.length === 0 ? (
+            {/* Loading lives in the results area only: the toolbar above (and the
+                search box in the top bar) stay mounted so typing a query never
+                tears them down. Stale cards stay visible, dimmed, while the next
+                request is in flight. */}
+            <div className="templates-page__results" aria-busy={loading} data-busy={loading && templates.length > 0 ? 'true' : undefined}>
+            {loading && templates.length === 0 && !loadError ? (
+                <EmptyState loading loadingVariant="cards" title={t('app.templates.loadingTemplates', 'Loading templates')} />
+            ) : loadError && templates.length === 0 ? (
                 <ErrorState
                     title={t('app.templates.couldntLoadTemplates', "Couldn't load templates.")}
                     error={loadError}
@@ -610,6 +608,7 @@ const Templates = () => {
                     })}
                 </CatalogGrid>
             )}
+            </div>
 
             {/* Under the cards, not above them: `templates` is what the category
                 and search query returned, `sortedTemplates` is what the kind
