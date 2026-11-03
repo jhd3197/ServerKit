@@ -12,8 +12,8 @@ import { Textarea } from '@/components/ui/textarea';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Pill } from '@/components/ds';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { Pill, SegControl } from '@/components/ds';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import CopyField from '../components/CopyField';
 import { useTranslation } from 'react-i18next';
@@ -112,6 +112,7 @@ const StatusPages = () => {
     const [selectedPage, setSelectedPage] = useState(null);
     const [components, setComponents] = useState([]);
     const [incidents, setIncidents] = useState([]);
+    const [detailTab, setDetailTab] = useState('components');
     const [showCreatePage, setShowCreatePage] = useState(false);
     const [showCreateComponent, setShowCreateComponent] = useState(false);
     // Monitors are first-class now (core /api/v1/monitors) — a status page
@@ -331,6 +332,18 @@ const StatusPages = () => {
     useTopbarActions(() =>
         (
             <>
+                {selectedPage && (
+                    <SegControl
+                        aria-label={t('app.statusPages.views', 'Status page views')}
+                        value={detailTab}
+                        onChange={setDetailTab}
+                        options={[
+                            { value: 'components', label: t('app.statusPages.components', 'Components') },
+                            { value: 'incidents', label: t('app.statusPages.incidents', 'Incidents') },
+                            { value: 'settings', label: t('app.statusPages.page', 'Page') },
+                        ]}
+                    />
+                )}
                 <Button size="sm" variant="outline" onClick={loadPages}>
                     <RefreshCw size={16} />
                     {t('common.actions.refresh', 'Refresh')}
@@ -343,7 +356,7 @@ const StatusPages = () => {
                 )}
             </>
         ),
-        [isAdmin]
+        [isAdmin, !!selectedPage, detailTab]
     );
 
     if (loading) return <PageLoader />;
@@ -423,13 +436,7 @@ const StatusPages = () => {
                             </div>
                         </div>
 
-                        <Tabs defaultValue="components">
-                            <TabsList>
-                                <TabsTrigger value="components">{t('app.statusPages.components', 'Components')}</TabsTrigger>
-                                <TabsTrigger value="incidents">{t('app.statusPages.incidents', 'Incidents')}</TabsTrigger>
-                                <TabsTrigger value="settings">{t('app.statusPages.page', 'Page')}</TabsTrigger>
-                            </TabsList>
-
+                        <Tabs value={detailTab} onValueChange={setDetailTab}>
                             <TabsContent value="components">
                                 <div className="status-actions-bar">
                                     {isAdmin && (

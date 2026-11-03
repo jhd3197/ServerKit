@@ -6,7 +6,7 @@ import {
 import useTabParam from '../hooks/useTabParam';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { api } from '../services/api';
-import { DataTable, DataTableFooter, MetricCard, KpiBand, Pill, ListToolbar } from '@/components/ds';
+import { DataTable, DataTableFooter, MetricCard, KpiBand, Pill, ListToolbar, SegControl } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
@@ -23,7 +23,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { InfoList, InfoItem } from '../components/InfoList';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useTranslation } from 'react-i18next';
 import { errorReason, toastError } from '@/utils/errorMessage';
 
@@ -498,8 +498,27 @@ function FTPServer() {
     const isInstalled = status?.any_installed;
     const isRunning = status?.any_running;
 
+    const selectTab = (val) => {
+        setActiveTab(val);
+        if (val === 'connections') loadConnections();
+        if (val === 'logs') loadLogs();
+    };
+
     useTopbarActions(() =>
         <>
+        {isInstalled && (
+            <SegControl
+                aria-label={t('app.fTPServer.views', 'FTP views')}
+                value={activeTab}
+                onChange={selectTab}
+                options={[
+                    { value: 'overview', label: t('common.labels.overview', 'Overview') },
+                    { value: 'users', label: t('app.fTPServer.users', 'Users') },
+                    { value: 'connections', label: t('app.fTPServer.connections', 'Connections') },
+                    { value: 'logs', label: t('common.labels.logs', 'Logs') },
+                ]}
+            />
+        )}
         {!isInstalled ? (
             <Button onClick={() => setShowInstallModal(true)}>
                 {t('app.fTPServer.installFtpServer', 'Install FTP server')}
@@ -541,7 +560,7 @@ function FTPServer() {
             </>
         )}
         </>,
-        [isInstalled, isRunning, actionLoading],
+        [isInstalled, isRunning, actionLoading, activeTab],
     );
 
     if (loading) {
@@ -601,18 +620,7 @@ function FTPServer() {
                         />
                     </KpiBand>
 
-                    <Tabs value={activeTab} onValueChange={(val) => {
-                        setActiveTab(val);
-                        if (val === 'connections') loadConnections();
-                        if (val === 'logs') loadLogs();
-                    }}>
-                        <TabsList>
-                            <TabsTrigger value="overview">{t('common.labels.overview', 'Overview')}</TabsTrigger>
-                            <TabsTrigger value="users">{t('app.fTPServer.users', 'Users')}</TabsTrigger>
-                            <TabsTrigger value="connections">{t('app.fTPServer.connections', 'Connections')}</TabsTrigger>
-                            <TabsTrigger value="logs">{t('common.labels.logs', 'Logs')}</TabsTrigger>
-                        </TabsList>
-
+                    <Tabs value={activeTab} onValueChange={selectTab}>
                         <TabsContent value="overview">
                             <div className="overview-tab">
                                 <div className="config-section">

@@ -1410,6 +1410,10 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         color: var(--text-dim);
         text-decoration: none;
         white-space: nowrap;
+        // Button tabs (<button role="tab">) share the link tabs' flat look.
+        border: 0;
+        background: transparent;
+        cursor: pointer;
         transition: background 0.14s, color 0.14s;
 
         svg { width: 15px; height: 15px; }
@@ -1480,6 +1484,17 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             > .sk-topbar__chrome > .sk-searchfield { flex: 1 1 calc(100% - #{2 * ($control-lg + $space-2)}); min-width: 0; }
 
             :is(button, a, [role='button']) { min-height: $control-lg; }
+
+            // A view switcher (SegControl) is a row of its own that scrolls
+            // sideways rather than clipping or wrapping its segments.
+            > .sk-seg {
+                flex: 1 1 100%;
+                max-width: 100%;
+                overflow-x: auto;
+                scrollbar-width: none;
+                &::-webkit-scrollbar { display: none; }
+                .sk-seg__btn { flex-shrink: 0; }
+            }
         }
     }
 }

@@ -18,6 +18,8 @@ import { useConfirm } from '../hooks/useConfirm';
 import EmptyState from '../components/EmptyState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import { Tip } from '@/components/ui/tooltip';
+import PageLayout from '../layouts/PageLayout';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -454,7 +456,32 @@ const QueueOperations = () => {
     }
 
     return (
-        <div className="queue-page queue-page--ops">
+        <PageLayout
+            fill
+            className="queue-page queue-page--ops"
+            icon={<Layers size={18} />}
+            title={t('app.queueOperations.queueBus', 'Queue bus')}
+            meta={`${activeGroupLabel} · ${activeStatusLabel} · ${filteredQueues.length} visible`}
+            actions={(
+                <>
+                    <Tip content={t('app.queueOperations.group', 'Group')}>
+                        <Button variant="ghost" size="icon" aria-label={t('app.queueOperations.group', 'Group')} onClick={() => setShowGroupModal(true)}>
+                            <Folder size={16} />
+                        </Button>
+                    </Tip>
+                    <Tip content={t('app.queueOperations.queue', 'Queue')}>
+                        <Button variant="ghost" size="icon" aria-label={t('app.queueOperations.queue', 'Queue')} onClick={() => setShowQueueModal(true)}>
+                            <Plus size={16} />
+                        </Button>
+                    </Tip>
+                    <Tip content={t('common.actions.refresh', 'Refresh')}>
+                        <Button variant="ghost" size="icon" aria-label={t('common.actions.refresh', 'Refresh')} onClick={() => { loadData(); loadQueues(selectedGroup); }}>
+                            <RefreshCw size={16} />
+                        </Button>
+                    </Tip>
+                </>
+            )}
+        >
             <div className="queue-ops-workspace">
                 <aside className="queue-fleet-rail">
                     <section className="queue-rail-section queue-rail-section--overview">
@@ -536,25 +563,6 @@ const QueueOperations = () => {
                 </aside>
 
                 <main className="queue-main">
-                    <div className="queue-workbar">
-                        <div className="queue-workbar-title">
-                            <span>{t('app.queueOperations.queueBus', 'Queue bus')}</span>
-                            <h1>{activeGroupLabel}</h1>
-                            <em>{activeStatusLabel} · {filteredQueues.length} visible</em>
-                        </div>
-                        <div className="queue-workbar-actions">
-                            <Button variant="outline" onClick={() => setShowGroupModal(true)}>
-                                <Folder size={16} /> {t('app.queueOperations.group', 'Group')}
-                            </Button>
-                            <Button variant="outline" onClick={() => setShowQueueModal(true)}>
-                                <Plus size={16} /> {t('app.queueOperations.queue', 'Queue')}
-                            </Button>
-                            <Button variant="outline" onClick={() => { loadData(); loadQueues(selectedGroup); }}>
-                                <RefreshCw size={16} /> {t('common.actions.refresh', 'Refresh')}
-                            </Button>
-                        </div>
-                    </div>
-
                     {/* The view name is the page's heading for the list, and
                         the table's own chrome sits on that same line. */}
                     <GridViewPicker
@@ -758,7 +766,7 @@ const QueueOperations = () => {
             </Modal>
 
             <GridFilterDrawer {...chrome.drawerProps} />
-        </div>
+        </PageLayout>
     );
 };
 

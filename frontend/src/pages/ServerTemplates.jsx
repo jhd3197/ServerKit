@@ -18,8 +18,8 @@ import { Badge } from '@/components/ui/badge';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { DataTable, Pill, CatalogCard, CatalogGrid } from '@/components/ds';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { DataTable, Pill, SegControl, CatalogCard, CatalogGrid } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
@@ -336,12 +336,24 @@ const ServerTemplates = () => {
 
 
     // Publish the admin "Create Template" action to the shared tab-group top bar.
-    useTopbarActions(() =>
-        user?.is_admin ? (
-            <Button size="sm" onClick={() => setShowCreateModal(true)}>{t('app.serverTemplates.createTemplate', 'Create template')}</Button>
-        ) : null,
-        [user?.is_admin]
-    );
+    // Library/Templates switcher rides the bar beside it. Library leads, because
+    // on a fresh panel Templates is empty; the default follows the data.
+    useTopbarActions(() => (
+        <>
+            <SegControl
+                aria-label={t('app.serverTemplates.views', 'Template views')}
+                value={activeTab || 'library'}
+                onChange={setActiveTab}
+                options={[
+                    { value: 'library', label: t('app.serverTemplates.library', 'Library') },
+                    { value: 'templates', label: t('app.serverTemplates.templates', 'Templates'), count: templates.length || undefined },
+                ]}
+            />
+            {user?.is_admin && (
+                <Button size="sm" onClick={() => setShowCreateModal(true)}>{t('app.serverTemplates.createTemplate', 'Create template')}</Button>
+            )}
+        </>
+    ), [user?.is_admin, activeTab, templates.length]);
 
     // Two accessors per column where they differ: `value` is what the column
     // menu, the filter rules, the grouping and the export read, `sortValue` is
@@ -555,18 +567,7 @@ const ServerTemplates = () => {
     return (
         <div className="sk-tabgroup__inner server-templates-page">
             {topbarChrome}
-            {/* Library leads, because on a fresh panel Templates has nothing in
-                it — landing there showed an empty page as the first impression.
-                The default follows the data rather than being fixed: once you
-                have templates of your own, those are what you came for. */}
             <Tabs value={activeTab || 'library'} onValueChange={setActiveTab}>
-                <TabsList>
-                    <TabsTrigger value="library">{t('app.serverTemplates.library', 'Library')}</TabsTrigger>
-                    <TabsTrigger value="templates">
-                        {t('app.serverTemplates.templates', 'Templates')}{templates.length > 0 ? ` (${templates.length})` : ''}
-                    </TabsTrigger>
-                </TabsList>
-
                 <TabsContent value="templates">
                     {loadErrors.templates && templates.length > 0 && (
                         <ErrorState compact error={loadErrors.templates} onRetry={loadData} />
