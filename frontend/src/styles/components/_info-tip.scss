@@ -31,6 +31,8 @@
     z-index: $z-tooltip + 10;
     width: auto;
     max-width: min(320px, calc(100vw - 24px));
+    max-height: var(--radix-popover-content-available-height, 60vh);
+    overflow-y: auto;
     padding: $space-2 $space-3;
     font-size: $text-sm;
     font-weight: $font-weight-normal;
@@ -94,11 +96,32 @@
         svg { width: 16px; height: 16px; } // geometry: connector icon
     }
 
+    // Narrow: stay one compact row; label sits under a smaller tile.
     @include respond-to($breakpoint-sm) {
-        flex-direction: column;
+        flex-wrap: wrap;
         align-items: flex-start;
+        gap: $space-1;
 
-        &__arrow { transform: rotate(90deg); margin-inline-start: $space-3; }
+        &__step {
+            display: grid;
+            grid-template-columns: auto auto;
+            justify-content: center;
+            align-items: center;
+            gap: $space-1;
+        }
+
+        &__tile {
+            grid-column: 1 / -1;
+            justify-self: center;
+            width: 36px;  // geometry: compact tile
+            height: 36px; // geometry: compact tile
+            svg { width: 18px; height: 18px; } // geometry: icon in compact tile
+        }
+
+        &__label { font-size: $text-xs; }
+
+        // Centre the 14px chevron on the 36px tile.
+        &__arrow { margin-block-start: 11px; svg { width: 14px; height: 14px; } } // geometry: connector
     }
 }
 
@@ -177,6 +200,19 @@
     gap: $space-3;
 
     &__text { flex: 1; min-width: 0; }
+
+    @include respond-to($breakpoint-sm) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $space-2;
+
+        .tip-illustration {
+            width: 36px;  // geometry: compact illustration
+            height: 36px; // geometry: compact illustration
+        }
+
+        &__text { flex: none; width: 100%; }
+    }
     &__title { display: flex; align-items: center; gap: $space-1; color: $text-primary; font-weight: $font-weight-medium; }
     &__line { margin: 0; color: $text-secondary; font-size: $text-sm; }
 }

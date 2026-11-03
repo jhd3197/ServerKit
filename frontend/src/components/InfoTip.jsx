@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Info } from 'lucide-react';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import useMediaQuery from '../hooks/useMediaQuery';
 import { t } from '../i18n/t';
 
 // An (i) button that holds the explanation a page used to print inline.
@@ -9,6 +10,9 @@ import { t } from '../i18n/t';
 // (no button-in-button) and above Modal/Sheet (.info-tip__panel z-index).
 export default function InfoTip({ children, label, side = 'top', size = 'sm', className = '' }) {
     const [open, setOpen] = useState(false);
+    // Narrow screens: keep the panel clear of the sticky app header.
+    const narrow = useMediaQuery('(max-width: 640px)');
+    const collisionPadding = narrow ? { top: 72, right: 12, bottom: 12, left: 12 } : 8; // geometry: header 56px + safe area
     const pinned = useRef(false);
     const hoverable = (e) => e.pointerType === 'mouse';
 
@@ -37,6 +41,8 @@ export default function InfoTip({ children, label, side = 'top', size = 'sm', cl
             </PopoverTrigger>
             <PopoverContent
                 side={side}
+                avoidCollisions
+                collisionPadding={collisionPadding}
                 className="info-tip__panel"
                 onOpenAutoFocus={(e) => e.preventDefault()}
                 onCloseAutoFocus={(e) => e.preventDefault()}

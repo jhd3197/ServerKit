@@ -66,6 +66,8 @@
         font-weight: $font-weight-medium;
         color: var(--text-faint);
         letter-spacing: 0;
+
+        @include respond-to($breakpoint-sm) { display: block; }
     }
 
     // Severity / state chip (mono uppercase on a semantic wash) —
