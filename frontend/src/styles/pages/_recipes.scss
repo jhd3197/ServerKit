@@ -5,19 +5,7 @@
 
     &__head {
         display: flex;
-        align-items: flex-end;
-        gap: $spacing-lg;
-        margin-bottom: $spacing-md;
-    }
-
-    &__lede {
-        flex: 1;
-        min-width: 0;
-        margin: 0;
-        color: var(--text-secondary);
-        font-size: $text-sm;
-        line-height: 1.55;
-        max-width: 640px;
+        margin: $spacing-md 0;
     }
 
     &__search {
@@ -25,6 +13,9 @@
         align-items: center;
         gap: $space-2;
         width: 260px;
+
+        @media (max-width: $breakpoint-md) { width: 100%; }
+
         height: $control-md;
         padding: 0 $space-3;
         border: 1px solid var(--border-color);
@@ -49,14 +40,28 @@
         gap: $space-2;
         margin-bottom: $spacing-md;
 
-        .sk-pill {
+        .recipes-page__cat {
+            display: inline-flex;
+            align-items: center;
+            height: $control-sm;
+            padding: 0 $space-3;
+            border: 1px solid var(--border-color);
+            border-radius: $radius-full;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: $text-sm;
+            font-weight: $font-weight-medium;
             cursor: pointer;
-            opacity: 0.72;
+
+            &:hover {
+                background: var(--bg-hover);
+                color: var(--text-primary);
+            }
 
             &.is-active {
-                opacity: 1;
-                border-color: var(--primary-color);
-                color: var(--primary-color);
+                background: var(--accent-bg);
+                border-color: var(--accent-bright);
+                color: var(--accent-bright);
             }
         }
     }
