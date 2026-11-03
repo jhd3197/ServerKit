@@ -332,6 +332,4 @@ export function PageSkeleton({ variant = 'panel', rows, className = '' }) {
     );
 }
 
-export const PAGE_SKELETON_VARIANTS = Object.keys(VARIANTS);
-
 export default PageSkeleton;
