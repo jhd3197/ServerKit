@@ -534,7 +534,7 @@ def _notify_fleet_alerts(opened, resolved):
                     'metric': alert.metric,
                     'value': alert.value,
                     'threshold': alert.threshold,
-                    'message': (
+                    'message': alert.detail or (
                         f'{hostname}: {alert.metric} averaged {alert.value} over '
                         f'{alert.duration_seconds}s, past the '
                         f'{alert.severity} threshold of {alert.threshold}.'),
@@ -555,7 +555,9 @@ def _notify_fleet_alerts(opened, resolved):
                     'hostname': hostname,
                     'alert_type': f'{alert.metric} recovered',
                     'metric': alert.metric,
-                    'message': (f'{hostname}: {alert.metric} is back under its '
+                    'message': (f'{hostname}: {alert.metric} recovered.'
+                                if alert.detail else
+                                f'{hostname}: {alert.metric} is back under its '
                                 f'threshold.'),
                 },
             )

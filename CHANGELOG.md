@@ -22,6 +22,15 @@ release history; historical `agent-v*` tags are not panel releases.
 
 ### Added
 
+- Agent permission levels (Monitor / Protect / Full), enforced by the agent and
+  reported to the panel. Adds a signed `POST /api/v1/agent/report` endpoint for
+  report-only Monitor agents, per-server level and service-check state (server
+  list badge and health, server detail panel), offline / service-down alerts
+  through the existing fleet alerts and notification channels, audited level
+  changes, and a panel-side command gate. The panel cannot set the level; it is
+  changed on the server with `serverkit-agent permissions set`. See
+  [docs/AGENT_PERMISSION_LEVELS.md](docs/AGENT_PERMISSION_LEVELS.md). Migration
+  112. The Add Server commands now pass `--level` / `-Level`.
 - `GET /api/v1/servers` now accepts an API key (`X-API-Key`) carrying the
   `servers:read` scope, in addition to the usual JWT, so external tools can
   poll the server list read-only without a short-lived token. JWT callers are

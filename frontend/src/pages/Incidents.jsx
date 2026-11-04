@@ -285,9 +285,10 @@ export default function Incidents() {
                 kind: 'alert',
                 key: `fleet-${alert.id}`,
                 alertId: alert.id,
-                title,
+                // Offline / service-check alerts carry their own message; otherwise describeAlert's copy.
+                title: alert.detail || title,
                 subject,
-                detail,
+                detail: alert.detail || detail,
                 state: alert.status,
                 tone: alertStatusKind(alert.status),
                 impact: alert.severity,

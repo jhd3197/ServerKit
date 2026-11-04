@@ -2588,3 +2588,128 @@
 
     &__id { display: flex; align-items: center; gap: $space-1; code { font-family: $font-mono; } }
 }
+
+// Permission-level picker in the Add Server drawer
+.level-picker {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: $space-2;
+
+    @media (max-width: 560px) {
+        grid-template-columns: 1fr;
+    }
+
+    // The (i) button is a sibling of the radio card, not nested in it.
+    &__cell {
+        position: relative;
+        display: flex;
+    }
+
+    &__opt {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $space-2;
+        padding: $space-3;
+        text-align: center;
+        color: $text-tertiary;
+        background: $bg-card;
+        border: 1px solid $border-subtle;
+        border-radius: $radius-control;
+        cursor: pointer;
+        transition: border-color $transition-fast, background $transition-fast, box-shadow $transition-fast;
+
+        &:hover {
+            border-color: $border-active;
+            background: $bg-elevated;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--accent-dim);
+            outline-offset: 2px;
+        }
+
+        &.is-active {
+            color: var(--accent);
+            border-color: var(--accent-dim);
+            background: var(--accent-bg);
+        }
+    }
+
+    &__art svg {
+        display: block;
+        width: auto;
+        max-width: 100%;
+        height: 56px;
+    }
+
+    &__head {
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+    }
+
+    &__caps {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: $space-1;
+    }
+
+    &__cap {
+        position: relative;
+        display: inline-flex;
+        color: $text-secondary;
+
+        .is-active & {
+            color: var(--accent);
+        }
+
+        &.is-blocked {
+            color: $text-tertiary;
+            opacity: .5;
+
+            &::after {
+                content: '';
+                position: absolute;
+                inset: 50% -2px auto;
+                height: 1.5px;
+                background: currentColor;
+                transform: rotate(-45deg);
+            }
+        }
+    }
+
+    &__info {
+        position: absolute;
+        top: $space-1;
+        inset-inline-end: $space-1;
+        display: inline-flex;
+        padding: $space-1;
+        color: $text-tertiary;
+        background: none;
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover,
+        &:focus-visible {
+            color: $text-primary;
+        }
+    }
+
+    &__tip {
+        flex-direction: column;
+        align-items: flex-start;
+        max-width: 260px;
+        white-space: normal;
+    }
+
+    &__note {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: $space-1;
+    }
+}

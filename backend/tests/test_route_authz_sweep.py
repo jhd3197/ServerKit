@@ -221,6 +221,7 @@ VIEWER_WRITABLE = {
     'docker.get_containers_stats',
     # PUBLIC transport — agent long-poll fallback; user JWT is ignored here.
     'agent_poll.disconnect',
+    'agent_report.report',
     # PUBLIC authentication challenge only; credential verification and UV are
     # required by passkey_authenticate before any session tokens are issued.
     'auth.passkey_auth_options',
