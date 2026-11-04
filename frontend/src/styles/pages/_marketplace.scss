@@ -79,16 +79,18 @@
     }
 
     // ExtensionCover in compact form: the CatalogCard's 36px icon slot. It
-    // keeps the cover's fallback chain (light tile for image art, per-slug
+    // keeps the cover's fallback chain (surface tile for image art, per-slug
     // gradient for the white brand mark / glyph), just at icon size.
     .sk-catalog-card__art {
         display: grid;
         place-items: center;
         width: 100%;
         height: 100%;
+        border-radius: var(--radius-sm);
 
         &--icon {
-            background: #fff;
+            background: var(--surface-2);
+            border: 1px solid var(--border-soft);
         }
 
         .extension-card__brand,
@@ -221,21 +223,24 @@
 
     &__header {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: $space-4;
     }
 
-    // Cover banner in the detail modal. Gradient variant holds the brand mark /
-    // glyph; the --icon variant is a clean light tile for illustrated art.
+    // Compact 40px cover tile left of the heading. Gradient variant holds the
+    // brand mark / glyph; the --icon variant is a surface tile for artwork.
     &__cover {
         display: grid;
         place-items: center;
-        height: 128px;
-        border-radius: $radius-control;
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px; // geometry: icon
+        border-radius: var(--radius-sm);
         overflow: hidden;
 
         &--icon {
-            background: #fff;
+            background: var(--surface-2);
+            border: 1px solid var(--border-soft);
         }
 
         .extension-card__brand,
@@ -244,14 +249,13 @@
         }
 
         .extension-card__glyph {
-            width: 46px;
-            height: 46px; // geometry: icon
+            width: 22px;
+            height: 22px; // geometry: icon
         }
 
         .extension-card__icon {
-            width: 108px;
-            height: 108px;
-            max-width: 60%;
+            width: 24px;
+            height: 24px; // geometry: icon
             object-fit: contain;
         }
     }

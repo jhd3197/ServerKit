@@ -5,15 +5,15 @@ import { hasBrandMark, extensionCoverStyle } from '../icons/extensionBrandData';
 import { resolveExtensionIcon } from '../icons/ExtensionIcons';
 import { getCategoryIcon } from './extensionCatalog';
 
-// Cover banner + artwork with a deterministic fallback chain:
+// Cover tile + artwork with a deterministic fallback chain:
 // registry logo image -> bundled illustrated icon -> Simple Icons brand mark ->
 // manifest icon SVG -> category lucide glyph. Image artwork (logo or bundled
-// icon) sits on a clean light tile at one shared size; the white brand-mark /
+// icon) sits on a dark surface tile at one shared size; the white brand-mark /
 // glyph fallbacks keep the deterministic gradient so they stay legible. The
 // tile is chosen from what actually renders, so a registry logo that fails to
-// load falls back to the gradient instead of a white glyph on white. `base` is
+// load falls back to the gradient instead of a blank tile. `base` is
 // the cover class ('sk-catalog-card__art' for the compact catalog-card icon,
-// 'extension-detail__cover' for the modal banner); both share this component.
+// 'extension-detail__cover' for the modal header tile); both share this component.
 export const ExtensionCover = ({ base, entry, category, brandSize = 34, children }) => {
     const [logoFailed, setLogoFailed] = useState(false);
     const rasterIcon = resolveExtensionIcon(entry.installKey, category);

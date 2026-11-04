@@ -46,8 +46,8 @@ export const ExtensionDetailModal = ({ entry, installing, statusVariant, onClose
     return (
         <Modal open onClose={onClose} title={entry.displayName} size="lg">
             <div className="extension-detail">
-                <ExtensionCover base="extension-detail__cover" entry={entry} category={category} brandSize={46} />
                 <div className="extension-detail__header">
+                    <ExtensionCover base="extension-detail__cover" entry={entry} category={category} brandSize={22} />
                     <div className="extension-detail__heading">
                         <div className="extension-detail__badges">
                             {entry.firstParty && (
