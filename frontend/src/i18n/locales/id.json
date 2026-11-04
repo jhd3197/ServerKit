@@ -2042,7 +2042,6 @@
             "onLinuxMakeSureTheDocker": "Pada Linux, pastikan daemon Docker dimulai",
             "retryConnection": "Coba Lagi Koneksi",
             "targets": "Target",
-            "toUseDockerManagement": "Untuk menggunakan manajemen Docker:",
             "verifyTheUserHasPermissionsTo": "Verifikasikan bahwa pengguna memiliki izin untuk mengakses Docker",
             "volumes": "Volume"
         },

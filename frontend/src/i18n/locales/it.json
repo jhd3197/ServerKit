@@ -2042,7 +2042,6 @@
             "onLinuxMakeSureTheDocker": "Su Linux, assicurati che il demone Docker sia avviato",
             "retryConnection": "Riprovare la connessione",
             "targets": "Destinazioni",
-            "toUseDockerManagement": "Per utilizzare la gestione Docker:",
             "verifyTheUserHasPermissionsTo": "Verificare che l'utente disponga delle autorizzazioni per accedere a Docker",
             "volumes": "Volumi"
         },

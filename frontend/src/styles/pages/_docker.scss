@@ -155,17 +155,17 @@
     margin: 0 auto;
 
     .docker-unavailable-icon {
-        width: 100px;
-        height: 100px;
+        width: 72px;
+        height: 72px;
         display: flex;
         align-items: center;
         justify-content: center;
         background: fade($color-docker, 10%);
         border-radius: $radius-overlay;
-        margin-bottom: $space-6;
+        margin-block-end: $space-5;
+        color: $color-docker;
 
         svg {
-            stroke: $color-docker;
             opacity: 0.6;
         }
     }
@@ -183,12 +183,60 @@
         margin: 0 0 $space-4 0;
     }
 
-    .docker-unavailable-details {
+    .docker-unavailable-steps {
+        list-style: none;
+        margin: 0 0 $space-4 0;
+        padding: 0;
         width: 100%;
-        margin-bottom: $space-6;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: $space-2;
+
+        li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: $space-2;
+            padding: $space-3 $space-2;
+            background: $bg-hover;
+            border: 1px solid $border-subtle;
+            border-radius: $radius-control;
+            color: $text-secondary;
+            font-size: $text-xs;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    .docker-unavailable-disclosure {
+        width: 100%;
+        margin-block-end: $space-6;
+        text-align: start;
+
+        summary {
+            display: inline-flex;
+            align-items: center;
+            gap: $space-1;
+            cursor: pointer;
+            color: $text-tertiary;
+            font-size: $text-xs;
+            list-style: none;
+
+            &::-webkit-details-marker {
+                display: none;
+            }
+
+            svg {
+                transition: transform 0.15s ease;
+            }
+        }
+
+        &[open] summary svg {
+            transform: rotate(180deg);
+        }
 
         code {
             display: block;
+            margin-block-start: $space-3;
             padding: $space-3 $space-4;
             background: $bg-hover;
             border: 1px solid $border-subtle;
@@ -196,39 +244,22 @@
             font-family: $font-mono;
             font-size: $text-xs;
             color: $text-tertiary;
-            word-break: break-all;
-            text-align: left;
-        }
-    }
-
-    .docker-unavailable-help {
-        width: 100%;
-        padding: $space-5;
-        background: $bg-hover;
-        border-radius: $radius-card;
-        text-align: left;
-        margin-bottom: $space-6;
-
-        h4 {
-            font-size: $text-xs;
-            font-weight: $font-weight-semibold;
-            margin: 0 0 $space-3 0;
-            color: $text-primary;
+            overflow-wrap: anywhere;
         }
 
         ul {
-            margin: 0;
-            padding-left: $space-5;
+            margin: $space-3 0 0 0;
+            padding-inline-start: $space-5;
+            font-size: $text-xs;
+            color: $text-secondary;
+        }
+    }
 
-            li {
-                font-size: $text-xs;
-                color: $text-secondary;
-                margin-bottom: $space-2;
+    .docker-unavailable-spin {
+        animation: spinner-rotate 0.8s linear infinite;
 
-                &:last-child {
-                    margin-bottom: 0;
-                }
-            }
+        @media (prefers-reduced-motion: reduce) {
+            animation: none;
         }
     }
 

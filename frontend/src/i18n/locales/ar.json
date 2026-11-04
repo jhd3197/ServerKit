@@ -2042,7 +2042,6 @@
             "onLinuxMakeSureTheDocker": "على Linux، تأكد من بدء تشغيل البرنامج الخفي Docker",
             "retryConnection": "أعد محاولة الاتصال",
             "targets": "الأهداف",
-            "toUseDockerManagement": "لاستخدام إدارة Docker:",
             "verifyTheUserHasPermissionsTo": "تحقق من أن المستخدم لديه أذونات للوصول إلى Docker",
             "volumes": "وحدات التخزين"
         },

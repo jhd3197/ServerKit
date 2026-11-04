@@ -2042,7 +2042,6 @@
             "onLinuxMakeSureTheDocker": "Trên Linux, hãy đảm bảo daemon Docker được khởi động",
             "retryConnection": "Thử lại kết nối",
             "targets": "Mục tiêu",
-            "toUseDockerManagement": "Để sử dụng quản lý Docker:",
             "verifyTheUserHasPermissionsTo": "Xác minh người dùng có quyền truy cập Docker",
             "volumes": "Volume"
         },

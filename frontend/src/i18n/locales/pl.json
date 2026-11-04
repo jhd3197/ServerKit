@@ -2042,7 +2042,6 @@
             "onLinuxMakeSureTheDocker": "W przypadku Linux upewnij się, że demon Docker jest uruchomiony",
             "retryConnection": "Ponów próbę połączenia",
             "targets": "Cele",
-            "toUseDockerManagement": "Aby skorzystać z zarządzania Docker:",
             "verifyTheUserHasPermissionsTo": "Sprawdź, czy użytkownik ma uprawnienia dostępu do Docker",
             "volumes": "Woluminy"
         },

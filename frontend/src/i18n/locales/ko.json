@@ -2042,7 +2042,6 @@
             "onLinuxMakeSureTheDocker": "Linux에서는 Docker 데몬이 시작되었는지 확인하세요.",
             "retryConnection": "연결 재시도",
             "targets": "대상",
-            "toUseDockerManagement": "Docker 관리를 사용하려면:",
             "verifyTheUserHasPermissionsTo": "사용자에게 Docker에 액세스할 수 있는 권한이 있는지 확인",
             "volumes": "볼륨"
         },

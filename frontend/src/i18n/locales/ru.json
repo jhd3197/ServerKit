@@ -2042,7 +2042,6 @@
             "onLinuxMakeSureTheDocker": "В Linux убедитесь, что демон Docker запущен.",
             "retryConnection": "Повторить попытку подключения",
             "targets": "Цели",
-            "toUseDockerManagement": "Чтобы использовать управление Docker:",
             "verifyTheUserHasPermissionsTo": "Убедитесь, что у пользователя есть разрешения на доступ к Docker.",
             "volumes": "Тома"
         },

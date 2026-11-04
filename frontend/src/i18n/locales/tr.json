@@ -2042,7 +2042,6 @@
             "onLinuxMakeSureTheDocker": "Linux'de Docker arka plan programının başlatıldığından emin olun",
             "retryConnection": "Bağlantıyı Yeniden Dene",
             "targets": "Hedefler",
-            "toUseDockerManagement": "Docker yönetimini kullanmak için:",
             "verifyTheUserHasPermissionsTo": "Kullanıcının Docker'ye erişim izinleri olduğunu doğrulayın",
             "volumes": "Birimler"
         },
