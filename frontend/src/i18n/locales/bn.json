@@ -2096,7 +2096,6 @@
             "onLinuxMakeSureTheDocker": "Linux এ, নিশ্চিত করুন যে Docker ডেমন শুরু হয়েছে",
             "retryConnection": "সংযোগ পুনরায় চেষ্টা করুন",
             "targets": "টার্গেট",
-            "toUseDockerManagement": "Docker ব্যবস্থাপনা ব্যবহার করতে:",
             "verifyTheUserHasPermissionsTo": "ব্যবহারকারীর Docker অ্যাক্সেস করার অনুমতি আছে তা যাচাই করুন",
             "volumes": "ভলিউম"
         },

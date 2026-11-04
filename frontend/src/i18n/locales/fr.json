@@ -2096,7 +2096,6 @@
             "onLinuxMakeSureTheDocker": "Sur Linux, assurez-vous que le démon Docker est démarré",
             "retryConnection": "Réessayer la connexion",
             "targets": "Cibles",
-            "toUseDockerManagement": "Pour utiliser la gestion Docker :",
             "verifyTheUserHasPermissionsTo": "Vérifiez que l'utilisateur dispose des autorisations nécessaires pour accéder à Docker.",
             "volumes": "Volumes"
         },

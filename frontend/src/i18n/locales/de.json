@@ -2096,7 +2096,6 @@
             "onLinuxMakeSureTheDocker": "Stellen Sie unter Linux sicher, dass der Docker-Daemon gestartet ist",
             "retryConnection": "Verbindung erneut versuchen",
             "targets": "Ziele",
-            "toUseDockerManagement": "So verwenden Sie die Docker-Verwaltung:",
             "verifyTheUserHasPermissionsTo": "Stellen Sie sicher, dass der Benutzer über Berechtigungen zum Zugriff auf Docker verfügt",
             "volumes": "Volumes"
         },

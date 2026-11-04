@@ -2096,7 +2096,6 @@
             "onLinuxMakeSureTheDocker": "No Linux, certifique-se de que o daemon Docker esteja iniciado",
             "retryConnection": "Tentar novamente a conexão",
             "targets": "Alvos",
-            "toUseDockerManagement": "Para usar o gerenciamento do Docker:",
             "verifyTheUserHasPermissionsTo": "Verifique se o usuário tem permissões para acessar o Docker",
             "volumes": "Volumes"
         },

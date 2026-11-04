@@ -2096,7 +2096,6 @@
             "onLinuxMakeSureTheDocker": "在 Linux 上，確保 Docker 守護程式已啟動",
             "retryConnection": "重試連線",
             "targets": "目標",
-            "toUseDockerManagement": "使用 Docker 管理：",
             "verifyTheUserHasPermissionsTo": "驗證使用者是否有權限存取 Docker",
             "volumes": "磁碟區"
         },
