@@ -103,97 +103,64 @@
     }
 
     .marketplace-installed-label {
-        color: $text-tertiary;
-        font-size: $text-xs;
-    }
-
-    .installed-list {
-        display: flex;
-        flex-direction: column;
-        gap: $space-3;
-    }
-
-    .installed-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: $space-3;
-        padding: $space-3;
-    }
-
-    .installed-item__main {
-        display: flex;
-        align-items: center;
-        gap: $space-3;
-        min-width: 0;
-        flex: 1;
-    }
-
-    .installed-item__icon {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        width: 34px;
-        height: 34px; // geometry: icon tile
-        flex: 0 0 34px;
-        border-radius: $radius-card;
-
-        svg {
-            width: 17px;
-            height: 17px;
-        }
-    }
-
-    .installed-item__icon--extension {
-        color: $success;
-        background: fade($success-raw, 12%);
-    }
-
-    .installed-item__icon--local {
-        color: $warning;
-        background: fade($warning-raw, 12%);
-    }
-
-    .installed-item__icon--plugin {
-        color: $accent-primary;
-        background: fade($accent-primary-raw, 12%);
-    }
-
-    .installed-item__content {
-        display: flex;
-        flex-direction: column;
         gap: $space-1;
-        min-width: 0;
+        color: var(--green);
+        font-size: $text-xs;
 
-        strong {
-            color: $text-primary;
-            font-size: $text-base;
-        }
+        svg { width: 14px; height: 14px; } // geometry: icon
     }
 
-    .installed-item__title-line,
-    .installed-item__actions {
+    // Update strip above every Extensions view.
+    .marketplace-banner {
         display: flex;
         align-items: center;
         gap: $space-2;
-        flex-wrap: wrap;
+        margin-bottom: $space-3;
+        padding: $space-2 $space-3;
+        border: 1px solid var(--accent-dim);
+        border-radius: $radius-card;
+        background: var(--accent-bg);
+        font-size: $text-sm;
     }
 
-    .installed-item__description,
-    .installed-item__error {
-        margin: $space-1 0 0;
-        color: $text-secondary;
-        font-size: $text-xs;
-        line-height: $line-height-normal;
+    .marketplace-banner__icon { color: var(--accent-bright); flex-shrink: 0; }
+    .marketplace-banner__text { flex: 1 1 auto; min-width: 0; font-weight: $font-weight-medium; }
+    .marketplace-banner__action { flex-shrink: 0; }
+
+    // Category / status chips: a scrolling strip, full width.
+    .marketplace-chips {
+        display: flex;
+        margin-bottom: $space-3;
     }
 
-    .installed-item__error {
-        color: $danger;
+    .marketplace-card__sub {
+        display: inline-flex;
+        align-items: center;
+        gap: $space-tight;
     }
 
-    .installed-item--error {
-        border-color: fade($danger-raw, 30%);
+    .marketplace-card--error { border-color: var(--red); }
+    .marketplace-card__err { color: var(--red); }
+
+    .marketplace-info {
+        display: flex;
+        flex-direction: column;
+        gap: $space-2;
+
+        p { margin: 0; }
     }
+    .marketplace-info__error { color: var(--red); }
+    .marketplace-info__meta { color: var(--text-faint); font-size: $text-xs; }
+
+    .marketplace-updates__bar {
+        display: flex;
+        align-items: center;
+        gap: $space-3;
+        margin-bottom: $space-3;
+    }
+    .marketplace-updates__checked { color: var(--text-faint); font-size: $text-xs; }
 
     // "Update available" pill on plugin rows. Uses the info badge variant for
     // color; this just tightens the icon/text rhythm and weight.
@@ -225,18 +192,6 @@
             }
         }
 
-        .installed-item {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-
-        .installed-item__actions {
-            width: 100%;
-
-            .btn {
-                flex: 1;
-            }
-        }
     }
 
     @media (max-width: $breakpoint-sm) {

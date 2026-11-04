@@ -112,6 +112,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 // ------------------------------------------------------------
 .sk-seg {
     display: inline-flex;
+    max-width: 100%; // wider than its row -> scrolls (see .sk-tabscroll)
     gap: $space-hair;
     background: var(--surface-2);
     border: 1px solid var(--border);
@@ -1438,6 +1439,21 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         // Overflowed tab — moved into the "More" popover, not rendered inline.
         &.is-hidden { display: none; }
     }
+    // Count pill on a tab (e.g. pending updates).
+    &__badge {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: $space-4; height: $space-4; padding: 0 $space-1;
+        border-radius: $radius-full;
+        background: var(--accent); color: $on-accent;
+        font-size: $text-xs; font-weight: $font-weight-semibold; line-height: 1;
+    }
+    // Phones: inactive iconOnlyNarrow tabs are icon-only (aria-label keeps the name).
+    @media (max-width: $breakpoint-sm) {
+        &__tab:not(.is-active) &__tab-label {
+            position: absolute; inline-size: 1px; block-size: 1px;
+            overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+        }
+    }
     // Overflow ("More") trigger — a tab-styled button that never collapses.
     &__more {
         flex-shrink: 0;
@@ -2062,10 +2078,5 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     display: flex;
     margin-bottom: $space-4;
     max-width: 100%;
-    overflow-x: auto;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar { display: none; }
-
-    .sk-seg { flex-shrink: 0; }
+    min-width: 0;
 }

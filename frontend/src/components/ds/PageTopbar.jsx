@@ -50,6 +50,18 @@ export function PageTopbar({ icon, title, meta, tabs, actions, className, navLab
     );
 }
 
+// Tab label plus the optional update-count pill. `iconOnlyNarrow` tabs keep
+// their label for assistive tech and, on phones, show it only while active.
+function TabContent({ tab }) {
+    return (
+        <>
+            {tab.icon}
+            {tab.iconOnlyNarrow ? <span className="sk-topbar__tab-label">{tab.label}</span> : tab.label}
+            {tab.badgeCount > 0 && <span className="sk-topbar__badge">{tab.badgeCount}</span>}
+        </>
+    );
+}
+
 function matchTab(tab, path) {
     // Button tabs (`id` + `onSelect`) carry their own `active` flag — the page
     // owns the selection (e.g. a /page/:tab URL param) rather than the route.
@@ -127,8 +139,7 @@ function TopbarTabs({ tabs, label }) {
                                 data-overflow={isHidden ? 'hidden' : undefined}
                                 onClick={tab.onSelect}
                             >
-                                {tab.icon}
-                                {tab.label}
+                                <TabContent tab={tab} />
                             </SharedButton>
                         );
                     }
@@ -140,9 +151,10 @@ function TopbarTabs({ tabs, label }) {
                             ref={(el) => { itemRefs.current[i] = el; }}
                             className={({ isActive }) => cn('sk-topbar__tab', isActive && 'is-active', isHidden && 'is-hidden')}
                             data-overflow={isHidden ? 'hidden' : undefined}
+                            aria-label={tab.iconOnlyNarrow ? tab.label : undefined}
+                            title={tab.iconOnlyNarrow ? tab.label : undefined}
                         >
-                            {tab.icon}
-                            {tab.label}
+                            <TabContent tab={tab} />
                         </NavLink>
                     );
                 })}
@@ -174,8 +186,7 @@ function TopbarTabs({ tabs, label }) {
                                                 data-state={idx === activeIndex ? 'active' : 'inactive'}
                                                 onClick={() => { setPopoverOpen(false); tab.onSelect(); }}
                                             >
-                                                {tab.icon}
-                                                {tab.label}
+                                                <TabContent tab={tab} />
                                             </SharedButton>
                                         );
                                     }
@@ -188,8 +199,7 @@ function TopbarTabs({ tabs, label }) {
                                             data-state={idx === activeIndex ? 'active' : 'inactive'}
                                             onClick={() => setPopoverOpen(false)}
                                         >
-                                            {tab.icon}
-                                            {tab.label}
+                                            <TabContent tab={tab} />
                                         </NavLink>
                                     );
                                 })}
