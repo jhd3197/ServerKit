@@ -11,6 +11,7 @@ import AIConnectionsSettings from './AIConnectionsSettings';
 import AIManagementSettings from './AIManagementSettings';
 import AIUsageSettings from './AIUsageSettings';
 import { SegControl } from '../ds/SegControl';
+import InfoTip from '../InfoTip';
 import { useTranslation } from 'react-i18next';
 
 const AI_CONFIG_CHANGED_EVENT = 'serverkit:ai-config-changed';
@@ -122,9 +123,9 @@ const AISettingsTab = () => {
                 <div className="settings-row">
                     <div className="settings-label">
                         <Label htmlFor="ai-enabled">{t('app.aISettingsTab.enableAiAssistant', 'Enable AI assistant')}</Label>
-                        <span className="settings-hint">{settings.default_connection_id
+                        <InfoTip>{settings.default_connection_id
                             ? t('ai.settings.enabledHint', 'Changes apply immediately to new messages. Configure the default connection below.')
-                            : t('ai.settings.setupHint', 'Save a provider connection below before enabling the assistant.')}</span>
+                            : t('ai.settings.setupHint', 'Save a provider connection below before enabling the assistant.')}</InfoTip>
                     </div>
                     <Switch id="ai-enabled" checked={settings.enabled}
                         disabled={loadError || toggling || saving || (!settings.enabled && !settings.default_connection_id)}
@@ -136,21 +137,20 @@ const AISettingsTab = () => {
                     defaultId={settings.default_connection_id} onSaved={refreshConnections} />
             </div>
             <div className="settings-card">
-                <h3>{t('ai.settings.limits', 'Limits and protections')}</h3>
-                <p>{t('ai.settings.limitsHint', 'These settings apply to assistant conversations. Save changes to apply them.')}</p>
+                <h3>{t('ai.settings.limits', 'Limits and protections')} <InfoTip>{t('ai.settings.limitsHint', 'These settings apply to assistant conversations. Save changes to apply them.')}</InfoTip></h3>
                 <div {...register('ai-cost-limit', 'form-group')}>
-                    <label htmlFor="ai-max-cost">{t('app.aISettingsTab.perConversationCostCeilingUsd', 'Per-conversation cost ceiling (USD)')}</label>
+                    <div className="label-with-tip">
+                        <label htmlFor="ai-max-cost">{t('app.aISettingsTab.perConversationCostCeilingUsd', 'Per-conversation cost ceiling (USD)')}</label><InfoTip>{t('ai.settings.costHint', 'Used by the budget behavior in Task models and behavior. A call can exceed the remaining amount; models with unknown pricing need a provider-side limit. Set 0 for no limit.')}</InfoTip>
+                    </div>
                     <Input
                         id="ai-max-cost"
                         type="number"
                         step="0.01"
                         min="0"
-                        aria-describedby="ai-max-cost-hint"
                         disabled={loadError || saving}
                         value={settings.max_cost_usd}
                         onChange={(e) => setSettings((s) => ({ ...s, max_cost_usd: e.target.value }))}
                     />
-                    <p id="ai-max-cost-hint" className="settings-hint">{t('ai.settings.costHint', 'Used by the budget behavior in Task models and behavior. A call can exceed the remaining amount; models with unknown pricing need a provider-side limit. Set 0 for no limit.')}</p>
                 </div>
 
                 <div {...register('ai-pii-redaction', 'form-group')}>

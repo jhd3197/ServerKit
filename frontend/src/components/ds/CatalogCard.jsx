@@ -2,6 +2,7 @@ import { Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { t } from '@/i18n/t';
+import InfoTip from '@/components/InfoTip';
 
 /**
  * The one card for things you browse to install or deploy: extensions,
@@ -21,6 +22,9 @@ import { t } from '@/i18n/t';
  *     />
  *   </CatalogGrid>
  *
+ * `description` lives in an (i) beside the tag, not as a paragraph; `chips`
+ * (short strings) show as a tag row in its place.
+ *
  * One tag, one action. Version, author and counts go in `sub` / `facts` as
  * plain text rather than as more badges.
  *
@@ -35,6 +39,7 @@ export function CatalogCard({
     sub,
     tag,
     description,
+    chips,
     facts,
     action,
     featured = false,
@@ -78,8 +83,13 @@ export function CatalogCard({
                     {sub && <span className="sk-catalog-card__sub">{sub}</span>}
                 </span>
                 {tag && <span className="sk-catalog-card__tag">{tag}</span>}
+                {description && <InfoTip>{description}</InfoTip>}
             </div>
-            {description && <p className="sk-catalog-card__desc">{description}</p>}
+            {chips?.length > 0 && (
+                <div className="tip-chip-row">
+                    {chips.map((c) => <span key={c} className="tip-chip">{c}</span>)}
+                </div>
+            )}
             {(facts || action) && (
                 <div className="sk-catalog-card__foot">
                     <span className="sk-catalog-card__facts">{facts}</span>

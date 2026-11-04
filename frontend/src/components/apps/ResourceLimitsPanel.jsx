@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
+import InfoTip from '@/components/InfoTip';
 
 // Docker memory limit: number + one-letter unit (b/k/m/g), e.g. "512m", "2g".
 const MEMORY_LIMIT_RE = /^\d+(\.\d+)?(b|k|m|g)$/i;
@@ -104,7 +105,7 @@ const ResourceLimitsPanel = ({ app, onChanged }) => {
             </div>
             <div className="app-panel-body">
                 <p className="app-panel-hint">
-                    {t('app.resourceLimitsPanel.capHowMuchCpuAndMemory', 'Cap how much CPU and memory this service\'s container may use. Leave a field empty for no limit. Limits are written into the generated compose configuration and enforced by Docker.')}
+                    {t('app.resourceLimitsPanel.capShort', 'Cap CPU and memory. Empty means no limit.')} <InfoTip>{t('app.resourceLimitsPanel.capHowMuchCpuAndMemory', 'Cap how much CPU and memory this service\'s container may use. Leave a field empty for no limit. Limits are written into the generated compose configuration and enforced by Docker.')}</InfoTip>
                 </p>
 
                 {usage ? (

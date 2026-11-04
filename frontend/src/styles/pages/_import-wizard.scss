@@ -5,7 +5,6 @@
 .import-wizard {
     max-width: 960px;
     margin: 0 auto;
-    padding: $space-6;
     display: flex;
     flex-direction: column;
     gap: $space-6;
@@ -31,6 +30,10 @@
         padding: 0;
         list-style: none;
         overflow-x: auto;
+
+        @media (max-width: $breakpoint-sm) {
+            justify-content: space-between;
+        }
     }
 
     &__step {
@@ -67,8 +70,29 @@
             content: '';
             width: 16px;
             height: 1px;
-            margin-right: $space-2;
+            margin-inline-end: $space-2;
             background: $border-default;
+        }
+
+        // Phones: only the current step keeps its label; the rest shrink to
+        // their numbered dot and the row spreads to fit instead of clipping.
+        @media (max-width: $breakpoint-sm) {
+            flex: 0 0 auto;
+            padding-inline: $space-1;
+
+            &:not(.is-active) .import-wizard__step-label {
+                display: none;
+            }
+
+            &.is-active {
+                padding-inline: $space-3;
+            }
+
+            & + &::before {
+                flex: 0 0 auto;
+                width: $space-3;
+                margin-inline-end: $space-1;
+            }
         }
     }
 
@@ -124,6 +148,21 @@
         }
     }
 
+    // Wrapper so the (i) sits beside the card, never inside its button/link.
+    &__source {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+
+        > .import-wizard__source-card { flex: 1; }
+    }
+
+    &__source-tip {
+        position: absolute;
+        bottom: $space-3;
+        right: $space-3;
+    }
+
     &__source-card {
         position: relative;
         display: flex;
@@ -156,7 +195,7 @@
             background: $bg-hover;
         }
 
-        &--link p::after {
+        &--link strong::after {
             content: ' ↗';
             color: $text-tertiary;
         }

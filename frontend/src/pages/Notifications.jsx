@@ -97,7 +97,7 @@ export default function Notifications() {
         <PageLayout
             icon={<Bell size={18} />}
             title={t('app.notifications.notifications', 'Notifications')}
-            meta={unreadCount ? `${unreadCount} unread` : 'All caught up'}
+            meta={unreadCount ? t('app.notifications.unreadCount', '{{count}} unread', { count: unreadCount }) : t('app.notifications.allCaughtUp', 'All caught up')}
             actions={(
                 <>
                     {isAdmin && (

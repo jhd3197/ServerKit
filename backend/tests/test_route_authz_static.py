@@ -145,6 +145,7 @@ PUBLIC_ALT_AUTH = {
     # Public by design; the value names the mechanism that authenticates the call.
     'agent_poll.connect': 'agent HMAC handshake + per-IP throttle',
     'agent_poll.disconnect': 'X-Session-Token lookup',
+    'agent_report.report': 'HMAC over timestamp+nonce+body hash, skew/replay/rate limits',
     'agent_poll.poll': 'X-Session-Token resolves the ConnectedAgent',
     'agent_poll.result': 'X-Session-Token resolves the ConnectedAgent',
     'auth.connect_session': 'loopback-only + Cloud grant verified against JWKS, 30/min',

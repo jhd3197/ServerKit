@@ -7,8 +7,8 @@ release line and the `main` branch.
 
 | Version | Supported |
 |---------|-----------|
-| 1.7.x   | ✅ |
-| < 1.7   | ❌ (please upgrade) |
+| 1.11.x  | ✅ |
+| < 1.11  | ❌ (please upgrade) |
 
 The **agent** ships from its own repository, `jhd3197/serverkit-agent`, and is
 versioned independently (`vX.Y.Z` — it used `agent-vX.Y.Z` while it lived in this
@@ -47,6 +47,12 @@ trust boundaries:
   (`system:exec`) and interactive PTY sessions are controlled by the agent's
   `Features.Exec` flag, which is **off by default**. Enable it only on servers
   where you intend the panel to run shell commands.
+- **Permission levels bound what a compromised panel can do.** An agent runs as
+  Monitor (report-only, no inbound command channel), Protect (security allowlist
+  only) or Full. The level is read only from the agent's local config and can
+  only be changed on the server (`serverkit-agent permissions set`); the panel
+  records and audits the reported level but has no API to set it. See
+  [docs/AGENT_PERMISSION_LEVELS.md](docs/AGENT_PERMISSION_LEVELS.md).
 - **Transport & connection controls.** Agents authenticate to the panel with
   per-connection HMAC-SHA256 (with nonce/replay protection and a timestamp-skew
   check), and the panel enforces a per-server IP allowlist. Use `wss://`
@@ -136,6 +142,13 @@ carry a `sink-safe: <sanitizer> — <why>` comment. `scripts/check-html-sinks.mj
 (run in `npm run lint`, and mirrored by `backend/tests/test_html_sink_sweep.py`)
 fails CI on any new unannotated sink, so a raw-HTML injection point can't land
 silently.
+
+## Known Limitations
+
+- **Tokens in `localStorage`.** The SPA keeps its JWT access/refresh tokens in
+  `localStorage`, so an XSS bug would expose them. The production CSP now
+  forbids inline and `eval` scripts (`script-src 'self'`) to reduce that risk;
+  planned follow-up: move tokens to `httpOnly` `SameSite` cookies with CSRF protection.
 
 ## Extension Trust Model
 

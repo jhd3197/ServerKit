@@ -6,6 +6,7 @@ import api from '../../services/api';
 import CopyField from '../CopyField';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
+import InfoTip from '@/components/InfoTip';
 
 // Enrolment is a three-beat flow. Offer is the default so someone who just
 // wants a dashboard is one click from moving on — 2FA is offered here because
@@ -130,7 +131,7 @@ const SetupStepSecurity = ({ onComplete }) => {
             <div className="wizard-step">
                 <h2 className="wizard-step-title">{t('app.setupStepSecurity.protectThisAccount', 'Protect this account')}</h2>
                 <p className="wizard-step-description">
-                    {t('app.setupStepSecurity.thisPanelCanRestartServicesOpen', 'This panel can restart services, open firewall ports and read your databases. Two-factor authentication means a stolen password alone is not enough to do any of that.')}
+                    {t('app.setupStepSecurity.protectShort', 'Two-factor stops stolen-password access.')} <InfoTip>{t('app.setupStepSecurity.thisPanelCanRestartServicesOpen', 'This panel can restart services, open firewall ports and read your databases. Two-factor authentication means a stolen password alone is not enough to do any of that.')}</InfoTip>
                 </p>
 
                 <div className="security-offer">
@@ -142,7 +143,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                             {t('app.setupStepSecurity.twoFactorAuthentication', 'Two-factor authentication')}
                         </div>
                         <p className="security-offer__desc">
-                            {t('app.setupStepSecurity.takesAboutThirtySecondsWithAny', "Takes about thirty seconds with any authenticator app, such as 1Password, Aegis or Google Authenticator. You'll get backup codes in case you lose the device.")}
+                            {t('app.setupStepSecurity.offerShort', 'Takes about thirty seconds.')} <InfoTip>{t('app.setupStepSecurity.takesAboutThirtySecondsWithAny', "Takes about thirty seconds with any authenticator app, such as 1Password, Aegis or Google Authenticator. You'll get backup codes in case you lose the device.")}</InfoTip>
                         </p>
                     </div>
                 </div>
@@ -246,7 +247,7 @@ const SetupStepSecurity = ({ onComplete }) => {
         <div className="wizard-step">
             <h2 className="wizard-step-title">{t('app.setupStepSecurity.saveYourBackupCodes', 'Save your backup codes')}</h2>
             <p className="wizard-step-description">
-                {t('app.setupStepSecurity.theseAreShownOnceAndNever', 'These are shown once and never again. Each works a single time if you lose your authenticator. Keep them somewhere that does not depend on this server being reachable.')}
+                {t('app.setupStepSecurity.backupCodesShort', 'Shown once. Each works a single time.')} <InfoTip>{t('app.setupStepSecurity.theseAreShownOnceAndNever', 'These are shown once and never again. Each works a single time if you lose your authenticator. Keep them somewhere that does not depend on this server being reachable.')}</InfoTip>
             </p>
 
             <CopyField

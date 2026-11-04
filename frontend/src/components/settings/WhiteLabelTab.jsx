@@ -1,4 +1,5 @@
 import { useRef, useId } from 'react';
+import InfoTip from '@/components/InfoTip';
 import { useTheme } from '../../contexts/useTheme.js';
 import { Star, X, Layers, Image, Type, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -161,7 +162,7 @@ const WhiteLabelTab = () => {
                             <div className="star-content">
                                 <h4>{t('app.whiteLabelTab.supportServerkit', 'Support ServerKit')}</h4>
                                 <p>
-                                    {t('app.whiteLabelTab.byUsingCustomBrandingTheGithub', 'By using custom branding, the GitHub star link is hidden from the sidebar. If ServerKit is useful to you, please consider starring the project. It helps the community grow.')}
+                                    {t('app.whiteLabelTab.starShort', 'Consider starring the project.')} <InfoTip>{t('app.whiteLabelTab.byUsingCustomBrandingTheGithub', 'By using custom branding, the GitHub star link is hidden from the sidebar. If ServerKit is useful to you, please consider starring the project. It helps the community grow.')}</InfoTip>
                                 </p>
                                 <a
                                     href="https://github.com/jhd3197/ServerKit"

@@ -10,6 +10,7 @@ import ServerKitLogo from '../components/ServerKitLogo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTranslation } from 'react-i18next';
+import InfoTip from '@/components/InfoTip';
 
 const TOTAL_STEPS = 4;
 const STEP_TITLES = ['Overview', 'Backup', 'Apply', 'Done'];
@@ -177,7 +178,7 @@ const DatabaseMigration = () => {
                             <div className="wizard-info-banner wizard-info-banner--warn">
                                 <AlertTriangle size={20} className="wizard-info-icon" />
                                 <p>
-                                    {t('app.databaseMigration.thisDatabaseIsStampedAt', 'This database is stamped at')} <code>{status.current_revision}</code>{t('app.databaseMigration.whichDoesNotExistInThis', ', which does not exist in this build (usually a branch that added a migration and was then reverted). The schema cannot be upgraded until it is stamped back to a known revision:')}
+                                    {t('app.databaseMigration.thisDatabaseIsStampedAt', 'This database is stamped at')} <code>{status.current_revision}</code>{t('app.databaseMigration.unknownRevisionShort', ', unknown to this build. Stamp it back to upgrade:')} <InfoTip>{t('app.databaseMigration.whichDoesNotExistInThis', ', which does not exist in this build (usually a branch that added a migration and was then reverted). The schema cannot be upgraded until it is stamped back to a known revision:')}</InfoTip>
                                     {' '}<code>{t('app.databaseMigration.flaskDbStamp', 'flask db stamp')} {status.head_revision || 'head'}</code>
                                 </p>
                             </div>

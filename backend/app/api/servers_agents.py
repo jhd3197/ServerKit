@@ -5,6 +5,7 @@ import os
 import re
 import requests
 from app.models.server import AgentVersion, Server
+from app.services import permission_levels
 from flask import Response, current_app, jsonify, redirect, request
 from app.middleware.rbac import admin_required, developer_required
 from app.exceptions import agent_offline, field_required
@@ -178,8 +179,11 @@ def get_install_instructions(server_id):
     # Get base URL
     base_url = _get_external_base_url()
     api_url = f"{base_url}/api/v1/servers"
+    level = (permission_levels.normalize(request.args.get('level'))
+             or server.requested_permission_level or 'monitor')
 
     return jsonify({
+        'permission_level': level,
         'linux': {
             # Download-then-run rather than `curl … | sudo bash`: in a pipeline
             # the shell reports bash's exit status, so a failed download exits 0
@@ -187,7 +191,7 @@ def get_install_instructions(server_id):
             'one_liner': (
                 f'curl -fsSL {api_url}/install.sh -o /tmp/serverkit-agent-install.sh '
                 f'&& sudo bash /tmp/serverkit-agent-install.sh '
-                f'--token "YOUR_TOKEN" --server "{base_url}"'
+                f'--token "YOUR_TOKEN" --server "{base_url}" --level {level}'
             ),
             'manual': [
                 f'# Download the script',
@@ -195,17 +199,17 @@ def get_install_instructions(server_id):
                 f'chmod +x install.sh',
                 f'',
                 f'# Run installation',
-                f'sudo ./install.sh --token "YOUR_TOKEN" --server "{base_url}"'
+                f'sudo ./install.sh --token "YOUR_TOKEN" --server "{base_url}" --level {level}'
             ]
         },
         'windows': {
-            'one_liner': f'irm {api_url}/install.ps1 | iex; Install-ServerKitAgent -Token "YOUR_TOKEN" -Server "{base_url}"',
+            'one_liner': f'irm {api_url}/install.ps1 | iex; Install-ServerKitAgent -Token "YOUR_TOKEN" -Server "{base_url}" -Level {level}',
             'manual': [
                 f'# Download the script (run in PowerShell as Administrator)',
                 f'Invoke-WebRequest -Uri "{api_url}/install.ps1" -OutFile install.ps1',
                 f'',
                 f'# Run installation',
-                f'.\\install.ps1 -Token "YOUR_TOKEN" -Server "{base_url}"'
+                f'.\\install.ps1 -Token "YOUR_TOKEN" -Server "{base_url}" -Level {level}'
             ]
         },
         'note': 'Replace YOUR_TOKEN with the registration token shown in the UI'
@@ -409,7 +413,8 @@ def _compare_versions(v1, v2):
             elif a > b:
                 return 1
         return 0
-    except:
+    except (ValueError, AttributeError, TypeError):
+        current_app.logger.warning('Could not compare versions %r and %r', v1, v2)
         return 0
 
 

@@ -101,9 +101,17 @@
         display: flex;
         align-items: center;
         gap: $space-3;
+        width: 100%;
         padding: $space-3 $space-4;
+        border: 0;
+        background: none;
+        font: inherit;
+        text-align: start;
         cursor: pointer;
         transition: background 0.12s, border-color 0.12s;
+        @include focus-ring();
+
+        &:focus-visible { outline-offset: -2px; }
 
         + .ws-pick__item { border-top: 1px solid var(--border-soft); }
 

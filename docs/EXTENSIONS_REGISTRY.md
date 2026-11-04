@@ -40,7 +40,7 @@ Relevant endpoints:
 |---|---|
 | `GET /api/v1/marketplace/registry` | list registry entries + live install state |
 | `POST /api/v1/marketplace/registry/<slug>/install` | checksum-verified install (admin) |
-| `GET /api/v1/plugins/updates` | installed plugins with a newer registry version |
+| `GET /api/v1/plugins/updates` | installed plugins with a newer registry/bundled version; returns `{updates, count, checked_at, registry_source}`, `?refresh=1` refetches |
 | `POST /api/v1/plugins/<id>/update` | update a plugin to the registry version (admin) |
 
 ---

@@ -5,12 +5,16 @@ import threading
 import time
 import queue
 import re
+import logging
+import subprocess
 
 from app.services.system_service import SystemService
 from app.services.log_service import LogService, LogStreamer
 from app.services.docker_service import DockerService
 from app import sockets_rooms as rooms
 from app.utils.background_loop import BackgroundLoop
+
+logger = logging.getLogger(__name__)
 
 
 class AuthorizedSocketIO(SocketIO):
@@ -775,11 +779,11 @@ def handle_subscribe_container_logs(data):
             try:
                 process.terminate()
                 process.wait(timeout=2)
-            except:
+            except (OSError, subprocess.SubprocessError):
                 try:
                     process.kill()
-                except:
-                    pass
+                except OSError as kill_err:
+                    logger.debug('Could not kill log stream process: %s', kill_err)
 
     thread = threading.Thread(target=stream_logs, daemon=True)
     thread.start()
@@ -836,11 +840,11 @@ def stop_container_log_stream(sid: str):
             try:
                 process.terminate()
                 process.wait(timeout=2)
-            except:
+            except (OSError, subprocess.SubprocessError):
                 try:
                     process.kill()
-                except:
-                    pass
+                except OSError as kill_err:
+                    logger.debug('Could not kill log stream process: %s', kill_err)
 
 
 def emit_container_log(app_id: int, line: str, level: str = 'info'):

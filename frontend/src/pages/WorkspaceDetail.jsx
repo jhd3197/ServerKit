@@ -254,13 +254,29 @@ const WorkspaceDetail = () => {
             topbarClassName="ws-detail-topbar"
             contentClassName="app-detail-page app-detail-page--wide"
             icon={<LayoutGrid size={18} />}
-            title={(
-                <span className="ws-crumbs">
-                    <Link to="/workspaces">{t('app.workspaceDetail.workspaces', 'Workspaces')}</Link>
-                    <span className="ws-crumbs__sep">/</span>
-                    <span className="ws-crumbs__cur">{ws.name}</span>
-                </span>
+            title={ws.name}
+            navLabel={t('app.workspaceDetail.sections', 'Workspace sections')}
+            meta={(
+                <>
+                    <FavoriteStar type="workspace" id={ws.id} path={`/workspaces/${ws.id}`} label={ws.name} />
+                    {isCurrent
+                        ? <Pill kind="green">{t('app.workspaceDetail.activeWorkspace', 'active workspace')}</Pill>
+                        : <Pill kind={ws.status === 'active' ? 'green' : 'amber'}>{ws.status}</Pill>}
+                    <span>/{ws.slug}</span>
+                    <span>{t('app.workspaceDetail.memberCount', { count: members.length, defaultValue_one: '1 member', defaultValue_other: '{{count}} members' })}</span>
+                    {since && <span>since {since}</span>}
+                </>
             )}
+            tabs={VALID_TABS.map((tab) => {
+                const Icon = TAB_META[tab].icon;
+                return {
+                    id: tab,
+                    label: TAB_META[tab].label,
+                    icon: <Icon size={15} />,
+                    active: activeTab === tab,
+                    onSelect: () => setActiveTab(tab),
+                };
+            })}
         >
 
             <div className="app-detail-body">
@@ -272,42 +288,7 @@ const WorkspaceDetail = () => {
                         onRetry={load}
                     />
                 )}
-                <div className="app-detail-header">
-                    <ServiceTile name={ws.name} size={54} gradient={ws.primary_color || undefined} className="ws-detail__tile" />
-                    <div className="app-detail-title-block">
-                        <h1>
-                            {ws.name}
-                            <FavoriteStar type="workspace" id={ws.id} path={`/workspaces/${ws.id}`} label={ws.name} />
-                            {isCurrent
-                                ? <Pill kind="green">{t('app.workspaceDetail.activeWorkspace', 'active workspace')}</Pill>
-                                : <Pill kind={ws.status === 'active' ? 'green' : 'amber'}>{ws.status}</Pill>}
-                        </h1>
-                        <div className="app-detail-subtitle">
-                            <span>/{ws.slug}</span>
-                            <span className="separator">·</span>
-                            <span>{t('app.workspaceDetail.memberCount', { count: members.length, defaultValue_one: '1 member', defaultValue_other: '{{count}} members' })}</span>
-                            {since && <><span className="separator">·</span><span>since {since}</span></>}
-                        </div>
-                    </div>
-                </div>
-
                 {ws.description && <p className="ws-detail__desc">{ws.description}</p>}
-
-                <div className="app-detail-tabs">
-                    {VALID_TABS.map((tab) => {
-                        const meta = TAB_META[tab];
-                        const Icon = meta.icon;
-                        return (
-                            <div
-                                key={tab}
-                                className={`app-detail-tab ${activeTab === tab ? 'active' : ''} ${tab === 'settings' ? 'app-detail-tab--end' : ''}`}
-                                onClick={() => setActiveTab(tab)}
-                            >
-                                <Icon size={14} /> {meta.label}
-                            </div>
-                        );
-                    })}
-                </div>
 
                 <div className="app-detail-content">
                     {activeTab === 'overview' && (

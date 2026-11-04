@@ -9,6 +9,7 @@ import {
 
 import { Drawer } from '../components/ds';
 import EmptyState from '../components/EmptyState';
+import SectionIntro from '../components/SectionIntro';
 import FormField from '../components/FormField';
 import { runRecipe, useRecipeCatalog } from '../hooks/useRecipeCatalog';
 import { useToast } from '../contexts/useToast.js';
@@ -36,7 +37,8 @@ function RecipeIcon({ icon }) {
     return <Icon size={17} />;
 }
 
-const GB = 1024 * 1024 * 1024;
+const MB = 1024 * 1024;
+const GB = 1024 * MB;
 
 function preflight(requirements, server) {
     if (!server || !requirements) return [];
@@ -52,9 +54,9 @@ function preflight(requirements, server) {
     if (requirements.memoryMB) {
         rows.push({
             key: 'mem',
-            need: formatBytes(requirements.memoryMB * GB, { decimals: 0 }),
+            need: formatBytes(requirements.memoryMB * MB, { decimals: 0 }),
             have: formatBytes(server.total_memory, { decimals: 0 }),
-            ok: !!server.total_memory && server.total_memory >= requirements.memoryMB * GB,
+            ok: !!server.total_memory && server.total_memory >= requirements.memoryMB * MB,
         });
     }
     if (requirements.diskGB) {
@@ -143,11 +145,21 @@ export default function Recipes() {
     };
 
     return (
-        <div className="recipes-page">
+        <div className="sk-tabgroup__inner recipes-page">
             <div className="recipes-page__head">
-                <p className="recipes-page__lede">
-                    {t('app.recipes.lede', 'Ready-to-go installers that run as real operations: probe, derive, apply, verify. Secrets are asked for mid-run and kept in the vault.')}
-                </p>
+                <SectionIntro
+                    className="recipes-page__intro"
+                    icon={<ChefHat />}
+                    info={t('app.recipes.lede', 'Ready-to-go installers that run as real operations: probe, derive, apply, verify. Secrets are asked for mid-run and kept in the vault.')}
+                    steps={[
+                        { icon: <Search />, label: t('app.recipes.stepProbe', 'Probe'), info: t('app.recipes.stepProbeInfo', 'Check the target server meets the requirements.') },
+                        { icon: <Play />, label: t('app.recipes.stepApply', 'Apply'), info: t('app.recipes.stepApplyInfo', 'Derive settings and run the install as a real operation.') },
+                        { icon: <Lock />, label: t('app.recipes.stepSecrets', 'Secrets'), info: t('app.recipes.stepSecretsInfo', 'Secrets are asked for mid-run and kept in the vault.') },
+                        { icon: <Check />, label: t('app.recipes.stepVerify', 'Verify'), info: t('app.recipes.stepVerifyInfo', 'Confirm the service came up healthy.') },
+                    ]}
+                >
+                    {t('app.recipes.headerLine', 'One-click installers')}
+                </SectionIntro>
                 <label className="recipes-page__search">
                     <Search size={14} />
                     <input
@@ -165,7 +177,8 @@ export default function Recipes() {
                         <SharedButton variant="unstyled"
                             key={cat}
                             type="button"
-                            className={`sk-pill${category === cat ? ' is-active' : ''}`}
+                            className={`recipes-page__cat${category === cat ? ' is-active' : ''}`}
+                            aria-pressed={category === cat}
                             onClick={() => setCategory(cat)}
                         >
                             {cat === 'all' ? t('common.labels.all', 'All') : cat}
@@ -214,7 +227,7 @@ export default function Recipes() {
                                     {(recipe.requirements?.cpuCores)
                                         && <span>{recipe.requirements.cpuCores} vCPU</span>}
                                     {(recipe.requirements?.memoryMB)
-                                        && <span>{formatBytes(recipe.requirements.memoryMB * GB, { decimals: 0 })}</span>}
+                                        && <span>{formatBytes(recipe.requirements.memoryMB * MB, { decimals: 0 })}</span>}
                                     {(recipe.requirements?.diskGB)
                                         && <span>{formatBytes(recipe.requirements.diskGB * GB, { decimals: 0 })}</span>}
                                     {(recipe.requirements?.igpu && recipe.requirements.igpu !== 'none')

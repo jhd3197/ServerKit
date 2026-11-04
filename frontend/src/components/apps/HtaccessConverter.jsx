@@ -9,6 +9,7 @@ import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
+import InfoTip from '@/components/InfoTip';
 
 // Paste-in .htaccess -> nginx converter for the per-site custom nginx rules
 // editor. Pairs with the site-import feature: imported cPanel sites carry
@@ -112,7 +113,7 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
             >
                 <div className="htaccess-converter">
                     <p className="htaccess-converter__hint">
-                        {t('app.htaccessConverter.pasteTheContentsOfAnApache', 'Paste the contents of an Apache')} <code>.htaccess</code> {t('app.htaccessConverter.fileEGFromAnImported', 'file (e.g. from an imported cPanel site). Rewrites, redirects, access rules and basic auth are translated to nginx directives for the custom rules box; anything that has no equivalent is listed below instead of being dropped.')}
+                        {t('app.htaccessConverter.hintShort', 'Paste an .htaccess file to convert it.')} <InfoTip>{t('app.htaccessConverter.pasteTheContentsOfAnApache', 'Paste the contents of an Apache')} <code>.htaccess</code> {t('app.htaccessConverter.fileEGFromAnImported', 'file (e.g. from an imported cPanel site). Rewrites, redirects, access rules and basic auth are translated to nginx directives for the custom rules box; anything that has no equivalent is listed below instead of being dropped.')}</InfoTip>
                     </p>
 
                     <Textarea

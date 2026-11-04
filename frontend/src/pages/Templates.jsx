@@ -16,10 +16,10 @@ import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
 import {
-    SearchField, FilterDrawer, FilterButton, countActiveFilters, Drawer,
+    SearchField, FilterDrawer, countActiveFilters, Drawer,
     DataTableFooter, CatalogCard, CatalogGrid,
 } from '@/components/ds';
-import { useTableChrome, GridViewPicker, GridToolsMenu } from '@/components/ds/grid';
+import { useTableChrome, GridViewPicker, GridToolsMenu, GridFilterButton } from '@/components/ds/grid';
 import ServerPicker from '@/components/ServerPicker';
 import PortField from '@/components/PortField';
 import { LOCAL_SERVER_ID } from '@/utils/serverTarget';
@@ -513,19 +513,10 @@ const Templates = () => {
                 onSearch={setSearchQueryFilter}
                 placeholder={t('app.templates.searchTemplates', 'Search templates…')}
             />
-            <FilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
+            <GridFilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
             <GridToolsMenu {...chrome.toolsProps} onRefresh={() => Promise.all([loadCategories(), loadTemplates()])} />
         </>,
     );
-
-    if (loading) {
-        return (
-            <div className="sk-tabgroup__inner">
-                {topbarChrome}
-                <EmptyState loading loadingVariant="cards" title={t('app.templates.loadingTemplates', 'Loading templates')} />
-            </div>
-        );
-    }
 
     return (
         <div className="sk-tabgroup__inner templates-page">
@@ -568,7 +559,14 @@ const Templates = () => {
             {loadError && templates.length > 0 && (
                 <ErrorState compact error={loadError} onRetry={loadTemplates} />
             )}
-            {loadError && templates.length === 0 ? (
+            {/* Loading lives in the results area only: the toolbar above (and the
+                search box in the top bar) stay mounted so typing a query never
+                tears them down. Stale cards stay visible, dimmed, while the next
+                request is in flight. */}
+            <div className="templates-page__results" aria-busy={loading} data-busy={loading && templates.length > 0 ? 'true' : undefined}>
+            {loading && templates.length === 0 && !loadError ? (
+                <EmptyState loading loadingVariant="cards" title={t('app.templates.loadingTemplates', 'Loading templates')} />
+            ) : loadError && templates.length === 0 ? (
                 <ErrorState
                     title={t('app.templates.couldntLoadTemplates', "Couldn't load templates.")}
                     error={loadError}
@@ -598,7 +596,7 @@ const Templates = () => {
                                 tag={isRepo ? t('app.templates.gitRepo', 'Git repo') : t('app.templates.oneClick', 'One-click')}
                                 featured={isFeatured(template)}
                                 description={template.description}
-                                facts={(template.categories || []).slice(0, 2).join(' · ')}
+                                chips={(template.categories || []).slice(0, 3)}
                                 onClick={deployManaged ? undefined : () => handleDeploy(template)}
                                 action={!deployManaged && (
                                     <Button variant="outline" size="sm" onClick={() => handleDeploy(template)}>
@@ -610,6 +608,7 @@ const Templates = () => {
                     })}
                 </CatalogGrid>
             )}
+            </div>
 
             {/* Under the cards, not above them: `templates` is what the category
                 and search query returned, `sortedTemplates` is what the kind

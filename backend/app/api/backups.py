@@ -1,3 +1,4 @@
+import logging
 import os
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
@@ -7,10 +8,21 @@ from app.services.backup_service import BackupService
 from app.services.backup_policy_service import BackupPolicyService, BackupPolicyError
 from app.services.storage_provider_service import StorageProviderService
 from app import db, paths
-from app.exceptions import field_required, not_found
+from app.exceptions import DependencyUnavailableError, field_required, not_found
 from app.api._request import json_object
 
 backups_bp = Blueprint('backups', __name__)
+logger = logging.getLogger(__name__)
+
+_STORAGE_UNAVAILABLE = ('Backup storage is not accessible: the panel cannot create or read '
+                        'its backup directory. Check its ownership and permissions.')
+
+
+@backups_bp.errorhandler(PermissionError)
+def _backup_dir_unavailable(exc):
+    logger.error('Backup directory is not writable: %s', exc)
+    err = DependencyUnavailableError('Backup directory is not writable', code='backup_dir_unavailable')
+    return jsonify(err.to_dict()), err.status_code
 
 
 # UI-facing metadata for the CORE target types. Extension kinds
@@ -62,7 +74,12 @@ def list_target_types():
 def list_backups():
     """List all backups."""
     backup_type = request.args.get('type')
-    backups = BackupService.list_backups(backup_type)
+    try:
+        backups = BackupService.list_backups(backup_type)
+    except OSError:
+        # e.g. PermissionError creating /var/backups/serverkit: keep the page usable.
+        logger.exception('Backup directory is not accessible')
+        return jsonify({'backups': [], 'warning': _STORAGE_UNAVAILABLE}), 200
     return jsonify({'backups': backups}), 200
 
 
@@ -70,7 +87,14 @@ def list_backups():
 @admin_required
 def get_stats():
     """Get backup statistics."""
-    stats = BackupService.get_backup_stats()
+    try:
+        stats = BackupService.get_backup_stats()
+    except OSError:
+        logger.exception('Backup directory is not accessible')
+        stats = {'total_backups': 0, 'application_backups': 0, 'database_backups': 0,
+                 'file_backups': 0, 'total_size': 0, 'total_size_human': '0 B',
+                 'remote_count': 0, 'remote_size': 0, 'remote_size_human': '0 B',
+                 'warning': _STORAGE_UNAVAILABLE}
     return jsonify(stats), 200
 
 

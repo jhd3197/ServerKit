@@ -4,6 +4,7 @@ import api from '../../services/api';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '../../contexts/useToast.js';
 import { toastError } from '@/utils/errorMessage';
+import InfoTip from '@/components/InfoTip';
 
 // Opt-in PgBouncer beside an installed PostgreSQL. Renders only
 // for PostgreSQL installs. Apps keep the direct connection unless they switch
@@ -56,10 +57,10 @@ export default function PoolerCard({ app }) {
                 />
             </div>
             <p className="pooler__hint">
-                {t('app.pooler.hint', 'Runs PgBouncer in transaction mode beside this database, so many client connections share a few server connections. Services opt in by referencing pooledUrl instead of connectionString.')}
+                {t('app.pooler.hintShort', 'PgBouncer shares a few server connections.')} <InfoTip>{t('app.pooler.hint', 'Runs PgBouncer in transaction mode beside this database, so many client connections share a few server connections. Services opt in by referencing pooledUrl instead of connectionString.')}</InfoTip>
             </p>
             <p className="pooler__tradeoff">
-                {t('app.pooler.tradeoff', 'Transaction pooling breaks session features: prepared statements in some drivers, LISTEN/NOTIFY, advisory locks and session SET. Services keep the direct connection unless they switch.')}
+                {t('app.pooler.tradeoffShort', 'Transaction pooling breaks session features.')} <InfoTip>{t('app.pooler.tradeoff', 'Transaction pooling breaks session features: prepared statements in some drivers, LISTEN/NOTIFY, advisory locks and session SET. Services keep the direct connection unless they switch.')}</InfoTip>
             </p>
         </div>
     );

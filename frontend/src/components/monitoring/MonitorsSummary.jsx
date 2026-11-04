@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { monitorStateOf } from './monitorShared';
 import { usePolling } from '../../hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import InfoTip from '@/components/InfoTip';
 
 const POLL_MS = 15000;
 const FEED_LIMIT = 9;
@@ -85,7 +86,7 @@ export default function MonitorsSummary({ refreshKey = 0 }) {
                     </Button>
                 </div>
                 <p className="mon-panel-hint">
-                    {t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkit', 'Everything below describes the servers ServerKit runs on. Add a monitor to watch a website, an API endpoint, a database port or a WordPress site and get an incident when it stops answering.')}
+                    {t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkitShort', 'Below: the servers ServerKit runs on.')} <InfoTip>{t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkit', 'Everything below describes the servers ServerKit runs on. Add a monitor to watch a website, an API endpoint, a database port or a WordPress site and get an incident when it stops answering.')}</InfoTip>
                 </p>
             </section>
         );

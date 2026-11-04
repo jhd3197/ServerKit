@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import InfoTip from '@/components/InfoTip';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
@@ -153,7 +154,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             <EmptyState
                 icon={FileSearch}
                 title={t('app.surveyTab.surveyNotAvailable', 'Survey not available')}
-                description={t('app.surveyTab.thisAgentDoesnTSupportThe', "This agent doesn't support the read-only survey yet. Upgrade the agent to enable Observe mode. It maps what's running on the server without changing anything.")}
+                description={<>{t('app.surveyTab.upgradeAgentForSurvey', 'Upgrade the agent to enable Observe mode.')} <InfoTip>{t('app.surveyTab.thisAgentDoesnTSupportThe', "This agent doesn't support the read-only survey yet. Upgrade the agent to enable Observe mode. It maps what's running on the server without changing anything.")}</InfoTip></>}
             />
         );
     }

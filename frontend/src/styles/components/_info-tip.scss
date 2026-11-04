@@ -1,0 +1,334 @@
+// "Less text" building blocks: <InfoTip>, <IconStepStrip>, <SectionIntro>,
+// plus the small chip / tile / illustration helpers the pages share.
+
+.info-tip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: $text-muted;
+    cursor: pointer;
+    vertical-align: middle;
+
+    &:hover,
+    &[data-state='open'] { color: $accent-primary; }
+
+    &--sm { width: 18px; height: 18px; svg { width: 14px; height: 14px; } } // geometry: inline icon button
+    &--md { width: 24px; height: 24px; svg { width: 16px; height: 16px; } } // geometry: inline icon button
+
+    &:focus-visible {
+        outline: 2px solid $accent-primary;
+        outline-offset: 1px;
+    }
+}
+
+// Above Sheet (1150) and Modal; same layer as .ui-tooltip.
+.ui-popover-panel.info-tip__panel {
+    z-index: $z-tooltip + 10;
+    width: auto;
+    max-width: min(320px, calc(100vw - 24px));
+    max-height: var(--radix-popover-content-available-height, 60vh);
+    overflow-y: auto;
+    padding: $space-2 $space-3;
+    font-size: $text-sm;
+    font-weight: $font-weight-normal;
+    line-height: 1.5;
+    text-transform: none;
+    letter-spacing: normal;
+
+    p { margin: 0; }
+    p + p { margin-top: $space-2; }
+    code { font-family: $font-mono; font-size: $text-xs; }
+}
+
+// Narrow screens: the tip is a bottom sheet with a grab handle, above any
+// open Modal/Sheet, clear of the home indicator.
+.ui-sheet-overlay.info-tip__overlay {
+    z-index: $z-tooltip + 9;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: none;
+}
+
+.ui-sheet-content.info-tip__sheet {
+    z-index: $z-tooltip + 10;
+    gap: $space-2;
+    max-height: 70vh;
+    padding: $space-6 $space-5 calc(#{$space-5} + env(safe-area-inset-bottom));
+    border-radius: $radius-overlay $radius-overlay 0 0;
+    text-transform: none;
+    letter-spacing: normal;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset-block-start: $space-2;
+        inset-inline-start: 50%;
+        width: 36px;  // geometry: grab handle
+        height: 4px;  // geometry: grab handle
+        border-radius: $radius-full;
+        background: $border-default;
+        transform: translateX(-50%);
+    }
+}
+
+.info-tip__sheet-title {
+    margin: 0;
+    padding-inline-end: $space-8;
+    color: $text-primary;
+    font-size: $text-base;
+    font-weight: $font-weight-semibold;
+}
+
+.info-tip__sheet-body {
+    color: $text-secondary;
+    font-size: $text-base;
+    line-height: 1.55;
+
+    p { margin: 0; }
+    p + p { margin-top: $space-2; }
+    code { font-family: $font-mono; font-size: $text-sm; }
+}
+
+.section-intro {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    margin: 0;
+    color: $text-secondary;
+    font-size: $text-sm;
+
+    // Compact card: icon tile + title + (i), steps inline on the right.
+    &--banner {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: $space-3 $space-6;
+        padding: $space-3 $space-4;
+        background: $bg-card;
+        border: 1px solid $border-subtle;
+        border-radius: $radius-card;
+    }
+
+    &__head {
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+        min-width: 0;
+    }
+
+    &__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+        width: $control-md;
+        height: $control-md;
+        border-radius: $radius-control;
+        @include status-variant($accent-primary, $accent-bg);
+
+        svg { width: 18px; height: 18px; } // geometry: icon in tile
+    }
+
+    &__title {
+        min-width: 0;
+        color: $text-primary;
+        font-size: $text-base;
+        font-weight: $font-weight-semibold;
+    }
+
+    @include respond-to($breakpoint-sm) {
+        &--banner {
+            flex-direction: column;
+            align-items: stretch;
+            padding: $space-4;
+        }
+
+        &__title { flex: 1; }
+    }
+}
+
+// Equal-width step pills joined by thin chevrons that sit in the gaps.
+.icon-step-strip {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr; // equal pills, but never narrower than a label
+    gap: $space-5;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__step {
+        position: relative;
+        display: flex;
+        min-width: 0;
+    }
+
+    &__arrow {
+        position: absolute;
+        inset-block-start: 50%;
+        inset-inline-start: -16px; // geometry: centres 12px chevron in the 20px gap
+        width: 12px;  // geometry: connector icon
+        height: 12px; // geometry: connector icon
+        color: $text-muted;
+        transform: translateY(-50%);
+    }
+
+    &__pill {
+        position: relative;
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        gap: $space-2;
+        min-width: 0;
+        min-height: $control-md;
+        margin: 0;
+        padding: $space-1 $space-2;
+        border: 1px solid $border-default;
+        border-radius: $radius-control;
+        background: $bg-secondary;
+        color: $text-primary;
+        font: inherit;
+        text-align: center;
+
+        &--info {
+            cursor: pointer;
+            @include transition(border-color);
+
+            &:hover,
+            &[data-state='open'] { border-color: $accent-primary; }
+
+            &:focus-visible {
+                outline: 2px solid $accent-primary;
+                outline-offset: 1px;
+            }
+        }
+    }
+
+    &__icon {
+        display: inline-flex;
+        flex: none;
+        color: $accent-primary;
+
+        svg { width: 16px; height: 16px; } // geometry: icon in pill
+    }
+
+    &__label {
+        min-width: 0;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
+        line-height: 1.3;
+    }
+
+    // Touch hint only; on desktop hover + the accent border say "more here".
+    &__more {
+        display: none;
+        width: 12px;  // geometry: info hint glyph
+        height: 12px; // geometry: info hint glyph
+        color: $text-muted;
+    }
+
+    // Narrow: icon over a wrapping label, the (i) hint tucked in the corner.
+    @include respond-to($breakpoint-sm) {
+        gap: $space-4;
+
+        &__arrow { inset-inline-start: -14px; } // geometry: centres chevron in the 16px gap
+
+        &__pill {
+            flex-direction: column;
+            gap: $space-1;
+            padding: $space-2 $space-1;
+        }
+
+        &__label { font-size: $text-xs; }
+
+        &__more {
+            display: block;
+            position: absolute;
+            inset-block-start: $space-1;
+            inset-inline-end: $space-1;
+        }
+    }
+}
+
+// Status / tag chip with a leading icon.
+.tip-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: 2px $space-2; // geometry: chip
+    border-radius: $radius-badge;
+    background: $bg-secondary;
+    color: $text-secondary;
+    font-size: $text-xs;
+    font-weight: $font-weight-medium;
+    white-space: nowrap;
+
+    svg { width: 14px; height: 14px; } // geometry: chip icon
+
+    &--warning { color: $warning; }
+    &--success { color: $success; }
+    &--danger { color: $danger; }
+    &--accent { color: $accent-primary; }
+}
+
+.tip-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-1;
+}
+
+// Row of logo/icon tiles with a caption under each.
+.logo-tile-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-3;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $space-1;
+        color: $text-secondary;
+        font-size: $text-xs;
+    }
+
+    &__tile {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: $control-lg;
+        height: $control-lg;
+        border-radius: $radius-control;
+        background: $bg-secondary;
+        border: 1px solid $border-default;
+        color: $text-primary;
+
+        svg { width: 20px; height: 20px; } // geometry: logo in tile
+    }
+}
+
+.tip-illustration {
+    flex: none;
+    width: 48px;  // geometry: illustration
+    height: 48px; // geometry: illustration
+    color: $accent-primary;
+}
+
+// Label + (i) tip on one row, for plain <label> markup outside FormField.
+.label-with-tip {
+    display: flex;
+    align-items: center;
+    gap: $space-1;
+    margin-bottom: $space-1;
+
+    > label { margin-bottom: 0; }
+}

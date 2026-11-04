@@ -108,3 +108,17 @@ def test_list_servers_metrics_are_batched_not_per_row(client, auth_headers, serv
     assert count_metric_queries() == baseline, (
         'metrics lookup grew with the server count — it must stay batched'
     )
+
+
+@pytest.mark.parametrize('param', ['from', 'to'])
+def test_metrics_rejects_a_malformed_timestamp_with_400(app, client, auth_headers, param):
+    with app.app_context():
+        server = _mk_server('delta')
+        db.session.commit()
+        server_id = server.id
+
+    resp = client.get(f'/api/v1/servers/{server_id}/metrics?{param}=not-a-date',
+                      headers=auth_headers)
+
+    assert resp.status_code == 400
+    assert resp.get_json()['error']

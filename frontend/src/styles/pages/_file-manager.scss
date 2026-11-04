@@ -302,7 +302,7 @@ $ft-default:  #646b7a;
             width: 100%;
 
             &::placeholder { color: $text-tertiary; }
-            &:focus { outline: none; }
+            &:focus-visible { outline-offset: -2px; }
         }
 
         .search-field-clear {
@@ -1776,7 +1776,7 @@ $drawer-width: 520px;
         color: $text-primary;
         min-height: 280px;
 
-        &:focus { outline: none; }
+        &:focus-visible { outline-offset: -2px; }
         &[readonly] { background: $bg-body; }
     }
 

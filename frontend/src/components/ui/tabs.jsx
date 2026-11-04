@@ -4,12 +4,16 @@ import { MoreHorizontal } from 'lucide-react';
 import { Popover, PopoverTrigger, PopoverContent } from './popover';
 import { cn } from '@/lib/utils';
 import { useOverflowItems } from '@/hooks/useOverflowItems';
+import { useScrollTabs } from '@/hooks/useScrollTabs';
 import { t } from '../../i18n/t';
 import { Button as SharedButton } from '@/components/ui/button';
 
 const Tabs = TabsPrimitive.Root;
 
-const TabsList = React.forwardRef(({ className, children, ...props }, ref) => {
+// Default: tabs that don't fit collapse into a "More" popover. With `scroll`,
+// the strip scrolls sideways instead (edge fades, active tab kept in view) —
+// the better fit when every tab should stay one tap away, e.g. on phones.
+const TabsList = React.forwardRef(({ className, children, scroll = false, ...props }, ref) => {
   const childArray = React.Children.toArray(children).filter(React.isValidElement);
   const [popoverOpen, setPopoverOpen] = React.useState(false);
   const itemRefs = React.useRef([]);
@@ -22,7 +26,7 @@ const TabsList = React.forwardRef(({ className, children, ...props }, ref) => {
     return active;
   }, []);
 
-  const { containerRef, moreBtnRef, hiddenIndices, hiddenSet, recompute } = useOverflowItems({
+  const { containerRef, moreBtnRef, hiddenIndices: overflowIndices, hiddenSet: overflowSet, recompute } = useOverflowItems({
     count: childArray.length,
     itemRefs,
     gap: 8,
@@ -30,8 +34,15 @@ const TabsList = React.forwardRef(({ className, children, ...props }, ref) => {
     getActiveIndex,
   });
 
+  const hiddenIndices = scroll ? [] : overflowIndices;
+  const hiddenSet = scroll ? new Set() : overflowSet;
+
+  const scrollRef = React.useRef(null);
+  useScrollTabs(scrollRef, scroll);
+
   const setContainerRef = React.useCallback(
     (node) => {
+      scrollRef.current = node;
       containerRef.current = node;
       if (typeof ref === 'function') ref(node);
       else if (ref) ref.current = node;
@@ -56,7 +67,7 @@ const TabsList = React.forwardRef(({ className, children, ...props }, ref) => {
   return (
     <TabsPrimitive.List
       ref={setContainerRef}
-      className={cn('tabs', className)}
+      className={cn('tabs', scroll && 'sk-tabscroll', className)}
       {...props}
     >
       {childArray.map((child, i) => {

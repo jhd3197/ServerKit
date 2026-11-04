@@ -13,6 +13,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from sqlalchemy.orm import joinedload
 from app import db, limiter
+from app.services import permission_levels
 from app.services.server_metrics_service import latest_metrics_by_server
 from app.api._query import apply_query, QueryParseError
 from app.api._request import json_object
@@ -440,6 +441,8 @@ def create_server():
         registered_by=user_id,
         workspace_id=ws_id,
         registration_token_expires=expires_at,
+        # What the install command asks for; the agent's report is the truth.
+        requested_permission_level=permission_levels.normalize(data.get('requested_level')),
     )
     server.set_registration_token(registration_token)
 
@@ -718,6 +721,7 @@ def regenerate_token(server_id):
     registration_token = Server.generate_registration_token()
     server.set_registration_token(registration_token)
     server.registration_token_expires = expires_at
+    server.requested_permission_level = permission_levels.normalize(data.get('requested_level'))
     server.status = 'pending'
     server.agent_id = None
 
@@ -792,6 +796,10 @@ def register_agent():
         server.total_disk = system_info.get('total_disk', server.total_disk)
 
     server.agent_version = data.get('agent_version')
+    # Level is whatever the agent says it was installed with; the panel never
+    # sets it. A mismatch with the requested level is surfaced in the UI.
+    from app.services import agent_health_service
+    agent_health_service.record_level(server, data.get('permission_level'))
 
     # Replace the panel-issued placeholder name with whatever the agent
     # reports — preferring the OS hostname over the agent's optional
@@ -883,15 +891,15 @@ def get_server_metrics(server_id):
         try:
             from_dt = datetime.fromisoformat(from_time.replace('Z', '+00:00'))
             query = query.filter(ServerMetrics.timestamp >= from_dt)
-        except:
-            pass
+        except ValueError:
+            raise ValidationError("Invalid 'from' timestamp; use ISO 8601")
 
     if to_time:
         try:
             to_dt = datetime.fromisoformat(to_time.replace('Z', '+00:00'))
             query = query.filter(ServerMetrics.timestamp <= to_dt)
-        except:
-            pass
+        except ValueError:
+            raise ValidationError("Invalid 'to' timestamp; use ISO 8601")
 
     metrics = query.order_by(ServerMetrics.timestamp.desc()).limit(limit).all()
 

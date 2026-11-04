@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState  } from 'react';
+import InfoTip from '@/components/InfoTip';
 import api from '../services/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -377,7 +378,7 @@ export default function Vaults() {
             onRowClick={(v) => openVault(v.id)}
             emptyIcon={KeyRound}
             emptyTitle="No vaults yet"
-            emptyDescription="A vault is an encrypted key/value store for credentials and tokens. Create one to start putting secrets in it."
+            emptyDescription={<>{t('app.vaults.emptyShort', 'Encrypted store for credentials.')} <InfoTip>{t('app.vaults.emptyFull', 'A vault is an encrypted key/value store for credentials and tokens. Create one to start putting secrets in it.')}</InfoTip></>}
             emptyAction={(
                 <Button onClick={() => setVaultForm({ open: true, name: '', description: '', workspace_id: activeWorkspaceId })}>
                     <Plus size={16} /> {t('app.vaults.createYourFirstVault', 'Create your first vault')}

@@ -14,6 +14,7 @@ import { ENGINE_META } from './dbAdapter';
 import { useTranslation } from 'react-i18next';
 import { translateLabel } from '@/i18n/labels';
 import { formatDateTime } from '@/utils/intl';
+import InfoTip from '@/components/InfoTip';
 
 // Import a SQL dump into an existing database.
 //
@@ -276,7 +277,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
                                     />
                                 </div>
                                 <p className="dbx-field-hint">
-                                    {t('app.importDumpModal.anAbsolutePathOnTheServer', 'An absolute path on the panel server. There is no upload endpoint, so a file on your own machine has to be copied across first (scp, the file manager, or a backup taken here).')} <code>.gz</code> {t('app.importDumpModal.isDecompressedAutomatically', 'is decompressed automatically.')}
+                                    {t('app.importDumpModal.anAbsolutePathShort', 'Absolute path on the panel server.')} <InfoTip>{t('app.importDumpModal.anAbsolutePathOnTheServer', 'An absolute path on the panel server. There is no upload endpoint, so a file on your own machine has to be copied across first (scp, the file manager, or a backup taken here).')} <code>.gz</code> {t('app.importDumpModal.isDecompressedAutomatically', 'is decompressed automatically.')}</InfoTip>
                                 </p>
                             </>
                         )}

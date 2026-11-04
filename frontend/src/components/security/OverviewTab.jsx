@@ -15,7 +15,10 @@ import {
     Siren,
     Bug,
     Radar,
+    Puzzle,
+    Bell,
 } from 'lucide-react';
+import InfoTip from '@/components/InfoTip';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
 
 // Status glyph per check state — paired with the label so state never relies on
@@ -196,17 +199,22 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                         })}
                     </div>
 
-                    <p className="sec-hint sec-posture__foot">
+                    <div className="sec-posture__foot tip-chip-row">
                         {!hasSecurityExtensions && (
                             <>
-                                {t('app.overviewTab.moreSecurityTools', 'More security tools (malware scanning, brute-force protection, vulnerability scans, auto-updates) are available as extensions in the')}
-                                {' '}
-                                <Link to="/marketplace">{t('app.overviewTab.marketplaceLink', 'Extensions')}</Link>
-                                {'. '}
+                                <Link to="/marketplace" className="tip-chip tip-chip--accent">
+                                    <Puzzle aria-hidden="true" />
+                                    {t('app.overviewTab.marketplaceLink', 'Extensions')}
+                                </Link>
+                                <InfoTip>{t('app.overviewTab.moreSecurityTools', 'More security tools (malware scanning, brute-force protection, vulnerability scans, auto-updates) are available as extensions in the Extensions marketplace.')}</InfoTip>
                             </>
                         )}
-                        {t('app.overviewTab.addAlertDeliveryChannelsDiscordSlack', 'Add alert delivery channels (Discord, Slack, Telegram) in Settings → Notifications.')}
-                    </p>
+                        <Link to="/settings/notifications" className="tip-chip tip-chip--accent">
+                            <Bell aria-hidden="true" />
+                            {t('app.overviewTab.notificationsLink', 'Notifications')}
+                        </Link>
+                        <InfoTip>{t('app.overviewTab.addAlertDeliveryChannelsDiscordSlack', 'Add alert delivery channels (Discord, Slack, Telegram) in Settings → Notifications.')}</InfoTip>
+                    </div>
                 </SharedCardContent>
             </SharedCard>
         </div>

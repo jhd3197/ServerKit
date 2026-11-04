@@ -8,8 +8,11 @@
     gap: $space-6;
     min-height: calc(100vh - 200px);
 
+    // minmax(0, …): the nowrap tab strip must scroll, not stretch the column.
     @media (max-width: $breakpoint-lg) {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+        grid-auto-rows: min-content;
+        min-height: 0;
     }
 }
 
@@ -38,14 +41,34 @@
     }
 
     @media (max-width: $breakpoint-lg) {
-        flex-direction: row;
-        flex-wrap: wrap;
         position: static;
         max-height: none;
         overflow-y: visible;
         background: $bg-card;
         padding: $space-2;
         border-radius: $radius-card;
+    }
+}
+
+// The tab list: a rail on desktop, a single scrolling strip (edge fades,
+// active tab kept in view — see hooks/useScrollTabs) once the rail collapses.
+.settings-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+
+    @media (max-width: $breakpoint-lg) {
+        @include tab-scroll;
+        flex-direction: row;
+        align-items: center;
+
+        // Section labels become inline captions between groups of tabs.
+        .settings-nav-divider {
+            flex-shrink: 0;
+            margin: 0;
+            padding: 0 $space-2;
+            white-space: nowrap;
+        }
     }
 }
 
@@ -61,8 +84,8 @@
     border-radius: $radius-control;
 
     @media (max-width: $breakpoint-lg) {
-        flex-basis: 100%;
         width: 100%;
+        margin-bottom: $space-2;
     }
 }
 
@@ -138,6 +161,7 @@
 
     @media (max-width: $breakpoint-lg) {
         width: auto;
+        white-space: nowrap;
     }
 }
 
@@ -1159,6 +1183,10 @@
 
 .settings-label {
     flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: $space-1;
 
     > span:first-child {
         display: block;
@@ -1169,6 +1197,7 @@
 
     .settings-hint {
         display: block;
+        flex-basis: 100%;
         font-size: $text-xs;
         color: $text-tertiary;
     }

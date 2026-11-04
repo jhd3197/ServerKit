@@ -9,31 +9,9 @@
     }
 
     &__viewmeta {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin: 0.75rem 0 0.5rem;
+        margin: 0 0 $space-3;
         font-size: $text-sm;
         color: $text-secondary;
-
-        span {
-            flex: 1;
-        }
-    }
-
-    &__legend-toggle {
-        background: transparent;
-        border: 1px solid $border-subtle;
-        color: $text-secondary;
-        font-size: $text-xs;
-        padding: $space-1 $space-3;
-        border-radius: $radius-badge;
-        cursor: pointer;
-
-        &:hover {
-            background: $bg-hover;
-            color: $text-primary;
-        }
     }
 
     &__legend {
@@ -64,8 +42,9 @@
     }
 
     &__canvas {
-        flex: 1 1 auto;
-        min-height: 480px;
+        // ReactFlow sizes itself at height:100%, which needs a definite parent
+        // height — a bare min-height collapses it to zero.
+        height: max(360px, calc(100dvh - 16rem));
         border: 1px solid $border-subtle;
         border-radius: $radius-card;
         background: $bg-card;
@@ -76,8 +55,14 @@
             display: none;
         }
 
-        .react-flow__minimap {
-            background: var(--bg-elevated);
+        // Re-skin ReactFlow's light defaults with the panel's theme tokens.
+        .react-flow {
+            --xy-controls-button-background-color: #{$bg-elevated};
+            --xy-controls-button-background-color-hover: #{$bg-hover};
+            --xy-controls-button-color: #{$text-secondary};
+            --xy-controls-button-color-hover: #{$text-primary};
+            --xy-controls-button-border-color: #{$border-subtle};
+            --xy-background-color: transparent;
         }
     }
 

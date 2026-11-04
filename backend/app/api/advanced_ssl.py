@@ -1,3 +1,4 @@
+import logging
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from app.services.advanced_ssl_service import AdvancedSSLService
@@ -5,6 +6,8 @@ from app.services.audit_service import AuditService
 from app.models.audit_log import AuditLog
 from app.middleware.rbac import get_current_user
 from app.api._request import json_object
+
+logger = logging.getLogger(__name__)
 
 advanced_ssl_bp = Blueprint('advanced_ssl', __name__)
 
@@ -79,8 +82,9 @@ def upload_cert():
     try:
         result = AdvancedSSLService.upload_custom_cert(domain, cert, key, chain)
         return jsonify(result), 201
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except Exception:
+        logger.exception('Custom certificate upload failed')
+        return jsonify({'error': 'Could not install the certificate'}), 400
 
 
 @advanced_ssl_bp.route('/health/<domain>', methods=['GET'])

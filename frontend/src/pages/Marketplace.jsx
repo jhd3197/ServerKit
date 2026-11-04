@@ -1,236 +1,51 @@
 import { useState, useEffect, useCallback } from 'react';
-import { statusVariant } from '@/components/ds/status';
 import { useLocation, useSearchParams, useNavigate } from 'react-router-dom';
-import {
-    Activity,
-    CheckCircle2,
-    DownloadCloud,
-    ExternalLink,
-    Gamepad2,
-    LayoutGrid,
-    Package,
-    PackageCheck,
-    Plug,
-    PlugZap,
-    ServerCog,
-    ShieldAlert,
-    ShieldCheck,
-    ShieldQuestion,
-    Sparkles,
-    UploadCloud,
-} from 'lucide-react';
+import { PackageCheck, Package, UploadCloud } from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
-import { sanitizeSvgInner } from '../utils/sanitizeSvg';
 import Modal from '@/components/Modal';
 import PageLoader from '../components/PageLoader';
 import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import {
-    Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
-} from '@/components/ui/select';
-import {
-    SearchField, FilterDrawer, FilterButton, countActiveFilters,
-    CatalogCard, CatalogGrid,
+    SearchField, FilterDrawer, FilterButton, countActiveFilters, CatalogGrid, SegControl,
 } from '@/components/ds';
+import { statusVariant } from '@/components/ds/status';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
+import { useExtensionUpdates, refreshExtensionUpdates } from '@/hooks/useExtensionUpdates';
 import ManualInstallModal from '../components/marketplace/ManualInstallModal';
 import ExtensionPermissionsDialog from '../components/marketplace/ExtensionPermissionsDialog';
-import { ExtensionBrandMark } from '../components/icons/ExtensionBrands';
-import { hasBrandMark, extensionCoverStyle } from '../components/icons/extensionBrandData';
-import { resolveExtensionIcon } from '../components/icons/ExtensionIcons';
+import CatalogExtensionCard from '../components/marketplace/CatalogExtensionCard';
+import ExtensionDetailModal from '../components/marketplace/ExtensionDetailModal';
+import { PluginConfigDialog, PluginUninstallDialog } from '../components/marketplace/PluginDialogs';
+import InstalledCard from '../components/marketplace/InstalledCard';
+import UpdatesBanner from '../components/marketplace/UpdatesBanner';
+import UpdatesView from '../components/marketplace/UpdatesView';
+import CategoryChips from '../components/marketplace/CategoryChips';
+import { useUpdateAll } from '../components/marketplace/useUpdateAll';
+import { indexUpdates } from '../components/marketplace/extensionUpdates';
+import {
+    deriveCatalogCategories, getRegistryCatalogEntry, getLocalCatalogEntry, catalogEntryMatches,
+} from '../components/marketplace/extensionCatalog';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
-import { t } from '@/i18n/t';
-
-const CATEGORIES = ['ai', 'games', 'monitoring', 'security', 'deployment', 'integration', 'ui', 'utility'];
-
-const CATEGORY_ICONS = {
-    ai: Sparkles,
-    games: Gamepad2,
-    monitoring: Activity,
-    security: ShieldCheck,
-    deployment: ServerCog,
-    integration: Plug,
-    ui: LayoutGrid,
-    utility: Package,
-};
-
-const titleCase = (value = '') => {
-    const cleaned = String(value || 'utility').replace(/[-_]/g, ' ');
-    return cleaned
-        .split(' ')
-        .filter(Boolean)
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(' ');
-};
-
-const getCategoryIcon = (category) => CATEGORY_ICONS[category] || Package;
-
-// A first-party ("by ServerKit") entry is one authored by ServerKit or one whose
-// manifest explicitly opts in via `first_party`. Case-insensitive on author.
-const isFirstParty = (author, source = {}) => {
-    if (source && source.first_party) return true;
-    return String(author || '').trim().toLowerCase() === 'serverkit';
-};
-
-// Union of categories actually present across the merged catalog, ordered by the
-// canonical CATEGORIES list first, then any extras alphabetically (stable, deduped).
-const deriveCatalogCategories = (entries) => {
-    const present = new Set(entries.map((entry) => entry.category || 'utility'));
-    const known = CATEGORIES.filter((item) => present.has(item));
-    const extra = [...present].filter((item) => !CATEGORIES.includes(item)).sort();
-    return [...known, ...extra];
-};
-
-const getRegistryCatalogEntry = (entry) => ({
-    key: `registry:${entry.slug}`,
-    source: 'registry',
-    sourceLabel: 'Registry',
-    sourceDetail: 'Remote registry package',
-    installKey: entry.slug,
-    displayName: entry.display_name || entry.slug,
-    description: entry.description || t('app.marketplace.noDescriptionProvided', 'No description provided.'),
-    category: entry.category || 'utility',
-    version: entry.version || '0.0.0',
-    author: entry.author,
-    firstParty: isFirstParty(entry.author, entry),
-    trust: entry.trust || 'unreviewed',
-    review: entry.review || null,
-    // Release-signature state from the index: `signed` means the
-    // entry carries an ed25519 signature the panel verifies at install;
-    // `publisherTrusted` means the named key is pinned by this panel.
-    signed: Boolean(entry.signature),
-    publisherTrusted: Boolean(entry.publisher_trusted),
-    publisherKeyId: entry.publisher_key_id || null,
-    icon: entry.icon || null,
-    logo: entry.logo || null,
-    repo: entry.repo || entry.homepage || null,
-    screenshots: Array.isArray(entry.screenshots) ? entry.screenshots : [],
-    permissions: Array.isArray(entry.permissions) ? entry.permissions : [],
-    configSchema: entry.config_schema && typeof entry.config_schema === 'object' ? entry.config_schema : null,
-    extensionType: 'registry',
-    installed: Boolean(entry.installed),
-    status: entry.status,
-    featured: Boolean(entry.featured),
-    featureScore: Number(entry.feature_score) || 0,
-});
-
-// Source badge tint: built-in is 'warning', registry is 'info'.
-const sourceBadgeVariant = (source) => {
-    if (source === 'local') return 'warning';
-    if (source === 'registry') return 'info';
-    return 'outline';
-};
-
-// Trust badge derived from the registry's hash-bound review stamp. 'reviewed'
-// shows who/when in the tooltip; 'unreviewed' warns on registry entries
-// (built-in entries never carry a trust field).
-const TrustBadge = ({ entry }) => {
-    const { t } = useTranslation();
-    if (entry.trust === 'reviewed') {
-        const review = entry.review || {};
-        const title = review.reviewer && review.date
-            ? `Reviewed by ${review.reviewer} on ${review.date}`
-            : 'Reviewed by the ServerKit maintainers';
-        return (
-            <Badge variant="success" title={title}>
-                <ShieldCheck aria-hidden="true" /> {t('app.marketplace.reviewed', 'Reviewed')}
-            </Badge>
-        );
-    }
-    if (entry.trust === 'unreviewed' && entry.source === 'registry') {
-        return <Badge variant="warning">{t('app.marketplace.unreviewed', 'Unreviewed')}</Badge>;
-    }
-    return null;
-};
-
-// Release-signature badge. Shown on the registry detail modal next
-// to TrustBadge: 'signed · verified' means the index pins an ed25519 signature
-// whose publisher key this panel trusts (verified cryptographically at
-// install); unsigned entries get the honest unsigned treatment.
-const SignatureBadge = ({ entry }) => {
-    const { t } = useTranslation();
-    if (entry.source !== 'registry') return null;
-    if (entry.signed && entry.publisherTrusted) {
-        return (
-            <Badge variant="success" title={t('app.marketplace.releaseZipIsSignedThePanel', 'Release zip is signed; the panel verifies the ed25519 signature at install')}>
-                <ShieldCheck aria-hidden="true" /> {t('app.marketplace.signed', 'Signed')}
-            </Badge>
-        );
-    }
-    if (entry.signed) {
-        return (
-            <Badge variant="warning" title={t('app.marketplace.signedWithPublisherKeyWhichThis', 'Signed with publisher key \'{{publisherKeyId}}\', which this panel does not pin', { publisherKeyId: entry.publisherKeyId })}>
-                <ShieldAlert aria-hidden="true" /> {t('app.marketplace.unknownSigner', 'Unknown signer')}
-            </Badge>
-        );
-    }
-    return (
-        <Badge variant="outline" title={t('app.marketplace.thisReleaseCarriesNoPublisherSignature', 'This release carries no publisher signature')}>
-            {t('app.marketplace.unsigned', 'Unsigned')}
-        </Badge>
-    );
-};
-
-const getLocalCatalogEntry = (builtin) => {
-    const manifest = builtin.manifest || {};
-
-    return {
-        key: `local:${builtin.slug}`,
-        source: 'local',
-        sourceLabel: 'Built-in',
-        sourceDetail: 'Bundled with ServerKit',
-        installKey: builtin.slug,
-        displayName: manifest.display_name || builtin.slug,
-        description: manifest.description || t('app.marketplace.bundledExtension', 'Bundled extension.'),
-        category: manifest.category || 'utility',
-        version: manifest.version || '0.0.0',
-        author: manifest.author,
-        firstParty: isFirstParty(manifest.author, manifest),
-        icon: manifest.icon || null,
-        logo: manifest.logo || null,
-        screenshots: Array.isArray(manifest.screenshots) ? manifest.screenshots : [],
-        permissions: Array.isArray(manifest.permissions) ? manifest.permissions : [],
-        configSchema: manifest.config_schema && typeof manifest.config_schema === 'object' ? manifest.config_schema : null,
-        extensionType: 'built-in',
-        installed: Boolean(builtin.installed),
-        status: builtin.status,
-        featured: Boolean(manifest.featured),
-        featureScore: Number(manifest.feature_score) || 0,
-    };
-};
-
-const catalogEntryMatches = (entry, search, category) => {
-    if (category && entry.category !== category) return false;
-
-    const query = search.trim().toLowerCase();
-    if (!query) return true;
-
-    return [
-        entry.displayName,
-        entry.description,
-        entry.category,
-        entry.author,
-        entry.sourceLabel,
-    ].some((value) => String(value || '').toLowerCase().includes(query));
-};
 
 const Marketplace = () => {
     const { t } = useTranslation();
     const toast = useToast();
     const [plugins, setPlugins] = useState([]);
     const [builtins, setBuiltins] = useState([]);
-    const [loadErrors, setLoadErrors] = useState({ installed: null, catalog: null, updates: null });
+    const [loadErrors, setLoadErrors] = useState({ installed: null, catalog: null });
     const [registryExtensions, setRegistryExtensions] = useState([]);
-    const [pluginUpdates, setPluginUpdates] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     // Advanced filters live in a shared FilterDrawer. `ownership` is single-select
     // ('' all, 'serverkit' firstParty, 'community'); `category` is multi-select.
     const [filters, setFilters] = useState({ ownership: '', category: [] });
+    const [category, setCategory] = useState('');
+    const [statusFilter, setStatusFilter] = useState('');
+    const [installedSearch, setInstalledSearch] = useState('');
     const [filtersOpen, setFiltersOpen] = useState(false);
     const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -238,8 +53,10 @@ const Marketplace = () => {
     // The active view is driven by the route (/marketplace = browse,
     // /marketplace/installed = installed). The legacy ?tab=installed deep link
     // still resolves to the installed view.
-    const installedView = location.pathname.endsWith('/installed')
-        || searchParams.get('tab') === 'installed';
+    const updatesView = location.pathname.endsWith('/updates');
+    const installedView = !updatesView && (location.pathname.endsWith('/installed')
+        || searchParams.get('tab') === 'installed');
+    const store = useExtensionUpdates();
     // Manual install modal (URL / folder / zip); null when closed, otherwise
     // the source sub-tab to preselect.
     const [manualInstallSource, setManualInstallSource] = useState(null);
@@ -273,24 +90,23 @@ const Marketplace = () => {
             (error) => ({ data: null, error }),
         );
         try {
-            const [pRes, bRes, rRes, uRes] = await Promise.all([
+            const [pRes, bRes, rRes] = await Promise.all([
                 settle(api.getInstalledPlugins()),
                 settle(api.getBuiltinExtensions()),
                 settle(api.getRegistryExtensions()),
-                settle(api.getPluginUpdates()),
             ]);
             if (pRes.data) setPlugins(pRes.data.plugins || []);
             if (bRes.data) setBuiltins(bRes.data.builtin || []);
             if (rRes.data) setRegistryExtensions(rRes.data.extensions || []);
-            if (uRes.data) setPluginUpdates(uRes.data.updates || []);
             setLoadErrors({
                 installed: pRes.error,
                 catalog: bRes.error || rRes.error,
-                updates: uRes.error,
             });
         } finally {
             setLoading(false);
         }
+        // Install / update / uninstall all land here: invalidate the shared update store.
+        refreshExtensionUpdates();
     }, []);
 
     useEffect(() => { loadExtensions(); }, [loadExtensions]);
@@ -457,100 +273,107 @@ const Marketplace = () => {
 
     const resetFilters = () => {
         setSearch('');
-        setFilters({ ownership: '', category: [] });
+        setCategory('');
+        setFilters({ ownership: '' });
     };
 
-    const pluginStatusVariant = (status) => statusVariant(status);
-
+    const updateAll = useUpdateAll(store.updates, loadExtensions);
     const activeFilterCount = countActiveFilters(filters);
+    const showSearch = !updatesView;
 
-    // Search + advanced-filter trigger sit in the shared page top bar (next to
-    // Install manually) so the browse body starts straight at the grid. Only the
-    // browse view gets search/filters; the installed view keeps Install manually
-    // alone. Search is debounced, so re-publishing here is cheap and React
+    // Search + publisher filter sit in the shared page top bar next to Install
+    // manually. Search is debounced, so re-publishing here is cheap and React
     // reconciles the input in place (focus is preserved between keystrokes).
     useTopbarActions(() =>
         <>
-            {!installedView && (
-                <>
-                    <SearchField
-                        value={search}
-                        onSearch={setSearch}
-                        placeholder={t('app.marketplace.searchExtensions', 'Search extensions…')}
-                    />
-                    <FilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
-                </>
+            {showSearch && (
+                <SearchField
+                    value={installedView ? installedSearch : search}
+                    onSearch={installedView ? setInstalledSearch : setSearch}
+                    placeholder={t('app.marketplace.searchExtensions', 'Search extensions…')}
+                />
+            )}
+            {!installedView && !updatesView && (
+                <FilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
             )}
             <Button variant="outline" size="sm" onClick={() => setManualInstallSource('url')}>
                 <UploadCloud aria-hidden="true" />
                 {t('app.marketplace.installManually', 'Install manually')}
             </Button>
         </>,
-        [installedView, search, activeFilterCount],
+        [installedView, updatesView, search, installedSearch, activeFilterCount],
     );
 
     if (loading) return <PageLoader />;
 
-    const localCatalogEntries = builtins.map(getLocalCatalogEntry);
-    const registryCatalogEntries = registryExtensions.map(getRegistryCatalogEntry);
-    // Update descriptors keyed by both plugin_id and slug so PluginRow can match
-    // whichever identifier it has on hand.
-    const updatesByKey = new Map();
-    pluginUpdates.forEach((update) => {
-        if (update.plugin_id != null) updatesByKey.set(String(update.plugin_id), update);
-        if (update.slug) updatesByKey.set(update.slug, update);
-    });
-    // Featured entries float to the top of the catalog, ordered by their
-    // feature score (higher = more prominent). The score itself is not shown —
-    // it only drives ordering; featured cards just get a "Featured" badge.
-    const mergedCatalogEntries = [...localCatalogEntries, ...registryCatalogEntries]
+    const mergedCatalogEntries = [...builtins.map(getLocalCatalogEntry), ...registryExtensions.map(getRegistryCatalogEntry)]
         .map((entry, index) => ({ entry, index }))
-        .sort((a, b) => {
-            const fa = a.entry.featured ? 1 : 0;
-            const fb = b.entry.featured ? 1 : 0;
-            if (fa !== fb) return fb - fa;
-            if (fa && a.entry.featureScore !== b.entry.featureScore) {
-                return b.entry.featureScore - a.entry.featureScore;
-            }
-            return a.index - b.index; // stable: preserve original order otherwise
+        .sort((x, y) => {
+            // Featured first, by feature score; otherwise keep catalog order.
+            const fx = x.entry.featured ? 1 : 0;
+            const fy = y.entry.featured ? 1 : 0;
+            if (fx !== fy) return fy - fx;
+            if (fx && x.entry.featureScore !== y.entry.featureScore) return y.entry.featureScore - x.entry.featureScore;
+            return x.index - y.index;
         })
         .map(({ entry }) => entry);
-    const catalogCategories = deriveCatalogCategories(mergedCatalogEntries);
-    const filterGroups = [
-        {
-            key: 'ownership',
-            labelKey: 'app.marketplace.publisher', label: 'Publisher',
-            type: 'single',
-            options: [
-                { value: 'serverkit', labelKey: 'app.marketplace.byServerkit', label: 'By ServerKit' },
-                { value: 'community', labelKey: 'app.marketplace.community', label: 'Community' },
-            ],
-        },
-        {
-            key: 'category',
-            labelKey: 'app.marketplace.categories', label: 'Categories',
-            type: 'multi',
-            options: catalogCategories.map((item) => ({ value: item, label: titleCase(item) })),
-        },
-    ];
+    const updatesByKey = indexUpdates(store.updates);
+    const categoryBySlug = Object.fromEntries(plugins.map((p) => [p.slug, p.category]));
+    const filterGroups = [{
+        key: 'ownership',
+        labelKey: 'app.marketplace.publisher', label: 'Publisher',
+        type: 'single',
+        options: [
+            { value: 'serverkit', labelKey: 'app.marketplace.byServerkit', label: 'By ServerKit' },
+            { value: 'community', labelKey: 'app.marketplace.community', label: 'Community' },
+        ],
+    }];
     const catalogEntries = mergedCatalogEntries
-        // Category is handled below (multi-select), so pass '' to the shared matcher.
-        .filter((entry) => catalogEntryMatches(entry, search, ''))
+        .filter((entry) => catalogEntryMatches(entry, search, category))
         .filter((entry) => {
             if (filters.ownership === 'serverkit') return entry.firstParty;
             if (filters.ownership === 'community') return !entry.firstParty;
             return true;
-        })
-        .filter((entry) => {
-            const cats = filters.category || [];
-            return cats.length === 0 || cats.includes(entry.category);
         });
-    const hasFilters = Boolean(search.trim() || activeFilterCount > 0);
+    const hasFilters = Boolean(search.trim() || category || activeFilterCount > 0);
+
+    const query = installedSearch.trim().toLowerCase();
+    const shownPlugins = plugins
+        .filter((p) => !query || [p.display_name, p.slug, p.description].some((v) => String(v || '').toLowerCase().includes(query)))
+        .filter((p) => !statusFilter
+            || (statusFilter === 'active' ? p.status === 'active'
+                : statusFilter === 'error' ? p.status === 'error'
+                    : p.status !== 'active' && p.status !== 'error'));
+    const statusOptions = [
+        { value: '', label: t('app.marketplace.all', 'All') },
+        { value: 'active', label: t('app.marketplace.enabled', 'Enabled') },
+        { value: 'disabled', label: t('app.marketplace.disabled', 'Disabled') },
+        { value: 'error', label: t('app.marketplace.errors', 'Errors') },
+    ];
 
     return (
         <div className="sk-tabgroup__inner marketplace-page">
-            {!installedView ? (
-                <>
+            <UpdatesBanner
+                count={store.count}
+                readyCount={updateAll.readyCount}
+                progress={updateAll.progress}
+                onUpdateAll={updateAll.run}
+            />
+
+            {updatesView ? (
+                <UpdatesView
+                    store={store}
+                    categories={categoryBySlug}
+                    busyId={busyPlugin?.action === 'update' ? busyPlugin.id : null}
+                    onUpdate={handlePluginUpdate}
+                />
+            ) : !installedView ? (
+                <section className="marketplace-section">
+                    <CategoryChips
+                        categories={deriveCatalogCategories(mergedCatalogEntries)}
+                        value={category}
+                        onChange={setCategory}
+                    />
                     {hasFilters && (
                         <div className="marketplace-resultbar">
                             <Button variant="ghost" size="sm" onClick={resetFilters}>
@@ -558,53 +381,52 @@ const Marketplace = () => {
                             </Button>
                         </div>
                     )}
-
-                    <section className="marketplace-section">
-                        {loadErrors.catalog && mergedCatalogEntries.length > 0 && (
-                            <ErrorState compact error={loadErrors.catalog} onRetry={loadExtensions} />
-                        )}
-                        {loadErrors.catalog && mergedCatalogEntries.length === 0 ? (
-                            <ErrorState
-                                title={t('app.marketplace.couldntLoadTheCatalog', "Couldn't load the extension catalog.")}
-                                error={loadErrors.catalog}
-                                onRetry={loadExtensions}
-                            />
-                        ) : catalogEntries.length > 0 ? (
-                            <CatalogGrid>
-                                {catalogEntries.map((entry) => (
+                    {loadErrors.catalog && mergedCatalogEntries.length > 0 && (
+                        <ErrorState compact error={loadErrors.catalog} onRetry={loadExtensions} />
+                    )}
+                    {loadErrors.catalog && mergedCatalogEntries.length === 0 ? (
+                        <ErrorState
+                            title={t('app.marketplace.couldntLoadTheCatalog', "Couldn't load the extension catalog.")}
+                            error={loadErrors.catalog}
+                            onRetry={loadExtensions}
+                        />
+                    ) : catalogEntries.length > 0 ? (
+                        <CatalogGrid>
+                            {catalogEntries.map((entry) => {
+                                const update = entry.installed ? updatesByKey.get(entry.installKey) : null;
+                                const row = update && plugins.find((p) => p.slug === entry.installKey);
+                                return (
                                     <CatalogExtensionCard
                                         key={entry.key}
                                         entry={entry}
+                                        update={update}
+                                        busy={Boolean(row) && busyPlugin?.id === row.id}
                                         installing={installing}
                                         onInstall={() => installEntry(entry)}
+                                        onUpdate={(u) => handlePluginUpdate(u.plugin_id)}
                                         onOpenDetail={setDetailEntry}
                                     />
-                                ))}
-                            </CatalogGrid>
-                        ) : (
-                            <EmptyState
-                                icon={Package}
-                                title={t('app.marketplace.noCatalogEntriesFound', 'No catalog entries found')}
-                                description={hasFilters ? t('app.marketplace.noBuiltInOrRegistryEntries', 'No built-in or registry entries match the current filter.') : t('app.marketplace.noExtensionEntriesAreAvailableYet', 'No extension entries are available yet.')}
-                                action={hasFilters ? (
-                                    <Button variant="outline" size="sm" onClick={resetFilters}>{t('common.actions.clearFilters', 'Clear filters')}</Button>
-                                ) : undefined}
-                            />
-                        )}
-                    </section>
-                </>
+                                );
+                            })}
+                        </CatalogGrid>
+                    ) : (
+                        <EmptyState
+                            icon={Package}
+                            title={t('app.marketplace.noCatalogEntriesFound', 'No catalog entries found')}
+                            description={hasFilters ? t('app.marketplace.noBuiltInOrRegistryEntries', 'No built-in or registry entries match the current filter.') : t('app.marketplace.noExtensionEntriesAreAvailableYet', 'No extension entries are available yet.')}
+                            action={hasFilters ? (
+                                <Button variant="outline" size="sm" onClick={resetFilters}>{t('common.actions.clearFilters', 'Clear filters')}</Button>
+                            ) : undefined}
+                        />
+                    )}
+                </section>
             ) : (
                 <section className="marketplace-section">
-                    <SectionHeader
-                        title={t('app.marketplace.installedExtensions', 'Installed extensions')}
-                        meta={loadErrors.installed && plugins.length === 0 ? undefined : `${plugins.length} installed`}
-                    />
-                    {(loadErrors.installed || loadErrors.updates) && plugins.length > 0 && (
-                        <ErrorState
-                            compact
-                            error={loadErrors.installed || loadErrors.updates}
-                            onRetry={loadExtensions}
-                        />
+                    {plugins.length > 0 && (
+                        <SegControl className="marketplace-chips" options={statusOptions} value={statusFilter} onChange={setStatusFilter} />
+                    )}
+                    {loadErrors.installed && plugins.length > 0 && (
+                        <ErrorState compact error={loadErrors.installed} onRetry={loadExtensions} />
                     )}
                     {loadErrors.installed && plugins.length === 0 ? (
                         <ErrorState
@@ -612,10 +434,10 @@ const Marketplace = () => {
                             error={loadErrors.installed}
                             onRetry={loadExtensions}
                         />
-                    ) : plugins.length > 0 ? (
-                        <div className="installed-list">
-                            {plugins.map((plugin) => (
-                                <PluginRow
+                    ) : shownPlugins.length > 0 ? (
+                        <CatalogGrid>
+                            {shownPlugins.map((plugin) => (
+                                <InstalledCard
                                     key={plugin.id}
                                     plugin={plugin}
                                     update={updatesByKey.get(String(plugin.id))}
@@ -625,16 +447,15 @@ const Marketplace = () => {
                                     onUninstall={requestPluginUninstall}
                                     onConfigure={setConfigTarget}
                                     onInspectPermissions={setPermissionsTarget}
-                                    statusVariant={pluginStatusVariant}
                                 />
                             ))}
-                        </div>
+                        </CatalogGrid>
                     ) : (
                         <EmptyState
                             icon={PackageCheck}
-                            title={t('app.marketplace.noExtensionsInstalled', 'No extensions installed')}
-                            description={t('app.marketplace.installOneFromTheCatalogOr', 'Install one from the catalog or use Install manually.')}
-                            action={(
+                            title={plugins.length ? t('app.marketplace.noMatches', 'No matching extensions') : t('app.marketplace.noExtensionsInstalled', 'No extensions installed')}
+                            description={plugins.length ? undefined : t('app.marketplace.installOneFromTheCatalogOr', 'Install one from the catalog or use Install manually.')}
+                            action={plugins.length ? undefined : (
                                 <Button variant="outline" size="sm" onClick={() => navigate('/extensions')}>
                                     {t('app.marketplace.browseCatalog', 'Browse catalog')}
                                 </Button>
@@ -665,7 +486,7 @@ const Marketplace = () => {
                 <ExtensionDetailModal
                     entry={detailEntry}
                     installing={installing}
-                    statusVariant={pluginStatusVariant}
+                    statusVariant={statusVariant}
                     onClose={() => setDetailEntry(null)}
                     onInstall={() => {
                         installEntry(detailEntry);
@@ -740,485 +561,6 @@ const Marketplace = () => {
                 />
             )}
         </div>
-    );
-};
-
-const SectionHeader = ({ title, meta }) => (
-    <div className="marketplace-section__header">
-        <h2>{title}</h2>
-        {meta && <Badge variant="outline">{meta}</Badge>}
-    </div>
-);
-
-// Cover banner + artwork with a deterministic fallback chain:
-// registry logo image -> bundled illustrated icon -> Simple Icons brand mark ->
-// manifest icon SVG -> category lucide glyph. Image artwork (logo or bundled
-// icon) sits on a clean light tile at one shared size; the white brand-mark /
-// glyph fallbacks keep the deterministic gradient so they stay legible. The
-// tile is chosen from what actually renders, so a registry logo that fails to
-// load falls back to the gradient instead of a white glyph on white. `base` is
-// the cover class ('sk-catalog-card__art' for the compact catalog-card icon,
-// 'extension-detail__cover' for the modal banner); both share this component.
-const ExtensionCover = ({ base, entry, category, brandSize = 34, children }) => {
-    const [logoFailed, setLogoFailed] = useState(false);
-    const rasterIcon = resolveExtensionIcon(entry.installKey, category);
-    const imageSrc = entry.logo && !logoFailed ? entry.logo : rasterIcon;
-
-    if (imageSrc) {
-        return (
-            <div className={`${base} ${base}--icon`}>
-                <img
-                    src={imageSrc}
-                    loading="lazy"
-                    alt=""
-                    aria-hidden="true"
-                    className="extension-card__icon"
-                    onError={imageSrc === entry.logo ? () => setLogoFailed(true) : undefined}
-                />
-                {children}
-            </div>
-        );
-    }
-    return (
-        <div className={base} style={extensionCoverStyle(entry.installKey, category)}>
-            <ExtensionGlyph entry={entry} category={category} brandSize={brandSize} />
-            {children}
-        </div>
-    );
-};
-
-const ExtensionGlyph = ({ entry, category, brandSize }) => {
-    const Icon = getCategoryIcon(category);
-    const iconSvg = entry.icon ? sanitizeSvgInner(entry.icon) : '';
-
-    if (hasBrandMark(entry.installKey)) {
-        return (
-            <ExtensionBrandMark
-                slug={entry.installKey}
-                size={brandSize}
-                className="extension-card__brand"
-            />
-        );
-    }
-    if (iconSvg) {
-        return (
-            <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                aria-hidden="true"
-                focusable="false"
-                className="extension-card__glyph"
-                /* sink-safe: iconSvg = sanitizeSvgInner(entry.icon) above */
-                dangerouslySetInnerHTML={{ __html: iconSvg }}
-            />
-        );
-    }
-    return <Icon aria-hidden="true" className="extension-card__glyph" />;
-};
-
-// Trust as a plain-text fact on the card: only the two states that carry
-// information (a hash-bound review, or a registry entry nobody reviewed).
-// Built-in entries never carry a trust field, so they show nothing.
-const TrustFact = ({ entry }) => {
-    const { t } = useTranslation();
-    if (entry.trust === 'reviewed') {
-        const review = entry.review || {};
-        const title = review.reviewer && review.date
-            ? `Reviewed by ${review.reviewer} on ${review.date}`
-            : 'Reviewed by the ServerKit maintainers';
-        return <span title={title}>{t('app.marketplace.reviewed', 'Reviewed')}</span>;
-    }
-    if (entry.trust === 'unreviewed' && entry.source === 'registry') {
-        return <span>{t('app.marketplace.unreviewed', 'Unreviewed')}</span>;
-    }
-    return null;
-};
-
-const CatalogExtensionCard = ({ entry, installing, onInstall, onOpenDetail }) => {
-    const { t } = useTranslation();
-    const category = entry.category || 'utility';
-    const isLocal = entry.source === 'local';
-    const installedLabel = entry.status && entry.status !== 'active'
-        ? titleCase(entry.status)
-        : t('app.marketplace.installed', 'Installed');
-    const hasTrustFact = entry.trust === 'reviewed'
-        || (entry.trust === 'unreviewed' && entry.source === 'registry');
-
-    return (
-        <CatalogCard
-            icon={<ExtensionCover base="sk-catalog-card__art" entry={entry} category={category} brandSize={20} />}
-            title={entry.displayName}
-            sub={t('app.marketplace.versionByAuthor', 'v{{version}} · by {{author}}', {
-                version: entry.version,
-                author: entry.author || 'ServerKit',
-            })}
-            tag={titleCase(category)}
-            featured={entry.featured}
-            description={entry.description}
-            facts={(isLocal || hasTrustFact) && (
-                <>
-                    {isLocal && t('app.marketplace.builtIn', 'Built-in')}
-                    {isLocal && hasTrustFact && ' · '}
-                    <TrustFact entry={entry} />
-                </>
-            )}
-            onClick={() => onOpenDetail(entry)}
-            action={entry.installed ? (
-                <span className="marketplace-installed-label">{installedLabel}</span>
-            ) : (
-                <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={installing}
-                    onClick={() => onInstall(entry.installKey)}
-                >
-                    <DownloadCloud aria-hidden="true" />
-                    {installing
-                        ? t('app.marketplace.installing', 'Installing…')
-                        : t('app.marketplace.install', 'Install')}
-                </Button>
-            )}
-        />
-    );
-};
-
-const ExtensionDetailModal = ({ entry, installing, statusVariant, onClose, onInstall }) => {
-    const { t } = useTranslation();
-    const category = entry.category || 'utility';
-    const isLocal = entry.source === 'local';
-    const screenshots = entry.screenshots || [];
-    const permissions = Array.isArray(entry.permissions) ? entry.permissions : [];
-    const configKeys = entry.configSchema && typeof entry.configSchema === 'object'
-        ? Object.keys(entry.configSchema)
-        : [];
-    const installedLabel = entry.status && entry.status !== 'active'
-        ? titleCase(entry.status)
-        : 'Installed';
-
-    return (
-        <Modal open onClose={onClose} title={entry.displayName} size="lg">
-            <div className="extension-detail">
-                <ExtensionCover base="extension-detail__cover" entry={entry} category={category} brandSize={46} />
-                <div className="extension-detail__header">
-                    <div className="extension-detail__heading">
-                        <div className="extension-detail__badges">
-                            {entry.firstParty && (
-                                <Badge variant="secondary" className="extension-firstparty">{t('app.marketplace.byServerkit2', 'by ServerKit')}</Badge>
-                            )}
-                            <TrustBadge entry={entry} />
-                            <SignatureBadge entry={entry} />
-                            <Badge variant={sourceBadgeVariant(entry.source)}>{entry.sourceLabel}</Badge>
-                            <Badge variant="outline">{titleCase(category)}</Badge>
-                        </div>
-                        <div className="extension-detail__meta">
-                            <span>v{entry.version}</span>
-                            {entry.author && <span>by {entry.author}</span>}
-                            <span>{isLocal ? 'built-in' : entry.extensionType}</span>
-                            {entry.repo && (
-                                <a
-                                    href={entry.repo}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="extension-detail__repo-link"
-                                >
-                                    <ExternalLink aria-hidden="true" />
-                                    {t('app.marketplace.sourceRepo', 'Source repo')}
-                                </a>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                <p className="extension-detail__desc">{entry.description}</p>
-
-                {permissions.length > 0 && (
-                    <div className="extension-detail__consent">
-                        <p className="extension-detail__section-label">{t('app.marketplace.thisExtensionRequests', 'This extension requests:')}</p>
-                        <div className="extension-detail__chips">
-                            {permissions.map((permission) => (
-                                <Badge key={permission} variant="outline">{permission}</Badge>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {configKeys.length > 0 && (
-                    <div className="extension-detail__config">
-                        <p className="extension-detail__section-label">{t('app.marketplace.configuration', 'Settings')}</p>
-                        <ul className="extension-detail__config-list">
-                            {configKeys.map((key) => (
-                                <li key={key}><code>{key}</code></li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-
-                {screenshots.length > 0 && (
-                    <div className="extension-detail__gallery" aria-label={t('app.marketplace.screenshots', 'Screenshots')}>
-                        {screenshots.map((src, index) => (
-                            <img
-                                key={src}
-                                src={src}
-                                alt={`${entry.displayName} screenshot ${index + 1}`}
-                                className="extension-detail__shot"
-                                loading="lazy"
-                            />
-                        ))}
-                    </div>
-                )}
-
-                <div className="extension-detail__actions">
-                    {entry.installed ? (
-                        <Badge variant={isLocal ? statusVariant(entry.status) : 'success'}>
-                            <CheckCircle2 aria-hidden="true" />
-                            {installedLabel}
-                        </Badge>
-                    ) : (
-                        <Button disabled={installing} onClick={onInstall}>
-                            <DownloadCloud aria-hidden="true" />
-                            {installing ? t('app.marketplace.installing', 'Installing…') : t('app.marketplace.install', 'Install')}
-                        </Button>
-                    )}
-                </div>
-            </div>
-        </Modal>
-    );
-};
-
-// Install-origin badge for installed rows. url/local/upload all collapse to
-// "Manual" — the raw origin lives in the tooltip.
-const PLUGIN_SOURCE_BADGES = {
-    builtin: { labelKey: 'app.marketplace.builtIn', label: 'Built-in', variant: 'warning' },
-    registry: { labelKey: 'app.marketplace.registry', label: 'Registry', variant: 'info' },
-};
-
-const PluginRow = ({
-    plugin, update, busy, onToggle, onUpdate, onUninstall, onConfigure,
-    onInspectPermissions, statusVariant,
-}) => {
-    const { t } = useTranslation();
-    const updateAvailable = Boolean(update?.update_available);
-    const compatible = update?.compatible !== false;
-    // A row action is in flight — disable every action on this row so it can't
-    // be double-fired, and surface which one via the button copy.
-    const isBusy = Boolean(busy);
-    const configurable = plugin.config_schema
-        && typeof plugin.config_schema === 'object'
-        && Object.keys(plugin.config_schema).length > 0;
-    const sourceBadge = PLUGIN_SOURCE_BADGES[plugin.source_type]
-        || { labelKey: 'app.marketplace.manual', label: 'Manual', variant: 'outline', title: plugin.source_url || undefined };
-
-    return (
-        <article className={`installed-item installed-item--plugin card ${plugin.status === 'error' ? 'installed-item--error' : ''}`}>
-            <div className="installed-item__main">
-                <div className="installed-item__icon installed-item__icon--plugin">
-                    <PlugZap aria-hidden="true" />
-                </div>
-                <div className="installed-item__content">
-                    <div className="installed-item__title-line">
-                        <strong>{plugin.display_name}</strong>
-                        <span className="text-muted">v{plugin.version}</span>
-                        <Badge variant={statusVariant(plugin.status)}>{plugin.status}</Badge>
-                        <Badge variant={sourceBadge.variant} title={sourceBadge.title}>{sourceBadge.label}</Badge>
-                        {plugin.has_backend && <Badge variant="secondary">{t('app.marketplace.backend', 'Backend')}</Badge>}
-                        {plugin.has_frontend && <Badge variant="secondary">{t('app.marketplace.frontend', 'Frontend')}</Badge>}
-                        {updateAvailable && (
-                            <Badge variant="info" className="plugin-update-badge">
-                                {t('app.marketplace.updateAvailableV', 'Update available → v')}{update.available_version}
-                            </Badge>
-                        )}
-                    </div>
-                    {plugin.description && <p className="installed-item__description">{plugin.description}</p>}
-                    {plugin.error_message && <p className="installed-item__error">{plugin.error_message}</p>}
-                </div>
-            </div>
-            <div className="installed-item__actions">
-                {updateAvailable && (
-                    <Button
-                        size="sm"
-                        disabled={!compatible || isBusy}
-                        title={compatible ? undefined : t('app.marketplace.panelVersionIsTooOldFor', 'Panel version is too old for this update')}
-                        onClick={() => onUpdate(plugin.id)}
-                    >
-                        <DownloadCloud aria-hidden="true" />
-                        {busy === 'update' ? t('app.marketplace.updating', 'Updating…') : t('app.marketplace.update', 'Update')}
-                    </Button>
-                )}
-                {configurable && (
-                    <Button size="sm" variant="outline" disabled={isBusy} onClick={() => onConfigure(plugin)}>
-                        {t('app.marketplace.configure', 'Configure')}
-                    </Button>
-                )}
-                <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={isBusy}
-                    title={t('app.marketplace.declaredPermissionsWhatThePanelHas', 'Declared permissions, what the panel has observed, and pending Python dependencies')}
-                    onClick={() => onInspectPermissions(plugin)}
-                >
-                    <ShieldQuestion aria-hidden="true" />
-                    {t('common.labels.permissions', 'Permissions')}
-                </Button>
-                <Button
-                    size="sm"
-                    variant={plugin.status === 'active' ? 'outline' : 'default'}
-                    disabled={isBusy}
-                    onClick={() => onToggle(plugin)}
-                >
-                    {busy === 'enable' ? t('app.marketplace.enabling', 'Enabling…')
-                        : busy === 'disable' ? t('app.marketplace.disabling', 'Disabling…')
-                        : plugin.status === 'active' ? t('common.actions.disable', 'Disable') : t('common.actions.enable', 'Enable')}
-                </Button>
-                <Button size="sm" variant="destructive" disabled={isBusy} onClick={() => onUninstall(plugin)}>
-                    {busy === 'uninstall' ? t('app.marketplace.uninstalling', 'Uninstalling…') : t('common.actions.uninstall', 'Uninstall')}
-                </Button>
-            </div>
-        </article>
-    );
-};
-
-// Config editor for an installed plugin (#49). Fields come from the manifest's
-// config_schema (top-level keys, or JSON-schema `properties`); values persist
-// via PUT /plugins/<id>/config and the plugin reads them on the backend via
-// plugins_sdk.config(slug).
-const PluginConfigDialog = ({ plugin, onClose }) => {
-    const { t } = useTranslation();
-    const toast = useToast();
-    const [values, setValues] = useState(null);
-    const [saving, setSaving] = useState(false);
-
-    const schema = plugin.config_schema || {};
-    const fields = schema.properties && typeof schema.properties === 'object'
-        ? schema.properties
-        : schema;
-
-    useEffect(() => {
-        api.getPluginConfig(plugin.id)
-            .then((data) => setValues(data.config || {}))
-            .catch(() => setValues({}));
-    }, [plugin.id]);
-
-    const setField = (key, v) => setValues((prev) => ({ ...prev, [key]: v }));
-
-    const save = async () => {
-        setSaving(true);
-        try {
-            await api.updatePluginConfig(plugin.id, values || {});
-            toast.success(t('app.marketplace.extensionConfigurationSaved', 'Extension settings saved'));
-            onClose();
-        } catch (err) {
-            toastError(toast, t('app.marketplace.failedToSaveConfiguration', "Couldn't save the settings."), err);
-        } finally {
-            setSaving(false);
-        }
-    };
-
-    return (
-        <Modal
-            open
-            onClose={onClose}
-            title={t('app.marketplace.configure2', 'Configure {{displayname}}', { displayname: plugin.display_name })}
-            size="sm"
-            footer={
-                <>
-                    <Button variant="ghost" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
-                    <Button onClick={save} disabled={saving || values === null}>
-                        {saving ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}
-                    </Button>
-                </>
-            }
-        >
-            {values === null ? (
-                <p className="text-muted">{t('common.loading', 'Loading…')}</p>
-            ) : (
-                <div className="plugin-config-form">
-                    {Object.entries(fields).map(([key, spec]) => {
-                        const s = spec && typeof spec === 'object' ? spec : {};
-                        const type = s.type || 'string';
-                        const isNumber = type === 'number' || type === 'integer';
-                        const value = values[key] ?? s.default ?? (type === 'boolean' ? false : '');
-                        return (
-                            <label key={key} className="plugin-config-form__field">
-                                <span className="plugin-config-form__label">{s.title || key}</span>
-                                {type === 'boolean' ? (
-                                    <input
-                                        type="checkbox"
-                                        checked={Boolean(value)}
-                                        onChange={(e) => setField(key, e.target.checked)}
-                                    />
-                                ) : Array.isArray(s.enum) ? (
-                                    // Radix items need non-empty string values; the
-                                    // original (possibly numeric) enum entry is restored on change.
-                                    <Select
-                                        value={value === '' ? '' : String(value)}
-                                        onValueChange={(v) => setField(
-                                            key,
-                                            s.enum.find((opt) => String(opt) === v) ?? v,
-                                        )}
-                                    >
-                                        <SelectTrigger aria-label={s.title || key}>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {s.enum.filter((opt) => String(opt) !== '').map((opt) => (
-                                                <SelectItem key={String(opt)} value={String(opt)}>{String(opt)}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                ) : (
-                                    <input
-                                        className="ui-input"
-                                        type={isNumber ? 'number' : (s.secret ? 'password' : 'text')}
-                                        value={value}
-                                        onChange={(e) => setField(
-                                            key,
-                                            isNumber
-                                                ? (e.target.value === '' ? '' : Number(e.target.value))
-                                                : e.target.value
-                                        )}
-                                    />
-                                )}
-                                {s.description && (
-                                    <span className="plugin-config-form__hint text-muted">{s.description}</span>
-                                )}
-                            </label>
-                        );
-                    })}
-                    {Object.keys(fields).length === 0 && (
-                        <p className="text-muted">{t('app.marketplace.thisExtensionDeclaresNoConfigurationFields', 'This extension has no settings.')}</p>
-                    )}
-                </div>
-            )}
-        </Modal>
-    );
-};
-
-// Data-policy dialog for plugin uninstall. Keeping data (default) leaves the
-// extension's tables intact for a later reinstall; purging drops them.
-const PluginUninstallDialog = ({ plugin, onCancel, onConfirm }) => {
-    const { t } = useTranslation();
-    return (
-        <Modal
-            open
-            onClose={onCancel}
-            title={t('app.marketplace.uninstall', 'Uninstall {{displayname}}?', { displayname: plugin.display_name })}
-            size="sm"
-            footer={
-                <>
-                    <Button variant="ghost" onClick={onCancel}>{t('common.actions.cancel', 'Cancel')}</Button>
-                    <Button variant="outline" onClick={() => onConfirm(false)}>{t('app.marketplace.keepData', 'Keep data')}</Button>
-                    <Button variant="destructive" onClick={() => onConfirm(true)}>{t('app.marketplace.purgeData', 'Delete data')}</Button>
-                </>
-            }
-        >
-            <div className="plugin-uninstall-dialog">
-                <p>{t('app.marketplace.removingThisExtensionStopsItsRoutes', 'Uninstalling this extension stops its routes and UI contributions.')}</p>
-                <p className="text-muted">
-                    <strong>{t('app.marketplace.keepData', 'Keep data')}</strong> {t('app.marketplace.leavesTheExtensionSDatabaseTables', 'leaves the extension\'s database tables intact so you can reinstall later.')} <strong>{t('app.marketplace.purgeData', 'Delete data')}</strong> {t('app.marketplace.permanentlyDropsTheExtensionSTables', 'permanently drops the extension\'s tables and cannot be undone.')}
-                </p>
-            </div>
-        </Modal>
     );
 };
 

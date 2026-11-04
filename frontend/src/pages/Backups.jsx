@@ -36,6 +36,7 @@ import useFocusParam from '../hooks/useFocusParam';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
+import InfoTip from '@/components/InfoTip';
 
 // `backups` is kept as an alias so old /backups/backups links still resolve to
 // the archive, which now answers to `snapshots`.
@@ -216,6 +217,7 @@ const Backups = () => {
             ]);
 
             setBackups(backupsRes.backups || []);
+            if (backupsRes.warning) setError(backupsRes.warning);
             setStats(statsRes);
             setConfig(configRes);
             if (refreshSchedules) await reloadSchedules();
@@ -1102,7 +1104,7 @@ const Backups = () => {
                         </SharedCardHeader>
                         <SharedCardContent variant="legacy" className="card-body">
                             <p className="form-help">
-                                {t('app.backups.serverkitIsFreeTheseAreYour', "ServerKit is free. These are your own storage costs. Local is your server disk (leave at 0 if you don't track it). S3/B2 are your cloud provider's $/GB/month.")}
+                                {t('app.backups.storageCostsShort', 'Your own storage costs.')} <InfoTip>{t('app.backups.serverkitIsFreeTheseAreYour', "ServerKit is free. These are your own storage costs. Local is your server disk (leave at 0 if you don't track it). S3/B2 are your cloud provider's $/GB/month.")}</InfoTip>
                             </p>
                             <form onSubmit={handleSaveRates}>
                                 <FormRow>

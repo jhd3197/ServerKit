@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
+import InfoTip from '@/components/InfoTip';
 
 // Must match app/services/deploy_settings.py DEFAULTS / _RULES.
 const TIMEOUT_DEFAULT = 120;
@@ -59,7 +60,7 @@ const DeploySafetyPanel = ({ app, onChanged }) => {
             </div>
             <div className="app-panel-body">
                 <p className="app-panel-hint">
-                    {t('app.deploySafetyPanel.intro', 'Before a new release counts as live, ServerKit asks it for this path and waits for a 2xx or 3xx answer three times in a row. A release that never answers fails the deploy.')}
+                    {t('app.deploySafetyPanel.introShort', 'New releases must answer before going live.')} <InfoTip>{t('app.deploySafetyPanel.intro', 'Before a new release counts as live, ServerKit asks it for this path and waits for a 2xx or 3xx answer three times in a row. A release that never answers fails the deploy.')}</InfoTip>
                 </p>
 
                 <div className="settings-row">

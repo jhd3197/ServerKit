@@ -214,7 +214,7 @@ class MonitoringService:
     @classmethod
     def send_webhook_alert(cls, alerts: List[Dict]) -> Dict:
         """Send webhook alert notification."""
-        import requests
+        from app.utils import safe_http
 
         config = cls.get_config()
         webhook_config = config.get('webhook', {})
@@ -229,7 +229,7 @@ class MonitoringService:
                 'alerts': alerts
             }
 
-            response = requests.post(
+            response = safe_http.post(
                 webhook_config['url'],
                 json=payload,
                 timeout=10
@@ -239,6 +239,8 @@ class MonitoringService:
                 return {'success': True, 'message': 'Webhook sent'}
             return {'success': False, 'error': f'Webhook returned {response.status_code}'}
 
+        except safe_http.UnsafeURLError as e:
+            return {'success': False, 'error': f'Webhook URL refused: {e}'}
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
