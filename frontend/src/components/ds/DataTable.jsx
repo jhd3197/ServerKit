@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronUp, ChevronDown, ChevronRight, Filter } from 'lucide-react';
+import { ArrowDownNarrowWide, ArrowUpNarrowWide, ChevronUp, ChevronDown, ChevronRight, Filter } from 'lucide-react';
 import {
     Table,
     TableBody,
@@ -9,6 +9,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { applyTableSorts, nextSorts, useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -18,6 +19,8 @@ import { applyFilters, isDecorative, withInferredTypes } from './grid/fields';
 import { useTranslation } from 'react-i18next';
 import { translateLabel } from '../../i18n/labels';
 import { Button as SharedButton } from '@/components/ui/button';
+
+const SORT_NONE = '__none__';
 
 /**
  * Declarative data table built on top of the shadcn/ui Table primitives.
@@ -40,6 +43,14 @@ import { Button as SharedButton } from '@/components/ui/button';
  * Keyboard nav: `keyboardNav` adds a row cursor — j/k (or arrows) move,
  * Enter triggers onRowClick, x toggles the cursor row's selection. Keys are
  * ignored while typing in a field or while a dialog holds focus.
+ *
+ * Responsive: under 640px every row becomes a stacked card (pure CSS on the
+ * same markup, so sorting, selection, grouping and keyboard nav keep working).
+ * The first visible column is the card title, the rest become "label · value"
+ * rows using the column header as the label, a header-less trailing column
+ * (actions) becomes a footer row of 40px targets, and the sortable headers
+ * collapse into one sort select + direction toggle above the cards. Pass `responsive={false}` for
+ * editor-style grids that must stay tabular on phones.
  *
  * Example:
  *   <DataTable
@@ -105,6 +116,7 @@ export function DataTable({
     className,
     rowClassName,
     tableClassName,
+    responsive = true,
 }) {
     const { t } = useTranslation();
     const internal = useTableSort({
@@ -325,6 +337,13 @@ export function DataTable({
         return selectedKeys?.includes(key);
     });
 
+    // Card mode (<640px, see .sk-dtable--stack): the column header is the label.
+    const cellLabel = (column) => (typeof column.header === 'string' ? translateLabel(t, column, 'header') : '');
+    const cellRole = (column, index) => {
+        if (isDecorative(column)) return 'sk-dtable__cell--actions';
+        return index === 0 ? 'sk-dtable__cell--title' : undefined;
+    };
+
     const renderDataRow = (row) => {
         const key = typeof keyField === 'function' ? keyField(row) : row[keyField];
         const computedRowClass = typeof rowClassName === 'function'
@@ -365,23 +384,61 @@ export function DataTable({
                         />
                     </TableCell>
                 )}
-                {visibleColumns.map((column) => (
+                {visibleColumns.map((column, columnIndex) => (
                     <TableCell
                         key={`${key}-${column.key}`}
-                        className={column.cellClassName}
+                        className={cn(column.cellClassName, cellRole(column, columnIndex))}
+                        data-label={cellLabel(column) || undefined}
                     >
-                        {column.render
-                            ? column.render(row)
-                            : row[column.key]}
+                        <div className="sk-dtable__value">
+                            {column.render
+                                ? column.render(row)
+                                : row[column.key]}
+                        </div>
                     </TableCell>
                 ))}
             </TableRow>
         );
     };
 
+    // Phones hide the header, so column sort moves to a select + direction toggle.
+    const sortColumns = visibleColumns.filter((column) => sortable && column.sortable && typeof column.header === 'string');
+    const activeSort = sorts[0];
+    const sortBar = responsive && sortColumns.length > 0 && (
+        <div className="sk-dtable__sortbar">
+            <Select
+                value={activeSort?.key ?? SORT_NONE}
+                onValueChange={(key) => setSorts(key === SORT_NONE ? [] : [{ key, direction: activeSort?.direction ?? 'asc' }])}
+            >
+                <SelectTrigger aria-label={t('app.dataTable.sortBy', 'Sort by')}>
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value={SORT_NONE}>{t('app.dataTable.defaultOrder', 'Default order')}</SelectItem>
+                    {sortColumns.map((column) => (
+                        <SelectItem key={column.key} value={column.key}>{translateLabel(t, column, 'header')}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+            <SharedButton
+                type="button"
+                variant="outline"
+                size="icon"
+                disabled={!activeSort}
+                aria-label={activeSort?.direction === 'desc'
+                    ? t('app.dataTable.sortDescending', 'Sorted descending, switch to ascending')
+                    : t('app.dataTable.sortAscending', 'Sorted ascending, switch to descending')}
+                onClick={() => setSorts([{ key: activeSort.key, direction: activeSort.direction === 'asc' ? 'desc' : 'asc' }])}
+            >
+                {activeSort?.direction === 'desc' ? <ArrowDownNarrowWide size={16} /> : <ArrowUpNarrowWide size={16} />}
+            </SharedButton>
+        </div>
+    );
+
     return (
         <div className={cn('sk-dtable-wrap', className)} ref={wrapRef}>
-            <Table className={cn('sk-dtable', tableClassName)}>
+            {sortBar}
+            <Table className={cn('sk-dtable', responsive && 'sk-dtable--stack', tableClassName)}>
                 <TableHeader>
                     <TableRow>
                         {selectable && (
@@ -391,6 +448,11 @@ export function DataTable({
                                     onCheckedChange={(checked) => onToggleAll?.(!!checked)}
                                     aria-label={t('app.dataTable.selectAllRows', 'Select all rows')}
                                 />
+                                <span className="sk-dtable__checklabel" aria-hidden="true">
+                                    {selectedKeys?.length
+                                        ? t('app.dataTable.selectedCount', '{{count}} selected', { count: selectedKeys.length })
+                                        : t('app.dataTable.selectAll', 'Select all')}
+                                </span>
                             </TableHead>
                         )}
                         {visibleColumns.map((column, columnIndex) => {

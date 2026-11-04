@@ -143,8 +143,17 @@ function SetupRoute({ children }) {
     return children;
 }
 
+// /git-ext was the in-tree git page; it now ships as the serverkit-git
+// extension at /git. Without the extension that route is never registered, so
+// send the operator to its marketplace entry instead of a "page not found".
+const GIT_EXTENSION_SLUG = 'serverkit-git';
+
 function LegacyGitExtRedirect() {
     const { tab } = useParams();
+    const { routes, __ready } = useContributions();
+    if (!__ready) return <AppLoader />;
+    const installed = (routes || []).some((route) => route.plugin === GIT_EXTENSION_SLUG);
+    if (!installed) return <Navigate to={`/extensions?install=${GIT_EXTENSION_SLUG}`} replace />;
     return <Navigate to={tab ? `/git/${tab}` : '/git'} replace />;
 }
 

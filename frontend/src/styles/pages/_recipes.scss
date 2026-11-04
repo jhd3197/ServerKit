@@ -5,29 +5,25 @@
 
     &__head {
         display: flex;
-        align-items: flex-end;
-        gap: $spacing-lg;
+        flex-direction: column;
+        gap: $spacing-md;
         margin-bottom: $spacing-md;
     }
 
-    &__lede {
+    &__intro {
         flex: 1;
         min-width: 0;
-        margin: 0;
-        color: var(--text-secondary);
-        font-size: $text-sm;
-        line-height: 1.55;
-        max-width: 640px;
     }
 
     &__search {
         display: flex;
         align-items: center;
         gap: $space-2;
-        width: 260px;
+        width: 100%;
+        max-width: 360px;
         height: $control-md;
         padding: 0 $space-3;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--border-default);
         border-radius: $radius-control;
         background: var(--bg-card);
         color: var(--text-tertiary);
@@ -36,7 +32,6 @@
             flex: 1;
             min-width: 0;
             border: none;
-            outline: none;
             background: transparent;
             color: var(--text-primary);
             font-size: $text-sm;
@@ -48,16 +43,25 @@
         flex-wrap: wrap;
         gap: $space-2;
         margin-bottom: $spacing-md;
+    }
 
-        .sk-pill {
-            cursor: pointer;
-            opacity: 0.72;
+    &__cat {
+        display: inline-flex;
+        align-items: center;
+        min-height: $control-sm;
+        padding: 0 $space-3;
+        border: 1px solid var(--border-default);
+        border-radius: $radius-full;
+        background: var(--bg-card);
+        color: var(--text-secondary);
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
+        cursor: pointer;
 
-            &.is-active {
-                opacity: 1;
-                border-color: var(--primary-color);
-                color: var(--primary-color);
-            }
+        &:hover { color: var(--text-primary); }
+
+        &.is-active {
+            @include status-variant(var(--accent), var(--accent-bg), var(--accent));
         }
     }
 
@@ -87,7 +91,7 @@
     flex-direction: column;
     gap: $space-3;
     padding: $spacing-md;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-default);
     border-radius: $radius-card;
     background: var(--bg-card);
 
@@ -105,8 +109,7 @@
         height: 34px; // geometry: icon tile
         flex-shrink: 0;
         border-radius: $radius-control;
-        background: color-mix(in srgb, var(--primary-color) 12%, transparent);
-        color: var(--primary-color);
+        @include status-variant(var(--accent), var(--accent-bg));
     }
 
     &__id {
@@ -152,7 +155,7 @@
         span {
             padding: $space-hair $space-2;
             border-radius: $radius-badge;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-default);
             font-size: $text-xs;
             color: var(--text-tertiary);
 
@@ -201,7 +204,7 @@
         width: 100%;
         height: $control-md;
         padding: 0 $space-3;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--border-default);
         border-radius: $radius-control;
         background: var(--bg-input, var(--bg-card));
         color: var(--text-primary);
@@ -220,7 +223,7 @@
         width: 100%;
         padding: $space-3 $space-3;
         border: none;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-default);
         background: transparent;
         color: var(--text-primary);
         cursor: pointer;
@@ -231,9 +234,9 @@
         &:hover { background: var(--bg-hover, rgba(128, 128, 128, 0.06)); }
 
         &.is-on {
-            background: color-mix(in srgb, var(--primary-color) 8%, transparent);
+            background: var(--accent-bg);
 
-            svg { color: var(--primary-color); }
+            svg { color: var(--accent); }
         }
     }
 
@@ -242,11 +245,11 @@
         height: 14px;
         flex-shrink: 0;
         border-radius: 50%;
-        border: 1.5px solid var(--border-color);
+        border: 1.5px solid var(--border-default);
 
         .is-on & {
-            border-color: var(--primary-color);
-            box-shadow: inset 0 0 0 3.5px var(--primary-color); // geometry: draws the radio's inner dot
+            border-color: var(--accent);
+            box-shadow: inset 0 0 0 3.5px var(--accent); // geometry: draws the radio's inner dot
         }
     }
 
@@ -298,7 +301,7 @@
     align-items: center;
     gap: $space-2;
     padding: $space-2 $space-3;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-default);
     font-size: $text-sm;
 
     &:last-child { border-bottom: none; }
@@ -325,7 +328,7 @@
     align-items: center;
     gap: $space-2;
     padding: $space-2 $space-3;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-default);
     font-size: $text-sm;
 
     &:last-child { border-bottom: none; }
@@ -336,6 +339,6 @@
 
     &__url {
         font-size: $text-xs;
-        color: var(--primary-color);
+        color: var(--accent);
     }
 }

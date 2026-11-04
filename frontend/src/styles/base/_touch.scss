@@ -1,0 +1,61 @@
+// ============================================
+// TOUCH TARGETS
+// ============================================
+// On coarse pointers every control gets a >= $control-lg hit area. Last in
+// the cascade (see main.scss) so it only raises the floor — desktop sizes are
+// untouched. Icon-only controls that must stay visually small grow an invisible
+// hit area instead of a bigger box.
+
+@media (pointer: coarse) {
+    .btn,
+    .quick-create,
+    .sk-notif__bell,
+    .skw-tab,
+    .skw-iconbtn,
+    .skw-barbtn,
+    .skw-actions__row,
+    .sk-seg__btn,
+    .sk-gridicon,
+    .sk-viewpick,
+    .ui-select-trigger,
+    .settings-nav-item,
+    .setup-health-widget__dismiss,
+    .detail-tabs__tab,
+    [role='tab'],
+    input.ui-input,
+    .sk-searchfield__input,
+    select {
+        min-height: $control-lg;
+    }
+
+    .quick-create,
+    .sk-notif__bell,
+    .sk-gridicon,
+    .skw-iconbtn,
+    .setup-health-widget__dismiss,
+    .skw-tab--add {
+        min-width: $control-lg;
+    }
+
+    .skw-iconbtn--bare,
+    .ui-checkbox {
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            inset: -#{$space-2};
+        }
+    }
+
+    .skw-iconbtn--bare { min-height: 0; min-width: 0; }
+}
+
+@media (pointer: coarse) and (max-width: $breakpoint-md) {
+    .global-statusbar {
+        &__segment,
+        .statusbar-select { height: var(--sk-statusbar-height); min-width: $control-lg; }
+    }
+
+    .dashboard-layout { --sk-statusbar-height: #{$control-lg}; }
+}

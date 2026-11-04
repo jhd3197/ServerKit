@@ -4,6 +4,9 @@
 // ============================================
 
 .templates-page {
+    // Stale cards stay put (dimmed) while the next search request is in flight.
+    &__results[data-busy='true'] { opacity: 0.6; transition: opacity 0.15s; }
+
     .empty-state {
         grid-column: 1 / -1;
         display: flex;

@@ -27,7 +27,7 @@ import { Input } from '@/components/ui/input';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
-import { METRIC_LABELS } from '../components/monitoring/fleetMetrics';
+import { describeAlert, formatReading, metricLabel } from '../components/monitoring/alertCopy';
 import { impactTone, INCIDENT_STATES } from '../components/monitoring/monitorShared';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
@@ -121,11 +121,6 @@ function formatWhen(iso) {
     const date = new Date(iso);
     if (Number.isNaN(date.getTime())) return 'unknown';
     return formatDateTime(date);
-}
-
-function formatValue(value) {
-    if (typeof value !== 'number' || Number.isNaN(value)) return '—';
-    return value.toFixed(1);
 }
 
 export default function Incidents() {
@@ -237,15 +232,16 @@ export default function Incidents() {
             };
         });
 
+        const thisServer = t('app.incidents.thisServer', 'This server');
         const hostDetail = (alert) => (alert.type
-            ? `${alert.type} ${formatValue(alert.value)} / ${alert.threshold}`
-            : 'This server');
+            ? describeAlert(t, { metric: alert.type, value: alert.value, threshold: alert.threshold, subject: thisServer }).detail
+            : thisServer);
 
         const fromActive = activeAlerts.map((alert, index) => ({
             kind: 'alert',
             key: `active-${alert.type}-${index}`,
             title: alert.message,
-            subject: 'This server',
+            subject: thisServer,
             detail: hostDetail(alert),
             state: 'firing',
             tone: 'red',
@@ -262,7 +258,7 @@ export default function Incidents() {
             kind: 'alert',
             key: `history-${alert.timestamp || index}-${index}`,
             title: alert.message,
-            subject: 'This server',
+            subject: thisServer,
             detail: hostDetail(alert),
             state: alert.severity,
             tone: statusKind(alert.severity),
@@ -282,16 +278,17 @@ export default function Incidents() {
         // sources above describe the panel's own box and have no server-side
         // lifecycle to ack or resolve.
         const fromFleet = fleetAlerts.map((alert) => {
-            const metric = METRIC_LABELS[alert.metric] || alert.metric;
-            const subject = alert.server_name || 'Unknown server';
+            const metric = metricLabel(alert.metric);
+            const subject = alert.server_name || t('app.incidents.unknownServer', 'Unknown server');
+            const { title, detail } = describeAlert(t, { ...alert, subject });
             return {
                 kind: 'alert',
                 key: `fleet-${alert.id}`,
                 alertId: alert.id,
-                // Offline / service-check alerts carry their own message and no threshold.
-                title: alert.detail || `${metric} over limit on ${subject}`,
+                // Offline / service-check alerts carry their own message; otherwise describeAlert's copy.
+                title: alert.detail || title,
                 subject,
-                detail: alert.detail || `${metric} ${formatValue(alert.value)} / ${alert.threshold}`,
+                detail: alert.detail || detail,
                 state: alert.status,
                 tone: alertStatusKind(alert.status),
                 impact: alert.severity,
@@ -306,7 +303,7 @@ export default function Incidents() {
 
         return [...fromActive, ...fromFleet, ...fromIncidents, ...fromHistory]
             .sort((a, b) => new Date(b.when || 0) - new Date(a.when || 0));
-    }, [incidents, activeAlerts, alertHistory, fleetAlerts, monitorsById]);
+    }, [incidents, activeAlerts, alertHistory, fleetAlerts, monitorsById, t]);
 
     // Search only. The active/resolved split used to live here as a segment
     // filter; it is a column rule now, applied inside the table.
@@ -409,7 +406,7 @@ export default function Incidents() {
             headerKey: 'app.incidents.impact', header: 'Impact',
             sortable: true,
             type: 'enum',
-            value: (item) => item.impact || '—',
+            value: (item) => item.impact || '',
         },
         {
             key: 'when',
@@ -629,9 +626,9 @@ export default function Incidents() {
                             </Pill>
                         </div>
                         <dl className="mon-inforows">
-                            <div><dt>{t('app.incidents.metric', 'Metric')}</dt><dd>{selected.metric || '—'}</dd></div>
-                            <div><dt>{t('app.incidents.reading', 'Reading')}</dt><dd>{formatValue(selected.value)}</dd></div>
-                            <div><dt>{t('app.incidents.limit', 'Limit')}</dt><dd>{selected.threshold ?? '—'}</dd></div>
+                            {selected.metric && <div><dt>{t('app.incidents.metric', 'Metric')}</dt><dd>{selected.metric}</dd></div>}
+                            {formatReading(selected.value) && <div><dt>{t('app.incidents.reading', 'Reading')}</dt><dd>{formatReading(selected.value)}</dd></div>}
+                            {formatReading(selected.threshold, 0) && <div><dt>{t('app.incidents.limit', 'Limit')}</dt><dd>{formatReading(selected.threshold, 0)}</dd></div>}
                             <div><dt>{t('common.labels.when', 'When')}</dt><dd>{formatWhen(selected.when)}</dd></div>
                         </dl>
                         <p className="mon-panel-hint">

@@ -172,8 +172,8 @@ export async function getPluginRequirements(pluginId) {
 // Returns available updates for installed plugins:
 //   { updates: [ { slug, plugin_id, installed_version, available_version,
 //                  update_available, compatible, source } ] }
-export async function getPluginUpdates() {
-    return this.request('/plugins/updates');
+export async function getPluginUpdates({ refresh = false } = {}) {
+    return this.request(`/plugins/updates${refresh ? '?refresh=1' : ''}`);
 }
 
 // Updates an installed plugin in place; returns the updated plugin dict.

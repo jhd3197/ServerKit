@@ -5,6 +5,7 @@ import ErrorState from '../ErrorState';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { useTranslation } from 'react-i18next';
+import InfoTip from '@/components/InfoTip';
 
 // Admin control for the require-2FA policy. A policy, never a
 // default: 'off' (nobody forced), 'admins', or 'all'. Within the grace window a
@@ -86,7 +87,7 @@ const TwoFactorPolicyCard = (props) => {
         <div className="settings-card" {...props}>
             <h3>{t('app.twoFactorPolicyCard.twoFactorAuthenticationPolicy', 'Two-factor authentication policy')}</h3>
             <p className="form-help form-help--flush">
-                {t('app.twoFactorPolicyCard.requireAccountsToProtectThemselvesWith', 'Require accounts to protect themselves with a passkey or authenticator app. Passwords keep working until the grace window ends; after that, sign-in only lets the user reach the enrolment screen until they add a second factor. Single sign-on users are always exempt.')}
+                {t('app.twoFactorPolicyCard.policyShort', 'Require a second factor for accounts.')} <InfoTip>{t('app.twoFactorPolicyCard.requireAccountsToProtectThemselvesWith', 'Require accounts to protect themselves with a passkey or authenticator app. Passwords keep working until the grace window ends; after that, sign-in only lets the user reach the enrolment screen until they add a second factor. Single sign-on users are always exempt.')}</InfoTip>
             </p>
 
             <div className="form-group">

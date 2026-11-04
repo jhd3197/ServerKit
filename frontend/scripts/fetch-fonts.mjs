@@ -5,7 +5,7 @@
 // ServerKit self-hosts its fonts for privacy (no Google Fonts CDN — that would
 // leak every visitor's IP + usage to a third party). This script downloads the
 // OFL-licensed IBM Plex faces once into the repo's public/fonts/ folder so
-// they're served from our own origin. The Sans 500/600/700 faces come directly
+// they're served from our own origin. The Sans 400/500/600/700 faces come directly
 // from the official IBM/plex repository; existing valid faces retain their
 // original @fontsource jsDelivr source.
 //
@@ -27,7 +27,7 @@ const IBM_PLEX_BASE = `https://raw.githubusercontent.com/IBM/plex/${IBM_PLEX_REV
 
 // local filename -> source URL
 const FONTS = {
-    'ibm-plex-sans-400.woff2': `${FONTSOURCE_BASE}/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2`,
+    'ibm-plex-sans-400.woff2': `${IBM_PLEX_BASE}/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-Regular.woff2`,
     'ibm-plex-sans-500.woff2': `${IBM_PLEX_BASE}/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-Medium.woff2`,
     'ibm-plex-sans-600.woff2': `${IBM_PLEX_BASE}/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-SemiBold.woff2`,
     'ibm-plex-sans-700.woff2': `${IBM_PLEX_BASE}/packages/plex-sans/fonts/complete/woff2/IBMPlexSans-Bold.woff2`,

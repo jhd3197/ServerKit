@@ -148,7 +148,7 @@ export default function AIManagementSettings({ connections, defaultId }) {
                 </div>
             </details>
             <details className="sk-ai-advanced"><summary>{t('ai.management.monthly', 'Monthly spending allowances')}</summary>
-                <p>{t('ai.management.allowanceHint', 'Allowances include active run reservations. Unknown-cost attempts consume the reservation conservatively. Limits use reported or estimated costs; a final call can overshoot. Use provider limits for authoritative billing caps.')}</p>
+                <p>{t('ai.management.allowanceHintShort', 'Includes active run reservations; limits are estimates.')} <InfoTip>{t('ai.management.allowanceHint', 'Allowances include active run reservations. Unknown-cost attempts consume the reservation conservatively. Limits use reported or estimated costs; a final call can overshoot. Use provider limits for authoritative billing caps.')}</InfoTip></p>
                 <div className="ai-connections__fields">
                     {numberField('monthly_limit_usd', t('ai.management.panelLimit', 'Panel allowance (USD / month)'), 0, 1000000, null, '0.01')}
                     {numberField('user_monthly_limit_usd', t('ai.management.userLimit', 'Allowance per user (USD / month)'), 0, 1000000, null, '0.01')}

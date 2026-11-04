@@ -7,8 +7,8 @@ release line and the `main` branch.
 
 | Version | Supported |
 |---------|-----------|
-| 1.7.x   | ✅ |
-| < 1.7   | ❌ (please upgrade) |
+| 1.11.x  | ✅ |
+| < 1.11  | ❌ (please upgrade) |
 
 The **agent** ships from its own repository, `jhd3197/serverkit-agent`, and is
 versioned independently (`vX.Y.Z` — it used `agent-vX.Y.Z` while it lived in this
@@ -142,6 +142,13 @@ carry a `sink-safe: <sanitizer> — <why>` comment. `scripts/check-html-sinks.mj
 (run in `npm run lint`, and mirrored by `backend/tests/test_html_sink_sweep.py`)
 fails CI on any new unannotated sink, so a raw-HTML injection point can't land
 silently.
+
+## Known Limitations
+
+- **Tokens in `localStorage`.** The SPA keeps its JWT access/refresh tokens in
+  `localStorage`, so an XSS bug would expose them. The production CSP now
+  forbids inline and `eval` scripts (`script-src 'self'`) to reduce that risk;
+  planned follow-up: move tokens to `httpOnly` `SameSite` cookies with CSRF protection.
 
 ## Extension Trust Model
 

@@ -291,7 +291,8 @@ export default function ResourceListPage({
 
     // Nothing to host while the page is empty or still loading — the chrome
     // acts on a table that isn't there.
-    const hasTable = !loading && resolvedTotal > 0;
+    // A refetch over existing rows keeps the chrome (and the search box's focus).
+    const hasTable = resolvedTotal > 0;
     const { hosted: chromeHoisted, portal: chromePortal } = useTopbarChrome(
         chromeNode,
         { enabled: chromeInTopbar && hasTable },
@@ -326,6 +327,7 @@ export default function ResourceListPage({
         // card grid when the page opted into one.
         return (
             <div className={cn('sk-tabgroup__inner', className)}>
+                {chromePortal}
                 <EmptyState
                     loading
                     loadingVariant={renderCard && view === 'cards' ? 'cards' : 'table'}

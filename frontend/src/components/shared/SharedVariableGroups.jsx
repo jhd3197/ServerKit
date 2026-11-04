@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import InfoTip from '@/components/InfoTip';
 import { ArrowLeft, Boxes, Plus, Trash2 } from 'lucide-react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
@@ -373,7 +374,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                     onRowClick={(g) => setSelectedId(g.id)}
                     emptyIcon={Boxes}
                     emptyTitle="No variable groups yet"
-                    emptyDescription="A group is a set of variables you attach to services, databases or servers at once, instead of copying the same values into each."
+                    emptyDescription={<>{t('app.sharedVariableGroups.emptyShort', 'Reusable variables for many resources.')} <InfoTip>{t('app.sharedVariableGroups.emptyFull', 'A group is a set of variables you attach to services, databases or servers at once, instead of copying the same values into each.')}</InfoTip></>}
                     emptyAction={<Button onClick={() => setCreating(true)}><Plus size={16} /> {t('app.sharedVariableGroups.createYourFirstGroup', 'Create your first group')}</Button>}
                     filteredEmptyIcon={Boxes}
                     filteredEmptyTitle="No groups found"

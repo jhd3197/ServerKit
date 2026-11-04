@@ -417,12 +417,13 @@ function ImportWizard() {
                     {STEPS.map((label, i) => (
                         <li
                             key={label}
+                            aria-current={i === stepperIndex ? 'step' : undefined}
                             className={`import-wizard__step${i === stepperIndex ? ' is-active' : ''}${i < stepperIndex ? ' is-done' : ''}`}
                         >
                             <span className="import-wizard__step-dot">
                                 {i < stepperIndex ? <CheckCircle2 size={14} aria-hidden="true" /> : i + 1}
                             </span>
-                            {label}
+                            <span className="import-wizard__step-label">{label}</span>
                         </li>
                     ))}
                 </ol>

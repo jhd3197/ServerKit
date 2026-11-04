@@ -12,6 +12,7 @@ Two endpoints:
   * POST /generate  — pure: given a plan dict, return Dockerfile + compose.
 """
 
+import logging
 import os
 import shutil
 import tempfile
@@ -24,6 +25,8 @@ from app.services.git_service import GitService
 from app.services.source_connection_service import SourceConnectionService
 from app.middleware.rbac import developer_required, get_current_user
 from app.api._request import json_object
+
+logger = logging.getLogger(__name__)
 
 buildpacks_bp = Blueprint('buildpacks', __name__)
 
@@ -113,8 +116,9 @@ def detect():
         plan = BuildpackService.detect(clone_target)
         BuildpackService.cache_plan(cache_key_url, plan, commit or branch)
         return jsonify(_build_response(plan, app_name)), 200
-    except Exception as exc:  # pragma: no cover - defensive
-        return jsonify({'error': str(exc)}), 400
+    except Exception:  # pragma: no cover - defensive
+        logger.exception('Buildpack detection failed')
+        return jsonify({'error': 'Could not detect a build plan for this repository'}), 400
     finally:
         shutil.rmtree(workdir, ignore_errors=True)
 

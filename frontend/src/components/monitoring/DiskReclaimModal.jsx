@@ -8,6 +8,7 @@ import { useToast } from '@/contexts/useToast.js';
 import { useOperations } from '@/contexts/OperationsContext';
 import formatBytes from '@/utils/formatBytes';
 import { toastError } from '@/utils/errorMessage';
+import InfoTip from '@/components/InfoTip';
 
 /**
  * Curated "safe" disk reclaim. Shows what a fresh measurement says can be
@@ -95,7 +96,7 @@ const DiskReclaimModal = ({ open, onClose }) => {
             )}
         >
             <p className="sk-modal__subtitle">
-                {t('app.diskReclaim.onlyReviewedSafeCandidatesAreOffered', 'Only reviewed-safe cleanup is offered: upgrade snapshots beyond the newest one, abandoned update staging, oversized logs, package caches, old journal entries and Docker build cache. Nothing here touches your services or databases.')}
+                {t('app.diskReclaim.onlyReviewedSafeCandidatesAreOfferedShort', 'Only reviewed-safe cleanup is offered.')} <InfoTip>{t('app.diskReclaim.onlyReviewedSafeCandidatesAreOffered', 'Only reviewed-safe cleanup is offered: upgrade snapshots beyond the newest one, abandoned update staging, oversized logs, package caches, old journal entries and Docker build cache. Nothing here touches your services or databases.')}</InfoTip>
             </p>
 
             {loading ? (

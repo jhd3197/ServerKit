@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import InfoTip from '@/components/InfoTip';
 import { useNavigate } from 'react-router-dom';
 import { FolderKanban, Plus } from 'lucide-react';
 import api from '../services/api';
@@ -164,7 +165,7 @@ const Projects = () => {
             onRowClick={(p) => navigate(`/projects/${p.id}`)}
             emptyIcon={FolderKanban}
             emptyTitle="No projects yet"
-            emptyDescription="Group your applications into projects and environments (production, staging, development) to keep things organized."
+            emptyDescription={<>{t('app.projects.emptyShort', 'Group apps into projects and environments.')} <InfoTip>{t('app.projects.emptyFull', 'Group your applications into projects and environments (production, staging, development) to keep things organized.')}</InfoTip></>}
             emptyAction={(
                 <Button onClick={() => setShowCreate(true)}>
                     <Plus size={16} /> {t('app.projects.createYourFirstProject', 'Create your first project')}

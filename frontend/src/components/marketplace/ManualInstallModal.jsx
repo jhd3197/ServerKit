@@ -7,7 +7,6 @@ import {
     PlugZap,
     Search,
     ShieldAlert,
-    ShieldCheck,
 } from 'lucide-react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
@@ -15,6 +14,7 @@ import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import SignatureBadge from './SignatureBadge';
 import DocsLink from '@/components/DocsLink';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
@@ -55,44 +55,6 @@ const SourceInput = ({
     </div>
 );
 
-// Signature verdict badge for the consent card. 'verified' means the
-// release zip's ed25519 signature checked out against a publisher key pinned
-// by this panel; everything else is an honest not-verified treatment.
-const SignatureBadge = ({ signature }) => {
-    const { t } = useTranslation();
-    const status = signature?.status || 'unsigned';
-    if (status === 'verified') {
-        return (
-            <Badge variant="success" className="plugin-install-consent__badge">
-                <ShieldCheck aria-hidden="true" />
-                {t('app.manualInstallModal.signed', 'Signed ·')} {signature.publisher || signature.key_id}
-            </Badge>
-        );
-    }
-    if (status === 'untrusted_key') {
-        return (
-            <Badge variant="warning" className="plugin-install-consent__badge">
-                <ShieldAlert aria-hidden="true" />
-                {t('app.manualInstallModal.signedUnknownPublisher', 'Signed · unknown publisher')}
-            </Badge>
-        );
-    }
-    if (status === 'invalid') {
-        return (
-            <Badge variant="destructive" className="plugin-install-consent__badge">
-                <ShieldAlert aria-hidden="true" />
-                {t('app.manualInstallModal.signatureInvalid', 'Signature invalid')}
-            </Badge>
-        );
-    }
-    return (
-        <Badge variant="warning" className="plugin-install-consent__badge">
-            <ShieldAlert aria-hidden="true" />
-            {t('app.manualInstallModal.unsigned', 'Unsigned')}
-        </Badge>
-    );
-};
-
 // The consent card shown after a GitHub/zip URL is resolved but before install.
 // Presents what will be installed and what it wants — the same permissions
 // presentation as the registry detail modal — so the install is never blind.
@@ -117,7 +79,7 @@ const PreviewConsent = ({ preview, installing, onInstall, onCancel }) => {
                         {compat && <span>{compat}</span>}
                     </div>
                 </div>
-                <SignatureBadge signature={preview.signature} />
+                <SignatureBadge signature={preview.signature} className="plugin-install-consent__badge" />
             </div>
 
             {preview.description && (

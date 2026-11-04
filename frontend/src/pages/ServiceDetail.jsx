@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { servicePortUrl } from '@/utils/serviceUrl';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
@@ -25,7 +25,8 @@ import EmptyState from '../components/EmptyState';
 import PluginSlot from '../components/PluginSlot';
 import { Layers, FileArchive, RotateCcw, LayoutDashboard, History, ScrollText, Variable, Terminal, Activity, Package, Server, SquareTerminal, Settings, Eye, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Pill, ServiceTile, PageTopbar, statusKind } from '@/components/ds';
+import { Pill, statusKind } from '@/components/ds';
+import PageLayout from '../layouts/PageLayout';
 import FavoriteStar from '@/components/FavoriteStar';
 import { useRecordVisit } from '@/hooks/useRecordVisit';
 import { useTranslation } from 'react-i18next';
@@ -279,24 +280,52 @@ const ServiceDetail = () => {
     const openUrl = primaryDomain ? null : servicePortUrl(service);
 
     return (
-        <div className="app-detail-page app-detail-page--wide svc-detail">
-            {/* Full-bleed top bar — the canonical PageTopbar (.sk-topbar): the SAME
-                chrome as the Services LIST page and the WordPress detail page, so the
-                top menu stays consistent. Breadcrumb in the title slot, all service
-                actions on the right. */}
-            <PageTopbar
-                className="svc-detail-topbar"
-                icon={<Layers size={18} />}
-                title={(
-                    <>
-                        <span className="svc-crumbs">
-                            <Link to="/services">{t('common.labels.services', 'Services')}</Link>
-                            <span className="svc-crumbs__sep">/</span>
-                            <span className="svc-crumbs__cur">{service.name}</span>
-                        </span>
-                        <FavoriteStar type="service" id={service.id} path={`/services/${service.id}`} label={service.name} />
-                    </>
-                )}
+        <PageLayout
+            fill
+            className="svc-detail"
+            topbarClassName="svc-detail-topbar"
+            icon={<Layers size={18} />}
+            title={service.name}
+            navLabel={t('app.serviceDetail.sections', 'Service sections')}
+            meta={(
+                <>
+                    <FavoriteStar type="service" id={service.id} path={`/services/${service.id}`} label={service.name} />
+                    {openUrl && (
+                        <a
+                            href={openUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="svc-detail__open"
+                            title={t('app.serviceDetail.open', 'Open {{openUrl}}', { openUrl: openUrl })}
+                            aria-label={t('app.serviceDetail.openInANewTab', 'Open {{name}} in a new tab', { name: service.name })}
+                        >
+                            <ExternalLink size={15} />
+                        </a>
+                    )}
+                    <Pill kind={statusKind(service.statusInfo.dotClass)}>{service.statusInfo.label}</Pill>
+                    <span
+                        className="svc-detail__type-badge"
+                        style={{ backgroundColor: service.typeInfo.bgColor, color: service.typeInfo.color, borderColor: service.typeInfo.borderColor }}
+                    >
+                        {service.typeInfo.label}
+                    </span>
+                    {service.port && <span>{t('common.labels.port', 'Port')} {service.port}</span>}
+                    <span>{t('common.labels.created', 'Created')} {formatDate(service.created_at)}</span>
+                    {primaryDomain && (
+                        <a href={`https://${primaryDomain}`} target="_blank" rel="noopener noreferrer">{primaryDomain}</a>
+                    )}
+                </>
+            )}
+            tabs={availableTabs.map(tab => {
+                const Icon = TAB_ICONS[tab];
+                return {
+                    id: tab,
+                    label: TAB_LABELS[tab] || tab,
+                    icon: Icon ? <Icon size={15} /> : null,
+                    active: activeTab === tab,
+                    onSelect: () => setActiveTab(tab),
+                };
+            })}
                 actions={(
                     <>
                     {/* Deploy dropdown */}
@@ -407,76 +436,11 @@ const ServiceDetail = () => {
                     </div>
                     </>
                 )}
-            />
+        >
 
             {/* Everything below the full-bleed top bar lives in a centered, padded
                 column (.app-detail-body), matching the WordPress detail page. */}
             <div className="app-detail-body">
-            {/* Identity — tile + name + status + type (no actions). */}
-            <div className="app-detail-header">
-                <ServiceTile name={service.name} size={52} className="svc-detail__tile" />
-                <div className="app-detail-title-block">
-                    <h1>
-                        {service.name}
-                        {/* Before the status pill: the first thing you want
-                            after seeing a service is live is to go look at it. */}
-                        {openUrl && (
-                            <a
-                                href={openUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="svc-detail__open"
-                                title={t('app.serviceDetail.open', 'Open {{openUrl}}', { openUrl: openUrl })}
-                                aria-label={t('app.serviceDetail.openInANewTab', 'Open {{name}} in a new tab', { name: service.name })}
-                            >
-                                <ExternalLink size={15} />
-                            </a>
-                        )}
-                        <Pill kind={statusKind(service.statusInfo.dotClass)}>
-                            {service.statusInfo.label}
-                        </Pill>
-                        <span
-                            className="svc-detail__type-badge"
-                            style={{ backgroundColor: service.typeInfo.bgColor, color: service.typeInfo.color, borderColor: service.typeInfo.borderColor }}
-                        >
-                            {service.typeInfo.label}
-                        </span>
-                    </h1>
-                    <div className="app-detail-subtitle">
-                        {service.port && (
-                            openUrl ? (
-                                <a
-                                    href={openUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="svc-detail__portlink"
-                                    title={t('app.serviceDetail.open', 'Open {{openUrl}}', { openUrl: openUrl })}
-                                >
-                                    {t('common.labels.port', 'Port')} {service.port}
-                                    <ExternalLink size={12} />
-                                </a>
-                            ) : (
-                                <span>{t('common.labels.port', 'Port')} {service.port}</span>
-                            )
-                        )}
-                        {service.port && <span className="separator">&middot;</span>}
-                        <span>{t('common.labels.created', 'Created')} {formatDate(service.created_at)}</span>
-                        {primaryDomain && (
-                            <>
-                                <span className="separator">&middot;</span>
-                                <a
-                                    href={`https://${primaryDomain}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {primaryDomain}
-                                </a>
-                            </>
-                        )}
-                    </div>
-                </div>
-            </div>
-
             {/* Repo Connection Pill */}
             <div className="svc-detail__repo-bar">
                 {isUpload ? (
@@ -573,25 +537,6 @@ const ServiceDetail = () => {
                 </div>
             )}
 
-            {/* Tab Bar — shared underline-style strip (app-detail-tabs) with a
-                glyph per tab; Settings is pinned to the far right (--end), exactly
-                like the WordPress detail page. */}
-            <div className="app-detail-tabs">
-                {availableTabs.map(tab => {
-                    const Icon = TAB_ICONS[tab];
-                    return (
-                        <Button variant="unstyled" type="button"
-                            key={tab}
-                            className={`app-detail-tab ${activeTab === tab ? 'active' : ''} ${tab === 'settings' ? 'app-detail-tab--end' : ''}`}
-                            onClick={() => setActiveTab(tab)}
-                        >
-                            {Icon && <Icon size={14} />}
-                            {TAB_LABELS[tab] || tab}
-                        </Button>
-                    );
-                })}
-            </div>
-
             {/* Tab Content */}
             <div className="app-detail-content">
                 {activeTab === 'overview' && <OverviewTab app={service} deployConfig={deployConfig} />}
@@ -618,7 +563,7 @@ const ServiceDetail = () => {
             {/* Extension slot: widgets contributed to the service detail page */}
             <PluginSlot name="service.detail.tab" context={{ serviceId: service.id }} />
             </div>
-        </div>
+        </PageLayout>
     );
 };
 

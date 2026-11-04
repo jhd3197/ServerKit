@@ -39,6 +39,23 @@ const SheetContent = React.forwardRef(({ side = 'right', className, overlayClass
 });
 SheetContent.displayName = SheetPrimitive.Content.displayName;
 
+// Bare modal panel for legacy hand-rolled drawers that own their own chrome and
+// CSS: Radix supplies role=dialog, aria-modal, focus trap, focus restore and
+// Escape; the caller supplies the classes and an element carrying the title.
+function SheetPanel({ onClose, overlayClassName, className, label, children }) {
+  return (
+    <SheetPrimitive.Root open onOpenChange={(v) => !v && onClose()}>
+      <SheetPortal>
+        <SheetPrimitive.Overlay className={overlayClassName} />
+        <SheetPrimitive.Content className={className} aria-label={label} aria-describedby={undefined}>
+          {children}
+        </SheetPrimitive.Content>
+      </SheetPortal>
+    </SheetPrimitive.Root>
+  );
+}
+SheetPanel.displayName = 'SheetPanel';
+
 function SheetHeader({ className, ...props }) {
   return <div className={cn('ui-sheet-header', className)} {...props} />;
 }
@@ -59,4 +76,4 @@ const SheetDescription = React.forwardRef(({ className, ...props }, ref) => (
 ));
 SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
-export { Sheet, SheetPortal, SheetOverlay, SheetTrigger, SheetClose, SheetContent, SheetHeader, SheetFooter, SheetTitle, SheetDescription };
+export { Sheet, SheetPortal, SheetOverlay, SheetTrigger, SheetClose, SheetContent, SheetPanel, SheetHeader, SheetFooter, SheetTitle, SheetDescription };

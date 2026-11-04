@@ -891,15 +891,15 @@ def get_server_metrics(server_id):
         try:
             from_dt = datetime.fromisoformat(from_time.replace('Z', '+00:00'))
             query = query.filter(ServerMetrics.timestamp >= from_dt)
-        except:
-            pass
+        except ValueError:
+            raise ValidationError("Invalid 'from' timestamp; use ISO 8601")
 
     if to_time:
         try:
             to_dt = datetime.fromisoformat(to_time.replace('Z', '+00:00'))
             query = query.filter(ServerMetrics.timestamp <= to_dt)
-        except:
-            pass
+        except ValueError:
+            raise ValidationError("Invalid 'to' timestamp; use ISO 8601")
 
     metrics = query.order_by(ServerMetrics.timestamp.desc()).limit(limit).all()
 

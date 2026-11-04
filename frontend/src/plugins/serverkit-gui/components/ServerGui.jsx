@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useTranslation, useFormat } from 'serverkit-sdk';
 import SyntheticDesktop from './SyntheticDesktop.jsx';
 import { Button as SharedButton } from 'serverkit-sdk';
+import { storageKey } from '../../../services/tunnelBase';
 
 const FRAME_INTERVAL_MS_DEFAULT = 700;
 const STORAGE_KEY = 'sk-gui:prefs';
@@ -52,7 +53,7 @@ export default function ServerGui({ api, serverId }) {
         if (api && typeof api.request === 'function') {
             return api.request(path);
         }
-        const token = localStorage.getItem('access_token');
+        const token = localStorage.getItem(storageKey('access_token'));
         const r = await fetch(path, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();

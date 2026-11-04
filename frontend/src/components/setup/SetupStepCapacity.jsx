@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import InfoTip from '@/components/InfoTip';
 import { useResourceTier } from '../../contexts/useResourceTier.js';
 import { Check, X, AlertTriangle, Loader, Cpu, MemoryStick, HardDrive } from 'lucide-react';
 import api from '../../services/api';
@@ -181,8 +182,8 @@ const SetupStepCapacity = ({ useCases, onComplete }) => {
                 <div className="tier-warning">
                     <AlertTriangle size={20} className="tier-warning-icon" />
                     <div className="tier-warning-text">
-                        {t('app.setupStepCapacity.dockerIsNotInstalledOrNot', "Docker is not installed or not responding, so service hosting stays off until it is. We'll remember this choice. Install Docker and restart ServerKit, or re-run the installer with")}{' '}
-                        <code>{t('app.setupStepCapacity.serverkitProfile', 'SERVERKIT_PROFILE=')}{activeProfile}</code>.
+                        {t('app.setupStepCapacity.dockerOffShort', 'Docker is not responding; service hosting stays off.')} <InfoTip>{t('app.setupStepCapacity.dockerIsNotInstalledOrNot', "Docker is not installed or not responding, so service hosting stays off until it is. We'll remember this choice. Install Docker and restart ServerKit, or re-run the installer with")}{' '}
+                        <code>{t('app.setupStepCapacity.serverkitProfile', 'SERVERKIT_PROFILE=')}{activeProfile}</code>.</InfoTip>
                     </div>
                 </div>
             )}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import InfoTip from '@/components/InfoTip';
 import useTabParam from '../hooks/useTabParam';
 import { useLogsDrawer } from '../contexts/LogsDrawerContext';
 import {
@@ -831,7 +832,7 @@ export default function StyleGuide() {
                         </SharedCard>
 
                         <SectionTitle title={t('app.styleGuide.sideDrawerSheet', 'Side drawer (Sheet)')} />
-                        <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.rightLeftAnchoredPanelBuiltOn', 'Right/left-anchored panel built on Radix Dialog. Used for forms like "Add server" or "Add service" where a slide-in panel is preferred over a centered modal.')}</p>
+                        <p className="styleguide__description styleguide__description--spaced">{t('app.styleGuide.sheetShort', 'Slide-in panel built on Radix Dialog.')} <InfoTip>{t('app.styleGuide.rightLeftAnchoredPanelBuiltOn', 'Right/left-anchored panel built on Radix Dialog. Used for forms like "Add server" or "Add service" where a slide-in panel is preferred over a centered modal.')}</InfoTip></p>
                         <SharedCard variant="legacy" className="card styleguide__demo-card">
                             <div className="styleguide__actions">
                                 <Button onClick={() => { setSheetSide('right'); setSheetOpen(true); }}>
@@ -1192,8 +1193,10 @@ export default function StyleGuide() {
 
                         <SectionTitle title={t('app.styleGuide.retiredPageHeader', 'Retired: .page-header')} />
                         <p className="styleguide__description styleguide__description--spaced">
+                            {t('app.styleGuide.retiredShort', 'Removed. Use one of the two bars above.')} <InfoTip>
                             {t('app.styleGuide.theOld', 'The old')} <code>{t('app.styleGuide.divClassnamePageHeader', '<div className="page-header">')}</code> +{' '}
                             <code>&lt;h1&gt;</code> {t('app.styleGuide.blockHasBeenRemovedFromThe', "block has been removed from the codebase and its styles deleted. Don't reintroduce it; use one of the two bars above. Bespoke workspace pages (Docker, Database Explorer) intentionally carry no page bar at all; that is not a licence to invent a third header.")}
+                            </InfoTip>
                         </p>
 
                         <SectionTitle title={t('app.styleGuide.cardWithHeaderActions', 'Card with header + actions')} />

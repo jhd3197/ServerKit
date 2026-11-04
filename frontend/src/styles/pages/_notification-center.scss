@@ -1,9 +1,7 @@
 // Notifications history page (sk-notif-page).
 
 .sk-notif-page {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: $space-5 $space-6 $space-10;
+    // Width and gutter come from the page shell, as on every page.
 
     &__filters {
         display: inline-flex;

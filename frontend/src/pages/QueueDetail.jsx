@@ -15,6 +15,8 @@ import { useConfirm } from '../hooks/useConfirm';
 import EmptyState from '../components/EmptyState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import { Tip } from '@/components/ui/tooltip';
+import PageLayout from '../layouts/PageLayout';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -337,35 +339,43 @@ const QueueDetail = () => {
     }
 
     return (
-        <div className="queue-page queue-detail">
-            <div className="queue-detail-header">
-                <Button variant="unstyled" type="button" className="queue-back" onClick={() => navigate('/queue')}>
-                    <ArrowLeft size={16} /> {t('app.queueDetail.queueBus', 'Queue bus')}
-                </Button>
-                <div className="queue-detail-headline">
-                    <div className="queue-workbar-title">
-                        <span>{t('app.queueDetail.queue', 'Queue')}</span>
-                        <h1>{queue?.name || queueSlug}</h1>
-                        <em>{groupSlug} / {queueSlug}</em>
-                    </div>
-                    <div className="queue-detail-actions">
-                        {viewOnly && (
-                            <span className="queue-readonly-badge">
-                                <Lock size={12} /> {t('app.queueDetail.readOnly', 'Read-only')}
-                            </span>
-                        )}
-                        {!viewOnly && (
-                            <Button variant="outline" onClick={() => setShowSend(true)}>
-                                <Send size={16} /> {t('app.queueDetail.sendMessage', 'Send message')}
-                            </Button>
-                        )}
-                        <Button variant="outline" onClick={() => { loadMeta(); loadMessages(statusFilter); }}>
-                            <RefreshCw size={16} /> {t('common.actions.refresh', 'Refresh')}
+        <PageLayout
+            className="queue-page"
+            icon={<Inbox size={18} />}
+            title={queue?.name || queueSlug}
+            meta={(
+                <>
+                    <span>{groupSlug} / {queueSlug}</span>
+                    {viewOnly && (
+                        <span className="queue-readonly-badge">
+                            <Lock size={12} /> {t('app.queueDetail.readOnly', 'Read-only')}
+                        </span>
+                    )}
+                </>
+            )}
+            actions={(
+                <>
+                    <Tip content={t('app.queueDetail.queueBus', 'Queue bus')}>
+                        <Button variant="ghost" size="icon" aria-label={t('app.queueDetail.queueBus', 'Queue bus')} onClick={() => navigate('/queue')}>
+                            <ArrowLeft size={16} />
                         </Button>
-                    </div>
-                </div>
-            </div>
-
+                    </Tip>
+                    {!viewOnly && (
+                        <Tip content={t('app.queueDetail.sendMessage', 'Send message')}>
+                            <Button variant="ghost" size="icon" aria-label={t('app.queueDetail.sendMessage', 'Send message')} onClick={() => setShowSend(true)}>
+                                <Send size={16} />
+                            </Button>
+                        </Tip>
+                    )}
+                    <Tip content={t('common.actions.refresh', 'Refresh')}>
+                        <Button variant="ghost" size="icon" aria-label={t('common.actions.refresh', 'Refresh')} onClick={() => { loadMeta(); loadMessages(statusFilter); }}>
+                            <RefreshCw size={16} />
+                        </Button>
+                    </Tip>
+                </>
+            )}
+        >
+          <div className="queue-detail">
             <KpiBand>
                 <MetricCard label={t('app.queueDetail.total', 'Total')} value={stats.total || 0} />
                 {STATUS_ORDER.map(s => (
@@ -512,7 +522,8 @@ const QueueDetail = () => {
             </Modal>
 
             <GridFilterDrawer {...chrome.drawerProps} />
-        </div>
+          </div>
+        </PageLayout>
     );
 };
 
