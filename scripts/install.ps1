@@ -30,6 +30,17 @@
 .PARAMETER Version
     Specific agent version to install (optional, defaults to latest)
 
+.PARAMETER Level
+    Permission level: monitor (report-only, no inbound commands), protect
+    (security actions only) or full (everything). If omitted: a menu on an
+    interactive console, otherwise full with a warning.
+
+.PARAMETER Reconfigure
+    Required to change the level of an already-installed agent.
+
+.PARAMETER Yes
+    Skip the typed confirmation when reconfiguring.
+
 .EXAMPLE
     .\install.ps1 -Token "sk_reg_xxx" -Server "https://your-serverkit.com"
 
@@ -53,7 +64,15 @@ param(
     [string]$Name,
 
     [Parameter(Mandatory=$false)]
-    [string]$Version = "latest"
+    [string]$Version = "latest",
+
+    [Parameter(Mandatory=$false)]
+    [ValidateSet("monitor", "protect", "full")]
+    [string]$Level,
+
+    [switch]$Reconfigure,
+
+    [switch]$Yes
 )
 
 # Configuration
@@ -172,11 +191,61 @@ function New-ConfigDirectory {
     }
 }
 
+# Level recorded in an existing config ("" when none; no key = legacy = full).
+function Get-InstalledLevel {
+    $cfg = Join-Path $ConfigDir "config.yaml"
+    if (-not (Test-Path $cfg)) { return "" }
+    $m = Select-String -Path $cfg -Pattern '^\s+level:\s*"?(\w+)"?' | Select-Object -First 1
+    if ($m) { return $m.Matches[0].Groups[1].Value }
+    return "full"
+}
+
+# Refuses to silently change an installed agent's level; returns the level to use.
+function Resolve-Level {
+    param([string]$Level, [bool]$Reconfigure, [bool]$Yes)
+
+    $current = Get-InstalledLevel
+    if ($current) {
+        if (-not $Level) { return $current }
+        if ($Level -eq $current) { return $Level }
+        if (-not $Reconfigure) {
+            Write-ColorOutput "This agent is already installed at level '$current'. Re-run with -Reconfigure to change it to '$Level'." "Error"
+            exit 1
+        }
+        if (-not $Yes) {
+            $answer = Read-Host "Changing level $current -> $Level. Type '$Level' to confirm"
+            if ($answer -ne $Level) {
+                Write-ColorOutput "Confirmation did not match; permission level unchanged (use -Yes for scripted use)" "Error"
+                exit 1
+            }
+        }
+        $script:ChangeLevelFrom = $current
+        return $Level
+    }
+    if ($Level) { return $Level }
+    if ([Environment]::UserInteractive -and -not [Console]::IsInputRedirected) {
+        Write-Host ""
+        Write-Host "  Choose what this agent may do on this server:"
+        Write-Host "    1) monitor  report-only, accepts no commands from the panel"
+        Write-Host "    2) protect  security actions only (firewall, fail2ban, CrowdSec, origin lock)"
+        Write-Host "    3) full     everything"
+        switch (Read-Host "  Selection [1-3]") {
+            "1" { return "monitor" }
+            "2" { return "protect" }
+            "3" { return "full" }
+            default { Write-ColorOutput "Invalid selection" "Error"; exit 1 }
+        }
+    }
+    Write-ColorOutput "No -Level given and no console: defaulting to FULL control. Pass -Level monitor|protect|full to choose." "Warning"
+    return "full"
+}
+
 function Register-Agent {
     param(
         [string]$Token,
         [string]$Server,
-        [string]$Name
+        [string]$Name,
+        [string]$Level
     )
 
     Write-ColorOutput "Registering agent with ServerKit..." "Info"
@@ -187,6 +256,11 @@ function Register-Agent {
 
     if ($Name) {
         $arguments += @("--name", $Name)
+    }
+    $arguments += @("--level", $Level)
+
+    if ($script:ChangeLevelFrom) {
+        Start-Process -FilePath $agentPath -ArgumentList @("--config", $configPath, "permissions", "set", $Level, "--yes") -Wait -NoNewWindow | Out-Null
     }
 
     try {
@@ -307,7 +381,15 @@ function Install-ServerKitAgent {
         [string]$Name,
 
         [Parameter(Mandatory=$false)]
-        [string]$Version = "latest"
+        [string]$Version = "latest",
+
+        [Parameter(Mandatory=$false)]
+        [ValidateSet("monitor", "protect", "full")]
+        [string]$Level,
+
+        [switch]$Reconfigure,
+
+        [switch]$Yes
     )
 
     # Update script-level variables
@@ -321,19 +403,30 @@ function Install-ServerKitAgent {
         exit 1
     }
 
+    $Level = Resolve-Level -Level $Level -Reconfigure $Reconfigure.IsPresent -Yes $Yes.IsPresent
+
     Get-LatestVersion
     Install-Agent
     New-ConfigDirectory
-    Register-Agent -Token $Token -Server $Server -Name $Name
+    Register-Agent -Token $Token -Server $Server -Name $Name -Level $Level
     Install-WindowsService
     Start-AgentService
     Add-ToPath
     Write-SuccessMessage
+    Write-Host "Permission level: $($Level.ToUpper())" -ForegroundColor Yellow
+    switch ($Level) {
+        "monitor" { Write-Host "  Report-only: this agent sends metrics out and accepts NO commands." }
+        "protect" { Write-Host "  Security actions only (firewall, fail2ban, CrowdSec, origin lock)." }
+        default   { Write-Host "  Full control: the panel can run any supported action." }
+    }
+    Write-Host "  Change it (elevated prompt, this machine only):"
+    Write-Host "    & '$InstallDir\$AgentBinary' permissions set <monitor|protect|full>"
+    Write-Host ""
 }
 
 # Direct execution with parameters
 if ($Token -and $Server) {
-    Install-ServerKitAgent -Token $Token -Server $Server -Name $Name -Version $Version
+    Install-ServerKitAgent -Token $Token -Server $Server -Name $Name -Version $Version -Level $Level -Reconfigure:$Reconfigure -Yes:$Yes
 }
 elseif ($PSBoundParameters.Count -gt 0) {
     Write-ColorOutput "Both -Token and -Server parameters are required" "Error"

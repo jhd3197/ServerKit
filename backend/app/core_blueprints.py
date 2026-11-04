@@ -46,6 +46,7 @@ class BlueprintSpec:
 CORE_BLUEPRINTS: tuple[BlueprintSpec, ...] = (
     BlueprintSpec('app.api.auth', 'auth_bp', '/api/v1/auth'),
     BlueprintSpec('app.api.agent_poll', 'agent_poll_bp', '/api/v1/agent'),
+    BlueprintSpec('app.api.agent_report', 'agent_report_bp', '/api/v1/agent'),
     BlueprintSpec('app.api.linked_panel', 'linked_panel_bp', '/api/v1/linked-panel'),
     BlueprintSpec('app.api.apps', 'apps_bp', '/api/v1/apps'),
     BlueprintSpec('app.api.apps', 'apps_bp', '/api/v1/services', name='services'),
