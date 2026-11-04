@@ -2,6 +2,7 @@ import { useId, useMemo } from 'react';
 import { Label } from '@/components/ui/label';
 import { FieldContext } from '@/components/ui/field-context';
 import { cn } from '@/lib/utils';
+import InfoTip from './InfoTip';
 
 /**
  * Standard form field wrapper: label, hint, error message, and input slot.
@@ -22,6 +23,7 @@ export function FormField({
     children,
     error,
     hint,
+    info,
     required = false,
     className,
     labelClassName,
@@ -42,12 +44,17 @@ export function FormField({
 
     return (
         <div className={cn('form-field', invalid && 'form-field--invalid', className)}>
-            {label && (
-                <Label htmlFor={inputId} className={cn('form-field__label', labelClassName)}>
-                    {label}
-                    {required && <span className="form-field__required" aria-hidden="true">*</span>}
-                </Label>
-            )}
+            {label && (() => {
+                const labelEl = (
+                    <Label htmlFor={inputId} className={cn('form-field__label', labelClassName)}>
+                        {label}
+                        {required && <span className="form-field__required" aria-hidden="true">*</span>}
+                    </Label>
+                );
+                return info
+                    ? <div className="form-field__head">{labelEl}<InfoTip>{info}</InfoTip></div>
+                    : labelEl;
+            })()}
             <div className="form-field__control">
                 <FieldContext.Provider value={field}>
                     {children}

@@ -598,7 +598,7 @@ const Templates = () => {
                                 tag={isRepo ? t('app.templates.gitRepo', 'Git repo') : t('app.templates.oneClick', 'One-click')}
                                 featured={isFeatured(template)}
                                 description={template.description}
-                                facts={(template.categories || []).slice(0, 2).join(' · ')}
+                                chips={(template.categories || []).slice(0, 3)}
                                 onClick={deployManaged ? undefined : () => handleDeploy(template)}
                                 action={!deployManaged && (
                                     <Button variant="outline" size="sm" onClick={() => handleDeploy(template)}>

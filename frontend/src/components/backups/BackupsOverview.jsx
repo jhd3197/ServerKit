@@ -9,6 +9,7 @@ import api from '../../services/api';
 import { formatBytes } from '@/utils/formatBytes';
 import { KpiBand, MetricCard, Pill, DataTable, DataTableFooter } from '@/components/ds';
 import EmptyState from '../EmptyState';
+import InfoTip from '../InfoTip';
 import { useTranslation } from 'react-i18next';
 import { formatDuration, formatNumber } from '@/utils/intl';
 
@@ -407,9 +408,12 @@ export default function BackupsOverview({
                         </div>
                     ))}
                     {destinations.count === 1 && (
-                        <p className="bk-hint bk-hint--warn">
-                            <AlertTriangle size={13} />
-                            {t('app.backupsOverview.everythingIsOnOneDiskAdd', 'Everything is on one disk. Add a remote destination so a dead server doesn\'t take the backups with it.')}
+                        <p className="bk-hint bk-hint--warn tip-chip-row">
+                            <span className="tip-chip tip-chip--warning">
+                                <AlertTriangle aria-hidden="true" />
+                                {t('app.backupsOverview.singleDisk', 'Single disk')}
+                            </span>
+                            <InfoTip>{t('app.backupsOverview.everythingIsOnOneDiskAdd', 'Everything is on one disk. Add a remote destination so a dead server doesn\'t take the backups with it.')}</InfoTip>
                         </p>
                     )}
                 </section>

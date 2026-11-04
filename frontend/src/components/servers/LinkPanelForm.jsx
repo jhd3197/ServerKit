@@ -1,5 +1,6 @@
 import { useEffect, useState, useId } from 'react';
-import { Unlink } from 'lucide-react';
+import { KeyRound, Link2, Server, Unlink } from 'lucide-react';
+import IconStepStrip from '../IconStepStrip';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { ConfirmDialog } from '../ConfirmDialog';
@@ -130,9 +131,11 @@ const LinkPanelForm = ({ onClose }) => {
     return (
         <form className="server-setup-form" onSubmit={handleLink}>
             <div className="server-setup-form__body">
-                <p className="section-description">
-                    {t('app.linkPanelForm.linkThisPanelToAMaster', 'Link this panel to a master ServerKit so it can manage this server. No separate agent install is needed. Generate a registration token on the master: Servers → Add server / regenerate token.')}
-                </p>
+                <IconStepStrip steps={[
+                    { icon: <KeyRound />, label: t('app.linkPanelForm.stepMasterToken', 'Master token'), info: t('app.linkPanelForm.linkThisPanelToAMaster', 'Link this panel to a master ServerKit so it can manage this server. No separate agent install is needed. Generate a registration token on the master: Servers → Add server / regenerate token.') },
+                    { icon: <Link2 />, label: t('app.linkPanelForm.stepPasteHere', 'Paste here') },
+                    { icon: <Server />, label: t('app.linkPanelForm.stepLinked', 'Linked') },
+                ]} />
 
                 {linkError && <div className="error-message">{linkError}</div>}
 

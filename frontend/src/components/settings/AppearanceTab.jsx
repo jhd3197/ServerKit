@@ -13,6 +13,7 @@ import ThemeBrowseModal from './ThemeBrowseModal';
 import ThemeStudioModal from './ThemeStudioModal';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
+import InfoTip from '../InfoTip';
 import { toastError } from '@/utils/errorMessage';
 
 const ACCENT_PRESETS = [
@@ -64,8 +65,7 @@ const AppearanceTab = () => {
             <LanguageSelector />
 
             <div {...register('appearance-theme', 'settings-card')}>
-                <h3>{t('app.appearanceTab.theme', 'Theme')}</h3>
-                <p>{t('app.appearanceTab.selectYourPreferredColorScheme', 'Select your preferred color scheme')}</p>
+                <h3>{t('app.appearanceTab.theme', 'Theme')} <InfoTip>{t('app.appearanceTab.selectYourPreferredColorScheme', 'Select your preferred color scheme')}</InfoTip></h3>
                 <div className="theme-options">
                     <Button variant="unstyled" type="button"
                         className={`theme-option ${theme === 'dark' ? 'active' : ''}`}
@@ -112,8 +112,7 @@ const AppearanceTab = () => {
             <div {...register('appearance-theme-gallery', 'settings-card')}>
                 <div className="theme-gallery-header">
                     <div>
-                        <h3>{t('app.appearanceTab.theme', 'Theme')}</h3>
-                        <p>{t('app.appearanceTab.pickAColorThemeAppliesInstantly', 'Pick a color theme. Applies instantly and stays your personal choice; the dark/light toggle above still works on top of it.')}</p>
+                        <h3>{t('app.appearanceTab.theme', 'Theme')} <InfoTip>{t('app.appearanceTab.pickAColorThemeAppliesInstantly', 'Pick a color theme. Applies instantly and stays your personal choice; the dark/light toggle above still works on top of it.')}</InfoTip></h3>
                     </div>
                     <div className="theme-gallery-actions">
                         <Button variant="outline" size="sm" onClick={() => setStudioOpen(true)}>
@@ -147,8 +146,7 @@ const AppearanceTab = () => {
             </div>
 
             <div {...register('appearance-accent-color', 'settings-card')}>
-                <h3>{t('app.appearanceTab.accentColor', 'Accent color')}</h3>
-                <p>{t('app.appearanceTab.chooseThePrimaryAccentColorUsed', 'Choose the primary accent color used across the interface.')}</p>
+                <h3>{t('app.appearanceTab.accentColor', 'Accent color')} <InfoTip>{t('app.appearanceTab.chooseThePrimaryAccentColorUsed', 'Choose the primary accent color used across the interface.')}</InfoTip></h3>
                 <div className="accent-presets">
                     {ACCENT_PRESETS.map(({ label, color }) => (
                         <Button variant="unstyled" type="button"
@@ -187,10 +185,7 @@ const AppearanceTab = () => {
             </div>
 
             <div {...register('appearance-widgets', 'settings-card')}>
-                <h3>{t('app.appearanceTab.dashboardWidgets', 'Dashboard widgets')}</h3>
-                <p>
-                    {t('app.appearanceTab.widgetsAreArrangedOnTheDashboard', 'Widgets are arranged on the dashboard itself now. Add, move, resize and configure them in place, across as many boards as you need.')}
-                </p>
+                <h3>{t('app.appearanceTab.dashboardWidgets', 'Dashboard widgets')} <InfoTip>{t('app.appearanceTab.widgetsAreArrangedOnTheDashboard', 'Widgets are arranged on the dashboard itself now. Add, move, resize and configure them in place, across as many boards as you need.')}</InfoTip></h3>
                 <Button variant="outline" size="sm" asChild>
                     <Link to="/">
                         <LayoutGrid size={14} />

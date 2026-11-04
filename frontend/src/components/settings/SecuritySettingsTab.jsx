@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import InfoTip from '../InfoTip';
+import LockShieldIllustration from '../illustrations/LockShieldIllustration';
 import CopyField from '../CopyField';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
@@ -313,14 +315,9 @@ Keep these codes in a safe place.`;
             {/* Two-Factor Authentication Section */}
             <div {...register('security-2fa', 'settings-card two-fa-card')} data-walkthrough="two-factor-card">
                 <div className="two-fa-header">
-                    <div className="two-fa-icon">
-                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" strokeWidth="2">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                        </svg>
-                    </div>
+                    <LockShieldIllustration />
                     <div>
-                        <h3>{t('app.securitySettingsTab.twoFactorAuthentication2fa', 'Two-factor authentication (2FA)')}</h3>
+                        <h3>{t('app.securitySettingsTab.twoFactorAuthentication2fa', 'Two-factor authentication (2FA)')} <InfoTip>{t('app.securitySettingsTab.twoFactorAuthenticationAddsAnAdditional', 'Two-factor authentication adds an additional layer of security to your account by requiring a code from your authenticator app in addition to your password.')}</InfoTip></h3>
                         <p>{t('app.securitySettingsTab.addAnExtraLayerOfSecurity', 'Add an extra layer of security to your account.')}</p>
                     </div>
                 </div>
@@ -372,9 +369,6 @@ Keep these codes in a safe place.`;
                     </div>
                 ) : (
                     <div className="two-fa-disabled">
-                        <p className="two-fa-description">
-                            {t('app.securitySettingsTab.twoFactorAuthenticationAddsAnAdditional', 'Two-factor authentication adds an additional layer of security to your account by requiring a code from your authenticator app in addition to your password.')}
-                        </p>
                         <Button
                             variant="default"
                             onClick={handleInitiate2FA}
@@ -433,8 +427,7 @@ Keep these codes in a safe place.`;
             </form>
 
             <div {...register('security-sessions', 'settings-card')}>
-                <h3>{t('app.securitySettingsTab.sessions', 'Sessions')}</h3>
-                <p>{t('app.securitySettingsTab.manageYourActiveSessions', 'Manage your active sessions')}</p>
+                <h3>{t('app.securitySettingsTab.sessions', 'Sessions')} <InfoTip>{t('app.securitySettingsTab.manageYourActiveSessions', 'Manage your active sessions')}</InfoTip></h3>
                 <div className="session-item current">
                     <div className="session-info">
                         <svg viewBox="0 0 24 24" width="20" height="20">

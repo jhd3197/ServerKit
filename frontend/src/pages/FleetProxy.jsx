@@ -13,6 +13,8 @@ import {
     GridToolsMenu, GridFilterDrawer,
 } from '@/components/ds/grid';
 import EmptyState from '../components/EmptyState';
+import InfoTip from '../components/InfoTip';
+import ProxyLogoTiles from '../components/proxy/ProxyLogoTiles';
 import { useTranslation } from 'react-i18next';
 import { t } from '../i18n/t';
 import { toastError } from '@/utils/errorMessage';
@@ -412,7 +414,8 @@ const FleetProxy = () => {
                                 <EmptyState
                                     icon={Network}
                                     title={t('app.fleetProxy.noServersInTheFleet', 'No servers in the fleet')}
-                                    description={t('app.fleetProxy.thisIsWhereEachServerS', 'This is where each server\'s reverse-proxy posture lands: which proxy it runs, whether it\'s healthy, and when its config was last regenerated. Host Nginx is the default; a server can opt into a managed Traefik or Caddy stack from its Proxy tab. Add a server to start.')}
+                                    description={<InfoTip>{t('app.fleetProxy.thisIsWhereEachServerS', 'This is where each server\'s reverse-proxy posture lands: which proxy it runs, whether it\'s healthy, and when its config was last regenerated. Host Nginx is the default; a server can opt into a managed Traefik or Caddy stack from its Proxy tab. Add a server to start.')}</InfoTip>}
+                                    action={<ProxyLogoTiles />}
                                 />
                             )}
                         />

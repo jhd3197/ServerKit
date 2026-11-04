@@ -124,6 +124,21 @@
         }
     }
 
+    // Wrapper so the (i) sits beside the card, never inside its button/link.
+    &__source {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+
+        > .import-wizard__source-card { flex: 1; }
+    }
+
+    &__source-tip {
+        position: absolute;
+        bottom: $space-3;
+        right: $space-3;
+    }
+
     &__source-card {
         position: relative;
         display: flex;
@@ -156,7 +171,7 @@
             background: $bg-hover;
         }
 
-        &--link p::after {
+        &--link strong::after {
             content: ' ↗';
             color: $text-tertiary;
         }

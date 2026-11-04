@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useMemo, useId } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Ban, ChevronRight, Container, Cpu, Database, Flame, Folder, HardDrive, Info, Lock, MemoryStick, Plus, RefreshCw, Server as ServerLucideIcon, Terminal, X } from 'lucide-react';
+import { Ban, ChevronRight, ClipboardPaste, Container, Cpu, Database, Flame, Folder, Hash, HardDrive, Info, KeyRound, Lock, MemoryStick, Plus, RefreshCw, Server as ServerLucideIcon, Terminal, X } from 'lucide-react';
+import InfoTip from '../components/InfoTip';
+import IconStepStrip from '../components/IconStepStrip';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import LevelIllustration from '../components/servers/LevelIllustrations';
 import api from '../services/api';
@@ -684,11 +686,11 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
     return (
         <form className="server-setup-form" onSubmit={handleClaim}>
             <div className="server-setup-form__body">
-                <div className="pair-instructions">
-                    <p>
-                        {t('app.servers.onTheTargetMachineStartThe', 'On the target server, start the agent. It will display a 6-character pair code and a passphrase. Enter both below.')}
-                    </p>
-                </div>
+                <IconStepStrip steps={[
+                    { icon: <Terminal />, label: t('app.servers.stepStartAgent', 'Start agent'), info: t('app.servers.onTheTargetMachineStartThe', 'On the target server, start the agent. It will display a 6-character pair code and a passphrase. Enter both below.') },
+                    { icon: <Hash />, label: t('app.servers.stepReadCode', 'Read code'), info: t('app.servers.theCodeIsShownInThe', 'The code is shown in the terminal output or system tray.') },
+                    { icon: <KeyRound />, label: t('app.servers.stepEnterBoth', 'Enter both') },
+                ]} />
 
                 <div className="form-group">
                     <label htmlFor={`${fieldId}-code`}>{t('app.servers.pairCode', 'Pair code')}</label>
@@ -708,7 +710,6 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
                         className="server-pair-code"
                         required
                     />
-                    <span className="form-hint">{t('app.servers.theCodeIsShownInThe', 'The code is shown in the terminal output or system tray.')}</span>
                     {lookupError && <div className="error-message server-pair-error">{lookupError}</div>}
                 </div>
 
@@ -1031,9 +1032,11 @@ const AddServerModal = ({ groups, onClose, onCreated }) => {
                         <div className="server-setup-form__body">
                             {error && <div className="error-message">{error}</div>}
 
-                            <p className="section-description">
-                                {t('app.servers.generateASingleConnectionStringPaste', "Generate a single connection string. Paste it into the agent's pairing wizard, or use it with the one-liner installer. The agent's hostname becomes the server name on first connect; you can rename it later from the server's Settings tab.")}
-                            </p>
+                            <IconStepStrip steps={[
+                                { icon: <KeyRound />, label: t('app.servers.stepGenerate', 'Generate string'), info: t('app.servers.generateASingleConnectionStringPaste', "Generate a single connection string. Paste it into the agent's pairing wizard, or use it with the one-liner installer. The agent's hostname becomes the server name on first connect; you can rename it later from the server's Settings tab.") },
+                                { icon: <ClipboardPaste />, label: t('app.servers.stepPasteInAgent', 'Paste in agent') },
+                                { icon: <ServerLucideIcon />, label: t('app.servers.stepServerOnline', 'Server online') },
+                            ]} />
 
                             <LevelPicker value={level} onChange={setLevel} />
 
@@ -1121,15 +1124,12 @@ const AddServerModal = ({ groups, onClose, onCreated }) => {
                             </details>
 
                             <div className="install-info">
-                                <h4>{t('app.servers.whatHappensNext', 'What happens next?')}</h4>
+                                <h4>{t('app.servers.whatHappensNext', 'What happens next?')} <InfoTip>{t('app.servers.theTokenIsSingleUseIf', 'The token is single-use. If you reinstall the agent later, generate a new connection string from the server\'s Settings tab.')}</InfoTip></h4>
                                 <ol>
                                     <li>{t('app.servers.openTheAgentOnYourTarget', 'Open the agent on your target server and paste the connection string.')}</li>
                                     <li>{t('app.servers.theAgentRegistersAutomaticallyAndReports', 'The agent registers automatically and reports its hostname back as the server name.')}</li>
                                     <li>{t('app.servers.theRowInThisListWill', 'The row in this list will switch from')} <strong>{t('app.servers.pending', 'Pending')}</strong> to <strong>{t('app.servers.online', 'Online')}</strong>.</li>
                                 </ol>
-                                <p className="text-muted">
-                                    {t('app.servers.theTokenIsSingleUseIf', 'The token is single-use. If you reinstall the agent later, generate a new connection string from the server\'s Settings tab.')}
-                                </p>
                             </div>
                         </div>
 
