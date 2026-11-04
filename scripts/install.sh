@@ -30,7 +30,15 @@
 #   --server, -s    ServerKit server URL (required)
 #   --name, -n      Display name for this server (optional)
 #   --version, -v   Specific agent version to install (optional, defaults to latest)
+#   --level, -l     Permission level: monitor | protect | full (see below)
+#   --reconfigure   Allow changing the level of an already-installed agent
+#   --yes, -y       Skip the typed confirmation when reconfiguring
 #   --help, -h      Show this help message
+#
+# Permission levels: monitor = report-only (no inbound commands), protect =
+# security actions only (firewall, fail2ban, CrowdSec, Cloudflare origin lock),
+# full = everything. Omitted: a menu on a terminal; `full` (with a warning)
+# when non-interactive, for compatibility with older install commands.
 #
 
 set -e
@@ -67,6 +75,9 @@ TOKEN=""
 SERVER_URL=""
 SERVER_NAME=""
 VERSION="latest"
+LEVEL=""
+RECONFIGURE=false
+ASSUME_YES=false
 
 # Version injected by the panel when it serves this script (the panel already
 # resolves the latest agent release for its update endpoints). Empty means
@@ -108,6 +119,9 @@ show_help() {
     echo "  --server, -s    ServerKit server URL (required)"
     echo "  --name, -n      Display name for this server (optional)"
     echo "  --version, -v   Specific agent version (optional, defaults to latest)"
+    echo "  --level, -l     Permission level: monitor | protect | full (optional)"
+    echo "  --reconfigure   Allow changing the level of an already-installed agent"
+    echo "  --yes, -y       Skip the typed confirmation when reconfiguring"
     echo "  --help, -h      Show this help message"
     echo ""
     echo "Example:"
@@ -142,6 +156,19 @@ parse_args() {
                 VERSION="$2"
                 shift 2
                 ;;
+            --level|-l)
+                [[ $# -ge 2 ]] || log_error "Option $1 requires a value"
+                LEVEL="$(printf '%s' "$2" | tr '[:upper:]' '[:lower:]')"
+                shift 2
+                ;;
+            --reconfigure)
+                RECONFIGURE=true
+                shift
+                ;;
+            --yes|-y)
+                ASSUME_YES=true
+                shift
+                ;;
             --help|-h)
                 show_help
                 ;;
@@ -158,6 +185,72 @@ parse_args() {
 
     if [[ -z "$SERVER_URL" ]]; then
         log_error "Server URL is required. Use --server or -s"
+    fi
+
+    if [[ -n "$LEVEL" ]]; then
+        case "$LEVEL" in
+            monitor|protect|full) ;;
+            *) log_error "Unknown permission level '$LEVEL' (use monitor, protect or full)" ;;
+        esac
+    fi
+}
+
+# Level recorded in an existing config ("" when none; a config without the
+# key is a legacy install, which means full).
+installed_level() {
+    local cfg="${CONFIG_DIR}/config.yaml"
+    [[ -f "$cfg" ]] || return 0
+    local lvl
+    lvl="$(sed -n '/^permissions:/,/^[^ ]/ s/^[[:space:]]*level:[[:space:]]*//p' "$cfg" | head -n1 | tr -d "\"' \r")"
+    printf '%s' "${lvl:-full}"
+}
+
+is_tty() { [[ -t 0 && -t 1 ]]; }
+
+# Refuse to silently change the level of an installed agent; --reconfigure
+# plus a typed confirmation (or --yes) is required.
+check_reconfigure() {
+    local current
+    current="$(installed_level)"
+    [[ -n "$current" ]] || return 0
+    if [[ -z "$LEVEL" ]]; then
+        LEVEL="$current"
+        return 0
+    fi
+    [[ "$LEVEL" != "$current" ]] || return 0
+    if [[ "$RECONFIGURE" != true ]]; then
+        log_error "This agent is already installed at level '$current'. Re-run with --reconfigure to change it to '$LEVEL'."
+    fi
+    if [[ "$ASSUME_YES" != true ]]; then
+        local answer=""
+        if is_tty; then
+            read -r -p "  Changing level ${current} -> ${LEVEL}. Type '${LEVEL}' to confirm: " answer
+        fi
+        [[ "$answer" == "$LEVEL" ]] || log_error "Confirmation did not match; permission level unchanged (use --yes for scripted use)"
+    fi
+    CHANGE_LEVEL_FROM="$current"
+}
+
+# Pick a level when none was given: menu on a terminal, else full + warning.
+resolve_level() {
+    [[ -z "$LEVEL" ]] || return 0
+    if is_tty; then
+        echo ""
+        echo "  Choose what this agent may do on this server:"
+        echo "    1) monitor  report-only, accepts no commands from the panel"
+        echo "    2) protect  security actions only (firewall, fail2ban, CrowdSec, origin lock)"
+        echo "    3) full     everything (docker, files, terminal, packages, ...)"
+        local choice=""
+        read -r -p "  Selection [1-3]: " choice
+        case "$choice" in
+            1|monitor) LEVEL=monitor ;;
+            2|protect) LEVEL=protect ;;
+            3|full) LEVEL=full ;;
+            *) log_error "Invalid selection" ;;
+        esac
+    else
+        log_warn "No --level given and no terminal: defaulting to FULL control. Pass --level monitor|protect|full to choose."
+        LEVEL=full
     fi
 }
 
@@ -351,6 +444,14 @@ register_agent() {
     if [[ -n "$SERVER_NAME" ]]; then
         REGISTER_CMD+=(--name "${SERVER_NAME}")
     fi
+    REGISTER_CMD+=(--level "${LEVEL}")
+
+    # Re-installing at a different level: apply it locally first so the
+    # register step sees a consistent config.
+    if [[ -n "${CHANGE_LEVEL_FROM:-}" ]]; then
+        "${INSTALL_DIR}/${AGENT_BINARY}" --config "${CONFIG_DIR}/config.yaml" \
+            permissions set "${LEVEL}" --yes >/dev/null 2>&1 || true
+    fi
 
     if ! "${REGISTER_CMD[@]}"; then
         log_error "Agent registration failed"
@@ -448,6 +549,15 @@ print_success() {
     echo -e "${GREEN}║          Installation completed successfully!             ║${NC}"
     echo -e "${GREEN}╚═══════════════════════════════════════════════════════════╝${NC}"
     echo ""
+    echo -e "${YELLOW}Permission level: ${LEVEL^^}${NC}"
+    case "$LEVEL" in
+        monitor) echo "  Report-only: this agent sends metrics out and accepts NO commands." ;;
+        protect) echo "  Security actions only (firewall, fail2ban, CrowdSec, origin lock)." ;;
+        *)       echo "  Full control: the panel can run any supported action." ;;
+    esac
+    echo "  Change it (as root, on this machine only):"
+    echo "    ${INSTALL_DIR}/${AGENT_BINARY} permissions set <monitor|protect|full>"
+    echo ""
     echo "Agent Status:"
     echo "  Binary:     ${INSTALL_DIR}/${AGENT_BINARY}"
     echo "  Config:     ${CONFIG_DIR}/config.yaml"
@@ -466,6 +576,8 @@ main() {
     print_banner
     parse_args "$@"
     check_root
+    check_reconfigure
+    resolve_level
     detect_platform
     check_dependencies
     get_latest_version

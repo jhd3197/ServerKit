@@ -126,6 +126,17 @@ class Server(TimestampMixin, JsonColumnMixin, db.Model):
     allow_agent_update_observed = db.Column(db.Boolean, nullable=False,
                                             default=False, server_default='0')
 
+    # Agent permission level (monitor|protect|full). REPORTED BY THE AGENT
+    # only -- no panel API writes it. NULL = unknown/legacy, treated as full.
+    # requested_permission_level is what the install command asked for, kept
+    # only to flag a mismatch with what the agent reports.
+    permission_level = db.Column(db.String(16), nullable=True)
+    permission_level_updated_at = db.Column(db.DateTime, nullable=True)
+    requested_permission_level = db.Column(db.String(16), nullable=True)
+    last_report_at = db.Column(db.DateTime, nullable=True)
+    report_interval_seconds = db.Column(db.Integer, nullable=True)
+    service_checks = db.Column(db.JSON, nullable=True)  # latest state per check
+
     @property
     def is_managed(self):
         """False only for observed boxes."""
@@ -490,6 +501,12 @@ class Server(TimestampMixin, JsonColumnMixin, db.Model):
             'last_error': self.last_error,
             'management_mode': self.management_mode or 'managed',
             'allow_agent_update_observed': bool(self.allow_agent_update_observed),
+            'permission_level': self.permission_level,
+            'permission_level_effective': self.permission_level or 'full',
+            'permission_level_updated_at': self.permission_level_updated_at.isoformat() if self.permission_level_updated_at else None,
+            'requested_permission_level': self.requested_permission_level,
+            'last_report_at': self.last_report_at.isoformat() if self.last_report_at else None,
+            'service_checks': self.service_checks or [],
             'onboarding_state': self.onboarding_state,
             'onboarding_updated_at': self.onboarding_updated_at.isoformat() if self.onboarding_updated_at else None,
             'agent_version': self.agent_version,

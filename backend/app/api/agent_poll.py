@@ -108,7 +108,9 @@ def poll():
     # Shared transport-neutral ingest: capability
     # side-effects (e.g. tunnel reconcile) fire exactly as on the WS path.
     agent_registry.ingest_agent_state(agent, metrics=metrics, sysinfo=sysinfo,
-                                      capabilities=caps)
+                                      capabilities=caps,
+                                      permission_level=body.get('permission_level'),
+                                      service_checks=body.get('service_checks'))
 
     # Long-poll up to 25s for any queued command. Below the typical
     # tunnel idle-timeout (Cloudflare ~100s, ngrok ~60s) so we never
