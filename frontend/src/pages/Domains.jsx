@@ -8,6 +8,7 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useAuth } from '../contexts/useAuth.js';
 import EmptyState from '../components/EmptyState';
+import InfoTip from '@/components/InfoTip';
 import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import DomainField from '@/components/DomainField';
@@ -665,7 +666,12 @@ const Domains = () => {
                 <EmptyState
                     icon={Globe}
                     title={t('app.domains.noDomainsYet', 'No domains yet')}
-                    description={t('app.domains.attachADomainToAnApplication', 'Attach a domain to a service, or connect a DNS provider to see its zones here.')}
+                    description={(
+                        <>
+                            {t('app.domains.attachADomainOrConnectDns', 'Attach a domain or connect DNS.')}
+                            <InfoTip>{t('app.domains.attachADomainToAnApplication', 'Attach a domain to a service, or connect a DNS provider to see its zones here.')}</InfoTip>
+                        </>
+                    )}
                     action={<Button onClick={() => setShowAddModal(true)}><Plus size={16} /> {t('app.domains.addDomain2', 'Add domain')}</Button>}
                 />
             ) : (

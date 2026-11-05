@@ -1585,7 +1585,6 @@
             "noOutputProduced": "ไม่มีผลผลิตออกมา",
             "noRunsRecordedYet": "ยังไม่มีการบันทึกการรัน",
             "noRunsYet": "ยังไม่มีการรัน",
-            "noScheduledJobsFoundCreateYour": "ไม่พบงานที่กำหนดเวลาไว้ สร้างงาน cron งานแรกของคุณเพื่อทำให้งานเป็นแบบอัตโนมัติ",
             "paused": "หยุดชั่วคราว",
             "runHistory": "ประวัติการรัน",
             "runHistoryIsAnAdminOnly": "ประวัติการเรียกใช้เป็นพื้นที่สำหรับผู้ดูแลระบบเท่านั้น",

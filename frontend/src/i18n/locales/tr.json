@@ -1585,7 +1585,6 @@
             "noOutputProduced": "Çıktı üretilmedi.",
             "noRunsRecordedYet": "Henüz kayıtlı bir çalıştırma yok.",
             "noRunsYet": "Henüz çalıştırma yok",
-            "noScheduledJobsFoundCreateYour": "Planlanmış iş bulunamadı. Görevleri otomatikleştirmek için ilk cron işinizi oluşturun.",
             "paused": "Duraklatıldı",
             "runHistory": "Çalıştırma geçmişi",
             "runHistoryIsAnAdminOnly": "Çalıştırma geçmişi yalnızca yöneticilerin erişebildiği bir yüzeydir.",

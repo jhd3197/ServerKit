@@ -1585,7 +1585,6 @@
             "noOutputProduced": "출력이 생성되지 않습니다.",
             "noRunsRecordedYet": "아직 기록된 실행이 없습니다.",
             "noRunsYet": "아직 실행 없음",
-            "noScheduledJobsFoundCreateYour": "예약된 작업을 찾을 수 없습니다. 첫 번째 크론 작업을 만들어 작업을 자동화하세요.",
             "paused": "일시중지됨",
             "runHistory": "실행 기록",
             "runHistoryIsAnAdminOnly": "실행 기록은 관리자 전용 영역입니다.",

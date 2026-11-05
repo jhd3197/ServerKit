@@ -1585,7 +1585,6 @@
             "noOutputProduced": "Nessun output prodotto.",
             "noRunsRecordedYet": "Nessuna esecuzione ancora registrata.",
             "noRunsYet": "Ancora nessuna esecuzione",
-            "noScheduledJobsFoundCreateYour": "Nessun lavoro programmato trovato. Crea il tuo primo lavoro cron per automatizzare le attività.",
             "paused": "In pausa",
             "runHistory": "Cronologia esecuzioni",
             "runHistoryIsAnAdminOnly": "La cronologia delle esecuzioni è una superficie riservata all'amministratore.",

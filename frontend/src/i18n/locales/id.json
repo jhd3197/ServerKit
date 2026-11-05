@@ -1585,7 +1585,6 @@
             "noOutputProduced": "Tidak ada keluaran yang dihasilkan.",
             "noRunsRecordedYet": "Belum ada proses yang tercatat.",
             "noRunsYet": "Belum ada run",
-            "noScheduledJobsFoundCreateYour": "Tidak ada pekerjaan terjadwal yang ditemukan. Buat pekerjaan cron pertama Anda untuk mengotomatisasi tugas.",
             "paused": "Dijeda",
             "runHistory": "Riwayat proses",
             "runHistoryIsAnAdminOnly": "Riwayat proses adalah permukaan khusus admin.",

@@ -1585,7 +1585,6 @@
             "noOutputProduced": "Es wurde keine Ausgabe erzeugt.",
             "noRunsRecordedYet": "Es wurden noch keine Läufe aufgezeichnet.",
             "noRunsYet": "Noch keine Läufe",
-            "noScheduledJobsFoundCreateYour": "Keine geplanten Jobs gefunden. Erstellen Sie Ihren ersten Cronjob, um Aufgaben zu automatisieren.",
             "paused": "Angehalten",
             "runHistory": "Laufverlauf",
             "runHistoryIsAnAdminOnly": "Der Ausführungsverlauf ist eine reine Administratoroberfläche.",
