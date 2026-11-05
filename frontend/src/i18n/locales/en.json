@@ -4521,7 +4521,7 @@
             "emailAddress": "Email address",
             "memberSince": "Member since",
             "profileSettings": "Profile settings",
-            "role": "Role",
+            "profileUpdated": "Profile updated successfully",
             "saveChanges": "Save changes"
         },
         "projectDetail": {
