@@ -5001,7 +5001,6 @@
             "failedToAddKey": "Gagal menambahkan kunci: {{message}}",
             "failedToRemoveKey": "Gagal menghapus kunci: {{message}}",
             "fingerprint": "Sidik jari",
-            "noSshKeysConfiguredForRoot": "Tidak ada kunci SSH yang dikonfigurasi untuk pengguna root.",
             "pasteYourSshPublicKeyTypically": "Tempelkan kunci publik SSH Anda (biasanya dari ~/.ssh/id_rsa.pub atau ~/.ssh/id_ed25519.pub)",
             "publicKey": "Kunci Publik",
             "removeSshKey": "Hapus Kunci SSH",

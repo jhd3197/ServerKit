@@ -5001,7 +5001,6 @@
             "failedToAddKey": "키 추가 실패: {{message}}",
             "failedToRemoveKey": "키 제거 실패: {{message}}",
             "fingerprint": "지문",
-            "noSshKeysConfiguredForRoot": "루트 사용자에 대해 구성된 SSH 키가 없습니다.",
             "pasteYourSshPublicKeyTypically": "SSH 공개 키를 붙여넣습니다(일반적으로 ~/.ssh/id_rsa.pub 또는 ~/.ssh/id_ed25519.pub에서).",
             "publicKey": "공개 키",
             "removeSshKey": "SSH 키 제거",

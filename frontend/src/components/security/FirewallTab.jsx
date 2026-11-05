@@ -454,7 +454,12 @@ const FirewallTab = () => {
                 <EmptyState
                     icon={Shield}
                     title={t('app.firewallTab.noFirewallInstalled', 'No firewall installed')}
-                    description={t('app.firewallTab.installAFirewallToProtectYour', 'Install a firewall to protect your server from unauthorized access.')}
+                    description={(
+                        <>
+                            {t('app.firewallTab.blockUnwantedTrafficAtTheEdge', 'Block unwanted traffic at the edge.')}
+                            <InfoTip>{t('app.firewallTab.installAFirewallToProtectYour', 'Install a firewall to protect your server from unauthorized access. You can do it whenever you are ready.')}</InfoTip>
+                        </>
+                    )}
                     action={(
                         <Button variant="default" onClick={() => setShowInstallModal(true)}>
                             {t('app.firewallTab.installFirewall', 'Install firewall')}

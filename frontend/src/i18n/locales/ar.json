@@ -5001,7 +5001,6 @@
             "failedToAddKey": "فشلت إضافة المفتاح: {{message}}",
             "failedToRemoveKey": "فشل في إزالة المفتاح: {{message}}",
             "fingerprint": "بصمة",
-            "noSshKeysConfiguredForRoot": "لم يتم تكوين مفاتيح SSH للمستخدم الجذر.",
             "pasteYourSshPublicKeyTypically": "الصق مفتاحك العام SSH (عادةً من ~/.ssh/id_rsa.pub أو ~/.ssh/id_ed25519.pub)",
             "publicKey": "المفتاح العام",
             "removeSshKey": "قم بإزالة مفتاح SSH",

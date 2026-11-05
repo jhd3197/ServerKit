@@ -5001,7 +5001,6 @@
             "failedToAddKey": "কী যোগ করতে ব্যর্থ হয়েছে: {{message}}",
             "failedToRemoveKey": "কী সরাতে ব্যর্থ হয়েছে: {{message}}",
             "fingerprint": "আঙুলের ছাপ",
-            "noSshKeysConfiguredForRoot": "রুট ব্যবহারকারীর জন্য কোন SSH কী কনফিগার করা নেই।",
             "pasteYourSshPublicKeyTypically": "আপনার SSH পাবলিক কী পেস্ট করুন (সাধারণত ~/.ssh/id_rsa.pub বা ~/.ssh/id_ed25519.pub থেকে)",
             "publicKey": "সর্বজনীন কী",
             "removeSshKey": "SSH কী সরান",

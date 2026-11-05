@@ -581,10 +581,12 @@
             "title": "Attached services"
         },
         "auditTab": {
+            "checkThisServersSecurityPosture": "Check this server's security posture.",
             "couldntRunAudit": "Couldn't run the security audit.",
             "generated": "Generated",
+            "noAuditYet": "No audit yet",
             "recommendations": "Recommendations",
-            "runASecurityAuditToCheck": "Run a security audit to check your server's configuration.",
+            "runASecurityAuditToCheck": "Run a security audit to check your server's configuration and get a score with findings to fix.",
             "runAudit": "Run audit",
             "runningAudit": "Running audit…",
             "runningSecurityAudit": "Running security audit…",
@@ -2840,6 +2842,7 @@
             "blockContainerAccessTo169254": "Block container access to 169.254.169.254",
             "blockIp": "Block IP",
             "blockIpAddress": "Block IP address",
+            "blockUnwantedTrafficAtTheEdge": "Block unwanted traffic at the edge.",
             "blockedIpAddresses": "Blocked IP addresses",
             "blockedIps": "Blocked IPs",
             "blocking": "Blocking…",
@@ -2864,7 +2867,7 @@
             "firewalldCentosRhel": "firewalld (CentOS/RHEL)",
             "inactive": "Inactive",
             "install": "Install",
-            "installAFirewallToProtectYour": "Install a firewall to protect your server from unauthorized access.",
+            "installAFirewallToProtectYour": "Install a firewall to protect your server from unauthorized access. You can do it whenever you are ready.",
             "installFirewall": "Install firewall",
             "installedSuccessfully": "{{value}} installed",
             "installing": "Installing…",
@@ -5133,6 +5136,7 @@
             "workspaces": "Workspaces"
         },
         "sSHKeysTab": {
+            "addAKeyForRootLogin": "Add a key for root login.",
             "addKey": "Add key",
             "addSshKey": "Add SSH key",
             "addSshPublicKey": "Add SSH public key",
@@ -5143,7 +5147,8 @@
             "failedToAddKey": "Couldn't add the key. {{message}}",
             "failedToRemoveKey": "Couldn't delete the key. {{message}}",
             "fingerprint": "Fingerprint",
-            "noSshKeysConfiguredForRoot": "No SSH keys configured for root user.",
+            "keysApplyToTheRootUser": "Keys are for the root user on this server. Password login stays available until you harden SSH.",
+            "noSshKeys": "No SSH keys",
             "pasteYourSshPublicKeyTypically": "Paste your SSH public key (typically from ~/.ssh/id_rsa.pub or ~/.ssh/id_ed25519.pub)",
             "publicKey": "Public key",
             "removeSshKey": "Delete SSH key",

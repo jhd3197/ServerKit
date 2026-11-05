@@ -5001,7 +5001,6 @@
             "failedToAddKey": "Échec de l'ajout de la clé : {{message}}",
             "failedToRemoveKey": "Échec de la suppression de la clé : {{message}}",
             "fingerprint": "Empreinte digitale",
-            "noSshKeysConfiguredForRoot": "Aucune clé SSH configurée pour l'utilisateur root.",
             "pasteYourSshPublicKeyTypically": "Collez votre clé publique SSH (généralement depuis ~/.ssh/id_rsa.pub ou ~/.ssh/id_ed25519.pub)",
             "publicKey": "Clé publique",
             "removeSshKey": "Supprimer la clé SSH",
