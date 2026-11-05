@@ -1094,3 +1094,35 @@
 .bk-storage-fieldset:disabled {
     opacity: 0.65;
 }
+
+// ---------- Storage-unavailable notice ----------
+// Calm single row: amber tint, not a red alert. Persistent, so no close button.
+.backup-storage-notice {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-2 $space-3;
+    padding: $space-2 $space-3;
+    border: 1px solid $warning-border;
+    border-radius: $radius-card;
+    background: $warning-bg;
+
+    &__icon {
+        flex-shrink: 0;
+        color: $warning;
+    }
+
+    &__text {
+        display: flex;
+        flex: 1 1 12rem;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0 $space-2;
+        min-inline-size: 0;
+        font-size: $text-sm;
+
+        strong { font-weight: $font-weight-semibold; }
+    }
+
+    &__sub { color: var(--text-faint); }
+}

@@ -21,6 +21,7 @@ import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
 } from '@/components/ds/grid';
+import BackupStorageNotice from '../components/backups/BackupStorageNotice';
 import BackupsOverview from '../components/backups/BackupsOverview';
 import SchedulesTable from '../components/backups/SchedulesTable';
 import AddScheduleModal from '../components/backups/AddScheduleModal';
@@ -149,6 +150,7 @@ const Backups = () => {
     const [apps, setApps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [storageWarning, setStorageWarning] = useState(false);
     const [rawTab, setActiveTab] = useTabParam('/backups', VALID_TABS);
     const activeTab = TAB_ALIASES[rawTab] || rawTab;
     const [search, setSearch] = useState('');
@@ -217,7 +219,7 @@ const Backups = () => {
             ]);
 
             setBackups(backupsRes.backups || []);
-            if (backupsRes.warning) setError(backupsRes.warning);
+            setStorageWarning(Boolean(backupsRes.warning || statsRes?.warning));
             setStats(statsRes);
             setConfig(configRes);
             if (refreshSchedules) await reloadSchedules();
@@ -737,6 +739,10 @@ const Backups = () => {
                 </div>
             )}
 
+            {storageWarning && (
+                <BackupStorageNotice onStorage={activeTab === 'storage' ? undefined : () => setActiveTab('storage')} />
+            )}
+
             {/* Overview answers "is my data safe?" — the KPI band, the
                 activity heatmap, the destinations and the recent feed. The
                 archive table it used to sit on top of is now its own section. */}
@@ -748,6 +754,7 @@ const Backups = () => {
                     schedules={schedules}
                     backups={backups}
                     onGo={setActiveTab}
+                    storageWarning={storageWarning}
                 />
             )}
 
