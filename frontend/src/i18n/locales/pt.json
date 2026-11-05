@@ -1585,7 +1585,6 @@
             "noOutputProduced": "Nenhuma saída produzida.",
             "noRunsRecordedYet": "Nenhuma execução registrada ainda.",
             "noRunsYet": "Nenhuma execução ainda",
-            "noScheduledJobsFoundCreateYour": "Nenhum trabalho agendado encontrado. Crie seu primeiro cron job para automatizar tarefas.",
             "paused": "Pausado",
             "runHistory": "Histórico de execução",
             "runHistoryIsAnAdminOnly": "O histórico de execução é uma superfície somente para administradores.",

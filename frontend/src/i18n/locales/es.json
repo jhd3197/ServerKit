@@ -1585,7 +1585,6 @@
             "noOutputProduced": "No se produjo ninguna salida.",
             "noRunsRecordedYet": "Aún no hay ejecuciones registradas.",
             "noRunsYet": "Aún no hay ejecuciones",
-            "noScheduledJobsFoundCreateYour": "No se encontraron tareas programadas. Crea tu primera tarea cron para automatizar procesos.",
             "paused": "En pausa",
             "runHistory": "Historial de ejecuciones",
             "runHistoryIsAnAdminOnly": "El historial de ejecuciones es una función solo para administradores.",

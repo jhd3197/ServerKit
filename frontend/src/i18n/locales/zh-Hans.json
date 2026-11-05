@@ -1585,7 +1585,6 @@
             "noOutputProduced": "没有产生任何输出。",
             "noRunsRecordedYet": "尚未记录任何运行。",
             "noRunsYet": "尚无运行",
-            "noScheduledJobsFoundCreateYour": "没有找到预定的工作。创建您的第一个 cron 作业来自动执行任务。",
             "paused": "已暂停",
             "runHistory": "运行历史",
             "runHistoryIsAnAdminOnly": "运行历史记录是仅限管理员使用的界面。",

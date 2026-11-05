@@ -1585,7 +1585,6 @@
             "noOutputProduced": "沒有產生任何輸出。",
             "noRunsRecordedYet": "尚無執行記錄。",
             "noRunsYet": "尚未執行",
-            "noScheduledJobsFoundCreateYour": "尚無排程作業。請建立第一個 Cron 作業，以自動執行工作。",
             "paused": "已暫停",
             "runHistory": "執行歷史",
             "runHistoryIsAnAdminOnly": "執行歷史記錄是僅限管理員使用的介面。",

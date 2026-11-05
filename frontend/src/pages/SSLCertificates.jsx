@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import api from '../services/api';
 import Modal from '@/components/Modal';
+import InfoTip from '@/components/InfoTip';
 import { Pill, SearchField } from '@/components/ds';
 import ResourceListPage from '../components/layouts/ResourceListPage';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
@@ -523,8 +524,17 @@ const SSLCertificates = () => {
                 onSearchChange={setSearch}
                 searchInTopbar
                 emptyIcon={Lock}
-                emptyTitle="No SSL certificates"
-                emptyDescription="Obtain your first Let's Encrypt certificate to secure your domains."
+                emptySize="default"
+                emptyTitle={t('app.sSLCertificates.noSslCertificates', 'No SSL certificates')}
+                emptyDescription={(
+                    <>
+                        {t('app.sSLCertificates.secureYourDomainsWithLetS', "Secure your domains with Let's Encrypt.")}
+                        <InfoTip>
+                            {t('app.sSLCertificates.freeAutoRenewingCertificates', 'Get free, auto-renewing certificates for your domains.')}
+                            {!certbotInstalled && ` ${t('app.sSLCertificates.certbotMustBeInstalledFirst', 'Certbot must be installed first.')}`}
+                        </InfoTip>
+                    </>
+                )}
                 emptyAction={certbotInstalled ? (
                     <Button onClick={() => setShowObtainModal(true)}>
                         <Plus size={16} />

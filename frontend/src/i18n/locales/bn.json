@@ -1585,7 +1585,6 @@
             "noOutputProduced": "কোন আউটপুট উত্পাদিত.",
             "noRunsRecordedYet": "এখনো কোনো রান রেকর্ড হয়নি।",
             "noRunsYet": "এখনো কোনো রান নেই",
-            "noScheduledJobsFoundCreateYour": "কোনো নির্ধারিত চাকরি পাওয়া যায়নি। কাজগুলি স্বয়ংক্রিয় করতে আপনার প্রথম cron কাজ তৈরি করুন৷",
             "paused": "বিরতি দেওয়া হয়েছে",
             "runHistory": "রান ইতিহাস",
             "runHistoryIsAnAdminOnly": "রান ইতিহাস হল একটি প্রশাসক-শুধুমাত্র পৃষ্ঠ।",

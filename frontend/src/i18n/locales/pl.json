@@ -1585,7 +1585,6 @@
             "noOutputProduced": "Nie wytworzono żadnych wyników.",
             "noRunsRecordedYet": "Nie zarejestrowano jeszcze żadnych uruchomień.",
             "noRunsYet": "Brak uruchomień",
-            "noScheduledJobsFoundCreateYour": "Nie znaleziono zaplanowanych zadań. Utwórz swoje pierwsze zadanie cron, aby zautomatyzować zadania.",
             "paused": "Wstrzymano",
             "runHistory": "Historia uruchomień",
             "runHistoryIsAnAdminOnly": "Historia uruchamiania jest platformą dostępną tylko dla administratora.",

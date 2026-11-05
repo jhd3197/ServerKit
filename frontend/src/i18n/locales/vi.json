@@ -1585,7 +1585,6 @@
             "noOutputProduced": "Không có đầu ra được sản xuất.",
             "noRunsRecordedYet": "Chưa có lần chạy nào được ghi lại.",
             "noRunsYet": "Chưa có lượt chạy nào",
-            "noScheduledJobsFoundCreateYour": "Không tìm thấy công việc theo lịch trình. Tạo công việc cron đầu tiên của bạn để tự động hóa các tác vụ.",
             "paused": "Đã tạm dừng",
             "runHistory": "Lịch sử chạy",
             "runHistoryIsAnAdminOnly": "Lịch sử chạy là một bề mặt chỉ dành cho quản trị viên.",

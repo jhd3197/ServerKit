@@ -100,6 +100,7 @@ export default function ResourceListPage({
     emptyTitle = 'No results',
     emptyDescription = '',
     emptyAction = null,
+    emptySize = 'lg',
     // filtered empty (items exist but none match the filter/search)
     filteredEmptyIcon,
     filteredEmptyTitle = 'No results found',
@@ -352,7 +353,7 @@ export default function ResourceListPage({
                 />
             ) : resolvedTotal === 0 ? (
                 <EmptyState
-                    size="lg"
+                    size={emptySize}
                     icon={emptyIcon}
                     title={emptyTitle}
                     description={emptyDescription}

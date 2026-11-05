@@ -1585,7 +1585,6 @@
             "noOutputProduced": "لم يتم إنتاج أي إخراج.",
             "noRunsRecordedYet": "لم يتم تسجيل أي عمليات تشغيل حتى الآن.",
             "noRunsYet": "لا توجد عمليات تشغيل بعد",
-            "noScheduledJobsFoundCreateYour": "لم يتم العثور على وظائف مجدولة. قم بإنشاء أول مهمة cron لأتمتة المهام.",
             "paused": "متوقف مؤقتًا",
             "runHistory": "سجل التشغيل",
             "runHistoryIsAnAdminOnly": "سجل التشغيل هو سطح مخصص للمسؤول فقط.",
