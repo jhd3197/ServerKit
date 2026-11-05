@@ -6,6 +6,9 @@ import { Label } from '@/components/ui/label';
 import useSettingFocus from '../../hooks/useSettingFocus';
 import { useTranslation } from 'react-i18next';
 import { formatDate } from '@/utils/intl';
+import { ShieldCheck, User, CalendarDays } from 'lucide-react';
+import { Pill } from '@/components/ds';
+import InfoTip from '../InfoTip';
 
 const ProfileTab = () => {
     const { t } = useTranslation();
@@ -27,6 +30,10 @@ const ProfileTab = () => {
         }
     }, [user]);
 
+    const dirty = formData.username !== (user?.username || '') || formData.email !== (user?.email || '');
+    const role = user?.role || 'user';
+    const RoleIcon = role === 'admin' ? ShieldCheck : User;
+
     async function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
@@ -34,7 +41,7 @@ const ProfileTab = () => {
 
         try {
             await updateUser(formData);
-            setMessage({ type: 'success', text: 'Profile updated successfully' });
+            setMessage({ type: 'success', text: t('app.profileTab.profileUpdated', 'Profile updated successfully') });
         } catch (err) {
             setMessage({ type: 'error', text: err.message });
         } finally {
@@ -46,6 +53,29 @@ const ProfileTab = () => {
         <div className="settings-section">
             <div className="section-header">
                 <h2>{t('app.profileTab.profileSettings', 'Profile settings')}</h2>
+            </div>
+
+            <div className="profile-identity">
+                <div className="profile-identity__avatar" aria-hidden="true">
+                    {(user?.username || '?').charAt(0).toUpperCase()}
+                </div>
+                <div className="profile-identity__text">
+                    <div className="profile-identity__name">{user?.username}</div>
+                    <div className="profile-identity__email">{user?.email}</div>
+                </div>
+                <div className="profile-identity__meta">
+                    <Pill dot={false}>
+                        <RoleIcon aria-hidden="true" />
+                        <span className="profile-identity__role">{role}</span>
+                        <InfoTip>{t('app.profileTab.contactAnAdministratorToChangeYour', 'Contact an administrator to change your role')}</InfoTip>
+                    </Pill>
+                    {user?.created_at && (
+                        <Pill dot={false} title={t('app.profileTab.memberSince', 'Member since')}>
+                            <CalendarDays aria-hidden="true" />
+                            {formatDate(user.created_at)}
+                        </Pill>
+                    )}
+                </div>
             </div>
 
             {message && (
@@ -75,23 +105,8 @@ const ProfileTab = () => {
                     />
                 </div>
 
-                <div className="form-group">
-                    <Label htmlFor="profile-role">{t('app.profileTab.role', 'Role')}</Label>
-                    <Input id="profile-role" type="text" value={user?.role || 'user'} readOnly />
-                    <span className="form-help">{t('app.profileTab.contactAnAdministratorToChangeYour', 'Contact an administrator to change your role')}</span>
-                </div>
-
-                <div className="form-group">
-                    <Label htmlFor="profile-member-since">{t('app.profileTab.memberSince', 'Member since')}</Label>
-                    <Input
-                        id="profile-member-since" type="text"
-                        value={user?.created_at ? formatDate(user.created_at) : '-'}
-                        readOnly
-                    />
-                </div>
-
                 <div className="form-actions">
-                    <Button type="submit" variant="default" disabled={loading}>
+                    <Button type="submit" variant="default" disabled={loading || !dirty}>
                         {loading ? t('common.saving', 'Saving…') : t('app.profileTab.saveChanges', 'Save changes')}
                     </Button>
                 </div>

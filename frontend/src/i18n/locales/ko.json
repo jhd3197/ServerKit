@@ -4408,7 +4408,6 @@
             "emailAddress": "이메일 주소",
             "memberSince": "회원가입 이후",
             "profileSettings": "프로필 설정",
-            "role": "역할",
             "saveChanges": "변경 사항 저장"
         },
         "projectDetail": {

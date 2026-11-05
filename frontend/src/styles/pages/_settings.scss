@@ -2638,3 +2638,55 @@
 .sk-ai-message__usage { font-size: $text-xs; color: $text-secondary; border-top: 1px solid $border-subtle; margin-top: $space-3; padding-top: $space-2; overflow-wrap: anywhere;
     summary { cursor: pointer; }
 }
+
+.profile-identity {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: $space-2 $space-3;
+    padding: $space-3 $space-4;
+    margin-block-end: $space-4;
+    background: $bg-card;
+    border: 1px solid $border-default;
+    border-radius: $radius-card;
+
+    &__avatar {
+        display: grid;
+        place-items: center;
+        inline-size: 40px; // geometry: avatar tile
+        block-size: 40px; // geometry: avatar tile
+        border-radius: $radius-full;
+        background: $accent-bg;
+        font-size: $text-md;
+        font-weight: $font-weight-semibold;
+        color: $accent-bright;
+    }
+    &__text { min-inline-size: 0; }
+    &__name {
+        font-size: $text-md;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+    }
+    &__email {
+        font-size: $text-sm;
+        color: $text-secondary;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    &__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    &__role { text-transform: capitalize; }
+    &__meta {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: $space-2;
+        .sk-pill { block-size: auto; svg { inline-size: 14px; block-size: 14px; } } // geometry: chip glyph
+    }
+
+    @media (min-width: $breakpoint-md) {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        &__avatar { inline-size: 48px; block-size: 48px; } // geometry: avatar tile
+        &__meta { grid-column: auto; justify-content: flex-end; }
+    }
+}
