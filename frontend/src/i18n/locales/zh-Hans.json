@@ -5001,7 +5001,6 @@
             "failedToAddKey": "添加密钥失败：{{message}}",
             "failedToRemoveKey": "无法删除密钥：{{message}}",
             "fingerprint": "指纹",
-            "noSshKeysConfiguredForRoot": "没有为 root 用户配置 SSH 密钥。",
             "pasteYourSshPublicKeyTypically": "粘贴您的 SSH 公钥（通常来自 ~/.ssh/id_rsa.pub 或 ~/.ssh/id_ed25519.pub）",
             "publicKey": "公钥",
             "removeSshKey": "删除 SSH 密钥",

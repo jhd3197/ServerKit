@@ -5001,7 +5001,6 @@
             "failedToAddKey": "Không thêm được khóa: {{message}}",
             "failedToRemoveKey": "Không xóa được khóa: {{message}}",
             "fingerprint": "Dấu vân tay",
-            "noSshKeysConfiguredForRoot": "Không có khóa SSH nào được định cấu hình cho người dùng root.",
             "pasteYourSshPublicKeyTypically": "Dán khóa công khai SSH của bạn (thường là từ ~/.ssh/id_rsa.pub hoặc ~/.ssh/id_ed25519.pub)",
             "publicKey": "Khóa công khai",
             "removeSshKey": "Xóa khóa SSH",

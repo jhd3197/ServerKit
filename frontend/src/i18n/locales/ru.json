@@ -5001,7 +5001,6 @@
             "failedToAddKey": "Не удалось добавить ключ: {{message}}.",
             "failedToRemoveKey": "Не удалось удалить ключ: {{message}}.",
             "fingerprint": "Отпечаток пальца",
-            "noSshKeysConfiguredForRoot": "Для пользователя root не настроены ключи SSH.",
             "pasteYourSshPublicKeyTypically": "Вставьте свой открытый ключ SSH (обычно из ~/.ssh/id_rsa.pub или ~/.ssh/id_ed25519.pub).",
             "publicKey": "Открытый ключ",
             "removeSshKey": "Удалить SSH-ключ",
