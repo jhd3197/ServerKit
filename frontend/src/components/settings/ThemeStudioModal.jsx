@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, useId } from 'react';
-import { Download, Save, Github } from 'lucide-react';
+import { Download, Save } from 'lucide-react';
+import { SiGithub as Github } from 'react-icons/si';
 import {
     Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from '@/components/ui/dialog';

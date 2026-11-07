@@ -5,12 +5,16 @@ import threading
 import time
 import queue
 import re
+import logging
+import subprocess
 
 from app.services.system_service import SystemService
 from app.services.log_service import LogService, LogStreamer
 from app.services.docker_service import DockerService
 from app import sockets_rooms as rooms
 from app.utils.background_loop import BackgroundLoop
+
+logger = logging.getLogger(__name__)
 
 
 class AuthorizedSocketIO(SocketIO):
@@ -65,7 +69,9 @@ def _client_user(sid):
         info = connected_clients.get(sid)
     if not info:
         return None
-    user = validate_session_claims(info.get('claims', {}))
+    # A socket outlives its 15-minute access token; ending it at `exp` froze
+    # every live view, since clients don't reconnect after a server disconnect.
+    user = validate_session_claims(info.get('claims', {}), check_expiry=False)
     # Disconnect on role changes instead of retaining previously joined rooms.
     if not user or user.role != info['role']:
         _disconnect_client(sid)
@@ -138,6 +144,17 @@ def _room_allowed(user, room):
     return bool(re.fullmatch(r'job:[A-Za-z0-9-]+', channel)
                 and user.role in _PRIVILEGED_ROLES
                 and _server_visible(user, server_id))
+
+
+def _emit_to_member(sid, room, event, payload):
+    """Emit to one socket, only while it is still allowed in ``room``."""
+    application = getattr(socketio, '_security_app', None)
+    if application is not None:
+        with application.app_context():
+            _prune_audience(room)
+    members = socketio.server.manager.get_participants('/', room)
+    if any(member == sid for member, _ in members):
+        socketio.emit(event, payload, to=sid)
 
 
 def _prune_audience(room=None):
@@ -719,6 +736,14 @@ def handle_subscribe_container_logs(data):
 
     # Create stop event for this stream
     stop_event = threading.Event()
+    room = rooms.app_logs_room(app_id)
+
+    def deliver(event, payload):
+        # This `docker logs` process is this socket's alone, so are its lines:
+        # sending them to the shared room showed every line once per open
+        # viewer. Room membership is still the gate - pruning drops a socket
+        # whose access to the app was removed, and then it gets nothing.
+        _emit_to_member(sid, room, event, payload)
 
     # Create thread to read and emit logs
     def stream_logs():
@@ -728,37 +753,37 @@ def handle_subscribe_container_logs(data):
                 if not line:
                     # Process ended (container stopped or exited)
                     if not stop_event.is_set():
-                        socketio.emit('container_log_ended', {
+                        deliver('container_log_ended', {
                             'app_id': app_id,
                             'message': 'Container log stream ended'
-                        }, room=rooms.app_logs_room(app_id))
+                        })
                     break
 
                 # Parse the log line
                 parsed = DockerService.parse_log_line(line.rstrip('\n'))
 
-                socketio.emit('container_log', {
+                deliver('container_log', {
                     'app_id': app_id,
                     'line': line.rstrip('\n'),
                     'parsed': parsed,
                     'timestamp': time.time()
-                }, room=rooms.app_logs_room(app_id))
+                })
         except Exception as e:
             if not stop_event.is_set():
-                socketio.emit('container_log_error', {
+                deliver('container_log_error', {
                     'app_id': app_id,
                     'message': f'Stream error: {str(e)}'
-                }, room=rooms.app_logs_room(app_id))
+                })
         finally:
             # Clean up
             try:
                 process.terminate()
                 process.wait(timeout=2)
-            except:
+            except (OSError, subprocess.SubprocessError):
                 try:
                     process.kill()
-                except:
-                    pass
+                except OSError as kill_err:
+                    logger.debug('Could not kill log stream process: %s', kill_err)
 
     thread = threading.Thread(target=stream_logs, daemon=True)
     thread.start()
@@ -815,11 +840,11 @@ def stop_container_log_stream(sid: str):
             try:
                 process.terminate()
                 process.wait(timeout=2)
-            except:
+            except (OSError, subprocess.SubprocessError):
                 try:
                     process.kill()
-                except:
-                    pass
+                except OSError as kill_err:
+                    logger.debug('Could not kill log stream process: %s', kill_err)
 
 
 def emit_container_log(app_id: int, line: str, level: str = 'info'):

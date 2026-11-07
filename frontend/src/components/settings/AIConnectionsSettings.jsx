@@ -9,6 +9,9 @@ import { Input } from '../ui/input';
 import { Switch } from '../ui/switch';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
 import ModelPicker from '../ai/ModelPicker';
+import InfoTip from '../InfoTip';
+import { SiAnthropic, SiGooglegemini, SiMistralai, SiOllama } from 'react-icons/si';
+import { Network } from 'lucide-react';
 import useSettingFocus from '../../hooks/useSettingFocus';
 
 function ChoiceField({ id, label, value, onChange, disabled, placeholder, options, children }) {
@@ -106,8 +109,12 @@ export default function AIConnectionsSettings({ connections, providers, defaultI
 
     return (
         <div className="settings-card ai-connections">
-            <h3>{t('ai.connections.title', 'Provider connections')}</h3>
-            <p className="section-description">{t('ai.connections.description', 'Configure native Prompture providers or connect a gateway such as OmniRoute. Credentials stay encrypted on the server.')}</p>
+            <h3>{t('ai.connections.title', 'Provider connections')} <InfoTip>{t('ai.connections.description', 'Configure native Prompture providers or connect a gateway such as OmniRoute. Credentials stay encrypted on the server.')}</InfoTip></h3>
+            <ul className="logo-tile-row" aria-hidden="true">
+                {[SiAnthropic, SiGooglegemini, SiMistralai, SiOllama, Network].map((Icon, i) => (
+                    <li key={i} className="logo-tile-row__item"><span className="logo-tile-row__tile"><Icon /></span></li>
+                ))}
+            </ul>
             <ChoiceField id="ai-connection" label={t('ai.connections.saved', 'Saved connection')}
                 value={draft.id} onChange={selectConnection} disabled={busy}
                 placeholder={t('ai.connections.add', 'Add a connection…')}
@@ -136,7 +143,7 @@ export default function AIConnectionsSettings({ connections, providers, defaultI
                     {(meta?.fields || []).map((field) => (
                         <FormField key={field.name} htmlFor={`ai-config-${field.name}`}
                             label={<>{field.label}{field.required ? t('ai.connections.required', ' (required)') : t('ai.connections.optional', ' (optional)')}</>}
-                            hint={field.type === 'url' ? t('ai.connections.endpointHelp', 'Use an address reachable from the ServerKit backend. In Docker, localhost refers to the panel container. Changing this URL requires re-entering credentials.') : undefined}>
+                            info={field.type === 'url' ? t('ai.connections.endpointHelp', 'Use an address reachable from the ServerKit backend. In Docker, localhost refers to the panel container. Changing this URL requires re-entering credentials.') : undefined}>
                             <Input id={`ai-config-${field.name}`} type={field.secret ? 'password' : field.type}
                                 autoComplete="off" disabled={busy} value={draft.config[field.name] ?? ''}
                                 placeholder={field.secret && draft.secrets_set.includes(field.name) ? t('ai.connections.secretConfigured', 'Configured (leave blank to keep)') : field.default || ''}
@@ -152,7 +159,7 @@ export default function AIConnectionsSettings({ connections, providers, defaultI
             </div>
             <div {...register('ai-model')}>
                 <FormField htmlFor="ai-model" label={t('ai.connections.defaultModel', 'Default model ID')}
-                    hint={t('ai.connections.discoveryHint', 'Discover models from this connection, then browse or enter an exact model ID.')}>
+                    info={t('ai.connections.discoveryHint', 'Discover models from this connection, then browse or enter an exact model ID.')}>
                     <ModelPicker id="ai-model" value={draft.model} models={models} disabled={busy}
                         onChange={(model) => { revision.current += 1; setDraft({ ...draft, model }); setMessage(null); }} />
                 </FormField>

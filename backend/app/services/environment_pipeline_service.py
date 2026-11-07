@@ -1779,7 +1779,9 @@ class EnvironmentPipelineService:
         for attempt in range(max_attempts):
             result = EnvironmentDockerService.exec_in_container(
                 compose_path, 'db',
-                f'mysqladmin -u {db_user} -p{db_password} ping'
+                # ping exits 0 whenever the server answers, even "Access
+                # denied", so it needs no password on the command line.
+                f'mysqladmin -u {db_user} ping'
             )
             if result.get('success'):
                 return True

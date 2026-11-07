@@ -1,10 +1,12 @@
 import { useCallback, useState, useEffect, useMemo  } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Layers, Plus, Square, Play, RotateCw, GitBranch, Github, FolderOpen, FileArchive, FolderKanban, ArrowDownToLine } from 'lucide-react';
+import { Layers, Plus, Square, Play, RotateCw, GitBranch, FolderOpen, FileArchive, FolderKanban, ArrowDownToLine } from 'lucide-react';
+import { SiGithub as Github } from 'react-icons/si';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { getServiceType, getStatusConfig, formatRelativeTime } from '../utils/serviceTypes';
 import ResourceListPage from '../components/layouts/ResourceListPage';
+import InfoTip from '@/components/InfoTip';
 import BandwidthSparkline from '../components/BandwidthSparkline';
 import { formatBytes } from '../utils/formatBytes';
 import { Pill, ServiceTile, EnvTag, SearchField, serviceStatusKind } from '@/components/ds';
@@ -430,8 +432,8 @@ const Services = () => {
                 </>
             }
             emptyIcon={Layers}
-            emptyTitle="No services found"
-            emptyDescription="Connect a repository or install a template to get started"
+            emptyTitle={t('app.services.noServicesYet', 'No services yet')}
+            emptyDescription={<>{t('app.services.emptyShort', 'Connect a repo or install a template.')} <InfoTip>{t('app.services.emptyFull', 'Connect a Git repository, upload files, or install a ready-made template to deploy your first service.')}</InfoTip></>}
             emptyAction={
                 <Button asChild>
                     <Link to="/services/new">{t('app.services.createService', 'New service')}</Link>

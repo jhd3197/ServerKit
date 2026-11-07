@@ -54,8 +54,8 @@ const SSOConfigTab = () => {
     const [expandedProvider, setExpandedProvider] = useState(null);
 
     // General settings local state
-    const [autoProvision, setAutoProvision] = useState(true);
-    const [defaultRole, setDefaultRole] = useState('developer');
+    const [autoProvision, setAutoProvision] = useState(false);
+    const [defaultRole, setDefaultRole] = useState('viewer');
     const [forceSso, setForceSso] = useState(false);
     const [allowedDomains, setAllowedDomains] = useState('');
 
@@ -67,8 +67,8 @@ const SSOConfigTab = () => {
         try {
             const data = await api.getSSOConfig();
             setConfig(data.config || {});
-            setAutoProvision(data.config?.sso_auto_provision ?? true);
-            setDefaultRole(data.config?.sso_default_role || 'developer');
+            setAutoProvision(data.config?.sso_auto_provision ?? false);
+            setDefaultRole(data.config?.sso_default_role || 'viewer');
             setForceSso(data.config?.sso_force_sso ?? false);
             const domains = data.config?.sso_allowed_domains || [];
             setAllowedDomains(Array.isArray(domains) ? domains.join(', ') : '');

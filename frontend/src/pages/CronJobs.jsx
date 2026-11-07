@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/useAuth.js';
 import { useConfirm } from '../hooks/useConfirm';
 import useFocusParam from '@/hooks/useFocusParam';
 import EmptyState from '../components/EmptyState';
+import InfoTip from '@/components/InfoTip';
 import Modal from '@/components/Modal';
 import {
     Clock, Plus, RefreshCw, Play, Pause, Trash2, Pencil,
@@ -466,7 +467,12 @@ const CronJobs = () => {
                 <EmptyState
                     icon={Clock}
                     title={t('app.cronJobs.noCronJobs', 'No cron jobs')}
-                    description={t('app.cronJobs.noScheduledJobsFoundCreateYour', 'No scheduled jobs found. Create your first cron job to automate tasks.')}
+                    description={(
+                        <>
+                            {t('app.cronJobs.scheduleARecurringTask', 'Schedule a recurring task.')}
+                            <InfoTip>{t('app.cronJobs.cronJobsRunCommandsOnA', 'Cron jobs run commands on a schedule, such as backups, cleanups or reports. Create the first one with New cron job.')}</InfoTip>
+                        </>
+                    )}
                     action={<Button onClick={openCreateDrawer}><Plus size={16} /> {t('app.cronJobs.newCronJob', 'New cron job')}</Button>}
                 />
             ) : (

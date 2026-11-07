@@ -17,6 +17,7 @@ import {
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import InfoTip from '@/components/InfoTip';
 import ErrorState from '../components/ErrorState';
 import {
     DataTable, DataTableFooter, Drawer, FilterButton, FilterDrawer,
@@ -519,10 +520,10 @@ export default function Monitors() {
             ) : monitors.length === 0 ? (
                 <EmptyState
                     icon={Radar}
-                    title={hasFilters ? t('app.monitors.noMonitorsMatch', 'No monitors match') : t('app.monitors.nothingIsBeingWatchedYet', 'Nothing is being watched yet')}
+                    title={hasFilters ? t('app.monitors.noMonitorsMatch', 'No monitors match') : t('app.monitors.noMonitorsYet', 'No monitors yet')}
                     description={hasFilters
                         ? t('app.monitors.tryADifferentSearchOrClear', 'Try a different search or clear the filters.')
-                        : t('app.monitors.addAMonitorToWatchA', 'Add a monitor to watch a website, an API endpoint, a database port or a WordPress site, and get an incident when it stops answering.')}
+                        : <>{t('app.monitors.emptyShort', 'Watch a site, API, or port.')} <InfoTip>{t('app.monitors.addAMonitorToWatchA', 'Add a monitor to watch a website, an API endpoint, a database port or a WordPress site, and get an incident when it stops answering.')}</InfoTip></>}
                     action={hasFilters
                         ? <Button variant="outline" onClick={() => { setQ(''); setFilters({ status: '', type: '' }); }}>{t('common.actions.clearFilters', 'Clear filters')}</Button>
                         : <Button onClick={openCreate}><Plus size={16} /> {t('app.monitors.addMonitor', 'New monitor')}</Button>}

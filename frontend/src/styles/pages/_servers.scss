@@ -179,32 +179,6 @@
     }
 }
 
-// Brief instruction callout shown above the pair-code input
-.pair-instructions {
-    display: flex;
-    gap: $space-3;
-    padding: $space-3 $space-4;
-    background: rgba($accent-primary-raw, 0.07);
-    border: 1px solid rgba($accent-primary-raw, 0.22);
-    border-radius: $radius-control;
-
-    p {
-        margin: 0;
-        font-size: $text-xs;
-        color: $text-secondary;
-        line-height: 1.5;
-
-        code {
-            font-family: $font-mono;
-            font-size: $text-xs;
-            color: $accent-primary;
-            background: rgba($accent-primary-raw, 0.12);
-            padding: 1px $space-tight;
-            border-radius: $radius-badge;
-        }
-    }
-}
-
 .server-setup-form {
     display: flex;
     flex-direction: column;
@@ -2579,4 +2553,163 @@
     display: flex;
     flex-direction: column;
     gap: $space-3;
+}
+
+// Header: dot / (i) / star share one centered row beside the title; on narrow
+// screens the title block and actions stay on ONE row (title truncates), tabs below.
+.server-detail-page .sk-topbar {
+    &__titles { align-items: center; }
+    &__meta { display: inline-flex; align-items: center; gap: $space-2; }
+
+    .fav-star {
+        width: 24px; // geometry: matches the InfoTip md footprint
+        height: 24px; // geometry: matches the InfoTip md footprint
+        svg { width: 14px; height: 14px; } // geometry: inline icon
+        opacity: 0.6;
+        &:hover, &.is-on { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+        &__titles { flex: 1 1 0; min-width: 0; flex-wrap: nowrap; }
+        &__title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; overflow-wrap: normal; }
+        &__spacer { display: none; }
+        &__actions { order: 0; width: auto; margin-left: auto; justify-content: flex-end; overflow: visible; flex-wrap: nowrap; }
+    }
+}
+
+.server-detail-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: $space-1 $space-3;
+    margin: 0;
+
+    dt { color: var(--text-faint); }
+    dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+
+    &__id { display: flex; align-items: center; gap: $space-1; code { font-family: $font-mono; } }
+}
+
+// Permission-level picker in the Add Server drawer
+.level-picker {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: $space-2;
+
+    @media (max-width: 560px) {
+        grid-template-columns: 1fr;
+    }
+
+    // The (i) button is a sibling of the radio card, not nested in it.
+    &__cell {
+        position: relative;
+        display: flex;
+    }
+
+    &__opt {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $space-2;
+        padding: $space-3;
+        text-align: center;
+        color: $text-tertiary;
+        background: $bg-card;
+        border: 1px solid $border-subtle;
+        border-radius: $radius-control;
+        cursor: pointer;
+        transition: border-color $transition-fast, background $transition-fast, box-shadow $transition-fast;
+
+        &:hover {
+            border-color: $border-active;
+            background: $bg-elevated;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--accent-dim);
+            outline-offset: 2px;
+        }
+
+        &.is-active {
+            color: var(--accent);
+            border-color: var(--accent-dim);
+            background: var(--accent-bg);
+        }
+    }
+
+    &__art svg {
+        display: block;
+        width: auto;
+        max-width: 100%;
+        height: 56px;
+    }
+
+    &__head {
+        font-size: $text-sm;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+    }
+
+    &__caps {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: $space-1;
+    }
+
+    &__cap {
+        position: relative;
+        display: inline-flex;
+        color: $text-secondary;
+
+        .is-active & {
+            color: var(--accent);
+        }
+
+        &.is-blocked {
+            color: $text-tertiary;
+            opacity: .5;
+
+            &::after {
+                content: '';
+                position: absolute;
+                inset: 50% -2px auto;
+                height: 1.5px;
+                background: currentColor;
+                transform: rotate(-45deg);
+            }
+        }
+    }
+
+    &__info {
+        position: absolute;
+        top: $space-1;
+        inset-inline-end: $space-1;
+        display: inline-flex;
+        padding: $space-1;
+        color: $text-tertiary;
+        background: none;
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover,
+        &:focus-visible {
+            color: $text-primary;
+        }
+    }
+
+    &__tip {
+        flex-direction: column;
+        align-items: flex-start;
+        max-width: 260px;
+        white-space: normal;
+    }
+
+    &__note {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: $space-1;
+    }
 }

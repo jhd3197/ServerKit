@@ -24,6 +24,43 @@
     }
 }
 
+// Shared horizontally scrolling tab strip. Pair with hooks/useScrollTabs, which
+// scrolls the active tab into view and sets data-fade-start / data-fade-end on
+// the edges that still have content to reveal. Used by <TabsList scroll> and
+// any hand-rolled nav (Settings) that needs to survive narrow viewports.
+@mixin tab-scroll {
+    --sk-tabscroll-fade: 28px; // geometry: edge fade width
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar { display: none; }
+
+    > * { flex-shrink: 0; }
+
+    &[data-fade-end] {
+        mask-image: linear-gradient(to right, black calc(100% - var(--sk-tabscroll-fade)), transparent);
+    }
+
+    &[data-fade-start] {
+        mask-image: linear-gradient(to right, transparent, black var(--sk-tabscroll-fade));
+    }
+
+    &[data-fade-start][data-fade-end] {
+        mask-image: linear-gradient(to right, transparent, black var(--sk-tabscroll-fade), black calc(100% - var(--sk-tabscroll-fade)), transparent);
+    }
+
+    &:dir(rtl)[data-fade-end] { mask-image: linear-gradient(to left, black calc(100% - var(--sk-tabscroll-fade)), transparent); }
+    &:dir(rtl)[data-fade-start] { mask-image: linear-gradient(to left, transparent, black var(--sk-tabscroll-fade)); }
+    &:dir(rtl)[data-fade-start][data-fade-end] {
+        mask-image: linear-gradient(to left, transparent, black var(--sk-tabscroll-fade), black calc(100% - var(--sk-tabscroll-fade)), transparent);
+    }
+}
+
+.sk-tabscroll { @include tab-scroll; }
+
 .tab {
     display: inline-flex;
     align-items: center;

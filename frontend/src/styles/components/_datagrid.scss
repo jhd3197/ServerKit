@@ -49,6 +49,7 @@
 .sk-viewbar {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: $space-4;
     margin-bottom: $space-4;
 
@@ -59,8 +60,10 @@
     &__actions {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
+        min-width: 0;
         gap: $space-2;
-        margin-left: auto;
+        margin-inline-start: auto;
     }
 
     // Amber, not red: unsaved tweaks are a state, not an error.
@@ -733,7 +736,6 @@
             min-width: 0;
             background: none;
             border: none;
-            outline: none;
             color: var(--text);
             font-size: $text-sm;
         }

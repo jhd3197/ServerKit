@@ -335,6 +335,15 @@ def _streamed(cmd: List[str], pump, *, env: Optional[dict], timeout: Optional[in
     }
 
 
+def secret_env(**secrets) -> dict:
+    """This process's environment plus *secrets*, for passing a password to a
+    child (MYSQL_PWD, PGPASSWORD) without putting it on the command line,
+    where every local account can read it from ps or /proc/<pid>/cmdline.
+    For ``docker exec``/``docker compose exec`` name the variable bare
+    (``-e MYSQL_PWD``) so docker copies the value from this environment."""
+    return {**os.environ, **{k: v for k, v in secrets.items() if v}}
+
+
 def run_to_gzip(cmd: List[str], dest: str, *, env: Optional[dict] = None,
                 timeout: Optional[int] = None) -> dict:
     """Run *cmd* and gzip its stdout into *dest*; *dest* is removed on failure."""

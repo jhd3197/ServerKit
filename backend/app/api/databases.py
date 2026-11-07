@@ -23,6 +23,19 @@ logger = logging.getLogger(__name__)
 databases_bp = Blueprint('databases', __name__)
 
 
+def _attach_owner_user(engine, name, data, result):
+    """Create the database's same-name user; report its credentials only if it
+    exists, and why not under `user_error` otherwise."""
+    password = data.get('user_password') or DatabaseService.generate_password()
+    created = DatabaseService.create_database_user(
+        engine, name, password, data.get('host', 'localhost'), data.get('root_password'))
+    if created.get('success'):
+        result['user'] = name
+        result['password'] = password
+    else:
+        result['user_error'] = created.get('error') or 'Could not create the database user'
+
+
 def _persist_provisioned(engine, name, result, data):
     """Track a just-provisioned database as a managed resource. Best-effort and
     additive — a persistence failure never fails the provisioning that succeeded."""
@@ -86,22 +99,7 @@ def create_mysql_database():
     if result['success']:
         # Optionally create user with same name
         if data.get('create_user'):
-            password = data.get('user_password') or DatabaseService.generate_password()
-            DatabaseService.mysql_create_user(
-                data['name'],
-                password,
-                data.get('host', 'localhost'),
-                data.get('root_password')
-            )
-            DatabaseService.mysql_grant_privileges(
-                data['name'],
-                data['name'],
-                'ALL',
-                data.get('host', 'localhost'),
-                data.get('root_password')
-            )
-            result['user'] = data['name']
-            result['password'] = password
+            _attach_owner_user('mysql', data['name'], data, result)
 
         _persist_provisioned('mysql', data['name'], result, data)
 
@@ -192,13 +190,15 @@ def create_mysql_user():
 
         # Grant privileges if database specified
         if data.get('database'):
-            DatabaseService.mysql_grant_privileges(
+            granted = DatabaseService.mysql_grant_privileges(
                 data['username'],
                 data['database'],
                 data.get('privileges', 'ALL'),
                 data.get('host', 'localhost'),
                 data.get('root_password')
             )
+            if not granted.get('success'):
+                result['grant_error'] = granted.get('error') or 'Could not grant privileges'
 
     return jsonify(result), 201 if result['success'] else 400
 
@@ -292,11 +292,7 @@ def create_pg_database():
     if result['success']:
         # Optionally create user with same name
         if data.get('create_user'):
-            password = data.get('user_password') or DatabaseService.generate_password()
-            DatabaseService.pg_create_user(data['name'], password)
-            DatabaseService.pg_grant_privileges(data['name'], data['name'], 'ALL')
-            result['user'] = data['name']
-            result['password'] = password
+            _attach_owner_user('postgresql', data['name'], data, result)
 
         _persist_provisioned('postgresql', data['name'], result, data)
 
@@ -368,11 +364,13 @@ def create_pg_user():
 
         # Grant privileges if database specified
         if data.get('database'):
-            DatabaseService.pg_grant_privileges(
+            granted = DatabaseService.pg_grant_privileges(
                 data['username'],
                 data['database'],
                 data.get('privileges', 'ALL')
             )
+            if not granted.get('success'):
+                result['grant_error'] = granted.get('error') or 'Could not grant privileges'
 
     return jsonify(result), 201 if result['success'] else 400
 
@@ -788,19 +786,11 @@ def create_managed_database():
             name, data.get('charset', 'utf8mb4'),
             data.get('collation', 'utf8mb4_unicode_ci'), data.get('root_password'))
         if result.get('success') and data.get('create_user'):
-            password = data.get('user_password') or DatabaseService.generate_password()
-            DatabaseService.mysql_create_user(name, password, data.get('host', 'localhost'), data.get('root_password'))
-            DatabaseService.mysql_grant_privileges(name, name, 'ALL', data.get('host', 'localhost'), data.get('root_password'))
-            result['user'] = name
-            result['password'] = password
+            _attach_owner_user('mysql', name, data, result)
     else:
         result = DatabaseService.pg_create_database(name, data.get('owner'), data.get('encoding', 'UTF8'))
         if result.get('success') and data.get('create_user'):
-            password = data.get('user_password') or DatabaseService.generate_password()
-            DatabaseService.pg_create_user(name, password)
-            DatabaseService.pg_grant_privileges(name, name, 'ALL')
-            result['user'] = name
-            result['password'] = password
+            _attach_owner_user('postgresql', name, data, result)
 
     if not result.get('success'):
         return jsonify(result), 400

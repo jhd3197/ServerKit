@@ -2133,37 +2133,71 @@ def install_registry_extension(slug, user_id=None):
     )
 
 
-def check_for_updates():
-    """Compare installed plugins to the registry; return update candidates.
+def check_for_updates(refresh=False):
+    """Compare installed plugins to the registry / bundled manifests.
 
-    Update v1 is registry-driven: a plugin whose slug is in the registry with a
-    higher version than installed is flagged. Panel-version compatibility is
-    surfaced so the UI can gray out an update the panel can't run yet. The
-    installed plugin's ``source_type`` is included so callers can see the
-    provenance the update would cross (audit M2 — a registry entry only ever
-    matches on slug; the update route's consent gate is the enforcement).
+    Registry-driven for url/registry rows (matched on slug); ``builtin`` rows
+    compare against the bundled manifest in builtin-extensions/. Rows with no
+    known source of truth (url/local/upload/git without a registry entry) are
+    skipped. A malformed version means "no update"; one bad row never breaks
+    the list. ``requires_ack``/``risk`` mirror the update route's consent gate.
     """
     from app.services import registry_service
     from app.utils.version import compare_versions, version_satisfies, get_panel_version
+    if refresh:
+        registry_service.refresh(force=True)
     panel = get_panel_version()
+    bundled = {b['slug']: b['manifest'] for b in list_builtin_extensions()}
     out = []
     for p in InstalledPlugin.query.all():
-        entry = registry_service.get_entry(p.slug)
-        if not entry:
-            continue
-        available = entry.get('version')
-        out.append({
-            'slug': p.slug,
-            'plugin_id': p.id,
-            'installed_version': p.version,
-            'available_version': available,
-            'update_available': compare_versions(available, p.version) > 0,
-            'compatible': version_satisfies(
-                panel, entry.get('min_panel_version'), entry.get('max_panel_version')
-            ),
-            'source': entry.get('source'),
-            'installed_source_type': p.source_type,
-        })
+        try:
+            if p.source_type == 'builtin':
+                m = bundled.get(p.slug)
+                if not m:
+                    continue
+                available = m.get('version')
+                row = {
+                    'display_name': m.get('display_name') or p.name,
+                    'update_source': 'builtin', 'source': None,
+                    'compatible': True, 'requires_ack': False, 'risk': None,
+                }
+                minv = m.get('min_panel_version')
+                maxv = m.get('max_panel_version')
+            else:
+                entry = registry_service.get_entry(p.slug)
+                if not entry:
+                    continue
+                available = entry.get('version')
+                minv = entry.get('min_panel_version')
+                maxv = entry.get('max_panel_version')
+                risk, _ = registry_service.consent_gate(entry, False)
+                row = {
+                    'display_name': entry.get('display_name') or p.name,
+                    'update_source': 'registry', 'source': entry.get('source'),
+                    'requires_ack': bool(risk), 'risk': risk,
+                }
+            try:
+                newer = compare_versions(available, p.version) > 0
+            except Exception:  # noqa: BLE001 - malformed version = no update
+                newer = False
+            compatible = version_satisfies(panel, minv, maxv)
+            row['compatible'] = bool(compatible)
+            row['incompatible_reason'] = None if compatible else (
+                f"Needs panel {minv or '*'}–{maxv or '*'} (this panel is {panel})."
+            )
+            if minv:
+                row['min_panel_version'] = minv
+            out.append({
+                'slug': p.slug,
+                'plugin_id': p.id,
+                'installed_version': p.version,
+                'available_version': available,
+                'update_available': newer,
+                'installed_source_type': p.source_type,
+                **row,
+            })
+        except Exception as exc:  # noqa: BLE001 - isolate bad rows
+            logger.warning(f'Update check skipped {p.slug}: {exc}')
     return out
 
 
@@ -2173,6 +2207,15 @@ def update_plugin(plugin_id, user_id=None):
     plugin = InstalledPlugin.query.get(plugin_id)
     if not plugin:
         raise ValueError('Plugin not found')
+    folder = next((b['path'] for b in list_builtin_extensions()
+                   if b['slug'] == plugin.slug), None) \
+        if plugin.source_type == 'builtin' else None
+    # A builtin row with no bundled folder (e.g. stamped by hand) falls
+    # through to the registry path below.
+    if folder:
+        return install_from_path(
+            folder, user_id=user_id, force=True, source_type='builtin',
+        )
     entry = registry_service.get_entry(plugin.slug)
     if not entry:
         raise ValueError(

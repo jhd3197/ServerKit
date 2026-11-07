@@ -71,7 +71,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 # surfaces as a failed image build, never as a half-installed panel on a host.
 #
 # 1. Bundled test suites. Third-party packages ship their own pytest trees
-#    (passlib is the big one) that no running panel imports.
+#    that no running panel imports.
 # 2. botocore API models. botocore carries JSON models for 400+ AWS services
 #    (~15 MB); ServerKit constructs exactly three clients — s3
 #    (storage_provider_service), route53 (dns_provider_service) and ses
@@ -190,4 +190,4 @@ WORKDIR /app/backend
 # Single process (agent gateway state is in-memory) + threads: the app runs
 # async_mode='threading' (simple-websocket serves WS); a gevent-websocket
 # worker would double-answer the upgrade handshake and break WebSocket.
-CMD ["sh", "-c", "exec gunicorn --workers 1 --threads 100 --bind 0.0.0.0:${SERVERKIT_BACKEND_PORT:-5000} --timeout 120 --access-logfile - --error-logfile - run:app"]
+CMD ["sh", "-c", "exec gunicorn --workers 1 --threads ${SERVERKIT_THREADS:-100} --bind 0.0.0.0:${SERVERKIT_BACKEND_PORT:-5000} --timeout 120 --access-logfile - --error-logfile - run:app"]

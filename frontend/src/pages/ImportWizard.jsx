@@ -3,9 +3,11 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
     ArrowDownToLine, ArrowLeft, ArrowRight, CheckCircle2, ChevronRight, Clock,
-    Database, Globe, Link2, Package, RotateCcw, Server, Trash2, AlertTriangle,
+    Database, Globe, Link2, Package, RotateCcw, Trash2, AlertTriangle,
     Upload, Users,
 } from 'lucide-react';
+import { SiCpanel, SiWordpress } from 'react-icons/si';
+import InfoTip from '../components/InfoTip';
 import api from '../services/api';
 import HtaccessConverter from '../components/apps/HtaccessConverter';
 import { useToast } from '../contexts/useToast.js';
@@ -26,17 +28,17 @@ const POLL_MS = 2000;
 
 const SOURCE_TYPES = [
     {
-        id: 'cpanel',
+        id: 'cpanel', Logo: SiCpanel, format: 'cpmove .tar.gz',
         name: 'cPanel full backup',
         descriptionKey: 'app.importWizard.aCpmoveBackupTarGzArchive', description: 'A cpmove / backup-*.tar.gz archive from cPanel\'s Full Account Backup.',
     },
     {
-        id: 'directadmin',
+        id: 'directadmin', format: 'backup .tar.gz',
         name: 'DirectAdmin',
         descriptionKey: 'app.importWizard.aUserBackupArchiveCreatedBy', description: 'A user backup archive created by DirectAdmin\'s Create/Restore Backups.',
     },
     {
-        id: 'hestia',
+        id: 'hestia', format: 'v-backup .tar',
         name: 'Hestia',
         descriptionKey: 'app.importWizard.aVBackupUserArchiveFrom', description: 'A v-backup-user archive from HestiaCP (also fits VestaCP layouts).',
     },
@@ -415,12 +417,13 @@ function ImportWizard() {
                     {STEPS.map((label, i) => (
                         <li
                             key={label}
+                            aria-current={i === stepperIndex ? 'step' : undefined}
                             className={`import-wizard__step${i === stepperIndex ? ' is-active' : ''}${i < stepperIndex ? ' is-done' : ''}`}
                         >
                             <span className="import-wizard__step-dot">
                                 {i < stepperIndex ? <CheckCircle2 size={14} aria-hidden="true" /> : i + 1}
                             </span>
-                            {label}
+                            <span className="import-wizard__step-label">{label}</span>
                         </li>
                     ))}
                 </ol>
@@ -431,24 +434,29 @@ function ImportWizard() {
                         <h2>{t('app.importWizard.whereIsTheSiteComingFrom', 'Where is the site coming from?')}</h2>
                         <div className="import-wizard__sources">
                             {SOURCE_TYPES.map((s) => (
-                                <Button variant="unstyled"
-                                    key={s.id}
-                                    type="button"
-                                    className="import-wizard__source-card"
-                                    onClick={() => pickSource(s.id)}
-                                >
-                                    <span className="import-wizard__source-ico"><Package size={18} aria-hidden="true" /></span>
-                                    <strong>{s.name}</strong>
-                                    <p>{s.description}</p>
-                                    <ChevronRight size={16} className="import-wizard__source-chev" aria-hidden="true" />
-                                </Button>
+                                <div key={s.id} className="import-wizard__source">
+                                    <Button variant="unstyled"
+                                        type="button"
+                                        className="import-wizard__source-card"
+                                        onClick={() => pickSource(s.id)}
+                                    >
+                                        <span className="import-wizard__source-ico">{s.Logo ? <s.Logo size={18} aria-hidden="true" /> : <Package size={18} aria-hidden="true" />}</span>
+                                        <strong>{s.name}</strong>
+                                        <span className="tip-chip">{s.format}</span>
+                                        <ChevronRight size={16} className="import-wizard__source-chev" aria-hidden="true" />
+                                    </Button>
+                                    <InfoTip className="import-wizard__source-tip" title={s.name}>{s.description}</InfoTip>
+                                </div>
                             ))}
-                            <Link to="/wordpress/ssh-import" className="import-wizard__source-card import-wizard__source-card--link">
-                                <span className="import-wizard__source-ico"><Server size={18} aria-hidden="true" /></span>
-                                <strong>{t('app.importWizard.wordpressOverSsh', 'WordPress over SSH')}</strong>
-                                <p>{t('app.importWizard.pullALiveWordpressSiteStraight', 'Pull a live WordPress site straight from its current server. Opens the WordPress import surface.')}</p>
-                                <ChevronRight size={16} className="import-wizard__source-chev" aria-hidden="true" />
-                            </Link>
+                            <div className="import-wizard__source">
+                                <Link to="/wordpress/ssh-import" className="import-wizard__source-card import-wizard__source-card--link">
+                                    <span className="import-wizard__source-ico"><SiWordpress size={18} aria-hidden="true" /></span>
+                                    <strong>{t('app.importWizard.wordpressOverSsh', 'WordPress over SSH')}</strong>
+                                    <span className="tip-chip">{t('app.importWizard.liveSite', 'Live site')}</span>
+                                    <ChevronRight size={16} className="import-wizard__source-chev" aria-hidden="true" />
+                                </Link>
+                                <InfoTip className="import-wizard__source-tip" title={t('app.importWizard.wordpressOverSsh', 'WordPress over SSH')}>{t('app.importWizard.pullALiveWordpressSiteStraight', 'Pull a live WordPress site straight from its current server. Opens the WordPress import surface.')}</InfoTip>
+                            </div>
                         </div>
                     </div>
                 )}

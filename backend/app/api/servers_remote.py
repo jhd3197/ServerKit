@@ -156,6 +156,7 @@ def _agent_result(result, ok_status=200):
 @servers_bp.route('/<server_id>/cron/status', methods=['GET'])
 @jwt_required()
 def remote_cron_status(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteCronService.status(server_id, user_id=user_id)
     return _agent_result(result)
@@ -164,6 +165,7 @@ def remote_cron_status(server_id):
 @servers_bp.route('/<server_id>/cron/jobs', methods=['GET'])
 @jwt_required()
 def remote_cron_list(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteCronService.list_jobs(server_id, user_id=user_id)
     return _agent_result(result)
@@ -172,6 +174,7 @@ def remote_cron_list(server_id):
 @servers_bp.route('/<server_id>/cron/jobs', methods=['POST'])
 @developer_required
 def remote_cron_add(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     schedule = (data.get('schedule') or '').strip()
@@ -193,6 +196,7 @@ def remote_cron_add(server_id):
 @servers_bp.route('/<server_id>/cron/jobs/<job_id>', methods=['DELETE'])
 @developer_required
 def remote_cron_remove(server_id, job_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteCronService.remove_job(server_id, job_id, user_id=user_id)
     return _agent_result(result)
@@ -201,6 +205,7 @@ def remote_cron_remove(server_id, job_id):
 @servers_bp.route('/<server_id>/cron/jobs/<job_id>/toggle', methods=['POST'])
 @developer_required
 def remote_cron_toggle(server_id, job_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     enabled = bool(data.get('enabled', True))
@@ -224,6 +229,7 @@ def remote_cron_toggle(server_id, job_id):
 @servers_bp.route('/<server_id>/cloudflared/status', methods=['GET'])
 @jwt_required()
 def remote_cloudflared_status(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteCloudflaredService.status(server_id, user_id=user_id)
     return _agent_result(result)
@@ -235,6 +241,7 @@ def remote_cloudflared_login(server_id):
     """Start `cloudflared tunnel login` on the agent. Returns
     {job_id, channel}; the panel subscribes to the corresponding
     Socket.IO room and renders the auth_url the agent surfaces."""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteCloudflaredService.login(server_id, user_id=user_id)
     return _agent_result(result)
@@ -243,6 +250,7 @@ def remote_cloudflared_login(server_id):
 @servers_bp.route('/<server_id>/cloudflared/tunnels', methods=['GET'])
 @jwt_required()
 def remote_cloudflared_list(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteCloudflaredService.list_tunnels(server_id, user_id=user_id)
     return _agent_result(result)
@@ -251,6 +259,7 @@ def remote_cloudflared_list(server_id):
 @servers_bp.route('/<server_id>/cloudflared/tunnels', methods=['POST'])
 @developer_required
 def remote_cloudflared_create(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     name = (data.get('name') or '').strip()
@@ -264,6 +273,7 @@ def remote_cloudflared_create(server_id):
 @servers_bp.route('/<server_id>/cloudflared/tunnels/<tunnel_ref>/route', methods=['POST'])
 @developer_required
 def remote_cloudflared_route(server_id, tunnel_ref):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     hostname = (data.get('hostname') or '').strip()
@@ -279,6 +289,7 @@ def remote_cloudflared_route(server_id, tunnel_ref):
 @servers_bp.route('/<server_id>/cloudflared/tunnels/<tunnel_ref>', methods=['DELETE'])
 @developer_required
 def remote_cloudflared_delete(server_id, tunnel_ref):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteCloudflaredService.delete_tunnel(server_id, tunnel_ref, user_id=user_id)
     return _agent_result(result)
@@ -296,6 +307,7 @@ def remote_cloudflared_delete(server_id, tunnel_ref):
 @servers_bp.route('/<server_id>/refresh-capabilities', methods=['POST'])
 @developer_required
 def remote_refresh_capabilities(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = dispatch_agent_command(
         server_id=server_id, action='agent:recapabilities',
@@ -315,6 +327,7 @@ def remote_refresh_capabilities(server_id):
 @servers_bp.route('/<server_id>/packages', methods=['GET'])
 @jwt_required()
 def remote_packages_list(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemotePackagesService.list_installed(server_id, user_id=user_id)
     return _agent_result(result)
@@ -323,6 +336,7 @@ def remote_packages_list(server_id):
 @servers_bp.route('/<server_id>/packages/search', methods=['GET'])
 @jwt_required()
 def remote_packages_search(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     query = (request.args.get('q') or '').strip()
     if not query:
@@ -338,6 +352,7 @@ def remote_packages_search(server_id):
 @servers_bp.route('/<server_id>/packages/info/<name>', methods=['GET'])
 @jwt_required()
 def remote_packages_info(server_id, name):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemotePackagesService.info(server_id, name, user_id=user_id)
     return _agent_result(result)
@@ -346,6 +361,7 @@ def remote_packages_info(server_id, name):
 @servers_bp.route('/<server_id>/packages/update-cache', methods=['POST'])
 @developer_required
 def remote_packages_update_cache(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemotePackagesService.update_cache(server_id, user_id=user_id)
     return _agent_result(result)
@@ -357,6 +373,7 @@ def remote_packages_install(server_id):
     """Streaming install. Body: {names: ['nginx', 'redis-server']}.
     Returns {job_id, channel} immediately; the panel subscribes to the
     matching Socket.IO room for live install output."""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     names = data.get('names') or []
@@ -371,6 +388,7 @@ def remote_packages_install(server_id):
 @servers_bp.route('/<server_id>/packages/remove', methods=['POST'])
 @developer_required
 def remote_packages_remove(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     name = (data.get('name') or '').strip()
@@ -385,6 +403,7 @@ def remote_packages_remove(server_id):
 def remote_packages_upgrade(server_id):
     """Streaming upgrade. Body: {all: bool, names?: [...]}. Returns
     {job_id, channel}."""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     names = data.get('names') or []
@@ -406,6 +425,7 @@ def remote_packages_upgrade(server_id):
 @servers_bp.route('/<server_id>/services', methods=['GET'])
 @jwt_required()
 def remote_services_list(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     state = request.args.get('state')
     type_ = request.args.get('type', 'service')
@@ -419,6 +439,7 @@ def remote_services_list(server_id):
 @servers_bp.route('/<server_id>/services/daemon-reload', methods=['POST'])
 @developer_required
 def remote_services_daemon_reload(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteSystemdService.daemon_reload(server_id, user_id=user_id)
     return _agent_result(result)
@@ -427,6 +448,7 @@ def remote_services_daemon_reload(server_id):
 @servers_bp.route('/<server_id>/services/<unit>/logs', methods=['GET'])
 @jwt_required()
 def remote_services_logs(server_id, unit):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     try:
         lines = int(request.args.get('lines', 200))
@@ -439,6 +461,7 @@ def remote_services_logs(server_id, unit):
 @servers_bp.route('/<server_id>/services/<unit>', methods=['GET'])
 @jwt_required()
 def remote_services_status(server_id, unit):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteSystemdService.status(server_id, unit, user_id=user_id)
     return _agent_result(result)
@@ -447,6 +470,7 @@ def remote_services_status(server_id, unit):
 @servers_bp.route('/<server_id>/services/<unit>/<action>', methods=['POST'])
 @developer_required
 def remote_services_control(server_id, unit, action):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteSystemdService.control(server_id, unit, action, user_id=user_id)
     return _agent_result(result)
@@ -462,6 +486,7 @@ def remote_services_control(server_id, unit, action):
 @servers_bp.route('/<server_id>/runtimes', methods=['GET'])
 @jwt_required()
 def remote_runtimes_list(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteRuntimesService.list_state(server_id, user_id=user_id)
     return _agent_result(result)
@@ -470,6 +495,7 @@ def remote_runtimes_list(server_id):
 @servers_bp.route('/<server_id>/runtimes/pyenv/bootstrap', methods=['POST'])
 @developer_required
 def remote_runtimes_pyenv_bootstrap(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteRuntimesService.pyenv_bootstrap(server_id, user_id=user_id)
     return _agent_result(result)
@@ -478,6 +504,7 @@ def remote_runtimes_pyenv_bootstrap(server_id):
 @servers_bp.route('/<server_id>/runtimes/python', methods=['GET'])
 @jwt_required()
 def remote_runtimes_python_installed(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteRuntimesService.python_installed(server_id, user_id=user_id)
     return _agent_result(result)
@@ -486,6 +513,7 @@ def remote_runtimes_python_installed(server_id):
 @servers_bp.route('/<server_id>/runtimes/python/available', methods=['GET'])
 @jwt_required()
 def remote_runtimes_python_available(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteRuntimesService.python_available(server_id, user_id=user_id)
     return _agent_result(result)
@@ -494,6 +522,7 @@ def remote_runtimes_python_available(server_id):
 @servers_bp.route('/<server_id>/runtimes/python/current', methods=['GET'])
 @jwt_required()
 def remote_runtimes_python_current(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     result = RemoteRuntimesService.python_current(server_id, user_id=user_id)
     return _agent_result(result)
@@ -502,6 +531,7 @@ def remote_runtimes_python_current(server_id):
 @servers_bp.route('/<server_id>/runtimes/python/install', methods=['POST'])
 @developer_required
 def remote_runtimes_python_install(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     version = (data.get('version') or '').strip()
@@ -514,6 +544,7 @@ def remote_runtimes_python_install(server_id):
 @servers_bp.route('/<server_id>/runtimes/python/uninstall', methods=['POST'])
 @developer_required
 def remote_runtimes_python_uninstall(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     version = (data.get('version') or '').strip()
@@ -526,6 +557,7 @@ def remote_runtimes_python_uninstall(server_id):
 @servers_bp.route('/<server_id>/runtimes/python/global', methods=['POST'])
 @developer_required
 def remote_runtimes_python_set_global(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     version = (data.get('version') or '').strip()
@@ -538,6 +570,7 @@ def remote_runtimes_python_set_global(server_id):
 @servers_bp.route('/<server_id>/runtimes/python/local', methods=['POST'])
 @developer_required
 def remote_runtimes_python_set_local(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     version = (data.get('version') or '').strip()
@@ -562,6 +595,7 @@ def remote_runtimes_python_set_local(server_id):
 def remote_file_allowed_paths(server_id):
     """Return the file roots the agent advertised on connect. Lets the
     file manager seed the browse picker without guessing or hardcoding."""
+    _get_operable_server(server_id)
     paths = RemoteFileService.get_allowed_paths(server_id)
     return jsonify({'allowed_paths': paths})
 
@@ -569,6 +603,7 @@ def remote_file_allowed_paths(server_id):
 @servers_bp.route('/<server_id>/files/browse', methods=['GET'])
 @jwt_required()
 def remote_file_browse(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     path = request.args.get('path')
     if not path:
@@ -580,6 +615,7 @@ def remote_file_browse(server_id):
 @servers_bp.route('/<server_id>/files/read', methods=['GET'])
 @jwt_required()
 def remote_file_read(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     path = request.args.get('path')
     if not path:
@@ -591,6 +627,7 @@ def remote_file_read(server_id):
 @servers_bp.route('/<server_id>/files/write', methods=['POST'])
 @developer_required
 def remote_file_write(server_id):
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object(optional=True)
     path = (data.get('path') or '').strip()

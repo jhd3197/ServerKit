@@ -1,3 +1,5 @@
+import hashlib
+import hmac
 import uuid
 import secrets
 from datetime import datetime
@@ -124,6 +126,17 @@ class Server(TimestampMixin, JsonColumnMixin, db.Model):
     allow_agent_update_observed = db.Column(db.Boolean, nullable=False,
                                             default=False, server_default='0')
 
+    # Agent permission level (monitor|protect|full). REPORTED BY THE AGENT
+    # only -- no panel API writes it. NULL = unknown/legacy, treated as full.
+    # requested_permission_level is what the install command asked for, kept
+    # only to flag a mismatch with what the agent reports.
+    permission_level = db.Column(db.String(16), nullable=True)
+    permission_level_updated_at = db.Column(db.DateTime, nullable=True)
+    requested_permission_level = db.Column(db.String(16), nullable=True)
+    last_report_at = db.Column(db.DateTime, nullable=True)
+    report_interval_seconds = db.Column(db.Integer, nullable=True)
+    service_checks = db.Column(db.JSON, nullable=True)  # latest state per check
+
     @property
     def is_managed(self):
         """False only for observed boxes."""
@@ -203,9 +216,17 @@ class Server(TimestampMixin, JsonColumnMixin, db.Model):
         api_secret = secrets.token_urlsafe(32)
         return api_key, api_secret
 
+    @staticmethod
+    def registration_token_digest(token):
+        """SHA-256 of a registration token. The token is 256 random bits, so a
+        slow password hash buys nothing, and a fast exact digest lets the
+        public /register route look one row up instead of running a
+        deliberately slow check against every pending server."""
+        return 'sha256$' + hashlib.sha256(token.encode()).hexdigest()
+
     def set_registration_token(self, token):
         """Hash and store registration token"""
-        self.registration_token_hash = generate_password_hash(token)
+        self.registration_token_hash = Server.registration_token_digest(token)
 
     def verify_registration_token(self, token):
         """Verify a registration token"""
@@ -213,7 +234,27 @@ class Server(TimestampMixin, JsonColumnMixin, db.Model):
             return False
         if self.registration_token_expires and datetime.utcnow() > self.registration_token_expires:
             return False
+        if self.registration_token_hash.startswith('sha256$'):
+            return hmac.compare_digest(self.registration_token_hash,
+                                       Server.registration_token_digest(token))
+        # Tokens issued before the digest switch; they expire on their own.
         return check_password_hash(self.registration_token_hash, token)
+
+    @staticmethod
+    def find_by_registration_token(token):
+        """The pending server this token pairs, or None."""
+        server = Server.query.filter_by(
+            registration_token_hash=Server.registration_token_digest(token)).first()
+        if server is not None:
+            return server if server.verify_registration_token(token) else None
+        now = datetime.utcnow()
+        legacy = Server.query.filter(
+            Server.registration_token_hash.isnot(None),
+            ~Server.registration_token_hash.startswith('sha256$'),
+            db.or_(Server.registration_token_expires.is_(None),
+                   Server.registration_token_expires > now),
+        ).all()
+        return next((s for s in legacy if s.verify_registration_token(token)), None)
 
     def set_api_key(self, api_key):
         """Hash and store API key"""
@@ -460,6 +501,12 @@ class Server(TimestampMixin, JsonColumnMixin, db.Model):
             'last_error': self.last_error,
             'management_mode': self.management_mode or 'managed',
             'allow_agent_update_observed': bool(self.allow_agent_update_observed),
+            'permission_level': self.permission_level,
+            'permission_level_effective': self.permission_level or 'full',
+            'permission_level_updated_at': self.permission_level_updated_at.isoformat() if self.permission_level_updated_at else None,
+            'requested_permission_level': self.requested_permission_level,
+            'last_report_at': self.last_report_at.isoformat() if self.last_report_at else None,
+            'service_checks': self.service_checks or [],
             'onboarding_state': self.onboarding_state,
             'onboarding_updated_at': self.onboarding_updated_at.isoformat() if self.onboarding_updated_at else None,
             'agent_version': self.agent_version,

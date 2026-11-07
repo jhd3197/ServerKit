@@ -3,6 +3,7 @@ import api from '../services/api';
 import { Button } from '@/components/ui/button';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import CopyField from '../components/CopyField';
+import InfoTip from '../components/InfoTip';
 import { scrollBehavior } from '@/utils/reducedMotion';
 import { useTranslation } from 'react-i18next';
 import { formatDate } from '@/utils/intl';
@@ -181,10 +182,8 @@ function Downloads() {
                     </div>
 
                     <section className="downloads-section">
-                        <h2>{t('app.downloads.directDownloads', 'Direct downloads')}</h2>
-                        <p className="section-description">
-                            {t('app.downloads.downloadTheAgentBinaryForYour', 'Download the agent binary for your platform. After downloading, follow the installation instructions below.')}
-                        </p>
+                        <h2>{t('app.downloads.directDownloads', 'Direct downloads')}
+                            <InfoTip>{t('app.downloads.downloadTheAgentBinaryForYour', 'Download the agent binary for your platform. After downloading, follow the installation instructions below.')}</InfoTip></h2>
 
                         <div className="download-cards">
                             {platforms.map((platform) => {
@@ -219,10 +218,9 @@ function Downloads() {
                     </section>
 
                     <section className="downloads-section">
-                        <h2>{t('app.downloads.quickInstallCommands', 'Quick install commands')}</h2>
-                        <p className="section-description">
-                            {t('app.downloads.useTheseOneLinerCommandsTo', 'Use these one-liner commands to download and install the agent. Replace')} <code>YOUR_TOKEN</code> {t('app.downloads.withTheServerRegistrationToken', 'with the server registration token.')}
-                        </p>
+                        <h2>{t('app.downloads.quickInstallCommands', 'Quick install commands')}
+                            <InfoTip>{t('app.downloads.useTheseOneLinerCommandsTo', 'Use these one-liner commands to download and install the agent. Replace')} <code>YOUR_TOKEN</code> {t('app.downloads.withTheServerRegistrationToken', 'with the server registration token.')}</InfoTip></h2>
+                        <p className="section-description">{t('app.downloads.replaceTokenHint', 'Replace')} <code>YOUR_TOKEN</code></p>
 
                         <div className="install-commands">
                             <div className="command-block">

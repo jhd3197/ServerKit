@@ -148,6 +148,19 @@ class FileService:
             raise PermissionDeniedError(cls._DENIED)
 
     @classmethod
+    def _require_no_protected_inside(cls, path: str) -> None:
+        """Raise when a protected root sits inside *path*. The path checks only
+        look at the path itself, so copying, moving or deleting a parent such
+        as /opt would otherwise carry the panel's .env along with it."""
+        try:
+            real_path = os.path.realpath(path)
+        except (ValueError, OSError):
+            raise PermissionDeniedError(cls._DENIED)
+        prefix = real_path.rstrip(os.sep) + os.sep
+        if any(root.startswith(prefix) for root in cls.PROTECTED_ROOTS):
+            raise PermissionDeniedError(cls._DENIED)
+
+    @classmethod
     def _require_writable(cls, path: str) -> None:
         """Raise unless a mutating operation may touch *path*."""
         cls._require_allowed(path)
@@ -362,6 +375,7 @@ class FileService:
     def delete(cls, path: str) -> Dict:
         """Delete a file or directory."""
         cls._require_writable(path)
+        cls._require_no_protected_inside(path)
 
         if not os.path.exists(path):
             raise NotFoundError('Path not found')
@@ -381,6 +395,7 @@ class FileService:
     def rename(cls, old_path: str, new_name: str) -> Dict:
         """Rename a file or directory."""
         cls._require_writable(old_path)
+        cls._require_no_protected_inside(old_path)
 
         if not os.path.exists(old_path):
             raise NotFoundError('Path not found')
@@ -414,6 +429,7 @@ class FileService:
         # is written, so it gets the full check.
         if not cls.is_path_allowed(src_path):
             raise PermissionDeniedError(cls._DENIED)
+        cls._require_no_protected_inside(src_path)
         cls._require_writable(dest_path)
 
         if not os.path.exists(src_path):
@@ -424,7 +440,9 @@ class FileService:
 
         try:
             if os.path.isdir(src_path):
-                shutil.copytree(src_path, dest_path)
+                # Links stay links: following one would copy whatever it
+                # points at, protected roots included.
+                shutil.copytree(src_path, dest_path, symlinks=True)
             else:
                 shutil.copy2(src_path, dest_path)
             return {'src': src_path, 'dest': dest_path}
@@ -439,6 +457,7 @@ class FileService:
         # A move removes the source, so unlike copy both ends must be writable.
         for candidate in (src_path, dest_path):
             cls._require_writable(candidate)
+        cls._require_no_protected_inside(src_path)
 
         if not os.path.exists(src_path):
             raise NotFoundError('Source not found')

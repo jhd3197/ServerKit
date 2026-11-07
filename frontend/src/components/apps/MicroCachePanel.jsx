@@ -9,6 +9,7 @@ import { useConfirm } from '@/hooks/useConfirm';
 import { formatPercent } from '@/utils/intl';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
+import InfoTip from '@/components/InfoTip';
 
 // Must match NginxService.MICROCACHE_TTL_DEFAULT / MICROCACHE_TTL_MAX.
 const TTL_DEFAULT = 10;
@@ -122,7 +123,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
             </div>
             <div className="app-panel-body">
                 <p className="app-panel-hint">
-                    {t('app.microCachePanel.cachesFullPagesInNginx', 'Caches full pages in nginx for a few seconds, so traffic spikes hit the cache instead of your service, and visitors still get the last good page while the service restarts or errors. It is safe to enable: requests from logged-in users, carts and checkouts, admin and login pages, non-GET requests, and URLs with query strings always bypass the cache and reach the service directly.')}
+                    {t('app.microCachePanel.cachesFullPagesShort', 'Caches pages in nginx for a few seconds.')} <InfoTip>{t('app.microCachePanel.cachesFullPagesInNginx', 'Caches full pages in nginx for a few seconds, so traffic spikes hit the cache instead of your service, and visitors still get the last good page while the service restarts or errors. It is safe to enable: requests from logged-in users, carts and checkouts, admin and login pages, non-GET requests, and URLs with query strings always bypass the cache and reach the service directly.')}</InfoTip>
                 </p>
 
                 <div className="settings-row">
@@ -148,7 +149,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
                         <div className="settings-label">
                             <span>{t('app.microCachePanel.longCacheAssets', 'Long-cache fingerprinted assets')}</span>
                             <span className="settings-hint">
-                                {t('app.microCachePanel.longCacheAssetsHint', 'Browsers keep files whose name carries a content hash (app.3f9a2c1d.js) for a year. Only turn this on if your build names assets that way: a file that changes without a new name would stay stale.')}
+                                {t('app.microCachePanel.longCacheAssetsShort', 'Browsers keep hashed assets for a year.')} <InfoTip>{t('app.microCachePanel.longCacheAssetsHint', 'Browsers keep files whose name carries a content hash (app.3f9a2c1d.js) for a year. Only turn this on if your build names assets that way: a file that changes without a new name would stay stale.')}</InfoTip>
                             </span>
                         </div>
                         <div className="settings-control">
@@ -169,7 +170,7 @@ const MicroCachePanel = ({ app, onChanged }) => {
                                     {t('app.microCachePanel.cacheLifetime', 'Cache lifetime (seconds)')}
                                 </label>
                                 <span className="settings-hint">
-                                    {t('app.microCachePanel.cacheLifetimeHint', 'How long a page is served from the cache before the service is asked again (1–{{max}}). Longer means fewer requests reach the service, and changes take longer to show.', { max: TTL_MAX })}
+                                    {t('app.microCachePanel.cacheLifetimeShort', 'How long pages stay cached.')} <InfoTip>{t('app.microCachePanel.cacheLifetimeHint', 'How long a page is served from the cache before the service is asked again (1–{{max}}). Longer means fewer requests reach the service, and changes take longer to show.', { max: TTL_MAX })}</InfoTip>
                                 </span>
                             </div>
                             <div className="settings-control micro-cache__ttl">

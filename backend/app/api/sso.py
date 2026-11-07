@@ -1,4 +1,5 @@
 """SSO / OAuth API blueprint."""
+import logging
 from datetime import datetime, timedelta
 from flask import Blueprint, request, jsonify, session
 from flask_jwt_extended import (
@@ -15,6 +16,8 @@ from app.middleware.session_auth import issue_session_tokens
 from app.error_reporting import record_unexpected
 from app.exceptions import NotFoundError
 from app.api._request import json_object
+
+logger = logging.getLogger(__name__)
 
 sso_bp = Blueprint('sso', __name__)
 
@@ -47,8 +50,9 @@ def authorize(provider):
     try:
         auth_url, state = sso_service.generate_auth_url(provider, redirect_uri)
         return jsonify({'auth_url': auth_url, 'state': state}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except Exception:
+        logger.exception('SSO authorize failed for %s', provider)
+        return jsonify({'error': 'Could not start single sign-on'}), 400
 
 
 @sso_bp.route('/callback/<provider>', methods=['POST'])
@@ -169,8 +173,9 @@ def link_provider(provider):
 
     try:
         profile = sso_service.handle_oauth_callback(provider, code, state, redirect_uri)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except Exception:
+        logger.exception('SSO link callback failed for %s', provider)
+        return jsonify({'error': 'Single sign-on failed'}), 400
 
     # Check if this identity is already linked to another user
     existing = OAuthIdentity.query.filter_by(

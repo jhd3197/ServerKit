@@ -61,12 +61,7 @@
 .fleet-agent-actions { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid $border-subtle; }
 .fleet-agent-action { width: 100%; }
 .fleet-discovery-empty { text-align: center; grid-column: 1 / -1; }
-.fleet-diagnostics-overlay { display: flex; align-items: center; justify-content: center; position: fixed; inset: 0; z-index: 50; background-color: rgba(0, 0, 0, 0.6); }
-.fleet-diagnostics-dialog { width: 100%; overflow-y: auto; max-width: 42rem; max-height: 80vh; margin: 1rem; }
-.fleet-diagnostics-heading { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; border-bottom: 1px solid $border-subtle; }
-.fleet-diagnostics-title { font-weight: $font-weight-semibold; font-size: $text-lg; }
 .fleet-diagnostics-body > * + * { margin-top: 1.5rem; }
-.fleet-diagnostics-body { padding: 1.5rem; }
 .fleet-diagnostics-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .fleet-connection-value { font-weight: $font-weight-semibold; display: flex; align-items: center; gap: 0.5rem; }
 .fleet-connected-icon { color: $success; }

@@ -16,8 +16,11 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import EmptyState from '../components/EmptyState';
+import InfoTip from '@/components/InfoTip';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import { Tip } from '@/components/ui/tooltip';
+import PageLayout from '../layouts/PageLayout';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -454,7 +457,32 @@ const QueueOperations = () => {
     }
 
     return (
-        <div className="queue-page queue-page--ops">
+        <PageLayout
+            fill
+            className="queue-page queue-page--ops"
+            icon={<Layers size={18} />}
+            title={t('app.queueOperations.queueBus', 'Queue bus')}
+            meta={`${activeGroupLabel} · ${activeStatusLabel} · ${filteredQueues.length} visible`}
+            actions={(
+                <>
+                    <Tip content={t('app.queueOperations.group', 'Group')}>
+                        <Button variant="ghost" size="icon" aria-label={t('app.queueOperations.group', 'Group')} onClick={() => setShowGroupModal(true)}>
+                            <Folder size={16} />
+                        </Button>
+                    </Tip>
+                    <Tip content={t('app.queueOperations.queue', 'Queue')}>
+                        <Button variant="ghost" size="icon" aria-label={t('app.queueOperations.queue', 'Queue')} onClick={() => setShowQueueModal(true)}>
+                            <Plus size={16} />
+                        </Button>
+                    </Tip>
+                    <Tip content={t('common.actions.refresh', 'Refresh')}>
+                        <Button variant="ghost" size="icon" aria-label={t('common.actions.refresh', 'Refresh')} onClick={() => { loadData(); loadQueues(selectedGroup); }}>
+                            <RefreshCw size={16} />
+                        </Button>
+                    </Tip>
+                </>
+            )}
+        >
             <div className="queue-ops-workspace">
                 <aside className="queue-fleet-rail">
                     <section className="queue-rail-section queue-rail-section--overview">
@@ -536,25 +564,6 @@ const QueueOperations = () => {
                 </aside>
 
                 <main className="queue-main">
-                    <div className="queue-workbar">
-                        <div className="queue-workbar-title">
-                            <span>{t('app.queueOperations.queueBus', 'Queue bus')}</span>
-                            <h1>{activeGroupLabel}</h1>
-                            <em>{activeStatusLabel} · {filteredQueues.length} visible</em>
-                        </div>
-                        <div className="queue-workbar-actions">
-                            <Button variant="outline" onClick={() => setShowGroupModal(true)}>
-                                <Folder size={16} /> {t('app.queueOperations.group', 'Group')}
-                            </Button>
-                            <Button variant="outline" onClick={() => setShowQueueModal(true)}>
-                                <Plus size={16} /> {t('app.queueOperations.queue', 'Queue')}
-                            </Button>
-                            <Button variant="outline" onClick={() => { loadData(); loadQueues(selectedGroup); }}>
-                                <RefreshCw size={16} /> {t('common.actions.refresh', 'Refresh')}
-                            </Button>
-                        </div>
-                    </div>
-
                     {/* The view name is the page's heading for the list, and
                         the table's own chrome sits on that same line. */}
                     <GridViewPicker
@@ -622,7 +631,7 @@ const QueueOperations = () => {
                             icon={Layers}
                             title={queues.length === 0 ? t('app.queueOperations.noQueuesYet', 'No queues yet') : t('app.queueOperations.noQueuesMatchTheseFilters', 'No queues match these filters')}
                             description={queues.length === 0
-                                ? t('app.queueOperations.createAQueueGroupAndQueue', 'Create a queue group and queue to start sending messages.')
+                                ? <>{t('app.queueOperations.emptyShort', 'Create a group, then a queue.')} <InfoTip>{t('app.queueOperations.createAQueueGroupAndQueue', 'Groups hold your queues. Create a group, add a queue to it, then send messages through that queue.')}</InfoTip></>
                                 : t('app.queueOperations.adjustTheFiltersOrSearchQuery', 'Adjust the filters or search query to see your queues.')}
                             action={queues.length === 0 ? (
                                 <Button onClick={() => setShowGroupModal(true)}>
@@ -758,7 +767,7 @@ const QueueOperations = () => {
             </Modal>
 
             <GridFilterDrawer {...chrome.drawerProps} />
-        </div>
+        </PageLayout>
     );
 };
 

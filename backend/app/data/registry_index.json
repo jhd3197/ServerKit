@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated": "2026-10-23",
+  "updated": "2026-10-28",
   "note": "Bundled fallback copy of the ServerKit extension registry index. The live index is fetched from SERVERKIT_REGISTRY_URL when configured; this file is used offline and in tests. It is a MIRROR of serverkit-extensions/index.json on main \u2014 do not hand-edit entries here, or it drifts from the artifacts it pins and installs fail checksum verification on exactly the panels that are already offline. Regenerate by copying that file's extensions array; tests/test_registry_bundled_index.py checks the two agree. Schema v3 adds optional per-entry `signature` + `publisher_key_id` (ed25519 minisign-style detached signature over the release zip, verified against the panel's pinned publisher keys at install \u2014 plan 55 D3). v1/v2 indexes without those fields remain valid; their entries are treated as unsigned.",
   "extensions": [
     {
@@ -299,7 +299,7 @@
       "slug": "serverkit-wordpress",
       "display_name": "WordPress",
       "description": "The full WordPress suite: one-click site provisioning, a curated plugin library, environments and promote pipelines, update runs, security hardening, vulnerability scanning, analytics and reports. Offered during onboarding; uninstall it to slim the panel.",
-      "version": "1.0.4",
+      "version": "1.0.5",
       "category": "integration",
       "author": "ServerKit",
       "first_party": true,
@@ -313,14 +313,14 @@
       ],
       "min_panel_version": "1.11.18",
       "max_panel_version": null,
-      "source": "https://github.com/jhd3197/serverkit-wordpress/releases/download/v1.0.4/serverkit-wordpress-1.0.4.zip",
-      "sha256": "dd755d298c86eec4da9e55760718141a2fe0248067b63d13730a32c7643773cf",
+      "source": "https://github.com/jhd3197/serverkit-wordpress/releases/download/v1.0.5/serverkit-wordpress-1.0.5.zip",
+      "sha256": "f541d6a9077146470a212c79149df25806a77bbc5bebefb296bf8e1d1dfef74a",
       "repo": "https://github.com/jhd3197/serverkit-wordpress",
       "homepage": "https://github.com/jhd3197/serverkit-wordpress",
       "featured": true,
       "feature_score": 80,
       "logo": "assets/serverkit-wordpress/logo.png",
-      "signature": "RUSisf2r8uF4y2HOqYuZhdCDM07/Ft3TTMRCaJGbuGoUKPIlky587HkwFWe48XAm8DtPWAcIDUPMrBrHt86M7/A0yQ/Eb9qw7wA=",
+      "signature": "RUSisf2r8uF4ywWGOlXcW5biOIo140NvStZUiYr6N9bi4DIvkKbTu/7rDkNYnny9SvWGdrkqobVArkY89YDMIOuuQJKCYB0RYAs=",
       "publisher_key_id": "serverkit-official"
     },
     {
@@ -405,23 +405,27 @@
     {
       "slug": "serverkit-faro",
       "display_name": "Faro",
-      "description": "One-click Open in Faro. Adds a Connect with Faro button to Services, Domains, and WordPress sites that opens the Faro desktop client prefilled to SFTP into that site's web root, via faro:// deep links. No credentials ever leave the panel: a link only prefills Faro's connection editor for the user to review and connect.",
-      "version": "1.0.2",
+      "description": "Open in Faro and SSH access sharing. Connect with Faro buttons open the Faro desktop client prefilled for SFTP via faro:// links, and the Access pages let you give people time-boxed, revocable key-based access to managed servers: one-time links, or members whose devices you add and approve. Keys are installed and removed through the agent, including on bridge hosts.",
+      "version": "1.2.0",
       "category": "utility",
       "author": "Juan Denis",
       "first_party": true,
       "bundled": false,
-      "permissions": [],
-      "min_panel_version": "1.7.0",
+      "permissions": [
+        "db",
+        "agent.command:ssh:keys:add",
+        "agent.command:ssh:keys:remove"
+      ],
+      "min_panel_version": "1.11.17",
       "max_panel_version": null,
-      "source": "https://github.com/jhd3197/serverkit-faro/releases/download/v1.0.2/serverkit-faro-1.0.2.zip",
-      "sha256": "eba4a111bf7642fd4f72fbb491f78609f7663199d650950c21c88b706317f3b3",
+      "source": "https://github.com/jhd3197/serverkit-faro/releases/download/v1.2.0/serverkit-faro-1.2.0.zip",
+      "sha256": "b5bd467ecd86ccde6845b5e124590e12579d005f74ef92829a38afaefd1da196",
       "repo": "https://github.com/jhd3197/serverkit-faro",
       "homepage": "https://github.com/jhd3197/serverkit-faro",
       "featured": true,
       "feature_score": 100,
       "logo": "assets/serverkit-faro/logo.png",
-      "signature": "RUSisf2r8uF4y0SdTvSDNBJHsTbpWumcmG7a9B7SoOsmhOOL3GhhExZJ1jdQpp2AwrPBtnTvwSb3f8C1f+J9OpG+2SspaHjSqA8=",
+      "signature": "RUSisf2r8uF4y63Lt0ub3cpRFaQvADy4FHpguNWqyjZZzVDISkdA1B3fq6JNP+rbNyP4KVOIv08ahrJbhcx1Rffct9rRLmjD2gQ=",
       "publisher_key_id": "serverkit-official"
     },
     {

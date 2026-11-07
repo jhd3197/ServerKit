@@ -136,7 +136,10 @@ class AgentNamespace(Namespace):
             return
 
         metrics = data.get('metrics', {})
-        agent_registry.ingest_agent_state(agent, metrics=metrics)
+        agent_registry.ingest_agent_state(
+            agent, metrics=metrics,
+            permission_level=data.get('permission_level'),
+            service_checks=data.get('service_checks'))
 
         emit('heartbeat_ack', {'type': 'heartbeat_ack'})
 

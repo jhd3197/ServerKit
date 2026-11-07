@@ -1,5 +1,6 @@
 """A developer outside a server's workspace must not operate it over REST —
 the same rule the Socket.IO server rooms and terminal already enforce."""
+import re
 from unittest.mock import patch
 
 import pytest
@@ -75,3 +76,70 @@ def test_default_workspace_servers_stay_shared(client, setup):
         resp = client.post(f'/api/v1/servers/{server.id}/terminal', json={},
                            headers=headers_for(setup['outsider']))
     assert resp.status_code == 200
+
+
+def _server_id_rules(app):
+    """Every route that takes a server id, across all blueprints."""
+    for rule in app.url_map.iter_rules():
+        if '<server_id>' not in rule.rule or not rule.rule.startswith('/api/v1/'):
+            continue
+        for method in sorted(rule.methods - {'HEAD', 'OPTIONS'}):
+            yield method.lower(), rule.rule
+
+
+def test_every_server_route_refuses_an_outsider(app, client, setup):
+    """Sweep: no `<server_id>` route lets a non-member operate or read a
+    foreign workspace's server. A route that 400s/503s before the check
+    would show up here as a non-404/403."""
+    from app.services.workspace_service import WorkspaceService
+    leaks = []
+    with patch('app.services.remote_command_dispatcher.dispatch_agent_command',
+               side_effect=AssertionError('agent reached')), \
+            patch.object(WorkspaceService, 'can_access_server',
+                         wraps=WorkspaceService.can_access_server) as gate:
+        for method, rule in _server_id_rules(app):
+            url = rule.replace('<server_id>', setup['server'])
+            url = re.sub(r'<int:[^>]+>', '1', url)
+            url = re.sub(r'<[^>]+>', 'x', url)
+            gate.reset_mock()
+            resp = getattr(client, method)(url, json={},
+                                           headers=headers_for(setup['outsider']))
+            if resp.status_code not in (401, 403, 404):
+                leaks.append(f'{method.upper()} {rule} -> {resp.status_code}')
+            elif resp.status_code == 404 and not gate.called:
+                leaks.append(f'{method.upper()} {rule} -> 404 without the workspace check')
+    assert not leaks, '\n'.join(leaks)
+
+
+def test_overview_and_list_hide_foreign_servers(client, setup):
+    for url in ('/api/v1/servers', '/api/v1/servers/overview'):
+        body = client.get(url, headers=headers_for(setup['outsider'])).get_json()
+        rows = body if isinstance(body, list) else body['servers']
+        assert setup['server'] not in {r['id'] for r in rows}, url
+        body = client.get(url, headers=headers_for(setup['member'])).get_json()
+        rows = body if isinstance(body, list) else body['servers']
+        assert setup['server'] in {r['id'] for r in rows}, url
+
+
+def test_update_server_validates_allowed_ips(client, setup):
+    resp = client.put(f"/api/v1/servers/{setup['server']}",
+                      json={'allowed_ips': ['not-an-ip']},
+                      headers=headers_for(setup['member']))
+    assert resp.status_code == 400
+
+
+def test_docker_target_picker_hides_foreign_servers(client, setup):
+    from app import db
+    from app.models.server import Server
+    Server.query.get(setup['server']).status = 'online'
+    db.session.commit()
+    ids = {s['id'] for s in client.get('/api/v1/servers/available',
+                                       headers=headers_for(setup['outsider'])).get_json()}
+    assert setup['server'] not in ids
+
+
+def test_timeline_hides_foreign_server(client, setup):
+    resp = client.get(f"/api/v1/servers/{setup['server']}/timeline",
+                      headers=headers_for(setup['outsider']))
+    assert resp.status_code == 404
+    assert resp.get_json()['code'] == 'server_timeline_server_not_found'

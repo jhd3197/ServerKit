@@ -62,14 +62,6 @@
     &.is-amber { background: $warning-bg; border-color: $warning-border; }
 }
 
-// Diagnostics overlay panel (token home for the old bg-white modal)
-.fleet-modal {
-    background: $bg-elevated;
-    border: 1px solid $border-default;
-    border-radius: $radius-overlay;
-    box-shadow: $shadow-overlay;
-}
-
 // The heatmap grid that used to live here is gone: colour-coded cells were a
 // read-only view of the same numbers the Host health cards on /monitoring now
 // show, and those cards are clickable — they re-scope the page to that server.

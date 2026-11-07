@@ -321,7 +321,7 @@ class TestSigningAndDelivery:
             captured.update({'url': url, 'data': data, 'headers': headers})
             return _Resp()
 
-        monkeypatch.setattr('app.services.chat_webhook_service.requests.post', fake_post)
+        monkeypatch.setattr('app.services.chat_webhook_service.safe_http.post', fake_post)
 
         user = _make_user()
         conn = ChatWebhookService.add({'kind': 'webhook', 'name': 'Ops', 'url': 'https://hooks/x',
@@ -392,7 +392,7 @@ class TestConnectionTesting:
             status_code = 503
 
         monkeypatch.setattr(
-            'app.services.chat_webhook_service.requests.post',
+            'app.services.chat_webhook_service.safe_http.post',
             lambda *args, **kwargs: _Resp(),
         )
         conn = ChatWebhookService.add({
@@ -428,7 +428,7 @@ class TestConnectionTesting:
             raise RuntimeError(f'failed POST {url}')
 
         monkeypatch.setattr(
-            'app.services.chat_webhook_service.requests.post', fail_post,
+            'app.services.chat_webhook_service.safe_http.post', fail_post,
         )
         secret_url = 'https://hooks.example/super-secret-token'
         conn = ChatWebhookService.add({
@@ -454,7 +454,7 @@ class TestConnectionTesting:
             raise RuntimeError(f'failed POST {url}')
 
         monkeypatch.setattr(
-            'app.services.chat_webhook_service.requests.post', fail_post,
+            'app.services.chat_webhook_service.safe_http.post', fail_post,
         )
         conn = ChatWebhookService.add({
             'kind': 'webhook',
@@ -624,7 +624,7 @@ class TestApi:
             status_code = 503
 
         monkeypatch.setattr(
-            'app.services.chat_webhook_service.requests.post',
+            'app.services.chat_webhook_service.safe_http.post',
             lambda *args, **kwargs: _Resp(),
         )
         conn = ChatWebhookService.add({

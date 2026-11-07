@@ -21,6 +21,7 @@ import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
 } from '@/components/ds/grid';
+import BackupStorageNotice from '../components/backups/BackupStorageNotice';
 import BackupsOverview from '../components/backups/BackupsOverview';
 import SchedulesTable from '../components/backups/SchedulesTable';
 import AddScheduleModal from '../components/backups/AddScheduleModal';
@@ -36,6 +37,7 @@ import useFocusParam from '../hooks/useFocusParam';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
+import InfoTip from '@/components/InfoTip';
 
 // `backups` is kept as an alias so old /backups/backups links still resolve to
 // the archive, which now answers to `snapshots`.
@@ -148,6 +150,7 @@ const Backups = () => {
     const [apps, setApps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [storageWarning, setStorageWarning] = useState(false);
     const [rawTab, setActiveTab] = useTabParam('/backups', VALID_TABS);
     const activeTab = TAB_ALIASES[rawTab] || rawTab;
     const [search, setSearch] = useState('');
@@ -216,6 +219,7 @@ const Backups = () => {
             ]);
 
             setBackups(backupsRes.backups || []);
+            setStorageWarning(Boolean(backupsRes.warning || statsRes?.warning));
             setStats(statsRes);
             setConfig(configRes);
             if (refreshSchedules) await reloadSchedules();
@@ -735,6 +739,10 @@ const Backups = () => {
                 </div>
             )}
 
+            {storageWarning && (
+                <BackupStorageNotice onStorage={activeTab === 'storage' ? undefined : () => setActiveTab('storage')} />
+            )}
+
             {/* Overview answers "is my data safe?" — the KPI band, the
                 activity heatmap, the destinations and the recent feed. The
                 archive table it used to sit on top of is now its own section. */}
@@ -746,6 +754,7 @@ const Backups = () => {
                     schedules={schedules}
                     backups={backups}
                     onGo={setActiveTab}
+                    storageWarning={storageWarning}
                 />
             )}
 
@@ -1102,7 +1111,7 @@ const Backups = () => {
                         </SharedCardHeader>
                         <SharedCardContent variant="legacy" className="card-body">
                             <p className="form-help">
-                                {t('app.backups.serverkitIsFreeTheseAreYour', "ServerKit is free. These are your own storage costs. Local is your server disk (leave at 0 if you don't track it). S3/B2 are your cloud provider's $/GB/month.")}
+                                {t('app.backups.storageCostsShort', 'Your own storage costs.')} <InfoTip>{t('app.backups.serverkitIsFreeTheseAreYour', "ServerKit is free. These are your own storage costs. Local is your server disk (leave at 0 if you don't track it). S3/B2 are your cloud provider's $/GB/month.")}</InfoTip>
                             </p>
                             <form onSubmit={handleSaveRates}>
                                 <FormRow>

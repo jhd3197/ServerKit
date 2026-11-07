@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-    Github, FileText, HelpCircle, MessageSquare, Bug, Check, Download, CheckCircle,
+    FileText, HelpCircle, MessageSquare, Bug, Check, Download, CheckCircle,
     RefreshCw, ExternalLink, Star, X, Code, Search, Container, Globe, BarChart3,
     Database, Shield, Cloud, Video, Music, Image, Home, Server, GitBranch, Workflow,
     HardDrive, Lock, Users, Settings as SettingsIcon, Layers, ChevronDown, Copy, Tag,
@@ -48,9 +48,6 @@ const ICON_CATALOG = {
     'Navigation & UI': {
         Home, Star, Sun, Moon, Palette, Play, Square, Calendar, Clock,
         LogOut, SettingsIcon, Newspaper, TrendingUp, BarChart3, Minus
-    },
-    'Brands': {
-        Github
     }
 };
 

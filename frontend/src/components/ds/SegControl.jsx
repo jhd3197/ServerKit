@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+import { useScrollTabs } from '@/hooks/useScrollTabs';
 import { cn } from '@/lib/utils';
 import { Button as SharedButton } from '@/components/ui/button';
 
@@ -5,8 +7,10 @@ import { Button as SharedButton } from '@/components/ui/button';
 // options: array of strings, or { value, label, icon?, count? } objects.
 export function SegControl({ options = [], value, onChange, className, ...props }) {
     const items = options.map((o) => (typeof o === 'string' ? { value: o, label: o } : o));
+    const ref = useRef(null);
+    useScrollTabs(ref);
     return (
-        <div className={cn('sk-seg', className)} role="tablist" {...props}>
+        <div ref={ref} className={cn('sk-seg sk-tabscroll', className)} role="tablist" {...props}>
             {items.map((o) => (
                 <SharedButton variant="unstyled"
                     key={o.value}

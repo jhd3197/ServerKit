@@ -1,4 +1,5 @@
 import { useCallback, useId, useState, useEffect  } from 'react';
+import Modal from '@/components/Modal';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import {
     Shield,
@@ -21,10 +22,8 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MetricCard, KpiBand, Pill, Gauge, DataTable, DataTableFooter, statusKind } from '@/components/ds';
+import { MetricCard, KpiBand, Pill, Gauge, SegControl, DataTable, DataTableFooter, statusKind } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
@@ -104,15 +103,16 @@ const AgentFleet = () => {
         fetchData();
     }, [fetchData]);
 
-    // Publish the Refresh button to the shared tab-group top bar; re-registers
-    // on `loading` so the spinner/disabled state stays in sync.
-    useTopbarActions(() =>
-        <Button size="sm" onClick={fetchData} disabled={loading}>
-            <RefreshCw size={18} className={loading ? 'fleet-refresh-spinner' : ''} />
-            {t('common.actions.refresh', 'Refresh')}
-        </Button>,
-        [loading]
-    );
+    // Publish the view switcher + Refresh to the shared tab-group top bar;
+    // re-registers on the values the node reads so spinner/counts stay in sync.
+    useTopbarActions(() => (
+        <>
+            <Button size="sm" onClick={fetchData} disabled={loading}>
+                <RefreshCw size={18} className={loading ? 'fleet-refresh-spinner' : ''} />
+                {t('common.actions.refresh', 'Refresh')}
+            </Button>
+        </>
+    ), [loading, activeTab, queuedCommands.length, pendingServers.length]);
 
 
     const startDiscovery = async () => {
@@ -461,30 +461,21 @@ const AgentFleet = () => {
 
     return (
         <div className="sk-tabgroup__inner">
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList>
-                    {[
-                        { key: 'dashboard', icon: Activity, labelKey: 'app.agentFleet.dashboard', label: 'Dashboard' },
-                        { key: 'versions', icon: Package, labelKey: 'app.agentFleet.versions', label: 'Versions' },
-                        { key: 'rollouts', icon: Zap, labelKey: 'app.agentFleet.rollouts', label: 'Rollouts' },
-                        { key: 'queue', icon: Clock, labelKey: 'app.agentFleet.commandQueue', label: 'Command queue' },
-                        { key: 'discovery', icon: Search, labelKey: 'app.agentFleet.discovery', label: 'Discovery' },
-                        { key: 'approvals', icon: Shield, labelKey: 'app.agentFleet.approvals', label: 'Approvals' },
-                    ].map(tab => (
-                        <TabsTrigger key={tab.key} value={tab.key}>
-                            <tab.icon size={18} />
-                            {tab.label}
-                            {tab.key === 'approvals' && pendingServers.length > 0 && (
-                                <Badge variant="destructive" className="fleet-tab-count">{pendingServers.length}</Badge>
-                            )}
-                            {tab.key === 'queue' && queuedCommands.length > 0 && (
-                                <Badge variant="warning" className="fleet-tab-count">{queuedCommands.length}</Badge>
-                            )}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
-            </Tabs>
-
+            <div className="sk-viewswitch">
+                <SegControl
+                    aria-label={t('app.agentFleet.views', 'Fleet views')}
+                    value={activeTab}
+                    onChange={setActiveTab}
+                    options={[
+                        { value: 'dashboard', icon: <Activity size={16} />, label: t('app.agentFleet.dashboard', 'Dashboard') },
+                        { value: 'versions', icon: <Package size={16} />, label: t('app.agentFleet.versions', 'Versions') },
+                        { value: 'rollouts', icon: <Zap size={16} />, label: t('app.agentFleet.rollouts', 'Rollouts') },
+                        { value: 'queue', icon: <Clock size={16} />, label: t('app.agentFleet.commandQueue', 'Command queue'), count: queuedCommands.length || undefined },
+                        { value: 'discovery', icon: <Search size={16} />, label: t('app.agentFleet.discovery', 'Discovery') },
+                        { value: 'approvals', icon: <Shield size={16} />, label: t('app.agentFleet.approvals', 'Approvals'), count: pendingServers.length || undefined },
+                    ]}
+                />
+            </div>
             {loadError && !tabHasData ? (
                 <ErrorState
                     title={t('app.agentFleet.couldntLoadFleetData', "Couldn't load fleet data.")}
@@ -822,16 +813,12 @@ const AgentFleet = () => {
 
                 {/* ==================== Diagnostics Modal ==================== */}
                 {diagnostics && (
-                    <div className="fleet-diagnostics-overlay" onClick={() => setDiagnostics(null)}>
-                        <div className="fleet-modal fleet-diagnostics-dialog" onClick={e => e.stopPropagation()}>
-                            <div className="fleet-diagnostics-heading">
-                                <h2 className="fleet-diagnostics-title">
-                                    {t('app.agentFleet.agentDiagnostics', 'Agent diagnostics -')} {diagnostics.server_name}
-                                </h2>
-                                <Button variant="ghost" size="sm" onClick={() => setDiagnostics(null)}>
-                                    <XCircle size={18} />
-                                </Button>
-                            </div>
+                    <Modal
+                        open
+                        onClose={() => setDiagnostics(null)}
+                        title={`${t('app.agentFleet.agentDiagnostics', 'Agent diagnostics -')} ${diagnostics.server_name}`}
+                        size="lg"
+                    >
                             <div className="fleet-diagnostics-body">
                                 <div className="fleet-diagnostics-facts">
                                     <div>
@@ -933,8 +920,7 @@ const AgentFleet = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                    </Modal>
                 )}
             </div>
             )}

@@ -407,20 +407,11 @@ def enable_ssl(domain_id):
     if not result['success']:
         return jsonify({'error': result.get('error', 'Failed to obtain certificate')}), 400
 
-    # Add SSL to Nginx site
-    nginx_result = NginxService.add_ssl_to_site(
-        app.name,
-        result['certificate_path'],
-        result['private_key_path']
-    )
-
-    if not nginx_result['success']:
-        return jsonify({'error': nginx_result.get('error', 'Failed to configure Nginx')}), 400
-
-    domain.ssl_enabled = True
-    domain.ssl_certificate_path = result['certificate_path']
-    domain.ssl_private_key_path = result['private_key_path']
-    db.session.commit()
+    from app.services.site_domain_service import SiteDomainService
+    error = SiteDomainService.enable_domain_ssl(
+        app, domain, result['certificate_path'], result['private_key_path'])
+    if error:
+        return jsonify({'error': error}), 400
 
     # Only after issuance actually worked — remembering an address that
     # Let's Encrypt rejected would be worse than not remembering one.
@@ -449,10 +440,14 @@ def disable_ssl(domain_id):
     if not ResourceGrantService.can_edit_app(user, app):
         raise permission_denied()
 
+    from app.services.site_domain_service import SiteDomainService
     domain.ssl_enabled = False
     db.session.commit()
+    # Drop the domain's HTTPS server block; best-effort like other rewrites.
+    published = SiteDomainService.write_app_vhost(app)
 
     return jsonify({
+        'warning': published.get('warning'),
         'message': 'SSL disabled for domain',
         'domain': domain.to_dict()
     }), 200

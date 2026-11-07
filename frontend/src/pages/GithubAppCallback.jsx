@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Github, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { SiGithub as Github } from 'react-icons/si';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useTranslation } from 'react-i18next';

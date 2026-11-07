@@ -8,7 +8,7 @@ Supports WordPress-specific features like URL search-replace and data anonymizat
 import os
 import subprocess
 
-from app.utils.system import run_checked, run_from_gzip, run_to_gzip
+from app.utils.system import run_checked, run_from_gzip, run_to_gzip, secret_env
 import shutil
 import json
 import re
@@ -38,13 +38,11 @@ class DatabaseSyncService:
         """Execute a MySQL command."""
         try:
             cmd = ['mysql', '-h', host, '-u', user]
-            if password:
-                cmd.append(f'-p{password}')
             if database:
                 cmd.extend(['-D', database])
             cmd.extend(['-e', command])
 
-            return run_checked(cmd, timeout=300)
+            return run_checked(cmd, timeout=300, env=secret_env(MYSQL_PWD=password))
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
@@ -85,8 +83,6 @@ class DatabaseSyncService:
         try:
             # Build mysqldump command
             cmd = ['mysqldump', '-h', host, '-u', user]
-            if password:
-                cmd.append(f'-p{password}')
 
             # Add options for consistent snapshot
             cmd.extend([
@@ -105,13 +101,13 @@ class DatabaseSyncService:
 
             # Execute dump
             if compress:
-                result = run_to_gzip(cmd, file_path)
+                result = run_to_gzip(cmd, file_path, env=secret_env(MYSQL_PWD=password))
                 if not result['success']:
                     return {'success': False, 'error': f"mysqldump failed: {result['error']}"}
             else:
                 with open(file_path, 'w') as f:
                     result = run_checked(cmd, stdout=f, stderr=subprocess.PIPE,
-                                         timeout=None)
+                                         timeout=None, env=secret_env(MYSQL_PWD=password))
                     if not result['success']:
                         return {'success': False,
                                 'error': f"mysqldump failed: {result['error']}"}
@@ -191,17 +187,17 @@ class DatabaseSyncService:
 
             # Build mysql import command
             cmd = ['mysql', '-h', host, '-u', user]
-            if password:
-                cmd.append(f'-p{password}')
             cmd.append(target_db)
 
             # Handle compressed files
             if file_path.endswith('.gz'):
                 # 30 min bound for large DBs
-                result = run_from_gzip(cmd, file_path, timeout=1800)
+                result = run_from_gzip(cmd, file_path, timeout=1800,
+                                       env=secret_env(MYSQL_PWD=password))
             else:
                 with open(file_path, 'r') as f:
-                    result = run_checked(cmd, stdin=f, timeout=1800)
+                    result = run_checked(cmd, stdin=f, timeout=1800,
+                                         env=secret_env(MYSQL_PWD=password))
 
             if not result['success']:
                 return {'success': False, 'error': result['error']}
@@ -571,8 +567,6 @@ class DatabaseSyncService:
         try:
             # Build mysqldump command to run inside container
             dump_cmd = ['mysqldump', '-u', db_user]
-            if db_password:
-                dump_cmd.append(f'-p{db_password}')
             dump_cmd.extend([
                 '--single-transaction',
                 '--routines',
@@ -587,17 +581,19 @@ class DatabaseSyncService:
             dump_cmd.append(db_name)
 
             # Run via docker compose exec
-            full_cmd = ['docker', 'compose', '-f', compose_path, 'exec', '-T', 'db'] + dump_cmd
+            full_cmd = (['docker', 'compose', '-f', compose_path, 'exec', '-T']
+                        + (['-e', 'MYSQL_PWD'] if db_password else []) + ['db'] + dump_cmd)
+            env = secret_env(MYSQL_PWD=db_password)
 
             if compress:
-                result = run_to_gzip(full_cmd, output_path, timeout=600)
+                result = run_to_gzip(full_cmd, output_path, timeout=600, env=env)
                 if not result['success']:
                     return {'success': False,
                             'error': f"Container mysqldump failed: {result['error']}"}
             else:
                 with open(output_path, 'w') as f:
                     result = run_checked(full_cmd, stdout=f, stderr=subprocess.PIPE,
-                                         timeout=600)
+                                         timeout=600, env=env)
                     if not result['success']:
                         if os.path.exists(output_path):
                             os.remove(output_path)
@@ -647,17 +643,16 @@ class DatabaseSyncService:
 
         try:
             # Build mysql import command
-            import_cmd = ['docker', 'compose', '-f', compose_path, 'exec', '-T', 'db',
-                          'mysql', '-u', db_user]
-            if db_password:
-                import_cmd.append(f'-p{db_password}')
-            import_cmd.append(db_name)
+            import_cmd = (['docker', 'compose', '-f', compose_path, 'exec', '-T']
+                          + (['-e', 'MYSQL_PWD'] if db_password else [])
+                          + ['db', 'mysql', '-u', db_user, db_name])
+            env = secret_env(MYSQL_PWD=db_password)
 
             if snapshot_path.endswith('.gz'):
-                result = run_from_gzip(import_cmd, snapshot_path, timeout=1800)
+                result = run_from_gzip(import_cmd, snapshot_path, timeout=1800, env=env)
             else:
                 with open(snapshot_path, 'r') as f:
-                    result = run_checked(import_cmd, stdin=f, timeout=1800)
+                    result = run_checked(import_cmd, stdin=f, timeout=1800, env=env)
 
             if not result['success']:
                 return {'success': False,
