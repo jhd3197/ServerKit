@@ -29,7 +29,7 @@ python-engineio==4.15.1
 websockets==16.1.1
 
 # System monitoring
-psutil==5.9.7
+psutil==7.2.2
 
 # Production server. WebSocket is served by simple-websocket (engineio's
 # threading driver) under a plain threaded gunicorn worker — do NOT deploy
