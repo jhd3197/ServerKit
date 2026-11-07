@@ -3971,7 +3971,6 @@
             "monitoring": "Мониторинг {{name}}",
             "nextCheck": "Следующая проверка",
             "noMonitorsMatch": "Ни один монитор не подходит",
-            "nothingIsBeingWatchedYet": "Пока ничего не смотрят",
             "offForSelfSignedCertificatesOn": "Выключено для самозаверяющих сертификатов на внутренних хостах.",
             "pause": "Приостановить",
             "paused": "Приостановлено {{name}}",

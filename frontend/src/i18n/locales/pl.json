@@ -3971,7 +3971,6 @@
             "monitoring": "Monitorowanie {{name}}",
             "nextCheck": "Następna kontrola",
             "noMonitorsMatch": "Żadne monitory nie pasują",
-            "nothingIsBeingWatchedYet": "Na razie nic nie jest oglądane",
             "offForSelfSignedCertificatesOn": "Wyłączone dla certyfikatów z podpisem własnym na hostach wewnętrznych.",
             "pause": "Pauza",
             "paused": "Wstrzymano {{name}}",

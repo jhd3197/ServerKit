@@ -3971,7 +3971,6 @@
             "monitoring": "監控{{name}}",
             "nextCheck": "下次檢查",
             "noMonitorsMatch": "沒有符合條件的監測器",
-            "nothingIsBeingWatchedYet": "目前還沒有任何內容被關注",
             "offForSelfSignedCertificatesOn": "對於內部主機上的自簽名憑證關閉。",
             "pause": "暫停",
             "paused": "已暫停 {{name}}",

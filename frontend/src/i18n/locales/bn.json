@@ -3971,7 +3971,6 @@
             "monitoring": "মনিটরিং {{name}}",
             "nextCheck": "পরবর্তী চেক",
             "noMonitorsMatch": "কোনো মনিটর মেলে না",
-            "nothingIsBeingWatchedYet": "এখনও কিছুই দেখা হচ্ছে না",
             "offForSelfSignedCertificatesOn": "অভ্যন্তরীণ হোস্টে স্ব-স্বাক্ষরিত শংসাপত্রের জন্য বন্ধ।",
             "pause": "বিরতি",
             "paused": "বিরাম দেওয়া হয়েছে {{name}}৷",

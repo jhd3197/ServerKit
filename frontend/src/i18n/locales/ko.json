@@ -3971,7 +3971,6 @@
             "monitoring": "{{name}} 모니터링",
             "nextCheck": "다음 확인",
             "noMonitorsMatch": "일치하는 모니터가 없습니다.",
-            "nothingIsBeingWatchedYet": "아직 시청 중인 항목이 없습니다.",
             "offForSelfSignedCertificatesOn": "내부 호스트의 자체 서명된 인증서의 경우 꺼집니다.",
             "pause": "일시중지",
             "paused": "일시중지됨 {{name}}",

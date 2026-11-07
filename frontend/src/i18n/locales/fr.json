@@ -3971,7 +3971,6 @@
             "monitoring": "Surveillance {{name}}",
             "nextCheck": "Vérification suivante",
             "noMonitorsMatch": "Aucun moniteur ne correspond",
-            "nothingIsBeingWatchedYet": "Rien n'est encore regardé",
             "offForSelfSignedCertificatesOn": "Désactivé pour les certificats auto-signés sur les hôtes internes.",
             "pause": "Pause",
             "paused": "En pause {{name}}",

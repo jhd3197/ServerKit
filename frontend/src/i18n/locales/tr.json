@@ -3971,7 +3971,6 @@
             "monitoring": "{{name}}'nin izlenmesi",
             "nextCheck": "Sonraki kontrol",
             "noMonitorsMatch": "Hiçbir monitör eşleşmiyor",
-            "nothingIsBeingWatchedYet": "Henüz hiçbir şey izlenmiyor",
             "offForSelfSignedCertificatesOn": "Dahili ana makinelerdeki kendinden imzalı sertifikalar için kapalı.",
             "pause": "Duraklat",
             "paused": "Duraklatıldı {{name}}",
