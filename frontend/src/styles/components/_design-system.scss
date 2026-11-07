@@ -233,6 +233,36 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     // A tile whose metric is over its configured limit. Amber, not red: it is
     // an "act soon", and the value itself already carries the number.
     &.is-alerting { border-color: rgba(245, 185, 69, 0.35); }
+
+    // Phone (matches the 2-up KpiBand): the icon sits inline with the value and
+    // the body dissolves into the grid, so the label gets the full tile width
+    // (two-line clamp, no ellipsis) and the sub line collapses to one line.
+    @media (max-width: 560px) {
+        grid-template-areas: none;
+        row-gap: $space-hair;
+
+        // Row 1 is pinned (icon, value, trend); every other body child and the
+        // spark span the full width and auto-flow into their own rows below.
+        &__body { display: contents; }
+        &__icon, &__val, &__trend { grid-area: auto; grid-row: 1; }
+        &__icon { grid-column: 1; }
+        &__val { grid-column: 2; }
+        &__trend { grid-column: 3; }
+        &__body > :not(.sk-kpi__val), &__spark { grid-area: auto; grid-column: 1 / -1; min-width: 0; }
+        &__label {
+            white-space: normal;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+        }
+        &__sub {
+            flex-wrap: nowrap;
+            white-space: nowrap;
+            overflow: hidden;
+            > * { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+        }
+    }
 }
 
 // ------------------------------------------------------------
