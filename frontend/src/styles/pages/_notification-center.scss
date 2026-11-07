@@ -3,10 +3,36 @@
 .sk-notif-page {
     // Width and gutter come from the page shell, as on every page.
 
+    &__toolbar {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: $space-3;
+        margin-bottom: $space-4;
+    }
+
+    &__filter-btn { position: relative; margin-inline-start: auto; }
+
+    &__filter-count {
+        margin-inline-start: $space-1;
+        font-size: $text-xs;
+        color: $accent-primary;
+    }
+
+    &__sheet {
+        display: flex;
+        flex-direction: column;
+        gap: $space-3;
+    }
+
+    &__sheet-label {
+        font-size: $text-xs;
+        color: $text-secondary;
+    }
+
     &__filters {
         display: inline-flex;
         gap: $space-1;
-        margin-bottom: $space-4;
         background: $bg-card;
         border: 1px solid $border-subtle;
         border-radius: $radius-card;
@@ -334,9 +360,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: $space-4;
-    padding: 0 0 $space-3;
-    margin-bottom: $space-2;
-    border-bottom: 1px solid $border-subtle;
+    padding-inline-start: $space-4;
+    border-inline-start: 1px solid $border-subtle;
 }
 
 .sk-notif-chipset {
