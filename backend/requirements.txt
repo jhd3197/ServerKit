@@ -46,7 +46,7 @@ PyYAML==6.0.3
 tomli>=2.0.0; python_version < '3.11'
 
 # Rate limiting
-Flask-Limiter==3.5.0
+Flask-Limiter==4.1.1
 
 # CLI
 click==8.5.0
