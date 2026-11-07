@@ -3971,7 +3971,6 @@
             "monitoring": "Giám sát {{name}}",
             "nextCheck": "Kiểm tra tiếp theo",
             "noMonitorsMatch": "Không có trình giám sát nào phù hợp",
-            "nothingIsBeingWatchedYet": "Chưa có gì được theo dõi",
             "offForSelfSignedCertificatesOn": "Tắt đối với chứng chỉ tự ký trên máy chủ nội bộ.",
             "pause": "Tạm dừng",
             "paused": "Đã tạm dừng {{name}}",

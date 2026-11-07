@@ -3971,7 +3971,6 @@
             "monitoring": "การตรวจสอบ {{name}}",
             "nextCheck": "ตรวจสอบครั้งต่อไป",
             "noMonitorsMatch": "ไม่มีตัวเฝ้าสังเกตที่ตรงกัน",
-            "nothingIsBeingWatchedYet": "ยังไม่ได้ดูอะไรเลย",
             "offForSelfSignedCertificatesOn": "ปิดสำหรับใบรับรองที่ลงนามด้วยตนเองบนโฮสต์ภายใน",
             "pause": "หยุดชั่วคราว",
             "paused": "หยุด {{name}} ชั่วคราว",

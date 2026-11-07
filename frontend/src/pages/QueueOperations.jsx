@@ -16,6 +16,7 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import EmptyState from '../components/EmptyState';
+import InfoTip from '@/components/InfoTip';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Tip } from '@/components/ui/tooltip';
@@ -630,7 +631,7 @@ const QueueOperations = () => {
                             icon={Layers}
                             title={queues.length === 0 ? t('app.queueOperations.noQueuesYet', 'No queues yet') : t('app.queueOperations.noQueuesMatchTheseFilters', 'No queues match these filters')}
                             description={queues.length === 0
-                                ? t('app.queueOperations.createAQueueGroupAndQueue', 'Create a queue group and queue to start sending messages.')
+                                ? <>{t('app.queueOperations.emptyShort', 'Create a group, then a queue.')} <InfoTip>{t('app.queueOperations.createAQueueGroupAndQueue', 'Groups hold your queues. Create a group, add a queue to it, then send messages through that queue.')}</InfoTip></>
                                 : t('app.queueOperations.adjustTheFiltersOrSearchQuery', 'Adjust the filters or search query to see your queues.')}
                             action={queues.length === 0 ? (
                                 <Button onClick={() => setShowGroupModal(true)}>

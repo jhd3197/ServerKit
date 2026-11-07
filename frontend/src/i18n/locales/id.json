@@ -3971,7 +3971,6 @@
             "monitoring": "Pemantauan {{name}}",
             "nextCheck": "Periksa selanjutnya",
             "noMonitorsMatch": "Tidak ada monitor yang cocok",
-            "nothingIsBeingWatchedYet": "Belum ada yang diawasi",
             "offForSelfSignedCertificatesOn": "Nonaktif untuk sertifikat yang ditandatangani sendiri pada host internal.",
             "pause": "Berhenti sebentar",
             "paused": "{{name}} dijeda",

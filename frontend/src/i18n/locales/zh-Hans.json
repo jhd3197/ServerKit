@@ -3971,7 +3971,6 @@
             "monitoring": "监控 {{name}}",
             "nextCheck": "下一步检查",
             "noMonitorsMatch": "没有匹配的监控项",
-            "nothingIsBeingWatchedYet": "目前还没有任何内容被关注",
             "offForSelfSignedCertificatesOn": "对于内部主机上的自签名证书关闭。",
             "pause": "暂停",
             "paused": "已暂停{{name}}",
