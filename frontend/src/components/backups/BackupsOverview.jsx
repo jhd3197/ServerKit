@@ -272,7 +272,7 @@ export default function BackupsOverview({
                     label={t('app.backupsOverview.storageUsed', 'Storage used')}
                 >
                     <div className="sk-kpi__sub">
-                        <span>across {destinations.count} destination{destinations.count === 1 ? '' : 's'}</span>
+                        <span>{t('app.backupsOverview.acrossDestinations', { count: destinations.count, defaultValue_one: 'across 1 destination', defaultValue_other: 'across {{count}} destinations' })}</span>
                     </div>
                 </MetricCard>
                 <MetricCard
