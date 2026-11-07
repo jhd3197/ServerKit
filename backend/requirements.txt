@@ -43,7 +43,7 @@ python-dotenv==1.2.4
 
 # YAML / TOML parsing (for Docker Compose and repository manifests)
 PyYAML==6.0.3
-tomli>=2.0.0; python_version < '3.11'
+tomli>=2.5.0; python_version < '3.11'
 
 # Rate limiting
 Flask-Limiter==3.5.0
