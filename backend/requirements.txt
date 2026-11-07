@@ -77,7 +77,7 @@ python3-saml==1.16.0
 # Cross-platform local IANA timezone resolution (SystemService.get_server_time
 # falls back to this on hosts without /etc/timezone or timedatectl, e.g. Windows
 # dev boxes) so the panel never reports a non-IANA zone the UI can't format.
-tzlocal>=5.0
+tzlocal>=5.4.5
 
 # OpenAPI documentation
 apispec==6.10.0
