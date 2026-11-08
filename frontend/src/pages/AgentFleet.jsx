@@ -106,12 +106,17 @@ const AgentFleet = () => {
     // Publish the view switcher + Refresh to the shared tab-group top bar;
     // re-registers on the values the node reads so spinner/counts stay in sync.
     useTopbarActions(() => (
-        <>
-            <Button size="sm" onClick={fetchData} disabled={loading}>
-                <RefreshCw size={18} className={loading ? 'fleet-refresh-spinner' : ''} />
-                {t('common.actions.refresh', 'Refresh')}
-            </Button>
-        </>
+        <Button
+            variant="ghost"
+            size="icon"
+            className="sk-topbar__action--compact"
+            onClick={fetchData}
+            disabled={loading}
+            aria-label={t('common.actions.refresh', 'Refresh')}
+            title={t('common.actions.refresh', 'Refresh')}
+        >
+            <RefreshCw size={18} className={loading ? 'fleet-refresh-spinner' : ''} />
+        </Button>
     ), [loading, activeTab, queuedCommands.length, pendingServers.length]);
 
 
