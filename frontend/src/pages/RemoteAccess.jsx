@@ -8,6 +8,7 @@ import {
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import InfoTip from '../components/InfoTip';
 import Modal from '../components/Modal';
 import ServerPicker from '../components/ServerPicker';
 import DomainField from '../components/DomainField';
@@ -196,11 +197,13 @@ const RemoteAccess = ({ serverId }) => {
             <div className="ra-intro">
                 {serverId && currentServer ? (
                     <p>
-                        {t('app.remoteAccess.exposeServicesRunningOn', 'Expose services running on')} <strong>{currentServer.name}</strong> {t('app.remoteAccess.toAPublicHostnameOverA', 'to a public hostname over a WireGuard tunnel. ServerKit pairs this host with an edge server that has a public IP.')}
+                        {t('app.remoteAccess.exposeServicesOn', 'Expose services on')} <strong>{currentServer.name}</strong>.
+                        <InfoTip>{t('app.remoteAccess.exposeServicesRunningOn', 'Expose services running on')} <strong>{currentServer.name}</strong> {t('app.remoteAccess.toAPublicHostnameOverA', 'to a public hostname over a WireGuard tunnel. ServerKit pairs this host with an edge server that has a public IP.')}</InfoTip>
                     </p>
                 ) : (
                     <p>
-                        {t('app.remoteAccess.exposeAServiceRunningOnA', 'Expose a service running on a private server (behind NAT, no port-forwarding) to a public hostname over a WireGuard tunnel between two of your agents.')}
+                        {t('app.remoteAccess.exposeAPrivateServicePublicly', 'Expose a private service publicly.')}
+                        <InfoTip>{t('app.remoteAccess.exposeAServiceRunningOnA', 'Expose a service running on a private server (behind NAT, no port-forwarding) to a public hostname over a WireGuard tunnel between two of your agents.')}</InfoTip>
                     </p>
                 )}
                 {serverId && (
@@ -216,9 +219,17 @@ const RemoteAccess = ({ serverId }) => {
                 <EmptyState
                     icon={Network}
                     title={serverId ? t('app.remoteAccess.noTunnelsForThisServer', 'No tunnels for this server') : t('app.remoteAccess.noTunnelsYet', 'No tunnels yet')}
-                    description={serverId
-                        ? t('app.remoteAccess.pickAPublicIpEdgeServer', 'Pick a public-IP edge server and ServerKit will pair it with {{value}} over WireGuard.', { value: currentServer?.name || 'this host' })
-                        : t('app.remoteAccess.pickAPublicIpEdgeServer2', 'Pick a public-IP edge server and a private host, and ServerKit will pair them over WireGuard and publish your service. No router changes are needed.')}
+                    description={serverId ? (
+                        <>
+                            {t('app.remoteAccess.pickAPublicIpEdgeServerShort', 'Pick a public-IP edge server.')}
+                            <InfoTip>{t('app.remoteAccess.pickAPublicIpEdgeServer', 'Pick a public-IP edge server and ServerKit will pair it with {{value}} over WireGuard.', { value: currentServer?.name || 'this host' })}</InfoTip>
+                        </>
+                    ) : (
+                        <>
+                            {t('app.remoteAccess.pickAnEdgeAndAPrivateHost', 'Pick an edge and a private host.')}
+                            <InfoTip>{t('app.remoteAccess.pickAPublicIpEdgeServer2', 'Pick a public-IP edge server and a private host, and ServerKit will pair them over WireGuard and publish your service. No router changes are needed.')}</InfoTip>
+                        </>
+                    )}
                     action={exposeButton}
                 />
             ) : (
@@ -397,7 +408,10 @@ const RemoteAccess = ({ serverId }) => {
                                 )}
                             </div>
                             <div className="ra-service-field">
-                                <Label htmlFor={`${fieldId}-edge-server`}>{t('app.remoteAccess.edgeServerPublicIpFrontsThe', 'Edge server (public IP, fronts the tunnel)')}</Label>
+                                <span className="ra-label-row">
+                                    <Label htmlFor={`${fieldId}-edge-server`}>{t('app.remoteAccess.edgeServerPublicIpFrontsThe', 'Edge server (public IP, fronts the tunnel)')}</Label>
+                                    <InfoTip>{t('app.remoteAccess.aTunnelBetweenTheseTwoIs', 'A tunnel between these two is created (or reused) automatically.')}</InfoTip>
+                                </span>
                                 <ServerPicker
                                     id={`${fieldId}-edge-server`}
                                     value={form.edgeServerId}
@@ -411,22 +425,21 @@ const RemoteAccess = ({ serverId }) => {
                                         {t('app.remoteAccess.pickTwoDifferentServers', 'Pick two different servers: the edge fronts the private host.')}
                                     </p>
                                 )}
-                                <p className="ra-service-hint">
-                                    {t('app.remoteAccess.aTunnelBetweenTheseTwoIs', 'A tunnel between these two is created (or reused) automatically.')}
-                                </p>
                             </div>
                         </>
                     )}
 
                     <div className="ra-service-routing">
                         <div className="ra-service-field ra-service-field--host">
-                            <Label htmlFor="ra-hostname">{t('app.remoteAccess.publicHostname', 'Public hostname')}</Label>
+                            <span className="ra-label-row">
+                                <Label htmlFor="ra-hostname">{t('app.remoteAccess.publicHostname', 'Public hostname')}</Label>
+                                <InfoTip>{t('app.remoteAccess.pointAtEdgeGeneric', 'Point the hostname at the edge server; the tunnel carries it from there.')}</InfoTip>
+                            </span>
                             <DomainField
                                 id="ra-hostname"
                                 modes={['custom']}
                                 value={form.hostname}
                                 onChange={(fqdn) => setField('hostname', fqdn)}
-                                hint={(name) => t('app.remoteAccess.pointAtEdge', 'Point {{name}} at the edge server; the tunnel carries it from there.', { name })}
                             />
                         </div>
                         <div className="ra-service-field">
@@ -444,16 +457,20 @@ const RemoteAccess = ({ serverId }) => {
 
                     <div className="ra-service-option">
                         <div>
-                            <Label htmlFor={`${fieldId}-ssl`}>{t('app.remoteAccess.httpsLetSEncrypt', 'HTTPS (Let\'s Encrypt)')}</Label>
-                            <p className="ra-service-hint">{t('app.remoteAccess.obtainACertificateOnTheEdge', 'Obtain a certificate on the edge.')}</p>
+                            <span className="ra-label-row">
+                                <Label htmlFor={`${fieldId}-ssl`}>{t('app.remoteAccess.httpsLetSEncrypt', 'HTTPS (Let\'s Encrypt)')}</Label>
+                                <InfoTip>{t('app.remoteAccess.obtainACertificateOnTheEdge', 'Obtain a certificate on the edge.')}</InfoTip>
+                            </span>
                         </div>
                         <Switch id={`${fieldId}-ssl`} checked={form.ssl} onCheckedChange={(v) => setField('ssl', v)} />
                     </div>
 
                     <div className="ra-service-option">
                         <div>
-                            <Label htmlFor={`${fieldId}-require-auth`}>{t('app.remoteAccess.requireLoginBasicAuth', 'Require login (basic auth)')}</Label>
-                            <p className="ra-service-hint">{t('app.remoteAccess.putAUsernamePasswordInFront', 'Put a username/password in front of the service.')}</p>
+                            <span className="ra-label-row">
+                                <Label htmlFor={`${fieldId}-require-auth`}>{t('app.remoteAccess.requireLoginBasicAuth', 'Require login (basic auth)')}</Label>
+                                <InfoTip>{t('app.remoteAccess.putAUsernamePasswordInFront', 'Put a username/password in front of the service.')}</InfoTip>
+                            </span>
                         </div>
                         <Switch id={`${fieldId}-require-auth`} checked={form.requireAuth} onCheckedChange={(v) => setField('requireAuth', v)} />
                     </div>

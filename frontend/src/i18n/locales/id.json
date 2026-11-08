@@ -4781,7 +4781,6 @@
             "pickAPublicIpEdgeServer": "Pilih server edge IP publik dan ServerKit akan memasangkannya dengan {{value}} melalui WireGuard.",
             "pickAPublicIpEdgeServer2": "Pilih server edge IP publik dan host pribadi, dan ServerKit akan memasangkannya melalui WireGuard dan mempublikasikan layanan Anda — tidak perlu perubahan router.",
             "pickTwoDifferentServers": "Pilih dua server yang berbeda: edge berada di depan host privat.",
-            "pointAtEdge": "Arahkan {{name}} ke server edge; tunnel membawanya dari sana.",
             "privateHostWhereTheServiceRuns": "Host pribadi (tempat layanan berjalan)",
             "publicHostname": "Nama host publik",
             "publishing": "Memublikasikan…",

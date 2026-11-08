@@ -4781,7 +4781,6 @@
             "pickAPublicIpEdgeServer": "Wählen Sie einen öffentlichen IP-Edgeserver aus und ServerKit koppelt ihn über WireGuard mit {{value}}.",
             "pickAPublicIpEdgeServer2": "Wählen Sie einen öffentlichen IP-Edge-Server und einen privaten Host aus, und ServerKit koppelt sie über WireGuard und veröffentlicht Ihren Dienst – keine Änderungen am Router erforderlich.",
             "pickTwoDifferentServers": "Wählen Sie zwei verschiedene Server: Der Edge-Server steht vor dem privaten Host.",
-            "pointAtEdge": "Richten Sie {{name}} auf den Edge-Server; der Tunnel leitet es von dort weiter.",
             "privateHostWhereTheServiceRuns": "Privater Host (auf dem der Dienst ausgeführt wird)",
             "publicHostname": "Öffentlicher Hostname",
             "publishing": "Wird veröffentlicht…",

@@ -4781,7 +4781,6 @@
             "pickAPublicIpEdgeServer": "공용 IP 에지 서버를 선택하면 ServerKit이 WireGuard를 통해 이를 {{value}}와 페어링합니다.",
             "pickAPublicIpEdgeServer2": "공용 IP 에지 서버와 개인 호스트를 선택하면 ServerKit이 WireGuard를 통해 이들을 연결하고 서비스를 게시합니다. 라우터를 변경할 필요가 없습니다.",
             "pickTwoDifferentServers": "서로 다른 두 서버를 선택하세요. 엣지 서버가 비공개 호스트 앞단을 맡습니다.",
-            "pointAtEdge": "{{name}}이(가) 엣지 서버를 가리키도록 하세요. 그 이후는 터널이 전달합니다.",
             "privateHostWhereTheServiceRuns": "개인 호스트(서비스가 실행되는 곳)",
             "publicHostname": "공개 호스트 이름",
             "publishing": "게시 중…",

@@ -4781,7 +4781,6 @@
             "pickAPublicIpEdgeServer": "选择一个公共 IP 边缘服务器，ServerKit 将通过 WireGuard 将其与 {{value}} 配对。",
             "pickAPublicIpEdgeServer2": "选择一个公共 IP 边缘服务器和一个私有主机，ServerKit 将通过 WireGuard 将它们配对并发布您的服务 - 无需更改路由器。",
             "pickTwoDifferentServers": "请选择两台不同的服务器：边缘服务器位于私有主机前端。",
-            "pointAtEdge": "将 {{name}} 指向边缘服务器；之后由隧道转发。",
             "privateHostWhereTheServiceRuns": "私有主机（服务运行的地方）",
             "publicHostname": "公共主机名",
             "publishing": "正在发布…",

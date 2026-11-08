@@ -4781,7 +4781,6 @@
             "pickAPublicIpEdgeServer": "請選擇具有公用 IP 位址的邊緣伺服器，ServerKit 會透過 WireGuard 與 {{value}} 配對。",
             "pickAPublicIpEdgeServer2": "選擇具有公用 IP 的邊緣伺服器及私人主機，ServerKit 就會透過 WireGuard 配對兩者並公開服務，無須變更路由器設定。",
             "pickTwoDifferentServers": "請選擇兩部不同的伺服器：邊緣伺服器位於私人主機前端。",
-            "pointAtEdge": "將 {{name}} 指向邊緣伺服器，隧道會從那裡轉送流量。",
             "privateHostWhereTheServiceRuns": "私有主機（服務運作的地方）",
             "publicHostname": "公開主機名稱",
             "publishing": "正在發佈…",

@@ -4782,7 +4782,6 @@
             "pickAPublicIpEdgeServer": "Elige un servidor de borde con IP pública y ServerKit lo emparejará con {{value}} mediante WireGuard.",
             "pickAPublicIpEdgeServer2": "Elige un servidor de borde con IP pública y un host privado; ServerKit los emparejará mediante WireGuard y publicará tu servicio, sin cambios en el router.",
             "pickTwoDifferentServers": "Elige dos servidores distintos: el de borde está delante del host privado.",
-            "pointAtEdge": "Apunta {{name}} al servidor de borde; el túnel lo lleva desde ahí.",
             "privateHostWhereTheServiceRuns": "Host privado (donde se ejecuta el servicio)",
             "publicHostname": "Hostname público",
             "publishing": "Publicando…",
