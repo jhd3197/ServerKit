@@ -462,9 +462,12 @@
             "howThePanelConnectsToServers": "How the panel connects to servers, agents and services in production.",
             "requestStack": "Request stack",
             "routesApis": "Routes and APIs",
+            "routesShort": "Pages and the APIs they call.",
             "runtimeTopology": "Runtime topology",
             "showLegend": "Show legend",
             "sidebarNavigationPagesBackendApiBlueprints": "Sidebar navigation → pages → backend API blueprints they call.",
+            "stackShort": "Browser through to the database.",
+            "topologyShort": "How the panel reaches servers.",
             "views": "Views"
         },
         "appWafPanel": {
@@ -5809,6 +5812,7 @@
             "pairAgentAction": "Pair agent",
             "pairAnAgentAndTheMachine": "Pair an agent and the server shows up here with its CPU, memory and disk alongside every other server you run.",
             "pairCode": "Pair code",
+            "pairShort": "Pair an agent to add it.",
             "pairing": "Pairing…",
             "passphrase": "Passphrase *",
             "pasteThisIntoTheAgentOr": "Paste this into the agent, or run the installer.",
@@ -7556,6 +7560,7 @@
             "norTheWindowsEventLogAre": ", nor the Windows Event Log are available.",
             "notice": "Notice",
             "openAShellOn": "Open a shell on {{name}}",
+            "pairShort": "Pair a server with shell access.",
             "phpFpm": "PHP-FPM",
             "pickServerToOpenShell": "Pick a server on the left to open a shell.",
             "pid": "PID {{pid}} · {{value}}",

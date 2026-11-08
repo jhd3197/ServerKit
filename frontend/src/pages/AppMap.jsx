@@ -10,6 +10,7 @@ import '@xyflow/react/dist/style.css';
 import {
     Map as MapIcon, Layers, Compass, Network, Info,
 } from 'lucide-react';
+import InfoTip from '@/components/InfoTip';
 import { Tip } from '@/components/ui/tooltip';
 import PageLayout from '../layouts/PageLayout';
 import useTabParam from '../hooks/useTabParam';
@@ -289,6 +290,11 @@ export default function AppMap() {
         routes: t('app.appMap.routesApis', 'Routes and APIs'),
         topology: t('app.appMap.runtimeTopology', 'Runtime topology'),
     };
+    const viewShort = {
+        stack: t('app.appMap.stackShort', 'Browser through to the database.'),
+        routes: t('app.appMap.routesShort', 'Pages and the APIs they call.'),
+        topology: t('app.appMap.topologyShort', 'How the panel reaches servers.'),
+    };
     const viewDescriptions = {
         stack: t('app.appMap.howARequestFlowsFromThe', 'How a request flows from the browser through the frontend, backend, services and database.'),
         routes: t('app.appMap.sidebarNavigationPagesBackendApiBlueprints', 'Sidebar navigation → pages → backend API blueprints they call.'),
@@ -325,7 +331,7 @@ export default function AppMap() {
                 </Tip>
             )}
         >
-            <p className="app-map__viewmeta">{viewDescriptions[view.id]}</p>
+            <p className="app-map__viewmeta"><span className="app-map__viewmeta-text">{viewShort[view.id]}</span><InfoTip>{viewDescriptions[view.id]}</InfoTip></p>
 
             {showLegend && (
                 <div className="app-map__legend">

@@ -464,7 +464,7 @@ const Servers = () => {
                     icon={ServerLucideIcon}
                     title={servers.length === 0 ? t('app.servers.noServersYet', 'No servers yet') : t('app.servers.noServersMatchTheseFilters', 'No servers match these filters')}
                     description={servers.length === 0
-                        ? t('app.servers.pairAnAgentAndTheMachine', 'Pair an agent and the server shows up here with its CPU, memory and disk alongside every other server you run.')
+                        ? <>{t('app.servers.pairShort', 'Pair an agent to add it.')} <InfoTip>{t('app.servers.pairAnAgentAndTheMachine', 'Pair an agent and the server shows up here with its CPU, memory and disk alongside every other server you run.')}</InfoTip></>
                         : t('app.servers.adjustTheSearchOrClearThe', 'Adjust the search or clear the column filters to see your servers.')}
                     action={servers.length === 0 ? (
                         <Button onClick={() => setShowAddModal(true)}>

@@ -16,6 +16,7 @@ import ProcessTable from '../components/ProcessTable';
 import { procUser } from '../components/processData';
 import SystemdServicesTab from '../components/serverdetail/ServicesTab';
 import { useTableSort } from '@/hooks/useTableSort';
+import InfoTip from '@/components/InfoTip';
 import PageLayout from '../layouts/PageLayout';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { usePolling } from '@/hooks/usePolling';
@@ -151,7 +152,7 @@ const TerminalShellTab = () => {
                         <p>
                             {anyOnline
                                 ? t('app.terminal.pickServerToOpenShell', 'Pick a server on the left to open a shell.')
-                                : t('app.terminal.shellsRunOverAgent', 'Interactive shells run over the ServerKit agent. Pair a server (Servers → Add server) with shell access and it shows up here.')}
+                                : <>{t('app.terminal.pairShort', 'Pair a server with shell access.')} <InfoTip>{t('app.terminal.shellsRunOverAgent', 'Interactive shells run over the ServerKit agent. Pair a server (Servers → Add server) with shell access and it shows up here.')}</InfoTip></>}
                         </p>
                     </div>
                 )}
