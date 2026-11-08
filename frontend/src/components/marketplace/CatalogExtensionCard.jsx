@@ -62,6 +62,7 @@ export const CatalogExtensionCard = ({ entry, update, busy, installing, onInstal
 
     return (
         <CatalogCard
+            className="sk-catalog-card--inline-action"
             icon={<ExtensionCover base="sk-catalog-card__art" entry={entry} category={category} brandSize={20} />}
             title={entry.displayName}
             sub={t('app.marketplace.versionByAuthor', 'v{{version}} · by {{author}}', {

@@ -201,6 +201,28 @@
             align-items: flex-start;
             flex-direction: column;
         }
+
+        // Catalog cards: one row — icon, name/version, (i), action. The tag
+        // is redundant with the category chips; the foot's facts drop under.
+        .sk-catalog-card--inline-action {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto auto;
+            align-items: center;
+            column-gap: $space-3;
+            row-gap: $space-1;
+            padding: $space-3;
+        }
+
+        .sk-catalog-card--inline-action .sk-catalog-card__head,
+        .sk-catalog-card--inline-action .sk-catalog-card__foot { display: contents; }
+        .sk-catalog-card--inline-action .sk-catalog-card__tag { display: none; }
+        .sk-catalog-card--inline-action .sk-catalog-card__facts {
+            grid-column: 2 / -1;
+            grid-row: 2;
+
+            &:empty { display: none; }
+        }
+        .sk-catalog-card--inline-action .sk-catalog-card__action { grid-column: 4; grid-row: 1; }
     }
 }
 
