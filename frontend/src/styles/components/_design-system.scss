@@ -1515,6 +1515,19 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             &::-webkit-scrollbar { display: none; }
         }
         &__tabs { order: 3; width: 100%; margin-left: 0; justify-content: flex-start; }
+
+        // Only compact icon actions (e.g. a lone Refresh): share the tabs' row,
+        // pinned right, instead of costing a full row of their own.
+        &__actions:has(> .sk-topbar__action--compact):not(:has(> :not(.sk-topbar__action--compact, .sk-topbar__chrome))) {
+            order: 2;
+            width: auto;
+            margin-left: auto;
+        }
+        &:has(.sk-topbar__actions > .sk-topbar__action--compact):not(:has(.sk-topbar__actions > :not(.sk-topbar__action--compact, .sk-topbar__chrome))) &__tabs {
+            order: 1;
+            width: auto;
+            flex: 1 1 0;
+        }
     }
 
     // Phones: the one page-header rule. The title takes the row beside its icon
