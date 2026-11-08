@@ -6,6 +6,7 @@ import { useContributions } from '@/plugins/contributions';
 import { Button } from '@/components/ui/button';
 import { Pill, ScoreGauge, KpiBand, MetricCard } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
+import useMediaQuery from '../../hooks/useMediaQuery';
 import {
     ShieldCheck,
     RefreshCw,
@@ -27,6 +28,7 @@ const STATE_ICON = { pass: CheckCircle2, warn: AlertTriangle, unknown: Circle };
 
 const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
     const { t } = useTranslation();
+    const phone = useMediaQuery('(max-width: 640px)'); // = $breakpoint-sm
     // One action runs at a time; `busyKey` names it so only that row spins and
     // the rest disable (no double-submits against the same daemon).
     const [busyKey, setBusyKey] = useState(null);
@@ -135,7 +137,7 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                 <SharedCardContent variant="legacy" className="card-body">
                     <div className="sec-posture__top">
                         {score !== null ? (
-                            <ScoreGauge value={score} size={104} stroke={9} color={scoreColor} label="posture" />
+                            <ScoreGauge value={score} size={phone ? 72 : 104} stroke={phone ? 7 : 9} color={scoreColor} label="posture" />
                         ) : (
                             <div className="sec-posture__pending">
                                 <RefreshCw size={18} className="sec-spin" />
@@ -177,7 +179,7 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                             const Icon = STATE_ICON[c.state];
                             const rowBusy = busyKey === c.key;
                             return (
-                                <div key={c.key} className={`sec-posture__check sec-posture__check--${c.state}`}>
+                                <div key={c.key} className={`sec-posture__check sec-posture__check--${c.state}${c.fix ? ' sec-posture__check--fix' : ''}`}>
                                     <Icon size={15} className="sec-posture__ico" />
                                     <span className="sec-posture__label">{c.label}</span>
                                     <span className="sec-posture__detail">{c.detail}</span>

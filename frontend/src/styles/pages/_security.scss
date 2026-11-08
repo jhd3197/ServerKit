@@ -271,10 +271,11 @@
         margin-bottom: $space-2;
         border-bottom: 1px solid var(--border-soft);
 
+        // Phone: gauge beside the verdict, KPI row below at full width
         @media (max-width: $breakpoint-sm) {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: $space-4;
+            display: grid;
+            grid-template-columns: 72px minmax(0, 1fr); // gauge size
+            gap: $space-3 $space-4;
         }
     }
 
@@ -288,6 +289,8 @@
         font-size: $text-xs;
         color: var(--text-faint);
 
+        @media (max-width: $breakpoint-sm) { width: 72px; height: 72px; }
+
         svg { color: var(--text-faint); }
     }
 
@@ -295,12 +298,20 @@
         flex: 1;
         min-width: 0;
 
-        @media (max-width: $breakpoint-sm) { align-self: stretch; }
+        // Dissolve so verdict joins the gauge row and the KPIs span below
+        @media (max-width: $breakpoint-sm) {
+            display: contents;
+
+            // KpiBand's wrapper is the grid item, so it must do the spanning
+            .sk-kpiband-wrap { grid-column: 1 / -1; margin-bottom: 0; }
+        }
     }
 
     .sec-posture__verdict {
         margin: 0 0 $space-3;
         font-size: $text-base;
+
+        @media (max-width: $breakpoint-sm) { margin: 0; }
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
@@ -313,8 +324,10 @@
 
         @media (max-width: $breakpoint-sm) {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); // geometry: fluid tile track
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: $space-2;
+
+            .sk-kpi { padding: $space-2; gap: $space-2; }
         }
     }
 
@@ -368,10 +381,10 @@
         &:first-child { border-top: none; }
 
         @media (max-width: $breakpoint-sm) {
-            flex-wrap: wrap;
             padding-block: $space-2;
 
-            .sec-posture__fix { flex: 1 0 100%; }
+            // The fix button already says what to do; drop the muted detail
+            &--fix .sec-posture__detail { display: none; }
         }
 
         &--pass    .sec-posture__ico { color: var(--green); }
@@ -398,6 +411,8 @@
         flex-shrink: 0;
         min-width: 124px;
         justify-content: center;
+
+        @media (max-width: $breakpoint-sm) { min-width: 0; }
     }
 
     .sec-posture__foot {
