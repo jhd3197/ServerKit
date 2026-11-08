@@ -12,6 +12,21 @@
         margin: 0 0 $space-3;
         font-size: $text-sm;
         color: $text-secondary;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        min-width: 0;
+
+        &-text {
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        > :not(.app-map__viewmeta-text) {
+            flex-shrink: 0;
+        }
     }
 
     &__legend {
