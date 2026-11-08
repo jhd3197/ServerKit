@@ -4781,7 +4781,6 @@
             "pickAPublicIpEdgeServer": "اختر خادم حافة IP عام وسيقوم ServerKit بإقرانه مع {{value}} عبر WireGuard.",
             "pickAPublicIpEdgeServer2": "اختر خادم حافة IP عام ومضيفًا خاصًا، وسيعمل ServerKit على إقرانهما عبر WireGuard ونشر خدمتك - دون الحاجة إلى إجراء تغييرات على جهاز التوجيه.",
             "pickTwoDifferentServers": "اختر خادمين مختلفين: خادم الحافة يقف أمام المضيف الخاص.",
-            "pointAtEdge": "وجّه {{name}} إلى خادم الحافة؛ والنفق ينقله من هناك.",
             "privateHostWhereTheServiceRuns": "مضيف خاص (حيث تعمل الخدمة)",
             "publicHostname": "اسم المضيف العام",
             "publishing": "جارٍ النشر…",

@@ -4781,7 +4781,6 @@
             "pickAPublicIpEdgeServer": "Bir genel IP uç sunucusu seçin; ServerKit, onu WireGuard üzerinden {{value}} ile eşleştirecektir.",
             "pickAPublicIpEdgeServer2": "Bir genel IP uç sunucusu ve özel bir ana bilgisayar seçin; ServerKit bunları WireGuard üzerinden eşleştirecek ve hizmetinizi yayınlayacaktır; yönlendirici değişikliğine gerek yoktur.",
             "pickTwoDifferentServers": "İki farklı sunucu seçin: uç sunucu, özel ana makinenin önünde durur.",
-            "pointAtEdge": "{{name}} adresini uç sunucuya yönlendirin; tünel onu oradan taşır.",
             "privateHostWhereTheServiceRuns": "Özel ana bilgisayar (hizmetin çalıştığı yer)",
             "publicHostname": "Genel ana makine adı",
             "publishing": "Yayınlanıyor…",

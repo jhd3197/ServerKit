@@ -4781,7 +4781,6 @@
             "pickAPublicIpEdgeServer": "Chọn một máy chủ biên IP công cộng và ServerKit sẽ ghép nối nó với {{value}} qua WireGuard.",
             "pickAPublicIpEdgeServer2": "Chọn một máy chủ biên IP công cộng và một máy chủ riêng, sau đó ServerKit sẽ ghép nối chúng qua WireGuard và xuất bản dịch vụ của bạn — không cần thay đổi bộ định tuyến.",
             "pickTwoDifferentServers": "Chọn hai máy chủ khác nhau: máy chủ biên đứng trước máy chủ riêng.",
-            "pointAtEdge": "Trỏ {{name}} đến máy chủ biên; đường hầm sẽ chuyển tiếp từ đó.",
             "privateHostWhereTheServiceRuns": "Máy chủ riêng (nơi dịch vụ chạy)",
             "publicHostname": "Tên máy chủ công cộng",
             "publishing": "Đang xuất bản…",

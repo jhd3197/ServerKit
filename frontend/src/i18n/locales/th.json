@@ -4781,7 +4781,6 @@
             "pickAPublicIpEdgeServer": "เลือกเซิร์ฟเวอร์ Edge-IP สาธารณะ จากนั้น ServerKit จะจับคู่กับ {{value}} ผ่าน WireGuard",
             "pickAPublicIpEdgeServer2": "เลือกเซิร์ฟเวอร์ Edge สาธารณะ IP และโฮสต์ส่วนตัว แล้ว ServerKit จะจับคู่เซิร์ฟเวอร์เหล่านั้นผ่าน WireGuard และเผยแพร่บริการของคุณ โดยไม่จำเป็นต้องเปลี่ยนแปลงเราเตอร์",
             "pickTwoDifferentServers": "เลือกเซิร์ฟเวอร์สองเครื่องที่ต่างกัน: เซิร์ฟเวอร์ edge อยู่ด้านหน้าโฮสต์ส่วนตัว",
-            "pointAtEdge": "ชี้ {{name}} ไปที่เซิร์ฟเวอร์ edge แล้วอุโมงค์จะส่งต่อจากที่นั่น",
             "privateHostWhereTheServiceRuns": "โฮสต์ส่วนตัว (ที่บริการทำงาน)",
             "publicHostname": "ชื่อโฮสต์สาธารณะ",
             "publishing": "กำลังเผยแพร่…",

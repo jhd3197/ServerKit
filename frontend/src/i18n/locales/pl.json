@@ -4781,7 +4781,6 @@
             "pickAPublicIpEdgeServer": "Wybierz serwer brzegowy z publicznym adresem IP, a ServerKit połączy go z {{value}} przez WireGuard.",
             "pickAPublicIpEdgeServer2": "Wybierz serwer brzegowy z publicznym adresem IP i prywatnego hosta, a ServerKit sparuje je za pośrednictwem WireGuard i opublikuje Twoją usługę — bez konieczności zmiany routera.",
             "pickTwoDifferentServers": "Wybierz dwa różne serwery: serwer brzegowy obsługuje ruch dla hosta prywatnego.",
-            "pointAtEdge": "Skieruj {{name}} na serwer brzegowy; dalej ruch przenosi tunel.",
             "privateHostWhereTheServiceRuns": "Host prywatny (na którym działa usługa)",
             "publicHostname": "Publiczna nazwa hosta",
             "publishing": "Publikowanie…",

@@ -38,8 +38,7 @@
 
 @media (max-width: $breakpoint-md) {
     .ra-intro {
-        flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
         gap: $space-3;
     }
 }
@@ -258,6 +257,7 @@
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
 .ra-service-form > * + * { margin-top: 1rem; }
 .ra-service-field > * + * { margin-top: 0.375rem; }
+.ra-label-row { display: inline-flex; align-items: center; gap: 0.25rem; }
 .ra-service-hint { font-size: 0.75rem; color: $text-tertiary; }
 .ra-service-routing { display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 0.75rem; }
 @media (min-width: $breakpoint-sm) {
