@@ -48,7 +48,7 @@ export default function Notifications() {
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [hasMore, setHasMore] = useState(false);
-    const compact = useMediaQuery('(max-width: 768px)');
+    const compact = useMediaQuery('(max-width: 1219px)');
     const activeFilters = (category ? 1 : 0) + (severity ? 1 : 0);
 
     const fetchPage = useCallback(async (startOffset, replace) => {
