@@ -7911,6 +7911,10 @@
             "users": "Usuarios",
             "workspaceBrandColor": "Color de marca del espacio de trabajo",
             "workspaceCreated": "Espacio de trabajo creado"
+        },
+        "mobileSearch": {
+            "label": "Buscar",
+            "title": "Buscar en todo (Ctrl K)"
         }
     },
     "auth": {

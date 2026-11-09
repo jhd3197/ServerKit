@@ -7910,6 +7910,10 @@
             "users": "사용자",
             "workspaceBrandColor": "워크스페이스 브랜드 색상",
             "workspaceCreated": "작업공간이 생성되었습니다."
+        },
+        "mobileSearch": {
+            "label": "검색",
+            "title": "전체 검색 (Ctrl K)"
         }
     },
     "auth": {

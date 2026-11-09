@@ -7910,6 +7910,10 @@
             "users": "ব্যবহারকারীদের",
             "workspaceBrandColor": "কর্মক্ষেত্র ব্র্যান্ডের রঙ",
             "workspaceCreated": "ওয়ার্কস্পেস তৈরি করা হয়েছে"
+        },
+        "mobileSearch": {
+            "label": "অনুসন্ধান",
+            "title": "সবকিছু অনুসন্ধান করুন (Ctrl K)"
         }
     },
     "auth": {

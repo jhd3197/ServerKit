@@ -7910,6 +7910,10 @@
             "users": "使用者",
             "workspaceBrandColor": "工作區品牌色彩",
             "workspaceCreated": "工作區已建立"
+        },
+        "mobileSearch": {
+            "label": "搜尋",
+            "title": "搜尋全部 (Ctrl K)"
         }
     },
     "auth": {

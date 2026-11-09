@@ -7910,6 +7910,10 @@
             "users": "Пользователи",
             "workspaceBrandColor": "Фирменный цвет рабочего пространства",
             "workspaceCreated": "Рабочая область создана"
+        },
+        "mobileSearch": {
+            "label": "Поиск",
+            "title": "Поиск везде (Ctrl K)"
         }
     },
     "auth": {

@@ -3837,6 +3837,10 @@
             "yourDatabaseIsAt": "Your database is at",
             "yourSchemaAlreadyMatchesThisRepairs": "Your schema already matches {{value}}; this repairs the version pointer{{value2}}."
         },
+        "mobileSearch": {
+            "label": "Search",
+            "title": "Search everything (Ctrl K)"
+        },
         "modals": {
             "anyHost": "% (any host)",
             "attachServiceHint": "Optional. An attached database is listed on the service and is cleaned up with it.",

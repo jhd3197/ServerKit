@@ -7910,6 +7910,10 @@
             "users": "Kullanıcılar",
             "workspaceBrandColor": "Çalışma alanı marka rengi",
             "workspaceCreated": "Çalışma alanı oluşturuldu"
+        },
+        "mobileSearch": {
+            "label": "Ara",
+            "title": "Her yerde ara (Ctrl K)"
         }
     },
     "auth": {

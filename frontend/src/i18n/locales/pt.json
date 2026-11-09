@@ -7910,6 +7910,10 @@
             "users": "Usuários",
             "workspaceBrandColor": "Cor da marca do espaço de trabalho",
             "workspaceCreated": "Espaço de trabalho criado"
+        },
+        "mobileSearch": {
+            "label": "Pesquisar",
+            "title": "Pesquisar tudo (Ctrl K)"
         }
     },
     "auth": {

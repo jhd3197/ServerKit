@@ -7910,6 +7910,10 @@
             "users": "Người dùng",
             "workspaceBrandColor": "Màu sắc thương hiệu không gian làm việc",
             "workspaceCreated": "Đã tạo không gian làm việc"
+        },
+        "mobileSearch": {
+            "label": "Tìm kiếm",
+            "title": "Tìm mọi thứ (Ctrl K)"
         }
     },
     "auth": {

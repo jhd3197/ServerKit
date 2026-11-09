@@ -7910,6 +7910,10 @@
             "users": "Pengguna",
             "workspaceBrandColor": "Warna merek ruang kerja",
             "workspaceCreated": "Ruang kerja dibuat"
+        },
+        "mobileSearch": {
+            "label": "Cari",
+            "title": "Cari semuanya (Ctrl K)"
         }
     },
     "auth": {

@@ -7910,6 +7910,10 @@
             "users": "المستخدمين",
             "workspaceBrandColor": "لون العلامة التجارية لمساحة العمل",
             "workspaceCreated": "تم إنشاء مساحة العمل"
+        },
+        "mobileSearch": {
+            "label": "بحث",
+            "title": "البحث في كل شيء (Ctrl K)"
         }
     },
     "auth": {
