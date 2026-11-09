@@ -4,8 +4,7 @@
 //   user.language (server, per-user)
 //     -> localStorage 'language'   (pre-auth cache; stops the login flash)
 //       -> panel default           (system_settings, unauthenticated endpoint)
-//         -> navigator.language    (first visit, matched to a shipped bundle)
-//           -> 'en'
+//           -> 'en'                  (US English; browser language is ignored)
 //
 // This mirrors ThemeContext's precedence (workspace -> user -> skin ->
 // default) deliberately: same problem shape, same solution, one thing to
@@ -56,10 +55,9 @@ export function resolveLocale({
     userLanguage = null,
     stored = null,
     panelDefault = null,
-    navigatorLanguages = [],
     supported = SUPPORTED_CODES,
 } = {}) {
-    const candidates = [userLanguage, stored, panelDefault, ...navigatorLanguages];
+    const candidates = [userLanguage, stored, panelDefault];
     for (const candidate of candidates) {
         const match = matchSupported(candidate, supported);
         if (match) return match;
@@ -76,13 +74,4 @@ export function languageInfo(code) {
 /** Writing direction for a code — drives <html dir>. */
 export function directionFor(code) {
     return languageInfo(code).dir || 'ltr';
-}
-
-/** Browser languages, defensively — `navigator` is absent under node. */
-export function navigatorLanguages() {
-    if (typeof navigator === 'undefined') return [];
-    if (Array.isArray(navigator.languages) && navigator.languages.length) {
-        return [...navigator.languages];
-    }
-    return navigator.language ? [navigator.language] : [];
 }
