@@ -166,6 +166,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     grid-template-areas: "icon body trend" "spark spark spark";
 
     &:hover { border-color: var(--border-strong); }
+    // Spark-less tile stretched to its siblings' height: pack rows at the top and
+    // leave the slack empty. Spark tiles keep the default so the spark fills down.
+    &:not(:has(> .sk-kpi__spark)) { align-content: start; }
 
     // A bare glyph. Tinted icon squares in a rainbow of tones read as
     // decoration; only "act on this" tones keep a colour, on the glyph alone.
