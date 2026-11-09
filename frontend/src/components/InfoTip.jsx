@@ -6,8 +6,9 @@ import useMediaQuery from '../hooks/useMediaQuery';
 import { t } from '../i18n/t';
 
 // An (i) button that holds the explanation a page used to print inline.
-// Mouse: hover/focus previews it. Touch, click, Enter and Space: toggles a
-// pinned popover that closes on outside tap or Escape. Narrow screens get a
+// Mouse: hover/focus previews it. Touch and click toggle a pinned popover that
+// closes on outside tap or Escape. Keyboard: Enter/Space on an unpinned preview
+// pins it open; on a pinned tip they toggle it closed. Narrow screens get a
 // bottom sheet instead, so the text never sits on top of the content it
 // explains. Both are portalled (no button-in-button) and above Modal/Sheet.
 // `trigger` replaces the (i) glyph (e.g. a whole step pill); `title` heads the sheet.
@@ -15,7 +16,23 @@ export default function InfoTip({ children, label, title, trigger, side = 'top',
     const [open, setOpen] = useState(false);
     const narrow = useMediaQuery('(max-width: 640px)');
     const pinned = useRef(false);
+    const pinnedByKey = useRef(false);
     const hoverable = (e) => e.pointerType === 'mouse';
+
+    // preventDefault skips Radix's toggle (it honours defaultPrevented); Space
+    // also clicks on keyup, so that one is swallowed too.
+    const onKeyDown = (e) => {
+        if ((e.key !== 'Enter' && e.key !== ' ') || !open || pinned.current) return;
+        e.preventDefault();
+        pinned.current = true;
+        pinnedByKey.current = e.key === ' ';
+    };
+    const onKeyUp = (e) => {
+        if (e.key === ' ' && pinnedByKey.current) {
+            e.preventDefault();
+            pinnedByKey.current = false;
+        }
+    };
 
     const onOpenChange = (next) => {
         pinned.current = next;
@@ -31,6 +48,8 @@ export default function InfoTip({ children, label, title, trigger, side = 'top',
             className={(trigger ? className : `info-tip info-tip--${size} ${className}`).trim()}
             aria-label={trigger ? label : (label || t('common.moreInfo', 'More info'))}
             onClick={stop}
+            onKeyDown={onKeyDown}
+            onKeyUp={onKeyUp}
             onPointerEnter={(e) => { if (hoverable(e)) setOpen(true); }}
             onPointerLeave={(e) => { if (hoverable(e) && !pinned.current) setOpen(false); }}
             onFocus={(e) => { if (e.currentTarget.matches(':focus-visible')) setOpen(true); }}
