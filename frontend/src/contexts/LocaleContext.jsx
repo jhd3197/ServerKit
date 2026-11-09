@@ -3,7 +3,7 @@ import { activateLocale } from '../i18n';
 import { setFormatLocale } from '../utils/intl';
 import {
     DEFAULT_LANGUAGE, LANGUAGES, STORAGE_KEY,
-    directionFor, languageInfo, matchSupported, navigatorLanguages, resolveLocale,
+    directionFor, languageInfo, matchSupported, resolveLocale,
 } from '../i18n/resolveLocale';
 
 import { LocaleContext } from './useLocale.js';
@@ -18,11 +18,10 @@ import { LocaleContext } from './useLocale.js';
  * Exactly the arrangement ThemeProvider/ThemeSync already uses.
  */
 export function LocaleProvider({ children }) {
-    // Synchronous first value: whatever the last session stored, else the
-    // browser's own languages. Anything that needs a round trip would repaint.
+    // Synchronous first value: whatever the last session stored, else English.
+    // Anything that needs a round trip would repaint.
     const [language, setLanguageState] = useState(() => resolveLocale({
         stored: readStored(),
-        navigatorLanguages: navigatorLanguages(),
     }));
 
     // True once the active bundle is in memory. `en` is bundled, so this is
@@ -84,8 +83,7 @@ export function LocaleProvider({ children }) {
             userLanguage,
             stored: readStored(),
             panelDefault,
-            navigatorLanguages: navigatorLanguages(),
-        });
+            });
         setLanguageState(resolved);
         // Cache for the next pre-auth paint, but do NOT write it back to the
         // server: nothing was chosen here, it was only resolved.

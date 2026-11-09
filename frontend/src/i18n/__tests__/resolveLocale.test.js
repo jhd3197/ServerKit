@@ -52,7 +52,6 @@ test('the user preference outranks everything', () => {
         userLanguage: 'es',
         stored: 'en',
         panelDefault: 'en',
-        navigatorLanguages: ['en-US'],
         supported: SUPPORTED,
     }), 'es');
 });
@@ -63,25 +62,23 @@ test('the stored value outranks the panel default', () => {
     assert.equal(resolveLocale({
         stored: 'es',
         panelDefault: 'en',
-        navigatorLanguages: ['en-US'],
         supported: SUPPORTED,
     }), 'es');
 });
 
-test('the panel default outranks the browser', () => {
-    // A panel that has an opinion must beat the operator's OS language.
+test('the panel default outranks the English default', () => {
     assert.equal(resolveLocale({
         panelDefault: 'es',
-        navigatorLanguages: ['en-US', 'en'],
         supported: SUPPORTED,
     }), 'es');
 });
 
-test('the browser decides on a first visit', () => {
+test('browser language is ignored; a first visit defaults to English', () => {
+    // Even a Spanish navigator must not pick Spanish: resolveLocale takes no navigator input.
     assert.equal(resolveLocale({
-        navigatorLanguages: ['es-MX', 'en'],
+        navigatorLanguages: ['es-MX', 'es'],
         supported: SUPPORTED,
-    }), 'es');
+    }), 'en');
 });
 
 test('unsupported candidates are skipped, not fatal', () => {
@@ -90,15 +87,13 @@ test('unsupported candidates are skipped, not fatal', () => {
         userLanguage: 'fr',
         stored: 'de',
         panelDefault: 'ja',
-        navigatorLanguages: ['pt-BR', 'es-ES'],
         supported: SUPPORTED,
-    }), 'es');
+    }), DEFAULT_LANGUAGE);
 });
 
 test('falls back to English when nothing matches', () => {
     assert.equal(resolveLocale({
         userLanguage: 'fr',
-        navigatorLanguages: ['fr-FR'],
         supported: SUPPORTED,
     }), DEFAULT_LANGUAGE);
     assert.equal(resolveLocale({ supported: SUPPORTED }), DEFAULT_LANGUAGE);
