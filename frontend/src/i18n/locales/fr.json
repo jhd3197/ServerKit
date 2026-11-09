@@ -4622,7 +4622,6 @@
             "total": "Total"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Ajustez les filtres ou la requête de recherche pour voir vos files d'attente.",
             "allGroups": "Tous les groupes",
             "anyStatus": "N'importe quel statut",
             "areYouSureYouWantTo": "Etes-vous sûr de vouloir supprimer « {{value}} » et tous ses messages ?",

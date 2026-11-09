@@ -4622,7 +4622,6 @@
             "total": "Всего"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Настройте фильтры или поисковый запрос, чтобы увидеть свои очереди.",
             "allGroups": "Все группы",
             "anyStatus": "Любой статус",
             "areYouSureYouWantTo": "Вы уверены, что хотите удалить «{{value}}» и все его сообщения?",

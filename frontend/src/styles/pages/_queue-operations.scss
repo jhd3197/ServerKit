@@ -42,6 +42,11 @@
 
     @media (max-width: $breakpoint-lg) {
         grid-template-columns: 1fr;
+
+        // No groups: the empty state is the only useful content, show it first.
+        &--no-groups .queue-fleet-rail {
+            order: 1;
+        }
     }
 }
 

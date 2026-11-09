@@ -4622,7 +4622,6 @@
             "total": "Całkowity"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Dostosuj filtry lub zapytanie, aby zobaczyć swoje kolejki.",
             "allGroups": "Wszystkie grupy",
             "anyStatus": "Dowolny stan",
             "areYouSureYouWantTo": "Czy na pewno chcesz usunąć „{{value}}” i wszystkie zawarte w nim wiadomości?",

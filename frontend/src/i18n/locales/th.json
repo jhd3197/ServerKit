@@ -4622,7 +4622,6 @@
             "total": "ทั้งหมด"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "ปรับตัวกรองหรือคำค้นหาเพื่อดูคิวของคุณ",
             "allGroups": "ทุกกลุ่ม",
             "anyStatus": "สถานะอะไรก็ได้",
             "areYouSureYouWantTo": "คุณแน่ใจหรือไม่ว่าต้องการลบ \"{{value}}\" และข้อความทั้งหมดในนั้น",

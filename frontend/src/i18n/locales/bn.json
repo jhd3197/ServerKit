@@ -4622,7 +4622,6 @@
             "total": "মোট"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "আপনার সারি দেখতে ফিল্টার বা অনুসন্ধান ক্যোয়ারী সামঞ্জস্য করুন.",
             "allGroups": "সব গ্রুপ",
             "anyStatus": "যেকোনো স্ট্যাটাস",
             "areYouSureYouWantTo": "আপনি কি \"{{value}}\" এবং এর সমস্ত বার্তা মুছতে চান?",

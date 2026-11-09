@@ -4622,7 +4622,6 @@
             "total": "Insgesamt"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Passen Sie die Filter oder die Suchabfrage an, um Ihre Warteschlangen anzuzeigen.",
             "allGroups": "Alle Gruppen",
             "anyStatus": "Beliebiger Status",
             "areYouSureYouWantTo": "Sind Sie sicher, dass Sie „{{value}}“ und alle zugehörigen Nachrichten löschen möchten?",
