@@ -11,7 +11,30 @@
         margin-bottom: $space-4;
     }
 
-    &__filter-btn { position: relative; margin-inline-start: auto; }
+    &__filter-btn {
+        position: relative;
+        margin-inline-start: auto;
+
+        &.is-active { border-color: $accent-primary; background: $accent-glow; }
+    }
+
+    &__pills {
+        display: flex;
+        flex-basis: 100%;
+        gap: $space-2;
+        overflow-x: auto;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar { display: none; }
+    }
+
+    &__sheet-footer {
+        display: flex;
+        gap: $space-3;
+        margin-top: $space-3;
+
+        > * { flex: 1; }
+    }
 
     &__filter-count {
         margin-inline-start: $space-1;
@@ -65,6 +88,8 @@
 
         svg { opacity: 0.5; }
         p { margin: 0; font-size: $text-base; }
+
+        &--compact { padding: $space-8 $space-5; }
     }
 
     &__list {
@@ -385,6 +410,21 @@
         background: $accent-glow;
         color: $accent-primary;
     }
+}
+
+.sk-notif-pill {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: $space-1;
+    height: $control-sm;
+    padding: 0 $space-3;
+    font-size: $text-xs;
+    border: 1px solid $accent-primary;
+    border-radius: $radius-full;
+    background: $accent-glow;
+    color: $accent-primary;
+    cursor: pointer;
 }
 
 .sk-notif-row.is-linked { cursor: pointer; }
