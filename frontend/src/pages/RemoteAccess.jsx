@@ -223,12 +223,12 @@ const RemoteAccess = ({ serverId }) => {
                 {serverId && currentServer ? (
                     <p>
                         {t('app.remoteAccess.exposeServicesOn', 'Expose services on')} <strong>{currentServer.name}</strong>.
-                        <InfoTip>{t('app.remoteAccess.exposeServicesRunningOn', 'Expose services running on')} <strong>{currentServer.name}</strong> {t('app.remoteAccess.toAPublicHostnameOverA', 'to a public hostname over a WireGuard tunnel. ServerKit pairs this host with an edge server that has a public IP.')}</InfoTip>
+                        {' '}<InfoTip>{t('app.remoteAccess.exposeServicesRunningOn', 'Expose services running on')} <strong>{currentServer.name}</strong> {t('app.remoteAccess.toAPublicHostnameOverA', 'to a public hostname over a WireGuard tunnel. ServerKit pairs this host with an edge server that has a public IP.')}</InfoTip>
                     </p>
                 ) : (
                     <p>
                         {t('app.remoteAccess.exposeAPrivateServicePublicly', 'Expose a private service publicly.')}
-                        <InfoTip>{t('app.remoteAccess.exposeAServiceRunningOnA', 'Expose a service running on a private server (behind NAT, no port-forwarding) to a public hostname over a WireGuard tunnel between two of your agents.')}</InfoTip>
+                        {' '}<InfoTip>{t('app.remoteAccess.exposeAServiceRunningOnA', 'Expose a service running on a private server (behind NAT, no port-forwarding) to a public hostname over a WireGuard tunnel between two of your agents.')}</InfoTip>
                     </p>
                 )}
                 {serverId && (
@@ -247,12 +247,12 @@ const RemoteAccess = ({ serverId }) => {
                     description={serverId ? (
                         <>
                             {t('app.remoteAccess.pickAPublicIpEdgeServerShort', 'Pick a public-IP edge server.')}
-                            <InfoTip>{t('app.remoteAccess.pickAPublicIpEdgeServer', 'Pick a public-IP edge server and ServerKit will pair it with {{value}} over WireGuard.', { value: currentServer?.name || t('app.remoteAccess.thisHost', 'this host') })}</InfoTip>
+                            {' '}<InfoTip>{t('app.remoteAccess.pickAPublicIpEdgeServer', 'Pick a public-IP edge server and ServerKit will pair it with {{value}} over WireGuard.', { value: currentServer?.name || t('app.remoteAccess.thisHost', 'this host') })}</InfoTip>
                         </>
                     ) : (
                         <>
                             {t('app.remoteAccess.pickAnEdgeAndAPrivateHost', 'Pick an edge and a private host.')}
-                            <InfoTip>{t('app.remoteAccess.pickAPublicIpEdgeServer2', 'Pick a public-IP edge server and a private host, and ServerKit will pair them over WireGuard and publish your service. No router changes are needed.')}</InfoTip>
+                            {' '}<InfoTip>{t('app.remoteAccess.pickAPublicIpEdgeServer2', 'Pick a public-IP edge server and a private host, and ServerKit will pair them over WireGuard and publish your service. No router changes are needed.')}</InfoTip>
                         </>
                     )}
                     action={exposeButton}

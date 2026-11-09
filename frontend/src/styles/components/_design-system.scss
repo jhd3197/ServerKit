@@ -1862,6 +1862,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &.is-clickable:focus-within { border-color: var(--border); }
 
     &__head { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
+    &__head > .info-tip { margin-inline-start: -6px; } // 10px gap - 6 = the 4px InfoTip rule
     &__icon {
         display: inline-flex; align-items: center; justify-content: center;
         flex-shrink: 0;

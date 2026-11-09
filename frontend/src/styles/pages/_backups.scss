@@ -96,6 +96,8 @@
 
     svg { flex-shrink: 0; }
 
+    &.tip-chip-row { gap: $space-1; }
+
     // Amber, not red: keeping backups only on the same disk is a risk to fix,
     // not a failure that has already happened.
     &--warn {
@@ -1117,7 +1119,7 @@
         flex: 1 1 12rem;
         flex-wrap: wrap;
         align-items: center;
-        gap: 0 $space-2;
+        gap: 0 $space-1;
         min-inline-size: 0;
         font-size: $text-sm;
 
