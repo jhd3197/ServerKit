@@ -3615,7 +3615,8 @@
             "update": "Güncelleme",
             "updateAnyway": "Yine de güncelle",
             "updating": "Güncelleniyor…",
-            "versionByAuthor": "v{{version}} · {{author}} tarafından"
+            "versionByAuthor": "v{{version}} · {{author}} tarafından",
+            "installShort": "Yükle"
         },
         "message": {
             "somethingWentWrong": "Bir şeyler ters gitti."
@@ -5631,7 +5632,8 @@
             "tokenExpires": "Belirtecin süresi doluyor",
             "ungrouped": "Gruplandırılmamış",
             "whatHappensNext": "Sonra ne olacak?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Eşitle"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Emin misin? Bu, hizmeti ve içindeki tüm verileri kalıcı olarak kaldıracaktır.",

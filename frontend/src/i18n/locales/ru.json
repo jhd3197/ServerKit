@@ -3615,7 +3615,8 @@
             "update": "Обновлять",
             "updateAnyway": "Всё равно обновить",
             "updating": "Обновление…",
-            "versionByAuthor": "v{{version}} · автор: {{author}}"
+            "versionByAuthor": "v{{version}} · автор: {{author}}",
+            "installShort": "Установить"
         },
         "message": {
             "somethingWentWrong": "Что-то пошло не так."
@@ -5631,7 +5632,8 @@
             "tokenExpires": "Срок действия токена истекает",
             "ungrouped": "Разгруппировано",
             "whatHappensNext": "Что произойдет дальше?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Синхр."
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Вы уверены? Это приведет к безвозвратному удалению службы и всех ее данных.",

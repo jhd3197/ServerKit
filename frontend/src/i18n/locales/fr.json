@@ -3615,7 +3615,8 @@
             "update": "Mise à jour",
             "updateAnyway": "Mettre à jour quand même",
             "updating": "Mise à jour…",
-            "versionByAuthor": "v{{version}} · par {{author}}"
+            "versionByAuthor": "v{{version}} · par {{author}}",
+            "installShort": "Installer"
         },
         "message": {
             "somethingWentWrong": "Une erreur s'est produite."
@@ -5631,7 +5632,8 @@
             "tokenExpires": "Le jeton expire",
             "ungrouped": "Non groupé",
             "whatHappensNext": "Que se passe-t-il ensuite ?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Synchro"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Es-tu sûr? Cela supprimera définitivement le service et toutes ses données.",

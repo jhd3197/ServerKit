@@ -296,9 +296,15 @@ const Marketplace = () => {
             {!installedView && !updatesView && (
                 <FilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
             )}
-            <Button variant="outline" size="sm" onClick={() => setManualInstallSource('url')}>
+            <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setManualInstallSource('url')}
+                title={t('app.marketplace.installManually', 'Install manually')}
+                aria-label={t('app.marketplace.installManually', 'Install manually')}
+            >
                 <UploadCloud aria-hidden="true" />
-                {t('app.marketplace.installManually', 'Install manually')}
+                {t('app.marketplace.installShort', 'Install')}
             </Button>
         </>,
         [installedView, updatesView, search, installedSearch, activeFilterCount],

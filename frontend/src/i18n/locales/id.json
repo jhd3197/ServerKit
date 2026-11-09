@@ -3615,7 +3615,8 @@
             "update": "Memperbarui",
             "updateAnyway": "Tetap perbarui",
             "updating": "Memperbarui…",
-            "versionByAuthor": "v{{version}} · oleh {{author}}"
+            "versionByAuthor": "v{{version}} · oleh {{author}}",
+            "installShort": "Instal"
         },
         "message": {
             "somethingWentWrong": "Terjadi kesalahan."
@@ -5631,7 +5632,8 @@
             "tokenExpires": "Token berakhir",
             "ungrouped": "Tidak dikelompokkan",
             "whatHappensNext": "Apa yang terjadi selanjutnya?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Sinkron"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Apa kamu yakin? Tindakan ini akan menghapus layanan dan semua datanya secara permanen.",

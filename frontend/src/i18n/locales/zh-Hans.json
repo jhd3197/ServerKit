@@ -3615,7 +3615,8 @@
             "update": "更新",
             "updateAnyway": "仍然更新",
             "updating": "正在更新…",
-            "versionByAuthor": "v{{version}} · 作者 {{author}}"
+            "versionByAuthor": "v{{version}} · 作者 {{author}}",
+            "installShort": "安装"
         },
         "message": {
             "somethingWentWrong": "出现了问题。"
@@ -5631,7 +5632,8 @@
             "tokenExpires": "令牌过期",
             "ungrouped": "未分组",
             "whatHappensNext": "接下来会发生什么？",
-            "windowsPowershell": "Windows（PowerShell）"
+            "windowsPowershell": "Windows（PowerShell）",
+            "syncShort": "同步"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "你确定吗？这将永久删除该服务及其所有数据。",

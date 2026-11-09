@@ -3615,7 +3615,8 @@
             "update": "Actualizar",
             "updateAnyway": "Actualizar de todos modos",
             "updating": "Actualizando…",
-            "versionByAuthor": "v{{version}} · por {{author}}"
+            "versionByAuthor": "v{{version}} · por {{author}}",
+            "installShort": "Instalar"
         },
         "message": {
             "somethingWentWrong": "Algo salió mal."
@@ -5632,7 +5633,8 @@
             "tokenExpires": "El token vence",
             "ungrouped": "Sin agrupar",
             "whatHappensNext": "¿Qué pasa después?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Sincr."
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "¿Estás seguro? Esto quitará el servicio y todos sus datos de forma permanente.",

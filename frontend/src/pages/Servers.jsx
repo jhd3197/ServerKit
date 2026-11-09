@@ -385,8 +385,8 @@ const Servers = () => {
             <Button variant="outline" size="sm" onClick={() => setShowGroupModal(true)}>
                 <Folder size={16} /> {t('app.servers.groups', 'Groups')}
             </Button>
-            <Button variant="outline" size="sm" onClick={loadData} disabled={loading}>
-                <RefreshCw size={16} className={loading ? 'spin' : ''} /> {t('app.servers.sync', 'Sync')}
+            <Button variant="outline" size="sm" onClick={loadData} disabled={loading} title={t('app.servers.sync', 'Sync')} aria-label={t('app.servers.sync', 'Sync')}>
+                <RefreshCw size={16} className={loading ? 'spin' : ''} /> {t('app.servers.syncShort', 'Sync')}
             </Button>
             <PagePrimaryButton
                 id="servers-add"

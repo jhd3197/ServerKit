@@ -3615,7 +3615,8 @@
             "update": "تحديث",
             "updateAnyway": "التحديث على أي حال",
             "updating": "جارٍ التحديث…",
-            "versionByAuthor": "v{{version}} · بواسطة {{author}}"
+            "versionByAuthor": "v{{version}} · بواسطة {{author}}",
+            "installShort": "تثبيت"
         },
         "message": {
             "somethingWentWrong": "حدث خطأ ما."
@@ -5631,7 +5632,8 @@
             "tokenExpires": "تنتهي صلاحية الرمز المميز",
             "ungrouped": "غير مجمعة",
             "whatHappensNext": "ماذا سيحدث بعد ذلك؟",
-            "windowsPowershell": "ويندوز (باورشيل)"
+            "windowsPowershell": "ويندوز (باورشيل)",
+            "syncShort": "مزامنة"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "هل أنت متأكد؟ سيؤدي هذا إلى إزالة الخدمة وجميع بياناتها نهائيًا.",

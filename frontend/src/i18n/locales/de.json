@@ -3615,7 +3615,8 @@
             "update": "Aktualisieren",
             "updateAnyway": "Trotzdem aktualisieren",
             "updating": "Wird aktualisiert…",
-            "versionByAuthor": "v{{version}} · von {{author}}"
+            "versionByAuthor": "v{{version}} · von {{author}}",
+            "installShort": "Installieren"
         },
         "message": {
             "somethingWentWrong": "Etwas ist schiefgelaufen."
@@ -5631,7 +5632,8 @@
             "tokenExpires": "Token läuft ab",
             "ungrouped": "Nicht gruppiert",
             "whatHappensNext": "Was passiert als nächstes?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Sync"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Bist du sicher? Dadurch werden der Dienst und alle seine Daten dauerhaft entfernt.",
