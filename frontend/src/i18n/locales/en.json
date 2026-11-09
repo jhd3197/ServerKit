@@ -5014,7 +5014,8 @@
         },
         "requiresDocker": {
             "checkedAutomatically": "Re-checked automatically.",
-            "curlFsslHttpsGetDockerCom": "curl -fsSL https://get.docker.com | sh",
+            "copied": "Copied!",
+            "copyCommand": "Copy command",
             "dockerIsnTAvailable": "Docker isn't available",
             "forThisInstallSProfile": "for this install's profile.",
             "installItOnTheServerThen": "Install it on the server, then restart ServerKit:",
@@ -5022,8 +5023,7 @@
             "needsDockerToRunContainersAnd": "needs Docker to run containers, and this server was installed with the",
             "profileWhichLeavesItOutNothing": "profile, which leaves it out. Nothing is locked; adding Docker turns this page on.",
             "serverkitReChecksForDockerAutomatically": "ServerKit re-checks for Docker automatically. Monitoring, domains, certificates, cron and DNS keep working without it. See",
-            "settingsSystem": "Settings → System",
-            "sudoSystemctlRestartServerkit": "sudo systemctl restart serverkit"
+            "settingsSystem": "Settings → System"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB and this server has",
@@ -5940,6 +5940,7 @@
             "failedToMoveServices": "Couldn't move the services.",
             "importASite": "Import a site",
             "lastDeploy": "Last deploy",
+            "loadingServices": "Loading services...",
             "local": "Local",
             "move": "Move",
             "moveToProject": "Move to project",
@@ -5947,6 +5948,7 @@
             "movedServices_other": "Moved {{count}} services",
             "moving": "Moving…",
             "newService": "New service",
+            "noServicesFound": "No services found",
             "noServicesYet": "No services yet",
             "noSpecificEnvironment": "No specific environment",
             "restartAll": "Restart all",
@@ -5956,6 +5958,7 @@
             "stopAll": "Stop all",
             "transfer": "Transfer",
             "transferLast30Days": "Transfer (last 30 days)",
+            "tryAdjustingFilter": "Try adjusting your search or filter",
             "unassign": "Unassign",
             "unassigned": "Unassigned",
             "unassignedServices_one": "Unassigned 1 service",

@@ -4857,15 +4857,13 @@
             "title": "트래픽"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "curl -fsSL https://get.docker.com | sh",
             "dockerIsnTAvailable": "Docker를 사용할 수 없습니다",
             "forThisInstallSProfile": "이 설치 프로필의 경우.",
             "installItOnTheServerThen": "서버에 설치한 후 ServerKit을 다시 시작하세요.",
             "needsDockerToRunContainersAnd": "컨테이너를 실행하려면 Docker가 필요하며 이 서버는",
             "profileWhichLeavesItOutNothing": "프로필을 삭제합니다. 아무것도 잠겨 있지 않습니다. Docker를 추가하면 이 페이지가 활성화됩니다.",
             "serverkitReChecksForDockerAutomatically": "ServerKit은 Docker를 자동으로 다시 확인합니다. 모니터링, 도메인, 인증서, cron 및 DNS는 그것 없이도 계속 작동합니다.",
-            "settingsSystem": "설정 → 시스템",
-            "sudoSystemctlRestartServerkit": "sudo systemctl restart serverkit"
+            "settingsSystem": "설정 → 시스템"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB이고 이 서버에는",

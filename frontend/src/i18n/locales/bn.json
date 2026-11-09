@@ -4857,15 +4857,13 @@
             "title": "ট্রাফিক"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "curl -fsSL https://get.docker.com | শ",
             "dockerIsnTAvailable": "Docker উপলব্ধ নেই৷",
             "forThisInstallSProfile": "এই ইনস্টলের প্রোফাইলের জন্য।",
             "installItOnTheServerThen": "এটি সার্ভারে ইনস্টল করুন, তারপর ServerKit পুনরায় চালু করুন:",
             "needsDockerToRunContainersAnd": "কনটেইনার চালানোর জন্য Docker প্রয়োজন, এবং এই সার্ভারটি এর সাথে ইনস্টল করা হয়েছিল",
             "profileWhichLeavesItOutNothing": "প্রোফাইল, যা এটি ছেড়ে যায়। কিছুই লক করা নেই — Docker যোগ করা এই পৃষ্ঠাটি চালু করে।",
             "serverkitReChecksForDockerAutomatically": "ServerKit Docker স্বয়ংক্রিয়ভাবে পুনরায় পরীক্ষা করে। মনিটরিং, ডোমেইন, সার্টিফিকেট, cron এবং DNS এটি ছাড়াই কাজ করতে থাকুন — দেখুন",
-            "settingsSystem": "সেটিংস → সিস্টেম",
-            "sudoSystemctlRestartServerkit": "sudo systemctl restart serverkit"
+            "settingsSystem": "সেটিংস → সিস্টেম"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "এমবি এবং এই সার্ভার আছে",

@@ -4857,15 +4857,13 @@
             "title": "Ruch"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "curl -fsSL https://get.docker.com | cii",
             "dockerIsnTAvailable": "Docker nie jest dostępny",
             "forThisInstallSProfile": "dla profilu tej instalacji.",
             "installItOnTheServerThen": "Zainstaluj go na serwerze, a następnie uruchom ponownie ServerKit:",
             "needsDockerToRunContainersAnd": "potrzebuje Docker do uruchamiania kontenerów, a ten serwer został zainstalowany z pakietem",
             "profileWhichLeavesItOutNothing": "profil, który to pomija. Nic nie jest zablokowane — dodanie Docker włącza tę stronę.",
             "serverkitReChecksForDockerAutomatically": "ServerKit automatycznie ponownie sprawdza obecność Docker. Monitoring, domeny, certyfikaty cron i DNS działają bez tego — zobacz",
-            "settingsSystem": "Ustawienia → System",
-            "sudoSystemctlRestartServerkit": "sudo systemctl zrestartuj zestaw serwerów"
+            "settingsSystem": "Ustawienia → System"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB i ten serwer ma",

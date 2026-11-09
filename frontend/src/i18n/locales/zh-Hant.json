@@ -4857,15 +4857,13 @@
             "title": "流量"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "curl -fsSL https://get.docker.com | sh",
             "dockerIsnTAvailable": "Docker 不可用",
             "forThisInstallSProfile": "對於此安裝的設定檔。",
             "installItOnTheServerThen": "在伺服器上安裝，然後重新啟動 ServerKit：",
             "needsDockerToRunContainersAnd": "需要 Docker 才能執行容器，但此伺服器安裝時選用的",
             "profileWhichLeavesItOutNothing": "設定檔未包含 Docker。此頁面沒有鎖定任何功能；安裝 Docker 後即可使用。",
             "serverkitReChecksForDockerAutomatically": "ServerKit 自動重新檢查 Docker。監控、網域、憑證、cron 和 DNS 無需它即可繼續工作 — 請參閱",
-            "settingsSystem": "設定→系統",
-            "sudoSystemctlRestartServerkit": "sudo systemctl restart serverkit"
+            "settingsSystem": "設定→系統"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB 且該伺服器有",

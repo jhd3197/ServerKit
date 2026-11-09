@@ -4857,15 +4857,13 @@
             "title": "Traffico"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "ricciolo -fsSL https://get.docker.com | sh",
             "dockerIsnTAvailable": "Docker non è disponibile",
             "forThisInstallSProfile": "per il profilo di questa installazione.",
             "installItOnTheServerThen": "Installalo sul server, quindi riavvia ServerKit:",
             "needsDockerToRunContainersAnd": "necessita di Docker per eseguire i contenitori e questo server è stato installato con",
             "profileWhichLeavesItOutNothing": "profilo, che lo lascia fuori. Niente è bloccato: l'aggiunta di Docker attiva questa pagina.",
             "serverkitReChecksForDockerAutomatically": "ServerKit ricontrolla automaticamente Docker. Monitoraggio, domini, certificati, cron e DNS continuano a funzionare senza di esso: vedi",
-            "settingsSystem": "Impostazioni → Sistema",
-            "sudoSystemctlRestartServerkit": "sudo systemctl riavviare serverkit"
+            "settingsSystem": "Impostazioni → Sistema"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB e questo server ha",
