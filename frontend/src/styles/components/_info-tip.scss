@@ -13,6 +13,18 @@
     color: $text-muted;
     cursor: pointer;
     vertical-align: middle;
+    position: relative;
+
+    // Invisible 32px touch target; the glyph and line box stay as they are.
+    &::before {
+        content: '';
+        position: absolute;
+        inset-block-start: 50%;
+        inset-inline-start: 50%;
+        width: 32px;  // geometry: minimum touch target
+        height: 32px; // geometry: minimum touch target
+        transform: translate(-50%, -50%);
+    }
 
     &:hover,
     &[data-state='open'] { color: $accent-primary; }
