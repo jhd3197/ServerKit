@@ -183,7 +183,7 @@ function Downloads() {
 
                     <section className="downloads-section">
                         <h2>{t('app.downloads.directDownloads', 'Direct downloads')}
-                            <InfoTip>{t('app.downloads.downloadTheAgentBinaryForYour', 'Download the agent binary for your platform. After downloading, follow the installation instructions below.')}</InfoTip></h2>
+                            {' '}<InfoTip>{t('app.downloads.downloadTheAgentBinaryForYour', 'Download the agent binary for your platform. After downloading, follow the installation instructions below.')}</InfoTip></h2>
 
                         <div className="download-cards">
                             {platforms.map((platform) => {
@@ -219,7 +219,7 @@ function Downloads() {
 
                     <section className="downloads-section">
                         <h2>{t('app.downloads.quickInstallCommands', 'Quick install commands')}
-                            <InfoTip>{t('app.downloads.useTheseOneLinerCommandsTo', 'Use these one-liner commands to download and install the agent. Replace')} <code>YOUR_TOKEN</code> {t('app.downloads.withTheServerRegistrationToken', 'with the server registration token.')}</InfoTip></h2>
+                            {' '}<InfoTip>{t('app.downloads.useTheseOneLinerCommandsTo', 'Use these one-liner commands to download and install the agent. Replace')} <code>YOUR_TOKEN</code> {t('app.downloads.withTheServerRegistrationToken', 'with the server registration token.')}</InfoTip></h2>
                         <p className="section-description">{t('app.downloads.replaceTokenHint', 'Replace')} <code>YOUR_TOKEN</code></p>
 
                         <div className="install-commands">

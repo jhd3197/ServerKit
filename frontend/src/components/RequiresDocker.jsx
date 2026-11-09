@@ -37,7 +37,7 @@ const RequiresDocker = ({ children, what = 'This page' }) => {
 
             <p className="requires-docker__text">
                 {what} {t('app.requiresDocker.needsDocker', 'needs Docker.')}
-                <InfoTip>
+                {' '}<InfoTip>
                     {what} {t('app.requiresDocker.needsDockerToRunContainersAnd', 'needs Docker to run containers, and this server was installed with the')} <strong>{profileLabel}</strong> {t('app.requiresDocker.profileWhichLeavesItOutNothing', 'profile, which leaves it out. Nothing is locked; adding Docker turns this page on.')}
                 </InfoTip>
             </p>
@@ -58,7 +58,7 @@ const RequiresDocker = ({ children, what = 'This page' }) => {
             <p className="requires-docker__footnote">
                 {t('app.requiresDocker.checkedAutomatically', 'Re-checked automatically.')}{' '}
                 <Link to="/settings/system">{t('app.requiresDocker.settingsSystem', 'Settings → System')}</Link>
-                <InfoTip>
+                {' '}<InfoTip>
                     {t('app.requiresDocker.serverkitReChecksForDockerAutomatically', 'ServerKit re-checks for Docker automatically. Monitoring, domains, certificates, cron and DNS keep working without it. See')}{' '}
                     {t('app.requiresDocker.settingsSystem', 'Settings → System')} {t('app.requiresDocker.forThisInstallSProfile', 'for this install\'s profile.')}
                 </InfoTip>

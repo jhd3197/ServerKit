@@ -11,6 +11,9 @@ import { t } from '../i18n/t';
 // pins it open; on a pinned tip they toggle it closed. Narrow screens get a
 // bottom sheet instead, so the text never sits on top of the content it
 // explains. Both are portalled (no button-in-button) and above Modal/Sheet.
+// Placement: put it right after the label/heading text it explains, inside
+// the same element (separate it with a plain space, or let the flex gap do it),
+// never on its own line. Standard: ~4px after the text, centred on that line.
 // `trigger` replaces the (i) glyph (e.g. a whole step pill); `title` heads the sheet.
 export default function InfoTip({ children, label, title, trigger, side = 'top', size = 'sm', className = '' }) {
     const [open, setOpen] = useState(false);

@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback, useMemo, useId } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Ban, ChevronRight, ClipboardPaste, Container, Cpu, Database, Flame, Folder, Hash, HardDrive, Info, KeyRound, Lock, MemoryStick, Plus, RefreshCw, Server as ServerLucideIcon, Terminal, X } from 'lucide-react';
+import { Ban, ChevronRight, ClipboardPaste, Container, Cpu, Database, Flame, Folder, Hash, HardDrive, KeyRound, Lock, MemoryStick, Plus, RefreshCw, Server as ServerLucideIcon, Terminal, X } from 'lucide-react';
 import InfoTip from '../components/InfoTip';
 import IconStepStrip from '../components/IconStepStrip';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import LevelIllustration from '../components/servers/LevelIllustrations';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
@@ -889,20 +888,13 @@ const LevelPicker = ({ value, onChange }) => {
                                 })}
                             </span>
                         </div>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button variant="unstyled" type="button" className="level-picker__info"
-                                    aria-label={t('app.servers.levelInfo', 'What can {{level}} do?', { level: levelLabel(level) })}
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    <Info size={14} aria-hidden="true" />
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="top" align="end" className="level-picker__tip">
-                                <span>{copy[level].can}</span>
-                                <span>{copy[level].cannot}</span>
-                            </TooltipContent>
-                        </Tooltip>
+                        <InfoTip className="level-picker__info"
+                            label={t('app.servers.levelInfo', 'What can {{level}} do?', { level: levelLabel(level) })}
+                            side="top"
+                        >
+                            <p>{copy[level].can}</p>
+                            <p>{copy[level].cannot}</p>
+                        </InfoTip>
                     </div>
                 ))}
             </div>

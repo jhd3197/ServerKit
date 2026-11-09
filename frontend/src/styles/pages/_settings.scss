@@ -1170,6 +1170,7 @@
     background: $bg-hover;
     border-radius: $radius-control;
     gap: $space-4;
+    flex-wrap: wrap; // on phones the control drops below the label instead of squeezing it
 
     &:not(:last-child) {
         margin-bottom: $space-3;
@@ -1182,11 +1183,14 @@
 }
 
 .settings-label {
-    flex: 1;
+    flex: 1 1 12rem;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     column-gap: $space-1;
+
+    // `.form-group label` adds a bottom margin; mirror it so align-items: center centres the (i) on the text, not text + margin.
+    .form-group & > .ui-label + .info-tip { margin-block-end: $space-2; }
 
     > span:first-child {
         display: block;
@@ -1416,6 +1420,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: $space-3;
     margin-bottom: $space-3;
 

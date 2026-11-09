@@ -14,6 +14,7 @@
     cursor: pointer;
     vertical-align: middle;
     position: relative;
+    inset-block-start: -1px; // optical: middle-aligned glyph sits ~1-2px below the text's centre
 
     // Invisible 32px touch target; the glyph and line box stay as they are.
     &::before {
