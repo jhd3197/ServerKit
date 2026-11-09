@@ -4,11 +4,12 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import Modal from '@/components/Modal';
 import ResourceListPage from '../components/layouts/ResourceListPage';
-import { LayoutGrid, Plus, ChevronRight } from 'lucide-react';
+import { LayoutGrid, ChevronRight } from 'lucide-react';
 import { Pill, ServiceTile, SearchField } from '@/components/ds';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import useFocusParam from '@/hooks/useFocusParam';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useWorkspace } from '../contexts/useWorkspace.js';
@@ -120,10 +121,12 @@ const Workspaces = () => {
     useTopbarActions(() => (
         <>
             {isAdmin && (
-                <Button size="sm" onClick={() => setShowCreateModal(true)}>
-                    <Plus size={16} />
-                    {t('app.workspaces.newWorkspace', 'New workspace')}
-                </Button>
+                <PagePrimaryButton
+                    id="workspaces-new"
+                    label={t('app.workspaces.newWorkspace', 'New workspace')}
+                    shortLabel={t('common.actions.new', 'New')}
+                    onClick={() => setShowCreateModal(true)}
+                />
             )}
             <SearchField
                 value={search}

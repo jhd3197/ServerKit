@@ -11,6 +11,7 @@ import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
@@ -387,9 +388,12 @@ const Servers = () => {
             <Button variant="outline" size="sm" onClick={loadData} disabled={loading}>
                 <RefreshCw size={16} className={loading ? 'spin' : ''} /> {t('app.servers.sync', 'Sync')}
             </Button>
-            <Button size="sm" onClick={() => setShowAddModal(true)}>
-                <Plus size={16} /> {t('app.servers.addServer', 'Add server')}
-            </Button>
+            <PagePrimaryButton
+                id="servers-add"
+                label={t('app.servers.addServer', 'Add server')}
+                shortLabel={t('common.actions.add', 'Add')}
+                onClick={() => setShowAddModal(true)}
+            />
             <SearchField
                 value={searchTerm}
                 onSearch={setSearchTerm}

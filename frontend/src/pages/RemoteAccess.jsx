@@ -16,6 +16,7 @@ import PortField from '../components/PortField';
 import { Pill } from '@/components/ds';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -195,16 +196,26 @@ const RemoteAccess = ({ serverId }) => {
         }
     };
 
+    // Plain copy for page-body placements: stays visible on phones, full label.
     const exposeButton = (
         <Button size="sm" onClick={() => openWizard(null)} disabled={loading}>
-            <Plus size={15} /> {t('app.remoteAccess.exposeALocalService', 'Expose a local service')}
+            <Plus size={15} aria-hidden="true" />
+            {t('app.remoteAccess.exposeALocalService', 'Expose a local service')}
         </Button>
     );
 
     // Header action lives in the shared Servers top bar when this page is used
     // as a tab in the Servers group. When embedded inside a single server's
     // detail page we render the action inline instead.
-    useTopbarActions(() => exposeButton, [loading]);
+    useTopbarActions(() => (
+        <PagePrimaryButton
+            id="remote-access-expose"
+            label={t('app.remoteAccess.exposeALocalService', 'Expose a local service')}
+            shortLabel={t('app.remoteAccess.exposeShort', 'Expose')}
+            onClick={() => openWizard(null)}
+            disabled={loading}
+        />
+    ), [loading]);
 
     return (
         <div className="sk-tabgroup__inner ra-page">

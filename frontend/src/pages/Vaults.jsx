@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState  } from 'react';
 import InfoTip from '@/components/InfoTip';
 import api from '../services/api';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -178,16 +179,22 @@ export default function Vaults() {
             <Button variant="outline" size="sm" onClick={() => setSelectedVault(null)}>
                 <ArrowLeft size={15} /> {t('app.vaults.allVaults', 'All vaults')}
             </Button>
-            <Button size="sm" onClick={() => setSecretForm({ open: true, name: '', value: '', description: '' })}>
-                <Plus size={15} /> {t('app.vaults.addSecret', 'Add secret')}
-            </Button>
+            <PagePrimaryButton
+                id="vaults-add-secret"
+                label={t('app.vaults.addSecret', 'Add secret')}
+                shortLabel={t('common.actions.add', 'Add')}
+                onClick={() => setSecretForm({ open: true, name: '', value: '', description: '' })}
+            />
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.vaults.searchSecrets', 'Search secrets…')} />
         </>
     ) : (
         <>
-            <Button size="sm" onClick={() => setVaultForm({ open: true, name: '', description: '', workspace_id: activeWorkspaceId })}>
-                <Plus size={15} /> {t('app.vaults.newVault', 'New vault')}
-            </Button>
+            <PagePrimaryButton
+                id="vaults-new"
+                label={t('app.vaults.newVault', 'New vault')}
+                shortLabel={t('common.actions.new', 'New')}
+                onClick={() => setVaultForm({ open: true, name: '', description: '', workspace_id: activeWorkspaceId })}
+            />
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.vaults.searchVaults', 'Search vaults…')} />
         </>
     )), [selectedVault, search, activeWorkspaceId]);

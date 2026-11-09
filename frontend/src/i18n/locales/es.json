@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "Subir {{name}} al almacenamiento remoto",
             "uploadToRemoteStorageAfterBackup": "Subir al almacenamiento remoto después de la copia",
             "warning": "Advertencia:",
-            "yourServerDiskUsuallyFree": "El disco de tu servidor: normalmente gratis"
+            "yourServerDiskUsuallyFree": "El disco de tu servidor: normalmente gratis",
+            "backUpShort": "Respaldar"
         },
         "backupsOverview": {
             "allSnapshots": "Todas las instantáneas",
@@ -4809,7 +4810,8 @@
             "thisRemovesTheWireguardTunnel": "Esto elimina el túnel WireGuard",
             "thisServer": "este servidor",
             "toAPublicHostnameOverA": "hacia un hostname público mediante un túnel WireGuard. ServerKit empareja este host con un servidor de borde que tiene IP pública.",
-            "tunnelTornDown": "Túnel desmontado"
+            "tunnelTornDown": "Túnel desmontado",
+            "exposeShort": "Exponer"
         },
         "remoteTerminal": {
             "closeTerminal": "Cerrar terminal",
@@ -7991,7 +7993,8 @@
             "stop": "Detener",
             "test": "Probar",
             "tryAgain": "Reintentar",
-            "uninstall": "Desinstalar"
+            "uninstall": "Desinstalar",
+            "new": "Nuevo"
         },
         "checking": "Comprobando...",
         "confirm": {

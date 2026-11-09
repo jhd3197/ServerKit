@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "দূরবর্তী সঞ্চয়স্থানে {{name}} আপলোড করুন",
             "uploadToRemoteStorageAfterBackup": "ব্যাকআপের পরে দূরবর্তী সঞ্চয়স্থানে আপলোড করুন",
             "warning": "সতর্কতা:",
-            "yourServerDiskUsuallyFree": "আপনার সার্ভার ডিস্ক - সাধারণত বিনামূল্যে"
+            "yourServerDiskUsuallyFree": "আপনার সার্ভার ডিস্ক - সাধারণত বিনামূল্যে",
+            "backUpShort": "ব্যাকআপ"
         },
         "backupsOverview": {
             "allSnapshots": "সব স্ন্যাপশট",
@@ -4808,7 +4809,8 @@
             "thisRemovesTheWireguardTunnel": "এটি ওয়্যারগার্ড টানেলটি সরিয়ে দেয়",
             "thisServer": "এই সার্ভার",
             "toAPublicHostnameOverA": "একটি ওয়্যারগার্ড টানেলের উপরে একটি সর্বজনীন হোস্টনামে। ServerKit এই হোস্টটিকে একটি প্রান্ত সার্ভারের সাথে যুক্ত করে যার একটি পাবলিক আইপি রয়েছে।",
-            "tunnelTornDown": "টানেল ভেঙে গেছে"
+            "tunnelTornDown": "টানেল ভেঙে গেছে",
+            "exposeShort": "এক্সপোজ"
         },
         "remoteTerminal": {
             "closeTerminal": "টার্মিনাল বন্ধ করুন",
@@ -7990,7 +7992,8 @@
             "stop": "থামো",
             "test": "পরীক্ষা",
             "tryAgain": "আবার চেষ্টা করুন",
-            "uninstall": "আনইনস্টল করুন"
+            "uninstall": "আনইনস্টল করুন",
+            "new": "নতুন"
         },
         "checking": "পরীক্ষা করা হচ্ছে...",
         "confirm": {

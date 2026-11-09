@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useId } from 'react';
 import useTabParam from '../hooks/useTabParam';
-import { Upload, Check, AlertTriangle, Archive, Clock, Database, Package, FolderArchive, HardDrive, History, Cloud, RefreshCw, Trash2, Plus, FileArchive, DollarSign } from 'lucide-react';
+import { Upload, Check, AlertTriangle, Archive, Clock, Database, Package, FolderArchive, HardDrive, History, Cloud, RefreshCw, Trash2, FileArchive, DollarSign } from 'lucide-react';
 import api from '../services/api';
 import { formatBytes } from '@/utils/formatBytes';
 import { scrollBehavior } from '@/utils/reducedMotion';
@@ -10,6 +10,7 @@ import EmptyState from '../components/EmptyState';
 import Modal from '@/components/Modal';
 import { FormField, FormRow } from '../components/FormField';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
@@ -688,15 +689,20 @@ const Backups = () => {
     useTopbarActions(() => (
         <>
             {activeTab === 'schedules' && !backupsManaged ? (
-                <Button size="sm" onClick={() => setShowScheduleModal(true)}>
-                    <Plus size={16} />
-                    {t('app.backups.newSchedule', 'New schedule')}
-                </Button>
+                <PagePrimaryButton
+                    id="backups-new-schedule"
+                    label={t('app.backups.newSchedule', 'New schedule')}
+                    shortLabel={t('common.actions.new', 'New')}
+                    onClick={() => setShowScheduleModal(true)}
+                />
             ) : (
-                <Button size="sm" onClick={() => setShowBackupModal(true)}>
-                    <Archive size={16} />
-                    {t('app.backups.backUpNow', 'Back up now')}
-                </Button>
+                <PagePrimaryButton
+                    id="backups-back-up"
+                    icon={Archive}
+                    label={t('app.backups.backUpNow', 'Back up now')}
+                    shortLabel={t('app.backups.backUpShort', 'Back up')}
+                    onClick={() => setShowBackupModal(true)}
+                />
             )}
             {activeTab === 'snapshots' && (
                 <SearchField

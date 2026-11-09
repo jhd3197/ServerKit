@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "Prześlij {{name}} do zdalnej pamięci masowej",
             "uploadToRemoteStorageAfterBackup": "Prześlij do magazynu zdalnego po utworzeniu kopii zapasowej",
             "warning": "Ostrzeżenie:",
-            "yourServerDiskUsuallyFree": "Dysk Twojego serwera — zazwyczaj bezpłatny"
+            "yourServerDiskUsuallyFree": "Dysk Twojego serwera — zazwyczaj bezpłatny",
+            "backUpShort": "Kopia"
         },
         "backupsOverview": {
             "allSnapshots": "Wszystkie migawki",
@@ -4808,7 +4809,8 @@
             "thisRemovesTheWireguardTunnel": "Spowoduje to usunięcie tunelu WireGuard",
             "thisServer": "ten serwer",
             "toAPublicHostnameOverA": "do publicznej nazwy hosta przez tunel WireGuard. ServerKit łączy ten host z serwerem brzegowym mającym publiczny adres IP.",
-            "tunnelTornDown": "Tunel rozebrany"
+            "tunnelTornDown": "Tunel rozebrany",
+            "exposeShort": "Udostępnij"
         },
         "remoteTerminal": {
             "closeTerminal": "Zamknij terminal",
@@ -7990,7 +7992,8 @@
             "stop": "Zatrzymywać się",
             "test": "Test",
             "tryAgain": "Spróbuj ponownie",
-            "uninstall": "Odinstaluj"
+            "uninstall": "Odinstaluj",
+            "new": "Nowy"
         },
         "checking": "Kontrola...",
         "confirm": {

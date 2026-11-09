@@ -19,6 +19,7 @@ import EmptyState from '../components/EmptyState';
 import InfoTip from '@/components/InfoTip';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Tip } from '@/components/ui/tooltip';
 import PageLayout from '../layouts/PageLayout';
 import { Input } from '@/components/ui/input';
@@ -470,11 +471,12 @@ const QueueOperations = () => {
                             <Folder size={16} />
                         </Button>
                     </Tip>
-                    <Tip content={t('app.queueOperations.queue', 'Queue')}>
-                        <Button variant="ghost" size="icon" aria-label={t('app.queueOperations.queue', 'Queue')} onClick={() => setShowQueueModal(true)}>
-                            <Plus size={16} />
-                        </Button>
-                    </Tip>
+                    <PagePrimaryButton
+                        id="queue-new"
+                        iconOnly
+                        label={t('app.queueOperations.newQueue', 'New queue')}
+                        onClick={() => setShowQueueModal(true)}
+                    />
                     <Tip content={t('common.actions.refresh', 'Refresh')}>
                         <Button variant="ghost" size="icon" aria-label={t('common.actions.refresh', 'Refresh')} onClick={() => { loadData(); loadQueues(selectedGroup); }}>
                             <RefreshCw size={16} />

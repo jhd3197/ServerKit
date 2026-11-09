@@ -7,6 +7,7 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import EmptyState from '../components/EmptyState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -337,10 +338,12 @@ const StatusPages = () => {
                     {t('common.actions.refresh', 'Refresh')}
                 </Button>
                 {isAdmin && (
-                    <Button size="sm" onClick={() => setShowCreatePage(true)}>
-                        <Plus size={16} />
-                        {t('app.statusPages.createPage', 'Create page')}
-                    </Button>
+                    <PagePrimaryButton
+                        id="status-pages-create"
+                        label={t('app.statusPages.createPage', 'Create page')}
+                        shortLabel={t('common.actions.create', 'Create')}
+                        onClick={() => setShowCreatePage(true)}
+                    />
                 )}
             </>
         ),

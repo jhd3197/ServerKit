@@ -18,6 +18,7 @@ import OperationsDock from '../components/OperationsDock';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { useShortcut } from '../hooks/useShortcut';
 import { useTranslation } from 'react-i18next';
+import { PagePrimaryActionProvider } from '../contexts/PagePrimaryActionProvider';
 import { OperationsProvider } from '../contexts/OperationsContext';
 import { ManagedProfileProvider } from '../contexts/ManagedProfileContext';
 import { useManagedProfile } from '../contexts/useManagedProfile';
@@ -114,6 +115,7 @@ const DashboardLayout = () => {
     }, []);
 
     return (
+        <PagePrimaryActionProvider>
         <OperationsProvider>
         <LogsDrawerProvider>
             <AIProvider>
@@ -154,6 +156,7 @@ const DashboardLayout = () => {
             </AIProvider>
         </LogsDrawerProvider>
         </OperationsProvider>
+        </PagePrimaryActionProvider>
     );
 };
 

@@ -14,6 +14,7 @@ import Modal from '@/components/Modal';
 import DomainField from '@/components/DomainField';
 import { attachDomain } from '@/services/attachDomain';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -619,9 +620,12 @@ const Domains = () => {
     // two fixed-width icon buttons.
     useTopbarActions(() => (
         <>
-            <Button size="sm" onClick={() => setShowAddModal(true)}>
-                <Plus size={15} /> {t('app.domains.addDomain', 'Add domain')}
-            </Button>
+            <PagePrimaryButton
+                id="domains-add"
+                label={t('app.domains.addDomain', 'Add domain')}
+                shortLabel={t('common.actions.add', 'Add')}
+                onClick={() => setShowAddModal(true)}
+            />
             <Button variant="outline" size="sm" onClick={loadData}>
                 <RefreshCw size={15} /> {t('app.domains.checkDns', 'Check DNS')}
             </Button>

@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "Télécharger {{name}} sur le stockage distant",
             "uploadToRemoteStorageAfterBackup": "Télécharger sur le stockage distant après la sauvegarde",
             "warning": "Avertissement:",
-            "yourServerDiskUsuallyFree": "Le disque de votre serveur – généralement gratuit"
+            "yourServerDiskUsuallyFree": "Le disque de votre serveur – généralement gratuit",
+            "backUpShort": "Sauvegarder"
         },
         "backupsOverview": {
             "allSnapshots": "Tous les instantanés",
@@ -4808,7 +4809,8 @@
             "thisRemovesTheWireguardTunnel": "Cela supprime le tunnel WireGuard",
             "thisServer": "ce serveur",
             "toAPublicHostnameOverA": "à un nom d'hôte public via un tunnel WireGuard. ServerKit associe cet hôte à un serveur Edge doté d'une adresse IP publique.",
-            "tunnelTornDown": "Tunnel démoli"
+            "tunnelTornDown": "Tunnel démoli",
+            "exposeShort": "Exposer"
         },
         "remoteTerminal": {
             "closeTerminal": "Fermer le terminal",
@@ -7990,7 +7992,8 @@
             "stop": "Arrêt",
             "test": "Test",
             "tryAgain": "Essayer à nouveau",
-            "uninstall": "Désinstaller"
+            "uninstall": "Désinstaller",
+            "new": "Nouveau"
         },
         "checking": "Vérification...",
         "confirm": {

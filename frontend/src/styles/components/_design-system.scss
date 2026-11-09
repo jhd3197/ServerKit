@@ -1358,6 +1358,14 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__title { margin: 0; font-size: $text-md; font-weight: $font-weight-semibold; letter-spacing: -0.01em; color: var(--text); }
     &__meta { font-size: $text-xs; color: var(--text-faint); }
     &__spacer { flex: 1; }
+    // A page's compact create button. Never grows with a long label; below the
+    // width where the mobile header shows, that header "+" runs the same action.
+    &__primary {
+        max-inline-size: 14rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
     &__actions {
         display: inline-flex;
         align-items: center;
@@ -1386,6 +1394,14 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         > .sk-topbar__chrome > .sk-searchfield { order: 1; }
         > .sk-gridicon,
         > .sk-topbar__chrome > .sk-gridicon { order: 2; }
+    }
+
+    // Primary is hidden here, so a strip holding only it (and an empty chrome
+    // slot) is a 0-height flex item that still costs the topbar a row-gap.
+    @media (max-width: $breakpoint-md) {
+        // Only the topbar copy hides; the same button in a page body stays.
+        &__actions > &__primary { display: none; }
+        &__actions:has(> .sk-topbar__primary):not(:has(> :not(.sk-topbar__primary, .sk-topbar__chrome), > .sk-topbar__chrome > *)) { display: none; }
     }
 
     // The portal target a table's chrome renders into. It must not become a box
