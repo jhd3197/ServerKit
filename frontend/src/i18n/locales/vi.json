@@ -4857,15 +4857,13 @@
             "title": "Lưu lượng"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "cuộn tròn -fsSL https://get.docker.com | sh",
             "dockerIsnTAvailable": "Docker không có sẵn",
             "forThisInstallSProfile": "cho hồ sơ của cài đặt này.",
             "installItOnTheServerThen": "Cài đặt nó trên máy chủ, sau đó khởi động lại ServerKit:",
             "needsDockerToRunContainersAnd": "cần Docker để chạy các container và máy chủ này đã được cài đặt với",
             "profileWhichLeavesItOutNothing": "profile, loại bỏ nó. Không có gì bị khóa — thêm Docker sẽ bật trang này.",
             "serverkitReChecksForDockerAutomatically": "ServerKit tự động kiểm tra lại Docker. Giám sát, miền, chứng chỉ, cron và DNS vẫn hoạt động mà không cần có nó — xem",
-            "settingsSystem": "Cài đặt → Hệ thống",
-            "sudoSystemctlRestartServerkit": "sudo systemctl khởi động lại bộ máy chủ"
+            "settingsSystem": "Cài đặt → Hệ thống"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB và máy chủ này có",

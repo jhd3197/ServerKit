@@ -4857,15 +4857,13 @@
             "title": "Trafik"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "kıvrılma -fsSL https://get.docker.com | ş",
             "dockerIsnTAvailable": "Docker mevcut değil",
             "forThisInstallSProfile": "bu kurulumun profili için.",
             "installItOnTheServerThen": "Sunucuya yükleyin ve ardından ServerKit'yi yeniden başlatın:",
             "needsDockerToRunContainersAnd": "Konteynerleri çalıştırmak için Docker gerekiyor ve bu sunucu,",
             "profileWhichLeavesItOutNothing": "profil, bu da onu dışarıda bırakıyor. Hiçbir şey kilitli değil — Docker eklendiğinde bu sayfa açılır.",
             "serverkitReChecksForDockerAutomatically": "ServerKit, Docker'yi otomatik olarak yeniden kontrol eder. İzleme, etki alanları, sertifikalar, cron ve DNS onsuz çalışmaya devam eder; bkz.",
-            "settingsSystem": "Ayarlar → Sistem",
-            "sudoSystemctlRestartServerkit": "sudo systemctl sunucu kitini yeniden başlat"
+            "settingsSystem": "Ayarlar → Sistem"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB ve bu sunucunun",

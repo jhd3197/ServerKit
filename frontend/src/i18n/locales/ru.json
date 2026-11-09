@@ -4857,15 +4857,13 @@
             "title": "Трафик"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "curl -fsSL https://get.docker.com | sh",
             "dockerIsnTAvailable": "Docker недоступен",
             "forThisInstallSProfile": "для профиля этой установки.",
             "installItOnTheServerThen": "Установите его на сервер, затем перезапустите ServerKit:",
             "needsDockerToRunContainersAnd": "для запуска контейнеров требуется Docker, и этот сервер был установлен с",
             "profileWhichLeavesItOutNothing": "профиль, который исключает его. Ничего не заблокировано — добавление Docker включает эту страницу.",
             "serverkitReChecksForDockerAutomatically": "ServerKit автоматически проверяет наличие Docker. Мониторинг, домены, сертификаты, cron и DNS продолжают работать и без него — см.",
-            "settingsSystem": "Настройки → Система",
-            "sudoSystemctlRestartServerkit": "sudo systemctl restart serverkit"
+            "settingsSystem": "Настройки → Система"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "МБ и на этом сервере есть",

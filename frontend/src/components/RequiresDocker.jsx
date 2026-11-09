@@ -3,6 +3,10 @@ import { Boxes, Terminal } from 'lucide-react';
 import { useResourceTier } from '../contexts/useResourceTier.js';
 import { useTranslation } from 'react-i18next';
 import InfoTip from './InfoTip';
+import CopyButton from './CopyButton';
+
+// Shell commands are literal — never route them through t().
+const COMMANDS = ['curl -fsSL https://get.docker.com | sh', 'sudo systemctl restart serverkit'];
 
 /**
  * Explains a Dockerless install instead of letting the page fail at click time.
@@ -43,12 +47,12 @@ const RequiresDocker = ({ children, what = 'This page' }) => {
                     <Terminal size={15} />
                     {t('app.requiresDocker.installItOnTheServerThen', 'Install it on the server, then restart ServerKit:')}
                 </div>
-                <code className="requires-docker__cmd">
-                    {t('app.requiresDocker.curlFsslHttpsGetDockerCom', 'curl -fsSL https://get.docker.com | sh')}
-                </code>
-                <code className="requires-docker__cmd">
-                    {t('app.requiresDocker.sudoSystemctlRestartServerkit', 'sudo systemctl restart serverkit')}
-                </code>
+                {COMMANDS.map((cmd) => (
+                    <div className="requires-docker__cmd" key={cmd}>
+                        <code className="requires-docker__cmd-text">{cmd}</code>
+                        <CopyButton value={cmd} label={t('app.requiresDocker.copyCommand', 'Copy command')} copiedLabel={t('app.requiresDocker.copied', 'Copied!')} />
+                    </div>
+                ))}
             </div>
 
             <p className="requires-docker__footnote">

@@ -4857,15 +4857,13 @@
             "title": "ทราฟฟิก"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "ขด -fsSL https://get.docker.com | ซ",
             "dockerIsnTAvailable": "Docker ไม่พร้อมใช้งาน",
             "forThisInstallSProfile": "สำหรับโปรไฟล์การติดตั้งนี้",
             "installItOnTheServerThen": "ติดตั้งบนเซิร์ฟเวอร์ จากนั้นรีสตาร์ท ServerKit:",
             "needsDockerToRunContainersAnd": "ต้องการ Docker เพื่อเรียกใช้คอนเทนเนอร์ และเซิร์ฟเวอร์นี้ได้รับการติดตั้งพร้อมกับ",
             "profileWhichLeavesItOutNothing": "โปรไฟล์ซึ่งทำให้มันออกมา ไม่มีอะไรถูกล็อค — การเพิ่ม Docker จะเปิดหน้านี้",
             "serverkitReChecksForDockerAutomatically": "ServerKit ตรวจสอบ Docker อีกครั้งโดยอัตโนมัติ การตรวจสอบ โดเมน ใบรับรอง cron และ DNS ยังคงทำงานต่อไปได้โดยไม่ต้องใช้ — ดู",
-            "settingsSystem": "การตั้งค่า → ระบบ",
-            "sudoSystemctlRestartServerkit": "sudo systemctl รีสตาร์ทเซิร์ฟเวอร์ kit"
+            "settingsSystem": "การตั้งค่า → ระบบ"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB และเซิร์ฟเวอร์นี้มี",

@@ -4857,15 +4857,13 @@
             "title": "Lalu lintas"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "keriting -fsSL https://get.docker.com | sh",
             "dockerIsnTAvailable": "Docker tidak tersedia",
             "forThisInstallSProfile": "untuk profil instalasi ini.",
             "installItOnTheServerThen": "Instal di server, lalu restart ServerKit:",
             "needsDockerToRunContainersAnd": "membutuhkan Docker untuk menjalankan container, dan server ini diinstal dengan",
             "profileWhichLeavesItOutNothing": "profil, yang mengabaikannya. Tidak ada yang terkunci — menambahkan Docker akan mengaktifkan halaman ini.",
             "serverkitReChecksForDockerAutomatically": "ServerKit memeriksa ulang Docker secara otomatis. Pemantauan, domain, sertifikat, cron dan DNS tetap berfungsi tanpanya — lihat",
-            "settingsSystem": "Pengaturan → Sistem",
-            "sudoSystemctlRestartServerkit": "sudo systemctl restart serverkit"
+            "settingsSystem": "Pengaturan → Sistem"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB dan server ini punya",

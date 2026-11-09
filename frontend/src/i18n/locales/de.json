@@ -4857,15 +4857,13 @@
             "title": "Traffic"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "curl -fsSL https://get.docker.com | sh",
             "dockerIsnTAvailable": "Docker ist nicht verfügbar",
             "forThisInstallSProfile": "für das Profil dieser Installation.",
             "installItOnTheServerThen": "Installieren Sie es auf dem Server und starten Sie dann ServerKit neu:",
             "needsDockerToRunContainersAnd": "benötigt Docker, um Container auszuführen, und dieser Server wurde mit installiert",
             "profileWhichLeavesItOutNothing": "Profil, das es weglässt. Nichts ist gesperrt – das Hinzufügen von Docker aktiviert diese Seite.",
             "serverkitReChecksForDockerAutomatically": "ServerKit sucht automatisch erneut nach Docker. Überwachung, Domänen, Zertifikate, Cron und DNS funktionieren auch ohne sie weiter – siehe",
-            "settingsSystem": "Einstellungen → System",
-            "sudoSystemctlRestartServerkit": "sudo systemctl serverkit neu starten"
+            "settingsSystem": "Einstellungen → System"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB und dieser Server hat",

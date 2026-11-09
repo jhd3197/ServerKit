@@ -401,7 +401,7 @@ const Services = () => {
         <ResourceListPage
             className="services-page"
             loading={loading}
-            loadingTitle="Loading services..."
+            loadingTitle={t('app.services.loadingServices', 'Loading services...')}
             storageKey="serverkit-list-services"
             viewPageKey="services"
             noun="services"
@@ -436,12 +436,15 @@ const Services = () => {
             emptyDescription={<>{t('app.services.emptyShort', 'Connect a repo or install a template.')} <InfoTip>{t('app.services.emptyFull', 'Connect a Git repository, upload files, or install a ready-made template to deploy your first service.')}</InfoTip></>}
             emptyAction={
                 <Button asChild>
-                    <Link to="/services/new">{t('app.services.createService', 'New service')}</Link>
+                    <Link to="/services/new">
+                        <Plus size={16} />
+                        {t('app.services.createService', 'New service')}
+                    </Link>
                 </Button>
             }
             filteredEmptyIcon={Layers}
-            filteredEmptyTitle="No services found"
-            filteredEmptyDescription="Try adjusting your search or filter"
+            filteredEmptyTitle={t('app.services.noServicesFound', 'No services found')}
+            filteredEmptyDescription={t('app.services.tryAdjustingFilter', 'Try adjusting your search or filter')}
         >
             <MoveToProjectDialog
                 open={showMoveDialog}

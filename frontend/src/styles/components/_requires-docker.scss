@@ -49,19 +49,26 @@
     }
 
     &__cmd {
-        display: block;
-        font-family: $font-mono;
-        font-size: $text-xs;
-        color: $text-primary;
-        padding: $space-2 $space-3;
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+        padding: $space-1 $space-1 $space-1 $space-3;
         background: $bg-tertiary;
         border-radius: $radius-control;
-        overflow-x: auto;
-        white-space: nowrap;
 
         & + & {
             margin-top: $space-2;
         }
+    }
+
+    &__cmd-text {
+        flex: 1;
+        min-width: 0;
+        font-family: $font-mono;
+        font-size: $text-xs;
+        color: $text-primary;
+        overflow-x: auto;
+        white-space: nowrap;
     }
 
     &__footnote {

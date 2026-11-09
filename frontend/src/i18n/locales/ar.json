@@ -4857,15 +4857,13 @@
             "title": "الزيارات"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "حليقة -fsSL https://get.docker.com | ش",
             "dockerIsnTAvailable": "Docker غير متوفر",
             "forThisInstallSProfile": "لملف تعريف التثبيت هذا.",
             "installItOnTheServerThen": "قم بتثبيته على الخادم، ثم أعد تشغيل ServerKit:",
             "needsDockerToRunContainersAnd": "يحتاج إلى Docker لتشغيل الحاويات، وقد تم تثبيت هذا الخادم مع",
             "profileWhichLeavesItOutNothing": "الملف الشخصي، الذي يترك ذلك. لا يوجد شيء مقفل - تؤدي إضافة Docker إلى تشغيل هذه الصفحة.",
             "serverkitReChecksForDockerAutomatically": "يقوم ServerKit بإعادة التحقق من Docker تلقائيًا. المراقبة والمجالات والشهادات وcron وDNS يستمرون في العمل بدونها - راجع",
-            "settingsSystem": "الإعدادات → النظام",
-            "sudoSystemctlRestartServerkit": "سودو systemctl إعادة تشغيل serverkit"
+            "settingsSystem": "الإعدادات → النظام"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB وهذا الخادم لديه",
