@@ -39,6 +39,20 @@ const EMPTY_FORM = {
 
 const RemoteAccess = ({ serverId }) => {
     const { t } = useTranslation();
+
+    // Literal keys only (extract-i18n can't follow computed ones); unknown values show raw.
+    const statusLabel = (status) => {
+        switch (status || 'unknown') {
+            case 'pending': return t('app.remoteAccess.status.pending', 'pending');
+            case 'up': return t('app.remoteAccess.status.up', 'up');
+            case 'degraded': return t('app.remoteAccess.status.degraded', 'degraded');
+            case 'down': return t('app.remoteAccess.status.down', 'down');
+            case 'error': return t('app.remoteAccess.status.error', 'error');
+            case 'published': return t('app.remoteAccess.status.published', 'published');
+            case 'unknown': return t('app.remoteAccess.status.unknown', 'unknown');
+            default: return status;
+        }
+    };
     const fieldId = useId();
     const toast = useToast();
     const [tunnels, setTunnels] = useState([]);
@@ -222,7 +236,7 @@ const RemoteAccess = ({ serverId }) => {
                     description={serverId ? (
                         <>
                             {t('app.remoteAccess.pickAPublicIpEdgeServerShort', 'Pick a public-IP edge server.')}
-                            <InfoTip>{t('app.remoteAccess.pickAPublicIpEdgeServer', 'Pick a public-IP edge server and ServerKit will pair it with {{value}} over WireGuard.', { value: currentServer?.name || 'this host' })}</InfoTip>
+                            <InfoTip>{t('app.remoteAccess.pickAPublicIpEdgeServer', 'Pick a public-IP edge server and ServerKit will pair it with {{value}} over WireGuard.', { value: currentServer?.name || t('app.remoteAccess.thisHost', 'this host') })}</InfoTip>
                         </>
                     ) : (
                         <>
@@ -266,7 +280,7 @@ const RemoteAccess = ({ serverId }) => {
                                                 )}
                                                 {isCurrentEdge && <span className="ra-node__tag">{t('app.remoteAccess.thisServer', 'this server')}</span>}
                                             </span>
-                                            <Pill kind={pillKind(tunnel.status)}>{tunnel.status || 'unknown'}</Pill>
+                                            <Pill kind={pillKind(tunnel.status)}>{statusLabel(tunnel.status)}</Pill>
                                         </div>
                                         <div className="ra-tunnel__meta">
                                             <span>{tunnel.subnet}</span>
@@ -346,7 +360,7 @@ const RemoteAccess = ({ serverId }) => {
                                                 </div>
                                                 <div className="ra-svc__right">
                                                     <Pill kind={pillKind(svc.status)}>
-                                                        {svc.status || 'unknown'}
+                                                        {statusLabel(svc.status)}
                                                     </Pill>
                                                     <Button
                                                         variant="ghost"
