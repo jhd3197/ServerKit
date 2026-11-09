@@ -4622,7 +4622,6 @@
             "total": "합계"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "필터나 검색어를 조정하여 대기열을 확인하세요.",
             "allGroups": "모든 그룹",
             "anyStatus": "모든 상태",
             "areYouSureYouWantTo": "\"{{value}}\" 및 모든 메시지를 삭제하시겠습니까?",

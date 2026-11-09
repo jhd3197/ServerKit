@@ -4623,7 +4623,6 @@
             "total": "Total"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Ajusta los filtros o la búsqueda para ver tus colas.",
             "allGroups": "Todos los grupos",
             "anyStatus": "Cualquier estado",
             "areYouSureYouWantTo": "¿Seguro que quieres eliminar \"{{value}}\" y todos sus mensajes?",

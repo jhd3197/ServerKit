@@ -483,7 +483,7 @@ const QueueOperations = () => {
                 </>
             )}
         >
-            <div className="queue-ops-workspace">
+            <div className={`queue-ops-workspace${groups.length === 0 ? ' queue-ops-workspace--no-groups' : ''}`}>
                 <aside className="queue-fleet-rail">
                     <section className="queue-rail-section queue-rail-section--overview">
                         <div className="queue-rail-section-header">
@@ -592,6 +592,7 @@ const QueueOperations = () => {
                     {/* The group select stays out of the chrome row: it decides
                         which group's queues are FETCHED, not how the loaded
                         rows are shown. */}
+                    {(groups.length > 0 || hasActiveFilters) && (
                     <div className="queue-command-bar">
                         <div className="queue-toolbar">
                             <Select
@@ -607,7 +608,7 @@ const QueueOperations = () => {
                                 </SelectContent>
                             </Select>
                         </div>
-                        {hasActiveFilters && (
+                        {hasActiveFilters && !(queues.length > 0 && filteredQueues.length === 0) && (
                             <Button variant="unstyled"
                                 type="button"
                                 className="queue-clear-filters"
@@ -621,6 +622,7 @@ const QueueOperations = () => {
                             </Button>
                         )}
                     </div>
+                    )}
 
                     <GridChips {...chrome.chipProps} />
 
@@ -631,12 +633,18 @@ const QueueOperations = () => {
                             icon={Layers}
                             title={queues.length === 0 ? t('app.queueOperations.noQueuesYet', 'No queues yet') : t('app.queueOperations.noQueuesMatchTheseFilters', 'No queues match these filters')}
                             description={queues.length === 0
-                                ? <>{t('app.queueOperations.emptyShort', 'Create a group, then a queue.')} <InfoTip>{t('app.queueOperations.createAQueueGroupAndQueue', 'Groups hold your queues. Create a group, add a queue to it, then send messages through that queue.')}</InfoTip></>
-                                : t('app.queueOperations.adjustTheFiltersOrSearchQuery', 'Adjust the filters or search query to see your queues.')}
+                                ? <>{groups.length > 0 ? t('app.queueOperations.addAQueueToAGroup', 'Add a queue to a group.') : t('app.queueOperations.emptyShort', 'Create a group, then a queue.')} <InfoTip>{t('app.queueOperations.createAQueueGroupAndQueue', 'Groups hold your queues. Create a group, add a queue to it, then send messages through that queue.')}</InfoTip></>
+                                : t('app.queueOperations.tryAnotherSearchOrFilter', 'Try another search or filter.')}
                             action={queues.length === 0 ? (
-                                <Button onClick={() => setShowGroupModal(true)}>
-                                    <Plus size={16} /> {t('app.queueOperations.newGroup', 'New group')}
-                                </Button>
+                                groups.length > 0 ? (
+                                    <Button onClick={() => setShowQueueModal(true)}>
+                                        <Plus size={16} /> {t('app.queueOperations.newQueue', 'New queue')}
+                                    </Button>
+                                ) : (
+                                    <Button onClick={() => setShowGroupModal(true)}>
+                                        <Plus size={16} /> {t('app.queueOperations.newGroup', 'New group')}
+                                    </Button>
+                                )
                             ) : (
                                 <Button variant="outline" onClick={() => {
                                     setSelectedGroup('');

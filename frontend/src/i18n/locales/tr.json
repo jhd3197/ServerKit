@@ -4622,7 +4622,6 @@
             "total": "Toplam"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Sıralarınızı görmek için filtreleri veya arama sorgusunu ayarlayın.",
             "allGroups": "Tüm gruplar",
             "anyStatus": "Herhangi bir durum",
             "areYouSureYouWantTo": "\"{{value}}\" ve tüm mesajlarını silmek istediğinizden emin misiniz?",

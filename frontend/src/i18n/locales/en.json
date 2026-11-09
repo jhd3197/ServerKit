@@ -4763,7 +4763,7 @@
             "total": "Total"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Adjust the filters or search query to see your queues.",
+            "addAQueueToAGroup": "Add a queue to a group.",
             "allGroups": "All groups",
             "anyStatus": "Any status",
             "areYouSureYouWantTo": "Delete \"{{value}}\"? This removes the queue and all its messages.",
@@ -4793,6 +4793,7 @@
             "messages": "Messages",
             "new": "New",
             "newGroup": "New group",
+            "newQueue": "New queue",
             "noQueuesMatchTheseFilters": "No queues match these filters",
             "noQueuesYet": "No queues yet",
             "payloadJson": "Payload (JSON)",
@@ -4810,6 +4811,7 @@
             "selectGroup": "Select group",
             "sendMessage": "Send message",
             "sendMessage2": "Send message",
+            "tryAnotherSearchOrFilter": "Try another search or filter.",
             "viewMessages": "View messages"
         },
         "quickCreate": {

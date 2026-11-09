@@ -4622,7 +4622,6 @@
             "total": "Totale"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Modifica i filtri o la query di ricerca per visualizzare le tue code.",
             "allGroups": "Tutti i gruppi",
             "anyStatus": "Qualsiasi stato",
             "areYouSureYouWantTo": "Sei sicuro di voler eliminare \"{{value}}\" e tutti i suoi messaggi?",

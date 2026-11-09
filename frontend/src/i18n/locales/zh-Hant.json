@@ -4622,7 +4622,6 @@
             "total": "總計"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "調整篩選條件或搜尋字串以檢視您的佇列。",
             "allGroups": "所有群組",
             "anyStatus": "任何狀態",
             "areYouSureYouWantTo": "您確定要刪除“{{value}}”及其所有訊息嗎？",

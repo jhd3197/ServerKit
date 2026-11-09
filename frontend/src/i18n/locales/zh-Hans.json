@@ -4622,7 +4622,6 @@
             "total": "总计"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "调整过滤器或搜索查询以查看您的队列。",
             "allGroups": "所有组",
             "anyStatus": "任何状态",
             "areYouSureYouWantTo": "您确定要删除“{{value}}”及其所有消息吗？",

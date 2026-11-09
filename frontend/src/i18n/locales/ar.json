@@ -4622,7 +4622,6 @@
             "total": "المجموع"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "اضبط عوامل التصفية أو استعلام البحث لرؤية قوائم الانتظار الخاصة بك.",
             "allGroups": "جميع المجموعات",
             "anyStatus": "أي حالة",
             "areYouSureYouWantTo": "هل أنت متأكد أنك تريد حذف \"{{value}}\" وجميع رسائله؟",
