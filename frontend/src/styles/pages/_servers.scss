@@ -305,36 +305,6 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-// Scoped under .servers-page: as a bare top-level `.empty-state` this block
-// used to win the cascade app-wide over the shared styles in
-// components/_empty-state.scss (see the specificity-hack comment there).
-.servers-page .empty-state {
-    text-align: center;
-    padding: $space-16 $space-6;
-    background: $bg-card;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-card;
-
-    .empty-icon {
-        width: 64px;
-        height: 64px;
-        color: $text-tertiary;
-        margin-bottom: $space-4;
-    }
-
-    h3 {
-        font-size: $text-lg;
-        font-weight: $font-weight-semibold;
-        color: $text-primary;
-        margin: 0 0 $space-2;
-    }
-
-    p {
-        color: $text-secondary;
-        margin: 0 0 $space-6;
-    }
-}
-
 // ============================================
 // SERVER DETAIL PAGE
 // ============================================
