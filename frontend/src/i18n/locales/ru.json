@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "Загрузите {{name}} в удаленное хранилище.",
             "uploadToRemoteStorageAfterBackup": "Загрузка в удаленное хранилище после резервного копирования",
             "warning": "Предупреждение:",
-            "yourServerDiskUsuallyFree": "Диск вашего сервера — обычно бесплатно"
+            "yourServerDiskUsuallyFree": "Диск вашего сервера — обычно бесплатно",
+            "backUpShort": "Бэкап"
         },
         "backupsOverview": {
             "allSnapshots": "Все снимки",
@@ -4808,7 +4809,8 @@
             "thisRemovesTheWireguardTunnel": "Это удалит туннель WireGuard.",
             "thisServer": "этот сервер",
             "toAPublicHostnameOverA": "к общедоступному имени хоста через туннель WireGuard. ServerKit соединяет этот хост с пограничным сервером, имеющим общедоступный IP-адрес.",
-            "tunnelTornDown": "Туннель снесен"
+            "tunnelTornDown": "Туннель снесен",
+            "exposeShort": "Открыть"
         },
         "remoteTerminal": {
             "closeTerminal": "Закрыть терминал",
@@ -7990,7 +7992,8 @@
             "stop": "Остановить",
             "test": "Проверить",
             "tryAgain": "Попробуйте еще раз",
-            "uninstall": "Удалить"
+            "uninstall": "Удалить",
+            "new": "Создать"
         },
         "checking": "Проверка...",
         "confirm": {

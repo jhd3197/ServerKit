@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "{{name}}'yi uzak depolama birimine yükleyin",
             "uploadToRemoteStorageAfterBackup": "Yedeklemeden sonra uzak depolama birimine yükleyin",
             "warning": "Uyarı:",
-            "yourServerDiskUsuallyFree": "Sunucu diskiniz — genellikle ücretsizdir"
+            "yourServerDiskUsuallyFree": "Sunucu diskiniz — genellikle ücretsizdir",
+            "backUpShort": "Yedekle"
         },
         "backupsOverview": {
             "allSnapshots": "Tüm anlık görüntüler",
@@ -4808,7 +4809,8 @@
             "thisRemovesTheWireguardTunnel": "Bu, WireGuard tünelini kaldırır",
             "thisServer": "bu sunucu",
             "toAPublicHostnameOverA": "WireGuard tüneli üzerinden genel bir ana bilgisayar adına. ServerKit, bu ana bilgisayarı genel IP'ye sahip bir uç sunucuyla eşleştirir.",
-            "tunnelTornDown": "Tünel yıkıldı"
+            "tunnelTornDown": "Tünel yıkıldı",
+            "exposeShort": "Aç"
         },
         "remoteTerminal": {
             "closeTerminal": "Terminali kapat",
@@ -7990,7 +7992,8 @@
             "stop": "Durmak",
             "test": "Test",
             "tryAgain": "Tekrar deneyin",
-            "uninstall": "Kaldır"
+            "uninstall": "Kaldır",
+            "new": "Yeni"
         },
         "checking": "Kontrol ediliyor...",
         "confirm": {

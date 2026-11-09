@@ -9,6 +9,7 @@ import { useTopbarActions } from '@/hooks/useTopbarActions';
 import useFocusParam from '@/hooks/useFocusParam';
 import { SearchField, ServiceTile } from '@/components/ds';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -80,9 +81,12 @@ const Projects = () => {
 
     useTopbarActions(() => (
         <>
-            <Button size="sm" onClick={() => setShowCreate(true)}>
-                <Plus size={16} /> {t('app.projects.newProject', 'New project')}
-            </Button>
+            <PagePrimaryButton
+                id="projects-new"
+                label={t('app.projects.newProject', 'New project')}
+                shortLabel={t('common.actions.new', 'New')}
+                onClick={() => setShowCreate(true)}
+            />
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.projects.searchProjects', 'Search projects…')} />
         </>
     ), [search]);

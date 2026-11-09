@@ -12,6 +12,7 @@ import { formatBytes } from '../utils/formatBytes';
 import { Pill, ServiceTile, EnvTag, SearchField, serviceStatusKind } from '@/components/ds';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -202,18 +203,18 @@ const Services = () => {
 
     useTopbarActions(() =>
         <>
-            <Button variant="outline" size="sm" asChild>
-                <Link to="/imports">
+            <Button variant="outline" size="sm" asChild title={t('app.services.importASite', 'Import a site')}>
+                <Link to="/imports" aria-label={t('app.services.importASite', 'Import a site')}>
                     <ArrowDownToLine size={16} />
-                    {t('app.services.importASite', 'Import a site')}
+                    {t('common.actions.import', 'Import')}
                 </Link>
             </Button>
-            <Button size="sm" asChild>
-                <Link to="/services/new">
-                    <Plus size={16} />
-                    {t('app.services.newService', 'New service')}
-                </Link>
-            </Button>
+            <PagePrimaryButton
+                id="services-new"
+                label={t('app.services.newService', 'New service')}
+                shortLabel={t('common.actions.new', 'New')}
+                to="/services/new"
+            />
             <SearchField
                 value={searchTerm}
                 onSearch={setSearchTerm}

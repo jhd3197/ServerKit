@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "قم بتحميل {{name}} إلى وحدة التخزين البعيدة",
             "uploadToRemoteStorageAfterBackup": "تحميل إلى التخزين البعيد بعد النسخ الاحتياطي",
             "warning": "تحذير:",
-            "yourServerDiskUsuallyFree": "قرص الخادم الخاص بك — عادةً ما يكون مجانيًا"
+            "yourServerDiskUsuallyFree": "قرص الخادم الخاص بك — عادةً ما يكون مجانيًا",
+            "backUpShort": "نسخ احتياطي"
         },
         "backupsOverview": {
             "allSnapshots": "جميع اللقطات",
@@ -4808,7 +4809,8 @@
             "thisRemovesTheWireguardTunnel": "يؤدي هذا إلى إزالة نفق WireGuard",
             "thisServer": "هذا الخادم",
             "toAPublicHostnameOverA": "إلى اسم مضيف عام عبر نفق WireGuard. يقوم ServerKit بإقران هذا المضيف بخادم طرفي له عنوان IP عام.",
-            "tunnelTornDown": "النفق هدم"
+            "tunnelTornDown": "النفق هدم",
+            "exposeShort": "كشف"
         },
         "remoteTerminal": {
             "closeTerminal": "إغلاق المحطة",
@@ -7990,7 +7992,8 @@
             "stop": "قف",
             "test": "امتحان",
             "tryAgain": "حاول ثانية",
-            "uninstall": "إلغاء التثبيت"
+            "uninstall": "إلغاء التثبيت",
+            "new": "جديد"
         },
         "checking": "جارٍ التحقق...",
         "confirm": {

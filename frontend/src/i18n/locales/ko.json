@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "원격 저장소에 {{name}} 업로드",
             "uploadToRemoteStorageAfterBackup": "백업 후 원격 저장소에 업로드",
             "warning": "경고:",
-            "yourServerDiskUsuallyFree": "서버 디스크 – 일반적으로 무료"
+            "yourServerDiskUsuallyFree": "서버 디스크 – 일반적으로 무료",
+            "backUpShort": "백업"
         },
         "backupsOverview": {
             "allSnapshots": "모든 스냅샷",
@@ -4808,7 +4809,8 @@
             "thisRemovesTheWireguardTunnel": "WireGuard 터널이 제거됩니다.",
             "thisServer": "이 서버",
             "toAPublicHostnameOverA": "WireGuard 터널을 통해 공개 호스트 이름으로. ServerKit은 이 호스트를 공용 IP가 있는 에지 서버와 연결합니다.",
-            "tunnelTornDown": "터널이 철거됨"
+            "tunnelTornDown": "터널이 철거됨",
+            "exposeShort": "노출"
         },
         "remoteTerminal": {
             "closeTerminal": "터미널 닫기",
@@ -7990,7 +7992,8 @@
             "stop": "중지",
             "test": "테스트",
             "tryAgain": "다시 시도하세요",
-            "uninstall": "제거"
+            "uninstall": "제거",
+            "new": "새로 만들기"
         },
         "checking": "확인 중...",
         "confirm": {

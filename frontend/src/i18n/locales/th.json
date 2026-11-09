@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "อัปโหลด {{name}} ไปยังที่จัดเก็บข้อมูลระยะไกล",
             "uploadToRemoteStorageAfterBackup": "อัปโหลดไปยังที่จัดเก็บข้อมูลระยะไกลหลังการสำรองข้อมูล",
             "warning": "คำเตือน:",
-            "yourServerDiskUsuallyFree": "ดิสก์เซิร์ฟเวอร์ของคุณ — ปกติจะฟรี"
+            "yourServerDiskUsuallyFree": "ดิสก์เซิร์ฟเวอร์ของคุณ — ปกติจะฟรี",
+            "backUpShort": "สำรอง"
         },
         "backupsOverview": {
             "allSnapshots": "สแนปชอตทั้งหมด",
@@ -4808,7 +4809,8 @@
             "thisRemovesTheWireguardTunnel": "การดำเนินการนี้จะลบอุโมงค์ WireGuard",
             "thisServer": "เซิร์ฟเวอร์นี้",
             "toAPublicHostnameOverA": "ไปยังชื่อโฮสต์สาธารณะผ่านอุโมงค์ WireGuard ServerKit จับคู่โฮสต์นี้กับเซิร์ฟเวอร์ Edge ที่มี IP สาธารณะ",
-            "tunnelTornDown": "อุโมงค์ถูกรื้อลง"
+            "tunnelTornDown": "อุโมงค์ถูกรื้อลง",
+            "exposeShort": "เปิดเผย"
         },
         "remoteTerminal": {
             "closeTerminal": "ปิดเทอร์มินัล",
@@ -7990,7 +7992,8 @@
             "stop": "หยุด",
             "test": "ทดสอบ",
             "tryAgain": "ลองอีกครั้ง",
-            "uninstall": "ถอนการติดตั้ง"
+            "uninstall": "ถอนการติดตั้ง",
+            "new": "ใหม่"
         },
         "checking": "กำลังตรวจสอบ...",
         "confirm": {

@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "Unggah {{name}} ke penyimpanan jarak jauh",
             "uploadToRemoteStorageAfterBackup": "Unggah ke penyimpanan jarak jauh setelah pencadangan",
             "warning": "Peringatan:",
-            "yourServerDiskUsuallyFree": "Disk server Anda — biasanya gratis"
+            "yourServerDiskUsuallyFree": "Disk server Anda — biasanya gratis",
+            "backUpShort": "Cadangkan"
         },
         "backupsOverview": {
             "allSnapshots": "Semua cuplikan",
@@ -4808,7 +4809,8 @@
             "thisRemovesTheWireguardTunnel": "Ini menghilangkan terowongan WireGuard",
             "thisServer": "server ini",
             "toAPublicHostnameOverA": "ke nama host publik melalui terowongan WireGuard. ServerKit memasangkan host ini dengan server edge yang memiliki IP publik.",
-            "tunnelTornDown": "Terowongan dirobohkan"
+            "tunnelTornDown": "Terowongan dirobohkan",
+            "exposeShort": "Ekspos"
         },
         "remoteTerminal": {
             "closeTerminal": "Tutup terminalnya",
@@ -7990,7 +7992,8 @@
             "stop": "Berhenti",
             "test": "Tes",
             "tryAgain": "Coba lagi",
-            "uninstall": "Hapus instalasi"
+            "uninstall": "Hapus instalasi",
+            "new": "Baru"
         },
         "checking": "Memeriksa...",
         "confirm": {

@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "Tải {{name}} lên bộ nhớ từ xa",
             "uploadToRemoteStorageAfterBackup": "Tải lên bộ nhớ từ xa sau khi sao lưu",
             "warning": "Cảnh báo:",
-            "yourServerDiskUsuallyFree": "Đĩa máy chủ của bạn - thường miễn phí"
+            "yourServerDiskUsuallyFree": "Đĩa máy chủ của bạn - thường miễn phí",
+            "backUpShort": "Sao lưu"
         },
         "backupsOverview": {
             "allSnapshots": "Tất cả ảnh chụp nhanh",
@@ -4808,7 +4809,8 @@
             "thisRemovesTheWireguardTunnel": "Thao tác này sẽ xóa đường hầm WireGuard",
             "thisServer": "máy chủ này",
             "toAPublicHostnameOverA": "tới tên máy chủ công cộng qua đường hầm WireGuard. ServerKit ghép nối máy chủ này với máy chủ biên có IP công cộng.",
-            "tunnelTornDown": "Đường hầm bị phá bỏ"
+            "tunnelTornDown": "Đường hầm bị phá bỏ",
+            "exposeShort": "Mở"
         },
         "remoteTerminal": {
             "closeTerminal": "Đóng thiết bị đầu cuối",
@@ -7990,7 +7992,8 @@
             "stop": "Dừng lại",
             "test": "Bài kiểm tra",
             "tryAgain": "Thử lại",
-            "uninstall": "Gỡ cài đặt"
+            "uninstall": "Gỡ cài đặt",
+            "new": "Mới"
         },
         "checking": "Đang kiểm tra...",
         "confirm": {

@@ -730,7 +730,8 @@
             "uploadToRemoteStorage": "将 {{name}} 上传到远程存储",
             "uploadToRemoteStorageAfterBackup": "备份后上传至远程存储",
             "warning": "警告：",
-            "yourServerDiskUsuallyFree": "您的服务器磁盘 — 通常是免费的"
+            "yourServerDiskUsuallyFree": "您的服务器磁盘 — 通常是免费的",
+            "backUpShort": "备份"
         },
         "backupsOverview": {
             "allSnapshots": "所有快照",
@@ -4808,7 +4809,8 @@
             "thisRemovesTheWireguardTunnel": "这将删除 WireGuard 隧道",
             "thisServer": "该服务器",
             "toAPublicHostnameOverA": "通过 WireGuard 隧道到公共主机名。 ServerKit 将此主机与具有公共 IP 的边缘服务器配对。",
-            "tunnelTornDown": "隧道被拆除"
+            "tunnelTornDown": "隧道被拆除",
+            "exposeShort": "公开"
         },
         "remoteTerminal": {
             "closeTerminal": "关闭终端",
@@ -7990,7 +7992,8 @@
             "stop": "停止",
             "test": "测试",
             "tryAgain": "重试",
-            "uninstall": "卸载"
+            "uninstall": "卸载",
+            "new": "新建"
         },
         "checking": "检查...",
         "confirm": {

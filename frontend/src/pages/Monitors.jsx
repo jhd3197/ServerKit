@@ -27,6 +27,7 @@ import {
     useTableChrome, GridViewPicker, GridChips, GridToolsMenu,
 } from '@/components/ds/grid';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -264,9 +265,12 @@ export default function Monitors() {
             <Button variant="outline" size="sm" onClick={load}>
                 <RefreshCw size={14} /> {t('common.actions.refresh', 'Refresh')}
             </Button>
-            <Button size="sm" onClick={openCreate}>
-                <Plus size={14} /> {t('app.monitors.addMonitor', 'New monitor')}
-            </Button>
+            <PagePrimaryButton
+                id="monitors-new"
+                label={t('app.monitors.addMonitor', 'New monitor')}
+                shortLabel={t('common.actions.new', 'New')}
+                onClick={openCreate}
+            />
         </>
     ), [q, activeFilterCount, load]);
 
