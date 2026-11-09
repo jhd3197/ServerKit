@@ -9,6 +9,7 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import EmptyState from '../components/EmptyState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
@@ -61,7 +62,12 @@ const CloudProvision = () => {
             {user?.is_admin && (
                 <>
                     <Button size="sm" variant="outline" onClick={() => setShowCreateProvider(true)}>{t('app.cloudProvision.addProvider', 'Add provider')}</Button>
-                    <Button size="sm" onClick={() => setShowCreateServer(true)}>{t('app.cloudProvision.newServer', 'New server')}</Button>
+                    <PagePrimaryButton
+                        id="cloud-provision-new-server"
+                        label={t('app.cloudProvision.newServer', 'New server')}
+                        shortLabel={t('common.actions.new', 'New')}
+                        onClick={() => setShowCreateServer(true)}
+                    />
                 </>
             )}
         </>

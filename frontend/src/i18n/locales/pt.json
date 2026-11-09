@@ -3615,7 +3615,8 @@
             "update": "Atualizar",
             "updateAnyway": "Atualizar mesmo assim",
             "updating": "Atualizando…",
-            "versionByAuthor": "v{{version}} · por {{author}}"
+            "versionByAuthor": "v{{version}} · por {{author}}",
+            "installShort": "Instalar"
         },
         "message": {
             "somethingWentWrong": "Algo deu errado."
@@ -5631,7 +5632,8 @@
             "tokenExpires": "O token expira",
             "ungrouped": "Desagrupado",
             "whatHappensNext": "O que acontece a seguir?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Sincr."
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Você tem certeza? Isso removerá permanentemente o serviço e todos os seus dados.",
@@ -7910,6 +7912,10 @@
             "users": "Usuários",
             "workspaceBrandColor": "Cor da marca do espaço de trabalho",
             "workspaceCreated": "Espaço de trabalho criado"
+        },
+        "mobileSearch": {
+            "label": "Pesquisar",
+            "title": "Pesquisar tudo (Ctrl K)"
         }
     },
     "auth": {

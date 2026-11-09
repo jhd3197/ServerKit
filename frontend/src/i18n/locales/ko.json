@@ -3615,7 +3615,8 @@
             "update": "업데이트",
             "updateAnyway": "그래도 업데이트",
             "updating": "업데이트 중…",
-            "versionByAuthor": "v{{version}} · {{author}} 제작"
+            "versionByAuthor": "v{{version}} · {{author}} 제작",
+            "installShort": "설치"
         },
         "message": {
             "somethingWentWrong": "문제가 발생했습니다."
@@ -5631,7 +5632,8 @@
             "tokenExpires": "토큰 만료",
             "ungrouped": "그룹 해제됨",
             "whatHappensNext": "다음에는 어떻게 되나요?",
-            "windowsPowershell": "윈도우(파워셸)"
+            "windowsPowershell": "윈도우(파워셸)",
+            "syncShort": "동기화"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "확실합니까? 이렇게 하면 서비스와 모든 데이터가 영구적으로 삭제됩니다.",
@@ -7910,6 +7912,10 @@
             "users": "사용자",
             "workspaceBrandColor": "워크스페이스 브랜드 색상",
             "workspaceCreated": "작업공간이 생성되었습니다."
+        },
+        "mobileSearch": {
+            "label": "검색",
+            "title": "전체 검색 (Ctrl K)"
         }
     },
     "auth": {

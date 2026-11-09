@@ -3615,7 +3615,8 @@
             "update": "আপডেট",
             "updateAnyway": "তবুও আপডেট করুন",
             "updating": "আপডেট হচ্ছে…",
-            "versionByAuthor": "v{{version}} · {{author}} দ্বারা"
+            "versionByAuthor": "v{{version}} · {{author}} দ্বারা",
+            "installShort": "ইনস্টল"
         },
         "message": {
             "somethingWentWrong": "কিছু একটা ভুল হয়েছে।"
@@ -5631,7 +5632,8 @@
             "tokenExpires": "টোকেনের মেয়াদ শেষ",
             "ungrouped": "গোষ্ঠীভুক্ত নয়",
             "whatHappensNext": "এরপর কি হবে?",
-            "windowsPowershell": "উইন্ডোজ (পাওয়ারশেল)"
+            "windowsPowershell": "উইন্ডোজ (পাওয়ারশেল)",
+            "syncShort": "সিঙ্ক"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "আপনি কি নিশ্চিত? এটি স্থায়ীভাবে পরিষেবা এবং এর সমস্ত ডেটা মুছে ফেলবে৷",
@@ -7910,6 +7912,10 @@
             "users": "ব্যবহারকারীদের",
             "workspaceBrandColor": "কর্মক্ষেত্র ব্র্যান্ডের রঙ",
             "workspaceCreated": "ওয়ার্কস্পেস তৈরি করা হয়েছে"
+        },
+        "mobileSearch": {
+            "label": "অনুসন্ধান",
+            "title": "সবকিছু অনুসন্ধান করুন (Ctrl K)"
         }
     },
     "auth": {

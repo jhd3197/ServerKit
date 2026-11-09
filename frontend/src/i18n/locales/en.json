@@ -3672,6 +3672,7 @@
             "installAnyway": "Install anyway",
             "installManually": "Install manually",
             "installOneFromTheCatalogOr": "Install one from the catalog or use Install manually.",
+            "installShort": "Install",
             "installUnreviewedExtension": "Install unreviewed extension?",
             "installWithAnUnverifiableSignature": "Install with an unverifiable signature?",
             "installWithoutChecksumVerification": "Install without checksum verification?",
@@ -3836,6 +3837,10 @@
             "versionNeedsRepair": "Database version needs repair",
             "yourDatabaseIsAt": "Your database is at",
             "yourSchemaAlreadyMatchesThisRepairs": "Your schema already matches {{value}}; this repairs the version pointer{{value2}}."
+        },
+        "mobileSearch": {
+            "label": "Search",
+            "title": "Search everything (Ctrl K)"
         },
         "modals": {
             "anyHost": "% (any host)",
@@ -5857,6 +5862,7 @@
             "stepServerOnline": "Server online",
             "stepStartAgent": "Start agent",
             "sync": "Sync",
+            "syncShort": "Sync",
             "theAgentRegistersAutomaticallyAndReports": "The agent registers automatically and reports its hostname back as the server name.",
             "theCodeIsShownInThe": "The code is shown in the terminal output or system tray.",
             "theRowInThisListWill": "The row in this list will switch from",

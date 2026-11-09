@@ -3615,7 +3615,8 @@
             "update": "Cập nhật",
             "updateAnyway": "Vẫn cập nhật",
             "updating": "Đang cập nhật…",
-            "versionByAuthor": "v{{version}} · bởi {{author}}"
+            "versionByAuthor": "v{{version}} · bởi {{author}}",
+            "installShort": "Cài đặt"
         },
         "message": {
             "somethingWentWrong": "Đã xảy ra lỗi."
@@ -5631,7 +5632,8 @@
             "tokenExpires": "Mã thông báo hết hạn",
             "ungrouped": "Đã tách nhóm",
             "whatHappensNext": "Điều gì xảy ra tiếp theo?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Đồng bộ"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Bạn có chắc không? Thao tác này sẽ xóa vĩnh viễn dịch vụ và tất cả dữ liệu của dịch vụ đó.",
@@ -7910,6 +7912,10 @@
             "users": "Người dùng",
             "workspaceBrandColor": "Màu sắc thương hiệu không gian làm việc",
             "workspaceCreated": "Đã tạo không gian làm việc"
+        },
+        "mobileSearch": {
+            "label": "Tìm kiếm",
+            "title": "Tìm mọi thứ (Ctrl K)"
         }
     },
     "auth": {

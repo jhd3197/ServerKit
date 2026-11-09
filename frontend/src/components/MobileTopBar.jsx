@@ -1,9 +1,8 @@
-import { Menu, Plus, X } from 'lucide-react';
+import { Menu, Plus, Search, X } from 'lucide-react';
 import { t } from '../i18n/t';
 import { useTheme } from '../contexts/useTheme.js';
 import ServerKitLogo from './ServerKitLogo';
 import NotificationBell from './NotificationBell';
-import QuickCreate from './QuickCreate';
 import { Button as SharedButton } from '@/components/ui/button';
 import { useRegisteredPrimaryAction } from '../contexts/pagePrimaryAction.js';
 
@@ -45,7 +44,16 @@ const MobileTopBar = ({ navOpen, onToggle }) => {
                 <span className="mobile-topbar__name">{brandName}</span>
             </div>
             <div className="mobile-topbar__actions">
-                {primary ? (
+                <SharedButton variant="unstyled"
+                    type="button"
+                    className="quick-create"
+                    title={t('app.mobileSearch.title', 'Search everything (Ctrl K)')}
+                    aria-label={t('app.mobileSearch.label', 'Search')}
+                    onClick={() => window.dispatchEvent(new CustomEvent('serverkit:open-palette'))}
+                >
+                    <Search size={16} aria-hidden="true" />
+                </SharedButton>
+                {primary && (
                     <SharedButton variant="unstyled"
                         type="button"
                         className="quick-create"
@@ -56,7 +64,7 @@ const MobileTopBar = ({ navOpen, onToggle }) => {
                     >
                         <Plus size={16} />
                     </SharedButton>
-                ) : <QuickCreate />}
+                )}
                 <NotificationBell />
             </div>
         </header>

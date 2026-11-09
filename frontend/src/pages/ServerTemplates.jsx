@@ -12,6 +12,7 @@ import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import { LayoutTemplate } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
@@ -341,7 +342,12 @@ const ServerTemplates = () => {
     useTopbarActions(() => (
         <>
             {user?.is_admin && (
-                <Button size="sm" onClick={() => setShowCreateModal(true)}>{t('app.serverTemplates.createTemplate', 'Create template')}</Button>
+                <PagePrimaryButton
+                    id="server-templates-create"
+                    label={t('app.serverTemplates.createTemplate', 'Create template')}
+                    shortLabel={t('common.actions.new', 'New')}
+                    onClick={() => setShowCreateModal(true)}
+                />
             )}
         </>
     ), [user?.is_admin, activeTab, templates.length]);

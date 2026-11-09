@@ -3615,7 +3615,8 @@
             "update": "Aggiornamento",
             "updateAnyway": "Aggiorna comunque",
             "updating": "Aggiornamento…",
-            "versionByAuthor": "v{{version}} · di {{author}}"
+            "versionByAuthor": "v{{version}} · di {{author}}",
+            "installShort": "Installa"
         },
         "message": {
             "somethingWentWrong": "Qualcosa è andato storto."
@@ -5631,7 +5632,8 @@
             "tokenExpires": "Il token scade",
             "ungrouped": "Non raggruppato",
             "whatHappensNext": "Cosa succede dopo?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Sincro"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Sei sicuro? Ciò rimuoverà permanentemente il servizio e tutti i suoi dati.",
@@ -7910,6 +7912,10 @@
             "users": "Utenti",
             "workspaceBrandColor": "Colore del marchio dell'area di lavoro",
             "workspaceCreated": "Area di lavoro creata"
+        },
+        "mobileSearch": {
+            "label": "Cerca",
+            "title": "Cerca ovunque (Ctrl K)"
         }
     },
     "auth": {

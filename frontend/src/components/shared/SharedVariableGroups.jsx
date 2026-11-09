@@ -4,6 +4,7 @@ import { ArrowLeft, Boxes, Plus, Trash2 } from 'lucide-react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -200,9 +201,12 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
         </>
     ) : (
         <>
-            <Button size="sm" onClick={() => setCreating(true)}>
-                <Plus size={15} /> {t('app.sharedVariableGroups.newGroup', 'New group')}
-            </Button>
+            <PagePrimaryButton
+                id="shared-variable-groups-new"
+                label={t('app.sharedVariableGroups.newGroup', 'New group')}
+                shortLabel={t('common.actions.new', 'New')}
+                onClick={() => setCreating(true)}
+            />
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.sharedVariableGroups.searchGroups', 'Search groups…')} />
         </>
     )), [detail, search]);

@@ -3615,7 +3615,8 @@
             "update": "อัปเดต",
             "updateAnyway": "อัปเดตต่อไป",
             "updating": "กำลังอัปเดต…",
-            "versionByAuthor": "v{{version}} · โดย {{author}}"
+            "versionByAuthor": "v{{version}} · โดย {{author}}",
+            "installShort": "ติดตั้ง"
         },
         "message": {
             "somethingWentWrong": "เกิดข้อผิดพลาดบางอย่าง"
@@ -5631,7 +5632,8 @@
             "tokenExpires": "โทเค็นหมดอายุ",
             "ungrouped": "ไม่ได้จัดกลุ่ม",
             "whatHappensNext": "จะเกิดอะไรขึ้นต่อไป?",
-            "windowsPowershell": "วินโดวส์ (PowerShell)"
+            "windowsPowershell": "วินโดวส์ (PowerShell)",
+            "syncShort": "ซิงค์"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "คุณแน่ใจเหรอ? การดำเนินการนี้จะลบบริการและข้อมูลทั้งหมดออกอย่างถาวร",
@@ -7910,6 +7912,10 @@
             "users": "ผู้ใช้",
             "workspaceBrandColor": "สีของแบรนด์พื้นที่ทำงาน",
             "workspaceCreated": "สร้างพื้นที่ทำงานแล้ว"
+        },
+        "mobileSearch": {
+            "label": "ค้นหา",
+            "title": "ค้นหาทุกอย่าง (Ctrl K)"
         }
     },
     "auth": {
