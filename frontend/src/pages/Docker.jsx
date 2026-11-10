@@ -172,8 +172,20 @@ const Docker = () => {
         return `${total} B`;
     }
 
+    const tabs = [
+        { id: 'containers', label: t('app.docker.containers', 'Containers'), icon: Box },
+        { id: 'compose', label: t('app.docker.compose', 'Compose'), icon: Package },
+        { id: 'images', label: t('app.docker.images', 'Images'), icon: Layers },
+        { id: 'volumes', label: t('app.docker.volumes', 'Volumes'), icon: HardDrive },
+        { id: 'networks', label: t('app.docker.networks', 'Networks'), icon: NetworkIcon },
+    ].map(({ id, label, icon: Icon }) => ({ to: `/docker/${id}`, label, icon: <Icon size={15} /> }));
+
     if (loading) {
-        return <EmptyState loading loadingVariant="table" title={t('app.docker.checkingDockerStatus', 'Checking Docker status…')} />;
+        return (
+            <PageLayout className="docker-page" icon={<Box size={18} />} title={t('common.labels.docker', 'Docker')} tabs={tabs}>
+                <EmptyState loading loadingVariant="table" title={t('app.docker.checkingDockerStatus', 'Checking Docker status…')} />
+            </PageLayout>
+        );
     }
 
     if (!dockerStatus?.installed) {
@@ -221,14 +233,6 @@ const Docker = () => {
             </PageLayout>
         );
     }
-
-    const tabs = [
-        { id: 'containers', label: t('app.docker.containers', 'Containers'), icon: Box },
-        { id: 'compose', label: t('app.docker.compose', 'Compose'), icon: Package },
-        { id: 'images', label: t('app.docker.images', 'Images'), icon: Layers },
-        { id: 'volumes', label: t('app.docker.volumes', 'Volumes'), icon: HardDrive },
-        { id: 'networks', label: t('app.docker.networks', 'Networks'), icon: NetworkIcon },
-    ].map(({ id, label, icon: Icon }) => ({ to: `/docker/${id}`, label, icon: <Icon size={15} /> }));
 
     const hasMultipleTargets = availableServers.length > 1;
 
