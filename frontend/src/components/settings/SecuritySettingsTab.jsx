@@ -13,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import InfoTip from '../InfoTip';
 import LockShieldIllustration from '../illustrations/LockShieldIllustration';
 import CopyField from '../CopyField';
+import EmptyState from '../EmptyState';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
 import { formatDate, formatDateTime } from '@/utils/intl';
@@ -323,7 +324,7 @@ Keep these codes in a safe place.`;
                 </div>
 
                 {twoFALoading && !twoFAStatus ? (
-                    <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
+                    <EmptyState loading loadingVariant="form" loadingRows={2} size="compact" title={t('common.loading', 'Loading…')} />
                 ) : twoFALoadError && !twoFAStatus ? (
                     <ErrorState
                         title={t('app.securitySettingsTab.couldntLoad2fa', "Couldn't load 2FA status.")}

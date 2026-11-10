@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
+import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
 import { Feed, FeedItem } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
@@ -99,7 +100,7 @@ const EventsTab = () => {
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">
                     {loading ? (
-                        <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
+                        <EmptyState loading loadingVariant="feed" loadingRows={5} title={t('common.loading', 'Loading…')} />
                     ) : eventsError && events.length === 0 ? (
                         <ErrorState
                             title={t('app.eventsTab.couldntLoadSecurityEvents', "Couldn't load security events.")}

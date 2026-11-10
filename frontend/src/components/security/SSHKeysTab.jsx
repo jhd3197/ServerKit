@@ -237,10 +237,8 @@ const SSHKeysTab = () => {
                 <ErrorState compact error={loadError} onRetry={loadKeys} />
             )}
 
-            {loading ? (
-                <SharedCard variant="legacy" className="card">
-                    <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
-                </SharedCard>
+            {loading && keys.length === 0 ? (
+                <EmptyState loading loadingVariant="table" loadingRows={3} title={t('common.loading', 'Loading…')} />
             ) : loadError && keys.length === 0 ? (
                 <ErrorState
                     title={t('app.sSHKeysTab.couldntLoadSshKeys', "Couldn't load SSH keys.")}

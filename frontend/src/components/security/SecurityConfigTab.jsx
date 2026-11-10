@@ -1,6 +1,7 @@
 import { useState, useEffect, useId } from 'react';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
+import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
@@ -58,8 +59,8 @@ const SecurityConfigTab = () => {
         }));
     }
 
-    if (loading) {
-        return <div className="loading-sm">{t('app.securityConfigTab.loadingSettings', 'Loading settings…')}</div>;
+    if (loading && !config) {
+        return <EmptyState loading loadingVariant="form" loadingRows={4} title={t('app.securityConfigTab.loadingSettings', 'Loading settings…')} />;
     }
 
     // Never render the form on a failed load: saving it would write the

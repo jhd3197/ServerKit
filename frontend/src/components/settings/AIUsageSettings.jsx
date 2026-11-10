@@ -79,8 +79,8 @@ export default function AIUsageSettings({ connections }) {
         </div>
         <div className="settings-actions settings-actions--footer"><Button variant="outline" disabled={busy} onClick={() => { setOffset(0); setApplied({ ...filters }); }}>{t('ai.usage.apply', 'Apply filters')}</Button></div>
         {error && <p className="error-message" role="alert">{error}</p>}
-        {busy && <EmptyState loading title={t('common.loading', 'Loading…')} />}
-        {!busy && data?.totals && <>
+        {busy && !data && <EmptyState loading loadingVariant="table" loadingRows={4} title={t('common.loading', 'Loading…')} />}
+        {data?.totals && <>
             <div className="stat-strip">
                 <div className="stat-strip__item"><span>{t('ai.usage.cost', 'Known cost')}</span><strong>{money(data.totals.cost)}</strong></div>
                 <div className="stat-strip__item"><span>{t('ai.usage.tokens', 'Tokens')}</span><strong>{formatNumber(data.totals.tokens)}</strong></div>

@@ -174,7 +174,7 @@ const SystemTab = () => {
     }
 
     if (loading) {
-        return <EmptyState loading title={t('app.systemTab.loadingSystemInformation', 'Loading system information…')} />;
+        return <EmptyState loading loadingVariant="detail" title={t('app.systemTab.loadingSystemInformation', 'Loading system information…')} />;
     }
 
     return (
@@ -307,7 +307,7 @@ const SystemTab = () => {
                     </div>
                 )}
                 {domainLoading ? (
-                    <EmptyState loading title={t('app.systemTab.loadingDomainSettings', 'Loading domain settings…')} />
+                    <EmptyState loading loadingVariant="form" loadingRows={2} title={t('app.systemTab.loadingDomainSettings', 'Loading domain settings…')} />
                 ) : domainError ? (
                     <ErrorState
                         title={t('app.systemTab.couldntLoadDomainSettings', "Couldn't load domain settings.")}

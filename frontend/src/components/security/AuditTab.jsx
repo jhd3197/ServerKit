@@ -70,14 +70,11 @@ const AuditTab = () => {
                         />
                     )}
 
-                    {loading && (
-                        <div className="loading-state">
-                            <div className="spinner"></div>
-                            <p>{t('app.auditTab.runningSecurityAudit', 'Running security audit…')}</p>
-                        </div>
+                    {loading && !audit && (
+                        <EmptyState loading loadingVariant="detail" title={t('app.auditTab.runningSecurityAudit', 'Running security audit…')} />
                     )}
 
-                    {audit && !loading && (
+                    {audit && (
                         <div className="audit-results">
                             <div className="sec-audit-score">
                                 <ScoreGauge

@@ -3,6 +3,12 @@ import { PageSkeleton } from './PageSkeleton';
 import { t } from '../i18n/t';
 
 /**
+ * Loading rule: first load = EmptyState `loading` with a shaped
+ * `loadingVariant` (or Skeleton pieces in-card); refresh = keep the loaded
+ * content (SkeletonBoundary, or only skeleton while there is no data yet);
+ * failure = an error with retry (ErrorState), never an empty state or an
+ * endless skeleton.
+ *
  * `loadingVariant` names the shape of the page that is loading — see
  * PageSkeleton for the archetypes (table, feed, cards, detail, console, form,
  * chart, tree, split). It defaults to the generic `panel`, which is a safe

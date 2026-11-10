@@ -40,7 +40,7 @@ export default function AIManagementSettings({ connections, defaultId }) {
         catch (e) { setError(e.message); }
         finally { setBusy(false); }
     };
-    if (!config) return <div className="settings-card">{error ? <><p role="alert">{error}</p><Button onClick={load}>{t('common.retry', 'Retry')}</Button></> : <EmptyState loading title={t('common.loading', 'Loading…')} />}</div>;
+    if (!config) return <div className="settings-card">{error ? <><p role="alert">{error}</p><Button onClick={load}>{t('common.retry', 'Retry')}</Button></> : <EmptyState loading loadingVariant="form" loadingRows={5} title={t('common.loading', 'Loading…')} />}</div>;
     const profiles = [
         ['utility', t('ai.management.utility', 'Utility'), t('ai.management.utilityHint', 'Economical model for summaries and structured extraction.')],
         ['standard', t('ai.management.standard', 'Standard'), t('ai.management.standardHint', 'Everyday questions and tool-assisted troubleshooting.')],

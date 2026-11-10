@@ -16,6 +16,7 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import useSettingFocus from '../../hooks/useSettingFocus';
+import EmptyState from '../EmptyState';
 import { useTranslation } from 'react-i18next';
 
 // The label the Status cell shows, in one place: the built-in view below
@@ -411,10 +412,10 @@ const UsersTab = () => {
         setGroupBy,
     });
 
-    if (loading) {
+    if (loading && users.length === 0) {
         return (
             <div className="users-tab">
-                <div className="loading-state">{t('app.usersTab.loadingUsers', 'Loading users…')}</div>
+                <EmptyState loading loadingVariant="table" loadingRows={6} title={t('app.usersTab.loadingUsers', 'Loading users…')} />
             </div>
         );
     }

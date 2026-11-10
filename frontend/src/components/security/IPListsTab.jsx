@@ -3,6 +3,7 @@ import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
 import Modal from '../Modal';
+import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -311,8 +312,8 @@ const IPListsTab = () => {
         );
     };
 
-    if (loading) {
-        return <div className="loading-sm">{t('app.iPListsTab.loadingIpLists', 'Loading IP lists…')}</div>;
+    if (loading && !loaded) {
+        return <EmptyState loading loadingVariant="table" loadingRows={4} title={t('app.iPListsTab.loadingIpLists', 'Loading IP lists…')} />;
     }
 
     if (loadError && !loaded) {

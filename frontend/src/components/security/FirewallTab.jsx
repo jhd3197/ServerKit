@@ -430,8 +430,8 @@ const FirewallTab = () => {
         [rules, chrome.cfg.filters, chrome.columns],
     );
 
-    if (loading) {
-        return <div className="loading-sm">{t('app.firewallTab.loadingFirewallStatus', 'Loading firewall status…')}</div>;
+    if (loading && !status) {
+        return <EmptyState loading loadingVariant="detail" title={t('app.firewallTab.loadingFirewallStatus', 'Loading firewall status…')} />;
     }
 
     if (loadErrors.status && !status) {

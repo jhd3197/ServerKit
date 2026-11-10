@@ -144,7 +144,7 @@ export default function StorageTab() {
     if (loading && !overview) {
         return (
             <div className="settings-section">
-                <EmptyState loading title={t('app.storageTab.measuring', 'Measuring disk usage…')} />
+                <EmptyState loading loadingVariant="detail" title={t('app.storageTab.measuring', 'Measuring disk usage…')} />
             </div>
         );
     }

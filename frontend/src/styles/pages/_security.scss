@@ -820,19 +820,6 @@
 
 // ── Audit tab ────────────────────────────────────────────────
 .audit-tab {
-    .loading-state {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: $space-8;
-        gap: $space-4;
-
-        .spinner {
-            width: 40px;
-            height: 40px; // geometry: spinner icon
-        }
-    }
-
     .audit-results {
         display: flex;
         flex-direction: column;
