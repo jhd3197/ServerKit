@@ -935,14 +935,6 @@
 
     .mon-nomonitors { margin-bottom: 22px; }
 
-    // First-load tiles at the size of the loaded ones (one carries a sparkline),
-    // so the band does not grow when the monitors arrive.
-    .mon-kpiband--loaded-size .sk-kpiband__skel {
-        min-height: 114px;
-
-        @media (max-width: 560px) { &:nth-child(n + 3) { min-height: 66px; } }
-    }
-
     .mon-monitor-list,
     .mon-feed { display: flex; flex-direction: column; }
 

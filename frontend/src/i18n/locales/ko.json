@@ -4016,8 +4016,7 @@
             "mostRecentResults": "가장 최근 결과",
             "noChecksRecordedYetTheScheduler": "아직 검사가 기록되지 않았습니다. 스케줄러는 각 모니터의 간격을 폴링합니다.",
             "nothingIsBeingWatchedYet": "아직 시청 중인 항목이 없습니다.",
-            "couldntLoadMonitors": "모니터를 불러오지 못했습니다.",
-            "loadingMonitors": "모니터를 불러오는 중"
+            "couldntLoadMonitors": "모니터를 불러오지 못했습니다."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "컨테이너를 연결하기 위한 네트워크를 만듭니다.",

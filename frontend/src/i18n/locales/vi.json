@@ -4016,8 +4016,7 @@
             "mostRecentResults": "Kết quả gần đây nhất",
             "noChecksRecordedYetTheScheduler": "Chưa có cuộc kiểm tra nào được ghi lại - bộ lập lịch thăm dò theo khoảng thời gian của mỗi màn hình.",
             "nothingIsBeingWatchedYet": "Chưa có gì được theo dõi",
-            "couldntLoadMonitors": "Không thể tải các trình giám sát.",
-            "loadingMonitors": "Đang tải các trình giám sát"
+            "couldntLoadMonitors": "Không thể tải các trình giám sát."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Tạo một mạng để kết nối các container.",

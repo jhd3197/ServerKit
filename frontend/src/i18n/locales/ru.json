@@ -4016,8 +4016,7 @@
             "mostRecentResults": "Последние результаты",
             "noChecksRecordedYetTheScheduler": "Проверок пока не зарегистрировано — планировщик опрашивает интервал каждого монитора.",
             "nothingIsBeingWatchedYet": "Пока ничего не смотрят",
-            "couldntLoadMonitors": "Не удалось загрузить мониторы.",
-            "loadingMonitors": "Загрузка мониторов"
+            "couldntLoadMonitors": "Не удалось загрузить мониторы."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Создайте сеть для подключения контейнеров.",

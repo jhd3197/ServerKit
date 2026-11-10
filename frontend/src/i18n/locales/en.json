@@ -4126,7 +4126,6 @@
             "everythingBelowDescribesTheMachinesServerkit": "Everything below describes the servers ServerKit runs on. Add a monitor to watch a website, an API endpoint, a database port or a WordPress site and get an incident when it stops answering.",
             "everythingBelowDescribesTheMachinesServerkitShort": "Below: the servers ServerKit runs on.",
             "liveChecks": "Live checks",
-            "loadingMonitors": "Loading monitors",
             "manage": "Manage",
             "monitors": "Monitors",
             "monitorsDown": "Monitors down",

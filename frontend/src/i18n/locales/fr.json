@@ -4016,8 +4016,7 @@
             "mostRecentResults": "Résultats les plus récents",
             "noChecksRecordedYetTheScheduler": "Aucune vérification enregistrée pour l'instant : le planificateur interroge les intervalles de chaque moniteur.",
             "nothingIsBeingWatchedYet": "Rien n'est encore regardé",
-            "couldntLoadMonitors": "Impossible de charger les moniteurs.",
-            "loadingMonitors": "Chargement des moniteurs"
+            "couldntLoadMonitors": "Impossible de charger les moniteurs."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Créez un réseau pour connecter les conteneurs.",

@@ -4016,8 +4016,7 @@
             "mostRecentResults": "সাম্প্রতিক ফলাফল",
             "noChecksRecordedYetTheScheduler": "এখনও কোন চেক রেকর্ড করা হয়নি — প্রতিটি মনিটরের ব্যবধানে শিডিউলারের পোল।",
             "nothingIsBeingWatchedYet": "এখনও কিছুই দেখা হচ্ছে না",
-            "couldntLoadMonitors": "মনিটরগুলো লোড করা যায়নি।",
-            "loadingMonitors": "মনিটর লোড হচ্ছে"
+            "couldntLoadMonitors": "মনিটরগুলো লোড করা যায়নি।"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "পাত্রে সংযোগ করার জন্য একটি নেটওয়ার্ক তৈরি করুন।",

@@ -4016,8 +4016,7 @@
             "mostRecentResults": "最新結果",
             "noChecksRecordedYetTheScheduler": "尚未記錄任何檢查結果；排程器會依各監測器的間隔進行檢查。",
             "nothingIsBeingWatchedYet": "目前還沒有任何內容被關注",
-            "couldntLoadMonitors": "無法載入監控項。",
-            "loadingMonitors": "正在載入監控項"
+            "couldntLoadMonitors": "無法載入監控項。"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "建立網路來連線容器。",

@@ -4016,8 +4016,7 @@
             "mostRecentResults": "Resultados mais recentes",
             "noChecksRecordedYetTheScheduler": "Nenhuma verificação registrada ainda — o agendador pesquisa o intervalo de cada monitor.",
             "nothingIsBeingWatchedYet": "Nada está sendo assistido ainda",
-            "couldntLoadMonitors": "Não foi possível carregar os monitores.",
-            "loadingMonitors": "Carregando monitores"
+            "couldntLoadMonitors": "Não foi possível carregar os monitores."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Crie uma rede para conectar contêineres.",

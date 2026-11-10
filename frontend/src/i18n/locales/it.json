@@ -4016,8 +4016,7 @@
             "mostRecentResults": "Risultati più recenti",
             "noChecksRecordedYetTheScheduler": "Nessun controllo ancora registrato: lo scheduler esegue il polling sull'intervallo di ciascun monitor.",
             "nothingIsBeingWatchedYet": "Non si sta ancora guardando nulla",
-            "couldntLoadMonitors": "Impossibile caricare i monitor.",
-            "loadingMonitors": "Caricamento dei monitor"
+            "couldntLoadMonitors": "Impossibile caricare i monitor."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Crea una rete per connettere i contenitori.",

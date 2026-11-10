@@ -4016,8 +4016,7 @@
             "mostRecentResults": "ผลลัพธ์ล่าสุด",
             "noChecksRecordedYetTheScheduler": "ยังไม่มีการบันทึกการตรวจสอบ — ตัวกำหนดตารางเวลาจะโพลตามช่วงเวลาของจอภาพแต่ละจอ",
             "nothingIsBeingWatchedYet": "ยังไม่ได้ดูอะไรเลย",
-            "couldntLoadMonitors": "ไม่สามารถโหลดมอนิเตอร์ได้",
-            "loadingMonitors": "กำลังโหลดมอนิเตอร์"
+            "couldntLoadMonitors": "ไม่สามารถโหลดมอนิเตอร์ได้"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "สร้างเครือข่ายเพื่อเชื่อมต่อคอนเทนเนอร์",

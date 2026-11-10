@@ -4016,8 +4016,7 @@
             "mostRecentResults": "أحدث النتائج",
             "noChecksRecordedYetTheScheduler": "لم يتم تسجيل أي عمليات تحقق حتى الآن - يقوم المجدول بالاستقصاء على الفاصل الزمني لكل جهاز عرض.",
             "nothingIsBeingWatchedYet": "لا شيء يتم مراقبته بعد",
-            "couldntLoadMonitors": "تعذّر تحميل أجهزة المراقبة.",
-            "loadingMonitors": "جارٍ تحميل أجهزة المراقبة"
+            "couldntLoadMonitors": "تعذّر تحميل أجهزة المراقبة."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "إنشاء شبكة لربط الحاويات.",

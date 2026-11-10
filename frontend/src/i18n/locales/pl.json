@@ -4016,8 +4016,7 @@
             "mostRecentResults": "Najnowsze wyniki",
             "noChecksRecordedYetTheScheduler": "Nie zarejestrowano jeszcze żadnych kontroli — program planujący odpytuje interwał każdego monitora.",
             "nothingIsBeingWatchedYet": "Na razie nic nie jest oglądane",
-            "couldntLoadMonitors": "Nie udało się wczytać monitorów.",
-            "loadingMonitors": "Wczytywanie monitorów"
+            "couldntLoadMonitors": "Nie udało się wczytać monitorów."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Utwórz sieć do łączenia kontenerów.",

@@ -5,23 +5,15 @@
 // machines ServerKit runs on, and nothing described the things it is supposed to
 // be watching. Host health stays below; this sits above it because "is the site
 // up" is the question the page is actually for.
-import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Activity, Plus, Radar, ShieldAlert, Timer, Zap } from 'lucide-react';
-import api from '../../services/api';
 import { AreaChart, KpiBand, MetricCard, Pill } from '@/components/ds';
 import { Button } from '@/components/ui/button';
 import { monitorStateOf } from './monitorShared';
-import { usePolling } from '../../hooks/usePolling';
 import { useTranslation } from 'react-i18next';
 import InfoTip from '@/components/InfoTip';
 import ErrorState from '../ErrorState';
-import { Skeleton } from '../Skeleton';
 
-const POLL_MS = 15000;
-const FEED_LIMIT = 9;
-// Height of the monitor list at its usual size (rows + header), for the first-load placeholder.
-const SKELETON_LIST_HEIGHT = 407;
 
 function relativeTime(iso) {
     if (!iso) return 'never';
@@ -33,73 +25,10 @@ function relativeTime(iso) {
     return `${Math.floor(seconds / 3600)}h ago`;
 }
 
-export default function MonitorsSummary({ refreshKey = 0 }) {
+export default function MonitorsSummary({ summary }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [monitors, setMonitors] = useState([]);
-    const [stats, setStats] = useState(null);
-    const [feed, setFeed] = useState([]);
-    const [loaded, setLoaded] = useState(false);
-    const [loadError, setLoadError] = useState(null);
-
-    const load = useCallback(async () => {
-        try {
-            const [listRes, statsRes] = await Promise.all([
-                api.getMonitors(),
-                api.getMonitorStats().catch(() => null),
-            ]);
-            const list = listRes?.monitors || [];
-            setMonitors(list);
-            setStats(statsRes?.stats || null);
-            setLoadError(null);
-
-            // The live feed is the most recently checked monitors, newest first —
-            // derived from what we already fetched rather than a second request
-            // per monitor.
-            setFeed(
-                [...list]
-                    .filter((m) => m.last_check_at && !m.is_paused)
-                    .sort((a, b) => new Date(b.last_check_at) - new Date(a.last_check_at))
-                    .slice(0, FEED_LIMIT),
-            );
-        } catch (err) {
-            // Overview must survive a monitors outage; the rest of the page is fine.
-            setLoadError(err);
-        } finally {
-            setLoaded(true);
-        }
-    }, []);
-
-    const refresh = usePolling(load, POLL_MS);
-
-    // The parent bumps refreshKey to force a reload (e.g. after creating a
-    // monitor); it is not part of the polling schedule.
-    useEffect(() => {
-        if (refreshKey) refresh();
-    }, [refreshKey, refresh]);
-
-    // First load holds the KPI band and the two-panel row at their loaded size,
-    // so the host sections below stay put when the monitors arrive.
-    if (!loaded) {
-        return (
-            <div
-                className="mon-monitors-summary"
-                role="status"
-                aria-busy="true"
-                aria-label={t('app.monitorsSummary.loadingMonitors', 'Loading monitors')}
-            >
-                <KpiBand loading count={4} className="mon-kpiband--loaded-size" />
-                <div className="mon-grid2" aria-hidden="true">
-                    {[0, 1].map((p) => (
-                        <section className="monitoring-panel" key={p}>
-                            <Skeleton variant="title" width="30%" />
-                            <Skeleton variant="block" height={SKELETON_LIST_HEIGHT} />
-                        </section>
-                    ))}
-                </div>
-            </div>
-        );
-    }
+    const { monitors, stats, feed, loadError, load } = summary;
 
     // A failed fetch with nothing loaded is not "nothing is being watched".
     if (loadError && !monitors.length) {

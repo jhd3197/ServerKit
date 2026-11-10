@@ -4016,8 +4016,7 @@
             "mostRecentResults": "Hasil terkini",
             "noChecksRecordedYetTheScheduler": "Belum ada pemeriksaan yang dicatat — penjadwal melakukan jajak pendapat pada setiap interval monitor.",
             "nothingIsBeingWatchedYet": "Belum ada yang diawasi",
-            "couldntLoadMonitors": "Tidak dapat memuat monitor.",
-            "loadingMonitors": "Memuat monitor"
+            "couldntLoadMonitors": "Tidak dapat memuat monitor."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Buat jaringan untuk menghubungkan kontainer.",

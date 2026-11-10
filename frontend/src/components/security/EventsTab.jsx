@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
-import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
 import { Skeleton } from '@/components/Skeleton';
 import { Feed, FeedItem } from '@/components/ds';
@@ -109,7 +108,9 @@ const EventsTab = () => {
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">
                     {loading ? (
-                        <EmptyState loading loadingVariant="feed" loadingRows={10} title={t('common.loading', 'Loading…')} />
+                        <div role="status" aria-busy="true" aria-label={t('common.loading', 'Loading…')}>
+                            <Skeleton variant="line" width="60%" height={14} />
+                        </div>
                     ) : eventsError && events.length === 0 ? (
                         <ErrorState
                             title={t('app.eventsTab.couldntLoadSecurityEvents', "Couldn't load security events.")}

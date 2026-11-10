@@ -4016,8 +4016,7 @@
             "mostRecentResults": "Neueste Ergebnisse",
             "noChecksRecordedYetTheScheduler": "Es wurden noch keine Prüfungen aufgezeichnet – der Planer fragt die Intervalle jedes Monitors ab.",
             "nothingIsBeingWatchedYet": "Es wird noch nichts angeschaut",
-            "couldntLoadMonitors": "Monitore konnten nicht geladen werden.",
-            "loadingMonitors": "Monitore werden geladen"
+            "couldntLoadMonitors": "Monitore konnten nicht geladen werden."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Erstellen Sie ein Netzwerk, um Container zu verbinden.",

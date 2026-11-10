@@ -51,7 +51,8 @@ const Security = () => {
         await loadStatus();
     }
 
-    if (loading) {
+    // Only Overview renders the status; other tabs load themselves in parallel.
+    if (loading && activeTab === 'overview') {
         return (
             <div className="sk-tabgroup__inner security-page">
                 <EmptyState loading loadingVariant="detail" title={t('app.security.loadingSecurityStatus', 'Loading security status…')} />

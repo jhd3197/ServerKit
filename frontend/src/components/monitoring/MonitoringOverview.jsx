@@ -48,7 +48,7 @@ function last(series) {
 export default function MonitoringOverview({
     scope, isHost, scopeLabel, status, activeAlerts = [],
     speedTest, speedTestRunning, onRunSpeedTest,
-    thresholds = {}, onScopeChange, refreshKey = 0,
+    thresholds = {}, onScopeChange, refreshKey = 0, monitorsSummary,
 }) {
     const { t } = useTranslation();
     const [period, setPeriod] = useState('24h');
@@ -198,7 +198,7 @@ export default function MonitoringOverview({
             {/* Monitors first: "is the site up" is the question this page is
                 for, and everything below describes the machines ServerKit runs
                 on rather than the things it is watching. */}
-            <MonitorsSummary refreshKey={refreshKey} />
+            <MonitorsSummary summary={monitorsSummary} />
 
             <div className="mon-section-head">
                 <h3>{t('app.monitoringOverview.hostHealth', 'Host health')}</h3>

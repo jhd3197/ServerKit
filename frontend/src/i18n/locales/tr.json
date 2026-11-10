@@ -4016,8 +4016,7 @@
             "mostRecentResults": "En yeni sonuçlar",
             "noChecksRecordedYetTheScheduler": "Henüz hiçbir kontrol kaydedilmedi; zamanlayıcı her monitörün aralığını yoklar.",
             "nothingIsBeingWatchedYet": "Henüz hiçbir şey izlenmiyor",
-            "couldntLoadMonitors": "Monitörler yüklenemedi.",
-            "loadingMonitors": "Monitörler yükleniyor"
+            "couldntLoadMonitors": "Monitörler yüklenemedi."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Kapları bağlamak için bir ağ oluşturun.",

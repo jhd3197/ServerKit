@@ -4016,8 +4016,7 @@
             "mostRecentResults": "最新结果",
             "noChecksRecordedYetTheScheduler": "尚未记录任何检查 - 调度程序轮询每个监视器的时间间隔。",
             "nothingIsBeingWatchedYet": "目前还没有任何内容被关注",
-            "couldntLoadMonitors": "无法加载监控项。",
-            "loadingMonitors": "正在加载监控项"
+            "couldntLoadMonitors": "无法加载监控项。"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "创建网络来连接容器。",
