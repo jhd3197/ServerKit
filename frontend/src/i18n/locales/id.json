@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "melalui penyedia DNS Anda.",
             "webrootPath": "Jalur Webroot",
             "wildcardCertificateDns01Validation": "Sertifikat wildcard (validasi DNS-01)",
-            "wildcardCertificateIssued": "Sertifikat wildcard diterbitkan"
+            "wildcardCertificateIssued": "Sertifikat wildcard diterbitkan",
+            "domainsRequired": "Masukkan setidaknya satu domain."
         },
         "sSOCallback": {
             "authenticationFailed": "Otentikasi Gagal",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "baru saja",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "Masukkan domain.",
+            "domainInvalid": "Masukkan domain yang valid.",
+            "emailInvalid": "Masukkan alamat email yang valid.",
+            "required": "Kolom ini wajib diisi."
         }
     },
     "errors": {

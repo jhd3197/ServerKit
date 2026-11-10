@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "über Ihren DNS-Anbieter.",
             "webrootPath": "Webroot-Pfad",
             "wildcardCertificateDns01Validation": "Wildcard-Zertifikat (DNS-01-Validierung)",
-            "wildcardCertificateIssued": "Wildcard-Zertifikat ausgestellt"
+            "wildcardCertificateIssued": "Wildcard-Zertifikat ausgestellt",
+            "domainsRequired": "Gib mindestens eine Domain ein."
         },
         "sSOCallback": {
             "authenticationFailed": "Authentifizierung fehlgeschlagen",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "gerade jetzt",
             "minutesShort": "{{count}}M"
+        },
+        "validation": {
+            "domainEmpty": "Gib eine Domain ein.",
+            "domainInvalid": "Gib eine gültige Domain ein.",
+            "emailInvalid": "Gib eine gültige E-Mail-Adresse ein.",
+            "required": "Dieses Feld ist erforderlich."
         }
     },
     "errors": {

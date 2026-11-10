@@ -5235,6 +5235,7 @@
             "dnsProvider": "DNS provider",
             "documentRootForHttpValidation": "Document root for HTTP validation",
             "domainsLabel": "Domains",
+            "domainsRequired": "Enter at least one domain.",
             "emailAddress": "Email address",
             "exampleComWwwExampleCom": "example.com, www.example.com",
             "expires": "Expires",
@@ -8567,6 +8568,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "just now",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "Enter a domain.",
+            "domainInvalid": "Enter a valid domain.",
+            "emailInvalid": "Enter a valid email address.",
+            "required": "This field is required."
         }
     },
     "effectiveEnv": {

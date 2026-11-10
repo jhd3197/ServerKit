@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useId } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Layers,
@@ -24,6 +24,8 @@ import { Tip } from '@/components/ui/tooltip';
 import PageLayout from '../layouts/PageLayout';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { FormField, FormRow } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { Textarea } from '@/components/ui/textarea';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
@@ -124,6 +126,28 @@ const QueueOperations = () => {
 
     const [sendTarget, setSendTarget] = useState(null);
     const [sendForm, setSendForm] = useState({ payload: '{}', priority: 0, delay_ms: 0 });
+
+    const fieldId = useId();
+    const required = t('common.validation.required', 'This field is required.');
+    const jsonProblem = (text, invalid) => {
+        try { JSON.parse(text); return null; } catch { return invalid; }
+    };
+    const groupErrors = useFieldErrors({
+        name: groupForm.name.trim() ? null : required,
+    }, `${fieldId}-group`);
+    const queueErrors = useFieldErrors({
+        group: (queueForm.groupSlug || selectedGroup) ? null : t('app.queueOperations.selectAGroupForTheQueue', 'Select a group for the queue'),
+        name: queueForm.name.trim() ? null : required,
+        config: jsonProblem(queueForm.config, t('app.queueOperations.configMustBeValidJson', 'Config must be valid JSON, like {"key": "value"}.')),
+    }, `${fieldId}-queue`);
+    const sendErrors = useFieldErrors({
+        payload: sendForm.payload.trim()
+            ? jsonProblem(sendForm.payload, t('app.queueOperations.payloadMustBeValidJson', 'Payload must be valid JSON, like {"key": "value"}.'))
+            : required,
+    }, `${fieldId}-send`);
+    const closeGroup = () => { setShowGroupModal(false); groupErrors.reset(); };
+    const closeQueue = () => { setShowQueueModal(false); queueErrors.reset(); };
+    const closeSend = () => { setSendTarget(null); sendErrors.reset(); };
     const { sorts, setSorts } = useTableSort({ storageKey: 'serverkit-table-queue-ops-sort' });
     const {
         hiddenKeys, setHiddenKeys,
@@ -229,34 +253,27 @@ const QueueOperations = () => {
 
     const handleCreateGroup = async (e) => {
         e.preventDefault();
+        if (!groupErrors.attempt()) return;
         try {
             await api.createQueueGroup({
                 name: groupForm.name,
                 description: groupForm.description,
             });
             toast.success(t('app.queueOperations.queueGroupCreated', 'Queue group created'));
-            setShowGroupModal(false);
+            closeGroup();
             setGroupForm({ name: '', description: '' });
             loadData();
         } catch (err) {
+            if (groupErrors.fromServer(err)) return;
             toastError(toast, t('app.queueOperations.couldntCreateGroup', "Couldn't create the group."), err);
         }
     };
 
     const handleCreateQueue = async (e) => {
         e.preventDefault();
+        if (!queueErrors.attempt()) return;
         const groupSlug = queueForm.groupSlug || selectedGroup;
-        if (!groupSlug) {
-            toast.error(t('app.queueOperations.selectAGroupForTheQueue', 'Select a group for the queue'));
-            return;
-        }
-        let config = {};
-        try {
-            config = JSON.parse(queueForm.config);
-        } catch (err) {
-            toastError(toast, t('app.queueOperations.configMustBeValidJson', 'Config must be valid JSON, like {"key": "value"}.'), err);
-            return;
-        }
+        const config = JSON.parse(queueForm.config);
         try {
             await api.createQueue(groupSlug, {
                 name: queueForm.name,
@@ -264,11 +281,12 @@ const QueueOperations = () => {
                 config,
             });
             toast.success(t('app.queueOperations.queueCreated', 'Queue created'));
-            setShowQueueModal(false);
+            closeQueue();
             setQueueForm({ name: '', description: '', config: '{}' });
             loadQueues(selectedGroup);
             loadData();
         } catch (err) {
+            if (queueErrors.fromServer(err)) return;
             toastError(toast, t('app.queueOperations.couldntCreateQueue', "Couldn't create the queue."), err);
         }
     };
@@ -291,6 +309,7 @@ const QueueOperations = () => {
     };
 
     const openSendModal = (queue) => {
+        sendErrors.reset();
         setSendTarget(queue);
         setSendForm({ payload: '{}', priority: 0, delay_ms: 0 });
     };
@@ -302,20 +321,15 @@ const QueueOperations = () => {
             toast.error(t('app.queueOperations.selectADestinationQueue', 'Select a destination queue'));
             return;
         }
-        let payload = {};
-        try {
-            payload = JSON.parse(sendForm.payload);
-        } catch (err) {
-            toastError(toast, t('app.queueOperations.payloadMustBeValidJson', 'Payload must be valid JSON, like {"key": "value"}.'), err);
-            return;
-        }
+        if (!sendErrors.attempt()) return;
+        const payload = JSON.parse(sendForm.payload);
         try {
             await api.sendMessage(queue.group_slug, queue.slug, payload, {
                 priority: parseInt(sendForm.priority, 10) || 0,
                 delay_ms: parseInt(sendForm.delay_ms, 10) || 0,
             });
             toast.success(t('app.queueOperations.messageSent', 'Message sent'));
-            setSendTarget(null);
+            closeSend();
             loadQueues(selectedGroup);
             loadData();
         } catch (err) {
@@ -680,64 +694,57 @@ const QueueOperations = () => {
             </div>
 
             {/* Create Group Modal */}
-            <Modal open={showGroupModal} onClose={() => setShowGroupModal(false)} title={t('app.queueOperations.createQueueGroup', 'Create queue group')}>
-                        <form onSubmit={handleCreateGroup}>
-                                <div className="form-group">
-                                    <Label htmlFor="group-name">{t('common.labels.name', 'Name')}</Label>
-                                    <Input id="group-name" value={groupForm.name} onChange={(e) => setGroupForm({ ...groupForm, name: e.target.value })} required />
-                                </div>
-                                <div className="form-group">
-                                    <Label htmlFor="group-description">{t('common.labels.description', 'Description')}</Label>
-                                    <Input id="group-description" value={groupForm.description} onChange={(e) => setGroupForm({ ...groupForm, description: e.target.value })} />
-                                </div>
+            <Modal open={showGroupModal} onClose={closeGroup} title={t('app.queueOperations.createQueueGroup', 'Create queue group')}>
+                        <form onSubmit={handleCreateGroup} noValidate>
+                                <FormField label={t('common.labels.name', 'Name')} htmlFor={`${fieldId}-group-name`} required error={groupErrors.error('name')}>
+                                    <Input id={`${fieldId}-group-name`} value={groupForm.name} onChange={(e) => { groupErrors.clear('name'); setGroupForm({ ...groupForm, name: e.target.value }); }} onBlur={() => groupErrors.touch('name')} />
+                                </FormField>
+                                <FormField label={t('common.labels.description', 'Description')} htmlFor={`${fieldId}-group-description`}>
+                                    <Input id={`${fieldId}-group-description`} value={groupForm.description} onChange={(e) => setGroupForm({ ...groupForm, description: e.target.value })} />
+                                </FormField>
                             <div className="modal-actions">
-                                <Button type="button" variant="outline" onClick={() => setShowGroupModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
+                                <Button type="button" variant="outline" onClick={closeGroup}>{t('common.actions.cancel', 'Cancel')}</Button>
                                 <Button type="submit">{t('app.queueOperations.createGroup', 'Create group')}</Button>
                             </div>
                         </form>
             </Modal>
 
             {/* Create Queue Modal */}
-            <Modal open={showQueueModal} onClose={() => setShowQueueModal(false)} title={t('app.queueOperations.createQueue', 'Create queue')}>
-                        <form onSubmit={handleCreateQueue}>
-                                <div className="form-group">
-                                    <Label htmlFor="queue-group">{t('app.queueOperations.group', 'Group')}</Label>
+            <Modal open={showQueueModal} onClose={closeQueue} title={t('app.queueOperations.createQueue', 'Create queue')}>
+                        <form onSubmit={handleCreateQueue} noValidate>
+                                <FormField label={t('app.queueOperations.group', 'Group')} htmlFor={`${fieldId}-queue-group`} required error={queueErrors.error('group')}>
                                     <Select
                                         value={queueForm.groupSlug || selectedGroup || ''}
                                         onValueChange={(v) => setQueueForm({ ...queueForm, groupSlug: v })}
-                                        required
                                     >
-                                        <SelectTrigger id="queue-group">
+                                        <SelectTrigger id={`${fieldId}-queue-group`} onBlur={() => queueErrors.touch('group')}>
                                             <SelectValue placeholder={t('app.queueOperations.selectGroup', 'Select group')} />
                                         </SelectTrigger>
                                         <SelectContent>
                                             {groups.map(g => <SelectItem key={g.id} value={g.slug}>{g.name}</SelectItem>)}
                                         </SelectContent>
                                     </Select>
-                                </div>
-                                <div className="form-group">
-                                    <Label htmlFor="queue-name">{t('common.labels.name', 'Name')}</Label>
-                                    <Input id="queue-name" value={queueForm.name} onChange={(e) => setQueueForm({ ...queueForm, name: e.target.value })} required />
-                                </div>
-                                <div className="form-group">
-                                    <Label htmlFor="queue-description">{t('common.labels.description', 'Description')}</Label>
-                                    <Input id="queue-description" value={queueForm.description} onChange={(e) => setQueueForm({ ...queueForm, description: e.target.value })} />
-                                </div>
-                                <div className="form-group">
-                                    <Label htmlFor="queue-config">{t('app.queueOperations.configJson', 'Config (JSON)')}</Label>
-                                    <Textarea id="queue-config" value={queueForm.config} onChange={(e) => setQueueForm({ ...queueForm, config: e.target.value })} rows={4} />
-                                </div>
+                                </FormField>
+                                <FormField label={t('common.labels.name', 'Name')} htmlFor={`${fieldId}-queue-name`} required error={queueErrors.error('name')}>
+                                    <Input id={`${fieldId}-queue-name`} value={queueForm.name} onChange={(e) => setQueueForm({ ...queueForm, name: e.target.value })} onBlur={() => queueErrors.touch('name')} />
+                                </FormField>
+                                <FormField label={t('common.labels.description', 'Description')} htmlFor={`${fieldId}-queue-description`}>
+                                    <Input id={`${fieldId}-queue-description`} value={queueForm.description} onChange={(e) => setQueueForm({ ...queueForm, description: e.target.value })} />
+                                </FormField>
+                                <FormField label={t('app.queueOperations.configJson', 'Config (JSON)')} htmlFor={`${fieldId}-queue-config`} error={queueErrors.error('config')}>
+                                    <Textarea id={`${fieldId}-queue-config`} value={queueForm.config} onChange={(e) => setQueueForm({ ...queueForm, config: e.target.value })} onBlur={() => queueErrors.touch('config')} rows={4} />
+                                </FormField>
                             <div className="modal-actions">
-                                <Button type="button" variant="outline" onClick={() => setShowQueueModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
+                                <Button type="button" variant="outline" onClick={closeQueue}>{t('common.actions.cancel', 'Cancel')}</Button>
                                 <Button type="submit">{t('app.queueOperations.createQueue', 'Create queue')}</Button>
                             </div>
                         </form>
             </Modal>
 
             {/* Send Message Modal */}
-            <Modal open={!!sendTarget} onClose={() => setSendTarget(null)} title={t('app.queueOperations.sendMessage2', 'Send message')}>
+            <Modal open={!!sendTarget} onClose={closeSend} title={t('app.queueOperations.sendMessage2', 'Send message')}>
                         {sendTarget && (
-                        <form onSubmit={handleSendMessage}>
+                        <form onSubmit={handleSendMessage} noValidate>
                                 <div className="queue-send-destination">
                                     <div>
                                         <Label>{t('app.queueOperations.group', 'Group')}</Label>
@@ -748,28 +755,25 @@ const QueueOperations = () => {
                                         <div className="queue-send-readonly">{sendTarget.slug}</div>
                                     </div>
                                 </div>
-                                <div className="form-group">
-                                    <Label htmlFor="payload">{t('app.queueOperations.payloadJson', 'Payload (JSON)')}</Label>
+                                <FormField label={t('app.queueOperations.payloadJson', 'Payload (JSON)')} htmlFor={`${fieldId}-send-payload`} required error={sendErrors.error('payload')}>
                                     <Textarea
-                                        id="payload"
+                                        id={`${fieldId}-send-payload`}
                                         value={sendForm.payload}
                                         onChange={(e) => setSendForm({ ...sendForm, payload: e.target.value })}
+                                        onBlur={() => sendErrors.touch('payload')}
                                         rows={6}
-                                        required
                                     />
-                                </div>
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <Label htmlFor="priority">{t('app.queueOperations.priority', 'Priority')}</Label>
-                                        <Input id="priority" type="number" value={sendForm.priority} onChange={(e) => setSendForm({ ...sendForm, priority: e.target.value })} />
-                                    </div>
-                                    <div className="form-group">
-                                        <Label htmlFor="delay_ms">{t('app.queueOperations.delayMs', 'Delay (ms)')}</Label>
-                                        <Input id="delay_ms" type="number" value={sendForm.delay_ms} onChange={(e) => setSendForm({ ...sendForm, delay_ms: e.target.value })} />
-                                    </div>
-                                </div>
+                                </FormField>
+                                <FormRow>
+                                    <FormField label={t('app.queueOperations.priority', 'Priority')} htmlFor={`${fieldId}-send-priority`}>
+                                        <Input id={`${fieldId}-send-priority`} type="number" value={sendForm.priority} onChange={(e) => setSendForm({ ...sendForm, priority: e.target.value })} />
+                                    </FormField>
+                                    <FormField label={t('app.queueOperations.delayMs', 'Delay (ms)')} htmlFor={`${fieldId}-send-delay`}>
+                                        <Input id={`${fieldId}-send-delay`} type="number" value={sendForm.delay_ms} onChange={(e) => setSendForm({ ...sendForm, delay_ms: e.target.value })} />
+                                    </FormField>
+                                </FormRow>
                             <div className="modal-actions">
-                                <Button type="button" variant="outline" onClick={() => setSendTarget(null)}>{t('common.actions.cancel', 'Cancel')}</Button>
+                                <Button type="button" variant="outline" onClick={closeSend}>{t('common.actions.cancel', 'Cancel')}</Button>
                                 <Button type="submit"><Send size={14} className="queue-action-icon" /> {t('app.queueOperations.sendMessage2', 'Send message')}</Button>
                             </div>
                         </form>

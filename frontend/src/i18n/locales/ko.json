@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "DNS 공급자를 통해.",
             "webrootPath": "웹루트 경로",
             "wildcardCertificateDns01Validation": "와일드카드 인증서(DNS-01 검증)",
-            "wildcardCertificateIssued": "와일드카드 인증서 발급됨"
+            "wildcardCertificateIssued": "와일드카드 인증서 발급됨",
+            "domainsRequired": "도메인을 하나 이상 입력하세요."
         },
         "sSOCallback": {
             "authenticationFailed": "인증 실패",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}시간",
             "justNow": "지금 막",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "도메인을 입력하세요.",
+            "domainInvalid": "올바른 도메인을 입력하세요.",
+            "emailInvalid": "올바른 이메일 주소를 입력하세요.",
+            "required": "필수 입력 항목입니다."
         }
     },
     "errors": {

@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import {
     Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList,
 } from './ui/command';
+import { useFieldProps } from './ui/field-context';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { useResourceOptions } from '../hooks/useResourceOptions';
 import { normalizeResourceRef, resourceKey } from '../utils/resourceRefs';
@@ -34,6 +35,8 @@ export default function ResourcePicker({
     id,
 }) {
     const { t } = useTranslation();
+    // Inside a FormField the trigger reports required/invalid and points at the error.
+    const fieldProps = useFieldProps({ id });
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState('');
     const search = useResourceOptions({
@@ -108,7 +111,10 @@ export default function ResourcePicker({
         }}>
             <PopoverTrigger asChild>
                 <Button
-                    id={id}
+                    id={fieldProps.id}
+                    aria-describedby={fieldProps['aria-describedby']}
+                    aria-invalid={fieldProps['aria-invalid']}
+                    aria-required={fieldProps['aria-required']}
                     type="button"
                     variant="outline"
                     className={triggerClassName}

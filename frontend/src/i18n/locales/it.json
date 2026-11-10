@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "tramite il tuo fornitore DNS.",
             "webrootPath": "Percorso Webroot",
             "wildcardCertificateDns01Validation": "Certificato jolly (convalida DNS-01)",
-            "wildcardCertificateIssued": "Certificato jolly rilasciato"
+            "wildcardCertificateIssued": "Certificato jolly rilasciato",
+            "domainsRequired": "Inserisci almeno un dominio."
         },
         "sSOCallback": {
             "authenticationFailed": "Autenticazione non riuscita",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "proprio adesso",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "Inserisci un dominio.",
+            "domainInvalid": "Inserisci un dominio valido.",
+            "emailInvalid": "Inserisci un indirizzo e-mail valido.",
+            "required": "Questo campo è obbligatorio."
         }
     },
     "errors": {

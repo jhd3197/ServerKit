@@ -240,7 +240,7 @@ const ADOPTION_CEILINGS = [
     },
     {
         name: 'hand-rolled form-group blocks (F2: FormField/useForm)',
-        ceiling: 321,
+        ceiling: 253,
         include: (file) => file.startsWith('pages/') || file.startsWith('components/'),
         pattern: /form-group/g,
     },

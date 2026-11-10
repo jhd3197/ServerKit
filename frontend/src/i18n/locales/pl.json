@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "za pośrednictwem dostawcy DNS.",
             "webrootPath": "Ścieżka Webroota",
             "wildcardCertificateDns01Validation": "Certyfikat wieloznaczny (walidacja DNS-01)",
-            "wildcardCertificateIssued": "Wydano certyfikat wieloznaczny"
+            "wildcardCertificateIssued": "Wydano certyfikat wieloznaczny",
+            "domainsRequired": "Podaj co najmniej jedną domenę."
         },
         "sSOCallback": {
             "authenticationFailed": "Uwierzytelnianie nie powiodło się",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "właśnie",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "Podaj domenę.",
+            "domainInvalid": "Podaj prawidłową domenę.",
+            "emailInvalid": "Podaj prawidłowy adres e-mail.",
+            "required": "To pole jest wymagane."
         }
     },
     "errors": {

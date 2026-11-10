@@ -5102,7 +5102,8 @@
             "viaYourDnsProvider": "a través de tu proveedor de DNS.",
             "webrootPath": "Ruta del webroot",
             "wildcardCertificateDns01Validation": "Certificado comodín (validación DNS-01)",
-            "wildcardCertificateIssued": "Certificado comodín emitido"
+            "wildcardCertificateIssued": "Certificado comodín emitido",
+            "domainsRequired": "Introduce al menos un dominio."
         },
         "sSOCallback": {
             "authenticationFailed": "La autenticación falló",
@@ -8125,6 +8126,12 @@
             "hoursShort": "{{count}} h",
             "justNow": "ahora mismo",
             "minutesShort": "{{count}} min"
+        },
+        "validation": {
+            "domainEmpty": "Introduce un dominio.",
+            "domainInvalid": "Introduce un dominio válido.",
+            "emailInvalid": "Introduce una dirección de correo válida.",
+            "required": "Este campo es obligatorio."
         }
     },
     "errors": {

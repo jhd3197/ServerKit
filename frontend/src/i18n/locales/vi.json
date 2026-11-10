@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "thông qua nhà cung cấp DNS của bạn.",
             "webrootPath": "Đường dẫn Webroot",
             "wildcardCertificateDns01Validation": "Chứng chỉ ký tự đại diện (xác thực DNS-01)",
-            "wildcardCertificateIssued": "Chứng chỉ ký tự đại diện đã được cấp"
+            "wildcardCertificateIssued": "Chứng chỉ ký tự đại diện đã được cấp",
+            "domainsRequired": "Nhập ít nhất một tên miền."
         },
         "sSOCallback": {
             "authenticationFailed": "Xác thực không thành công",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "ngay bây giờ",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "Nhập tên miền.",
+            "domainInvalid": "Nhập tên miền hợp lệ.",
+            "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+            "required": "Trường này là bắt buộc."
         }
     },
     "errors": {

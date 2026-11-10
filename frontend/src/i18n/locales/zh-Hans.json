@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "通过您的 DNS 提供商。",
             "webrootPath": "网络根路径",
             "wildcardCertificateDns01Validation": "通配符证书（DNS-01 验证）",
-            "wildcardCertificateIssued": "颁发通配符证书"
+            "wildcardCertificateIssued": "颁发通配符证书",
+            "domainsRequired": "请至少输入一个域名。"
         },
         "sSOCallback": {
             "authenticationFailed": "认证失败",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}小时",
             "justNow": "现在",
             "minutesShort": "{{count}}米"
+        },
+        "validation": {
+            "domainEmpty": "请输入域名。",
+            "domainInvalid": "请输入有效的域名。",
+            "emailInvalid": "请输入有效的电子邮件地址。",
+            "required": "此字段为必填项。"
         }
     },
     "errors": {

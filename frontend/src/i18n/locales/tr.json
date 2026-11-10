@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "DNS sağlayıcınız aracılığıyla.",
             "webrootPath": "Web kökü Yolu",
             "wildcardCertificateDns01Validation": "Joker karakter sertifikası (DNS-01 doğrulaması)",
-            "wildcardCertificateIssued": "Joker karakter sertifikası verildi"
+            "wildcardCertificateIssued": "Joker karakter sertifikası verildi",
+            "domainsRequired": "En az bir alan adı girin."
         },
         "sSOCallback": {
             "authenticationFailed": "Kimlik Doğrulama Başarısız",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "Şu anda",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "Bir alan adı girin.",
+            "domainInvalid": "Geçerli bir alan adı girin.",
+            "emailInvalid": "Geçerli bir e-posta adresi girin.",
+            "required": "Bu alan zorunludur."
         }
     },
     "errors": {
