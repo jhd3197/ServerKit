@@ -462,12 +462,9 @@ const QueueOperations = () => {
 
     if (loading) {
         return (
-            <div className="queue-page queue-page--loading">
-                <div className="queue-loading-card">
-                    <Layers size={24} />
-                    <span>{t('app.queueOperations.loadingQueueBus', 'Loading queue bus…')}</span>
-                </div>
-            </div>
+            <PageLayout fill className="queue-page queue-page--ops" icon={<Layers size={18} />} title={t('app.queueOperations.queueBus', 'Queue bus')}>
+                <EmptyState loading loadingVariant="table" title={t('app.queueOperations.loadingQueueBus', 'Loading queue bus…')} />
+            </PageLayout>
         );
     }
 

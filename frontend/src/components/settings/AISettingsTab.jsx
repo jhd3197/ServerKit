@@ -103,7 +103,7 @@ const AISettingsTab = () => {
         return <div className="settings-section"><p>{t('app.aISettingsTab.adminAccessRequired', 'Admin access required.')}</p></div>;
     }
     if (loading) {
-        return <EmptyState loading title={t('common.loading', 'Loading…')} />;
+        return <EmptyState loading loadingVariant="form" loadingRows={4} title={t('common.loading', 'Loading…')} />;
     }
 
 

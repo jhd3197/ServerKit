@@ -395,10 +395,10 @@
 }
 
 .settings-card__loading {
-    padding: $space-6;
-    text-align: center;
-    color: $text-tertiary;
-    font-size: $text-xs;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    padding: $space-4 0;
 }
 
 .settings-card__footer {

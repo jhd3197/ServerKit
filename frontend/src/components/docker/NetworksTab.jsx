@@ -119,6 +119,9 @@ const NetworksTab = ({ onStatsChange }) => {
     const loadSeq = useRef(0);
     const [loadError, setLoadError] = useState(null);
 
+    // A different server's rows must not linger as the "already loaded" list.
+    useEffect(() => { setNetworks([]); }, [serverId]);
+
     useEffect(() => {
         loadNetworks();
     }, [serverId]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -292,10 +295,10 @@ const NetworksTab = ({ onStatsChange }) => {
         applyPage: applyViewPageState,
     });
 
-    if (loading) {
+    if (loading && networks.length === 0) {
         return (
             <div className="dx-tab-pane">
-                <div className="docker-loading">{t('app.networksTab.loadingNetworks', 'Loading networks…')}</div>
+                <EmptyState loading loadingVariant="table" loadingRows={5} title={t('app.networksTab.loadingNetworks', 'Loading networks…')} />
             </div>
         );
     }

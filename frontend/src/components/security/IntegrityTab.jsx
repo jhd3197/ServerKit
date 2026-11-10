@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
 import { DataTable, DataTableFooter, ListToolbar } from '@/components/ds';
 import {
@@ -426,7 +427,7 @@ const IntegrityTab = () => {
                 onRetry={load}
             />
         ) : (
-            <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
+            <EmptyState loading loadingVariant="detail" title={t('common.loading', 'Loading…')} />
         );
     }
 

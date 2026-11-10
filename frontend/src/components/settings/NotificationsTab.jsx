@@ -135,7 +135,7 @@ const NotificationsTab = () => {
     }
 
     if (loading) {
-        return <EmptyState loading title={t('app.notificationsTab.loadingNotificationSettings', 'Loading notification settings…')} />;
+        return <EmptyState loading loadingVariant="form" loadingRows={5} title={t('app.notificationsTab.loadingNotificationSettings', 'Loading notification settings…')} />;
     }
 
     if (loadError) return <EmptyState title={t('notifications.loadFailed', "Couldn't load notification settings. Reload to try again.")}

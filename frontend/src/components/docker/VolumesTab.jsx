@@ -123,6 +123,9 @@ const VolumesTab = ({ onStatsChange }) => {
     const loadSeq = useRef(0);
     const [loadError, setLoadError] = useState(null);
 
+    // A different server's rows must not linger as the "already loaded" list.
+    useEffect(() => { setVolumes([]); }, [serverId]);
+
     useEffect(() => {
         loadVolumes();
     }, [serverId]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -288,10 +291,10 @@ const VolumesTab = ({ onStatsChange }) => {
         applyPage: applyViewPageState,
     });
 
-    if (loading) {
+    if (loading && volumes.length === 0) {
         return (
             <div className="dx-tab-pane">
-                <div className="docker-loading">{t('app.volumesTab.loadingVolumes', 'Loading volumes…')}</div>
+                <EmptyState loading loadingVariant="table" loadingRows={5} title={t('app.volumesTab.loadingVolumes', 'Loading volumes…')} />
             </div>
         );
     }

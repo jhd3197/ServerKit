@@ -21,6 +21,8 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import EmptyState from '../EmptyState';
+import { ErrorState } from '../ErrorState';
+import { Skeleton } from '../Skeleton';
 import { useConfirm } from '@/hooks/useConfirm';
 import { useTranslation } from 'react-i18next';
 import { formatDate, formatDateTime, formatNumber } from '@/utils/intl';
@@ -93,12 +95,22 @@ const API_KEY_VIEWS = [
     },
 ];
 
+// First-load placeholder that keeps the card near its final height.
+const CardLoading = ({ label, rows = 3 }) => (
+    <div className="settings-card__loading" role="status" aria-busy="true" aria-label={label}>
+        {Array.from({ length: rows }, (_, i) => (
+            <Skeleton key={i} variant="block" height={36} radius={8} />
+        ))}
+    </div>
+);
+
 const ApiKeysSection = () => {
     const { t } = useTranslation();
     const { confirm } = useConfirm();
     const register = useSettingFocus();
     const [keys, setKeys] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [createdKey, setCreatedKey] = useState(null);
 
@@ -114,9 +126,10 @@ const ApiKeysSection = () => {
 
     const loadKeys = () => {
         setLoading(true);
+        setLoadError(null);
         api.getApiKeys().then(data => {
             setKeys(data.api_keys || []);
-        }).catch(() => {}).finally(() => setLoading(false));
+        }).catch(err => setLoadError(err)).finally(() => setLoading(false));
     };
 
     useEffect(() => { loadKeys(); }, []);
@@ -319,8 +332,10 @@ const ApiKeysSection = () => {
             />
             <GridChips {...chrome.chipProps} />
 
-            {loading ? (
-                <div className="settings-card__loading">{t('common.loading', 'Loading…')}</div>
+            {loading && keys.length === 0 ? (
+                <CardLoading label={t('common.loading', 'Loading…')} />
+            ) : loadError && keys.length === 0 ? (
+                <ErrorState compact error={loadError} onRetry={loadKeys} />
             ) : keys.length === 0 ? (
                 <EmptyState
                     icon={Key}
@@ -496,6 +511,7 @@ const WebhookSection = () => {
     const register = useSettingFocus();
     const [subscriptions, setSubscriptions] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [editingSub, setEditingSub] = useState(null);
     const [expandedId, setExpandedId] = useState(null);
@@ -503,9 +519,10 @@ const WebhookSection = () => {
 
     const loadSubscriptions = () => {
         setLoading(true);
+        setLoadError(null);
         api.getEventSubscriptions().then(data => {
             setSubscriptions(data.subscriptions || []);
-        }).catch(() => {}).finally(() => setLoading(false));
+        }).catch(err => setLoadError(err)).finally(() => setLoading(false));
     };
 
     useEffect(() => { loadSubscriptions(); }, []);
@@ -570,8 +587,10 @@ const WebhookSection = () => {
                 </Button>
             </div>
 
-            {loading ? (
-                <div className="settings-card__loading">{t('common.loading', 'Loading…')}</div>
+            {loading && subscriptions.length === 0 ? (
+                <CardLoading label={t('common.loading', 'Loading…')} />
+            ) : loadError && subscriptions.length === 0 ? (
+                <ErrorState compact error={loadError} onRetry={loadSubscriptions} />
             ) : subscriptions.length === 0 ? (
                 <EmptyState
                     icon={Zap}
@@ -714,9 +733,11 @@ const AnalyticsSection = () => {
     const [timeseries, setTimeseries] = useState([]);
     const [period, setPeriod] = useState('24h');
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
 
     const loadData = useCallback(() => {
         setLoading(true);
+        setLoadError(null);
         Promise.all([
             api.getApiAnalyticsOverview(period),
             api.getApiAnalyticsEndpoints(period),
@@ -725,7 +746,7 @@ const AnalyticsSection = () => {
             setOverview(ov);
             setEndpoints(ep.endpoints || []);
             setTimeseries(ts.data || []);
-        }).catch(() => {}).finally(() => setLoading(false));
+        }).catch(err => setLoadError(err)).finally(() => setLoading(false));
     }, [period]);
 
     useEffect(() => { loadData(); }, [loadData]);
@@ -756,8 +777,10 @@ const AnalyticsSection = () => {
                 </div>
             </div>
 
-            {loading ? (
-                <div className="settings-card__loading">{t('common.loading', 'Loading…')}</div>
+            {loading && !overview ? (
+                <CardLoading label={t('common.loading', 'Loading…')} />
+            ) : loadError && !overview ? (
+                <ErrorState compact error={loadError} onRetry={loadData} />
             ) : (
                 <>
                     {overview && (
