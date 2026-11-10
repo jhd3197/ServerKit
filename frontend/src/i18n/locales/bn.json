@@ -1636,7 +1636,8 @@
             "removeCronJob": "ক্রোন জব সরান",
             "scheduleACommandOnTheHost": "হোস্ট crontab-এ একটি কমান্ড নির্ধারণ করুন। এজেন্ট ব্যবহারকারী হিসেবে চলে।",
             "scheduleIsRequired": "সময়সূচী প্রয়োজন",
-            "serverOffline": "সার্ভার অফলাইন"
+            "serverOffline": "সার্ভার অফলাইন",
+            "failedToLoadCronJobs": "cron কাজগুলো লোড করা যায়নি।"
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "এই ড্যাশবোর্ডে এখনো কোনো উইজেট নেই।"
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "কনফিগারেশন সংরক্ষিত. পরিবর্তনগুলি প্রয়োগ করতে পরিষেবাটি পুনরায় চালু করুন।",
             "failedToSaveConfiguration": "কনফিগারেশন সংরক্ষণ করতে ব্যর্থ হয়েছে",
             "gunicornConfiguration": "Gunicorn কনফিগারেশন",
-            "loadingGunicornConfiguration": "Gunicorn কনফিগারেশন লোড হচ্ছে..."
+            "loadingGunicornConfiguration": "Gunicorn কনফিগারেশন লোড হচ্ছে...",
+            "failedToLoadConfiguration": "Gunicorn কনফিগারেশন লোড করা যায়নি।"
         },
         "hints": {
             "appBound": "পরিষেবাটি নিজেই বাধা। এর সামনে পুরো পৃষ্ঠা ক্যাশে করুন, অথবা এটিকে একটি বড় সার্ভার দিন।",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "প্রতি মিনিটে মেট্রিক্স সংগ্রহ করা হয়",
             "noHistoricalDataYet": "কোন ঐতিহাসিক তথ্য এখনও",
             "realTimePerformance": "রিয়েল-টাইম পারফরম্যান্স",
-            "systemMetrics": "সিস্টেম মেট্রিক্স"
+            "systemMetrics": "সিস্টেম মেট্রিক্স",
+            "loadingMetricsHistory": "মেট্রিক ইতিহাস লোড হচ্ছে…"
         },
         "metricsTab": {
             "activeRunning": "সক্রিয় (চলছে)",
@@ -3662,7 +3665,8 @@
             "processes": "প্রসেস",
             "serviceStatus": "সার্ভিস স্ট্যাটাস",
             "startTheServiceToViewResource": "রিসোর্স মেট্রিক্স দেখতে পরিষেবা শুরু করুন।",
-            "workers": "ওয়ার্কার"
+            "workers": "ওয়ার্কার",
+            "failedToLoadMetrics": "মেট্রিক লোড করা যায়নি।"
         },
         "microCachePanel": {
             "assetCachingSaved": "অ্যাসেট ক্যাশিং সংরক্ষিত",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "উপরে ট্রিগার",
             "webhook": "ওয়েবহুক",
             "whereAnAlertGoesWhenIt": "যেখানে আগুন লাগলে একটি সতর্কতা চলে যায়",
-            "wouldAlertNow": "এখনই সতর্ক করত"
+            "wouldAlertNow": "এখনই সতর্ক করত",
+            "couldntLoadMonitoringData": "মনিটরিং ডেটা লোড করা যায়নি।"
         },
         "monitoringOverview": {
             "activeAlerts": "সক্রিয় সতর্কতা",
@@ -3950,7 +3955,8 @@
             "runTest": "পরীক্ষা চালান",
             "running": "চলছে…",
             "speedTest": "গতি পরীক্ষা",
-            "tested": "পরীক্ষিত"
+            "tested": "পরীক্ষিত",
+            "loadingHosts": "হোস্ট লোড হচ্ছে"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "এই টেক্সট ছাড়া একটি 200 প্রতিক্রিয়া একটি বিভ্রাট হিসাবে গণনা করা হয়.",
@@ -4009,7 +4015,8 @@
             "monitorsDown": "মনিটর ডাউন",
             "mostRecentResults": "সাম্প্রতিক ফলাফল",
             "noChecksRecordedYetTheScheduler": "এখনও কোন চেক রেকর্ড করা হয়নি — প্রতিটি মনিটরের ব্যবধানে শিডিউলারের পোল।",
-            "nothingIsBeingWatchedYet": "এখনও কিছুই দেখা হচ্ছে না"
+            "nothingIsBeingWatchedYet": "এখনও কিছুই দেখা হচ্ছে না",
+            "couldntLoadMonitors": "মনিটরগুলো লোড করা যায়নি।"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "পাত্রে সংযোগ করার জন্য একটি নেটওয়ার্ক তৈরি করুন।",
@@ -4258,7 +4265,8 @@
             "loadingPackages": "প্যাকেজ লোড হচ্ছে...",
             "package": "প্যাকেজ",
             "packageNameEGRequestsFlask": "প্যাকেজের নাম (যেমন, অনুরোধ, ফ্লাস্ক==2.0.0)",
-            "requirementsTxtUpdated": "requirements.txt আপডেট করা হয়েছে"
+            "requirementsTxtUpdated": "requirements.txt আপডেট করা হয়েছে",
+            "failedToLoadPackages": "প্যাকেজগুলো লোড করা যায়নি।"
         },
         "pageContextMap": {
             "application": "পরিষেবা",
@@ -6278,7 +6286,8 @@
             "noRunningContainers": "চলমান পাত্রে নেই",
             "running": "চলছে...",
             "startTheServiceToAccessThe": "শেল অ্যাক্সেস করতে পরিষেবা শুরু করুন।",
-            "typeACommandBelowToExecute": "কন্টেইনারে এটি চালানোর জন্য নীচের একটি কমান্ড টাইপ করুন।"
+            "typeACommandBelowToExecute": "কন্টেইনারে এটি চালানোর জন্য নীচের একটি কমান্ড টাইপ করুন।",
+            "failedToLoadContainers": "কন্টেইনারগুলো লোড করা যায়নি।"
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "একটি প্রিসেট চয়ন করুন বা একটি কাস্টম ভিউ তৈরি করুন৷ শুধুমাত্র দৃশ্যমান আইটেম আপনার সাইডবারে প্রদর্শিত হবে.",
@@ -7005,7 +7014,8 @@
             "twoPanelsWritingWebServerConfig": "ওয়েব সার্ভার কনফিগার লেখা দুটি প্যানেল মালিকানা নিয়ে লড়াই করবে। এই সার্ভার স্যুইচ করুন",
             "upstream": "আপস্ট্রিম",
             "whatWeCheck": "আমরা যা পরীক্ষা করি",
-            "whileObserving": "পর্যবেক্ষণ করার সময়"
+            "whileObserving": "পর্যবেক্ষণ করার সময়",
+            "failedToLoadSurvey": "সার্ভে লোড করা যায়নি।"
         },
         "systemNotices": {
             "dismiss": "{{title}} খারিজ করুন",
@@ -7249,7 +7259,8 @@
             "truncateLogFile": "লগ ফাইল ছেঁটে দিন",
             "typeUnitName": "ইউনিটের নাম টাইপ করুন...",
             "unit": "ইউনিট",
-            "useThe": "ব্যবহার করুন"
+            "useThe": "ব্যবহার করুন",
+            "failedToLoadProcesses": "প্রসেসগুলো লোড করা যায়নি।"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "একটি দৌড় ইতিমধ্যেই চলছে।",

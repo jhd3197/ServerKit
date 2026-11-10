@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { Button } from '@/components/ui/button';
-import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
+import { Skeleton } from '@/components/Skeleton';
 import { Feed, FeedItem } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import { CardHeader as SharedCardHeader, CardContent as SharedCardContent, Card as SharedCard } from '@/components/ui/card';
@@ -70,20 +70,28 @@ const EventsTab = () => {
                     onRetry={loadFailedLogins}
                 />
             )}
-            {failedLogins && (
-                <div className={`card ${failedLogins.alert_triggered ? 'card-warning' : ''}`}>
+            {(failedLogins || !failedLoginsError) && (
+                <div className={`card ${failedLogins?.alert_triggered ? 'card-warning' : ''}`}>
                     <SharedCardHeader variant="legacy" className="card-header">
                         <h3>{t('app.eventsTab.failedLoginAttempts24h', 'Failed login attempts (24h)')}</h3>
                         <Button variant="outline" size="sm" onClick={loadFailedLogins}>{t('common.actions.refresh', 'Refresh')}</Button>
                     </SharedCardHeader>
                     <SharedCardContent variant="legacy" className="card-body">
-                        <div className="failed-login-summary">
-                            <span className={`count ${failedLogins.alert_triggered ? 'danger' : ''}`}>
-                                {failedLogins.failed_attempts}
-                            </span>
-                            <span className="label">{t('app.eventsTab.failedAttemptsThreshold', 'failed attempts · threshold')} {failedLogins.threshold}</span>
-                        </div>
-                        {failedLogins.recent_failures?.length > 0 && (
+                        {!failedLogins ? (
+                            // Holds the summary row's footprint so the events card below does not move when it lands.
+                            <div className="failed-login-summary" role="status" aria-busy="true" aria-label={t('common.loading', 'Loading…')}>
+                                <Skeleton variant="line" width={28} height={36} />
+                                <Skeleton variant="line" width={190} height={12} />
+                            </div>
+                        ) : (
+                            <div className="failed-login-summary">
+                                <span className={`count ${failedLogins.alert_triggered ? 'danger' : ''}`}>
+                                    {failedLogins.failed_attempts}
+                                </span>
+                                <span className="label">{t('app.eventsTab.failedAttemptsThreshold', 'failed attempts · threshold')} {failedLogins.threshold}</span>
+                            </div>
+                        )}
+                        {failedLogins?.recent_failures?.length > 0 && (
                             <details className="recent-failures">
                                 <summary>{t('app.eventsTab.viewRecentFailures', 'View recent failures')}</summary>
                                 <pre>{failedLogins.recent_failures.join('\n')}</pre>
@@ -100,7 +108,9 @@ const EventsTab = () => {
                 </SharedCardHeader>
                 <SharedCardContent variant="legacy" className="card-body">
                     {loading ? (
-                        <EmptyState loading loadingVariant="feed" loadingRows={5} title={t('common.loading', 'Loading…')} />
+                        <div role="status" aria-busy="true" aria-label={t('common.loading', 'Loading…')}>
+                            <Skeleton variant="line" width="60%" height={14} />
+                        </div>
                     ) : eventsError && events.length === 0 ? (
                         <ErrorState
                             title={t('app.eventsTab.couldntLoadSecurityEvents', "Couldn't load security events.")}

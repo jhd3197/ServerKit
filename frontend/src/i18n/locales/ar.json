@@ -1636,7 +1636,8 @@
             "removeCronJob": "حذف مهمة Cron",
             "scheduleACommandOnTheHost": "جدولة أمر على المضيف crontab. يعمل كمستخدم وكيل.",
             "scheduleIsRequired": "الجدول الزمني مطلوب",
-            "serverOffline": "الخادم غير متصل"
+            "serverOffline": "الخادم غير متصل",
+            "failedToLoadCronJobs": "تعذّر تحميل مهام cron."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "لا توجد أدوات على لوحة القيادة هذه حتى الآن."
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "تم حفظ التكوين. أعد تشغيل الخدمة لتطبيق التغييرات.",
             "failedToSaveConfiguration": "فشل حفظ التكوين",
             "gunicornConfiguration": "تكوين Gunicorn",
-            "loadingGunicornConfiguration": "جارٍ تحميل تكوين Gunicorn..."
+            "loadingGunicornConfiguration": "جارٍ تحميل تكوين Gunicorn...",
+            "failedToLoadConfiguration": "تعذّر تحميل إعدادات Gunicorn."
         },
         "hints": {
             "appBound": "الخدمة نفسها هي عنق الزجاجة. خزّن الصفحات كاملة مؤقتًا أمامها، أو امنحها خادمًا أكبر.",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "يتم جمع المقاييس كل دقيقة",
             "noHistoricalDataYet": "لا توجد بيانات تاريخية حتى الآن",
             "realTimePerformance": "الأداء في الوقت الحقيقي",
-            "systemMetrics": "مقاييس النظام"
+            "systemMetrics": "مقاييس النظام",
+            "loadingMetricsHistory": "جارٍ تحميل سجل المقاييس…"
         },
         "metricsTab": {
             "activeRunning": "نشط (قيد التشغيل)",
@@ -3662,7 +3665,8 @@
             "processes": "العمليات",
             "serviceStatus": "حالة الخدمة",
             "startTheServiceToViewResource": "ابدأ الخدمة لعرض مقاييس الموارد.",
-            "workers": "العمال"
+            "workers": "العمال",
+            "failedToLoadMetrics": "تعذّر تحميل المقاييس."
         },
         "microCachePanel": {
             "assetCachingSaved": "تم حفظ التخزين المؤقت للأصول",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "الزناد أعلاه",
             "webhook": "خطاف ويب",
             "whereAnAlertGoesWhenIt": "أين يذهب التنبيه عند إطلاقه",
-            "wouldAlertNow": "سيُطلق تنبيهًا الآن"
+            "wouldAlertNow": "سيُطلق تنبيهًا الآن",
+            "couldntLoadMonitoringData": "تعذّر تحميل بيانات المراقبة."
         },
         "monitoringOverview": {
             "activeAlerts": "التنبيهات النشطة",
@@ -3950,7 +3955,8 @@
             "runTest": "تشغيل الاختبار",
             "running": "جارٍ التشغيل…",
             "speedTest": "اختبار السرعة",
-            "tested": "تم اختباره"
+            "tested": "تم اختباره",
+            "loadingHosts": "جارٍ تحميل المضيفات"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "تعتبر الاستجابة 200 بدون هذا النص بمثابة انقطاع.",
@@ -4009,7 +4015,8 @@
             "monitorsDown": "مراقبات متوقفة",
             "mostRecentResults": "أحدث النتائج",
             "noChecksRecordedYetTheScheduler": "لم يتم تسجيل أي عمليات تحقق حتى الآن - يقوم المجدول بالاستقصاء على الفاصل الزمني لكل جهاز عرض.",
-            "nothingIsBeingWatchedYet": "لا شيء يتم مراقبته بعد"
+            "nothingIsBeingWatchedYet": "لا شيء يتم مراقبته بعد",
+            "couldntLoadMonitors": "تعذّر تحميل أجهزة المراقبة."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "إنشاء شبكة لربط الحاويات.",
@@ -4258,7 +4265,8 @@
             "loadingPackages": "جارٍ تحميل الحزم...",
             "package": "طَرد",
             "packageNameEGRequestsFlask": "اسم الحزمة (على سبيل المثال، الطلبات، القارورة==2.0.0)",
-            "requirementsTxtUpdated": "تم تحديث المتطلبات.txt"
+            "requirementsTxtUpdated": "تم تحديث المتطلبات.txt",
+            "failedToLoadPackages": "تعذّر تحميل الحزم."
         },
         "pageContextMap": {
             "application": "الخدمة",
@@ -6278,7 +6286,8 @@
             "noRunningContainers": "لا توجد حاويات قيد التشغيل",
             "running": "جري...",
             "startTheServiceToAccessThe": "ابدأ الخدمة للوصول إلى الصدفة.",
-            "typeACommandBelowToExecute": "اكتب أمرًا أدناه لتنفيذه في الحاوية."
+            "typeACommandBelowToExecute": "اكتب أمرًا أدناه لتنفيذه في الحاوية.",
+            "failedToLoadContainers": "تعذّر تحميل الحاويات."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "اختر إعدادًا مسبقًا أو أنشئ طريقة عرض مخصصة. تظهر العناصر المرئية فقط في الشريط الجانبي الخاص بك.",
@@ -7005,7 +7014,8 @@
             "twoPanelsWritingWebServerConfig": "سوف تتقاتل لوحتان تكتبان تكوين خادم الويب على الملكية. تحويل هذا الخادم إلى",
             "upstream": "المنبع",
             "whatWeCheck": "ما الذي نفحصه",
-            "whileObserving": "أثناء المراقبة"
+            "whileObserving": "أثناء المراقبة",
+            "failedToLoadSurvey": "تعذّر تحميل المسح."
         },
         "systemNotices": {
             "dismiss": "تجاهل {{title}}",
@@ -7249,7 +7259,8 @@
             "truncateLogFile": "اقتطاع ملف السجل",
             "typeUnitName": "اكتب اسم الوحدة...",
             "unit": "وحدة",
-            "useThe": "استخدم"
+            "useThe": "استخدم",
+            "failedToLoadProcesses": "تعذّر تحميل العمليات."
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "التشغيل قيد التقدم بالفعل.",

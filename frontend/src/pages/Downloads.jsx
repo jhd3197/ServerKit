@@ -6,6 +6,7 @@ import CopyField from '../components/CopyField';
 import InfoTip from '../components/InfoTip';
 import { scrollBehavior } from '@/utils/reducedMotion';
 import { useTranslation } from 'react-i18next';
+import EmptyState from '../components/EmptyState';
 import { formatDate } from '@/utils/intl';
 
 // Platform icons as SVG components
@@ -135,10 +136,7 @@ function Downloads() {
     if (loading) {
         return (
             <div className="sk-tabgroup__inner downloads-page">
-                <div className="loading-container">
-                    <div className="loading-spinner"></div>
-                    <p>{t('app.downloads.loadingVersionInformation', 'Loading version information…')}</p>
-                </div>
+                <EmptyState loading loadingVariant="detail" title={t('app.downloads.loadingVersionInformation', 'Loading version information…')} />
             </div>
         );
     }

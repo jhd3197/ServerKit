@@ -1636,7 +1636,8 @@
             "removeCronJob": "ลบงาน Cron",
             "scheduleACommandOnTheHost": "กำหนดเวลาคำสั่งบนแท็บโฮสต์ cron รันในฐานะผู้ใช้ตัวแทน",
             "scheduleIsRequired": "จำเป็นต้องมีกำหนดการ",
-            "serverOffline": "เซิร์ฟเวอร์ออฟไลน์"
+            "serverOffline": "เซิร์ฟเวอร์ออฟไลน์",
+            "failedToLoadCronJobs": "ไม่สามารถโหลดงาน cron ได้"
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "ยังไม่มีวิดเจ็ตบนแดชบอร์ดนี้"
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "บันทึกการกำหนดค่าแล้ว รีสตาร์ทบริการเพื่อใช้การเปลี่ยนแปลง",
             "failedToSaveConfiguration": "บันทึกการกำหนดค่าไม่สำเร็จ",
             "gunicornConfiguration": "การกำหนดค่า Gunicorn",
-            "loadingGunicornConfiguration": "กำลังโหลดการกำหนดค่า Gunicorn..."
+            "loadingGunicornConfiguration": "กำลังโหลดการกำหนดค่า Gunicorn...",
+            "failedToLoadConfiguration": "ไม่สามารถโหลดการกำหนดค่า Gunicorn ได้"
         },
         "hints": {
             "appBound": "ตัวบริการเองคือคอขวด แคชทั้งหน้าไว้ด้านหน้า หรือย้ายไปยังเซิร์ฟเวอร์ที่ใหญ่กว่า",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "ตัวชี้วัดจะถูกรวบรวมทุกนาที",
             "noHistoricalDataYet": "ยังไม่มีข้อมูลในอดีต",
             "realTimePerformance": "ประสิทธิภาพแบบเรียลไทม์",
-            "systemMetrics": "ตัวชี้วัดของระบบ"
+            "systemMetrics": "ตัวชี้วัดของระบบ",
+            "loadingMetricsHistory": "กำลังโหลดประวัติเมตริก…"
         },
         "metricsTab": {
             "activeRunning": "ใช้งานอยู่ (กำลังทำงาน)",
@@ -3662,7 +3665,8 @@
             "processes": "กระบวนการ",
             "serviceStatus": "สถานะการบริการ",
             "startTheServiceToViewResource": "เริ่มบริการเพื่อดูตัวชี้วัดทรัพยากร",
-            "workers": "เวิร์กเกอร์"
+            "workers": "เวิร์กเกอร์",
+            "failedToLoadMetrics": "ไม่สามารถโหลดเมตริกได้"
         },
         "microCachePanel": {
             "assetCachingSaved": "บันทึกการแคชแอสเซ็ตแล้ว",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "ทริกเกอร์ด้านบน",
             "webhook": "เว็บฮุค",
             "whereAnAlertGoesWhenIt": "การแจ้งเตือนจะไปที่ไหนเมื่อมีการยิง",
-            "wouldAlertNow": "จะแจ้งเตือนตอนนี้"
+            "wouldAlertNow": "จะแจ้งเตือนตอนนี้",
+            "couldntLoadMonitoringData": "ไม่สามารถโหลดข้อมูลการตรวจสอบได้"
         },
         "monitoringOverview": {
             "activeAlerts": "การแจ้งเตือนที่ใช้งานอยู่",
@@ -3950,7 +3955,8 @@
             "runTest": "เรียกใช้การทดสอบ",
             "running": "กำลังทำงาน…",
             "speedTest": "ทดสอบความเร็ว",
-            "tested": "ผ่านการทดสอบแล้ว"
+            "tested": "ผ่านการทดสอบแล้ว",
+            "loadingHosts": "กำลังโหลดโฮสต์"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "การตอบกลับ 200 ครั้งโดยไม่มีข้อความนี้ถือเป็นการหยุดทำงาน",
@@ -4009,7 +4015,8 @@
             "monitorsDown": "ตัวเฝ้าสังเกตที่ล่ม",
             "mostRecentResults": "ผลลัพธ์ล่าสุด",
             "noChecksRecordedYetTheScheduler": "ยังไม่มีการบันทึกการตรวจสอบ — ตัวกำหนดตารางเวลาจะโพลตามช่วงเวลาของจอภาพแต่ละจอ",
-            "nothingIsBeingWatchedYet": "ยังไม่ได้ดูอะไรเลย"
+            "nothingIsBeingWatchedYet": "ยังไม่ได้ดูอะไรเลย",
+            "couldntLoadMonitors": "ไม่สามารถโหลดมอนิเตอร์ได้"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "สร้างเครือข่ายเพื่อเชื่อมต่อคอนเทนเนอร์",
@@ -4258,7 +4265,8 @@
             "loadingPackages": "กำลังโหลดแพ็กเกจ...",
             "package": "บรรจุุภัณฑ์",
             "packageNameEGRequestsFlask": "ชื่อบรรจุภัณฑ์ (เช่น คำขอ ขวด==2.0.0)",
-            "requirementsTxtUpdated": "อัปเดตข้อกำหนด.txt แล้ว"
+            "requirementsTxtUpdated": "อัปเดตข้อกำหนด.txt แล้ว",
+            "failedToLoadPackages": "ไม่สามารถโหลดแพ็กเกจได้"
         },
         "pageContextMap": {
             "application": "บริการ",
@@ -6278,7 +6286,8 @@
             "noRunningContainers": "ไม่มีคอนเทนเนอร์ที่ทำงานอยู่",
             "running": "วิ่ง...",
             "startTheServiceToAccessThe": "เริ่มบริการเพื่อเข้าถึงเชลล์",
-            "typeACommandBelowToExecute": "พิมพ์คำสั่งด้านล่างเพื่อดำเนินการในคอนเทนเนอร์"
+            "typeACommandBelowToExecute": "พิมพ์คำสั่งด้านล่างเพื่อดำเนินการในคอนเทนเนอร์",
+            "failedToLoadContainers": "ไม่สามารถโหลดคอนเทนเนอร์ได้"
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "เลือกค่าที่ตั้งล่วงหน้าหรือสร้างมุมมองที่กำหนดเอง เฉพาะรายการที่มองเห็นได้เท่านั้นที่จะปรากฏในแถบด้านข้างของคุณ",
@@ -7005,7 +7014,8 @@
             "twoPanelsWritingWebServerConfig": "แผงสองแผงที่เขียนการกำหนดค่าเว็บเซิร์ฟเวอร์จะแย่งชิงความเป็นเจ้าของ สลับเซิร์ฟเวอร์นี้เป็น",
             "upstream": "ต้นน้ำ",
             "whatWeCheck": "สิ่งที่เราตรวจสอบ",
-            "whileObserving": "ในขณะที่สังเกต"
+            "whileObserving": "ในขณะที่สังเกต",
+            "failedToLoadSurvey": "ไม่สามารถโหลดผลสำรวจได้"
         },
         "systemNotices": {
             "dismiss": "ยกเลิก {{title}}",
@@ -7249,7 +7259,8 @@
             "truncateLogFile": "ตัดทอนไฟล์บันทึก",
             "typeUnitName": "พิมพ์ชื่อยูนิต...",
             "unit": "หน่วย",
-            "useThe": "ใช้"
+            "useThe": "ใช้",
+            "failedToLoadProcesses": "ไม่สามารถโหลดโพรเซสได้"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "การวิ่งกำลังดำเนินอยู่",

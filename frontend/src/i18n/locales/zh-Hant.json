@@ -1636,7 +1636,8 @@
             "removeCronJob": "刪除 Cron 作業",
             "scheduleACommandOnTheHost": "在主機 crontab 上排程指令。以代理程式使用者身分執行。",
             "scheduleIsRequired": "需要安排時間表",
-            "serverOffline": "伺服器離線"
+            "serverOffline": "伺服器離線",
+            "failedToLoadCronJobs": "無法載入 cron 工作。"
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "此儀表板上還沒有小工具。"
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "設定已儲存。請重新啟動服務以套用變更。",
             "failedToSaveConfiguration": "儲存設定失敗",
             "gunicornConfiguration": "Gunicorn 設定",
-            "loadingGunicornConfiguration": "正在載入 Gunicorn 設定…"
+            "loadingGunicornConfiguration": "正在載入 Gunicorn 設定…",
+            "failedToLoadConfiguration": "無法載入 Gunicorn 設定。"
         },
         "hints": {
             "appBound": "瓶頸在服務本身。請在其前方快取整個頁面，或為其提供更大的伺服器。",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "每分鐘收集一次指標",
             "noHistoricalDataYet": "還沒有歷史資料",
             "realTimePerformance": "即時表現",
-            "systemMetrics": "系統指標"
+            "systemMetrics": "系統指標",
+            "loadingMetricsHistory": "正在載入指標歷程…"
         },
         "metricsTab": {
             "activeRunning": "作用中（執行中）",
@@ -3662,7 +3665,8 @@
             "processes": "處理程序",
             "serviceStatus": "服務狀態",
             "startTheServiceToViewResource": "啟動服務以檢視資源指標。",
-            "workers": "工作程序"
+            "workers": "工作程序",
+            "failedToLoadMetrics": "無法載入指標。"
         },
         "microCachePanel": {
             "assetCachingSaved": "靜態資源快取設定已儲存",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "高於此值時觸發",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "警報觸發時去往何處",
-            "wouldAlertNow": "目前會觸發警報"
+            "wouldAlertNow": "目前會觸發警報",
+            "couldntLoadMonitoringData": "無法載入監控資料。"
         },
         "monitoringOverview": {
             "activeAlerts": "活動警報",
@@ -3950,7 +3955,8 @@
             "runTest": "執行測試",
             "running": "正在執行…",
             "speedTest": "速度測試",
-            "tested": "已測試"
+            "tested": "已測試",
+            "loadingHosts": "正在載入主機"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "沒有此文字的 200 回應將被視為中斷。",
@@ -4009,7 +4015,8 @@
             "monitorsDown": "停機的監測器",
             "mostRecentResults": "最新結果",
             "noChecksRecordedYetTheScheduler": "尚未記錄任何檢查結果；排程器會依各監測器的間隔進行檢查。",
-            "nothingIsBeingWatchedYet": "目前還沒有任何內容被關注"
+            "nothingIsBeingWatchedYet": "目前還沒有任何內容被關注",
+            "couldntLoadMonitors": "無法載入監控項。"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "建立網路來連線容器。",
@@ -4258,7 +4265,8 @@
             "loadingPackages": "正在載入套件…",
             "package": "套件",
             "packageNameEGRequestsFlask": "套件名稱（例如 requests、flask==2.0.0）",
-            "requirementsTxtUpdated": "requirements.txt 已更新"
+            "requirementsTxtUpdated": "requirements.txt 已更新",
+            "failedToLoadPackages": "無法載入套件。"
         },
         "pageContextMap": {
             "application": "服務",
@@ -6278,7 +6286,8 @@
             "noRunningContainers": "沒有正在執行的容器",
             "running": "執行中…",
             "startTheServiceToAccessThe": "啟動服務以存取 shell。",
-            "typeACommandBelowToExecute": "輸入下面的命令以在容器中執行它。"
+            "typeACommandBelowToExecute": "輸入下面的命令以在容器中執行它。",
+            "failedToLoadContainers": "無法載入容器。"
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "選擇預設或建立自訂檢視。只有可見的選項才會出現在側邊欄。",
@@ -7005,7 +7014,8 @@
             "twoPanelsWritingWebServerConfig": "兩個編寫網頁伺服器設定的面板將爭奪所有權。將此伺服器切換到",
             "upstream": "上游",
             "whatWeCheck": "檢查項目",
-            "whileObserving": "在觀察的同時"
+            "whileObserving": "在觀察的同時",
+            "failedToLoadSurvey": "無法載入探查結果。"
         },
         "systemNotices": {
             "dismiss": "關閉{{title}}",
@@ -7249,7 +7259,8 @@
             "truncateLogFile": "截斷記錄檔",
             "typeUnitName": "輸入單元名稱…",
             "unit": "單元",
-            "useThe": "使用"
+            "useThe": "使用",
+            "failedToLoadProcesses": "無法載入程序。"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "執行已經在進行中。",

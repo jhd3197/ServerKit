@@ -1636,7 +1636,8 @@
             "removeCronJob": "Удалить задание Cron",
             "scheduleACommandOnTheHost": "Запланируйте команду в crontab хоста. Запускается от имени пользователя агента.",
             "scheduleIsRequired": "Требуется расписание",
-            "serverOffline": "Сервер оффлайн"
+            "serverOffline": "Сервер оффлайн",
+            "failedToLoadCronJobs": "Не удалось загрузить задания cron."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "На этой панели пока нет виджетов."
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "Конфигурация сохранена. Перезапустите сервис, чтобы применить изменения.",
             "failedToSaveConfiguration": "Не удалось сохранить конфигурацию.",
             "gunicornConfiguration": "Конфигурация Gunicorn",
-            "loadingGunicornConfiguration": "Загрузка конфигурации Gunicorn..."
+            "loadingGunicornConfiguration": "Загрузка конфигурации Gunicorn...",
+            "failedToLoadConfiguration": "Не удалось загрузить конфигурацию Gunicorn."
         },
         "hints": {
             "appBound": "Узкое место — сам сервис. Кэшируйте целые страницы перед ним или выделите ему более мощный сервер.",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "Метрики собираются каждую минуту",
             "noHistoricalDataYet": "Исторических данных пока нет",
             "realTimePerformance": "Производительность в реальном времени",
-            "systemMetrics": "Системные метрики"
+            "systemMetrics": "Системные метрики",
+            "loadingMetricsHistory": "Загрузка истории метрик…"
         },
         "metricsTab": {
             "activeRunning": "Активен (работает)",
@@ -3662,7 +3665,8 @@
             "processes": "Процессы",
             "serviceStatus": "Статус сервиса",
             "startTheServiceToViewResource": "Запустите службу, чтобы просмотреть метрики ресурсов.",
-            "workers": "Рабочие процессы"
+            "workers": "Рабочие процессы",
+            "failedToLoadMetrics": "Не удалось загрузить метрики."
         },
         "microCachePanel": {
             "assetCachingSaved": "Кеширование ресурсов сохранено",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "Триггер выше",
             "webhook": "Вебхук",
             "whereAnAlertGoesWhenIt": "Куда направляется оповещение при срабатывании",
-            "wouldAlertNow": "Сработало бы сейчас"
+            "wouldAlertNow": "Сработало бы сейчас",
+            "couldntLoadMonitoringData": "Не удалось загрузить данные мониторинга."
         },
         "monitoringOverview": {
             "activeAlerts": "Активные оповещения",
@@ -3950,7 +3955,8 @@
             "runTest": "Запустить тест",
             "running": "Выполнение…",
             "speedTest": "Тест скорости",
-            "tested": "Протестировано"
+            "tested": "Протестировано",
+            "loadingHosts": "Загрузка хостов"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Ответ 200 без этого текста считается сбоем в работе.",
@@ -4009,7 +4015,8 @@
             "monitorsDown": "Мониторы со сбоем",
             "mostRecentResults": "Последние результаты",
             "noChecksRecordedYetTheScheduler": "Проверок пока не зарегистрировано — планировщик опрашивает интервал каждого монитора.",
-            "nothingIsBeingWatchedYet": "Пока ничего не смотрят"
+            "nothingIsBeingWatchedYet": "Пока ничего не смотрят",
+            "couldntLoadMonitors": "Не удалось загрузить мониторы."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Создайте сеть для подключения контейнеров.",
@@ -4258,7 +4265,8 @@
             "loadingPackages": "Загрузка пакетов...",
             "package": "Упаковка",
             "packageNameEGRequestsFlask": "Имя пакета (например, запросы, колба==2.0.0)",
-            "requirementsTxtUpdated": "Требования.txt обновлен"
+            "requirementsTxtUpdated": "Требования.txt обновлен",
+            "failedToLoadPackages": "Не удалось загрузить пакеты."
         },
         "pageContextMap": {
             "application": "Сервис",
@@ -6278,7 +6286,8 @@
             "noRunningContainers": "Нет работающих контейнеров",
             "running": "Бег...",
             "startTheServiceToAccessThe": "Запустите службу для доступа к оболочке.",
-            "typeACommandBelowToExecute": "Введите команду ниже, чтобы выполнить ее в контейнере."
+            "typeACommandBelowToExecute": "Введите команду ниже, чтобы выполнить ее в контейнере.",
+            "failedToLoadContainers": "Не удалось загрузить контейнеры."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Выберите предустановку или создайте собственное представление. На боковой панели отображаются только видимые элементы.",
@@ -7005,7 +7014,8 @@
             "twoPanelsWritingWebServerConfig": "Две панели, пишущие конфигурацию веб-сервера, будут бороться за право собственности. Переключите этот сервер на",
             "upstream": "вверх по течению",
             "whatWeCheck": "Что мы проверяем",
-            "whileObserving": "наблюдая за"
+            "whileObserving": "наблюдая за",
+            "failedToLoadSurvey": "Не удалось загрузить обследование."
         },
         "systemNotices": {
             "dismiss": "Удалить {{title}}",
@@ -7249,7 +7259,8 @@
             "truncateLogFile": "Усечь файл журнала",
             "typeUnitName": "Введите название устройства…",
             "unit": "Единица",
-            "useThe": "Используйте"
+            "useThe": "Используйте",
+            "failedToLoadProcesses": "Не удалось загрузить процессы."
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Забег уже идет.",

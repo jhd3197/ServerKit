@@ -4,6 +4,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { DataTable, DataTableFooter } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
@@ -36,6 +37,7 @@ const PackagesTab = ({ appId }) => {
     const toast = useToast();
     const [packages, setPackages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [installing, setInstalling] = useState(false);
     const [newPackage, setNewPackage] = useState('');
 
@@ -43,8 +45,10 @@ const PackagesTab = ({ appId }) => {
         try {
             const data = await api.getPythonPackages(appId);
             setPackages(data.packages || []);
+            setLoadError(null);
         } catch (err) {
             console.error('Failed to load packages:', err);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -80,7 +84,11 @@ const PackagesTab = ({ appId }) => {
     }
 
     if (loading) {
-        return <EmptyState loading title={t('app.packagesTab.loadingPackages', 'Loading packages…')} />;
+        return <EmptyState loading loadingVariant="table" loadingRows={6} title={t('app.packagesTab.loadingPackages', 'Loading packages…')} />;
+    }
+
+    if (loadError && packages.length === 0) {
+        return <ErrorState title={t('app.packagesTab.failedToLoadPackages', "Couldn't load packages.")} error={loadError} onRetry={() => { setLoading(true); loadPackages(); }} />;
     }
 
     return (

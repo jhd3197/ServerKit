@@ -1,5 +1,6 @@
 import { forwardRef, useMemo, useRef, useCallback, useLayoutEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import EmptyState from '../EmptyState';
 import { severityOf, splitOnMatch } from './logHelpers';
 
 const LogContent = forwardRef(function LogContent({
@@ -51,7 +52,7 @@ const LogContent = forwardRef(function LogContent({
     }, [content]);
 
     if (loading) {
-        return <div className="lv-content lv-content-loading">{t('app.logContent.loadingLog', 'Loading log…')}</div>;
+        return <EmptyState loading loadingVariant="console" title={t('app.logContent.loadingLog', 'Loading log…')} />;
     }
 
     if (!content) {

@@ -1636,7 +1636,8 @@
             "removeCronJob": "删除 Cron 作业",
             "scheduleACommandOnTheHost": "在主机 crontab 上安排命令。以代理用户身份运行。",
             "scheduleIsRequired": "需要安排时间表",
-            "serverOffline": "服务器离线"
+            "serverOffline": "服务器离线",
+            "failedToLoadCronJobs": "无法加载 cron 任务。"
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "此仪表板上还没有小部件。"
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "配置已保存。重新启动服务以应用更改。",
             "failedToSaveConfiguration": "保存配置失败",
             "gunicornConfiguration": "Gunicorn 配置",
-            "loadingGunicornConfiguration": "正在加载 Gunicorn 配置..."
+            "loadingGunicornConfiguration": "正在加载 Gunicorn 配置...",
+            "failedToLoadConfiguration": "无法加载 Gunicorn 配置。"
         },
         "hints": {
             "appBound": "瓶颈在服务本身。在其前面缓存整个页面，或为其提供更大的服务器。",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "每分钟收集一次指标",
             "noHistoricalDataYet": "还没有历史数据",
             "realTimePerformance": "实时表现",
-            "systemMetrics": "系统指标"
+            "systemMetrics": "系统指标",
+            "loadingMetricsHistory": "正在加载指标历史…"
         },
         "metricsTab": {
             "activeRunning": "活动（运行中）",
@@ -3662,7 +3665,8 @@
             "processes": "进程",
             "serviceStatus": "服务状态",
             "startTheServiceToViewResource": "启动服务以查看资源指标。",
-            "workers": "工作进程"
+            "workers": "工作进程",
+            "failedToLoadMetrics": "无法加载指标。"
         },
         "microCachePanel": {
             "assetCachingSaved": "资源缓存设置已保存",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "上面触发",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "警报触发时去往何处",
-            "wouldAlertNow": "现在会触发警报"
+            "wouldAlertNow": "现在会触发警报",
+            "couldntLoadMonitoringData": "无法加载监控数据。"
         },
         "monitoringOverview": {
             "activeAlerts": "活动警报",
@@ -3950,7 +3955,8 @@
             "runTest": "运行测试",
             "running": "正在运行…",
             "speedTest": "速度测试",
-            "tested": "已测试"
+            "tested": "已测试",
+            "loadingHosts": "正在加载主机"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "没有此文本的 200 响应将被视为中断。",
@@ -4009,7 +4015,8 @@
             "monitorsDown": "宕机的监控项",
             "mostRecentResults": "最新结果",
             "noChecksRecordedYetTheScheduler": "尚未记录任何检查 - 调度程序轮询每个监视器的时间间隔。",
-            "nothingIsBeingWatchedYet": "目前还没有任何内容被关注"
+            "nothingIsBeingWatchedYet": "目前还没有任何内容被关注",
+            "couldntLoadMonitors": "无法加载监控项。"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "创建网络来连接容器。",
@@ -4258,7 +4265,8 @@
             "loadingPackages": "正在加载包...",
             "package": "包裹",
             "packageNameEGRequestsFlask": "包名称（例如 requests、flask==2.0.0）",
-            "requirementsTxtUpdated": "要求.txt 已更新"
+            "requirementsTxtUpdated": "要求.txt 已更新",
+            "failedToLoadPackages": "无法加载软件包。"
         },
         "pageContextMap": {
             "application": "服务",
@@ -6278,7 +6286,8 @@
             "noRunningContainers": "没有正在运行的容器",
             "running": "跑步...",
             "startTheServiceToAccessThe": "启动服务以访问 shell。",
-            "typeACommandBelowToExecute": "输入下面的命令以在容器中执行它。"
+            "typeACommandBelowToExecute": "输入下面的命令以在容器中执行它。",
+            "failedToLoadContainers": "无法加载容器。"
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "选择预设或构建自定义视图。只有可见的项目才会出现在侧边栏中。",
@@ -7005,7 +7014,8 @@
             "twoPanelsWritingWebServerConfig": "两个编写网络服务器配置的面板将争夺所有权。将此服务器切换到",
             "upstream": "上游",
             "whatWeCheck": "检查内容",
-            "whileObserving": "在观察的同时"
+            "whileObserving": "在观察的同时",
+            "failedToLoadSurvey": "无法加载探查结果。"
         },
         "systemNotices": {
             "dismiss": "关闭{{title}}",
@@ -7249,7 +7259,8 @@
             "truncateLogFile": "截断日志文件",
             "typeUnitName": "输入单位名称...",
             "unit": "单元",
-            "useThe": "使用"
+            "useThe": "使用",
+            "failedToLoadProcesses": "无法加载进程。"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "运行已经在进行中。",

@@ -3,25 +3,6 @@
 // ============================================
 
 .downloads-page {
-    .loading-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: $space-12;
-        color: $text-secondary;
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px; // geometry: spinner
-            border: 3px solid $border-default;
-            border-top-color: $accent-primary;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: $space-4;
-        }
-    }
-
     .alert-error {
         background: $danger-bg;
         border: 1px solid $danger-border;

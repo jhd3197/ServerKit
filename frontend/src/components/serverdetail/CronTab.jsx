@@ -14,6 +14,7 @@ import {
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { Clock3 } from 'lucide-react';
 import Modal from '@/components/Modal';
 import { Label } from '@/components/ui/label';
@@ -305,7 +306,7 @@ const CronTab = ({ serverId, serverStatus }) => {
     }
 
     if (loading) {
-        return <EmptyState loading title={t('app.cronTab.loadingCronJobs', 'Loading cron jobs')} />;
+        return <EmptyState loading loadingVariant="table" loadingRows={4} title={t('app.cronTab.loadingCronJobs', 'Loading cron jobs')} />;
     }
 
     return (
@@ -330,11 +331,17 @@ const CronTab = ({ serverId, serverStatus }) => {
                 </div>
             </div>
 
-            {error && (
+            {error && jobs.length > 0 && (
                 <div className="alert alert-danger">{error}</div>
             )}
 
-            {jobs.length === 0 ? (
+            {error && jobs.length === 0 ? (
+                <ErrorState
+                    title={t('app.cronTab.failedToLoadCronJobs', "Couldn't load cron jobs.")}
+                    message={error}
+                    onRetry={loadJobs}
+                />
+            ) : jobs.length === 0 ? (
                 <EmptyState
                     icon={Clock3}
                     title={t('app.cronTab.noCronJobs', 'No cron jobs')}

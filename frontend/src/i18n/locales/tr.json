@@ -1636,7 +1636,8 @@
             "removeCronJob": "Cron Job'u Kaldır",
             "scheduleACommandOnTheHost": "crontab ana bilgisayarında bir komut planlayın. Aracı kullanıcı olarak çalışır.",
             "scheduleIsRequired": "Program gerekli",
-            "serverOffline": "Sunucu Çevrimdışı"
+            "serverOffline": "Sunucu Çevrimdışı",
+            "failedToLoadCronJobs": "Cron görevleri yüklenemedi."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "Bu kontrol panelinde henüz widget yok."
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "Yapılandırma kaydedildi. Değişiklikleri uygulamak için hizmeti yeniden başlatın.",
             "failedToSaveConfiguration": "Yapılandırma kaydedilemedi",
             "gunicornConfiguration": "Gunicorn Yapılandırması",
-            "loadingGunicornConfiguration": "Gunicorn yapılandırması yükleniyor..."
+            "loadingGunicornConfiguration": "Gunicorn yapılandırması yükleniyor...",
+            "failedToLoadConfiguration": "Gunicorn yapılandırması yüklenemedi."
         },
         "hints": {
             "appBound": "Darboğaz hizmetin kendisi. Önüne tam sayfa önbelleği koyun veya ona daha büyük bir sunucu verin.",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "Metrikler her dakika toplanır",
             "noHistoricalDataYet": "Henüz geçmiş veri yok",
             "realTimePerformance": "Gerçek Zamanlı Performans",
-            "systemMetrics": "Sistem Metrikleri"
+            "systemMetrics": "Sistem Metrikleri",
+            "loadingMetricsHistory": "Metrik geçmişi yükleniyor…"
         },
         "metricsTab": {
             "activeRunning": "Etkin (çalışıyor)",
@@ -3662,7 +3665,8 @@
             "processes": "Süreçler",
             "serviceStatus": "Hizmet Durumu",
             "startTheServiceToViewResource": "Kaynak ölçümlerini görüntülemek için hizmeti başlatın.",
-            "workers": "İşçiler"
+            "workers": "İşçiler",
+            "failedToLoadMetrics": "Metrikler yüklenemedi."
         },
         "microCachePanel": {
             "assetCachingSaved": "Varlık önbelleğe alma kaydedildi",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "Yukarıda tetikle",
             "webhook": "Web kancası",
             "whereAnAlertGoesWhenIt": "Bir uyarı tetiklendiğinde nereye gider?",
-            "wouldAlertNow": "Şu anda uyarı verirdi"
+            "wouldAlertNow": "Şu anda uyarı verirdi",
+            "couldntLoadMonitoringData": "İzleme verileri yüklenemedi."
         },
         "monitoringOverview": {
             "activeAlerts": "Aktif uyarılar",
@@ -3950,7 +3955,8 @@
             "runTest": "Testi çalıştır",
             "running": "Çalışıyor…",
             "speedTest": "Hız testi",
-            "tested": "Test edildi"
+            "tested": "Test edildi",
+            "loadingHosts": "Sunucular yükleniyor"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Bu metnin bulunmadığı 200 yanıt, kesinti olarak sayılır.",
@@ -4009,7 +4015,8 @@
             "monitorsDown": "Monitörler kapalı",
             "mostRecentResults": "En yeni sonuçlar",
             "noChecksRecordedYetTheScheduler": "Henüz hiçbir kontrol kaydedilmedi; zamanlayıcı her monitörün aralığını yoklar.",
-            "nothingIsBeingWatchedYet": "Henüz hiçbir şey izlenmiyor"
+            "nothingIsBeingWatchedYet": "Henüz hiçbir şey izlenmiyor",
+            "couldntLoadMonitors": "Monitörler yüklenemedi."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Kapları bağlamak için bir ağ oluşturun.",
@@ -4258,7 +4265,8 @@
             "loadingPackages": "Paketler yükleniyor...",
             "package": "Paket",
             "packageNameEGRequestsFlask": "Paket adı (ör. istekler, şişe==2.0.0)",
-            "requirementsTxtUpdated": "gereksinimleri.txt güncellendi"
+            "requirementsTxtUpdated": "gereksinimleri.txt güncellendi",
+            "failedToLoadPackages": "Paketler yüklenemedi."
         },
         "pageContextMap": {
             "application": "Hizmet",
@@ -6278,7 +6286,8 @@
             "noRunningContainers": "Çalışan kapsayıcı yok",
             "running": "Koşma...",
             "startTheServiceToAccessThe": "Kabuğa erişmek için hizmeti başlatın.",
-            "typeACommandBelowToExecute": "Kapsayıcıda yürütmek için aşağıya bir komut yazın."
+            "typeACommandBelowToExecute": "Kapsayıcıda yürütmek için aşağıya bir komut yazın.",
+            "failedToLoadContainers": "Konteynerler yüklenemedi."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Bir ön ayar seçin veya özel bir görünüm oluşturun. Kenar çubuğunuzda yalnızca görünür öğeler görünür.",
@@ -7005,7 +7014,8 @@
             "twoPanelsWritingWebServerConfig": "Web sunucusu yapılandırmasını yazan iki panel, sahiplik konusunda kavga edecek. Bu sunucuyu şuraya değiştir:",
             "upstream": "Yukarı akış",
             "whatWeCheck": "Neleri kontrol ediyoruz",
-            "whileObserving": "gözlemlerken"
+            "whileObserving": "gözlemlerken",
+            "failedToLoadSurvey": "Tarama yüklenemedi."
         },
         "systemNotices": {
             "dismiss": "{{title}}'yi reddet",
@@ -7249,7 +7259,8 @@
             "truncateLogFile": "Günlük dosyasını kısalt",
             "typeUnitName": "Birim adını yazın…",
             "unit": "Birim",
-            "useThe": "Şunu kullanın:"
+            "useThe": "Şunu kullanın:",
+            "failedToLoadProcesses": "Süreçler yüklenemedi."
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Bir çalıştırma zaten devam ediyor.",

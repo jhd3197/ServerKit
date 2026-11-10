@@ -4,8 +4,10 @@ import useTabParam from '../hooks/useTabParam';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import DoctorPanel from '../components/monitoring/DoctorPanel';
 import MonitoringOverview from '../components/monitoring/MonitoringOverview';
+import { useMonitorsSummary } from '../components/monitoring/useMonitorsSummary';
 import FleetCapacityPanel from '../components/monitoring/FleetCapacityPanel';
 import FleetThresholdsPanel from '../components/monitoring/FleetThresholdsPanel';
 import ServerScopePicker from '../components/monitoring/ServerScopePicker';
@@ -92,6 +94,7 @@ const Monitoring = () => {
     // Bumped by the top-bar Refresh so the scope-driven panels reload with the
     // host-scoped data instead of each growing a refresh button of its own.
     const [refreshKey, setRefreshKey] = useState(0);
+    const monitorsSummary = useMonitorsSummary(refreshKey, activeTab === 'overview');
 
     const loadSpeedTest = async () => {
         try {
@@ -295,10 +298,23 @@ const Monitoring = () => {
         [status?.enabled, scope, servers.length, scopeLabel]
     );
 
-    if (loading) {
+    if (loading || (activeTab === 'overview' && !monitorsSummary.loaded)) {
         return (
             <div className="sk-tabgroup__inner monitoring-page">
                 <EmptyState loading loadingVariant="chart" size="lg" title={t('app.monitoring.loadingMonitoringData', 'Loading monitoring data')} />
+            </div>
+        );
+    }
+
+    // Nothing loaded and the request failed: show the failure, not an empty overview.
+    if (error && !status) {
+        return (
+            <div className="sk-tabgroup__inner monitoring-page">
+                <ErrorState
+                    title={t('app.monitoring.couldntLoadMonitoringData', "Couldn't load monitoring data.")}
+                    message={error}
+                    onRetry={loadData}
+                />
             </div>
         );
     }
@@ -325,6 +341,7 @@ const Monitoring = () => {
                     thresholds={thresholds}
                     onScopeChange={setScope}
                     refreshKey={refreshKey}
+                    monitorsSummary={monitorsSummary}
                 />
             )}
 
