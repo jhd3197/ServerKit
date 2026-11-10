@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import InfoTip from '@/components/InfoTip';
+import EmptyState from '../EmptyState';
 import { useResourceTier } from '../../contexts/useResourceTier.js';
-import { Check, X, AlertTriangle, Loader, Cpu, MemoryStick, HardDrive } from 'lucide-react';
+import { Check, X, AlertTriangle, Cpu, MemoryStick, HardDrive } from 'lucide-react';
 import api from '../../services/api';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
@@ -33,9 +34,7 @@ const SetupStepCapacity = ({ useCases, onComplete }) => {
     if (loading) {
         return (
             <div className="wizard-step">
-                <div className="wizard-loading">
-                    <Loader size={24} className="spin" />
-                </div>
+                <EmptyState loading loadingVariant="cards" loadingRows={3} title={t('common.state.loading', 'Loading')} />
             </div>
         );
     }

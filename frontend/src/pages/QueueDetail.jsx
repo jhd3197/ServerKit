@@ -13,6 +13,7 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
 import { Tip } from '@/components/ui/tooltip';
@@ -112,6 +113,8 @@ const QueueDetail = () => {
     const { confirm } = useConfirm();
 
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
+    const [messagesError, setMessagesError] = useState(null);
     const [queue, setQueue] = useState(null);
     const [group, setGroup] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -136,6 +139,7 @@ const QueueDetail = () => {
 
     const loadMeta = useCallback(async () => {
         try {
+            setLoadError(null);
             const [queueRes, groupRes] = await Promise.all([
                 api.getQueue(groupSlug, queueSlug),
                 api.getQueueGroup(groupSlug).catch(() => null),
@@ -143,12 +147,12 @@ const QueueDetail = () => {
             setQueue(queueRes.queue || null);
             setGroup(groupRes?.group || null);
         } catch (err) {
-            toastError(toast, t('app.queueDetail.couldntLoadQueue', "Couldn't load the queue."), err);
-            navigate('/queue');
+            // Stay on the page with a Retry rather than bouncing away from a transient failure.
+            setLoadError(err.message || t('app.queueDetail.couldntLoadQueue', "Couldn't load the queue."));
         } finally {
             setLoading(false);
         }
-    }, [groupSlug, queueSlug, navigate, t, toast]);
+    }, [groupSlug, queueSlug, t]);
 
     const loadMessages = useCallback(async (status) => {
         try {
@@ -157,7 +161,9 @@ const QueueDetail = () => {
                 limit: 100,
             });
             setMessages(res.messages || []);
+            setMessagesError(null);
         } catch (err) {
+            setMessagesError(err.message || t('app.queueDetail.couldntLoadMessages', "Couldn't load messages."));
             toastError(toast, t('app.queueDetail.couldntLoadMessages', "Couldn't load messages."), err);
         }
     }, [groupSlug, queueSlug, t, toast]);
@@ -329,12 +335,21 @@ const QueueDetail = () => {
 
     if (loading) {
         return (
-            <div className="queue-page queue-page--loading">
-                <div className="queue-loading-card">
-                    <Inbox size={24} />
-                    <span>{t('app.queueDetail.loadingQueue', 'Loading queue…')}</span>
-                </div>
-            </div>
+            <PageLayout className="queue-page" icon={<Inbox size={18} />} title={queueSlug}>
+                <EmptyState loading loadingVariant="table" size="lg" title={t('app.queueDetail.loadingQueue', 'Loading queue…')} />
+            </PageLayout>
+        );
+    }
+
+    if (loadError && !queue) {
+        return (
+            <PageLayout className="queue-page" icon={<Inbox size={18} />} title={queueSlug}>
+                <ErrorState
+                    title={t('app.queueDetail.couldntLoadQueue', "Couldn't load the queue.")}
+                    message={loadError}
+                    onRetry={() => { setLoading(true); loadMeta(); loadMessages(statusFilter); }}
+                />
+            </PageLayout>
         );
     }
 
@@ -432,7 +447,14 @@ const QueueDetail = () => {
 
                     <SortChipBar columns={columns} sorts={sorts} onChange={setSorts} />
 
-                    {messages.length === 0 ? (
+                    {messages.length === 0 && messagesError ? (
+                        <ErrorState
+                            compact
+                            title={t('app.queueDetail.couldntLoadMessages', "Couldn't load messages.")}
+                            message={messagesError}
+                            onRetry={() => loadMessages(statusFilter)}
+                        />
+                    ) : messages.length === 0 ? (
                         <EmptyState
                             icon={Inbox}
                             title={t('app.queueDetail.noMessages', 'No messages')}

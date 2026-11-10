@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import useTabParam from '../hooks/useTabParam';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
-import EmptyState from '../components/EmptyState';
+import { Skeleton } from '../components/Skeleton';
+import { KpiBand } from '@/components/ds';
 import ErrorState from '../components/ErrorState';
 import DoctorPanel from '../components/monitoring/DoctorPanel';
 import MonitoringOverview from '../components/monitoring/MonitoringOverview';
@@ -62,6 +63,9 @@ const RULE_ICONS = {
     disk_percent: HardDrive,
     load_average: GaugeIcon,
 };
+
+// Loaded-card footprints (px) the first-load placeholder reserves.
+const MON_SKELETON = { monitors: 110, kpi: 118, panel: 270 };
 
 const SPEEDTEST_POLL_INTERVAL_MS = 3000;
 const SPEEDTEST_POLL_TIMEOUT_MS = 90000;
@@ -301,7 +305,25 @@ const Monitoring = () => {
     if (loading || (activeTab === 'overview' && !monitorsSummary.loaded)) {
         return (
             <div className="sk-tabgroup__inner monitoring-page">
-                <EmptyState loading loadingVariant="chart" size="lg" title={t('app.monitoring.loadingMonitoringData', 'Loading monitoring data')} />
+                {/* Same footprint as the loaded overview, so content replaces it in place. */}
+                <div
+                    className="mon-overview"
+                    role="status"
+                    aria-busy="true"
+                    aria-label={t('app.monitoring.loadingMonitoringData', 'Loading monitoring data')}
+                >
+                    <Skeleton variant="block" height={MON_SKELETON.monitors} radius={12} />
+                    <Skeleton variant="line" width={90} height={10} />
+                    <KpiBand max={4}>
+                        {[0, 1, 2, 3].map((i) => <Skeleton key={i} variant="block" height={MON_SKELETON.kpi} radius={12} />)}
+                    </KpiBand>
+                    {[0, 1].map((row) => (
+                        <div className="mon-grid2" key={row}>
+                            <Skeleton variant="block" height={MON_SKELETON.panel} radius={12} />
+                            <Skeleton variant="block" height={MON_SKELETON.panel} radius={12} />
+                        </div>
+                    ))}
+                </div>
             </div>
         );
     }

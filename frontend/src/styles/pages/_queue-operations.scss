@@ -3,37 +3,6 @@
     min-height: 100%;
 }
 
-.queue-page--loading {
-    min-height: 58vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.queue-loading-card {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-3;
-    padding: $space-5 $space-6;
-    border: 1px solid $border-subtle;
-    border-radius: $radius-overlay;
-    background:
-        linear-gradient(135deg, $accent-glow, transparent 55%),
-        $bg-card;
-    color: $text-secondary;
-    box-shadow: none;
-
-    svg {
-        color: $accent-primary;
-        animation: queue-pulse 1.5s ease-in-out infinite;
-    }
-}
-
-@keyframes queue-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-}
-
 .queue-ops-workspace {
     display: grid;
     grid-template-columns: 260px minmax(0, 1fr);

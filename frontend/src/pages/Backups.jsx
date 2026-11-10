@@ -743,6 +743,7 @@ const Backups = () => {
     if (loading) {
         return (
             <div className="sk-tabgroup__inner backups-page">
+                {topbarChrome}
                 <EmptyState loading loadingVariant="table" size="lg" title={t('app.backups.loadingBackupData', 'Loading backup data…')} />
             </div>
         );
