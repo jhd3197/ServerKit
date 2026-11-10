@@ -343,6 +343,7 @@
     width: calc(100% - #{$space-8});
     max-width: 560px;
     max-height: calc(100vh - #{$space-10});
+    max-height: calc(100dvh - #{$space-10});
     transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
@@ -896,6 +897,7 @@
     overflow: hidden;
     max-width: 32rem; // = md default
     max-height: 90vh;
+    max-height: 90dvh;
 
     &--sm { max-width: 24rem; }
     &--md { max-width: 32rem; }
@@ -950,7 +952,45 @@
     min-height: 0;
     overflow-y: auto;
     padding: $space-4 $space-6;
+    container-type: inline-size;
     @include custom-scrollbar();
+
+    // Hand-rolled trailing action rows live inside the body (the form wraps
+    // it); pin them to the bottom of the scroll area so they stay reachable.
+    // Sticky offsets are measured from the padding-box inset, so bottom must
+    // be -$space-4 (the body's bottom padding) to sit flush; the negative
+    // margins cancel the body padding.
+    .modal-actions:last-child,
+    .modal-footer:last-child,
+    .form-actions:last-child {
+        position: sticky;
+        bottom: -$space-4;
+        z-index: 1;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        gap: $space-2;
+        margin: $space-4 (-$space-6) (-$space-4);
+        padding: $space-3 $space-6;
+        border-top: 1px solid $border-subtle;
+        background: $bg-card;
+    }
+
+    // The outer body owns padding and scrolling.
+    .modal-body {
+        padding: 0;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .modal-footer:not(:last-child) {
+        padding: $space-3 0;
+    }
+}
+
+// Narrow modals: stack two-column rows.
+@container (max-width: 28rem) {
+    .sk-modal__body .form-row { grid-template-columns: 1fr; }
 }
 
 .sk-modal__footer {
@@ -961,6 +1001,41 @@
     padding: $space-3 $space-6;
     border-top: 1px solid $border-subtle;
     background: $bg-card;
+}
+
+@media (max-width: $breakpoint-sm) {
+    .ui-dialog-content { width: calc(100% - #{$space-6}); }
+
+    .sk-modal__header { padding: $space-4 $space-10 $space-4 $space-4; }
+    .sk-modal__body { padding: $space-4; }
+
+    .sk-modal__footer {
+        flex-wrap: wrap;
+        padding: $space-3 $space-4;
+        padding-bottom: calc(#{$space-3} + env(safe-area-inset-bottom, 0px));
+    }
+
+    .sk-modal__body {
+        .modal-actions:last-child,
+        .modal-footer:last-child,
+        .form-actions:last-child {
+            margin: $space-4 (-$space-4) (-$space-4);
+            padding: $space-3 $space-4;
+            padding-bottom: calc(#{$space-3} + env(safe-area-inset-bottom, 0px));
+        }
+    }
+}
+
+// iOS Safari zooms the page when a focused field is under 16px.
+@media (max-width: $breakpoint-sm) and (pointer: coarse) {
+    .ui-dialog-content {
+        input:not([type='checkbox'], [type='radio'], [type='range'], [type='color'], [type='file']),
+        textarea,
+        select,
+        [role='combobox'] {
+            font-size: $text-md;
+        }
+    }
 }
 
 // --------------------------------------------

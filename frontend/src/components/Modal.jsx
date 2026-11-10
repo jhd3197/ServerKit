@@ -5,6 +5,13 @@ import { cn } from '@/lib/utils';
 // (styles/components/_ui.scss → .sk-modal*). `size` picks a max-width on
 // >=sm screens; mobile is always near full-width.
 //
+// Small screens: height is capped in dvh so the modal fits the visible
+// viewport (browser bars / on-screen keyboard); on phones header/body/footer
+// padding drops to 16px. A trailing .modal-actions / .modal-footer /
+// .form-actions row hand-rolled inside the body (forms inside the body) sticks
+// to the bottom of the scrolling body, and a nested .modal-body adds no extra
+// padding or scroller. Two-column .form-row stacks in narrow modals.
+//
 // Form mode: pass `onSubmit` and the body AND footer
 // are wrapped in one <form>. This exists because a submit button must live
 // inside the form it submits — without it, every modal with a form had to
