@@ -60,10 +60,15 @@
     &__actions {
         display: flex;
         align-items: center;
-        flex-wrap: wrap;
+        // No wrap: the search shrinks, so an icon button is never orphaned. When
+        // the bar itself wraps, this group takes its own row, icons together.
+        flex-wrap: nowrap;
+        flex: 0 1 auto;
         min-width: 0;
         gap: $space-2;
         margin-inline-start: auto;
+
+        > * { flex-shrink: 0; }
     }
 
     // Amber, not red: unsaved tweaks are a state, not an error.

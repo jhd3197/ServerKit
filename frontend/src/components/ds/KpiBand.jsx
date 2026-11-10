@@ -83,6 +83,7 @@ export function KpiBand({
             <div
                 className={cn('sk-kpiband', dense && 'sk-kpiband--dense', className)}
                 style={{ '--kpi-cols': cols }}
+                data-cols={cols}
             >
                 {primary}
             </div>
