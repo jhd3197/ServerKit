@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "单击进行排序 · Shift+单击添加排序级别",
             "loading": "加载中",
             "noRowsMatchTheActiveColumn": "没有行与活动列过滤器匹配。",
+            "scrollableTable": "可滚动表格",
             "selectAllRows": "选择所有行",
             "selectRow": "选择行"
         },

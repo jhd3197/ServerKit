@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "Nhấp để sắp xếp · Shift+nhấp để thêm cấp độ sắp xếp",
             "loading": "Đang tải",
             "noRowsMatchTheActiveColumn": "Không có hàng nào khớp với bộ lọc cột đang hoạt động.",
+            "scrollableTable": "Bảng có thể cuộn",
             "selectAllRows": "Chọn tất cả các hàng",
             "selectRow": "Chọn hàng"
         },

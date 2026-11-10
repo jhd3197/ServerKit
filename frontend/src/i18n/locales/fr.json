@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "Cliquez pour trier · Maj+clic pour ajouter un niveau de tri",
             "loading": "Chargement",
             "noRowsMatchTheActiveColumn": "Aucune ligne ne correspond aux filtres de colonnes actifs.",
+            "scrollableTable": "Tableau défilant",
             "selectAllRows": "Sélectionner toutes les lignes",
             "selectRow": "Sélectionner une ligne"
         },

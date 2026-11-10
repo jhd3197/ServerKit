@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "সাজানোর জন্য ক্লিক করুন · একটি সাজানোর স্তর যোগ করতে Shift+ক্লিক করুন",
             "loading": "লোড হচ্ছে",
             "noRowsMatchTheActiveColumn": "সক্রিয় কলাম ফিল্টারগুলির সাথে কোনো সারি মেলে না।",
+            "scrollableTable": "স্ক্রোলযোগ্য টেবিল",
             "selectAllRows": "সব সারি নির্বাচন করুন",
             "selectRow": "সারি নির্বাচন করুন"
         },

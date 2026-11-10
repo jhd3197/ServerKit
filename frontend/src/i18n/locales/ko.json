@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "정렬하려면 클릭하세요. 정렬 수준을 추가하려면 Shift+클릭하세요.",
             "loading": "로드 중",
             "noRowsMatchTheActiveColumn": "활성 열 필터와 일치하는 행이 없습니다.",
+            "scrollableTable": "스크롤 가능한 표",
             "selectAllRows": "모든 행 선택",
             "selectRow": "행 선택"
         },

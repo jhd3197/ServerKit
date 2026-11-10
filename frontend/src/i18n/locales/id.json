@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "Klik untuk mengurutkan · Shift+klik untuk menambahkan tingkat pengurutan",
             "loading": "Memuat",
             "noRowsMatchTheActiveColumn": "Tidak ada baris yang cocok dengan filter kolom aktif.",
+            "scrollableTable": "Tabel yang dapat digulir",
             "selectAllRows": "Pilih semua baris",
             "selectRow": "Pilih baris"
         },

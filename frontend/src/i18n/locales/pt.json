@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "Clique para classificar · Shift+clique para adicionar um nível de classificação",
             "loading": "Carregando",
             "noRowsMatchTheActiveColumn": "Nenhuma linha corresponde aos filtros de coluna ativos.",
+            "scrollableTable": "Tabela rolável",
             "selectAllRows": "Selecione todas as linhas",
             "selectRow": "Selecione a linha"
         },

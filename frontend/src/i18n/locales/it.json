@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "Fare clic per ordinare · Maiusc+clic per aggiungere un livello di ordinamento",
             "loading": "Caricamento",
             "noRowsMatchTheActiveColumn": "Nessuna riga corrisponde ai filtri di colonna attivi.",
+            "scrollableTable": "Tabella scorrevole",
             "selectAllRows": "Seleziona tutte le righe",
             "selectRow": "Seleziona riga"
         },
