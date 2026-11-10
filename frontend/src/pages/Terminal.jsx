@@ -21,6 +21,8 @@ import PageLayout from '../layouts/PageLayout';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 
 // Log/journal tail cadence while auto-refresh is on.
 const LOG_TAIL_MS = 3000;
@@ -821,6 +823,7 @@ const ProcessesTab = () => {
     const [selectedProcess, setSelectedProcess] = useState(null);
     const [autoRefresh, setAutoRefresh] = useState(false);
     const [lastUpdated, setLastUpdated] = useState(null);
+    const [loadError, setLoadError] = useState(null);
 
     // The table sorts client-side, but /processes answers with a TOP-N slice:
     // the top 100 by CPU re-sorted by memory is NOT the top 100 by memory. So
@@ -852,8 +855,10 @@ const ProcessesTab = () => {
             const data = await api.getProcesses(limit, fetchSort);
             setProcesses(data.processes || []);
             setLastUpdated(new Date());
+            setLoadError(null);
         } catch (err) {
             console.error('Failed to load processes:', err);
+            setLoadError(err);
             toast.error(t('app.terminal.failed', "Couldn't do that. {{message}}", { message: errorReason(err) }));
         } finally {
             setLoading(false);
@@ -949,7 +954,13 @@ const ProcessesTab = () => {
                 whole table — chrome, active view, column rules, sort and scroll
                 position with it — then remounted a second later. */}
             {loading && processes.length === 0 ? (
-                <div className="lv-content-loading">{t('app.terminal.loadingProcesses', 'Loading processes…')}</div>
+                <EmptyState loading loadingVariant="table" title={t('app.terminal.loadingProcesses', 'Loading processes…')} />
+            ) : loadError && processes.length === 0 ? (
+                <ErrorState
+                    title={t('app.terminal.failedToLoadProcesses', "Couldn't load processes.")}
+                    error={loadError}
+                    onRetry={() => loadProcesses()}
+                />
             ) : (
                 <ProcessTable
                     processes={processes}

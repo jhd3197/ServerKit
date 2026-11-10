@@ -1636,7 +1636,8 @@
             "removeCronJob": "크론 작업 제거",
             "scheduleACommandOnTheHost": "호스트 crontab에서 명령을 예약합니다. 에이전트 사용자로 실행됩니다.",
             "scheduleIsRequired": "일정은 필수 항목입니다.",
-            "serverOffline": "서버 오프라인"
+            "serverOffline": "서버 오프라인",
+            "failedToLoadCronJobs": "cron 작업을 불러오지 못했습니다."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "이 대시보드에는 아직 위젯이 없습니다."
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "구성이 저장되었습니다. 변경 사항을 적용하려면 서비스를 다시 시작하세요.",
             "failedToSaveConfiguration": "구성을 저장하지 못했습니다.",
             "gunicornConfiguration": "Gunicorn 구성",
-            "loadingGunicornConfiguration": "Gunicorn 구성 로드 중..."
+            "loadingGunicornConfiguration": "Gunicorn 구성 로드 중...",
+            "failedToLoadConfiguration": "Gunicorn 구성을 불러오지 못했습니다."
         },
         "hints": {
             "appBound": "서비스 자체가 병목입니다. 앞단에서 전체 페이지를 캐시하거나 더 큰 서버를 할당하세요.",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "지표는 1분마다 수집됩니다.",
             "noHistoricalDataYet": "아직 이전 데이터가 없습니다.",
             "realTimePerformance": "실시간 성능",
-            "systemMetrics": "시스템 측정항목"
+            "systemMetrics": "시스템 측정항목",
+            "loadingMetricsHistory": "지표 기록을 불러오는 중…"
         },
         "metricsTab": {
             "activeRunning": "활성 (실행 중)",
@@ -3662,7 +3665,8 @@
             "processes": "프로세스",
             "serviceStatus": "서비스 현황",
             "startTheServiceToViewResource": "리소스 측정항목을 보려면 서비스를 시작하세요.",
-            "workers": "워커"
+            "workers": "워커",
+            "failedToLoadMetrics": "지표를 불러오지 못했습니다."
         },
         "microCachePanel": {
             "assetCachingSaved": "자산 캐싱이 저장되었습니다.",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "위의 트리거",
             "webhook": "웹훅",
             "whereAnAlertGoesWhenIt": "경고가 발생하면 어디로 가는지",
-            "wouldAlertNow": "지금 알림 발생 조건"
+            "wouldAlertNow": "지금 알림 발생 조건",
+            "couldntLoadMonitoringData": "모니터링 데이터를 불러오지 못했습니다."
         },
         "monitoringOverview": {
             "activeAlerts": "활성 경고",
@@ -3950,7 +3955,8 @@
             "runTest": "테스트 실행",
             "running": "실행 중…",
             "speedTest": "속도 테스트",
-            "tested": "테스트됨"
+            "tested": "테스트됨",
+            "loadingHosts": "호스트를 불러오는 중"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "이 텍스트가 없는 200 응답은 중단으로 간주됩니다.",
@@ -4009,7 +4015,9 @@
             "monitorsDown": "모니터 다운",
             "mostRecentResults": "가장 최근 결과",
             "noChecksRecordedYetTheScheduler": "아직 검사가 기록되지 않았습니다. 스케줄러는 각 모니터의 간격을 폴링합니다.",
-            "nothingIsBeingWatchedYet": "아직 시청 중인 항목이 없습니다."
+            "nothingIsBeingWatchedYet": "아직 시청 중인 항목이 없습니다.",
+            "couldntLoadMonitors": "모니터를 불러오지 못했습니다.",
+            "loadingMonitors": "모니터를 불러오는 중"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "컨테이너를 연결하기 위한 네트워크를 만듭니다.",
@@ -4258,7 +4266,8 @@
             "loadingPackages": "패키지 로드 중...",
             "package": "패키지",
             "packageNameEGRequestsFlask": "패키지 이름(예: 요청, 플라스크==2.0.0)",
-            "requirementsTxtUpdated": "요구 사항.txt가 업데이트되었습니다."
+            "requirementsTxtUpdated": "요구 사항.txt가 업데이트되었습니다.",
+            "failedToLoadPackages": "패키지를 불러오지 못했습니다."
         },
         "pageContextMap": {
             "application": "서비스",
@@ -6278,7 +6287,8 @@
             "noRunningContainers": "실행 중인 컨테이너 없음",
             "running": "실행중...",
             "startTheServiceToAccessThe": "셸에 액세스하려면 서비스를 시작하세요.",
-            "typeACommandBelowToExecute": "컨테이너에서 실행하려면 아래 명령을 입력하세요."
+            "typeACommandBelowToExecute": "컨테이너에서 실행하려면 아래 명령을 입력하세요.",
+            "failedToLoadContainers": "컨테이너를 불러오지 못했습니다."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "사전 설정을 선택하거나 사용자 정의 보기를 구축하세요. 보이는 항목만 사이드바에 나타납니다.",
@@ -7005,7 +7015,8 @@
             "twoPanelsWritingWebServerConfig": "웹 서버 구성을 작성하는 두 패널이 소유권을 놓고 싸울 것입니다. 이 서버를 다음으로 전환하세요.",
             "upstream": "업스트림",
             "whatWeCheck": "확인 항목",
-            "whileObserving": "관찰하는 동안"
+            "whileObserving": "관찰하는 동안",
+            "failedToLoadSurvey": "서베이를 불러오지 못했습니다."
         },
         "systemNotices": {
             "dismiss": "{{title}} 닫기",
@@ -7249,7 +7260,8 @@
             "truncateLogFile": "로그 파일 자르기",
             "typeUnitName": "단위 이름을 입력하세요…",
             "unit": "단위",
-            "useThe": "사용"
+            "useThe": "사용",
+            "failedToLoadProcesses": "프로세스를 불러오지 못했습니다."
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "실행이 이미 진행 중입니다.",

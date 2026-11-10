@@ -1636,7 +1636,8 @@
             "removeCronJob": "Usuń zadanie Cron",
             "scheduleACommandOnTheHost": "Zaplanuj polecenie na hoście crontab. Działa jako użytkownik agenta.",
             "scheduleIsRequired": "Harmonogram jest wymagany",
-            "serverOffline": "Serwer offline"
+            "serverOffline": "Serwer offline",
+            "failedToLoadCronJobs": "Nie udało się wczytać zadań cron."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "Nie ma jeszcze widżetów w tym panelu."
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "Konfiguracja została zapisana. Uruchom ponownie usługę, aby zastosować zmiany.",
             "failedToSaveConfiguration": "Nie udało się zapisać konfiguracji",
             "gunicornConfiguration": "Konfiguracja Gunicorn",
-            "loadingGunicornConfiguration": "Ładowanie konfiguracji Gunicorn..."
+            "loadingGunicornConfiguration": "Ładowanie konfiguracji Gunicorn...",
+            "failedToLoadConfiguration": "Nie udało się wczytać konfiguracji Gunicorna."
         },
         "hints": {
             "appBound": "Wąskim gardłem jest sama usługa. Buforuj całe strony przed nią lub daj jej większy serwer.",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "Dane są zbierane co minutę",
             "noHistoricalDataYet": "Nie ma jeszcze danych historycznych",
             "realTimePerformance": "Wydajność w czasie rzeczywistym",
-            "systemMetrics": "Metryki systemu"
+            "systemMetrics": "Metryki systemu",
+            "loadingMetricsHistory": "Wczytywanie historii metryk…"
         },
         "metricsTab": {
             "activeRunning": "Aktywna (działa)",
@@ -3662,7 +3665,8 @@
             "processes": "Procesy",
             "serviceStatus": "Stan usługi",
             "startTheServiceToViewResource": "Uruchom usługę, aby wyświetlić metryki zasobów.",
-            "workers": "Procesy robocze"
+            "workers": "Procesy robocze",
+            "failedToLoadMetrics": "Nie udało się wczytać metryk."
         },
         "microCachePanel": {
             "assetCachingSaved": "Zapisano buforowanie zasobów",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "Wyzwalacz powyżej",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "Gdzie trafia alert po uruchomieniu",
-            "wouldAlertNow": "Alert zostałby wysłany teraz"
+            "wouldAlertNow": "Alert zostałby wysłany teraz",
+            "couldntLoadMonitoringData": "Nie udało się wczytać danych monitorowania."
         },
         "monitoringOverview": {
             "activeAlerts": "Aktywne alerty",
@@ -3950,7 +3955,8 @@
             "runTest": "Uruchom test",
             "running": "Uruchamianie…",
             "speedTest": "Test prędkości",
-            "tested": "Przetestowany"
+            "tested": "Przetestowany",
+            "loadingHosts": "Wczytywanie hostów"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Odpowiedź 200 bez tego tekstu liczy się jako awaria.",
@@ -4009,7 +4015,9 @@
             "monitorsDown": "Monitory z awarią",
             "mostRecentResults": "Najnowsze wyniki",
             "noChecksRecordedYetTheScheduler": "Nie zarejestrowano jeszcze żadnych kontroli — program planujący odpytuje interwał każdego monitora.",
-            "nothingIsBeingWatchedYet": "Na razie nic nie jest oglądane"
+            "nothingIsBeingWatchedYet": "Na razie nic nie jest oglądane",
+            "couldntLoadMonitors": "Nie udało się wczytać monitorów.",
+            "loadingMonitors": "Wczytywanie monitorów"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Utwórz sieć do łączenia kontenerów.",
@@ -4258,7 +4266,8 @@
             "loadingPackages": "Ładowanie pakietów...",
             "package": "Pakiet",
             "packageNameEGRequestsFlask": "Nazwa pakietu (np. żądania, flask==2.0.0)",
-            "requirementsTxtUpdated": "zaktualizowano plik wymagania.txt"
+            "requirementsTxtUpdated": "zaktualizowano plik wymagania.txt",
+            "failedToLoadPackages": "Nie udało się wczytać pakietów."
         },
         "pageContextMap": {
             "application": "Usługa",
@@ -6278,7 +6287,8 @@
             "noRunningContainers": "Brak działających kontenerów",
             "running": "Działanie...",
             "startTheServiceToAccessThe": "Uruchom usługę, aby uzyskać dostęp do powłoki.",
-            "typeACommandBelowToExecute": "Wpisz poniższe polecenie, aby wykonać je w kontenerze."
+            "typeACommandBelowToExecute": "Wpisz poniższe polecenie, aby wykonać je w kontenerze.",
+            "failedToLoadContainers": "Nie udało się wczytać kontenerów."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Wybierz gotowe ustawienie lub utwórz własny widok. Na pasku bocznym pojawiają się tylko widoczne elementy.",
@@ -7005,7 +7015,8 @@
             "twoPanelsWritingWebServerConfig": "Dwa panele piszące konfigurację serwera WWW będą walczyć o własność. Przełącz ten serwer na",
             "upstream": "Pod prąd",
             "whatWeCheck": "Co sprawdzamy",
-            "whileObserving": "podczas obserwacji"
+            "whileObserving": "podczas obserwacji",
+            "failedToLoadSurvey": "Nie udało się wczytać przeglądu."
         },
         "systemNotices": {
             "dismiss": "Odrzuć {{title}}",
@@ -7249,7 +7260,8 @@
             "truncateLogFile": "Obetnij plik dziennika",
             "typeUnitName": "Wpisz nazwę jednostki…",
             "unit": "Jednostka",
-            "useThe": "Skorzystaj z"
+            "useThe": "Skorzystaj z",
+            "failedToLoadProcesses": "Nie udało się wczytać procesów."
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Bieg już trwa.",

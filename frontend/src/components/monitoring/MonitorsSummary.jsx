@@ -15,9 +15,13 @@ import { monitorStateOf } from './monitorShared';
 import { usePolling } from '../../hooks/usePolling';
 import { useTranslation } from 'react-i18next';
 import InfoTip from '@/components/InfoTip';
+import ErrorState from '../ErrorState';
+import { Skeleton } from '../Skeleton';
 
 const POLL_MS = 15000;
 const FEED_LIMIT = 9;
+// Height of the monitor list at its usual size (rows + header), for the first-load placeholder.
+const SKELETON_LIST_HEIGHT = 407;
 
 function relativeTime(iso) {
     if (!iso) return 'never';
@@ -36,6 +40,7 @@ export default function MonitorsSummary({ refreshKey = 0 }) {
     const [stats, setStats] = useState(null);
     const [feed, setFeed] = useState([]);
     const [loaded, setLoaded] = useState(false);
+    const [loadError, setLoadError] = useState(null);
 
     const load = useCallback(async () => {
         try {
@@ -46,6 +51,7 @@ export default function MonitorsSummary({ refreshKey = 0 }) {
             const list = listRes?.monitors || [];
             setMonitors(list);
             setStats(statsRes?.stats || null);
+            setLoadError(null);
 
             // The live feed is the most recently checked monitors, newest first —
             // derived from what we already fetched rather than a second request
@@ -56,8 +62,9 @@ export default function MonitorsSummary({ refreshKey = 0 }) {
                     .sort((a, b) => new Date(b.last_check_at) - new Date(a.last_check_at))
                     .slice(0, FEED_LIMIT),
             );
-        } catch {
+        } catch (err) {
             // Overview must survive a monitors outage; the rest of the page is fine.
+            setLoadError(err);
         } finally {
             setLoaded(true);
         }
@@ -71,7 +78,42 @@ export default function MonitorsSummary({ refreshKey = 0 }) {
         if (refreshKey) refresh();
     }, [refreshKey, refresh]);
 
-    if (!loaded) return null;
+    // First load holds the KPI band and the two-panel row at their loaded size,
+    // so the host sections below stay put when the monitors arrive.
+    if (!loaded) {
+        return (
+            <div
+                className="mon-monitors-summary"
+                role="status"
+                aria-busy="true"
+                aria-label={t('app.monitorsSummary.loadingMonitors', 'Loading monitors')}
+            >
+                <KpiBand loading count={4} className="mon-kpiband--loaded-size" />
+                <div className="mon-grid2" aria-hidden="true">
+                    {[0, 1].map((p) => (
+                        <section className="monitoring-panel" key={p}>
+                            <Skeleton variant="title" width="30%" />
+                            <Skeleton variant="block" height={SKELETON_LIST_HEIGHT} />
+                        </section>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    // A failed fetch with nothing loaded is not "nothing is being watched".
+    if (loadError && !monitors.length) {
+        return (
+            <section className="monitoring-panel mon-nomonitors">
+                <ErrorState
+                    compact
+                    title={t('app.monitorsSummary.couldntLoadMonitors', "Couldn't load monitors.")}
+                    error={loadError}
+                    onRetry={load}
+                />
+            </section>
+        );
+    }
 
     if (!monitors.length) {
         return (

@@ -1636,7 +1636,8 @@
             "removeCronJob": "Xóa công việc định kỳ",
             "scheduleACommandOnTheHost": "Lên lịch lệnh trên máy chủ crontab. Chạy với tư cách là người dùng đại lý.",
             "scheduleIsRequired": "Lịch trình là bắt buộc",
-            "serverOffline": "Máy chủ ngoại tuyến"
+            "serverOffline": "Máy chủ ngoại tuyến",
+            "failedToLoadCronJobs": "Không thể tải các tác vụ cron."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "Chưa có tiện ích nào trên trang tổng quan này."
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "Đã lưu cấu hình. Khởi động lại dịch vụ để áp dụng các thay đổi.",
             "failedToSaveConfiguration": "Không lưu được cấu hình",
             "gunicornConfiguration": "Cấu hình Gunicorn",
-            "loadingGunicornConfiguration": "Đang tải cấu hình Gunicorn..."
+            "loadingGunicornConfiguration": "Đang tải cấu hình Gunicorn...",
+            "failedToLoadConfiguration": "Không thể tải cấu hình Gunicorn."
         },
         "hints": {
             "appBound": "Bản thân dịch vụ là điểm nghẽn. Hãy lưu đệm toàn bộ trang phía trước nó, hoặc cấp cho nó máy chủ lớn hơn.",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "Số liệu được thu thập mỗi phút",
             "noHistoricalDataYet": "Chưa có dữ liệu lịch sử",
             "realTimePerformance": "Hiệu suất thời gian thực",
-            "systemMetrics": "Số liệu hệ thống"
+            "systemMetrics": "Số liệu hệ thống",
+            "loadingMetricsHistory": "Đang tải lịch sử số liệu…"
         },
         "metricsTab": {
             "activeRunning": "Hoạt động (đang chạy)",
@@ -3662,7 +3665,8 @@
             "processes": "Quy trình",
             "serviceStatus": "Trạng thái dịch vụ",
             "startTheServiceToViewResource": "Khởi động dịch vụ để xem số liệu tài nguyên.",
-            "workers": "Worker"
+            "workers": "Worker",
+            "failedToLoadMetrics": "Không thể tải số liệu."
         },
         "microCachePanel": {
             "assetCachingSaved": "Đã lưu cài đặt bộ nhớ đệm tài nguyên",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "Kích hoạt ở trên",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "Cảnh báo sẽ đi đến đâu khi nó kích hoạt",
-            "wouldAlertNow": "Sẽ cảnh báo ngay"
+            "wouldAlertNow": "Sẽ cảnh báo ngay",
+            "couldntLoadMonitoringData": "Không thể tải dữ liệu giám sát."
         },
         "monitoringOverview": {
             "activeAlerts": "Cảnh báo hoạt động",
@@ -3950,7 +3955,8 @@
             "runTest": "Chạy kiểm tra",
             "running": "Đang chạy…",
             "speedTest": "Kiểm tra tốc độ",
-            "tested": "Đã thử nghiệm"
+            "tested": "Đã thử nghiệm",
+            "loadingHosts": "Đang tải máy chủ"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Một phản hồi 200 không có văn bản này được tính là ngừng hoạt động.",
@@ -4009,7 +4015,9 @@
             "monitorsDown": "Trình giám sát báo lỗi",
             "mostRecentResults": "Kết quả gần đây nhất",
             "noChecksRecordedYetTheScheduler": "Chưa có cuộc kiểm tra nào được ghi lại - bộ lập lịch thăm dò theo khoảng thời gian của mỗi màn hình.",
-            "nothingIsBeingWatchedYet": "Chưa có gì được theo dõi"
+            "nothingIsBeingWatchedYet": "Chưa có gì được theo dõi",
+            "couldntLoadMonitors": "Không thể tải các trình giám sát.",
+            "loadingMonitors": "Đang tải các trình giám sát"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Tạo một mạng để kết nối các container.",
@@ -4258,7 +4266,8 @@
             "loadingPackages": "Đang tải gói...",
             "package": "Bưu kiện",
             "packageNameEGRequestsFlask": "Tên gói (ví dụ: yêu cầu, bình==2.0.0)",
-            "requirementsTxtUpdated": "đã cập nhật yêu cầu.txt"
+            "requirementsTxtUpdated": "đã cập nhật yêu cầu.txt",
+            "failedToLoadPackages": "Không thể tải các gói."
         },
         "pageContextMap": {
             "application": "Dịch vụ",
@@ -6278,7 +6287,8 @@
             "noRunningContainers": "Không có container đang chạy",
             "running": "Đang chạy...",
             "startTheServiceToAccessThe": "Bắt đầu dịch vụ để truy cập shell.",
-            "typeACommandBelowToExecute": "Nhập lệnh bên dưới để thực thi lệnh đó trong vùng chứa."
+            "typeACommandBelowToExecute": "Nhập lệnh bên dưới để thực thi lệnh đó trong vùng chứa.",
+            "failedToLoadContainers": "Không thể tải các container."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Chọn một cài đặt trước hoặc xây dựng chế độ xem tùy chỉnh. Chỉ các mục hiển thị mới xuất hiện trong thanh bên của bạn.",
@@ -7005,7 +7015,8 @@
             "twoPanelsWritingWebServerConfig": "Hai bảng viết cấu hình máy chủ web sẽ tranh giành quyền sở hữu. Chuyển máy chủ này sang",
             "upstream": "Thượng nguồn",
             "whatWeCheck": "Những gì chúng tôi kiểm tra",
-            "whileObserving": "trong khi quan sát"
+            "whileObserving": "trong khi quan sát",
+            "failedToLoadSurvey": "Không thể tải khảo sát."
         },
         "systemNotices": {
             "dismiss": "Loại bỏ {{title}}",
@@ -7249,7 +7260,8 @@
             "truncateLogFile": "Cắt bớt tệp nhật ký",
             "typeUnitName": "Nhập tên đơn vị…",
             "unit": "Đơn vị",
-            "useThe": "Sử dụng"
+            "useThe": "Sử dụng",
+            "failedToLoadProcesses": "Không thể tải các tiến trình."
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Một cuộc chạy đang được tiến hành.",

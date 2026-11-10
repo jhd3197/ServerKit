@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { RefreshCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import api from '../../services/api';
+import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
 import { Button } from '@/components/ui/button';
@@ -64,8 +66,10 @@ export default function InsightsPanel({ conn, engine, isAdmin }) {
         }
     }
 
-    if (error) return <div className="dbx-insights"><p className="dbx-insights__error">{error}</p></div>;
-    if (!data) return <div className="dbx-insights"><p>{t('common.loading', 'Loading…')}</p></div>;
+    if (error && !data) {
+        return <div className="dbx-insights"><ErrorState compact message={error} onRetry={load} /></div>;
+    }
+    if (!data) return <div className="dbx-insights"><EmptyState loading loadingVariant="cards" loadingRows={3} title={t('common.loading', 'Loading…')} /></div>;
 
     const { connections, cache_hit_ratio: hitRatio } = data;
     const connShare = connections?.max ? connections.in_use / connections.max : null;

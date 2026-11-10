@@ -3,6 +3,7 @@ import api from '../../services/api';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { useTranslation } from 'react-i18next';
 
 const ShellTab = ({ appId, appName }) => {
@@ -13,6 +14,7 @@ const ShellTab = ({ appId, appName }) => {
     const [command, setCommand] = useState('');
     const [running, setRunning] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const terminalRef = useRef(null);
 
     const loadContainers = useCallback(async () => {
@@ -23,11 +25,13 @@ const ShellTab = ({ appId, appName }) => {
                 c.Labels?.['com.docker.compose.project'] === appName
             );
             setContainers(appContainers);
+            setLoadError(null);
             if (appContainers.length > 0) {
                 setSelectedContainer(current => current || appContainers[0].Id);
             }
         } catch (err) {
             console.error('Failed to load containers:', err);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -69,7 +73,11 @@ const ShellTab = ({ appId, appName }) => {
     }
 
     if (loading) {
-        return <EmptyState loading title={t('app.shellTab.loadingContainers', 'Loading containers…')} />;
+        return <EmptyState loading loadingVariant="console" loadingRows={8} title={t('app.shellTab.loadingContainers', 'Loading containers…')} />;
+    }
+
+    if (loadError && containers.length === 0) {
+        return <ErrorState title={t('app.shellTab.failedToLoadContainers', "Couldn't load containers.")} error={loadError} onRetry={() => { setLoading(true); loadContainers(); }} />;
     }
 
     if (containers.length === 0) {

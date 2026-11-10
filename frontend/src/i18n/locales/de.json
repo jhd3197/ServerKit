@@ -1636,7 +1636,8 @@
             "removeCronJob": "Cron-Job entfernen",
             "scheduleACommandOnTheHost": "Planen Sie einen Befehl auf der Host-Crontab. Wird als Agentenbenutzer ausgeführt.",
             "scheduleIsRequired": "Zeitplan ist erforderlich",
-            "serverOffline": "Server offline"
+            "serverOffline": "Server offline",
+            "failedToLoadCronJobs": "Cron-Jobs konnten nicht geladen werden."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "Noch keine Widgets auf diesem Dashboard."
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "Konfiguration gespeichert. Starten Sie den Dienst neu, um die Änderungen zu übernehmen.",
             "failedToSaveConfiguration": "Die Konfiguration konnte nicht gespeichert werden",
             "gunicornConfiguration": "Gunicorn-Konfiguration",
-            "loadingGunicornConfiguration": "Gunicorn-Konfiguration wird geladen..."
+            "loadingGunicornConfiguration": "Gunicorn-Konfiguration wird geladen...",
+            "failedToLoadConfiguration": "Die Gunicorn-Konfiguration konnte nicht geladen werden."
         },
         "hints": {
             "appBound": "Der Dienst selbst ist der Engpass. Cachen Sie ganze Seiten davor oder geben Sie ihm einen größeren Server.",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "Die Messwerte werden jede Minute erfasst",
             "noHistoricalDataYet": "Noch keine historischen Daten",
             "realTimePerformance": "Echtzeitleistung",
-            "systemMetrics": "Systemmetriken"
+            "systemMetrics": "Systemmetriken",
+            "loadingMetricsHistory": "Metrikverlauf wird geladen…"
         },
         "metricsTab": {
             "activeRunning": "Aktiv (läuft)",
@@ -3662,7 +3665,8 @@
             "processes": "Prozesse",
             "serviceStatus": "Servicestatus",
             "startTheServiceToViewResource": "Starten Sie den Dienst, um Ressourcenmetriken anzuzeigen.",
-            "workers": "Worker"
+            "workers": "Worker",
+            "failedToLoadMetrics": "Metriken konnten nicht geladen werden."
         },
         "microCachePanel": {
             "assetCachingSaved": "Asset-Caching gespeichert",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "Auslöser oben",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "Wohin eine Warnung geht, wenn sie ausgelöst wird",
-            "wouldAlertNow": "Würde jetzt warnen"
+            "wouldAlertNow": "Würde jetzt warnen",
+            "couldntLoadMonitoringData": "Überwachungsdaten konnten nicht geladen werden."
         },
         "monitoringOverview": {
             "activeAlerts": "Aktive Warnungen",
@@ -3950,7 +3955,8 @@
             "runTest": "Test ausführen",
             "running": "Läuft…",
             "speedTest": "Geschwindigkeitstest",
-            "tested": "Getestet"
+            "tested": "Getestet",
+            "loadingHosts": "Hosts werden geladen"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Eine Antwort von 200 ohne diesen Text gilt als Ausfall.",
@@ -4009,7 +4015,9 @@
             "monitorsDown": "Monitore ausgefallen",
             "mostRecentResults": "Neueste Ergebnisse",
             "noChecksRecordedYetTheScheduler": "Es wurden noch keine Prüfungen aufgezeichnet – der Planer fragt die Intervalle jedes Monitors ab.",
-            "nothingIsBeingWatchedYet": "Es wird noch nichts angeschaut"
+            "nothingIsBeingWatchedYet": "Es wird noch nichts angeschaut",
+            "couldntLoadMonitors": "Monitore konnten nicht geladen werden.",
+            "loadingMonitors": "Monitore werden geladen"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Erstellen Sie ein Netzwerk, um Container zu verbinden.",
@@ -4258,7 +4266,8 @@
             "loadingPackages": "Pakete werden geladen...",
             "package": "Paket",
             "packageNameEGRequestsFlask": "Paketname (z. B. „requests“, „flask==2.0.0“)",
-            "requirementsTxtUpdated": "Anforderungen.txt aktualisiert"
+            "requirementsTxtUpdated": "Anforderungen.txt aktualisiert",
+            "failedToLoadPackages": "Pakete konnten nicht geladen werden."
         },
         "pageContextMap": {
             "application": "Dienst",
@@ -6278,7 +6287,8 @@
             "noRunningContainers": "Keine laufenden Container",
             "running": "Laufen...",
             "startTheServiceToAccessThe": "Starten Sie den Dienst, um auf die Shell zuzugreifen.",
-            "typeACommandBelowToExecute": "Geben Sie unten einen Befehl ein, um ihn im Container auszuführen."
+            "typeACommandBelowToExecute": "Geben Sie unten einen Befehl ein, um ihn im Container auszuführen.",
+            "failedToLoadContainers": "Container konnten nicht geladen werden."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Wählen Sie eine Voreinstellung oder erstellen Sie eine benutzerdefinierte Ansicht. In Ihrer Seitenleiste werden nur sichtbare Elemente angezeigt.",
@@ -7005,7 +7015,8 @@
             "twoPanelsWritingWebServerConfig": "Zwei Panels, die Webserver-Konfigurationen schreiben, werden um die Eigentumsrechte streiten. Wechseln Sie zu diesem Server",
             "upstream": "Stromaufwärts",
             "whatWeCheck": "Was wir prüfen",
-            "whileObserving": "beim Beobachten"
+            "whileObserving": "beim Beobachten",
+            "failedToLoadSurvey": "Die Bestandsaufnahme konnte nicht geladen werden."
         },
         "systemNotices": {
             "dismiss": "{{title}} ablehnen",
@@ -7249,7 +7260,8 @@
             "truncateLogFile": "Protokolldatei kürzen",
             "typeUnitName": "Geben Sie den Namen der Einheit ein…",
             "unit": "Einheit",
-            "useThe": "Benutzen Sie die"
+            "useThe": "Benutzen Sie die",
+            "failedToLoadProcesses": "Prozesse konnten nicht geladen werden."
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Ein Lauf ist bereits im Gange.",

@@ -1636,7 +1636,8 @@
             "removeCronJob": "Hapus Pekerjaan Cron",
             "scheduleACommandOnTheHost": "Jadwalkan perintah pada host crontab. Berjalan sebagai pengguna agen.",
             "scheduleIsRequired": "Jadwal diperlukan",
-            "serverOffline": "Server Luar Talian"
+            "serverOffline": "Server Luar Talian",
+            "failedToLoadCronJobs": "Tidak dapat memuat tugas cron."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "Belum ada widget di dasbor ini."
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "Konfigurasi disimpan. Mulai ulang layanan untuk menerapkan perubahan.",
             "failedToSaveConfiguration": "Gagal menyimpan konfigurasi",
             "gunicornConfiguration": "Konfigurasi Gunicorn",
-            "loadingGunicornConfiguration": "Memuat konfigurasi Gunicorn..."
+            "loadingGunicornConfiguration": "Memuat konfigurasi Gunicorn...",
+            "failedToLoadConfiguration": "Tidak dapat memuat konfigurasi Gunicorn."
         },
         "hints": {
             "appBound": "Layanan itu sendiri adalah hambatannya. Cache seluruh halaman di depannya, atau berikan server yang lebih besar.",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "Metrik dikumpulkan setiap menit",
             "noHistoricalDataYet": "Belum ada data historis",
             "realTimePerformance": "Performa Waktu Nyata",
-            "systemMetrics": "Metrik Sistem"
+            "systemMetrics": "Metrik Sistem",
+            "loadingMetricsHistory": "Memuat riwayat metrik…"
         },
         "metricsTab": {
             "activeRunning": "Aktif (berjalan)",
@@ -3662,7 +3665,8 @@
             "processes": "Proses",
             "serviceStatus": "Status Layanan",
             "startTheServiceToViewResource": "Mulai layanan untuk melihat metrik sumber daya.",
-            "workers": "Pekerja"
+            "workers": "Pekerja",
+            "failedToLoadMetrics": "Tidak dapat memuat metrik."
         },
         "microCachePanel": {
             "assetCachingSaved": "Cache aset disimpan",
@@ -3923,7 +3927,8 @@
             "triggerAbove": "Pemicu di atas",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "Tempat peringatan ketika terjadi kebakaran",
-            "wouldAlertNow": "Akan memicu peringatan sekarang"
+            "wouldAlertNow": "Akan memicu peringatan sekarang",
+            "couldntLoadMonitoringData": "Tidak dapat memuat data pemantauan."
         },
         "monitoringOverview": {
             "activeAlerts": "Peringatan aktif",
@@ -3950,7 +3955,8 @@
             "runTest": "Jalankan tes",
             "running": "Menjalankan…",
             "speedTest": "Tes kecepatan",
-            "tested": "Diuji"
+            "tested": "Diuji",
+            "loadingHosts": "Memuat host"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Respons 200 tanpa teks ini dihitung sebagai pemadaman.",
@@ -4009,7 +4015,9 @@
             "monitorsDown": "Monitor mati",
             "mostRecentResults": "Hasil terkini",
             "noChecksRecordedYetTheScheduler": "Belum ada pemeriksaan yang dicatat — penjadwal melakukan jajak pendapat pada setiap interval monitor.",
-            "nothingIsBeingWatchedYet": "Belum ada yang diawasi"
+            "nothingIsBeingWatchedYet": "Belum ada yang diawasi",
+            "couldntLoadMonitors": "Tidak dapat memuat monitor.",
+            "loadingMonitors": "Memuat monitor"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Buat jaringan untuk menghubungkan kontainer.",
@@ -4258,7 +4266,8 @@
             "loadingPackages": "Memuat paket...",
             "package": "Kemasan",
             "packageNameEGRequestsFlask": "Nama paket (misalnya, permintaan, flask==2.0.0)",
-            "requirementsTxtUpdated": "persyaratan.txt diperbarui"
+            "requirementsTxtUpdated": "persyaratan.txt diperbarui",
+            "failedToLoadPackages": "Tidak dapat memuat paket."
         },
         "pageContextMap": {
             "application": "Layanan",
@@ -6278,7 +6287,8 @@
             "noRunningContainers": "Tidak ada kontainer yang berjalan",
             "running": "Berlari...",
             "startTheServiceToAccessThe": "Mulai layanan untuk mengakses shell.",
-            "typeACommandBelowToExecute": "Ketik perintah di bawah ini untuk menjalankannya di wadah."
+            "typeACommandBelowToExecute": "Ketik perintah di bawah ini untuk menjalankannya di wadah.",
+            "failedToLoadContainers": "Tidak dapat memuat kontainer."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Pilih preset atau buat tampilan kustom. Hanya item yang terlihat yang muncul di sidebar Anda.",
@@ -7005,7 +7015,8 @@
             "twoPanelsWritingWebServerConfig": "Dua panel yang menulis konfigurasi server web akan berebut kepemilikan. Alihkan server ini ke",
             "upstream": "Hulu",
             "whatWeCheck": "Apa yang kami periksa",
-            "whileObserving": "sambil mengamati"
+            "whileObserving": "sambil mengamati",
+            "failedToLoadSurvey": "Tidak dapat memuat survei."
         },
         "systemNotices": {
             "dismiss": "Singkirkan {{title}}",
@@ -7249,7 +7260,8 @@
             "truncateLogFile": "Potong file log",
             "typeUnitName": "Ketik nama satuan…",
             "unit": "Satuan",
-            "useThe": "Gunakan"
+            "useThe": "Gunakan",
+            "failedToLoadProcesses": "Tidak dapat memuat proses."
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Proses sedang berlangsung.",

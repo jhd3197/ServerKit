@@ -198,7 +198,7 @@ export default function BackupHistoryList({
     ];
 
     if (loading && (!runs || runs.length === 0)) {
-        return <EmptyState icon={Archive} title={t('app.backupHistoryList.loadingBackups', 'Loading backups…')} loading />;
+        return <EmptyState loadingVariant="table" loadingRows={5} title={t('app.backupHistoryList.loadingBackups', 'Loading backups…')} loading />;
     }
 
     if (!loading && (!runs || runs.length === 0)) {

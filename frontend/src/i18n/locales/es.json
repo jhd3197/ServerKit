@@ -1636,7 +1636,8 @@
             "removeCronJob": "Quitar tarea cron",
             "scheduleACommandOnTheHost": "Programa un comando en el crontab del host. Se ejecuta como el usuario del agente.",
             "scheduleIsRequired": "La programación es obligatoria",
-            "serverOffline": "Servidor sin conexión"
+            "serverOffline": "Servidor sin conexión",
+            "failedToLoadCronJobs": "No se pudieron cargar las tareas cron."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "Aún no hay widgets en este panel."
@@ -3018,7 +3019,8 @@
             "configurationSavedRestartTheAppTo": "Configuración guardada. Reinicia la app para aplicar los cambios.",
             "failedToSaveConfiguration": "No se pudo guardar la configuración",
             "gunicornConfiguration": "Configuración de Gunicorn",
-            "loadingGunicornConfiguration": "Cargando la configuración de Gunicorn..."
+            "loadingGunicornConfiguration": "Cargando la configuración de Gunicorn...",
+            "failedToLoadConfiguration": "No se pudo cargar la configuración de Gunicorn."
         },
         "hints": {
             "appBound": "El cuello de botella es la propia app. Guarda páginas completas en caché delante de ella o dale una máquina más grande.",
@@ -3647,7 +3649,8 @@
             "metricsAreCollectedEveryMinute": "Las métricas se recopilan cada minuto",
             "noHistoricalDataYet": "Aún no hay datos históricos",
             "realTimePerformance": "Rendimiento en tiempo real",
-            "systemMetrics": "Métricas del sistema"
+            "systemMetrics": "Métricas del sistema",
+            "loadingMetricsHistory": "Cargando el historial de métricas…"
         },
         "metricsTab": {
             "activeRunning": "Activo (en ejecución)",
@@ -3662,7 +3665,8 @@
             "processes": "Procesos",
             "serviceStatus": "Estado del servicio",
             "startTheServiceToViewResource": "Inicia el servicio para ver las métricas de recursos.",
-            "workers": "Workers"
+            "workers": "Workers",
+            "failedToLoadMetrics": "No se pudieron cargar las métricas."
         },
         "microCachePanel": {
             "assetCachingSaved": "Caché de recursos guardada.",
@@ -3924,7 +3928,8 @@
             "triggerAbove": "Disparar por encima de",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "Adónde va una alerta cuando se dispara",
-            "wouldAlertNow": "Alertaría ahora"
+            "wouldAlertNow": "Alertaría ahora",
+            "couldntLoadMonitoringData": "No se pudieron cargar los datos de monitorización."
         },
         "monitoringOverview": {
             "activeAlerts": "Alertas activas",
@@ -3951,7 +3956,8 @@
             "runTest": "Ejecutar prueba",
             "running": "Ejecutando…",
             "speedTest": "Prueba de velocidad",
-            "tested": "Probado"
+            "tested": "Probado",
+            "loadingHosts": "Cargando hosts"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Una respuesta 200 sin este texto cuenta como una caída.",
@@ -4010,7 +4016,9 @@
             "monitorsDown": "Monitores caídos",
             "mostRecentResults": "Resultados más recientes",
             "noChecksRecordedYetTheScheduler": "Aún no hay comprobaciones registradas: el planificador consulta según el intervalo de cada monitor.",
-            "nothingIsBeingWatchedYet": "Aún no se vigila nada"
+            "nothingIsBeingWatchedYet": "Aún no se vigila nada",
+            "couldntLoadMonitors": "No se pudieron cargar los monitores.",
+            "loadingMonitors": "Cargando monitores"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Crea una red para conectar contenedores.",
@@ -4259,7 +4267,8 @@
             "loadingPackages": "Cargando paquetes...",
             "package": "Paquete",
             "packageNameEGRequestsFlask": "Nombre del paquete (p. ej., requests, flask==2.0.0)",
-            "requirementsTxtUpdated": "requirements.txt actualizado"
+            "requirementsTxtUpdated": "requirements.txt actualizado",
+            "failedToLoadPackages": "No se pudieron cargar los paquetes."
         },
         "pageContextMap": {
             "application": "Servicio",
@@ -6279,7 +6288,8 @@
             "noRunningContainers": "No hay contenedores en ejecución",
             "running": "Ejecutando...",
             "startTheServiceToAccessThe": "Inicia el servicio para acceder al shell.",
-            "typeACommandBelowToExecute": "Escribe un comando abajo para ejecutarlo en el contenedor."
+            "typeACommandBelowToExecute": "Escribe un comando abajo para ejecutarlo en el contenedor.",
+            "failedToLoadContainers": "No se pudieron cargar los contenedores."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Elige una vista predefinida o crea una personalizada. Solo los elementos visibles aparecen en tu barra lateral.",
@@ -7006,7 +7016,8 @@
             "twoPanelsWritingWebServerConfig": "Dos paneles escribiendo la configuración del servidor web se pelearán por el control. Cambia este servidor a",
             "upstream": "Upstream",
             "whatWeCheck": "Qué comprobamos",
-            "whileObserving": "mientras observa"
+            "whileObserving": "mientras observa",
+            "failedToLoadSurvey": "No se pudo cargar el sondeo."
         },
         "systemNotices": {
             "dismiss": "Descartar {{title}}",
@@ -7250,7 +7261,8 @@
             "truncateLogFile": "Truncar el archivo de registro",
             "typeUnitName": "Escribe el nombre de la unidad…",
             "unit": "Unidad",
-            "useThe": "Usa la pestaña"
+            "useThe": "Usa la pestaña",
+            "failedToLoadProcesses": "No se pudieron cargar los procesos."
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Ya hay una ejecución en curso.",

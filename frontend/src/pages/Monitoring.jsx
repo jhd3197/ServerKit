@@ -4,6 +4,7 @@ import useTabParam from '../hooks/useTabParam';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import DoctorPanel from '../components/monitoring/DoctorPanel';
 import MonitoringOverview from '../components/monitoring/MonitoringOverview';
 import FleetCapacityPanel from '../components/monitoring/FleetCapacityPanel';
@@ -299,6 +300,19 @@ const Monitoring = () => {
         return (
             <div className="sk-tabgroup__inner monitoring-page">
                 <EmptyState loading loadingVariant="chart" size="lg" title={t('app.monitoring.loadingMonitoringData', 'Loading monitoring data')} />
+            </div>
+        );
+    }
+
+    // Nothing loaded and the request failed: show the failure, not an empty overview.
+    if (error && !status) {
+        return (
+            <div className="sk-tabgroup__inner monitoring-page">
+                <ErrorState
+                    title={t('app.monitoring.couldntLoadMonitoringData', "Couldn't load monitoring data.")}
+                    message={error}
+                    onRetry={loadData}
+                />
             </div>
         );
     }

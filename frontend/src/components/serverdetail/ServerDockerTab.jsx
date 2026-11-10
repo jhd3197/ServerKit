@@ -200,7 +200,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
     }
 
     if (loading) {
-        return <EmptyState loading title={t('app.serverDockerTab.loadingDockerData', 'Loading Docker data')} />;
+        return <EmptyState loading loadingVariant="table" loadingRows={5} title={t('app.serverDockerTab.loadingDockerData', 'Loading Docker data')} />;
     }
 
     // Containers table columns. Cell markup and classNames are identical to
