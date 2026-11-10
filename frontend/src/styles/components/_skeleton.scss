@@ -158,6 +158,9 @@
     gap: $space-4;
     width: 100%;
 
+    // Some variants use >100% ragged widths; never let a bar exceed its container.
+    .skeleton { max-width: 100%; }
+
     // Pushes a trailing control to the right edge of a toolbar row.
     &__push { margin-left: auto; }
 
