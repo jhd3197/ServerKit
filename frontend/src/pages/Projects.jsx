@@ -11,7 +11,8 @@ import { SearchField, ServiceTile } from '@/components/ds';
 import { Button } from '@/components/ui/button';
 import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormField } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { Textarea } from '@/components/ui/textarea';
 import Modal from '@/components/Modal';
 import { useTranslation } from 'react-i18next';
@@ -197,18 +198,19 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
     const [description, setDescription] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const toast = useToast();
+    const fe = useFieldErrors({
+        name: name.trim() ? null : t('app.projects.projectNameIsRequired', 'Project name is required'),
+    }, 'project');
 
     function reset() {
         setName('');
         setDescription('');
+        fe.reset();
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
-        if (!name.trim()) {
-            toast.error(t('app.projects.projectNameIsRequired', 'Project name is required'));
-            return;
-        }
+        if (!fe.attempt()) return;
         setSubmitting(true);
         try {
             await api.createProject({
@@ -233,19 +235,17 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
                 </p>
 
                 <div className="projects-form">
-                        <div className="projects-form__field">
-                            <Label htmlFor="project-name">{t('common.labels.name', 'Name')}</Label>
+                        <FormField label={t('common.labels.name', 'Name')} htmlFor="project-name" required error={fe.error('name')}>
                             <Input
                                 id="project-name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
+                                onBlur={() => fe.touch('name')}
                                 placeholder={t('app.projects.myProject', 'My project')}
                                 autoFocus
-                                required
                             />
-                        </div>
-                        <div className="projects-form__field">
-                            <Label htmlFor="project-description">{t('app.projects.descriptionOptional', 'Description (optional)')}</Label>
+                        </FormField>
+                        <FormField label={t('app.projects.descriptionOptional', 'Description (optional)')} htmlFor="project-description">
                             <Textarea
                                 id="project-description"
                                 value={description}
@@ -253,14 +253,14 @@ const CreateProjectDialog = ({ open, onOpenChange, onCreated }) => {
                                 placeholder={t('app.projects.whatThisProjectIsFor', 'What this project is for…')}
                                 rows={3}
                             />
-                        </div>
+                        </FormField>
                     </div>
 
                     <div className="modal-actions">
                         <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
-                        <Button type="submit" disabled={submitting || !name.trim()}>
+                        <Button type="submit" disabled={submitting}>
                             {submitting ? t('app.projects.creating', 'Creating…') : t('app.projects.createProjectAction', 'Create project')}
                         </Button>
                     </div>

@@ -197,7 +197,7 @@ export default function DomainField({
                     />
                     {bases.length > 1 ? (
                         <Select value={base} onValueChange={setBase} disabled={disabled}>
-                            <SelectTrigger className="sk-domain-field__base" aria-label={t('app.domainField.baseDomain', 'Base domain')}>
+                            <SelectTrigger id={`${inputId}-base`} className="sk-domain-field__base" aria-label={t('app.domainField.baseDomain', 'Base domain')}>
                                 <span className="sk-domain-field__dot">.</span><SelectValue />
                             </SelectTrigger>
                             <SelectContent>
