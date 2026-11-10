@@ -819,14 +819,5 @@
     }
 }
 
-// --------------------------------------------
-// Loading state
-// --------------------------------------------
-.wizard-loading {
-    @include flex-center();
-    padding: $space-10;
-    color: $text-secondary;
-}
-
 // Semantic layouts and controls; declarations preserved from the legacy compatibility layer.
 .setup-back-action { margin-bottom: 1rem; }

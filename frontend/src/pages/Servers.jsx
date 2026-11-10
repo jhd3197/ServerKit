@@ -434,6 +434,7 @@ const Servers = () => {
     if (loading) {
         return (
             <div className="sk-tabgroup__inner servers-page">
+                {topbarChrome}
                 <EmptyState loading loadingVariant="table" title={t('app.servers.scanningFleet', 'Scanning fleet…')} />
             </div>
         );
