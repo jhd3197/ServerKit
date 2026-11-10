@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "Haz clic para ordenar · Mayús+clic para añadir un nivel de ordenación",
             "loading": "Cargando",
             "noRowsMatchTheActiveColumn": "Ninguna fila coincide con los filtros de columna activos.",
+            "scrollableTable": "Tabla desplazable",
             "selectAllRows": "Seleccionar todas las filas",
             "selectRow": "Seleccionar fila"
         },

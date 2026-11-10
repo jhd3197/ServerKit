@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "คลิกเพื่อจัดเรียง · Shift+คลิกเพื่อเพิ่มระดับการจัดเรียง",
             "loading": "กำลังโหลด",
             "noRowsMatchTheActiveColumn": "ไม่มีแถวที่ตรงกับตัวกรองคอลัมน์ที่ใช้งานอยู่",
+            "scrollableTable": "ตารางที่เลื่อนได้",
             "selectAllRows": "เลือกแถวทั้งหมด",
             "selectRow": "เลือกแถว"
         },

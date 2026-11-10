@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "點選即可排序；按住 Shift 再點選可新增排序層級",
             "loading": "載入中",
             "noRowsMatchTheActiveColumn": "沒有資料列符合目前的欄位篩選條件。",
+            "scrollableTable": "可捲動表格",
             "selectAllRows": "選取所有資料列",
             "selectRow": "選取資料列"
         },

@@ -1677,6 +1677,7 @@
             "clickToSortShiftClickTo": "Kliknij, aby posortować · Shift+kliknięcie, aby dodać poziom sortowania",
             "loading": "Załadunek",
             "noRowsMatchTheActiveColumn": "Żaden wiersz nie pasuje do aktywnych filtrów kolumn.",
+            "scrollableTable": "Przewijana tabela",
             "selectAllRows": "Wybierz wszystkie wiersze",
             "selectRow": "Wybierz wiersz"
         },

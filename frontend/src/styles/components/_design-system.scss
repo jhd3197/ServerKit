@@ -630,15 +630,17 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         tbody td {
             display: block;
             height: auto;
-            padding: $space-2 $space-4;
+            padding: $space-1 $space-4;
             border-bottom: 0;
+            overflow-wrap: anywhere; // emails, ids and paths wrap instead of overflowing
         }
 
         // label · value rows
         tbody td[data-label] {
             display: grid;
-            grid-template-columns: minmax(0, 38%) minmax(0, 1fr);
+            grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
             align-items: baseline;
+            justify-items: start; // pills/badges hug their content, not the column
             column-gap: $space-3;
 
             &::before {
@@ -661,6 +663,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         tbody td.sk-dtable__cell--actions {
             display: block;
             margin-top: $space-1;
+            padding-block: $space-1;
             border-top: 1px solid var(--border-soft);
 
             .sk-dtable__value {
@@ -684,7 +687,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         }
 
         // A lone chevron ("row opens a detail") has no job on a card.
-        tbody td.sk-dtable__cell--actions:has(> .sk-dtable__value > svg:only-child) { display: none; }
+        tbody td.sk-dtable__cell--actions:has(> .sk-dtable__value > svg:only-child),
+        tbody td.sk-dtable__cell--actions:has(> .sk-dtable__value:empty),
+        tbody td.sk-dtable__cell--actions:has(> .sk-dtable__value > :only-child:empty) { display: none; }
 
         tbody tr:has(.sk-dtable__check) .sk-dtable__cell--title { padding-inline-end: $space-10; }
 

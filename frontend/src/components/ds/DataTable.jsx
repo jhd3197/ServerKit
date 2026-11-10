@@ -49,8 +49,14 @@ const SORT_NONE = '__none__';
  * The first visible column is the card title, the rest become "label · value"
  * rows using the column header as the label, a header-less trailing column
  * (actions) becomes a footer row of 40px targets, and the sortable headers
- * collapse into one sort select + direction toggle above the cards. Pass `responsive={false}` for
- * editor-style grids that must stay tabular on phones.
+ * collapse into one sort select + direction toggle above the cards. Pills and
+ * badges stay content-sized, long values wrap, and an empty actions cell drops
+ * its footer. Pass `responsive={false}` for editor-style grids that must stay
+ * tabular on phones.
+ *
+ * Tablet / narrow desktop: when the table is wider than its frame the frame
+ * becomes a keyboard-focusable "Scrollable table" region with an edge fade on
+ * the side(s) that have more columns (see ui/table.jsx).
  *
  * Example:
  *   <DataTable
@@ -338,9 +344,9 @@ export function DataTable({
     });
 
     // Card mode (<640px, see .sk-dtable--stack): the column header is the label.
-    const cellLabel = (column) => (typeof column.header === 'string' ? translateLabel(t, column, 'header') : '');
+    const cellLabel = (column) => (typeof column.header === 'string' && column.key !== 'actions' ? translateLabel(t, column, 'header') : '');
     const cellRole = (column, index) => {
-        if (isDecorative(column)) return 'sk-dtable__cell--actions';
+        if (isDecorative(column) || column.key === 'actions') return 'sk-dtable__cell--actions';
         return index === 0 ? 'sk-dtable__cell--title' : undefined;
     };
 

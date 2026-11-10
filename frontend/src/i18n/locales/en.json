@@ -1715,6 +1715,7 @@
             "defaultOrder": "Default order",
             "loading": "Loading",
             "noRowsMatchTheActiveColumn": "No rows match the active column filters.",
+            "scrollableTable": "Scrollable table",
             "selectAll": "Select all",
             "selectAllRows": "Select all rows",
             "selectRow": "Select row",
