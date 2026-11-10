@@ -394,8 +394,9 @@ $ft-default:  #646b7a;
         }
 
         > span {
-            width: 78px;
-            min-width: 0;
+            width: auto;
+            min-width: 78px;
+            white-space: nowrap;
             text-align: start;
         }
 
@@ -1852,7 +1853,7 @@ $drawer-width: 520px;
             .toolbar-left,
             .toolbar-right { width: 100%; justify-content: flex-start; }
 
-            .toolbar-right { flex-wrap: wrap; }
+            .toolbar-right { flex-wrap: wrap; gap: $space-1; }
 
             .search-field {
                 order: -1;
@@ -1862,9 +1863,10 @@ $drawer-width: 520px;
             }
 
             .file-toolbar-select {
-                flex: 1;
+                flex: 0 1 auto;
 
-                > span { width: 100%; }
+                > span { min-width: 0; }
+                > svg:not(.ui-select-icon) { display: none; }
             }
 
             .file-mount-chip { display: none; }
