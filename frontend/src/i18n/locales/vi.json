@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "Tạo người dùng có cùng tên và đầy đủ đặc quyền",
             "creating": "Đang tạo…",
             "databaseCreated": "Đã tạo cơ sở dữ liệu",
-            "databaseName": "Tên cơ sở dữ liệu *",
+            "databaseName": "Tên cơ sở dữ liệu",
             "encoding": "Mã hóa",
             "engine": "Động cơ",
             "fromTheTemplateCatalog": "từ danh mục mẫu",
@@ -3766,7 +3766,9 @@
             "running": "đang chạy",
             "saveTheseCredentialsThePasswordWon": "Lưu các thông tin xác thực này — mật khẩu sẽ không được hiển thị lại.",
             "userCreated": "Người dùng đã tạo",
-            "username": "Tên người dùng *"
+            "username": "Tên người dùng",
+            "databaseNameInvalid": "Chỉ dùng chữ cái, chữ số và dấu gạch dưới.",
+            "databaseNameRequired": "Nhập tên cơ sở dữ liệu."
         },
         "modeToggle": {
             "assistant": "Trợ lý",
@@ -7663,7 +7665,8 @@
             "payloadUrl": "Tải trọng URL",
             "retryCount": "Đếm lại",
             "timeoutSeconds": "Thời gian chờ (giây)",
-            "update": "Cập nhật"
+            "update": "Cập nhật",
+            "eventsRequired": "Chọn ít nhất một sự kiện."
         },
         "webhooksTab": {
             "active": "Hoạt động",
@@ -8130,7 +8133,8 @@
             "domainEmpty": "Nhập tên miền.",
             "domainInvalid": "Nhập tên miền hợp lệ.",
             "emailInvalid": "Nhập địa chỉ email hợp lệ.",
-            "required": "Trường này là bắt buộc."
+            "required": "Trường này là bắt buộc.",
+            "urlInvalid": "Nhập URL hợp lệ, ví dụ https://example.com/webhook."
         }
     },
     "errors": {

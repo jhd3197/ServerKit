@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "Buat pengguna dengan nama yang sama dan hak penuh",
             "creating": "Membuat…",
             "databaseCreated": "Basis data dibuat",
-            "databaseName": "Nama basis data *",
+            "databaseName": "Nama basis data",
             "encoding": "Pengkodean",
             "engine": "Mesin",
             "fromTheTemplateCatalog": "dari katalog templat",
@@ -3766,7 +3766,9 @@
             "running": "berjalan",
             "saveTheseCredentialsThePasswordWon": "Simpan kredensial ini — kata sandi tidak akan ditampilkan lagi.",
             "userCreated": "Pengguna dibuat",
-            "username": "Nama belakang *"
+            "username": "Nama belakang",
+            "databaseNameInvalid": "Gunakan hanya huruf, angka, dan garis bawah.",
+            "databaseNameRequired": "Masukkan nama basis data."
         },
         "modeToggle": {
             "assistant": "Asisten",
@@ -7663,7 +7665,8 @@
             "payloadUrl": "Muatan URL",
             "retryCount": "Coba Lagi Hitung",
             "timeoutSeconds": "Batas waktu (detik)",
-            "update": "Perbarui"
+            "update": "Perbarui",
+            "eventsRequired": "Pilih setidaknya satu peristiwa."
         },
         "webhooksTab": {
             "active": "Aktif",
@@ -8130,7 +8133,8 @@
             "domainEmpty": "Masukkan domain.",
             "domainInvalid": "Masukkan domain yang valid.",
             "emailInvalid": "Masukkan alamat email yang valid.",
-            "required": "Kolom ini wajib diisi."
+            "required": "Kolom ini wajib diisi.",
+            "urlInvalid": "Masukkan URL yang valid, mis. https://example.com/webhook."
         }
     },
     "errors": {

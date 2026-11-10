@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "Aynı ada ve tüm ayrıcalıklara sahip bir kullanıcı oluşturun",
             "creating": "Oluşturuluyor…",
             "databaseCreated": "Veritabanı oluşturuldu",
-            "databaseName": "Veritabanı adı *",
+            "databaseName": "Veritabanı adı",
             "encoding": "Kodlama",
             "engine": "Motor",
             "fromTheTemplateCatalog": "şablon kataloğundan",
@@ -3766,7 +3766,9 @@
             "running": "çalışıyor",
             "saveTheseCredentialsThePasswordWon": "Bu kimlik bilgilerini kaydedin; şifre bir daha gösterilmeyecektir.",
             "userCreated": "Kullanıcı oluşturuldu",
-            "username": "Kullanıcı adı *"
+            "username": "Kullanıcı adı",
+            "databaseNameInvalid": "Yalnızca harf, rakam ve alt çizgi kullanın.",
+            "databaseNameRequired": "Veritabanı adını girin."
         },
         "modeToggle": {
             "assistant": "Asistan",
@@ -7663,7 +7665,8 @@
             "payloadUrl": "Yük URL",
             "retryCount": "Yeniden Deneme Sayısı",
             "timeoutSeconds": "Zaman aşımı (saniye)",
-            "update": "Güncelle"
+            "update": "Güncelle",
+            "eventsRequired": "En az bir olay seçin."
         },
         "webhooksTab": {
             "active": "Etkin",
@@ -8130,7 +8133,8 @@
             "domainEmpty": "Bir alan adı girin.",
             "domainInvalid": "Geçerli bir alan adı girin.",
             "emailInvalid": "Geçerli bir e-posta adresi girin.",
-            "required": "Bu alan zorunludur."
+            "required": "Bu alan zorunludur.",
+            "urlInvalid": "Geçerli bir URL girin, ör. https://example.com/webhook."
         }
     },
     "errors": {

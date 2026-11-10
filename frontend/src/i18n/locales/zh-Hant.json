@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "建立具有相同名稱和完全權限的使用者",
             "creating": "正在建立…",
             "databaseCreated": "資料庫已建立",
-            "databaseName": "資料庫名稱 *",
+            "databaseName": "資料庫名稱",
             "encoding": "編碼",
             "engine": "引擎",
             "fromTheTemplateCatalog": "從範本目錄",
@@ -3766,7 +3766,9 @@
             "running": "執行中",
             "saveTheseCredentialsThePasswordWon": "儲存這些憑證 - 密碼將不會再次顯示。",
             "userCreated": "使用者已建立",
-            "username": "使用者名稱 *"
+            "username": "使用者名稱",
+            "databaseNameInvalid": "只能使用字母、數字和底線。",
+            "databaseNameRequired": "請輸入資料庫名稱。"
         },
         "modeToggle": {
             "assistant": "助理",
@@ -7663,7 +7665,8 @@
             "payloadUrl": "酬載網址",
             "retryCount": "重試次數",
             "timeoutSeconds": "逾時（秒）",
-            "update": "更新"
+            "update": "更新",
+            "eventsRequired": "請至少選擇一個事件。"
         },
         "webhooksTab": {
             "active": "使用中",
@@ -8130,7 +8133,8 @@
             "domainEmpty": "請輸入網域。",
             "domainInvalid": "請輸入有效的網域。",
             "emailInvalid": "請輸入有效的電子郵件地址。",
-            "required": "此欄位為必填。"
+            "required": "此欄位為必填。",
+            "urlInvalid": "請輸入有效的 URL，例如 https://example.com/webhook。"
         }
     },
     "errors": {

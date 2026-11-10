@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "قم بإنشاء مستخدم بنفس الاسم والامتيازات الكاملة",
             "creating": "جارٍ الإنشاء…",
             "databaseCreated": "تم إنشاء قاعدة البيانات",
-            "databaseName": "اسم قاعدة البيانات *",
+            "databaseName": "اسم قاعدة البيانات",
             "encoding": "الترميز",
             "engine": "محرك",
             "fromTheTemplateCatalog": "من كتالوج القالب",
@@ -3766,7 +3766,9 @@
             "running": "قيد التشغيل",
             "saveTheseCredentialsThePasswordWon": "احفظ بيانات الاعتماد هذه — لن يتم عرض كلمة المرور مرة أخرى.",
             "userCreated": "تم إنشاء المستخدم",
-            "username": "اسم المستخدم *"
+            "username": "اسم المستخدم",
+            "databaseNameInvalid": "استخدم الأحرف والأرقام والشرطة السفلية فقط.",
+            "databaseNameRequired": "أدخل اسم قاعدة البيانات."
         },
         "modeToggle": {
             "assistant": "مساعد",
@@ -7663,7 +7665,8 @@
             "payloadUrl": "الحمولة URL",
             "retryCount": "إعادة المحاولة العد",
             "timeoutSeconds": "المهلة (ثواني)",
-            "update": "تحديث"
+            "update": "تحديث",
+            "eventsRequired": "حدّد حدثًا واحدًا على الأقل."
         },
         "webhooksTab": {
             "active": "نشط",
@@ -8130,7 +8133,8 @@
             "domainEmpty": "أدخل نطاقًا.",
             "domainInvalid": "أدخل نطاقًا صالحًا.",
             "emailInvalid": "أدخل عنوان بريد إلكتروني صالحًا.",
-            "required": "هذا الحقل مطلوب."
+            "required": "هذا الحقل مطلوب.",
+            "urlInvalid": "أدخل عنوان URL صالحًا، مثل https://example.com/webhook."
         }
     },
     "errors": {

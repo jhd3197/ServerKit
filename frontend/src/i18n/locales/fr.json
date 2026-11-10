@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "Créer un utilisateur avec le même nom et tous les privilèges",
             "creating": "Création…",
             "databaseCreated": "Base de données créée",
-            "databaseName": "Nom de la base de données *",
+            "databaseName": "Nom de la base de données",
             "encoding": "Codage",
             "engine": "Moteur",
             "fromTheTemplateCatalog": "du catalogue de modèles",
@@ -3766,7 +3766,9 @@
             "running": "en cours d'exécution",
             "saveTheseCredentialsThePasswordWon": "Enregistrez ces informations d'identification : le mot de passe ne sera plus affiché.",
             "userCreated": "Utilisateur créé",
-            "username": "Nom d'utilisateur *"
+            "username": "Nom d'utilisateur",
+            "databaseNameInvalid": "Utilisez uniquement des lettres, des chiffres et des tirets bas.",
+            "databaseNameRequired": "Saisissez le nom de la base de données."
         },
         "modeToggle": {
             "assistant": "Assistant",
@@ -7663,7 +7665,8 @@
             "payloadUrl": "Charge utile URL",
             "retryCount": "Nombre de tentatives",
             "timeoutSeconds": "Délai d'expiration (secondes)",
-            "update": "Mettre à jour"
+            "update": "Mettre à jour",
+            "eventsRequired": "Sélectionnez au moins un événement."
         },
         "webhooksTab": {
             "active": "Actif",
@@ -8130,7 +8133,8 @@
             "domainEmpty": "Saisissez un domaine.",
             "domainInvalid": "Saisissez un domaine valide.",
             "emailInvalid": "Saisissez une adresse e-mail valide.",
-            "required": "Ce champ est obligatoire."
+            "required": "Ce champ est obligatoire.",
+            "urlInvalid": "Saisissez une URL valide, par ex. https://example.com/webhook."
         }
     },
     "errors": {

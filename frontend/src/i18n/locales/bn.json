@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "একই নাম এবং সম্পূর্ণ অধিকার সহ ব্যবহারকারী তৈরি করুন",
             "creating": "তৈরি হচ্ছে…",
             "databaseCreated": "ডাটাবেস তৈরি করা হয়েছে",
-            "databaseName": "ডাটাবেসের নাম *",
+            "databaseName": "ডাটাবেসের নাম",
             "encoding": "এনকোডিং",
             "engine": "ইঞ্জিন",
             "fromTheTemplateCatalog": "টেমপ্লেট ক্যাটালগ থেকে",
@@ -3766,7 +3766,9 @@
             "running": "চলছে",
             "saveTheseCredentialsThePasswordWon": "এই শংসাপত্রগুলি সংরক্ষণ করুন — পাসওয়ার্ডটি আর দেখানো হবে না৷",
             "userCreated": "ব্যবহারকারী তৈরি করা হয়েছে",
-            "username": "ব্যবহারকারীর নাম *"
+            "username": "ব্যবহারকারীর নাম",
+            "databaseNameInvalid": "শুধু অক্ষর, সংখ্যা ও আন্ডারস্কোর ব্যবহার করুন।",
+            "databaseNameRequired": "ডাটাবেসের নাম লিখুন।"
         },
         "modeToggle": {
             "assistant": "সহকারী",
@@ -7663,7 +7665,8 @@
             "payloadUrl": "পেলোড URL",
             "retryCount": "গণনা পুনরায় চেষ্টা করুন",
             "timeoutSeconds": "সময়সীমা (সেকেন্ড)",
-            "update": "আপডেট করুন"
+            "update": "আপডেট করুন",
+            "eventsRequired": "কমপক্ষে একটি ইভেন্ট নির্বাচন করুন।"
         },
         "webhooksTab": {
             "active": "সক্রিয়",
@@ -8130,7 +8133,8 @@
             "domainEmpty": "একটি ডোমেইন লিখুন।",
             "domainInvalid": "একটি বৈধ ডোমেইন লিখুন।",
             "emailInvalid": "একটি বৈধ ইমেইল ঠিকানা লিখুন।",
-            "required": "এই ঘরটি পূরণ করা আবশ্যক।"
+            "required": "এই ঘরটি পূরণ করা আবশ্যক।",
+            "urlInvalid": "একটি বৈধ URL লিখুন, যেমন https://example.com/webhook।"
         }
     },
     "errors": {

@@ -265,7 +265,14 @@ const Domains = () => {
             setIsPrimary(false);
             loadData();
         } catch (err) {
-            setError(err.message);
+            // Field-keyed errors, or a message that is plainly about the
+            // domain name (duplicate / invalid), land at the field; anything
+            // else stays in the banner.
+            const msg = err?.message || '';
+            const pinned = addErrors.fromServer(err)
+                || (/\b(domain|hostname)\b/i.test(msg) && /already|exists|invalid|in use|taken|not allowed/i.test(msg)
+                    && addErrors.fromServer({ errors: { domain: msg } }));
+            if (!pinned) setError(msg);
         } finally {
             setActionLoading(false);
         }
@@ -916,9 +923,9 @@ const Domains = () => {
 
             {/* ── Add Domain Modal ───────────────────────────── */}
             <Modal open={showAddModal} onClose={closeAdd} title={t('app.domains.addDomain2', 'Add domain')}>
-                <form onSubmit={handleAddDomain}>
+                <form onSubmit={handleAddDomain} noValidate>
                     <FormField label={t('app.domains.application', 'Service')} htmlFor={`${fieldId}-app`} required error={addErrors.error('app')}>
-                        <Select value={selectedAppId} onValueChange={setSelectedAppId}>
+                        <Select value={selectedAppId} onValueChange={(v) => { addErrors.clear('app'); setSelectedAppId(v); }}>
                             <SelectTrigger id={`${fieldId}-app`} onBlur={() => addErrors.touch('app')}><SelectValue placeholder={t('app.domains.selectAnApplication', 'Select a service')} /></SelectTrigger>
                             <SelectContent>
                                 {apps.map(app => (
@@ -934,7 +941,7 @@ const Domains = () => {
                                 id={`${fieldId}-domain`}
                                 exclude={domains.map((d) => d.name)}
                                 rejectExisting
-                                onChange={(name, info) => { setDomainName(name); setDomainInfo(info); }}
+                                onChange={(name, info) => { addErrors.clear('domain'); setDomainName(name); setDomainInfo(info); }}
                                 disabled={actionLoading}
                             />
                             </div>
