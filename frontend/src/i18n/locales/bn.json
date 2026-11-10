@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "আপনার DNS প্রদানকারীর মাধ্যমে।",
             "webrootPath": "ওয়েবরুট পথ",
             "wildcardCertificateDns01Validation": "ওয়াইল্ডকার্ড শংসাপত্র (DNS-01 বৈধতা)",
-            "wildcardCertificateIssued": "ওয়াইল্ডকার্ড সার্টিফিকেট জারি করা হয়েছে"
+            "wildcardCertificateIssued": "ওয়াইল্ডকার্ড সার্টিফিকেট জারি করা হয়েছে",
+            "domainsRequired": "কমপক্ষে একটি ডোমেইন লিখুন।"
         },
         "sSOCallback": {
             "authenticationFailed": "প্রমাণীকরণ ব্যর্থ হয়েছে৷",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "এইমাত্র",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "একটি ডোমেইন লিখুন।",
+            "domainInvalid": "একটি বৈধ ডোমেইন লিখুন।",
+            "emailInvalid": "একটি বৈধ ইমেইল ঠিকানা লিখুন।",
+            "required": "এই ঘরটি পূরণ করা আবশ্যক।"
         }
     },
     "errors": {

@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "ผ่านผู้ให้บริการ DNS ของคุณ",
             "webrootPath": "เส้นทางเว็บรูท",
             "wildcardCertificateDns01Validation": "ใบรับรองตัวแทน (การตรวจสอบ DNS-01)",
-            "wildcardCertificateIssued": "ออกใบรับรองตัวแทนแล้ว"
+            "wildcardCertificateIssued": "ออกใบรับรองตัวแทนแล้ว",
+            "domainsRequired": "ป้อนโดเมนอย่างน้อยหนึ่งโดเมน"
         },
         "sSOCallback": {
             "authenticationFailed": "การรับรองความถูกต้องล้มเหลว",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "แค่ตอนนี้",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "ป้อนโดเมน",
+            "domainInvalid": "ป้อนโดเมนที่ถูกต้อง",
+            "emailInvalid": "ป้อนที่อยู่อีเมลที่ถูกต้อง",
+            "required": "จำเป็นต้องกรอกช่องนี้"
         }
     },
     "errors": {

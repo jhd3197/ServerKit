@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "através do seu provedor de DNS.",
             "webrootPath": "Caminho Webroot",
             "wildcardCertificateDns01Validation": "Certificado curinga (validação DNS-01)",
-            "wildcardCertificateIssued": "Certificado curinga emitido"
+            "wildcardCertificateIssued": "Certificado curinga emitido",
+            "domainsRequired": "Informe pelo menos um domínio."
         },
         "sSOCallback": {
             "authenticationFailed": "Falha na autenticação",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "agora mesmo",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "Informe um domínio.",
+            "domainInvalid": "Informe um domínio válido.",
+            "emailInvalid": "Informe um endereço de e-mail válido.",
+            "required": "Este campo é obrigatório."
         }
     },
     "errors": {

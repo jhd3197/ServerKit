@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "через вашего DNS-провайдера.",
             "webrootPath": "Корневой веб-путь",
             "wildcardCertificateDns01Validation": "Подстановочный сертификат (проверка DNS-01)",
-            "wildcardCertificateIssued": "Выдан сертификат Wildcard"
+            "wildcardCertificateIssued": "Выдан сертификат Wildcard",
+            "domainsRequired": "Укажите хотя бы один домен."
         },
         "sSOCallback": {
             "authenticationFailed": "Аутентификация не удалась",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}} ч.",
             "justNow": "прямо сейчас",
             "minutesShort": "{{count}} м"
+        },
+        "validation": {
+            "domainEmpty": "Укажите домен.",
+            "domainInvalid": "Укажите корректный домен.",
+            "emailInvalid": "Укажите корректный адрес электронной почты.",
+            "required": "Это поле обязательно."
         }
     },
     "errors": {

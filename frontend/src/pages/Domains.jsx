@@ -173,7 +173,9 @@ const Domains = () => {
 
     const addErrors = useFieldErrors({
         app: selectedAppId ? null : t('app.domains.serviceRequired', 'Choose a service.'),
-        domain: domainName ? null : t('app.domains.domainRequired', 'Enter a valid domain.'),
+        domain: domainName ? null : (domainInfo && !domainInfo.empty
+            ? t('app.domains.domainRequired', 'Enter a valid domain.')
+            : t('common.validation.domainEmpty', 'Enter a domain.')),
     }, fieldId);
     const closeAdd = () => { setShowAddModal(false); addErrors.reset(); };
 

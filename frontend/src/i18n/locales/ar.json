@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "عبر مزود DNS الخاص بك.",
             "webrootPath": "مسار ويب روت",
             "wildcardCertificateDns01Validation": "شهادة حرف البدل (التحقق من صحة DNS-01)",
-            "wildcardCertificateIssued": "تم إصدار شهادة البدل"
+            "wildcardCertificateIssued": "تم إصدار شهادة البدل",
+            "domainsRequired": "أدخل نطاقًا واحدًا على الأقل."
         },
         "sSOCallback": {
             "authenticationFailed": "فشلت المصادقة",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "الآن",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "أدخل نطاقًا.",
+            "domainInvalid": "أدخل نطاقًا صالحًا.",
+            "emailInvalid": "أدخل عنوان بريد إلكتروني صالحًا.",
+            "required": "هذا الحقل مطلوب."
         }
     },
     "errors": {

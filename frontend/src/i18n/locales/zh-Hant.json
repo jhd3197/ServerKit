@@ -5101,7 +5101,8 @@
             "viaYourDnsProvider": "透過您的 DNS 提供者。",
             "webrootPath": "網站根目錄路徑",
             "wildcardCertificateDns01Validation": "萬用字元憑證（DNS-01 驗證）",
-            "wildcardCertificateIssued": "簽發萬用字元憑證"
+            "wildcardCertificateIssued": "簽發萬用字元憑證",
+            "domainsRequired": "請至少輸入一個網域。"
         },
         "sSOCallback": {
             "authenticationFailed": "認證失敗",
@@ -8124,6 +8125,12 @@
             "hoursShort": "{{count}}h",
             "justNow": "剛剛",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "請輸入網域。",
+            "domainInvalid": "請輸入有效的網域。",
+            "emailInvalid": "請輸入有效的電子郵件地址。",
+            "required": "此欄位為必填。"
         }
     },
     "errors": {
