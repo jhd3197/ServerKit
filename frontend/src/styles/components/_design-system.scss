@@ -249,8 +249,10 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         &__body { display: contents; }
         &__icon, &__val, &__trend { grid-area: auto; grid-row: 1; }
         &__icon { grid-column: 1; }
-        &__val { grid-column: 2; }
-        &__trend { grid-column: 3; }
+        // Value sizes to its content (never ellipsized); the trend takes what is left.
+        grid-template-columns: auto auto minmax(0, 1fr);
+        &__val { grid-column: 2; overflow: visible; text-overflow: clip; }
+        &__trend { grid-column: 3; justify-self: end; }
         &__body > :not(.sk-kpi__val), &__spark { grid-area: auto; grid-column: 1 / -1; min-width: 0; }
         &__label {
             white-space: normal;
@@ -259,12 +261,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             -webkit-line-clamp: 2;
             line-clamp: 2;
         }
-        &__sub {
-            flex-wrap: nowrap;
-            white-space: nowrap;
-            overflow: hidden;
-            > * { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-        }
+        &__sub { > * { min-width: 0; overflow-wrap: anywhere; } }
     }
 }
 
@@ -1878,7 +1875,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__title {
         display: inline-flex; align-items: center; gap: 6px;
         font-weight: $font-weight-semibold; font-size: $text-sm; color: var(--text);
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        overflow: hidden; overflow-wrap: anywhere;
+        display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical;
     }
     &__open {
         max-width: 100%;
@@ -1891,10 +1889,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
         &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     }
-    &__featured { flex-shrink: 0; color: var(--text-faint); fill: currentColor; }
-    &__sub {
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
+    &__featured { flex-shrink: 0; color: var(--text-faint); fill: currentColor; margin-inline-start: 6px; vertical-align: -1px; }
+    &__sub { overflow-wrap: anywhere; }
     &__tag { flex-shrink: 0; font-size: $text-xs; color: var(--text-faint); white-space: nowrap; }
     &__desc {
         margin: 0;
