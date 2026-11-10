@@ -12,7 +12,7 @@ export default function LogToolbar({
     wrapLines, onToggleWrap,
     isFullscreen, onToggleFullscreen,
     onRefresh, onDownload, onClear, onScrollToBottom,
-    canAct,
+    canAct, actDisabledReason,
 }) {
     const { t } = useTranslation();
     return (
@@ -56,6 +56,7 @@ export default function LogToolbar({
                     className={`lv-chip ${autoRefresh ? 'active' : ''}`}
                     onClick={onAutoRefreshToggle}
                     disabled={!canAct}
+                    disabledReason={actDisabledReason}
                     title={t('app.logToolbar.autoRefreshEvery3sAndFollow', 'Auto-refresh every 3s and follow tail')}
                 >
                     <span className={`lv-pulse ${autoRefresh ? 'on' : ''}`} />
@@ -79,6 +80,7 @@ export default function LogToolbar({
                     className="lv-icon-btn"
                     onClick={onScrollToBottom}
                     disabled={!canAct}
+                    disabledReason={actDisabledReason}
                     title={t('app.logToolbar.jumpToEnd', 'Jump to end')}
                 >
                     <ArrowDownToLine size={13} />
@@ -87,6 +89,7 @@ export default function LogToolbar({
                     className="lv-icon-btn"
                     onClick={onRefresh}
                     disabled={!canAct}
+                    disabledReason={actDisabledReason}
                     title={t('common.actions.refresh', 'Refresh')}
                 >
                     <RefreshCw size={13} />
@@ -95,6 +98,7 @@ export default function LogToolbar({
                     className="lv-icon-btn"
                     onClick={onDownload}
                     disabled={!canAct}
+                    disabledReason={actDisabledReason}
                     title={t('common.actions.download', 'Download')}
                 >
                     <Download size={13} />
@@ -103,6 +107,7 @@ export default function LogToolbar({
                     className="lv-icon-btn danger"
                     onClick={onClear}
                     disabled={!canAct}
+                    disabledReason={actDisabledReason}
                     title={t('app.logToolbar.truncateLogFile', 'Truncate log file')}
                 >
                     <Trash2 size={13} />

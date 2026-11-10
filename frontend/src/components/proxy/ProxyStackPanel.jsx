@@ -246,7 +246,7 @@ const ProxyStackPanel = ({ serverId }) => {
                     onChange={setSelectedType}
                 />
                 <div className="proxy-panel__actions">
-                    <Button onClick={handleSwitch} disabled={!isDirtyType || busy}>
+                    <Button onClick={handleSwitch} disabled={!isDirtyType || busy} disabledReason={!busy ? t('app.proxyStackPanel.selectADifferentProxyFirst', 'Select a different proxy first') : undefined}>
                         {isDirtyType
                             ? t('app.proxyStackPanel.switchTo', 'Switch to {{type}}', { type: selectedType })
                             : t('app.proxyStackPanel.noChange', 'No change')}
@@ -293,6 +293,7 @@ const ProxyStackPanel = ({ serverId }) => {
                             variant="outline"
                             onClick={handleSaveSnippet}
                             disabled={!isDirtySnippet || busy}
+                            disabledReason={!busy ? t('app.proxyStackPanel.noChangesToSave', 'No changes to save') : undefined}
                         >
                             {t('app.proxyStackPanel.saveSnippet', 'Save snippet')}
                         </Button>

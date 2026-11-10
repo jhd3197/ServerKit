@@ -892,8 +892,9 @@ export default function Databases() {
                                 type="button"
                                 className="dbx-tab dbx-tab-new"
                                 disabled={!newConsoleConn}
+                                disabledReason={t('app.databases.selectADatabaseToOpenA', 'Select a database to open a console')}
                                 onClick={() => { if (newConsoleConn) openConsole(newConsoleConn, selectedNode.engine); }}
-                                title={newConsoleConn ? t('app.databases.newSqlConsole', 'New SQL console') : t('app.databases.selectADatabaseToOpenA', 'Select a database to open a console')}
+                                title={newConsoleConn ? t('app.databases.newSqlConsole', 'New SQL console') : undefined}
                                 aria-label={t('app.databases.newSqlConsole', 'New SQL console')}
                             >
                                 <Plus size={14} aria-hidden="true" />

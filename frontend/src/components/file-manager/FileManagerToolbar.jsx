@@ -82,6 +82,7 @@ export default function FileManagerToolbar({
                             className="nav-btn"
                             onClick={goBack}
                             disabled={historyIdx === 0}
+                            disabledReason={t('app.fileManager.nothingToGoBackTo', 'Nothing to go back to')}
                             title={t('common.actions.back', 'Back')}
                         >
                             <ArrowLeft size={14} />
@@ -92,6 +93,7 @@ export default function FileManagerToolbar({
                             className="nav-btn"
                             onClick={goForward}
                             disabled={historyIdx >= history.length - 1}
+                            disabledReason={t('app.fileManager.nothingToGoForwardTo', 'Nothing to go forward to')}
                             title={t('app.fileManager.forward', 'Forward')}
                         >
                             <ArrowRight size={14} />

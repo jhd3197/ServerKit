@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "تم تفعيل الترقية لجميع الوكلاء عبر الإنترنت",
             "versionDistribution": "توزيع الإصدار",
             "versions": "الإصدارات",
-            "viewDetails": "عرض التفاصيل"
+            "viewDetails": "عرض التفاصيل",
+            "selectAVersionFirst": "اختر إصدارًا أولًا"
         },
         "ai": {
             "assistant": "المساعد"
@@ -608,7 +609,8 @@
             "remote": "بعيد",
             "restoreDrills": "استعادة التدريبات",
             "turnOnProtectionOrClickBack": "قم بتشغيل الحماية أو انقر فوق النسخ الاحتياطي الآن.",
-            "verifyRemoteCopy": "التحقق من النسخة البعيدة"
+            "verifyRemoteCopy": "التحقق من النسخة البعيدة",
+            "onlySuccessfulBackupsCanBeRestored": "يمكن استعادة النسخ الاحتياطية الناجحة فقط"
         },
         "backupTabs": {
             "schedules": "الجداول الزمنية",
@@ -882,7 +884,8 @@
             "selectSize": "اختر الحجم",
             "serverDestroyed": "تم تدمير الخادم",
             "serverName": "اسم الخادم",
-            "serverProvisioningInitiated": "بدأ توفير الخادم"
+            "serverProvisioningInitiated": "بدأ توفير الخادم",
+            "enterANameAndChooseAProvider": "أدخل اسمًا واختر مزوّدًا أولًا"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "سيتم إنشاء CNAME لاسم المضيف هذا في Cloudflare DNS، مع الإشارة إلى النفق.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "نظرة عامة على التحديث",
             "updatingDatabaseSchema": "جارٍ تحديث مخطط قاعدة البيانات...",
             "weRecommendBackingUpYourDatabase": "نوصي بعمل نسخة احتياطية لقاعدة البيانات الخاصة بك قبل تطبيق التحديثات.",
-            "whichDoesNotExistInThis": "، وهو غير موجود في هذا الإصدار - عادةً ما يكون فرعًا أضاف عملية ترحيل ثم تمت إعادته بعد ذلك. لا يمكن ترقية المخطط حتى يتم إعادته إلى مراجعة معروفة:"
+            "whichDoesNotExistInThis": "، وهو غير موجود في هذا الإصدار - عادةً ما يكون فرعًا أضاف عملية ترحيل ثم تمت إعادته بعد ذلك. لا يمكن ترقية المخطط حتى يتم إعادته إلى مراجعة معروفة:",
+            "createABackupFirst": "أنشئ نسخة احتياطية أولًا"
         },
         "databases": {
             "backUpDatabase": "النسخ الاحتياطي لقاعدة البيانات",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "تحقق من التنزيل باستخدام المجموع الاختباري SHA256:",
             "windows": "ويندوز:",
             "windowsPowershell": "ويندوز (باورشيل)",
-            "withTheServerRegistrationToken": "مع رمز تسجيل الخادم."
+            "withTheServerRegistrationToken": "مع رمز تسجيل الخادم.",
+            "noBuildPublishedForThisPlatform": "لم يُنشر أي إصدار لهذه المنصة بعد"
         },
         "drawerHeader": {
             "aiSettings": "إعدادات الذكاء الاصطناعي",
@@ -2760,7 +2765,9 @@
             "videos": "فيديوهات",
             "volumes": "وحدات التخزين",
             "webConfig": "تكوين الويب",
-            "willBeCreatedIn": "سيتم إنشاؤها في:"
+            "willBeCreatedIn": "سيتم إنشاؤها في:",
+            "nothingToGoBackTo": "لا يوجد ما يمكن الرجوع إليه",
+            "nothingToGoForwardTo": "لا يوجد ما يمكن التقدم إليه"
         },
         "fileRow": {
             "deselect": "قم بإلغاء التحديد",
@@ -2878,7 +2885,8 @@
             "trend": "اتجاه",
             "unusuallyHigh": "مرتفع بشكل غير معتاد",
             "unusuallyLow": "منخفض بشكل غير معتاد",
-            "zScore": "درجة Z"
+            "zScore": "درجة Z",
+            "selectAServerFirst": "اختر خادمًا أولًا"
         },
         "fleetProxy": {
             "apps": "الخدمات",
@@ -3453,7 +3461,8 @@
             "logFiles": "ملفات السجل",
             "noLogFilesFound": "لم يتم العثور على ملفات السجل",
             "searchPattern": "نمط البحث...",
-            "selectALogFile": "اختر ملف سجل لعرض محتوياته."
+            "selectALogFile": "اختر ملف سجل لعرض محتوياته.",
+            "selectALogFileFirst": "اختر ملف سجل أولًا"
         },
         "loginLinksSection": {
             "allowedIp": "IP المسموح به",
@@ -4049,7 +4058,10 @@
             "registering": "جارٍ التسجيل…",
             "review": "مراجعة",
             "uploadAndDeploy": "رفع ونشر",
-            "uploading": "جارٍ الرفع…"
+            "uploading": "جارٍ الرفع…",
+            "completeTheSourceDetailsFirst": "أكمل تفاصيل المصدر أولًا",
+            "fillInTheRequiredDetailsFirst": "أكمل البيانات المطلوبة أولًا",
+            "finishThePreviousStepFirst": "أنهِ الخطوة السابقة أولًا"
         },
         "notFound": {
             "browseExtensions": "تصفح الامتدادات",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "يتعامل Nginx الخاص بالمضيف مع الوكيل العكسي. قم بالتبديل إلى Traefik أو Caddy أعلاه لتشغيل مكدس وكيل Docker المُدار بدلاً من ذلك.",
             "thisServerSActiveProxyIs": "الوكيل النشط لهذا الخادم هو",
             "traefik": "Traefik",
-            "whichExpects": "، الذي يتوقع"
+            "whichExpects": "، الذي يتوقع",
+            "noChangesToSave": "لا توجد تغييرات للحفظ",
+            "selectADifferentProxyFirst": "اختر وكيلًا مختلفًا أولًا"
         },
         "pruneButton": {
             "cleaning": "جارٍ التنظيف…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "استخدم هذا المجال",
             "used": "مستخدم",
             "utcOffset": "إزاحة التوقيت العالمي المنسق",
-            "version": "الإصدار {{brand}}"
+            "version": "الإصدار {{brand}}",
+            "enterADomainFirst": "أدخل نطاقًا أولًا",
+            "selectADifferentTimezoneFirst": "اختر منطقة زمنية مختلفة أولًا"
         },
         "tableDataTab": {
             "column": "عمود",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "اكتب اسم الوحدة...",
             "unit": "وحدة",
             "useThe": "استخدم",
-            "failedToLoadProcesses": "تعذّر تحميل العمليات."
+            "failedToLoadProcesses": "تعذّر تحميل العمليات.",
+            "selectALogFileFirst": "اختر ملف سجل أولًا"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "التشغيل قيد التقدم بالفعل.",

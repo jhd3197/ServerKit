@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Upgrade für alle Online-Agenten ausgelöst",
             "versionDistribution": "Versionsverteilung",
             "versions": "Versionen",
-            "viewDetails": "Details anzeigen"
+            "viewDetails": "Details anzeigen",
+            "selectAVersionFirst": "Zuerst eine Version auswählen"
         },
         "ai": {
             "assistant": "Assistent"
@@ -608,7 +609,8 @@
             "remote": "Fernbedienung",
             "restoreDrills": "Übungen wiederherstellen",
             "turnOnProtectionOrClickBack": "Aktivieren Sie den Schutz oder klicken Sie auf Jetzt sichern.",
-            "verifyRemoteCopy": "Remote-Kopie überprüfen"
+            "verifyRemoteCopy": "Remote-Kopie überprüfen",
+            "onlySuccessfulBackupsCanBeRestored": "Nur erfolgreiche Backups können wiederhergestellt werden"
         },
         "backupTabs": {
             "schedules": "Zeitpläne",
@@ -882,7 +884,8 @@
             "selectSize": "Größe auswählen",
             "serverDestroyed": "Server zerstört",
             "serverName": "Servername",
-            "serverProvisioningInitiated": "Serverbereitstellung eingeleitet"
+            "serverProvisioningInitiated": "Serverbereitstellung eingeleitet",
+            "enterANameAndChooseAProvider": "Zuerst einen Namen eingeben und einen Anbieter wählen"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "Für diesen Hostnamen wird im Cloudflare-DNS ein CNAME erstellt, der auf den Tunnel verweist.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "Update-Übersicht",
             "updatingDatabaseSchema": "Datenbankschema wird aktualisiert...",
             "weRecommendBackingUpYourDatabase": "Wir empfehlen, Ihre Datenbank zu sichern, bevor Sie Updates anwenden.",
-            "whichDoesNotExistInThis": ", der in diesem Build nicht vorhanden ist – normalerweise ein Zweig, der eine Migration hinzugefügt und dann zurückgesetzt wurde. Das Schema kann erst aktualisiert werden, wenn es auf eine bekannte Revision zurückgesetzt wird:"
+            "whichDoesNotExistInThis": ", der in diesem Build nicht vorhanden ist – normalerweise ein Zweig, der eine Migration hinzugefügt und dann zurückgesetzt wurde. Das Schema kann erst aktualisiert werden, wenn es auf eine bekannte Revision zurückgesetzt wird:",
+            "createABackupFirst": "Zuerst ein Backup erstellen"
         },
         "databases": {
             "backUpDatabase": "Datenbank sichern",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "Überprüfen Sie Ihren Download anhand der SHA256-Prüfsummen:",
             "windows": "Windows:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "mit dem Serverregistrierungstoken."
+            "withTheServerRegistrationToken": "mit dem Serverregistrierungstoken.",
+            "noBuildPublishedForThisPlatform": "Für diese Plattform ist noch kein Build veröffentlicht"
         },
         "drawerHeader": {
             "aiSettings": "KI-Einstellungen",
@@ -2760,7 +2765,9 @@
             "videos": "Videos",
             "volumes": "Volumes",
             "webConfig": "Webkonfiguration",
-            "willBeCreatedIn": "Wird erstellt in:"
+            "willBeCreatedIn": "Wird erstellt in:",
+            "nothingToGoBackTo": "Nichts, wohin man zurückgehen kann",
+            "nothingToGoForwardTo": "Nichts, wohin man vorwärts gehen kann"
         },
         "fileRow": {
             "deselect": "Abwählen",
@@ -2878,7 +2885,8 @@
             "trend": "Trend",
             "unusuallyHigh": "Ungewöhnlich hoch",
             "unusuallyLow": "Ungewöhnlich niedrig",
-            "zScore": "Z-Score"
+            "zScore": "Z-Score",
+            "selectAServerFirst": "Zuerst einen Server auswählen"
         },
         "fleetProxy": {
             "apps": "Dienste",
@@ -3453,7 +3461,8 @@
             "logFiles": "Protokolldateien",
             "noLogFilesFound": "Keine Protokolldateien gefunden",
             "searchPattern": "Suchmuster...",
-            "selectALogFile": "Wählen Sie eine Logdatei aus, um ihren Inhalt anzuzeigen."
+            "selectALogFile": "Wählen Sie eine Logdatei aus, um ihren Inhalt anzuzeigen.",
+            "selectALogFileFirst": "Zuerst eine Logdatei auswählen"
         },
         "loginLinksSection": {
             "allowedIp": "Erlaubte IP",
@@ -4049,7 +4058,10 @@
             "registering": "Wird registriert…",
             "review": "Rezension",
             "uploadAndDeploy": "Hochladen und bereitstellen",
-            "uploading": "Wird hochgeladen…"
+            "uploading": "Wird hochgeladen…",
+            "completeTheSourceDetailsFirst": "Zuerst die Quellendetails ausfüllen",
+            "fillInTheRequiredDetailsFirst": "Zuerst die erforderlichen Angaben ausfüllen",
+            "finishThePreviousStepFirst": "Zuerst den vorherigen Schritt abschließen"
         },
         "notFound": {
             "browseExtensions": "Durchsuchen Sie Erweiterungen",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "Der Nginx des Hosts übernimmt das Reverse-Proxying. Wechseln Sie oben zu Traefik oder Caddy, um stattdessen einen verwalteten Docker-Proxy-Stack auszuführen.",
             "thisServerSActiveProxyIs": "Der aktive Proxy dieses Servers ist",
             "traefik": "Traefik",
-            "whichExpects": ", was erwartet"
+            "whichExpects": ", was erwartet",
+            "noChangesToSave": "Keine Änderungen zu speichern",
+            "selectADifferentProxyFirst": "Zuerst einen anderen Proxy auswählen"
         },
         "pruneButton": {
             "cleaning": "Wird bereinigt…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "Nutzen Sie diese Domain",
             "used": "Gebraucht",
             "utcOffset": "UTC-Offset",
-            "version": "{{brand}}-Version"
+            "version": "{{brand}}-Version",
+            "enterADomainFirst": "Zuerst eine Domain eingeben",
+            "selectADifferentTimezoneFirst": "Zuerst eine andere Zeitzone auswählen"
         },
         "tableDataTab": {
             "column": "Spalte",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "Geben Sie den Namen der Einheit ein…",
             "unit": "Einheit",
             "useThe": "Benutzen Sie die",
-            "failedToLoadProcesses": "Prozesse konnten nicht geladen werden."
+            "failedToLoadProcesses": "Prozesse konnten nicht geladen werden.",
+            "selectALogFileFirst": "Zuerst eine Logdatei auswählen"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Ein Lauf ist bereits im Gange.",

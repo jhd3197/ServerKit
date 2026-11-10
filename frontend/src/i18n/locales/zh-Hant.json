@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "為所有線上代理程式觸發升級",
             "versionDistribution": "版本分佈",
             "versions": "版本",
-            "viewDetails": "檢視詳細資料"
+            "viewDetails": "檢視詳細資料",
+            "selectAVersionFirst": "請先選擇一個版本"
         },
         "ai": {
             "assistant": "助理"
@@ -608,7 +609,8 @@
             "remote": "遠端",
             "restoreDrills": "還原演習",
             "turnOnProtectionOrClickBack": "開啟保護或點選立即備份。",
-            "verifyRemoteCopy": "驗證遠端複製"
+            "verifyRemoteCopy": "驗證遠端複製",
+            "onlySuccessfulBackupsCanBeRestored": "只能還原成功的備份"
         },
         "backupTabs": {
             "schedules": "排程",
@@ -882,7 +884,8 @@
             "selectSize": "選擇規格",
             "serverDestroyed": "伺服器已銷毀",
             "serverName": "伺服器名稱",
-            "serverProvisioningInitiated": "已啟動伺服器佈建"
+            "serverProvisioningInitiated": "已啟動伺服器佈建",
+            "enterANameAndChooseAProvider": "請先輸入名稱並選擇提供者"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "將在 Cloudflare DNS 中建立該主機名稱的 CNAME，指向隧道。",
@@ -1726,7 +1729,8 @@
             "updateOverview": "更新概覽",
             "updatingDatabaseSchema": "正在更新資料庫架構…",
             "weRecommendBackingUpYourDatabase": "建議在套用更新前先備份資料庫。",
-            "whichDoesNotExistInThis": "，但此建置中沒有該版本，通常是新增遷移的分支後來遭到還原。在將資料庫架構標記回已知修訂版本前，無法進行升級："
+            "whichDoesNotExistInThis": "，但此建置中沒有該版本，通常是新增遷移的分支後來遭到還原。在將資料庫架構標記回已知修訂版本前，無法進行升級：",
+            "createABackupFirst": "請先建立備份"
         },
         "databases": {
             "backUpDatabase": "備份資料庫",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "使用 SHA256 檢查碼驗證您的下載：",
             "windows": "Windows:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "與伺服器註冊權杖。"
+            "withTheServerRegistrationToken": "與伺服器註冊權杖。",
+            "noBuildPublishedForThisPlatform": "此平台尚未發布建置"
         },
         "drawerHeader": {
             "aiSettings": "人工智慧設定",
@@ -2760,7 +2765,9 @@
             "videos": "影片",
             "volumes": "磁碟區",
             "webConfig": "網頁設定",
-            "willBeCreatedIn": "將建立於："
+            "willBeCreatedIn": "將建立於：",
+            "nothingToGoBackTo": "沒有可返回的頁面",
+            "nothingToGoForwardTo": "沒有可前進的頁面"
         },
         "fileRow": {
             "deselect": "取消選擇",
@@ -2878,7 +2885,8 @@
             "trend": "趨勢",
             "unusuallyHigh": "異常偏高",
             "unusuallyLow": "異常偏低",
-            "zScore": "Z 分數"
+            "zScore": "Z 分數",
+            "selectAServerFirst": "請先選擇伺服器"
         },
         "fleetProxy": {
             "apps": "服務",
@@ -3453,7 +3461,8 @@
             "logFiles": "記錄檔",
             "noLogFilesFound": "未找到記錄檔",
             "searchPattern": "搜尋模式…",
-            "selectALogFile": "選擇記錄檔以檢視其內容。"
+            "selectALogFile": "選擇記錄檔以檢視其內容。",
+            "selectALogFileFirst": "請先選擇記錄檔"
         },
         "loginLinksSection": {
             "allowedIp": "允許的 IP",
@@ -4049,7 +4058,10 @@
             "registering": "正在註冊…",
             "review": "審查",
             "uploadAndDeploy": "上傳並部署",
-            "uploading": "正在上傳…"
+            "uploading": "正在上傳…",
+            "completeTheSourceDetailsFirst": "請先完成來源詳細資料",
+            "fillInTheRequiredDetailsFirst": "請先填寫必填資訊",
+            "finishThePreviousStepFirst": "請先完成上一步"
         },
         "notFound": {
             "browseExtensions": "瀏覽擴充",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "主機的 Nginx 正在處理反向代理。切換到上面的 Traefik 或 Caddy 以執行託管 Docker 代理堆疊。",
             "thisServerSActiveProxyIs": "該伺服器的活動代理是",
             "traefik": "Traefik",
-            "whichExpects": "，期望"
+            "whichExpects": "，期望",
+            "noChangesToSave": "沒有可儲存的變更",
+            "selectADifferentProxyFirst": "請先選擇其他代理"
         },
         "pruneButton": {
             "cleaning": "正在清理…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "使用該網域",
             "used": "已使用",
             "utcOffset": "UTC 時差",
-            "version": "{{brand}} 版本"
+            "version": "{{brand}} 版本",
+            "enterADomainFirst": "請先輸入網域",
+            "selectADifferentTimezoneFirst": "請先選擇其他時區"
         },
         "tableDataTab": {
             "column": "欄位",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "輸入單元名稱…",
             "unit": "單元",
             "useThe": "使用",
-            "failedToLoadProcesses": "無法載入程序。"
+            "failedToLoadProcesses": "無法載入程序。",
+            "selectALogFileFirst": "請先選擇記錄檔"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "執行已經在進行中。",

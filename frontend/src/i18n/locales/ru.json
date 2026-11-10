@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Обновление запущено для всех онлайн-агентов",
             "versionDistribution": "Распространение версий",
             "versions": "Версии",
-            "viewDetails": "Посмотреть детали"
+            "viewDetails": "Посмотреть детали",
+            "selectAVersionFirst": "Сначала выберите версию"
         },
         "ai": {
             "assistant": "Ассистент"
@@ -608,7 +609,8 @@
             "remote": "Удаленный",
             "restoreDrills": "Восстановление сверл",
             "turnOnProtectionOrClickBack": "Включите защиту или нажмите «Создать резервную копию сейчас».",
-            "verifyRemoteCopy": "Проверка удаленной копии"
+            "verifyRemoteCopy": "Проверка удаленной копии",
+            "onlySuccessfulBackupsCanBeRestored": "Восстановить можно только успешные резервные копии"
         },
         "backupTabs": {
             "schedules": "Расписания",
@@ -882,7 +884,8 @@
             "selectSize": "Выберите размер",
             "serverDestroyed": "Сервер уничтожен",
             "serverName": "Имя сервера",
-            "serverProvisioningInitiated": "Инициация подготовки сервера началась"
+            "serverProvisioningInitiated": "Инициация подготовки сервера началась",
+            "enterANameAndChooseAProvider": "Сначала введите имя и выберите провайдера"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "CNAME для этого имени хоста будет создан в DNS Cloudflare и будет указывать на туннель.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "Обзор обновлений",
             "updatingDatabaseSchema": "Обновление схемы базы данных...",
             "weRecommendBackingUpYourDatabase": "Мы рекомендуем создать резервную копию базы данных перед применением обновлений.",
-            "whichDoesNotExistInThis": ", которого нет в этой сборке — обычно это ветка, в которую была добавлена миграция, а затем отменена. Схему невозможно обновить, пока она не будет возвращена к известной версии:"
+            "whichDoesNotExistInThis": ", которого нет в этой сборке — обычно это ветка, в которую была добавлена миграция, а затем отменена. Схему невозможно обновить, пока она не будет возвращена к известной версии:",
+            "createABackupFirst": "Сначала создайте резервную копию"
         },
         "databases": {
             "backUpDatabase": "Резервное копирование базы данных",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "Проверьте загрузку, используя контрольные суммы SHA256:",
             "windows": "Окна:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "с токеном регистрации сервера."
+            "withTheServerRegistrationToken": "с токеном регистрации сервера.",
+            "noBuildPublishedForThisPlatform": "Для этой платформы сборка ещё не опубликована"
         },
         "drawerHeader": {
             "aiSettings": "Настройки ИИ",
@@ -2760,7 +2765,9 @@
             "videos": "Видео",
             "volumes": "Тома",
             "webConfig": "Веб-конфигурация",
-            "willBeCreatedIn": "Будет создано в:"
+            "willBeCreatedIn": "Будет создано в:",
+            "nothingToGoBackTo": "Некуда возвращаться",
+            "nothingToGoForwardTo": "Некуда переходить вперёд"
         },
         "fileRow": {
             "deselect": "Отменить выбор",
@@ -2878,7 +2885,8 @@
             "trend": "Тренд",
             "unusuallyHigh": "Необычно высокое",
             "unusuallyLow": "Необычно низкое",
-            "zScore": "Z-оценка"
+            "zScore": "Z-оценка",
+            "selectAServerFirst": "Сначала выберите сервер"
         },
         "fleetProxy": {
             "apps": "Сервисы",
@@ -3453,7 +3461,8 @@
             "logFiles": "Файлы журналов",
             "noLogFilesFound": "Файлы журналов не найдены",
             "searchPattern": "Шаблон поиска...",
-            "selectALogFile": "Выберите файл журнала, чтобы просмотреть его содержимое."
+            "selectALogFile": "Выберите файл журнала, чтобы просмотреть его содержимое.",
+            "selectALogFileFirst": "Сначала выберите файл журнала"
         },
         "loginLinksSection": {
             "allowedIp": "Разрешенный IP-адрес",
@@ -4049,7 +4058,10 @@
             "registering": "Регистрация…",
             "review": "Обзор",
             "uploadAndDeploy": "Загрузить и развернуть",
-            "uploading": "Загрузка…"
+            "uploading": "Загрузка…",
+            "completeTheSourceDetailsFirst": "Сначала заполните данные источника",
+            "fillInTheRequiredDetailsFirst": "Сначала заполните обязательные поля",
+            "finishThePreviousStepFirst": "Сначала завершите предыдущий шаг"
         },
         "notFound": {
             "browseExtensions": "Просмотр расширений",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "Nginx хоста обрабатывает обратное проксирование. Переключитесь на Traefik или Caddy, указанный выше, чтобы вместо этого запустить управляемый стек прокси-сервера Docker.",
             "thisServerSActiveProxyIs": "Активный прокси-сервер этого сервера",
             "traefik": "Traefik",
-            "whichExpects": ", который ожидает"
+            "whichExpects": ", который ожидает",
+            "noChangesToSave": "Нет изменений для сохранения",
+            "selectADifferentProxyFirst": "Сначала выберите другой прокси"
         },
         "pruneButton": {
             "cleaning": "Очистка…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "Используйте этот домен",
             "used": "Использовано",
             "utcOffset": "Смещение UTC",
-            "version": "{{brand}} Версия"
+            "version": "{{brand}} Версия",
+            "enterADomainFirst": "Сначала введите домен",
+            "selectADifferentTimezoneFirst": "Сначала выберите другой часовой пояс"
         },
         "tableDataTab": {
             "column": "Столбец",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "Введите название устройства…",
             "unit": "Единица",
             "useThe": "Используйте",
-            "failedToLoadProcesses": "Не удалось загрузить процессы."
+            "failedToLoadProcesses": "Не удалось загрузить процессы.",
+            "selectALogFileFirst": "Сначала выберите файл журнала"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Забег уже идет.",

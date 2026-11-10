@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "อัปเกรดสำหรับตัวแทนออนไลน์ทั้งหมด",
             "versionDistribution": "การจำหน่ายเวอร์ชัน",
             "versions": "รุ่นต่างๆ",
-            "viewDetails": "ดูรายละเอียด"
+            "viewDetails": "ดูรายละเอียด",
+            "selectAVersionFirst": "เลือกเวอร์ชันก่อน"
         },
         "ai": {
             "assistant": "ผู้ช่วย"
@@ -608,7 +609,8 @@
             "remote": "ระยะไกล",
             "restoreDrills": "คืนค่าการฝึกซ้อม",
             "turnOnProtectionOrClickBack": "เปิดการป้องกันหรือคลิกสำรองข้อมูลทันที",
-            "verifyRemoteCopy": "ตรวจสอบสำเนาระยะไกล"
+            "verifyRemoteCopy": "ตรวจสอบสำเนาระยะไกล",
+            "onlySuccessfulBackupsCanBeRestored": "กู้คืนได้เฉพาะข้อมูลสำรองที่สำเร็จเท่านั้น"
         },
         "backupTabs": {
             "schedules": "กำหนดการ",
@@ -882,7 +884,8 @@
             "selectSize": "เลือกขนาด",
             "serverDestroyed": "เซิร์ฟเวอร์ถูกทำลาย",
             "serverName": "ชื่อเซิร์ฟเวอร์",
-            "serverProvisioningInitiated": "เริ่มต้นการจัดเตรียมเซิร์ฟเวอร์แล้ว"
+            "serverProvisioningInitiated": "เริ่มต้นการจัดเตรียมเซิร์ฟเวอร์แล้ว",
+            "enterANameAndChooseAProvider": "ใส่ชื่อและเลือกผู้ให้บริการก่อน"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "CNAME สำหรับชื่อโฮสต์นี้จะถูกสร้างขึ้นใน Cloudflare DNS โดยชี้ไปที่อุโมงค์",
@@ -1726,7 +1729,8 @@
             "updateOverview": "ภาพรวมการอัปเดต",
             "updatingDatabaseSchema": "กำลังอัปเดตสคีมาฐานข้อมูล...",
             "weRecommendBackingUpYourDatabase": "เราขอแนะนำให้สำรองฐานข้อมูลของคุณก่อนที่จะใช้การอัปเดต",
-            "whichDoesNotExistInThis": "ซึ่งไม่มีอยู่ในบิลด์นี้ โดยปกติแล้วจะเป็นสาขาที่เพิ่มการโยกย้ายและถูกเปลี่ยนกลับ ไม่สามารถอัปเกรดสคีมาได้จนกว่าจะประทับตรากลับไปเป็นการแก้ไขที่ทราบ:"
+            "whichDoesNotExistInThis": "ซึ่งไม่มีอยู่ในบิลด์นี้ โดยปกติแล้วจะเป็นสาขาที่เพิ่มการโยกย้ายและถูกเปลี่ยนกลับ ไม่สามารถอัปเกรดสคีมาได้จนกว่าจะประทับตรากลับไปเป็นการแก้ไขที่ทราบ:",
+            "createABackupFirst": "สร้างข้อมูลสำรองก่อน"
         },
         "databases": {
             "backUpDatabase": "สำรองฐานข้อมูล",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "ตรวจสอบการดาวน์โหลดของคุณโดยใช้เช็คซัม SHA256:",
             "windows": "หน้าต่าง:",
             "windowsPowershell": "วินโดวส์ (PowerShell)",
-            "withTheServerRegistrationToken": "ด้วยโทเค็นการลงทะเบียนเซิร์ฟเวอร์"
+            "withTheServerRegistrationToken": "ด้วยโทเค็นการลงทะเบียนเซิร์ฟเวอร์",
+            "noBuildPublishedForThisPlatform": "ยังไม่มีบิลด์ที่เผยแพร่สำหรับแพลตฟอร์มนี้"
         },
         "drawerHeader": {
             "aiSettings": "การตั้งค่าเอไอ",
@@ -2760,7 +2765,9 @@
             "videos": "วิดีโอ",
             "volumes": "โวลุ่ม",
             "webConfig": "การกำหนดค่าเว็บ",
-            "willBeCreatedIn": "จะถูกสร้างขึ้นใน:"
+            "willBeCreatedIn": "จะถูกสร้างขึ้นใน:",
+            "nothingToGoBackTo": "ไม่มีหน้าให้ย้อนกลับ",
+            "nothingToGoForwardTo": "ไม่มีหน้าให้ไปข้างหน้า"
         },
         "fileRow": {
             "deselect": "ยกเลิกการเลือก",
@@ -2878,7 +2885,8 @@
             "trend": "แนวโน้ม",
             "unusuallyHigh": "สูงผิดปกติ",
             "unusuallyLow": "ต่ำผิดปกติ",
-            "zScore": "คะแนน Z"
+            "zScore": "คะแนน Z",
+            "selectAServerFirst": "เลือกเซิร์ฟเวอร์ก่อน"
         },
         "fleetProxy": {
             "apps": "บริการ",
@@ -3453,7 +3461,8 @@
             "logFiles": "ไฟล์บันทึก",
             "noLogFilesFound": "ไม่พบไฟล์บันทึก",
             "searchPattern": "รูปแบบการค้นหา...",
-            "selectALogFile": "เลือกไฟล์บันทึกเพื่อดูเนื้อหา"
+            "selectALogFile": "เลือกไฟล์บันทึกเพื่อดูเนื้อหา",
+            "selectALogFileFirst": "เลือกไฟล์บันทึกก่อน"
         },
         "loginLinksSection": {
             "allowedIp": "IP ที่อนุญาต",
@@ -4049,7 +4058,10 @@
             "registering": "กำลังลงทะเบียน…",
             "review": "ทบทวน",
             "uploadAndDeploy": "อัปโหลดและปรับใช้",
-            "uploading": "กำลังอัปโหลด…"
+            "uploading": "กำลังอัปโหลด…",
+            "completeTheSourceDetailsFirst": "กรอกรายละเอียดต้นทางให้ครบก่อน",
+            "fillInTheRequiredDetailsFirst": "กรอกข้อมูลที่จำเป็นก่อน",
+            "finishThePreviousStepFirst": "ทำขั้นตอนก่อนหน้าให้เสร็จก่อน"
         },
         "notFound": {
             "browseExtensions": "เรียกดูส่วนขยาย",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "Nginx ของโฮสต์กำลังจัดการ Reverse proxying เปลี่ยนไปใช้ Traefik หรือ Caddy ด้านบนเพื่อเรียกใช้พร็อกซีสแต็ก Docker ที่มีการจัดการแทน",
             "thisServerSActiveProxyIs": "พร็อกซีที่ใช้งานอยู่ของเซิร์ฟเวอร์นี้คือ",
             "traefik": "Traefik",
-            "whichExpects": "ซึ่งคาดว่า"
+            "whichExpects": "ซึ่งคาดว่า",
+            "noChangesToSave": "ไม่มีการเปลี่ยนแปลงให้บันทึก",
+            "selectADifferentProxyFirst": "เลือกพร็อกซีอื่นก่อน"
         },
         "pruneButton": {
             "cleaning": "กำลังล้าง…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "ใช้โดเมนนี้",
             "used": "ใช้แล้ว",
             "utcOffset": "ออฟเซ็ต UTC",
-            "version": "เวอร์ชัน {{brand}}"
+            "version": "เวอร์ชัน {{brand}}",
+            "enterADomainFirst": "ใส่โดเมนก่อน",
+            "selectADifferentTimezoneFirst": "เลือกเขตเวลาอื่นก่อน"
         },
         "tableDataTab": {
             "column": "คอลัมน์",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "พิมพ์ชื่อยูนิต...",
             "unit": "หน่วย",
             "useThe": "ใช้",
-            "failedToLoadProcesses": "ไม่สามารถโหลดโพรเซสได้"
+            "failedToLoadProcesses": "ไม่สามารถโหลดโพรเซสได้",
+            "selectALogFileFirst": "เลือกไฟล์บันทึกก่อน"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "การวิ่งกำลังดำเนินอยู่",

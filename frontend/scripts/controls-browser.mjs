@@ -41,6 +41,20 @@ try {
     assert.equal(await page.evaluate(() => window.controlEvents.submits), 2, 'implicit submit behavior changed');
     await page.locator('#shared-disabled').evaluate((node) => node.click());
     assert.equal(await page.evaluate(() => window.controlEvents.clicks), 2, 'disabled button fired');
+    // disabledReason: aria-disabled (not native), focusable, inert on click/Enter (no click, no
+    // implicit submit), reason in the accessible description and tooltip on focus and on tap.
+    const reason = page.locator('#shared-reason');
+    assert.equal(await reason.getAttribute('aria-disabled'), 'true');
+    assert.equal(await reason.getAttribute('disabled'), null);
+    await reason.focus();
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'shared-reason', 'reasoned button must be focusable');
+    await page.locator('[role="tooltip"]', { hasText: 'Install it first' }).first().waitFor();
+    await page.keyboard.press('Escape');
+    await reason.click({ force: true });
+    await reason.press('Enter');
+    assert.deepEqual(await page.evaluate(() => window.controlEvents), { submits: 2, clicks: 2 }, 'reasoned button fired or submitted');
+    assert.equal(await reason.evaluate((node) => document.getElementById(node.getAttribute('aria-describedby').split(' ').pop()).textContent), 'Install it first');
+    await page.locator('[role="tooltip"]', { hasText: 'Install it first' }).first().waitFor();
     assert.equal(await page.locator('#shared-link').evaluate((node) => node.tagName), 'A');
     assert.equal(await page.locator('#shared-link').getAttribute('href'), '#destination');
     assert.deepEqual(errors, []);

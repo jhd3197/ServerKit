@@ -121,7 +121,7 @@ export function LogViewer({
                             </Button>
                         )}
                         {onClear && (
-                            <Button variant="destructive" size="sm" onClick={onClear} disabled={!selectedPath}>
+                            <Button variant="destructive" size="sm" onClick={onClear} disabled={!selectedPath} disabledReason={t('app.logViewer.selectALogFileFirst', 'Select a log file first')}>
                                 {t('common.actions.clear', 'Clear')}
                             </Button>
                         )}

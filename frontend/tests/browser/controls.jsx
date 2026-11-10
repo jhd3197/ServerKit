@@ -19,6 +19,7 @@ createRoot(document.getElementById('root')).render(
                 ref={(node) => { window.controlRef = node; }} onClick={click}>Action</Button>
             <NativeButton id="native-disabled" type="button" className="btn btn-secondary" disabled>Disabled</NativeButton>
             <Button id="shared-disabled" type="button" variant="outline" className="btn btn-secondary" disabled onClick={click}>Disabled</Button>
+            <Button id="shared-reason" variant="outline" disabled disabledReason="Install it first" onClick={click}>Reasoned</Button>
         </form>
         <Button asChild variant="unstyled"><a id="shared-link" href="#destination">Link</a></Button>
         {createElement('div', { id: 'native-card', className: 'card' },

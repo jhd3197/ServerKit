@@ -517,7 +517,7 @@ const SSLCertificates = () => {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={handleSetupAutoRenewal} disabled={actionLoading || !certbotInstalled}>
+                        <DropdownMenuItem onClick={handleSetupAutoRenewal} disabled={actionLoading || !certbotInstalled} disabledReason={!certbotInstalled ? t('app.sSLCertificates.installCertbotFirst', 'Install Certbot first') : undefined}>
                             <Settings size={15} />
                             {t('app.sSLCertificates.autoRenew2', 'Auto-renew')}
                         </DropdownMenuItem>
@@ -544,6 +544,7 @@ const SSLCertificates = () => {
                         size="sm"
                         onClick={handleSetupAutoRenewal}
                         disabled={actionLoading || !certbotInstalled}
+                        disabledReason={!certbotInstalled ? t('app.sSLCertificates.installCertbotFirst', 'Install Certbot first') : undefined}
                         title={t('app.sSLCertificates.configureAutomaticRenewalViaSystemdOr', 'Configure automatic renewal via systemd or cron')}
                     >
                         <Settings size={15} />
@@ -565,7 +566,7 @@ const SSLCertificates = () => {
                     </Button>
                 </>
             )}
-            <Button size="sm" onClick={() => setShowObtainModal(true)} disabled={!certbotInstalled}>
+            <Button size="sm" onClick={() => setShowObtainModal(true)} disabled={!certbotInstalled} disabledReason={!certbotInstalled ? t('app.sSLCertificates.installCertbotFirst', 'Install Certbot first') : undefined}>
                 <Plus size={15} />
                 {t('app.sSLCertificates.newCertificate', 'New certificate')}
             </Button>

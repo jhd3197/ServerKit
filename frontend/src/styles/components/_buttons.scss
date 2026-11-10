@@ -57,6 +57,11 @@
     &[aria-disabled='true'] {
         opacity: 0.55;
         cursor: not-allowed;
+    }
+
+    // Native-disabled swallows pointer events itself; aria-disabled (the
+    // disabledReason path) must keep them so the tooltip can open.
+    &:disabled {
         pointer-events: none;
     }
 
@@ -75,7 +80,7 @@
     background: var(--accent);
     color: #fff;
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
         background: color-mix(in srgb, var(--accent) 88%, white);
     }
 }
@@ -86,7 +91,7 @@
     border-color: $border-active;
     color: $text-primary;
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
         background-color: $bg-hover;
     }
 }
@@ -96,7 +101,7 @@
     background-color: $bg-secondary;
     color: $text-primary;
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
         background-color: $bg-hover;
     }
 }
@@ -105,7 +110,7 @@
     background: $danger;
     color: #fff;
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
         background: $danger-hover;
     }
 }
@@ -155,7 +160,7 @@ height: auto;
     &.btn-lg { height: $control-lg; min-width: 0; }
 
     &:hover,
-    &:hover:not(:disabled) { text-decoration: underline; }
+    &:hover:not(:disabled):not([aria-disabled='true']) { text-decoration: underline; }
 }
 
 // Icon-only square button — matches default height so it lines up
@@ -266,7 +271,7 @@ background: transparent;
         color: $text-primary;
     }
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
         background-color: $bg-hover;
         color: $text-primary;
     }
@@ -274,7 +279,7 @@ background: transparent;
     // Destructive row action: quiet like its neighbours, red only on hover.
     // A solid red button in every row shouts the one action nobody wants by
     // accident. A class, not a variant, so an older panel degrades to ghost.
-    &.is-danger:hover:not(:disabled) {
+    &.is-danger:hover:not(:disabled):not([aria-disabled='true']) {
         background-color: var(--red-bg);
         color: var(--red);
     }

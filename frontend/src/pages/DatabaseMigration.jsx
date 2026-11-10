@@ -344,6 +344,7 @@ const DatabaseMigration = () => {
                                     className="btn-wizard-next"
                                     onClick={() => setCurrentStep(3)}
                                     disabled={!backupResult?.success}
+                                    disabledReason={t('app.databaseMigration.createABackupFirst', 'Create a backup first')}
                                 >
                                     {t('common.actions.continue', 'Continue')} <ArrowRight size={16} />
                                 </Button>

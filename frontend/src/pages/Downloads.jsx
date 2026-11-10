@@ -205,6 +205,7 @@ function Downloads() {
                                             className="download-btn"
                                             onClick={() => handleDownload(platform.os, platform.archKey)}
                                             disabled={!isAvailable}
+                                            disabledReason={t('app.downloads.noBuildPublishedForThisPlatform', 'No build published for this platform yet')}
                                         >
                                             <DownloadIcon />
                                             {isAvailable ? t('common.actions.download', 'Download') : t('app.downloads.notAvailable', 'Not available')}

@@ -2,6 +2,15 @@ import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { buttonVariants } from './buttonVariants';
 import { Spinner } from '../Spinner';
+import { Tooltip, TooltipTrigger, TooltipContent } from './tooltip';
+
+// Why is this button off?
+//   disabled because of a missing prerequisite → pass `disabledReason` (short,
+//     says what to do: "Install Certbot first"). The button gets aria-disabled
+//     instead of the native attribute, so it stays focusable and hoverable and
+//     the reason shows in a tooltip (hover, focus, tap) and is read by screen
+//     readers. Clicks are swallowed.
+//   disabled only while a request runs → use `loading`, no reason needed.
 
 // forwardRef is load-bearing, not ceremony: every Radix trigger used as
 // `<PopoverTrigger asChild><Button/></PopoverTrigger>` hands the button a ref
@@ -18,23 +27,32 @@ import { Spinner } from '../Spinner';
 // accessible name ("Saving…") when the visible label would lie.
 const Button = React.forwardRef(({
   className, variant, size, asChild = false, loading = false, loadingText,
-  disabled, children, ...props
+  disabled, disabledReason, children, onClick, title, 'aria-describedby': describedBy, ...props
 }, ref) => {
+  const [open, setOpen] = React.useState(false);
+  const reasonId = React.useId();
   const Comp = asChild ? Slot : 'button';
   if (asChild) {
     return (
-      <Comp ref={ref} data-slot="button" className={buttonVariants({ variant, size, className })} disabled={disabled} {...props}>
+      <Comp ref={ref} data-slot="button" className={buttonVariants({ variant, size, className })} disabled={disabled} onClick={onClick} title={title} {...props}>
         {children}
       </Comp>
     );
   }
-  return (
+  const reasoned = Boolean(disabled && !loading && disabledReason);
+  const text = title && disabledReason ? `${title}: ${disabledReason}` : disabledReason;
+  const button = (
     <Comp
       ref={ref}
       data-slot="button"
       className={buttonVariants({ variant, size, className: loading ? `btn-loading ${className || ''}` : className })}
-      disabled={disabled || loading}
+      disabled={reasoned ? undefined : disabled || loading}
+      aria-disabled={reasoned || undefined}
+      aria-describedby={reasoned ? [describedBy, reasonId].filter(Boolean).join(' ') : describedBy}
       aria-busy={loading || undefined}
+      title={reasoned ? undefined : title}
+      aria-label={reasoned && title ? title : undefined} // the native title (the name of an icon button) is dropped for the tooltip
+      onClick={reasoned ? (e) => { e.preventDefault(); setOpen(true); } : onClick}
       {...props}
     >
       {loading ? (
@@ -44,7 +62,18 @@ const Button = React.forwardRef(({
           {loadingText && <span className="sr-only">{loadingText}</span>}
         </>
       ) : children}
+      {/* Inside the button (not a sibling) so :last-child CSS and flex gaps are unaffected;
+          aria-hidden keeps it out of the accessible name while aria-describedby still reads it. */}
+      {reasoned && <span id={reasonId} className="sr-only" aria-hidden="true">{text}</span>}
     </Comp>
+  );
+  if (!reasoned) return button;
+  // Tap has no hover: opening on click is what makes the reason reachable on touch.
+  return (
+    <Tooltip open={open} onOpenChange={setOpen}>
+      <TooltipTrigger asChild>{button}</TooltipTrigger>
+      <TooltipContent><span>{text}</span></TooltipContent>
+    </Tooltip>
   );
 });
 Button.displayName = 'Button';

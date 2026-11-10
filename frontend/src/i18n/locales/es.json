@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Actualización iniciada para todos los agentes en línea",
             "versionDistribution": "Distribución de versiones",
             "versions": "Versiones",
-            "viewDetails": "Ver detalles"
+            "viewDetails": "Ver detalles",
+            "selectAVersionFirst": "Selecciona una versión primero"
         },
         "ai": {
             "assistant": "Asistente"
@@ -608,7 +609,8 @@
             "remote": "Remoto",
             "restoreDrills": "Simulacros de restauración",
             "turnOnProtectionOrClickBack": "Activa la protección o haz clic en Hacer copia ahora.",
-            "verifyRemoteCopy": "Verificar copia remota"
+            "verifyRemoteCopy": "Verificar copia remota",
+            "onlySuccessfulBackupsCanBeRestored": "Solo se pueden restaurar copias de seguridad correctas"
         },
         "backupTabs": {
             "schedules": "Programaciones",
@@ -882,7 +884,8 @@
             "selectSize": "Seleccionar tamaño",
             "serverDestroyed": "Servidor destruido",
             "serverName": "Nombre del servidor",
-            "serverProvisioningInitiated": "Aprovisionamiento del servidor iniciado"
+            "serverProvisioningInitiated": "Aprovisionamiento del servidor iniciado",
+            "enterANameAndChooseAProvider": "Introduce un nombre y elige un proveedor primero"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "Se creará un CNAME para este hostname en el DNS de Cloudflare, apuntando al túnel.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "Resumen de la actualización",
             "updatingDatabaseSchema": "Actualizando el esquema de la base de datos...",
             "weRecommendBackingUpYourDatabase": "Te recomendamos hacer una copia de seguridad de tu base de datos antes de aplicar las actualizaciones.",
-            "whichDoesNotExistInThis": ", que no existe en esta compilación — normalmente una rama que añadió una migración y luego se revirtió. No se puede actualizar el esquema hasta que se vuelva a marcar en una revisión conocida:"
+            "whichDoesNotExistInThis": ", que no existe en esta compilación — normalmente una rama que añadió una migración y luego se revirtió. No se puede actualizar el esquema hasta que se vuelva a marcar en una revisión conocida:",
+            "createABackupFirst": "Crea una copia de seguridad primero"
         },
         "databases": {
             "backUpDatabase": "Crear copia de seguridad de la base de datos",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "Verifica tu descarga con las sumas de verificación SHA256:",
             "windows": "Windows:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "con el token de registro del servidor."
+            "withTheServerRegistrationToken": "con el token de registro del servidor.",
+            "noBuildPublishedForThisPlatform": "Aún no hay una compilación publicada para esta plataforma"
         },
         "drawerHeader": {
             "aiSettings": "Configuración de IA",
@@ -2760,7 +2765,9 @@
             "videos": "Videos",
             "volumes": "Volúmenes",
             "webConfig": "Configuración web",
-            "willBeCreatedIn": "Se creará en:"
+            "willBeCreatedIn": "Se creará en:",
+            "nothingToGoBackTo": "No hay nada atrás",
+            "nothingToGoForwardTo": "No hay nada adelante"
         },
         "fileRow": {
             "deselect": "Deseleccionar",
@@ -2878,7 +2885,8 @@
             "trend": "Tendencia",
             "unusuallyHigh": "Inusualmente alto",
             "unusuallyLow": "Inusualmente bajo",
-            "zScore": "Puntuación Z"
+            "zScore": "Puntuación Z",
+            "selectAServerFirst": "Selecciona un servidor primero"
         },
         "fleetProxy": {
             "apps": "Servicios",
@@ -3453,7 +3461,8 @@
             "logFiles": "Archivos de registro",
             "noLogFilesFound": "No se encontraron archivos de registro",
             "searchPattern": "Patrón de búsqueda...",
-            "selectALogFile": "Selecciona un archivo de registro para ver su contenido."
+            "selectALogFile": "Selecciona un archivo de registro para ver su contenido.",
+            "selectALogFileFirst": "Selecciona un archivo de registro primero"
         },
         "loginLinksSection": {
             "allowedIp": "IP permitida",
@@ -4050,7 +4059,10 @@
             "registering": "Registrando…",
             "review": "Revisión",
             "uploadAndDeploy": "Subir y desplegar",
-            "uploading": "Subiendo…"
+            "uploading": "Subiendo…",
+            "completeTheSourceDetailsFirst": "Completa primero los detalles del origen",
+            "fillInTheRequiredDetailsFirst": "Completa primero los datos obligatorios",
+            "finishThePreviousStepFirst": "Termina primero el paso anterior"
         },
         "notFound": {
             "browseExtensions": "Explorar extensiones",
@@ -4572,7 +4584,9 @@
             "theHostSNginxIsHandling": "El Nginx del host se encarga del proxy inverso. Cambia a Traefik o Caddy arriba para ejecutar en su lugar un stack de proxy gestionado en Docker.",
             "thisServerSActiveProxyIs": "El proxy activo de este servidor es",
             "traefik": "Traefik",
-            "whichExpects": ", que espera"
+            "whichExpects": ", que espera",
+            "noChangesToSave": "No hay cambios que guardar",
+            "selectADifferentProxyFirst": "Selecciona primero un proxy distinto"
         },
         "pruneButton": {
             "cleaning": "Limpiando…",
@@ -7089,7 +7103,9 @@
             "useThisDomain": "Usar este dominio",
             "used": "Usado",
             "utcOffset": "Desfase UTC",
-            "version": "Versión de {{brand}}"
+            "version": "Versión de {{brand}}",
+            "enterADomainFirst": "Introduce un dominio primero",
+            "selectADifferentTimezoneFirst": "Selecciona primero una zona horaria distinta"
         },
         "tableDataTab": {
             "column": "Columna",
@@ -7261,7 +7277,8 @@
             "typeUnitName": "Escribe el nombre de la unidad…",
             "unit": "Unidad",
             "useThe": "Usa la pestaña",
-            "failedToLoadProcesses": "No se pudieron cargar los procesos."
+            "failedToLoadProcesses": "No se pudieron cargar los procesos.",
+            "selectALogFileFirst": "Selecciona un archivo de registro primero"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Ya hay una ejecución en curso.",

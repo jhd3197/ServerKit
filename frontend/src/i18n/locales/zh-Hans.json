@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "为所有在线代理触发升级",
             "versionDistribution": "版本分布",
             "versions": "版本",
-            "viewDetails": "查看详情"
+            "viewDetails": "查看详情",
+            "selectAVersionFirst": "请先选择一个版本"
         },
         "ai": {
             "assistant": "助手"
@@ -608,7 +609,8 @@
             "remote": "偏僻的",
             "restoreDrills": "恢复演习",
             "turnOnProtectionOrClickBack": "打开保护或单击立即备份。",
-            "verifyRemoteCopy": "验证远程复制"
+            "verifyRemoteCopy": "验证远程复制",
+            "onlySuccessfulBackupsCanBeRestored": "只能恢复成功的备份"
         },
         "backupTabs": {
             "schedules": "计划",
@@ -882,7 +884,8 @@
             "selectSize": "选择尺码",
             "serverDestroyed": "服务器被毁",
             "serverName": "服务器名称",
-            "serverProvisioningInitiated": "已启动服务器配置"
+            "serverProvisioningInitiated": "已启动服务器配置",
+            "enterANameAndChooseAProvider": "请先输入名称并选择提供商"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "将在 Cloudflare DNS 中创建该主机名的 CNAME，指向隧道。",
@@ -1726,7 +1729,8 @@
             "updateOverview": "更新概览",
             "updatingDatabaseSchema": "正在更新数据库架构...",
             "weRecommendBackingUpYourDatabase": "我们建议在应用更新之前备份您的数据库。",
-            "whichDoesNotExistInThis": "，此构建中不存在 - 通常是添加迁移然后恢复的分支。在将模式标记回已知版本之前，无法升级该模式："
+            "whichDoesNotExistInThis": "，此构建中不存在 - 通常是添加迁移然后恢复的分支。在将模式标记回已知版本之前，无法升级该模式：",
+            "createABackupFirst": "请先创建备份"
         },
         "databases": {
             "backUpDatabase": "备份数据库",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "使用 SHA256 校验和验证您的下载：",
             "windows": "视窗：",
             "windowsPowershell": "Windows（PowerShell）",
-            "withTheServerRegistrationToken": "与服务器注册令牌。"
+            "withTheServerRegistrationToken": "与服务器注册令牌。",
+            "noBuildPublishedForThisPlatform": "此平台尚未发布构建"
         },
         "drawerHeader": {
             "aiSettings": "人工智能设置",
@@ -2760,7 +2765,9 @@
             "videos": "视频",
             "volumes": "卷",
             "webConfig": "网页配置",
-            "willBeCreatedIn": "将创建于："
+            "willBeCreatedIn": "将创建于：",
+            "nothingToGoBackTo": "没有可返回的页面",
+            "nothingToGoForwardTo": "没有可前进的页面"
         },
         "fileRow": {
             "deselect": "取消选择",
@@ -2878,7 +2885,8 @@
             "trend": "趋势",
             "unusuallyHigh": "异常偏高",
             "unusuallyLow": "异常偏低",
-            "zScore": "Z 分数"
+            "zScore": "Z 分数",
+            "selectAServerFirst": "请先选择服务器"
         },
         "fleetProxy": {
             "apps": "服务",
@@ -3453,7 +3461,8 @@
             "logFiles": "日志文件",
             "noLogFilesFound": "未找到日志文件",
             "searchPattern": "搜索模式...",
-            "selectALogFile": "选择一个日志文件以查看其内容。"
+            "selectALogFile": "选择一个日志文件以查看其内容。",
+            "selectALogFileFirst": "请先选择日志文件"
         },
         "loginLinksSection": {
             "allowedIp": "允许的IP",
@@ -4049,7 +4058,10 @@
             "registering": "正在注册…",
             "review": "审查",
             "uploadAndDeploy": "上传并部署",
-            "uploading": "正在上传…"
+            "uploading": "正在上传…",
+            "completeTheSourceDetailsFirst": "请先完成来源详情",
+            "fillInTheRequiredDetailsFirst": "请先填写必填信息",
+            "finishThePreviousStepFirst": "请先完成上一步"
         },
         "notFound": {
             "browseExtensions": "浏览扩展",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "主机的 Nginx 正在处理反向代理。切换到上面的 Traefik 或 Caddy 来运行托管 Docker 代理堆栈。",
             "thisServerSActiveProxyIs": "该服务器的活动代理是",
             "traefik": "Traefik",
-            "whichExpects": "，期望"
+            "whichExpects": "，期望",
+            "noChangesToSave": "没有可保存的更改",
+            "selectADifferentProxyFirst": "请先选择其他代理"
         },
         "pruneButton": {
             "cleaning": "正在清理…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "使用该域名",
             "used": "已使用",
             "utcOffset": "世界标准时间偏移",
-            "version": "{{brand}}版本"
+            "version": "{{brand}}版本",
+            "enterADomainFirst": "请先输入域名",
+            "selectADifferentTimezoneFirst": "请先选择其他时区"
         },
         "tableDataTab": {
             "column": "柱子",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "输入单位名称...",
             "unit": "单元",
             "useThe": "使用",
-            "failedToLoadProcesses": "无法加载进程。"
+            "failedToLoadProcesses": "无法加载进程。",
+            "selectALogFileFirst": "请先选择日志文件"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "运行已经在进行中。",

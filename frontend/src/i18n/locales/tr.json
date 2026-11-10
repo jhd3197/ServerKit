@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Yükseltme tüm çevrimiçi temsilciler için tetiklendi",
             "versionDistribution": "Sürüm Dağıtımı",
             "versions": "Sürümler",
-            "viewDetails": "Ayrıntıları Görüntüle"
+            "viewDetails": "Ayrıntıları Görüntüle",
+            "selectAVersionFirst": "Önce bir sürüm seçin"
         },
         "ai": {
             "assistant": "Asistan"
@@ -608,7 +609,8 @@
             "remote": "Uzak",
             "restoreDrills": "Tatbikatları geri yükle",
             "turnOnProtectionOrClickBack": "Korumayı açın veya Şimdi yedekle'ye tıklayın.",
-            "verifyRemoteCopy": "Uzaktan kopyayı doğrulayın"
+            "verifyRemoteCopy": "Uzaktan kopyayı doğrulayın",
+            "onlySuccessfulBackupsCanBeRestored": "Yalnızca başarılı yedekler geri yüklenebilir"
         },
         "backupTabs": {
             "schedules": "Programlar",
@@ -882,7 +884,8 @@
             "selectSize": "Boyutu seçin",
             "serverDestroyed": "Sunucu yok edildi",
             "serverName": "Sunucu Adı",
-            "serverProvisioningInitiated": "Sunucu temel hazırlığı başlatıldı"
+            "serverProvisioningInitiated": "Sunucu temel hazırlığı başlatıldı",
+            "enterANameAndChooseAProvider": "Önce bir ad girin ve sağlayıcı seçin"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "Bu ana bilgisayar adı için Cloudflare DNS'de tüneli işaret edecek şekilde bir CNAME oluşturulacaktır.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "Güncellemeye Genel Bakış",
             "updatingDatabaseSchema": "Veritabanı şeması güncelleniyor...",
             "weRecommendBackingUpYourDatabase": "Güncelleştirmeleri uygulamadan önce veritabanınızı yedeklemenizi öneririz.",
-            "whichDoesNotExistInThis": ", bu yapıda mevcut değil - genellikle geçiş ekleyen ve daha sonra geri döndürülen bir dal. Şema, bilinen bir revizyona geri damgalanana kadar yükseltilemez:"
+            "whichDoesNotExistInThis": ", bu yapıda mevcut değil - genellikle geçiş ekleyen ve daha sonra geri döndürülen bir dal. Şema, bilinen bir revizyona geri damgalanana kadar yükseltilemez:",
+            "createABackupFirst": "Önce bir yedek oluşturun"
         },
         "databases": {
             "backUpDatabase": "Veritabanını yedekle",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "İndirme işleminizi SHA256 sağlama toplamlarını kullanarak doğrulayın:",
             "windows": "Windows:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "sunucu kayıt belirteci ile."
+            "withTheServerRegistrationToken": "sunucu kayıt belirteci ile.",
+            "noBuildPublishedForThisPlatform": "Bu platform için henüz yayınlanmış bir derleme yok"
         },
         "drawerHeader": {
             "aiSettings": "Yapay zeka ayarları",
@@ -2760,7 +2765,9 @@
             "videos": "Videolar",
             "volumes": "Birimler",
             "webConfig": "Web yapılandırması",
-            "willBeCreatedIn": "Şurada oluşturulacak:"
+            "willBeCreatedIn": "Şurada oluşturulacak:",
+            "nothingToGoBackTo": "Geri gidilecek bir şey yok",
+            "nothingToGoForwardTo": "İleri gidilecek bir şey yok"
         },
         "fileRow": {
             "deselect": "Seçimi kaldır",
@@ -2878,7 +2885,8 @@
             "trend": "Eğilim",
             "unusuallyHigh": "Olağandışı yüksek",
             "unusuallyLow": "Olağandışı düşük",
-            "zScore": "Z puanı"
+            "zScore": "Z puanı",
+            "selectAServerFirst": "Önce bir sunucu seçin"
         },
         "fleetProxy": {
             "apps": "Hizmetler",
@@ -3453,7 +3461,8 @@
             "logFiles": "Günlük Dosyaları",
             "noLogFilesFound": "Günlük dosyası bulunamadı",
             "searchPattern": "Arama modeli...",
-            "selectALogFile": "İçeriğini görüntülemek için bir günlük dosyası seçin."
+            "selectALogFile": "İçeriğini görüntülemek için bir günlük dosyası seçin.",
+            "selectALogFileFirst": "Önce bir günlük dosyası seçin"
         },
         "loginLinksSection": {
             "allowedIp": "İzin verilen IP",
@@ -4049,7 +4058,10 @@
             "registering": "Kaydediliyor…",
             "review": "Gözden geçirmek",
             "uploadAndDeploy": "Yükle ve dağıt",
-            "uploading": "Yükleniyor…"
+            "uploading": "Yükleniyor…",
+            "completeTheSourceDetailsFirst": "Önce kaynak ayrıntılarını tamamlayın",
+            "fillInTheRequiredDetailsFirst": "Önce gerekli bilgileri doldurun",
+            "finishThePreviousStepFirst": "Önce önceki adımı tamamlayın"
         },
         "notFound": {
             "browseExtensions": "Uzantılara Göz Atın",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "Ana bilgisayarın Nginx'si ters proxy'yi yönetiyor. Bunun yerine yönetilen bir Docker proxy yığınını çalıştırmak için yukarıdaki Traefik veya Caddy'ye geçin.",
             "thisServerSActiveProxyIs": "Bu sunucunun aktif proxy'si:",
             "traefik": "Traefik",
-            "whichExpects": ", beklenen"
+            "whichExpects": ", beklenen",
+            "noChangesToSave": "Kaydedilecek değişiklik yok",
+            "selectADifferentProxyFirst": "Önce farklı bir proxy seçin"
         },
         "pruneButton": {
             "cleaning": "Temizleniyor…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "Bu alanı kullan",
             "used": "Kullanılmış",
             "utcOffset": "UTC Farkı",
-            "version": "{{brand}} Sürümü"
+            "version": "{{brand}} Sürümü",
+            "enterADomainFirst": "Önce bir alan adı girin",
+            "selectADifferentTimezoneFirst": "Önce farklı bir saat dilimi seçin"
         },
         "tableDataTab": {
             "column": "Kolon",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "Birim adını yazın…",
             "unit": "Birim",
             "useThe": "Şunu kullanın:",
-            "failedToLoadProcesses": "Süreçler yüklenemedi."
+            "failedToLoadProcesses": "Süreçler yüklenemedi.",
+            "selectALogFileFirst": "Önce bir günlük dosyası seçin"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Bir çalıştırma zaten devam ediyor.",

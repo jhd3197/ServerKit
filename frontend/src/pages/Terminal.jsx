@@ -436,6 +436,7 @@ const LogFilesTab = () => {
                         onClear={handleClearLog}
                         onScrollToBottom={scrollToBottom}
                         canAct={!!selectedLog && !loadingContent}
+                        actDisabledReason={!selectedLog ? t('app.terminal.selectALogFileFirst', 'Select a log file first') : undefined}
                     />
 
                     <LogContent

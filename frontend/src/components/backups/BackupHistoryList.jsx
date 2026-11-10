@@ -187,7 +187,7 @@ export default function BackupHistoryList({
             hideable: false,
             render: (run) => (
                 <div className="backup-history-list__actions" onClick={(e) => e.stopPropagation()}>
-                    <Button size="icon" variant="outline" title={t('common.actions.restore', 'Restore')} disabled={run.status !== 'success'} onClick={() => onRestore(run)}><RotateCcw size={14} /></Button>
+                    <Button size="icon" variant="outline" title={t('common.actions.restore', 'Restore')} disabled={run.status !== 'success'} disabledReason={t('app.backupHistoryList.onlySuccessfulBackupsCanBeRestored', 'Only successful backups can be restored')} onClick={() => onRestore(run)}><RotateCcw size={14} /></Button>
                     {run.remote_key && (
                         <Button size="icon" variant="outline" title={t('app.backupHistoryList.verifyRemoteCopy', 'Verify remote copy')} onClick={() => onVerify(run)}><ShieldCheck size={14} /></Button>
                     )}
