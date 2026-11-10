@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "Создайте пользователя с тем же именем и полными привилегиями.",
             "creating": "Создание…",
             "databaseCreated": "База данных создана",
-            "databaseName": "Имя базы данных *",
+            "databaseName": "Имя базы данных",
             "encoding": "Кодирование",
             "engine": "Двигатель",
             "fromTheTemplateCatalog": "из каталога шаблонов",
@@ -3766,7 +3766,9 @@
             "running": "запущен",
             "saveTheseCredentialsThePasswordWon": "Сохраните эти учетные данные — пароль больше не будет отображаться.",
             "userCreated": "Пользователь создан",
-            "username": "Имя пользователя *"
+            "username": "Имя пользователя",
+            "databaseNameInvalid": "Используйте только буквы, цифры и подчёркивания.",
+            "databaseNameRequired": "Введите имя базы данных."
         },
         "modeToggle": {
             "assistant": "Ассистент",
@@ -7663,7 +7665,8 @@
             "payloadUrl": "URL-адрес полезной нагрузки",
             "retryCount": "Количество повторов",
             "timeoutSeconds": "Тайм-аут (секунды)",
-            "update": "Обновить"
+            "update": "Обновить",
+            "eventsRequired": "Выберите хотя бы одно событие."
         },
         "webhooksTab": {
             "active": "Активен",
@@ -8130,7 +8133,8 @@
             "domainEmpty": "Укажите домен.",
             "domainInvalid": "Укажите корректный домен.",
             "emailInvalid": "Укажите корректный адрес электронной почты.",
-            "required": "Это поле обязательно."
+            "required": "Это поле обязательно.",
+            "urlInvalid": "Введите корректный URL, например https://example.com/webhook."
         }
     },
     "errors": {

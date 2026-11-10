@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "สร้างผู้ใช้ที่มีชื่อเดียวกันและสิทธิ์เต็ม",
             "creating": "กำลังสร้าง…",
             "databaseCreated": "สร้างฐานข้อมูลแล้ว",
-            "databaseName": "ชื่อฐานข้อมูล *",
+            "databaseName": "ชื่อฐานข้อมูล",
             "encoding": "การเข้ารหัส",
             "engine": "เครื่องยนต์",
             "fromTheTemplateCatalog": "จากแค็ตตาล็อกเทมเพลต",
@@ -3766,7 +3766,9 @@
             "running": "กำลังทำงาน",
             "saveTheseCredentialsThePasswordWon": "บันทึกข้อมูลประจำตัวเหล่านี้ - รหัสผ่านจะไม่แสดงอีก",
             "userCreated": "ผู้ใช้สร้างขึ้น",
-            "username": "ชื่อผู้ใช้ *"
+            "username": "ชื่อผู้ใช้",
+            "databaseNameInvalid": "ใช้ได้เฉพาะตัวอักษร ตัวเลข และขีดล่าง",
+            "databaseNameRequired": "กรอกชื่อฐานข้อมูล"
         },
         "modeToggle": {
             "assistant": "ผู้ช่วย",
@@ -7663,7 +7665,8 @@
             "payloadUrl": "เพย์โหลด URL",
             "retryCount": "ลองนับอีกครั้ง",
             "timeoutSeconds": "หมดเวลา (วินาที)",
-            "update": "อัปเดต"
+            "update": "อัปเดต",
+            "eventsRequired": "เลือกอย่างน้อยหนึ่งเหตุการณ์"
         },
         "webhooksTab": {
             "active": "ใช้งานอยู่",
@@ -8130,7 +8133,8 @@
             "domainEmpty": "ป้อนโดเมน",
             "domainInvalid": "ป้อนโดเมนที่ถูกต้อง",
             "emailInvalid": "ป้อนที่อยู่อีเมลที่ถูกต้อง",
-            "required": "จำเป็นต้องกรอกช่องนี้"
+            "required": "จำเป็นต้องกรอกช่องนี้",
+            "urlInvalid": "กรอก URL ที่ถูกต้อง เช่น https://example.com/webhook"
         }
     },
     "errors": {

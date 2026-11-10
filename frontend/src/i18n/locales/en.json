@@ -3860,7 +3860,9 @@
             "createUserWithSameNameAnd": "Create user with same name and full privileges",
             "creating": "Creating…",
             "databaseCreated": "Database created",
-            "databaseName": "Database name *",
+            "databaseName": "Database name",
+            "databaseNameInvalid": "Use only letters, numbers and underscores.",
+            "databaseNameRequired": "Enter the database name.",
             "databaseUserNotCreated": "Database created, but its user was not: {{error}}",
             "encoding": "Encoding",
             "engine": "Engine",
@@ -3878,7 +3880,7 @@
             "running": "running",
             "saveTheseCredentialsThePasswordWon": "Save these credentials. The password won't be shown again.",
             "userCreated": "User created",
-            "username": "Username *"
+            "username": "Username"
         },
         "modeToggle": {
             "assistant": "Assistant",
@@ -8054,6 +8056,7 @@
             "eGSlackNotificationsCiTrigger": "e.g. Slack Notifications, CI Trigger",
             "editSubscription": "Edit subscription",
             "events": "Events",
+            "eventsRequired": "Select at least one event.",
             "payloadUrl": "Payload URL",
             "retryCount": "Retry count",
             "timeoutSeconds": "Timeout (seconds)",
@@ -8573,7 +8576,8 @@
             "domainEmpty": "Enter a domain.",
             "domainInvalid": "Enter a valid domain.",
             "emailInvalid": "Enter a valid email address.",
-            "required": "This field is required."
+            "required": "This field is required.",
+            "urlInvalid": "Enter a valid URL, e.g. https://example.com/webhook."
         }
     },
     "effectiveEnv": {

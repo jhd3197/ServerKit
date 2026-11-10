@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "创建具有相同名称和完全权限的用户",
             "creating": "正在创建…",
             "databaseCreated": "数据库已创建",
-            "databaseName": "数据库名称 *",
+            "databaseName": "数据库名称",
             "encoding": "编码",
             "engine": "引擎",
             "fromTheTemplateCatalog": "从模板目录",
@@ -3766,7 +3766,9 @@
             "running": "运行中",
             "saveTheseCredentialsThePasswordWon": "保存这些凭据 - 密码将不会再次显示。",
             "userCreated": "用户已创建",
-            "username": "用户名 *"
+            "username": "用户名",
+            "databaseNameInvalid": "只能使用字母、数字和下划线。",
+            "databaseNameRequired": "请输入数据库名称。"
         },
         "modeToggle": {
             "assistant": "助手",
@@ -7663,7 +7665,8 @@
             "payloadUrl": "负载网址",
             "retryCount": "重试次数",
             "timeoutSeconds": "超时（秒）",
-            "update": "更新"
+            "update": "更新",
+            "eventsRequired": "请至少选择一个事件。"
         },
         "webhooksTab": {
             "active": "活动",
@@ -8130,7 +8133,8 @@
             "domainEmpty": "请输入域名。",
             "domainInvalid": "请输入有效的域名。",
             "emailInvalid": "请输入有效的电子邮件地址。",
-            "required": "此字段为必填项。"
+            "required": "此字段为必填项。",
+            "urlInvalid": "请输入有效的 URL，例如 https://example.com/webhook。"
         }
     },
     "errors": {

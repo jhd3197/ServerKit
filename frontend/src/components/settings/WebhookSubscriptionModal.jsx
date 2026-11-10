@@ -3,7 +3,8 @@ import api from '../../services/api';
 import Modal from '../Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormField, FormRow } from '../FormField';
+import useFieldErrors from '../../hooks/useFieldErrors';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslation } from 'react-i18next';
 
@@ -32,6 +33,15 @@ const WebhookSubscriptionModal = ({ subscription, onClose, onSubmit }) => {
         }
     }, [subscription]);
 
+    const isUrl = (value) => { try { return /^https?:$/.test(new URL(value).protocol); } catch { return false; } };
+    const fe = useFieldErrors({
+        name: name.trim() ? null : t('common.validation.required', 'This field is required.'),
+        url: !url.trim()
+            ? t('common.validation.required', 'This field is required.')
+            : (isUrl(url.trim()) ? null : t('common.validation.urlInvalid', 'Enter a valid URL, e.g. https://example.com/webhook.')),
+        events: selectedEvents.length ? null : t('app.webhookSubscriptionModal.eventsRequired', 'Select at least one event.'),
+    }, fieldId);
+
     const handleEventToggle = (eventType) => {
         setSelectedEvents(prev =>
             prev.includes(eventType)
@@ -54,7 +64,7 @@ const WebhookSubscriptionModal = ({ subscription, onClose, onSubmit }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!name.trim() || !url.trim() || selectedEvents.length === 0) return;
+        if (!fe.attempt()) return;
         setSaving(true);
         try {
             await onSubmit({
@@ -78,35 +88,32 @@ const WebhookSubscriptionModal = ({ subscription, onClose, onSubmit }) => {
 
     return (
         <Modal open={true} onClose={onClose} title={subscription ? t('app.webhookSubscriptionModal.editSubscription', 'Edit subscription') : t('app.webhookSubscriptionModal.createWebhookSubscription', 'Create webhook subscription')} className="webhook-modal">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} noValidate>
                     <div className="modal-body">
-                        <div className="form-group">
-                            <Label htmlFor={`${fieldId}-name`}>{t('common.labels.name', 'Name')}</Label>
+                        <FormField label={t('common.labels.name', 'Name')} htmlFor={`${fieldId}-name`} required error={fe.error('name')}>
                             <Input
                                 id={`${fieldId}-name`}
                                 type="text"
                                 value={name}
-                                onChange={e => setName(e.target.value)}
+                                onChange={e => { fe.clear('name'); setName(e.target.value); }}
+                                onBlur={() => fe.touch('name')}
                                 placeholder={t('app.webhookSubscriptionModal.eGSlackNotificationsCiTrigger', 'e.g. Slack Notifications, CI Trigger')}
-                                required
                             />
-                        </div>
+                        </FormField>
 
-                        <div className="form-group">
-                            <Label htmlFor={`${fieldId}-url`}>{t('app.webhookSubscriptionModal.payloadUrl', 'Payload URL')}</Label>
+                        <FormField label={t('app.webhookSubscriptionModal.payloadUrl', 'Payload URL')} htmlFor={`${fieldId}-url`} required error={fe.error('url')}>
                             <Input
                                 id={`${fieldId}-url`}
                                 type="url"
                                 value={url}
-                                onChange={e => setUrl(e.target.value)}
+                                onChange={e => { fe.clear('url'); setUrl(e.target.value); }}
+                                onBlur={() => fe.touch('url')}
                                 placeholder="https://example.com/webhook"
-                                required
                             />
-                        </div>
+                        </FormField>
 
-                        <div className="form-group">
-                            <Label>{t('app.webhookSubscriptionModal.events', 'Events')}</Label>
-                            <div className="webhook-modal__events">
+                        <FormField label={t('app.webhookSubscriptionModal.events', 'Events')} htmlFor={`${fieldId}-events`} required error={fe.error('events')}>
+                            <div className="webhook-modal__events" id={`${fieldId}-events`} tabIndex={-1} role="group">
                                 {Object.entries(groupedEvents).map(([category, events]) => {
                                     const categoryEvents = events.map(e => e.type);
                                     const allSelected = categoryEvents.every(e => selectedEvents.includes(e));
@@ -135,11 +142,10 @@ const WebhookSubscriptionModal = ({ subscription, onClose, onSubmit }) => {
                                     );
                                 })}
                             </div>
-                        </div>
+                        </FormField>
 
-                        <div className="form-row">
-                            <div className="form-group">
-                                <Label htmlFor={`${fieldId}-retry-count`}>{t('app.webhookSubscriptionModal.retryCount', 'Retry count')}</Label>
+                        <FormRow>
+                            <FormField label={t('app.webhookSubscriptionModal.retryCount', 'Retry count')} htmlFor={`${fieldId}-retry-count`}>
                                 <Input
                                     id={`${fieldId}-retry-count`}
                                     type="number"
@@ -148,9 +154,8 @@ const WebhookSubscriptionModal = ({ subscription, onClose, onSubmit }) => {
                                     min={0}
                                     max={10}
                                 />
-                            </div>
-                            <div className="form-group">
-                                <Label htmlFor={`${fieldId}-timeout`}>{t('app.webhookSubscriptionModal.timeoutSeconds', 'Timeout (seconds)')}</Label>
+                            </FormField>
+                            <FormField label={t('app.webhookSubscriptionModal.timeoutSeconds', 'Timeout (seconds)')} htmlFor={`${fieldId}-timeout`}>
                                 <Input
                                     id={`${fieldId}-timeout`}
                                     type="number"
@@ -159,16 +164,12 @@ const WebhookSubscriptionModal = ({ subscription, onClose, onSubmit }) => {
                                     min={1}
                                     max={30}
                                 />
-                            </div>
-                        </div>
+                            </FormField>
+                        </FormRow>
                     </div>
                     <div className="modal-footer">
                         <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button
-                            type="submit"
-                            variant="default"
-                            disabled={saving || !name.trim() || !url.trim() || selectedEvents.length === 0}
-                        >
+                        <Button type="submit" variant="default" disabled={saving}>
                             {saving ? t('common.saving', 'Saving…') : (subscription ? t('app.webhookSubscriptionModal.update', 'Update') : t('common.actions.create', 'Create'))}
                         </Button>
                     </div>

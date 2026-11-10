@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import Modal from '@/components/Modal';
 import { FormField } from '@/components/FormField';
@@ -5,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import useForm from '@/hooks/useForm';
+import useFieldErrors from '@/hooks/useFieldErrors';
 
 export default function AddScheduleModal({ open, onClose, onCreate, onCreated, remoteEnabled, timezone }) {
     const { t } = useTranslation();
@@ -13,9 +15,28 @@ export default function AddScheduleModal({ open, onClose, onCreate, onCreated, r
         onSubmit: async (values) => {
             await onCreate(values);
             form.reset();
+            fe.reset();
             onCreated();
         },
     });
+    const fieldId = useId();
+    const required = t('common.validation.required', 'This field is required.');
+    const fe = useFieldErrors({
+        name: form.values.name.trim() ? null : required,
+        target: form.values.target.trim() ? null : required,
+        scheduleTime: form.values.scheduleTime ? null : required,
+    }, fieldId);
+    const submit = (e) => {
+        if (!fe.attempt()) { e.preventDefault(); return undefined; }
+        return form.handleSubmit(e);
+    };
+    const close = () => { fe.reset(); onClose(); };
+    const err = (name) => fe.error(name) || form.getFieldError(name);
+    // Wraps getFieldProps so edits/blur also drive the inline-error timing.
+    const props = (name) => {
+        const p = form.getFieldProps(name);
+        return { ...p, onBlur: () => { p.onBlur(); fe.touch(name); }, 'aria-invalid': Boolean(err(name)) };
+    };
     const targetLabel = form.values.backupType === 'files'
         ? t('app.backups.schedulePaths', 'Paths (comma-separated)')
         : form.values.backupType === 'database'
@@ -23,11 +44,11 @@ export default function AddScheduleModal({ open, onClose, onCreate, onCreated, r
             : t('app.backups.applicationName', 'Service name');
 
     return (
-        <Modal open={open} onClose={() => { if (!form.isSubmitting) onClose(); }} title={t('app.backups.addBackupSchedule', 'New backup schedule')}>
-            <form onSubmit={form.handleSubmit} data-walkthrough="backup-schedule-form">
+        <Modal open={open} onClose={() => { if (!form.isSubmitting) close(); }} title={t('app.backups.addBackupSchedule', 'New backup schedule')}>
+            <form onSubmit={submit} noValidate data-walkthrough="backup-schedule-form">
                 {form.submitError && <p className="error-message" role="alert">{form.submitError}</p>}
-                <FormField htmlFor="backup-schedule-name" label={t('app.backups.scheduleName', 'Schedule name')} error={form.getFieldError('name')} required>
-                    <Input id="backup-schedule-name" type="text" {...form.getFieldProps('name')} placeholder={t('app.backups.dailyAppBackup', 'Daily service backup')} required />
+                <FormField htmlFor={`${fieldId}-name`} label={t('app.backups.scheduleName', 'Schedule name')} error={err('name')} required>
+                    <Input id={`${fieldId}-name`} type="text" {...props('name')} placeholder={t('app.backups.dailyAppBackup', 'Daily service backup')} />
                 </FormField>
                 <FormField htmlFor="backup-schedule-type" label={t('app.backups.backupType', 'Backup type')} error={form.getFieldError('backupType')}>
                     <Select
@@ -45,11 +66,11 @@ export default function AddScheduleModal({ open, onClose, onCreate, onCreated, r
                         </SelectContent>
                     </Select>
                 </FormField>
-                <FormField htmlFor="backup-schedule-target" label={targetLabel} error={form.getFieldError('target')} required>
-                    <Input id="backup-schedule-target" type="text" {...form.getFieldProps('target')} placeholder={form.values.backupType === 'files' ? '/etc/nginx,/var/www/config' : form.values.backupType === 'database' ? 'mysql:mydb' : 'my-app'} required />
+                <FormField htmlFor={`${fieldId}-target`} label={targetLabel} error={err('target')} required>
+                    <Input id={`${fieldId}-target`} type="text" {...props('target')} placeholder={form.values.backupType === 'files' ? '/etc/nginx,/var/www/config' : form.values.backupType === 'database' ? 'mysql:mydb' : 'my-app'} />
                 </FormField>
-                <FormField htmlFor="backup-schedule-time" label={t('common.labels.time', 'Time')} error={form.getFieldError('scheduleTime')} hint={timezone} required>
-                    <Input id="backup-schedule-time" type="time" {...form.getFieldProps('scheduleTime')} required />
+                <FormField htmlFor={`${fieldId}-scheduleTime`} label={t('common.labels.time', 'Time')} error={err('scheduleTime')} hint={timezone} required>
+                    <Input id={`${fieldId}-scheduleTime`} type="time" {...props('scheduleTime')} />
                 </FormField>
                 {remoteEnabled && (
                     <FormField>
@@ -60,7 +81,7 @@ export default function AddScheduleModal({ open, onClose, onCreate, onCreated, r
                     </FormField>
                 )}
                 <div className="modal-actions">
-                    <Button type="button" variant="outline" onClick={onClose} disabled={form.isSubmitting}>{t('common.actions.cancel', 'Cancel')}</Button>
+                    <Button type="button" variant="outline" onClick={close} disabled={form.isSubmitting}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button type="submit" disabled={form.isSubmitting} data-walkthrough="backup-schedule-submit">{t('app.backups.addSchedule', 'Create schedule')}</Button>
                 </div>
             </form>

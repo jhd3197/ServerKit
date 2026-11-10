@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "Erstellen Sie einen Benutzer mit demselben Namen und vollständigen Berechtigungen",
             "creating": "Wird erstellt…",
             "databaseCreated": "Datenbank erstellt",
-            "databaseName": "Datenbankname *",
+            "databaseName": "Datenbankname",
             "encoding": "Kodierung",
             "engine": "Motor",
             "fromTheTemplateCatalog": "aus dem Vorlagenkatalog",
@@ -3766,7 +3766,9 @@
             "running": "läuft",
             "saveTheseCredentialsThePasswordWon": "Speichern Sie diese Anmeldedaten – das Passwort wird nicht mehr angezeigt.",
             "userCreated": "Benutzer erstellt",
-            "username": "Benutzername *"
+            "username": "Benutzername",
+            "databaseNameInvalid": "Verwende nur Buchstaben, Zahlen und Unterstriche.",
+            "databaseNameRequired": "Gib den Datenbanknamen ein."
         },
         "modeToggle": {
             "assistant": "Assistent",
@@ -7663,7 +7665,8 @@
             "payloadUrl": "Payload-URL",
             "retryCount": "Anzahl der Wiederholungen",
             "timeoutSeconds": "Timeout (Sekunden)",
-            "update": "Aktualisieren"
+            "update": "Aktualisieren",
+            "eventsRequired": "Wähle mindestens ein Ereignis aus."
         },
         "webhooksTab": {
             "active": "Aktiv",
@@ -8130,7 +8133,8 @@
             "domainEmpty": "Gib eine Domain ein.",
             "domainInvalid": "Gib eine gültige Domain ein.",
             "emailInvalid": "Gib eine gültige E-Mail-Adresse ein.",
-            "required": "Dieses Feld ist erforderlich."
+            "required": "Dieses Feld ist erforderlich.",
+            "urlInvalid": "Gib eine gültige URL ein, z. B. https://example.com/webhook."
         }
     },
     "errors": {

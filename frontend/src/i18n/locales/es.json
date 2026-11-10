@@ -3749,7 +3749,7 @@
             "createUserWithSameNameAnd": "Crear un usuario con el mismo nombre y privilegios completos",
             "creating": "Creando…",
             "databaseCreated": "Base de datos creada",
-            "databaseName": "Nombre de la base de datos *",
+            "databaseName": "Nombre de la base de datos",
             "encoding": "Codificación",
             "engine": "Motor",
             "fromTheTemplateCatalog": "del catálogo de plantillas",
@@ -3766,8 +3766,10 @@
             "running": "en ejecución",
             "saveTheseCredentialsThePasswordWon": "Guarda estas credenciales: la contraseña no se volverá a mostrar.",
             "userCreated": "Usuario creado",
-            "username": "Nombre de usuario *",
-            "databaseUserNotCreated": "Base de datos creada, pero su usuario no: {{error}}"
+            "username": "Nombre de usuario",
+            "databaseUserNotCreated": "Base de datos creada, pero su usuario no: {{error}}",
+            "databaseNameInvalid": "Usa solo letras, números y guiones bajos.",
+            "databaseNameRequired": "Introduce el nombre de la base de datos."
         },
         "modeToggle": {
             "assistant": "Asistente",
@@ -7664,7 +7666,8 @@
             "payloadUrl": "URL del payload",
             "retryCount": "Número de reintentos",
             "timeoutSeconds": "Tiempo de espera (segundos)",
-            "update": "Actualizar"
+            "update": "Actualizar",
+            "eventsRequired": "Selecciona al menos un evento."
         },
         "webhooksTab": {
             "active": "Activo",
@@ -8131,7 +8134,8 @@
             "domainEmpty": "Introduce un dominio.",
             "domainInvalid": "Introduce un dominio válido.",
             "emailInvalid": "Introduce una dirección de correo válida.",
-            "required": "Este campo es obligatorio."
+            "required": "Este campo es obligatorio.",
+            "urlInvalid": "Introduce una URL válida, p. ej. https://example.com/webhook."
         }
     },
     "errors": {
