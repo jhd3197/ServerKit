@@ -16,6 +16,16 @@ import InfoTip from './InfoTip';
  * screen reader announces the hint and the validation message with the field.
  * Every control in components/ui reads it; `htmlFor` is only needed when the
  * control already has its own id. One control per field.
+ *
+ * Required/optional convention (use it everywhere):
+ *   - required fields: `required` prop -> red "*" after the label (aria-hidden)
+ *     and `aria-required` on the control. Outside FormField, `<Label required>`
+ *     draws the same marker.
+ *   - optional fields: no marker; where a form mixes both and it helps, the
+ *     label may end in "(optional)".
+ *   - errors: pass `error` (short, specific). Show it only after the field was
+ *     blurred or a submit was attempted (hooks/useFieldErrors.js), never on a
+ *     freshly opened dialog.
  */
 export function FormField({
     label,
@@ -46,9 +56,8 @@ export function FormField({
         <div className={cn('form-field', invalid && 'form-field--invalid', className)}>
             {label && (() => {
                 const labelEl = (
-                    <Label htmlFor={inputId} className={cn('form-field__label', labelClassName)}>
+                    <Label htmlFor={inputId} required={required} className={cn('form-field__label', labelClassName)}>
                         {label}
-                        {required && <span className="form-field__required" aria-hidden="true">*</span>}
                     </Label>
                 );
                 return info

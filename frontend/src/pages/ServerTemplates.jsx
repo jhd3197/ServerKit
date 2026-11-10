@@ -10,6 +10,8 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
+import { FormField } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { LayoutTemplate } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import PagePrimaryButton from '@/components/PagePrimaryButton';
@@ -255,6 +257,11 @@ const ServerTemplates = () => {
         auto_remediate: false, remediation_approval_required: true
     });
 
+    const fe = useFieldErrors({
+        name: form.name.trim() ? null : t('app.serverTemplates.nameRequired', 'Enter a template name.'),
+    }, fieldId);
+    const closeCreate = () => { setShowCreateModal(false); fe.reset(); };
+
     const loadData = useCallback(async () => {
         try {
             const [tRes, lRes] = await Promise.allSettled([
@@ -286,16 +293,19 @@ const ServerTemplates = () => {
     }, [loadData]);
 
     const handleCreate = async () => {
+        if (!fe.attempt()) return;
         try {
             const data = {
                 ...form,
+                name: form.name.trim(),
                 packages: form.packages.split('\n').map(p => p.trim()).filter(Boolean),
             };
             await api.createServerTemplate(data);
             toast.success(t('app.serverTemplates.templateCreated', 'Template created'));
-            setShowCreateModal(false);
+            closeCreate();
             loadData();
         } catch (err) {
+            if (fe.fromServer(err)) return;
             toastError(toast, t('app.serverTemplates.couldntCreate', "Couldn't create the template."), err);
         }
     };
@@ -676,36 +686,33 @@ const ServerTemplates = () => {
             {/* Create Modal */}
             <Modal
                 open={showCreateModal}
-                onClose={() => setShowCreateModal(false)}
+                onClose={closeCreate}
+                onSubmit={handleCreate}
                 title={t('app.serverTemplates.createTemplate', 'Create template')}
                 footer={(
                     <>
-                        <Button variant="outline" onClick={() => setShowCreateModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button onClick={handleCreate} disabled={!form.name}>{t('common.actions.create', 'Create')}</Button>
+                        <Button type="button" variant="outline" onClick={closeCreate}>{t('common.actions.cancel', 'Cancel')}</Button>
+                        <Button type="submit">{t('common.actions.create', 'Create')}</Button>
                     </>
                 )}
             >
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-name`}>{t('common.labels.name', 'Name')}</label>
-                    <Input id={`${fieldId}-name`} value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
-                </div>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-description`}>{t('common.labels.description', 'Description')}</label>
+                <FormField label={t('common.labels.name', 'Name')} htmlFor={`${fieldId}-name`} required error={fe.error('name')}>
+                    <Input id={`${fieldId}-name`} value={form.name} onChange={e => { fe.clear('name'); setForm({...form, name: e.target.value}); }} onBlur={() => fe.touch('name')} autoFocus />
+                </FormField>
+                <FormField label={t('common.labels.description', 'Description')} htmlFor={`${fieldId}-description`}>
                     <Textarea id={`${fieldId}-description`} value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={2} />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="server-template-category">{t('app.serverTemplates.category', 'Category')}</label>
+                </FormField>
+                <FormField label={t('app.serverTemplates.category', 'Category')} htmlFor="server-template-category">
                     <Select value={form.category} onValueChange={v => setForm({...form, category: v})}>
                         <SelectTrigger id="server-template-category"><SelectValue /></SelectTrigger>
                         <SelectContent>
                             {Object.entries(CATEGORY_LABELS).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
                         </SelectContent>
                     </Select>
-                </div>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-packages`}>{t('app.serverTemplates.packagesOnePerLine', 'Packages (one per line)')}</label>
+                </FormField>
+                <FormField label={t('app.serverTemplates.packagesOnePerLine', 'Packages (one per line)')} htmlFor={`${fieldId}-packages`}>
                     <Textarea id={`${fieldId}-packages`} className="form-input--mono" value={form.packages} onChange={e => setForm({...form, packages: e.target.value})} rows={4} placeholder={t('app.serverTemplates.nginxPhpFpmCertbot', 'nginx\nphp-fpm\ncertbot')} />
-                </div>
+                </FormField>
                 <div className="form-group">
                     <label className="checkbox-label">
                         <input type="checkbox" checked={form.auto_remediate} onChange={e => setForm({...form, auto_remediate: e.target.checked})} />
