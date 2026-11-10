@@ -8,6 +8,8 @@ import api from '../../services/api';
 import { Drawer, SegControl } from '@/components/ds';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '../../contexts/useToast.js';
 import EngineGlyph from './EngineGlyph';
@@ -65,23 +67,21 @@ function SecretRow({ password, onRegenerate, disabled }) {
 }
 
 // One template variable, rendered from its own declaration.
-function VariableField({ variable, value, onChange }) {
+function VariableField({ variable, value, onChange, error, onBlur }) {
     const { t } = useTranslation();
     const id = `dbx-var-${variable.name}`;
     return (
         <div className="dbx-field">
-            <label className="dbx-field__label" htmlFor={id}>
+            <Label className="dbx-field__label" htmlFor={id} required={variable.required}>
                 {variable.name}
-                {variable.required && ' *'}
-            </label>
+            </Label>
             {variable.options ? (
                 <Select
                     value={value == null || value === '' ? '' : String(value)}
                     onValueChange={onChange}
-                    required={variable.required}
                     name={variable.name}
                 >
-                    <SelectTrigger id={id}>
+                    <SelectTrigger id={id} aria-required={variable.required || undefined} aria-invalid={Boolean(error) || undefined} onBlur={onBlur}>
                         <SelectValue placeholder={t('app.engineInstallDrawer.select', 'Select…')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -94,7 +94,9 @@ function VariableField({ variable, value, onChange }) {
                     value={value ?? ''}
                     onChange={(next) => onChange(next === '' ? '' : String(next))}
                     placeholder={variable.default != null ? String(variable.default) : ''}
-                    required={variable.required}
+                    aria-required={variable.required || undefined}
+                    aria-invalid={Boolean(error) || undefined}
+                    onBlur={onBlur}
                 />
             ) : (
                 <Input
@@ -103,9 +105,12 @@ function VariableField({ variable, value, onChange }) {
                     value={value ?? ''}
                     onChange={(e) => onChange(e.target.value)}
                     placeholder={variable.default != null ? String(variable.default) : ''}
-                    required={variable.required}
+                    aria-required={variable.required || undefined}
+                    aria-invalid={Boolean(error) || undefined}
+                    onBlur={onBlur}
                 />
             )}
+            {error && <p className="form-field__error" role="alert">{error}</p>}
             {variable.description && <p className="dbx-field-hint">{variable.description}</p>}
         </div>
     );
@@ -172,6 +177,13 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
         [template],
     );
 
+    const problems = { name: slugifyService(name) ? null : t('common.validation.required', 'This field is required.') };
+    for (const v of parts.visible) {
+        const val = vars[v.name];
+        problems[`var-${v.name}`] = v.required && (val == null || String(val).trim() === '') ? t('common.validation.required', 'This field is required.') : null;
+    }
+    const fe = useFieldErrors(problems, 'dbx');
+
     if (!entry || !template) return null;
 
     const unitOne = singular(meta.unit);
@@ -183,6 +195,7 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
 
     async function submit(event) {
         event.preventDefault();
+        if (!fe.attempt()) return;
         setError('');
         setSuggestedPort(null);
         setBusy(true);
@@ -292,7 +305,7 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                     </footer>
                 </div>
             ) : (
-                <form className="dbx-drawer__shell" onSubmit={submit}>
+                <form className="dbx-drawer__shell" noValidate onSubmit={submit}>
                     <div className="dbx-drawer__scroll">
                         {error && (
                             <div className="error-message">
@@ -324,18 +337,20 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                         )}
 
                         <div className="dbx-field">
-                            <label className="dbx-field__label" htmlFor="dbx-eng-name">{t('app.engineInstallDrawer.instanceName', 'Instance name')}</label>
+                            <Label className="dbx-field__label" htmlFor="dbx-name" required>{t('app.engineInstallDrawer.instanceName', 'Instance name')}</Label>
                             <div className="dbx-input">
                                 <Box size={15} aria-hidden="true" />
                                 <input
-                                    id="dbx-eng-name"
+                                    id="dbx-name"
                                     type="text"
                                     value={name}
                                     onChange={(e) => setName(slugifyService(e.target.value))}
-                                    minLength={2}
-                                    required
+                                    onBlur={() => fe.touch('name')}
+                                    aria-required="true"
+                                    aria-invalid={Boolean(fe.error('name')) || undefined}
                                 />
                             </div>
+                            {fe.error('name') && <p className="form-field__error" role="alert">{fe.error('name')}</p>}
                             <p className="dbx-field-hint">
                                 {t('app.engineInstallDrawer.namesTheServiceItsContainerAnd', 'Names the service, its container and its data volume.')}
                             </p>
@@ -362,6 +377,8 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                                 variable={variable}
                                 value={vars[variable.name]}
                                 onChange={(value) => setVar(variable.name, value)}
+                                onBlur={() => fe.touch(`var-${variable.name}`)}
+                                error={fe.error(`var-${variable.name}`)}
                             />
                         ))}
 
@@ -457,7 +474,7 @@ export default function EngineInstallDrawer({ entry, open, onOpenChange, onInsta
                         <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
-                        <Button type="submit" disabled={busy || !slugifyService(name)}>
+                        <Button type="submit" disabled={busy}>
                             <Rocket size={15} aria-hidden="true" />
                             {busy ? t('app.engineInstallDrawer.starting', 'Starting…') : t('app.engineInstallDrawer.installName', 'Install {{name}}', { name: template.name })}
                         </Button>
