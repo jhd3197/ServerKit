@@ -957,13 +957,14 @@
 
     // Hand-rolled trailing action rows live inside the body (the form wraps
     // it); pin them to the bottom of the scroll area so they stay reachable.
-    // Sticky offsets from the scrollport edge, so bottom: 0 is flush; the
-    // negative margins cancel the body padding.
+    // Sticky offsets are measured from the padding-box inset, so bottom must
+    // be -$space-4 (the body's bottom padding) to sit flush; the negative
+    // margins cancel the body padding.
     .modal-actions:last-child,
     .modal-footer:last-child,
     .form-actions:last-child {
         position: sticky;
-        bottom: 0;
+        bottom: -$space-4;
         z-index: 1;
         flex-wrap: wrap;
         align-items: center;
