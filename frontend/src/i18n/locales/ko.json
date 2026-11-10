@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "모든 온라인 에이전트에 대해 업그레이드가 트리거됨",
             "versionDistribution": "버전 배포",
             "versions": "버전",
-            "viewDetails": "세부정보 보기"
+            "viewDetails": "세부정보 보기",
+            "selectAVersionFirst": "먼저 버전을 선택하세요"
         },
         "ai": {
             "assistant": "어시스턴트"
@@ -608,7 +609,8 @@
             "remote": "원격",
             "restoreDrills": "복원 훈련",
             "turnOnProtectionOrClickBack": "보호 기능을 켜거나 지금 백업을 클릭하세요.",
-            "verifyRemoteCopy": "원격 복사본 확인"
+            "verifyRemoteCopy": "원격 복사본 확인",
+            "onlySuccessfulBackupsCanBeRestored": "성공한 백업만 복원할 수 있습니다"
         },
         "backupTabs": {
             "schedules": "일정",
@@ -882,7 +884,8 @@
             "selectSize": "사이즈 선택",
             "serverDestroyed": "서버가 파괴되었습니다",
             "serverName": "서버 이름",
-            "serverProvisioningInitiated": "서버 프로비저닝이 시작되었습니다."
+            "serverProvisioningInitiated": "서버 프로비저닝이 시작되었습니다.",
+            "enterANameAndChooseAProvider": "먼저 이름을 입력하고 공급자를 선택하세요"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "이 호스트 이름에 대한 CNAME은 터널을 가리키는 Cloudflare DNS에 생성됩니다.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "업데이트 개요",
             "updatingDatabaseSchema": "데이터베이스 스키마 업데이트 중...",
             "weRecommendBackingUpYourDatabase": "업데이트를 적용하기 전에 데이터베이스를 백업하는 것이 좋습니다.",
-            "whichDoesNotExistInThis": ", 이 빌드에는 존재하지 않습니다. 일반적으로 마이그레이션을 추가한 다음 되돌린 분기입니다. 스키마는 알려진 버전으로 다시 스탬프될 때까지 업그레이드할 수 없습니다."
+            "whichDoesNotExistInThis": ", 이 빌드에는 존재하지 않습니다. 일반적으로 마이그레이션을 추가한 다음 되돌린 분기입니다. 스키마는 알려진 버전으로 다시 스탬프될 때까지 업그레이드할 수 없습니다.",
+            "createABackupFirst": "먼저 백업을 만드세요"
         },
         "databases": {
             "backUpDatabase": "데이터베이스 백업",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "SHA256 체크섬을 사용하여 다운로드를 확인합니다.",
             "windows": "윈도우:",
             "windowsPowershell": "윈도우(파워셸)",
-            "withTheServerRegistrationToken": "서버 등록 토큰으로."
+            "withTheServerRegistrationToken": "서버 등록 토큰으로.",
+            "noBuildPublishedForThisPlatform": "이 플랫폼용 빌드가 아직 게시되지 않았습니다"
         },
         "drawerHeader": {
             "aiSettings": "AI 설정",
@@ -2760,7 +2765,9 @@
             "videos": "비디오",
             "volumes": "볼륨",
             "webConfig": "웹 구성",
-            "willBeCreatedIn": "생성 날짜:"
+            "willBeCreatedIn": "생성 날짜:",
+            "nothingToGoBackTo": "뒤로 갈 곳이 없습니다",
+            "nothingToGoForwardTo": "앞으로 갈 곳이 없습니다"
         },
         "fileRow": {
             "deselect": "선택 취소",
@@ -2878,7 +2885,8 @@
             "trend": "동향",
             "unusuallyHigh": "비정상적으로 높음",
             "unusuallyLow": "비정상적으로 낮음",
-            "zScore": "Z-점수"
+            "zScore": "Z-점수",
+            "selectAServerFirst": "먼저 서버를 선택하세요"
         },
         "fleetProxy": {
             "apps": "서비스",
@@ -3453,7 +3461,8 @@
             "logFiles": "로그 파일",
             "noLogFilesFound": "로그 파일을 찾을 수 없습니다.",
             "searchPattern": "검색 패턴...",
-            "selectALogFile": "내용을 보려면 로그 파일을 선택하세요."
+            "selectALogFile": "내용을 보려면 로그 파일을 선택하세요.",
+            "selectALogFileFirst": "먼저 로그 파일을 선택하세요"
         },
         "loginLinksSection": {
             "allowedIp": "허용된 IP",
@@ -4049,7 +4058,10 @@
             "registering": "등록 중…",
             "review": "검토",
             "uploadAndDeploy": "업로드 및 배포",
-            "uploading": "업로드 중…"
+            "uploading": "업로드 중…",
+            "completeTheSourceDetailsFirst": "먼저 소스 세부 정보를 입력하세요",
+            "fillInTheRequiredDetailsFirst": "먼저 필수 정보를 입력하세요",
+            "finishThePreviousStepFirst": "먼저 이전 단계를 완료하세요"
         },
         "notFound": {
             "browseExtensions": "확장 프로그램 찾아보기",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "호스트의 Nginx가 역방향 프록시를 처리하고 있습니다. 대신 관리형 Docker 프록시 스택을 실행하려면 위의 Traefik 또는 Caddy로 전환하세요.",
             "thisServerSActiveProxyIs": "이 서버의 활성 프록시는 다음과 같습니다.",
             "traefik": "Traefik",
-            "whichExpects": ", 기대하는"
+            "whichExpects": ", 기대하는",
+            "noChangesToSave": "저장할 변경 사항이 없습니다",
+            "selectADifferentProxyFirst": "먼저 다른 프록시를 선택하세요"
         },
         "pruneButton": {
             "cleaning": "정리 중…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "이 도메인을 사용하세요",
             "used": "중고",
             "utcOffset": "UTC 오프셋",
-            "version": "{{brand}} 버전"
+            "version": "{{brand}} 버전",
+            "enterADomainFirst": "먼저 도메인을 입력하세요",
+            "selectADifferentTimezoneFirst": "먼저 다른 시간대를 선택하세요"
         },
         "tableDataTab": {
             "column": "칼럼",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "단위 이름을 입력하세요…",
             "unit": "단위",
             "useThe": "사용",
-            "failedToLoadProcesses": "프로세스를 불러오지 못했습니다."
+            "failedToLoadProcesses": "프로세스를 불러오지 못했습니다.",
+            "selectALogFileFirst": "먼저 로그 파일을 선택하세요"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "실행이 이미 진행 중입니다.",

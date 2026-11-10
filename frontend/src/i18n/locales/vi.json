@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Đã kích hoạt nâng cấp cho tất cả các đại lý trực tuyến",
             "versionDistribution": "Phân phối phiên bản",
             "versions": "Phiên bản",
-            "viewDetails": "Xem chi tiết"
+            "viewDetails": "Xem chi tiết",
+            "selectAVersionFirst": "Hãy chọn một phiên bản trước"
         },
         "ai": {
             "assistant": "Trợ lý"
@@ -608,7 +609,8 @@
             "remote": "Xa",
             "restoreDrills": "Khôi phục cuộc tập trận",
             "turnOnProtectionOrClickBack": "Bật bảo vệ hoặc nhấp vào Sao lưu ngay.",
-            "verifyRemoteCopy": "Xác minh bản sao từ xa"
+            "verifyRemoteCopy": "Xác minh bản sao từ xa",
+            "onlySuccessfulBackupsCanBeRestored": "Chỉ có thể khôi phục các bản sao lưu thành công"
         },
         "backupTabs": {
             "schedules": "Lịch trình",
@@ -882,7 +884,8 @@
             "selectSize": "Chọn kích thước",
             "serverDestroyed": "Máy chủ bị phá hủy",
             "serverName": "Tên máy chủ",
-            "serverProvisioningInitiated": "Đã bắt đầu cung cấp máy chủ"
+            "serverProvisioningInitiated": "Đã bắt đầu cung cấp máy chủ",
+            "enterANameAndChooseAProvider": "Hãy nhập tên và chọn nhà cung cấp trước"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "CNAME cho tên máy chủ này sẽ được tạo trong Cloudflare DNS, trỏ vào đường hầm.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "Cập nhật tổng quan",
             "updatingDatabaseSchema": "Đang cập nhật lược đồ cơ sở dữ liệu...",
             "weRecommendBackingUpYourDatabase": "Chúng tôi khuyên bạn nên sao lưu cơ sở dữ liệu của mình trước khi áp dụng các bản cập nhật.",
-            "whichDoesNotExistInThis": ", không tồn tại trong bản dựng này - thường là một nhánh đã thêm quá trình di chuyển và sau đó được hoàn nguyên. Lược đồ không thể được nâng cấp cho đến khi nó được đóng dấu trở lại bản sửa đổi đã biết:"
+            "whichDoesNotExistInThis": ", không tồn tại trong bản dựng này - thường là một nhánh đã thêm quá trình di chuyển và sau đó được hoàn nguyên. Lược đồ không thể được nâng cấp cho đến khi nó được đóng dấu trở lại bản sửa đổi đã biết:",
+            "createABackupFirst": "Hãy tạo bản sao lưu trước"
         },
         "databases": {
             "backUpDatabase": "Sao lưu cơ sở dữ liệu",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "Xác minh tải xuống của bạn bằng cách sử dụng tổng kiểm tra SHA256:",
             "windows": "Windows:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "với mã thông báo đăng ký máy chủ."
+            "withTheServerRegistrationToken": "với mã thông báo đăng ký máy chủ.",
+            "noBuildPublishedForThisPlatform": "Chưa có bản dựng nào được phát hành cho nền tảng này"
         },
         "drawerHeader": {
             "aiSettings": "cài đặt AI",
@@ -2760,7 +2765,9 @@
             "videos": "Video",
             "volumes": "Volumes",
             "webConfig": "Cấu hình web",
-            "willBeCreatedIn": "Sẽ được tạo trong:"
+            "willBeCreatedIn": "Sẽ được tạo trong:",
+            "nothingToGoBackTo": "Không có gì để quay lại",
+            "nothingToGoForwardTo": "Không có gì để đi tiếp"
         },
         "fileRow": {
             "deselect": "Bỏ chọn",
@@ -2878,7 +2885,8 @@
             "trend": "Xu hướng",
             "unusuallyHigh": "Cao bất thường",
             "unusuallyLow": "Thấp bất thường",
-            "zScore": "điểm Z"
+            "zScore": "điểm Z",
+            "selectAServerFirst": "Hãy chọn một máy chủ trước"
         },
         "fleetProxy": {
             "apps": "Dịch vụ",
@@ -3453,7 +3461,8 @@
             "logFiles": "Tệp nhật ký",
             "noLogFilesFound": "Không tìm thấy tệp nhật ký nào",
             "searchPattern": "Mẫu tìm kiếm...",
-            "selectALogFile": "Chọn một tệp nhật ký để xem nội dung."
+            "selectALogFile": "Chọn một tệp nhật ký để xem nội dung.",
+            "selectALogFileFirst": "Hãy chọn một tệp nhật ký trước"
         },
         "loginLinksSection": {
             "allowedIp": "IP được phép",
@@ -4049,7 +4058,10 @@
             "registering": "Đang đăng ký…",
             "review": "Ôn tập",
             "uploadAndDeploy": "Tải lên & triển khai",
-            "uploading": "Đang tải lên…"
+            "uploading": "Đang tải lên…",
+            "completeTheSourceDetailsFirst": "Hãy hoàn tất chi tiết nguồn trước",
+            "fillInTheRequiredDetailsFirst": "Hãy điền các thông tin bắt buộc trước",
+            "finishThePreviousStepFirst": "Hãy hoàn tất bước trước đó"
         },
         "notFound": {
             "browseExtensions": "Duyệt qua tiện ích mở rộng",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "Nginx của máy chủ đang xử lý ủy quyền ngược. Thay vào đó hãy chuyển sang Traefik hoặc Caddy ở trên để chạy ngăn xếp proxy Docker được quản lý.",
             "thisServerSActiveProxyIs": "Proxy hoạt động của máy chủ này là",
             "traefik": "traefik",
-            "whichExpects": ", mong đợi"
+            "whichExpects": ", mong đợi",
+            "noChangesToSave": "Không có thay đổi để lưu",
+            "selectADifferentProxyFirst": "Hãy chọn một proxy khác trước"
         },
         "pruneButton": {
             "cleaning": "Đang dọn dẹp…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "Sử dụng tên miền này",
             "used": "Đã sử dụng",
             "utcOffset": "Bù UTC",
-            "version": "Phiên bản {{brand}}"
+            "version": "Phiên bản {{brand}}",
+            "enterADomainFirst": "Hãy nhập tên miền trước",
+            "selectADifferentTimezoneFirst": "Hãy chọn một múi giờ khác trước"
         },
         "tableDataTab": {
             "column": "Cột",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "Nhập tên đơn vị…",
             "unit": "Đơn vị",
             "useThe": "Sử dụng",
-            "failedToLoadProcesses": "Không thể tải các tiến trình."
+            "failedToLoadProcesses": "Không thể tải các tiến trình.",
+            "selectALogFileFirst": "Hãy chọn một tệp nhật ký trước"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Một cuộc chạy đang được tiến hành.",

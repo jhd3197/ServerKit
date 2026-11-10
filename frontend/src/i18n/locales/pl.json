@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Aktualizacja została uruchomiona dla wszystkich agentów online",
             "versionDistribution": "Dystrybucja wersji",
             "versions": "Wersje",
-            "viewDetails": "Zobacz szczegóły"
+            "viewDetails": "Zobacz szczegóły",
+            "selectAVersionFirst": "Najpierw wybierz wersję"
         },
         "ai": {
             "assistant": "Asystent"
@@ -608,7 +609,8 @@
             "remote": "Zdalny",
             "restoreDrills": "Przywróć ćwiczenia",
             "turnOnProtectionOrClickBack": "Włącz ochronę lub kliknij Utwórz kopię zapasową teraz.",
-            "verifyRemoteCopy": "Sprawdź zdalną kopię"
+            "verifyRemoteCopy": "Sprawdź zdalną kopię",
+            "onlySuccessfulBackupsCanBeRestored": "Przywrócić można tylko udane kopie zapasowe"
         },
         "backupTabs": {
             "schedules": "Harmonogramy",
@@ -882,7 +884,8 @@
             "selectSize": "Wybierz rozmiar",
             "serverDestroyed": "Serwer zniszczony",
             "serverName": "Nazwa serwera",
-            "serverProvisioningInitiated": "Rozpoczęto udostępnianie serwera"
+            "serverProvisioningInitiated": "Rozpoczęto udostępnianie serwera",
+            "enterANameAndChooseAProvider": "Najpierw wpisz nazwę i wybierz dostawcę"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "CNAME dla tej nazwy hosta zostanie utworzona w Cloudflare DNS, wskazując na tunel.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "Aktualizuj przegląd",
             "updatingDatabaseSchema": "Aktualizowanie schematu bazy danych...",
             "weRecommendBackingUpYourDatabase": "Zalecamy utworzenie kopii zapasowej bazy danych przed zastosowaniem aktualizacji.",
-            "whichDoesNotExistInThis": ", który nie istnieje w tej kompilacji — zwykle jest to gałąź, która dodała migrację, a następnie została przywrócona. Schematu nie można zaktualizować, dopóki nie zostanie przywrócona sygnatura do znanej wersji:"
+            "whichDoesNotExistInThis": ", który nie istnieje w tej kompilacji — zwykle jest to gałąź, która dodała migrację, a następnie została przywrócona. Schematu nie można zaktualizować, dopóki nie zostanie przywrócona sygnatura do znanej wersji:",
+            "createABackupFirst": "Najpierw utwórz kopię zapasową"
         },
         "databases": {
             "backUpDatabase": "Utwórz kopię zapasową bazy danych",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "Zweryfikuj pobieranie, korzystając z sum kontrolnych SHA256:",
             "windows": "Okna:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "z tokenem rejestracyjnym serwera."
+            "withTheServerRegistrationToken": "z tokenem rejestracyjnym serwera.",
+            "noBuildPublishedForThisPlatform": "Dla tej platformy nie opublikowano jeszcze kompilacji"
         },
         "drawerHeader": {
             "aiSettings": "Ustawienia AI",
@@ -2760,7 +2765,9 @@
             "videos": "Filmy",
             "volumes": "Woluminy",
             "webConfig": "Konfiguracja internetowa",
-            "willBeCreatedIn": "Powstanie w:"
+            "willBeCreatedIn": "Powstanie w:",
+            "nothingToGoBackTo": "Nie ma dokąd wrócić",
+            "nothingToGoForwardTo": "Nie ma dokąd przejść dalej"
         },
         "fileRow": {
             "deselect": "Odznacz",
@@ -2878,7 +2885,8 @@
             "trend": "Tendencja",
             "unusuallyHigh": "Nietypowo wysoka",
             "unusuallyLow": "Nietypowo niska",
-            "zScore": "Wynik Z"
+            "zScore": "Wynik Z",
+            "selectAServerFirst": "Najpierw wybierz serwer"
         },
         "fleetProxy": {
             "apps": "Usługi",
@@ -3453,7 +3461,8 @@
             "logFiles": "Pliki dziennika",
             "noLogFilesFound": "Nie znaleziono plików dziennika",
             "searchPattern": "Wyszukaj wzór...",
-            "selectALogFile": "Wybierz plik logu, aby wyświetlić jego zawartość."
+            "selectALogFile": "Wybierz plik logu, aby wyświetlić jego zawartość.",
+            "selectALogFileFirst": "Najpierw wybierz plik dziennika"
         },
         "loginLinksSection": {
             "allowedIp": "Dozwolone IP",
@@ -4049,7 +4058,10 @@
             "registering": "Rejestrowanie…",
             "review": "Recenzja",
             "uploadAndDeploy": "Prześlij i wdróż",
-            "uploading": "Przesyłanie…"
+            "uploading": "Przesyłanie…",
+            "completeTheSourceDetailsFirst": "Najpierw uzupełnij szczegóły źródła",
+            "fillInTheRequiredDetailsFirst": "Najpierw uzupełnij wymagane dane",
+            "finishThePreviousStepFirst": "Najpierw ukończ poprzedni krok"
         },
         "notFound": {
             "browseExtensions": "Przeglądaj rozszerzenia",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "Nginx hosta obsługuje odwrotne proxy. Przełącz się na Traefik lub Caddy powyżej, aby zamiast tego uruchomić zarządzany stos proxy Docker.",
             "thisServerSActiveProxyIs": "Aktywnym serwerem proxy tego serwera jest",
             "traefik": "Traefik",
-            "whichExpects": ", który oczekuje"
+            "whichExpects": ", który oczekuje",
+            "noChangesToSave": "Brak zmian do zapisania",
+            "selectADifferentProxyFirst": "Najpierw wybierz inny serwer proxy"
         },
         "pruneButton": {
             "cleaning": "Czyszczenie…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "Użyj tej domeny",
             "used": "Używany",
             "utcOffset": "Przesunięcie czasu UTC",
-            "version": "Wersja {{brand}}"
+            "version": "Wersja {{brand}}",
+            "enterADomainFirst": "Najpierw wpisz domenę",
+            "selectADifferentTimezoneFirst": "Najpierw wybierz inną strefę czasową"
         },
         "tableDataTab": {
             "column": "Kolumna",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "Wpisz nazwę jednostki…",
             "unit": "Jednostka",
             "useThe": "Skorzystaj z",
-            "failedToLoadProcesses": "Nie udało się wczytać procesów."
+            "failedToLoadProcesses": "Nie udało się wczytać procesów.",
+            "selectALogFileFirst": "Najpierw wybierz plik dziennika"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Bieg już trwa.",

@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Peningkatan versi dipicu untuk semua agen online",
             "versionDistribution": "Distribusi Versi",
             "versions": "Versi",
-            "viewDetails": "Lihat Detail"
+            "viewDetails": "Lihat Detail",
+            "selectAVersionFirst": "Pilih versi terlebih dahulu"
         },
         "ai": {
             "assistant": "Asisten"
@@ -608,7 +609,8 @@
             "remote": "Terpencil",
             "restoreDrills": "Kembalikan latihan",
             "turnOnProtectionOrClickBack": "Aktifkan perlindungan atau klik Cadangkan sekarang.",
-            "verifyRemoteCopy": "Verifikasi salinan jarak jauh"
+            "verifyRemoteCopy": "Verifikasi salinan jarak jauh",
+            "onlySuccessfulBackupsCanBeRestored": "Hanya cadangan yang berhasil yang dapat dipulihkan"
         },
         "backupTabs": {
             "schedules": "Jadwal",
@@ -882,7 +884,8 @@
             "selectSize": "Pilih ukuran",
             "serverDestroyed": "Server hancur",
             "serverName": "Nama Server",
-            "serverProvisioningInitiated": "Penyediaan server dimulai"
+            "serverProvisioningInitiated": "Penyediaan server dimulai",
+            "enterANameAndChooseAProvider": "Masukkan nama dan pilih penyedia terlebih dahulu"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "CNAME untuk nama host ini akan dibuat di Cloudflare DNS, menunjuk ke terowongan.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "Perbarui Ikhtisar",
             "updatingDatabaseSchema": "Memperbarui skema database...",
             "weRecommendBackingUpYourDatabase": "Kami menyarankan untuk mencadangkan database Anda sebelum menerapkan pembaruan.",
-            "whichDoesNotExistInThis": ", yang tidak ada di build ini — biasanya cabang yang menambahkan migrasi dan kemudian dikembalikan. Skema tidak dapat ditingkatkan hingga dikembalikan ke revisi yang diketahui:"
+            "whichDoesNotExistInThis": ", yang tidak ada di build ini — biasanya cabang yang menambahkan migrasi dan kemudian dikembalikan. Skema tidak dapat ditingkatkan hingga dikembalikan ke revisi yang diketahui:",
+            "createABackupFirst": "Buat cadangan terlebih dahulu"
         },
         "databases": {
             "backUpDatabase": "Cadangkan basis data",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "Verifikasi unduhan Anda menggunakan checksum SHA256:",
             "windows": "jendela:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "dengan token pendaftaran server."
+            "withTheServerRegistrationToken": "dengan token pendaftaran server.",
+            "noBuildPublishedForThisPlatform": "Belum ada build yang dipublikasikan untuk platform ini"
         },
         "drawerHeader": {
             "aiSettings": "Pengaturan AI",
@@ -2760,7 +2765,9 @@
             "videos": "Video",
             "volumes": "Volume",
             "webConfig": "Konfigurasi web",
-            "willBeCreatedIn": "Akan dibuat di:"
+            "willBeCreatedIn": "Akan dibuat di:",
+            "nothingToGoBackTo": "Tidak ada yang bisa dikembalikan",
+            "nothingToGoForwardTo": "Tidak ada yang bisa dimajukan"
         },
         "fileRow": {
             "deselect": "Batalkan pilihan",
@@ -2878,7 +2885,8 @@
             "trend": "Kecenderungan",
             "unusuallyHigh": "Tinggi tidak biasa",
             "unusuallyLow": "Rendah tidak biasa",
-            "zScore": "Skor-Z"
+            "zScore": "Skor-Z",
+            "selectAServerFirst": "Pilih server terlebih dahulu"
         },
         "fleetProxy": {
             "apps": "Layanan",
@@ -3453,7 +3461,8 @@
             "logFiles": "File Log",
             "noLogFilesFound": "Tidak ada file log yang ditemukan",
             "searchPattern": "Pola pencarian...",
-            "selectALogFile": "Pilih berkas log untuk melihat isinya."
+            "selectALogFile": "Pilih berkas log untuk melihat isinya.",
+            "selectALogFileFirst": "Pilih file log terlebih dahulu"
         },
         "loginLinksSection": {
             "allowedIp": "IP yang diizinkan",
@@ -4049,7 +4058,10 @@
             "registering": "Mendaftarkan…",
             "review": "Tinjauan",
             "uploadAndDeploy": "Unggah & terapkan",
-            "uploading": "Mengunggah…"
+            "uploading": "Mengunggah…",
+            "completeTheSourceDetailsFirst": "Lengkapi detail sumber terlebih dahulu",
+            "fillInTheRequiredDetailsFirst": "Isi detail yang diperlukan terlebih dahulu",
+            "finishThePreviousStepFirst": "Selesaikan langkah sebelumnya terlebih dahulu"
         },
         "notFound": {
             "browseExtensions": "Telusuri Ekstensi",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "Nginx host menangani proksi terbalik. Beralih ke Traefik atau Caddy di atas untuk menjalankan tumpukan proksi Docker yang dikelola.",
             "thisServerSActiveProxyIs": "Proksi aktif server ini adalah",
             "traefik": "Traefik",
-            "whichExpects": ", yang diharapkan"
+            "whichExpects": ", yang diharapkan",
+            "noChangesToSave": "Tidak ada perubahan untuk disimpan",
+            "selectADifferentProxyFirst": "Pilih proxy lain terlebih dahulu"
         },
         "pruneButton": {
             "cleaning": "Membersihkan…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "Gunakan domain ini",
             "used": "Digunakan",
             "utcOffset": "Perimbangan UTC",
-            "version": "Versi {{brand}}"
+            "version": "Versi {{brand}}",
+            "enterADomainFirst": "Masukkan domain terlebih dahulu",
+            "selectADifferentTimezoneFirst": "Pilih zona waktu lain terlebih dahulu"
         },
         "tableDataTab": {
             "column": "Kolom",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "Ketik nama satuan…",
             "unit": "Satuan",
             "useThe": "Gunakan",
-            "failedToLoadProcesses": "Tidak dapat memuat proses."
+            "failedToLoadProcesses": "Tidak dapat memuat proses.",
+            "selectALogFileFirst": "Pilih file log terlebih dahulu"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Proses sedang berlangsung.",

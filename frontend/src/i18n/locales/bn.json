@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "সমস্ত অনলাইন এজেন্টদের জন্য আপগ্রেড ট্রিগার হয়েছে৷",
             "versionDistribution": "সংস্করণ বিতরণ",
             "versions": "সংস্করণ",
-            "viewDetails": "বিস্তারিত দেখুন"
+            "viewDetails": "বিস্তারিত দেখুন",
+            "selectAVersionFirst": "আগে একটি সংস্করণ নির্বাচন করুন"
         },
         "ai": {
             "assistant": "অ্যাসিস্ট্যান্ট"
@@ -608,7 +609,8 @@
             "remote": "দূরবর্তী",
             "restoreDrills": "ড্রিল পুনরুদ্ধার করুন",
             "turnOnProtectionOrClickBack": "সুরক্ষা চালু করুন বা এখনই ব্যাক আপ করুন ক্লিক করুন৷",
-            "verifyRemoteCopy": "দূরবর্তী অনুলিপি যাচাই করুন"
+            "verifyRemoteCopy": "দূরবর্তী অনুলিপি যাচাই করুন",
+            "onlySuccessfulBackupsCanBeRestored": "শুধু সফল ব্যাকআপ পুনরুদ্ধার করা যায়"
         },
         "backupTabs": {
             "schedules": "সময়সূচী",
@@ -882,7 +884,8 @@
             "selectSize": "আকার নির্বাচন করুন",
             "serverDestroyed": "সার্ভার ধ্বংস",
             "serverName": "সার্ভারের নাম",
-            "serverProvisioningInitiated": "সার্ভার বিধান শুরু হয়েছে"
+            "serverProvisioningInitiated": "সার্ভার বিধান শুরু হয়েছে",
+            "enterANameAndChooseAProvider": "আগে একটি নাম লিখুন এবং প্রদানকারী বেছে নিন"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "এই হোস্টনামের জন্য একটি CNAME তৈরি করা হবে Cloudflare DNS, টানেলের দিকে নির্দেশ করে৷",
@@ -1726,7 +1729,8 @@
             "updateOverview": "ওভারভিউ আপডেট করুন",
             "updatingDatabaseSchema": "ডাটাবেস স্কিমা আপডেট করা হচ্ছে...",
             "weRecommendBackingUpYourDatabase": "আমরা আপডেট প্রয়োগ করার আগে আপনার ডাটাবেস ব্যাক আপ করার পরামর্শ দিই।",
-            "whichDoesNotExistInThis": ", যা এই বিল্ডে বিদ্যমান নেই — সাধারণত একটি শাখা যা একটি মাইগ্রেশন যোগ করে এবং তারপরে ফিরিয়ে দেওয়া হয়। স্কিমাটিকে আপগ্রেড করা যাবে না যতক্ষণ না এটি একটি পরিচিত সংশোধনে স্ট্যাম্প করা হয়:"
+            "whichDoesNotExistInThis": ", যা এই বিল্ডে বিদ্যমান নেই — সাধারণত একটি শাখা যা একটি মাইগ্রেশন যোগ করে এবং তারপরে ফিরিয়ে দেওয়া হয়। স্কিমাটিকে আপগ্রেড করা যাবে না যতক্ষণ না এটি একটি পরিচিত সংশোধনে স্ট্যাম্প করা হয়:",
+            "createABackupFirst": "আগে একটি ব্যাকআপ তৈরি করুন"
         },
         "databases": {
             "backUpDatabase": "ডাটাবেস ব্যাক আপ করুন",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "SHA256 চেকসাম ব্যবহার করে আপনার ডাউনলোড যাচাই করুন:",
             "windows": "উইন্ডোজ:",
             "windowsPowershell": "উইন্ডোজ (পাওয়ারশেল)",
-            "withTheServerRegistrationToken": "সার্ভার রেজিস্ট্রেশন টোকেন সহ।"
+            "withTheServerRegistrationToken": "সার্ভার রেজিস্ট্রেশন টোকেন সহ।",
+            "noBuildPublishedForThisPlatform": "এই প্ল্যাটফর্মের জন্য এখনও কোনো বিল্ড প্রকাশিত হয়নি"
         },
         "drawerHeader": {
             "aiSettings": "এআই সেটিংস",
@@ -2760,7 +2765,9 @@
             "videos": "ভিডিও",
             "volumes": "ভলিউম",
             "webConfig": "ওয়েব কনফিগারেশন",
-            "willBeCreatedIn": "এতে তৈরি করা হবে:"
+            "willBeCreatedIn": "এতে তৈরি করা হবে:",
+            "nothingToGoBackTo": "পিছনে যাওয়ার কিছু নেই",
+            "nothingToGoForwardTo": "সামনে যাওয়ার কিছু নেই"
         },
         "fileRow": {
             "deselect": "অনির্বাচন করুন",
@@ -2878,7 +2885,8 @@
             "trend": "প্রবণতা",
             "unusuallyHigh": "অস্বাভাবিকভাবে বেশি",
             "unusuallyLow": "অস্বাভাবিকভাবে কম",
-            "zScore": "জেড-স্কোর"
+            "zScore": "জেড-স্কোর",
+            "selectAServerFirst": "আগে একটি সার্ভার নির্বাচন করুন"
         },
         "fleetProxy": {
             "apps": "পরিষেবা",
@@ -3453,7 +3461,8 @@
             "logFiles": "লগ ফাইল",
             "noLogFilesFound": "কোন লগ ফাইল পাওয়া যায়নি",
             "searchPattern": "সার্চ প্যাটার্ন...",
-            "selectALogFile": "এর বিষয়বস্তু দেখতে একটি লগ ফাইল নির্বাচন করুন।"
+            "selectALogFile": "এর বিষয়বস্তু দেখতে একটি লগ ফাইল নির্বাচন করুন।",
+            "selectALogFileFirst": "আগে একটি লগ ফাইল নির্বাচন করুন"
         },
         "loginLinksSection": {
             "allowedIp": "অনুমোদিত আইপি",
@@ -4049,7 +4058,10 @@
             "registering": "নিবন্ধন করা হচ্ছে…",
             "review": "পর্যালোচনা",
             "uploadAndDeploy": "আপলোড ও স্থাপন করুন",
-            "uploading": "আপলোড হচ্ছে…"
+            "uploading": "আপলোড হচ্ছে…",
+            "completeTheSourceDetailsFirst": "আগে সোর্সের বিবরণ পূরণ করুন",
+            "fillInTheRequiredDetailsFirst": "আগে প্রয়োজনীয় তথ্য পূরণ করুন",
+            "finishThePreviousStepFirst": "আগে আগের ধাপটি শেষ করুন"
         },
         "notFound": {
             "browseExtensions": "এক্সটেনশন ব্রাউজ করুন",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "হোস্টের Nginx বিপরীত প্রক্সি পরিচালনা করছে। পরিবর্তে একটি পরিচালিত Docker প্রক্সি স্ট্যাক চালানোর জন্য উপরে Traefik বা Caddy এ স্যুইচ করুন।",
             "thisServerSActiveProxyIs": "এই সার্ভারের সক্রিয় প্রক্সি",
             "traefik": "Traefik",
-            "whichExpects": ", যা প্রত্যাশা করে"
+            "whichExpects": ", যা প্রত্যাশা করে",
+            "noChangesToSave": "সংরক্ষণ করার মতো কোনো পরিবর্তন নেই",
+            "selectADifferentProxyFirst": "আগে একটি ভিন্ন প্রক্সি নির্বাচন করুন"
         },
         "pruneButton": {
             "cleaning": "পরিষ্কার করা হচ্ছে…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "এই ডোমেইন ব্যবহার করুন",
             "used": "ব্যবহৃত",
             "utcOffset": "UTC অফসেট",
-            "version": "{{brand}} সংস্করণ"
+            "version": "{{brand}} সংস্করণ",
+            "enterADomainFirst": "আগে একটি ডোমেইন লিখুন",
+            "selectADifferentTimezoneFirst": "আগে একটি ভিন্ন টাইম জোন নির্বাচন করুন"
         },
         "tableDataTab": {
             "column": "কলাম",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "ইউনিটের নাম টাইপ করুন...",
             "unit": "ইউনিট",
             "useThe": "ব্যবহার করুন",
-            "failedToLoadProcesses": "প্রসেসগুলো লোড করা যায়নি।"
+            "failedToLoadProcesses": "প্রসেসগুলো লোড করা যায়নি।",
+            "selectALogFileFirst": "আগে একটি লগ ফাইল নির্বাচন করুন"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "একটি দৌড় ইতিমধ্যেই চলছে।",

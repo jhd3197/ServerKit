@@ -242,7 +242,7 @@ const CloudProvision = () => {
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateServer(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button onClick={handleCreateServer} disabled={!serverForm.name || !serverForm.provider_id}>{t('common.actions.create', 'Create')}</Button>
+                        <Button onClick={handleCreateServer} disabled={!serverForm.name || !serverForm.provider_id} disabledReason={t('app.cloudProvision.enterANameAndChooseAProvider', 'Enter a name and choose a provider first')}>{t('common.actions.create', 'Create')}</Button>
                     </>
                 )}
             >

@@ -716,6 +716,12 @@
     }
 }
 
+.ui-dropdown-item__reason {
+    margin-inline-start: auto;
+    font-size: $text-xs;
+    color: $text-secondary;
+}
+
 .ui-dropdown-checkbox-item,
 .ui-dropdown-radio-item {
     padding-left: $space-8;

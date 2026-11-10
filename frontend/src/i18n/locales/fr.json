@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Mise à niveau déclenchée pour tous les agents en ligne",
             "versionDistribution": "Distribution des versions",
             "versions": "Versions",
-            "viewDetails": "Afficher les détails"
+            "viewDetails": "Afficher les détails",
+            "selectAVersionFirst": "Sélectionnez d'abord une version"
         },
         "ai": {
             "assistant": "Assistant"
@@ -608,7 +609,8 @@
             "remote": "Télécommande",
             "restoreDrills": "Restaurer les exercices",
             "turnOnProtectionOrClickBack": "Activez la protection ou cliquez sur Sauvegarder maintenant.",
-            "verifyRemoteCopy": "Vérifier la copie à distance"
+            "verifyRemoteCopy": "Vérifier la copie à distance",
+            "onlySuccessfulBackupsCanBeRestored": "Seules les sauvegardes réussies peuvent être restaurées"
         },
         "backupTabs": {
             "schedules": "Horaires",
@@ -882,7 +884,8 @@
             "selectSize": "Sélectionnez la taille",
             "serverDestroyed": "Serveur détruit",
             "serverName": "Nom du serveur",
-            "serverProvisioningInitiated": "Approvisionnement du serveur lancé"
+            "serverProvisioningInitiated": "Approvisionnement du serveur lancé",
+            "enterANameAndChooseAProvider": "Saisissez d'abord un nom et choisissez un fournisseur"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "Un CNAME pour ce nom d'hôte sera créé dans Cloudflare DNS, pointant vers le tunnel.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "Présentation de la mise à jour",
             "updatingDatabaseSchema": "Mise à jour du schéma de base de données...",
             "weRecommendBackingUpYourDatabase": "Nous vous recommandons de sauvegarder votre base de données avant d'appliquer les mises à jour.",
-            "whichDoesNotExistInThis": ", qui n'existe pas dans cette version - généralement une branche qui a ajouté une migration puis a été annulée. Le schéma ne peut pas être mis à niveau tant qu'il n'est pas réinitialisé à une révision connue :"
+            "whichDoesNotExistInThis": ", qui n'existe pas dans cette version - généralement une branche qui a ajouté une migration puis a été annulée. Le schéma ne peut pas être mis à niveau tant qu'il n'est pas réinitialisé à une révision connue :",
+            "createABackupFirst": "Créez d'abord une sauvegarde"
         },
         "databases": {
             "backUpDatabase": "Sauvegarder la base de données",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "Vérifiez votre téléchargement à l'aide des sommes de contrôle SHA256 :",
             "windows": "Fenêtres :",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "avec le jeton d'enregistrement du serveur."
+            "withTheServerRegistrationToken": "avec le jeton d'enregistrement du serveur.",
+            "noBuildPublishedForThisPlatform": "Aucune version publiée pour cette plateforme pour l'instant"
         },
         "drawerHeader": {
             "aiSettings": "Paramètres de l'IA",
@@ -2760,7 +2765,9 @@
             "videos": "Vidéos",
             "volumes": "Volumes",
             "webConfig": "Configuration Web",
-            "willBeCreatedIn": "Sera créé dans :"
+            "willBeCreatedIn": "Sera créé dans :",
+            "nothingToGoBackTo": "Rien en arrière",
+            "nothingToGoForwardTo": "Rien en avant"
         },
         "fileRow": {
             "deselect": "Désélectionner",
@@ -2878,7 +2885,8 @@
             "trend": "S'orienter",
             "unusuallyHigh": "Anormalement élevé",
             "unusuallyLow": "Anormalement bas",
-            "zScore": "Score Z"
+            "zScore": "Score Z",
+            "selectAServerFirst": "Sélectionnez d'abord un serveur"
         },
         "fleetProxy": {
             "apps": "Services",
@@ -3453,7 +3461,8 @@
             "logFiles": "Fichiers journaux",
             "noLogFilesFound": "Aucun fichier journal trouvé",
             "searchPattern": "Modèle de recherche...",
-            "selectALogFile": "Sélectionnez un fichier journal pour afficher son contenu."
+            "selectALogFile": "Sélectionnez un fichier journal pour afficher son contenu.",
+            "selectALogFileFirst": "Sélectionnez d'abord un fichier journal"
         },
         "loginLinksSection": {
             "allowedIp": "IP autorisée",
@@ -4049,7 +4058,10 @@
             "registering": "Enregistrement…",
             "review": "Revoir",
             "uploadAndDeploy": "Téléverser et déployer",
-            "uploading": "Téléversement…"
+            "uploading": "Téléversement…",
+            "completeTheSourceDetailsFirst": "Renseignez d'abord les détails de la source",
+            "fillInTheRequiredDetailsFirst": "Renseignez d'abord les informations requises",
+            "finishThePreviousStepFirst": "Terminez d'abord l'étape précédente"
         },
         "notFound": {
             "browseExtensions": "Parcourir les extensions",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "Le Nginx de l'hôte gère le proxy inverse. Basculez vers Traefik ou Caddy ci-dessus pour exécuter à la place une pile proxy Docker gérée.",
             "thisServerSActiveProxyIs": "Le proxy actif de ce serveur est",
             "traefik": "Traefik",
-            "whichExpects": ", qui attend"
+            "whichExpects": ", qui attend",
+            "noChangesToSave": "Aucune modification à enregistrer",
+            "selectADifferentProxyFirst": "Sélectionnez d'abord un autre proxy"
         },
         "pruneButton": {
             "cleaning": "Nettoyage…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "Utiliser ce domaine",
             "used": "Utilisé",
             "utcOffset": "Décalage UTC",
-            "version": "Version {{brand}}"
+            "version": "Version {{brand}}",
+            "enterADomainFirst": "Saisissez d'abord un domaine",
+            "selectADifferentTimezoneFirst": "Sélectionnez d'abord un autre fuseau horaire"
         },
         "tableDataTab": {
             "column": "Colonne",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "Tapez le nom de l’unité…",
             "unit": "Unité",
             "useThe": "Utilisez le",
-            "failedToLoadProcesses": "Impossible de charger les processus."
+            "failedToLoadProcesses": "Impossible de charger les processus.",
+            "selectALogFileFirst": "Sélectionnez d'abord un fichier journal"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Une course est déjà en cours.",

@@ -283,6 +283,7 @@ const SystemTab = () => {
                             variant="default"
                             onClick={handleTimezoneChange}
                             disabled={savingTimezone || !selectedTimezone || selectedTimezone === metrics?.time?.timezone_id}
+                            disabledReason={!savingTimezone ? t('app.systemTab.selectADifferentTimezoneFirst', 'Select a different timezone first') : undefined}
                         >
                             {savingTimezone ? t('common.saving', 'Saving…') : t('app.systemTab.apply', 'Apply')}
                         </Button>
@@ -374,6 +375,7 @@ const SystemTab = () => {
                             variant="default"
                             onClick={handleSaveCanonicalDomain}
                             disabled={savingDomain || !canonicalDomain}
+                            disabledReason={!savingDomain ? t('app.systemTab.enterADomainFirst', 'Enter a domain first') : undefined}
                         >
                             {savingDomain ? t('common.saving', 'Saving…') : t('app.systemTab.saveCanonicalDomain', 'Save canonical domain')}
                         </Button>

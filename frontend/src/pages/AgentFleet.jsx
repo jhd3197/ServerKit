@@ -655,7 +655,7 @@ const AgentFleet = () => {
                                     )}
                                 </div>
                                 <div className="fleet-rollout-actions">
-                                    <Button onClick={triggerUpgrade} disabled={!selectedVersion}>
+                                    <Button onClick={triggerUpgrade} disabled={!selectedVersion} disabledReason={t('app.agentFleet.selectAVersionFirst', 'Select a version first')}>
                                         <Play size={18} /> {t('app.agentFleet.startRollout', 'Start rollout')}
                                     </Button>
                                 </div>

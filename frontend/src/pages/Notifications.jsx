@@ -155,7 +155,7 @@ export default function Notifications() {
                             <ScrollText size={15} /> {t('app.notifications.deliveryLog', 'Delivery log')}
                         </Button>
                     )}
-                    <Button variant="outline" size="sm" onClick={onMarkAll} disabled={!unreadCount}>
+                    <Button variant="outline" size="sm" onClick={onMarkAll} disabled={!unreadCount} disabledReason={t('app.notifications.noUnreadNotifications', 'No unread notifications.')}>
                         <CheckCheck size={15} /> {category ? t('app.notifications.markCategoryRead', 'Mark {{category}} read', { category }) : t('app.notifications.markAllRead', 'Mark all read')}
                     </Button>
                 </>

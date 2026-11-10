@@ -46,12 +46,16 @@ const DropdownMenuContent = React.forwardRef(({ className, sideOffset = 4, ...pr
 ));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
-const DropdownMenuItem = React.forwardRef(({ className, inset, ...props }, ref) => (
+const DropdownMenuItem = React.forwardRef(({ className, inset, disabledReason, children, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn('ui-dropdown-item', inset && 'ui-dropdown-inset', className)}
     {...props}
-  />
+  >
+    {children}
+    {/* A disabled item cannot take focus or tooltips, so the reason is shown inline. */}
+    {props.disabled && disabledReason && <span className="ui-dropdown-item__reason">{disabledReason}</span>}
+  </DropdownMenuPrimitive.Item>
 ));
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 

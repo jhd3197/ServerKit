@@ -696,17 +696,18 @@ $lk-default:  #646b7a;
     justify-content: center;
     @include transition(all);
 
-    &:hover:not(:disabled) {
+    &:hover:not(:disabled):not([aria-disabled='true']) {
         background: var(--surface-2);
         color: var(--text);
     }
-    &:disabled { opacity: 0.4; cursor: not-allowed; }
+    &:disabled,
+    &[aria-disabled='true'] { opacity: 0.4; cursor: not-allowed; }
 
     &.active {
         @include status-variant(var(--accent-bright), var(--accent-bg));
     }
 
-    &.danger:hover:not(:disabled) {
+    &.danger:hover:not(:disabled):not([aria-disabled='true']) {
         @include status-variant($danger, $danger-bg);
     }
 }
@@ -726,8 +727,9 @@ $lk-default:  #646b7a;
     cursor: pointer;
     @include transition(all);
 
-    &:hover:not(:disabled) { color: var(--text); border-color: var(--border-strong); }
-    &:disabled { opacity: 0.5; cursor: not-allowed; }
+    &:hover:not(:disabled):not([aria-disabled='true']) { color: var(--text); border-color: var(--border-strong); }
+    &:disabled,
+    &[aria-disabled='true'] { opacity: 0.5; cursor: not-allowed; }
     &.active {
         background: var(--accent-bg);
         border-color: var(--accent-dim);

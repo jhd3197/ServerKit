@@ -184,10 +184,10 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
                 <div className="monitoring-panel__header">
                     <h3>{t('app.fleetCapacityPanel.serverComparison', 'Server comparison')}</h3>
                     <div>
-                        <Button variant="outline" size="sm" onClick={exportCsv} disabled={selectedServers.length === 0}>
+                        <Button variant="outline" size="sm" onClick={exportCsv} disabled={selectedServers.length === 0} disabledReason={t('app.fleetCapacityPanel.selectAServerFirst', 'Select a server first')}>
                             <Download size={14} /> {t('app.fleetCapacityPanel.exportCsv', 'Export CSV')}
                         </Button>
-                        <Button size="sm" onClick={loadComparison} disabled={selectedServers.length === 0 || comparing}>
+                        <Button size="sm" onClick={loadComparison} disabled={selectedServers.length === 0 || comparing} disabledReason={!comparing && selectedServers.length === 0 ? t('app.fleetCapacityPanel.selectAServerFirst', 'Select a server first') : undefined}>
                             <BarChart3 size={14} /> {comparing ? t('app.fleetCapacityPanel.comparing', 'Comparing…') : t('app.fleetCapacityPanel.compare', 'Compare')}
                         </Button>
                     </div>
@@ -305,7 +305,7 @@ export default function FleetCapacityPanel({ scope, refreshKey = 0 }) {
             <section className="monitoring-panel">
                 <div className="monitoring-panel__header">
                     <h3>{t('app.fleetCapacityPanel.capacityForecast', 'Capacity forecast')}</h3>
-                    <Button size="sm" onClick={loadForecast} disabled={!forecastServer}>
+                    <Button size="sm" onClick={loadForecast} disabled={!forecastServer} disabledReason={t('app.fleetCapacityPanel.selectAServerFirst', 'Select a server first')}>
                         <TrendingUp size={14} /> {t('app.fleetCapacityPanel.forecast', 'Forecast')}
                     </Button>
                 </div>

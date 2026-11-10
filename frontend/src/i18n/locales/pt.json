@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Atualização acionada para todos os agentes online",
             "versionDistribution": "Distribuição de versões",
             "versions": "Versões",
-            "viewDetails": "Ver detalhes"
+            "viewDetails": "Ver detalhes",
+            "selectAVersionFirst": "Selecione uma versão primeiro"
         },
         "ai": {
             "assistant": "Assistente"
@@ -608,7 +609,8 @@
             "remote": "Remoto",
             "restoreDrills": "Restaurar exercícios",
             "turnOnProtectionOrClickBack": "Ative a proteção ou clique em Fazer backup agora.",
-            "verifyRemoteCopy": "Verifique a cópia remota"
+            "verifyRemoteCopy": "Verifique a cópia remota",
+            "onlySuccessfulBackupsCanBeRestored": "Só é possível restaurar backups bem-sucedidos"
         },
         "backupTabs": {
             "schedules": "Horários",
@@ -882,7 +884,8 @@
             "selectSize": "Selecione o tamanho",
             "serverDestroyed": "Servidor destruído",
             "serverName": "Nome do servidor",
-            "serverProvisioningInitiated": "Provisionamento de servidor iniciado"
+            "serverProvisioningInitiated": "Provisionamento de servidor iniciado",
+            "enterANameAndChooseAProvider": "Informe um nome e escolha um provedor primeiro"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "Um CNAME para este nome de host será criado no DNS da Cloudflare, apontando para o túnel.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "Visão geral da atualização",
             "updatingDatabaseSchema": "Atualizando esquema do banco de dados...",
             "weRecommendBackingUpYourDatabase": "Recomendamos fazer backup do seu banco de dados antes de aplicar as atualizações.",
-            "whichDoesNotExistInThis": ", que não existe nesta compilação — geralmente uma branch que adicionou uma migração e foi então revertida. O esquema não pode ser atualizado até que seja carimbado de volta para uma revisão conhecida:"
+            "whichDoesNotExistInThis": ", que não existe nesta compilação — geralmente uma branch que adicionou uma migração e foi então revertida. O esquema não pode ser atualizado até que seja carimbado de volta para uma revisão conhecida:",
+            "createABackupFirst": "Crie um backup primeiro"
         },
         "databases": {
             "backUpDatabase": "Fazer backup do banco de dados",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "Verifique seu download usando as somas de verificação SHA256:",
             "windows": "Windows:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "com o token de registro do servidor."
+            "withTheServerRegistrationToken": "com o token de registro do servidor.",
+            "noBuildPublishedForThisPlatform": "Ainda não há build publicada para esta plataforma"
         },
         "drawerHeader": {
             "aiSettings": "Configurações de IA",
@@ -2760,7 +2765,9 @@
             "videos": "Vídeos",
             "volumes": "Volumes",
             "webConfig": "Configuração da Web",
-            "willBeCreatedIn": "Será criado em:"
+            "willBeCreatedIn": "Será criado em:",
+            "nothingToGoBackTo": "Nada para voltar",
+            "nothingToGoForwardTo": "Nada para avançar"
         },
         "fileRow": {
             "deselect": "Desmarcar",
@@ -2878,7 +2885,8 @@
             "trend": "Tendência",
             "unusuallyHigh": "Excepcionalmente alto",
             "unusuallyLow": "Excepcionalmente baixo",
-            "zScore": "Pontuação Z"
+            "zScore": "Pontuação Z",
+            "selectAServerFirst": "Selecione um servidor primeiro"
         },
         "fleetProxy": {
             "apps": "Serviços",
@@ -3453,7 +3461,8 @@
             "logFiles": "Arquivos de registro",
             "noLogFilesFound": "Nenhum arquivo de log encontrado",
             "searchPattern": "Padrão de pesquisa...",
-            "selectALogFile": "Selecione um arquivo de log para ver seu conteúdo."
+            "selectALogFile": "Selecione um arquivo de log para ver seu conteúdo.",
+            "selectALogFileFirst": "Selecione um arquivo de log primeiro"
         },
         "loginLinksSection": {
             "allowedIp": "IP permitido",
@@ -4049,7 +4058,10 @@
             "registering": "Registrando…",
             "review": "Revisão",
             "uploadAndDeploy": "Enviar e implantar",
-            "uploading": "Enviando…"
+            "uploading": "Enviando…",
+            "completeTheSourceDetailsFirst": "Preencha primeiro os detalhes da origem",
+            "fillInTheRequiredDetailsFirst": "Preencha primeiro os dados obrigatórios",
+            "finishThePreviousStepFirst": "Conclua primeiro a etapa anterior"
         },
         "notFound": {
             "browseExtensions": "Navegar pelas extensões",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "O Nginx do host está lidando com proxy reverso. Mude para Traefik ou Caddy acima para executar uma pilha de proxy Docker gerenciada.",
             "thisServerSActiveProxyIs": "O proxy ativo deste servidor é",
             "traefik": "Traefik",
-            "whichExpects": ", que espera"
+            "whichExpects": ", que espera",
+            "noChangesToSave": "Nenhuma alteração para salvar",
+            "selectADifferentProxyFirst": "Selecione primeiro um proxy diferente"
         },
         "pruneButton": {
             "cleaning": "Limpando…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "Usar este domínio",
             "used": "Usado",
             "utcOffset": "Compensação UTC",
-            "version": "Versão {{brand}}"
+            "version": "Versão {{brand}}",
+            "enterADomainFirst": "Informe um domínio primeiro",
+            "selectADifferentTimezoneFirst": "Selecione primeiro um fuso horário diferente"
         },
         "tableDataTab": {
             "column": "Coluna",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "Digite o nome da unidade…",
             "unit": "Unidade",
             "useThe": "Use o",
-            "failedToLoadProcesses": "Não foi possível carregar os processos."
+            "failedToLoadProcesses": "Não foi possível carregar os processos.",
+            "selectALogFileFirst": "Selecione um arquivo de log primeiro"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Uma execução já está em andamento.",

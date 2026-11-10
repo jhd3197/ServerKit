@@ -57,6 +57,7 @@ const NewService = () => {
                             className={`new-service-page__stepper-item new-service-page__stepper-item--${state}`}
                             onClick={() => { if (step > n) setStep(n); }}
                             disabled={step < n}
+                            disabledReason={t('app.newService.finishThePreviousStepFirst', 'Finish the previous step first')}
                             aria-current={step === n ? 'step' : undefined}
                         >
                             <span className="new-service-page__stepper-dot">
@@ -90,12 +91,14 @@ const NewService = () => {
                             type="button"
                             onClick={() => setStep(3)}
                             disabled={!canProceedFromConnect}
+                            disabledReason={t('app.newService.completeTheSourceDetailsFirst', 'Complete the source details first')}
                         >
                             {t('common.actions.continue', 'Continue')}
                         </Button>
                     )}
                     {step === 3 && (
-                        <Button type="submit" data-walkthrough="service-submit" disabled={!canSubmit || submitting}>
+                        <Button type="submit" data-walkthrough="service-submit" disabled={!canSubmit || submitting}
+                            disabledReason={!submitting ? t('app.newService.fillInTheRequiredDetailsFirst', 'Fill in the required details first') : undefined}>
                             <Rocket size={16} />
                             {submitting
                                 ? (form.sourceMode === 'local' ? t('app.newService.registering', 'Registering…') : form.sourceMode === 'upload' ? t('app.newService.uploading', 'Uploading…') : t('app.newService.deploying', 'Deploying…'))

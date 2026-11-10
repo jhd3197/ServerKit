@@ -346,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Aggiornamento attivato per tutti gli agenti online",
             "versionDistribution": "Distribuzione della versione",
             "versions": "Versioni",
-            "viewDetails": "Visualizza dettagli"
+            "viewDetails": "Visualizza dettagli",
+            "selectAVersionFirst": "Seleziona prima una versione"
         },
         "ai": {
             "assistant": "Assistente"
@@ -608,7 +609,8 @@
             "remote": "Remoto",
             "restoreDrills": "Ripristino degli esercizi",
             "turnOnProtectionOrClickBack": "Attiva la protezione o fai clic su Esegui backup adesso.",
-            "verifyRemoteCopy": "Verificare la copia remota"
+            "verifyRemoteCopy": "Verificare la copia remota",
+            "onlySuccessfulBackupsCanBeRestored": "Solo i backup riusciti possono essere ripristinati"
         },
         "backupTabs": {
             "schedules": "Orari",
@@ -882,7 +884,8 @@
             "selectSize": "Seleziona la taglia",
             "serverDestroyed": "Server distrutto",
             "serverName": "Nome del server",
-            "serverProvisioningInitiated": "Provisioning del server avviato"
+            "serverProvisioningInitiated": "Provisioning del server avviato",
+            "enterANameAndChooseAProvider": "Inserisci prima un nome e scegli un provider"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "Verrà creato un CNAME per questo nome host in Cloudflare DNS, puntando al tunnel.",
@@ -1726,7 +1729,8 @@
             "updateOverview": "Panoramica dell'aggiornamento",
             "updatingDatabaseSchema": "Aggiornamento dello schema del database in corso...",
             "weRecommendBackingUpYourDatabase": "Ti consigliamo di eseguire il backup del database prima di applicare gli aggiornamenti.",
-            "whichDoesNotExistInThis": ", che non esiste in questa build, in genere un ramo che ha aggiunto una migrazione ed è stato quindi ripristinato. Lo schema non può essere aggiornato finché non viene riportato a una revisione nota:"
+            "whichDoesNotExistInThis": ", che non esiste in questa build, in genere un ramo che ha aggiunto una migrazione ed è stato quindi ripristinato. Lo schema non può essere aggiornato finché non viene riportato a una revisione nota:",
+            "createABackupFirst": "Crea prima un backup"
         },
         "databases": {
             "backUpDatabase": "Eseguire il backup del database",
@@ -2299,7 +2303,8 @@
             "verifyYourDownloadUsingTheSha256": "Verifica il download utilizzando i checksum SHA256:",
             "windows": "Finestre:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "con il token di registrazione del server."
+            "withTheServerRegistrationToken": "con il token di registrazione del server.",
+            "noBuildPublishedForThisPlatform": "Nessuna build ancora pubblicata per questa piattaforma"
         },
         "drawerHeader": {
             "aiSettings": "Impostazioni dell'IA",
@@ -2760,7 +2765,9 @@
             "videos": "Video",
             "volumes": "Volumi",
             "webConfig": "Configurazione web",
-            "willBeCreatedIn": "Verrà creato in:"
+            "willBeCreatedIn": "Verrà creato in:",
+            "nothingToGoBackTo": "Niente a cui tornare indietro",
+            "nothingToGoForwardTo": "Niente a cui andare avanti"
         },
         "fileRow": {
             "deselect": "Deseleziona",
@@ -2878,7 +2885,8 @@
             "trend": "Tendenza",
             "unusuallyHigh": "Insolitamente alto",
             "unusuallyLow": "Insolitamente basso",
-            "zScore": "Punteggio Z"
+            "zScore": "Punteggio Z",
+            "selectAServerFirst": "Seleziona prima un server"
         },
         "fleetProxy": {
             "apps": "Servizi",
@@ -3453,7 +3461,8 @@
             "logFiles": "File di registro",
             "noLogFilesFound": "Nessun file di registro trovato",
             "searchPattern": "Modello di ricerca...",
-            "selectALogFile": "Seleziona un file di log per visualizzarne il contenuto."
+            "selectALogFile": "Seleziona un file di log per visualizzarne il contenuto.",
+            "selectALogFileFirst": "Seleziona prima un file di log"
         },
         "loginLinksSection": {
             "allowedIp": "IP consentito",
@@ -4049,7 +4058,10 @@
             "registering": "Registrazione…",
             "review": "Revisione",
             "uploadAndDeploy": "Carica e distribuisci",
-            "uploading": "Caricamento…"
+            "uploading": "Caricamento…",
+            "completeTheSourceDetailsFirst": "Completa prima i dettagli dell'origine",
+            "fillInTheRequiredDetailsFirst": "Compila prima i dati richiesti",
+            "finishThePreviousStepFirst": "Completa prima il passaggio precedente"
         },
         "notFound": {
             "browseExtensions": "Sfoglia le estensioni",
@@ -4571,7 +4583,9 @@
             "theHostSNginxIsHandling": "Nginx dell'host gestisce il proxy inverso. Passa a Traefik o Caddy sopra per eseguire invece uno stack proxy Docker gestito.",
             "thisServerSActiveProxyIs": "Il proxy attivo di questo server è",
             "traefik": "Traefik",
-            "whichExpects": ", che si aspetta"
+            "whichExpects": ", che si aspetta",
+            "noChangesToSave": "Nessuna modifica da salvare",
+            "selectADifferentProxyFirst": "Seleziona prima un proxy diverso"
         },
         "pruneButton": {
             "cleaning": "Pulizia…",
@@ -7088,7 +7102,9 @@
             "useThisDomain": "Usa questo dominio",
             "used": "Usato",
             "utcOffset": "Differenza UTC",
-            "version": "Versione {{brand}}"
+            "version": "Versione {{brand}}",
+            "enterADomainFirst": "Inserisci prima un dominio",
+            "selectADifferentTimezoneFirst": "Seleziona prima un fuso orario diverso"
         },
         "tableDataTab": {
             "column": "Colonna",
@@ -7260,7 +7276,8 @@
             "typeUnitName": "Digita il nome dell'unità...",
             "unit": "Unità",
             "useThe": "Usa il",
-            "failedToLoadProcesses": "Impossibile caricare i processi."
+            "failedToLoadProcesses": "Impossibile caricare i processi.",
+            "selectALogFileFirst": "Seleziona prima un file di log"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "È già in corso una corsa.",
