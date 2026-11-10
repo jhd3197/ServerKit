@@ -1,11 +1,47 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 
-const Table = React.forwardRef(({ className, ...props }, ref) => (
-  <div className="ui-table-wrapper">
-    <table ref={ref} className={cn('ui-table', className)} {...props} />
-  </div>
-));
+// The wrapper becomes a focusable scroll region only while the table really
+// overflows; data-fade-start/-end drive the edge fade in _ui.scss.
+const Table = React.forwardRef(({ className, ...props }, ref) => {
+  const { t } = useTranslation();
+  const wrapRef = React.useRef(null);
+  const [scroll, setScroll] = React.useState({ overflow: false, start: false, end: false });
+
+  React.useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return undefined;
+    const update = () => {
+      const max = el.scrollWidth - el.clientWidth;
+      const x = Math.abs(el.scrollLeft); // abs: RTL scrollLeft is negative
+      const next = { overflow: max > 1, start: x > 1, end: x < max - 1 };
+      setScroll((prev) => (prev.overflow === next.overflow && prev.start === next.start && prev.end === next.end ? prev : next));
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    if (el.firstElementChild) ro.observe(el.firstElementChild);
+    el.addEventListener('scroll', update, { passive: true });
+    return () => { ro.disconnect(); el.removeEventListener('scroll', update); };
+  }, []);
+
+  return (
+    <div
+      ref={wrapRef}
+      className="ui-table-wrapper"
+      data-fade-start={scroll.start || undefined}
+      data-fade-end={scroll.end || undefined}
+      {...(scroll.overflow ? {
+        tabIndex: 0,
+        role: 'region',
+        'aria-label': t('app.dataTable.scrollableTable', 'Scrollable table'),
+      } : {})}
+    >
+      <table ref={ref} className={cn('ui-table', className)} {...props} />
+    </div>
+  );
+});
 Table.displayName = 'Table';
 
 const TableHeader = React.forwardRef(({ className, ...props }, ref) => (
