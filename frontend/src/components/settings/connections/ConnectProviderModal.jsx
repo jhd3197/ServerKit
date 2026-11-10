@@ -7,7 +7,7 @@
 //   - 'registrar' → GoDaddy account; reads the domain portfolio + expiry
 // Each body owns its own form state and is keyed by provider.id so switching
 // providers resets cleanly.
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import {
     CheckCircle2, ExternalLink, KeyRound, Link2, Mail, PlugZap, Server, Globe,
     HardDrive, ShieldCheck, ShieldAlert, Trash2, Activity, ChevronDown, Boxes, Zap,
@@ -18,7 +18,8 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormField } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { Checkbox } from '@/components/ui/checkbox';
 import PortField from '@/components/PortField';
 import { ProviderBrandIcon } from '../../icons/ProviderBrands';
@@ -129,6 +130,8 @@ function SourceBody({ provider, status, config, isAdmin, onConnect, onDisconnect
     // "Advanced". Other providers keep the manual form open.
     const [advancedOpen, setAdvancedOpen] = useState(!isGithub);
     const [busy, setBusy] = useState(false);
+    const fid = useId();
+    const fe = useFieldErrors({}, fid);
 
     async function save(e) {
         e.preventDefault();
@@ -205,17 +208,15 @@ function SourceBody({ provider, status, config, isAdmin, onConnect, onDisconnect
                         </Button>
                     )}
                     {advancedOpen && (
-                        <form className="conn-form" onSubmit={save}>
+                        <form className="conn-form" noValidate onSubmit={save}>
                             {!isGithub && <div className="conn-form__heading"><KeyRound size={15} /> {t('app.connectProviderModal.oauthAppCredentials', 'OAuth app credentials')}</div>}
                             <div className="conn-form__grid">
-                                <div className="form-group">
-                                    <Label htmlFor="src-client-id">{t('app.connectProviderModal.clientId', 'Client ID')}</Label>
-                                    <Input id="src-client-id" value={cfg.client_id} onChange={(e) => setCfg((c) => ({ ...c, client_id: e.target.value }))} placeholder={t('app.connectProviderModal.oauthClientId', '{{name}} OAuth client ID', { name: provider.name })} autoComplete="off" />
-                                </div>
-                                <div className="form-group">
-                                    <Label htmlFor="src-client-secret">{t('app.connectProviderModal.clientSecret', 'Client secret')}</Label>
-                                    <Input id="src-client-secret" type="password" value={cfg.client_secret} onChange={(e) => setCfg((c) => ({ ...c, client_secret: e.target.value }))} placeholder={t('app.connectProviderModal.oauthClientSecret', '{{name}} OAuth client secret', { name: provider.name })} autoComplete="off" />
-                                </div>
+                                <FormField label={t('app.connectProviderModal.clientId', 'Client ID')} htmlFor={`${fid}-client_id`} error={fe.error('client_id')}>
+                                    <Input id={`${fid}-client_id`} value={cfg.client_id} onBlur={() => fe.touch('client_id')} onChange={(e) => setCfg((c) => ({ ...c, client_id: e.target.value }))} placeholder={t('app.connectProviderModal.oauthClientId', '{{name}} OAuth client ID', { name: provider.name })} autoComplete="off" />
+                                </FormField>
+                                <FormField label={t('app.connectProviderModal.clientSecret', 'Client secret')} htmlFor={`${fid}-client_secret`} error={fe.error('client_secret')}>
+                                    <Input id={`${fid}-client_secret`} type="password" value={cfg.client_secret} onBlur={() => fe.touch('client_secret')} onChange={(e) => setCfg((c) => ({ ...c, client_secret: e.target.value }))} placeholder={t('app.connectProviderModal.oauthClientSecret', '{{name}} OAuth client secret', { name: provider.name })} autoComplete="off" />
+                                </FormField>
                             </div>
                             <div className="conn-form__callback">
                                 <CheckCircle2 size={14} /> {t('app.connectProviderModal.callbackUrl', 'Callback URL:')} <code>{callbackUrl}</code>
@@ -250,17 +251,18 @@ function DnsBody({ provider, isAdmin, connections, onAdd, onRemove, onTest }) {
     const [busy, setBusy] = useState(false);
     const [activityId, setActivityId] = useState(null); // connection id whose change log is open
 
-    const canAdd = (() => {
-        if (!form.api_key.trim()) return false;
-        if (isCloudflare && cfMode === 'global' && !form.api_email.trim()) return false;
-        if ((isRoute53 || isGoDaddy) && !form.api_secret.trim()) return false;
-        return true;
-    })();
+    const fid = useId();
+    const fe = useFieldErrors({
+        api_key: form.api_key.trim() ? null : t('common.validation.required', 'This field is required.'),
+        api_email: isCloudflare && cfMode === 'global' && !form.api_email.trim() ? t('common.validation.required', 'This field is required.') : null,
+        api_secret: (isRoute53 || isGoDaddy) && !form.api_secret.trim() ? t('common.validation.required', 'This field is required.') : null,
+    }, fid);
 
     async function withBusy(fn) { setBusy(true); try { return await fn(); } finally { setBusy(false); } }
 
     async function add(e) {
         e.preventDefault();
+        if (!fe.attempt()) return;
         const base = { name: form.name.trim() || provider.name, provider: provider.provider, api_key: form.api_key.trim() };
         let payload = base;
         if (isCloudflare && cfMode === 'global') payload = { ...base, api_email: form.api_email.trim() };
@@ -313,7 +315,7 @@ function DnsBody({ provider, isAdmin, connections, onAdd, onRemove, onTest }) {
             {!isAdmin ? (
                 <p className="conn-modal__note"><ShieldCheck size={15} /> {t('app.connectProviderModal.onlyAdministratorsCanAddOrChange', 'Only administrators can add or change connections.')}</p>
             ) : (
-                <form className="conn-form" onSubmit={add}>
+                <form className="conn-form" noValidate onSubmit={add}>
                     <div className="conn-form__heading">{connections.length > 0 ? t('app.connectProviderModal.addAnotherConnection', 'Add another connection') : t('app.connectProviderModal.connectProvider', 'Connect {{name}}', { name: provider.name })}</div>
 
                     {isCloudflare && (
@@ -330,54 +332,46 @@ function DnsBody({ provider, isAdmin, connections, onAdd, onRemove, onTest }) {
                     )}
 
                     <div className="conn-form__grid">
-                        <div className="form-group">
-                            <Label htmlFor="dns-name">{t('app.connectProviderModal.connectionName', 'Connection name')}</Label>
-                            <Input id="dns-name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder={provider.name} />
-                        </div>
+                        <FormField label={t('app.connectProviderModal.connectionName', 'Connection name')} htmlFor={`${fid}-name`} error={fe.error('name')}>
+                            <Input id={`${fid}-name`} value={form.name} onBlur={() => fe.touch('name')} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder={provider.name} />
+                        </FormField>
 
                         {(isDigitalOcean || (isCloudflare && cfMode === 'scoped')) && (
-                            <div className="form-group conn-form__wide">
-                                <Label htmlFor="dns-token">{t('app.connectProviderModal.apiToken', 'API token')}</Label>
-                                <Input id="dns-token" type="password" value={form.api_key} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={isDigitalOcean ? t('app.connectProviderModal.digitaloceanPersonalAccessToken', 'DigitalOcean personal access token') : t('app.connectProviderModal.cloudflareScopedApiToken', 'Cloudflare scoped API token')} autoComplete="off" />
-                            </div>
+                            <FormField label={t('app.connectProviderModal.apiToken', 'API token')} htmlFor={`${fid}-api_key`} required className="conn-form__wide" error={fe.error('api_key')}>
+                                <Input id={`${fid}-api_key`} type="password" value={form.api_key} onBlur={() => fe.touch('api_key')} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={isDigitalOcean ? t('app.connectProviderModal.digitaloceanPersonalAccessToken', 'DigitalOcean personal access token') : t('app.connectProviderModal.cloudflareScopedApiToken', 'Cloudflare scoped API token')} autoComplete="off" />
+                            </FormField>
                         )}
 
                         {isCloudflare && cfMode === 'global' && (
                             <>
-                                <div className="form-group">
-                                    <Label htmlFor="dns-email">{t('app.connectProviderModal.accountEmail', 'Account email')}</Label>
-                                    <Input id="dns-email" type="email" value={form.api_email} onChange={(e) => setForm((f) => ({ ...f, api_email: e.target.value }))} placeholder="you@example.com" autoComplete="off" />
-                                </div>
-                                <div className="form-group">
-                                    <Label htmlFor="dns-key">{t('app.connectProviderModal.globalApiKey', 'Global API key')}</Label>
-                                    <Input id="dns-key" type="password" value={form.api_key} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={t('app.connectProviderModal.cloudflareGlobalApiKey', 'Cloudflare global API key')} autoComplete="off" />
-                                </div>
+                                <FormField label={t('app.connectProviderModal.accountEmail', 'Account email')} htmlFor={`${fid}-api_email`} required error={fe.error('api_email')}>
+                                    <Input id={`${fid}-api_email`} type="email" value={form.api_email} onBlur={() => fe.touch('api_email')} onChange={(e) => setForm((f) => ({ ...f, api_email: e.target.value }))} placeholder="you@example.com" autoComplete="off" />
+                                </FormField>
+                                <FormField label={t('app.connectProviderModal.globalApiKey', 'Global API key')} htmlFor={`${fid}-api_key`} required error={fe.error('api_key')}>
+                                    <Input id={`${fid}-api_key`} type="password" value={form.api_key} onBlur={() => fe.touch('api_key')} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={t('app.connectProviderModal.cloudflareGlobalApiKey', 'Cloudflare global API key')} autoComplete="off" />
+                                </FormField>
                             </>
                         )}
 
                         {isRoute53 && (
                             <>
-                                <div className="form-group">
-                                    <Label htmlFor="dns-akid">{t('app.connectProviderModal.accessKeyId', 'Access key ID')}</Label>
-                                    <Input id="dns-akid" value={form.api_key} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={t('app.connectProviderModal.akia', 'AKIA…')} autoComplete="off" />
-                                </div>
-                                <div className="form-group">
-                                    <Label htmlFor="dns-secret">{t('app.connectProviderModal.secretAccessKey', 'Secret access key')}</Label>
-                                    <Input id="dns-secret" type="password" value={form.api_secret} onChange={(e) => setForm((f) => ({ ...f, api_secret: e.target.value }))} placeholder={t('app.connectProviderModal.secretAccessKey', 'Secret access key')} autoComplete="off" />
-                                </div>
+                                <FormField label={t('app.connectProviderModal.accessKeyId', 'Access key ID')} htmlFor={`${fid}-api_key`} required error={fe.error('api_key')}>
+                                    <Input id={`${fid}-api_key`} value={form.api_key} onBlur={() => fe.touch('api_key')} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={t('app.connectProviderModal.akia', 'AKIA…')} autoComplete="off" />
+                                </FormField>
+                                <FormField label={t('app.connectProviderModal.secretAccessKey', 'Secret access key')} htmlFor={`${fid}-api_secret`} required error={fe.error('api_secret')}>
+                                    <Input id={`${fid}-api_secret`} type="password" value={form.api_secret} onBlur={() => fe.touch('api_secret')} onChange={(e) => setForm((f) => ({ ...f, api_secret: e.target.value }))} placeholder={t('app.connectProviderModal.secretAccessKey', 'Secret access key')} autoComplete="off" />
+                                </FormField>
                             </>
                         )}
 
                         {isGoDaddy && (
                             <>
-                                <div className="form-group">
-                                    <Label htmlFor="dns-gd-key">{t('app.connectProviderModal.apiKey', 'API key')}</Label>
-                                    <Input id="dns-gd-key" value={form.api_key} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={t('app.connectProviderModal.godaddyApiKey', 'GoDaddy API key')} autoComplete="off" />
-                                </div>
-                                <div className="form-group">
-                                    <Label htmlFor="dns-gd-secret">{t('app.connectProviderModal.apiSecret', 'API secret')}</Label>
-                                    <Input id="dns-gd-secret" type="password" value={form.api_secret} onChange={(e) => setForm((f) => ({ ...f, api_secret: e.target.value }))} placeholder={t('app.connectProviderModal.godaddyApiSecret', 'GoDaddy API secret')} autoComplete="off" />
-                                </div>
+                                <FormField label={t('app.connectProviderModal.apiKey', 'API key')} htmlFor={`${fid}-api_key`} required error={fe.error('api_key')}>
+                                    <Input id={`${fid}-api_key`} value={form.api_key} onBlur={() => fe.touch('api_key')} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={t('app.connectProviderModal.godaddyApiKey', 'GoDaddy API key')} autoComplete="off" />
+                                </FormField>
+                                <FormField label={t('app.connectProviderModal.apiSecret', 'API secret')} htmlFor={`${fid}-api_secret`} required error={fe.error('api_secret')}>
+                                    <Input id={`${fid}-api_secret`} type="password" value={form.api_secret} onBlur={() => fe.touch('api_secret')} onChange={(e) => setForm((f) => ({ ...f, api_secret: e.target.value }))} placeholder={t('app.connectProviderModal.godaddyApiSecret', 'GoDaddy API secret')} autoComplete="off" />
+                                </FormField>
                             </>
                         )}
                     </div>
@@ -389,7 +383,7 @@ function DnsBody({ provider, isAdmin, connections, onAdd, onRemove, onTest }) {
                     )}
 
                     <div className="conn-form__actions">
-                        <Button type="submit" size="sm" disabled={busy || !canAdd}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
+                        <Button type="submit" size="sm" disabled={busy}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
                     </div>
                 </form>
             )}
@@ -402,11 +396,14 @@ function CloudBody({ provider, isAdmin, connections, onAdd, onRemove }) {
     const { t } = useTranslation();
     const [form, setForm] = useState({ name: provider.name, api_key: '' });
     const [busy, setBusy] = useState(false);
+    const fid = useId();
+    const fe = useFieldErrors({ api_key: form.api_key.trim() ? null : t('common.validation.required', 'This field is required.') }, fid);
 
     async function withBusy(fn) { setBusy(true); try { return await fn(); } finally { setBusy(false); } }
 
     async function add(e) {
         e.preventDefault();
+        if (!fe.attempt()) return;
         const ok = await withBusy(() => onAdd({ provider_type: provider.providerType, name: form.name.trim() || provider.name, api_key: form.api_key.trim() }));
         if (ok) setForm({ name: provider.name, api_key: '' });
     }
@@ -438,17 +435,15 @@ function CloudBody({ provider, isAdmin, connections, onAdd, onRemove }) {
             {!isAdmin ? (
                 <p className="conn-modal__note"><ShieldCheck size={15} /> {t('app.connectProviderModal.onlyAdministratorsCanConnectCloudAccounts', 'Only administrators can connect cloud accounts.')}</p>
             ) : (
-                <form className="conn-form" onSubmit={add}>
+                <form className="conn-form" noValidate onSubmit={add}>
                     <div className="conn-form__heading">{connections.length > 0 ? t('app.connectProviderModal.addAnotherAccount', 'Add another account') : t('app.connectProviderModal.connectProvider', 'Connect {{name}}', { name: provider.name })}</div>
                     <div className="conn-form__grid">
-                        <div className="form-group">
-                            <Label htmlFor="cloud-name">{t('app.connectProviderModal.accountName', 'Account name')}</Label>
-                            <Input id="cloud-name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder={provider.name} />
-                        </div>
-                        <div className="form-group conn-form__wide">
-                            <Label htmlFor="cloud-token">{t('app.connectProviderModal.apiToken', 'API token')}</Label>
-                            <Input id="cloud-token" type="password" value={form.api_key} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={t('app.connectProviderModal.apiToken3', '{{name}} API token', { name: provider.name })} autoComplete="off" />
-                        </div>
+                        <FormField label={t('app.connectProviderModal.accountName', 'Account name')} htmlFor={`${fid}-name`} error={fe.error('name')}>
+                            <Input id={`${fid}-name`} value={form.name} onBlur={() => fe.touch('name')} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder={provider.name} />
+                        </FormField>
+                        <FormField label={t('app.connectProviderModal.apiToken', 'API token')} htmlFor={`${fid}-api_key`} required className="conn-form__wide" error={fe.error('api_key')}>
+                            <Input id={`${fid}-api_key`} type="password" value={form.api_key} onBlur={() => fe.touch('api_key')} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={t('app.connectProviderModal.apiToken3', '{{name}} API token', { name: provider.name })} autoComplete="off" />
+                        </FormField>
                     </div>
                     {provider.docUrl && (
                         <a className="conn-form__doc" href={provider.docUrl} target="_blank" rel="noreferrer">
@@ -456,7 +451,7 @@ function CloudBody({ provider, isAdmin, connections, onAdd, onRemove }) {
                         </a>
                     )}
                     <div className="conn-form__actions">
-                        <Button type="submit" size="sm" disabled={busy || !form.api_key.trim()}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
+                        <Button type="submit" size="sm" disabled={busy}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
                     </div>
                 </form>
             )}
@@ -495,14 +490,16 @@ function StorageBody({ provider, isAdmin, storageConfig, onSave, onTest }) {
     });
     const [busy, setBusy] = useState(false);
     const isActive = storageConfig?.provider === sp;
+    const fid = useId();
+    const fe = useFieldErrors({ bucket: form.bucket ? null : t('common.validation.required', 'This field is required.') }, fid);
 
     function buildConfig() {
         return { ...(storageConfig || {}), provider: sp, [sp]: { ...existing, ...form } };
     }
 
     async function withBusy(fn) { setBusy(true); try { return await fn(); } finally { setBusy(false); } }
-    async function save(e) { e.preventDefault(); await withBusy(() => onSave(buildConfig())); }
-    async function test() { await withBusy(() => onTest(buildConfig())); }
+    async function save(e) { e.preventDefault(); if (!fe.attempt()) return; await withBusy(() => onSave(buildConfig())); }
+    async function test() { if (!fe.attempt()) return; await withBusy(() => onTest(buildConfig())); }
 
     if (!isAdmin) {
         return <p className="conn-modal__note"><ShieldCheck size={15} /> {t('app.connectProviderModal.onlyAdministratorsCanConfigureStorage', 'Only administrators can configure storage.')}</p>;
@@ -513,21 +510,21 @@ function StorageBody({ provider, isAdmin, storageConfig, onSave, onTest }) {
             <p className="conn-modal__note">
                 <HardDrive size={15} /> {isActive ? t('app.connectProviderModal.activeBackupDestination', 'This is the active backup destination.') : t('app.connectProviderModal.savingMakesThisActive', 'Saving makes this the active offsite destination.')} {t('app.connectProviderModal.manageBackupsIn', 'Manage backups in')} <Link className="conn-modal__link" to="/backups">{t('app.connectProviderModal.backups', 'Backups →')}</Link>
             </p>
-            <form className="conn-form" onSubmit={save}>
+            <form className="conn-form" noValidate onSubmit={save}>
                 <div className="conn-form__heading"><KeyRound size={15} /> {t('app.connectProviderModal.providerCredentials', '{{name}} credentials', { name: provider.name })}</div>
                 <div className="conn-form__grid">
                     {fields.map((f) => (
-                        <div key={f.k} className={`form-group${f.wide ? ' conn-form__wide' : ''}`}>
-                            <Label htmlFor={`st-${f.k}`}>{f.label}</Label>
+                        <FormField key={f.k} label={f.label} htmlFor={`${fid}-${f.k}`} required={f.k === 'bucket'} className={f.wide ? 'conn-form__wide' : undefined} error={fe.error(f.k)}>
                             <Input
-                                id={`st-${f.k}`}
+                                id={`${fid}-${f.k}`}
+                                onBlur={() => fe.touch(f.k)}
                                 type={f.secret ? 'password' : 'text'}
                                 value={form[f.k]}
                                 onChange={(e) => setForm((s) => ({ ...s, [f.k]: e.target.value }))}
                                 placeholder={f.placeholder || ''}
                                 autoComplete="off"
                             />
-                        </div>
+                        </FormField>
                     ))}
                 </div>
                 {provider.docUrl && (
@@ -536,8 +533,8 @@ function StorageBody({ provider, isAdmin, storageConfig, onSave, onTest }) {
                     </a>
                 )}
                 <div className="conn-form__actions conn-form__actions--split">
-                    <Button type="button" variant="outline" size="sm" disabled={busy || !form.bucket} onClick={test}>{t('common.actions.test', 'Test')}</Button>
-                    <Button type="submit" size="sm" disabled={busy || !form.bucket}>{busy ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}</Button>
+                    <Button type="button" variant="outline" size="sm" disabled={busy} onClick={test}>{t('common.actions.test', 'Test')}</Button>
+                    <Button type="submit" size="sm" disabled={busy}>{busy ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}</Button>
                 </div>
             </form>
         </>
@@ -550,13 +547,18 @@ function RegistrarBody({ provider, isAdmin, connections, onAdd, onRemove, onTest
     const isNamecheap = provider.provider === 'namecheap';
     const [form, setForm] = useState({ name: provider.name, api_key: '', api_secret: '', username: '', client_ip: '' });
     const [busy, setBusy] = useState(false);
-    const canAdd = isNamecheap
-        ? Boolean(form.api_key.trim() && form.username.trim() && form.client_ip.trim())
-        : Boolean(form.api_key.trim() && form.api_secret.trim());
+    const fid = useId();
+    const fe = useFieldErrors({
+        api_key: form.api_key.trim() ? null : t('common.validation.required', 'This field is required.'),
+        username: isNamecheap && !form.username.trim() ? t('common.validation.required', 'This field is required.') : null,
+        client_ip: isNamecheap && !form.client_ip.trim() ? t('common.validation.required', 'This field is required.') : null,
+        api_secret: !isNamecheap && !form.api_secret.trim() ? t('common.validation.required', 'This field is required.') : null,
+    }, fid);
 
     async function withBusy(fn) { setBusy(true); try { return await fn(); } finally { setBusy(false); } }
     async function add(e) {
         e.preventDefault();
+        if (!fe.attempt()) return;
         const payload = { provider: provider.provider, name: form.name.trim() || provider.name, api_key: form.api_key.trim() };
         if (isNamecheap) {
             payload.username = form.username.trim();
@@ -596,33 +598,28 @@ function RegistrarBody({ provider, isAdmin, connections, onAdd, onRemove, onTest
             {!isAdmin ? (
                 <p className="conn-modal__note"><ShieldCheck size={15} /> {t('app.connectProviderModal.onlyAdministratorsCanConnectARegistrar', 'Only administrators can connect a registrar.')}</p>
             ) : (
-                <form className="conn-form" onSubmit={add}>
+                <form className="conn-form" noValidate onSubmit={add}>
                     <div className="conn-form__heading">{connections.length > 0 ? t('app.connectProviderModal.addAnotherAccount', 'Add another account') : t('app.connectProviderModal.connectProvider', 'Connect {{name}}', { name: provider.name })}</div>
                     <div className="conn-form__grid">
-                        <div className="form-group conn-form__wide">
-                            <Label htmlFor="reg-name">{t('app.connectProviderModal.accountName', 'Account name')}</Label>
-                            <Input id="reg-name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder={provider.name} />
-                        </div>
-                        <div className="form-group">
-                            <Label htmlFor="reg-key">{t('app.connectProviderModal.apiKey', 'API key')}</Label>
-                            <Input id="reg-key" value={form.api_key} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={isNamecheap ? t('app.connectProviderModal.namecheapApiKey', 'Namecheap API key') : t('app.connectProviderModal.godaddyApiKeyProduction', 'GoDaddy API key (production)')} autoComplete="off" />
-                        </div>
+                        <FormField label={t('app.connectProviderModal.accountName', 'Account name')} htmlFor={`${fid}-name`} className="conn-form__wide" error={fe.error('name')}>
+                            <Input id={`${fid}-name`} value={form.name} onBlur={() => fe.touch('name')} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder={provider.name} />
+                        </FormField>
+                        <FormField label={t('app.connectProviderModal.apiKey', 'API key')} htmlFor={`${fid}-api_key`} required error={fe.error('api_key')}>
+                            <Input id={`${fid}-api_key`} value={form.api_key} onBlur={() => fe.touch('api_key')} onChange={(e) => setForm((f) => ({ ...f, api_key: e.target.value }))} placeholder={isNamecheap ? t('app.connectProviderModal.namecheapApiKey', 'Namecheap API key') : t('app.connectProviderModal.godaddyApiKeyProduction', 'GoDaddy API key (production)')} autoComplete="off" />
+                        </FormField>
                         {isNamecheap ? (
                             <>
-                                <div className="form-group">
-                                    <Label htmlFor="reg-user">{t('app.connectProviderModal.apiUsername', 'API username')}</Label>
-                                    <Input id="reg-user" value={form.username} onChange={(e) => setForm((f) => ({ ...f, username: e.target.value }))} placeholder={t('app.connectProviderModal.namecheapAccountUsername', 'Namecheap account username')} autoComplete="off" />
-                                </div>
-                                <div className="form-group">
-                                    <Label htmlFor="reg-ip">{t('app.connectProviderModal.allowListedIp', 'Allow-listed IP')}</Label>
-                                    <Input id="reg-ip" value={form.client_ip} onChange={(e) => setForm((f) => ({ ...f, client_ip: e.target.value }))} placeholder={t('app.connectProviderModal.thisServerSPublicIp', 'This server\'s public IP')} autoComplete="off" />
-                                </div>
+                                <FormField label={t('app.connectProviderModal.apiUsername', 'API username')} htmlFor={`${fid}-username`} required error={fe.error('username')}>
+                                    <Input id={`${fid}-username`} value={form.username} onBlur={() => fe.touch('username')} onChange={(e) => setForm((f) => ({ ...f, username: e.target.value }))} placeholder={t('app.connectProviderModal.namecheapAccountUsername', 'Namecheap account username')} autoComplete="off" />
+                                </FormField>
+                                <FormField label={t('app.connectProviderModal.allowListedIp', 'Allow-listed IP')} htmlFor={`${fid}-client_ip`} required error={fe.error('client_ip')}>
+                                    <Input id={`${fid}-client_ip`} value={form.client_ip} onBlur={() => fe.touch('client_ip')} onChange={(e) => setForm((f) => ({ ...f, client_ip: e.target.value }))} placeholder={t('app.connectProviderModal.thisServerSPublicIp', 'This server\'s public IP')} autoComplete="off" />
+                                </FormField>
                             </>
                         ) : (
-                            <div className="form-group">
-                                <Label htmlFor="reg-secret">{t('app.connectProviderModal.apiSecret', 'API secret')}</Label>
-                                <Input id="reg-secret" type="password" value={form.api_secret} onChange={(e) => setForm((f) => ({ ...f, api_secret: e.target.value }))} placeholder={t('app.connectProviderModal.godaddyApiSecret', 'GoDaddy API secret')} autoComplete="off" />
-                            </div>
+                            <FormField label={t('app.connectProviderModal.apiSecret', 'API secret')} htmlFor={`${fid}-api_secret`} required error={fe.error('api_secret')}>
+                                <Input id={`${fid}-api_secret`} type="password" value={form.api_secret} onBlur={() => fe.touch('api_secret')} onChange={(e) => setForm((f) => ({ ...f, api_secret: e.target.value }))} placeholder={t('app.connectProviderModal.godaddyApiSecret', 'GoDaddy API secret')} autoComplete="off" />
+                            </FormField>
                         )}
                     </div>
                     {provider.docUrl && (
@@ -631,7 +628,7 @@ function RegistrarBody({ provider, isAdmin, connections, onAdd, onRemove, onTest
                         </a>
                     )}
                     <div className="conn-form__actions">
-                        <Button type="submit" size="sm" disabled={busy || !canAdd}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
+                        <Button type="submit" size="sm" disabled={busy}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
                     </div>
                 </form>
             )}
@@ -657,11 +654,18 @@ function RegistryBody({ isAdmin, registries, onAdd, onRemove, onTest }) {
 
     // ECR authenticates with AWS keys, no username; every other provider needs one.
     const needsUsername = providerId !== 'ecr';
-    const canAdd = Boolean(form.name.trim() && form.secret.trim() && (!needsUsername || form.username.trim()));
+    const fid = useId();
+    const fe = useFieldErrors({
+        name: form.name.trim() ? null : t('common.validation.required', 'This field is required.'),
+        registry_url: preset.urlLocked || form.registry_url.trim() ? null : t('common.validation.required', 'This field is required.'),
+        username: needsUsername && !form.username.trim() ? t('common.validation.required', 'This field is required.') : null,
+        secret: form.secret.trim() ? null : t('common.validation.required', 'This field is required.'),
+    }, fid);
 
     async function withBusy(fn) { setBusy(true); try { return await fn(); } finally { setBusy(false); } }
     async function add(e) {
         e.preventDefault();
+        if (!fe.attempt()) return;
         const payload = {
             name: form.name.trim(),
             provider: providerId,
@@ -702,7 +706,7 @@ function RegistryBody({ isAdmin, registries, onAdd, onRemove, onTest }) {
             {!isAdmin ? (
                 <p className="conn-modal__note"><ShieldCheck size={15} /> {t('app.connectProviderModal.onlyAdministratorsCanAddRegistries', 'Only administrators can add registries.')}</p>
             ) : (
-                <form className="conn-form" onSubmit={add}>
+                <form className="conn-form" noValidate onSubmit={add}>
                     <div className="conn-form__heading">{registries.length > 0 ? t('app.connectProviderModal.addAnotherRegistry', 'Add another registry') : t('app.connectProviderModal.connectARegistry', 'Connect a registry')}</div>
 
                     <div className="conn-presets" role="radiogroup" aria-label={t('app.connectProviderModal.registryProvider', 'Registry provider')}>
@@ -721,31 +725,28 @@ function RegistryBody({ isAdmin, registries, onAdd, onRemove, onTest }) {
                     </div>
 
                     <div className="conn-form__grid">
-                        <div className="form-group">
-                            <Label htmlFor="reg-name">{t('app.connectProviderModal.connectionName', 'Connection name')}</Label>
-                            <Input id="reg-name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder={t('app.connectProviderModal.registryTeamPlaceholder', '{{name}} (team)', { name: preset.name })} />
-                        </div>
-                        <div className="form-group">
-                            <Label htmlFor="reg-url">{t('app.connectProviderModal.registryHost', 'Registry host')}</Label>
+                        <FormField label={t('app.connectProviderModal.connectionName', 'Connection name')} htmlFor={`${fid}-name`} required error={fe.error('name')}>
+                            <Input id={`${fid}-name`} value={form.name} onBlur={() => fe.touch('name')} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder={t('app.connectProviderModal.registryTeamPlaceholder', '{{name}} (team)', { name: preset.name })} />
+                        </FormField>
+                        <FormField label={t('app.connectProviderModal.registryHost', 'Registry host')} htmlFor={`${fid}-registry_url`} required={!preset.urlLocked} error={fe.error('registry_url')}>
                             <Input
-                                id="reg-url"
+                                id={`${fid}-registry_url`}
                                 value={form.registry_url}
+                                onBlur={() => fe.touch('registry_url')}
                                 onChange={(e) => setForm((f) => ({ ...f, registry_url: e.target.value }))}
                                 placeholder={preset.id === 'dockerhub' ? t('app.connectProviderModal.indexDockerIoDockerHub', 'index.docker.io (Docker Hub)') : 'registry.example.com'}
                                 disabled={preset.urlLocked}
                                 autoComplete="off"
                             />
-                        </div>
+                        </FormField>
                         {needsUsername && (
-                            <div className="form-group">
-                                <Label htmlFor="reg-username">{t('common.labels.username', 'Username')}</Label>
-                                <Input id="reg-username" value={form.username} onChange={(e) => setForm((f) => ({ ...f, username: e.target.value }))} placeholder={preset.usernameHint} autoComplete="off" />
-                            </div>
+                            <FormField label={t('common.labels.username', 'Username')} htmlFor={`${fid}-username`} required error={fe.error('username')}>
+                                <Input id={`${fid}-username`} value={form.username} onBlur={() => fe.touch('username')} onChange={(e) => setForm((f) => ({ ...f, username: e.target.value }))} placeholder={preset.usernameHint} autoComplete="off" />
+                            </FormField>
                         )}
-                        <div className={`form-group${needsUsername ? '' : ' conn-form__wide'}`}>
-                            <Label htmlFor="reg-secret">{providerId === 'ecr' ? t('app.connectProviderModal.awsCredentials', 'AWS credentials') : t('app.connectProviderModal.passwordToken', 'Password / token')}</Label>
-                            <Input id="reg-secret" type="password" value={form.secret} onChange={(e) => setForm((f) => ({ ...f, secret: e.target.value }))} placeholder={preset.secretHint} autoComplete="off" />
-                        </div>
+                        <FormField label={providerId === 'ecr' ? t('app.connectProviderModal.awsCredentials', 'AWS credentials') : t('app.connectProviderModal.passwordToken', 'Password / token')} htmlFor={`${fid}-secret`} required className={needsUsername ? undefined : 'conn-form__wide'} error={fe.error('secret')}>
+                            <Input id={`${fid}-secret`} type="password" value={form.secret} onBlur={() => fe.touch('secret')} onChange={(e) => setForm((f) => ({ ...f, secret: e.target.value }))} placeholder={preset.secretHint} autoComplete="off" />
+                        </FormField>
                     </div>
 
                     <a className="conn-form__doc" href="https://docs.docker.com/engine/reference/commandline/login/" target="_blank" rel="noreferrer">
@@ -753,7 +754,7 @@ function RegistryBody({ isAdmin, registries, onAdd, onRemove, onTest }) {
                     </a>
 
                     <div className="conn-form__actions">
-                        <Button type="submit" size="sm" disabled={busy || !canAdd}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
+                        <Button type="submit" size="sm" disabled={busy}>{busy ? t('app.connectProviderModal.connecting', 'Connecting…') : t('app.connectProviderModal.connect', 'Connect')}</Button>
                     </div>
                 </form>
             )}
@@ -784,6 +785,8 @@ function EmailBody({ isAdmin, relayConfig, onSave, onTest, onDisable }) {
     });
     const [busy, setBusy] = useState(false);
     const configured = Boolean(cfg.host);
+    const fid = useId();
+    const fe = useFieldErrors({ host: form.host.trim() ? null : t('common.validation.required', 'This field is required.') }, fid);
 
     function applyPreset(id) {
         const p = SMTP_PRESETS.find((x) => x.id === id);
@@ -803,15 +806,15 @@ function EmailBody({ isAdmin, relayConfig, onSave, onTest, onDisable }) {
     }
 
     async function withBusy(fn) { setBusy(true); try { return await fn(); } finally { setBusy(false); } }
-    async function save(e) { e.preventDefault(); await withBusy(() => onSave(payload())); }
-    async function test() { await withBusy(() => onTest(payload())); }
+    async function save(e) { e.preventDefault(); if (!fe.attempt()) return; await withBusy(() => onSave(payload())); }
+    async function test() { if (!fe.attempt()) return; await withBusy(() => onTest(payload())); }
 
     if (!isAdmin) {
         return <p className="conn-modal__note"><ShieldCheck size={15} /> {t('app.connectProviderModal.onlyAdministratorsCanConfigureTheMail', 'Only administrators can configure the mail relay.')}</p>;
     }
 
     return (
-        <form className="conn-form" onSubmit={save}>
+        <form className="conn-form" noValidate onSubmit={save}>
             <div className="conn-form__heading"><Mail size={15} /> {t('app.connectProviderModal.outboundRelay', 'Outbound relay')}</div>
 
             <div className="conn-presets" role="radiogroup" aria-label={t('app.connectProviderModal.providerPreset', 'Provider preset')}>
@@ -830,22 +833,18 @@ function EmailBody({ isAdmin, relayConfig, onSave, onTest, onDisable }) {
             </div>
 
             <div className="conn-form__grid">
-                <div className="form-group conn-form__wide">
-                    <Label htmlFor="relay-host">{t('app.connectProviderModal.smtpHost', 'SMTP host')}</Label>
-                    <Input id="relay-host" value={form.host} onChange={(e) => setForm((f) => ({ ...f, host: e.target.value }))} placeholder="smtp.provider.com" autoComplete="off" />
-                </div>
-                <div className="form-group">
-                    <Label htmlFor="relay-port">{t('common.labels.port', 'Port')}</Label>
-                    <PortField id="relay-port" host={false} allowPrivileged value={form.port} onChange={(port) => setForm((f) => ({ ...f, port }))} placeholder="587" />
-                </div>
-                <div className="form-group">
-                    <Label htmlFor="relay-user">{t('common.labels.username', 'Username')}</Label>
-                    <Input id="relay-user" value={form.username} onChange={(e) => setForm((f) => ({ ...f, username: e.target.value }))} placeholder={t('app.connectProviderModal.smtpUsernameApiToken', 'SMTP username / API token')} autoComplete="off" />
-                </div>
-                <div className="form-group conn-form__wide">
-                    <Label htmlFor="relay-pass">{t('common.labels.password', 'Password')}{cfg.password_set ? ` ${t('app.connectProviderModal.leaveBlankToKeep', '(leave blank to keep)')}` : ''}</Label>
-                    <Input id="relay-pass" type="password" value={form.password} onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))} placeholder={cfg.password_set ? t('app.connectProviderModal.stored', '•••••••• stored') : t('app.connectProviderModal.smtpPasswordApiToken', 'SMTP password / API token')} autoComplete="off" />
-                </div>
+                <FormField label={t('app.connectProviderModal.smtpHost', 'SMTP host')} htmlFor={`${fid}-host`} required className="conn-form__wide" error={fe.error('host')}>
+                    <Input id={`${fid}-host`} value={form.host} onBlur={() => fe.touch('host')} onChange={(e) => setForm((f) => ({ ...f, host: e.target.value }))} placeholder="smtp.provider.com" autoComplete="off" />
+                </FormField>
+                <FormField label={t('common.labels.port', 'Port')} htmlFor={`${fid}-port`}>
+                    <PortField id={`${fid}-port`} host={false} allowPrivileged value={form.port} onChange={(port) => setForm((f) => ({ ...f, port }))} placeholder="587" />
+                </FormField>
+                <FormField label={t('common.labels.username', 'Username')} htmlFor={`${fid}-username`} error={fe.error('username')}>
+                    <Input id={`${fid}-username`} value={form.username} onBlur={() => fe.touch('username')} onChange={(e) => setForm((f) => ({ ...f, username: e.target.value }))} placeholder={t('app.connectProviderModal.smtpUsernameApiToken', 'SMTP username / API token')} autoComplete="off" />
+                </FormField>
+                <FormField label={`${t('common.labels.password', 'Password')}${cfg.password_set ? ` ${t('app.connectProviderModal.leaveBlankToKeep', '(leave blank to keep)')}` : ''}`} htmlFor={`${fid}-password`} className="conn-form__wide" error={fe.error('password')}>
+                    <Input id={`${fid}-password`} type="password" value={form.password} onBlur={() => fe.touch('password')} onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))} placeholder={cfg.password_set ? t('app.connectProviderModal.stored', '•••••••• stored') : t('app.connectProviderModal.smtpPasswordApiToken', 'SMTP password / API token')} autoComplete="off" />
+                </FormField>
             </div>
 
             <label className="conn-check">
@@ -866,8 +865,8 @@ function EmailBody({ isAdmin, relayConfig, onSave, onTest, onDisable }) {
                     )}
                 </span>
                 <span className="conn-form__actions-group">
-                    <Button type="button" variant="outline" size="sm" disabled={busy || !form.host.trim()} onClick={test}>{t('common.actions.test', 'Test')}</Button>
-                    <Button type="submit" size="sm" disabled={busy || !form.host.trim()}>{busy ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}</Button>
+                    <Button type="button" variant="outline" size="sm" disabled={busy} onClick={test}>{t('common.actions.test', 'Test')}</Button>
+                    <Button type="submit" size="sm" disabled={busy}>{busy ? t('common.saving', 'Saving…') : t('common.actions.save', 'Save')}</Button>
                 </span>
             </div>
         </form>
