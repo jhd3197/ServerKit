@@ -1,7 +1,7 @@
 import { useState, useEffect, useId, useMemo } from 'react';
 import {
     ShieldCheck, RefreshCw, Plus, Lock, MoreVertical,
-    Settings, Download, Upload,
+    Settings, Download, Upload, MoreHorizontal,
 } from 'lucide-react';
 import api from '../services/api';
 import Modal from '@/components/Modal';
@@ -24,6 +24,7 @@ import {
 import DomainField from '../components/DomainField';
 import { formatExpiry } from '../utils/expiry';
 import { useTranslation } from 'react-i18next';
+import useMediaQuery from '@/hooks/useMediaQuery';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
 
@@ -98,6 +99,7 @@ const SSL_BUILTIN_VIEWS = [
 
 const SSLCertificates = () => {
     const { t } = useTranslation();
+    const phone = useMediaQuery('(max-width: 639px)');
     const fieldId = useId();
     const toast = useToast();
     const { confirm } = useConfirm();
@@ -471,37 +473,71 @@ const SSLCertificates = () => {
                     {t('app.sSLCertificates.installCertbot', 'Install Certbot')}
                 </Button>
             )}
-            <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSetupAutoRenewal}
-                disabled={actionLoading || !certbotInstalled}
-                title={t('app.sSLCertificates.configureAutomaticRenewalViaSystemdOr', 'Configure automatic renewal via systemd or cron')}
-            >
-                <Settings size={15} />
-                {t('app.sSLCertificates.autoRenew2', 'Auto-renew')}
-            </Button>
-            {certificates.length > 0 && (
-                <Button variant="outline" size="sm" onClick={handleRenewAll} disabled={actionLoading}>
-                    <RefreshCw size={15} />
-                    {t('app.sSLCertificates.renewAll', 'Renew all')}
-                </Button>
+            {phone ? (
+                // Phones: the secondary actions share one overflow menu so the
+                // bar stays a single row; Install Certbot / New certificate stay out.
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="icon" aria-label={t('common.more', 'More')}>
+                            <MoreHorizontal size={15} />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={handleSetupAutoRenewal} disabled={actionLoading || !certbotInstalled}>
+                            <Settings size={15} />
+                            {t('app.sSLCertificates.autoRenew2', 'Auto-renew')}
+                        </DropdownMenuItem>
+                        {certificates.length > 0 && (
+                            <DropdownMenuItem onClick={handleRenewAll} disabled={actionLoading}>
+                                <RefreshCw size={15} />
+                                {t('app.sSLCertificates.renewAll', 'Renew all')}
+                            </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem onClick={loadData}>
+                            <RefreshCw size={15} />
+                            {t('common.actions.refresh', 'Refresh')}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setShowUploadModal(true)}>
+                            <Upload size={15} />
+                            {t('app.sSLCertificates.upload', 'Upload')}
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            ) : (
+                <>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleSetupAutoRenewal}
+                        disabled={actionLoading || !certbotInstalled}
+                        title={t('app.sSLCertificates.configureAutomaticRenewalViaSystemdOr', 'Configure automatic renewal via systemd or cron')}
+                    >
+                        <Settings size={15} />
+                        {t('app.sSLCertificates.autoRenew2', 'Auto-renew')}
+                    </Button>
+                    {certificates.length > 0 && (
+                        <Button variant="outline" size="sm" onClick={handleRenewAll} disabled={actionLoading}>
+                            <RefreshCw size={15} />
+                            {t('app.sSLCertificates.renewAll', 'Renew all')}
+                        </Button>
+                    )}
+                    <Button variant="outline" size="sm" onClick={loadData}>
+                        <RefreshCw size={15} />
+                        {t('common.actions.refresh', 'Refresh')}
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => setShowUploadModal(true)}>
+                        <Upload size={15} />
+                        {t('app.sSLCertificates.upload', 'Upload')}
+                    </Button>
+                </>
             )}
-            <Button variant="outline" size="sm" onClick={loadData}>
-                <RefreshCw size={15} />
-                {t('common.actions.refresh', 'Refresh')}
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => setShowUploadModal(true)}>
-                <Upload size={15} />
-                {t('app.sSLCertificates.upload', 'Upload')}
-            </Button>
             <Button size="sm" onClick={() => setShowObtainModal(true)} disabled={!certbotInstalled}>
                 <Plus size={15} />
                 {t('app.sSLCertificates.newCertificate', 'New certificate')}
             </Button>
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.sSLCertificates.searchCertificates', 'Search certificates…')} />
         </>
-    ), [actionLoading, certbotInstalled, certbotMissing, certificates.length, search]);
+    ), [actionLoading, certbotInstalled, certbotMissing, certificates.length, search, phone]);
 
     return (
         <>

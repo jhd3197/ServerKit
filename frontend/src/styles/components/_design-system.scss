@@ -275,6 +275,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     flex-direction: column;
     gap: $space-3;
  margin-bottom: $space-5;
+    container-type: inline-size;
 }
 
 .sk-kpiband {
@@ -289,6 +290,11 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
     @media (max-width: 560px) {
         grid-template-columns: 1fr 1fr;
+    }
+    // Four tiles: 4 across or 2x2, never the 3+1 auto-fit gives at tablet width.
+    // Measured on the band's own container, so a sidebar-narrowed page agrees.
+    @container (max-width: 820px) {
+        &[data-cols='4'] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     // Skeleton tile — same geometry as .sk-kpi so content doesn't jump on load.
@@ -1517,6 +1523,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         &__actions {
             order: 2;
             width: 100%;
+            flex-wrap: wrap;
             min-width: 0;
             justify-content: flex-start;
             overflow-x: auto;
@@ -1527,6 +1534,11 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
             > *,
             > .sk-topbar__chrome > * { flex-shrink: 0; }
+
+            // The search takes what is left on its row and wraps to a row of its
+            // own (full width) when even its minimum doesn't fit — never offscreen.
+            > .sk-searchfield,
+            > .sk-topbar__chrome > .sk-searchfield { flex: 1 1 180px; max-width: none; min-width: 0; }
 
             &::-webkit-scrollbar { display: none; }
         }
@@ -1668,6 +1680,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     flex: 1 1 240px;
     min-width: 180px;
     max-width: 420px;
+
+    // Inside a view bar it shrinks before its icon buttons would wrap.
+    .sk-viewbar__actions > & { flex: 1 1 auto; min-width: 96px; }
 
     &__icon {
         position: absolute;
