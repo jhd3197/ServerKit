@@ -86,6 +86,14 @@ VITE_API_URL=https://api.example.com
 
 Access them in code via `import.meta.env.VITE_API_URL`.
 
+## Layout screenshot regressions
+
+`npm run test:layout` renders the main pages at 390, 768 and 1440 px from synthetic
+fixtures and compares them with `tests/layout-baselines/`. After an intended UI
+change run `LAYOUT_UPDATE=1 npm run test:layout` and commit the new PNGs; failures
+leave actual/diff images in `test-results/layout/`. See the header of
+`scripts/layout-screenshots-browser.mjs` for the options.
+
 ## Contributing
 
 See the documentation files for AI agent permissions and guidelines.

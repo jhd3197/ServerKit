@@ -89,6 +89,9 @@ jobs:
       - name: Assistant deployment browser regressions
         working-directory: frontend
         run: npm run test:ai-operations
+      - name: Layout screenshot regressions
+        working-directory: frontend
+        run: npm run test:layout
       - name: Upload Settings screenshots
         if: always()
         uses: actions/upload-artifact@v7
