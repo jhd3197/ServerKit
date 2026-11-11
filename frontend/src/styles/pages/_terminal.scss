@@ -372,7 +372,6 @@ $lk-default:  #646b7a;
 
         &::placeholder { color: var(--text-faint); }
         &:focus {
-            outline: none;
             border-color: var(--accent-dim);
             background: var(--surface);
         }
@@ -671,7 +670,6 @@ $lk-default:  #646b7a;
 
     &:focus, &:hover {
         border-color: var(--border-strong);
-        outline: none;
     }
 
     // The Radix trigger (LogToolbar) sizes to its value, not the full-width

@@ -63,6 +63,7 @@ export default function LogFileList({ files, selectedPath, onSelect, onRefresh, 
                         type="text"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
+                        aria-label={t('app.logFileList.filterLogFiles', 'Filter log files…')}
                         placeholder={t('app.logFileList.filterLogFiles', 'Filter log files…')}
                     />
                 </div>

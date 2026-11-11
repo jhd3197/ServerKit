@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "嘗試不同的搜尋字詞或瀏覽另一個資料夾。",
             "typeZA": "類型 Z-A",
             "types": "類型",
+            "up": "上一層",
             "upDelDeleteF2RenameA": "⌫ 向上 · Del 刪除 · F2 重新命名 · ⌘A 全部",
             "updatedAt": "更新於 {{time}}",
             "upload": "上傳",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "已在最上層資料夾"
         },
         "fileRow": {
-            "deselect": "取消選擇",
             "rename": "重新命名",
             "select": "選擇"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "正在驗證邀請…"
     },
     "common": {
+        "actionTarget": "{{action}}：{{subject}}",
         "actions": {
             "add": "新增",
             "back": "回到上一頁",
@@ -8183,6 +8184,8 @@
         },
         "loading": "載入中…",
         "more": "更多",
+        "moreActions": "更多操作",
+        "moreInfoAbout": "關於{{subject}}的更多資訊",
         "moreSections": "更多區段",
         "page": "頁",
         "retry": "重試",

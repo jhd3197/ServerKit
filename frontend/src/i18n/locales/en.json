@@ -2833,6 +2833,7 @@
             "tryADifferentSearchTermOr": "Try a different search term or browse another folder.",
             "typeZA": "Type Z-A",
             "types": "Types",
+            "up": "Up",
             "upDelDeleteF2RenameA": "⌫ Up · Del Delete · F2 Rename · ⌘A All",
             "updatedAt": "Updated {{time}}",
             "upload": "Upload",
@@ -2849,7 +2850,6 @@
             "willBeCreatedIn": "Will be created in:"
         },
         "fileRow": {
-            "deselect": "Deselect",
             "rename": "Rename",
             "select": "Select"
         },
@@ -8441,6 +8441,7 @@
         "validatingInvitation": "Validating invitation…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Add",
             "back": "Back",
@@ -8625,7 +8626,9 @@
         },
         "loading": "Loading…",
         "more": "More",
+        "moreActions": "More actions",
         "moreInfo": "More info",
+        "moreInfoAbout": "More info about {{subject}}",
         "moreSections": "More sections",
         "page": "Page",
         "retry": "Retry",

@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Essayez un autre terme de recherche ou parcourez un autre dossier.",
             "typeZA": "Type Z-A",
             "types": "Espèces",
+            "up": "Dossier parent",
             "upDelDeleteF2RenameA": "⌫ Haut · Supprimer · F2 Renommer · ⌘A Tout",
             "updatedAt": "Mis à jour {{time}}",
             "upload": "Télécharger",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "Déjà dans le dossier racine"
         },
         "fileRow": {
-            "deselect": "Désélectionner",
             "rename": "Rebaptiser",
             "select": "Sélectionner"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "Validation de l'invitation…"
     },
     "common": {
+        "actionTarget": "{{action}} : {{subject}}",
         "actions": {
             "add": "Ajouter",
             "back": "Dos",
@@ -8183,6 +8184,8 @@
         },
         "loading": "Chargement…",
         "more": "Plus",
+        "moreActions": "Plus d’actions",
+        "moreInfoAbout": "Plus d’infos sur {{subject}}",
         "moreSections": "Plus de rubriques",
         "page": "Page",
         "retry": "Réessayer",

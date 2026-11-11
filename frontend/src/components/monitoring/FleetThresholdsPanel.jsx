@@ -121,8 +121,8 @@ export default function FleetThresholdsPanel({ refreshKey = 0 }) {
             sortable: false,
             hideable: false,
             cellClassName: 'mon-row-actions',
-            render: (t) => (
-                <Button variant="ghost" size="sm" onClick={() => removeThreshold(t.id)}>
+            render: (row) => (
+                <Button variant="ghost" size="sm" onClick={() => removeThreshold(row.id)} aria-label={t('common.actions.remove', 'Remove')}>
                     <XCircle size={14} />
                 </Button>
             ),

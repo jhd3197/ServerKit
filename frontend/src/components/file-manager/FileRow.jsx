@@ -18,6 +18,7 @@ function FileRow({
     onDelete,
 }) {
     const { t } = useTranslation();
+    const named = (action) => t('common.actionTarget', '{{action}}: {{subject}}', { action, subject: entry.name });
     return (
         <div
             className={`file-item ${selected ? 'selected' : ''} ${selectMode ? 'select-mode' : ''}`}
@@ -38,7 +39,8 @@ function FileRow({
                 <SharedButton variant="unstyled" type="button"
                     className="checkbox-btn"
                     onClick={(e) => onToggleSelect(entry, { ...e, ctrlKey: true })}
-                    aria-label={selected ? t('app.fileRow.deselect', 'Deselect') : t('app.fileRow.select', 'Select')}
+                    aria-label={t('common.actionTarget', '{{action}}: {{subject}}', { action: t('app.fileRow.select', 'Select'), subject: entry.name })}
+                    aria-pressed={selected}
                 >
                     <span className={`checkbox ${selected ? 'checked' : ''}`}>
                         {selected && <Check size={12} />}
@@ -58,17 +60,17 @@ function FileRow({
             <span className="col-owner">{entry.owner}</span>
             <span className="col-actions" onClick={(e) => e.stopPropagation()}>
                 {!entry.is_dir && (
-                    <SharedButton variant="unstyled" type="button" className="row-action" onClick={() => onDownload(entry)} title={t('common.actions.download', 'Download')}>
+                    <SharedButton variant="unstyled" type="button" className="row-action" onClick={() => onDownload(entry)} title={t('common.actions.download', 'Download')} aria-label={named(t('common.actions.download', 'Download'))}>
                         <Download size={14} />
                     </SharedButton>
                 )}
-                <SharedButton variant="unstyled" type="button" className="row-action" onClick={() => onRename(entry)} title={t('app.fileRow.rename', 'Rename')}>
+                <SharedButton variant="unstyled" type="button" className="row-action" onClick={() => onRename(entry)} title={t('app.fileRow.rename', 'Rename')} aria-label={named(t('app.fileRow.rename', 'Rename'))}>
                     <Edit3 size={14} />
                 </SharedButton>
-                <SharedButton variant="unstyled" type="button" className="row-action" onClick={() => onPermissions(entry)} title={t('common.labels.permissions', 'Permissions')}>
+                <SharedButton variant="unstyled" type="button" className="row-action" onClick={() => onPermissions(entry)} title={t('common.labels.permissions', 'Permissions')} aria-label={named(t('common.labels.permissions', 'Permissions'))}>
                     <Lock size={14} />
                 </SharedButton>
-                <SharedButton variant="unstyled" type="button" className="row-action danger" onClick={() => onDelete(entry)} title={t('common.actions.delete', 'Delete')}>
+                <SharedButton variant="unstyled" type="button" className="row-action danger" onClick={() => onDelete(entry)} title={t('common.actions.delete', 'Delete')} aria-label={named(t('common.actions.delete', 'Delete'))}>
                     <Trash2 size={14} />
                 </SharedButton>
             </span>

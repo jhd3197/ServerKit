@@ -598,7 +598,7 @@ const StatusPages = () => {
                                                             ))}
                                                         </>
                                                     )}
-                                                    <Button size="sm" variant="ghost" onClick={() => setDeleteConfirm({ type: 'incident', item: incident })}>
+                                                    <Button size="sm" variant="ghost" onClick={() => setDeleteConfirm({ type: 'incident', item: incident })} aria-label={t('common.actions.delete', 'Delete')}>
                                                         <Trash2 size={14} />
                                                     </Button>
                                                 </div>

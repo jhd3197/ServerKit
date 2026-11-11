@@ -1495,6 +1495,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         &.is-active { @include status-variant(var(--accent-bright), var(--accent-bg)); }
         // Overflowed tab — moved into the "More" popover, not rendered inline.
         &.is-hidden { display: none; }
+        // __tabs clips overflow, so the default 2px-offset ring would be cut off.
+        &:focus-visible { outline-offset: -2px; }
     }
     // Count pill on a tab (e.g. pending updates).
     &__badge {
@@ -1521,6 +1523,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         font: inherit;
         cursor: pointer;
         &[data-state="open"] { background: var(--surface-hover); color: var(--text); }
+        &:focus-visible { outline-offset: -2px; }
     }
 
     @media (max-width: 768px) {

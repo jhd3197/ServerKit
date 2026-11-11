@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "ลองใช้คำค้นหาอื่นหรือเรียกดูโฟลเดอร์อื่น",
             "typeZA": "ประเภท Z-A",
             "types": "ประเภท",
+            "up": "ขึ้น",
             "upDelDeleteF2RenameA": "⌫ ขึ้น · ลบ ลบ · F2 เปลี่ยนชื่อ · ⌘A ทั้งหมด",
             "updatedAt": "อัปเดต {{time}}",
             "upload": "อัปโหลด",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "อยู่ที่โฟลเดอร์บนสุดแล้ว"
         },
         "fileRow": {
-            "deselect": "ยกเลิกการเลือก",
             "rename": "เปลี่ยนชื่อ",
             "select": "เลือก"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "กำลังตรวจสอบคำเชิญ..."
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "เพิ่ม",
             "back": "กลับ",
@@ -8183,6 +8184,8 @@
         },
         "loading": "กำลังโหลด...",
         "more": "มากกว่า",
+        "moreActions": "การดำเนินการเพิ่มเติม",
+        "moreInfoAbout": "ข้อมูลเพิ่มเติมเกี่ยวกับ {{subject}}",
         "moreSections": "ส่วนเพิ่มเติม",
         "page": "หน้าหนังสือ",
         "retry": "ลองอีกครั้ง",

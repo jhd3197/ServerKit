@@ -263,7 +263,7 @@ export default function Vaults() {
             render: (v) => (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                        <Button variant="ghost" size="icon"><MoreVertical size={14} /></Button>
+                        <Button variant="ghost" size="icon" aria-label={t('common.moreActions', 'More actions')}><MoreVertical size={14} /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => openVault(v.id)}>{t('common.actions.open', 'Open')}</DropdownMenuItem>

@@ -25,6 +25,7 @@ export default function LogToolbar({
                         placeholder={t('app.logToolbar.searchInLog', 'Search in log…')}
                         value={searchPattern}
                         onChange={(e) => onSearchChange(e.target.value)}
+                        aria-label={t('app.logToolbar.searchInLog', 'Search in log…')}
                         onKeyDown={(e) => e.key === 'Enter' && onSearchSubmit()}
                     />
                     {searchPattern && (
@@ -65,6 +66,7 @@ export default function LogToolbar({
                 <SharedButton variant="unstyled" type="button"
                     className={`lv-icon-btn ${showLineNumbers ? 'active' : ''}`}
                     onClick={onToggleLineNumbers}
+                    aria-pressed={showLineNumbers}
                     title={t('app.logToolbar.toggleLineNumbers', 'Toggle line numbers')}
                 >
                     <Hash size={13} />
@@ -72,6 +74,7 @@ export default function LogToolbar({
                 <SharedButton variant="unstyled" type="button"
                     className={`lv-icon-btn ${wrapLines ? 'active' : ''}`}
                     onClick={onToggleWrap}
+                    aria-pressed={wrapLines}
                     title={t('app.logToolbar.toggleWordWrap', 'Toggle word wrap')}
                 >
                     <WrapText size={13} />

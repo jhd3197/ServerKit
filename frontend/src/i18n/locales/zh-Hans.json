@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "尝试不同的搜索词或浏览另一个文件夹。",
             "typeZA": "Z-A型",
             "types": "类型",
+            "up": "上一级",
             "upDelDeleteF2RenameA": "⌫ 向上 · Del 删除 · F2 重命名 · ⌘A 全部",
             "updatedAt": "更新于 {{time}}",
             "upload": "上传",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "已在最上层文件夹"
         },
         "fileRow": {
-            "deselect": "取消选择",
             "rename": "重命名",
             "select": "选择"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "正在验证邀请..."
     },
     "common": {
+        "actionTarget": "{{action}}：{{subject}}",
         "actions": {
             "add": "添加",
             "back": "返回",
@@ -8183,6 +8184,8 @@
         },
         "loading": "加载中…",
         "more": "更多的",
+        "moreActions": "更多操作",
+        "moreInfoAbout": "关于{{subject}}的更多信息",
         "moreSections": "更多栏目",
         "page": "页",
         "retry": "重试",

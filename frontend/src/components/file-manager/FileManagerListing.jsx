@@ -119,6 +119,8 @@ export default function FileManagerListing({
                                         variant="unstyled"
                                         type="button"
                                         className="checkbox-btn"
+                                        aria-label={t('app.dataTable.selectAll', 'Select all')}
+                                        aria-pressed={selectedPaths.size === sortedFiltered.length && sortedFiltered.length > 0}
                                         onClick={() => {
                                             if (selectedPaths.size === sortedFiltered.length)
                                                 clearSelection();

@@ -638,7 +638,7 @@ const WebhookSection = () => {
                                         >
                                             <Trash2 size={14} /> {t('common.actions.delete', 'Delete')}
                                         </Button>
-                                        <Button variant="ghost" size="sm" onClick={() => loadDeliveries(sub.id)}>
+                                        <Button variant="ghost" size="sm" onClick={() => loadDeliveries(sub.id)} aria-label={t('common.actions.refresh', 'Refresh')}>
                                             <RefreshCw size={14} />
                                         </Button>
                                     </div>

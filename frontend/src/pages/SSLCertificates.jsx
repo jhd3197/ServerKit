@@ -473,7 +473,7 @@ const SSLCertificates = () => {
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                            <Button variant="ghost" size="icon" disabled={renewing || actionLoading}>
+                            <Button variant="ghost" size="icon" disabled={renewing || actionLoading} aria-label={t('common.moreActions', 'More actions')}>
                                 {renewing ? <RefreshCw size={14} className="spin" /> : <MoreVertical size={14} />}
                             </Button>
                         </DropdownMenuTrigger>
@@ -512,7 +512,7 @@ const SSLCertificates = () => {
                 // bar stays a single row; Install Certbot / New certificate stay out.
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon" aria-label={t('common.more', 'More')}>
+                        <Button variant="outline" size="icon" aria-label={t('common.moreActions', 'More actions')}>
                             <MoreHorizontal size={15} />
                         </Button>
                     </DropdownMenuTrigger>

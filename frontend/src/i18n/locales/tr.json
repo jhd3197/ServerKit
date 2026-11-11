@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Farklı bir arama terimi deneyin veya başka bir klasöre göz atın.",
             "typeZA": "Tip Z-A",
             "types": "Türler",
+            "up": "Yukarı",
             "upDelDeleteF2RenameA": "⌫ Yukarı · Sil Sil · F2 Yeniden Adlandır · ⌘A Tümü",
             "updatedAt": "{{time}} güncellendi",
             "upload": "Yüklemek",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "Zaten en üst klasördesiniz"
         },
         "fileRow": {
-            "deselect": "Seçimi kaldır",
             "rename": "Yeniden isimlendirmek",
             "select": "Seçme"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "Davetiye doğrulanıyor…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Eklemek",
             "back": "Geri",
@@ -8183,6 +8184,8 @@
         },
         "loading": "Yükleniyor…",
         "more": "Daha",
+        "moreActions": "Diğer eylemler",
+        "moreInfoAbout": "{{subject}} hakkında daha fazla bilgi",
         "moreSections": "Daha fazla bölüm",
         "page": "Sayfa",
         "retry": "Yeniden dene",

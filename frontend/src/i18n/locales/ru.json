@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Попробуйте другой поисковый запрос или просмотрите другую папку.",
             "typeZA": "Тип Z-A",
             "types": "Типы",
+            "up": "Вверх",
             "upDelDeleteF2RenameA": "⌫ Вверх · Удалить · Переименовать F2 · ⌘A Все",
             "updatedAt": "Обновлено {{time}}",
             "upload": "Загрузить",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "Это уже верхняя папка"
         },
         "fileRow": {
-            "deselect": "Отменить выбор",
             "rename": "Переименовать",
             "select": "Выбрать"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "Проверка приглашения…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Добавить",
             "back": "Назад",
@@ -8183,6 +8184,8 @@
         },
         "loading": "Загрузка…",
         "more": "Более",
+        "moreActions": "Другие действия",
+        "moreInfoAbout": "Подробнее: {{subject}}",
         "moreSections": "Еще разделы",
         "page": "Страница",
         "retry": "Повторить",

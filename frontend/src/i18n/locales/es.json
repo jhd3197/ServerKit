@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Prueba con otro término de búsqueda o navega a otra carpeta.",
             "typeZA": "Tipo Z-A",
             "types": "Tipos",
+            "up": "Subir",
             "upDelDeleteF2RenameA": "⌫ Subir · Del Eliminar · F2 Renombrar · ⌘A Todo",
             "updatedAt": "Actualizado {{time}}",
             "upload": "Subir",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "Ya estás en la carpeta superior"
         },
         "fileRow": {
-            "deselect": "Deseleccionar",
             "rename": "Renombrar",
             "select": "Seleccionar"
         },
@@ -8050,6 +8050,7 @@
         "validatingInvitation": "Validando la invitación…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Añadir",
             "back": "Atrás",
@@ -8184,6 +8185,8 @@
         },
         "loading": "Cargando…",
         "more": "Más",
+        "moreActions": "Más acciones",
+        "moreInfoAbout": "Más información sobre {{subject}}",
         "moreSections": "Más secciones",
         "page": "Página",
         "retry": "Reintentar",
