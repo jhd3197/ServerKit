@@ -8,6 +8,11 @@
  * page header is present and there is no uncaught page error. Then it diffs the
  * viewport screenshot against tests/layout-baselines/<page>-<width>[-light].png
  * (per-channel tolerance, fails above LAYOUT_DIFF_RATIO of pixels differing).
+ * A pixel only counts as different if it mismatches the baseline at the same
+ * position AND no pixel within 1px in the other image matches it, checked in
+ * both directions (like pixelmatch's AA detection): text anti-aliasing/hinting
+ * differences between machines pass, moved or resized boxes still fail.
+ * Chromium is launched with fixed font-rendering flags to keep text stable.
  *
  *   npm run test:layout                       # check
  *   LAYOUT_UPDATE=1 npm run test:layout       # rewrite baselines
@@ -26,8 +31,9 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { fixtureFor } from './layout-fixtures.mjs';
 
-const DIFF_RATIO = Number(process.env.LAYOUT_DIFF_RATIO ?? 0.005);
+const DIFF_RATIO = Number(process.env.LAYOUT_DIFF_RATIO ?? 0.002);
 const TOLERANCE = 24;
+const LAUNCH_ARGS = ['--font-render-hinting=none', '--disable-font-subpixel-positioning', '--disable-lcd-text', '--force-color-profile=srgb'];
 const OUT = 'test-results/layout';
 const BASE_DIR = 'tests/layout-baselines';
 const NOW = '2026-01-15T12:00:00Z';
@@ -60,9 +66,20 @@ const diffInPage = async ({ a, b, tol }) => {
     const read = (img) => { const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; const x = c.getContext('2d'); x.drawImage(img, 0, 0); return x.getImageData(0, 0, c.width, c.height); };
     const da = read(ia); const db = read(ib);
     const out = new ImageData(ia.width, ia.height);
+    const { width: W, height: H } = ia;
+    const near = (x, y, i, o) => Math.abs(x[i] - y[o]) <= tol && Math.abs(x[i + 1] - y[o + 1]) <= tol && Math.abs(x[i + 2] - y[o + 2]) <= tol;
+    // true if any pixel of `d` within 1px of (px,py) matches pixel i of `s` (AA shifts glyph edges by <=1px)
+    const matchesAround = (s, d, i, px, py) => {
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+            const x = px + dx; const y = py + dy;
+            if (x >= 0 && y >= 0 && x < W && y < H && near(s, d, i, (y * W + x) * 4)) return true;
+        }
+        return false;
+    };
     let count = 0;
     for (let i = 0; i < da.data.length; i += 4) {
-        const bad = Math.abs(da.data[i] - db.data[i]) > tol || Math.abs(da.data[i + 1] - db.data[i + 1]) > tol || Math.abs(da.data[i + 2] - db.data[i + 2]) > tol;
+        const px = (i / 4) % W; const py = Math.floor(i / 4 / W);
+        const bad = !near(da.data, db.data, i, i) && !matchesAround(da.data, db.data, i, px, py) && !matchesAround(db.data, da.data, i, px, py);
         if (bad) { count++; out.data.set([255, 0, 255, 255], i); } else out.data.set([db.data[i], db.data[i + 1], db.data[i + 2], 80], i);
     }
     const c = document.createElement('canvas'); c.width = ia.width; c.height = ia.height; c.getContext('2d').putImageData(out, 0, 0);
@@ -95,7 +112,7 @@ try {
     await server.listen();
     const base = server.resolvedUrls.local[0];
     const origin = new URL(base).origin;
-    browser = await chromium.launch({ headless: true });
+    browser = await chromium.launch({ headless: true, args: LAUNCH_ARGS });
     await mkdir(OUT, { recursive: true });
     await mkdir(BASE_DIR, { recursive: true });
     const diffPage = await browser.newPage();
