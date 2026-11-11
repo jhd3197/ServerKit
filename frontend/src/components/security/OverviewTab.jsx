@@ -208,14 +208,14 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                                     <Puzzle aria-hidden="true" />
                                     {t('app.overviewTab.marketplaceLink', 'Extensions')}
                                 </Link>
-                                <InfoTip>{t('app.overviewTab.moreSecurityTools', 'More security tools (malware scanning, brute-force protection, vulnerability scans, auto-updates) are available as extensions in the Extensions marketplace.')}</InfoTip>
+                                <InfoTip subject={t('app.overviewTab.marketplaceLink', 'Extensions')}>{t('app.overviewTab.moreSecurityTools', 'More security tools (malware scanning, brute-force protection, vulnerability scans, auto-updates) are available as extensions in the Extensions marketplace.')}</InfoTip>
                             </>
                         )}
                         <Link to="/settings/notifications" className="tip-chip tip-chip--accent">
                             <Bell aria-hidden="true" />
                             {t('app.overviewTab.notificationsLink', 'Notifications')}
                         </Link>
-                        <InfoTip>{t('app.overviewTab.addAlertDeliveryChannelsDiscordSlack', 'Add alert delivery channels (Discord, Slack, Telegram) in Settings → Notifications.')}</InfoTip>
+                        <InfoTip subject={t('app.overviewTab.notificationsLink', 'Notifications')}>{t('app.overviewTab.addAlertDeliveryChannelsDiscordSlack', 'Add alert delivery channels (Discord, Slack, Telegram) in Settings → Notifications.')}</InfoTip>
                     </div>
                 </SharedCardContent>
             </SharedCard>

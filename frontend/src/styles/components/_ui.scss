@@ -602,6 +602,8 @@
         color: $text-primary;
     }
 
+    &:focus-visible { box-shadow: inset 0 0 0 2px $accent-primary; } // geometry: inset, the menu clips an outer ring
+
     &[data-disabled] {
         opacity: 0.5;
         pointer-events: none;
@@ -702,6 +704,8 @@
         background: $bg-hover;
         color: $text-primary;
     }
+
+    &:focus-visible { box-shadow: inset 0 0 0 2px $accent-primary; } // geometry: inset, the menu clips an outer ring
 
     &[data-disabled] {
         opacity: 0.5;

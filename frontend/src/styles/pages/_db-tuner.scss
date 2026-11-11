@@ -112,6 +112,7 @@
         &:focus {
             outline: none;
             border-color: $border-active;
+            box-shadow: $focus-ring;
         }
     }
 

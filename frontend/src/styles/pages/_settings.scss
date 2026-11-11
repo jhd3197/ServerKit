@@ -148,7 +148,7 @@
 
     &:focus-visible {
         outline: none;
-        box-shadow: $focus-ring;
+        box-shadow: inset 0 0 0 2px var(--accent-primary); // geometry: inset, the nav scroller clips an outer ring
     }
 
     &.active {
@@ -1232,6 +1232,7 @@
     &:focus {
         outline: none;
         border-color: $accent-primary;
+        box-shadow: $focus-ring;
     }
 
     &:disabled {
@@ -1460,6 +1461,8 @@
     &:hover {
         border-color: var(--border-strong);
     }
+
+    &:focus-visible { outline-offset: -2px; } // inset: the gallery clips an outer ring
 
     &--active {
         border-color: var(--accent-primary);
@@ -1984,6 +1987,7 @@
             &:focus {
                 outline: none;
                 border-color: $accent-primary;
+                box-shadow: $focus-ring;
             }
         }
     }
@@ -2152,6 +2156,7 @@
             &:focus {
                 outline: none;
                 border-color: $accent-primary;
+                box-shadow: $focus-ring;
             }
         }
     }
@@ -2228,6 +2233,7 @@
                 &:focus {
                     outline: none;
                     border-color: $accent-primary;
+                    box-shadow: $focus-ring;
                 }
             }
 

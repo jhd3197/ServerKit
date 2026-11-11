@@ -203,7 +203,7 @@ const ProxyStackPanel = ({ serverId }) => {
 
             <div className="proxy-panel__hint tip-chip-row">
                 <ProxyLogoTiles />
-                <InfoTip>{t('app.proxyStackPanel.hostNginxIsTheDefaultAnd', 'Host Nginx is the default and is recommended for PHP/WordPress. You can opt into a Dockerized Traefik or Caddy proxy deployed as a Compose stack.')}</InfoTip>
+                <InfoTip subject={t('app.proxyStackPanel.reverseProxy', 'Reverse proxy')}>{t('app.proxyStackPanel.hostNginxIsTheDefaultAnd', 'Host Nginx is the default and is recommended for PHP/WordPress. You can opt into a Dockerized Traefik or Caddy proxy deployed as a Compose stack.')}</InfoTip>
             </div>
 
             {audit && audit.mismatch_count > 0 && (

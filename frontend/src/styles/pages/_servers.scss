@@ -93,6 +93,7 @@
         &:focus {
             outline: none;
             border-color: $accent-primary;
+            box-shadow: $focus-ring;
         }
     }
 }
@@ -883,6 +884,7 @@
         &:focus {
             border-color: $accent-primary;
             outline: none;
+            box-shadow: $focus-ring;
         }
     }
 }
@@ -1316,6 +1318,7 @@
         &:focus {
             outline: none;
             border-color: $accent-primary;
+            box-shadow: $focus-ring;
         }
     }
 }

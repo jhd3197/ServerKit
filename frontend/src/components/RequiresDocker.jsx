@@ -58,7 +58,7 @@ const RequiresDocker = ({ children, what = 'This page' }) => {
             <p className="requires-docker__footnote">
                 {t('app.requiresDocker.checkedAutomatically', 'Re-checked automatically.')}{' '}
                 <Link to="/settings/system">{t('app.requiresDocker.settingsSystem', 'Settings → System')}</Link>
-                {' '}<InfoTip>
+                {' '}<InfoTip subject={t('app.requiresDocker.checkedAutomatically', 'Re-checked automatically.')}>
                     {t('app.requiresDocker.serverkitReChecksForDockerAutomatically', 'ServerKit re-checks for Docker automatically. Monitoring, domains, certificates, cron and DNS keep working without it. See')}{' '}
                     {t('app.requiresDocker.settingsSystem', 'Settings → System')} {t('app.requiresDocker.forThisInstallSProfile', 'for this install\'s profile.')}
                 </InfoTip>

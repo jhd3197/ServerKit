@@ -67,7 +67,7 @@ const ProfileTab = () => {
                     <Pill dot={false}>
                         <RoleIcon aria-hidden="true" />
                         <span className="profile-identity__role">{role}</span>
-                        <InfoTip>{t('app.profileTab.contactAnAdministratorToChangeYour', 'Contact an administrator to change your role')}</InfoTip>
+                        <InfoTip subject={t('app.usersTab.role', 'Role')}>{t('app.profileTab.contactAnAdministratorToChangeYour', 'Contact an administrator to change your role')}</InfoTip>
                     </Pill>
                     {user?.created_at && (
                         <Pill dot={false} title={t('app.profileTab.memberSince', 'Member since')}>

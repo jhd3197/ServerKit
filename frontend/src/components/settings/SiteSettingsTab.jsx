@@ -510,7 +510,7 @@ const SiteSettingsTab = ({ onDevModeChange }) => {
                                         </Pill>
                                     </span>
                                 )}
-                                <InfoTip>{t('app.siteSettingsTab.sitesPublishAt', 'Services publish at')} <code>&lt;name&gt;.{b.domain || 'base-domain'}</code>.{' '}
+                                <InfoTip subject={b.domain}>{t('app.siteSettingsTab.sitesPublishAt', 'Services publish at')} <code>&lt;name&gt;.{b.domain || 'base-domain'}</code>.{' '}
                             {(b.dns_mode || 'wildcard') === 'wildcard'
                                 ? <>{t('app.siteSettingsTab.point', 'Point')} <code>*.{b.domain || 'base-domain'}</code> {t('app.siteSettingsTab.atThisServer', 'at this server.')}</>
                                 : <>{t('app.siteSettingsTab.eachNewSiteGetsItsOwn', 'Each new service gets its own A record, auto-created via the provider.')}</>}</InfoTip>
