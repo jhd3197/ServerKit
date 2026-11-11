@@ -104,6 +104,7 @@ export default function FileManagerToolbar({
                             className="nav-btn"
                             onClick={goUp}
                             disabled={!parentPath}
+                            disabledReason={t('app.fileManager.alreadyAtTheTopFolder', 'Already at the top folder')}
                             title="Up"
                         >
                             <ArrowUp size={14} />

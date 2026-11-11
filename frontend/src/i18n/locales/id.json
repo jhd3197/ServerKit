@@ -971,7 +971,10 @@
             "sortAToZ": "Urutkan A ke Z",
             "sortHighToLow": "Urutkan tinggi ke rendah",
             "sortLowToHigh": "Urutkan rendah ke tinggi",
-            "sortZToA": "Urutkan Z ke A"
+            "sortZToA": "Urutkan Z ke A",
+            "alreadyTheFirstColumn": "Sudah kolom pertama",
+            "alreadyTheLastColumn": "Sudah kolom terakhir",
+            "noFilterOnThisColumn": "Tidak ada filter pada kolom ini"
         },
         "columnsMenu": {
             "columns": "Kolom",
@@ -1043,7 +1046,9 @@
             "messageTheAssistant": "Kirim pesan ke asisten",
             "noResources": "Tidak ada sumber daya yang dapat diakses",
             "searchResources": "Cari sumber daya…",
-            "send": "Mengirim"
+            "send": "Mengirim",
+            "setUpTheAssistantFirst": "Siapkan asisten terlebih dahulu",
+            "typeAMessageFirst": "Ketik pesan terlebih dahulu"
         },
         "configDiffModal": {
             "applyRestorePoint": "Terapkan titik pemulihan",
@@ -1222,7 +1227,8 @@
             "thisServerSPublicIp": "IP publik server ini",
             "useStarttlsRecommended": "Gunakan STARTTLS (disarankan)",
             "whereDoIGetThis": "Dimana saya bisa mendapatkan ini?",
-            "yourAccountEmailGlobalKeySimplest": "Email akun Anda + kunci global. Paling sederhana untuk disiapkan, tetapi memberikan akses akun penuh."
+            "yourAccountEmailGlobalKeySimplest": "Email akun Anda + kunci global. Paling sederhana untuk disiapkan, tetapi memberikan akses akun penuh.",
+            "setUpTheOauthAppFirst": "Siapkan aplikasi OAuth terlebih dahulu"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "Tambahkan kredensial aplikasi OAuth GitHub di Pengaturan sebelum menghubungkan.",
@@ -1248,7 +1254,8 @@
             "searchRepositories": "Cari repositori",
             "serviceName": "Nama layanan",
             "systemdUnitOptional": "Unit systemd (opsional)",
-            "uploadTheArchive": "Unggah arsip"
+            "uploadTheArchive": "Unggah arsip",
+            "setUpGithubInSettingsFirst": "Siapkan GitHub di Pengaturan terlebih dahulu"
         },
         "connectionsHub": {
             "authorizedViaOauth": "Diotorisasi melalui OAuth",
@@ -1339,7 +1346,8 @@
             "toRun": "untuk menjalankan.",
             "writeSqlAboveAndPress": "Tulis SQL di atas dan tekan",
             "writesEnabledBeCareful": "Penulisan diaktifkan — hati-hati",
-            "writesOn": "Penulisan aktif"
+            "writesOn": "Penulisan aktif",
+            "runAQueryWithResultsFirst": "Jalankan kueri dengan hasil terlebih dahulu"
         },
         "consoleToolbar": {
             "allLevels": "Semua level",
@@ -1355,7 +1363,8 @@
             "searchLogs": "Log penelusuran…",
             "showTheDeploymentDetailsAgain": "Tampilkan kembali detail penerapan",
             "timestamps": "Stempel waktu",
-            "wrap": "Membungkus"
+            "wrap": "Membungkus",
+            "noMatchesToJumpTo": "Tidak ada kecocokan untuk dituju"
         },
         "containerOpsPanel": {
             "actionFailed": "Tindakan gagal",
@@ -1608,7 +1617,8 @@
             "undo": "Membuka",
             "unnamedJob": "Pekerjaan tanpa nama",
             "untracked": "Tidak dilacak",
-            "whatDoesThisJobDo": "Apa fungsi pekerjaan ini?"
+            "whatDoesThisJobDo": "Apa fungsi pekerjaan ini?",
+            "enterANameCommandAndScheduleFirst": "Masukkan nama, perintah, dan jadwal terlebih dahulu"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 bidang: menit, jam, hari, bulan, hari kerja.",
@@ -1685,7 +1695,8 @@
             "noRowsMatchTheActiveColumn": "Tidak ada baris yang cocok dengan filter kolom aktif.",
             "scrollableTable": "Tabel yang dapat digulir",
             "selectAllRows": "Pilih semua baris",
-            "selectRow": "Pilih baris"
+            "selectRow": "Pilih baris",
+            "sortAColumnFirst": "Urutkan kolom terlebih dahulu"
         },
         "dataTableFooter": {
             "nextPage": "Halaman berikutnya",
@@ -2176,7 +2187,8 @@
             "refreshRecords": "Segarkan catatan",
             "regenerateToken": "Regenerasi token",
             "thisDomainIsnTSetUp": "Domain ini belum disiapkan untuk DNS di ServerKit.",
-            "tokenRegenerated": "Token dibuat ulang"
+            "tokenRegenerated": "Token dibuat ulang",
+            "enterTheRecordContentFirst": "Masukkan isi catatan terlebih dahulu"
         },
         "domainField": {
             "alreadyAttached": "{{name}} sudah terhubung ke sebuah layanan.",
@@ -2767,7 +2779,8 @@
             "webConfig": "Konfigurasi web",
             "willBeCreatedIn": "Akan dibuat di:",
             "nothingToGoBackTo": "Tidak ada yang bisa dikembalikan",
-            "nothingToGoForwardTo": "Tidak ada yang bisa dimajukan"
+            "nothingToGoForwardTo": "Tidak ada yang bisa dimajukan",
+            "alreadyAtTheTopFolder": "Sudah di folder teratas"
         },
         "fileRow": {
             "deselect": "Batalkan pilihan",
@@ -2782,7 +2795,8 @@
             "clearAll": "Hapus semuanya",
             "noFilters": "tidak ada filter",
             "showResults_one": "Tampilkan {{count}} {{noun}}",
-            "showResults_other": "Tampilkan {{count}} {{noun}}"
+            "showResults_other": "Tampilkan {{count}} {{noun}}",
+            "noFiltersApplied": "Tidak ada filter yang diterapkan"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 atau 10.0.0.0/24",
@@ -3000,7 +3014,8 @@
             "resetViewChanges": "Setel ulang perubahan tampilan",
             "rowDensity": "Kepadatan baris",
             "rowsInThisView": "Baris dalam tampilan ini",
-            "selectedRows": "Baris yang dipilih"
+            "selectedRows": "Baris yang dipilih",
+            "selectSomeRowsFirst": "Pilih beberapa baris terlebih dahulu"
         },
         "gridViewPicker": {
             "builtIn": "Dibangun di",
@@ -3016,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "Mulai dari filter & kolom saat ini",
             "unsaved": "Belum disimpan",
             "unsetAsDefault": "Batalkan sebagai default",
-            "viewOptions": "Opsi {{name}}"
+            "viewOptions": "Opsi {{name}}",
+            "enterAViewNameFirst": "Masukkan nama tampilan terlebih dahulu"
         },
         "groupMenu": {
             "group": "Grup",
@@ -3073,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "Tidak ada yang perlu dikonversi — tidak ada arahan yang ditemukan.",
             "pasteTheContentsOfAnApache": "Rekatkan konten Apache",
             "reason": "Alasan",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine Aktif \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine Aktif \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "Tempel aturan .htaccess terlebih dahulu"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 atau 10.0.0.0/24",
@@ -3169,7 +3186,12 @@
             "toConfirm": "untuk mengkonfirmasi",
             "tryAgain": "Coba lagi",
             "whereTheDumpLives": "Dimana tempat pembuangan sampah itu tinggal",
-            "working": "Memproses…"
+            "working": "Memproses…",
+            "chooseADumpFileFirst": "Pilih berkas dump terlebih dahulu",
+            "chooseATargetDatabaseFirst": "Pilih database tujuan terlebih dahulu",
+            "importFinished": "Impor selesai",
+            "onlyAdminsCanImport": "Hanya admin yang dapat mengimpor",
+            "typeTheDatabaseNameToConfirm": "Ketik nama database untuk mengonfirmasi"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "Arsip cpmove / backup-*.tar.gz dari Cadangan Akun Lengkap cPanel.",
@@ -3304,7 +3326,9 @@
             "unknownAge": "usia tidak diketahui",
             "viewChanges": "Lihat perubahan",
             "watchingADocrootHashesEveryFile": "Menonton docroot meng-hash setiap file di luar direktori unggah/cache, sehingga diikutsertakan per layanan.",
-            "whatChanged": "Apa yang berubah"
+            "whatChanged": "Apa yang berubah",
+            "createABaselineFirst": "Buat baseline terlebih dahulu",
+            "notAvailableOnThisServer": "Tidak tersedia di server ini"
         },
         "invitationsTab": {
             "copyInviteLink": "Salin tautan undangan",
@@ -3354,7 +3378,8 @@
             "exitCode": "(exit {{code}})",
             "streamingProgress": "Kemajuan streaming…",
             "waitingForTheAgentToBegin": "Menunggu agen untuk memulai…",
-            "working": "Memproses…"
+            "working": "Memproses…",
+            "waitForTheJobToFinish": "Tunggu hingga tugas selesai"
         },
         "jobs": {
             "activity": "Aktivitas",
@@ -3462,7 +3487,8 @@
             "noLogFilesFound": "Tidak ada file log yang ditemukan",
             "searchPattern": "Pola pencarian...",
             "selectALogFile": "Pilih berkas log untuk melihat isinya.",
-            "selectALogFileFirst": "Pilih file log terlebih dahulu"
+            "selectALogFileFirst": "Pilih file log terlebih dahulu",
+            "nothingToDownloadYet": "Belum ada yang bisa diunduh"
         },
         "loginLinksSection": {
             "allowedIp": "IP yang diizinkan",
@@ -4087,7 +4113,8 @@
             "noUnreadNotifications": "Tidak ada notifikasi yang belum dibaca.",
             "notifications": "Pemberitahuan",
             "success": "Kesuksesan",
-            "unread": "Belum dibaca"
+            "unread": "Belum dibaca",
+            "noFiltersToReset": "Tidak ada filter untuk direset"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, tim@example.com",
@@ -4210,7 +4237,8 @@
             "shortcutLabel": "Alihkan dock Operasi",
             "title": "Operasi",
             "unreadCount": "{{count}} belum dibaca",
-            "waitingForLogs": "Menunggu log proses…"
+            "waitingForLogs": "Menunggu log proses…",
+            "enterTheRequiredValueFirst": "Masukkan nilai yang diperlukan terlebih dahulu"
         },
         "organizationTabs": {
             "projects": "Proyek",
@@ -4741,7 +4769,9 @@
             "stepsCount_other": "{{count}} langkah",
             "unavailable": "Katalog resep tidak tersedia",
             "unavailableHint": "Registri tidak dapat dijangkau dan tidak ada salinan bawaan.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "Selesaikan hambatan di atas terlebih dahulu",
+            "selectATargetServerFirst": "Pilih server tujuan terlebih dahulu"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "Gagal memuat tempat sampah.",
@@ -5451,7 +5481,8 @@
             "upgradeAll": "Tingkatkan semuanya",
             "upgradeAllPackages": "Tingkatkan semua paket",
             "upgradeFailedToStart": "Peningkatan gagal dimulai",
-            "upgradingAllPackages": "Meningkatkan semua paket"
+            "upgradingAllPackages": "Meningkatkan semua paket",
+            "enterAPackageNameFirst": "Masukkan nama paket terlebih dahulu"
         },
         "serverPicker": {
             "deployToServer": "Terapkan ke server",
@@ -6128,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "Putuskan tautan {{name}} dari layanan tertautnya?",
             "unlinking": "Memutuskan tautan…",
             "unlinkingWillResetBothAppsTo": "Membatalkan tautan akan mengatur ulang kedua layanan ke mode mandiri.",
-            "usedForCertificateExpiryRemindersFrom": "Digunakan untuk pengingat kedaluwarsa sertifikat dari Let's Encrypt."
+            "usedForCertificateExpiryRemindersFrom": "Digunakan untuk pengingat kedaluwarsa sertifikat dari Let's Encrypt.",
+            "enterADomainNameFirst": "Masukkan nama domain terlebih dahulu"
         },
         "setupHealthWidget": {
             "allSet": "Semua siap —",
@@ -6291,7 +6323,10 @@
             "targetService": "Layanan sasaran",
             "variables": "Variabel",
             "variablesInThisGroupApplyTo": "Variabel dalam grup ini berlaku untuk setiap sumber daya yang Anda lampirkan.",
-            "whatThisGroupIsFor": "Untuk apa grup ini…"
+            "whatThisGroupIsFor": "Untuk apa grup ini…",
+            "enterAGroupNameFirst": "Masukkan nama grup terlebih dahulu",
+            "enterAResourceIdFirst": "Masukkan ID sumber daya terlebih dahulu",
+            "enterAVariableNameFirst": "Masukkan nama variabel terlebih dahulu"
         },
         "shellTab": {
             "containerShell": "Shell Kontainer",
@@ -7121,7 +7156,8 @@
             "query": "Pertanyaan",
             "structure": "Struktur",
             "tableView": "Tampilan tabel",
-            "zeroRows": "0 baris"
+            "zeroRows": "0 baris",
+            "noMoreRows": "Tidak ada baris lagi"
         },
         "tabs": {
             "moreTabs": "Lebih banyak tab"
@@ -7277,7 +7313,8 @@
             "unit": "Satuan",
             "useThe": "Gunakan",
             "failedToLoadProcesses": "Tidak dapat memuat proses.",
-            "selectALogFileFirst": "Pilih file log terlebih dahulu"
+            "selectALogFileFirst": "Pilih file log terlebih dahulu",
+            "remoteJournalIsNotAvailableYet": "Jurnal jarak jauh belum tersedia"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Proses sedang berlangsung.",
@@ -7526,7 +7563,8 @@
             "viewSaved": "Lihat \"{{trimmed}}\" disimpan",
             "viewUpdated": "Lihat \"{{name}}\" diperbarui",
             "views": "Tampilan",
-            "withChanges": "” dengan perubahan"
+            "withChanges": "” dengan perubahan",
+            "enterAViewNameFirst": "Masukkan nama tampilan terlebih dahulu"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "Hapus juga data. Tindakan ini tidak dapat dibatalkan.",
@@ -7961,6 +7999,10 @@
         "mobileSearch": {
             "label": "Cari",
             "title": "Cari semuanya (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "Tidak ada yang bisa diulang",
+            "nothingToUndo": "Tidak ada yang bisa dibatalkan"
         }
     },
     "auth": {

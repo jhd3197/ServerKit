@@ -8,10 +8,12 @@ import { usePagePrimaryAction } from '../contexts/pagePrimaryAction.js';
 // the mobile header "+", which takes over at the width where this button hides
 // (.sk-topbar__primary). Pass `to` instead of onClick to navigate.
 // `iconOnly` drops the visible label, e.g. for pages with a tight icon bar.
-export function PagePrimaryButton({ id, label, shortLabel, icon: Icon = Plus, onClick, to, disabled = false, iconOnly = false }) {
+// `disabledReason` (a prerequisite, not a pending request) is shown on both this
+// button and the header "+".
+export function PagePrimaryButton({ id, label, shortLabel, icon: Icon = Plus, onClick, to, disabled = false, disabledReason, iconOnly = false }) {
     const navigate = useNavigate();
     const run = to ? () => navigate(to) : onClick;
-    usePagePrimaryAction({ id, label, onClick: run, disabled });
+    usePagePrimaryAction({ id, label, onClick: run, disabled, disabledReason });
 
     return (
         <Button
@@ -21,6 +23,7 @@ export function PagePrimaryButton({ id, label, shortLabel, icon: Icon = Plus, on
             title={label}
             aria-label={label}
             disabled={disabled}
+            disabledReason={disabledReason}
             onClick={run}
         >
             <Icon size={15} aria-hidden="true" />

@@ -151,7 +151,7 @@ export function ViewMenu({ views, className }) {
                         aria-label={t('app.viewMenu.newViewName', 'New view name')}
                         maxLength={120}
                     />
-                    <Button size="sm" onClick={handleSave} disabled={!name.trim() || saving}>
+                    <Button size="sm" onClick={handleSave} disabled={!name.trim() || saving} disabledReason={!saving ? t('app.viewMenu.enterAViewNameFirst', 'Enter a view name first') : undefined}>
                         {t('common.actions.save', 'Save')}
                     </Button>
                 </div>

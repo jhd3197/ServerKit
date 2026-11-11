@@ -948,7 +948,7 @@ function CronFormDrawer({ open, job, onClose, onSaved }) {
 
                 <div className="cron-form__actions">
                     <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
-                    <Button type="submit" disabled={!canSave || saving}>
+                    <Button type="submit" disabled={!canSave || saving} disabledReason={!saving ? t('app.cronJobs.enterANameCommandAndScheduleFirst', 'Enter a name, command and schedule first') : undefined}>
                         {saving
                             ? t('common.saving', 'Saving…')
                             : job

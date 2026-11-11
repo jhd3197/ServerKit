@@ -60,6 +60,7 @@ const MobileTopBar = ({ navOpen, onToggle }) => {
                         title={primary.label}
                         aria-label={primary.label}
                         disabled={primary.disabled}
+                        disabledReason={primary.disabledReason}
                         onClick={primary.run}
                     >
                         <Plus size={16} />

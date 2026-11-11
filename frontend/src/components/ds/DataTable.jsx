@@ -431,6 +431,7 @@ export function DataTable({
                 variant="outline"
                 size="icon"
                 disabled={!activeSort}
+                disabledReason={t('app.dataTable.sortAColumnFirst', 'Sort a column first')}
                 aria-label={activeSort?.direction === 'desc'
                     ? t('app.dataTable.sortDescending', 'Sorted descending, switch to ascending')
                     : t('app.dataTable.sortAscending', 'Sorted ascending, switch to descending')}

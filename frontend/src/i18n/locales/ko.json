@@ -971,7 +971,10 @@
             "sortAToZ": "A → Z 정렬",
             "sortHighToLow": "높은 순 정렬",
             "sortLowToHigh": "낮은 순 정렬",
-            "sortZToA": "Z → A 정렬"
+            "sortZToA": "Z → A 정렬",
+            "alreadyTheFirstColumn": "이미 첫 번째 열입니다",
+            "alreadyTheLastColumn": "이미 마지막 열입니다",
+            "noFilterOnThisColumn": "이 열에는 필터가 없습니다"
         },
         "columnsMenu": {
             "columns": "열",
@@ -1043,7 +1046,9 @@
             "messageTheAssistant": "어시스턴트에게 메시지 보내기",
             "noResources": "액세스 가능한 리소스를 찾을 수 없습니다",
             "searchResources": "리소스 검색…",
-            "send": "보내기"
+            "send": "보내기",
+            "setUpTheAssistantFirst": "먼저 어시스턴트를 설정하세요",
+            "typeAMessageFirst": "먼저 메시지를 입력하세요"
         },
         "configDiffModal": {
             "applyRestorePoint": "복원 지점 적용",
@@ -1222,7 +1227,8 @@
             "thisServerSPublicIp": "이 서버의 공개 IP",
             "useStarttlsRecommended": "STARTTLS 사용(권장)",
             "whereDoIGetThis": "이건 어디서 구할 수 있나요?",
-            "yourAccountEmailGlobalKeySimplest": "귀하의 계정 이메일 + 글로벌 키. 설정이 가장 간단하지만 전체 계정 액세스 권한을 부여합니다."
+            "yourAccountEmailGlobalKeySimplest": "귀하의 계정 이메일 + 글로벌 키. 설정이 가장 간단하지만 전체 계정 액세스 권한을 부여합니다.",
+            "setUpTheOauthAppFirst": "먼저 OAuth 앱을 설정하세요"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "연결하기 전에 설정에서 GitHub OAuth 앱 자격 증명을 추가하세요.",
@@ -1248,7 +1254,8 @@
             "searchRepositories": "저장소 검색",
             "serviceName": "서비스 이름",
             "systemdUnitOptional": "systemd 유닛(선택 사항)",
-            "uploadTheArchive": "아카이브 업로드"
+            "uploadTheArchive": "아카이브 업로드",
+            "setUpGithubInSettingsFirst": "먼저 설정에서 GitHub를 설정하세요"
         },
         "connectionsHub": {
             "authorizedViaOauth": "OAuth로 승인됨",
@@ -1339,7 +1346,8 @@
             "toRun": "을(를) 눌러 실행하세요.",
             "writeSqlAboveAndPress": "위에 SQL을 작성하고 다음을 누르세요.",
             "writesEnabledBeCareful": "쓰기 가능 — 주의하세요",
-            "writesOn": "쓰기 켜짐"
+            "writesOn": "쓰기 켜짐",
+            "runAQueryWithResultsFirst": "먼저 결과가 있는 쿼리를 실행하세요"
         },
         "consoleToolbar": {
             "allLevels": "모든 수준",
@@ -1355,7 +1363,8 @@
             "searchLogs": "로그 검색…",
             "showTheDeploymentDetailsAgain": "배포 세부정보를 다시 표시",
             "timestamps": "타임스탬프",
-            "wrap": "랩"
+            "wrap": "랩",
+            "noMatchesToJumpTo": "이동할 일치 항목이 없습니다"
         },
         "containerOpsPanel": {
             "actionFailed": "작업 실패",
@@ -1608,7 +1617,8 @@
             "undo": "실행 취소",
             "unnamedJob": "이름 없는 작업",
             "untracked": "추적 안 함",
-            "whatDoesThisJobDo": "이 직업은 무엇을 하나요?"
+            "whatDoesThisJobDo": "이 직업은 무엇을 하나요?",
+            "enterANameCommandAndScheduleFirst": "먼저 이름, 명령, 일정을 입력하세요"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5개 필드: 분, 시, 일, 월, 요일.",
@@ -1685,7 +1695,8 @@
             "noRowsMatchTheActiveColumn": "활성 열 필터와 일치하는 행이 없습니다.",
             "scrollableTable": "스크롤 가능한 표",
             "selectAllRows": "모든 행 선택",
-            "selectRow": "행 선택"
+            "selectRow": "행 선택",
+            "sortAColumnFirst": "먼저 열을 기준으로 정렬하세요"
         },
         "dataTableFooter": {
             "nextPage": "다음 페이지",
@@ -2176,7 +2187,8 @@
             "refreshRecords": "레코드 새로 고침",
             "regenerateToken": "토큰 재생성",
             "thisDomainIsnTSetUp": "이 도메인은 아직 ServerKit에서 DNS용으로 설정되지 않았습니다.",
-            "tokenRegenerated": "토큰이 재생성되었습니다."
+            "tokenRegenerated": "토큰이 재생성되었습니다.",
+            "enterTheRecordContentFirst": "먼저 레코드 내용을 입력하세요"
         },
         "domainField": {
             "alreadyAttached": "{{name}}은(는) 이미 서비스에 연결되어 있습니다.",
@@ -2767,7 +2779,8 @@
             "webConfig": "웹 구성",
             "willBeCreatedIn": "생성 날짜:",
             "nothingToGoBackTo": "뒤로 갈 곳이 없습니다",
-            "nothingToGoForwardTo": "앞으로 갈 곳이 없습니다"
+            "nothingToGoForwardTo": "앞으로 갈 곳이 없습니다",
+            "alreadyAtTheTopFolder": "이미 최상위 폴더입니다"
         },
         "fileRow": {
             "deselect": "선택 취소",
@@ -2782,7 +2795,8 @@
             "clearAll": "모두 지우기",
             "noFilters": "필터 없음",
             "showResults_one": "{{noun}} {{count}}개 표시",
-            "showResults_other": "{{noun}} {{count}}개 표시"
+            "showResults_other": "{{noun}} {{count}}개 표시",
+            "noFiltersApplied": "적용된 필터가 없습니다"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 또는 10.0.0.0/24",
@@ -3000,7 +3014,8 @@
             "resetViewChanges": "보기 변경사항 재설정",
             "rowDensity": "행 밀도",
             "rowsInThisView": "이 보기의 행",
-            "selectedRows": "선택한 행"
+            "selectedRows": "선택한 행",
+            "selectSomeRowsFirst": "먼저 행을 선택하세요"
         },
         "gridViewPicker": {
             "builtIn": "내장",
@@ -3016,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "현재 필터 및 열에서 시작",
             "unsaved": "저장되지 않음",
             "unsetAsDefault": "기본값 해제",
-            "viewOptions": "{{name}} 옵션"
+            "viewOptions": "{{name}} 옵션",
+            "enterAViewNameFirst": "먼저 보기 이름을 입력하세요"
         },
         "groupMenu": {
             "group": "그룹",
@@ -3073,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "변환할 항목이 없습니다. 지시어가 없습니다.",
             "pasteTheContentsOfAnApache": "Apache의 내용 붙여넣기",
             "reason": "이유",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine On\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine On\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "먼저 .htaccess 규칙을 붙여넣으세요"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 또는 10.0.0.0/24",
@@ -3169,7 +3186,12 @@
             "toConfirm": "확인하기",
             "tryAgain": "다시 시도하세요",
             "whereTheDumpLives": "덤프가 사는 곳",
-            "working": "처리 중…"
+            "working": "처리 중…",
+            "chooseADumpFileFirst": "먼저 덤프 파일을 선택하세요",
+            "chooseATargetDatabaseFirst": "먼저 대상 데이터베이스를 선택하세요",
+            "importFinished": "가져오기가 완료되었습니다",
+            "onlyAdminsCanImport": "관리자만 가져올 수 있습니다",
+            "typeTheDatabaseNameToConfirm": "확인하려면 데이터베이스 이름을 입력하세요"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "cPanel의 전체 계정 백업의 cpmove / backup-*.tar.gz 아카이브.",
@@ -3304,7 +3326,9 @@
             "unknownAge": "경과 시간 알 수 없음",
             "viewChanges": "변경 사항 보기",
             "watchingADocrootHashesEveryFile": "docroot를 관찰하면 업로드/캐시 디렉터리 외부의 모든 파일이 해시되므로 서비스별로 선택됩니다.",
-            "whatChanged": "무엇이 바뀌었나"
+            "whatChanged": "무엇이 바뀌었나",
+            "createABaselineFirst": "먼저 기준선을 만드세요",
+            "notAvailableOnThisServer": "이 서버에서는 사용할 수 없습니다"
         },
         "invitationsTab": {
             "copyInviteLink": "초대 링크 복사",
@@ -3354,7 +3378,8 @@
             "exitCode": "(종료 코드 {{code}})",
             "streamingProgress": "스트리밍 진행 중…",
             "waitingForTheAgentToBegin": "에이전트가 시작되기를 기다리는 중...",
-            "working": "처리 중…"
+            "working": "처리 중…",
+            "waitForTheJobToFinish": "작업이 끝날 때까지 기다리세요"
         },
         "jobs": {
             "activity": "활동",
@@ -3462,7 +3487,8 @@
             "noLogFilesFound": "로그 파일을 찾을 수 없습니다.",
             "searchPattern": "검색 패턴...",
             "selectALogFile": "내용을 보려면 로그 파일을 선택하세요.",
-            "selectALogFileFirst": "먼저 로그 파일을 선택하세요"
+            "selectALogFileFirst": "먼저 로그 파일을 선택하세요",
+            "nothingToDownloadYet": "아직 다운로드할 항목이 없습니다"
         },
         "loginLinksSection": {
             "allowedIp": "허용된 IP",
@@ -4087,7 +4113,8 @@
             "noUnreadNotifications": "읽지 않은 알림이 없습니다.",
             "notifications": "알림",
             "success": "성공",
-            "unread": "읽지 않음"
+            "unread": "읽지 않음",
+            "noFiltersToReset": "초기화할 필터가 없습니다"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, team@example.com",
@@ -4210,7 +4237,8 @@
             "shortcutLabel": "작업 도크 전환",
             "title": "작업",
             "unreadCount": "읽지 않음 {{count}}개",
-            "waitingForLogs": "실행 로그를 기다리는 중…"
+            "waitingForLogs": "실행 로그를 기다리는 중…",
+            "enterTheRequiredValueFirst": "먼저 필수 값을 입력하세요"
         },
         "organizationTabs": {
             "projects": "프로젝트",
@@ -4741,7 +4769,9 @@
             "stepsCount_other": "{{count}}단계",
             "unavailable": "레시피 카탈로그를 사용할 수 없습니다",
             "unavailableHint": "레지스트리에 연결할 수 없으며 번들 사본도 없습니다.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "먼저 위의 차단 항목을 해결하세요",
+            "selectATargetServerFirst": "먼저 대상 서버를 선택하세요"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "휴지통을 로드하지 못했습니다.",
@@ -5451,7 +5481,8 @@
             "upgradeAll": "모두 업그레이드",
             "upgradeAllPackages": "모든 패키지 업그레이드",
             "upgradeFailedToStart": "업그레이드를 시작하지 못했습니다.",
-            "upgradingAllPackages": "모든 패키지 업그레이드"
+            "upgradingAllPackages": "모든 패키지 업그레이드",
+            "enterAPackageNameFirst": "먼저 패키지 이름을 입력하세요"
         },
         "serverPicker": {
             "deployToServer": "서버에 배포",
@@ -6128,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "연결된 서비스에서 {{name}}을(를) 연결 해제하시겠습니까?",
             "unlinking": "연결 해제 중…",
             "unlinkingWillResetBothAppsTo": "연결을 해제하면 두 서비스가 모두 독립 실행형 모드로 재설정됩니다.",
-            "usedForCertificateExpiryRemindersFrom": "Let's Encrypt의 인증서 만료 알림에 사용됩니다."
+            "usedForCertificateExpiryRemindersFrom": "Let's Encrypt의 인증서 만료 알림에 사용됩니다.",
+            "enterADomainNameFirst": "먼저 도메인 이름을 입력하세요"
         },
         "setupHealthWidget": {
             "allSet": "모든 설정 —",
@@ -6291,7 +6323,10 @@
             "targetService": "대상 서비스",
             "variables": "변수",
             "variablesInThisGroupApplyTo": "이 그룹의 변수는 연결하는 모든 리소스에 적용됩니다.",
-            "whatThisGroupIsFor": "이 그룹은 무엇을 위해..."
+            "whatThisGroupIsFor": "이 그룹은 무엇을 위해...",
+            "enterAGroupNameFirst": "먼저 그룹 이름을 입력하세요",
+            "enterAResourceIdFirst": "먼저 리소스 ID를 입력하세요",
+            "enterAVariableNameFirst": "먼저 변수 이름을 입력하세요"
         },
         "shellTab": {
             "containerShell": "컨테이너 셸",
@@ -7121,7 +7156,8 @@
             "query": "쿼리",
             "structure": "구조",
             "tableView": "테이블 보기",
-            "zeroRows": "0개 행"
+            "zeroRows": "0개 행",
+            "noMoreRows": "더 이상 행이 없습니다"
         },
         "tabs": {
             "moreTabs": "탭 더보기"
@@ -7277,7 +7313,8 @@
             "unit": "단위",
             "useThe": "사용",
             "failedToLoadProcesses": "프로세스를 불러오지 못했습니다.",
-            "selectALogFileFirst": "먼저 로그 파일을 선택하세요"
+            "selectALogFileFirst": "먼저 로그 파일을 선택하세요",
+            "remoteJournalIsNotAvailableYet": "원격 저널은 아직 사용할 수 없습니다"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "실행이 이미 진행 중입니다.",
@@ -7526,7 +7563,8 @@
             "viewSaved": "\"{{trimmed}}\" 보기가 저장됨",
             "viewUpdated": "\"{{name}}\" 보기가 업데이트되었습니다.",
             "views": "보기",
-            "withChanges": "\" 변경 사항이 있는"
+            "withChanges": "\" 변경 사항이 있는",
+            "enterAViewNameFirst": "먼저 보기 이름을 입력하세요"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "데이터도 삭제합니다. 이 작업은 되돌릴 수 없습니다.",
@@ -7961,6 +7999,10 @@
         "mobileSearch": {
             "label": "검색",
             "title": "전체 검색 (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "다시 실행할 항목이 없습니다",
+            "nothingToUndo": "실행 취소할 항목이 없습니다"
         }
     },
     "auth": {

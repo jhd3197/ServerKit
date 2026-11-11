@@ -971,7 +971,10 @@
             "sortAToZ": "按 A 到 Z 排序",
             "sortHighToLow": "从高到低排序",
             "sortLowToHigh": "从低到高排序",
-            "sortZToA": "按 Z 到 A 排序"
+            "sortZToA": "按 Z 到 A 排序",
+            "alreadyTheFirstColumn": "已经是第一列",
+            "alreadyTheLastColumn": "已经是最后一列",
+            "noFilterOnThisColumn": "此列没有筛选条件"
         },
         "columnsMenu": {
             "columns": "专栏",
@@ -1043,7 +1046,9 @@
             "messageTheAssistant": "给助理留言",
             "noResources": "未找到可访问的资源",
             "searchResources": "搜索资源…",
-            "send": "发送"
+            "send": "发送",
+            "setUpTheAssistantFirst": "请先设置助手",
+            "typeAMessageFirst": "请先输入消息"
         },
         "configDiffModal": {
             "applyRestorePoint": "应用恢复点",
@@ -1222,7 +1227,8 @@
             "thisServerSPublicIp": "该服务器的公共IP",
             "useStarttlsRecommended": "使用 STARTTLS（推荐）",
             "whereDoIGetThis": "如何获取？",
-            "yourAccountEmailGlobalKeySimplest": "您的帐户电子邮件 + 全局密钥。设置最简单，但授予完全帐户访问权限。"
+            "yourAccountEmailGlobalKeySimplest": "您的帐户电子邮件 + 全局密钥。设置最简单，但授予完全帐户访问权限。",
+            "setUpTheOauthAppFirst": "请先设置 OAuth 应用"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "连接前，请先在“设置”中添加 GitHub OAuth 应用凭据。",
@@ -1248,7 +1254,8 @@
             "searchRepositories": "搜索存储库",
             "serviceName": "服务名称",
             "systemdUnitOptional": "systemd 单元（可选）",
-            "uploadTheArchive": "上传归档文件"
+            "uploadTheArchive": "上传归档文件",
+            "setUpGithubInSettingsFirst": "请先在设置中配置 GitHub"
         },
         "connectionsHub": {
             "authorizedViaOauth": "已通过 OAuth 授权",
@@ -1339,7 +1346,8 @@
             "toRun": "运行。",
             "writeSqlAboveAndPress": "在上面写入SQL并按",
             "writesEnabledBeCareful": "启用写入——小心",
-            "writesOn": "写入已开启"
+            "writesOn": "写入已开启",
+            "runAQueryWithResultsFirst": "请先运行有结果的查询"
         },
         "consoleToolbar": {
             "allLevels": "所有级别",
@@ -1355,7 +1363,8 @@
             "searchLogs": "搜索日志...",
             "showTheDeploymentDetailsAgain": "再次显示部署详细信息",
             "timestamps": "时间戳",
-            "wrap": "裹"
+            "wrap": "裹",
+            "noMatchesToJumpTo": "没有可跳转的匹配项"
         },
         "containerOpsPanel": {
             "actionFailed": "操作失败",
@@ -1608,7 +1617,8 @@
             "undo": "撤消",
             "unnamedJob": "未命名任务",
             "untracked": "未跟踪",
-            "whatDoesThisJobDo": "这份工作是做什么的？"
+            "whatDoesThisJobDo": "这份工作是做什么的？",
+            "enterANameCommandAndScheduleFirst": "请先填写名称、命令和计划"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 个字段：分钟、小时、日、月、工作日。",
@@ -1685,7 +1695,8 @@
             "noRowsMatchTheActiveColumn": "没有行与活动列过滤器匹配。",
             "scrollableTable": "可滚动表格",
             "selectAllRows": "选择所有行",
-            "selectRow": "选择行"
+            "selectRow": "选择行",
+            "sortAColumnFirst": "请先按某一列排序"
         },
         "dataTableFooter": {
             "nextPage": "下一页",
@@ -2176,7 +2187,8 @@
             "refreshRecords": "刷新记录",
             "regenerateToken": "重新生成令牌",
             "thisDomainIsnTSetUp": "尚未在 ServerKit 中为 DNS 设置此域。",
-            "tokenRegenerated": "令牌重新生成"
+            "tokenRegenerated": "令牌重新生成",
+            "enterTheRecordContentFirst": "请先输入记录内容"
         },
         "domainField": {
             "alreadyAttached": "{{name}} 已关联到某个服务。",
@@ -2767,7 +2779,8 @@
             "webConfig": "网页配置",
             "willBeCreatedIn": "将创建于：",
             "nothingToGoBackTo": "没有可返回的页面",
-            "nothingToGoForwardTo": "没有可前进的页面"
+            "nothingToGoForwardTo": "没有可前进的页面",
+            "alreadyAtTheTopFolder": "已在最上层文件夹"
         },
         "fileRow": {
             "deselect": "取消选择",
@@ -2782,7 +2795,8 @@
             "clearAll": "全部清除",
             "noFilters": "无过滤器",
             "showResults_one": "显示 {{count}} 个{{noun}}",
-            "showResults_other": "显示 {{count}} 个{{noun}}"
+            "showResults_other": "显示 {{count}} 个{{noun}}",
+            "noFiltersApplied": "未应用任何筛选"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 或 10.0.0.0/24",
@@ -3000,7 +3014,8 @@
             "resetViewChanges": "重置视图更改",
             "rowDensity": "行密度",
             "rowsInThisView": "此视图中的行",
-            "selectedRows": "选定的行"
+            "selectedRows": "选定的行",
+            "selectSomeRowsFirst": "请先选择若干行"
         },
         "gridViewPicker": {
             "builtIn": "内置",
@@ -3016,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "从当前过滤器和列开始",
             "unsaved": "未保存",
             "unsetAsDefault": "取消默认",
-            "viewOptions": "{{name}} 选项"
+            "viewOptions": "{{name}} 选项",
+            "enterAViewNameFirst": "请先输入视图名称"
         },
         "groupMenu": {
             "group": "分组",
@@ -3073,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "没有要转换的内容——没有找到指令。",
             "pasteTheContentsOfAnApache": "粘贴 Apache 的内容",
             "reason": "原因",
-            "rewriteengineOnRewritecondRequestFilenameF": "重写引擎开启\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\n重写规则。 /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "重写引擎开启\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\n重写规则。 /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "请先粘贴 .htaccess 规则"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 或 10.0.0.0/24",
@@ -3169,7 +3186,12 @@
             "toConfirm": "确认",
             "tryAgain": "重试",
             "whereTheDumpLives": "垃圾场所在的地方",
-            "working": "处理中…"
+            "working": "处理中…",
+            "chooseADumpFileFirst": "请先选择转储文件",
+            "chooseATargetDatabaseFirst": "请先选择目标数据库",
+            "importFinished": "导入已完成",
+            "onlyAdminsCanImport": "只有管理员可以导入",
+            "typeTheDatabaseNameToConfirm": "输入数据库名称以确认"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "来自 cPanel 完整帐户备份的 cpmove / backup-*.tar.gz 存档。",
@@ -3304,7 +3326,9 @@
             "unknownAge": "时间未知",
             "viewChanges": "查看更改",
             "watchingADocrootHashesEveryFile": "观察文档根对上传/缓存目录之外的每个文件进行哈希处理，因此每个服务都可以选择加入。",
-            "whatChanged": "发生了什么变化"
+            "whatChanged": "发生了什么变化",
+            "createABaselineFirst": "请先创建基线",
+            "notAvailableOnThisServer": "此服务器上不可用"
         },
         "invitationsTab": {
             "copyInviteLink": "复制邀请链接",
@@ -3354,7 +3378,8 @@
             "exitCode": "（退出码 {{code}}）",
             "streamingProgress": "流媒体进度...",
             "waitingForTheAgentToBegin": "等待代理开始...",
-            "working": "处理中…"
+            "working": "处理中…",
+            "waitForTheJobToFinish": "请等待任务完成"
         },
         "jobs": {
             "activity": "活动",
@@ -3462,7 +3487,8 @@
             "noLogFilesFound": "未找到日志文件",
             "searchPattern": "搜索模式...",
             "selectALogFile": "选择一个日志文件以查看其内容。",
-            "selectALogFileFirst": "请先选择日志文件"
+            "selectALogFileFirst": "请先选择日志文件",
+            "nothingToDownloadYet": "暂无可下载的内容"
         },
         "loginLinksSection": {
             "allowedIp": "允许的IP",
@@ -4087,7 +4113,8 @@
             "noUnreadNotifications": "没有未读通知。",
             "notifications": "通知",
             "success": "成功",
-            "unread": "未读"
+            "unread": "未读",
+            "noFiltersToReset": "没有可重置的筛选"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com、team@example.com",
@@ -4210,7 +4237,8 @@
             "shortcutLabel": "切换“操作”停靠栏",
             "title": "操作",
             "unreadCount": "{{count}} 条未读",
-            "waitingForLogs": "正在等待运行日志…"
+            "waitingForLogs": "正在等待运行日志…",
+            "enterTheRequiredValueFirst": "请先输入所需的值"
         },
         "organizationTabs": {
             "projects": "项目",
@@ -4741,7 +4769,9 @@
             "stepsCount_other": "{{count}} 个步骤",
             "unavailable": "配方目录不可用",
             "unavailableHint": "无法访问注册表，且没有内置副本。",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "请先解决上方的阻碍项",
+            "selectATargetServerFirst": "请先选择目标服务器"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "加载回收站失败",
@@ -5451,7 +5481,8 @@
             "upgradeAll": "全部升级",
             "upgradeAllPackages": "升级所有包",
             "upgradeFailedToStart": "升级无法启动",
-            "upgradingAllPackages": "升级所有包"
+            "upgradingAllPackages": "升级所有包",
+            "enterAPackageNameFirst": "请先输入软件包名称"
         },
         "serverPicker": {
             "deployToServer": "部署到服务器",
@@ -6128,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "取消 {{name}} 与其链接服务的链接？",
             "unlinking": "正在取消关联…",
             "unlinkingWillResetBothAppsTo": "取消链接会将两个服务重置为独立模式。",
-            "usedForCertificateExpiryRemindersFrom": "用于 Let's Encrypt 的证书到期提醒。"
+            "usedForCertificateExpiryRemindersFrom": "用于 Let's Encrypt 的证书到期提醒。",
+            "enterADomainNameFirst": "请先输入域名"
         },
         "setupHealthWidget": {
             "allSet": "一切就绪——",
@@ -6291,7 +6323,10 @@
             "targetService": "目标服务",
             "variables": "变量",
             "variablesInThisGroupApplyTo": "该组中的变量适用于您附加到的每个资源。",
-            "whatThisGroupIsFor": "这个小组的目的是……"
+            "whatThisGroupIsFor": "这个小组的目的是……",
+            "enterAGroupNameFirst": "请先输入组名称",
+            "enterAResourceIdFirst": "请先输入资源 ID",
+            "enterAVariableNameFirst": "请先输入变量名"
         },
         "shellTab": {
             "containerShell": "容器 Shell",
@@ -7121,7 +7156,8 @@
             "query": "询问",
             "structure": "结构",
             "tableView": "表格视图",
-            "zeroRows": "0 行"
+            "zeroRows": "0 行",
+            "noMoreRows": "没有更多行"
         },
         "tabs": {
             "moreTabs": "更多标签"
@@ -7277,7 +7313,8 @@
             "unit": "单元",
             "useThe": "使用",
             "failedToLoadProcesses": "无法加载进程。",
-            "selectALogFileFirst": "请先选择日志文件"
+            "selectALogFileFirst": "请先选择日志文件",
+            "remoteJournalIsNotAvailableYet": "远程日志暂不可用"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "运行已经在进行中。",
@@ -7526,7 +7563,8 @@
             "viewSaved": "查看已保存的“{{trimmed}}”",
             "viewUpdated": "查看“{{name}}”已更新",
             "views": "视图",
-            "withChanges": "” 有变化"
+            "withChanges": "” 有变化",
+            "enterAViewNameFirst": "请先输入视图名称"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "同时删除数据。此操作无法撤销。",
@@ -7961,6 +7999,10 @@
         "mobileSearch": {
             "label": "搜索",
             "title": "搜索全部 (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "没有可重做的内容",
+            "nothingToUndo": "没有可撤销的内容"
         }
     },
     "auth": {

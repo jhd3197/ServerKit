@@ -130,6 +130,7 @@ export default function HtaccessConverter({ onInsert, trigger = null }) {
                             type="button"
                             onClick={handleConvert}
                             disabled={!source.trim() || converting}
+                            disabledReason={!converting ? t('app.htaccessConverter.pasteSomeHtaccessRulesFirst', 'Paste some .htaccess rules first') : undefined}
                         >
                             {converting ? t('app.htaccessConverter.converting', 'Converting…') : t('app.htaccessConverter.convert', 'Convert')}
                         </Button>

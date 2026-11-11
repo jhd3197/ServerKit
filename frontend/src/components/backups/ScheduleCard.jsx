@@ -214,6 +214,7 @@ const ScheduleCard = ({ policy, remoteConfigured, onSave, saving }) => {
                         variant="primary"
                         size="sm"
                         disabled={!dirty || saving}
+                        disabledReason={!saving ? t('app.proxyStackPanel.noChangesToSave', 'No changes to save') : undefined}
                         onClick={handleSave}
                     >
                         {saving ? <Loader2 size={14} className="spin" /> : <Save size={14} />}

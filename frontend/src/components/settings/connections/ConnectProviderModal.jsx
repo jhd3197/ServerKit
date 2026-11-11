@@ -163,7 +163,7 @@ function SourceBody({ provider, status, config, isAdmin, onConnect, onDisconnect
                                 ? t('app.connectProviderModal.setUpInOneClickBelow', 'Set it up in one click below, with no secrets to copy, then connect your account.')
                                 : t('app.connectProviderModal.anAdminNeedsToAddOauthApp', 'An admin needs to add an OAuth app below before anyone can connect.')}</span>
                     </div>
-                    <Button type="button" size="sm" disabled={!configured || busy} onClick={onConnect}>
+                    <Button type="button" size="sm" disabled={!configured || busy} disabledReason={!configured ? t('app.connectProviderModal.setUpTheOauthAppFirst', 'Set up the OAuth app first') : undefined} onClick={onConnect}>
                         <PlugZap size={15} /> {t('app.connectProviderModal.connect', 'Connect')} {provider.name}
                     </Button>
                 </div>

@@ -125,7 +125,8 @@ const DeploySafetyPanel = ({ app, onChanged }) => {
                 <div className="settings-row">
                     <div className="settings-label" />
                     <div className="settings-control">
-                        <Button size="sm" onClick={handleSave} disabled={saving || !dirty || !timeoutValid}>
+                        <Button size="sm" onClick={handleSave} disabled={saving || !dirty || !timeoutValid}
+                                disabledReason={!saving && !dirty ? t('app.proxyStackPanel.noChangesToSave', 'No changes to save') : undefined}>
                             {saving ? t('common.editing.saving', 'Saving…') : t('common.actions.save', 'Save')}
                         </Button>
                     </div>

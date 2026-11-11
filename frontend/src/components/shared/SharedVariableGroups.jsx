@@ -414,7 +414,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                         </div>
                         <div className="modal-actions">
                             <Button type="button" variant="outline" onClick={() => setCreating(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={!newName.trim()}>{t('app.sharedVariableGroups.createGroup', 'Create group')}</Button>
+                            <Button type="submit" disabled={!newName.trim()} disabledReason={t('app.sharedVariableGroups.enterAGroupNameFirst', 'Enter a group name first')}>{t('app.sharedVariableGroups.createGroup', 'Create group')}</Button>
                         </div>
                     </form>
                 </Modal>
@@ -484,7 +484,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                                     <Checkbox checked={varSecret} onCheckedChange={setVarSecret} />
                                     <span>{t('app.sharedVariableGroups.secret', 'Secret')}</span>
                                 </label>
-                                <Button type="submit" size="sm" disabled={!varKey.trim()}>
+                                <Button type="submit" size="sm" disabled={!varKey.trim()} disabledReason={t('app.sharedVariableGroups.enterAVariableNameFirst', 'Enter a variable name first')}>
                                     {t('common.actions.add', 'Add')}
                                 </Button>
                             </form>
@@ -535,7 +535,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                                     placeholder={t('app.sharedVariableGroups.resourceId', 'resource ID')}
                                     className="shared-groups__attach-id"
                                 />
-                                <Button type="submit" size="sm" disabled={!attachId.trim()}>
+                                <Button type="submit" size="sm" disabled={!attachId.trim()} disabledReason={t('app.sharedVariableGroups.enterAResourceIdFirst', 'Enter a resource ID first')}>
                                     {t('app.sharedVariableGroups.attach', 'Attach')}
                                 </Button>
                             </form>

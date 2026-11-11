@@ -629,7 +629,7 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
                             disabled={attaching}
                         />
                         <div className="app-detail-actions">
-                            <Button type="submit" disabled={!newDomain.name || attaching}>
+                            <Button type="submit" disabled={!newDomain.name || attaching} disabledReason={!attaching ? t('app.settingsTab.enterADomainNameFirst', 'Enter a domain name first') : undefined}>
                                 <Globe size={14} />
                                 {attaching ? t('app.settingsTab.attaching', 'Attaching…') : t('app.settingsTab.attachDomain', 'Attach domain')}
                             </Button>
@@ -703,7 +703,7 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
                         </div>
                         <div className="modal-footer">
                             <Button type="button" variant="outline" onClick={() => setAddOpen(false)} disabled={attaching}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={!newDomain.name || attaching}>
+                            <Button type="submit" disabled={!newDomain.name || attaching} disabledReason={!attaching ? t('app.settingsTab.enterADomainNameFirst', 'Enter a domain name first') : undefined}>
                                 {attaching ? t('app.settingsTab.attaching', 'Attaching…') : t('app.settingsTab.attachDomain', 'Attach domain')}
                             </Button>
                         </div>

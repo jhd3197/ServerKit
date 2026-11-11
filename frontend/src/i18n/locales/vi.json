@@ -971,7 +971,10 @@
             "sortAToZ": "Sắp xếp A đến Z",
             "sortHighToLow": "Sắp xếp cao đến thấp",
             "sortLowToHigh": "Sắp xếp thấp đến cao",
-            "sortZToA": "Sắp xếp Z đến A"
+            "sortZToA": "Sắp xếp Z đến A",
+            "alreadyTheFirstColumn": "Đã là cột đầu tiên",
+            "alreadyTheLastColumn": "Đã là cột cuối cùng",
+            "noFilterOnThisColumn": "Cột này không có bộ lọc"
         },
         "columnsMenu": {
             "columns": "Cột",
@@ -1043,7 +1046,9 @@
             "messageTheAssistant": "Nhắn tin cho trợ lý",
             "noResources": "Không tìm thấy tài nguyên nào có thể truy cập",
             "searchResources": "Tìm kiếm tài nguyên…",
-            "send": "Gửi"
+            "send": "Gửi",
+            "setUpTheAssistantFirst": "Hãy thiết lập trợ lý trước",
+            "typeAMessageFirst": "Hãy nhập tin nhắn trước"
         },
         "configDiffModal": {
             "applyRestorePoint": "Áp dụng điểm khôi phục",
@@ -1222,7 +1227,8 @@
             "thisServerSPublicIp": "IP công cộng của máy chủ này",
             "useStarttlsRecommended": "Sử dụng STARTTLS (được khuyến nghị)",
             "whereDoIGetThis": "Tôi lấy cái này ở đâu?",
-            "yourAccountEmailGlobalKeySimplest": "Email tài khoản của bạn + khóa chung. Thiết lập đơn giản nhất nhưng cấp toàn quyền truy cập vào tài khoản."
+            "yourAccountEmailGlobalKeySimplest": "Email tài khoản của bạn + khóa chung. Thiết lập đơn giản nhất nhưng cấp toàn quyền truy cập vào tài khoản.",
+            "setUpTheOauthAppFirst": "Hãy thiết lập ứng dụng OAuth trước"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "Thêm thông tin xác thực ứng dụng GitHub OAuth trong Cài đặt trước khi kết nối.",
@@ -1248,7 +1254,8 @@
             "searchRepositories": "Tìm kiếm kho lưu trữ",
             "serviceName": "Tên dịch vụ",
             "systemdUnitOptional": "Đơn vị systemd (tùy chọn)",
-            "uploadTheArchive": "Tải lên tệp nén"
+            "uploadTheArchive": "Tải lên tệp nén",
+            "setUpGithubInSettingsFirst": "Hãy thiết lập GitHub trong Cài đặt trước"
         },
         "connectionsHub": {
             "authorizedViaOauth": "Đã ủy quyền qua OAuth",
@@ -1339,7 +1346,8 @@
             "toRun": "để chạy.",
             "writeSqlAboveAndPress": "Viết SQL ở trên và nhấn",
             "writesEnabledBeCareful": "Đã bật tính năng ghi - hãy cẩn thận",
-            "writesOn": "Cho phép ghi"
+            "writesOn": "Cho phép ghi",
+            "runAQueryWithResultsFirst": "Hãy chạy truy vấn có kết quả trước"
         },
         "consoleToolbar": {
             "allLevels": "Tất cả cấp độ",
@@ -1355,7 +1363,8 @@
             "searchLogs": "Nhật ký tìm kiếm…",
             "showTheDeploymentDetailsAgain": "Hiển thị lại chi tiết triển khai",
             "timestamps": "Dấu thời gian",
-            "wrap": "Bọc"
+            "wrap": "Bọc",
+            "noMatchesToJumpTo": "Không có kết quả khớp để chuyển tới"
         },
         "containerOpsPanel": {
             "actionFailed": "Hành động không thành công",
@@ -1608,7 +1617,8 @@
             "undo": "Hoàn tác",
             "unnamedJob": "Công việc không tên",
             "untracked": "Không theo dõi",
-            "whatDoesThisJobDo": "Công việc này làm gì?"
+            "whatDoesThisJobDo": "Công việc này làm gì?",
+            "enterANameCommandAndScheduleFirst": "Hãy nhập tên, lệnh và lịch trước"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 trường: phút, giờ, ngày, tháng, ngày trong tuần.",
@@ -1685,7 +1695,8 @@
             "noRowsMatchTheActiveColumn": "Không có hàng nào khớp với bộ lọc cột đang hoạt động.",
             "scrollableTable": "Bảng có thể cuộn",
             "selectAllRows": "Chọn tất cả các hàng",
-            "selectRow": "Chọn hàng"
+            "selectRow": "Chọn hàng",
+            "sortAColumnFirst": "Hãy sắp xếp theo một cột trước"
         },
         "dataTableFooter": {
             "nextPage": "Trang tiếp theo",
@@ -2176,7 +2187,8 @@
             "refreshRecords": "Làm mới bản ghi",
             "regenerateToken": "Tạo lại mã thông báo",
             "thisDomainIsnTSetUp": "Miền này chưa được thiết lập cho DNS trong ServerKit.",
-            "tokenRegenerated": "Mã thông báo đã được tạo lại"
+            "tokenRegenerated": "Mã thông báo đã được tạo lại",
+            "enterTheRecordContentFirst": "Hãy nhập nội dung bản ghi trước"
         },
         "domainField": {
             "alreadyAttached": "{{name}} đã được gắn với một dịch vụ.",
@@ -2767,7 +2779,8 @@
             "webConfig": "Cấu hình web",
             "willBeCreatedIn": "Sẽ được tạo trong:",
             "nothingToGoBackTo": "Không có gì để quay lại",
-            "nothingToGoForwardTo": "Không có gì để đi tiếp"
+            "nothingToGoForwardTo": "Không có gì để đi tiếp",
+            "alreadyAtTheTopFolder": "Đã ở thư mục trên cùng"
         },
         "fileRow": {
             "deselect": "Bỏ chọn",
@@ -2782,7 +2795,8 @@
             "clearAll": "Xóa tất cả",
             "noFilters": "không có bộ lọc",
             "showResults_one": "Hiện {{count}} {{noun}}",
-            "showResults_other": "Hiện {{count}} {{noun}}"
+            "showResults_other": "Hiện {{count}} {{noun}}",
+            "noFiltersApplied": "Chưa áp dụng bộ lọc nào"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 hoặc 10.0.0.0/24",
@@ -3000,7 +3014,8 @@
             "resetViewChanges": "Đặt lại các thay đổi về chế độ xem",
             "rowDensity": "Mật độ hàng",
             "rowsInThisView": "Các hàng trong chế độ xem này",
-            "selectedRows": "Hàng đã chọn"
+            "selectedRows": "Hàng đã chọn",
+            "selectSomeRowsFirst": "Hãy chọn một số hàng trước"
         },
         "gridViewPicker": {
             "builtIn": "Được xây dựng trong",
@@ -3016,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "Bắt đầu từ các bộ lọc và cột hiện tại",
             "unsaved": "Chưa lưu",
             "unsetAsDefault": "Bỏ đặt mặc định",
-            "viewOptions": "Tùy chọn {{name}}"
+            "viewOptions": "Tùy chọn {{name}}",
+            "enterAViewNameFirst": "Hãy nhập tên chế độ xem trước"
         },
         "groupMenu": {
             "group": "Nhóm",
@@ -3073,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "Không có gì để chuyển đổi - không tìm thấy chỉ thị nào.",
             "pasteTheContentsOfAnApache": "Dán nội dung của Apache",
             "reason": "Lý do",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine trên \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine trên \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "Hãy dán các quy tắc .htaccess trước"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 hoặc 10.0.0.0/24",
@@ -3169,7 +3186,12 @@
             "toConfirm": "để xác nhận",
             "tryAgain": "Thử lại",
             "whereTheDumpLives": "Nơi bãi rác sống",
-            "working": "Đang xử lý…"
+            "working": "Đang xử lý…",
+            "chooseADumpFileFirst": "Hãy chọn tệp dump trước",
+            "chooseATargetDatabaseFirst": "Hãy chọn cơ sở dữ liệu đích trước",
+            "importFinished": "Đã nhập xong",
+            "onlyAdminsCanImport": "Chỉ quản trị viên mới có thể nhập",
+            "typeTheDatabaseNameToConfirm": "Nhập tên cơ sở dữ liệu để xác nhận"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "Kho lưu trữ cpmove / backup-*.tar.gz từ Sao lưu toàn bộ tài khoản của cPanel.",
@@ -3304,7 +3326,9 @@
             "unknownAge": "không rõ thời gian",
             "viewChanges": "Xem thay đổi",
             "watchingADocrootHashesEveryFile": "Việc xem docroot băm mọi tệp bên ngoài thư mục tải lên/bộ đệm, do đó, nó được chọn tham gia cho mỗi dịch vụ.",
-            "whatChanged": "Điều gì đã thay đổi"
+            "whatChanged": "Điều gì đã thay đổi",
+            "createABaselineFirst": "Hãy tạo đường cơ sở trước",
+            "notAvailableOnThisServer": "Không khả dụng trên máy chủ này"
         },
         "invitationsTab": {
             "copyInviteLink": "Sao chép liên kết mời",
@@ -3354,7 +3378,8 @@
             "exitCode": "(mã thoát {{code}})",
             "streamingProgress": "Đang phát trực tuyến…",
             "waitingForTheAgentToBegin": "Đang chờ đại lý bắt đầu…",
-            "working": "Đang xử lý…"
+            "working": "Đang xử lý…",
+            "waitForTheJobToFinish": "Hãy đợi tác vụ hoàn tất"
         },
         "jobs": {
             "activity": "Hoạt động",
@@ -3462,7 +3487,8 @@
             "noLogFilesFound": "Không tìm thấy tệp nhật ký nào",
             "searchPattern": "Mẫu tìm kiếm...",
             "selectALogFile": "Chọn một tệp nhật ký để xem nội dung.",
-            "selectALogFileFirst": "Hãy chọn một tệp nhật ký trước"
+            "selectALogFileFirst": "Hãy chọn một tệp nhật ký trước",
+            "nothingToDownloadYet": "Chưa có gì để tải xuống"
         },
         "loginLinksSection": {
             "allowedIp": "IP được phép",
@@ -4087,7 +4113,8 @@
             "noUnreadNotifications": "Không có thông báo chưa đọc.",
             "notifications": "Thông báo",
             "success": "Thành công",
-            "unread": "Chưa đọc"
+            "unread": "Chưa đọc",
+            "noFiltersToReset": "Không có bộ lọc để đặt lại"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "quản trị viên@example.com, team@example.com",
@@ -4210,7 +4237,8 @@
             "shortcutLabel": "Bật/tắt dock Tác vụ",
             "title": "Tác vụ",
             "unreadCount": "{{count}} chưa đọc",
-            "waitingForLogs": "Đang chờ nhật ký chạy…"
+            "waitingForLogs": "Đang chờ nhật ký chạy…",
+            "enterTheRequiredValueFirst": "Hãy nhập giá trị bắt buộc trước"
         },
         "organizationTabs": {
             "projects": "Dự án",
@@ -4741,7 +4769,9 @@
             "stepsCount_other": "{{count}} bước",
             "unavailable": "Danh mục công thức không khả dụng",
             "unavailableHint": "Không thể truy cập registry và không có bản sao đi kèm.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "Hãy giải quyết các điểm chặn ở trên trước",
+            "selectATargetServerFirst": "Hãy chọn máy chủ đích trước"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "Không thể tải thùng rác.",
@@ -5451,7 +5481,8 @@
             "upgradeAll": "Nâng cấp tất cả",
             "upgradeAllPackages": "Nâng cấp tất cả các gói",
             "upgradeFailedToStart": "Nâng cấp không bắt đầu được",
-            "upgradingAllPackages": "Nâng cấp tất cả các gói"
+            "upgradingAllPackages": "Nâng cấp tất cả các gói",
+            "enterAPackageNameFirst": "Hãy nhập tên gói trước"
         },
         "serverPicker": {
             "deployToServer": "Triển khai đến máy chủ",
@@ -6128,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "Hủy liên kết {{name}} khỏi dịch vụ được liên kết của nó?",
             "unlinking": "Đang hủy liên kết…",
             "unlinkingWillResetBothAppsTo": "Việc hủy liên kết sẽ đặt lại cả hai dịch vụ về chế độ độc lập.",
-            "usedForCertificateExpiryRemindersFrom": "Được sử dụng để nhắc nhở hết hạn chứng chỉ từ Let's Encrypt."
+            "usedForCertificateExpiryRemindersFrom": "Được sử dụng để nhắc nhở hết hạn chứng chỉ từ Let's Encrypt.",
+            "enterADomainNameFirst": "Hãy nhập tên miền trước"
         },
         "setupHealthWidget": {
             "allSet": "Mọi thứ đã sẵn sàng —",
@@ -6291,7 +6323,10 @@
             "targetService": "Dịch vụ mục tiêu",
             "variables": "Biến",
             "variablesInThisGroupApplyTo": "Các biến trong nhóm này áp dụng cho mọi tài nguyên mà bạn đính kèm.",
-            "whatThisGroupIsFor": "Nhóm này dùng để làm gì…"
+            "whatThisGroupIsFor": "Nhóm này dùng để làm gì…",
+            "enterAGroupNameFirst": "Hãy nhập tên nhóm trước",
+            "enterAResourceIdFirst": "Hãy nhập ID tài nguyên trước",
+            "enterAVariableNameFirst": "Hãy nhập tên biến trước"
         },
         "shellTab": {
             "containerShell": "Shell container",
@@ -7121,7 +7156,8 @@
             "query": "Truy vấn",
             "structure": "Kết cấu",
             "tableView": "Xem bảng",
-            "zeroRows": "0 hàng"
+            "zeroRows": "0 hàng",
+            "noMoreRows": "Không còn hàng nào"
         },
         "tabs": {
             "moreTabs": "Thêm tab"
@@ -7277,7 +7313,8 @@
             "unit": "Đơn vị",
             "useThe": "Sử dụng",
             "failedToLoadProcesses": "Không thể tải các tiến trình.",
-            "selectALogFileFirst": "Hãy chọn một tệp nhật ký trước"
+            "selectALogFileFirst": "Hãy chọn một tệp nhật ký trước",
+            "remoteJournalIsNotAvailableYet": "Nhật ký từ xa chưa khả dụng"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Một cuộc chạy đang được tiến hành.",
@@ -7526,7 +7563,8 @@
             "viewSaved": "Xem \"{{trimmed}}\" đã lưu",
             "viewUpdated": "Xem \"{{name}}\" đã cập nhật",
             "views": "Chế độ xem",
-            "withChanges": "” với những thay đổi"
+            "withChanges": "” với những thay đổi",
+            "enterAViewNameFirst": "Hãy nhập tên chế độ xem trước"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "Đồng thời xóa dữ liệu. Không thể hoàn tác.",
@@ -7961,6 +7999,10 @@
         "mobileSearch": {
             "label": "Tìm kiếm",
             "title": "Tìm mọi thứ (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "Không có gì để làm lại",
+            "nothingToUndo": "Không có gì để hoàn tác"
         }
     },
     "auth": {

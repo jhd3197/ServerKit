@@ -773,6 +773,7 @@ const JournalTab = () => {
                         onClear={() => toast.error(t('app.terminal.journalLogsCannotBeTruncatedFrom', 'Journal logs cannot be truncated from the panel.'))}
                         onScrollToBottom={scrollToBottom}
                         canAct={!loading && !isRemote}
+                        actDisabledReason={isRemote ? t('app.terminal.remoteJournalIsNotAvailableYet', 'Remote journal isn\'t available yet') : undefined}
                     />
 
                     <LogContent

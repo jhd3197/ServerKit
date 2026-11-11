@@ -971,7 +971,10 @@
             "sortAToZ": "เรียง A ถึง Z",
             "sortHighToLow": "เรียงจากมากไปน้อย",
             "sortLowToHigh": "เรียงจากน้อยไปมาก",
-            "sortZToA": "เรียง Z ถึง A"
+            "sortZToA": "เรียง Z ถึง A",
+            "alreadyTheFirstColumn": "เป็นคอลัมน์แรกอยู่แล้ว",
+            "alreadyTheLastColumn": "เป็นคอลัมน์สุดท้ายอยู่แล้ว",
+            "noFilterOnThisColumn": "คอลัมน์นี้ไม่มีตัวกรอง"
         },
         "columnsMenu": {
             "columns": "คอลัมน์",
@@ -1043,7 +1046,9 @@
             "messageTheAssistant": "ส่งข้อความถึงผู้ช่วย",
             "noResources": "ไม่พบทรัพยากรที่เข้าถึงได้",
             "searchResources": "ค้นหาทรัพยากร…",
-            "send": "ส่ง"
+            "send": "ส่ง",
+            "setUpTheAssistantFirst": "ตั้งค่าผู้ช่วยก่อน",
+            "typeAMessageFirst": "พิมพ์ข้อความก่อน"
         },
         "configDiffModal": {
             "applyRestorePoint": "ใช้จุดคืนค่า",
@@ -1222,7 +1227,8 @@
             "thisServerSPublicIp": "IP สาธารณะของเซิร์ฟเวอร์นี้",
             "useStarttlsRecommended": "ใช้ STARTTLS (แนะนำ)",
             "whereDoIGetThis": "ฉันจะได้รับสิ่งนี้ที่ไหน?",
-            "yourAccountEmailGlobalKeySimplest": "อีเมลบัญชีของคุณ + รหัสสากล ตั้งค่าง่ายที่สุด แต่ให้สิทธิ์การเข้าถึงบัญชีเต็มรูปแบบ"
+            "yourAccountEmailGlobalKeySimplest": "อีเมลบัญชีของคุณ + รหัสสากล ตั้งค่าง่ายที่สุด แต่ให้สิทธิ์การเข้าถึงบัญชีเต็มรูปแบบ",
+            "setUpTheOauthAppFirst": "ตั้งค่าแอป OAuth ก่อน"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "เพิ่มข้อมูลรับรองแอป GitHub OAuth ในการตั้งค่าก่อนเชื่อมต่อ",
@@ -1248,7 +1254,8 @@
             "searchRepositories": "ค้นหาที่เก็บข้อมูล",
             "serviceName": "ชื่อบริการ",
             "systemdUnitOptional": "หน่วย systemd (อุปกรณ์เสริม)",
-            "uploadTheArchive": "อัปโหลดไฟล์เก็บถาวร"
+            "uploadTheArchive": "อัปโหลดไฟล์เก็บถาวร",
+            "setUpGithubInSettingsFirst": "ตั้งค่า GitHub ในการตั้งค่าก่อน"
         },
         "connectionsHub": {
             "authorizedViaOauth": "อนุญาตผ่าน OAuth แล้ว",
@@ -1339,7 +1346,8 @@
             "toRun": "เพื่อรัน",
             "writeSqlAboveAndPress": "เขียน SQL ด้านบนแล้วกด",
             "writesEnabledBeCareful": "เปิดใช้งานการเขียน — ระวัง",
-            "writesOn": "เปิดการเขียนแล้ว"
+            "writesOn": "เปิดการเขียนแล้ว",
+            "runAQueryWithResultsFirst": "รันคิวรีที่มีผลลัพธ์ก่อน"
         },
         "consoleToolbar": {
             "allLevels": "ทุกระดับ",
@@ -1355,7 +1363,8 @@
             "searchLogs": "ค้นหาบันทึก...",
             "showTheDeploymentDetailsAgain": "แสดงรายละเอียดการปรับใช้อีกครั้ง",
             "timestamps": "การประทับเวลา",
-            "wrap": "ห่อ"
+            "wrap": "ห่อ",
+            "noMatchesToJumpTo": "ไม่มีรายการที่ตรงกันให้ข้ามไป"
         },
         "containerOpsPanel": {
             "actionFailed": "การดำเนินการล้มเหลว",
@@ -1608,7 +1617,8 @@
             "undo": "เลิกทำ",
             "unnamedJob": "งานที่ไม่มีชื่อ",
             "untracked": "ไม่ได้ติดตาม",
-            "whatDoesThisJobDo": "งานนี้ทำอะไรบ้าง?"
+            "whatDoesThisJobDo": "งานนี้ทำอะไรบ้าง?",
+            "enterANameCommandAndScheduleFirst": "กรอกชื่อ คำสั่ง และกำหนดเวลาก่อน"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 ช่อง: นาที ชั่วโมง วัน เดือน วันธรรมดา",
@@ -1685,7 +1695,8 @@
             "noRowsMatchTheActiveColumn": "ไม่มีแถวที่ตรงกับตัวกรองคอลัมน์ที่ใช้งานอยู่",
             "scrollableTable": "ตารางที่เลื่อนได้",
             "selectAllRows": "เลือกแถวทั้งหมด",
-            "selectRow": "เลือกแถว"
+            "selectRow": "เลือกแถว",
+            "sortAColumnFirst": "จัดเรียงตามคอลัมน์ก่อน"
         },
         "dataTableFooter": {
             "nextPage": "หน้าถัดไป",
@@ -2176,7 +2187,8 @@
             "refreshRecords": "รีเฟรชเรคคอร์ด",
             "regenerateToken": "สร้างโทเค็นใหม่",
             "thisDomainIsnTSetUp": "โดเมนนี้ยังไม่ได้ตั้งค่าสำหรับ DNS ใน ServerKit",
-            "tokenRegenerated": "โทเค็นถูกสร้างขึ้นใหม่"
+            "tokenRegenerated": "โทเค็นถูกสร้างขึ้นใหม่",
+            "enterTheRecordContentFirst": "กรอกเนื้อหาเรกคอร์ดก่อน"
         },
         "domainField": {
             "alreadyAttached": "{{name}} เชื่อมกับบริการอยู่แล้ว",
@@ -2767,7 +2779,8 @@
             "webConfig": "การกำหนดค่าเว็บ",
             "willBeCreatedIn": "จะถูกสร้างขึ้นใน:",
             "nothingToGoBackTo": "ไม่มีหน้าให้ย้อนกลับ",
-            "nothingToGoForwardTo": "ไม่มีหน้าให้ไปข้างหน้า"
+            "nothingToGoForwardTo": "ไม่มีหน้าให้ไปข้างหน้า",
+            "alreadyAtTheTopFolder": "อยู่ที่โฟลเดอร์บนสุดแล้ว"
         },
         "fileRow": {
             "deselect": "ยกเลิกการเลือก",
@@ -2782,7 +2795,8 @@
             "clearAll": "เคลียร์ทั้งหมด",
             "noFilters": "ไม่มีตัวกรอง",
             "showResults_one": "แสดง {{count}} {{noun}}",
-            "showResults_other": "แสดง {{count}} {{noun}}"
+            "showResults_other": "แสดง {{count}} {{noun}}",
+            "noFiltersApplied": "ไม่ได้ใช้ตัวกรองใดๆ"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 หรือ 10.0.0.0/24",
@@ -3000,7 +3014,8 @@
             "resetViewChanges": "รีเซ็ตการเปลี่ยนแปลงมุมมอง",
             "rowDensity": "ความหนาแน่นของแถว",
             "rowsInThisView": "แถวในมุมมองนี้",
-            "selectedRows": "แถวที่เลือก"
+            "selectedRows": "แถวที่เลือก",
+            "selectSomeRowsFirst": "เลือกบางแถวก่อน"
         },
         "gridViewPicker": {
             "builtIn": "สร้างขึ้นใน",
@@ -3016,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "เริ่มจากตัวกรองและคอลัมน์ปัจจุบัน",
             "unsaved": "ไม่ได้บันทึก",
             "unsetAsDefault": "ยกเลิกการเป็นค่าเริ่มต้น",
-            "viewOptions": "ตัวเลือกของ {{name}}"
+            "viewOptions": "ตัวเลือกของ {{name}}",
+            "enterAViewNameFirst": "กรอกชื่อมุมมองก่อน"
         },
         "groupMenu": {
             "group": "กลุ่ม",
@@ -3073,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "ไม่มีสิ่งใดที่จะแปลง — ไม่พบคำสั่ง",
             "pasteTheContentsOfAnApache": "วางเนื้อหาของ Apache",
             "reason": "เหตุผล",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine บน \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine บน \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "วางกฎ .htaccess ก่อน"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 หรือ 10.0.0.0/24",
@@ -3169,7 +3186,12 @@
             "toConfirm": "เพื่อยืนยัน",
             "tryAgain": "ลองอีกครั้ง",
             "whereTheDumpLives": "ที่ทิ้งขยะอาศัยอยู่",
-            "working": "กำลังดำเนินการ…"
+            "working": "กำลังดำเนินการ…",
+            "chooseADumpFileFirst": "เลือกไฟล์ดัมพ์ก่อน",
+            "chooseATargetDatabaseFirst": "เลือกฐานข้อมูลปลายทางก่อน",
+            "importFinished": "นำเข้าเสร็จแล้ว",
+            "onlyAdminsCanImport": "เฉพาะผู้ดูแลระบบเท่านั้นที่นำเข้าได้",
+            "typeTheDatabaseNameToConfirm": "พิมพ์ชื่อฐานข้อมูลเพื่อยืนยัน"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "ไฟล์เก็บถาวร cpmove / backup-*.tar.gz จากการสำรองข้อมูลบัญชีแบบเต็มของ cPanel",
@@ -3304,7 +3326,9 @@
             "unknownAge": "ไม่ทราบอายุ",
             "viewChanges": "ดูการเปลี่ยนแปลง",
             "watchingADocrootHashesEveryFile": "การดู docroot จะแฮชทุกไฟล์ที่อยู่นอกไดเร็กทอรีการอัปโหลด/แคช ดังนั้นจึงสามารถเลือกใช้งานได้ตามแต่ละบริการ",
-            "whatChanged": "สิ่งที่เปลี่ยนแปลงไป"
+            "whatChanged": "สิ่งที่เปลี่ยนแปลงไป",
+            "createABaselineFirst": "สร้างเบสไลน์ก่อน",
+            "notAvailableOnThisServer": "ไม่พร้อมใช้งานบนเซิร์ฟเวอร์นี้"
         },
         "invitationsTab": {
             "copyInviteLink": "คัดลอกลิงก์คำเชิญ",
@@ -3354,7 +3378,8 @@
             "exitCode": "(exit {{code}})",
             "streamingProgress": "ความคืบหน้าการสตรีม...",
             "waitingForTheAgentToBegin": "กำลังรอให้ตัวแทนเริ่มต้น...",
-            "working": "กำลังดำเนินการ…"
+            "working": "กำลังดำเนินการ…",
+            "waitForTheJobToFinish": "รอให้งานเสร็จสิ้นก่อน"
         },
         "jobs": {
             "activity": "กิจกรรม",
@@ -3462,7 +3487,8 @@
             "noLogFilesFound": "ไม่พบไฟล์บันทึก",
             "searchPattern": "รูปแบบการค้นหา...",
             "selectALogFile": "เลือกไฟล์บันทึกเพื่อดูเนื้อหา",
-            "selectALogFileFirst": "เลือกไฟล์บันทึกก่อน"
+            "selectALogFileFirst": "เลือกไฟล์บันทึกก่อน",
+            "nothingToDownloadYet": "ยังไม่มีอะไรให้ดาวน์โหลด"
         },
         "loginLinksSection": {
             "allowedIp": "IP ที่อนุญาต",
@@ -4087,7 +4113,8 @@
             "noUnreadNotifications": "ไม่มีการแจ้งเตือนที่ยังไม่ได้อ่าน",
             "notifications": "การแจ้งเตือน",
             "success": "ความสำเร็จ",
-            "unread": "ยังไม่ได้อ่าน"
+            "unread": "ยังไม่ได้อ่าน",
+            "noFiltersToReset": "ไม่มีตัวกรองให้รีเซ็ต"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, team@example.com",
@@ -4210,7 +4237,8 @@
             "shortcutLabel": "สลับแผงการดำเนินการ",
             "title": "การดำเนินการ",
             "unreadCount": "ยังไม่ได้อ่าน {{count}} รายการ",
-            "waitingForLogs": "กำลังรอบันทึกการทำงาน…"
+            "waitingForLogs": "กำลังรอบันทึกการทำงาน…",
+            "enterTheRequiredValueFirst": "กรอกค่าที่จำเป็นก่อน"
         },
         "organizationTabs": {
             "projects": "โครงการ",
@@ -4741,7 +4769,9 @@
             "stepsCount_other": "{{count}} ขั้นตอน",
             "unavailable": "แคตตาล็อกสูตรไม่พร้อมใช้งาน",
             "unavailableHint": "ไม่สามารถเข้าถึงรีจิสทรีได้และไม่มีสำเนาที่แนบมา",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "แก้ไขสิ่งที่ขัดขวางด้านบนก่อน",
+            "selectATargetServerFirst": "เลือกเซิร์ฟเวอร์ปลายทางก่อน"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "ไม่สามารถโหลดถังขยะรีไซเคิลได้",
@@ -5451,7 +5481,8 @@
             "upgradeAll": "อัพเกรดทั้งหมด",
             "upgradeAllPackages": "อัพเกรดแพ็คเกจทั้งหมด",
             "upgradeFailedToStart": "การอัพเกรดล้มเหลวในการเริ่มต้น",
-            "upgradingAllPackages": "การอัพเกรดแพ็คเกจทั้งหมด"
+            "upgradingAllPackages": "การอัพเกรดแพ็คเกจทั้งหมด",
+            "enterAPackageNameFirst": "กรอกชื่อแพ็กเกจก่อน"
         },
         "serverPicker": {
             "deployToServer": "ปรับใช้กับเซิร์ฟเวอร์",
@@ -6128,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "ยกเลิกการเชื่อมโยง {{name}} จากบริการที่เชื่อมโยงหรือไม่",
             "unlinking": "กำลังยกเลิกการเชื่อมโยง…",
             "unlinkingWillResetBothAppsTo": "การยกเลิกการเชื่อมโยงจะรีเซ็ตทั้งสองบริการเป็นโหมดสแตนด์อโลน",
-            "usedForCertificateExpiryRemindersFrom": "ใช้สำหรับการแจ้งเตือนการหมดอายุของใบรับรองจาก Let's Encrypt"
+            "usedForCertificateExpiryRemindersFrom": "ใช้สำหรับการแจ้งเตือนการหมดอายุของใบรับรองจาก Let's Encrypt",
+            "enterADomainNameFirst": "กรอกชื่อโดเมนก่อน"
         },
         "setupHealthWidget": {
             "allSet": "เรียบร้อยแล้ว —",
@@ -6291,7 +6323,10 @@
             "targetService": "บริการเป้าหมาย",
             "variables": "ตัวแปร",
             "variablesInThisGroupApplyTo": "ตัวแปรในกลุ่มนี้ใช้กับทุกทรัพยากรที่คุณแนบไว้",
-            "whatThisGroupIsFor": "กลุ่มนี้มีไว้เพื่ออะไร..."
+            "whatThisGroupIsFor": "กลุ่มนี้มีไว้เพื่ออะไร...",
+            "enterAGroupNameFirst": "กรอกชื่อกลุ่มก่อน",
+            "enterAResourceIdFirst": "กรอกรหัสทรัพยากรก่อน",
+            "enterAVariableNameFirst": "กรอกชื่อตัวแปรก่อน"
         },
         "shellTab": {
             "containerShell": "เชลล์คอนเทนเนอร์",
@@ -7121,7 +7156,8 @@
             "query": "แบบสอบถาม",
             "structure": "โครงสร้าง",
             "tableView": "มุมมองตาราง",
-            "zeroRows": "0 แถว"
+            "zeroRows": "0 แถว",
+            "noMoreRows": "ไม่มีแถวเพิ่มเติม"
         },
         "tabs": {
             "moreTabs": "แท็บเพิ่มเติม"
@@ -7277,7 +7313,8 @@
             "unit": "หน่วย",
             "useThe": "ใช้",
             "failedToLoadProcesses": "ไม่สามารถโหลดโพรเซสได้",
-            "selectALogFileFirst": "เลือกไฟล์บันทึกก่อน"
+            "selectALogFileFirst": "เลือกไฟล์บันทึกก่อน",
+            "remoteJournalIsNotAvailableYet": "ยังไม่รองรับเจอร์นัลระยะไกล"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "การวิ่งกำลังดำเนินอยู่",
@@ -7526,7 +7563,8 @@
             "viewSaved": "ดู \"{{trimmed}}\" ที่บันทึกไว้",
             "viewUpdated": "ดู \"{{name}}\" อัปเดตแล้ว",
             "views": "มุมมอง",
-            "withChanges": "”กับการเปลี่ยนแปลง"
+            "withChanges": "”กับการเปลี่ยนแปลง",
+            "enterAViewNameFirst": "กรอกชื่อมุมมองก่อน"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "ลบข้อมูลด้วย การดำเนินการนี้ไม่สามารถยกเลิกได้",
@@ -7961,6 +7999,10 @@
         "mobileSearch": {
             "label": "ค้นหา",
             "title": "ค้นหาทุกอย่าง (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "ไม่มีอะไรให้ทำซ้ำ",
+            "nothingToUndo": "ไม่มีอะไรให้ยกเลิก"
         }
     },
     "auth": {

@@ -370,6 +370,7 @@ export default function Recipes() {
                                 type="button"
                                 className="btn btn-primary"
                                 disabled={!targetServer || !!selectedBlockers.length || starting}
+                                disabledReason={starting ? undefined : !targetServer ? t('app.recipes.selectATargetServerFirst', 'Select a target server first') : t('app.recipes.resolveTheBlockersFirst', 'Resolve the blockers above first')}
                                 onClick={handleStart}
                             >
                                 {starting ? <Loader2 size={14} className="spin" /> : <Play size={14} />}

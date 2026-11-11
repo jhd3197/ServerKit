@@ -143,7 +143,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                             </SharedButton>
                             <div className="sk-gridmenu__foot">
                                 <SharedButton variant="unstyled" type="button" onClick={() => setCreating(false)}>{t('common.actions.cancel', 'Cancel')}</SharedButton>
-                                <SharedButton variant="unstyled" type="button" className="is-primary" disabled={!name.trim()} onClick={submitNew}>
+                                <SharedButton variant="unstyled" type="button" className="is-primary" disabled={!name.trim()} disabledReason={t('app.gridViewPicker.enterAViewNameFirst', 'Enter a view name first')} onClick={submitNew}>
                                     {t('common.actions.create', 'Create')}
                                 </SharedButton>
                             </div>

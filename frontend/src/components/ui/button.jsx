@@ -62,18 +62,20 @@ const Button = React.forwardRef(({
           {loadingText && <span className="sr-only">{loadingText}</span>}
         </>
       ) : children}
-      {/* Inside the button (not a sibling) so :last-child CSS and flex gaps are unaffected;
-          aria-hidden keeps it out of the accessible name while aria-describedby still reads it. */}
-      {reasoned && <span id={reasonId} className="sr-only" aria-hidden="true">{text}</span>}
     </Comp>
   );
   if (!reasoned) return button;
   // Tap has no hover: opening on click is what makes the reason reachable on touch.
+  // The description sits beside the button, not in it: a child of the button is
+  // folded into its accessible name even when aria-hidden.
   return (
-    <Tooltip open={open} onOpenChange={setOpen}>
-      <TooltipTrigger asChild>{button}</TooltipTrigger>
-      <TooltipContent><span>{text}</span></TooltipContent>
-    </Tooltip>
+    <>
+      <Tooltip open={open} onOpenChange={setOpen}>
+        <TooltipTrigger asChild>{button}</TooltipTrigger>
+        <TooltipContent><span>{text}</span></TooltipContent>
+      </Tooltip>
+      <span id={reasonId} className="sr-only">{text}</span>
+    </>
   );
 });
 Button.displayName = 'Button';

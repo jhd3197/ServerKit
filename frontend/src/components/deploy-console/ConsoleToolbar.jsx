@@ -106,6 +106,7 @@ export default function ConsoleToolbar({
                         className="deploy-console__toggle"
                         onClick={onNavPrev}
                         disabled={!navCount}
+                        disabledReason={t('app.consoleToolbar.noMatchesToJumpTo', 'No matches to jump to')}
                         title={t('app.consoleToolbar.previous', 'Previous {{value}}', { value: navLabel || 'match' })}
                     >
                         <ArrowUp size={14} />
@@ -115,6 +116,7 @@ export default function ConsoleToolbar({
                         className="deploy-console__toggle"
                         onClick={onNavNext}
                         disabled={!navCount}
+                        disabledReason={t('app.consoleToolbar.noMatchesToJumpTo', 'No matches to jump to')}
                         title={t('app.consoleToolbar.next', 'Next {{value}}', { value: navLabel || 'match' })}
                     >
                         <ArrowDown size={14} />
