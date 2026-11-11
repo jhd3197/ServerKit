@@ -214,6 +214,7 @@ const SidebarSettings = () => {
                     variant="default"
                     onClick={handleSave}
                     disabled={saving || !hasChanges}
+                    disabledReason={!saving && !hasChanges ? t('app.proxyStackPanel.noChangesToSave', 'No changes to save') : undefined}
                 >
                     {saving ? t('common.saving', 'Saving…') : t('app.sidebarSettings.saveChanges', 'Save changes')}
                 </Button>

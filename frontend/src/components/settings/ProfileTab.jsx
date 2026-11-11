@@ -106,7 +106,8 @@ const ProfileTab = () => {
                 </div>
 
                 <div className="form-actions">
-                    <Button type="submit" variant="default" disabled={loading || !dirty}>
+                    <Button type="submit" variant="default" disabled={loading || !dirty}
+                        disabledReason={!loading && !dirty ? t('app.proxyStackPanel.noChangesToSave', 'No changes to save') : undefined}>
                         {loading ? t('common.saving', 'Saving…') : t('app.profileTab.saveChanges', 'Save changes')}
                     </Button>
                 </div>

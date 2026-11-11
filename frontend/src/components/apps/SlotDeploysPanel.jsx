@@ -258,7 +258,8 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                     <div className="settings-label" />
                     <div className="settings-control">
                         <Button size="sm" onClick={handleSave}
-                            disabled={saving || !dirty || watchValue === null || standbyValue === null}>
+                            disabled={saving || !dirty || watchValue === null || standbyValue === null}
+                            disabledReason={!saving && !dirty ? t('app.proxyStackPanel.noChangesToSave', 'No changes to save') : undefined}>
                             {saving ? t('common.editing.saving', 'Saving…') : t('common.actions.save', 'Save')}
                         </Button>
                     </div>
