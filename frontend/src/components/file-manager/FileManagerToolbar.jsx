@@ -105,7 +105,7 @@ export default function FileManagerToolbar({
                             onClick={goUp}
                             disabled={!parentPath}
                             disabledReason={t('app.fileManager.alreadyAtTheTopFolder', 'Already at the top folder')}
-                            title="Up"
+                            title={t('app.fileManager.up', 'Up')}
                         >
                             <ArrowUp size={14} />
                         </Button>
@@ -227,6 +227,7 @@ export default function FileManagerToolbar({
                             type="button"
                             className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
                             onClick={() => setViewMode('grid')}
+                            aria-pressed={viewMode === 'grid'}
                             title={t('app.fileManager.gridView', 'Grid view')}
                         >
                             <LayoutGrid size={14} />
@@ -236,6 +237,7 @@ export default function FileManagerToolbar({
                             type="button"
                             className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
                             onClick={() => setViewMode('list')}
+                            aria-pressed={viewMode === 'list'}
                             title={t('app.fileManager.listView', 'List view')}
                         >
                             <List size={14} />
@@ -246,6 +248,7 @@ export default function FileManagerToolbar({
                         type="button"
                         className={`toolbar-icon-btn ${showHidden ? 'active' : ''}`}
                         onClick={() => setShowHidden(!showHidden)}
+                        aria-pressed={showHidden}
                         title={t('app.fileManager.toggleHiddenFiles', 'Toggle hidden files')}
                     >
                         {showHidden ? <Eye size={14} /> : <EyeOff size={14} />}

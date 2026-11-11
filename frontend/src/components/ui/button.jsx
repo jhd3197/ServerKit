@@ -25,6 +25,12 @@ import { Tooltip, TooltipTrigger, TooltipContent } from './tooltip';
 // change width mid-click and the row around it does not jump. The button is
 // disabled and aria-busy while it lasts; `loadingText` replaces the
 // accessible name ("Saving…") when the visible label would lie.
+// An icon-only button's native `title` is its tooltip but not a reliable name:
+// without visible text it also becomes the aria-label (an explicit one wins).
+const hasText = (node) => React.Children.toArray(node).some((c) => (
+  typeof c === 'string' || typeof c === 'number' ? String(c).trim() !== '' : React.isValidElement(c) && hasText(c.props.children)
+));
+
 const Button = React.forwardRef(({
   className, variant, size, asChild = false, loading = false, loadingText,
   disabled, disabledReason, children, onClick, title, 'aria-describedby': describedBy, ...props
@@ -51,7 +57,7 @@ const Button = React.forwardRef(({
       aria-describedby={reasoned ? [describedBy, reasonId].filter(Boolean).join(' ') : describedBy}
       aria-busy={loading || undefined}
       title={reasoned ? undefined : title}
-      aria-label={reasoned && title ? title : undefined} // the native title (the name of an icon button) is dropped for the tooltip
+      aria-label={title && (reasoned || !hasText(children)) ? title : undefined} // a reasoned button drops the native title for the tooltip
       onClick={reasoned ? (e) => { e.preventDefault(); setOpen(true); } : onClick}
       {...props}
     >

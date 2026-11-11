@@ -34,7 +34,7 @@ export function LogViewer({
                 <div className="sidebar-header">
                     <h3>{t('app.logViewer.logFiles', 'Log files')}</h3>
                     {onRefreshFiles && (
-                        <Button variant="outline" size="sm" onClick={onRefreshFiles}>
+                        <Button variant="outline" size="sm" onClick={onRefreshFiles} aria-label={t('common.actions.refresh', 'Refresh')}>
                             <RefreshCw size={14} />
                         </Button>
                     )}

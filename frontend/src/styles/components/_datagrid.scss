@@ -209,6 +209,7 @@
     }
 
     &__row:hover &__cog,
+    &__row:focus-within &__cog,
     &__row.is-on &__cog { opacity: 1; }
 }
 
@@ -535,7 +536,8 @@
         }
     }
 
-    &__row:hover &__rowend button { opacity: 1; }
+    &__row:hover &__rowend button,
+    &__row:focus-within &__rowend button { opacity: 1; }
 
     // ---- group headers ----
     &__group {

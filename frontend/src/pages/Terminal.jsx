@@ -678,6 +678,7 @@ const JournalTab = () => {
                                 value={unitInput}
                                 onChange={(e) => setUnitInput(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && applyUnitInput()}
+                                aria-label={t('app.terminal.typeUnitName', 'Type unit name…')}
                                 placeholder={t('app.terminal.typeUnitName', 'Type unit name…')}
                             />
                         </div>

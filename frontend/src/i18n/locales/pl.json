@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Wypróbuj inne wyszukiwane hasło lub przejrzyj inny folder.",
             "typeZA": "Typ Z-A",
             "types": "Typy",
+            "up": "W górę",
             "upDelDeleteF2RenameA": "⌫ W górę · Usuń · F2 Zmień nazwę · ⌘A Wszystko",
             "updatedAt": "Zaktualizowano {{time}}",
             "upload": "Wgrywać",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "To już najwyższy folder"
         },
         "fileRow": {
-            "deselect": "Odznacz",
             "rename": "Przemianować",
             "select": "Wybierać"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "Sprawdzam zaproszenie…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Dodać",
             "back": "Z powrotem",
@@ -8183,6 +8184,8 @@
         },
         "loading": "Załadunek…",
         "more": "Więcej",
+        "moreActions": "Więcej akcji",
+        "moreInfoAbout": "Więcej informacji o: {{subject}}",
         "moreSections": "Więcej sekcji",
         "page": "Strona",
         "retry": "Ponów",

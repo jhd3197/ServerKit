@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "একটি ভিন্ন অনুসন্ধান শব্দ চেষ্টা করুন বা অন্য ফোল্ডার ব্রাউজ করুন.",
             "typeZA": "Z-A টাইপ করুন",
             "types": "প্রকারভেদ",
+            "up": "উপরে",
             "upDelDeleteF2RenameA": "⌫ Up · Del Delete · F2 Rename · ⌘A All",
             "updatedAt": "আপডেট হয়েছে {{time}}",
             "upload": "আপলোড করুন",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "ইতিমধ্যেই সর্বোচ্চ ফোল্ডারে আছেন"
         },
         "fileRow": {
-            "deselect": "অনির্বাচন করুন",
             "rename": "নাম পরিবর্তন করুন",
             "select": "নির্বাচন করুন"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "আমন্ত্রণ যাচাই করা হচ্ছে..."
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "যোগ করুন",
             "back": "ব্যাক",
@@ -8183,6 +8184,8 @@
         },
         "loading": "লোড হচ্ছে...",
         "more": "আরও",
+        "moreActions": "আরও অ্যাকশন",
+        "moreInfoAbout": "{{subject}} সম্পর্কে আরও তথ্য",
         "moreSections": "আরো বিভাগ",
         "page": "পাতা",
         "retry": "আবার চেষ্টা করুন",

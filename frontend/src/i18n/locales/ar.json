@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "جرّب مصطلح بحث مختلفًا أو تصفح مجلدًا آخر.",
             "typeZA": "اكتب Z-A",
             "types": "أنواع",
+            "up": "أعلى",
             "upDelDeleteF2RenameA": "⌫ لأعلى · ديل حذف · إعادة تسمية F2 · ⌘A الكل",
             "updatedAt": "تم التحديث {{time}}",
             "upload": "رفع",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "أنت بالفعل في المجلد الأعلى"
         },
         "fileRow": {
-            "deselect": "قم بإلغاء التحديد",
             "rename": "إعادة تسمية",
             "select": "يختار"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "جارٍ التحقق من الدعوة…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "يضيف",
             "back": "خلف",
@@ -8183,6 +8184,8 @@
         },
         "loading": "تحميل…",
         "more": "أكثر",
+        "moreActions": "المزيد من الإجراءات",
+        "moreInfoAbout": "مزيد من المعلومات حول {{subject}}",
         "moreSections": "المزيد من الأقسام",
         "page": "صفحة",
         "retry": "إعادة المحاولة",

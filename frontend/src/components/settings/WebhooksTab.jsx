@@ -192,7 +192,7 @@ export default function WebhooksTab() {
             render: (ep) => (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                        <Button variant="ghost" size="icon"><MoreVertical size={14} /></Button>
+                        <Button variant="ghost" size="icon" aria-label={t('common.moreActions', 'More actions')}><MoreVertical size={14} /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => openEndpoint(ep.id)}>{t('app.webhooksTab.viewDeliveries', 'View deliveries')}</DropdownMenuItem>

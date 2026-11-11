@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Experimente um termo de pesquisa diferente ou navegue em outra pasta.",
             "typeZA": "Tipo Z-A",
             "types": "Tipos",
+            "up": "Subir",
             "upDelDeleteF2RenameA": "⌫ Para cima · Del Excluir · F2 Renomear · ⌘A Tudo",
             "updatedAt": "Atualizado {{time}}",
             "upload": "Carregar",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "Já está na pasta superior"
         },
         "fileRow": {
-            "deselect": "Desmarcar",
             "rename": "Renomear",
             "select": "Selecione"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "Validando convite…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Adicionar",
             "back": "Voltar",
@@ -8183,6 +8184,8 @@
         },
         "loading": "Carregando…",
         "more": "Mais",
+        "moreActions": "Mais ações",
+        "moreInfoAbout": "Mais informações sobre {{subject}}",
         "moreSections": "Mais seções",
         "page": "Página",
         "retry": "Tentar novamente",

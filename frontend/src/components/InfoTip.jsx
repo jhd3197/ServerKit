@@ -1,9 +1,10 @@
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Info } from 'lucide-react';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { Sheet, SheetTrigger, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import useMediaQuery from '../hooks/useMediaQuery';
 import { t } from '../i18n/t';
+import { infoTipName, nearbyText } from './infoTipName';
 
 // An (i) button that holds the explanation a page used to print inline.
 // Mouse: hover/focus previews it. Touch and click toggle a pinned popover that
@@ -15,11 +16,18 @@ import { t } from '../i18n/t';
 // the same element (separate it with a plain space, or let the flex gap do it),
 // never on its own line. Standard: ~4px after the text, centred on that line.
 // `trigger` replaces the (i) glyph (e.g. a whole step pill); `title` heads the sheet.
-export default function InfoTip({ children, label, title, trigger, side = 'top', size = 'sm', className = '' }) {
+// The button is named "More info about <subject>": `subject`, else `title`, else
+// the text right before it. `label` overrides the whole name.
+export default function InfoTip({ children, label, subject, title, trigger, side = 'top', size = 'sm', className = '' }) {
     const [open, setOpen] = useState(false);
     const narrow = useMediaQuery('(max-width: 640px)');
     const pinned = useRef(false);
     const pinnedByKey = useRef(false);
+    const buttonRef = useRef(null);
+    const [nearby, setNearby] = useState('');
+    // narrow swaps Popover for Sheet, which remounts the button.
+    useLayoutEffect(() => { setNearby(nearbyText(buttonRef.current)); }, [narrow, subject, title, label]);
+    const name = infoTipName({ label, subject, title, nearby }, t);
     const hoverable = (e) => e.pointerType === 'mouse';
 
     // preventDefault skips Radix's toggle (it honours defaultPrevented); Space
@@ -47,9 +55,10 @@ export default function InfoTip({ children, label, title, trigger, side = 'top',
     const button = (
         // eslint-disable-next-line no-restricted-syntax -- bare 18px glyph button; Button/IconButton add control-sized chrome and a nested Tip
         <button
+            ref={buttonRef}
             type="button"
             className={(trigger ? className : `info-tip info-tip--${size} ${className}`).trim()}
-            aria-label={trigger ? label : (label || t('common.moreInfo', 'More info'))}
+            aria-label={trigger ? label : name}
             onClick={stop}
             onKeyDown={onKeyDown}
             onKeyUp={onKeyUp}
@@ -75,7 +84,7 @@ export default function InfoTip({ children, label, title, trigger, side = 'top',
                     onCloseAutoFocus={noFocus}
                     onClick={stop}
                 >
-                    <SheetTitle className="info-tip__sheet-title">{title || label || t('common.moreInfo', 'More info')}</SheetTitle>
+                    <SheetTitle className="info-tip__sheet-title">{title || label || name}</SheetTitle>
                     <div className="info-tip__sheet-body">{children}</div>
                 </SheetContent>
             </Sheet>

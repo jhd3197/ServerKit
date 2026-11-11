@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Versuchen Sie es mit einem anderen Suchbegriff oder durchsuchen Sie einen anderen Ordner.",
             "typeZA": "Typ Z-A",
             "types": "Typen",
+            "up": "Nach oben",
             "upDelDeleteF2RenameA": "⌫ Nach oben · Entf Löschen · F2 Umbenennen · ⌘A Alle",
             "updatedAt": "Aktualisiert {{time}}",
             "upload": "Hochladen",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "Bereits im obersten Ordner"
         },
         "fileRow": {
-            "deselect": "Abwählen",
             "rename": "Umbenennen",
             "select": "Auswählen"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "Einladung wird validiert…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Hinzufügen",
             "back": "Zurück",
@@ -8183,6 +8184,8 @@
         },
         "loading": "Laden…",
         "more": "Mehr",
+        "moreActions": "Weitere Aktionen",
+        "moreInfoAbout": "Mehr Infos zu {{subject}}",
         "moreSections": "Weitere Abschnitte",
         "page": "Seite",
         "retry": "Erneut versuchen",

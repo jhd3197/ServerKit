@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "다른 검색어를 사용해 보거나 다른 폴더를 찾아보세요.",
             "typeZA": "Z-A형",
             "types": "유형",
+            "up": "위로",
             "upDelDeleteF2RenameA": "⌫ 위로 · Del 삭제 · F2 이름 바꾸기 · ⌘A 모두",
             "updatedAt": "{{time}} 업데이트됨",
             "upload": "업로드",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "이미 최상위 폴더입니다"
         },
         "fileRow": {
-            "deselect": "선택 취소",
             "rename": "이름 바꾸기",
             "select": "선택"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "초대 확인 중…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "추가",
             "back": "뒤로",
@@ -8183,6 +8184,8 @@
         },
         "loading": "로드 중…",
         "more": "더보기",
+        "moreActions": "더 많은 작업",
+        "moreInfoAbout": "{{subject}}에 대한 추가 정보",
         "moreSections": "더 많은 섹션",
         "page": "페이지",
         "retry": "재시도",

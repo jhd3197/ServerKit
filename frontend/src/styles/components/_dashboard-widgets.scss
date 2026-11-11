@@ -445,6 +445,7 @@ $skw-z-tv: 200;
     }
 
     &:hover &__actions,
+    &:focus-within &__actions,
     &--selected &__actions,
     &.is-selected &__actions { opacity: 1; }
 
@@ -1369,7 +1370,8 @@ $skw-z-tv: 200;
         transition: opacity 0.14s;
     }
 
-    &__card:hover &__add { opacity: 0.94; }
+    &__card:hover &__add,
+    &__card:focus-within &__add { opacity: 0.94; }
 
     &__meta { padding: 10px 11px 12px; }
 

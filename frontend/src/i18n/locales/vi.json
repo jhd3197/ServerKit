@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Hãy thử một cụm từ tìm kiếm khác hoặc duyệt qua một thư mục khác.",
             "typeZA": "Loại Z-A",
             "types": "Các loại",
+            "up": "Lên",
             "upDelDeleteF2RenameA": "⌫ Lên · Xóa · F2 Đổi tên · ⌘A Tất cả",
             "updatedAt": "Cập nhật {{time}}",
             "upload": "Tải lên",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "Đã ở thư mục trên cùng"
         },
         "fileRow": {
-            "deselect": "Bỏ chọn",
             "rename": "Đổi tên",
             "select": "Lựa chọn"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "Đang xác thực lời mời…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Thêm vào",
             "back": "Mặt sau",
@@ -8183,6 +8184,8 @@
         },
         "loading": "Đang tải…",
         "more": "Hơn",
+        "moreActions": "Thêm thao tác",
+        "moreInfoAbout": "Thông tin thêm về {{subject}}",
         "moreSections": "Các phần khác",
         "page": "Trang",
         "retry": "Thử lại",

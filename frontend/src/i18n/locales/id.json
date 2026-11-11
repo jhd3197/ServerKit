@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Coba istilah pencarian lain atau jelajahi folder lain.",
             "typeZA": "Tipe Z-A",
             "types": "Jenis",
+            "up": "Naik",
             "upDelDeleteF2RenameA": "⌫ Atas · Del Hapus · F2 Ganti Nama · ⌘A Semua",
             "updatedAt": "Diperbarui {{time}}",
             "upload": "Mengunggah",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "Sudah di folder teratas"
         },
         "fileRow": {
-            "deselect": "Batalkan pilihan",
             "rename": "Ganti nama",
             "select": "Memilih"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "Memvalidasi undangan…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Menambahkan",
             "back": "Kembali",
@@ -8183,6 +8184,8 @@
         },
         "loading": "Memuat…",
         "more": "Lagi",
+        "moreActions": "Tindakan lainnya",
+        "moreInfoAbout": "Info lebih lanjut tentang {{subject}}",
         "moreSections": "Lebih banyak bagian",
         "page": "Halaman",
         "retry": "Coba lagi",

@@ -2764,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Prova un termine di ricerca diverso o sfoglia un'altra cartella.",
             "typeZA": "Digitare Z-A",
             "types": "Tipi",
+            "up": "Su",
             "upDelDeleteF2RenameA": "⌫ Su · Canc Elimina · F2 Rinomina · ⌘A Tutto",
             "updatedAt": "Aggiornato {{time}}",
             "upload": "Caricamento",
@@ -2783,7 +2784,6 @@
             "alreadyAtTheTopFolder": "Sei già nella cartella superiore"
         },
         "fileRow": {
-            "deselect": "Deseleziona",
             "rename": "Rinominare",
             "select": "Selezionare"
         },
@@ -8049,6 +8049,7 @@
         "validatingInvitation": "Convalida dell'invito…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Aggiungere",
             "back": "Indietro",
@@ -8183,6 +8184,8 @@
         },
         "loading": "Caricamento…",
         "more": "Di più",
+        "moreActions": "Altre azioni",
+        "moreInfoAbout": "Maggiori informazioni su {{subject}}",
         "moreSections": "Più sezioni",
         "page": "Pagina",
         "retry": "Riprova",
