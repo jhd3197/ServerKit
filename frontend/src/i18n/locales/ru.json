@@ -971,7 +971,10 @@
             "sortAToZ": "Сортировать от А до Я",
             "sortHighToLow": "Сортировать по убыванию",
             "sortLowToHigh": "Сортировать по возрастанию",
-            "sortZToA": "Сортировать от Я до А"
+            "sortZToA": "Сортировать от Я до А",
+            "alreadyTheFirstColumn": "Это уже первый столбец",
+            "alreadyTheLastColumn": "Это уже последний столбец",
+            "noFilterOnThisColumn": "Для этого столбца нет фильтра"
         },
         "columnsMenu": {
             "columns": "Столбцы",
@@ -1043,7 +1046,9 @@
             "messageTheAssistant": "Напишите помощнику",
             "noResources": "Доступные ресурсы не найдены",
             "searchResources": "Поиск ресурсов…",
-            "send": "Отправлять"
+            "send": "Отправлять",
+            "setUpTheAssistantFirst": "Сначала настройте ассистента",
+            "typeAMessageFirst": "Сначала введите сообщение"
         },
         "configDiffModal": {
             "applyRestorePoint": "Применить точку восстановления",
@@ -1222,7 +1227,8 @@
             "thisServerSPublicIp": "Публичный IP-адрес этого сервера",
             "useStarttlsRecommended": "Используйте STARTTLS (рекомендуется)",
             "whereDoIGetThis": "Где я могу это получить?",
-            "yourAccountEmailGlobalKeySimplest": "Адрес электронной почты вашей учетной записи + глобальный ключ. Самый простой в настройке, но предоставляет полный доступ к учетной записи."
+            "yourAccountEmailGlobalKeySimplest": "Адрес электронной почты вашей учетной записи + глобальный ключ. Самый простой в настройке, но предоставляет полный доступ к учетной записи.",
+            "setUpTheOauthAppFirst": "Сначала настройте приложение OAuth"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "Перед подключением добавьте учётные данные OAuth-приложения GitHub в настройках.",
@@ -1248,7 +1254,8 @@
             "searchRepositories": "Поиск репозиториев",
             "serviceName": "Название службы",
             "systemdUnitOptional": "Юнит systemd (необязательно)",
-            "uploadTheArchive": "Загрузите архив"
+            "uploadTheArchive": "Загрузите архив",
+            "setUpGithubInSettingsFirst": "Сначала настройте GitHub в настройках"
         },
         "connectionsHub": {
             "authorizedViaOauth": "Авторизовано через OAuth",
@@ -1339,7 +1346,8 @@
             "toRun": "для запуска.",
             "writeSqlAboveAndPress": "Напишите SQL выше и нажмите",
             "writesEnabledBeCareful": "Запись включена — будьте осторожны",
-            "writesOn": "Запись включена"
+            "writesOn": "Запись включена",
+            "runAQueryWithResultsFirst": "Сначала выполните запрос с результатами"
         },
         "consoleToolbar": {
             "allLevels": "Все уровни",
@@ -1355,7 +1363,8 @@
             "searchLogs": "Поиск в журналах…",
             "showTheDeploymentDetailsAgain": "Показать сведения о развертывании еще раз",
             "timestamps": "Временные метки",
-            "wrap": "Сворачивать"
+            "wrap": "Сворачивать",
+            "noMatchesToJumpTo": "Нет совпадений для перехода"
         },
         "containerOpsPanel": {
             "actionFailed": "Действие не выполнено",
@@ -1608,7 +1617,8 @@
             "undo": "Отменить",
             "unnamedJob": "Безымянное задание",
             "untracked": "Не отслеживается",
-            "whatDoesThisJobDo": "Что делает эта работа?"
+            "whatDoesThisJobDo": "Что делает эта работа?",
+            "enterANameCommandAndScheduleFirst": "Сначала укажите имя, команду и расписание"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 полей: минуты, часы, день, месяц, день недели.",
@@ -1685,7 +1695,8 @@
             "noRowsMatchTheActiveColumn": "Ни одна строка не соответствует активным фильтрам столбцов.",
             "scrollableTable": "Прокручиваемая таблица",
             "selectAllRows": "Выбрать все строки",
-            "selectRow": "Выберите строку"
+            "selectRow": "Выберите строку",
+            "sortAColumnFirst": "Сначала отсортируйте по столбцу"
         },
         "dataTableFooter": {
             "nextPage": "Следующая страница",
@@ -2176,7 +2187,8 @@
             "refreshRecords": "Обновить записи",
             "regenerateToken": "Перегенерировать токен",
             "thisDomainIsnTSetUp": "Этот домен еще не настроен для DNS в ServerKit.",
-            "tokenRegenerated": "Токен перегенерирован"
+            "tokenRegenerated": "Токен перегенерирован",
+            "enterTheRecordContentFirst": "Сначала введите содержимое записи"
         },
         "domainField": {
             "alreadyAttached": "{{name}} уже привязан к сервису.",
@@ -2767,7 +2779,8 @@
             "webConfig": "Веб-конфигурация",
             "willBeCreatedIn": "Будет создано в:",
             "nothingToGoBackTo": "Некуда возвращаться",
-            "nothingToGoForwardTo": "Некуда переходить вперёд"
+            "nothingToGoForwardTo": "Некуда переходить вперёд",
+            "alreadyAtTheTopFolder": "Это уже верхняя папка"
         },
         "fileRow": {
             "deselect": "Отменить выбор",
@@ -2782,7 +2795,8 @@
             "clearAll": "Очистить все",
             "noFilters": "без фильтров",
             "showResults_one": "Показать {{count}} {{noun}}",
-            "showResults_other": "Показать {{count}} {{noun}}"
+            "showResults_other": "Показать {{count}} {{noun}}",
+            "noFiltersApplied": "Фильтры не применены"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 или 10.0.0.0/24",
@@ -3000,7 +3014,8 @@
             "resetViewChanges": "Сбросить изменения вида",
             "rowDensity": "Плотность строк",
             "rowsInThisView": "Строки в этом представлении",
-            "selectedRows": "Выбранные строки"
+            "selectedRows": "Выбранные строки",
+            "selectSomeRowsFirst": "Сначала выберите строки"
         },
         "gridViewPicker": {
             "builtIn": "Встроенный",
@@ -3016,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "Начать с текущих фильтров и столбцов",
             "unsaved": "несохраненный",
             "unsetAsDefault": "Убрать из умолчаний",
-            "viewOptions": "Параметры: {{name}}"
+            "viewOptions": "Параметры: {{name}}",
+            "enterAViewNameFirst": "Сначала введите название представления"
         },
         "groupMenu": {
             "group": "Группа",
@@ -3073,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "Нечего конвертировать — директивы не найдены.",
             "pasteTheContentsOfAnApache": "Вставьте содержимое Apache",
             "reason": "Причина",
-            "rewriteengineOnRewritecondRequestFilenameF": "Перезаписать двигатель включен\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nПереписатьПравило. /index.php [Л]"
+            "rewriteengineOnRewritecondRequestFilenameF": "Перезаписать двигатель включен\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nПереписатьПравило. /index.php [Л]",
+            "pasteSomeHtaccessRulesFirst": "Сначала вставьте правила .htaccess"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 или 10.0.0.0/24",
@@ -3169,7 +3186,12 @@
             "toConfirm": "подтвердить",
             "tryAgain": "Попробуйте еще раз",
             "whereTheDumpLives": "Где живет свалка",
-            "working": "Выполняется…"
+            "working": "Выполняется…",
+            "chooseADumpFileFirst": "Сначала выберите файл дампа",
+            "chooseATargetDatabaseFirst": "Сначала выберите целевую базу данных",
+            "importFinished": "Импорт завершён",
+            "onlyAdminsCanImport": "Импортировать могут только администраторы",
+            "typeTheDatabaseNameToConfirm": "Введите имя базы данных для подтверждения"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "Архив cpmove/backup-*.tar.gz из полной резервной копии учетной записи cPanel.",
@@ -3304,7 +3326,9 @@
             "unknownAge": "возраст неизвестен",
             "viewChanges": "Просмотреть изменения",
             "watchingADocrootHashesEveryFile": "Наблюдение за docroot хеширует каждый файл за пределами каталогов загрузки/кэша, поэтому его использование разрешено для каждого сервиса.",
-            "whatChanged": "Что изменилось"
+            "whatChanged": "Что изменилось",
+            "createABaselineFirst": "Сначала создайте базовый снимок",
+            "notAvailableOnThisServer": "Недоступно на этом сервере"
         },
         "invitationsTab": {
             "copyInviteLink": "Скопировать ссылку-приглашение",
@@ -3354,7 +3378,8 @@
             "exitCode": "(код выхода {{code}})",
             "streamingProgress": "Трансляция прогресса…",
             "waitingForTheAgentToBegin": "Ожидание начала агента…",
-            "working": "Выполняется…"
+            "working": "Выполняется…",
+            "waitForTheJobToFinish": "Дождитесь завершения задачи"
         },
         "jobs": {
             "activity": "Активность",
@@ -3462,7 +3487,8 @@
             "noLogFilesFound": "Файлы журналов не найдены",
             "searchPattern": "Шаблон поиска...",
             "selectALogFile": "Выберите файл журнала, чтобы просмотреть его содержимое.",
-            "selectALogFileFirst": "Сначала выберите файл журнала"
+            "selectALogFileFirst": "Сначала выберите файл журнала",
+            "nothingToDownloadYet": "Пока нечего скачивать"
         },
         "loginLinksSection": {
             "allowedIp": "Разрешенный IP-адрес",
@@ -4087,7 +4113,8 @@
             "noUnreadNotifications": "Нет непрочитанных уведомлений.",
             "notifications": "Уведомления",
             "success": "Успешно",
-            "unread": "Непрочитано"
+            "unread": "Непрочитано",
+            "noFiltersToReset": "Нет фильтров для сброса"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, team@example.com",
@@ -4210,7 +4237,8 @@
             "shortcutLabel": "Переключить панель операций",
             "title": "Операции",
             "unreadCount": "{{count}} непрочитанных",
-            "waitingForLogs": "Ожидание журналов выполнения…"
+            "waitingForLogs": "Ожидание журналов выполнения…",
+            "enterTheRequiredValueFirst": "Сначала введите требуемое значение"
         },
         "organizationTabs": {
             "projects": "Проекты",
@@ -4741,7 +4769,9 @@
             "stepsCount_other": "Шагов: {{count}}",
             "unavailable": "Каталог рецептов недоступен",
             "unavailableHint": "Не удалось связаться с реестром, а встроенной копии нет.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "Сначала устраните блокировки выше",
+            "selectATargetServerFirst": "Сначала выберите целевой сервер"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "Не удалось загрузить корзину.",
@@ -5451,7 +5481,8 @@
             "upgradeAll": "Обновить все",
             "upgradeAllPackages": "Обновить все пакеты",
             "upgradeFailedToStart": "Обновление не началось",
-            "upgradingAllPackages": "Обновление всех пакетов"
+            "upgradingAllPackages": "Обновление всех пакетов",
+            "enterAPackageNameFirst": "Сначала введите имя пакета"
         },
         "serverPicker": {
             "deployToServer": "Развертывание на сервере",
@@ -6128,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "Отсоединить {{name}} от связанного с ним сервиса?",
             "unlinking": "Отвязка…",
             "unlinkingWillResetBothAppsTo": "Отмена связи приведет к сбросу обоих сервисов в автономный режим.",
-            "usedForCertificateExpiryRemindersFrom": "Используется для напоминаний об истечении срока действия сертификата от Let's Encrypt."
+            "usedForCertificateExpiryRemindersFrom": "Используется для напоминаний об истечении срока действия сертификата от Let's Encrypt.",
+            "enterADomainNameFirst": "Сначала введите имя домена"
         },
         "setupHealthWidget": {
             "allSet": "Все готово —",
@@ -6291,7 +6323,10 @@
             "targetService": "Целевой сервис",
             "variables": "Переменные",
             "variablesInThisGroupApplyTo": "Переменные в этой группе применяются к каждому ресурсу, к которому вы их прикрепляете.",
-            "whatThisGroupIsFor": "Для чего эта группа..."
+            "whatThisGroupIsFor": "Для чего эта группа...",
+            "enterAGroupNameFirst": "Сначала введите имя группы",
+            "enterAResourceIdFirst": "Сначала введите ID ресурса",
+            "enterAVariableNameFirst": "Сначала введите имя переменной"
         },
         "shellTab": {
             "containerShell": "Контейнерная оболочка",
@@ -7121,7 +7156,8 @@
             "query": "Запрос",
             "structure": "Структура",
             "tableView": "Вид таблицы",
-            "zeroRows": "0 строк"
+            "zeroRows": "0 строк",
+            "noMoreRows": "Больше нет строк"
         },
         "tabs": {
             "moreTabs": "Дополнительные вкладки"
@@ -7277,7 +7313,8 @@
             "unit": "Единица",
             "useThe": "Используйте",
             "failedToLoadProcesses": "Не удалось загрузить процессы.",
-            "selectALogFileFirst": "Сначала выберите файл журнала"
+            "selectALogFileFirst": "Сначала выберите файл журнала",
+            "remoteJournalIsNotAvailableYet": "Удалённый журнал пока недоступен"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Забег уже идет.",
@@ -7526,7 +7563,8 @@
             "viewSaved": "Просмотреть \"{{trimmed}}\" сохранено.",
             "viewUpdated": "Просмотр \"{{name}}\" обновлен",
             "views": "Представления",
-            "withChanges": "» с изменениями"
+            "withChanges": "» с изменениями",
+            "enterAViewNameFirst": "Сначала введите название представления"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "Также удалить данные. Это нельзя отменить.",
@@ -7961,6 +7999,10 @@
         "mobileSearch": {
             "label": "Поиск",
             "title": "Поиск везде (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "Нечего повторять",
+            "nothingToUndo": "Нечего отменять"
         }
     },
     "auth": {

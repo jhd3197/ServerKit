@@ -109,6 +109,12 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
     const confirmed = Boolean(target) && confirmText.trim() === target.name;
     const ready = Boolean(target && backupPath && confirmed && isAdmin && !result?.ok);
 
+    const importReason = result?.ok ? t('app.importDumpModal.importFinished', 'Import finished')
+        : !isAdmin ? t('app.importDumpModal.onlyAdminsCanImport', 'Only admins can import')
+        : !target ? t('app.importDumpModal.chooseATargetDatabaseFirst', 'Choose a target database first')
+        : !backupPath ? t('app.importDumpModal.chooseADumpFileFirst', 'Choose a dump file first')
+        : t('app.importDumpModal.typeTheDatabaseNameToConfirm', 'Type the database name to confirm');
+
     async function run() {
         if (!ready || busy) return;
         setBusy(true);
@@ -155,7 +161,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
     const footer = (
         <>
             <Button type="button" variant="outline" onClick={onClose}>{result?.ok ? t('common.actions.done', 'Done') : t('common.actions.cancel', 'Cancel')}</Button>
-            <Button type="button" variant="danger" onClick={run} disabled={!ready || busy}>
+            <Button type="button" variant="danger" onClick={run} disabled={!ready || busy} disabledReason={busy ? undefined : importReason}>
                 {busy
                     ? <Loader2 size={14} className="dbx-spin" aria-hidden="true" />
                     : <FileCode2 size={14} aria-hidden="true" />}

@@ -88,7 +88,7 @@ export default function JobProgressModal({
                             </span>
                         )}
                     </div>
-                    <Button variant="outline" onClick={onClose} disabled={!done}>
+                    <Button variant="outline" onClick={onClose} disabled={!done} disabledReason={t('app.jobProgressModal.waitForTheJobToFinish', 'Wait for the job to finish')}>
                         {done ? t('common.actions.close', 'Close') : t('app.jobProgressModal.working', 'Working…')}
                     </Button>
                 </div>

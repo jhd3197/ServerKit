@@ -105,7 +105,7 @@ const ConnectStep = ({ form }) => {
                                 </p>
                             </div>
                             <div className="new-service-page__connect-actions">
-                                <Button type="button" onClick={handleConnectGithub} disabled={!githubConfigured}>
+                                <Button type="button" onClick={handleConnectGithub} disabled={!githubConfigured} disabledReason={t('app.connectStep.setUpGithubInSettingsFirst', 'Set up GitHub in Settings first')}>
                                     <SiGithub size={16} />
                                     {t('app.connectStep.connectGithub', 'Connect GitHub')}
                                 </Button>

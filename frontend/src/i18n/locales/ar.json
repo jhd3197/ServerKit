@@ -971,7 +971,10 @@
             "sortAToZ": "الترتيب من A إلى Z",
             "sortHighToLow": "الترتيب من الأعلى إلى الأدنى",
             "sortLowToHigh": "الترتيب من الأدنى إلى الأعلى",
-            "sortZToA": "الترتيب من Z إلى A"
+            "sortZToA": "الترتيب من Z إلى A",
+            "alreadyTheFirstColumn": "هذا هو العمود الأول بالفعل",
+            "alreadyTheLastColumn": "هذا هو العمود الأخير بالفعل",
+            "noFilterOnThisColumn": "لا يوجد مرشح على هذا العمود"
         },
         "columnsMenu": {
             "columns": "أعمدة",
@@ -1043,7 +1046,9 @@
             "messageTheAssistant": "مراسلة المساعد",
             "noResources": "لم يتم العثور على موارد يمكن الوصول إليها",
             "searchResources": "البحث في الموارد…",
-            "send": "يرسل"
+            "send": "يرسل",
+            "setUpTheAssistantFirst": "أعدّ المساعد أولاً",
+            "typeAMessageFirst": "اكتب رسالة أولاً"
         },
         "configDiffModal": {
             "applyRestorePoint": "تطبيق نقطة الاستعادة",
@@ -1222,7 +1227,8 @@
             "thisServerSPublicIp": "عنوان IP العام لهذا الخادم",
             "useStarttlsRecommended": "استخدم STARTTLS (مستحسن)",
             "whereDoIGetThis": "أين يمكنني الحصول على هذا؟",
-            "yourAccountEmailGlobalKeySimplest": "البريد الإلكتروني الخاص بحسابك + المفتاح العام. أبسط من حيث الإعداد، ولكنه يمنح الوصول الكامل إلى الحساب."
+            "yourAccountEmailGlobalKeySimplest": "البريد الإلكتروني الخاص بحسابك + المفتاح العام. أبسط من حيث الإعداد، ولكنه يمنح الوصول الكامل إلى الحساب.",
+            "setUpTheOauthAppFirst": "أعدّ تطبيق OAuth أولاً"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "أضف بيانات اعتماد تطبيق GitHub OAuth في الإعدادات قبل الاتصال.",
@@ -1248,7 +1254,8 @@
             "searchRepositories": "مستودعات البحث",
             "serviceName": "اسم الخدمة",
             "systemdUnitOptional": "وحدة systemd (اختياري)",
-            "uploadTheArchive": "رفع الأرشيف"
+            "uploadTheArchive": "رفع الأرشيف",
+            "setUpGithubInSettingsFirst": "أعدّ GitHub في الإعدادات أولاً"
         },
         "connectionsHub": {
             "authorizedViaOauth": "مُخوَّل عبر OAuth",
@@ -1339,7 +1346,8 @@
             "toRun": "للتشغيل.",
             "writeSqlAboveAndPress": "اكتب SQL أعلاه ثم اضغط",
             "writesEnabledBeCareful": "تم تمكين الكتابة - كن حذرًا",
-            "writesOn": "الكتابة مفعّلة"
+            "writesOn": "الكتابة مفعّلة",
+            "runAQueryWithResultsFirst": "شغّل استعلاماً له نتائج أولاً"
         },
         "consoleToolbar": {
             "allLevels": "كل المستويات",
@@ -1355,7 +1363,8 @@
             "searchLogs": "سجلات البحث...",
             "showTheDeploymentDetailsAgain": "أظهر تفاصيل النشر مرة أخرى",
             "timestamps": "الطوابع الزمنية",
-            "wrap": "طَوّق"
+            "wrap": "طَوّق",
+            "noMatchesToJumpTo": "لا توجد نتائج مطابقة للانتقال إليها"
         },
         "containerOpsPanel": {
             "actionFailed": "فشل الإجراء",
@@ -1608,7 +1617,8 @@
             "undo": "تراجع",
             "unnamedJob": "مهمة بدون اسم",
             "untracked": "غير متتبَّع",
-            "whatDoesThisJobDo": "ماذا تفعل هذه الوظيفة؟"
+            "whatDoesThisJobDo": "ماذا تفعل هذه الوظيفة؟",
+            "enterANameCommandAndScheduleFirst": "أدخل الاسم والأمر والجدولة أولاً"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 حقول: الدقيقة، الساعة، اليوم، الشهر، أيام الأسبوع.",
@@ -1685,7 +1695,8 @@
             "noRowsMatchTheActiveColumn": "لا توجد صفوف تتطابق مع عوامل تصفية الأعمدة النشطة.",
             "scrollableTable": "جدول قابل للتمرير",
             "selectAllRows": "حدد كافة الصفوف",
-            "selectRow": "حدد الصف"
+            "selectRow": "حدد الصف",
+            "sortAColumnFirst": "رتّب حسب عمود أولاً"
         },
         "dataTableFooter": {
             "nextPage": "الصفحة التالية",
@@ -2176,7 +2187,8 @@
             "refreshRecords": "تحديث السجلات",
             "regenerateToken": "إعادة إنشاء الرمز المميز",
             "thisDomainIsnTSetUp": "لم يتم إعداد هذا المجال لـ DNS في ServerKit حتى الآن.",
-            "tokenRegenerated": "تم إعادة إنشاء الرمز المميز"
+            "tokenRegenerated": "تم إعادة إنشاء الرمز المميز",
+            "enterTheRecordContentFirst": "أدخل محتوى السجل أولاً"
         },
         "domainField": {
             "alreadyAttached": "{{name}} مرتبط بالفعل بخدمة.",
@@ -2767,7 +2779,8 @@
             "webConfig": "تكوين الويب",
             "willBeCreatedIn": "سيتم إنشاؤها في:",
             "nothingToGoBackTo": "لا يوجد ما يمكن الرجوع إليه",
-            "nothingToGoForwardTo": "لا يوجد ما يمكن التقدم إليه"
+            "nothingToGoForwardTo": "لا يوجد ما يمكن التقدم إليه",
+            "alreadyAtTheTopFolder": "أنت بالفعل في المجلد الأعلى"
         },
         "fileRow": {
             "deselect": "قم بإلغاء التحديد",
@@ -2782,7 +2795,8 @@
             "clearAll": "مسح الكل",
             "noFilters": "لا المرشحات",
             "showResults_one": "إظهار {{count}} {{noun}}",
-            "showResults_other": "إظهار {{count}} {{noun}}"
+            "showResults_other": "إظهار {{count}} {{noun}}",
+            "noFiltersApplied": "لا توجد مرشحات مطبّقة"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 أو 10.0.0.0/24",
@@ -3000,7 +3014,8 @@
             "resetViewChanges": "إعادة ضبط تغييرات العرض",
             "rowDensity": "كثافة الصف",
             "rowsInThisView": "الصفوف في طريقة العرض هذه",
-            "selectedRows": "صفوف مختارة"
+            "selectedRows": "صفوف مختارة",
+            "selectSomeRowsFirst": "حدّد بعض الصفوف أولاً"
         },
         "gridViewPicker": {
             "builtIn": "بنيت في",
@@ -3016,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "ابدأ من المرشحات والأعمدة الحالية",
             "unsaved": "غير محفوظ",
             "unsetAsDefault": "إلغاء التعيين كافتراضي",
-            "viewOptions": "خيارات {{name}}"
+            "viewOptions": "خيارات {{name}}",
+            "enterAViewNameFirst": "أدخل اسم العرض أولاً"
         },
         "groupMenu": {
             "group": "تجميع",
@@ -3073,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "لا يوجد شيء للتحويل — لم يتم العثور على أي توجيهات.",
             "pasteTheContentsOfAnApache": "لصق محتويات أباتشي",
             "reason": "سبب",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine على \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine على \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "الصق قواعد .htaccess أولاً"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 أو 10.0.0.0/24",
@@ -3169,7 +3186,12 @@
             "toConfirm": "للتأكيد",
             "tryAgain": "حاول ثانية",
             "whereTheDumpLives": "حيث يعيش المكب",
-            "working": "جارٍ العمل…"
+            "working": "جارٍ العمل…",
+            "chooseADumpFileFirst": "اختر ملف النسخة (dump) أولاً",
+            "chooseATargetDatabaseFirst": "اختر قاعدة البيانات الهدف أولاً",
+            "importFinished": "اكتمل الاستيراد",
+            "onlyAdminsCanImport": "يمكن للمسؤولين فقط الاستيراد",
+            "typeTheDatabaseNameToConfirm": "اكتب اسم قاعدة البيانات للتأكيد"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "أرشيف cpmove / Backup-*.tar.gz من النسخة الاحتياطية الكاملة للحساب في cPanel.",
@@ -3304,7 +3326,9 @@
             "unknownAge": "عمر غير معروف",
             "viewChanges": "عرض التغييرات",
             "watchingADocrootHashesEveryFile": "تؤدي مشاهدة docroot إلى تجزئة كل ملف خارج مجلدات التحميل/التخزين المؤقت، لذلك يتم الاشتراك لكل خدمة.",
-            "whatChanged": "ما تغير"
+            "whatChanged": "ما تغير",
+            "createABaselineFirst": "أنشئ خط أساس أولاً",
+            "notAvailableOnThisServer": "غير متاح على هذا الخادم"
         },
         "invitationsTab": {
             "copyInviteLink": "انسخ رابط الدعوة",
@@ -3354,7 +3378,8 @@
             "exitCode": "(رمز الخروج {{code}})",
             "streamingProgress": "تقدم البث…",
             "waitingForTheAgentToBegin": "في انتظار الوكيل ليبدأ...",
-            "working": "جارٍ العمل…"
+            "working": "جارٍ العمل…",
+            "waitForTheJobToFinish": "انتظر حتى تنتهي المهمة"
         },
         "jobs": {
             "activity": "نشاط",
@@ -3462,7 +3487,8 @@
             "noLogFilesFound": "لم يتم العثور على ملفات السجل",
             "searchPattern": "نمط البحث...",
             "selectALogFile": "اختر ملف سجل لعرض محتوياته.",
-            "selectALogFileFirst": "اختر ملف سجل أولًا"
+            "selectALogFileFirst": "اختر ملف سجل أولًا",
+            "nothingToDownloadYet": "لا يوجد شيء للتنزيل بعد"
         },
         "loginLinksSection": {
             "allowedIp": "IP المسموح به",
@@ -4087,7 +4113,8 @@
             "noUnreadNotifications": "لا توجد إشعارات غير مقروءة.",
             "notifications": "إشعارات",
             "success": "نجاح",
-            "unread": "غير مقروءة"
+            "unread": "غير مقروءة",
+            "noFiltersToReset": "لا توجد مرشحات لإعادة ضبطها"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com، team@example.com",
@@ -4210,7 +4237,8 @@
             "shortcutLabel": "تبديل شريط العمليات",
             "title": "العمليات",
             "unreadCount": "{{count}} غير مقروءة",
-            "waitingForLogs": "في انتظار سجلات التشغيل…"
+            "waitingForLogs": "في انتظار سجلات التشغيل…",
+            "enterTheRequiredValueFirst": "أدخل القيمة المطلوبة أولاً"
         },
         "organizationTabs": {
             "projects": "المشاريع",
@@ -4741,7 +4769,9 @@
             "stepsCount_other": "{{count}} خطوات",
             "unavailable": "كتالوج الوصفات غير متاح",
             "unavailableHint": "تعذر الوصول إلى السجل ولا توجد نسخة مضمَّنة.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "عالج العوائق أعلاه أولاً",
+            "selectATargetServerFirst": "اختر خادماً هدفاً أولاً"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "فشل تحميل سلة المهملات.",
@@ -5451,7 +5481,8 @@
             "upgradeAll": "ترقية الكل",
             "upgradeAllPackages": "ترقية كافة الحزم",
             "upgradeFailedToStart": "فشل بدء الترقية",
-            "upgradingAllPackages": "ترقية كافة الباقات"
+            "upgradingAllPackages": "ترقية كافة الباقات",
+            "enterAPackageNameFirst": "أدخل اسم الحزمة أولاً"
         },
         "serverPicker": {
             "deployToServer": "نشر إلى الخادم",
@@ -6128,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "هل تريد إلغاء ربط {{name}} من الخدمة المرتبطة به؟",
             "unlinking": "جارٍ إلغاء الربط…",
             "unlinkingWillResetBothAppsTo": "سيؤدي إلغاء الارتباط إلى إعادة تعيين كلتا الخدمتين إلى الوضع المستقل.",
-            "usedForCertificateExpiryRemindersFrom": "يستخدم للتذكير بانتهاء الشهادة من Let's Encrypt."
+            "usedForCertificateExpiryRemindersFrom": "يستخدم للتذكير بانتهاء الشهادة من Let's Encrypt.",
+            "enterADomainNameFirst": "أدخل اسم النطاق أولاً"
         },
         "setupHealthWidget": {
             "allSet": "كل شيء جاهز —",
@@ -6291,7 +6323,10 @@
             "targetService": "الخدمة المستهدفة",
             "variables": "المتغيرات",
             "variablesInThisGroupApplyTo": "تنطبق المتغيرات الموجودة في هذه المجموعة على كل مورد ترفقه به.",
-            "whatThisGroupIsFor": "ما هي هذه المجموعة ل..."
+            "whatThisGroupIsFor": "ما هي هذه المجموعة ل...",
+            "enterAGroupNameFirst": "أدخل اسم المجموعة أولاً",
+            "enterAResourceIdFirst": "أدخل معرّف المورد أولاً",
+            "enterAVariableNameFirst": "أدخل اسم المتغير أولاً"
         },
         "shellTab": {
             "containerShell": "واجهة أوامر الحاوية",
@@ -7121,7 +7156,8 @@
             "query": "استفسار",
             "structure": "بناء",
             "tableView": "عرض الجدول",
-            "zeroRows": "0 صفوف"
+            "zeroRows": "0 صفوف",
+            "noMoreRows": "لا توجد صفوف أخرى"
         },
         "tabs": {
             "moreTabs": "المزيد من علامات التبويب"
@@ -7277,7 +7313,8 @@
             "unit": "وحدة",
             "useThe": "استخدم",
             "failedToLoadProcesses": "تعذّر تحميل العمليات.",
-            "selectALogFileFirst": "اختر ملف سجل أولًا"
+            "selectALogFileFirst": "اختر ملف سجل أولًا",
+            "remoteJournalIsNotAvailableYet": "السجل البعيد غير متاح بعد"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "التشغيل قيد التقدم بالفعل.",
@@ -7526,7 +7563,8 @@
             "viewSaved": "تم حفظ العرض \"{{trimmed}}\".",
             "viewUpdated": "عرض \"{{name}}\" محدث",
             "views": "طرق العرض",
-            "withChanges": "\"مع التغييرات"
+            "withChanges": "\"مع التغييرات",
+            "enterAViewNameFirst": "أدخل اسم العرض أولاً"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "حذف البيانات أيضًا. لا يمكن التراجع عن ذلك.",
@@ -7961,6 +7999,10 @@
         "mobileSearch": {
             "label": "بحث",
             "title": "البحث في كل شيء (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "لا يوجد ما يمكن إعادته",
+            "nothingToUndo": "لا يوجد ما يمكن التراجع عنه"
         }
     },
     "auth": {

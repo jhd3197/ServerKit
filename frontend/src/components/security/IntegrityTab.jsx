@@ -342,6 +342,7 @@ const IntegrityTab = () => {
                             size="sm"
                             onClick={() => runAction(key, 'baseline')}
                             disabled={!scope.available || busy !== null}
+                            disabledReason={busy === null && !scope.available ? t('app.integrityTab.notAvailableOnThisServer', 'Not available on this server') : undefined}
                         >
                             {busy === `${key}:baseline` ? t('app.integrityTab.baselining', 'Baselining…') : t('app.integrityTab.baseline', 'Baseline')}
                         </Button>
@@ -350,6 +351,7 @@ const IntegrityTab = () => {
                             size="sm"
                             onClick={() => runAction(key, 'check')}
                             disabled={!baseline || busy !== null}
+                            disabledReason={busy === null && !baseline ? t('app.integrityTab.createABaselineFirst', 'Create a baseline first') : undefined}
                         >
                             {busy === `${key}:check` ? t('common.checking', 'Checking…') : t('app.integrityTab.checkNow', 'Check now')}
                         </Button>

@@ -15,13 +15,13 @@ export function useRegisteredPrimaryAction() {
 // it. Cleared on unmount. onClick is kept in a ref so a new closure every
 // render does not re-register (and so cannot loop); only id/label/disabled do.
 // No-op outside the provider.
-export function usePagePrimaryAction({ id, label, onClick, disabled = false }) {
+export function usePagePrimaryAction({ id, label, onClick, disabled = false, disabledReason }) {
     const store = useContext(PagePrimaryActionContext);
     const latest = useRef(onClick);
     latest.current = onClick;
 
     useEffect(() => {
         if (!store) return undefined;
-        return store.register({ id, label, disabled, run: () => latest.current?.() });
-    }, [store, id, label, disabled]);
+        return store.register({ id, label, disabled, disabledReason, run: () => latest.current?.() });
+    }, [store, id, label, disabled, disabledReason]);
 }

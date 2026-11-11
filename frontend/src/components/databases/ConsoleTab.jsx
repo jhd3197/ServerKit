@@ -156,7 +156,7 @@ export default function ConsoleTab({ conn, tabId, active, isAdmin, initialQuery 
                 <SharedButton variant="unstyled" type="button" className="dbx-chip" onClick={() => { setQuery(''); editorRef.current?.focus(); }}>
                     <Eraser size={14} aria-hidden="true" /> {t('common.actions.clear', 'Clear')}
                 </SharedButton>
-                <SharedButton variant="unstyled" type="button" className="dbx-chip" onClick={exportCsv} disabled={!results?.rows?.length}>
+                <SharedButton variant="unstyled" type="button" className="dbx-chip" onClick={exportCsv} disabled={!results?.rows?.length} disabledReason={t('app.consoleTab.runAQueryWithResultsFirst', 'Run a query with results first')}>
                     <Download size={14} aria-hidden="true" /> {t('app.consoleTab.export', 'Export')}
                 </SharedButton>
             </div>

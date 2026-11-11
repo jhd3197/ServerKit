@@ -200,7 +200,7 @@ export default function Notifications() {
                                     {severityChips}
                                 </div>
                                 <div className="sk-notif-page__sheet-footer">
-                                    <Button variant="outline" disabled={!activeFilters} onClick={clearFilters}>
+                                    <Button variant="outline" disabled={!activeFilters} disabledReason={t('app.notifications.noFiltersToReset', 'No filters to reset')} onClick={clearFilters}>
                                         <RotateCcw size={15} aria-hidden="true" /> {t('app.notifications.reset', 'Reset')}
                                     </Button>
                                     <SheetClose asChild>

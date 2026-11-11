@@ -132,7 +132,7 @@ export function FilterDrawer({
                 ))}
                 {children && <div className="sk-filter__extra">{children}</div>}
                 <div className="sk-filter__footer">
-                    <Button variant="ghost" size="sm" onClick={clearAll} disabled={!active}>
+                    <Button variant="ghost" size="sm" onClick={clearAll} disabled={!active} disabledReason={t('app.filterDrawer.noFiltersApplied', 'No filters applied')}>
                         {t('app.filterDrawer.clearAll', 'Clear all')}
                     </Button>
                     <Button size="sm" onClick={() => onOpenChange(false)}>

@@ -971,7 +971,10 @@
             "sortAToZ": "Ordenar de A a Z",
             "sortHighToLow": "Ordenar do maior para o menor",
             "sortLowToHigh": "Ordenar do menor para o maior",
-            "sortZToA": "Ordenar de Z a A"
+            "sortZToA": "Ordenar de Z a A",
+            "alreadyTheFirstColumn": "Já é a primeira coluna",
+            "alreadyTheLastColumn": "Já é a última coluna",
+            "noFilterOnThisColumn": "Sem filtro nesta coluna"
         },
         "columnsMenu": {
             "columns": "Colunas",
@@ -1043,7 +1046,9 @@
             "messageTheAssistant": "Envie uma mensagem para o assistente",
             "noResources": "Nenhum recurso acessível encontrado",
             "searchResources": "Pesquisar recursos…",
-            "send": "Enviar"
+            "send": "Enviar",
+            "setUpTheAssistantFirst": "Configure primeiro o assistente",
+            "typeAMessageFirst": "Digite primeiro uma mensagem"
         },
         "configDiffModal": {
             "applyRestorePoint": "Aplicar ponto de restauração",
@@ -1222,7 +1227,8 @@
             "thisServerSPublicIp": "O IP público deste servidor",
             "useStarttlsRecommended": "Usar STARTTLS (recomendado)",
             "whereDoIGetThis": "Onde posso conseguir isso?",
-            "yourAccountEmailGlobalKeySimplest": "E-mail da sua conta + chave global. Mais simples de configurar, mas concede acesso total à conta."
+            "yourAccountEmailGlobalKeySimplest": "E-mail da sua conta + chave global. Mais simples de configurar, mas concede acesso total à conta.",
+            "setUpTheOauthAppFirst": "Configure primeiro o app OAuth"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "Adicione as credenciais do app OAuth do GitHub em Configurações antes de conectar.",
@@ -1248,7 +1254,8 @@
             "searchRepositories": "Pesquisar repositórios",
             "serviceName": "Nome do serviço",
             "systemdUnitOptional": "unidade systemd (opcional)",
-            "uploadTheArchive": "Envie o arquivo"
+            "uploadTheArchive": "Envie o arquivo",
+            "setUpGithubInSettingsFirst": "Configure primeiro o GitHub nas Configurações"
         },
         "connectionsHub": {
             "authorizedViaOauth": "Autorizado via OAuth",
@@ -1339,7 +1346,8 @@
             "toRun": "para executar.",
             "writeSqlAboveAndPress": "Escreva SQL acima e pressione",
             "writesEnabledBeCareful": "Gravações habilitadas – tenha cuidado",
-            "writesOn": "Gravações ativadas"
+            "writesOn": "Gravações ativadas",
+            "runAQueryWithResultsFirst": "Execute primeiro uma consulta com resultados"
         },
         "consoleToolbar": {
             "allLevels": "Todos os níveis",
@@ -1355,7 +1363,8 @@
             "searchLogs": "Registros de pesquisa…",
             "showTheDeploymentDetailsAgain": "Mostrar os detalhes da implantação novamente",
             "timestamps": "Carimbos de data e hora",
-            "wrap": "Embrulhar"
+            "wrap": "Embrulhar",
+            "noMatchesToJumpTo": "Nenhuma correspondência para ir"
         },
         "containerOpsPanel": {
             "actionFailed": "Falha na ação",
@@ -1608,7 +1617,8 @@
             "undo": "Desfazer",
             "unnamedJob": "Trabalho sem nome",
             "untracked": "Não rastreado",
-            "whatDoesThisJobDo": "O que esse trabalho faz?"
+            "whatDoesThisJobDo": "O que esse trabalho faz?",
+            "enterANameCommandAndScheduleFirst": "Informe primeiro nome, comando e agendamento"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 campos: minuto, hora, dia, mês, dia da semana.",
@@ -1685,7 +1695,8 @@
             "noRowsMatchTheActiveColumn": "Nenhuma linha corresponde aos filtros de coluna ativos.",
             "scrollableTable": "Tabela rolável",
             "selectAllRows": "Selecione todas as linhas",
-            "selectRow": "Selecione a linha"
+            "selectRow": "Selecione a linha",
+            "sortAColumnFirst": "Ordene primeiro por uma coluna"
         },
         "dataTableFooter": {
             "nextPage": "Próxima página",
@@ -2176,7 +2187,8 @@
             "refreshRecords": "Atualizar registros",
             "regenerateToken": "Regenerar token",
             "thisDomainIsnTSetUp": "Este domínio ainda não está configurado para DNS no ServerKit.",
-            "tokenRegenerated": "Token regenerado"
+            "tokenRegenerated": "Token regenerado",
+            "enterTheRecordContentFirst": "Informe primeiro o conteúdo do registro"
         },
         "domainField": {
             "alreadyAttached": "{{name}} já está vinculado a um serviço.",
@@ -2767,7 +2779,8 @@
             "webConfig": "Configuração da Web",
             "willBeCreatedIn": "Será criado em:",
             "nothingToGoBackTo": "Nada para voltar",
-            "nothingToGoForwardTo": "Nada para avançar"
+            "nothingToGoForwardTo": "Nada para avançar",
+            "alreadyAtTheTopFolder": "Já está na pasta superior"
         },
         "fileRow": {
             "deselect": "Desmarcar",
@@ -2782,7 +2795,8 @@
             "clearAll": "Limpar tudo",
             "noFilters": "sem filtros",
             "showResults_one": "Mostrar {{count}} {{noun}}",
-            "showResults_other": "Mostrar {{count}} {{noun}}s"
+            "showResults_other": "Mostrar {{count}} {{noun}}s",
+            "noFiltersApplied": "Nenhum filtro aplicado"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 ou 10.0.0.0/24",
@@ -3000,7 +3014,8 @@
             "resetViewChanges": "Redefinir alterações de visualização",
             "rowDensity": "Densidade de linha",
             "rowsInThisView": "Linhas nesta visualização",
-            "selectedRows": "Linhas selecionadas"
+            "selectedRows": "Linhas selecionadas",
+            "selectSomeRowsFirst": "Selecione primeiro algumas linhas"
         },
         "gridViewPicker": {
             "builtIn": "Construído em",
@@ -3016,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "Comece pelos filtros e colunas atuais",
             "unsaved": "Não salvo",
             "unsetAsDefault": "Remover como padrão",
-            "viewOptions": "Opções de {{name}}"
+            "viewOptions": "Opções de {{name}}",
+            "enterAViewNameFirst": "Informe primeiro um nome para a visualização"
         },
         "groupMenu": {
             "group": "Agrupar",
@@ -3073,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "Nada para converter — nenhuma diretiva encontrada.",
             "pasteTheContentsOfAnApache": "Cole o conteúdo de um Apache",
             "reason": "Razão",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine ativado\nReescreverCond %{REQUEST_FILENAME} !-f\nReescreverCond %{REQUEST_FILENAME} !-d\nRewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine ativado\nReescreverCond %{REQUEST_FILENAME} !-f\nReescreverCond %{REQUEST_FILENAME} !-d\nRewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "Cole primeiro regras do .htaccess"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 ou 10.0.0.0/24",
@@ -3169,7 +3186,12 @@
             "toConfirm": "confirmar",
             "tryAgain": "Tente novamente",
             "whereTheDumpLives": "Onde mora o lixão",
-            "working": "Processando…"
+            "working": "Processando…",
+            "chooseADumpFileFirst": "Escolha primeiro um arquivo de dump",
+            "chooseATargetDatabaseFirst": "Escolha primeiro um banco de dados de destino",
+            "importFinished": "Importação concluída",
+            "onlyAdminsCanImport": "Somente administradores podem importar",
+            "typeTheDatabaseNameToConfirm": "Digite o nome do banco de dados para confirmar"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "Um arquivo cpmove / backup-*.tar.gz do backup completo da conta do cPanel.",
@@ -3304,7 +3326,9 @@
             "unknownAge": "idade desconhecida",
             "viewChanges": "Ver alterações",
             "watchingADocrootHashesEveryFile": "Assistir a um docroot faz o hash de todos os arquivos fora dos diretórios de upload/cache, portanto, é opcional por serviço.",
-            "whatChanged": "O que mudou"
+            "whatChanged": "O que mudou",
+            "createABaselineFirst": "Crie primeiro uma linha de base",
+            "notAvailableOnThisServer": "Indisponível neste servidor"
         },
         "invitationsTab": {
             "copyInviteLink": "Copiar link de convite",
@@ -3354,7 +3378,8 @@
             "exitCode": "(saída {{code}})",
             "streamingProgress": "Progresso da transmissão…",
             "waitingForTheAgentToBegin": "Esperando o agente começar…",
-            "working": "Processando…"
+            "working": "Processando…",
+            "waitForTheJobToFinish": "Aguarde a conclusão da tarefa"
         },
         "jobs": {
             "activity": "Atividade",
@@ -3462,7 +3487,8 @@
             "noLogFilesFound": "Nenhum arquivo de log encontrado",
             "searchPattern": "Padrão de pesquisa...",
             "selectALogFile": "Selecione um arquivo de log para ver seu conteúdo.",
-            "selectALogFileFirst": "Selecione um arquivo de log primeiro"
+            "selectALogFileFirst": "Selecione um arquivo de log primeiro",
+            "nothingToDownloadYet": "Ainda não há nada para baixar"
         },
         "loginLinksSection": {
             "allowedIp": "IP permitido",
@@ -4087,7 +4113,8 @@
             "noUnreadNotifications": "Nenhuma notificação não lida.",
             "notifications": "Notificações",
             "success": "Sucesso",
-            "unread": "Não lido"
+            "unread": "Não lido",
+            "noFiltersToReset": "Nenhum filtro para redefinir"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, equipe@example.com",
@@ -4210,7 +4237,8 @@
             "shortcutLabel": "Alternar dock de Operações",
             "title": "Operações",
             "unreadCount": "{{count}} não lidas",
-            "waitingForLogs": "Aguardando logs da execução…"
+            "waitingForLogs": "Aguardando logs da execução…",
+            "enterTheRequiredValueFirst": "Informe primeiro o valor necessário"
         },
         "organizationTabs": {
             "projects": "Projetos",
@@ -4741,7 +4769,9 @@
             "stepsCount_other": "{{count}} etapas",
             "unavailable": "Catálogo de receitas indisponível",
             "unavailableHint": "Não foi possível acessar o registro e não há uma cópia incluída presente.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "Resolva primeiro os bloqueios acima",
+            "selectATargetServerFirst": "Selecione primeiro um servidor de destino"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "Falha ao carregar a lixeira.",
@@ -5451,7 +5481,8 @@
             "upgradeAll": "Atualizar tudo",
             "upgradeAllPackages": "Atualize todos os pacotes",
             "upgradeFailedToStart": "Falha ao iniciar a atualização",
-            "upgradingAllPackages": "Atualizando todos os pacotes"
+            "upgradingAllPackages": "Atualizando todos os pacotes",
+            "enterAPackageNameFirst": "Informe primeiro o nome do pacote"
         },
         "serverPicker": {
             "deployToServer": "Implantar no servidor",
@@ -6128,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "Desvincular {{name}} de seu serviço vinculado?",
             "unlinking": "Desvinculando…",
             "unlinkingWillResetBothAppsTo": "A desvinculação redefinirá ambos os serviços para o modo independente.",
-            "usedForCertificateExpiryRemindersFrom": "Usado para lembretes de expiração de certificado do Let's Encrypt."
+            "usedForCertificateExpiryRemindersFrom": "Usado para lembretes de expiração de certificado do Let's Encrypt.",
+            "enterADomainNameFirst": "Informe primeiro um nome de domínio"
         },
         "setupHealthWidget": {
             "allSet": "Tudo pronto -",
@@ -6291,7 +6323,10 @@
             "targetService": "Serviço alvo",
             "variables": "Variáveis",
             "variablesInThisGroupApplyTo": "As variáveis neste grupo se aplicam a todos os recursos aos quais você as anexa.",
-            "whatThisGroupIsFor": "Para que serve este grupo…"
+            "whatThisGroupIsFor": "Para que serve este grupo…",
+            "enterAGroupNameFirst": "Informe primeiro um nome de grupo",
+            "enterAResourceIdFirst": "Informe primeiro um ID de recurso",
+            "enterAVariableNameFirst": "Informe primeiro um nome de variável"
         },
         "shellTab": {
             "containerShell": "Shell do contêiner",
@@ -7121,7 +7156,8 @@
             "query": "Consulta",
             "structure": "Estrutura",
             "tableView": "Visualização de tabela",
-            "zeroRows": "0 linhas"
+            "zeroRows": "0 linhas",
+            "noMoreRows": "Não há mais linhas"
         },
         "tabs": {
             "moreTabs": "Mais guias"
@@ -7277,7 +7313,8 @@
             "unit": "Unidade",
             "useThe": "Use o",
             "failedToLoadProcesses": "Não foi possível carregar os processos.",
-            "selectALogFileFirst": "Selecione um arquivo de log primeiro"
+            "selectALogFileFirst": "Selecione um arquivo de log primeiro",
+            "remoteJournalIsNotAvailableYet": "O diário remoto ainda não está disponível"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Uma execução já está em andamento.",
@@ -7526,7 +7563,8 @@
             "viewSaved": "Ver \"{{trimmed}}\" salvo",
             "viewUpdated": "Ver \"{{name}}\" atualizado",
             "views": "Visualizações",
-            "withChanges": "” com alterações"
+            "withChanges": "” com alterações",
+            "enterAViewNameFirst": "Informe primeiro um nome para a visualização"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "Excluir também os dados. Isso não pode ser desfeito.",
@@ -7961,6 +7999,10 @@
         "mobileSearch": {
             "label": "Pesquisar",
             "title": "Pesquisar tudo (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "Nada para refazer",
+            "nothingToUndo": "Nada para desfazer"
         }
     },
     "auth": {

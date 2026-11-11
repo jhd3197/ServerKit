@@ -971,7 +971,10 @@
             "sortAToZ": "A'dan Z'ye sırala",
             "sortHighToLow": "Yüksekten düşüğe sırala",
             "sortLowToHigh": "Düşükten yükseğe sırala",
-            "sortZToA": "Z'den A'ya sırala"
+            "sortZToA": "Z'den A'ya sırala",
+            "alreadyTheFirstColumn": "Zaten ilk sütun",
+            "alreadyTheLastColumn": "Zaten son sütun",
+            "noFilterOnThisColumn": "Bu sütunda filtre yok"
         },
         "columnsMenu": {
             "columns": "Sütunlar",
@@ -1043,7 +1046,9 @@
             "messageTheAssistant": "Asistana mesaj gönder",
             "noResources": "Erişilebilir kaynak bulunamadı",
             "searchResources": "Kaynaklarda ara…",
-            "send": "Göndermek"
+            "send": "Göndermek",
+            "setUpTheAssistantFirst": "Önce asistanı ayarlayın",
+            "typeAMessageFirst": "Önce bir mesaj yazın"
         },
         "configDiffModal": {
             "applyRestorePoint": "Geri yükleme noktasını uygula",
@@ -1222,7 +1227,8 @@
             "thisServerSPublicIp": "Bu sunucunun genel IP'si",
             "useStarttlsRecommended": "STARTTLS kullanın (önerilir)",
             "whereDoIGetThis": "Bunu nereden alacağım?",
-            "yourAccountEmailGlobalKeySimplest": "Hesabınızın e-postası + genel anahtarınız. Kurulumu en basit olanıdır ancak tam hesap erişimi sağlar."
+            "yourAccountEmailGlobalKeySimplest": "Hesabınızın e-postası + genel anahtarınız. Kurulumu en basit olanıdır ancak tam hesap erişimi sağlar.",
+            "setUpTheOauthAppFirst": "Önce OAuth uygulamasını ayarlayın"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "Bağlanmadan önce Ayarlar'da GitHub OAuth uygulaması kimlik bilgilerini ekleyin.",
@@ -1248,7 +1254,8 @@
             "searchRepositories": "Depolarda ara",
             "serviceName": "Hizmet adı",
             "systemdUnitOptional": "systemd ünitesi (isteğe bağlı)",
-            "uploadTheArchive": "Arşivi yükleyin"
+            "uploadTheArchive": "Arşivi yükleyin",
+            "setUpGithubInSettingsFirst": "Önce Ayarlar'da GitHub'ı kurun"
         },
         "connectionsHub": {
             "authorizedViaOauth": "OAuth ile yetkilendirildi",
@@ -1339,7 +1346,8 @@
             "toRun": "çalıştırmak için.",
             "writeSqlAboveAndPress": "Yukarıya SQL yazın ve tuşuna basın",
             "writesEnabledBeCareful": "Yazma etkin — dikkatli olun",
-            "writesOn": "Yazma açık"
+            "writesOn": "Yazma açık",
+            "runAQueryWithResultsFirst": "Önce sonuç döndüren bir sorgu çalıştırın"
         },
         "consoleToolbar": {
             "allLevels": "Tüm düzeyler",
@@ -1355,7 +1363,8 @@
             "searchLogs": "Günlükleri ara…",
             "showTheDeploymentDetailsAgain": "Dağıtım ayrıntılarını tekrar göster",
             "timestamps": "Zaman damgaları",
-            "wrap": "Dürüm"
+            "wrap": "Dürüm",
+            "noMatchesToJumpTo": "Gidilecek eşleşme yok"
         },
         "containerOpsPanel": {
             "actionFailed": "İşlem başarısız oldu",
@@ -1608,7 +1617,8 @@
             "undo": "Geri al",
             "unnamedJob": "Adsız iş",
             "untracked": "Takip edilmiyor",
-            "whatDoesThisJobDo": "Bu iş ne işe yarıyor?"
+            "whatDoesThisJobDo": "Bu iş ne işe yarıyor?",
+            "enterANameCommandAndScheduleFirst": "Önce ad, komut ve zamanlama girin"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 alan: dakika, saat, gün, ay, haftanın günü.",
@@ -1685,7 +1695,8 @@
             "noRowsMatchTheActiveColumn": "Etkin sütun filtreleriyle eşleşen satır yok.",
             "scrollableTable": "Kaydırılabilir tablo",
             "selectAllRows": "Tüm satırları seç",
-            "selectRow": "Satır seç"
+            "selectRow": "Satır seç",
+            "sortAColumnFirst": "Önce bir sütuna göre sıralayın"
         },
         "dataTableFooter": {
             "nextPage": "Sonraki sayfa",
@@ -2176,7 +2187,8 @@
             "refreshRecords": "Kayıtları yenile",
             "regenerateToken": "Jetonu yeniden oluştur",
             "thisDomainIsnTSetUp": "Bu alan adı henüz ServerKit'de DNS için ayarlanmadı.",
-            "tokenRegenerated": "Jeton yeniden oluşturuldu"
+            "tokenRegenerated": "Jeton yeniden oluşturuldu",
+            "enterTheRecordContentFirst": "Önce kayıt içeriğini girin"
         },
         "domainField": {
             "alreadyAttached": "{{name}} zaten bir hizmete bağlı.",
@@ -2767,7 +2779,8 @@
             "webConfig": "Web yapılandırması",
             "willBeCreatedIn": "Şurada oluşturulacak:",
             "nothingToGoBackTo": "Geri gidilecek bir şey yok",
-            "nothingToGoForwardTo": "İleri gidilecek bir şey yok"
+            "nothingToGoForwardTo": "İleri gidilecek bir şey yok",
+            "alreadyAtTheTopFolder": "Zaten en üst klasördesiniz"
         },
         "fileRow": {
             "deselect": "Seçimi kaldır",
@@ -2782,7 +2795,8 @@
             "clearAll": "Tümünü temizle",
             "noFilters": "filtre yok",
             "showResults_one": "{{count}} {{noun}} göster",
-            "showResults_other": "{{count}} {{noun}} göster"
+            "showResults_other": "{{count}} {{noun}} göster",
+            "noFiltersApplied": "Uygulanmış filtre yok"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 veya 10.0.0.0/24",
@@ -3000,7 +3014,8 @@
             "resetViewChanges": "Görünüm değişikliklerini sıfırla",
             "rowDensity": "Satır yoğunluğu",
             "rowsInThisView": "Bu görünümdeki satırlar",
-            "selectedRows": "Seçilen satırlar"
+            "selectedRows": "Seçilen satırlar",
+            "selectSomeRowsFirst": "Önce birkaç satır seçin"
         },
         "gridViewPicker": {
             "builtIn": "Dahili",
@@ -3016,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "Mevcut filtrelerden ve sütunlardan başlayın",
             "unsaved": "Kaydedilmemiş",
             "unsetAsDefault": "Varsayılanı kaldır",
-            "viewOptions": "{{name}} seçenekleri"
+            "viewOptions": "{{name}} seçenekleri",
+            "enterAViewNameFirst": "Önce bir görünüm adı girin"
         },
         "groupMenu": {
             "group": "Grupla",
@@ -3073,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "Dönüştürülecek bir şey yok — yönerge bulunamadı.",
             "pasteTheContentsOfAnApache": "Bir Apache'nin içeriğini yapıştırın",
             "reason": "Sebep",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine On \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine On \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "Önce .htaccess kurallarını yapıştırın"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 veya 10.0.0.0/24",
@@ -3169,7 +3186,12 @@
             "toConfirm": "onaylamak",
             "tryAgain": "Tekrar deneyin",
             "whereTheDumpLives": "Çöplüğün yaşadığı yer",
-            "working": "Çalışıyor…"
+            "working": "Çalışıyor…",
+            "chooseADumpFileFirst": "Önce bir döküm dosyası seçin",
+            "chooseATargetDatabaseFirst": "Önce hedef veritabanını seçin",
+            "importFinished": "İçe aktarma tamamlandı",
+            "onlyAdminsCanImport": "Yalnızca yöneticiler içe aktarabilir",
+            "typeTheDatabaseNameToConfirm": "Onaylamak için veritabanı adını yazın"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "cPanel'in Tam Hesap Yedeklemesinden bir cpmove / backup-*.tar.gz arşivi.",
@@ -3304,7 +3326,9 @@
             "unknownAge": "bilinmeyen yaş",
             "viewChanges": "Değişiklikleri görüntüle",
             "watchingADocrootHashesEveryFile": "Bir docroot izlemek, yükleme/önbellek dizinleri dışındaki her dosyaya hash uygular, dolayısıyla hizmet başına katılım sağlanır.",
-            "whatChanged": "Ne değişti"
+            "whatChanged": "Ne değişti",
+            "createABaselineFirst": "Önce bir temel çizgi oluşturun",
+            "notAvailableOnThisServer": "Bu sunucuda kullanılamıyor"
         },
         "invitationsTab": {
             "copyInviteLink": "Davet bağlantısını kopyala",
@@ -3354,7 +3378,8 @@
             "exitCode": "(çıkış {{code}})",
             "streamingProgress": "Akış ilerlemesi…",
             "waitingForTheAgentToBegin": "Temsilcinin başlaması bekleniyor…",
-            "working": "Çalışıyor…"
+            "working": "Çalışıyor…",
+            "waitForTheJobToFinish": "İşin bitmesini bekleyin"
         },
         "jobs": {
             "activity": "Etkinlik",
@@ -3462,7 +3487,8 @@
             "noLogFilesFound": "Günlük dosyası bulunamadı",
             "searchPattern": "Arama modeli...",
             "selectALogFile": "İçeriğini görüntülemek için bir günlük dosyası seçin.",
-            "selectALogFileFirst": "Önce bir günlük dosyası seçin"
+            "selectALogFileFirst": "Önce bir günlük dosyası seçin",
+            "nothingToDownloadYet": "Henüz indirilecek bir şey yok"
         },
         "loginLinksSection": {
             "allowedIp": "İzin verilen IP",
@@ -4087,7 +4113,8 @@
             "noUnreadNotifications": "Okunmamış bildirim yok.",
             "notifications": "Bildirimler",
             "success": "Başarı",
-            "unread": "Okunmamış"
+            "unread": "Okunmamış",
+            "noFiltersToReset": "Sıfırlanacak filtre yok"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, ekip@example.com",
@@ -4210,7 +4237,8 @@
             "shortcutLabel": "İşlemler panelini aç/kapat",
             "title": "İşlemler",
             "unreadCount": "{{count}} okunmamış",
-            "waitingForLogs": "Çalıştırma günlükleri bekleniyor…"
+            "waitingForLogs": "Çalıştırma günlükleri bekleniyor…",
+            "enterTheRequiredValueFirst": "Önce gerekli değeri girin"
         },
         "organizationTabs": {
             "projects": "Projeler",
@@ -4741,7 +4769,9 @@
             "stepsCount_other": "{{count}} adım",
             "unavailable": "Tarif kataloğu kullanılamıyor",
             "unavailableHint": "Registry'ye ulaşılamadı ve paketlenmiş bir kopya mevcut değil.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "Önce yukarıdaki engelleri giderin",
+            "selectATargetServerFirst": "Önce bir hedef sunucu seçin"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "Geri dönüşüm kutusu yüklenemedi.",
@@ -5451,7 +5481,8 @@
             "upgradeAll": "Tümünü yükselt",
             "upgradeAllPackages": "Tüm paketleri yükselt",
             "upgradeFailedToStart": "Yükseltme başlatılamadı",
-            "upgradingAllPackages": "Tüm paketleri yükseltme"
+            "upgradingAllPackages": "Tüm paketleri yükseltme",
+            "enterAPackageNameFirst": "Önce paket adını girin"
         },
         "serverPicker": {
             "deployToServer": "Sunucuya dağıt",
@@ -6128,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "{{name}}'nin bağlı hizmetinden bağlantısı kaldırılsın mı?",
             "unlinking": "Bağlantı kaldırılıyor…",
             "unlinkingWillResetBothAppsTo": "Bağlantının kaldırılması her iki hizmeti da bağımsız moda sıfırlayacaktır.",
-            "usedForCertificateExpiryRemindersFrom": "Let's Encrypt'den sertifika süre sonu hatırlatmaları için kullanılır."
+            "usedForCertificateExpiryRemindersFrom": "Let's Encrypt'den sertifika süre sonu hatırlatmaları için kullanılır.",
+            "enterADomainNameFirst": "Önce bir alan adı girin"
         },
         "setupHealthWidget": {
             "allSet": "Her şey hazır —",
@@ -6291,7 +6323,10 @@
             "targetService": "Hedef hizmet",
             "variables": "Değişkenler",
             "variablesInThisGroupApplyTo": "Bu gruptaki değişkenler, onu eklediğiniz her kaynak için geçerlidir.",
-            "whatThisGroupIsFor": "Bu grup ne işe yarar?..."
+            "whatThisGroupIsFor": "Bu grup ne işe yarar?...",
+            "enterAGroupNameFirst": "Önce bir grup adı girin",
+            "enterAResourceIdFirst": "Önce bir kaynak kimliği girin",
+            "enterAVariableNameFirst": "Önce bir değişken adı girin"
         },
         "shellTab": {
             "containerShell": "Konteyner Kabuğu",
@@ -7121,7 +7156,8 @@
             "query": "Sorgu",
             "structure": "Yapı",
             "tableView": "Tablo görünümü",
-            "zeroRows": "0 satır"
+            "zeroRows": "0 satır",
+            "noMoreRows": "Başka satır yok"
         },
         "tabs": {
             "moreTabs": "Daha fazla sekme"
@@ -7277,7 +7313,8 @@
             "unit": "Birim",
             "useThe": "Şunu kullanın:",
             "failedToLoadProcesses": "Süreçler yüklenemedi.",
-            "selectALogFileFirst": "Önce bir günlük dosyası seçin"
+            "selectALogFileFirst": "Önce bir günlük dosyası seçin",
+            "remoteJournalIsNotAvailableYet": "Uzak günlük henüz kullanılamıyor"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Bir çalıştırma zaten devam ediyor.",
@@ -7526,7 +7563,8 @@
             "viewSaved": "Kaydedilen \"{{trimmed}}\" görünümünü görüntüleyin",
             "viewUpdated": "\"{{name}}\" görünümünün güncellenmesi",
             "views": "Görünümler",
-            "withChanges": "” değişikliklerle"
+            "withChanges": "” değişikliklerle",
+            "enterAViewNameFirst": "Önce bir görünüm adı girin"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "Verileri de sil. Bu işlem geri alınamaz.",
@@ -7961,6 +7999,10 @@
         "mobileSearch": {
             "label": "Ara",
             "title": "Her yerde ara (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "Yinelenecek bir şey yok",
+            "nothingToUndo": "Geri alınacak bir şey yok"
         }
     },
     "auth": {

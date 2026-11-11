@@ -286,6 +286,7 @@ export default function TableDataTab({ conn, tabId, table, rowsEstimate, active,
                             className="dbx-icon-btn"
                             onClick={() => setPage((p) => p + 1)}
                             disabled={!hasMore || dataLoading}
+                            disabledReason={!dataLoading ? t('app.tableDataTab.noMoreRows', 'No more rows') : undefined}
                             aria-label={t('app.tableDataTab.nextPage', 'Next page')}
                         >
                             <ChevronRight size={15} aria-hidden="true" />

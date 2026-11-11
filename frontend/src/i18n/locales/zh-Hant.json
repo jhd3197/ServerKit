@@ -971,7 +971,10 @@
             "sortAToZ": "由 A 到 Z 排序",
             "sortHighToLow": "由高到低排序",
             "sortLowToHigh": "由低到高排序",
-            "sortZToA": "由 Z 到 A 排序"
+            "sortZToA": "由 Z 到 A 排序",
+            "alreadyTheFirstColumn": "已經是第一欄",
+            "alreadyTheLastColumn": "已經是最後一欄",
+            "noFilterOnThisColumn": "此欄沒有篩選條件"
         },
         "columnsMenu": {
             "columns": "欄位",
@@ -1043,7 +1046,9 @@
             "messageTheAssistant": "給助理留言",
             "noResources": "找不到可存取的資源",
             "searchResources": "搜尋資源…",
-            "send": "傳送"
+            "send": "傳送",
+            "setUpTheAssistantFirst": "請先設定助理",
+            "typeAMessageFirst": "請先輸入訊息"
         },
         "configDiffModal": {
             "applyRestorePoint": "套用還原點",
@@ -1222,7 +1227,8 @@
             "thisServerSPublicIp": "此伺服器的公用 IP 位址",
             "useStarttlsRecommended": "使用 STARTTLS（建議）",
             "whereDoIGetThis": "我從哪裡得到這個？",
-            "yourAccountEmailGlobalKeySimplest": "您的帳戶電子郵件 + 全域金鑰。設定最簡單，但授予完全帳戶存取權限。"
+            "yourAccountEmailGlobalKeySimplest": "您的帳戶電子郵件 + 全域金鑰。設定最簡單，但授予完全帳戶存取權限。",
+            "setUpTheOauthAppFirst": "請先設定 OAuth 應用程式"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "連線前，請先在「設定」中新增 GitHub OAuth 應用程式憑證。",
@@ -1248,7 +1254,8 @@
             "searchRepositories": "搜尋儲存庫",
             "serviceName": "服務名稱",
             "systemdUnitOptional": "systemd 單元（選填）",
-            "uploadTheArchive": "上傳封存檔"
+            "uploadTheArchive": "上傳封存檔",
+            "setUpGithubInSettingsFirst": "請先在設定中配置 GitHub"
         },
         "connectionsHub": {
             "authorizedViaOauth": "已透過 OAuth 授權",
@@ -1339,7 +1346,8 @@
             "toRun": "執行。",
             "writeSqlAboveAndPress": "在上面寫入 SQL 並按",
             "writesEnabledBeCareful": "已啟用寫入功能，請謹慎操作",
-            "writesOn": "允許寫入"
+            "writesOn": "允許寫入",
+            "runAQueryWithResultsFirst": "請先執行有結果的查詢"
         },
         "consoleToolbar": {
             "allLevels": "所有層級",
@@ -1355,7 +1363,8 @@
             "searchLogs": "搜尋記錄…",
             "showTheDeploymentDetailsAgain": "再次顯示部署詳細資訊",
             "timestamps": "時間戳",
-            "wrap": "自動換行"
+            "wrap": "自動換行",
+            "noMatchesToJumpTo": "沒有可跳轉的符合項目"
         },
         "containerOpsPanel": {
             "actionFailed": "操作失敗",
@@ -1608,7 +1617,8 @@
             "undo": "復原",
             "unnamedJob": "未命名作業",
             "untracked": "未追蹤",
-            "whatDoesThisJobDo": "此作業的用途為何？"
+            "whatDoesThisJobDo": "此作業的用途為何？",
+            "enterANameCommandAndScheduleFirst": "請先填寫名稱、指令和排程"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 個欄位：分鐘、小時、日、月、工作日。",
@@ -1685,7 +1695,8 @@
             "noRowsMatchTheActiveColumn": "沒有資料列符合目前的欄位篩選條件。",
             "scrollableTable": "可捲動表格",
             "selectAllRows": "選取所有資料列",
-            "selectRow": "選取資料列"
+            "selectRow": "選取資料列",
+            "sortAColumnFirst": "請先依某一欄排序"
         },
         "dataTableFooter": {
             "nextPage": "下一頁",
@@ -2176,7 +2187,8 @@
             "refreshRecords": "重新整理記錄",
             "regenerateToken": "重新產生權杖",
             "thisDomainIsnTSetUp": "此網域尚未在 ServerKit 中設定 DNS。",
-            "tokenRegenerated": "權杖重新產生"
+            "tokenRegenerated": "權杖重新產生",
+            "enterTheRecordContentFirst": "請先輸入記錄內容"
         },
         "domainField": {
             "alreadyAttached": "{{name}} 已連結到某個服務。",
@@ -2767,7 +2779,8 @@
             "webConfig": "網頁設定",
             "willBeCreatedIn": "將建立於：",
             "nothingToGoBackTo": "沒有可返回的頁面",
-            "nothingToGoForwardTo": "沒有可前進的頁面"
+            "nothingToGoForwardTo": "沒有可前進的頁面",
+            "alreadyAtTheTopFolder": "已在最上層資料夾"
         },
         "fileRow": {
             "deselect": "取消選擇",
@@ -2782,7 +2795,8 @@
             "clearAll": "全部清除",
             "noFilters": "沒有篩選條件",
             "showResults_one": "顯示 {{count}} 個{{noun}}",
-            "showResults_other": "顯示 {{count}} 個{{noun}}"
+            "showResults_other": "顯示 {{count}} 個{{noun}}",
+            "noFiltersApplied": "未套用任何篩選"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 或 10.0.0.0/24",
@@ -3000,7 +3014,8 @@
             "resetViewChanges": "重設檢視方式的變更",
             "rowDensity": "資料列密度",
             "rowsInThisView": "此檢視中的資料列",
-            "selectedRows": "已選取的資料列"
+            "selectedRows": "已選取的資料列",
+            "selectSomeRowsFirst": "請先選取若干列"
         },
         "gridViewPicker": {
             "builtIn": "內建",
@@ -3016,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "從目前的篩選條件與欄開始",
             "unsaved": "未儲存",
             "unsetAsDefault": "取消預設",
-            "viewOptions": "{{name}} 選項"
+            "viewOptions": "{{name}} 選項",
+            "enterAViewNameFirst": "請先輸入檢視名稱"
         },
         "groupMenu": {
             "group": "分組",
@@ -3073,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "沒有要轉換的內容－沒有找到指令。",
             "pasteTheContentsOfAnApache": "貼上 Apache 的內容",
             "reason": "原因",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine On\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine On\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "請先貼上 .htaccess 規則"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 或 10.0.0.0/24",
@@ -3169,7 +3186,12 @@
             "toConfirm": "確認",
             "tryAgain": "再試一次",
             "whereTheDumpLives": "傾印檔位置",
-            "working": "處理中…"
+            "working": "處理中…",
+            "chooseADumpFileFirst": "請先選擇傾印檔案",
+            "chooseATargetDatabaseFirst": "請先選擇目標資料庫",
+            "importFinished": "匯入已完成",
+            "onlyAdminsCanImport": "只有管理員可以匯入",
+            "typeTheDatabaseNameToConfirm": "輸入資料庫名稱以確認"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "來自 cPanel 完整帳戶備份的 cpmove / backup-*.tar.gz 存檔。",
@@ -3304,7 +3326,9 @@
             "unknownAge": "時間未知",
             "viewChanges": "檢視變更",
             "watchingADocrootHashesEveryFile": "監看網站根目錄時，系統會對上傳與快取目錄以外的所有檔案計算雜湊，因此須由各服務個別啟用。",
-            "whatChanged": "發生了什麼變化"
+            "whatChanged": "發生了什麼變化",
+            "createABaselineFirst": "請先建立基準線",
+            "notAvailableOnThisServer": "此伺服器上無法使用"
         },
         "invitationsTab": {
             "copyInviteLink": "複製邀請連結",
@@ -3354,7 +3378,8 @@
             "exitCode": "（結束代碼 {{code}}）",
             "streamingProgress": "串流進度…",
             "waitingForTheAgentToBegin": "等待代理程式開始…",
-            "working": "處理中…"
+            "working": "處理中…",
+            "waitForTheJobToFinish": "請等待工作完成"
         },
         "jobs": {
             "activity": "活動",
@@ -3462,7 +3487,8 @@
             "noLogFilesFound": "未找到記錄檔",
             "searchPattern": "搜尋模式…",
             "selectALogFile": "選擇記錄檔以檢視其內容。",
-            "selectALogFileFirst": "請先選擇記錄檔"
+            "selectALogFileFirst": "請先選擇記錄檔",
+            "nothingToDownloadYet": "尚無可下載的內容"
         },
         "loginLinksSection": {
             "allowedIp": "允許的 IP",
@@ -4087,7 +4113,8 @@
             "noUnreadNotifications": "沒有未讀通知。",
             "notifications": "通知",
             "success": "成功",
-            "unread": "未讀"
+            "unread": "未讀",
+            "noFiltersToReset": "沒有可重設的篩選"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, team@example.com",
@@ -4210,7 +4237,8 @@
             "shortcutLabel": "切換操作面板",
             "title": "作業",
             "unreadCount": "{{count}} 則未讀",
-            "waitingForLogs": "正在等待執行記錄…"
+            "waitingForLogs": "正在等待執行記錄…",
+            "enterTheRequiredValueFirst": "請先輸入必要的值"
         },
         "organizationTabs": {
             "projects": "專案",
@@ -4741,7 +4769,9 @@
             "stepsCount_other": "{{count}} 個步驟",
             "unavailable": "配方目錄不可用",
             "unavailableHint": "無法連線到線上來源，且沒有隨附的副本。",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "請先解決上方的阻礙項目",
+            "selectATargetServerFirst": "請先選擇目標伺服器"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "無法載入資源回收筒。",
@@ -5451,7 +5481,8 @@
             "upgradeAll": "全部升級",
             "upgradeAllPackages": "升級所有套件",
             "upgradeFailedToStart": "升級無法啟動",
-            "upgradingAllPackages": "正在升級所有套件"
+            "upgradingAllPackages": "正在升級所有套件",
+            "enterAPackageNameFirst": "請先輸入套件名稱"
         },
         "serverPicker": {
             "deployToServer": "部署到伺服器",
@@ -6128,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "取消 {{name}} 與其連結服務的連結？",
             "unlinking": "正在取消連結…",
             "unlinkingWillResetBothAppsTo": "取消連結會將兩個服務重設為獨立模式。",
-            "usedForCertificateExpiryRemindersFrom": "用於 Let's Encrypt 的憑證到期提醒。"
+            "usedForCertificateExpiryRemindersFrom": "用於 Let's Encrypt 的憑證到期提醒。",
+            "enterADomainNameFirst": "請先輸入網域名稱"
         },
         "setupHealthWidget": {
             "allSet": "一切就緒——",
@@ -6291,7 +6323,10 @@
             "targetService": "目標服務",
             "variables": "變數",
             "variablesInThisGroupApplyTo": "該組中的變數適用於您附加到的每個資源。",
-            "whatThisGroupIsFor": "此群組的用途…"
+            "whatThisGroupIsFor": "此群組的用途…",
+            "enterAGroupNameFirst": "請先輸入群組名稱",
+            "enterAResourceIdFirst": "請先輸入資源 ID",
+            "enterAVariableNameFirst": "請先輸入變數名稱"
         },
         "shellTab": {
             "containerShell": "容器 Shell",
@@ -7121,7 +7156,8 @@
             "query": "查詢",
             "structure": "結構",
             "tableView": "表格檢視",
-            "zeroRows": "0 列"
+            "zeroRows": "0 列",
+            "noMoreRows": "沒有更多列"
         },
         "tabs": {
             "moreTabs": "更多標籤"
@@ -7277,7 +7313,8 @@
             "unit": "單元",
             "useThe": "使用",
             "failedToLoadProcesses": "無法載入程序。",
-            "selectALogFileFirst": "請先選擇記錄檔"
+            "selectALogFileFirst": "請先選擇記錄檔",
+            "remoteJournalIsNotAvailableYet": "遠端日誌尚不可用"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "執行已經在進行中。",
@@ -7526,7 +7563,8 @@
             "viewSaved": "已儲存檢視「{{trimmed}}」",
             "viewUpdated": "已更新檢視「{{name}}」",
             "views": "檢視",
-            "withChanges": "」並儲存變更"
+            "withChanges": "」並儲存變更",
+            "enterAViewNameFirst": "請先輸入檢視名稱"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "同時刪除資料。此動作無法復原。",
@@ -7961,6 +7999,10 @@
         "mobileSearch": {
             "label": "搜尋",
             "title": "搜尋全部 (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "沒有可重做的內容",
+            "nothingToUndo": "沒有可復原的內容"
         }
     },
     "auth": {

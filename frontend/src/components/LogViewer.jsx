@@ -111,12 +111,13 @@ export function LogViewer({
                                 size="sm"
                                 onClick={onRefreshContent}
                                 disabled={!selectedPath || contentLoading}
+                                disabledReason={!selectedPath ? t('app.logViewer.selectALogFileFirst', 'Select a log file first') : undefined}
                             >
                                 {t('common.actions.refresh', 'Refresh')}
                             </Button>
                         )}
                         {onDownload && (
-                            <Button variant="outline" size="sm" onClick={onDownload} disabled={!content}>
+                            <Button variant="outline" size="sm" onClick={onDownload} disabled={!content} disabledReason={t('app.logViewer.nothingToDownloadYet', 'Nothing to download yet')}>
                                 {t('common.actions.download', 'Download')}
                             </Button>
                         )}

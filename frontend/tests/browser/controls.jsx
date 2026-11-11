@@ -20,6 +20,7 @@ createRoot(document.getElementById('root')).render(
             <NativeButton id="native-disabled" type="button" className="btn btn-secondary" disabled>Disabled</NativeButton>
             <Button id="shared-disabled" type="button" variant="outline" className="btn btn-secondary" disabled onClick={click}>Disabled</Button>
             <Button id="shared-reason" variant="outline" disabled disabledReason="Install it first" onClick={click}>Reasoned</Button>
+            <Button id="shared-reason-icon" size="icon" variant="outline" title="Go back" disabled disabledReason="Nothing to go back to" onClick={click}><span aria-hidden="true">&lt;</span></Button>
         </form>
         <Button asChild variant="unstyled"><a id="shared-link" href="#destination">Link</a></Button>
         {createElement('div', { id: 'native-card', className: 'card' },
