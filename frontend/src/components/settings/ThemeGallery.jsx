@@ -91,7 +91,7 @@ const ThemeGallery = () => {
                             {themeEntry.description && (
                                 // keydown must not reach the card's select-on-Enter handler
                                 <span onKeyDown={(e) => e.stopPropagation()}>
-                                    <InfoTip>{themeEntry.description}</InfoTip>
+                                    <InfoTip subject={themeEntry.name || themeEntry.slug}>{themeEntry.description}</InfoTip>
                                 </span>
                             )}
                         </div>

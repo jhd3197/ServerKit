@@ -107,7 +107,7 @@ export default function AIManagementSettings({ connections, defaultId }) {
             <Button type="button" variant="outline" onClick={previewRoute} disabled={busy || !sample.trim()}>{t('ai.management.preview', 'Preview routing')}</Button>
             {preview && <div className="sk-ai-routing-result" role="status"><strong>{connections.find((item) => item.id === preview.connection_id)?.name} · {preview.model}</strong><p>{preview.reason}</p></div>}
             {toggle('fallback_enabled', t('ai.management.enableFallback', 'Enable fallback before output starts'))}
-            <InfoTip>{t('ai.management.fallbackHint', 'Candidates are tried in order using their own saved credentials. Delivered output and tool actions are never replayed. Degradation chooses a lower-priced candidate before a turn at 80% of the conversation allowance; unknown prices cannot be compared.')}</InfoTip>
+            <InfoTip subject={t('ai.management.enableFallback', 'Enable fallback before output starts')}>{t('ai.management.fallbackHint', 'Candidates are tried in order using their own saved credentials. Delivered output and tool actions are never replayed. Degradation chooses a lower-priced candidate before a turn at 80% of the conversation allowance; unknown prices cannot be compared.')}</InfoTip>
             {candidates('fallbacks')}
         </section>
         <section className="settings-card">

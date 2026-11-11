@@ -20,6 +20,12 @@ test('InfoTip subject beats title beats nearby text; label overrides all; plain 
     assert.equal(infoTipName({ title: { type: 'span' }, nearby: '  ' }, t), 'More info');
 });
 
+test('theme gallery cards name the tip after the theme, not its description', () => {
+    assert.equal(infoTipName({ subject: 'Apamate', nearby: 'Warm dark palette' }, t), 'More info about Apamate');
+    const gallery = readFileSync(new URL('../settings/ThemeGallery.jsx', import.meta.url), 'utf8');
+    assert.match(gallery, /<InfoTip subject=\{themeEntry\.name \|\| themeEntry\.slug\}>/);
+});
+
 test('nearbyText reads the label printed before the button, trimmed', () => {
     const el = { previousSibling: { textContent: ' ', previousSibling: { textContent: ' Cert   expiry ' } } };
     assert.equal(nearbyText(el), 'Cert expiry');

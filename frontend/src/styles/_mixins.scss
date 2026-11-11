@@ -106,6 +106,7 @@
     &:focus {
         border-color: $accent-primary;
         outline: none;
+        box-shadow: $focus-ring;
     }
 
     &::placeholder {

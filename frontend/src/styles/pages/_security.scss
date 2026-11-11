@@ -541,6 +541,7 @@
         &:focus {
             outline: none;
             border-color: var(--accent-dim);
+            box-shadow: $focus-ring;
         }
     }
 

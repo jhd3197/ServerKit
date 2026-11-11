@@ -861,6 +861,7 @@ $ft-default:  #646b7a;
 
             &:focus {
                 border-color: var(--accent-dim);
+                box-shadow: $focus-ring;
             }
         }
     }

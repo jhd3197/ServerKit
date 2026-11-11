@@ -771,7 +771,7 @@ $calendar-cell: 32px;
 
         &:focus-visible {
             outline: none;
-            box-shadow: 0 0 0 4px $accent-bg; // geometry: focus halo around the thumb
+            box-shadow: 0 0 0 2px $bg-card, 0 0 0 4px $accent-primary; // geometry: gapped ring; the old 10% halo vanished on both themes
         }
     }
 

@@ -421,6 +421,9 @@
         font-size: $text-sm;
         overflow: hidden;
 
+        // inset: the cell clips an outer ring
+        :is(a, button, [role='button'], [tabindex]):focus-visible { outline-offset: -2px; }
+
         &.is-num {
             text-align: right;
             font-size: $text-xs;
@@ -1007,7 +1010,7 @@
         font-size: $text-sm;
         outline: none;
 
-        &:focus { border-color: var(--accent-dim); }
+        &:focus { border-color: var(--accent-dim); box-shadow: $focus-ring; }
     }
 
     &__del {

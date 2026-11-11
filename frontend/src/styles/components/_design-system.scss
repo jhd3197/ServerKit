@@ -136,6 +136,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         transition: 0.14s;
 
         &:hover { color: var(--text-dim); }
+        &:focus-visible { outline-offset: -2px; } // inset: the pill row clips an outer ring
         &.is-on { background: var(--surface-3); color: var(--text); box-shadow: none; }
 
         .sk-seg__count { font-size: $text-xs; opacity: 0.7; }
@@ -708,6 +709,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     background: var(--surface);
     border: 1px solid var(--border-soft);
     border-radius: $radius-card;
+
+    // inset: the wrap (and stacked phone cards) clips an outer ring
+    :is(a, button, [role='button'], [tabindex]):focus-visible { outline-offset: -2px; }
 }
 
 // A table that is one section of a titled card/panel runs flush inside it:
@@ -1074,7 +1078,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             transition: border-color 0.14s;
 
             &::placeholder { color: var(--text-faint); }
-            &:focus { border-color: var(--accent-dim); }
+            &:focus { border-color: var(--accent-dim); box-shadow: $focus-ring; }
         }
     }
 }
@@ -1826,6 +1830,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     border-radius: $radius-card;
     background: var(--surface);
     overflow: hidden;
+
+    // inset: the list clips an outer ring
+    :is(a, button, [role='button'], [tabindex]):focus-visible { outline-offset: -2px; }
 }
 
 .sk-resource-card {

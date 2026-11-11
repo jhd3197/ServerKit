@@ -434,7 +434,7 @@ const Services = () => {
             }
             emptyIcon={Layers}
             emptyTitle={t('app.services.noServicesYet', 'No services yet')}
-            emptyDescription={<>{t('app.services.emptyShort', 'Connect a repo or install a template.')} <InfoTip>{t('app.services.emptyFull', 'Connect a Git repository, upload files, or install a ready-made template to deploy your first service.')}</InfoTip></>}
+            emptyDescription={<>{t('app.services.emptyShort', 'Connect a repo or install a template.')} <InfoTip subject={t('app.services.noServicesYet', 'No services yet')}>{t('app.services.emptyFull', 'Connect a Git repository, upload files, or install a ready-made template to deploy your first service.')}</InfoTip></>}
             emptyAction={
                 <Button asChild>
                     <Link to="/services/new">
