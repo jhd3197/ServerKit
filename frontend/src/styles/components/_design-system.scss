@@ -1031,7 +1031,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         opacity: 0;
         transition: 0.12s;
 
-        .sk-viewmenu__row:hover & { opacity: 1; }
+        .sk-viewmenu__row:hover &,
+        .sk-viewmenu__row:focus-within & { opacity: 1; }
         &:hover { background: var(--surface); color: var(--text); }
     }
 

@@ -1139,7 +1139,8 @@ $ft-default:  #646b7a;
         @include transition(all);
         user-select: none;
 
-        &:hover {
+        &:hover,
+        &:focus-within {
             background: var(--surface-2);
 
             .file-card-check { opacity: 1; }
@@ -1321,7 +1322,8 @@ $ft-default:  #646b7a;
 
             &:last-child { border-bottom: none; }
 
-            &:hover {
+            &:hover,
+            &:focus-within {
                 background: var(--surface-2);
                 .col-actions .row-action { opacity: 1; }
                 .col-check .checkbox { border-color: $border-hover; }
@@ -1379,6 +1381,7 @@ $ft-default:  #646b7a;
     &.select-mode .file-list .file-list-header .col-check,
     &.select-mode .file-list .file-item .col-check,
     .file-list .file-item:hover .col-check,
+    .file-list .file-item:focus-within .col-check,
     .file-list .file-item.selected .col-check {
         opacity: 1;
     }
@@ -1408,6 +1411,7 @@ $ft-default:  #646b7a;
         opacity: 0;
         @include transition(all);
 
+        &:focus-visible { opacity: 1; }
         &:hover { background: var(--surface-3); color: var(--text); }
         &.danger:hover { @include status-variant($danger, $danger-bg); }
     }
