@@ -11,6 +11,7 @@ import {
     GitBranch, WifiOff, Clock
 } from 'lucide-react';
 import { PageTopbar, SearchField, CatalogCard, CatalogGrid } from '@/components/ds';
+import PageLayout from '@/layouts/PageLayout';
 import CopyField from '../components/CopyField';
 import PortField from '../components/PortField';
 import EnvEditor from '../components/EnvEditor';
@@ -109,24 +110,24 @@ export default function StyleGuide() {
     const sections = SECTIONS;
 
     return (
-        <div className="styleguide">
-            <PageTopbar
-                icon={<Palette size={18} />}
-                title={t('app.styleGuide.styleGuide', 'Style guide')}
-                meta="Design system reference — dev only"
-            />
-
-            <Tabs value={activeSection} onValueChange={setActiveSection}>
-                <TabsList>
-                    {sections.map(s => (
-                        <TabsTrigger key={s.id} value={s.id}>
-                            <s.icon size={14} />
-                            {s.label}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
-            </Tabs>
-
+        // The same frame as every standalone page: PageLayout pins the bar to
+        // the top of the content region and carries the sections as its tabs.
+        // This page used to drop a PageTopbar and a tab strip into the padded
+        // content well, the exact arrangement its own "Page headers" section
+        // warns against.
+        <PageLayout
+            className="styleguide"
+            icon={<Palette size={18} />}
+            title={t('app.styleGuide.styleGuide', 'Style guide')}
+            navLabel={t('app.styleGuide.sections', 'Style guide sections')}
+            tabs={sections.map((section) => ({
+                id: section.id,
+                label: section.label,
+                icon: <section.icon size={15} />,
+                active: activeSection === section.id,
+                onSelect: () => setActiveSection(section.id),
+            }))}
+        >
             <div className="styleguide__content">
 
                 {/* ── COLORS ── */}
@@ -1470,7 +1471,7 @@ export default function StyleGuide() {
                     </div>
                 )}
             </div>
-        </div>
+        </PageLayout>
     );
 }
 
