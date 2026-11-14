@@ -315,6 +315,9 @@ const ServerDetail = () => {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => navigate(`/servers/${id}?layout=edit`)}>
+                                <LayoutGrid size={14} /> {t('app.overviewBoard.editLayout', 'Edit overview layout')}
+                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={handleOpenTokenModal}>
                                 <KeyRound size={14} /> {t('app.serverDetail.generateConnectionString', 'Generate connection string')}
                             </DropdownMenuItem>

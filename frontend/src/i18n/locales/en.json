@@ -4379,6 +4379,17 @@
             "vaults": "Vaults",
             "workspaces": "Workspaces"
         },
+        "overviewBoard": {
+            "addBlock": "Add block",
+            "couldNotSave": "Couldn't save the overview layout.",
+            "discardMessage": "Your saved overview layout stays as it was.",
+            "discardTitle": "Discard layout changes?",
+            "editHint": "Drag headers to move · drag the corner to resize · this layout applies to every {{kind}} page for your account",
+            "editLayout": "Edit overview layout",
+            "nothingToShow": "Nothing to show here right now.",
+            "restoreDefault": "Restore default layout",
+            "saved": "Overview layout saved"
+        },
         "overviewTab": {
             "active": "Active",
             "addAlertDeliveryChannelsDiscordSlack": "Add alert delivery channels (Discord, Slack, Telegram) in Settings → Notifications.",
@@ -4397,6 +4408,7 @@
             "environment": "Environment",
             "fileIntegrityMonitoringEnabled": "File integrity monitoring enabled",
             "fixWorking": "Working…",
+            "hints": "Hints",
             "inactive": "Inactive",
             "initializeBaseline": "Initialize baseline",
             "integrityBaselineInitialized": "Integrity baseline initialized",
@@ -4426,6 +4438,7 @@
             "serviceInfo": "Service info",
             "startToViewMetrics": "Start the service to view metrics.",
             "thisMonth": "this month",
+            "traffic": "Traffic",
             "workers": "Workers"
         },
         "packagesTab": {
@@ -5652,10 +5665,12 @@
             "agentVersion": "Agent version",
             "architecture": "Architecture",
             "cantReachAgent": "Couldn't connect to the server agent.",
+            "connection": "Connection",
             "dockerVersion": "Docker version",
             "group": "Group",
             "hostname": "Hostname",
             "lastSeen": "Last seen",
+            "liveStatus": "Live status",
             "operatingSystem": "Operating system",
             "serverInformation": "Server information",
             "serverOffline": "Server offline",
@@ -8465,6 +8480,7 @@
             "create": "Create",
             "delete": "Delete",
             "disable": "Disable",
+            "discard": "Discard",
             "dismiss": "Dismiss",
             "done": "Done",
             "download": "Download",

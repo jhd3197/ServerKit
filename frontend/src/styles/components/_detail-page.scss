@@ -157,6 +157,64 @@
     gap: $space-5;
 }
 
+// Overview board: the Overview tab laid out on the dashboard's widget grid
+// (components/detail/OverviewBoard.jsx). The frames, library and editor are
+// the dashboard's own (.skw-*); only the page blocks inside them live here.
+.sk-overview-board {
+    min-inline-size: 0;
+
+    // Edit-mode controls above the grid.
+    &__bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $space-2;
+        margin-block-end: $space-3;
+
+        .skw-barbtn { height: $control-md; }
+    }
+}
+
+// A page block inside a widget frame: it fills the frame and scrolls when the
+// frame is shorter than its content.
+.sk-overview-section {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: $space-3 $space-4 $space-4;
+
+    // A block with nothing to render. Only seen while editing: outside edit
+    // mode an empty block is left out of the layout altogether.
+    &:has(> .sk-overview-section__host:empty)::before {
+        content: attr(data-empty);
+        color: var(--text-faint);
+        font-size: $text-sm;
+    }
+
+    // The frame already draws the card and its title, so a card placed in one
+    // drops its own.
+    &__host {
+        > .overview-tab__card,
+        > .scheduled-tasks-card {
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: none;
+        }
+
+        .overview-tab__card > .overview-tab__card-title,
+        .overview-tab__card-header-row > .overview-tab__card-title,
+        .system-status-card__title > h3,
+        .scheduled-tasks-card__header { display: none; }
+
+        // A header row keeps its action (Attach, a state pill) on the right.
+        .overview-tab__card-header-row { justify-content: flex-end; }
+        .overview-tab__card-header-row:not(:has(> :not(.overview-tab__card-title))) { display: none; }
+
+        .sk-kpiband-wrap { margin: 0; }
+        .offline-message { padding: $space-2; }
+    }
+}
+
 // Settings shell: grouped left nav + content column.
 .sk-detail-settings {
     display: grid;

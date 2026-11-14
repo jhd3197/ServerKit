@@ -34,3 +34,21 @@ export async function deleteDashboard(id) {
 export async function resetDashboard(id) {
     return this.request(`/dashboards/${id}/reset`, { method: 'POST' });
 }
+
+// The Overview layout this user saved for one kind of detail page ('server' |
+// 'service'), or null while they are still on the shipped layout. It is a
+// board like any other, so deleteDashboard(id) is what puts the shipped layout
+// back.
+export async function getOverviewBoard(kind) {
+    const data = await this.request(`/dashboards?scope=entity:${kind}`);
+    return data?.boards?.[0] || null;
+}
+
+// Store (or replace) this user's Overview layout for one kind of detail page.
+export async function saveOverviewBoard(kind, widgets) {
+    return this.request('/dashboards', {
+        method: 'POST',
+        body: JSON.stringify({ name: `${kind} overview`, scope: `entity:${kind}`, widgets }),
+    });
+}
+

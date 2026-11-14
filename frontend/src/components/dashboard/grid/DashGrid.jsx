@@ -36,6 +36,9 @@ export function DashGrid({
     onChange,
     ctx,
     onWidgetMenu,
+    // Height of one grid row. The home dashboard uses the default; a host can
+    // pass a finer row for layouts that need smaller height steps.
+    rowHeight = GRID_ROW,
 }) {
     const { t } = useTranslation();
     const hostRef = useRef(null);
@@ -44,7 +47,10 @@ export function DashGrid({
     // Detach function for the in-flight pointer gesture, so a mid-drag unmount
     // (or a pointer released outside the viewport) never leaves listeners behind.
     const detachRef = useRef(null);
-    const types = useWidgetTypes();
+    // A host with its own widget types (an entity overview's page blocks)
+    // passes them through ctx; the home dashboard uses the registry.
+    const registeredTypes = useWidgetTypes();
+    const types = ctx?.types || registeredTypes;
 
     useEffect(() => {
         const element = hostRef.current;
@@ -68,7 +74,7 @@ export function DashGrid({
         ? (hostWidth - GRID_GAP * (GRID_COLS - 1)) / GRID_COLS
         : 0;
     const stepX = cell + GRID_GAP;
-    const stepY = GRID_ROW + GRID_GAP;
+    const stepY = rowHeight + GRID_GAP;
 
     // While dragging we paint the previewed layout instead of the committed one.
     const list = drag ? drag.preview : widgets;
@@ -142,9 +148,9 @@ export function DashGrid({
         left: widget.x * stepX,
         top: widget.y * stepY,
         width: widget.w * cell + (widget.w - 1) * GRID_GAP,
-        height: widget.h * GRID_ROW + (widget.h - 1) * GRID_GAP,
+        height: widget.h * rowHeight + (widget.h - 1) * GRID_GAP,
         zIndex: drag?.id === widget.i ? 5 : 1,
-    }), [drag, cell, stepX, stepY]);
+    }), [drag, cell, stepX, stepY, rowHeight]);
 
     const hostClassName = useMemo(() => [
         'skw-grid',
@@ -156,7 +162,7 @@ export function DashGrid({
         <div
             ref={hostRef}
             className={hostClassName}
-            style={{ height: rows * GRID_ROW + (rows - 1) * GRID_GAP + HOST_PAD }}
+            style={{ height: rows * rowHeight + (rows - 1) * GRID_GAP + HOST_PAD }}
             onMouseDown={(event) => {
                 if (edit && event.target === event.currentTarget) onSelect?.(null);
             }}

@@ -361,6 +361,12 @@ const ServiceDetail = () => {
                         </Button>
                         {showMoreMenu && (
                             <div className="svc-detail__dropdown-menu svc-detail__dropdown-menu--right">
+                                <Button variant="unstyled" type="button"
+                                    onClick={() => { setShowMoreMenu(false); navigate(`/services/${id}?layout=edit`); }}
+                                >
+                                    <LayoutDashboard size={14} />
+                                    {t('app.overviewBoard.editLayout', 'Edit overview layout')}
+                                </Button>
                                 {service.isRunning && (
                                     <Button variant="unstyled" type="button" onClick={() => handleAction('stop')} disabled={actionLoading === 'stop'}>
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
