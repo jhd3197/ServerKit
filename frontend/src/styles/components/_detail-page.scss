@@ -172,6 +172,30 @@
 
         .skw-barbtn { height: $control-md; }
     }
+
+    // "Edit overview layout", under the blocks.
+    &__foot {
+        display: flex;
+        justify-content: flex-end;
+        margin-block-start: $space-3;
+    }
+
+    &__edit {
+        display: inline-flex;
+        align-items: center;
+        gap: $space-tight;
+        height: $control-sm;
+        padding: 0 $space-2;
+        border: 0;
+        border-radius: $radius-control;
+        background: transparent;
+        color: var(--text-ghost);
+        font-size: $text-xs;
+        font-family: inherit;
+        cursor: pointer;
+
+        &:hover { color: var(--text); background: var(--surface-2); }
+    }
 }
 
 // A page block inside a widget frame: it fills the frame and scrolls when the
@@ -194,7 +218,9 @@
     // drops its own.
     &__host {
         > .overview-tab__card,
-        > .scheduled-tasks-card {
+        > .scheduled-tasks-card,
+        > .monitoring-panel,
+        > .bk-panel {
             padding: 0;
             border: 0;
             border-radius: 0;
@@ -204,7 +230,17 @@
         .overview-tab__card > .overview-tab__card-title,
         .overview-tab__card-header-row > .overview-tab__card-title,
         .system-status-card__title > h3,
-        .scheduled-tasks-card__header { display: none; }
+        .scheduled-tasks-card__header,
+        > .monitoring-panel > .monitoring-panel__header h3,
+        > .bk-panel > .bk-panel__head h3 { display: none; }
+
+        // With the title gone, what is left of a panel's head (a count, a
+        // link, a button) sits on the right, where it sat beside the title.
+        > .monitoring-panel > .monitoring-panel__header > h3 + *,
+        > .bk-panel > .bk-panel__head > h3 + * { margin-inline-start: auto; }
+        // A head that held nothing but its title goes with it.
+        > .bk-panel > .bk-panel__head:not(:has(> :not(h3))),
+        > .monitoring-panel > .monitoring-panel__header:not(:has(> :not(h3))) { display: none; }
 
         // A header row keeps its action (Attach, a state pill) on the right.
         .overview-tab__card-header-row { justify-content: flex-end; }
@@ -213,6 +249,15 @@
         .sk-kpiband-wrap { margin: 0; }
         .offline-message { padding: $space-2; }
     }
+}
+
+// Monitoring styles its panels under its own page class, which outranks the
+// plain reset above; scoping to the board puts the reset back on top.
+.sk-overview-board .sk-overview-section__host > .monitoring-panel {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
 }
 
 // Settings shell: grouped left nav + content column.

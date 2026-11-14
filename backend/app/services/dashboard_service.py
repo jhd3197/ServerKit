@@ -49,13 +49,17 @@ GRID_COLS = 12
 # JSON per board.
 MAX_WIDGETS_PER_BOARD = 100
 
-# A board can also hold the Overview layout a user saved for one kind of
-# detail page (every server page shares the user's server layout, the page's
-# own server being the board's variable). It is an ordinary board row whose
-# slug names the kind, so it reuses the same storage, validation and
-# ownership rules; it is just never listed among the dashboard tabs.
+# A board can also hold the Overview layout a user saved for a page: one kind
+# of detail page (every server page shares the user's server layout, the
+# page's own server being the board's variable) or a single overview page
+# (Monitoring, Backups). It is an ordinary board row whose slug names the
+# page, so it reuses the same storage, validation and ownership rules; it is
+# just never listed among the dashboard tabs.
 ENTITY_SCOPE_PREFIX = 'entity:'
-ENTITY_SCOPES = ('entity:server', 'entity:service')
+ENTITY_SCOPES = (
+    'entity:server', 'entity:service',
+    'entity:monitoring', 'entity:backups',
+)
 
 
 DEFAULT_BOARDS = [

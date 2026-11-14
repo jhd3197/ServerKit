@@ -485,10 +485,20 @@ def test_overview_layout_is_stored_but_is_not_a_dashboard_tab(client, auth_heade
     assert scoped[0]['widgets'] == [_widget()]
 
 
-def test_overview_layout_is_empty_until_saved(client, auth_headers):
-    resp = client.get('/api/v1/dashboards?scope=entity:service', headers=auth_headers)
+@pytest.mark.parametrize('scope', [
+    'entity:server', 'entity:service', 'entity:monitoring', 'entity:backups',
+])
+def test_overview_layout_is_empty_until_saved(client, auth_headers, scope):
+    resp = client.get(f'/api/v1/dashboards?scope={scope}', headers=auth_headers)
     assert resp.status_code == 200
     assert resp.get_json()['boards'] == []
+
+    saved = client.post('/api/v1/dashboards', headers=auth_headers, json={
+        'name': 'Overview', 'scope': scope, 'widgets': [_widget()],
+    })
+    assert saved.status_code == 201
+    again = client.get(f'/api/v1/dashboards?scope={scope}', headers=auth_headers).get_json()['boards']
+    assert [board['slug'] for board in again] == [scope]
 
 
 def test_saving_an_overview_layout_again_replaces_it(client, auth_headers):

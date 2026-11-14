@@ -1,7 +1,7 @@
 import { Children, isValidElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Grid2x2, History, LayoutGrid, Plus } from 'lucide-react';
+import { Grid2x2, History, LayoutGrid, Plus, SlidersHorizontal } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import api from '@/services/api';
 import { useAuth } from '@/contexts/useAuth';
@@ -91,12 +91,17 @@ function SectionWidget({ widget, ctx }) {
 const NO_WIDGET_TYPES = [];
 const NO_LEADING_WIDGETS = [];
 
+//   kind         what the layout is for: 'server' / 'service' (one layout shared
+//                by every page of that kind) or a page such as 'monitoring'
+//   shared       true when `kind` covers many pages, so editing says so
+//   serverVar    what dashboard widgets bound to `$server` should read
 //   widgetTypes  ids of dashboard widget types offered on this board
 //   leading      dashboard widgets placed ahead of the sections in the default
 //                layout: [{ type, w, h, cfg }], h in board rows
 // Pass both as module-level constants: they define the board, they are not state.
 export function OverviewBoard({
-    kind, entityId, entityLabel, widgetTypes = NO_WIDGET_TYPES, leading = NO_LEADING_WIDGETS, children,
+    kind, entityId, entityLabel, shared = false, serverVar,
+    widgetTypes = NO_WIDGET_TYPES, leading = NO_LEADING_WIDGETS, children,
 }) {
     const sections = Children.toArray(children).filter(isValidElement).map((child) => child.props);
     return (
@@ -105,6 +110,8 @@ export function OverviewBoard({
             kind={kind}
             entityId={entityId}
             entityLabel={entityLabel}
+            shared={shared}
+            serverVar={serverVar}
             widgetTypeIds={widgetTypes}
             leading={leading}
             sections={sections}
@@ -112,7 +119,7 @@ export function OverviewBoard({
     );
 }
 
-function OverviewBoardInner({ kind, entityId, entityLabel, widgetTypeIds, leading, sections }) {
+function OverviewBoardInner({ kind, entityId, entityLabel, shared, serverVar, widgetTypeIds, leading, sections }) {
     const { t } = useTranslation();
     const toast = useToast();
     const navigate = useNavigate();
@@ -365,8 +372,8 @@ function OverviewBoardInner({ kind, entityId, entityLabel, widgetTypeIds, leadin
     const ctx = useMemo(() => ({
         range: BOARD_RANGE,
         tick,
-        // Dashboard widgets bound to `$server` read this page's server.
-        serverVar: kind === 'server' ? entityId : undefined,
+        // What dashboard widgets bound to `$server` read on this page.
+        serverVar,
         isAdmin,
         navigate,
         types,
@@ -375,12 +382,12 @@ function OverviewBoardInner({ kind, entityId, entityLabel, widgetTypeIds, leadin
         adoptVersion,
         releaseSection,
         emptyLabel: t('app.overviewBoard.nothingToShow', 'Nothing to show here right now.'),
-    }), [tick, kind, entityId, isAdmin, navigate, types, adoptVersion, releaseSection, t]);
+    }), [tick, kind, entityId, serverVar, isAdmin, navigate, types, adoptVersion, releaseSection, t]);
 
     // Page blocks already on the board are not offered again.
     const placedSections = new Set(widgets.filter(isSectionWidget).map((widget) => widget.cfg?.section));
     const libraryTypes = types.filter((type) => !type.section || !placedSections.has(type.section));
-    const resources = kind === 'server' ? [{ id: entityId, label: entityLabel || String(entityId), kind: 'server' }] : [];
+    const resources = serverVar ? [{ id: serverVar, label: entityLabel || String(serverVar), kind: 'server' }] : [];
 
     return (
         <div className={`sk-overview-board${edit ? ' is-editing' : ''}`}>
@@ -399,7 +406,9 @@ function OverviewBoardInner({ kind, entityId, entityLabel, widgetTypeIds, leadin
                         </Button>
                     </div>
                     <div className="skw-hint">
-                        <Grid2x2 size={13} aria-hidden="true" /> {t('app.overviewBoard.editHint', 'Drag headers to move · drag the corner to resize · this layout applies to every {{kind}} page for your account', { kind })}
+                        <Grid2x2 size={13} aria-hidden="true" /> {shared
+                            ? t('app.overviewBoard.editHint', 'Drag headers to move · drag the corner to resize · this layout applies to every {{kind}} page for your account', { kind })
+                            : t('app.overviewBoard.editHintPage', 'Drag headers to move · drag the corner to resize · saved to your account')}
                     </div>
                 </>
             )}
@@ -415,6 +424,15 @@ function OverviewBoardInner({ kind, entityId, entityLabel, widgetTypeIds, leadin
                     ctx={ctx}
                     onWidgetMenu={onWidgetMenu}
                 />
+            )}
+
+            {/* A quiet way in, under the blocks it rearranges. */}
+            {!edit && board !== undefined && (
+                <div className="sk-overview-board__foot">
+                    <Button variant="unstyled" type="button" className="sk-overview-board__edit" onClick={startEditing}>
+                        <SlidersHorizontal size={13} aria-hidden="true" /> {t('app.overviewBoard.editLayout', 'Edit overview layout')}
+                    </Button>
+                </div>
             )}
 
             {edit && <ChangeBar session={editing} onDiscard={discard} onSave={save} />}

@@ -118,7 +118,7 @@ const OverviewTab = ({ app, deployConfig }) => {
 
     return (
         <div className="overview-tab">
-            <OverviewBoard kind="service" entityId={app.id} entityLabel={app.name} widgetTypes={SERVICE_WIDGET_TYPES}>
+            <OverviewBoard kind="service" shared entityId={app.id} entityLabel={app.name} widgetTypes={SERVICE_WIDGET_TYPES}>
                 <OverviewSection id="info" title={t('app.overviewTab.serviceInfo', 'Service info')} w={6} h={7}>
                     <div className="overview-tab__card">
                         <h3 className="overview-tab__card-title">{t('app.overviewTab.serviceInfo', 'Service info')}</h3>

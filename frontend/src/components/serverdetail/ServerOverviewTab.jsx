@@ -113,8 +113,10 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
             )}
             <OverviewBoard
                 kind="server"
+                shared
                 entityId={server.id}
                 entityLabel={server.name}
+                serverVar={server.id}
                 widgetTypes={SERVER_WIDGET_TYPES}
                 leading={SERVER_LEADING_WIDGETS}
             >
