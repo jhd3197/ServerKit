@@ -13,11 +13,15 @@ on:
     branches: [dev]
     paths:
       - 'backend/**'
+      - 'docs/MIGRATION_INVENTORY.md'
+      - 'scripts/generate-migration-inventory.py'
       - '.github/workflows/backend-ci.yml'
   pull_request:
     branches: [main, dev]
     paths:
       - 'backend/**'
+      - 'docs/MIGRATION_INVENTORY.md'
+      - 'scripts/generate-migration-inventory.py'
       - '.github/workflows/backend-ci.yml'
   workflow_call:
 
