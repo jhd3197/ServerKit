@@ -42,7 +42,7 @@
         "preview": "vite preview"
     },
     "optionalDependencies": {
-        "@rollup/rollup-win32-x64-msvc": "^4.67.2"
+        "@rollup/rollup-win32-x64-msvc": "^4.68.2"
     },
     "dependencies": {
         "@radix-ui/react-alert-dialog": "^1.2.1",
@@ -61,11 +61,11 @@
         "@xterm/addon-fit": "^0.11.0",
         "@xterm/addon-web-links": "^0.12.0",
         "@xterm/xterm": "^5.5.0",
-        "@xyflow/react": "^12.12.0",
+        "@xyflow/react": "^12.12.1",
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",
         "i18next": "^26.5.12",
-        "lucide-react": "^1.65.0",
+        "lucide-react": "^1.72.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-i18next": "^17.1.9",
@@ -78,17 +78,17 @@
     "devDependencies": {
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
-        "@vitejs/plugin-react": "^6.1.2",
+        "@vitejs/plugin-react": "^6.3.0",
         "boneyard-js": "^1.10.0",
         "eslint": "^9.9.0",
         "eslint-plugin-react": "^7.35.0",
         "eslint-plugin-react-hooks": "^5.1.0-rc.0",
         "eslint-plugin-react-refresh": "^0.5.7",
         "espree": "^11.2.0",
-        "globals": "^17.13.0",
-        "playwright": "1.64.1",
-        "sass": "^1.107.1",
-        "vite": "^8.3.5"
+        "globals": "^17.14.0",
+        "playwright": "1.65.0",
+        "sass": "^1.108.2",
+        "vite": "^8.3.8"
     },
     "overrides": {
         "lodash": "4.18.1",
