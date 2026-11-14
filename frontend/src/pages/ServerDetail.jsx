@@ -1,5 +1,7 @@
-import { isPlaceholderServerName } from '../components/serverdetail/serverDetailData';
-import ServerHeaderMeta from '../components/serverdetail/ServerHeaderMeta';
+import { isPlaceholderServerName, serverStatusKind } from '../components/serverdetail/serverDetailData';
+import { DetailPage, DetailIdentity, DetailMetaSep, DetailTabs } from '@/components/detail/DetailPage';
+import FavoriteStar from '@/components/FavoriteStar';
+import { Pill, ServiceTile } from '@/components/ds';
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
@@ -7,10 +9,8 @@ import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import { useRecordVisit } from '@/hooks/useRecordVisit';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent } from '@/components/ui/tabs';
-import { Tip } from '@/components/ui/tooltip';
-import { Server, ArrowLeft } from 'lucide-react';
-import PageLayout from '../layouts/PageLayout';
+import { TabsContent } from '@/components/ui/tabs';
+import { Server, LayoutGrid, History, Container, Globe, Clock, Network, Package, Boxes, ScanSearch, Activity, Bell, Shield, Settings } from 'lucide-react';
 import PackagesTab from '../components/serverdetail/PackagesTab';
 import ServicesTab from '../components/serverdetail/ServicesTab';
 import ServerOverviewTab from '../components/serverdetail/ServerOverviewTab';
@@ -22,6 +22,8 @@ import ServerMetricsTab from '../components/serverdetail/ServerMetricsTab';
 import SurveyTab from '../components/serverdetail/SurveyTab';
 import ServerSettingsTab, { TokenModal } from '../components/serverdetail/ServerSettingsTab';
 import {
+    CopyChip,
+    FolderTinyIcon,
     RefreshIcon,
 } from '../components/serverdetail/serverDetailShared';
 import ProxyStackPanel from '../components/proxy/ProxyStackPanel';
@@ -32,6 +34,10 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/useAuth.js';
 import ServerRestorePointsTab from '../components/serverdetail/ServerRestorePointsTab';
 import { toastError } from '@/utils/errorMessage';
+import { formatDateTime } from '@/utils/intl';
+
+// Edge of the identity tile next to the entity name, in px.
+const IDENTITY_TILE_SIZE = 52;
 
 // Live host metrics cadence while the server is online.
 const METRICS_POLL_MS = 10000;
@@ -254,57 +260,86 @@ const ServerDetail = () => {
     // hiding the tab matches the rest of the panel's "don't expose what
     // the host can't do" behaviour.
     const tabs = [
-        { id: 'overview', label: t('common.labels.overview', 'Overview') },
-        ...(isDeveloper ? [{ id: 'restore-points', label: t('app.serverDetail.restorePoints', 'Restore points') }] : []),
-        { id: 'docker', label: t('common.labels.docker', 'Docker') },
-        { id: 'proxy', label: t('app.serverDetail.proxy', 'Proxy') },
-        ...(server.capabilities?.cron ? [{ id: 'cron', label: t('app.serverDetail.cron', 'Cron') }] : []),
-        ...(server.capabilities?.cloudflared ? [{ id: 'cloudflared', label: t('app.serverDetail.tunnels', 'Tunnels') }] : []),
-        ...(server.capabilities?.packages ? [{ id: 'packages', label: t('app.serverDetail.packages', 'Packages') }] : []),
-        ...(server.capabilities?.systemd ? [{ id: 'services', label: t('common.labels.services', 'Services') }] : []),
-        ...(server.capabilities?.survey ? [{ id: 'survey', label: t('app.serverDetail.survey', 'Survey') }] : []),
-        { id: 'metrics', label: t('app.serverDetail.metrics', 'Metrics') },
+        { id: 'overview', icon: LayoutGrid, label: t('common.labels.overview', 'Overview') },
+        ...(isDeveloper ? [{ id: 'restore-points', icon: History, label: t('app.serverDetail.restorePoints', 'Restore points') }] : []),
+        { id: 'docker', icon: Container, label: t('common.labels.docker', 'Docker') },
+        { id: 'proxy', icon: Globe, label: t('app.serverDetail.proxy', 'Proxy') },
+        ...(server.capabilities?.cron ? [{ id: 'cron', icon: Clock, label: t('app.serverDetail.cron', 'Cron') }] : []),
+        ...(server.capabilities?.cloudflared ? [{ id: 'cloudflared', icon: Network, label: t('app.serverDetail.tunnels', 'Tunnels') }] : []),
+        ...(server.capabilities?.packages ? [{ id: 'packages', icon: Package, label: t('app.serverDetail.packages', 'Packages') }] : []),
+        ...(server.capabilities?.systemd ? [{ id: 'services', icon: Boxes, label: t('common.labels.services', 'Services') }] : []),
+        ...(server.capabilities?.survey ? [{ id: 'survey', icon: ScanSearch, label: t('app.serverDetail.survey', 'Survey') }] : []),
+        { id: 'metrics', icon: Activity, label: t('app.serverDetail.metrics', 'Metrics') },
         ...(totalAlertCount > 0
-            ? [{ id: 'alerts', label: t('app.serverDetail.alerts', 'Alerts'), badge: totalAlertCount }]
-            : [{ id: 'alerts', label: t('app.serverDetail.alerts', 'Alerts') }]),
-        ...(server.capabilities?.wireguard ? [{ id: 'remote-access', label: t('app.serverDetail.remoteAccess', 'Remote access') }] : []),
-        { id: 'settings', label: t('common.labels.settings', 'Settings') }
+            ? [{ id: 'alerts', icon: Bell, label: t('app.serverDetail.alerts', 'Alerts'), badge: totalAlertCount }]
+            : [{ id: 'alerts', icon: Bell, label: t('app.serverDetail.alerts', 'Alerts') }]),
+        ...(server.capabilities?.wireguard ? [{ id: 'remote-access', icon: Shield, label: t('app.serverDetail.remoteAccess', 'Remote access') }] : []),
+        { id: 'settings', icon: Settings, label: t('common.labels.settings', 'Settings') }
     ];
 
+    const displayName = isPlaceholderServerName(server.name) ? t('app.serverDetail.pendingPairing', 'Pending pairing') : server.name;
+
     return (
-        <PageLayout
-            className="sk-detail-page server-detail-page"
-            contentClassName="sk-detail-body"
+        <DetailPage
+            className="server-detail-page"
             icon={<Server size={18} />}
-            title={isPlaceholderServerName(server.name) ? t('app.serverDetail.pendingPairing', 'Pending pairing') : server.name}
-            navLabel={t('app.serverDetail.sections', 'Server sections')}
-            meta={<ServerHeaderMeta server={server} />}
-            tabs={tabs.map((item) => ({
-                id: item.id,
-                label: item.badge ? <>{item.label}<span className="tab-badge">{item.badge}</span></> : item.label,
-                active: item.id === activeTab,
-                onSelect: () => navigate(item.id === 'overview' ? `/servers/${id}` : `/servers/${id}/${item.id}`, { replace: true }),
-            }))}
+            parentTo="/servers"
+            parentLabel={t('common.labels.servers', 'Servers')}
+            name={displayName}
+            favorite={<FavoriteStar type="server" id={server.id} path={`/servers/${server.id}`} label={server.name} />}
             actions={(
-                <>
-                    <Tip content={t('app.serverDetail.backToServers', 'Back to servers')}>
-                        <Button asChild variant="ghost" size="icon" aria-label={t('app.serverDetail.backToServers', 'Back to servers')}>
-                            <Link to="/servers"><ArrowLeft size={16} /></Link>
-                        </Button>
-                    </Tip>
-                    <Tip content={t('app.serverDetail.ping', 'Ping')}>
-                        <Button variant="ghost" size="icon" aria-label={t('app.serverDetail.ping', 'Ping')} onClick={handlePingServer}>
-                            <RefreshIcon />
-                        </Button>
-                    </Tip>
-                </>
+                <Button variant="outline" size="sm" onClick={handlePingServer}>
+                    <RefreshIcon /> {t('app.serverDetail.ping', 'Ping')}
+                </Button>
             )}
         >
-            {server.description && (
-                <p className="server-detail-header__description">{server.description}</p>
-            )}
+            <DetailIdentity
+                avatar={<ServiceTile name={displayName} size={IDENTITY_TILE_SIZE} />}
+                name={displayName}
+                badges={(
+                    <>
+                        <Pill kind={serverStatusKind(server.status)}>{server.status || 'pending'}</Pill>
+                        <CopyChip label="id" value={server.id} title={t('app.serverDetail.copyServerId', 'Copy server ID')} mono />
+                    </>
+                )}
+                meta={(
+                    <>
+                        <span>{server.hostname || server.ip_address || t('app.serverDetail.noEndpointConfigured', 'No endpoint configured')}</span>
+                        {server.group_name && (
+                            <>
+                                <DetailMetaSep />
+                                <span><FolderTinyIcon /> {server.group_name}</span>
+                            </>
+                        )}
+                        {server.os_type && (
+                            <>
+                                <DetailMetaSep />
+                                <span>{server.os_type}</span>
+                            </>
+                        )}
+                        {server.agent_version && (
+                            <>
+                                <DetailMetaSep />
+                                <span>{t('app.serverDetail.agentVersion', 'agent {{version}}', { version: server.agent_version })}</span>
+                            </>
+                        )}
+                        {server.last_seen && (
+                            <>
+                                <DetailMetaSep />
+                                <span>{t('app.serverDetail.lastSeen', 'last seen')} {formatDateTime(server.last_seen)}</span>
+                            </>
+                        )}
+                    </>
+                )}
+                description={server.description}
+            />
 
-            <Tabs value={activeTab}>
+            <DetailTabs
+                items={tabs}
+                value={activeTab}
+                ariaLabel={t('app.serverDetail.sections', 'Server sections')}
+                onValueChange={(value) => navigate(value === 'overview' ? `/servers/${id}` : `/servers/${id}/${value}`, { replace: true })}
+            >
                 <div className="server-detail-content">
                     <TabsContent value="overview">
                         <ServerOverviewTab
@@ -373,7 +408,7 @@ const ServerDetail = () => {
                         />
                     </TabsContent>
                 </div>
-            </Tabs>
+            </DetailTabs>
 
             {showTokenModal && server && (
                 <TokenModal
@@ -382,7 +417,7 @@ const ServerDetail = () => {
                     onGenerated={handleTokenGenerated}
                 />
             )}
-        </PageLayout>
+        </DetailPage>
     );
 };
 

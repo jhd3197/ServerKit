@@ -1,39 +1,153 @@
 // ============================================
 // ENTITY DETAIL PAGE
-// What the service and server detail pages share, so the two read as one
-// layout: the top-bar meta, the body rhythm and the settings shell. Feature
-// stylesheets (_service-detail, _servers) own only what is inside the tabs.
-//   components/detail/DetailHeaderMeta.jsx   [dot] [(i)] [star]
-//   components/detail/DetailSettings.jsx     grouped nav + content column
+// The frame the service and server detail pages share, so the two read as
+// one layout (components/detail/DetailPage.jsx, DetailSettings.jsx):
+//
+//   top bar    Parent / Name  [star]                         [actions]
+//   identity   [tile] Name [status] [badges] + meta line
+//   tabs       [Overview] [Logs] ...                        [Settings]
+//   content
+//
+// Feature stylesheets (_service-detail, _servers) own only what is inside
+// the tabs.
 // ============================================
 
-// Header: dot / (i) / star share one centered row beside the title.
+// Top bar: breadcrumb in the title slot, the star beside it.
 .sk-detail-page .sk-topbar {
     &__titles { align-items: center; }
     &__meta { display: inline-flex; align-items: center; gap: $space-2; }
 
     .fav-star {
-        width: 24px; // geometry: matches the InfoTip md footprint
-        height: 24px; // geometry: matches the InfoTip md footprint
+        width: 24px; // geometry: icon-button footprint
+        height: 24px; // geometry: icon-button footprint
         svg { width: 14px; height: 14px; } // geometry: inline icon
         opacity: 0.6;
         &:hover, &.is-on { opacity: 1; }
     }
 }
 
-// Facts behind the header (i): label / value pairs.
-.sk-detail-info {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: $space-1 $space-3;
-    margin: 0;
+.sk-detail-crumbs {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: $space-2;
+    overflow-wrap: anywhere;
 
-    &__row { display: contents; }
+    a {
+        color: var(--text-dim);
+        font-weight: $font-weight-medium;
+        text-decoration: none;
+        &:hover { color: var(--text); }
+    }
 
-    dt { color: var(--text-faint); }
-    dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+    > [aria-hidden] { color: var(--text-ghost); }
+}
 
-    &__id { display: flex; align-items: center; gap: $space-1; code { font-family: $font-mono; } }
+// Identity: tile + name + status, a meta line and an optional description.
+.sk-detail-identity {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-4;
+
+    > :first-child { flex-shrink: 0; }
+
+    &__body { min-inline-size: 0; flex: 1; }
+
+    &__title {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: $space-3;
+    }
+
+    h2 {
+        margin: 0;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
+        letter-spacing: -0.02em;
+        color: var(--text);
+        overflow-wrap: anywhere;
+    }
+
+    &__meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: $space-2;
+        margin-block-start: $space-1;
+        font-size: $text-xs;
+        color: var(--text-dim);
+        overflow-wrap: anywhere;
+
+        > span { display: inline-flex; align-items: center; gap: $space-1; }
+        a { color: var(--accent-bright); text-decoration: none; &:hover { text-decoration: underline; } }
+    }
+
+    &__sep { color: var(--text-ghost); }
+
+    &__description {
+        margin-block: $space-2 0;
+        font-size: $text-sm;
+        color: var(--text-dim);
+    }
+
+    .copy-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: $space-2;
+        padding: $space-1 $space-2;
+        border: 1px solid var(--border-soft);
+        border-radius: $radius-control;
+        background: var(--surface);
+        color: var(--text-dim);
+        font-size: $text-xs;
+        cursor: pointer;
+
+        &:hover { border-color: var(--border-strong); color: var(--text); }
+    }
+
+    .copy-chip__value {
+        max-inline-size: 22ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+// Tab strip under the identity: one quiet bar, Settings pinned to the end.
+.sk-detail-page .sk-detail-tabs {
+    min-inline-size: 0;
+
+    > .tabs {
+        gap: $space-1;
+        margin: 0;
+        padding: $space-1;
+        background: var(--surface);
+        border: 1px solid var(--border-soft);
+        border-radius: $radius-card;
+    }
+
+    > .tabs .tab {
+        display: inline-flex;
+        align-items: center;
+        gap: $space-2;
+        padding: $space-2 $space-3;
+        border: 0;
+        border-radius: $radius-control;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
+        color: var(--text-dim);
+        white-space: nowrap;
+
+        &:hover { color: var(--text); }
+        &[data-state='active'] { background: var(--surface-hover); color: var(--text); }
+    }
+
+    > .tabs .sk-detail-tabs__end { margin-inline-start: auto; order: 2; }
+    > .tabs .tabs-overflow-trigger { order: 1; }
+
+    &__content { padding-block-start: $space-5; }
+    .tab-content-pane { margin: 0; padding: 0; }
 }
 
 // Body below the top bar: one column, one gap between its blocks.

@@ -2368,18 +2368,6 @@
     gap: $space-3;
 }
 
-// Phones: the server's actions are two icon buttons, so the title block and
-// actions stay on ONE row (title truncates), tabs below. The shared header
-// rules (dot / (i) / star) live in components/_detail-page.scss.
-.server-detail-page .sk-topbar {
-    @media (max-width: 768px) {
-        &__titles { flex: 1 1 0; min-width: 0; flex-wrap: nowrap; }
-        &__title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; overflow-wrap: normal; }
-        &__spacer { display: none; }
-        &__actions { order: 0; width: auto; margin-left: auto; justify-content: flex-end; overflow: visible; flex-wrap: nowrap; }
-    }
-}
-
 // Permission-level picker in the Add Server drawer
 .level-picker {
     display: grid;

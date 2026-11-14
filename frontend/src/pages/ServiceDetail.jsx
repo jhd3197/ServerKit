@@ -23,12 +23,11 @@ import OverviewTab from '../components/service-detail/OverviewTab';
 import PreviewList from '../components/previews/PreviewList';
 import EmptyState from '../components/EmptyState';
 import PluginSlot from '../components/PluginSlot';
-import { Layers, FileArchive, RotateCcw, ExternalLink } from 'lucide-react';
+import { Layers, FileArchive, RotateCcw, LayoutDashboard, History, ScrollText, Variable, Terminal, Activity, Package, Server, SquareTerminal, Settings, Eye, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { statusKind } from '@/components/ds';
-import PageLayout from '../layouts/PageLayout';
+import { Pill, ServiceTile, statusKind } from '@/components/ds';
 import FavoriteStar from '@/components/FavoriteStar';
-import DetailHeaderMeta from '@/components/detail/DetailHeaderMeta';
+import { DetailPage, DetailIdentity, DetailMetaSep, DetailTabs } from '@/components/detail/DetailPage';
 import { useRecordVisit } from '@/hooks/useRecordVisit';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
@@ -59,6 +58,24 @@ const RETIRED_TAB_REDIRECTS = {
     build: 'settings/build',
     deploy: 'settings/git',
 };
+
+// Per-tab glyph for the detail tab strip.
+const TAB_ICONS = {
+    overview: LayoutDashboard,
+    events: History,
+    logs: ScrollText,
+    environment: Variable,
+    shell: Terminal,
+    metrics: Activity,
+    packages: Package,
+    gunicorn: Server,
+    commands: SquareTerminal,
+    previews: Eye,
+    settings: Settings,
+};
+
+// Edge of the identity tile next to the entity name, in px.
+const IDENTITY_TILE_SIZE = 52;
 
 const ServiceDetail = () => {
     const { t } = useTranslation();
@@ -266,51 +283,14 @@ const ServiceDetail = () => {
     const openUrl = primaryDomain ? null : servicePortUrl(service);
 
     return (
-        <PageLayout
-            className="sk-detail-page svc-detail"
-            contentClassName="sk-detail-body"
+        <DetailPage
+            className="svc-detail"
             topbarClassName="svc-detail-topbar"
             icon={<Layers size={18} />}
-            title={service.name}
-            navLabel={t('app.serviceDetail.sections', 'Service sections')}
-            meta={(
-                <DetailHeaderMeta
-                    status={{ kind: statusKind(service.statusInfo.dotClass), label: service.statusInfo.label }}
-                    infoTitle={t('app.serviceDetail.details', 'Service details')}
-                    rows={[
-                        { label: t('common.labels.status', 'Status'), value: service.statusInfo.label },
-                        { label: t('common.labels.type', 'Type'), value: service.typeInfo.label },
-                        { label: t('common.labels.port', 'Port'), value: service.port },
-                        { label: t('common.labels.created', 'Created'), value: formatDate(service.created_at) },
-                        {
-                            label: t('common.labels.domain', 'Domain'),
-                            value: primaryDomain && (
-                                <a href={`https://${primaryDomain}`} target="_blank" rel="noopener noreferrer">{primaryDomain}</a>
-                            ),
-                        },
-                    ]}
-                    favorite={<FavoriteStar type="service" id={service.id} path={`/services/${service.id}`} label={service.name} />}
-                >
-                    {openUrl && (
-                        <a
-                            href={openUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="svc-detail__open"
-                            title={t('app.serviceDetail.open', 'Open {{openUrl}}', { openUrl: openUrl })}
-                            aria-label={t('app.serviceDetail.openInANewTab', 'Open {{name}} in a new tab', { name: service.name })}
-                        >
-                            <ExternalLink size={15} />
-                        </a>
-                    )}
-                </DetailHeaderMeta>
-            )}
-            tabs={availableTabs.map(tab => ({
-                id: tab,
-                label: TAB_LABELS[tab] || tab,
-                active: activeTab === tab,
-                onSelect: () => setActiveTab(tab),
-            }))}
+            parentTo="/services"
+            parentLabel={t('common.labels.services', 'Services')}
+            name={service.name}
+            favorite={<FavoriteStar type="service" id={service.id} path={`/services/${service.id}`} label={service.name} />}
                 actions={(
                     <>
                     {/* Deploy dropdown */}
@@ -423,6 +403,51 @@ const ServiceDetail = () => {
                 )}
         >
 
+            <DetailIdentity
+                avatar={<ServiceTile name={service.name} size={IDENTITY_TILE_SIZE} />}
+                name={service.name}
+                badges={(
+                    <>
+                        {openUrl && (
+                            <a
+                                href={openUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="svc-detail__open"
+                                title={t('app.serviceDetail.open', 'Open {{openUrl}}', { openUrl: openUrl })}
+                                aria-label={t('app.serviceDetail.openInANewTab', 'Open {{name}} in a new tab', { name: service.name })}
+                            >
+                                <ExternalLink size={15} />
+                            </a>
+                        )}
+                        <Pill kind={statusKind(service.statusInfo.dotClass)}>{service.statusInfo.label}</Pill>
+                        <span
+                            className="svc-detail__type-badge"
+                            style={{ backgroundColor: service.typeInfo.bgColor, color: service.typeInfo.color, borderColor: service.typeInfo.borderColor }}
+                        >
+                            {service.typeInfo.label}
+                        </span>
+                    </>
+                )}
+                meta={(
+                    <>
+                        {service.port && (
+                            <>
+                                <span>{t('common.labels.port', 'Port')} {service.port}</span>
+                                <DetailMetaSep />
+                            </>
+                        )}
+                        <span>{t('common.labels.created', 'Created')} {formatDate(service.created_at)}</span>
+                        {primaryDomain && (
+                            <>
+                                <DetailMetaSep />
+                                <a href={`https://${primaryDomain}`} target="_blank" rel="noopener noreferrer">{primaryDomain}</a>
+                            </>
+                        )}
+                    </>
+                )}
+            />
+
             {/* Repo Connection Pill */}
             <div className="svc-detail__repo-bar">
                 {isUpload ? (
@@ -519,7 +544,12 @@ const ServiceDetail = () => {
                 </div>
             )}
 
-            {/* Tab Content */}
+            <DetailTabs
+                items={availableTabs.map((tab) => ({ id: tab, label: TAB_LABELS[tab] || tab, icon: TAB_ICONS[tab] }))}
+                value={activeTab}
+                onValueChange={setActiveTab}
+                ariaLabel={t('app.serviceDetail.sections', 'Service sections')}
+            >
             <div className="app-detail-content">
                 {activeTab === 'overview' && <OverviewTab app={service} deployConfig={deployConfig} />}
                 {activeTab === 'events' && <EventsTab appId={service.id} />}
@@ -541,10 +571,11 @@ const ServiceDetail = () => {
                     />
                 )}
             </div>
+            </DetailTabs>
 
             {/* Extension slot: widgets contributed to the service detail page */}
             <PluginSlot name="service.detail.tab" context={{ serviceId: service.id }} />
-        </PageLayout>
+        </DetailPage>
     );
 };
 
