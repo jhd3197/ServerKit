@@ -1,5 +1,5 @@
 import { serverStatusKind } from './serverDetailData';
-import { Pill, KpiBand } from '../ds';
+import { Pill, KpiBand, MetricCard, Gauge } from '../ds';
 import OnboardingWizard from '../server/OnboardingWizard';
 import SystemStatusCard from './SystemStatusCard';
 import ServerHealthCard from './ServerHealthCard';
@@ -8,8 +8,6 @@ import { InfoList, InfoItem } from '../InfoList';
 import { useTranslation } from 'react-i18next';
 import { formatDateTime } from '@/utils/intl';
 import {
-    KpiTile,
-    KpiGauge,
     PulseIcon,
     ClockIcon,
     CpuIcon,
@@ -29,6 +27,31 @@ import {
     DockerMiniIcon,
 } from './serverDetailShared';
 
+// Usage thresholds for the CPU / memory / disk tiles.
+const USAGE_DANGER_PERCENT = 85;
+const USAGE_WARN_PERCENT = 70;
+
+// A percent tile on the shared MetricCard: the value, a thin meter and the
+// capacity line underneath. Same tile the service overview's KPI band uses.
+const UsageTile = ({ icon, label, percent, color, sub }) => {
+    const has = Number.isFinite(percent);
+    const safe = has ? Math.min(Math.max(percent, 0), 100) : 0;
+    const danger = safe > USAGE_DANGER_PERCENT;
+    const warn = safe > USAGE_WARN_PERCENT && !danger;
+    return (
+        <MetricCard
+            icon={icon}
+            tone={danger ? 'red' : warn ? 'amber' : 'accent'}
+            value={has ? safe.toFixed(1) : '—'}
+            unit={has ? '%' : undefined}
+            label={label}
+        >
+            <Gauge className="sk-kpi__meter" value={safe} color={danger ? 'var(--red)' : warn ? 'var(--amber)' : color} />
+            {sub && <div className="sk-kpi__sub">{sub}</div>}
+        </MetricCard>
+    );
+};
+
 const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => {
     const { t } = useTranslation();
     const formatUptime = (seconds) => {
@@ -41,6 +64,7 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
     };
 
     const isOnline = server.status === 'online';
+    const statusLabel = server.status || 'pending';
     const cpuCores = systemInfo?.cpu_cores || server.cpu_cores;
     const cpuModel = systemInfo?.cpu_model || server.cpu_model;
     const totalMemory = systemInfo?.total_memory || server.total_memory;
@@ -72,33 +96,35 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                 </div>
             )}
             <KpiBand max={5}>
-                <KpiTile
+                <MetricCard
                     icon={<PulseIcon />}
+                    tone={isOnline ? 'green' : server.status === 'connecting' ? 'amber' : 'red'}
+                    value={statusLabel.charAt(0).toUpperCase() + statusLabel.slice(1)}
                     label={t('common.labels.status', 'Status')}
-                    value={server.status || 'pending'}
-                    tone={isOnline ? 'success' : server.status === 'connecting' ? 'warning' : 'danger'}
                 />
-                <KpiTile
+                <MetricCard
                     icon={<ClockIcon />}
-                    label={t('common.labels.uptime', 'Uptime')}
+                    tone="accent"
                     value={isOnline ? formatUptime(metrics?.uptime) : '—'}
-                    sub={isOnline && metrics?.uptime ? 'since last boot' : null}
-                />
-                <KpiGauge
+                    label={t('common.labels.uptime', 'Uptime')}
+                >
+                    {isOnline && metrics?.uptime ? <div className="sk-kpi__sub">{t('app.serverOverviewTab.sinceLastBoot', 'since last boot')}</div> : null}
+                </MetricCard>
+                <UsageTile
                     icon={<CpuIcon />}
                     label="CPU"
                     percent={isOnline ? metrics?.cpu_percent : null}
                     color="var(--accent-bright)"
                     sub={cpuCores ? `${cpuCores} cores` : null}
                 />
-                <KpiGauge
+                <UsageTile
                     icon={<MemoryIcon />}
                     label={t('common.labels.memory', 'Memory')}
                     percent={isOnline ? metrics?.memory_percent : null}
                     color="var(--cyan)"
                     sub={totalMemory ? formatBytes(totalMemory) : null}
                 />
-                <KpiGauge
+                <UsageTile
                     icon={<DiskIcon />}
                     label={t('common.labels.disk', 'Disk')}
                     percent={isOnline ? metrics?.disk_percent : null}
@@ -108,7 +134,7 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
             </KpiBand>
 
             {!isOnline && (
-                <div className="info-card offline-card">
+                <div className="overview-tab__card">
                     <div className="offline-message">
                         <OfflineIcon />
                         <h4>{t('app.serverOverviewTab.serverOffline', 'Server offline')}</h4>
@@ -121,9 +147,9 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                 </div>
             )}
 
-            <div className="overview-grid">
-                <div className="info-card">
-                    <h3><ServerIcon /> {t('app.serverOverviewTab.serverInformation', 'Server information')}</h3>
+            <div className="overview-tab__grid">
+                <div className="overview-tab__card">
+                    <h3 className="overview-tab__card-title"><ServerIcon /> {t('app.serverOverviewTab.serverInformation', 'Server information')}</h3>
                     <InfoList className="server-info-list">
                         <InfoItem label={<><PulseIcon /> {t('common.labels.status', 'Status')}</>}>
                             <Pill kind={serverStatusKind(server.status)}>{server.status}</Pill>
@@ -138,8 +164,8 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                     </InfoList>
                 </div>
 
-                <div className="info-card">
-                    <h3><ChipIcon /> {t('app.serverOverviewTab.systemInformation', 'System information')}</h3>
+                <div className="overview-tab__card">
+                    <h3 className="overview-tab__card-title"><ChipIcon /> {t('app.serverOverviewTab.systemInformation', 'System information')}</h3>
                     <InfoList className="server-info-list">
                         <InfoItem label={<><OsIcon /> {t('app.serverOverviewTab.operatingSystem', 'Operating system')}</>} value={osLabel} />
                         <InfoItem label={<><ArchIcon /> {t('app.serverOverviewTab.architecture', 'Architecture')}</>} value={systemInfo?.architecture || server.architecture || 'N/A'} />
@@ -154,8 +180,8 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                     </InfoList>
                 </div>
 
-                <div className="info-card overview-grid__full">
-                    <h3><AgentIcon /> {t('app.serverOverviewTab.agentInformation', 'Agent information')}</h3>
+                <div className="overview-tab__card overview-tab__card--full">
+                    <h3 className="overview-tab__card-title"><AgentIcon /> {t('app.serverOverviewTab.agentInformation', 'Agent information')}</h3>
                     <InfoList className="server-info-list server-info-list--columns">
                         <InfoItem label={<><TagIcon /> {t('app.serverOverviewTab.agentVersion', 'Agent version')}</>} value={server.agent_version || 'Not installed'} mono />
                         <InfoItem label={<><HashIcon /> {t('app.serverOverviewTab.agentId', 'Agent ID')}</>} value={server.agent_id || 'N/A'} mono />
@@ -166,9 +192,7 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
 
                 <ServerHealthCard server={server} />
 
-                <div className="overview-grid__full">
-                    <SystemStatusCard server={server} onRefresh={onRefreshServer} />
-                </div>
+                <SystemStatusCard server={server} onRefresh={onRefreshServer} />
             </div>
         </div>
     );

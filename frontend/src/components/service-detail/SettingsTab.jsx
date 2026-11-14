@@ -1,5 +1,6 @@
 import { useEffect, useState, useId } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
+import { DetailSettings } from '@/components/detail/DetailSettings';
 import {
     SlidersHorizontal,
     GitBranch,
@@ -231,31 +232,16 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
     }
 
     return (
-        <div className="svc-settings">
-            <nav className="svc-settings__nav" aria-label={t('app.settingsTab.serviceSettingsSections', 'Service settings sections')}>
-                {settingsGroups.map(g => (
-                    <div className="svc-settings__group" key={g.label}>
-                        <div className="svc-settings__grouplabel">{g.label}</div>
-                        {g.items.map(s => (
-                            <Button variant="unstyled"
-                                type="button"
-                                key={s.id}
-                                className={`svc-settings__navitem ${section === s.id ? 'is-active' : ''}`}
-                                onClick={() => setSection(s.id)}
-                            >
-                                <s.icon size={15} />
-                                {s.label}
-                            </Button>
-                        ))}
-                    </div>
-                ))}
-            </nav>
-
-            <div className="svc-settings__content">
+        <DetailSettings
+            groups={settingsGroups}
+            value={section}
+            onValueChange={setSection}
+            ariaLabel={t('app.settingsTab.serviceSettingsSections', 'Service settings sections')}
+        >
                 {/* Environment Configuration */}
                 {section === 'environment' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('app.settingsTab.environmentType', 'Environment type')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('app.settingsTab.environmentType', 'Environment type')}</h3>
                         <SharedCard variant="legacy" className="card settings-section">
                             <div className="settings-row">
                                 <div className="settings-label">
@@ -317,8 +303,8 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
 
                 {/* Domain & SSL — same information architecture as WordPress Settings → SSL. */}
                 {section === 'domain' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('app.settingsTab.domainSsl', 'Domain and SSL')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('app.settingsTab.domainSsl', 'Domain and SSL')}</h3>
                         <DomainSslPanel
                             app={app}
                             domains={domains}
@@ -331,8 +317,8 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
                 {/* Container Ops (Docker only) — image updates, restart policy,
                     resource limits, auto-sleep. Relocated from the old top tab. */}
                 {section === 'ops' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('app.settingsTab.containerOps', 'Container ops')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('app.settingsTab.containerOps', 'Container ops')}</h3>
                         <ContainerOpsPanel app={app} onChanged={onUpdate} />
                     </div>
                 )}
@@ -340,8 +326,8 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
                 {/* Resource Limits (Docker only) — first-class CPU/memory caps
                     with live usage, instead of compose-file-only limits. */}
                 {section === 'resources' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('app.settingsTab.resourceLimits', 'Resource limits')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('app.settingsTab.resourceLimits', 'Resource limits')}</h3>
                         <ResourceLimitsPanel app={app} onChanged={onUpdate} />
                     </div>
                 )}
@@ -350,8 +336,8 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
                     short-TTL page cache with auth/admin/cart bypasses, stale
                     serving, and a per-site purge. */}
                 {section === 'cache' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('app.settingsTab.cache', 'Cache')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('app.settingsTab.cache', 'Cache')}</h3>
                         <MicroCachePanel app={app} onChanged={onUpdate} />
                     </div>
                 )}
@@ -359,8 +345,8 @@ const SettingsTab = ({ app, deployConfig, domains, primaryDomain, onUpdate }) =>
                 {/* Health & Rollout (Docker only) — the deploy health gate:
 where a new release is asked, and for how long. */}
                 {section === 'health' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('app.settingsTab.healthRollout', 'Health and rollout')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('app.settingsTab.healthRollout', 'Health and rollout')}</h3>
                         <DeploySafetyPanel app={app} onChanged={onUpdate} />
                         <SlotDeploysPanel app={app} onChanged={onUpdate} />
                     </div>
@@ -369,8 +355,8 @@ where a new release is asked, and for how long. */}
                 {/* Storage (Docker only) — first-class managed volumes that
                     survive redeploys, replacing fragile relative bind mounts. */}
                 {section === 'storage' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('common.labels.storage', 'Storage')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('common.labels.storage', 'Storage')}</h3>
                         <VolumesPanel app={app} onChanged={onUpdate} />
                     </div>
                 )}
@@ -382,8 +368,8 @@ where a new release is asked, and for how long. */}
                     config checkpoints) as a separated subsection — no second repo
                     form, and nothing deploy-related shows before connecting. */}
                 {section === 'git' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('app.settingsTab.gitDeploy', 'Git and deploy')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('app.settingsTab.gitDeploy', 'Git and deploy')}</h3>
                         <RepoConnectForm
                             gitStatus={gitStatus}
                             onConnect={handleConnectRepo}
@@ -396,8 +382,8 @@ where a new release is asked, and for how long. */}
                             idPrefix="svc"
                         />
                         {deployConfig && (
-                            <div className="svc-settings__subsection">
-                                <h4 className="svc-settings__subsection-title">{t('app.settingsTab.deployment', 'Deployment')}</h4>
+                            <div className="sk-detail-settings__subsection">
+                                <h4 className="sk-detail-settings__subsection-title">{t('app.settingsTab.deployment', 'Deployment')}</h4>
                                 <DeployTab embedded appId={app.id} appPath={app.path} />
                             </div>
                         )}
@@ -407,8 +393,8 @@ where a new release is asked, and for how long. */}
                 {/* Build — build method, Dockerfile / build pack, cache, timeouts,
                     build logs. Relocated from the old top tab, beside Git & Deploy. */}
                 {section === 'build' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('app.settingsTab.build', 'Build')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('app.settingsTab.build', 'Build')}</h3>
                         <BuildTab appId={app.id} appPath={app.path} app={app} />
                     </div>
                 )}
@@ -417,16 +403,16 @@ where a new release is asked, and for how long. */}
                     when the app's project is manifest-managed, plus scaffold /
                     plan / apply actions. */}
                 {section === 'manifest' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('app.settingsTab.manifest', 'Manifest')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('app.settingsTab.manifest', 'Manifest')}</h3>
                         <ManifestSection app={app} />
                     </div>
                 )}
 
                 {/* WAF (Docker + Python) — per-app ModSecurity policy + matches. */}
                 {section === 'waf' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">WAF</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">WAF</h3>
                         <AppWafPanel app={app} onChanged={onUpdate} />
                     </div>
                 )}
@@ -435,8 +421,8 @@ where a new release is asked, and for how long. */}
                     cost, one-click restore), same component the WordPress
                     detail page renders. */}
                 {section === 'backups' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('common.labels.backups', 'Backups')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('common.labels.backups', 'Backups')}</h3>
                         <ProtectionPanel
                             targetType="application"
                             targetId={app.id}
@@ -447,8 +433,8 @@ where a new release is asked, and for how long. */}
 
                 {/* Danger Zone */}
                 {section === 'danger' && (
-                    <div className="svc-settings__section">
-                        <h3 className="svc-settings__section-title">{t('app.settingsTab.dangerZone', 'Delete service')}</h3>
+                    <div className="sk-detail-settings__section">
+                        <h3 className="sk-detail-settings__section-title">{t('app.settingsTab.dangerZone', 'Delete service')}</h3>
                         <DangerZone
                             description={t('app.settingsTab.onceYouDeleteAServiceThere', "Deleting a service removes all its data. You can't undo this.")}
                             action={
@@ -459,8 +445,7 @@ where a new release is asked, and for how long. */}
                         />
                     </div>
                 )}
-            </div>
-        </div>
+        </DetailSettings>
     );
 };
 

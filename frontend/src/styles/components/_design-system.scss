@@ -213,6 +213,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         gap: $space-3;
         flex-wrap: wrap;
     }
+    // Optional thin meter under the label (usage tiles: CPU / memory / disk).
+    &__meter { margin-top: $space-2; }
     &__trend {
         grid-area: trend;
         align-self: start;

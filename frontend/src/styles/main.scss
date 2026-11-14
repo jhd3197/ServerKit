@@ -68,6 +68,7 @@
 @import 'components/_status-badge';
 @import 'components/_connection-status';
 @import 'components/_detail-tabs';
+@import 'components/_detail-page';       // header meta, body rhythm and settings shell shared by service + server detail
 @import 'components/_server-selector';
 @import 'components/_domain-field';     // shared domain input (DomainField.jsx)
 @import 'components/_fields';           // CopyField, PortField, EnvEditor, ServerPicker

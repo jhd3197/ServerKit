@@ -50,8 +50,8 @@ const ServerHealthCard = ({ server }) => {
 
     return (
         <>
-            <div className="info-card">
-                <h3>{t('app.serverHealthCard.permissionLevel', 'Permission level')}</h3>
+            <div className="overview-tab__card">
+                <h3 className="overview-tab__card-title">{t('app.serverHealthCard.permissionLevel', 'Permission level')}</h3>
                 <InfoList className="server-info-list">
                     <InfoItem label={t('app.serverHealthCard.level', 'Level')}>
                         <Pill kind={levelKind(level)} dot={false}>{levelName}</Pill>
@@ -75,8 +75,8 @@ const ServerHealthCard = ({ server }) => {
                 <code>{SET_HINT}</code>
             </div>
 
-            <div className="info-card">
-                <h3>{t('app.serverHealthCard.health', 'Health')} <Pill kind={health.kind}>{health.code}</Pill></h3>
+            <div className="overview-tab__card">
+                <h3 className="overview-tab__card-title">{t('app.serverHealthCard.health', 'Health')} <Pill kind={health.kind}>{health.code}</Pill></h3>
                 {server.last_report_at && (
                     <p className="text-muted">
                         {t('app.serverHealthCard.lastReport', 'Last report')}: {formatDateTime(server.last_report_at)}

@@ -131,8 +131,6 @@
 // like the existing info-card but with chip rows for the multi-value
 // fields.
 .system-status-card {
-    grid-column: span 2;
-
     &__header {
         display: flex;
         align-items: center;

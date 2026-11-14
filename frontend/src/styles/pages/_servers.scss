@@ -310,11 +310,8 @@
 // SERVER DETAIL PAGE
 // ============================================
 
-.server-detail-page {
-    padding: 0;
-    width: min(100%, 1400px);
-    margin: 0 auto;
-}
+// No width cap here: the page shell (PageLayout) owns the frame, so the top
+// bar and body span the content region exactly like the service detail page.
 
 // Mono breadcrumb (redesign) — only ServerDetail renders this class.
 .page-breadcrumb {
@@ -366,14 +363,6 @@
         font-weight: $font-weight-semibold;
         color: $text-tertiary;
         margin: 0 0 $space-4;
-    }
-}
-
-.offline-card {
-    grid-column: span 2;
-
-    @media (max-width: $breakpoint-lg) {
-        grid-column: span 1;
     }
 }
 
@@ -1876,29 +1865,6 @@
     }
 }
 
-// Refine overview info cards (less marketing, more dashboard)
-.overview-tab .info-card {
-    padding: $space-5;
-    border-radius: $radius-overlay;
-    background: $bg-card;
-    border: 1px solid $border-subtle;
-    box-shadow: none;
-    transition: border-color $transition-fast;
-
-    &:hover {
-        border-color: $border-active;
-    }
-
-    h3 {
-        margin: 0 0 $space-3;
-        padding-bottom: $space-2;
-        border-bottom: 1px solid $border-subtle;
-        font-size: $text-xs;
-        font-weight: $font-weight-semibold;
-        color: $text-tertiary;
-    }
-}
-
 .overview-tab .info-item {
     padding: $space-2 0;
     border-bottom: 1px dashed $border-subtle;
@@ -1928,87 +1894,6 @@
     }
 }
 
-// Demo `.spec-card` look: quiet surface tile, mono uppercase label, big mono
-// value. Gauge tiles carry a thin .sk-gauge meter (CPU=accent-bright,
-// RAM=cyan, Disk=green; red>85 / amber>70 thresholds set in JSX).
-.kpi-tile {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: $space-2;
-    padding: $space-4 $space-4;
-    background: var(--surface);
-    border: 1px solid var(--border-soft);
-    border-radius: var(--radius);
-    transition: border-color $transition-fast;
-
-    &:hover {
-        border-color: var(--border-strong);
-    }
-
-    &__head {
-        display: flex;
-        align-items: center;
-        gap: $space-2;
-        color: var(--text-faint);
-    }
-
-    &__icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--text-ghost);
-
-        svg { width: 13px; height: 13px; }
-    }
-
-    &__label {
-        font-size: $text-xs;
-        font-weight: $font-weight-semibold;
-        color: var(--text-faint);
-    }
-
-    &__value {
-        font-size: $text-lg;
-        font-weight: $font-weight-semibold;
-        letter-spacing: -0.02em;
-        color: var(--text);
-        line-height: 1.15;
-        text-transform: capitalize;
-    }
-
-    &__sub {
-        font-size: $text-xs;
-        color: var(--text-faint);
-    }
-
-    &__meter {
-        margin-top: $space-hair;
-    }
-
-    // Tone variants (status tile + gauge thresholds)
-    &--success .kpi-tile__value { color: var(--green); }
-    &--danger .kpi-tile__value { color: var(--red); }
-    &--warning .kpi-tile__value,
-    &--warn .kpi-tile__value { color: var(--amber); }
-}
-
-// Iconified info rows replacing plain InfoList rows in overview cards
-.overview-tab .info-card {
-    h3 {
-        display: flex;
-        align-items: center;
-        gap: $space-2;
-        color: $text-tertiary;
-
-        svg {
-            width: 14px;
-            height: 14px;
-            color: $accent-primary;
-        }
-    }
-}
-
 // Server overview spec rows (InfoList): icon + faint key, mono value
 // right-aligned, soft separators.
 .server-info-list {
@@ -2027,11 +1912,8 @@
     .info-item {
         gap: $space-3;
         padding: $space-3 0;
-        border-bottom: 1px solid var(--border-soft);
         min-height: 40px; // geometry: table-row height (40 default row)
         font-size: $text-sm;
-
-        &:last-child { border-bottom: 0; }
     }
 
     .info-label {
@@ -2065,10 +1947,6 @@
             color: var(--text-dim);
         }
     }
-}
-
-.overview-grid__full {
-    grid-column: 1 / -1;
 }
 
 // ============================================
@@ -2301,40 +2179,6 @@
         }
     }
 
-    // ---- Overview info cards (quiet surface + mono eyebrow) ----
-    // `> h3` on purpose: SystemStatusCard nests its own h3 (styled in
-    // _server-packages.scss) and must not get a second eyebrow border.
-    .overview-tab .info-card {
-        padding: $space-4 $space-4;
-        border-radius: var(--radius);
-        background: var(--surface);
-        border: 1px solid var(--border-soft);
-        box-shadow: none;
-        transition: border-color $transition-fast;
-
-        &:hover {
-            border-color: var(--border-strong);
-        }
-
-        > h3 {
-            display: flex;
-            align-items: center;
-            gap: $space-2;
-            margin: 0 0 $space-2;
-            padding-bottom: $space-3;
-            border-bottom: 1px solid var(--border-soft);
-            font-size: $text-xs;
-            font-weight: $font-weight-semibold;
-            color: var(--text-faint);
-
-            svg {
-                width: 13px;
-                height: 13px;
-                color: var(--accent-bright);
-            }
-        }
-    }
-
     .offline-message {
         svg { color: var(--text-ghost); }
         h4 { color: var(--text); }
@@ -2524,38 +2368,16 @@
     gap: $space-3;
 }
 
-// Header: dot / (i) / star share one centered row beside the title; on narrow
-// screens the title block and actions stay on ONE row (title truncates), tabs below.
+// Phones: the server's actions are two icon buttons, so the title block and
+// actions stay on ONE row (title truncates), tabs below. The shared header
+// rules (dot / (i) / star) live in components/_detail-page.scss.
 .server-detail-page .sk-topbar {
-    &__titles { align-items: center; }
-    &__meta { display: inline-flex; align-items: center; gap: $space-2; }
-
-    .fav-star {
-        width: 24px; // geometry: matches the InfoTip md footprint
-        height: 24px; // geometry: matches the InfoTip md footprint
-        svg { width: 14px; height: 14px; } // geometry: inline icon
-        opacity: 0.6;
-        &:hover, &.is-on { opacity: 1; }
-    }
-
     @media (max-width: 768px) {
         &__titles { flex: 1 1 0; min-width: 0; flex-wrap: nowrap; }
         &__title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; overflow-wrap: normal; }
         &__spacer { display: none; }
         &__actions { order: 0; width: auto; margin-left: auto; justify-content: flex-end; overflow: visible; flex-wrap: nowrap; }
     }
-}
-
-.server-detail-info {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: $space-1 $space-3;
-    margin: 0;
-
-    dt { color: var(--text-faint); }
-    dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
-
-    &__id { display: flex; align-items: center; gap: $space-1; code { font-family: $font-mono; } }
 }
 
 // Permission-level picker in the Add Server drawer

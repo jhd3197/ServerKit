@@ -1,0 +1,179 @@
+// ============================================
+// ENTITY DETAIL PAGE
+// What the service and server detail pages share, so the two read as one
+// layout: the top-bar meta, the body rhythm and the settings shell. Feature
+// stylesheets (_service-detail, _servers) own only what is inside the tabs.
+//   components/detail/DetailHeaderMeta.jsx   [dot] [(i)] [star]
+//   components/detail/DetailSettings.jsx     grouped nav + content column
+// ============================================
+
+// Header: dot / (i) / star share one centered row beside the title.
+.sk-detail-page .sk-topbar {
+    &__titles { align-items: center; }
+    &__meta { display: inline-flex; align-items: center; gap: $space-2; }
+
+    .fav-star {
+        width: 24px; // geometry: matches the InfoTip md footprint
+        height: 24px; // geometry: matches the InfoTip md footprint
+        svg { width: 14px; height: 14px; } // geometry: inline icon
+        opacity: 0.6;
+        &:hover, &.is-on { opacity: 1; }
+    }
+}
+
+// Facts behind the header (i): label / value pairs.
+.sk-detail-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: $space-1 $space-3;
+    margin: 0;
+
+    &__row { display: contents; }
+
+    dt { color: var(--text-faint); }
+    dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+
+    &__id { display: flex; align-items: center; gap: $space-1; code { font-family: $font-mono; } }
+}
+
+// Body below the top bar: one column, one gap between its blocks.
+.sk-detail-body {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+}
+
+// Settings shell: grouped left nav + content column.
+.sk-detail-settings {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: $space-4;
+    align-items: start;
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: 1fr;
+    }
+
+    &__nav {
+        display: flex;
+        flex-direction: column;
+        gap: $space-hair;
+        position: sticky;
+        top: $space-4;
+
+        // Phones: one horizontally scrollable chip row. Groups are flattened
+        // (display: contents) so every item is a direct flex child; the group
+        // labels are hidden and the +$space-4 stagger margin disappears with
+        // the group boxes. The old wrap layout squeezed four group columns
+        // side by side, staggered them 16px apart and clipped the pills.
+        @media (max-width: $breakpoint-md) {
+            position: static;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: $space-tight;
+            overflow-x: auto;
+            padding-bottom: $space-hair; // keep the active pill's ring/shadow unclipped
+            scrollbar-width: none;
+            &::-webkit-scrollbar { display: none; }
+        }
+    }
+
+    // Grouped left nav — an uppercase mono label per group.
+    &__group + &__group {
+        margin-top: $space-4;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        &__group { display: contents; }
+        &__grouplabel { display: none; }
+    }
+
+    &__grouplabel {
+        padding: 0 $space-3;
+        margin-bottom: $space-tight;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
+        color: var(--text-faint);
+    }
+
+    &__navitem {
+        display: flex;
+        width: 100%; // fill the nav column — a flex <button> otherwise shrinks
+                     // to its label, so each item's box was a different width
+        align-items: center;
+        gap: $space-2;
+        min-height: $control-md;
+        padding: 0 $space-3;
+        border: none;
+        border-radius: $radius-control;
+        background: none;
+        color: var(--text-dim);
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.14s, color 0.14s;
+
+        svg { color: var(--text-faint); flex-shrink: 0; }
+
+        &:hover { background: var(--surface-hover); color: var(--text); }
+        &.is-active {
+            @include status-variant(var(--accent-bright), var(--accent-bg));
+            svg { color: var(--accent-bright); }
+        }
+
+        // Chip row on phones: shrink to the label, never wrap or stretch.
+        @media (max-width: $breakpoint-md) {
+            width: auto;
+            flex: 0 0 auto;
+            white-space: nowrap;
+        }
+    }
+
+    &__content {
+        min-width: 0;
+
+        // A form inside a section panel inherits the panel's surface instead
+        // of drawing a second card inside it.
+        .card .settings-form {
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+
+            > button[type='submit'] { margin-top: $space-4; }
+        }
+    }
+
+    &__section {
+        margin-bottom: $space-6;
+
+        &:last-child { margin-bottom: 0; }
+    }
+
+    &__section-title {
+        display: flex;
+        align-items: center;
+        gap: $space-tight;
+        margin: 0 0 $space-3;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
+        color: var(--text-faint);
+    }
+
+    // A divided sub-block within a section — e.g. the Deployment pipeline under
+    // the Git connect form in "Git & Deploy". Mirrors the .svc-give-subdomain
+    // divider so stacked panels read as distinct steps rather than one slab.
+    &__subsection {
+        margin-top: $space-5;
+        padding-top: $space-5;
+        border-top: 1px solid var(--border-soft);
+    }
+
+    &__subsection-title {
+        margin: 0 0 $space-3;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
+        color: var(--text-faint);
+    }
+}

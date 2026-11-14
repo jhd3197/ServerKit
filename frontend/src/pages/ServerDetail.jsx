@@ -273,7 +273,8 @@ const ServerDetail = () => {
 
     return (
         <PageLayout
-            className="server-detail-page"
+            className="sk-detail-page server-detail-page"
+            contentClassName="sk-detail-body"
             icon={<Server size={18} />}
             title={isPlaceholderServerName(server.name) ? t('app.serverDetail.pendingPairing', 'Pending pairing') : server.name}
             navLabel={t('app.serverDetail.sections', 'Server sections')}

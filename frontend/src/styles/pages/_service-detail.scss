@@ -1,14 +1,14 @@
 // ============================================
 // SERVICE DETAIL PAGE (redesign — infra console look)
-// Shares the WordPress detail page's layout: a full-bleed PageTopbar
-// (.sk-topbar) above a centered .app-detail-body, reusing the shared
-// app-detail-* base chrome (_applications.scss). Tab bodies consume the
+// Same frame as the server detail page: PageLayout's full-bleed top bar above
+// the shell body (.sk-detail-body, components/_detail-page.scss), reusing the
+// shared app-detail-* base chrome (_applications.scss). Tab bodies consume the
 // shared sk- primitives (Pill / MetricCard / Gauge / .sk-info-row / .sk-dtable).
 // ============================================
 
 // Run the detail page FULL-BLEED like the list pages: drop the .main-content
-// frame so the .sk-topbar spans edge-to-edge; .app-detail-body re-pads a
-// centered column below. (Mirrors .main-content:has(.wp-detail-page).)
+// frame so the .sk-topbar spans edge-to-edge; the page shell pads the body
+// below. (Mirrors .main-content:has(.wp-detail-page).)
 .main-content:has(.svc-detail) {
     padding: 0;
 
@@ -26,16 +26,6 @@
     // spans edge-to-edge above a centered, padded body. The .main-content
     // frame is dropped by the `:has()` rule at the bottom of this file.
     gap: 0;
-
-    // Full-width body below the full-bleed top bar.
-    .app-detail-body {
-        display: flex;
-        flex-direction: column;
-        gap: $space-5;
-        width: 100%;
-        // Same full width and gutter as every page body (page-shell-inner).
-        padding: $space-5 $space-5 $space-8;
-    }
 
     // Identity row — flat (no card): just the tile + name on the page.
     .app-detail-header {
@@ -162,7 +152,7 @@
         }
     }
 
-    // Repo Bar (spacing handled by the .app-detail-body flex gap)
+    // Repo Bar (spacing handled by the .sk-detail-body flex gap)
     &__repo-bar {
         display: flex;
     }
@@ -513,128 +503,8 @@ h3.svc-eyebrow {
 
 // Settings tab within service detail — grouped left sub-nav + content pane,
 // mirroring the WordPress detail page's settings layout (.wp-settings).
-.svc-settings {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: $space-4;
-    align-items: start;
-
-    @media (max-width: $breakpoint-md) {
-        grid-template-columns: 1fr;
-    }
-
-    &__nav {
-        display: flex;
-        flex-direction: column;
-        gap: $space-hair;
-        position: sticky;
-        top: $space-4;
-
-        // Phones: one horizontally scrollable chip row. Groups are flattened
-        // (display: contents) so every item is a direct flex child; the group
-        // labels are hidden and the +$space-4 stagger margin disappears with
-        // the group boxes. The old wrap layout squeezed four group columns
-        // side by side, staggered them 16px apart and clipped the pills.
-        @media (max-width: $breakpoint-md) {
-            position: static;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            gap: $space-tight;
-            overflow-x: auto;
-            padding-bottom: $space-hair; // keep the active pill's ring/shadow unclipped
-            scrollbar-width: none;
-            &::-webkit-scrollbar { display: none; }
-        }
-    }
-
-    // Grouped left nav — an uppercase mono label per group.
-    &__group + &__group {
-        margin-top: $space-4;
-    }
-
-    @media (max-width: $breakpoint-md) {
-        &__group { display: contents; }
-        &__grouplabel { display: none; }
-    }
-
-    &__grouplabel {
-        padding: 0 $space-3;
-        margin-bottom: $space-tight;
-        font-size: $text-xs;
-        font-weight: $font-weight-semibold;
-        color: var(--text-faint);
-    }
-
-    &__navitem {
-        display: flex;
-        width: 100%; // fill the nav column — a flex <button> otherwise shrinks
-                     // to its label, so each item's box was a different width
-        align-items: center;
-        gap: $space-2;
-        min-height: $control-md;
-        padding: 0 $space-3;
-        border: none;
-        border-radius: $radius-control;
-        background: none;
-        color: var(--text-dim);
-        font-size: $text-sm;
-        font-weight: $font-weight-medium;
-        text-align: left;
-        cursor: pointer;
-        transition: background 0.14s, color 0.14s;
-
-        svg { color: var(--text-faint); flex-shrink: 0; }
-
-        &:hover { background: var(--surface-hover); color: var(--text); }
-        &.is-active {
-            @include status-variant(var(--accent-bright), var(--accent-bg));
-            svg { color: var(--accent-bright); }
-        }
-
-        // Chip row on phones: shrink to the label, never wrap or stretch.
-        @media (max-width: $breakpoint-md) {
-            width: auto;
-            flex: 0 0 auto;
-            white-space: nowrap;
-        }
-    }
-
-    &__content {
-        min-width: 0;
-    }
-
-    &__section {
-        margin-bottom: $space-6;
-
-        &:last-child { margin-bottom: 0; }
-    }
-
-    &__section-title {
-        display: flex;
-        align-items: center;
-        gap: $space-tight;
-        margin: 0 0 $space-3;
-        font-size: $text-xs;
-        font-weight: $font-weight-semibold;
-        color: var(--text-faint);
-    }
-
-    // A divided sub-block within a section — e.g. the Deployment pipeline under
-    // the Git connect form in "Git & Deploy". Mirrors the .svc-give-subdomain
-    // divider so stacked panels read as distinct steps rather than one slab.
-    &__subsection {
-        margin-top: $space-5;
-        padding-top: $space-5;
-        border-top: 1px solid var(--border-soft);
-    }
-
-    &__subsection-title {
-        margin: 0 0 $space-3;
-        font-size: $text-xs;
-        font-weight: $font-weight-semibold;
-        color: var(--text-faint);
-    }
-}
+// The settings nav + content frame moved to components/_detail-settings.scss
+// (.sk-detail-settings), shared with the server detail page.
 
 // Icon-only button (global utility consumed by several other components)
 
@@ -898,6 +768,9 @@ h3.svc-eyebrow {
         font-size: $text-xs;
         font-weight: $font-weight-semibold;
         color: var(--text-faint);
+
+        // Title glyphs (server overview cards, scheduled tasks) share one size.
+        > svg { width: 14px; height: 14px; flex-shrink: 0; } // geometry: icon size
     }
 
     &__card-header-row {
